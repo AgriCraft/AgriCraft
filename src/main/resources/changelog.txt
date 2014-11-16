@@ -1,0 +1,55 @@
+Changelog
+---------
+0.0.7
+-Somewhere a bug creeped in where planted seeds would immediately be fully grown, this is fixed now
+-Fixed a bug where crosscrops would mutate in no plant
+-Added tanks
+
+0.0.6
+-Added journal
+-Fixed being able to bonemeal fully grown crops
+-Fixed a derp crash when one plant would get registered twice
+-Cleaned up some code (it's still a mess, but just a little bit less of a mess)
+-Fixed opening Seed Analyzer gui pausing the game
+-Fixed some crops crashing the game while trying to harvest them
+
+0.0.5
+-Added resource crops based on what ores have been registered in the ore dictionary
+-Fixed plants planted on regular farmland (outside crops) not dropping seeds (stats resetting not fixed yet)
+-Prevented Thaumic Tinkerer infused seeds from being planted or analyzed
+
+0.0.4
+-Added additional rendering method
+-Fixed, under certain conditions, recipes showing up twice in NEI
+-Fixed planting Magical Crops seed crash
+-Fixed harvesting Magical Crops now yields the correct item
+-Looked into Growthcraft integration and it seems there isn't much to integrate
+-Fixed a bug where if you only specified 1 mutation it wouldn't be parsed
+-Added the ability to add your own custom crops
+-You now specify the mutations using the names for seeds you get from NEI
+-Added a correction method on the input (old mutation configs will still work)
+-Fixed Rendering and drops on Nether Wart
+-Fixed NullPointerExceptions when harvesting melons, pumpkins or custom crops
+
+0.0.3
+-Fixed a bug where every seed could only mutate from a single set of unique parents
+-Added NEI integration
+-Added stat inheritance on mutations
+-Fixed being able to bonemeal empty crops
+-Added using bonemeal on a cross crop triggers a crossover
+-Added tooltips on seeds with initialized stats
+-Tweaked bounding box of crops
+-Reworked and cleaned up code
+-Added Seed Analyzer
+
+0.0.2
+-Added default mutations for poppy, dandelion, melons, pumpkins & sugarcane
+-Fixed plants rendering dark on crops
+-Hide crops from NEI
+-Added Natura integration
+-Added meta in mutation configs
+-Merged mutation configs in one file
+-Added config option to regenerate default mutation config
+
+0.0.1
+-Initial build

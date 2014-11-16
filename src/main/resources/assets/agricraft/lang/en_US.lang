@@ -1,0 +1,80 @@
+//Creative Tabs
+itemGroup.agricraft=Agricraft
+
+//Items
+item.agricraft:cropsItem.name=crops
+item.agricraft:journal.name=Agricultural Journal
+item.agricraft:debugger.name=Debugger
+item.agricraft:nuggetDiamond.name=Diamond Nugget
+item.agricraft:nuggetIron.name=Iron Nugget
+item.agricraft:nuggetEmerald.name=Emerald Nugget
+item.agricraft:nuggetTin.name=Tin Nugget
+item.agricraft:nuggetLead.name=Lead Nugget
+item.agricraft:nuggetSilver.name=Silver Nugget
+item.agricraft:nuggetAluminum.name=Aluminum Nugget
+item.agricraft:nuggetNickel.name=Nickel Nugget
+item.agricraft:nuggetPlatinum.name=Platinum Nugget
+item.agricraft:nuggetOsmium.name=Osmium Nugget
+
+item.agricraft:seedPotato.name=Potato Seeds
+item.agricraft:seedCarrot.name=Carrot Seeds
+item.agricraft:seedSugarcane.name=Sugarcane Seeds
+item.agricraft:seedDandelion.name=Dandelion Seeds
+item.agricraft:seedPoppy.name=Poppy Seeds
+item.agricraft:seedOrchid.name=Blue Orchid Seeds
+item.agricraft:seedAllium.name=Allium Seeds
+item.agricraft:seedTulipRed.name=Red Tulip Seeds
+item.agricraft:seedTulipOrange.name=Orange Tulip Seeds
+item.agricraft:seedTulipWhite.name=White Tulip Seeds
+item.agricraft:seedTulipPink.name=Pink Tulip Seeds
+item.agricraft:seedDaisy.name=Daisy Seeds
+
+item.agricraft:seedFerranium.name=Ferranium Seeds
+item.agricraft:seedAurigold.name=Aurigold Seeds
+item.agricraft:seedDiamahlia.name=Diamahlia Seeds
+item.agricraft:seedLapender.name=Lapender Seeds
+item.agricraft:seedEmeryllis.name=Emeryllis Seeds
+item.agricraft:seedRedstodendron.name=Redstodendron Seeds
+item.agricraft:seedCuprosia.name=Cuprosia Seeds
+item.agricraft:seedPetinia.name=Petinia Seeds
+item.agricraft:seedPlombean.name=Plombean Seeds
+item.agricraft:seedSilverweed.name=Silverweed Seeds
+item.agricraft:seedJaslumine.name=Jaslumine Seeds
+item.agricraft:seedNiccissus.name=Niccissus Seeds
+item.agricraft:seedPlatiolus.name=Platiolus Seeds
+item.agricraft:seedOsmonium.name=Osmonium Seeds
+
+
+//blocks
+tile.agricraft:crops.name=crops
+tile.agricraft:seedAnalyzer.name=Seed Analyser
+
+tile.agricraft:cropPotato.name=Potato
+tile.agricraft:cropCarrot.name=Carrot
+tile.agricraft:cropSugarcane.name=Sugarcane
+tile.agricraft:cropMelon.name=Melon
+tile.agricraft:cropPumpkin.name=Pumpkin
+tile.agricraft:cropDandelion.name=Dandelion
+tile.agricraft:cropPoppy.name=Poppy
+tile.agricraft:cropOrchid.name=Orchid
+tile.agricraft:cropAllium.name=Allium
+tile.agricraft:cropTulipRed.name=Red Tulip
+tile.agricraft:cropTulipOrange.name=Orange Tulip
+tile.agricraft:cropTulipWhite.name=White Tulip
+tile.agricraft:cropTulipPink.name=Pink Tulip
+tile.agricraft:cropDaisy.name=Daisy
+
+tile.agricraft:cropFerranium.name=Ferranium
+tile.agricraft:cropAurigold.name=Aurigold
+tile.agricraft:cropDiamahlia.name=Diamahlia
+tile.agricraft:cropLapender.name=Lapender
+tile.agricraft:cropEmeryllis.name=Emeryllis
+tile.agricraft:cropRedstodendron.name=Redstodendron
+tile.agricraft:cropCuprosia.name=Cuprosia
+tile.agricraft:cropPetinia.name=Petinia
+tile.agricraft:cropPlombean.name=Plombean
+tile.agricraft:cropSilverweed.name=Silverweed
+tile.agricraft:cropJaslumine.name=Jaslumine
+tile.agricraft:cropNiccissus.name=Niccissus
+tile.agricraft:cropPlatiolus.name=Platiolus
+tile.agricraft:cropOsmonium.name=Osmonium

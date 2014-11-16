@@ -1,0 +1,21 @@
+[
+{
+"modid": "AgriCraft",
+"name": "AgriCraft",
+"description": "Agricultural farming extended",
+"version": "0.0.6",
+"mcversion": "1.7.10",
+"url": "http://forum.feed-the-beast.com/threads/1-7-10-beta-agricraft.50964/",
+"updateUrl": "",
+"authorList": [
+"InfinityRaider"
+],
+"credits": "InfinityRaider",
+"logoFile": "",
+"screenshots": [
+],
+"parent":"",
+"dependencies": [
+]
+}
+]
