@@ -24,6 +24,7 @@ public class ConfigurationHandler {
     public static boolean integration_HC;
     public static boolean integration_Nat;
     public static double mutationChance;
+    public static boolean bonemealMutation;
 
 
 
@@ -39,14 +40,15 @@ public class ConfigurationHandler {
 
     public static void loadConfiguration() {
         //read values from the config
-        resourcePlants = config.getBoolean("Resource Crops","AGRICRAFT",false,"set to true if you wish to enable resource crops");
+        resourcePlants = config.getBoolean("Resource Crops","AGRICRAFT",false,"set to true if you wish to disable resource crops");
         mutationChance = (double) config.getFloat("Mutation Chance","AGRICRAFT", (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance");
+        bonemealMutation = config.getBoolean("Bonemeal Mutations","AGRICRAFT", true,"set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
         enableNEI = config.getBoolean("Enable NEI", "AGRICRAFT", true, "set to false if you wish to disable mutation recipes in NEI");
         propGenerateDefaults = config.get("AGRICRAFT", "GenerateDefaults", false, "set to true to regenerate a default mutations file (will turn back to false afterwards)");
         generateDefaults = propGenerateDefaults.getBoolean();
         customCrops = config.getBoolean("Custom crops", "AGRICRAFT", false, "set to true if you wish to create your own crops");
-        integration_HC = config.getBoolean("HarvestCraft","INTEGRATION",false,"Set to true to enable harvestCraft integration");
-        integration_Nat = config.getBoolean("Natura","INTEGRATION",false,"Set to true to enable Natura Integration");
+        integration_HC = config.getBoolean("HarvestCraft","INTEGRATION",true,"Set to false to disable harvestCraft integration");
+        integration_Nat = config.getBoolean("Natura","INTEGRATION",true,"Set to false to disable Natura Integration");
         debug = config.getBoolean("debug","DEBUG",false,"Set to true if you wish to enable debug mode");
         Reference.setDebug(debug);
         if(config.hasChanged()) {config.save();}

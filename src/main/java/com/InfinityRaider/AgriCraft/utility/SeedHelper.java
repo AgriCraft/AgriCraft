@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import mods.natura.common.NContent;
 import net.minecraft.block.BlockBush;
@@ -102,12 +103,11 @@ public abstract class SeedHelper {
 
     //check if the seed is valid
     public static boolean isValidSeed(ItemSeeds seed) {
-        /*
-        if(LoadedMods.thaumicTinkerer && seed instanceof thaumic.tinkerer.common.item.ItemInfusedSeeds) {
+        if(LoadedMods.thaumicTinkerer && getPlantDomain(seed).equalsIgnoreCase(Names.thaumicTinkerer)) {
             LogHelper.debug("Thaumic Tinkerer infused seeds are not supported, sorry");
             return false;
         }
-        */
+
 
         return true;
     }

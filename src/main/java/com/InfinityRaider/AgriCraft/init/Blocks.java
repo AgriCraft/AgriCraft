@@ -21,8 +21,8 @@ public class Blocks {
         blockWaterTank = new BlockWaterTank();
         RegisterHelper.registerBlock(blockCrop, Names.crops);
         RegisterHelper.registerBlock(seedAnalyzer, Names.seedAnalyzer);
-        blockWaterTank.setBlockName(Reference.MOD_ID.toLowerCase()+':'+Names.tank);
-        GameRegistry.registerBlock(blockWaterTank, ItemBlockTank.class, Names.tank);
+        //blockWaterTank.setBlockName(Reference.MOD_ID.toLowerCase()+':'+Names.tank);
+        //GameRegistry.registerBlock(blockWaterTank, ItemBlockTank.class, Names.tank);
         LogHelper.info("Blocks registered");
     }
 }

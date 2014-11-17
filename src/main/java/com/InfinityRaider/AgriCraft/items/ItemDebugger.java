@@ -42,6 +42,7 @@ public class ItemDebugger extends ModItem {
                     LogHelper.debug(" - Gain: " + cropTE.gain);
                     LogHelper.debug(" - Strength: " + cropTE.strength);
                     LogHelper.debug(" - Fertile: " + cropTE.isFertile());
+                    LogHelper.debug(" - Mature: " + cropTE.isMature());
                 }
             }
 

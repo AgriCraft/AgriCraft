@@ -64,17 +64,14 @@ public class TileEntityCrop extends TileEntity {
             neighbours[2] = (world.getTileEntity(x, y, z - 1) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x, y, z - 1) : null;
             neighbours[3] = (world.getTileEntity(x, y, z + 1) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x, y, z + 1) : null;
             if (Math.random() > ConfigurationHandler.mutationChance) {
-                LogHelper.debug("Trying to set crosscrop to a neighbour");
                 int index = (int) Math.floor(Math.random() * neighbours.length);
                 if (neighbours[index]!=null && neighbours[index].seed!=null && neighbours[index].isMature()) {
                     this.crossCrop = false;
                     int[] stats = CrossCropHelper.getStats(neighbours);
                     this.setPlant(stats[0], stats[1] ,stats[2], neighbours[index].seed, neighbours[index].seedMeta);
                     change = true;
-                    LogHelper.debug("Set crosscrop to "+Item.itemRegistry.getNameForObject(neighbours[index].seed));
                 }
             } else {
-                LogHelper.debug("Trying to set crosscrop to a mutation");
                 ItemStack[] crossOvers = CrossCropHelper.getCrossOvers(neighbours);
                 if (crossOvers != null && crossOvers.length>0) {
                     int index = (int) Math.floor(Math.random()*crossOvers.length);
@@ -83,7 +80,6 @@ public class TileEntityCrop extends TileEntity {
                         this.crossCrop = false;
                         this.setPlant(stats[0], stats[1], stats[2], (ItemSeeds) crossOvers[index].getItem(), crossOvers[index].getItemDamage());
                         change = true;
-                        LogHelper.debug("Set crosscrop to "+Item.itemRegistry.getNameForObject(crossOvers[index].getItem()));
                     }
                 }
             }

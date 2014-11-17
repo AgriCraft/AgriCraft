@@ -17,6 +17,30 @@ public abstract class IOHelper {
         data = data + '\n' + minecraftMutations;                                 //minecraft mutations
         if(ConfigurationHandler.resourcePlants) {
             data = data + '\n' + agricraftMutations;                             //agricraft mutations
+            if(OreDictHelper.oreCopper!=null) {
+                data = data + '\n' + copperMutation;
+            }
+            if(OreDictHelper.oreTin!=null) {
+                data = data + '\n' + tinMutation;
+            }
+            if(OreDictHelper.oreLead!=null) {
+                data = data + '\n' + leadMutation;
+            }
+            if(OreDictHelper.oreSilver!=null) {
+                data = data + '\n' + silverMutation;
+            }
+            if(OreDictHelper.oreAluminum!=null) {
+                data = data + '\n' + aluminumMutation;
+            }
+            if(OreDictHelper.oreNickel!=null) {
+                data = data + '\n' + nickelMutation;
+            }
+            if(OreDictHelper.orePlatinum!=null) {
+                data = data + '\n' + platinumMutation;
+            }
+            if(OreDictHelper.oreOsmium!=null) {
+                data = data + '\n' + osmiumMutation;
+            }
         }
         if(ConfigurationHandler.integration_Nat && ConfigurationHandler.integration_HC && LoadedMods.harvestcraft && LoadedMods.natura)  {
             data = data + '\n' + harvestcraftMutations + '\n' + barleyNaturaMutations;      //harvestcraft with natura barley
@@ -78,7 +102,7 @@ public abstract class IOHelper {
         int start = 0;
         int stop;
         for(int i=0;i<output.length;i++) {
-            if(output[i]==null || output[i]=="") {
+            if(output[i]==null || output[i].equals("")) {
                 stop = input.indexOf(',', start);
                 output[i] = i == output.length - 1 ? input.substring(start) : input.substring(start, stop);
                 start = stop + 1;
@@ -271,13 +295,38 @@ public abstract class IOHelper {
             "harvestcraft:ryeseedItem=harvestcraft:barleyseedItem+minecraft:wheat_seeds\n" +
             "harvestcraft:cottonseedItem=harvestcraft:barleyseedItem+AgriCraft:seedDaisy";
 
-    public static final String naturaMutations =
+    private static final String naturaMutations =
             "Natura:barley.seed:0=minecraft:wheat_seeds+AgriCraft:seedSugarcane\n" +
             "Natura:barley.seed:1=Natura:barley.seed:0+AgriCraft:seedDaisy";
 
-    public static final String barleyNaturaMutations =
+    private static final String barleyNaturaMutations =
             "Natura:barley.seed:0=minecraft:wheat_seeds+AgriCraft:seedSugarcane\n" +
             "harvestcraft:cornseedItem=Natura:barley.seed:0+harvestcraft:ryeseedItem\n" +
             "harvestcraft:ryeseedItem=Natura:barley+minecraft:wheat_seeds\n" +
             "Natura:barley.seed:1=Natura:barley.seed:0+AgriCraft:seedDaisy";
+
+    private static final String copperMutation =
+            "AgriCraft:seedCuprosia=AgriCraft:seedRedstodendron+AgriCraft:seedTulipOrange";
+
+    private static final String tinMutation =
+            "AgriCraft:seedPetinia=AgriCraft:seedLapender+AgriCraft:seedDaisy";
+
+    private static final String leadMutation =
+            "AgriCraft:seedPlombean=Agricraft:seedFerranium+AgriCraft:seedPotato";
+
+    private static final String silverMutation =
+            "AgriCraft:seedSilverweed=AgriCraft:seedAurigold+AgriCraft:seedAllium";
+
+    private static final String aluminumMutation =
+            "AgriCraft:seedJaslumine=AgriCraft:seedFerranium+minecraft:wheat_seeds";
+
+    private static final String nickelMutation =
+            "AgriCraft:seedNiccissus=AgriCraft:seedAurigold+AgriCraft:seedDandelion";
+
+    private static final String platinumMutation =
+            "AgriCraft:seedPlatiolus=AgriCraft:seedDiamahlia+AgriCraft:seedFerranium";
+
+    private static final String osmiumMutation =
+            "AgriCraft:seedOsmonium=AgriCraft:seedFerranium+AgriCraft:seedOrchid";
+
 }

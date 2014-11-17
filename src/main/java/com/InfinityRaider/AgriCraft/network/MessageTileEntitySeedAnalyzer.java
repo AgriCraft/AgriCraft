@@ -7,6 +7,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class MessageTileEntitySeedAnalyzer implements IMessage, IMessageHandler<MessageTileEntitySeedAnalyzer, IMessage> {
     public int progress;
@@ -20,7 +21,7 @@ public class MessageTileEntitySeedAnalyzer implements IMessage, IMessageHandler<
 
     public MessageTileEntitySeedAnalyzer(TileEntitySeedAnalyzer analyzer) {
         this.progress = analyzer.progress;
-        this.direction = (byte) analyzer.direction.ordinal();
+        this.direction = analyzer.direction==null?(byte)ForgeDirection.NORTH.ordinal():(byte)analyzer.direction.ordinal();
         this.x = analyzer.xCoord;
         this.y = analyzer.yCoord;
         this.z = analyzer.zCoord;

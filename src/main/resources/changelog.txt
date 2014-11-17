@@ -3,7 +3,10 @@ Changelog
 0.0.7
 -Somewhere a bug creeped in where planted seeds would immediately be fully grown, this is fixed now
 -Fixed a bug where crosscrops would mutate in no plant
--Added tanks
+-Started work on irrigation systems: added tanks (code is there, they are not registered yet)
+-Actually runs on servers now
+-Added default mutations for resource crops for non-vanilla resources
+-Changed Harvestcraft & Natura integration as well as resource crops to be enabled by default
 
 0.0.6
 -Added journal

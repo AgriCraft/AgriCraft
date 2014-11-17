@@ -75,7 +75,7 @@ public class AgriCraft {
         //register gui handler
         NetworkRegistry.INSTANCE.registerGuiHandler(instance , new GuiHandler());
         //initialize tile entities
-        TileEntities.init();
+        proxy.registerTileEntities();
         //initialize renderers
         proxy.registerRenderers();
         //initialize recipes

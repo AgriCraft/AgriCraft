@@ -1,4 +1,14 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
-public abstract class ServerProxy extends CommonProxy {
+import net.minecraft.item.ItemStack;
+
+public class ServerProxy extends CommonProxy {
+    @Override
+    public ClientProxy getClientProxy() {return null;}
+
+    @Override
+    public void registerRenderers() {}
+
+    @Override
+    public void hideItemInNEI(ItemStack stack) {}
 }
