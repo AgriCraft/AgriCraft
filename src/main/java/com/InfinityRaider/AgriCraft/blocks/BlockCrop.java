@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -171,7 +172,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         if(crop.hasPlant()) {
             super.func_149853_b(world, rand, x, y, z);
         }
-        else if(crop.crossCrop) {
+        else if(crop.crossCrop && ConfigurationHandler.bonemealMutation) {
             crop.crossOver(world, x, y, z);
         }
     }

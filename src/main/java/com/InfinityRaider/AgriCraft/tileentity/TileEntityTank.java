@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.handler.PacketHandler;
 import com.InfinityRaider.AgriCraft.network.MessageTileEntityTank;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,7 +15,6 @@ import net.minecraftforge.fluids.*;
 public class TileEntityTank extends TileEntity implements IFluidHandler {
     protected int connectedTanks=1;
     protected int fluidLevel;
-    protected int multiBlockId;
 
     //OVERRIDES
     //---------
@@ -25,7 +23,6 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     public void writeToNBT(NBTTagCompound tag) {
         tag.setInteger(Names.connected, this.connectedTanks);
         tag.setInteger(Names.level, this.fluidLevel);
-        tag.setInteger(Names.id, this.multiBlockId);
         super.writeToNBT(tag);
     }
 
@@ -34,7 +31,6 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     public void readFromNBT(NBTTagCompound tag) {
         this.connectedTanks = tag.getInteger(Names.connected);
         this.fluidLevel = tag.getInteger(Names.level);
-        this.multiBlockId = tag.getInteger(Names.id);
         super.readFromNBT(tag);
     }
 
@@ -94,24 +90,6 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     //sets the number of connected tanks
     public void setConnectedTanks(int nr) {this.connectedTanks = nr;}
 
-    //gets the id of the multiblock
-    public int getMultiBlockId() {return this.multiBlockId;}
-
-    //sets the id for the multiblock
-    public void setMultiBlockId(int id) {this.multiBlockId = id;}
-
-    //sets a random id
-    private void setMultiBlockId() {
-        if(this.multiBlockId==0 && this.isMultiBlock()) {
-            int id = 0;
-            while(id==0) {
-                id = Constants.rand.nextInt();
-            }
-            this.multiBlockId = id;
-            LogHelper.debug("Setting tank at ("+this.xCoord+","+this.yCoord+","+this.zCoord+") to "+this.multiBlockId);
-        }
-    }
-
     //check if a tile entity is instance of TileEntityTank and is the same material
     public boolean isSameTank(TileEntity tileEntity) {
         if(tileEntity!=null && tileEntity instanceof TileEntityTank) {
@@ -122,7 +100,7 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     }
     //check if a tile entity is part of this multiblock
     public boolean isMultiBlockPartner(TileEntity tileEntity) {
-        return this.getMultiBlockId()!=0 && (this.isSameTank(tileEntity)) && (this.getMultiBlockId() == ((TileEntityTank) tileEntity).getMultiBlockId());
+        return this.connectedTanks>1 && (this.isSameTank(tileEntity)) && (this.connectedTanks == ((TileEntityTank) tileEntity).connectedTanks);
     }
 
     //updates the multiblock, returns true if something has changed
@@ -176,13 +154,11 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
             }
             //turn all the blocks into one multiblock
             this.connectedTanks = xSize * ySize * zSize;
-            this.setMultiBlockId();
             for (int x = this.xCoord - xPos; x < this.xCoord - xPos + xSize; x++) {
                 for (int y = this.yCoord - yPos; y < this.yCoord - yPos + ySize; y++) {
                     for (int z = this.zCoord - zPos; z < this.zCoord - zPos + zSize; z++) {
                         TileEntityTank tank = ((TileEntityTank) this.worldObj.getTileEntity(x, y, z));
                         tank.connectedTanks = xSize * ySize * zSize;
-                        tank.multiBlockId = this.multiBlockId;
                         tank.setFluidLevel(lvl);
                         tank.markDirty();
                     }
@@ -214,9 +190,8 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
             for(int y=0;y<ySize;y++) {
                 for(int z=0;z<zSize;z++) {
                     TileEntityTank tank = (TileEntityTank) this.worldObj.getTileEntity(this.xCoord-xPos+x, this.yCoord-yPos+y, this.zCoord-zPos+z);
-                    tank.multiBlockId = 0;
-                    tank.fluidLevel = levels[y];
                     tank.connectedTanks = 1;
+                    tank.fluidLevel = levels[y];
                     tank.markDirty();
                 }
             }

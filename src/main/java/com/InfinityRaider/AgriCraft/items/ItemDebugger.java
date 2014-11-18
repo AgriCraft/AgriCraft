@@ -52,7 +52,6 @@ public class ItemDebugger extends ModItem {
                 LogHelper.debug("Tank: " + (tank.isWood() ? "wood" : "iron") + " (single capacity: " + tank.getSingleCapacity() + ")");
                 LogHelper.debug("  - MultiBlock: " + tank.isMultiBlock());
                 LogHelper.debug("  - Connected tanks: " + tank.getConnectedTanks());
-                LogHelper.debug("  - MultiBlock ID: " + tank.getMultiBlockId());
                 int[] size = tank.getDimensions();
                 LogHelper.debug("  - MultiBlock Size: " + size[0] + "x" + size[1] + "x" + size[2]);
                 LogHelper.debug("  - FluidLevel: " + tank.getFluidLevel() + "/" + tank.getTotalCapacity());
