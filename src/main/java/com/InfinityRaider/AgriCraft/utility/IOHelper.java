@@ -191,8 +191,9 @@ public abstract class IOHelper {
     }
 
     private static final String grassDropInstructions =
-            "";
-
+            "#Put a list of seeds here that will drop from tall grass with the following schematic: <seedname:seedmeta>,<weight>\n" +
+            "#The seedname should be the name NEI gives you, the weight is the weighted chance for this seed to drop (for reference, minecraft wheat seeds have weight 10)\n" +
+            "#Only define one seed per line, meta is optional. Example: minecraft:melon_seeds,10";
 
     private static final String customCropInstructions =
             "#Define custom crops here: <name>,<fruit:fruitmeta>,<baseblock:baseblockmeta>,<tier>,<rendermethod>,<information>\n" +
