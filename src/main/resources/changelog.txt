@@ -1,5 +1,12 @@
 Changelog
 ---------
+0.0.8
+-Added a config option to disable forcing a mutation by using bonemeal on a crosscrop
+-Finished water tank multiblock logic
+-Added a config for registering seeds to drop from tall grass
+-Fixed having to look at a block to open the Agricultural Journal
+-Seeds that have been analyzed or have been planted on a crop can no longer be planted on regular farmland
+
 0.0.7
 -Somewhere a bug creeped in where planted seeds would immediately be fully grown, this is fixed now
 -Fixed a bug where crosscrops would mutate in no plant
