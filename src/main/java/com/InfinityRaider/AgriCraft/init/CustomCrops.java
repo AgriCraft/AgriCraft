@@ -9,6 +9,8 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class CustomCrops {
@@ -16,11 +18,16 @@ public class CustomCrops {
     public static ItemModSeed[] customSeeds;
 
     public static void init() {
+        initCustomCrops();
+        initGrassSeeds();
+    }
+
+    private static void initCustomCrops() {
         if(ConfigurationHandler.customCrops) {
-           String[] cropsRawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readCustomCrops());
+            String[] cropsRawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readCustomCrops());
             customCrops = new BlockModPlant[cropsRawData.length];
             customSeeds = new ItemModSeed[cropsRawData.length];
-            for(int i=0;i< cropsRawData.length;i++) {
+            for(int i=0;i<cropsRawData.length;i++) {
                 String[] cropData = IOHelper.getCropData(cropsRawData[i]);
                 //cropData[0]: name
                 //cropData[1]: fruit name
@@ -38,6 +45,24 @@ public class CustomCrops {
                 OreDictionary.registerOre(Names.listAllseed, CustomCrops.customSeeds[i]);
             }
             LogHelper.info("Custom crops registered");
+        }
+    }
+
+    private static void initGrassSeeds() {
+        String[] rawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readGrassDrops());
+        for(String data: rawData) {
+            if(data.indexOf(',') > 0) {
+                String seedName = data.substring(0, data.indexOf(','));
+                int meta = 0;
+                if(seedName.indexOf(':') > 0) {
+                    meta = Integer.parseInt(seedName.substring(seedName.indexOf(':') + 1));
+                    seedName = seedName.substring(0, seedName.indexOf(':'));
+                }
+                Item drop = (Item) Item.itemRegistry.getObject(seedName);
+                int weight = Integer.parseInt(data.substring(data.indexOf(',') + 1));
+                MinecraftForge.addGrassSeed(new ItemStack(drop, 1, meta), 10);
+                LogHelper.info("Registered " + Item.itemRegistry.getNameForObject(drop) + ":" + meta + "as a drop from grass (weight: " + weight + ')');
+            }
         }
     }
 }
