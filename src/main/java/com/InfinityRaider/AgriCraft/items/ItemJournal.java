@@ -37,12 +37,11 @@ public class ItemJournal extends ModItem {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         if(world.isRemote) {
-            player.openGui(AgriCraft.instance, GuiHandler.seedAnalyzerID, world, x, y, z);
-            return true;
+            player.openGui(AgriCraft.instance, GuiHandler.seedAnalyzerID, world, player.serverPosX, player.serverPosY, player.serverPosZ);
         }
-        return false;
+        return stack;
     }
 
     @Override
