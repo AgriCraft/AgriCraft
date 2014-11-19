@@ -148,22 +148,29 @@ public class RenderTank extends TileEntitySpecialRenderer{
     private void drawWater(TileEntityTank tank, Tessellator tessellator) {
         float unit = Constants.unit;
         int layer = tank.getYPosition();
-        float y;
-        if(layer==0) {
-            y = unit + (((float) tank.getFluidLevel())/tank.getSingleCapacity())*(1.000F-unit);
-        }
-        else {
-            y = ((float) tank.getFluidLevel())/tank.getSingleCapacity();
-        }
-        if(y>layer && y <=layer+1) {
+        int area = tank.getXSize()*tank.getZSize();
+        int waterLevel = (int) Math.floor(((float)tank.getFluidLevel()-0.1)/((float)(tank.getSingleCapacity()*area)));
+        if(layer==waterLevel) {
+            int yLevel = (tank.getFluidLevel()/area)-waterLevel*tank.getSingleCapacity();
+            float y = yLevel/tank.getSingleCapacity();
             //bind the texture
             Minecraft.getMinecraft().renderEngine.bindTexture(this.waterTexture);
-            tessellator.startDrawingQuads();
-                tessellator.addVertexWithUV(0, y, 0, 0, 0);
-                tessellator.addVertexWithUV(0, y, 1, 0, 1);
-                tessellator.addVertexWithUV(1, y, 1, 1, 1);
-                tessellator.addVertexWithUV(1, y, 0, 1, 0);
-            tessellator.draw();
+            if(layer==0) {
+                tessellator.startDrawingQuads();
+                    tessellator.addVertexWithUV(0, unit + (1-unit)*y - 0.001, 0, 0, 0);
+                    tessellator.addVertexWithUV(0, unit + (1-unit)*y - 0.001, 1, 0, 1);
+                    tessellator.addVertexWithUV(1, unit + (1-unit)*y - 0.001, 1, 1, 1);
+                    tessellator.addVertexWithUV(1, unit + (1-unit)*y - 0.001, 0, 1, 0);
+                tessellator.draw();
+            }
+            else {
+                tessellator.startDrawingQuads();
+                    tessellator.addVertexWithUV(0, y - 0.001, 0, 0, 0);
+                    tessellator.addVertexWithUV(0, y - 0.001, 1, 0, 1);
+                    tessellator.addVertexWithUV(1, y - 0.001, 1, 1, 1);
+                    tessellator.addVertexWithUV(1, y - 0.001, 0, 1, 0);
+                tessellator.draw();
+            }
         }
     }
 }

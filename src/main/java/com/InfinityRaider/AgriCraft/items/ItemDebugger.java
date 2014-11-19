@@ -62,6 +62,8 @@ public class ItemDebugger extends ModItem {
                 boolean top = tank.isMultiBlockPartner(world.getTileEntity(x, y + 1, z));
                 boolean below = tank.isMultiBlockPartner(world.getTileEntity(x, y - 1, z));
                 LogHelper.debug("  - Found multiblock partners on: " + (left ? "left, " : "") + (right ? "right, " : "") + (back ? "back, " : "") + (front ? "front, " : "") + (top ? "top, " : "") + (below ? "below" : ""));
+                LogHelper.debug("Water level is on layer "+ (int) Math.floor(((float)tank.getFluidLevel()-0.1)/((float)(tank.getSingleCapacity()*tank.getXSize()*tank.getZSize())))+ ".");
+                LogHelper.debug("Tank clicked is on  layer "+tank.getYPosition()+".");
             }
         }
 
