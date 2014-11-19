@@ -83,7 +83,6 @@ public class ConfigurationHandler {
                 try {
                     writer.write(defaultData);
                     writer.close();
-                    propGenerateDefaults.setToDefault();
                     config.save();
 
                     return defaultData;
