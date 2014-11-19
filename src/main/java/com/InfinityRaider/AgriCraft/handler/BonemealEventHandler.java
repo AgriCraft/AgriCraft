@@ -1,15 +1,10 @@
 package com.InfinityRaider.AgriCraft.handler;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.BonemealEvent;
-import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 
 import java.util.Random;
 
