@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.renderers;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
+import com.sun.prism.util.tess.Tess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -23,7 +24,12 @@ public class RenderTank extends TileEntitySpecialRenderer{
             //translate the matrix to the right spot
             GL11.glTranslated(x,y,z);
             //draw the tank
-            this.drawTank(tank, tessellator);
+            if(tank.getBlockMetadata()==0) {
+                this.drawWoodTank(tank, tessellator);
+            }
+            else if(tank.getBlockMetadata()==1) {
+                this.drawIronTank(tank, tessellator);
+            }
             //draw the waterTexture
             if(tank.getFluidLevel()>0) {
                 this.drawWater(tank, tessellator);
@@ -32,7 +38,7 @@ public class RenderTank extends TileEntitySpecialRenderer{
 
     }
 
-    private void drawTank(TileEntityTank tank, Tessellator tessellator) {
+    private void drawWoodTank(TileEntityTank tank, Tessellator tessellator) {
         double unit = Constants.unit;
         //bind the texture
         Minecraft.getMinecraft().renderEngine.bindTexture(baseTexture[tank.getBlockMetadata()]);
@@ -120,6 +126,20 @@ public class RenderTank extends TileEntitySpecialRenderer{
                 tessellator.addVertexWithUV(1, unit, 1, 1, 1);
                 tessellator.addVertexWithUV(1, unit, 0, 0, 1);
             }
+        tessellator.draw();
+        //enable lighting
+        GL11.glEnable(GL11.GL_LIGHTING);
+    }
+
+    private void drawIronTank(TileEntityTank tank, Tessellator tessellator) {
+        double unit = Constants.unit;
+        //bind the texture
+        Minecraft.getMinecraft().renderEngine.bindTexture(baseTexture[tank.getBlockMetadata()]);
+        //disable lighting
+        GL11.glDisable(GL11.GL_LIGHTING);
+        //tell the tessellator to start drawing
+        tessellator.startDrawingQuads();
+
         tessellator.draw();
         //enable lighting
         GL11.glEnable(GL11.GL_LIGHTING);
