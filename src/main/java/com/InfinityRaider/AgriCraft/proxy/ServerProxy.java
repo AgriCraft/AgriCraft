@@ -11,4 +11,7 @@ public class ServerProxy extends CommonProxy {
 
     @Override
     public void hideItemInNEI(ItemStack stack) {}
+
+    @Override
+    public void registerEventHandlers() {super.registerEventHandlers();}
 }
