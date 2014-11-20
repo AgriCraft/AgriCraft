@@ -91,12 +91,20 @@ public class BlockWaterTank extends BlockContainer{
     //when the block is broken
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+        boolean placeWater = false;
         if(world.getTileEntity(x, y , z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityTank) {
             TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y ,z);
             tank.breakMultiBlock();
+            placeWater = tank.getFluidLevel()>Constants.mB;
         }
-        super.breakBlock(world,x,y,z,block,meta);
         world.removeTileEntity(x,y,z);
+        if(placeWater) {
+            world.setBlock(x, y, z, Blocks.water);
+        }
+        else {
+            world.setBlockToAir(x, y, z);
+        }
+        world.notifyBlockOfNeighborChange(x, y, z, null);
     }
 
     @Override

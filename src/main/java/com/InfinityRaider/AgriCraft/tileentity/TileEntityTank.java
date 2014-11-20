@@ -115,7 +115,6 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     //multiblockify
     public boolean checkForMultiBlock() {
         if(!this.worldObj.isRemote) {
-            int lvl = this.fluidLevel;
             //find dimensions
             int xPos = this.findArrayXPosition();
             int yPos = this.findArrayYPosition();
@@ -146,9 +145,18 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
                     for (int z = this.zCoord - zPos; z < this.zCoord - zPos + zSize; z++) {
                         TileEntityTank tank = ((TileEntityTank) this.worldObj.getTileEntity(x, y, z));
                         if(tank.isMultiBlock()) {
-                            lvl = tank.fluidLevel+lvl;
                             tank.breakMultiBlock();
                         }
+                    }
+                }
+            }
+            //calculate the total fluid level
+            int lvl = 0;
+            for (int x = this.xCoord - xPos; x < this.xCoord - xPos + xSize; x++) {
+                for (int y = this.yCoord - yPos; y < this.yCoord - yPos + ySize; y++) {
+                    for (int z = this.zCoord - zPos; z < this.zCoord - zPos + zSize; z++) {
+                        TileEntityTank tank = ((TileEntityTank) this.worldObj.getTileEntity(x, y, z));
+                        lvl = tank.fluidLevel+lvl;
                     }
                 }
             }
@@ -181,10 +189,10 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
         int ySize = this.getYSize();
         int zSize = this.getZSize();
         int[] levels = new int[ySize];
-        int area = xSize*ySize;
+        int area = xSize*zSize;
         for(int i=0;i<levels.length;i++) {
             levels[i] = (lvl/area>=this.getSingleCapacity())?this.getSingleCapacity():lvl/area;
-            lvl = lvl - levels[i]*area;
+            lvl = (lvl - levels[i]*area)<0?0:(lvl - levels[i]*area);
         }
         for(int x=0;x<xSize;x++) {
             for(int y=0;y<ySize;y++) {
