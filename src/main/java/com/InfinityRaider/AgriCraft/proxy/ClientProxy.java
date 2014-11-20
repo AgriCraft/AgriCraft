@@ -2,10 +2,8 @@ package com.InfinityRaider.AgriCraft.proxy;
 
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
-import com.InfinityRaider.AgriCraft.renderers.RenderCrop;
-import com.InfinityRaider.AgriCraft.renderers.RenderItemSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.renderers.RenderSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.renderers.RenderTank;
+import com.InfinityRaider.AgriCraft.renderers.*;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
@@ -41,6 +39,10 @@ public class ClientProxy extends CommonProxy {
         //water tank
         TileEntitySpecialRenderer renderTank = new RenderTank();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, renderTank);
+
+        //water channel
+        TileEntitySpecialRenderer renderChannel = new RenderChannel();
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChannel.class, renderChannel);
 
         LogHelper.info("Renderers registered");
     }
