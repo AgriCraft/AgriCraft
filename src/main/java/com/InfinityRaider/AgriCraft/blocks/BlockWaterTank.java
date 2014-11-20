@@ -99,12 +99,11 @@ public class BlockWaterTank extends BlockContainer{
         }
         world.removeTileEntity(x,y,z);
         if(placeWater) {
-            world.setBlock(x, y, z, Blocks.water);
+            world.setBlock(x, y, z, Blocks.water, 0, 3);
         }
         else {
             world.setBlockToAir(x, y, z);
         }
-        world.notifyBlockOfNeighborChange(x, y, z, null);
     }
 
     @Override

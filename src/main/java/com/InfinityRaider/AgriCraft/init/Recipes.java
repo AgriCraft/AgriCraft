@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.init;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ModItem;
 import com.InfinityRaider.AgriCraft.items.crafting.RecipeJournal;
+import com.InfinityRaider.AgriCraft.items.crafting.RecipeTank;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
@@ -24,6 +25,8 @@ public class Recipes {
         //journal
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.journal,1), "csc", "sbs", "csc", 'c', Items.crops, 's', Names.listAllseed, 'b', net.minecraft.init.Items.writable_book));
         GameRegistry.addRecipe(new RecipeJournal());
+        //tank
+        GameRegistry.addRecipe(new RecipeTank());
         //fruits
         if(ConfigurationHandler.resourcePlants) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.diamond, 1), "nnn", "nnn", "nnn", 'n',"nuggetDiamond"));

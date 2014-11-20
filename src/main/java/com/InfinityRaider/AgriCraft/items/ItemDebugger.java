@@ -64,6 +64,7 @@ public class ItemDebugger extends ModItem {
                 LogHelper.debug("  - Found multiblock partners on: " + (left ? "left, " : "") + (right ? "right, " : "") + (back ? "back, " : "") + (front ? "front, " : "") + (top ? "top, " : "") + (below ? "below" : ""));
                 LogHelper.debug("Water level is on layer "+ (int) Math.floor(((float)tank.getFluidLevel()-0.1F)/((float)(tank.getSingleCapacity()*tank.getXSize()*tank.getZSize())))+ ".");
                 LogHelper.debug("Tank clicked is on  layer "+tank.getYPosition()+".");
+                LogHelper.debug("Tank material is: " +Item.itemRegistry.getNameForObject(tank.getMaterial().getItem())+":"+tank.getMaterial().getItemDamage());
             }
         }
 

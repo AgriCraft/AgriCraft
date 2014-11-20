@@ -5,16 +5,21 @@ import com.InfinityRaider.AgriCraft.network.MessageTileEntityTank;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
 public class TileEntityTank extends TileEntity implements IFluidHandler {
     protected int connectedTanks=1;
     protected int fluidLevel;
+    protected String material;
+    protected int materialMeta;
 
     //OVERRIDES
     //---------
@@ -23,6 +28,8 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     public void writeToNBT(NBTTagCompound tag) {
         tag.setInteger(Names.connected, this.connectedTanks);
         tag.setInteger(Names.level, this.fluidLevel);
+        tag.setString(Names.material, this.material);
+        tag.setInteger(Names.materialMeta, this.materialMeta);
         super.writeToNBT(tag);
     }
 
@@ -31,6 +38,8 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     public void readFromNBT(NBTTagCompound tag) {
         this.connectedTanks = tag.getInteger(Names.connected);
         this.fluidLevel = tag.getInteger(Names.level);
+        this.material = tag.getString(Names.material);
+        this.materialMeta = tag.getInteger(Names.materialMeta);
         super.readFromNBT(tag);
     }
 
@@ -74,6 +83,30 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
         PacketHandler.instance.sendToAllAround(new MessageTileEntityTank(this),new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId,(double) this.xCoord,(double) this.yCoord, (double) this.zCoord, 128d));
         this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
         super.markDirty();
+    }
+
+    //RENDERING METHODS
+    //-----------------
+    //set the wood material
+    public void setMaterial(NBTTagCompound tag) {
+        if(tag.hasKey(Names.material) && tag.hasKey(Names.materialMeta)) {
+            this.material = tag.getString(Names.material);
+            this.materialMeta = tag.getInteger(Names.materialMeta);
+        }
+    }
+
+    public ItemStack getMaterial() {
+        return new ItemStack((Block) Block.blockRegistry.getObject(this.material), 1, this.materialMeta);
+    }
+
+    public IIcon getIcon() {
+        if(this.material!=null || !this.material.equals("")) {
+            Block material = (Block) Block.blockRegistry.getObject(this.material);
+            return material.getIcon(0, this.materialMeta);
+        }
+        else {
+            return this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord).getIcon(0, this.getBlockMetadata());
+        }
     }
 
     //MULTIBLOCK METHODS

@@ -30,6 +30,17 @@ public abstract class OreDictHelper {
     public static int orePlatinumMeta;
     public static int oreOsmiumMeta;
 
+    //checks if an itemstack has this ore dictionary entry
+    public static boolean hasOreId(ItemStack stack, String tag) {
+        int[] ids = OreDictionary.getOreIDs(stack);
+        for(int id:ids) {
+            if(OreDictionary.getOreName(id).equals(tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //checks if two blocks have the same ore dictionary entry
     public static boolean isSameOre(Block block1, int meta1, Block block2, int meta2) {
         if(block1==block2 && meta1==meta2) {
