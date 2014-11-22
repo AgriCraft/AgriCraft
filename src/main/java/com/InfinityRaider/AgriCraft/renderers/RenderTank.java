@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;

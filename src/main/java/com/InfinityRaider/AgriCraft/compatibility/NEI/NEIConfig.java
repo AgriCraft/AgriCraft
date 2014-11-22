@@ -10,8 +10,6 @@ import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
 import net.minecraft.item.ItemStack;
 
 import java.util.Iterator;

@@ -1,7 +1,5 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
-import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.models.ModelCrop;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -12,8 +10,6 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;

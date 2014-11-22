@@ -1,7 +1,5 @@
 package com.InfinityRaider.AgriCraft.reference;
 
-import java.util.Random;
-
 public final class Constants {
     // 1/16th
     public static final float unit = 0.0625F;
