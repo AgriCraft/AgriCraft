@@ -17,6 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
+
 version = "0.0.8"
 group= "com.InfinityRaider.AgriCraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "AgriCraft"
@@ -40,12 +41,12 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    compile fileTree(dir: 'lib', includes: ['CodeChickenCore-1.7.10-1.0.2.9-dev.jar'])
-    compile fileTree(dir: 'lib', includes: ['NotEnoughItems-1.7.10-1.0.2.15-dev.jar'])
+    compile fileTree(dir: 'lib', includes: ['CodeChickenCore-1.7.10-1.0.3.26-dev.jar'])
+    compile fileTree(dir: 'lib', includes: ['CodeChickenLib-1.7.10-1.1.1.104-dev.jar'])
+    compile fileTree(dir: 'lib', includes: ['NotEnoughItems-1.7.10-1.0.3.56-dev.jar'])
     compile fileTree(dir: 'lib', includes: ['Mantle_mc1.7.10_0.3.0.jar'])
     compile fileTree(dir: 'lib', includes: ['natura-1.7.10-2.2.0-b1.jar'])
     compile fileTree(dir: 'lib', includes: ['Baubles-1.7.10-1.0.1.7.jar'])
-    compile fileTree(dir: 'lib', includes: ['Thaumcraft-deobf-1.7.10-4.2.0.1.jar'])
     compile fileTree(dir: 'lib', includes: ['Harvestcraft-dev build.jar'])
     compile fileTree(dir: 'lib', includes: ['Pams Mob Drop Crops 1.7.10a.zip'])
     compile fileTree(dir: 'lib', includes: ['CoFHCore-[1.7.10]3.0.0B6-32.jar'])
