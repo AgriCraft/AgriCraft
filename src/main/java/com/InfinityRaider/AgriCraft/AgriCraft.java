@@ -89,10 +89,7 @@ public class AgriCraft {
         //initialize mutations
         CrossCropHelper.init();
         //configure NEI
-        if(LoadedMods.nei) {
-            NEIConfig configNEI = new NEIConfig();
-            configNEI.loadConfig();
-        }
+        proxy.initNEI();
         LogHelper.info("Post-Initialization Complete");
     }
 }

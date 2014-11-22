@@ -1,21 +1,19 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
-import com.sun.prism.util.tess.Tess;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
 public class RenderTank extends TileEntitySpecialRenderer{
-    private ResourceLocation[] baseTexture = {new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/tankWood.png"), new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/tankIron.png")};
-    private ResourceLocation waterTexture = new ResourceLocation("minecraft:textures/blocks/water_still.png");
+   private ResourceLocation waterTexture = new ResourceLocation("minecraft:textures/blocks/water_still.png");
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
@@ -37,13 +35,13 @@ public class RenderTank extends TileEntitySpecialRenderer{
                 this.drawWater(tank, tessellator);
             }
         GL11.glPopMatrix();
-
     }
 
     private void drawWoodTank(TileEntityTank tank, Tessellator tessellator) {
         double unit = Constants.unit;
         //bind the texture
-        Minecraft.getMinecraft().renderEngine.bindTexture(baseTexture[tank.getBlockMetadata()]);
+        Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(tank.getIcon()));
+        LogHelper.debug("Found "+tank.getIcon().getIconName());
         //disable lighting
         GL11.glDisable(GL11.GL_LIGHTING);
         //tell the tessellator to start drawing
@@ -136,7 +134,7 @@ public class RenderTank extends TileEntitySpecialRenderer{
     private void drawIronTank(TileEntityTank tank, Tessellator tessellator) {
         double unit = Constants.unit;
         //bind the texture
-        Minecraft.getMinecraft().renderEngine.bindTexture(baseTexture[tank.getBlockMetadata()]);
+        Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(tank.getIcon()));
         //disable lighting
         GL11.glDisable(GL11.GL_LIGHTING);
         //tell the tessellator to start drawing

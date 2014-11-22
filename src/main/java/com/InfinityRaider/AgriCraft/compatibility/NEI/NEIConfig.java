@@ -10,7 +10,11 @@ import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
 import net.minecraft.item.ItemStack;
+
+import java.util.Iterator;
 
 public class NEIConfig implements IConfigureNEI {
     private static String version = "1.0";
@@ -24,7 +28,6 @@ public class NEIConfig implements IConfigureNEI {
                 API.registerRecipeHandler(new NEICropMutationHandler());
                 API.registerUsageHandler(new NEICropMutationHandler());
             }
-
             //hide crop blocks in NEI
             hideItems();
         }
@@ -105,4 +108,5 @@ public class NEIConfig implements IConfigureNEI {
     public String getVersion() {
         return version;
     }
+
 }

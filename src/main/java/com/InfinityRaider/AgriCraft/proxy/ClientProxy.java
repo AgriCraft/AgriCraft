@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.renderers.*;
@@ -22,9 +24,6 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.Iterator;
 
 public class ClientProxy extends CommonProxy {
-    @Override
-    public ClientProxy getClientProxy() {return this;}
-
     //register custom renderers
     public void registerRenderers() {
         //crops
@@ -39,6 +38,7 @@ public class ClientProxy extends CommonProxy {
         //water tank
         TileEntitySpecialRenderer renderTank = new RenderTank();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, renderTank);
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockWaterTank), new RenderItemTank(renderTank, new TileEntityTank()));
 
         //water channel
         TileEntitySpecialRenderer renderChannel = new RenderChannel();
@@ -53,6 +53,14 @@ public class ClientProxy extends CommonProxy {
         super.registerEventHandlers();
         FMLCommonHandler.instance().bus().register(new ItemToolTipHandler());
         MinecraftForge.EVENT_BUS.register(new ItemToolTipHandler());
+    }
+
+    //initialize NEI
+    public void initNEI() {
+        if (LoadedMods.nei) {
+            NEIConfig configNEI = new NEIConfig();
+            configNEI.loadConfig();
+        }
     }
 
     //hide items in NEI
