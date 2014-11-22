@@ -4,9 +4,12 @@ import com.InfinityRaider.AgriCraft.handler.PacketHandler;
 import com.InfinityRaider.AgriCraft.network.MessageTileEntityTank;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
@@ -18,7 +21,7 @@ import net.minecraftforge.fluids.*;
 public class TileEntityTank extends TileEntity implements IFluidHandler {
     protected int connectedTanks=1;
     protected int fluidLevel;
-    protected String material;
+    protected String materialName;
     protected int materialMeta;
 
     //OVERRIDES
@@ -26,21 +29,26 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
         tag.setInteger(Names.connected, this.connectedTanks);
         tag.setInteger(Names.level, this.fluidLevel);
-        tag.setString(Names.material, this.material);
-        tag.setInteger(Names.materialMeta, this.materialMeta);
-        super.writeToNBT(tag);
+        if(this.materialName!=null && !this.materialName.equals("")) {
+            tag.setString(Names.material, this.materialName);
+            tag.setInteger(Names.materialMeta, this.materialMeta);
+        }
     }
 
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
         this.connectedTanks = tag.getInteger(Names.connected);
         this.fluidLevel = tag.getInteger(Names.level);
-        this.material = tag.getString(Names.material);
-        this.materialMeta = tag.getInteger(Names.materialMeta);
-        super.readFromNBT(tag);
+        String mat = tag.getString(Names.material);
+        if(mat!=null && !mat.equals("")) {
+            this.materialName = mat;
+            this.materialMeta = tag.getInteger(Names.materialMeta);
+        }
     }
 
     //updates the tile entity every tick
@@ -73,6 +81,7 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
             this.worldObj.markBlockForUpdate(xCoord,yCoord,zCoord);
             this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
             Minecraft.getMinecraft().renderGlobal.markBlockForUpdate(xCoord, yCoord, zCoord);
+            super.receiveClientEvent(id, value);
         }
         return true;
     }
@@ -89,19 +98,45 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     //-----------------
     //set the wood material
     public void setMaterial(NBTTagCompound tag) {
-        if(tag.hasKey(Names.material) && tag.hasKey(Names.materialMeta)) {
-            this.material = tag.getString(Names.material);
+        if(tag!=null && tag.hasKey(Names.material) && tag.hasKey(Names.materialMeta)) {
+            this.materialName = tag.getString(Names.material);
             this.materialMeta = tag.getInteger(Names.materialMeta);
         }
     }
 
+    public void setMaterial(ItemStack stack) {
+        this.materialName = Block.blockRegistry.getNameForObject(stack.getItem());
+        this.materialMeta = stack.getItemDamage();
+    }
+
+    public void setMaterial(String name, int meta) {
+        LogHelper.debug("setting material to " + name + ":" + meta);
+        if(name!=null && Block.blockRegistry.getObject(name)!=null) {
+            this.materialName = name;
+            this.materialMeta = meta;
+        }
+    }
+
+    //get material information
+    public String getMaterialName() {
+        return this.materialName;
+    }
+
+    public int getMaterialMeta() {
+        return this.materialMeta;
+    }
+
     public ItemStack getMaterial() {
-        return new ItemStack((Block) Block.blockRegistry.getObject(this.material), 1, this.materialMeta);
+        ItemStack stack = new ItemStack(Blocks.planks, 1, 0);
+        if(this.materialName !=null && !this.materialName.equals("")) {
+            stack = new ItemStack((Block) Block.blockRegistry.getObject(this.materialName), 1, this.materialMeta);
+        }
+        return stack;
     }
 
     public IIcon getIcon() {
-        if(this.material!=null || !this.material.equals("")) {
-            Block material = (Block) Block.blockRegistry.getObject(this.material);
+        if(this.materialName !=null && !this.materialName.equals("")) {
+            Block material = (Block) Block.blockRegistry.getObject(this.materialName);
             return material.getIcon(0, this.materialMeta);
         }
         else {
@@ -127,7 +162,7 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     public boolean isSameTank(TileEntity tileEntity) {
         if(tileEntity!=null && tileEntity instanceof TileEntityTank) {
             TileEntityTank tank = (TileEntityTank) tileEntity;
-            return this.isWood()==tank.isWood();
+            return ItemStack.areItemStacksEqual(this.getMaterial(), tank.getMaterial());
         }
         return false;
     }

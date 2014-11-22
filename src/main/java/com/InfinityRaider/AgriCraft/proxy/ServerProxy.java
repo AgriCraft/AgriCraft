@@ -4,10 +4,10 @@ import net.minecraft.item.ItemStack;
 
 public class ServerProxy extends CommonProxy {
     @Override
-    public ClientProxy getClientProxy() {return null;}
+    public void registerRenderers() {}
 
     @Override
-    public void registerRenderers() {}
+    public void initNEI() {}
 
     @Override
     public void hideItemInNEI(ItemStack stack) {}

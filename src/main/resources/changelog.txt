@@ -6,6 +6,8 @@ Changelog
 -Added a config for registering seeds to drop from tall grass
 -Fixed having to look at a block to open the Agricultural Journal
 -Seeds that have been analyzed or have been planted on a crop can no longer be planted on regular farmland
+-Finished water tank rendering: the tank renders using the texture from the wood used to craft it
+-Fixed trying to configure mutation NEI recipe handler serverside
 
 0.0.7
 -Somewhere a bug creeped in where planted seeds would immediately be fully grown, this is fixed now

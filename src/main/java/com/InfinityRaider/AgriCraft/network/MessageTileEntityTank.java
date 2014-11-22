@@ -10,6 +10,8 @@ import io.netty.buffer.ByteBuf;
 public class MessageTileEntityTank implements IMessage, IMessageHandler<MessageTileEntityTank, IMessage> {
     public int connectedTanks;
     public int fluidLevel;
+    public String materialName;
+    public int materialMeta;
     public int x;
     public int y;
     public int z;
@@ -20,6 +22,8 @@ public class MessageTileEntityTank implements IMessage, IMessageHandler<MessageT
     public MessageTileEntityTank(TileEntityTank tank) {
         this.connectedTanks = tank.getConnectedTanks();
         this.fluidLevel = tank.getFluidLevel();
+        this.materialName = tank.getMaterialName();
+        this.materialMeta = tank.getMaterialMeta();
         this.x = tank.xCoord;
         this.y = tank.yCoord;
         this.z = tank.zCoord;
@@ -29,6 +33,9 @@ public class MessageTileEntityTank implements IMessage, IMessageHandler<MessageT
     public void fromBytes(ByteBuf buf) {
         this.connectedTanks = buf.readInt();
         this.fluidLevel = buf.readInt();
+        int materialNameLength = buf.readInt();
+        this.materialName = new String(buf.readBytes(materialNameLength).array());
+        this.materialMeta = buf.readInt();
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
@@ -38,6 +45,9 @@ public class MessageTileEntityTank implements IMessage, IMessageHandler<MessageT
     public void toBytes(ByteBuf buf) {
         buf.writeInt(connectedTanks);
         buf.writeInt(fluidLevel);
+        buf.writeInt(materialName.length());
+        buf.writeBytes(materialName.getBytes());
+        buf.writeInt(materialMeta);
         buf.writeInt(x);
         buf.writeInt(y);
         buf.writeInt(z);
@@ -47,6 +57,7 @@ public class MessageTileEntityTank implements IMessage, IMessageHandler<MessageT
     public IMessage onMessage(MessageTileEntityTank message, MessageContext ctx) {
         if(FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x,message.y,message.z) instanceof TileEntityTank) {
             TileEntityTank tank = (TileEntityTank) FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x,message.y,message.z);
+            tank.setMaterial(materialName, materialMeta);
             tank.setConnectedTanks(message.connectedTanks);
             tank.setFluidLevel(message.fluidLevel);
         }
