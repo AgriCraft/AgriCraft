@@ -17,10 +17,8 @@ package com.InfinityRaider.AgriCraft;
 */
 
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
-import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
-import com.InfinityRaider.AgriCraft.handler.PacketHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -52,8 +50,6 @@ public class AgriCraft {
         //setting up configuration file
         ConfigurationHandler.init(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
-        //initialize packet handler
-        PacketHandler.init();
         //initialize blocks
         Blocks.init();
         //initialize crops

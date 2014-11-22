@@ -1,26 +1,20 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
-import com.InfinityRaider.AgriCraft.handler.PacketHandler;
-import com.InfinityRaider.AgriCraft.network.MessageTileEntityTank;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
-public class TileEntityTank extends TileEntity implements IFluidHandler {
+public class TileEntityTank extends TileEntityAgricraft implements IFluidHandler {
     protected int connectedTanks=1;
-    protected int fluidLevel;
+    protected int fluidLevel=0;
     protected String materialName;
     protected int materialMeta;
 
@@ -31,7 +25,9 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setInteger(Names.connected, this.connectedTanks);
-        tag.setInteger(Names.level, this.fluidLevel);
+        if(this.fluidLevel>0) {
+            tag.setInteger(Names.level, this.fluidLevel);
+        }
         if(this.materialName!=null && !this.materialName.equals("")) {
             tag.setString(Names.material, this.materialName);
             tag.setInteger(Names.materialMeta, this.materialMeta);
@@ -43,10 +39,14 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         this.connectedTanks = tag.getInteger(Names.connected);
-        this.fluidLevel = tag.getInteger(Names.level);
-        String mat = tag.getString(Names.material);
-        if(mat!=null && !mat.equals("")) {
-            this.materialName = mat;
+        if(tag.hasKey(Names.level)) {
+            this.fluidLevel = tag.getInteger(Names.level);
+        }
+        else {
+            this.fluidLevel=0;
+        }
+        if(tag.hasKey(Names.material) && tag.hasKey(Names.materialMeta)) {
+            this.materialName = tag.getString(Names.material);
             this.materialMeta = tag.getInteger(Names.materialMeta);
         }
     }
@@ -68,30 +68,16 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
         }
     }
 
-    //uses the packet handler to create a packet with the data contained in the tile entity
-    @Override
-    public Packet getDescriptionPacket() {
-        return PacketHandler.instance.getPacketFrom(new MessageTileEntityTank(this));
-    }
-
     //called on client event
     @Override
     public boolean receiveClientEvent(int id, int value) {
-        if(worldObj.isRemote && id == 1) {
+        if(worldObj.isRemote) {
             this.worldObj.markBlockForUpdate(xCoord,yCoord,zCoord);
             this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
             Minecraft.getMinecraft().renderGlobal.markBlockForUpdate(xCoord, yCoord, zCoord);
             super.receiveClientEvent(id, value);
         }
         return true;
-    }
-
-    //this gets called when the tile entity should get updated on the client (sort of)
-    @Override
-    public void markDirty() {
-        PacketHandler.instance.sendToAllAround(new MessageTileEntityTank(this),new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId,(double) this.xCoord,(double) this.yCoord, (double) this.zCoord, 128d));
-        this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
-        super.markDirty();
     }
 
     //RENDERING METHODS
@@ -110,7 +96,6 @@ public class TileEntityTank extends TileEntity implements IFluidHandler {
     }
 
     public void setMaterial(String name, int meta) {
-        LogHelper.debug("setting material to " + name + ":" + meta);
         if(name!=null && Block.blockRegistry.getObject(name)!=null) {
             this.materialName = name;
             this.materialMeta = meta;

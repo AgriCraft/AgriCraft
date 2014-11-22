@@ -1,24 +1,19 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.handler.PacketHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
-import com.InfinityRaider.AgriCraft.network.MessageTileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntitySeedAnalyzer extends TileEntity implements ISidedInventory {
+public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISidedInventory {
     public ItemStack seed = null;
     public ItemStack journal = null;
     public int progress = 0;
@@ -175,19 +170,6 @@ public class TileEntitySeedAnalyzer extends TileEntity implements ISidedInventor
     //returns the scaled progress percentage
     public int getProgressScaled(int scale) {
         return (int) Math.round(((float) this.progress*scale)/((float) this.maxProgress()));
-    }
-
-    //uses the packet handler to create a packet with the data contained in the tile entity
-    @Override
-    public Packet getDescriptionPacket() {
-        return PacketHandler.instance.getPacketFrom(new MessageTileEntitySeedAnalyzer(this));
-    }
-
-    //this gets called when the tile entity should get updated on the client
-    @Override
-    public void markDirty() {
-        PacketHandler.instance.sendToAllAround(new MessageTileEntitySeedAnalyzer(this),new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId,(double) this.xCoord,(double) this.yCoord, (double) this.zCoord, 128d));
-        super.markDirty();
     }
 
     @Override

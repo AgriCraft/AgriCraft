@@ -3,26 +3,21 @@ package com.InfinityRaider.AgriCraft.tileentity;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.handler.PacketHandler;
-import com.InfinityRaider.AgriCraft.network.MessageTileEntityCrop;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.CrossCropHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.block.BlockBush;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
-public class TileEntityCrop extends TileEntity {
+public class TileEntityCrop extends TileEntityAgricraft {
     public int growth=0;
     public int gain=0;
     public int strength=0;
@@ -37,8 +32,10 @@ public class TileEntityCrop extends TileEntity {
         tag.setShort(Names.gain, (short) gain);
         tag.setShort(Names.strength, (short) strength);
         tag.setBoolean("crossCrop",crossCrop);
-        tag.setString("seed",this.getSeedString());
-        tag.setShort("seedMeta",(short) seedMeta);
+        if(this.seed!=null) {
+            tag.setString(Names.seed, this.getSeedString());
+            tag.setShort(Names.meta, (short) seedMeta);
+        }
         super.writeToNBT(tag);
     }
 
@@ -49,8 +46,10 @@ public class TileEntityCrop extends TileEntity {
         this.gain=tag.getInteger(Names.gain);
         this.strength=tag.getInteger(Names.strength);
         this.crossCrop=tag.getBoolean("crossCrop");
-        this.setSeed(tag.getString("seed"));
-        this.seedMeta=tag.getInteger("seedMeta");
+        if(tag.hasKey(Names.seed) && tag.hasKey(Names.meta)) {
+            this.setSeed(tag.getString(Names.seed));
+            this.seedMeta = tag.getInteger(Names.meta);
+        }
         super.readFromNBT(tag);
     }
 
@@ -149,19 +148,4 @@ public class TileEntityCrop extends TileEntity {
     public void setSeed(String input) {
         this.seed = input.equalsIgnoreCase("none")?null:(ItemSeeds) Item.itemRegistry.getObject(input);
     }
-
-    //uses the packet handler to create a packet with the data contained in the tile entity
-    @Override
-    public Packet getDescriptionPacket() {
-       return PacketHandler.instance.getPacketFrom(new MessageTileEntityCrop(this));
-    }
-
-    //this gets called when the tile entity should get updated on the client (sort of)
-    @Override
-    public void markDirty() {
-        PacketHandler.instance.sendToAllAround(new MessageTileEntityCrop(this),new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId,(double) this.xCoord,(double) this.yCoord, (double) this.zCoord,128d));
-        this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);     //update lighting (just in case the plant emits light)
-        super.markDirty();
-    }
-
 }
