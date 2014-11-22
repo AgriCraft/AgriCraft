@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import mods.natura.common.NContent;
 import net.minecraft.block.BlockBush;

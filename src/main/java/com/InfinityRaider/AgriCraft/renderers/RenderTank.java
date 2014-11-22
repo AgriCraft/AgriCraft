@@ -41,7 +41,6 @@ public class RenderTank extends TileEntitySpecialRenderer{
         double unit = Constants.unit;
         //bind the texture
         Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(tank.getIcon()));
-        LogHelper.debug("Found "+tank.getIcon().getIconName());
         //disable lighting
         GL11.glDisable(GL11.GL_LIGHTING);
         //tell the tessellator to start drawing
