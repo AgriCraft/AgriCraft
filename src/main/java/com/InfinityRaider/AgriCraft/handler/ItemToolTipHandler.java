@@ -26,12 +26,5 @@ public class ItemToolTipHandler {
                 }
             }
         }
-        else if(stack.getItem() instanceof ItemJournal) {
-            int nr = 0;
-            if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.discoveredSeeds)) {
-                nr = stack.stackTagCompound.getTagList(Names.discoveredSeeds, 10).tagCount();
-            }
-            event.toolTip.add("Discovered Seeds: "+nr);
-        }
     }
 }

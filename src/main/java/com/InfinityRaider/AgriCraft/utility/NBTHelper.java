@@ -1,10 +1,22 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.InfinityRaider.AgriCraft.reference.Names;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 public abstract class NBTHelper {
+    public static NBTTagCompound getMaterialTag(ItemStack stack) {
+        NBTTagCompound tag = new NBTTagCompound();
+        if(stack!=null && stack.getItem()!=null) {
+            tag.setString(Names.material, Block.blockRegistry.getNameForObject(((ItemBlock) stack.getItem()).field_150939_a));
+            tag.setInteger(Names.materialMeta, stack.getItemDamage());
+        }
+        return tag;
+    }
+
     public static boolean listContainsStack(NBTTagList list, ItemStack stack) {
         if(stack==null || stack.getItem()==null) {
             return true;
