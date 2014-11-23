@@ -9,6 +9,7 @@ Changelog
 -Finished water tank rendering: the tank renders using the texture from the wood used to craft it
 -Fixed trying to configure mutation NEI recipe handler serverside
 -Updated to forge 10.13.1.1217
+-Changed some things in my TileEntity classes (I suggest you remove your crops and seed analyzers from your world before updating)
 
 0.0.7
 -Somewhere a bug creeped in where planted seeds would immediately be fully grown, this is fixed now
