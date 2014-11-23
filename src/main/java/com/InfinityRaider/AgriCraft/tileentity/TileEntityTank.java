@@ -124,8 +124,7 @@ public class TileEntityTank extends TileEntityAgricraft implements IFluidHandler
             Block material = (Block) Block.blockRegistry.getObject(this.materialName);
             return material.getIcon(0, this.materialMeta);
         }
-        else {
-            return this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord).getIcon(0, this.getBlockMetadata());
+        else {            return Blocks.planks.getIcon(0, 0);
         }
     }
 
@@ -275,6 +274,7 @@ public class TileEntityTank extends TileEntityAgricraft implements IFluidHandler
                 for (int z = this.zCoord - zPos; z < this.zCoord - zPos + zSize; z++) {
                     if(this.worldObj.getTileEntity(x, y ,z)!=null && this.worldObj.getTileEntity(x, y ,z) instanceof TileEntityTank) {
                         ((TileEntityTank) this.worldObj.getTileEntity(x, y, z)).fluidLevel = lvl;
+                        ((TileEntityTank) this.worldObj.getTileEntity(x, y, z)).markDirty();
                     }
                 }
             }
@@ -497,7 +497,7 @@ public class TileEntityTank extends TileEntityAgricraft implements IFluidHandler
     //check if the tank can be drained
     @Override
     public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        return this.getYPosition()==0 && fluid==FluidRegistry.WATER && !this.isEmpty();
+        return fluid==FluidRegistry.WATER && !this.isEmpty();
     }
 
     @Override
