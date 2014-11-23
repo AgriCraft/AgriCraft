@@ -3,13 +3,18 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemJournal extends ModItem {
     public ItemJournal() {
@@ -42,6 +47,15 @@ public class ItemJournal extends ModItem {
             player.openGui(AgriCraft.instance, GuiHandler.seedAnalyzerID, world, player.serverPosX, player.serverPosY, player.serverPosZ);
         }
         return stack;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+        int nr = 0;
+        if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.discoveredSeeds)) {
+            nr = stack.stackTagCompound.getTagList(Names.discoveredSeeds, 10).tagCount();
+        }
+        list.add("Discovered Seeds: "+nr);
     }
 
     @Override
