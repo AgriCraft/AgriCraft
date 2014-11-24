@@ -25,13 +25,13 @@ public class RenderTank extends TileEntitySpecialRenderer{
             //draw the tank
             if(tank.getBlockMetadata()==0) {
                 this.drawWoodTank(tank, tessellator);
+                //draw the waterTexture
+                if(tank.getFluidLevel()>0) {
+                    this.drawWater(tank, tessellator);
+                }
             }
             else if(tank.getBlockMetadata()==1) {
                 this.drawIronTank(tank, tessellator);
-            }
-            //draw the waterTexture
-            if(tank.getFluidLevel()>0) {
-                this.drawWater(tank, tessellator);
             }
         GL11.glPopMatrix();
     }
