@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -140,6 +139,7 @@ public class BlockWaterTank extends BlockContainer{
     public int damageDropped(int meta) {
         return meta;
     }
+
 
     //render methods
     //--------------
