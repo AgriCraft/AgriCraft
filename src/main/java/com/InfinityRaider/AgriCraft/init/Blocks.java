@@ -22,12 +22,12 @@ public class Blocks {
         blockCrop = new BlockCrop();
         seedAnalyzer = new BlockSeedAnalyzer();
         blockWaterTank = new BlockWaterTank();
-        //blockWaterChannel = new BlockWaterChannel();
+        blockWaterChannel = new BlockWaterChannel();
 
         RegisterHelper.registerBlock(blockCrop, Names.crops);
         RegisterHelper.registerBlock(seedAnalyzer, Names.seedAnalyzer);
         RegisterHelper.registerBlock(blockWaterTank, Names.tank, ItemBlockTank.class);
-        //RegisterHelper.registerBlock(blockWaterChannel, Names.channel, ItemBlockChannel.class);
+        RegisterHelper.registerBlock(blockWaterChannel, Names.channel, ItemBlockChannel.class);
         LogHelper.info("Blocks registered");
     }
 }

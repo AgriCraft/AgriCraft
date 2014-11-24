@@ -20,20 +20,12 @@ public class ItemBlockChannel extends ItemBlock {
     @Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
         NBTTagCompound tag = stack.stackTagCompound;
-        LogHelper.debug("Setting water tank: ");
-        if(tag.hasKey(Names.material) && tag.hasKey(Names.materialMeta)) {
-            LogHelper.debug("Material: " + tag.getString(Names.material) + ":" + tag.getInteger(Names.materialMeta));
-        }
-        else {
-            LogHelper.debug("Material: " + Block.blockRegistry.getNameForObject(Blocks.planks) + ":0");
-        }
         if (!world.setBlock(x, y, z, field_150939_a, metadata, 3)) {
             return false;
         }
         if (world.getBlock(x, y, z) == field_150939_a) {
             field_150939_a.onBlockPlacedBy(world, x, y, z, player, stack);
             field_150939_a.onPostBlockPlaced(world, x, y, z, metadata);
-            LogHelper.debug("Looking for TileEntity");
             if(world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityTank) {
                 TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
                 tank.setMaterial(tag);

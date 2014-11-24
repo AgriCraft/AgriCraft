@@ -2,21 +2,15 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
-public class TileEntityTank extends TileEntityAgricraft implements IFluidHandler {
+public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler {
     protected int connectedTanks=1;
     protected int fluidLevel=0;
-    protected String materialName;
-    protected int materialMeta;
 
     //OVERRIDES
     //---------
@@ -27,10 +21,6 @@ public class TileEntityTank extends TileEntityAgricraft implements IFluidHandler
         tag.setInteger(Names.connected, this.connectedTanks);
         if(this.fluidLevel>0) {
             tag.setInteger(Names.level, this.fluidLevel);
-        }
-        if(this.materialName!=null && !this.materialName.equals("")) {
-            tag.setString(Names.material, this.materialName);
-            tag.setInteger(Names.materialMeta, this.materialMeta);
         }
     }
 
@@ -44,10 +34,6 @@ public class TileEntityTank extends TileEntityAgricraft implements IFluidHandler
         }
         else {
             this.fluidLevel=0;
-        }
-        if(tag.hasKey(Names.material) && tag.hasKey(Names.materialMeta)) {
-            this.materialName = tag.getString(Names.material);
-            this.materialMeta = tag.getInteger(Names.materialMeta);
         }
     }
 
@@ -80,53 +66,6 @@ public class TileEntityTank extends TileEntityAgricraft implements IFluidHandler
         return true;
     }
 
-    //RENDERING METHODS
-    //-----------------
-    //set the wood material
-    public void setMaterial(NBTTagCompound tag) {
-        if(tag!=null && tag.hasKey(Names.material) && tag.hasKey(Names.materialMeta)) {
-            this.materialName = tag.getString(Names.material);
-            this.materialMeta = tag.getInteger(Names.materialMeta);
-        }
-    }
-
-    public void setMaterial(ItemStack stack) {
-        this.materialName = Block.blockRegistry.getNameForObject(stack.getItem());
-        this.materialMeta = stack.getItemDamage();
-    }
-
-    public void setMaterial(String name, int meta) {
-        if(name!=null && Block.blockRegistry.getObject(name)!=null) {
-            this.materialName = name;
-            this.materialMeta = meta;
-        }
-    }
-
-    //get material information
-    public String getMaterialName() {
-        return this.materialName;
-    }
-
-    public int getMaterialMeta() {
-        return this.materialMeta;
-    }
-
-    public ItemStack getMaterial() {
-        ItemStack stack = new ItemStack(Blocks.planks, 1, 0);
-        if(this.materialName !=null && !this.materialName.equals("")) {
-            stack = new ItemStack((Block) Block.blockRegistry.getObject(this.materialName), 1, this.materialMeta);
-        }
-        return stack;
-    }
-
-    public IIcon getIcon() {
-        if(this.materialName !=null && !this.materialName.equals("")) {
-            Block material = (Block) Block.blockRegistry.getObject(this.materialName);
-            return material.getIcon(0, this.materialMeta);
-        }
-        else {            return Blocks.planks.getIcon(0, 0);
-        }
-    }
 
     //MULTIBLOCK METHODS
     //------------------
@@ -146,7 +85,7 @@ public class TileEntityTank extends TileEntityAgricraft implements IFluidHandler
     public boolean isSameTank(TileEntity tileEntity) {
         if(tileEntity!=null && tileEntity instanceof TileEntityTank) {
             TileEntityTank tank = (TileEntityTank) tileEntity;
-            return ItemStack.areItemStacksEqual(this.getMaterial(), tank.getMaterial());
+            return this.isSameMaterial(tank);
         }
         return false;
     }

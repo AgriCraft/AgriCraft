@@ -11,6 +11,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileEntityAgricraft.class, Reference.MOD_ID+':'+Names.tileEntity+'_'+Reference.MOD_ID);
         GameRegistry.registerTileEntity(TileEntityCrop.class, Reference.MOD_ID+':'+ Names.tileEntity+'_'+Names.crop);
         GameRegistry.registerTileEntity(TileEntitySeedAnalyzer.class, Reference.MOD_ID+':'+ Names.tileEntity+'_'+Names.seedAnalyzer);
+        GameRegistry.registerTileEntity(TileEntityCustomWood.class, Reference.MOD_ID+':'+Names.tileEntity+'_'+"customWood");
         GameRegistry.registerTileEntity(TileEntityTank.class, Reference.MOD_ID+':'+ Names.tileEntity+'_'+Names.tank);
         GameRegistry.registerTileEntity(TileEntityChannel.class, Reference.MOD_ID+':'+ Names.tileEntity+'_'+Names.channel);
 
