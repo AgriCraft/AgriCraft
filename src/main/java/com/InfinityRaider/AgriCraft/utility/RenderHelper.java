@@ -2,9 +2,11 @@ package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -72,4 +74,9 @@ public abstract class RenderHelper {
         }
     }
 
+    //adds a vertex to the tessellator scaled with 1/46th of a block
+    public static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v) {
+        float unit = Constants.unit;
+        tessellator.addVertexWithUV(x*unit, y*unit, z*unit, u*unit, v*unit);
+    }
 }

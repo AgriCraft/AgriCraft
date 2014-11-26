@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
-import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -44,7 +43,6 @@ public class RenderChannel  extends TileEntitySpecialRenderer {
     }
 
     private void renderBottom(TileEntityChannel channel, Tessellator tessellator) {
-        float unit = Constants.unit;
         //bind the texture
         Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(channel.getIcon()));
         //disable lighting
@@ -52,31 +50,32 @@ public class RenderChannel  extends TileEntitySpecialRenderer {
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
             //draw first plane front
-            tessellator.addVertexWithUV(unit*4, unit*5, unit*4, unit*4, unit*4);
-            tessellator.addVertexWithUV(unit*4, unit*5, 1-unit*4, unit*4, 1-unit*4);
-            tessellator.addVertexWithUV(1-unit*4, unit*5, 1-unit*4, 1-unit*4, 1-unit*4);
-            tessellator.addVertexWithUV(1-unit*4, unit*5, unit*4, 1-unit*4, unit*4);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4, 5, 4, 4, 4);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4, 5, 12, 4, 12);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12, 5, 12, 12, 12);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12, 5, 4, 12, 12);
             //draw first plane back
-            tessellator.addVertexWithUV(unit*4, unit*4, unit*4, unit*4, unit*4);
-            tessellator.addVertexWithUV(1-unit*4, unit*4, unit*4, 1-unit*4, unit*4);
-            tessellator.addVertexWithUV(1-unit*4, unit*4, 1-unit*4, 1-unit*4, 1-unit*4);
-            tessellator.addVertexWithUV(unit*4, unit*4, 1-unit*4, unit*4, 1-unit*4);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4, 4, 4, 4, 4);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12, 4,4, 12, 4);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12, 4, 12, 12, 12);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4, 4, 12, 4, 12);
         tessellator.draw();
         //enable lighting
         GL11.glEnable(GL11.GL_LIGHTING);
     }
 
     private void renderSide(TileEntityChannel channel, Tessellator tessellator, char axis, int direction) {
-        boolean neighbour = channel.hasNeighbour(axis, direction);
-        boolean x = axis=='x';
-        switch(axis) {
-            case('x'): this.renderSideX(channel, tessellator, direction, neighbour);break;
-            //case('z'): this.renderSideZ(channel, tessellator, direction, neighbour);break;
+        if((axis=='x' || axis=='z') && (direction==1 || direction==-1)) {
+            boolean neighbour = channel.hasNeighbour(axis, direction);
+            boolean x = axis == 'x';
+            switch (axis) {
+                case ('x'):this.renderSideX(channel, tessellator, direction, neighbour);break;
+                case ('z'):this.renderSideZ(channel, tessellator, direction, neighbour);break;
+            }
         }
     }
 
     private void renderSideX(TileEntityChannel channel, Tessellator tessellator, int direction, boolean neighbour) {
-        float unit = Constants.unit;    //1 block = 16 units
         //bind the texture
         Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(channel.getIcon()));
         //disable lighting
@@ -86,64 +85,64 @@ public class RenderChannel  extends TileEntitySpecialRenderer {
             if(neighbour) {
                 //extend bottom plane
                     //draw bottom plane front
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*5, unit*4, 6*(direction+1)*unit, unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*5, 1-unit*4, 6*(direction+1)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*5, 1-unit*4, (10+direction*6)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*5, unit*4, (10+direction*6)*unit, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 6*(direction+1), 5, 4, 6*(direction+1), 4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 6*(direction+1), 5, 12, 6*(direction+1), 12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 5, 12, (10.5F+direction*5.5F), 12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 5, 4, (10.5F+direction*5.5F), 4);
                     //draw bottom plane back
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, unit*4, 6*(direction+1)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, unit*4, (10+direction*6)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, 1-unit*4, (10+direction*6)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, 1-unit*4, 6*(direction+1)*unit, 1-unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 6*(direction+1),4, 4, 6*(direction+1), 4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 4, 4, (10.5F+direction*5.5F), 4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 4, 12, (10.5F+direction*5.5F), 12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 6*(direction+1),4, 12, 6*(direction+1), 12);
                 //draw side edges
                     //draw first edge front
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 1-unit*4, 6*(direction+1)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, 1-unit*4, 6*(direction+1)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, 1-unit*4, (10+direction*6)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 1-unit*4, (10+direction*6)*unit, 1-unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(1+direction), 12, 12, 5.5F*(direction+1), 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 4, 12, 5.5F*(direction+1), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 4, 12, (10.5F+direction*5.5F), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 12, 12, (10.5F+direction*5.5F), 16-12);
                     //draw first edge back
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 1-unit*5, 6*(direction+1)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 1-unit*5, (10+direction*6)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, 1-unit*5, (10+direction*6)*unit, unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, 1-unit*5, 6*(direction+1)*unit, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 12, 11, 5.5F*(direction+1), 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 12, 11, (10.5F+direction*5.5F), 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 4, 11, (10.5F+direction*5.5F), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 4, 11, 5.5F*(direction+1), 16-4);
                     //draw first edge top
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 11*unit, 6*(direction+1)*unit, 11*unit);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 12*unit, 6*(direction+1)*unit, 12*unit);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 12*unit, (10+direction*6)*unit, 12*unit);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 11*unit, (10+direction*6)*unit, 11*unit);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 12, 11, 5.5F*(direction+1), 11);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 12, 12, 5.5F*(direction+1), 12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 12, 12, (10.5F+direction*5.5F), 12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 12, 11, (10.5F+direction*5.5F), 11);
                     //draw second edge front
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, unit*5, 6*(direction+1)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, unit*5, 6*(direction+1)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, unit*5, (10+direction*6)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, unit*5, (10+direction*6)*unit, 1-unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 12, 5, 5.5F*(direction+1), 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 4, 5, 5.5F*(direction+1), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 4, 5, (10.5F+direction*5.5F), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 12, 5, (10.5F+direction*5.5F), 16-12);
                     //draw second edge back
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, unit*4, 6*(direction+1)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, unit*4, (10+direction*6)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, unit*4, (10+direction*6)*unit, unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, unit*4, 6*(direction+1)*unit, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 12, 4, 5.5F*(direction+1), 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 12, 4, (10.5F+direction*5.5F), 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 4, 4, (10.5F+direction*5.5F), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 4, 4, 5.5F*(direction+1), 16-4);
                     //draw second edge top
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 4*unit, 6*(direction+1)*unit, 4*unit);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 5*unit, 6*(direction+1)*unit, 5*unit);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 5*unit, (10+direction*6)*unit, 5*unit);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 4*unit, (10+direction*6)*unit, 4*unit);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 12, 4, 5.5F*(direction+1), 4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5.5F*(direction+1), 12, 5, 5.5F*(direction+1), 5);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 12, 5, (10.5F+direction*5.5F), 5);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (10.5F+direction*5.5F), 12, 4, (10.5F+direction*5.5F), 4);
             }
             else {
-                //draw an edge
+                //draw an edge (Z-fighting here, needs work)
                     //draw edge front
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, 1-unit*4, 1-unit*4, 1-unit*4, unit*4);
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, unit*4, 1-unit*4, 1-unit*4, 1-unit*4);
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, unit*4, unit*4, unit*4, 1-unit*4);
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, 1-unit*4, unit*4, unit*4, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (8.5F+3.5F*direction), 12, 12, 12, 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (8.5F+3.5F*direction), 4, 12, 12, 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (8.5F+3.5F*direction), 4, 4, 4, 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (8.5F+3.5F*direction), 12, 4, 4, 16-4);
                     //draw edge back
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, 1-unit*4, 1-unit*4, unit*4, 1-unit*4);
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, 1-unit*4, unit*4, 1-unit*4, 1-unit*4);
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, unit*4, unit*4, 1-unit*4, unit*4);
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, unit*4, 1-unit*4, unit*4, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (7.5F+3.5F*direction), 12, 12, 4, 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (7.5F+3.5F*direction), 12, 4, 12, 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (7.5F+3.5F*direction), 4, 4, 12, 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (7.5F+3.5F*direction), 4, 12, 4, 16-4);
                     //draw edge top
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, 1-unit*4, unit*4, (7.5F+3.5F*direction)*unit, unit*4);
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, 1-unit*4, 1-unit*4, (7.5F+3.5F*direction)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, 1-unit*4, 1-unit*4, (8.5F+3.5F*direction)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, 1-unit*4, unit*4, (8.5F+3.5F*direction)*unit, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (7.5F+3.5F*direction), 12, 4, (7.5F+3.5F*direction), 4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (7.5F+3.5F*direction), 12, 12, (7.5F+3.5F*direction), 12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (8.5F+3.5F*direction), 12, 12, (8.5F+3.5F*direction), 12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, (8.5F+3.5F*direction), 12, 4, (8.5F+3.5F*direction), 4);
             }
         tessellator.draw();
         //enable lighting
@@ -151,7 +150,6 @@ public class RenderChannel  extends TileEntitySpecialRenderer {
     }
 
     private void renderSideZ(TileEntityChannel channel, Tessellator tessellator, int direction, boolean neighbour) {
-        float unit = Constants.unit;    //1 block = 16 units
         //bind the texture
         Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(channel.getIcon()));
         //disable lighting
@@ -161,64 +159,64 @@ public class RenderChannel  extends TileEntitySpecialRenderer {
             if(neighbour) {
                 //extend bottom plane
                     //draw bottom plane front
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*5, unit*4, 6*(direction+1)*unit, unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*5, 1-unit*4, 6*(direction+1)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*5, 1-unit*4, (10+direction*6)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*5, unit*4, (10+direction*6)*unit, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 5, (6+6*direction), 4, (6+6*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 5, (10+6*direction), 4, (10+6*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 5, (10+6*direction), 12, (10+6*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 5, (6+6*direction), 12, (6+6*direction));
                     //draw bottom plane back
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, unit*4, 6*(direction+1)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, unit*4, (10+direction*6)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, 1-unit*4, (10+direction*6)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, 1-unit*4, 6*(direction+1)*unit, 1-unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 4, (6+6*direction), 4, (6+6*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 4, (6+6*direction), 12, (6+6*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 4, (10+6*direction), 12, (10+6*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 4, (10+6*direction), 4, (10+6*direction));
                 //draw side edges
                     //draw first edge front
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 1-unit*4, 6*(direction+1)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, 1-unit*4, 6*(direction+1)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, 1-unit*4, (10+direction*6)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 1-unit*4, (10+direction*6)*unit, 1-unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, 5.5F*(1+direction), 5.5F*(1+direction), 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 4, 5.5F*(1+direction), 5.5F*(1+direction), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 4, (10.5F+5.5F*direction), (10.5F+5.5F*direction), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, (10.5F+5.5F*direction), (10.5F+5.5F*direction), 16-12);
                     //draw first edge back
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 1-unit*5, 6*(direction+1)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 1-unit*5, (10+direction*6)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, 1-unit*5, (10+direction*6)*unit, unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, 1-unit*5, 6*(direction+1)*unit, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5, 12, (10.5F+5.5F*direction), (10.5F+5.5F*direction), 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5, 4, (10.5F+5.5F*direction), (10.5F+5.5F*direction), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5, 4, 5.5F*(1+direction), 5.5F*(1+direction), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5, 12, 5.5F*(1+direction), 5.5F*(1+direction), 16-12);
                     //draw first edge top
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 11*unit, 6*(direction+1)*unit, 11*unit);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 12*unit, 6*(direction+1)*unit, 12*unit);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 12*unit, (10+direction*6)*unit, 12*unit);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 11*unit, (10+direction*6)*unit, 11*unit);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5, 12, 5.5F*(1+direction), 5, 5.5F*(1+direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, 5.5F*(1+direction), 4, 5.5F*(1+direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, (10.5F+5.5F*direction), 4, (10.5F+5.5F*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 5, 12, (10.5F+5.5F*direction), 5, (10.5F+5.5F*direction));
                     //draw second edge front
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, unit*5, 6*(direction+1)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, unit*5, 6*(direction+1)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, unit*5, (10+direction*6)*unit, unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, unit*5, (10+direction*6)*unit, 1-unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 11, 12, 5.5F*(1+direction), 5.5F*(1+direction), 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 11, 4, 5.5F*(1+direction), 5.5F*(1+direction), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 11, 4, (10.5F+5.5F*direction), (10.5F+5.5F*direction), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 11, 12, (10.5F+5.5F*direction), (10.5F+5.5F*direction), 16-12);
                     //draw second edge back
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, unit*4, 6*(direction+1)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, unit*4, (10+direction*6)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, unit*4, unit*4, (10+direction*6)*unit, unit*4);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, unit*4, unit*4, 6*(direction+1)*unit, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, (10.5F+5.5F*direction), (10.5F+5.5F*direction), 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 4, (10.5F+5.5F*direction), (10.5F+5.5F*direction), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 4, 5.5F*(1+direction), 5.5F*(1+direction), 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, 5.5F*(1+direction), 5.5F*(1+direction), 16-12);
                     //draw second edge top
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 4*unit, 6*(direction+1)*unit, 4*unit);
-                    tessellator.addVertexWithUV(6*(direction+1)*unit, 1-unit*4, 5*unit, 6*(direction+1)*unit, 5*unit);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 5*unit, (10+direction*6)*unit, 5*unit);
-                    tessellator.addVertexWithUV((10+direction*6)*unit, 1-unit*4, 4*unit, (10+direction*6)*unit, 4*unit);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, 5.5F*(1+direction), 12, 5.5F*(1+direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 11, 12, 5.5F*(1+direction), 11, 5.5F*(1+direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 11, 12, (10.5F+5.5F*direction), 11, (10.5F+5.5F*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, (10.5F+5.5F*direction), 12, (10.5F+5.5F*direction));
             }
             else {
                 //draw an edge
                     //draw edge front
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, 1-unit*4, 1-unit*4, 1-unit*4, 1-unit*4);
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, unit*4, 1-unit*4,  unit*4, 1-unit*4);
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, unit*4, unit*4, unit*4, unit*4);
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, 1-unit*4, unit*4, 1-unit*4, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, (8.5F+3.5F*direction), 4, 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 4, (8.5F+3.5F*direction),  4, 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 4, (8.5F+3.5F*direction), 12, 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, (8.5F+3.5F*direction), 12, 16-12);
                     //draw edge back
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, 1-unit*4, 1-unit*4, 1-unit*4, 1-unit*4);
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, 1-unit*4, unit*4, 1-unit*4, unit*4);
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, unit*4, unit*4, unit*4, unit*4);
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, unit*4, 1-unit*4, unit*4, 1-unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, (7.5F+3.5F*direction), 4, 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, (7.5F+3.5F*direction), 12, 16-12);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 4, (7.5F+3.5F*direction), 12, 16-4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 4, (7.5F+3.5F*direction),  4, 16-4);
                     //draw edge top
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, 1-unit*4, unit*4, (7.5F+3.5F*direction)*unit, unit*4);
-                    tessellator.addVertexWithUV((7.5F+3.5F*direction)*unit, 1-unit*4, 1-unit*4, (7.5F+3.5F*direction)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, 1-unit*4, 1-unit*4, (8.5F+3.5F*direction)*unit, 1-unit*4);
-                    tessellator.addVertexWithUV((8.5F+3.5F*direction)*unit, 1-unit*4, unit*4, (8.5F+3.5F*direction)*unit, unit*4);
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, (7.5F+3.5F*direction), 4, (7.5F+3.5F*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, (8.5F+3.5F*direction), 4, (8.5F+3.5F*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, (8.5F+3.5F*direction), 12, (8.5F+3.5F*direction));
+                    RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, (7.5F+3.5F*direction), 12, (7.5F+3.5F*direction));
         }
         tessellator.draw();
         //enable lighting
@@ -231,5 +229,5 @@ public class RenderChannel  extends TileEntitySpecialRenderer {
 
     private void drawWater(TileEntityChannel channel, Tessellator tessellator) {
 
-    }
+    }    
 }
