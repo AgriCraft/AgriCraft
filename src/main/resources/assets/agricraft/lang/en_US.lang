@@ -50,6 +50,8 @@ tile.agricraft:crops.name=Crops
 tile.agricraft:seedAnalyzer.name=Seed Analyzer
 tile.agricraft:waterTank.0.name=Wooden Water Tank
 tile.agricraft:waterTank.1.name=Iron Water Tank
+tile.agricraft:waterChannel.0.name=Wooden Irrigation Channel
+tile.agricraft:waterChannel.1.name=Iron Irrigation Pipe
 
 tile.agricraft:cropPotato.name=Potato
 tile.agricraft:cropCarrot.name=Carrot

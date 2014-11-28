@@ -2,8 +2,8 @@ package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ModItem;
+import com.InfinityRaider.AgriCraft.items.crafting.RecipeCustomWood;
 import com.InfinityRaider.AgriCraft.items.crafting.RecipeJournal;
-import com.InfinityRaider.AgriCraft.items.crafting.RecipeTank;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
@@ -13,6 +13,10 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class Recipes {
+    public static final boolean[][] tankSchematic = {{true, false, true}, {true, false, true}, {true, true, true}};
+    public static final boolean[][] channelSchematic_1 = {{true, false, true}, {false, true, false}, {false, false, false}};
+    public static final boolean[][] channelSchematic_2 = {{false, false, false}, {true, false, true}, {false, true, false}};
+
     public static void init() {
         //crop item
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.crops, 1), "stickWood", "stickWood", "stickWood", "stickWood"));
@@ -25,8 +29,10 @@ public class Recipes {
         //journal
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.journal,1), "csc", "sbs", "csc", 'c', Items.crops, 's', Names.listAllseed, 'b', net.minecraft.init.Items.writable_book));
         GameRegistry.addRecipe(new RecipeJournal());
-        //tank
-        GameRegistry.addRecipe(new RecipeTank());
+        //tank & channel
+        GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterTank, 1, 0), tankSchematic));
+        GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_1));
+        GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_2));
         //fruits
         if(ConfigurationHandler.resourcePlants) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.diamond, 1), "nnn", "nnn", "nnn", 'n',"nuggetDiamond"));

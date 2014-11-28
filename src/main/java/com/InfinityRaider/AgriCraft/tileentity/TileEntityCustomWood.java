@@ -75,6 +75,15 @@ public class TileEntityCustomWood extends TileEntityAgricraft {
         return stack;
     }
 
+    public NBTTagCompound getMaterialTag() {
+        NBTTagCompound tag = new NBTTagCompound();
+        if(this.materialName !=null && !this.materialName.equals("")) {
+            tag.setString(Names.material, this.materialName);
+            tag.setInteger(Names.materialMeta, this.materialMeta);
+        }
+        return tag;
+    }
+
     public IIcon getIcon() {
         if(this.materialName !=null && !this.materialName.equals("")) {
             Block material = (Block) Block.blockRegistry.getObject(this.materialName);

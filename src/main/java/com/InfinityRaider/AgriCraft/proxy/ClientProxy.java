@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
+import codechicken.nei.api.API;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
@@ -17,7 +18,6 @@ import cpw.mods.fml.common.ModContainer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import codechicken.nei.api.API;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -43,6 +43,7 @@ public class ClientProxy extends CommonProxy {
         //water channel
         TileEntitySpecialRenderer renderChannel = new RenderChannel();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChannel.class, renderChannel);
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockWaterChannel), new RenderItemChannel(renderChannel, new TileEntityChannel()));
 
         LogHelper.info("Renderers registered");
     }

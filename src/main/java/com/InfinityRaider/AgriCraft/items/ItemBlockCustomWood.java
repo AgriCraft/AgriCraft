@@ -1,9 +1,8 @@
 package com.InfinityRaider.AgriCraft.items;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockWaterTank;
-import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,10 +19,11 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemBlockTank extends ItemBlock {
-    public ItemBlockTank(Block block) {
+public class ItemBlockCustomWood extends ItemBlock {
+    public ItemBlockCustomWood(Block block) {
         super(block);
-        setHasSubtypes(true);
+        this.setHasSubtypes(true);
+        this.setCreativeTab(AgriCraftTab.agriCraftTab);
     }
 
     @Override
@@ -35,9 +35,9 @@ public class ItemBlockTank extends ItemBlock {
         if (world.getBlock(x, y, z) == field_150939_a) {
             field_150939_a.onBlockPlacedBy(world, x, y, z, player, stack);
             field_150939_a.onPostBlockPlaced(world, x, y, z, metadata);
-            if(world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityTank) {
-                TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
-                tank.setMaterial(tag);
+            if(world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityCustomWood) {
+                TileEntityCustomWood tileEntity = (TileEntityCustomWood) world.getTileEntity(x, y, z);
+                tileEntity.setMaterial(tag);
             }
         }
         return true;
@@ -45,23 +45,24 @@ public class ItemBlockTank extends ItemBlock {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, java.util.List list) {
-        list.clear();
+    public void getSubItems(Item item, CreativeTabs tab, List list) {
         ArrayList<ItemStack> registeredMaterials = new ArrayList<ItemStack>();
-        for(ItemStack stack:OreDictionary.getOres("plankWood")) {
-            if(stack.getItemDamage()==OreDictionary.WILDCARD_VALUE) {
+        ArrayList<ItemStack> planks = OreDictionary.getOres(Names.plankWood);
+        for(ItemStack plank:planks) {
+            if(plank.getItemDamage()==OreDictionary.WILDCARD_VALUE) {
                 ArrayList<ItemStack> subItems = new ArrayList<ItemStack>();
-                stack.getItem().getSubItems(stack.getItem(), null, subItems);
+                plank.getItem().getSubItems(plank.getItem(), null, subItems);
                 for(ItemStack subItem:subItems) {
                     this.addMaterialToList(subItem, list, 0, registeredMaterials);
                 }
             }
             else {
-                this.addMaterialToList(stack, list, 0, registeredMaterials);
+                this.addMaterialToList(plank, list, 0, registeredMaterials);
             }
         }
     }
 
+    //checks if a list of materials (item stacks) has this material
     @SideOnly(Side.CLIENT)
     private boolean hasMaterial(ArrayList<ItemStack> registeredMaterials, ItemStack material) {
         for(ItemStack stack:registeredMaterials) {
@@ -72,27 +73,18 @@ public class ItemBlockTank extends ItemBlock {
         return false;
     }
 
+    //adds a material (item stack) to a list if it's not registered in a list already
     @SideOnly(Side.CLIENT)
-    private void addMaterialToList(ItemStack stack, List list, int tankMeta, ArrayList<ItemStack> registeredMaterials) {
+    private void addMaterialToList(ItemStack stack, List list, int objectMeta, ArrayList<ItemStack> registeredMaterials) {
         if(!this.hasMaterial(registeredMaterials, stack)) {
-            ItemStack waterTank = new ItemStack(Blocks.blockWaterTank, 1, tankMeta);
+            ItemStack entry = new ItemStack(this.field_150939_a, 1, objectMeta);
             NBTTagCompound tag = NBTHelper.getMaterialTag(stack);
             if (tag != null) {
-                waterTank.setTagCompound(tag);
+                entry.setTagCompound(tag);
             }
-            list.add(waterTank);
+            list.add(entry);
             registeredMaterials.add(stack);
         }
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return this.getUnlocalizedName()+"."+stack.getItemDamage();
-    }
-
-    @Override
-    public int getMetadata(int meta) {
-        return meta;
     }
 
     @SideOnly(Side.CLIENT)
@@ -104,5 +96,15 @@ public class ItemBlockTank extends ItemBlock {
             ItemStack material = new ItemStack((Block) Block.blockRegistry.getObject(name), 1, meta);
             list.add("Material: "+ material.getItem().getItemStackDisplayName(material));
         }
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return this.getUnlocalizedName()+"."+stack.getItemDamage();
+    }
+
+    @Override
+    public int getMetadata(int meta) {
+        return meta;
     }
 }
