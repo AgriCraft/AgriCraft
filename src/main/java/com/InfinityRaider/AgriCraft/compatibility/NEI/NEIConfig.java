@@ -12,8 +12,6 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import net.minecraft.item.ItemStack;
 
-import java.util.Iterator;
-
 public class NEIConfig implements IConfigureNEI {
     private static String version = "1.0";
 

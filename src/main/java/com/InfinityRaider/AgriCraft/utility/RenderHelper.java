@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.utility;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.client.renderer.Tessellator;

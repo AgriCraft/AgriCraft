@@ -4,13 +4,10 @@ import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.blocks.BlockSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterTank;
-import com.InfinityRaider.AgriCraft.items.ItemBlockChannel;
-import com.InfinityRaider.AgriCraft.items.ItemBlockTank;
-import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Blocks {
     public static BlockCrop blockCrop;
@@ -26,8 +23,8 @@ public class Blocks {
 
         RegisterHelper.registerBlock(blockCrop, Names.crops);
         RegisterHelper.registerBlock(seedAnalyzer, Names.seedAnalyzer);
-        RegisterHelper.registerBlock(blockWaterTank, Names.tank, ItemBlockTank.class);
-        RegisterHelper.registerBlock(blockWaterChannel, Names.channel, ItemBlockChannel.class);
+        RegisterHelper.registerBlock(blockWaterTank, Names.tank, ItemBlockCustomWood.class);
+        RegisterHelper.registerBlock(blockWaterChannel, Names.channel, ItemBlockCustomWood.class);
         LogHelper.info("Blocks registered");
     }
 }

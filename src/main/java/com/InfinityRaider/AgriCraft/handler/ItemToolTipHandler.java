@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.item.ItemSeeds;
