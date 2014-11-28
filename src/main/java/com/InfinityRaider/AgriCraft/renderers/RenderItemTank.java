@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
-import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -54,7 +53,6 @@ public class RenderItemTank implements IItemRenderer {
     }
 
     private void drawWoodTank(TileEntityTank tank, Tessellator tessellator) {
-        double unit = Constants.unit;
         //bind the texture
         Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(tank.getIcon()));
         //disable lighting
@@ -62,79 +60,75 @@ public class RenderItemTank implements IItemRenderer {
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
             //draw first plane front
-            tessellator.addVertexWithUV(0, 1, 1, 0, 0);
-            tessellator.addVertexWithUV(0, 0, 1, 0, 1);
-            tessellator.addVertexWithUV(1, 0, 1, 1, 1);
-            tessellator.addVertexWithUV(1, 1, 1, 1, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 0, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 0);
             //draw first plane back
-            tessellator.addVertexWithUV(0, 1, 1 - unit*2, 0, 0);
-            tessellator.addVertexWithUV(1, 1, 1 - unit*2, 1, 0);
-            tessellator.addVertexWithUV(1, 0, 1 - unit*2, 1, 1);
-            tessellator.addVertexWithUV(0, 0, 1 - unit*2, 0, 1);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 14, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 14, 0, 16);
             //draw first plane top
-            tessellator.addVertexWithUV(0, 1, 1-unit*2, 0, 1-unit*2);
-            tessellator.addVertexWithUV(0, 1, 1, 0, 1);
-            tessellator.addVertexWithUV(1, 1, 1, 1, 1);
-            tessellator.addVertexWithUV(1, 1, 1 - unit*2, 1, 1-unit*2);
-
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 14);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 14);
             //draw second plane front
-            tessellator.addVertexWithUV(1, 1, 1, 0, 0);
-            tessellator.addVertexWithUV(1, 0, 1, 0, 1);
-            tessellator.addVertexWithUV(1, 0, 0, 1, 1);
-            tessellator.addVertexWithUV(1, 1, 0, 1, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 0, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
             //draw second plane back
-            tessellator.addVertexWithUV(1 - unit*2, 1, 1, 0, 0);
-            tessellator.addVertexWithUV(1 - unit*2, 1, 0, 1, 0);
-            tessellator.addVertexWithUV(1 - unit*2, 0, 0, 1, 1);
-            tessellator.addVertexWithUV(1 - unit*2, 0, 1, 0, 1);
+            RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 16, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 0, 16, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 14, 0, 0, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 14, 0, 16, 0, 16);
             //draw second plane top
-            tessellator.addVertexWithUV(1 - unit*2, 1, 0, 1-unit*2, 0);
-            tessellator.addVertexWithUV(1 - unit*2, 1, 1, 1-unit*2, 1);
-            tessellator.addVertexWithUV(1, 1, 1, 1, 1);
-            tessellator.addVertexWithUV(1, 1, 0, 1, 0);
-
+            RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 0, 14, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 16, 14, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
             //draw third plane front
-            tessellator.addVertexWithUV(1, 1, 0, 0, 0);
-            tessellator.addVertexWithUV(1, 0, 0, 0, 1);
-            tessellator.addVertexWithUV(0, 0, 0, 1, 1);
-            tessellator.addVertexWithUV(0, 1, 0, 1, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 16, 0);
             //draw third plane back
-            tessellator.addVertexWithUV(1, 1, unit*2, 0, 0);
-            tessellator.addVertexWithUV(0, 1, unit*2, 1, 0);
-            tessellator.addVertexWithUV(0, 0, unit*2, 1, 1);
-            tessellator.addVertexWithUV(1, 0, unit*2, 0, 1);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 2, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 2, 16, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 2, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 2, 0, 16);
             //draw third plane top
-            tessellator.addVertexWithUV(0, 1, 0, 0, 0);
-            tessellator.addVertexWithUV(0, 1, unit*2, 0, unit*2);
-            tessellator.addVertexWithUV(1, 1, unit*2, 1, unit*2);
-            tessellator.addVertexWithUV(1, 1, 0, 1, 0);
-
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 2, 0, 2);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 2, 16, 2);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
             //draw fourth plane front
-            tessellator.addVertexWithUV(0, 1, 0, 0, 0);
-            tessellator.addVertexWithUV(0, 0, 0, 0, 1);
-            tessellator.addVertexWithUV(0, 0, 1, 1, 1);
-            tessellator.addVertexWithUV(0, 1, 1, 1, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 16, 0);
             //draw fourth plane back
-            tessellator.addVertexWithUV(unit*2, 1, 0, 0, 0);
-            tessellator.addVertexWithUV(unit*2, 1, 1, 1, 0);
-            tessellator.addVertexWithUV(unit*2, 0, 1, 1, 1);
-            tessellator.addVertexWithUV(unit*2, 0, 0, 0, 1);
+            RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 0, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 16, 16, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 2, 0, 16, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 2, 0, 0, 0, 16);
             //draw fourth plane top
-            tessellator.addVertexWithUV(0, 1, 0, 0, 0);
-            tessellator.addVertexWithUV(0, 1, 1, 0, 1);
-            tessellator.addVertexWithUV(unit*2, 1, 1, unit*2, 1);
-            tessellator.addVertexWithUV(unit*2, 1, 0, unit*2, 0);
-
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 16, 2, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 0, 2, 0);
             //draw bottom plane front
-            tessellator.addVertexWithUV(0, 0, 0, 0, 0);
-            tessellator.addVertexWithUV(1, 0, 0, 0, 1);
-            tessellator.addVertexWithUV(1, 0, 1, 1, 1);
-            tessellator.addVertexWithUV(0, 0, 1, 1, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 0);
             //draw bottom plane back
-            tessellator.addVertexWithUV(0, unit, 0, 0, 0);
-            tessellator.addVertexWithUV(0, unit, 1, 1, 0);
-            tessellator.addVertexWithUV(1, unit, 1, 1, 1);
-            tessellator.addVertexWithUV(1, unit, 0, 0, 1);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 0, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 16, 16, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 16, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 0, 0, 16);
         tessellator.draw();
         //enable lighting
         GL11.glEnable(GL11.GL_LIGHTING);

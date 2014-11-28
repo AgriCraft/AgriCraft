@@ -62,15 +62,15 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
             //start drawing
             tessellator.startDrawingQuads();
                 //front
-                tessellator.addVertexWithUV(0 - Constants.unit*8, 0, 0, 1, 1);
-                tessellator.addVertexWithUV(0 - Constants.unit*8, 1, 0, 1, 0);
-                tessellator.addVertexWithUV(1 - Constants.unit*8, 1, 0, 0, 0);
-                tessellator.addVertexWithUV(1 - Constants.unit*8, 0, 0, 0, 1);
+                RenderHelper.addScaledVertexWithUV(tessellator, 0-8, 0, 0, 16, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, 0-8, 16, 0, 16, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, 16-8, 16, 0, 0, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, 16-8, 0, 0, 0, 16);
                 //back
-                tessellator.addVertexWithUV(0 - Constants.unit*8, 0, 0, 1, 1);
-                tessellator.addVertexWithUV(1 - Constants.unit*8, 0, 0, 0, 1);
-                tessellator.addVertexWithUV(1 - Constants.unit*8, 1, 0, 0, 0);
-                tessellator.addVertexWithUV(0 - Constants.unit*8, 1, 0, 1, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, 0-8, 0, 0, 16, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, 16-8, 0, 0, 0, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, 16-8, 16, 0, 0, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, 0-8, 16, 0, 16, 0);
                 //note the texture is rotating around the (0,1,0) axis, which goes trough the centre of the surface, in order to rotate the texture around it's centre axis
                 //this axis has to be coincident with the rotation axis, this is why I am shifting all the vertices in the x direction over half a block
             tessellator.draw();
