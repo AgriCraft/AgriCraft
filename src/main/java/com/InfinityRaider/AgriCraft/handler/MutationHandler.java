@@ -1,14 +1,15 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.InfinityRaider.AgriCraft.utility.IOHelper;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 
-public abstract class CrossCropHelper {
+public abstract class MutationHandler {
     private static ItemStack[] mutations;
     private static ItemStack[] parents1;
     private static ItemStack[] parents2;
@@ -40,24 +41,24 @@ public abstract class CrossCropHelper {
 
     //gets all the possible crossovers
     public static ItemStack[] getCrossOvers(TileEntityCrop[] crops) {
-        TileEntityCrop[] parents = CrossCropHelper.getParents(crops);
+        TileEntityCrop[] parents = MutationHandler.getParents(crops);
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         switch (parents.length) {
             case 2:
-                list.addAll(CrossCropHelper.getMutation(parents[0], parents[1]));
+                list.addAll(MutationHandler.getMutation(parents[0], parents[1]));
                 break;
             case 3:
-                list.addAll(CrossCropHelper.getMutation(parents[0], parents[1]));
-                list.addAll(CrossCropHelper.getMutation(parents[0], parents[2]));
-                list.addAll(CrossCropHelper.getMutation(parents[1], parents[2]));
+                list.addAll(MutationHandler.getMutation(parents[0], parents[1]));
+                list.addAll(MutationHandler.getMutation(parents[0], parents[2]));
+                list.addAll(MutationHandler.getMutation(parents[1], parents[2]));
                 break;
             case 4:
-                list.addAll(CrossCropHelper.getMutation(parents[0], parents[1]));
-                list.addAll(CrossCropHelper.getMutation(parents[0], parents[2]));
-                list.addAll(CrossCropHelper.getMutation(parents[0], parents[3]));
-                list.addAll(CrossCropHelper.getMutation(parents[1], parents[2]));
-                list.addAll(CrossCropHelper.getMutation(parents[1], parents[3]));
-                list.addAll(CrossCropHelper.getMutation(parents[2], parents[3]));
+                list.addAll(MutationHandler.getMutation(parents[0], parents[1]));
+                list.addAll(MutationHandler.getMutation(parents[0], parents[2]));
+                list.addAll(MutationHandler.getMutation(parents[0], parents[3]));
+                list.addAll(MutationHandler.getMutation(parents[1], parents[2]));
+                list.addAll(MutationHandler.getMutation(parents[1], parents[3]));
+                list.addAll(MutationHandler.getMutation(parents[2], parents[3]));
                 break;
         }
         return cleanItemStackArray(list.toArray(new ItemStack[list.size()]));

@@ -4,7 +4,7 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.utility.CrossCropHelper;
+import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -63,8 +63,8 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     @Override
     public void loadCraftingRecipes(String id, Object... results) {
         if(id.equalsIgnoreCase(NEICropMutationHandler.id)) {
-            ItemStack[] mutations = CrossCropHelper.getMutations();
-            ItemStack[][] parents = CrossCropHelper.getParents();
+            ItemStack[] mutations = MutationHandler.getMutations();
+            ItemStack[][] parents = MutationHandler.getParents();
             for(int i=0;i<mutations.length;i++) {
                 if(mutations[i].getItem()!=null && parents[i][0].getItem()!=null && parents[i][1].getItem()!=null) {
                     arecipes.add(new CachedCropMutationRecipe(parents[i][0], parents[i][1], mutations[i]));
@@ -84,7 +84,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     @Override
     public void loadCraftingRecipes(ItemStack result) {
         if(result.getItem() instanceof ItemSeeds) {
-            ItemStack[][] parents = CrossCropHelper.getParents(result);
+            ItemStack[][] parents = MutationHandler.getParents(result);
             if((parents!=null) && (parents.length>0)) {
                 for(ItemStack[]parent:parents) {
                     if (parent[0].getItem() != null && parent[1] != null) {
@@ -99,8 +99,8 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
         if(ingredient.getItem() instanceof ItemSeeds) {
-            ItemStack[] mutations = CrossCropHelper.getMutations(ingredient);
-            ItemStack[] coParents = CrossCropHelper.getCoParents(ingredient);
+            ItemStack[] mutations = MutationHandler.getMutations(ingredient);
+            ItemStack[] coParents = MutationHandler.getCoParents(ingredient);
             for(int i=0;i<mutations.length;i++) {
                 if(mutations[i].getItem()!=null && coParents[i].getItem()!=null) {
                     arecipes.add(new CachedCropMutationRecipe(new ItemStack(ingredient.getItem(), 1, ingredient.getItemDamage()), coParents[i], mutations[i]));

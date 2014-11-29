@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.gui;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.utility.CrossCropHelper;
+import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -326,7 +326,7 @@ public class GuiJournal extends GuiScreen {
             plantIcons[i] = RenderHelper.getIcon(SeedHelper.getPlant((ItemSeeds) seed.getItem()), RenderHelper.plantIconIndex((ItemSeeds) seed.getItem(), seed.getItemDamage(), i));
         }
         //get the icons for the parents that mutate into this seed
-        ItemStack[][] parents = CrossCropHelper.getParents(seed);
+        ItemStack[][] parents = MutationHandler.getParents(seed);
         ArrayList<IIcon> iconList0 = new ArrayList<IIcon>();
         ArrayList<IIcon> IconList1 = new ArrayList<IIcon>();
         ArrayList<ItemStack> list0 = new ArrayList<ItemStack>();
@@ -348,8 +348,8 @@ public class GuiJournal extends GuiScreen {
             discoveredParents[i][1]=list1.get(i);
         }
         //get the icons for the co parents and the mutations this seed can mutate to
-        ItemStack[] coParents = CrossCropHelper.getCoParents(seed);
-        ItemStack[] mutations = CrossCropHelper.getMutations(seed);
+        ItemStack[] coParents = MutationHandler.getCoParents(seed);
+        ItemStack[] mutations = MutationHandler.getMutations(seed);
         ArrayList<IIcon> coParentsIconList = new ArrayList<IIcon>();
         ArrayList<IIcon> mutationsIconList = new ArrayList<IIcon>();
         ArrayList<ItemStack> coParentsList = new ArrayList<ItemStack>();

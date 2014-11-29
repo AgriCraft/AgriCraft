@@ -4,7 +4,7 @@ import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.CrossCropHelper;
+import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -66,16 +66,16 @@ public class TileEntityCrop extends TileEntityAgricraft {
                 int index = (int) Math.floor(Math.random() * neighbours.length);
                 if (neighbours[index]!=null && neighbours[index].seed!=null && neighbours[index].isMature()) {
                     this.crossCrop = false;
-                    int[] stats = CrossCropHelper.getStats(neighbours);
+                    int[] stats = MutationHandler.getStats(neighbours);
                     this.setPlant(stats[0], stats[1] ,stats[2], neighbours[index].seed, neighbours[index].seedMeta);
                     change = true;
                 }
             } else {
-                ItemStack[] crossOvers = CrossCropHelper.getCrossOvers(neighbours);
+                ItemStack[] crossOvers = MutationHandler.getCrossOvers(neighbours);
                 if (crossOvers != null && crossOvers.length>0) {
                     int index = (int) Math.floor(Math.random()*crossOvers.length);
                     if(crossOvers[index].getItem()!=null) {
-                        int[] stats = CrossCropHelper.getStats(neighbours);
+                        int[] stats = MutationHandler.getStats(neighbours);
                         this.crossCrop = false;
                         this.setPlant(stats[0], stats[1], stats[2], (ItemSeeds) crossOvers[index].getItem(), crossOvers[index].getItemDamage());
                         change = true;

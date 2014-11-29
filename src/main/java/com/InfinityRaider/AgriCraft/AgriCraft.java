@@ -22,7 +22,7 @@ import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.utility.CrossCropHelper;
+import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -83,7 +83,7 @@ public class AgriCraft {
     public static void postInit(FMLPostInitializationEvent event) {
         LogHelper.info("Starting Post-Initialization");
         //initialize mutations
-        CrossCropHelper.init();
+        MutationHandler.init();
         //configure NEI
         proxy.initNEI();
         LogHelper.info("Post-Initialization Complete");
