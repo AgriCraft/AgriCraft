@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -42,89 +43,119 @@ public class RenderTank extends TileEntitySpecialRenderer{
         GL11.glDisable(GL11.GL_LIGHTING);
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
-            if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord, tank.yCoord, tank.zCoord+1))) {
-                //draw first plane front
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 0, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 0);
-                //draw first plane back
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 14, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 14, 0, 16);
-                //draw first plane top
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 14);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 14);
-            }
-            if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord+1, tank.yCoord, tank.zCoord))) {
-                //draw second plane front
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 0, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
-                //draw second plane back
-                RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 16, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 0, 16, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 14, 0, 0, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 14, 0, 16, 0, 16);
-                //draw second plane top
-                RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 0, 14, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 16, 14, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
-            }
-            if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord, tank.yCoord, tank.zCoord-1))) {
-                //draw third plane front
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 16, 0);
-                //draw third plane back
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 2, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 2, 16, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 2, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 2, 0, 16);
-                //draw third plane top
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 2, 0, 2);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 2, 16, 2);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
-            }
-            if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord-1, tank.yCoord, tank.zCoord))) {
-                //draw fourth plane front
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 16, 0);
-                //draw fourth plane back
-                RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 0, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 16, 16, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 2, 0, 16, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 2, 0, 0, 0, 16);
-                //draw fourth plane top
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 16, 2, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 0, 2, 0);
-            }
-            if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord, tank.yCoord-1, tank.zCoord))) {
-                //draw bottom plane front
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 0);
-                //draw bottom plane back
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 0, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 16, 16, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 16, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 0, 0, 16);
-            }
+            this.renderBottom(tank, tessellator);
+            this.renderSide(tank, tessellator, 'x', -1);
+            this.renderSide(tank, tessellator, 'x', 1);
+            this.renderSide(tank, tessellator, 'z', -1);
+            this.renderSide(tank, tessellator, 'z', 1);
         tessellator.draw();
         //enable lighting
         GL11.glEnable(GL11.GL_LIGHTING);
+    }
+
+    private void renderBottom(TileEntityTank tank, Tessellator tessellator) {
+        if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord, tank.yCoord-1, tank.zCoord))) {
+            //draw bottom plane front
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 0);
+            //draw bottom plane back
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 0, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 16, 16, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 16, 16, 16);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 0, 0, 16);
+        }
+    }
+
+    private void renderSide(TileEntityTank tank, Tessellator tessellator, char axis, int direction) {
+        if ((axis == 'x' || axis == 'z') && (direction == 1 || direction == -1)) {
+            boolean x = axis=='x';
+            if(tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction))instanceof TileEntityChannel && ((TileEntityChannel) tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction))).isSameMaterial(tank)) {
+                //draw plane front top
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(9+7*direction), 0, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 11, x?0:(9+7*direction), 0, 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 11, x?16:(9+7*direction), 16, 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 16, x?16:(9+7*direction), 16, 0);
+                //draw plane front left
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 11, x?0:(9+7*direction), 0, 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 5, x?0:(9+7*direction), 0, 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?5:(9+7*direction), 5, 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?5:(9+7*direction), 5, 5);
+                //draw plane front bottom
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 5, x?0:(9+7*direction), 0, 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 0, x?0:(9+7*direction), 0, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 0, x?16:(9+7*direction), 16, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 5, x?16:(9+7*direction), 16, 11);
+                //draw plane front right
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 11, x?11:(9+7*direction), 11, 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 5, x?11:(9+7*direction), 11, 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 5, x?16:(9+7*direction), 16, 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 11, x?16:(9+7*direction), 16, 5);
+                //draw plane back top
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 16, x?0:(7+7*direction), 0, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(7+7*direction), 16, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 11, x?16:(7+7*direction), 16, 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 11, x?0:(7+7*direction), 0, 5);
+                //draw plane back left
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 11, x?0:(7+7*direction), 0, 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 11, x?5:(7+7*direction), 5, 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 5, x?5:(7+7*direction), 5, 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 5, x?0:(7+7*direction), 0, 11);
+                //draw plane back bottom
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 5, x?0:(7+7*direction), 0, 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 5, x?16:(7+7*direction), 16, 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 0, x?16:(7+7*direction), 16, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 0, x?0:(7+7*direction), 0, 16);
+                //draw plane back right
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?11:(7+7*direction), 11, 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 11, x?16:(7+7*direction), 16, 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 5, x?16:(7+7*direction), 16, 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?11:(7+7*direction), 11, 11);
+                //draw hole bottom plane
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?5:(7+7*direction), x?(7+7*direction):5, x?5:(7+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?11:(9+7*direction), x?(7+7*direction):5, x?11:(9+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?11:(9+7*direction), x?(9+7*direction):11, x?11:(9+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?5:(7+7*direction), x?(9+7*direction):11, x?5:(7+7*direction));
+                //draw hole right plane
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 11, x?5:(7+7*direction), (7+7*direction), 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 5, x?5:(7+7*direction), (7+7*direction), 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?5:(9+7*direction), (9+7*direction), 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?5:(9+7*direction), (9+7*direction), 5);
+                //draw hole top plane
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?5:(7+7*direction), x?(7+7*direction):5, x?5:(7+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?5:(7+7*direction), x?(9+7*direction):11, x?5:(7+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?11:(9+7*direction), x?(9+7*direction):11, x?11:(9+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?11:(9+7*direction), x?(7+7*direction):5, x?11:(9+7*direction));
+                //draw hole left plane
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?11:(7+7*direction), (7+7*direction), 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 11, x?11:(9+7*direction), (9+7*direction), 5);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 5, x?11:(9+7*direction), (9+7*direction), 11);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?11:(7+7*direction), (7+7*direction), 11);
+                //draw plane top
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(7+7*direction), x?(7+7*direction):0, x?0:(7+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(9+7*direction), x?(7+7*direction):0, x?16:(9+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(9+7*direction), x?(9+7*direction):16, x?16:(9+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(7+7*direction), x?(9+7*direction):16, x?0:(7+7*direction));
+            }
+            else if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction)))) {
+                //draw front plane
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 16, x?16:(9+7*direction), 0, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 0, x?16:(9+7*direction), 0, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 0, x?0:(9+7*direction), 16, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(9+7*direction), 16, 0);
+                //draw back plane
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(7+7*direction), 0, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 16, x?0:(7+7*direction), 16, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 0, x?0:(7+7*direction), 16, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 0, x?16:(7+7*direction), 0, 16);
+                //draw top plane
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(7+7*direction), x?(7+7*direction):0, x?0:(7+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(9+7*direction), x?(7+7*direction):0, x?16:(9+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(9+7*direction), x?(9+7*direction):16, x?16:(9+7*direction));
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(7+7*direction), x?(9+7*direction):16, x?0:(7+7*direction));
+            }
+        }
     }
 
     private void drawIronTank(TileEntityTank tank, Tessellator tessellator) {
