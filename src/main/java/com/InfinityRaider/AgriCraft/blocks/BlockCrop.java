@@ -91,6 +91,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     }
                 }
                 else if(crop.hasPlant() && crop.isMature()) {
+                    LogHelper.debug("Harvesting crop");
                     this.harvest(crop);
                 }
             }
