@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -65,6 +66,12 @@ public class ItemDebugger extends ModItem {
                 LogHelper.debug("Water level is on layer "+ (int) Math.floor(((float)tank.getFluidLevel()-0.1F)/((float)(tank.getSingleCapacity()*tank.getXSize()*tank.getZSize())))+ ".");
                 LogHelper.debug("Tank clicked is on  layer "+tank.getYPosition()+".");
                 LogHelper.debug("Tank material is: " +Item.itemRegistry.getNameForObject(tank.getMaterial().getItem())+":"+tank.getMaterial().getItemDamage());
+            }
+
+            //print data for channel
+            else if (world.getBlock(x, y, z) == Blocks.blockWaterChannel) {
+                TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
+                LogHelper.debug("Chanel material is: " +Item.itemRegistry.getNameForObject(channel.getMaterial().getItem())+":"+channel.getMaterial().getItemDamage());
             }
         }
 
