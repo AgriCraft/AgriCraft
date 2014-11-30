@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -64,87 +65,101 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     //this harvests the crop
     public void harvest(World world, int x, int y, int z) {
         if(!world.isRemote) {
+            boolean update = false;
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-            crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
-            ArrayList<ItemStack> drops = SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
-            for(ItemStack drop:drops) {
-                LogHelper.debug("Spawning item in world: "+Item.itemRegistry.getNameForObject(drop.getItem())+":"+drop.getItemDamage());
-                this.dropBlockAsItem(world, x, y, z, drop);
+            if(crop.crossCrop) {
+                crop.crossCrop = false;
+                this.dropBlockAsItem(world, x, y, z, new ItemStack(Items.crops, 1));
+                update = true;
+            }
+            else if(crop.isMature()) {
+                crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
+                update = true;
+                ArrayList<ItemStack> drops = SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
+                for (ItemStack drop : drops) {
+                    LogHelper.debug("Spawning item in world: " + Item.itemRegistry.getNameForObject(drop.getItem()) + ":" + drop.getItemDamage());
+                    this.dropBlockAsItem(world, x, y, z, drop);
+                }
+            }
+            if (update) {
+                this.syncAndUpdate(world, x, y ,z);
             }
         }
+    }
+
+    public void setCrossCrop(World world, int x, int y, int z, EntityPlayer player) {
+        if(!world.isRemote) {
+            boolean update = false;
+            LogHelper.debug("Trying to set crosscrop");
+            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+            if(!crop.crossCrop && !crop.hasPlant()) {
+                crop.crossCrop=true;
+                player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode?player.getCurrentEquippedItem().stackSize:player.getCurrentEquippedItem().stackSize - 1;
+                update = true;
+                LogHelper.debug("Crosscrop set");
+            }
+            if (update) {
+                this.syncAndUpdate(world, x, y ,z);
+            }
+        }
+    }
+
+    public void plantSeed(World world, int x, int y, int z, EntityPlayer player) {
+        if(!world.isRemote) {
+            boolean update = false;
+            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+            LogHelper.debug("Trying to plant " + player.getCurrentEquippedItem().getItem().getUnlocalizedName());
+            //is the cropEmpty a crosscrop or does it already have a plant
+            if (crop.crossCrop || crop.hasPlant()) {
+                return;
+            }
+            //the seed can be planted here
+            else {
+                ItemStack stack = player.getCurrentEquippedItem();
+                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem())) {
+                    return;
+                }
+                //get NBT data from the seeds
+                if (player.getCurrentEquippedItem().stackTagCompound != null && player.getCurrentEquippedItem().stackTagCompound.hasKey(Names.growth)) {
+                    //NBT data was found: copy data to plant
+                    crop.setPlant(stack.stackTagCompound.getInteger(Names.growth), stack.stackTagCompound.getInteger(Names.gain), stack.stackTagCompound.getInteger(Names.strength), (ItemSeeds) stack.getItem(), stack.getItemDamage());
+                } else {
+                    //NBT data was not initialized: set defaults
+                    crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, (ItemSeeds) stack.getItem(), stack.getItemDamage());
+                }
+                //take one seed away if the player is not in creative
+                player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
+                update = true;
+            }
+            if (update) {
+                this.syncAndUpdate(world, x, y ,z);
+            }
+        }
+    }
+
+    public void syncAndUpdate(World world, int x, int y, int z) {
+        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y ,z);
+        world.addBlockEvent(x,y,z,this,1,0); //lets the tile entity know it has been updated
+        crop.markDirty(); //lets Minecraft know the tile entity has changed
+        world.notifyBlockChange(x,y,z,this); //lets the neighbors know this has been updated
     }
 
     //This gets called when the block is right clicked (player uses the block)
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
-        //flag to see if something has changed serverside that needs to be sent clientside
-        boolean update = false;
         //only make things happen serverside
         if(!world.isRemote) {   //very important, makes sure everything happens on the server
-            LogHelper.debug("Block right clicked, doing serverside stuff");
-            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             //check to see if the player has an empty hand
             if (player.getCurrentEquippedItem() == null) {
-                if(crop.crossCrop) {
-                    LogHelper.debug("Setting crop back to regular crop");
-                    crop.crossCrop = false;
-                    update = true;
-                    if(!player.capabilities.isCreativeMode) {
-                        world.spawnEntityInWorld(new EntityItem(world,x,y,z,new ItemStack(Items.crops,1)));
-                    }
-                }
-                else if(crop.hasPlant() && crop.isMature()) {
-                    LogHelper.debug("Harvesting crop");
-                    this.harvest(world, x, y ,z);
-                }
+                this.harvest(world, x, y, z);
             }
-
             //check to see if the player clicked with crops (crosscrop attempt)
-            else if(player.getCurrentEquippedItem().getItem()==Items.crops) {
-                if(crop.crossCrop || crop.hasPlant()) {
-                    LogHelper.debug("Crop is already a crosscrop or something is planted here");
-                }
-                else {
-                    LogHelper.debug("Setting to crosscrop");
-                    crop.crossCrop=true;
-                    player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode?player.getCurrentEquippedItem().stackSize:player.getCurrentEquippedItem().stackSize - 1;
-                    update = true;
-                }
+            else if (player.getCurrentEquippedItem().getItem() == Items.crops) {
+                this.setCrossCrop(world, x, y, z, player);
             }
-
             //check to see if clicked with seeds
             else if (player.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
-                LogHelper.debug("Trying to plant " + player.getCurrentEquippedItem().getItem().getUnlocalizedName());
-                //is the cropEmpty a crosscrop or does it already have a plant
-                if (crop.crossCrop || crop.hasPlant()) {
-                    LogHelper.debug("something is already planted here");
-                }
-                //the seed can be planted here
-                else {
-                    ItemStack stack = player.getCurrentEquippedItem();
-                    if(!SeedHelper.isValidSeed((ItemSeeds) stack.getItem())) {
-                        return false;
-                    }
-                    //get NBT data from the seeds
-                    if (player.getCurrentEquippedItem().stackTagCompound != null && player.getCurrentEquippedItem().stackTagCompound.hasKey(Names.growth)) {
-                        //NBT data was found: copy data to plant
-                        LogHelper.debug("Found data on seed, copying to crop");
-                        crop.setPlant(stack.stackTagCompound.getInteger(Names.growth), stack.stackTagCompound.getInteger(Names.gain), stack.stackTagCompound.getInteger(Names.strength), (ItemSeeds) stack.getItem(), stack.getItemDamage());
-                    } else {
-                        //NBT data was not initialized: set defaults
-                        LogHelper.debug("No plant data on seed, setting crop to defaults");
-                        crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, (ItemSeeds) stack.getItem(), stack.getItemDamage());
-                    }
-                    //take one seed away if the player is not in creative
-                    player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode?player.getCurrentEquippedItem().stackSize:player.getCurrentEquippedItem().stackSize - 1;
-                    LogHelper.debug("Planting " + (player.getCurrentEquippedItem().getItem()).getUnlocalizedName());
-                    update = true;
-                }
-            }
-            if(update) {
-                world.addBlockEvent(x,y,z,this,1,0);    //lets the tile entity know it has been updated
-                crop.markDirty();                       //lets Minecraft know the tile entity has changed
-                world.notifyBlockChange(x,y,z,this);    //lets the neighbors know this has been updated
+                this.plantSeed(world, x, y, z, player);
             }
         }
         return false;
@@ -180,7 +195,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     }
                 }
             }
-            ForgeEventFactory.fireBlockHarvesting(drops, world, this, x, y, z, meta, i, f, false, harvesters.get());
             for(ItemStack drop:drops) {
                 this.dropBlockAsItem(world, x, y, z, drop);
             }
