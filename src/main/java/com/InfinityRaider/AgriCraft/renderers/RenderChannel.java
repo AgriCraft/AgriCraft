@@ -1,10 +1,13 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -150,5 +153,43 @@ public class RenderChannel  extends TileEntitySpecialRenderer {
 
     private void drawWater(TileEntityChannel channel, Tessellator tessellator) {
         Minecraft.getMinecraft().renderEngine.bindTexture(this.waterTexture);
-    }    
+        float y = channel.getFluidHeight();
+        //stolen from Vanilla code
+        int l = Blocks.water.colorMultiplier(channel.getWorldObj(), channel.xCoord, channel.yCoord, channel.zCoord);
+        float f = (float)(l >> 16 & 255) / 255.0F;
+        float f1 = (float)(l >> 8 & 255) / 255.0F;
+        float f2 = (float)(l & 255) / 255.0F;
+        float f4 = 1.0F;
+        //tell the tessellator to start drawing
+        tessellator.startDrawingQuads();
+            tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(channel.getWorldObj(), channel.xCoord, channel.yCoord, channel.zCoord));
+            tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
+            //draw central water level
+            RenderHelper.addScaledVertexWithUV(tessellator, 5, y, 5, 5, 5);
+            RenderHelper.addScaledVertexWithUV(tessellator, 5, y, 11, 5, 11);
+            RenderHelper.addScaledVertexWithUV(tessellator, 11, y, 11, 11, 11);
+            RenderHelper.addScaledVertexWithUV(tessellator, 11, y, 5, 11, 5);
+            //connect to edges
+            this.connectWater(channel, tessellator, 'x', y);
+            this.connectWater(channel, tessellator, 'z', y);
+        tessellator.draw();
+    }
+
+    private void connectWater(TileEntityChannel channel, Tessellator tessellator, char axis, float y) {
+        if(axis=='x' || axis=='z') {
+            //checks if there is a neighbouring block that this block can connect to
+            if(channel.hasNeighbour(axis, 1)) {
+                boolean x = axis=='x';
+                TileEntityCustomWood te = (TileEntityCustomWood) channel.getWorldObj().getTileEntity(channel.xCoord, channel.yCoord, channel.zCoord);
+                if(te instanceof TileEntityChannel) {
+                    float y2 = (y + 5+7*((float) ((TileEntityChannel) te).getFluidLevel())/((float) Constants.mB/2))/2;
+                    RenderHelper.addScaledVertexWithUV(tessellator, 11, y, x?5:11, 11, x?5:11);
+                    RenderHelper.addScaledVertexWithUV(tessellator, x?11:5, y, 11, x?11:5, 11);
+                    RenderHelper.addScaledVertexWithUV(tessellator, x?21:5, y2, x?11:21, 5, x?11:5);
+                    RenderHelper.addScaledVertexWithUV(tessellator, x?21:11, y2, x?5:21, x?5:11, 5);
+                }
+
+            }
+        }
+    }
 }

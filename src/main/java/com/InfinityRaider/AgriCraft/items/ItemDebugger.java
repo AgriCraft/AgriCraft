@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
@@ -15,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import sun.rmi.runtime.Log;
 
 public class ItemDebugger extends ModItem {
     public ItemDebugger() {
@@ -56,6 +58,7 @@ public class ItemDebugger extends ModItem {
                 int[] size = tank.getDimensions();
                 LogHelper.debug("  - MultiBlock Size: " + size[0] + "x" + size[1] + "x" + size[2]);
                 LogHelper.debug("  - FluidLevel: " + tank.getFluidLevel() + "/" + tank.getTotalCapacity());
+                LogHelper.debug("  - FluidHeight: "+tank.getFluidY());
                 boolean left = tank.isMultiBlockPartner(world.getTileEntity(x - 1, y, z));
                 boolean right = tank.isMultiBlockPartner(world.getTileEntity(x + 1, y, z));
                 boolean back = tank.isMultiBlockPartner(world.getTileEntity(x, y, z - 1));
@@ -72,6 +75,8 @@ public class ItemDebugger extends ModItem {
             else if (world.getBlock(x, y, z) == Blocks.blockWaterChannel) {
                 TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
                 LogHelper.debug("Chanel material is: " +Item.itemRegistry.getNameForObject(channel.getMaterial().getItem())+":"+channel.getMaterial().getItemDamage());
+                LogHelper.debug("  - FluidLevel: " + channel.getFluidLevel()+"/"+ Constants.mB/2);
+                LogHelper.debug("  - FluidHeight: "+channel.getFluidHeight());
             }
         }
 

@@ -24,7 +24,7 @@ public class BlockWaterChannel extends BlockContainer {
     public BlockWaterChannel() {
         super(Material.wood);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
-        this.setBlockBounds(4*Constants.unit, 4*Constants.unit, 4*Constants.unit, 12*Constants.unit, 12*Constants.unit, 12*Constants.unit);
+        //this.setBlockBounds(4*Constants.unit, 4*Constants.unit, 4*Constants.unit, 12*Constants.unit, 12*Constants.unit, 12*Constants.unit);
     }
 
     @Override

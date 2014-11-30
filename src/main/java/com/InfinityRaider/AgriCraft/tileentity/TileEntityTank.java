@@ -213,7 +213,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                 for (int z = this.zCoord - zPos; z < this.zCoord - zPos + zSize; z++) {
                     if(this.worldObj.getTileEntity(x, y ,z)!=null && this.worldObj.getTileEntity(x, y ,z) instanceof TileEntityTank) {
                         ((TileEntityTank) this.worldObj.getTileEntity(x, y, z)).fluidLevel = lvl;
-                        ((TileEntityTank) this.worldObj.getTileEntity(x, y, z)).markDirty();
+                        this.worldObj.getTileEntity(x, y, z).markDirty();
                     }
                 }
             }
@@ -369,6 +369,11 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         return this.fluidLevel;
     }
 
+    public float getFluidY() {
+        int totalHeight = 16*this.getYSize()-2;
+        return totalHeight*((float) this.fluidLevel)/((float) this.getTotalCapacity())+2;
+    }
+
     public void setFluidLevel(int lvl) {
         this.fluidLevel = lvl>this.getTotalCapacity()?this.getTotalCapacity():lvl;
         this.syncFluidLevels();
@@ -404,6 +409,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         int filled = Math.min(resource.amount, this.getTotalCapacity() - this.getFluidLevel());
         if(doFill) {
             this.setFluidLevel(this.getFluidLevel()+filled);
+            this.markDirty();
         }
         return filled;
     }
@@ -417,6 +423,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         int drained = Math.min(resource.amount, this.getFluidLevel());
         if(doDrain) {
            this.setFluidLevel(this.fluidLevel-drained);
+            this.markDirty();
         }
         return new FluidStack(FluidRegistry.WATER, drained);
     }

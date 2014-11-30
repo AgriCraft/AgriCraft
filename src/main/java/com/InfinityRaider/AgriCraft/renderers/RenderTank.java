@@ -172,13 +172,9 @@ public class RenderTank extends TileEntitySpecialRenderer{
     }
 
     private void drawWater(TileEntityTank tank, Tessellator tessellator) {
-        int layer = tank.getYPosition();
-        int area = tank.getXSize()*tank.getZSize();
-        int waterLevel = (int) Math.floor(((float)tank.getFluidLevel()-0.1F)/((float)(tank.getSingleCapacity()*area)));
-        //only render water on the relevant layer
-        if(layer==waterLevel) {
-            int yLevel = (tank.getFluidLevel()/area)-waterLevel*tank.getSingleCapacity();
-            float y = ((float) yLevel)/((float) tank.getSingleCapacity());
+        //only render water on the bottom layer
+        if(tank.getYPosition()==0) {
+            float y = tank.getFluidY()-0.01F; //-0.0001F to avoid Z-fighting on maximum filled tanks
             //bind the texture
             Minecraft.getMinecraft().renderEngine.bindTexture(this.waterTexture);
             //stolen from Vanilla code
@@ -188,26 +184,15 @@ public class RenderTank extends TileEntitySpecialRenderer{
             float f2 = (float)(l & 255) / 255.0F;
             float f4 = 1.0F;
             //draw the water
-            if(layer==0) {
-                tessellator.startDrawingQuads();
-                    tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(tank.getWorldObj(), tank.xCoord, tank.yCoord, tank.zCoord));
-                    tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
-                    RenderHelper.addScaledVertexWithUV(tessellator, 0, 1+15*y - 0.0001F, 0, 0, 0);
-                    RenderHelper.addScaledVertexWithUV(tessellator, 0, 1+15*y - 0.0001F, 16, 0, 16);
-                    RenderHelper.addScaledVertexWithUV(tessellator, 16, 1+15*y - 0.0001F, 16, 16, 16);
-                    RenderHelper.addScaledVertexWithUV(tessellator, 16, 1+15*y - 0.0001F, 0, 16, 0);
-                tessellator.draw();
-            }
-            else {
-                tessellator.startDrawingQuads();
-                    tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(tank.getWorldObj(), tank.xCoord, tank.yCoord, tank.zCoord));
-                    tessellator.setColorOpaque_F(f4 * f, f4 * f1, f4 * f2);
-                    RenderHelper.addScaledVertexWithUV(tessellator, 0, 16*y - 0.001F, 0, 0, 0);
-                    RenderHelper.addScaledVertexWithUV(tessellator, 0, 16*y - 0.001F, 16, 0, 16);
-                    RenderHelper.addScaledVertexWithUV(tessellator, 16, 16*y - 0.001F, 16, 16, 16);
-                    RenderHelper.addScaledVertexWithUV(tessellator, 16, 16*y - 0.001F, 0, 16, 0);
-                tessellator.draw();
-            }
+            tessellator.startDrawingQuads();
+                tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(tank.getWorldObj(), tank.xCoord, tank.yCoord, tank.zCoord));
+                tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
+                //draw surface
+                RenderHelper.addScaledVertexWithUV(tessellator, 0, y, 0, 0, 0);
+                RenderHelper.addScaledVertexWithUV(tessellator, 0, y, 16, 0, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, 16, y, 16, 16, 16);
+                RenderHelper.addScaledVertexWithUV(tessellator, 16, y, 0, 16, 0);
+            tessellator.draw();
         }
     }
 }
