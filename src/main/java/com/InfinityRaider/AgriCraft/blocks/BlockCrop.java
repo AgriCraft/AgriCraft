@@ -26,6 +26,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -61,12 +62,14 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     }
 
     //this harvests the crop
-    public void harvest(TileEntityCrop crop) {
-        if(!crop.getWorldObj().isRemote) {
+    public void harvest(World world, int x, int y, int z) {
+        if(!world.isRemote) {
+            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
-            ArrayList<ItemStack> drops = SeedHelper.getPlantFruits((ItemSeeds) crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta);
+            ArrayList<ItemStack> drops = SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
             for(ItemStack drop:drops) {
-                crop.getWorldObj().spawnEntityInWorld(new EntityItem(crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, drop));
+                LogHelper.debug("Spawning item in world: "+Item.itemRegistry.getNameForObject(drop.getItem())+":"+drop.getItemDamage());
+                this.dropBlockAsItem(world, x, y, z, drop);
             }
         }
     }
@@ -92,7 +95,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 }
                 else if(crop.hasPlant() && crop.isMature()) {
                     LogHelper.debug("Harvesting crop");
-                    this.harvest(crop);
+                    this.harvest(world, x, y ,z);
                 }
             }
 
@@ -134,7 +137,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     }
                     //take one seed away if the player is not in creative
                     player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode?player.getCurrentEquippedItem().stackSize:player.getCurrentEquippedItem().stackSize - 1;
-                    LogHelper.debug("Planting " + ((ItemSeeds) player.getCurrentEquippedItem().getItem()).getUnlocalizedName());
+                    LogHelper.debug("Planting " + (player.getCurrentEquippedItem().getItem()).getUnlocalizedName());
                     update = true;
                 }
             }
@@ -152,10 +155,35 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
         if((!world.isRemote) && (!player.isSneaking())) {
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
-                this.dropBlockAsItem(world,x,y,z,world.getBlockMetadata(x,y,z),0);
+                this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
             }
             world.setBlockToAir(x,y,z);
             world.removeTileEntity(x,y,z);
+        }
+    }
+
+    //item drops
+    @Override
+    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
+        if(!world.isRemote) {
+            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+            ArrayList<ItemStack> drops= new ArrayList<ItemStack>();
+            if(crop.crossCrop) {
+                drops.add(new ItemStack(Items.crops, 2));
+            }
+            else {
+                drops.add(new ItemStack(Items.crops, 1));
+                if(crop.hasPlant()) {
+                    drops.add(crop.getSeedStack());
+                    if (this.isMature(world, x, y, z)) {
+                        drops.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+                    }
+                }
+            }
+            ForgeEventFactory.fireBlockHarvesting(drops, world, this, x, y, z, meta, i, f, false, harvesters.get());
+            for(ItemStack drop:drops) {
+                this.dropBlockAsItem(world, x, y, z, drop);
+            }
         }
     }
 

@@ -139,6 +139,17 @@ public class TileEntityCrop extends TileEntityAgricraft {
         return false;
     }
 
+    public ItemStack getSeedStack() {
+        ItemStack seed = new ItemStack((ItemSeeds) this.seed, 1, this.seedMeta);
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setInteger(Names.growth, this.growth);
+        tag.setInteger(Names.gain, this.gain);
+        tag.setInteger(Names.strength, this.strength);
+        tag.setBoolean(Names.analyzed, false);
+        seed.setTagCompound(tag);
+        return seed;
+    }
+
     //a helper method for ItemSeed <-> String conversion for storing seed as a string in NBT
     public String getSeedString() {
         return this.seed==null?"none":Item.itemRegistry.getNameForObject(this.seed);
