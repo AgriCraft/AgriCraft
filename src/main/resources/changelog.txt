@@ -1,8 +1,9 @@
 Changelog
 ---------
 0.0.9
--Finished irrigation systems
+-Further work on irrigation systems
 -Changed some methods for dropping seeds and fruits in the world when harvesting crops
+-AgriCraft should now be compatible with Hunger Overhaul
 
 0.0.8
 -Added a config option to disable forcing a mutation by using bonemeal on a crosscrop
