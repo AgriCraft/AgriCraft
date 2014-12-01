@@ -4,6 +4,8 @@ Changelog
 -Further work on irrigation systems
 -Changed some methods for dropping seeds and fruits in the world when harvesting crops
 -AgriCraft should now be compatible with Hunger Overhaul
+-Fixed duping bug with Hunger Overhaul installed
+-Fixed bonemeal not working with Hunger Overhaul installed
 
 0.0.8
 -Added a config option to disable forcing a mutation by using bonemeal on a crosscrop
