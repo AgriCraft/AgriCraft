@@ -1,9 +1,6 @@
 package com.InfinityRaider.AgriCraft.init;
 
-import com.InfinityRaider.AgriCraft.items.ItemCrop;
-import com.InfinityRaider.AgriCraft.items.ItemDebugger;
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
-import com.InfinityRaider.AgriCraft.items.ModItem;
+import com.InfinityRaider.AgriCraft.items.*;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -14,6 +11,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class Items {
     public static ItemCrop crops;
+    public static ItemSprinkler sprinkler;
     public static ItemJournal journal;
     public static ItemDebugger debugItem;
 
@@ -47,6 +45,8 @@ public class Items {
         RegisterHelper.registerItem(crops, Names.crops+"Item");
         journal = new ItemJournal();
         RegisterHelper.registerItem(journal, Names.journal);
+        sprinkler = new ItemSprinkler();
+        RegisterHelper.registerItem(sprinkler, Names.sprinkler);
         if(Reference.debug) {
             debugItem = new ItemDebugger();
             RegisterHelper.registerItem(debugItem, "debugger");

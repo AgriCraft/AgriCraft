@@ -89,7 +89,8 @@ public class TileEntityCustomWood extends TileEntityAgricraft {
             Block material = (Block) Block.blockRegistry.getObject(this.materialName);
             return material.getIcon(0, this.materialMeta);
         }
-        else {            return Blocks.planks.getIcon(0, 0);
+        else {
+            return Blocks.planks.getIcon(0, 0);
         }
     }
 }

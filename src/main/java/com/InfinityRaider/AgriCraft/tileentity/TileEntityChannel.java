@@ -38,8 +38,10 @@ public class TileEntityChannel extends TileEntityCustomWood {
     public int getFluidLevel() {return this.lvl;}
 
     public void setFluidLevel(int lvl) {
-        this.lvl = lvl;
-        this.markDirty();
+        if(lvl>=0 && lvl<=Constants.mB/2) {
+            this.lvl = lvl;
+            this.markDirty();
+        }
     }
 
     public float getFluidHeight() {

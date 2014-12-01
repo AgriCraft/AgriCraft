@@ -14,6 +14,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileEntityCustomWood.class, Reference.MOD_ID+':'+Names.tileEntity+'_'+"customWood");
         GameRegistry.registerTileEntity(TileEntityTank.class, Reference.MOD_ID+':'+ Names.tileEntity+'_'+Names.tank);
         GameRegistry.registerTileEntity(TileEntityChannel.class, Reference.MOD_ID+':'+ Names.tileEntity+'_'+Names.channel);
+        GameRegistry.registerTileEntity(TileEntitySprinkler.class, Reference.MOD_ID+':'+Names.tileEntity+'_'+Names.sprinkler);
 
         LogHelper.info("Tile Entities registered");
     }
