@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -15,7 +14,6 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -27,7 +25,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -106,7 +103,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
 
     public void plantSeed(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
-            boolean update = false;
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             LogHelper.debug("Trying to plant " + player.getCurrentEquippedItem().getItem().getUnlocalizedName());
             //is the cropEmpty a crosscrop or does it already have a plant
@@ -129,11 +125,8 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 }
                 //take one seed away if the player is not in creative
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
-                update = true;
             }
-            if (update) {
-                this.syncAndUpdate(world, x, y ,z);
-            }
+            this.syncAndUpdate(world, x, y ,z);
         }
     }
 
@@ -148,17 +141,17 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
         //only make things happen serverside
-        if(!world.isRemote) {   //very important, makes sure everything happens on the server
+        if(!world.isRemote) {
             //check to see if the player has an empty hand
-            if (player.getCurrentEquippedItem() == null) {
+            if(player.getCurrentEquippedItem()==null) {
                 this.harvest(world, x, y, z);
             }
             //check to see if the player clicked with crops (crosscrop attempt)
-            else if (player.getCurrentEquippedItem().getItem() == Items.crops) {
+            else if(player.getCurrentEquippedItem().getItem()==Items.crops) {
                 this.setCrossCrop(world, x, y, z, player);
             }
             //check to see if clicked with seeds
-            else if (player.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
+            else if(player.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
                 this.plantSeed(world, x, y, z, player);
             }
         }
@@ -204,7 +197,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     //bonemeal can be applied to this plant
     @Override
     public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
-        return true;
+        return !this.isMature(world, x, y , z);
     }
 
     //this gets called when the player uses bonemeal on the crop
