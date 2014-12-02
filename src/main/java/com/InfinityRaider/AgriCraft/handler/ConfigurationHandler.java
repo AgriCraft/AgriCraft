@@ -25,7 +25,6 @@ public class ConfigurationHandler {
     public static boolean integration_Nat;
     public static double mutationChance;
     public static boolean bonemealMutation;
-    public static int sprinklerConsumption;
 
 
 
@@ -51,8 +50,6 @@ public class ConfigurationHandler {
         integration_HC = config.getBoolean("HarvestCraft","INTEGRATION",true,"Set to false to disable harvestCraft integration");
         integration_Nat = config.getBoolean("Natura","INTEGRATION",true,"Set to false to disable Natura Integration");
         debug = config.getBoolean("debug","DEBUG",false,"Set to true if you wish to enable debug mode");
-        sprinklerConsumption = config.getInt("Sprinkler water consumption", "AGRICRAFT", Constants.sprinklerConsumption, 1, 500, "Define the amount of water (in mb) used by the sprinkler per tick to irrigate farmland");
-        Reference.setDebug(debug);
         if(config.hasChanged()) {config.save();}
     }
 

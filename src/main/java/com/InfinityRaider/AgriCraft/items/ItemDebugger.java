@@ -10,6 +10,8 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -28,8 +30,9 @@ public class ItemDebugger extends ModItem {
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         if(!world.isRemote) {
             LogHelper.debug("Clicked block at: (" + x + "," + y + "," + z + "):");
+            Block block = world.getBlock(x, y, z);
             //print data for crop
-            if (world.getBlock(x, y, z) == Blocks.blockCrop) {
+            if (block == Blocks.blockCrop) {
                 TileEntityCrop cropTE = (TileEntityCrop) world.getTileEntity(x, y, z);
                 BlockCrop blockCropBlock = (BlockCrop) world.getBlock(x, y, z);
                 if (cropTE.crossCrop) {
@@ -48,9 +51,8 @@ public class ItemDebugger extends ModItem {
                     LogHelper.debug(" - Mature: " + cropTE.isMature());
                 }
             }
-
             //print data for tank
-            else if (world.getBlock(x, y, z) == Blocks.blockWaterTank) {
+            else if (block == Blocks.blockWaterTank) {
                 TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
                 LogHelper.debug("Tank: " + (tank.isWood() ? "wood" : "iron") + " (single capacity: " + tank.getSingleCapacity() + ")");
                 LogHelper.debug("  - MultiBlock: " + tank.isMultiBlock());
@@ -70,13 +72,16 @@ public class ItemDebugger extends ModItem {
                 LogHelper.debug("Tank clicked is on  layer "+tank.getYPosition()+".");
                 LogHelper.debug("Tank material is: " +Item.itemRegistry.getNameForObject(tank.getMaterial().getItem())+":"+tank.getMaterial().getItemDamage());
             }
-
             //print data for channel
-            else if (world.getBlock(x, y, z) == Blocks.blockWaterChannel) {
+            else if (block == Blocks.blockWaterChannel) {
                 TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
                 LogHelper.debug("Chanel material is: " +Item.itemRegistry.getNameForObject(channel.getMaterial().getItem())+":"+channel.getMaterial().getItemDamage());
                 LogHelper.debug("  - FluidLevel: " + channel.getFluidLevel()+"/"+ Constants.mB/2);
                 LogHelper.debug("  - FluidHeight: "+channel.getFluidHeight());
+            }
+            //print data for farmland
+            else if(block == net.minecraft.init.Blocks.farmland) {
+                LogHelper.debug("Farmland meta: "+world.getBlockMetadata(x, y, z));
             }
         }
 

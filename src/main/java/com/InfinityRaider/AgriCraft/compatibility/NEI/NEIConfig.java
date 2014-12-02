@@ -34,6 +34,8 @@ public class NEIConfig implements IConfigureNEI {
         for (int i = 0; i < 16; i++) {
             //hide crops block
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockCrop, 1, i));
+            //hide sprinkler
+            AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockSprinkler, 1, i));
             //hide plant blocks
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.potato, 1, i));
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.carrot, 1, i));
@@ -89,7 +91,7 @@ public class NEIConfig implements IConfigureNEI {
                 }
             }
             //hide debugger
-            if (Reference.debug) {
+            if (ConfigurationHandler.debug) {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(Items.debugItem, 1, i));
             }
         }

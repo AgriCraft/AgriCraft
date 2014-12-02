@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.utility;
 
 //credits to Pahimar for this LogHelper class
 
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import cpw.mods.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
@@ -14,7 +15,7 @@ public abstract class LogHelper {
         log(Level.ALL, object);
     }
     public static void debug(Object object) {
-        if(Reference.debug) {
+        if(ConfigurationHandler.debug) {
             log(Level.INFO, "[DEBUG] "+object);
         }
     }
