@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.init.Blocks;
@@ -22,37 +21,32 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
         return Blocks.planks.getIcon(0, 0);
     }
 
-    //tries to sprinkle by taking water from the channel above
-    public boolean sprinkle() {
-        if(this.isConnected()) {
-            TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord+1, this.zCoord);
-            if(channel.getFluidLevel()>= ConfigurationHandler.sprinklerConsumption) {
-                channel.setFluidLevel(channel.getFluidLevel()- ConfigurationHandler.sprinklerConsumption);
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public void updateEntity() {
         if(!worldObj.isRemote) {
-            if(this.sprinkle()) {
-                for(int yOffset=-1;yOffset>-4;yOffset--) {
-                    for(int xOffset=yOffset;xOffset<=-yOffset;xOffset++) {
-                        for(int zOffset=yOffset;zOffset<=-zOffset;zOffset++) {
-                            this.irrigate(xOffset, yOffset, zOffset);
-                        }
+            for(int yOffset=-4;yOffset<0;yOffset++) {
+                for(int xOffset=-3;xOffset<=3;xOffset++) {
+                    for(int zOffset=-3;zOffset<=-3;zOffset++) {
+                        this.irrigate(xOffset, yOffset, zOffset);
                     }
                 }
             }
+
         }
     }
 
     private void irrigate(int xOffset, int yOffset, int zOffset) {
         Block block = this.worldObj.getBlock(this.xCoord+xOffset, this.yCoord+yOffset, this.zCoord+zOffset);
-        if(block!=null && block instanceof BlockFarmland) {
-            BlockFarmland farmland = (BlockFarmland) block;
+        if(block!=null && block instanceof BlockFarmland && this.worldObj.getBlockMetadata(this.xCoord+xOffset, this.yCoord+yOffset, this.zCoord+zOffset)<7) {
+            if(this.isConnected()) {
+                TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord);
+                int amount = 7 - this.worldObj.getBlockMetadata(this.xCoord+xOffset, this.yCoord+yOffset, this.zCoord+zOffset);
+                if (channel.getFluidLevel() >= amount) {
+                    channel.setFluidLevel(channel.getFluidLevel() - amount);
+                    this.worldObj.setBlockMetadataWithNotify(this.xCoord+xOffset, this.yCoord+yOffset, this.zCoord+zOffset, 7, 2);
+                }
+            }
         }
     }
+
 }

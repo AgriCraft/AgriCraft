@@ -7,9 +7,6 @@ public final class Constants {
     // 1 bucket in millibuckets
     public static final int mB = 1000;
 
-    //number of millibuckets used per tick by the sprinkler
-    public static final int sprinklerConsumption = 3;
-
     //growth tiers
     public static final int growthTier1 = 50;
     public static final int growthTier2 = 45;

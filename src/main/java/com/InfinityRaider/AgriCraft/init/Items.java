@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.init;
 
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.*;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
@@ -46,8 +46,8 @@ public class Items {
         journal = new ItemJournal();
         RegisterHelper.registerItem(journal, Names.journal);
         sprinkler = new ItemSprinkler();
-        RegisterHelper.registerItem(sprinkler, Names.sprinkler);
-        if(Reference.debug) {
+        RegisterHelper.registerItem(sprinkler, Names.sprinkler+"Item");
+        if(ConfigurationHandler.debug) {
             debugItem = new ItemDebugger();
             RegisterHelper.registerItem(debugItem, "debugger");
         }

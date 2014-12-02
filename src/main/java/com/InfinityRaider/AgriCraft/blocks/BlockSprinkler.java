@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 public class BlockSprinkler extends BlockContainer {
     public BlockSprinkler() {
-        super(Material.iron);
+        super(Material.water);
     }
 
     @Override
