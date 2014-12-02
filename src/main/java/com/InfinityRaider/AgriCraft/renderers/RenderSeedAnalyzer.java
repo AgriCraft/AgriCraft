@@ -25,7 +25,6 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
         TileEntitySeedAnalyzer analyzer= (TileEntitySeedAnalyzer) tileEntity;
-        double unit = Constants.unit;
         //render the model
         GL11.glPushMatrix();                                                            //initiate first gl renderer
             GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);    //sets the rendering origin to the right spot

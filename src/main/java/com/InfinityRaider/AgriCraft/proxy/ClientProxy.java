@@ -6,10 +6,7 @@ import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.renderers.*;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
+import com.InfinityRaider.AgriCraft.tileentity.*;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -44,6 +41,10 @@ public class ClientProxy extends CommonProxy {
         TileEntitySpecialRenderer renderChannel = new RenderChannel();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChannel.class, renderChannel);
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockWaterChannel), new RenderItemChannel(renderChannel, new TileEntityChannel()));
+
+        //sprinkler
+        TileEntitySpecialRenderer renderSprinkler = new RenderSprinkler();
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, renderSprinkler);
 
         LogHelper.info("Renderers registered");
     }
