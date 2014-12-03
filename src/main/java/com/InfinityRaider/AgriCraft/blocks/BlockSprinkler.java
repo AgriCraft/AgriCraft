@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySprinkler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
@@ -17,6 +19,11 @@ public class BlockSprinkler extends BlockContainer {
         return new TileEntitySprinkler();
     }
 
+    @Override
+    public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+        return false;
+    }
+
     //rendering stuff
     @Override
     public int getRenderType() {return -1;}                 //get default render type: net.minecraft.client.renderer
@@ -25,5 +32,6 @@ public class BlockSprinkler extends BlockContainer {
     @Override
     public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return false;}
 }

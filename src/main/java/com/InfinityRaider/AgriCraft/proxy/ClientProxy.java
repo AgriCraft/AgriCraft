@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.renderers.*;
 import com.InfinityRaider.AgriCraft.tileentity.*;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -45,6 +46,7 @@ public class ClientProxy extends CommonProxy {
         //sprinkler
         TileEntitySpecialRenderer renderSprinkler = new RenderSprinkler();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, renderSprinkler);
+        MinecraftForgeClient.registerItemRenderer(Items.sprinkler, new RenderItemSprinkler());
 
         LogHelper.info("Renderers registered");
     }

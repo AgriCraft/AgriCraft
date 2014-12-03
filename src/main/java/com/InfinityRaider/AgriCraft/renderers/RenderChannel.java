@@ -170,23 +170,25 @@ public class RenderChannel  extends TileEntitySpecialRenderer {
             RenderHelper.addScaledVertexWithUV(tessellator, 11, y, 11, 11, 11);
             RenderHelper.addScaledVertexWithUV(tessellator, 11, y, 5, 11, 5);
             //connect to edges
-            this.connectWater(channel, tessellator, 'x', y);
-            this.connectWater(channel, tessellator, 'z', y);
+            this.connectWater(channel, tessellator, 'x', 1, y);
+            this.connectWater(channel, tessellator, 'z', 1, y);
+            this.connectWater(channel, tessellator, 'x', -1, y);
+            this.connectWater(channel, tessellator, 'z', -1, y);
         tessellator.draw();
     }
 
-    private void connectWater(TileEntityChannel channel, Tessellator tessellator, char axis, float y) {
+    private void connectWater(TileEntityChannel channel, Tessellator tessellator, char axis, int direction, float y) {
         if(axis=='x' || axis=='z') {
             //checks if there is a neighbouring block that this block can connect to
-            if(channel.hasNeighbour(axis, 1)) {
+            if(channel.hasNeighbour(axis, direction)) {
                 boolean x = axis=='x';
-                TileEntityCustomWood te = (TileEntityCustomWood) channel.getWorldObj().getTileEntity(channel.xCoord, channel.yCoord, channel.zCoord);
+                TileEntityCustomWood te = (TileEntityCustomWood) channel.getWorldObj().getTileEntity(channel.xCoord+(x?direction:0), channel.yCoord, channel.zCoord+(x?0:direction));
                 if(te instanceof TileEntityChannel) {
-                    float y2 = (y + 5+7*((float) ((TileEntityChannel) te).getFluidLevel())/((float) Constants.mB/2))/2;
-                    RenderHelper.addScaledVertexWithUV(tessellator, 11, y, x?5:11, 11, x?5:11);
-                    RenderHelper.addScaledVertexWithUV(tessellator, x?11:5, y, 11, x?11:5, 11);
-                    RenderHelper.addScaledVertexWithUV(tessellator, x?21:5, y2, x?11:21, 5, x?11:5);
-                    RenderHelper.addScaledVertexWithUV(tessellator, x?21:11, y2, x?5:21, x?5:11, 5);
+                    float y2 = (y + ((TileEntityChannel) te).getFluidHeight())/2;
+                    RenderHelper.addScaledVertexWithUV(tessellator, x?(5.5F+direction*5.5F):11, x?y:y2, x?5:(5.5F+direction*5.5F), x?(5.5F+direction*5.5F):11, x?5:(5.5F+direction*5.5F));
+                    RenderHelper.addScaledVertexWithUV(tessellator, x?(5.5F+direction*5.5F):5, x?y:y2, x?11:(5.5F+direction*5.5F), x?(5.5F+direction*5.5F):5, x?11:(5.5F+direction*5.5F));
+                    RenderHelper.addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):5, x?y2:y, x?11:(10.5F+direction*5.5F), x?(10.5F+direction*5.5F):5, x?11:(10.5F+direction*5.5F));
+                    RenderHelper.addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):11, x?y2:y, x?5:(10.5F+direction*5.5F), x?(10.5F+direction*5.5F):11, x?5:(10.5F+direction*5.5F));
                 }
 
             }
