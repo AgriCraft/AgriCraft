@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.gui;
 
+import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
