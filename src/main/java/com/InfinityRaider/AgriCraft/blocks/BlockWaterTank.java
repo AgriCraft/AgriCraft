@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,6 +37,28 @@ public class BlockWaterTank extends BlockContainer{
         return new TileEntityTank();
     }
 
+    @Override
+    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
+        if(!world.isRemote) {
+            ItemStack drop = new ItemStack(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, 1);
+            drop.setTagCompound(((TileEntityCustomWood) world.getTileEntity(x, y, z)).getMaterialTag());
+            this.dropBlockAsItem(world, x, y, z, drop);
+        }
+    }
+
+    //This gets called when the block is left clicked (player hits the block)
+    @Override
+    public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
+        if((!world.isRemote) && (!player.isSneaking())) {
+            if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
+                this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
+            }
+            world.setBlockToAir(x,y,z);
+            world.removeTileEntity(x,y,z);
+        }
+    }
+
+    //This gets called when the block is right clicked
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
         boolean update=false;

@@ -2,15 +2,19 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
@@ -29,6 +33,36 @@ public class BlockWaterChannel extends BlockContainer {
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntityChannel();
+    }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+        super.breakBlock(world,x,y,z,block,meta);
+        world.removeTileEntity(x,y,z);
+        if(world.getBlock(x, y-1, z)!=null && world.getBlock(x, y-1, z)==com.InfinityRaider.AgriCraft.init.Blocks.blockSprinkler) {
+
+        }
+    }
+
+    //This gets called when the block is left clicked (player hits the block)
+    @Override
+    public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
+        if((!world.isRemote) && (!player.isSneaking())) {
+            if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
+                this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
+            }
+            world.setBlockToAir(x,y,z);
+            world.removeTileEntity(x,y,z);
+        }
+    }
+
+    @Override
+    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
+        if(!world.isRemote) {
+            ItemStack drop = new ItemStack(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, 1);
+            drop.setTagCompound(((TileEntityCustomWood) world.getTileEntity(x, y, z)).getMaterialTag());
+            this.dropBlockAsItem(world, x, y, z, drop);
+        }
     }
 
     @Override
