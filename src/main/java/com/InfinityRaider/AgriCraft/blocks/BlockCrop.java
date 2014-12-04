@@ -95,6 +95,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 update = true;
                 LogHelper.debug("Crosscrop set");
             }
+            else {
+                this.harvest(world, x, y, z);
+            }
             if (update) {
                 this.syncAndUpdate(world, x, y ,z);
             }
@@ -142,20 +145,24 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
         //only make things happen serverside
         if(!world.isRemote) {
-            //check to see if the player has an empty hand
             if(player.getCurrentEquippedItem()==null) {
+                //harvest operation
                 this.harvest(world, x, y, z);
             }
             //check to see if the player clicked with crops (crosscrop attempt)
             else if(player.getCurrentEquippedItem().getItem()==Items.crops) {
                 this.setCrossCrop(world, x, y, z, player);
             }
-            //check to see if clicked with seeds
-            else if(player.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
-                this.plantSeed(world, x, y, z, player);
+            else {
+                //harvest operation
+                this.harvest(world, x, y, z);
+                //check to see if clicked with seeds
+                if(player.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
+                    this.plantSeed(world, x, y, z, player);
+                }
             }
         }
-        return false;
+        return true;
     }
 
     //This gets called when the block is left clicked (player hits the block)
