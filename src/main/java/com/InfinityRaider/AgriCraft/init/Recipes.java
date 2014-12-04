@@ -33,6 +33,8 @@ public class Recipes {
         GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterTank, 1, 0), tankSchematic));
         GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_1));
         GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_2));
+        //sprinkler
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.sprinkler, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', net.minecraft.init.Blocks.iron_bars, 'c', net.minecraft.init.Items.bucket));
         //fruits
         if(ConfigurationHandler.resourcePlants) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.diamond, 1), "nnn", "nnn", "nnn", 'n',"nuggetDiamond"));
