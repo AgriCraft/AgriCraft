@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
+import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -62,8 +63,11 @@ public abstract class RenderHelper {
 
     //this method is used to convert the vanilla 0-7 meta growth stages to natura growth stages or nether wart growth stages
     public static int plantIconIndex(ItemSeeds seed, int seedMeta, int growthMeta) {
-        if(SeedHelper.getPlantDomain(seed).equalsIgnoreCase("natura")) {
+        if(LoadedMods.natura && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("natura")) {
             return NaturaHelper.getTextureIndex(growthMeta, seedMeta);
+        }
+        else if(LoadedMods.plantMegaPack && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
+            return PlantMegaPackHelper.getTextureIndex(growthMeta);
         }
         else if(seed== Items.nether_wart) {
             return (int) Math.ceil(( (float) growthMeta-2)/2);

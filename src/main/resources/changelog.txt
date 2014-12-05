@@ -8,6 +8,8 @@ Changelog
 -Fixed tanks & irrigation channels always dropping oak wood versions when harvesting them
 -Added default mutations for Pam's Weee Flowers
 -Added recipes to convert Ex Nihilo seeds to AgriCraft seeds
+-Added Plant Mega Pack integration and default mutations
+-Added French translations (Mazdallier)
 
 0.0.9
 -Further work on irrigation systems

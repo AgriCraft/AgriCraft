@@ -56,6 +56,9 @@ public abstract class IOHelper {
         if(ConfigurationHandler.integration_WeeeFlowers && LoadedMods.weeeFlowers) {
             data = data +'\n' + weeeFlowersMutations;
         }
+        if(ConfigurationHandler.integration_PlantMegaPack && LoadedMods.plantMegaPack) {
+            data = data + '\n' + plantMegaPackMutations;
+        }
         return data;
     }
 
@@ -326,6 +329,17 @@ public abstract class IOHelper {
             "harvestcraft:cornseedItem=Natura:barley.seed:0+harvestcraft:ryeseedItem\n" +
             "harvestcraft:ryeseedItem=Natura:barley+minecraft:wheat_seeds\n" +
             "Natura:barley.seed:1=Natura:barley.seed:0+AgriCraft:seedDaisy";
+
+    private static final String plantMegaPackMutations =
+            "plantmegapack:seedCelery=minecraft:wheat_seeds+AgriCraft:seedTulipWhite\n" +
+            "plantmegapack:seedTomato=minecraft:melon_seeds+AgriCraft:seedCarrot\n" +
+            "plantmegapack:seedBeet=plantmegapack:seedTomato+AgriCraft:seedPotato\n" +
+            "plantmegapack:seedLettuce=plantmegapack:seedCelery+AgriCraft:seedDaisy\n" +
+            "plantmegapack:seedSpinach=plantmegapack:seedLettuce+AgriCraft:seedSugarcane\n" +
+            "plantmegapack:seedCorn=minecraft:wheat_seeds+plantmegapack:seedCelery\n" +
+            "plantmegapack:seedBellPepperYellow=AgriCraft:seedCarrot+AgriCraft:seedDandelion\n" +
+            "plantmegapack:seedOnion=plantmegapack:seedBellPepperYellow+plantmegapack:seedLettuce\n" +
+            "plantmegapack:seedCucumber=plantmegapack:seedBeet+plantmegapack:seedBellPepperYellow";
 
     private static final String copperMutation =
             "AgriCraft:seedCuprosia=AgriCraft:seedRedstodendron+AgriCraft:seedTulipOrange";

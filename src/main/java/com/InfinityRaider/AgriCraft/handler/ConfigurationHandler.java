@@ -28,6 +28,7 @@ public class ConfigurationHandler {
     public static boolean integration_HC;
     public static boolean integration_Nat;
     public static boolean integration_WeeeFlowers;
+    public static boolean integration_PlantMegaPack;
 
     public static void init(FMLPreInitializationEvent event) {
         //specify the directory for the config files
@@ -52,6 +53,7 @@ public class ConfigurationHandler {
         integration_HC = config.getBoolean("HarvestCraft","INTEGRATION",true,"Set to false to disable harvestCraft integration");
         integration_Nat = config.getBoolean("Natura","INTEGRATION",true,"Set to false to disable Natura Integration");
         integration_WeeeFlowers = config.getBoolean("Weee Flowers","INTEGRATION",true,"Set to false to disable Weee Flowers Integration");
+        integration_PlantMegaPack = config.getBoolean("Plant Mega Pack","INTEGRATION",true,"Set to false to disable Plant Mega Pack Integration");
         debug = config.getBoolean("debug","DEBUG",false,"Set to true if you wish to enable debug mode");
         if(config.hasChanged()) {config.save();}
     }

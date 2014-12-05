@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -90,7 +92,11 @@ public abstract class SeedHelper {
             items.add(new ItemStack(getPlant(seed).getItemDropped(7, new Random(), 0), nr));
         }
         else {
-            ArrayList<ItemStack> defaultDrops = getPlant(seed).getDrops(world, x, y, z, 7, 0);
+            int harvestMeta = 7;
+            if(LoadedMods.plantMegaPack && getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
+                harvestMeta=4;
+            }
+            ArrayList<ItemStack> defaultDrops = getPlant(seed).getDrops(world, x, y, z, harvestMeta, 0);
             for (ItemStack drop : defaultDrops) {
                 if (!(drop.getItem() instanceof ItemSeeds) && drop.getItem()!=null) {
                     items.add(new ItemStack(drop.getItem(), nr, drop.getItemDamage()));

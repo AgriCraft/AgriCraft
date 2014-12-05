@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -9,6 +10,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import mods.natura.common.NContent;
+import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class Seeds {
@@ -179,7 +181,24 @@ public class Seeds {
         if(LoadedMods.natura) {
             OreDictionary.registerOre(Names.listAllseed, NContent.plantItem);
         }
-
+        //register ex nihilo seeds to the ore dictionary if ex nihilo is installed
+        if(LoadedMods.exNihilo) {
+            OreDictionary.registerOre(Names.listAllseed, ExNihiloHelper.seedCarrot);
+            OreDictionary.registerOre(Names.listAllseed, ExNihiloHelper.seedPotato);
+            OreDictionary.registerOre(Names.listAllseed, ExNihiloHelper.seedSugarCane);
+        }
+        //register plant mega pack seeds to the ore dictionary if plant mega pack is installed
+        if(LoadedMods.plantMegaPack) {
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedOnion"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedSpinach"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedCelery"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedLettuce"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedBellPepperYellow"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedCorn"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedCucumber"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedTomato"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedBeet"));
+        }
         LogHelper.info("Seeds registered");
 
     }
