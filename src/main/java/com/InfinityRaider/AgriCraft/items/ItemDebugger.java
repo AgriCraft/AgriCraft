@@ -27,8 +27,8 @@ public class ItemDebugger extends ModItem {
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         if(!world.isRemote) {
-            LogHelper.debug("Clicked block at: (" + x + "," + y + "," + z + "):");
             Block block = world.getBlock(x, y, z);
+            LogHelper.debug("Clicked block at: (" + x + "," + y + "," + z + "): "+Block.blockRegistry.getNameForObject(block)+":"+world.getBlockMetadata(x, y, z));
             //print data for crop
             if (block == Blocks.blockCrop) {
                 TileEntityCrop cropTE = (TileEntityCrop) world.getTileEntity(x, y, z);
