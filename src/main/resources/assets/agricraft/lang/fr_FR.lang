@@ -1,0 +1,84 @@
+//Creative Tabs
+itemGroup.agricraft=Agricraft
+
+//Items
+item.agricraft:cropsItem.name=Cultures
+item.agricraft:journal.name=Journal agricole
+item.agricraft:debugger.name=Débogueur
+item.agricraft:nuggetDiamond.name=Pépite de diamant
+item.agricraft:nuggetIron.name=Pépite de fer
+item.agricraft:nuggetEmerald.name=Pépite d'émeraude
+item.agricraft:nuggetTin.name=Pépite d'étain
+item.agricraft:nuggetLead.name=Pépite de plomb
+item.agricraft:nuggetSilver.name=Pépite d'argent
+item.agricraft:nuggetAluminum.name=Pépite d'aluminium
+item.agricraft:nuggetNickel.name=Pépite de nickel
+item.agricraft:nuggetPlatinum.name=Pépite de platine
+item.agricraft:nuggetOsmium.name=Pépite d'osmium 
+
+item.agricraft:seedPotato.name=Semence de pomme de terre
+item.agricraft:seedCarrot.name=Graine de carotte
+item.agricraft:seedSugarcane.name=Bouture de canne à sucre
+item.agricraft:seedDandelion.name=Graines de pissenlit
+item.agricraft:seedPoppy.name=Graines de pavot
+item.agricraft:seedOrchid.name=Graines d'orchidée bleue
+item.agricraft:seedAllium.name=Bulbe d'allium
+item.agricraft:seedTulipRed.name=Bulbe de tulipe rouge
+item.agricraft:seedTulipOrange.name=Bulbe de tulipe orange
+item.agricraft:seedTulipWhite.name=Bulbe de tulipe blanche
+item.agricraft:seedTulipPink.name=Bulbe de tulipe rose
+item.agricraft:seedDaisy.name=Graines de pâquerette
+
+item.agricraft:seedFerranium.name=Graines de ferranium
+item.agricraft:seedAurigold.name=Graines de aurigold 
+item.agricraft:seedDiamahlia.name=Graines de diamahlia 
+item.agricraft:seedLapender.name=Graines de lapender 
+item.agricraft:seedEmeryllis.name=Graines de émeryllis 
+item.agricraft:seedRedstodendron.name=Graines de redstodendron 
+item.agricraft:seedCuprosia.name=Graines de cuprosia 
+item.agricraft:seedPetinia.name=Graines de pétainia 
+item.agricraft:seedPlombean.name=Graines de plombean
+item.agricraft:seedSilverweed.name=Graines d'argentine
+item.agricraft:seedJaslumine.name=Graines de jaslumine 
+item.agricraft:seedNiccissus.name=Graines de niccissus 
+item.agricraft:seedPlatiolus.name=Graines de platiolus 
+item.agricraft:seedOsmonium.name=Graines d'osmonium 
+
+
+//blocks
+tile.agricraft:crops.name=Cultures
+tile.agricraft:seedAnalyzer.name=Analyseur de graines
+tile.agricraft:waterTank.0.name=Réservoire d'eau en bois
+tile.agricraft:waterTank.1.name=Réservoire d'eau en fer
+tile.agricraft:waterChannel.0.name=Cannal d'irrigation en bois
+tile.agricraft:waterChannel.1.name=Tuyau d'irrigation en fer
+
+tile.agricraft:cropPotato.name=Pomme de terre
+tile.agricraft:cropCarrot.name=Carotte
+tile.agricraft:cropSugarcane.name=Canne à sucre
+tile.agricraft:cropMelon.name=Melon
+tile.agricraft:cropPumpkin.name=Pastèque
+tile.agricraft:cropDandelion.name=Pissenlit
+tile.agricraft:cropPoppy.name=Pavot
+tile.agricraft:cropOrchid.name=Orchidée
+tile.agricraft:cropAllium.name=Allium
+tile.agricraft:cropTulipRed.name=Tulipe rouge
+tile.agricraft:cropTulipOrange.name=Tulipe orange
+tile.agricraft:cropTulipWhite.name=Tulipe blanche
+tile.agricraft:cropTulipPink.name=Tulipe rose
+tile.agricraft:cropDaisy.name=Pâquerette
+
+tile.agricraft:cropFerranium.name=Ferranium
+tile.agricraft:cropAurigold.name=Aurigold
+tile.agricraft:cropDiamahlia.name=Diamahlia
+tile.agricraft:cropLapender.name=Lapender
+tile.agricraft:cropEmeryllis.name=Emeryllis
+tile.agricraft:cropRedstodendron.name=Redstodendron
+tile.agricraft:cropCuprosia.name=Cuprosia
+tile.agricraft:cropPetinia.name=Pétainia
+tile.agricraft:cropPlombean.name=Plombean
+tile.agricraft:cropSilverweed.name=Argentine
+tile.agricraft:cropJaslumine.name=Jaslumine
+tile.agricraft:cropNiccissus.name=Niccissus
+tile.agricraft:cropPlatiolus.name=Platiolus
+tile.agricraft:cropOsmonium.name=Osmonium
