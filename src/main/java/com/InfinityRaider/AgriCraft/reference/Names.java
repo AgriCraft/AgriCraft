@@ -180,6 +180,7 @@ public final class Names {
     //mod references
     public static final String harvestcraft = "harvestcraft";
     public static final String natura = "Natura";
+    public static final String weeeFlowers = "weeeflowers";
     public static final String nei = "NotEnoughItems";
     public static final String thaumicTinkerer = "ThaumicTinkerer";
     public static final String hungerOverhaul= "HungerOverhaul";

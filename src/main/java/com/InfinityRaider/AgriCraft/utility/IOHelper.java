@@ -53,6 +53,9 @@ public abstract class IOHelper {
                 data = data + '\n' + naturaMutations;
             }
         }
+        if(ConfigurationHandler.integration_WeeeFlowers && LoadedMods.weeeFlowers) {
+            data = data +'\n' + weeeFlowersMutations;
+        }
         return data;
     }
 
@@ -267,6 +270,24 @@ public abstract class IOHelper {
             "harvestcraft:turnipseedItem=harvestcraft:parsnipseedItem+harvestcraft:radishseedItem\n" +
             "harvestcraft:wintersquashseedItem=minecraft:pumpkin_seeds+harvestcraft:zucchiniseedItem\n" +
             "harvestcraft:zucchiniseedItem=minecraft:pumpkin_seeds+harvestcraft:cucumberseedItem";
+
+    private static final String weeeFlowersMutations =
+            "weeeflowers:Red Flower Seed=AgriCraft:seedPoppy+AgriCraft:seedCarrot\n" +
+            "weeeflowers:Yellow Flower Seed=AgriCraft:seedDandelion+minecraft:pumpkin_seeds\n" +
+            "weeeflowers:Orange Flower Seed=weeeflowers:Yellow Flower Seed+weeeflowers:Red Flower Seed\n" +
+            "weeeflowers:White Flower Seed=AgriCraft:seedTulipWhite+AgriCraft:seedAllium\n" +
+            "weeeflowers:Pink Flower Seed=weeeflowers:Red Flower Seed+weeeflowers:White Flower Seed\n" +
+            "weeeflowers:Blue Flower Seed=AgriCraft:seedOrchid+AgriCraft:seedDaisy\n" +
+            "weeeflowers:Light Blue Flower Seed=weeeflowers:Blue Flower Seed+weeeflowers:White Flower Seed\n" +
+            "weeeflowers:Purple Flower Seed=weeeflowers:Blue Flower Seed+weeeflowers:Red Flower Seed\n" +
+            "weeeflowers:Magenta Flower Seed=weeeflowers:Purple Flower Seed+weeeflowers:Pink Flower Seed\n" +
+            "weeeflowers:Green Flower Seed=weeeflowers:Yellow Flower Seed+weeeflowers:Blue Flower Seed\n" +
+            "weeeflowers:Lime Flower Seed=weeeflowers:Green Flower Seed+weeeflowers:White Flower Seed\n" +
+            "weeeflowers:Black Flower Seed=weeeflowers:Blue Flower Seed+weeeflowers:Green Flower Seed\n" +
+            "weeeflowers:Light Grey Flower Seed=weeeflowers:Black Flower Seed+weeeflowers:White Flower Seed\n" +
+            "weeeflowers:Dark Grey Flower Seed=weeeflowers:Light Grey Flower Seed+weeeflowers:Black Flower Seed\n" +
+            "weeeflowers:Cyan Flower Seed=weeeflowers:Lime Flower Seed+weeeflowers:Light Blue Flower Seed\n" +
+            "weeeflowers:Brown Flower Seed=weeeflowers:Green Flower Seed+weeeflowers:Red Flower Seed";
 
     private static final String minecraftMutations =
             "AgriCraft:seedSugarcane=minecraft:wheat_seeds+AgriCraft:seedCarrot\n" +

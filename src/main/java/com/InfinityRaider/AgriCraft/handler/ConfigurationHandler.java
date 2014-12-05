@@ -21,13 +21,13 @@ public class ConfigurationHandler {
     public static boolean generateDefaults;
     public static boolean customCrops;
     public static boolean resourcePlants;
-    public static boolean integration_HC;
-    public static boolean integration_Nat;
     public static double mutationChance;
     public static boolean bonemealMutation;
     public static boolean disableVanillaFarming;
 
-
+    public static boolean integration_HC;
+    public static boolean integration_Nat;
+    public static boolean integration_WeeeFlowers;
 
     public static void init(FMLPreInitializationEvent event) {
         //specify the directory for the config files
@@ -51,6 +51,7 @@ public class ConfigurationHandler {
         customCrops = config.getBoolean("Custom crops", "AGRICRAFT", false, "set to true if you wish to create your own crops");
         integration_HC = config.getBoolean("HarvestCraft","INTEGRATION",true,"Set to false to disable harvestCraft integration");
         integration_Nat = config.getBoolean("Natura","INTEGRATION",true,"Set to false to disable Natura Integration");
+        integration_WeeeFlowers = config.getBoolean("Weee Flowers","INTEGRATION",true,"Set to false to disable Weee Flowers Integration");
         debug = config.getBoolean("debug","DEBUG",false,"Set to true if you wish to enable debug mode");
         if(config.hasChanged()) {config.save();}
     }
