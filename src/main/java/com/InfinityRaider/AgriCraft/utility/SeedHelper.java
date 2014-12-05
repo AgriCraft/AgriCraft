@@ -94,7 +94,7 @@ public abstract class SeedHelper {
         else {
             int harvestMeta = 7;
             if(LoadedMods.plantMegaPack && getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
-                harvestMeta=4;
+                harvestMeta=PlantMegaPackHelper.getTextureIndex(seed, 7);
             }
             ArrayList<ItemStack> defaultDrops = getPlant(seed).getDrops(world, x, y, z, harvestMeta, 0);
             for (ItemStack drop : defaultDrops) {

@@ -67,7 +67,7 @@ public abstract class RenderHelper {
             return NaturaHelper.getTextureIndex(growthMeta, seedMeta);
         }
         else if(LoadedMods.plantMegaPack && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
-            return PlantMegaPackHelper.getTextureIndex(growthMeta);
+            return PlantMegaPackHelper.getTextureIndex(seed, growthMeta);
         }
         else if(seed== Items.nether_wart) {
             return (int) Math.ceil(( (float) growthMeta-2)/2);
