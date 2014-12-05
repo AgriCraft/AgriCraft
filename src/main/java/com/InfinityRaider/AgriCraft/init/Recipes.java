@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.init;
 
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ModItem;
 import com.InfinityRaider.AgriCraft.items.crafting.RecipeCustomWood;
@@ -26,6 +28,11 @@ public class Recipes {
         //seeds
         GameRegistry.addShapelessRecipe(new ItemStack(Seeds.seedPotato), new ItemStack(net.minecraft.init.Items.potato));
         GameRegistry.addShapelessRecipe(new ItemStack(Seeds.seedCarrot), new ItemStack(net.minecraft.init.Items.carrot));
+        if(LoadedMods.exNihilo) {
+            GameRegistry.addShapelessRecipe(new ItemStack(Seeds.seedPotato), new ItemStack(ExNihiloHelper.seedPotato));
+            GameRegistry.addShapelessRecipe(new ItemStack(Seeds.seedCarrot), new ItemStack(ExNihiloHelper.seedCarrot));
+            GameRegistry.addShapelessRecipe(new ItemStack(Seeds.seedSugarcane), new ItemStack(ExNihiloHelper.seedSugarCane));
+        }
         //journal
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.journal,1), "csc", "sbs", "csc", 'c', Items.crops, 's', Names.listAllseed, 'b', net.minecraft.init.Items.writable_book));
         GameRegistry.addRecipe(new RecipeJournal());

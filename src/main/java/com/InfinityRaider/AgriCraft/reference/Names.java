@@ -184,4 +184,6 @@ public final class Names {
     public static final String nei = "NotEnoughItems";
     public static final String thaumicTinkerer = "ThaumicTinkerer";
     public static final String hungerOverhaul= "HungerOverhaul";
+    public static final String exNihilo = "exnihilo";
+    public static final String plantMegaPack = "plantmegapack";
 }
