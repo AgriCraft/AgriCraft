@@ -6,7 +6,8 @@ Changelog
 -Added config option to disable vanilla farming (default is false)
 -Finished irrigation systems
 -Fixed tanks & irrigation channels always dropping oak wood versions when harvesting them
--Added defaultmutations for Pam's Weee Flowers
+-Added default mutations for Pam's Weee Flowers
+-Added recipes to convert Ex Nihilo seeds to AgriCraft seeds
 
 0.0.9
 -Further work on irrigation systems
