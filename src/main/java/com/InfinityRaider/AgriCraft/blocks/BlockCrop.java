@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -153,6 +154,14 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             else if(player.getCurrentEquippedItem().getItem()==Items.crops) {
                 this.setCrossCrop(world, x, y, z, player);
             }
+            //check to see if the player wants to use bonemeal
+            else if(player.getCurrentEquippedItem().getItem()==net.minecraft.init.Items.dye && player.getCurrentEquippedItem().getItemDamage()==15) {
+                return false;
+            }
+            //allow the debugger to be used
+            else if(player.getCurrentEquippedItem().getItem() instanceof ItemDebugger) {
+                return false;
+            }
             else {
                 //harvest operation
                 this.harvest(world, x, y, z);
@@ -162,6 +171,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 }
             }
         }
+        //Returning true will prevent other things from happening
         return true;
     }
 
