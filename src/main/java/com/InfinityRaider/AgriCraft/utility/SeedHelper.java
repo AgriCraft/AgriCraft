@@ -99,7 +99,15 @@ public abstract class SeedHelper {
             ArrayList<ItemStack> defaultDrops = getPlant(seed).getDrops(world, x, y, z, harvestMeta, 0);
             for (ItemStack drop : defaultDrops) {
                 if (!(drop.getItem() instanceof ItemSeeds) && drop.getItem()!=null) {
-                    items.add(new ItemStack(drop.getItem(), nr, drop.getItemDamage()));
+                    boolean add = true;
+                    for(ItemStack item:items) {
+                        if(item.getItem()==drop.getItem() && item.getItemDamage()==drop.getItemDamage()) {
+                            add = false;
+                        }
+                    }
+                    if(add) {
+                        items.add(new ItemStack(drop.getItem(), nr, drop.getItemDamage()));
+                    }
                 }
             }
         }
