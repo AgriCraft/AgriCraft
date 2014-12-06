@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.models.ModelSprinkler;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySprinkler;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
@@ -25,15 +26,16 @@ public class RenderSprinkler extends TileEntitySpecialRenderer {
         TileEntitySprinkler sprinkler= (TileEntitySprinkler) tileEntity;
         //render the model
         GL11.glPushMatrix();                                                            //initiate first gl renderer
-            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);    //sets the rendering origin to the right spot
+            GL11.glDisable(GL11.GL_LIGHTING);                                           //disable lighting
             Minecraft.getMinecraft().renderEngine.bindTexture(this.texture);            //loads texture for the model
+            GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);    //sets the rendering origin to the right spot
+            GL11.glRotatef(sprinkler.angle, 0 , 1, 0);                                  //rotate around y-axis
             GL11.glPushMatrix();                                                        //initiate second gl renderer
                 GL11.glRotatef(180, 0F, 0F, 1F);                                        //rotate the renderer so the model doesn't render upside down
-                 this.model.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);        //actually renders the model
+                this.model.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);        //actually renders the model
             GL11.glPopMatrix();                                                         //close second gl renderer
-            GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glPopMatrix();
+            GL11.glEnable(GL11.GL_LIGHTING);                                            //enable lighting
+        GL11.glPopMatrix();                                                             //close first gl renderer
         renderConnection(sprinkler,x, y, z);
     }
 

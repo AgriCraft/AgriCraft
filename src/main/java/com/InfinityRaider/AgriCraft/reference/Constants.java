@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.reference;
 
 public final class Constants {
     // 1/16th
-    public static final float unit = 0.0625F;
+    public static final float unit = 0.06250F;
 
     // 1 bucket in millibuckets
     public static final int mB = 1000;

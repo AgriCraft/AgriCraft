@@ -13,6 +13,7 @@ import java.util.Random;
 
 public class TileEntitySprinkler extends TileEntityAgricraft{
     private int counter = 0;
+    public float angle = 0.0F;
 
     //this saves the data on the tile entity
     @Override
@@ -20,6 +21,9 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
         super.writeToNBT(tag);
         if(this.counter>0) {
             tag.setInteger(Names.level, this.counter);
+        }
+        if(this.angle>0) {
+            tag.setFloat(Names.angle, this.angle);
         }
     }
 
@@ -32,6 +36,12 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
         }
         else {
             this.counter=0;
+        }
+        if(tag.hasKey(Names.angle)) {
+            this.angle = tag.getFloat(Names.angle);
+        }
+        else {
+            this.angle = 0;
         }
     }
 
@@ -54,8 +64,9 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
             for(int yOffset=1;yOffset<5;yOffset++) {
                 for(int xOffset=-3;xOffset<=3;xOffset++) {
                     for(int zOffset=-3;zOffset<=3;zOffset++) {
-                        if(this.sprinkle())
-                        this.irrigate(this.xCoord+xOffset, this.yCoord-yOffset, this.zCoord+zOffset);
+                        if(this.sprinkle()) {
+                            this.irrigate(this.xCoord + xOffset, this.yCoord - yOffset, this.zCoord + zOffset);
+                        }
                     }
                 }
             }
@@ -63,16 +74,20 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
         }
     }
 
+    public boolean canSprinkle() {
+        return this.isConnected() && ((TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord+1, this.zCoord)).getFluidLevel() > 0;
+    }
+
     private boolean sprinkle() {
-        if(this.isConnected()) {
-            TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord);
-            if(channel.getFluidLevel()>0) {
-                counter = (counter+1)%10;
-                if(this.counter==0) {
-                    channel.setFluidLevel(channel.getFluidLevel() - 1);
-                }
-                return true;
+        if(this.canSprinkle()) {
+            TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord+1, this.zCoord);
+            counter = (counter+1)%10;
+            this.angle = (this.angle+0.05F)%360;
+            this.markDirty();
+            if(this.counter==0) {
+                channel.setFluidLevel(channel.getFluidLevel()-1);
             }
+            return true;
         }
         return false;
     }
