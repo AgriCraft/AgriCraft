@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.models.ModelSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -70,7 +71,7 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
                 RenderHelper.addScaledVertexWithUV(tessellator, 16-8, 0, 0, 0, 16);
                 RenderHelper.addScaledVertexWithUV(tessellator, 16-8, 16, 0, 0, 0);
                 RenderHelper.addScaledVertexWithUV(tessellator, 0-8, 16, 0, 16, 0);
-                //note the texture is rotating around the (0,1,0) axis, which goes trough the centre of the surface, in order to rotate the texture around it's centre axis
+                //note the texture is rotating around the (0,1,0) axis, which goes through the centre of the surface, in order to rotate the texture around its centre axis
                 //this axis has to be coincident with the rotation axis, this is why I am shifting all the vertices in the x direction over half a block
             tessellator.draw();
         GL11.glPopMatrix();
