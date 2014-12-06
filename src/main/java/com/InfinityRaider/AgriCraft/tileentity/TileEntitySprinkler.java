@@ -1,13 +1,19 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.particles.LiquidSprayFX;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockFarmland;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.Vec3;
 
 import java.util.Random;
 
@@ -70,7 +76,11 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
                     }
                 }
             }
-
+        }
+        else {
+            if(this.canSprinkle()) {
+                this.renderLiquidSpray();
+            }
         }
     }
 
@@ -106,6 +116,27 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
             }
         }
 
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void renderLiquidSpray() {
+        for(int i=0;i<4;i++) {
+            float alpha = (this.angle+90*i)*((float)Math.PI)/180;
+            double xOffset = (4*Constants.unit)*Math.cos(alpha);
+            double zOffset = (4*Constants.unit)*Math.sin(alpha);
+            float radius = 0.3F;
+            for(int j=0;j<=4;j++) {
+                float beta = -j*((float)Math.PI)/(8.0F);
+                Vec3 vector = Vec3.createVectorHelper(radius*Math.cos(alpha), radius*Math.sin(beta), radius*Math.sin(alpha));
+                this.spawnLiquidSpray(xOffset*(4-j)/4, zOffset*(4-j)/4, vector);
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void spawnLiquidSpray(double xOffset, double zOffset, Vec3 vector) {
+        LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord+0.5F+xOffset, this.yCoord+5* Constants.unit, this.zCoord+0.5F+zOffset, 0.3F, 0.7F, vector);
+        Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
     }
 
 }
