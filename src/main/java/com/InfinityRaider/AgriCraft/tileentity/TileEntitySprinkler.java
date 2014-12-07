@@ -109,8 +109,8 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
                 //irrigate farmland
                 this.worldObj.setBlockMetadataWithNotify(x, y, z, 7, 2);
             } else if(block instanceof BlockBush) {
-                //10% chance to force growth tick on plant
-                if(Math.random()<0.1) {
+                //2.5% chance to force growth tick on plant
+                if(Math.random()<0.025) {
                     block.updateTick(this.worldObj, x, y, z, new Random());
                 }
             }

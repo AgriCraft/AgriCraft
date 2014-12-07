@@ -90,6 +90,11 @@ public class RenderItemSprinkler implements IItemRenderer {
                 RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, 4, 12, 4);
                 //top face
                 RenderHelper.addScaledVertexWithUV(tessellator, 4, 20, 4, 4, 4);
+                RenderHelper.addScaledVertexWithUV(tessellator, 4, 20, 12, 4, 12);
+                RenderHelper.addScaledVertexWithUV(tessellator, 12, 20, 12, 12, 12);
+                RenderHelper.addScaledVertexWithUV(tessellator, 12, 20, 4, 12, 4);
+                //top face
+                RenderHelper.addScaledVertexWithUV(tessellator, 4, 20, 4, 4, 4);
                 RenderHelper.addScaledVertexWithUV(tessellator, 12, 20, 4, 12, 4);
                 RenderHelper.addScaledVertexWithUV(tessellator, 12, 20, 12, 12, 12);
                 RenderHelper.addScaledVertexWithUV(tessellator, 4, 20, 12, 4, 12);

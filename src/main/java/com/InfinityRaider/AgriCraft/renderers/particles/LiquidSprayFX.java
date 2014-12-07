@@ -16,7 +16,7 @@ public class LiquidSprayFX extends EntityFX {
         this.setParticleIcon(FluidRegistry.WATER.getStillIcon());
         this.particleGravity = gravity;
         this.particleScale = scale;
-        this.particleMaxAge = 20;
+        this.particleMaxAge = 15;
         this.setSize(0.2f, 0.2f);
         this.noClip = false;
         this.motionX = vector.xCoord;

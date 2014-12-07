@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySprinkler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,6 +18,12 @@ import net.minecraft.world.World;
 public class BlockSprinkler extends BlockContainer {
     public BlockSprinkler() {
         super(Material.water);
+        this.maxX = Constants.unit*12;
+        this.minX = Constants.unit*4;
+        this.maxZ = this.maxX;
+        this.minZ = this.minX;
+        this.maxY = Constants.unit*20;
+        this.minY = 8;
     }
 
     @Override
@@ -51,8 +58,8 @@ public class BlockSprinkler extends BlockContainer {
     //see if the block can stay
     @Override
     public boolean canBlockStay(World world, int x, int y, int z) {
-        Block sprinkler = world.getBlock(x,y+1,z);
-        return (sprinkler==com.InfinityRaider.AgriCraft.init.Blocks.blockSprinkler);
+        Block channel = world.getBlock(x,y+1,z);
+        return (channel==com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel);
     }
 
     @Override
