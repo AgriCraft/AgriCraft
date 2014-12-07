@@ -29,6 +29,8 @@ public class BlockWaterTank extends BlockContainer{
 
     public BlockWaterTank() {
         super(Material.wood);
+        this.setHardness(2.0F);
+        this.setResistance(5.0F);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
     }
 
