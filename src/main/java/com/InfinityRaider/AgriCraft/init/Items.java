@@ -45,8 +45,10 @@ public class Items {
         RegisterHelper.registerItem(crops, Names.crops+"Item");
         journal = new ItemJournal();
         RegisterHelper.registerItem(journal, Names.journal);
-        sprinkler = new ItemSprinkler();
-        RegisterHelper.registerItem(sprinkler, Names.sprinkler+"Item");
+        if(!ConfigurationHandler.disableIrrigation) {
+            sprinkler = new ItemSprinkler();
+            RegisterHelper.registerItem(sprinkler, Names.sprinkler + "Item");
+        }
         if(ConfigurationHandler.debug) {
             debugItem = new ItemDebugger();
             RegisterHelper.registerItem(debugItem, "debugger");

@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.blocks.*;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -15,16 +16,17 @@ public class Blocks {
 
     public static void init() {
         blockCrop = new BlockCrop();
-        seedAnalyzer = new BlockSeedAnalyzer();
-        blockWaterTank = new BlockWaterTank();
-        blockWaterChannel = new BlockWaterChannel();
-        blockSprinkler = new BlockSprinkler();
-
         RegisterHelper.registerBlock(blockCrop, Names.crops);
+        seedAnalyzer = new BlockSeedAnalyzer();
         RegisterHelper.registerBlock(seedAnalyzer, Names.seedAnalyzer);
-        RegisterHelper.registerBlock(blockWaterTank, Names.tank, ItemBlockCustomWood.class);
-        RegisterHelper.registerBlock(blockWaterChannel, Names.channel, ItemBlockCustomWood.class);
-        RegisterHelper.registerBlock(blockSprinkler, Names.sprinkler);
+        if(!ConfigurationHandler.disableIrrigation) {
+            blockWaterTank = new BlockWaterTank();
+            RegisterHelper.registerBlock(blockWaterTank, Names.tank, ItemBlockCustomWood.class);
+            blockWaterChannel = new BlockWaterChannel();
+            RegisterHelper.registerBlock(blockWaterChannel, Names.channel, ItemBlockCustomWood.class);
+            blockSprinkler = new BlockSprinkler();
+            RegisterHelper.registerBlock(blockSprinkler, Names.sprinkler);
+        }
         LogHelper.info("Blocks registered");
     }
 }
