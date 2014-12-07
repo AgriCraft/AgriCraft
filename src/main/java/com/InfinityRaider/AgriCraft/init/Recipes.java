@@ -9,6 +9,7 @@ import com.InfinityRaider.AgriCraft.items.crafting.RecipeJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -36,12 +37,17 @@ public class Recipes {
         //journal
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.journal,1), "csc", "sbs", "csc", 'c', Items.crops, 's', Names.listAllseed, 'b', net.minecraft.init.Items.writable_book));
         GameRegistry.addRecipe(new RecipeJournal());
-        //tank & channel
-        GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterTank, 1, 0), tankSchematic));
-        GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_1));
-        GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_2));
-        //sprinkler
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.sprinkler, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', net.minecraft.init.Blocks.iron_bars, 'c', net.minecraft.init.Items.bucket));
+        if(!ConfigurationHandler.disableIrrigation) {
+            //tank & channel
+            GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterTank, 1, 0), tankSchematic));
+            GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_1));
+            GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_2));
+            //change wooden bowl recipe
+            RegisterHelper.removeRecipe(new ItemStack(net.minecraft.init.Items.bowl));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.bowl, 4), "w w", " w ", 'w', Names.slabWood));
+            //sprinkler
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.sprinkler, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', net.minecraft.init.Blocks.iron_bars, 'c', net.minecraft.init.Items.bucket));
+        }
         //fruits
         if(ConfigurationHandler.resourcePlants) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.diamond, 1), "nnn", "nnn", "nnn", 'n',"nuggetDiamond"));

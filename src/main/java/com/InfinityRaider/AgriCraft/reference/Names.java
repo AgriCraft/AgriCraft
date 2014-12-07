@@ -174,6 +174,7 @@ public final class Names {
     //ore dictionary entries
     public static final String listAllseed = "listAllseed";
     public static final String plankWood = "plankWood";
+    public static final String slabWood = "slabWood";
 
     //item registry keywords
     public static final String seedItem = "seedItem";
