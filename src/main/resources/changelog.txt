@@ -9,6 +9,8 @@ Changelog
 -Added default mutations for Pam's Weee Flowers
 -Added recipes to convert Ex Nihilo seeds to AgriCraft seeds
 -Added Plant Mega Pack integration and default mutations
+-Changed the recipe for wooden bowls to use slabs (it overlaps with irrigation channels)
+-Added config option to disable irrigation systems
 -Added French translations (Mazdallier)
 
 0.0.9
