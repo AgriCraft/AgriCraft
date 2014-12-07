@@ -41,9 +41,6 @@ public class BlockWaterChannel extends BlockContainer {
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
         super.breakBlock(world,x,y,z,block,meta);
         world.removeTileEntity(x,y,z);
-        if(world.getBlock(x, y-1, z)!=null && world.getBlock(x, y-1, z)==com.InfinityRaider.AgriCraft.init.Blocks.blockSprinkler) {
-
-        }
     }
 
     //This gets called when the block is left clicked (player hits the block)

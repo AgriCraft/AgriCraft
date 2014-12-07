@@ -119,7 +119,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
     }
 
     @SideOnly(Side.CLIENT)
-    public void renderLiquidSpray() {
+    private void renderLiquidSpray() {
         for(int i=0;i<4;i++) {
             float alpha = (this.angle+90*i)*((float)Math.PI)/180;
             double xOffset = (4*Constants.unit)*Math.cos(alpha);
