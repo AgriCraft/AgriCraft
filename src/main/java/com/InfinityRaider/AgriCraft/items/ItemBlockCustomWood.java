@@ -49,15 +49,16 @@ public class ItemBlockCustomWood extends ItemBlock {
         ArrayList<ItemStack> registeredMaterials = new ArrayList<ItemStack>();
         ArrayList<ItemStack> planks = OreDictionary.getOres(Names.plankWood);
         for(ItemStack plank:planks) {
-            if(plank.getItemDamage()==OreDictionary.WILDCARD_VALUE) {
-                ArrayList<ItemStack> subItems = new ArrayList<ItemStack>();
-                plank.getItem().getSubItems(plank.getItem(), null, subItems);
-                for(ItemStack subItem:subItems) {
-                    this.addMaterialToList(subItem, list, 0, registeredMaterials);
+            if(plank.getItem() instanceof ItemBlock) {
+                if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                    ArrayList<ItemStack> subItems = new ArrayList<ItemStack>();
+                    plank.getItem().getSubItems(plank.getItem(), null, subItems);
+                    for (ItemStack subItem : subItems) {
+                        this.addMaterialToList(subItem, list, 0, registeredMaterials);
+                    }
+                } else {
+                    this.addMaterialToList(plank, list, 0, registeredMaterials);
                 }
-            }
-            else {
-                this.addMaterialToList(plank, list, 0, registeredMaterials);
             }
         }
     }
