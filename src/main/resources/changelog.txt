@@ -4,6 +4,7 @@ Changelog
 -Config option to get more crops per crafting operation
 -Added support to translate the journal to other languages
 -Fixed a crash with GregTech installed
+-Fixed derpy directory on Linux
 
 0.0.10
 -Fixed not being able to interact while having seeds in hand

@@ -34,7 +34,7 @@ public class ConfigurationHandler {
 
     public static void init(FMLPreInitializationEvent event) {
         //specify the directory for the config files
-        directory = event.getModConfigurationDirectory().toString()+'\\'+Reference.MOD_ID.toLowerCase()+'\\';
+        directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
         //if the config file doesn't exist, make a new one
         if(config == null) {config = new Configuration(new File(directory,"Configuration.cfg"));}
         //load config file
