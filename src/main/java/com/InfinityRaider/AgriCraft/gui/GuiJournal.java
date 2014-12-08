@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -271,7 +272,7 @@ public class GuiJournal extends GuiScreen {
         int xOffset = this.guiLeft + 24;
         int yOffset = this.guiTop + 28;
         float scale = 0.5F;
-        String introduction[] = IOHelper.getLinesArrayFromData(GuiJournal.introduction);
+        String introduction[] = IOHelper.getLinesArrayFromData(StatCollector.translateToLocal("agricraft_journal.introduction"));
         int yRenderPos = (int) ((float) yOffset / scale);
         GL11.glScalef(scale, scale, scale);
         for(String paragraph:introduction) {
@@ -371,7 +372,7 @@ public class GuiJournal extends GuiScreen {
     //draw the seed page title bar
     private void drawSeedTitle(int index) {
         ItemStack seed = discoveredSeeds[index];
-        String title = seed.getDisplayName().equalsIgnoreCase("Seeds")?"Wheat Seeds":seed.getDisplayName();
+        String title = seed.getDisplayName();
         Minecraft.getMinecraft().getTextureManager().bindTexture(RenderHelper.getItemResource(seedIcon));
         this.renderIconInGui(this.guiLeft + 25, this.guiTop + 11, RenderHelper.getItemResource(seedIcon));
         float scale = 0.8F;
@@ -387,7 +388,7 @@ public class GuiJournal extends GuiScreen {
     private void writeSeedInformation(int index) {
         float scale = 0.5F;
         GL11.glScalef(scale, scale, scale);
-        this.fontRendererObj.drawString("Information: ", (int) (this.textStart/scale), (int) ((this.guiTop+31)/scale), this.black);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_journal.information")+": ", (int) (this.textStart/scale), (int) ((this.guiTop+31)/scale), this.black);
         String seedData = splitInLines(SeedHelper.getSeedInformation(discoveredSeeds[index]), scale);
         if(seedData!=null && !seedData.equals("")) {
             String[] write = IOHelper.getLinesArrayFromData(seedData);
@@ -403,7 +404,7 @@ public class GuiJournal extends GuiScreen {
     //writes the seed tier
     private void writeSeedTier(int index) {
         int tier = SeedHelper.getSeedTier((ItemSeeds) discoveredSeeds[index].getItem());
-        String write = "Tier: "+tier;
+        String write = StatCollector.translateToLocal("agricraft_journal.tier")+": "+tier;
         float scale = 0.5F;
         GL11.glScalef(scale, scale, scale);
         this.fontRendererObj.drawString(write, (int) (this.textStart / scale), (int) ((this.guiTop + 70) / scale), this.black);
@@ -428,7 +429,7 @@ public class GuiJournal extends GuiScreen {
         }
         scale = 0.5F;
         GL11.glScalef(scale, scale, scale);
-        this.fontRendererObj.drawString("Fruits: ", (int) (this.textStart/scale), (int) ((yOffset-7)/scale), this.black);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_journal.fruits")+": ", (int) (this.textStart/scale), (int) ((yOffset-7)/scale), this.black);
         GL11.glScalef(1/scale, 1/scale, 1/scale);
     }
 
@@ -443,7 +444,7 @@ public class GuiJournal extends GuiScreen {
         }
         scale = 0.5F;
         GL11.glScalef(scale, scale, scale);
-        this.fontRendererObj.drawString("Growth Stages: ", (int) (this.textStart/scale), (int) ((yOffset-7)/scale), this.black);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_journal.growthStages")+": ", (int) (this.textStart/scale), (int) ((yOffset-7)/scale), this.black);
         GL11.glScalef(1/scale, 1/scale, 1/scale);
     }
 
@@ -489,7 +490,7 @@ public class GuiJournal extends GuiScreen {
         //draw the text
         float scale = 0.5F;
         GL11.glScalef(scale, scale, scale);
-        this.fontRendererObj.drawString("Mutations: ", (int) ((xOffset/scale)), (int) ((this.guiTop+yOffset-7)/scale), this.black);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_journal.mutations")+": ", (int) ((xOffset/scale)), (int) ((this.guiTop+yOffset-7)/scale), this.black);
         GL11.glScalef(1/scale, 1/scale, 1/scale);
     }
 
