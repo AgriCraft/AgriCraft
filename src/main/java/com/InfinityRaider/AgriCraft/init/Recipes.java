@@ -22,8 +22,9 @@ public class Recipes {
 
     public static void init() {
         //crop item
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.crops, 1), "stickWood", "stickWood", "stickWood", "stickWood"));
-        GameRegistry.addShapelessRecipe(new ItemStack(net.minecraft.init.Items.stick,4),new ItemStack(Items.crops));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.crops, ConfigurationHandler.cropsPerCraft), "stickWood", "stickWood", "stickWood", "stickWood"));
+        if(ConfigurationHandler.cropsPerCraft==3) {GameRegistry.addShapelessRecipe(new ItemStack(net.minecraft.init.Items.stick, 6 / ConfigurationHandler.cropsPerCraft), new ItemStack(Items.crops), new ItemStack(Items.crops));}
+        else {GameRegistry.addShapelessRecipe(new ItemStack(net.minecraft.init.Items.stick, 4 / ConfigurationHandler.cropsPerCraft), new ItemStack(Items.crops));}
         //seed analyzer
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.seedAnalyzer,1), "sgs", " bs", "pwp", 's', "stickWood", 'g', "paneGlass", 'b', net.minecraft.init.Blocks.stone_slab, 'p', "plankWood", 'w', "slabWood"));
         //seeds

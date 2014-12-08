@@ -22,6 +22,7 @@ public class ConfigurationHandler {
     public static boolean customCrops;
     public static boolean resourcePlants;
     public static double mutationChance;
+    public static int cropsPerCraft;
     public static boolean bonemealMutation;
     public static boolean disableIrrigation;
     public static boolean disableVanillaFarming;
@@ -45,6 +46,7 @@ public class ConfigurationHandler {
         //read values from the config
         resourcePlants = config.getBoolean("Resource Crops","AGRICRAFT",false,"set to true if you wish to disable resource crops");
         mutationChance = (double) config.getFloat("Mutation Chance","AGRICRAFT", (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance");
+        cropsPerCraft = config.getInt("Crops per craft", "AGRICRAFT", 1, 1, 4, "The number of crops you get per crafting operation");
         bonemealMutation = config.getBoolean("Bonemeal Mutations","AGRICRAFT", true, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
         disableIrrigation = config.getBoolean("Disable Irrigation","AGRICRAFT", false, "set to true if you want to disable irrigation systems");
         disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", "AGRICRAFT", false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
