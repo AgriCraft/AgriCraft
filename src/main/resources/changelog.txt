@@ -1,5 +1,8 @@
 Changelog
 ---------
+0.0.11
+-Config option to get more crops per crafting operation
+
 0.0.10
 -Fixed not being able to interact while having seeds in hand
 -You now no longer need an empty hand to harvest crops
