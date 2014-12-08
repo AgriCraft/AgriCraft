@@ -16,6 +16,7 @@ public final class Names {
     public static final String material = "material";
     public static final String materialMeta = "matMeta";
     public static final String angle = "angle";
+    public static final String chestSpawned = "chestSpawned";
 
     //mod objects
     public static final String crop = "crop";

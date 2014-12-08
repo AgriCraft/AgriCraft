@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.init.Crops;
@@ -18,6 +17,7 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -144,5 +144,15 @@ public abstract class SeedHelper {
             return null;
         }
         return SeedInformation.getSeedInformation(seedStack);
+    }
+
+    //get a random seed
+    public static ItemStack getRandomSeed() {
+        ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.listAllseed);
+        ItemStack seed = null;
+        while(seed==null) {
+            seed = seeds.get((int) Math.floor(Math.random()*seeds.size()));
+        }
+        return seed;
     }
 }
