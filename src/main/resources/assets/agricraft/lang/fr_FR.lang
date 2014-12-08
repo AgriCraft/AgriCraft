@@ -4,7 +4,7 @@
 itemGroup.agricraft=Agricraft
 
 //Items
-item.agricraft:cropsItem.name=Cultures
+item.agricraft:cropsItem.name=Tuteurs
 item.agricraft:journal.name=Journal agricole
 item.agricraft:debugger.name=Débogueur
 item.agricraft:nuggetDiamond.name=Pépite de diamant
