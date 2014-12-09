@@ -13,6 +13,7 @@ public class LoadedMods {
     public static boolean weeeFlowers;
     public static boolean exNihilo;
     public static boolean plantMegaPack;
+    public static boolean railcraft;
 
     public static void init() {
         nei = Loader.isModLoaded(Names.nei);
@@ -23,6 +24,7 @@ public class LoadedMods {
         hungerOverhaul = Loader.isModLoaded(Names.hungerOverhaul);
         exNihilo = Loader.isModLoaded(Names.exNihilo);
         plantMegaPack = Loader.isModLoaded(Names.plantMegaPack);
+        railcraft = Loader.isModLoaded(Names.railcraft);
         LogHelper.info("Checking for loaded mods:");
         LogHelper.info(" - NEI loaded: "+nei);
         LogHelper.info(" - Pam's HarvestCraft loaded: "+harvestcraft);
@@ -32,6 +34,7 @@ public class LoadedMods {
         LogHelper.info(" - Hunger Overhaul loaded: "+hungerOverhaul);
         LogHelper.info(" - Ex Nihilo loaded: "+exNihilo);
         LogHelper.info(" - Plant Mega Pack loaded: "+plantMegaPack);
+        LogHelper.info(" - Railcraft loaded: "+railcraft);
         LogHelper.info("Done");
     }
 }
