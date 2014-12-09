@@ -189,5 +189,4 @@ public final class Names {
     public static final String hungerOverhaul= "HungerOverhaul";
     public static final String exNihilo = "exnihilo";
     public static final String plantMegaPack = "plantmegapack";
-    public static final String railcraft = "Railcraft";
 }
