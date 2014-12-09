@@ -76,6 +76,8 @@ public class AgriCraft {
         proxy.registerRenderers();
         //initialize recipes
         Recipes.init();
+        //initialize world gen
+        WorldGen.init();
         LogHelper.info("Initialization Complete");
     }
 

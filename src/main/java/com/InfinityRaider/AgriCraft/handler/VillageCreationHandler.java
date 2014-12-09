@@ -12,7 +12,7 @@ public class VillageCreationHandler implements VillagerRegistry.IVillageCreation
     @Override
     public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int i) {
         //args: structure, weight, max spawns
-        return new StructureVillagePieces.PieceWeight(StructureGreenhouse.class, 5, 1);
+        return new StructureVillagePieces.PieceWeight(StructureGreenhouse.class, 20, 1);
     }
 
     @Override
