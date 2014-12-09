@@ -32,7 +32,9 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
             this.journal.writeToNBT(journalTag);
             tag.setTag(Names.journal, journalTag);
         }
-        tag.setByte("direction", (byte) this.direction.ordinal());
+        if(this.direction!=null) {
+            tag.setByte("direction", (byte) this.direction.ordinal());
+        }
         tag.setInteger("progress", this.progress);
         super.writeToNBT(tag);
     }
@@ -52,7 +54,9 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         else {
             this.journal = null;
         }
-        this.setDirection(tag.getByte("direction"));
+        if(tag.hasKey("direction")) {
+            this.setDirection(tag.getByte("direction"));
+        }
         this.progress = tag.getInteger("progress");
         super.readFromNBT(tag);
     }
