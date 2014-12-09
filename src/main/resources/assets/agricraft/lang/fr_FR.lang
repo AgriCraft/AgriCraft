@@ -84,3 +84,107 @@ tile.agricraft:cropJaslumine.name=Jaslumine
 tile.agricraft:cropNiccissus.name=Niccissus
 tile.agricraft:cropPlatiolus.name=Platiolus
 tile.agricraft:cropOsmonium.name=Osmonium
+
+
+//journal entries
+//---------------
+//headers
+agricraft_journal.introduction=Bienvenu à la ferme agricole, je vous apprendrai, aujourd'hui, les bases de la culture avec tuteurs. Pour débuter, vous devrez mettre 4 bâtons dans la grille de l'établi afin de faire des tuteurs. Ceux-ci pourront être posé sur les labours et les graines pourons être plantées dedans. Vous pouvez aussi placer un second lot de tuteur sur un déjà existant, ceci créera un treillage. Si vous semez deux plantes ou plus dans des tuteurs adjacents au treillage, il y a une chance pour qu'une mutation advienne. \nDans ce journal vous pouvez garder trace de toutes vos mutations découvertes. Pour enregistrer la nouvelle graine, placez le journal dans l'analyseur de graines puis analisez la graine. Ceci vous révèlera les propriétés de la graine en même temps qu'elle sera enregistée dans ce journal. Si vous souhaitez une copie du journal, placez le dans l'établi avec un livre et plume vierge.
+agricraft_journal.information=Information
+agricraft_journal.tier=Niveau
+agricraft_journal.fruits=Fruits
+agricraft_journal.growthStages=Croissance
+agricraft_journal.mutations=Mutations
+
+//agricraft seeds
+agricraft_journal.potato=La pomme de terre est la base de presque chaque repas, cependant certains ont même trouvé des façons de la transformer en boisson.
+agricraft_journal.carrot=La carotte est un légume adapté pour beaucoup de régimes, même si les cochon n'en profite pas.
+agricraft_journal.sugarcane=D'habitude les roseaux grandissent seulement près de l'eau, mais un agronome devrait pouvoir faire subir une mutation à cette plante pour la cultiver partout.
+agricraft_journal.dandelion=Les pissenlits sont des fleurs jaunes généralement placée dans des lieux exposés au soleil.
+agricraft_journal.poppy=Quoiqu'elle soit très commune, c'est toujours une très jolie fleur rouge foncée.
+agricraft_journal.orchid=Une fleur qui a belle allure dans beaucoup de jardins. En fait, aucun jardin n'est complet sans orchidées en son sein.
+agricraft_journal.allium=L'allium est une fleur cultivée pour ces pétales voilettes.
+agricraft_journal.tulipPink=La tulipe existe dans bien des couleurs, mais seul le vrai agronome apprécie la teinte rose.
+agricraft_journal.tulipOrange=Orange, l'une des nombreuses couleures dans le spectre des tulipes.
+agricraft_journal.tulipRed=Il y a une citation : \"Il y a 50 carreaux de tulipes, mais le rouge est le plus beau\".
+agricraft_journal.tulipWhite=Il y a beaucoup de fleurs blanches, mais beaucoup disent que la tulipe blanche est la fleur blanche des fleurs blanches.
+agricraft_journal.daisy=Les pâquerettes sont tout à fait communes, mais néanmoins de jolies petites fleurs blanches.
+agricraft_journal.diamahlia=Beaucoup continue de croire que cette fleur n'existe que dans les contes et légendes. Cependant, quelques agronomes disent qu'ils ont réussi à obtenir de cette légendaire plante.
+agricraft_journal.aurigold=L'aurigold est une fleur rare et légendaire qui s'alimente des minuscules fractions d'or dans le sol. Seul un agronome très patient et habile peut cultiver ce bijou.
+agricraft_journal.ferranium=Les racines de cette plante étrange ne craignent pas de l'eau. Elles creusent juste dans le sol en absorbant les particules de fer pour se renforcer.
+agricraft_journal.lapender=En plus de ca belle couleur bleue, cette fleur produit aussi des cailloux brillants.
+agricraft_journal.emeryllis=Si vous parlez aux agronomes de village, ils pourront vous dire des contes sur cette plante et la richesse infinie qu'elle fournirait.
+agricraft_journal.redstodendron=Une aura étrange semble émaner des buissons de redstodendron.
+agricraft_journal.cuprosia=Le cuprosia est une fleur étrange qui extrait le cuivre du sol pour le ressortir de ces beaux pétales.
+agricraft_journal.petinia=Cette fleur prospère seulement sur des sols riches en étain.
+agricraft_journal.plombean=Parfois les gens prennent cette plante pour de simples haricots et meurent d'empoisonnement au plomb après la consommation des fruits.
+agricraft_journal.silverweed=Parfois, des agronomes moins compétents prennent cette plante de valeur pour de la mauvaise herbe et l'arrachent.
+agricraft_journal.jaslumine=Les forgerons y froncent les sourcils à sa vue, mais beaucoup croient que l'aluminium a des utilisations. C'est pourquoi certains essayent toujours de cultiver cette fleur.
+agricraft_journal.niccissus=Quand elle fleurit, ces fleurs révèlent des pépites faites de nickel. C'est toujours un mystère comment cette plante grandit.
+agricraft_journal.platiolus=Le platine est une matière rare, la plupart des métallurgistes iront chez l'agronome au lieu des mineurs pour se le procurer.
+agricraft_journal.osmonium=Un agronome réussissant à cultiver ces fleurs trouvera un bon marché auprès des ingénieurs.
+
+//minecraft seeds
+agricraft_journal.wheat=Le blé est une culture très commune, mais très nutritive.
+agricraft_journal.pumpkin=La plupart des gens considèrent des potirons comme un légume décoratif, tandis que d'autres aiment le goût des tartes à la citrouille.
+agricraft_journal.melon=À cause de son gout sucré et son haut taux d'humidité, le melon est un fruit aimé de tous.
+
+//natura seeds
+agricraft_journal.barleyNatura=Some people prefer the taste of barley bread over regular bread, while others claim it tastes exactly the same.
+agricraft_journal.cottonNatura=Cotton has a high demand in the textile industry and is therefore a very valuable asset.
+
+//harvestcraft seeds
+agricraft_journal.hc_Artichoke=The edible portion of the artichoke consists of the flower buds before the flowers come into bloom.
+agricraft_journal.hc_Asparagus=Asparagus has been used as a vegetable and medicine, it has a very delicate flavour.
+agricraft_journal.hc_BambooShoot=Bamboo shoots or bamboo sprouts are the edible shoots which are used in numerous Asian dishes and broths.
+agricraft_journal.hc_Bean=Beans are a summer crop that needs warm temperatures to grow.
+agricraft_journal.hc_Beet=The usually deep purple roots of beet are eaten either raw, grilled, boiled, or roasted.
+agricraft_journal.hc_Bellpepper=Most often bell peppers are green, yellow, orange, and red.
+agricraft_journal.hc_Blackberry=The soft fruit is popular for use in desserts, jams, seedless jelly, and sometimes wine.
+agricraft_journal.hc_Blueberry=Blueberries are perennial flowering plants with indigo-colored berries.
+agricraft_journal.hc_Broccoli=Broccoli is an edible green plant in the cabbage family, whose large flowering head is used as a vegetable.
+agricraft_journal.hc_BrusselsSprout=The Brussels sprout has long been popular in Brussels, Belgium, and may have originated there.
+agricraft_journal.hc_Cabbage=Cabbage is generally grown for its densely leaved heads, produced during the first year of its biennial cycle.
+agricraft_journal.hc_CactusFruit=The fruits typically grow spikes as well, handle with caution.
+agricraft_journal.hc_CandleBerry=The candleberry is a small shrub that produces small fruits.
+agricraft_journal.hc_Cantaloupe=Cantaloupe is normally eaten as a fresh fruit, as a salad, or as a dessert with ice cream or custard.
+agricraft_journal.hc_Cauliflower=Cauliflower can be roasted, boiled, fried, steamed, or eaten raw.
+agricraft_journal.hc_Celery=Celery is a plant variety commonly used as a vegetable, the stem is the edible part.
+agricraft_journal.hc_ChiliPepper=The spicy chili has many culinary uses, from dips to spicing up your meal.
+agricraft_journal.hc_Coffee=These beans are the base for a steaming cup of coffee to start your day, so basicly the base of your day.
+agricraft_journal.hc_Corn=Because of its shallow roots, corn is susceptible to droughts, intolerant of nutrient-deficient soils, and prone to be uprooted by severe winds
+agricraft_journal.hc_Cranberry=Cranberry juice is usually sweetened or blended with other fruit juices to reduce its natural tartness.
+agricraft_journal.hc_Cucumber=The cucumber is a creeping vine that bears cylindrical fruits that are used as culinary vegetables.
+agricraft_journal.hc_Eggplant=The raw fruit can have a somewhat bitter taste, but becomes tender when cooked and develops a rich, complex flavor.
+agricraft_journal.hc_Garlic=Garlic is easy to grow and can be grown year-round in mild climates.
+agricraft_journal.hc_Ginger=Ginger produces clusters of white and pink flower buds that bloom into yellow flowers.
+agricraft_journal.hc_Grape=A grape is a fruiting berry of the deciduous woody vines and the fruits can be eaten raw or they can be used for making wine, jam, juice, jelly, grape seed extract, raisins, vinegar, and grape seed oil.
+agricraft_journal.hc_Kiwi=Kiwifruit can be grown in most temperate climates with adequate summer heat.
+agricraft_journal.hc_Leek=Rather than forming a tight bulb like the onion, the leek produces a long cylinder of bundled leaf sheaths that are generally blanched by pushing soil around them.
+agricraft_journal.hc_Lettuce=Generally grown as a hardy annual, lettuce is easily cultivated, although it requires relatively low temperatures to prevent it from flowering quickly.
+agricraft_journal.hc_Mustard=Mustard seeds generally take three to ten days to germinate if placed under the proper conditions, which include a cold atmosphere and relatively moist soil.
+agricraft_journal.hc_Oats=Oats are suitable for human consumption as oatmeal and rolled oats, but one of the most common uses is as livestock feed.
+agricraft_journal.hc_Okra=Okra plants are valued for their edible green seed pods.
+agricraft_journal.hc_Onion=The onion plant has a fan of hollow, bluish-green leaves and the bulb at the base of the plant begins to swell when a certain day-length is reached.
+agricraft_journal.hc_Parsnip=The parsnip is a root vegetable closely related to the carrot and parsley.
+agricraft_journal.hc_Peanut=Peanuts have many uses. They can be eaten raw, used in recipes, made into solvents and oils, medicines, textile materials, and peanut butter, as well as many other uses.
+agricraft_journal.hc_Peas=Peas are botanically a fruit, since they contain seeds developed from the ovary of a (pea) flower.
+agricraft_journal.hc_Pineapple=Pineapples are consumed fresh, cooked, juiced, and preserved, and are found in a wide array of cuisines.
+agricraft_journal.hc_Radish=Radishes are mostly used in salads but also appear in many European dishes.[
+agricraft_journal.hc_Raspberry=Raspberry plants should not be planted where potatoes, tomatoes, peppers, eggplants, or bulbs have previously been grown, without prior fumigation of the soil.
+agricraft_journal.hc_Rhubarb=For cooking, the stalks are often cut into small pieces and stewed (boiled in water) with added sugar.
+agricraft_journal.hc_Rice=The traditional method for cultivating rice is flooding the fields while, or after, setting the young seedlings.
+agricraft_journal.hc_Rutabaga=Some people carve out turnips in variable patterns (mostly faces) and used them as lanterns to ward off harmful spirits.
+agricraft_journal.hc_Rye=Rye is a grass grown extensively as a grain, a cover crop and as a forage crop.
+agricraft_journal.hc_Scallion=Scallion have a relatively mild onion flavour, and are used as a vegetable, either raw or cooked.
+agricraft_journal.hc_Seaweed=Seaweed is used in salad dressings and sauces, dietetic foods, and as a preservative in meat and fish products, dairy items and baked goods.
+agricraft_journal.hc_Soybean=Traditional nonfermented food uses of soybeans include soy milk, and from the latter tofu and tofu skin.
+agricraft_journal.hc_SpiceLeaf=Spices are distinguished from herbs, which are parts of leafy green plants used for flavoring or as a garnish.
+agricraft_journal.hc_Strawberry=Strawberries are popular and rewarding plants to grow in the domestic environment, be it for consumption or exhibition purposes.
+agricraft_journal.hc_SweetPotato=Although the leaves and shoots are also edible, the starchy tuberous roots are by far the most important product.
+agricraft_journal.hc_Tea=Tea can be prepared by pouring hot or boiling water over cured leaves of the tea plant
+agricraft_journal.hc_Tomato=The tomato is consumed in diverse ways, including raw, as an ingredient in many dishes, sauces, salads, and drinks.
+agricraft_journal.hc_Turnip=The turnip is a root vegetable commonly grown in temperate climates worldwide for its white, bulbous taproot.
+agricraft_journal.hc_WhiteMushroom=If you want to fly higher then a jetplane, these aren't the mushrooms you're looking for.
+agricraft_journal.hc_WinterSquash=Winter squash can be harvested whenever the fruits have turned a deep, solid color and the skin is hard.
+agricraft_journal.hc_Zucchini=Zucchini is usually served cooked, it can also be prepared using a variety of cooking techniques, including steamed, boiled, grilled, stuffed and baked, barbecued, fried, or incorporated in other recipes.
