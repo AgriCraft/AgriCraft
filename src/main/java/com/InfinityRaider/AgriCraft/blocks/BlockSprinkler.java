@@ -17,13 +17,15 @@ import net.minecraft.world.World;
 
 public class BlockSprinkler extends BlockContainer {
     public BlockSprinkler() {
-        super(Material.water);
+        super(Material.iron);
+        /*
         this.maxX = Constants.unit*12;
         this.minX = Constants.unit*4;
         this.maxZ = this.maxX;
         this.minZ = this.minX;
         this.maxY = Constants.unit*20;
         this.minY = 8;
+        */
     }
 
     @Override
