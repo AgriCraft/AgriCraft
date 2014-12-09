@@ -62,7 +62,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
             neighbours[1] = (world.getTileEntity(x + 1, y, z) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x + 1, y, z) : null;
             neighbours[2] = (world.getTileEntity(x, y, z - 1) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x, y, z - 1) : null;
             neighbours[3] = (world.getTileEntity(x, y, z + 1) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x, y, z + 1) : null;
-            if (Math.random() > ConfigurationHandler.mutationChance) {
+            if (Math.random() < ConfigurationHandler.mutationChance) {
                 int index = (int) Math.floor(Math.random() * neighbours.length);
                 if (neighbours[index]!=null && neighbours[index].seed!=null && neighbours[index].isMature()) {
                     this.crossCrop = false;
