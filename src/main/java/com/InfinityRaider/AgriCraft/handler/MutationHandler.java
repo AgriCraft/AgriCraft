@@ -32,8 +32,8 @@ public abstract class MutationHandler {
         setMutationChances(IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationChances()));
         LogHelper.info("Registered Mutations Chances overrides:");
         for(int i=0;i< mutationChances.length;i++) {
-            String mutation = mutationChanceOverrides[i].getItem()!=null?(Item.itemRegistry.getNameForObject(mutations[i].getItem())+':'+mutations[i].getItemDamage()):"null";
-            String chance = mutationChances[i]+"%";
+            String mutation = mutationChanceOverrides[i].getItem()!=null?(Item.itemRegistry.getNameForObject(mutationChanceOverrides[i].getItem())+':'+mutationChanceOverrides[i].getItemDamage()):"null";
+            String chance = mutationChances[i]+" percent";
             LogHelper.info(mutation + ": " + chance);
         }
     }

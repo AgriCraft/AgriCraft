@@ -156,7 +156,7 @@ public abstract class IOHelper {
                 domain =  Reference.MOD_ID;
             }
         }
-        if(domain.equalsIgnoreCase( Reference.MOD_ID)) {
+        if(domain.equalsIgnoreCase(Reference.MOD_ID)) {
             domain = Reference.MOD_ID;
             if(name.indexOf(':')>=0) {
                 name = name.substring(0,name.indexOf(':'));
@@ -186,7 +186,7 @@ public abstract class IOHelper {
             }
             name = "barley.seed:" + meta;
         }
-       return domain + ':' + name;
+        return domain + ':' + name;
     }
 
     //gets an item stack with the correct meta

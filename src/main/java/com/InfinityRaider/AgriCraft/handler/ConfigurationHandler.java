@@ -64,11 +64,8 @@ public class ConfigurationHandler {
     }
 
     public static String readGrassDrops() {
-        LogHelper.debug("Reading seeds dropped from grass");
         File file = new File(directory,"GrassDrops.txt");
-        LogHelper.debug("File path: "+file.toString());
         if(file.exists() && !file.isDirectory()) {
-            LogHelper.debug("File Found");
             try {
                 FileInputStream inputStream = new FileInputStream(file);
                 byte[] input = new byte[(int) file.length()];
@@ -77,14 +74,13 @@ public class ConfigurationHandler {
                     inputStream.close();
                     return new String(input, "UTF-8");
                 } catch (IOException e) {
-                    LogHelper.error(Arrays.toString(e.getStackTrace()));
+                    LogHelper.info("Caught IOException when reading grass drops");
                 }
             } catch(FileNotFoundException e) {
-                LogHelper.error(Arrays.toString(e.getStackTrace()));
+                LogHelper.info("Caught IOException when reading grass drops");
             }
         }
         else {
-            LogHelper.debug("Generating new file");
             String defaultData = IOHelper.getGrassDrops();
             BufferedWriter writer;
             try {
@@ -97,23 +93,19 @@ public class ConfigurationHandler {
                     return defaultData;
                 }
                 catch(IOException e) {
-                    LogHelper.debug("Caught IOException");
-                    LogHelper.error(Arrays.toString(e.getStackTrace()));
+                    LogHelper.info("Caught IOException when writing grass drops");
                 }
             }
             catch(IOException e) {
-                LogHelper.error(Arrays.toString(e.getStackTrace()));
+                LogHelper.info("Caught IOException when writing grass drops");
             }
         }
         return null;
     }
 
     public static String readCustomCrops() {
-        LogHelper.debug("Reading custom crops");
         File file = new File(directory,"CustomCrops.txt");
-        LogHelper.debug("File path: "+file.toString());
         if(file.exists() && !file.isDirectory()) {
-            LogHelper.debug("File Found");
             try {
                 FileInputStream inputStream = new FileInputStream(file);
                 byte[] input = new byte[(int) file.length()];
@@ -122,14 +114,13 @@ public class ConfigurationHandler {
                     inputStream.close();
                     return new String(input, "UTF-8");
                 } catch (IOException e) {
-                    LogHelper.error(Arrays.toString(e.getStackTrace()));
+                    LogHelper.info("Caught IOException when reading custom crops");
                 }
             } catch(FileNotFoundException e) {
-                LogHelper.error(Arrays.toString(e.getStackTrace()));
+                LogHelper.info("Caught IOException when reading custom crops");
             }
         }
         else {
-            LogHelper.debug("Generating new file");
             String defaultData = IOHelper.getCustomCropInstructions();
             BufferedWriter writer;
             try {
@@ -143,23 +134,19 @@ public class ConfigurationHandler {
                     return defaultData;
                 }
                 catch(IOException e) {
-                    LogHelper.debug("Caught IOException");
-                    LogHelper.error(Arrays.toString(e.getStackTrace()));
+                    LogHelper.info("Caught IOException when writing custom crops");
                 }
             }
             catch(IOException e) {
-                LogHelper.error(Arrays.toString(e.getStackTrace()));
+                LogHelper.info("Caught IOException when writing custom crops");
             }
         }
         return null;
     }
 
     public static String readMutationData() {
-        LogHelper.debug("Getting mutations");
         File file = new File(directory,"Mutations.txt");
-        LogHelper.debug("File path: "+file.toString());
         if(file.exists() && !file.isDirectory() && !generateDefaults) {
-            LogHelper.debug("File Found");
             try {
                 FileInputStream inputStream = new FileInputStream(file);
                 byte[] input = new byte[(int) file.length()];
@@ -168,14 +155,13 @@ public class ConfigurationHandler {
                     inputStream.close();
                     return new String(input, "UTF-8");
                 } catch (IOException e) {
-                    LogHelper.error(Arrays.toString(e.getStackTrace()));
+                    LogHelper.info("Caught IOException when reading mutations");
                 }
             } catch(FileNotFoundException e) {
-                LogHelper.error(Arrays.toString(e.getStackTrace()));
+                LogHelper.info("Caught IOException when reading mutations");
             }
         }
         else {
-            LogHelper.debug("Generating new file");
             String defaultData = IOHelper.getDefaultMutations();
             BufferedWriter writer;
             try {
@@ -189,23 +175,19 @@ public class ConfigurationHandler {
                     return defaultData;
                 }
                 catch(IOException e) {
-                    LogHelper.debug("Caught IOException");
-                    LogHelper.error(Arrays.toString(e.getStackTrace()));
+                    LogHelper.info("Caught IOException when writing mutations");
                 }
             }
             catch(IOException e) {
-                LogHelper.error(Arrays.toString(e.getStackTrace()));
+                LogHelper.info("Caught IOException when writing mutations");
             }
         }
         return null;
     }
 
     public static String readMutationChances() {
-        LogHelper.debug("Getting mutations chances overrides");
         File file = new File(directory,"MutationChancesOverrides.txt");
-        LogHelper.debug("File path: "+file.toString());
         if(file.exists() && !file.isDirectory() && !generateDefaults) {
-            LogHelper.debug("File Found");
             try {
                 FileInputStream inputStream = new FileInputStream(file);
                 byte[] input = new byte[(int) file.length()];
@@ -214,14 +196,13 @@ public class ConfigurationHandler {
                     inputStream.close();
                     return new String(input, "UTF-8");
                 } catch (IOException e) {
-                    LogHelper.error(Arrays.toString(e.getStackTrace()));
+                    LogHelper.info("Caught IOException when reading mutation chance overrides");
                 }
             } catch(FileNotFoundException e) {
-                LogHelper.error(Arrays.toString(e.getStackTrace()));
+                LogHelper.info("Caught IOException when reading mutation chance overrides");
             }
         }
         else {
-            LogHelper.debug("Generating new file");
             String defaultData = IOHelper.getMutationChancesOverridesInstructions();
             BufferedWriter writer;
             try {
@@ -235,12 +216,11 @@ public class ConfigurationHandler {
                     return defaultData;
                 }
                 catch(IOException e) {
-                    LogHelper.debug("Caught IOException");
-                    LogHelper.error(Arrays.toString(e.getStackTrace()));
+                    LogHelper.info("Caught IOException when writing mutation chance overrides");
                 }
             }
             catch(IOException e) {
-                LogHelper.error(Arrays.toString(e.getStackTrace()));
+                LogHelper.info("Caught IOException when writing mutation chance overrides");
             }
         }
         return null;

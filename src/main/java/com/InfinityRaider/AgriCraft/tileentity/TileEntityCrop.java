@@ -93,6 +93,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
                     change = true;
                 }
             }
+            //update the tile entity on a change
             if (change) {
                 world.addBlockEvent(x, y, z, world.getBlock(x, y, z), 1, 0);    //lets the tile entity know it has been updated
                 this.markDirty();                                               //lets Minecraft know the tile entity has changed
