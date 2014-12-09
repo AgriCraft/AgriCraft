@@ -200,5 +200,49 @@ public class ConfigurationHandler {
         return null;
     }
 
+    public static String readMutationChances() {
+        LogHelper.debug("Getting mutations chances overrides");
+        File file = new File(directory,"MutationChancesOverrides.txt");
+        LogHelper.debug("File path: "+file.toString());
+        if(file.exists() && !file.isDirectory() && !generateDefaults) {
+            LogHelper.debug("File Found");
+            try {
+                FileInputStream inputStream = new FileInputStream(file);
+                byte[] input = new byte[(int) file.length()];
+                try {
+                    inputStream.read(input);
+                    inputStream.close();
+                    return new String(input, "UTF-8");
+                } catch (IOException e) {
+                    LogHelper.error(Arrays.toString(e.getStackTrace()));
+                }
+            } catch(FileNotFoundException e) {
+                LogHelper.error(Arrays.toString(e.getStackTrace()));
+            }
+        }
+        else {
+            LogHelper.debug("Generating new file");
+            String defaultData = IOHelper.getMutationChancesOverridesInstructions();
+            BufferedWriter writer;
+            try {
+                writer = new BufferedWriter(new FileWriter(file));
+                try {
+                    writer.write(defaultData);
+                    writer.close();
+                    propGenerateDefaults.setToDefault();
+                    config.save();
 
+                    return defaultData;
+                }
+                catch(IOException e) {
+                    LogHelper.debug("Caught IOException");
+                    LogHelper.error(Arrays.toString(e.getStackTrace()));
+                }
+            }
+            catch(IOException e) {
+                LogHelper.error(Arrays.toString(e.getStackTrace()));
+            }
+        }
+        return null;
+    }
 }

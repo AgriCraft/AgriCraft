@@ -56,30 +56,41 @@ public class TileEntityCrop extends TileEntityAgricraft {
     //the code that makes the crop cross with neighboring crops
     public void crossOver(World world, int x, int y, int z) {
         if(!world.isRemote) {
+            //flag to check if the crop needs to update
             boolean change = false;
+            //possible new plant
+            ItemSeeds seed=null;
+            int seedMeta=0;
+            //find neighbours
             TileEntityCrop[] neighbours = new TileEntityCrop[4];
             neighbours[0] = (world.getTileEntity(x - 1, y, z) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x - 1, y, z) : null;
             neighbours[1] = (world.getTileEntity(x + 1, y, z) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x + 1, y, z) : null;
             neighbours[2] = (world.getTileEntity(x, y, z - 1) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x, y, z - 1) : null;
             neighbours[3] = (world.getTileEntity(x, y, z + 1) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x, y, z + 1) : null;
-            if (Math.random() < ConfigurationHandler.mutationChance) {
+            //find out the new plant
+            if (Math.random() > ConfigurationHandler.mutationChance) {
                 int index = (int) Math.floor(Math.random() * neighbours.length);
                 if (neighbours[index]!=null && neighbours[index].seed!=null && neighbours[index].isMature()) {
-                    this.crossCrop = false;
-                    int[] stats = MutationHandler.getStats(neighbours);
-                    this.setPlant(stats[0], stats[1] ,stats[2], neighbours[index].seed, neighbours[index].seedMeta);
-                    change = true;
+                    seed = (ItemSeeds) neighbours[index].seed;
+                    seedMeta = neighbours[index].seedMeta;
                 }
             } else {
                 ItemStack[] crossOvers = MutationHandler.getCrossOvers(neighbours);
                 if (crossOvers != null && crossOvers.length>0) {
                     int index = (int) Math.floor(Math.random()*crossOvers.length);
                     if(crossOvers[index].getItem()!=null) {
-                        int[] stats = MutationHandler.getStats(neighbours);
-                        this.crossCrop = false;
-                        this.setPlant(stats[0], stats[1], stats[2], (ItemSeeds) crossOvers[index].getItem(), crossOvers[index].getItemDamage());
-                        change = true;
+                        seed = (ItemSeeds) crossOvers[index].getItem();
+                        seedMeta = crossOvers[index].getItemDamage();
                     }
+                }
+            }
+            //try to set the new plant
+            if(seed!=null) {
+                if(Math.random()<MutationHandler.getMutationChance(seed, seedMeta)) {
+                    this.crossCrop = false;
+                    int[] stats = MutationHandler.getStats(neighbours);
+                    this.setPlant(stats[0], stats[1], stats[2], seed, seedMeta);
+                    change = true;
                 }
             }
             if (change) {

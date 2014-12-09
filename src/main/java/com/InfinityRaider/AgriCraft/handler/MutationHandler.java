@@ -13,6 +13,8 @@ public abstract class MutationHandler {
     private static ItemStack[] mutations;
     private static ItemStack[] parents1;
     private static ItemStack[] parents2;
+    private static ItemStack[] mutationChanceOverrides;
+    private static int[] mutationChances;
 
     public static void init() {
         //Read mutations & initialize the mutation arrays
@@ -25,6 +27,15 @@ public abstract class MutationHandler {
             String parent2 = parents2[i].getItem()!=null?(Item.itemRegistry.getNameForObject(parents2[i].getItem()))+':'+parents2[i].getItemDamage():"null";
             LogHelper.info(mutation + " = " + parent1 + " + " + parent2);
         }
+
+        //read mutation chance overrides & initialize the arrays
+        setMutationChances(IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationChances()));
+        LogHelper.info("Registered Mutations Chances overrides:");
+        for(int i=0;i< mutationChances.length;i++) {
+            String mutation = mutationChanceOverrides[i].getItem()!=null?(Item.itemRegistry.getNameForObject(mutations[i].getItem())+':'+mutations[i].getItemDamage()):"null";
+            String chance = mutationChances[i]+"%";
+            LogHelper.info(mutation + ": " + chance);
+        }
     }
 
     //initializes the mutations arrays
@@ -36,6 +47,17 @@ public abstract class MutationHandler {
             mutations[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(0,data[i].indexOf('='))));
             parents1[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(data[i].indexOf('=')+1,data[i].indexOf('+'))));
             parents2[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(data[i].indexOf('+')+1)));
+        }
+    }
+
+    //initializes the mutation chances arrays
+    private static void setMutationChances(String[] data) {
+        mutationChanceOverrides = new ItemStack[data.length];
+        mutationChances = new int[data.length];
+        for(int i=0;i<data.length;i++) {
+            mutationChanceOverrides[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(0,data[i].indexOf(','))));
+            int chance = Integer.parseInt(data[i].substring(data[i].indexOf(',')+1));
+            mutationChances[i] = chance<0?0:(chance>100?100:chance);
         }
     }
 
@@ -215,5 +237,14 @@ public abstract class MutationHandler {
             result[i] = list.get(i);
         }
         return result;
+    }
+
+    public static double getMutationChance(ItemSeeds seed, int meta) {
+        for(int i=0;i<mutationChances.length;i++) {
+            if(seed==mutationChanceOverrides[i].getItem() && meta==mutationChanceOverrides[i].getItemDamage()) {
+                return ((double)mutationChances[i])/100;
+            }
+        }
+        return 0.75;
     }
 }

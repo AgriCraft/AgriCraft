@@ -6,7 +6,7 @@ Changelog
 -Fixed a crash with GregTech installed
 -Fixed derpy directory on Linux
 -Railcraft Hidden Blocks no longer prevent crops from being placed
--The mutation chance specified in the config is now the actual chance and not 1-<value in config>
+-Added a config file to override mutation chances for seeds
 
 0.0.10
 -Fixed not being able to interact while having seeds in hand
