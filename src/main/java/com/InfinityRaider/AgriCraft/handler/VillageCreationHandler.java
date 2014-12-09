@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.world.StructureGreenhouse;
+import com.InfinityRaider.AgriCraft.world.StructureGreenhouseIrrigated;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
@@ -12,16 +12,16 @@ public class VillageCreationHandler implements VillagerRegistry.IVillageCreation
     @Override
     public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int i) {
         //args: structure, weight, max spawns
-        return new StructureVillagePieces.PieceWeight(StructureGreenhouse.class, 20, 1);
+        return new StructureVillagePieces.PieceWeight(StructureGreenhouseIrrigated.class, 20, 1);
     }
 
     @Override
     public Class<?> getComponentClass() {
-        return StructureGreenhouse.class;
+        return StructureGreenhouseIrrigated.class;
     }
 
     @Override
     public Object buildComponent(StructureVillagePieces.PieceWeight villagePiece, StructureVillagePieces.Start startPiece, List pieces, Random random, int p1, int p2, int p3, int p4, int p5) {
-        return StructureGreenhouse.buildComponent(startPiece, pieces, random, p1, p2, p3, p4, p5);
+        return StructureGreenhouseIrrigated.buildComponent(startPiece, pieces, random, p1, p2, p3, p4, p5);
     }
 }
