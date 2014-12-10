@@ -78,7 +78,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     public static boolean isValid(ItemStack stack) {
         if(stack!=null && stack.getItem() instanceof ItemSeeds) {
-            if(!SeedHelper.isValidSeed((ItemSeeds) stack.getItem())) {
+            if(!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage())) {
                 return false;
             }
             if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey(Names.analyzed)) {
@@ -195,7 +195,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     public boolean canInsertItem(int slot, ItemStack stack, int side) {
         if(slot==ContainerSeedAnalyzer.seedSlotId) {
             if (stack.getItem() instanceof ItemSeeds) {
-                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem())) {
+                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage())) {
                     return false;
                 }
                 return (this.seed == null || this.canStack(stack)) && this.isItemValidForSlot(slot, stack);

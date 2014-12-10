@@ -77,6 +77,10 @@ public abstract class IOHelper {
         return mutationChancesOverridesInstructions;
     }
 
+    public static String getSeedBlackListInstructions() {
+        return seedBlackListInstructions;
+    }
+
     //turns the raw data string into an array (each array element is a line from the string)
     public static String[] getLinesArrayFromData(String input) {
         int count = 0;
@@ -220,6 +224,12 @@ public abstract class IOHelper {
             "#Example: claysanthemum,minecraft:clay,minecraft:hardened_clay,2,6,a crop that extracts clay from the soil to grow clay buds.\n" +
             "#this will need textures cropClaysanthemum1, cropClaysanthemum2, Claysanthemum3, Claysanthemum4 in the agricraft/textures/blocks folder and seedClaysanthemum in the agricraft/textures/items folder of your resourcepack.\n" +
             "#Note the capitalization, always put a capital in the texture name. Also, this crop will not grow unless it has a hardened clay block underneath the block of farmland it's on";
+
+    private static final String seedBlackListInstructions =
+            "#Define blacklisted seeds here: <mod>:<seedname>:<seedmeta>\n" +
+            "#You can these values from NEI, the data you put here will be corrected up to a certain level, but you should always try to use the values NEI gives you\n" +
+            "#Blacklisted seeds will not be able to planted on crops\n" +
+            "#For example: AgriCraft:seedDandelion";
 
     private static final String mutationChancesOverridesInstructions =
             "#Define overides for mutation chances here: <mod>:<seedname>:<seedmeta>,<chance>\n" +

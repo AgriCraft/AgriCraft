@@ -85,7 +85,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
                 }
             }
             //try to set the new plant
-            if(seed!=null) {
+            if(seed!=null && SeedHelper.isValidSeed(seed, seedMeta)) {
                 if(Math.random()<MutationHandler.getMutationChance(seed, seedMeta)) {
                     this.crossCrop = false;
                     int[] stats = MutationHandler.getStats(neighbours);

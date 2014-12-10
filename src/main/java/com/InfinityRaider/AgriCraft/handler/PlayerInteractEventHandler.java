@@ -24,7 +24,7 @@ public class PlayerInteractEventHandler {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             if(event.world.getBlock(event.x, event.y, event.z)==Blocks.farmland) {
                 if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable && event.entityPlayer.getCurrentEquippedItem().hasTagCompound()) {
-                    if(ConfigurationHandler.disableVanillaFarming && SeedHelper.isValidSeed((ItemSeeds)  event.entityPlayer.getCurrentEquippedItem().getItem())) {
+                    if(ConfigurationHandler.disableVanillaFarming && SeedHelper.isValidSeed((ItemSeeds)  event.entityPlayer.getCurrentEquippedItem().getItem(), event.entityPlayer.getCurrentEquippedItem().getItemDamage())) {
                         event.setResult(Event.Result.DENY);
                         event.setCanceled(true);
                     }

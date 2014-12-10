@@ -116,7 +116,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             //the seed can be planted here
             else {
                 ItemStack stack = player.getCurrentEquippedItem();
-                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem())) {
+                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage())) {
                     return;
                 }
                 //get NBT data from the seeds

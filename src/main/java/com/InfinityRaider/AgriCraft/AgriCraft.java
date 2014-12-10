@@ -24,6 +24,7 @@ import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -86,6 +87,8 @@ public class AgriCraft {
         LogHelper.info("Starting Post-Initialization");
         //initialize mutations
         MutationHandler.init();
+        //initialize blacklist
+        SeedHelper.initSeedBlackList();
         //configure NEI
         proxy.initNEI();
         LogHelper.info("Post-Initialization Complete");

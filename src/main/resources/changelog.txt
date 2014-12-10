@@ -8,6 +8,8 @@ Changelog
 -Railcraft Hidden Blocks no longer prevent crops from being placed
 -Added a config file to override mutation chances for seeds
 -Fixed Seed Analyzer crash
+-Added a config file to blacklist seeds
+-Higher tier seeds will now mutate with lower chances and spread a lot slower to adjacent crosscrops
 
 0.0.10
 -Fixed not being able to interact while having seeds in hand

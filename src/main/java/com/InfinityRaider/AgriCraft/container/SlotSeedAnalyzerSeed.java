@@ -17,7 +17,7 @@ public class SlotSeedAnalyzerSeed extends Slot{
     public boolean isItemValid(ItemStack stack) {
         if(stack!=null && stack.stackSize>0 && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
             ItemSeeds seed = (ItemSeeds) stack.getItem();
-            if(!SeedHelper.isValidSeed(seed)) {
+            if(!SeedHelper.isValidSeed(seed, stack.getItemDamage())) {
                 return false;
             }
             if(stack.hasTagCompound()) {

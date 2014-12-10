@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -23,6 +24,20 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class SeedHelper {
+    private static ItemStack[] seedBlackList;
+
+    public static void initSeedBlackList() {
+        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSeedBlackList());
+        seedBlackList = new ItemStack[data.length];
+       for(int i=0;i<data.length;i++) {
+           seedBlackList[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i]));
+        }
+        LogHelper.info("Registered seeds blacklist:");
+        for(ItemStack seed:seedBlackList) {
+            LogHelper.info(" - "+Item.itemRegistry.getNameForObject(seed.getItem())+":"+seed.getItemDamage());
+        }
+    }
+
     public static int getSeedTier(ItemSeeds seed) {
         if(seed == null) {
             return 0;
@@ -115,12 +130,16 @@ public abstract class SeedHelper {
     }
 
     //check if the seed is valid
-    public static boolean isValidSeed(ItemSeeds seed) {
+    public static boolean isValidSeed(ItemSeeds seed, int meta) {
         if(LoadedMods.thaumicTinkerer && getPlantDomain(seed).equalsIgnoreCase(Names.thaumicTinkerer)) {
             LogHelper.debug("Thaumic Tinkerer infused seeds are not supported, sorry");
             return false;
         }
-
+        for(ItemStack blacklistedSeed:seedBlackList) {
+            if(blacklistedSeed.getItem()==seed && blacklistedSeed.getItemDamage()==meta) {
+                return false;
+            }
+        }
 
         return true;
     }
@@ -147,11 +166,19 @@ public abstract class SeedHelper {
     }
 
     //get a random seed
-    public static ItemStack getRandomSeed() {
+    public static ItemStack getRandomSeed(boolean setTag) {
         ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.listAllseed);
         ItemStack seed = null;
-        while(seed==null) {
+        while(seed==null || !isValidSeed((ItemSeeds) seed.getItem(), seed.getItemDamage())) {
             seed = seeds.get((int) Math.floor(Math.random()*seeds.size()));
+        }
+        if(setTag) {
+            int gain = (int) Math.ceil(Math.random()*7);
+            int growth = (int) Math.ceil(Math.random()*7);
+            int strength = (int) Math.ceil(Math.random()*7);
+            NBTTagCompound tag = new NBTTagCompound();
+            setNBT(tag, (short) growth, (short) gain, (short) strength, false);
+            seed.stackTagCompound = tag;
         }
         return seed;
     }

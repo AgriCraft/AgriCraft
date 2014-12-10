@@ -105,7 +105,7 @@ public class ContainerSeedAnalyzer extends Container {
                 //try to move item from the player's inventory into the analyzer
                 if(itemstack1.getItem()!=null) {
                     if(itemstack1.getItem() instanceof ItemSeeds) {
-                        if (!SeedHelper.isValidSeed((ItemSeeds) itemstack1.getItem())) {
+                        if (!SeedHelper.isValidSeed((ItemSeeds) itemstack1.getItem(), itemstack1.getItemDamage())) {
                             return null;
                         }
                         if (!this.mergeItemStack(itemstack1, 0, 1, false)) {

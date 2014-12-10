@@ -225,4 +225,45 @@ public class ConfigurationHandler {
         }
         return null;
     }
+
+    public static String readSeedBlackList() {
+        File file = new File(directory,"SeedBlackList.txt");
+        if(file.exists() && !file.isDirectory() && !generateDefaults) {
+            try {
+                FileInputStream inputStream = new FileInputStream(file);
+                byte[] input = new byte[(int) file.length()];
+                try {
+                    inputStream.read(input);
+                    inputStream.close();
+                    return new String(input, "UTF-8");
+                } catch (IOException e) {
+                    LogHelper.info("Caught IOException when reading seed blacklist");
+                }
+            } catch(FileNotFoundException e) {
+                LogHelper.info("Caught IOException when reading seed blacklist");
+            }
+        }
+        else {
+            String defaultData = IOHelper.getSeedBlackListInstructions();
+            BufferedWriter writer;
+            try {
+                writer = new BufferedWriter(new FileWriter(file));
+                try {
+                    writer.write(defaultData);
+                    writer.close();
+                    propGenerateDefaults.setToDefault();
+                    config.save();
+
+                    return defaultData;
+                }
+                catch(IOException e) {
+                    LogHelper.info("Caught IOException when writing seed blacklist");
+                }
+            }
+            catch(IOException e) {
+                LogHelper.info("Caught IOException when writing seed blacklist");
+            }
+        }
+        return null;
+    }
 }
