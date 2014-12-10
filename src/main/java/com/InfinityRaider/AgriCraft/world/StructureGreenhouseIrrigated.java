@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.init.Blocks;
@@ -14,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class StructureGreenhouseIrrigated extends StructureVillagePieces.Village {
     //structure dimensions
@@ -40,7 +43,7 @@ public class StructureGreenhouseIrrigated extends StructureVillagePieces.Village
         int size = (int) Math.ceil(Math.random()*10);
         WeightedRandomChestContent[] loot = new WeightedRandomChestContent[size];
         for(int i=0;i<size;i++) {
-            ItemStack seed = SeedHelper.getRandomSeed();
+            ItemStack seed = SeedHelper.getRandomSeed(true);
             loot[i] = new WeightedRandomChestContent(seed.getItem(), seed.getItemDamage(), 1, 3, 85);
         }
         return loot;
@@ -250,6 +253,21 @@ public class StructureGreenhouseIrrigated extends StructureVillagePieces.Village
         this.fillWithBlocks(world, boundingBox, 9, 2, 8, 13, 2, 12, com.InfinityRaider.AgriCraft.init.Blocks.blockCrop, com.InfinityRaider.AgriCraft.init.Blocks.blockCrop, false);
         //place water tank
         this.fillWithBlocks(world, boundingBox, 3, 5, 1, 6, 8, 4, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, false);
+        LogHelper.debug("Bounding box origin: ("+boundingBox.minX+","+boundingBox.minY+","+boundingBox.minZ+")");
+        for(int x=0;x<=4;x++) {
+            int xCoord = boundingBox.minX + 3 + x;
+            for(int y=0;y<=4;y++) {
+                int yCoord = boundingBox.minY + 5 + y;
+                for(int z=0;z<=4;z++) {
+                    int zCoord = boundingBox.minZ + 1 + z;
+                    LogHelper.debug("Checking ("+xCoord+","+yCoord+","+zCoord+") for tank");
+                    if(world.getTileEntity(xCoord, yCoord, zCoord)!=null) {
+                        LogHelper.debug("  - Found TileEntity");
+                        ((TileEntityTank) world.getTileEntity(xCoord, yCoord, zCoord)).setMaterial(new ItemStack(Blocks.planks, 1, 0));
+                    }
+                }
+            }
+        }
         //place irrigation channels
         this.fillWithBlocks(world, boundingBox, 5, 5, 5, 5, 5, 10, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, false);
         this.fillWithBlocks(world, boundingBox, 6, 5, 10, 11, 5, 10, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, false);
@@ -258,6 +276,14 @@ public class StructureGreenhouseIrrigated extends StructureVillagePieces.Village
         this.placeBlockAtCurrentPosition(world, com.InfinityRaider.AgriCraft.init.Blocks.blockSprinkler, 0, 11, 4, 10, boundingBox);
         //place seed analyzer
         this.placeBlockAtCurrentPosition(world, com.InfinityRaider.AgriCraft.init.Blocks.seedAnalyzer, 0, 11, 2, 4, boundingBox);
+        int xCoord = boundingBox.minX + 11;
+        int yCoord = boundingBox.minY + 2;
+        int zCoord = boundingBox.minZ + 4;
+        LogHelper.debug("Checking ("+xCoord+","+yCoord+","+zCoord+") or seed analyzer");
+        if(world.getTileEntity(xCoord, yCoord, zCoord)!=null) {
+            LogHelper.debug("  - Found TileEntity");
+            ((TileEntitySeedAnalyzer) world.getTileEntity(xCoord, yCoord, zCoord)).setDirection(ForgeDirection.SOUTH.ordinal());
+        }
         //place chest
         this.placeBlockAtCurrentPosition(world, Blocks.chest, 3, 12, 2, 4, boundingBox);
         return true;
