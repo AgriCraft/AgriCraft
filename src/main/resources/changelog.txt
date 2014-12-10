@@ -25,6 +25,7 @@ Changelog
 -Changed the recipe for wooden bowls to use slabs (it overlaps with irrigation channels)
 -Added config option to disable irrigation systems
 -Added French translations (Mazdallier)
+-crops can be harvested with MFR harvesters
 
 0.0.9
 -Further work on irrigation systems

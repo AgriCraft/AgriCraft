@@ -26,11 +26,15 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import powercrystals.minefactoryreloaded.api.HarvestType;
+import powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGrowable {
+public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGrowable, IFactoryHarvestable {
     public BlockCrop() {
         super(Blocks.farmland, null, null, 0, 0, 6);
         this.isBlockContainer = true;
@@ -271,7 +275,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 SeedHelper.setNBT(seedStack.stackTagCompound, (short) crop.growth, (short) crop.gain, (short) crop.strength, false);
                 items.add(seedStack);
                 if(crop.isMature()) {
-                   items.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
+                    items.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
                 }
             }
         }
@@ -325,4 +329,47 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         return (tileEntity!=null)&&(tileEntity.receiveClientEvent(id,data));
     }
 
+
+    //MFR methods
+    @Override
+    public Block getPlant() {
+        return null;
+    }
+
+    @Override
+    public HarvestType getHarvestType() {
+        return HarvestType.Normal;
+    }
+
+    @Override
+    public boolean breakBlock() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeHarvested(World world, Map<String, Boolean> harvesterSettings, int x, int y, int z) {
+        return this.isMature(world, x, y, z);
+    }
+
+    @Override
+    public List<ItemStack> getDrops(World world, Random rand, Map<String, Boolean> harvesterSettings, int x, int y, int z) {
+        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityCrop) {
+            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+            if (crop.hasPlant() && crop.isMature()) {
+                items.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
+            }
+        }
+        return items;
+    }
+
+    @Override
+    public void preHarvest(World world, int x, int y, int z) {
+
+    }
+
+    @Override
+    public void postHarvest(World world, int x, int y, int z) {
+        world.setBlockMetadataWithNotify(x, y, z, 2, 2);
+    }
 }
