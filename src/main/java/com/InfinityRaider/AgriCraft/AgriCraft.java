@@ -77,8 +77,6 @@ public class AgriCraft {
         proxy.registerRenderers();
         //initialize recipes
         Recipes.init();
-        //initialize world gen
-        WorldGen.init();
         LogHelper.info("Initialization Complete");
     }
 
@@ -89,6 +87,10 @@ public class AgriCraft {
         MutationHandler.init();
         //initialize blacklist
         SeedHelper.initSeedBlackList();
+        //initialize world gen
+        if(!ConfigurationHandler.disableWorldGen) {
+            WorldGen.init();
+        }
         //configure NEI
         proxy.initNEI();
         LogHelper.info("Post-Initialization Complete");

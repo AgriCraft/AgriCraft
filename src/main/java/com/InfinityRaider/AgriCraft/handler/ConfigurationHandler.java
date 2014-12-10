@@ -10,7 +10,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
 import java.io.*;
-import java.util.Arrays;
 
 public class ConfigurationHandler {
     private static Configuration config;
@@ -26,6 +25,7 @@ public class ConfigurationHandler {
     public static int cropsPerCraft;
     public static boolean bonemealMutation;
     public static boolean disableIrrigation;
+    public static boolean disableWorldGen;
     public static boolean disableVanillaFarming;
 
     public static boolean integration_HC;
@@ -51,6 +51,7 @@ public class ConfigurationHandler {
         bonemealMutation = config.getBoolean("Bonemeal Mutations","AGRICRAFT", true, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
         disableIrrigation = config.getBoolean("Disable Irrigation","AGRICRAFT", false, "set to true if you want to disable irrigation systems");
         disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", "AGRICRAFT", false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
+        disableWorldGen = config.getBoolean("Disable World Gen", "AGRICRAFT", false, "set to true to disable world gen, no greenhouses will spawn in villages");
         enableNEI = config.getBoolean("Enable NEI", "AGRICRAFT", true, "set to false if you wish to disable mutation recipes in NEI");
         propGenerateDefaults = config.get("AGRICRAFT", "GenerateDefaults", false, "set to true to regenerate a default mutations file (will turn back to false afterwards)");
         generateDefaults = propGenerateDefaults.getBoolean();

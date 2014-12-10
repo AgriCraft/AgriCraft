@@ -11,6 +11,7 @@ Changelog
 -Added a config file to blacklist seeds
 -Higher tier seeds will now mutate with lower chances and spread a lot slower to adjacent crosscrops
 -Added language support for tooltips
+-Added greenhouses to villages (can be disabled in the config)
 
 0.0.10
 -Fixed not being able to interact while having seeds in hand

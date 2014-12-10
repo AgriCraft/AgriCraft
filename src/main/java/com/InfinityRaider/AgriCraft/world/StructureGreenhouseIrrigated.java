@@ -3,64 +3,32 @@ package com.InfinityRaider.AgriCraft.world;
 import java.util.List;
 import java.util.Random;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class StructureGreenhouseIrrigated extends StructureVillagePieces.Village {
+public class StructureGreenhouseIrrigated extends StructureGreenhouse {
     //structure dimensions
     private static final int xSize = 17;
     private static final int ySize = 10;
     private static final int zSize = 16;
     //helper fields
     private int averageGroundLevel = -1;
-    private boolean chestSpawned;
 
     public StructureGreenhouseIrrigated(StructureBoundingBox structureBoundingBox, int coordBaseMode) {
-        this.coordBaseMode = coordBaseMode;
-        this.boundingBox = structureBoundingBox;
+        super(structureBoundingBox, coordBaseMode);
     }
 
     //public method to build the component
     public static StructureGreenhouseIrrigated buildComponent(StructureVillagePieces.Start villagePiece, List pieces, Random random, int p1, int p2, int p3, int p4, int p5) {
         StructureBoundingBox boundingBox = StructureBoundingBox.getComponentToAddBoundingBox(p1, p2, p3, 0, 0, 0, xSize, ySize, zSize, p4);
         return (canVillageGoDeeper(boundingBox)) && (StructureComponent.findIntersecting(pieces, boundingBox) == null)?new StructureGreenhouseIrrigated(boundingBox, p4) : null;
-    }
-
-    //get random loot
-    private WeightedRandomChestContent[] getLoot() {
-        int size = (int) Math.ceil(Math.random()*10);
-        WeightedRandomChestContent[] loot = new WeightedRandomChestContent[size];
-        for(int i=0;i<size;i++) {
-            ItemStack seed = SeedHelper.getRandomSeed(true);
-            loot[i] = new WeightedRandomChestContent(seed.getItem(), seed.getItemDamage(), 1, 3, 85);
-        }
-        return loot;
-    }
-
-    //write to NBT
-    @Override
-    protected void func_143012_a(NBTTagCompound par1NBTTagCompound) {
-        super.func_143012_a(par1NBTTagCompound);
-        par1NBTTagCompound.setBoolean(Names.chestSpawned, this.chestSpawned);
-    }
-
-    //read from NBT
-    @Override
-    protected void func_143011_b(NBTTagCompound par1NBTTagCompound) {
-        super.func_143011_b(par1NBTTagCompound);
-        this.chestSpawned = par1NBTTagCompound.getBoolean(Names.chestSpawned);
     }
 
     //structure generation code
@@ -218,74 +186,120 @@ public class StructureGreenhouseIrrigated extends StructureVillagePieces.Village
         this.placeBlockAtCurrentPosition(world, Blocks.wooden_door, 2, 15, 2, 10, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.wooden_door, 8, 15, 3, 10, boundingBox);
         //place torches
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 2, 0, 4, 6, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 2, 0, 4, 9, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 2, 0, 4, 11, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 2, 0, 4, 14, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 2, 9, 4, 3, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 2, 14, 4, 9, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 2, 14, 4, 11, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 5, 1, 3, 1, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 5, 15, 3, 1, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 4, 1, 4, 5, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 4, 8, 4, 5, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 4, 10, 4, 2, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 4, 13, 4, 2, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 4, 15, 4, 5, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 4, 8, 4, 13, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 1, 14, 4, 3, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 1, 16, 4, 6, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 1, 16, 4, 9, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 1, 16, 4, 14, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 1, 16, 4, 14, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 1, 2, 4, 9, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 1, 2, 4, 11, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 3, 1, 4, 15, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 3, 8, 4, 15, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 3, 15, 4, 15, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 3, 3, 4, 7, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 3, 6, 4, 7, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 3, 8, 4, 7, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 3, 10, 4, 7, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.torch, 3, 13, 4, 7, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 0, 4, 6, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 0, 4, 9, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 0, 4, 11, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 0, 4, 14, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 9, 4, 3, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 14, 4, 9, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 14, 4, 11, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 1, 3, 1, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 15, 3, 1, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 1, 4, 5, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 8, 4, 5, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 10, 4, 2, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 13, 4, 2, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 15, 4, 5, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 8, 4, 13, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 14, 4, 3, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 16, 4, 6, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 16, 4, 9, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 16, 4, 14, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 16, 4, 14, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 2, 4, 9, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 2, 4, 11, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 1, 4, 15, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 8, 4, 15, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 15, 4, 15, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 3, 4, 7, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 6, 4, 7, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 8, 4, 7, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 10, 4, 7, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 13, 4, 7, boundingBox);
         //place crops
-        this.fillWithBlocks(world, boundingBox, 3, 2, 8, 7, 2, 12, com.InfinityRaider.AgriCraft.init.Blocks.blockCrop, com.InfinityRaider.AgriCraft.init.Blocks.blockCrop, false);
-        this.fillWithBlocks(world, boundingBox, 9, 2, 8, 13, 2, 12, com.InfinityRaider.AgriCraft.init.Blocks.blockCrop, com.InfinityRaider.AgriCraft.init.Blocks.blockCrop, false);
+        for(int x=3;x<=7;x++) {
+            for(int z=8;z<=12;z++) {
+                this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==5 &&z==10));
+            }
+        }
+        for(int x=9;x<=13;x++) {
+            for(int z=8;z<=12;z++) {
+                this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==11 &&z==10));
+            }
+
+        }
         //place water tank
-        this.fillWithBlocks(world, boundingBox, 3, 5, 1, 6, 8, 4, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, false);
-        LogHelper.debug("Bounding box origin: ("+boundingBox.minX+","+boundingBox.minY+","+boundingBox.minZ+")");
-        for(int x=0;x<=4;x++) {
-            int xCoord = boundingBox.minX + 3 + x;
-            for(int y=0;y<=4;y++) {
-                int yCoord = boundingBox.minY + 5 + y;
-                for(int z=0;z<=4;z++) {
-                    int zCoord = boundingBox.minZ + 1 + z;
-                    LogHelper.debug("Checking ("+xCoord+","+yCoord+","+zCoord+") for tank");
-                    if(world.getTileEntity(xCoord, yCoord, zCoord)!=null) {
-                        LogHelper.debug("  - Found TileEntity");
-                        ((TileEntityTank) world.getTileEntity(xCoord, yCoord, zCoord)).setMaterial(new ItemStack(Blocks.planks, 1, 0));
-                    }
+        for(int x=3;x<=6;x++) {
+            for(int y=5;y<=8;y++) {
+                for(int z=1;z<=4;z++) {
+                    this.generateStructureWoodenTank(world, boundingBox, x, y, z);
                 }
             }
         }
         //place irrigation channels
         this.fillWithBlocks(world, boundingBox, 5, 5, 5, 5, 5, 10, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, false);
-        this.fillWithBlocks(world, boundingBox, 6, 5, 10, 11, 5, 10, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, false);
-        //place sprinklers
-        this.placeBlockAtCurrentPosition(world, com.InfinityRaider.AgriCraft.init.Blocks.blockSprinkler, 0, 5, 4, 10, boundingBox);
-        this.placeBlockAtCurrentPosition(world, com.InfinityRaider.AgriCraft.init.Blocks.blockSprinkler, 0, 11, 4, 10, boundingBox);
-        //place seed analyzer
-        this.placeBlockAtCurrentPosition(world, com.InfinityRaider.AgriCraft.init.Blocks.seedAnalyzer, 0, 11, 2, 4, boundingBox);
-        int xCoord = boundingBox.minX + 11;
-        int yCoord = boundingBox.minY + 2;
-        int zCoord = boundingBox.minZ + 4;
-        LogHelper.debug("Checking ("+xCoord+","+yCoord+","+zCoord+") or seed analyzer");
-        if(world.getTileEntity(xCoord, yCoord, zCoord)!=null) {
-            LogHelper.debug("  - Found TileEntity");
-            ((TileEntitySeedAnalyzer) world.getTileEntity(xCoord, yCoord, zCoord)).setDirection(ForgeDirection.SOUTH.ordinal());
+        for(int z=5;z<=10;z++) {
+            this.generateStructureIrrigationChannel(world, boundingBox, 5, 5, z);
         }
-        //place chest
-        this.placeBlockAtCurrentPosition(world, Blocks.chest, 3, 12, 2, 4, boundingBox);
+        this.fillWithBlocks(world, boundingBox, 6, 5, 10, 11, 5, 10, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, false);
+        for(int x=6;x<=11;x++) {
+            this.generateStructureIrrigationChannel(world, boundingBox, x, 5, 10);
+        }
+        //place sprinklers
+        this.generateStructureSprinkler(world, boundingBox, 5, 4, 10);
+        this.generateStructureSprinkler(world, boundingBox, 11, 4, 10);
+        //place seed analyzer
+        this.generateStructureSeedAnalyzer(world, boundingBox, 11, 2, 4, ForgeDirection.SOUTH);
         return true;
+    }
+
+    //place a tank
+    protected boolean generateStructureWoodenTank(World world, StructureBoundingBox boundingBox, int x, int y, int z) {
+        int xCoord = this.getXWithOffset(x, z);
+        int yCoord = this.getYWithOffset(y);
+        int zCoord = this.getZWithOffset(x, z);
+        if (boundingBox.isVecInside(xCoord, yCoord, zCoord)) {
+            world.setBlock(xCoord, yCoord, zCoord, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, 0, 2);
+            TileEntityTank tank = (TileEntityTank) world.getTileEntity(xCoord, yCoord, zCoord);
+            if (tank!=null) {
+                tank.setMaterial(new ItemStack(Blocks.planks, 1, 0));
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    //place an irrigation channel
+    protected boolean generateStructureIrrigationChannel(World world, StructureBoundingBox boundingBox, int x, int y, int z) {
+        int xCoord = this.getXWithOffset(x, z);
+        int yCoord = this.getYWithOffset(y);
+        int zCoord = this.getZWithOffset(x, z);
+        if (boundingBox.isVecInside(xCoord, yCoord, zCoord)) {
+            world.setBlock(xCoord, yCoord, zCoord, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, 0, 2);
+            TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(xCoord, yCoord, zCoord);
+            if (channel!=null) {
+                channel.setMaterial(new ItemStack(Blocks.planks, 1, 0));
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    //place a sprinkler
+    protected boolean generateStructureSprinkler(World world, StructureBoundingBox boundingBox, int x, int y, int z) {
+        int xCoord = this.getXWithOffset(x, z);
+        int yCoord = this.getYWithOffset(y);
+        int zCoord = this.getZWithOffset(x, z);
+        if (boundingBox.isVecInside(xCoord, yCoord, zCoord)) {
+            world.setBlock(xCoord, yCoord, zCoord, com.InfinityRaider.AgriCraft.init.Blocks.blockSprinkler, 0, 2);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
