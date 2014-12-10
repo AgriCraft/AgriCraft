@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.handler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -245,6 +246,6 @@ public abstract class MutationHandler {
                 return ((double)mutationChances[i])/100;
             }
         }
-        return 0.75;
+        return 1.00/ SeedHelper.getSeedTier(seed);
     }
 }
