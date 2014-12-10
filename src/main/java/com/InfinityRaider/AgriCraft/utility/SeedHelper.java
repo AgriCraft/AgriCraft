@@ -169,7 +169,7 @@ public abstract class SeedHelper {
     public static ItemStack getRandomSeed(boolean setTag) {
         ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.listAllseed);
         ItemStack seed = null;
-        while(seed==null || !isValidSeed((ItemSeeds) seed.getItem(), seed.getItemDamage())) {
+        while(seed==null || !(seed.getItem() instanceof ItemSeeds) || !isValidSeed((ItemSeeds) seed.getItem(), seed.getItemDamage())) {
             seed = seeds.get((int) Math.floor(Math.random()*seeds.size()));
         }
         if(setTag) {
