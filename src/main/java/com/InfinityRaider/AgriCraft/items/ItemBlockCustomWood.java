@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -95,7 +96,7 @@ public class ItemBlockCustomWood extends ItemBlock {
             String name = tag.getString(Names.material);
             int meta = tag.getInteger(Names.materialMeta);
             ItemStack material = new ItemStack((Block) Block.blockRegistry.getObject(name), 1, meta);
-            list.add("Material: "+ material.getItem().getItemStackDisplayName(material));
+            list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+ material.getItem().getItemStackDisplayName(material));
         }
     }
 

@@ -10,6 +10,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class ItemJournal extends ModItem {
         if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.discoveredSeeds)) {
             nr = stack.stackTagCompound.getTagList(Names.discoveredSeeds, 10).tagCount();
         }
-        list.add("Discovered Seeds: "+nr);
+        list.add(StatCollector.translateToLocal("agricraft_tooltip.discoveredSeeds")+": "+nr);
     }
 
     @Override

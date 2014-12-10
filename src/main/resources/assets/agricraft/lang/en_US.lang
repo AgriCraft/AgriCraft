@@ -83,6 +83,13 @@ tile.agricraft:cropNiccissus.name=Niccissus
 tile.agricraft:cropPlatiolus.name=Platiolus
 tile.agricraft:cropOsmonium.name=Osmonium
 
+//tooltips
+agricraft_tooltip.unidentified=Unidentified
+agricraft_tooltip.growth=Growth
+agricraft_tooltip.gain=Gain
+agricraft_tooltip.strength=Strength
+agricraft_tooltip.discoveredSeeds=Discovered Seeds
+agricraft_tooltip.material=Material
 
 //journal entries
 //---------------
