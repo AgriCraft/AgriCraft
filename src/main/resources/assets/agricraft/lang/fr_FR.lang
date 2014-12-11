@@ -6,6 +6,7 @@ itemGroup.agricraft=Agricraft
 //Items
 item.agricraft:cropsItem.name=Tuteurs
 item.agricraft:journal.name=Journal agricole
+item.agricraft:sprinklerItem.name=Arroseur
 item.agricraft:debugger.name=Débogueur
 item.agricraft:nuggetDiamond.name=Pépite de diamant
 item.agricraft:nuggetIron.name=Pépite de fer
@@ -48,7 +49,7 @@ item.agricraft:seedOsmonium.name=Graines d'osmonium
 
 
 //blocks
-tile.agricraft:crops.name=Cultures
+tile.agricraft:crops.name=Tuteurs
 tile.agricraft:seedAnalyzer.name=Analyseur de graines
 tile.agricraft:waterTank.0.name=Réservoire d'eau en bois
 tile.agricraft:waterTank.1.name=Réservoire d'eau en fer
@@ -85,6 +86,13 @@ tile.agricraft:cropNiccissus.name=Niccissus
 tile.agricraft:cropPlatiolus.name=Platiolus
 tile.agricraft:cropOsmonium.name=Osmonium
 
+//tooltips
+agricraft_tooltip.unidentified=Inconnue
+agricraft_tooltip.growth=Croissance
+agricraft_tooltip.gain=Gain
+agricraft_tooltip.strength=Force
+agricraft_tooltip.discoveredSeeds=Graines découvertes
+agricraft_tooltip.material=Matériaux
 
 //journal entries
 //---------------
