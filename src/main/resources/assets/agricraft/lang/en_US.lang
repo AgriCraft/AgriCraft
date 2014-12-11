@@ -4,6 +4,7 @@ itemGroup.agricraft=Agricraft
 //Items
 item.agricraft:cropsItem.name=crops
 item.agricraft:journal.name=Agricultural Journal
+item.agricraft:sprinklerItem.name=Sprinkler
 item.agricraft:debugger.name=Debugger
 item.agricraft:nuggetDiamond.name=Diamond Nugget
 item.agricraft:nuggetIron.name=Iron Nugget
