@@ -12,6 +12,9 @@ Changelog
 -Higher tier seeds will now mutate with lower chances and spread a lot slower to adjacent crosscrops
 -Added language support for tooltips
 -Added greenhouses to villages (can be disabled in the config)
+-Added MFR integration
+-Upgraded Forge to 1230
+-Added Thaumcraft integration (golem harvesting and aspects)
 
 0.0.10
 -Fixed not being able to interact while having seeds in hand
@@ -25,7 +28,6 @@ Changelog
 -Changed the recipe for wooden bowls to use slabs (it overlaps with irrigation channels)
 -Added config option to disable irrigation systems
 -Added French translations (Mazdallier)
--crops can be harvested with MFR harvesters
 
 0.0.9
 -Further work on irrigation systems
