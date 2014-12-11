@@ -26,7 +26,7 @@ public abstract class MutationHandler {
             String mutation = mutations[i].getItem()!=null?(Item.itemRegistry.getNameForObject(mutations[i].getItem())+':'+mutations[i].getItemDamage()):"null";
             String parent1 = parents1[i].getItem()!=null?(Item.itemRegistry.getNameForObject(parents1[i].getItem()))+':'+parents1[i].getItemDamage():"null";
             String parent2 = parents2[i].getItem()!=null?(Item.itemRegistry.getNameForObject(parents2[i].getItem()))+':'+parents2[i].getItemDamage():"null";
-            LogHelper.info(mutation + " = " + parent1 + " + " + parent2);
+            LogHelper.info(" - "+mutation + " = " + parent1 + " + " + parent2);
         }
 
         //read mutation chance overrides & initialize the arrays
@@ -35,7 +35,7 @@ public abstract class MutationHandler {
         for(int i=0;i< mutationChances.length;i++) {
             String mutation = mutationChanceOverrides[i].getItem()!=null?(Item.itemRegistry.getNameForObject(mutationChanceOverrides[i].getItem())+':'+mutationChanceOverrides[i].getItemDamage()):"null";
             String chance = mutationChances[i]+" percent";
-            LogHelper.info(mutation + ": " + chance);
+            LogHelper.info(" - "+mutation + ": " + chance);
         }
     }
 
