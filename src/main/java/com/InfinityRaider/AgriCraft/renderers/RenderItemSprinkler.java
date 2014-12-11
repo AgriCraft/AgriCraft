@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
-import com.InfinityRaider.AgriCraft.models.ModelSprinkler;
+import com.InfinityRaider.AgriCraft.renderers.models.ModelSprinkler;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
