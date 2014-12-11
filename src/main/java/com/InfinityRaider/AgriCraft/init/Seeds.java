@@ -9,6 +9,7 @@ import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import cpw.mods.fml.common.Loader;
 import mods.natura.common.NContent;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
@@ -198,6 +199,13 @@ public class Seeds {
             OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedCucumber"));
             OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedTomato"));
             OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedBeet"));
+        }
+        //register witchery seeds to the ore dictionary if witchery is installed
+        if(Loader.isModLoaded("witchery")) {
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("witchery:seedsbelladonna"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("witchery:seedsmandrake"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("witchery:seedsartichoke"));
+            OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("witchery:seedssnowbell"));
         }
         LogHelper.info("Seeds registered");
 
