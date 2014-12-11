@@ -139,11 +139,8 @@ public interface ISpeciesRoot {
 	/**
 	 * @param result {@link IAllele} to search for.
 	 * @return All registered mutations the given {@link IAllele} is the result of.
-	 * @deprecated since Forestry 3.3. use IChromosomeType version
 	 */
-	@Deprecated
 	Collection<? extends IMutation> getPaths(IAllele result, int chromosomeOrdinal);
-	Collection<? extends IMutation> getPaths(IAllele result, IChromosomeType chromosomeType);
 
 	/* RESEARCH */
 	/**

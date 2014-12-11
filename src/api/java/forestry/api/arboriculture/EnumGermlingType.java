@@ -10,7 +10,7 @@ public enum EnumGermlingType {
 
 	public static final EnumGermlingType[] VALUES = values();
 	
-	private final String name;
+	String name;
 
 	private EnumGermlingType(String name) {
 		this.name = name;

@@ -3,7 +3,9 @@
  * 
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.farming;
+package api.forestry.api.farming;
+
+import forestry.api.farming.IFarmInterface;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,7 +16,7 @@ public class Farmables {
 	 * 
 	 * Identifiers: farmArboreal farmWheat farmGourd farmInfernal farmPoales farmSucculentes farmVegetables farmShroom
 	 */
-	public static HashMap<String, Collection<IFarmable>> farmables = new HashMap<String, Collection<IFarmable>>();
+	public static HashMap<String, Collection<forestry.api.farming.IFarmable>> farmables = new HashMap<String, Collection<forestry.api.farming.IFarmable>>();
 
 	public static IFarmInterface farmInterface;
 }

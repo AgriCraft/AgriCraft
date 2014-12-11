@@ -20,19 +20,9 @@ public interface IGenome extends INBTTagable {
 
 	IChromosome[] getChromosomes();
 
-	/**
-	 * @deprecated since Forestry 3.3. Use IChromosomeType version
-	 */
-	@Deprecated
 	IAllele getActiveAllele(int chromosome);
-	IAllele getActiveAllele(IChromosomeType chromosomeType);
 
-	/**
-	 * @deprecated since Forestry 3.3. Use IChromosomeType version
-	 */
-	@Deprecated
 	IAllele getInactiveAllele(int chromosome);
-	IAllele getInactiveAllele(IChromosomeType chromosomeType);
 
 	boolean isGeneticEqual(IGenome other);
 	
