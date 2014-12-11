@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
 import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.AgriCraftHarvestable;
+import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.Aspects;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -16,6 +17,7 @@ public class ModIntegration {
         FactoryRegistry.sendMessage("registerHarvestable", new AgriCraftHarvestable());
         //Thaumcraft
         FMLInterModComms.sendMessage("Thaumcraft", "harvestClickableCrop", new ItemStack(Blocks.blockCrop, 1, 7));
+        Aspects.registerAspects();
     }
     public static class LoadedMods {
         public static boolean nei;
