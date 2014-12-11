@@ -190,4 +190,6 @@ public final class Names {
     public static final String exNihilo = "exnihilo";
     public static final String plantMegaPack = "plantmegapack";
     public static final String railcraft = "Railcraft";
+    public static final String thaumcraft = "Thaumcraft";
+    public static final String mfr = "MineFactoryReloaded";
 }

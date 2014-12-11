@@ -14,10 +14,14 @@ public class ModIntegration {
 
     public static void init() {
         //MFR
-        FactoryRegistry.sendMessage("registerHarvestable", new AgriCraftHarvestable());
+        if(LoadedMods.mfr) {
+            FactoryRegistry.sendMessage("registerHarvestable", new AgriCraftHarvestable());
+        }
         //Thaumcraft
-        FMLInterModComms.sendMessage("Thaumcraft", "harvestClickableCrop", new ItemStack(Blocks.blockCrop, 1, 7));
-        Aspects.registerAspects();
+        if(LoadedMods.thaumcraft) {
+            FMLInterModComms.sendMessage("Thaumcraft", "harvestClickableCrop", new ItemStack(Blocks.blockCrop, 1, 7));
+            Aspects.registerAspects();
+        }
     }
     public static class LoadedMods {
         public static boolean nei;
@@ -29,6 +33,8 @@ public class ModIntegration {
         public static boolean exNihilo;
         public static boolean plantMegaPack;
         public static boolean railcraft;
+        public static boolean thaumcraft;
+        public static boolean mfr;
 
         public static void init() {
             nei = Loader.isModLoaded(Names.nei);
@@ -40,6 +46,8 @@ public class ModIntegration {
             exNihilo = Loader.isModLoaded(Names.exNihilo);
             plantMegaPack = Loader.isModLoaded(Names.plantMegaPack);
             railcraft = Loader.isModLoaded(Names.railcraft);
+            thaumcraft = Loader.isModLoaded(Names.thaumcraft);
+            mfr = Loader.isModLoaded(Names.mfr);
             LogHelper.info("Checking for loaded mods:");
             LogHelper.info(" - NEI loaded: "+nei);
             LogHelper.info(" - Pam's HarvestCraft loaded: "+harvestcraft);
@@ -50,6 +58,8 @@ public class ModIntegration {
             LogHelper.info(" - Ex Nihilo loaded: "+exNihilo);
             LogHelper.info(" - Plant Mega Pack loaded: "+plantMegaPack);
             LogHelper.info(" - Railcraft loaded: "+railcraft);
+            LogHelper.info(" - Thaumcraft loaded: "+thaumcraft);
+            LogHelper.info(" - MineFactory Reloaded loaded: "+mfr);
             LogHelper.info("Done");
         }
     }
