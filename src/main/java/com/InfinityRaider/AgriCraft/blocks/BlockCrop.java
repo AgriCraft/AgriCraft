@@ -221,7 +221,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public void func_149853_b(World world, Random rand, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        if(crop.hasPlant()) {
+        if(crop.hasPlant() && this.isFertile(world, x, y ,z)) {
             super.func_149853_b(world, rand, x, y, z);
         }
         else if(crop.crossCrop && ConfigurationHandler.bonemealMutation) {
