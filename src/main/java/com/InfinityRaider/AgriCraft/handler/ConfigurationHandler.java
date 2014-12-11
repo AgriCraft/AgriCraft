@@ -66,221 +66,22 @@ public class ConfigurationHandler {
 
     public static String readGrassDrops() {
         return readOrWrite("GrassDrops", IOHelper.getGrassDrops());
-        /*
-        File file = new File(directory,"GrassDrops.txt");
-        if(file.exists() && !file.isDirectory()) {
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                byte[] input = new byte[(int) file.length()];
-                try {
-                    inputStream.read(input);
-                    inputStream.close();
-                    return new String(input, "UTF-8");
-                } catch (IOException e) {
-                    LogHelper.info("Caught IOException when reading grass drops");
-                }
-            } catch(FileNotFoundException e) {
-                LogHelper.info("Caught IOException when reading grass drops");
-            }
-        }
-        else {
-            String defaultData = IOHelper.getGrassDrops();
-            BufferedWriter writer;
-            try {
-                writer = new BufferedWriter(new FileWriter(file));
-                try {
-                    writer.write(defaultData);
-                    writer.close();
-                    config.save();
-
-                    return defaultData;
-                }
-                catch(IOException e) {
-                    LogHelper.info("Caught IOException when writing grass drops");
-                }
-            }
-            catch(IOException e) {
-                LogHelper.info("Caught IOException when writing grass drops");
-            }
-        }
-        return null;
-        */
     }
 
     public static String readCustomCrops() {
         return readOrWrite("CustomCrops", IOHelper.getCustomCropInstructions());
-        /*
-        File file = new File(directory,"CustomCrops.txt");
-        if(file.exists() && !file.isDirectory()) {
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                byte[] input = new byte[(int) file.length()];
-                try {
-                    inputStream.read(input);
-                    inputStream.close();
-                    return new String(input, "UTF-8");
-                } catch (IOException e) {
-                    LogHelper.info("Caught IOException when reading custom crops");
-                }
-            } catch(FileNotFoundException e) {
-                LogHelper.info("Caught IOException when reading custom crops");
-            }
-        }
-        else {
-            String defaultData = IOHelper.getCustomCropInstructions();
-            BufferedWriter writer;
-            try {
-                writer = new BufferedWriter(new FileWriter(file));
-                try {
-                    writer.write(defaultData);
-                    writer.close();
-                    propGenerateDefaults.setToDefault();
-                    config.save();
-
-                    return defaultData;
-                }
-                catch(IOException e) {
-                    LogHelper.info("Caught IOException when writing custom crops");
-                }
-            }
-            catch(IOException e) {
-                LogHelper.info("Caught IOException when writing custom crops");
-            }
-        }
-        return null;
-        */
     }
 
     public static String readMutationData() {
         return readOrWrite("Mutations", IOHelper.getDefaultMutations());
-        /*
-        File file = new File(directory,"Mutations.txt");
-        if(file.exists() && !file.isDirectory() && !generateDefaults) {
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                byte[] input = new byte[(int) file.length()];
-                try {
-                    inputStream.read(input);
-                    inputStream.close();
-                    return new String(input, "UTF-8");
-                } catch (IOException e) {
-                    LogHelper.info("Caught IOException when reading mutations");
-                }
-            } catch(FileNotFoundException e) {
-                LogHelper.info("Caught IOException when reading mutations");
-            }
-        }
-        else {
-            String defaultData = IOHelper.getDefaultMutations();
-            BufferedWriter writer;
-            try {
-                writer = new BufferedWriter(new FileWriter(file));
-                try {
-                    writer.write(defaultData);
-                    writer.close();
-                    propGenerateDefaults.setToDefault();
-                    config.save();
-
-                    return defaultData;
-                }
-                catch(IOException e) {
-                    LogHelper.info("Caught IOException when writing mutations");
-                }
-            }
-            catch(IOException e) {
-                LogHelper.info("Caught IOException when writing mutations");
-            }
-        }
-        return null;
-        */
     }
 
     public static String readMutationChances() {
         return readOrWrite("MutationChancesOverrides", IOHelper.getMutationChancesOverridesInstructions());
-        /*
-        File file = new File(directory,"MutationChancesOverrides.txt");
-        if(file.exists() && !file.isDirectory() && !generateDefaults) {
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                byte[] input = new byte[(int) file.length()];
-                try {
-                    inputStream.read(input);
-                    inputStream.close();
-                    return new String(input, "UTF-8");
-                } catch (IOException e) {
-                    LogHelper.info("Caught IOException when reading mutation chance overrides");
-                }
-            } catch(FileNotFoundException e) {
-                LogHelper.info("Caught IOException when reading mutation chance overrides");
-            }
-        }
-        else {
-            String defaultData = IOHelper.getMutationChancesOverridesInstructions();
-            BufferedWriter writer;
-            try {
-                writer = new BufferedWriter(new FileWriter(file));
-                try {
-                    writer.write(defaultData);
-                    writer.close();
-                    propGenerateDefaults.setToDefault();
-                    config.save();
-
-                    return defaultData;
-                }
-                catch(IOException e) {
-                    LogHelper.info("Caught IOException when writing mutation chance overrides");
-                }
-            }
-            catch(IOException e) {
-                LogHelper.info("Caught IOException when writing mutation chance overrides");
-            }
-        }
-        return null;
-        */
     }
 
     public static String readSeedBlackList() {
         return readOrWrite("SeedBlackList", IOHelper.getSeedBlackListInstructions());
-        /*
-        File file = new File(directory,"SeedBlackList.txt");
-        if(file.exists() && !file.isDirectory() && !generateDefaults) {
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                byte[] input = new byte[(int) file.length()];
-                try {
-                    inputStream.read(input);
-                    inputStream.close();
-                    return new String(input, "UTF-8");
-                } catch (IOException e) {
-                    LogHelper.info("Caught IOException when reading seed blacklist");
-                }
-            } catch(FileNotFoundException e) {
-                LogHelper.info("Caught IOException when reading seed blacklist");
-            }
-        }
-        else {
-            String defaultData = IOHelper.getSeedBlackListInstructions();
-            BufferedWriter writer;
-            try {
-                writer = new BufferedWriter(new FileWriter(file));
-                try {
-                    writer.write(defaultData);
-                    writer.close();
-                    propGenerateDefaults.setToDefault();
-                    config.save();
-
-                    return defaultData;
-                }
-                catch(IOException e) {
-                    LogHelper.info("Caught IOException when writing seed blacklist");
-                }
-            }
-            catch(IOException e) {
-                LogHelper.info("Caught IOException when writing seed blacklist");
-            }
-        }
-        return null;
-        */
     }
 
     private static String readOrWrite(String fileName, String defaultData) {
