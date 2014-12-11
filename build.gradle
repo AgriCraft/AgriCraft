@@ -27,7 +27,7 @@ group= "com.InfinityRaider.AgriCraft" // http://maven.apache.org/guides/mini/gui
 archivesBaseName = "AgriCraft"
 
 minecraft {
-    version = "1.7.10-10.13.1.1217"
+    version = "1.7.10-10.13.2.1230"
     assetDir = "eclipse/assets"
 }
 
@@ -40,7 +40,6 @@ dependencies {
 //some more mods
     compile fileTree(dir: 'libs', includes: ['*Mantle*.jar'])
     compile fileTree(dir: 'libs', includes: ['*natura*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*Baubles*.jar'])
     compile fileTree(dir: 'libs', includes: ['*Harvestcraft*.jar'])
     compile fileTree(dir: 'libs', includes: ['*Pams Mob Drop Crops*.zip'])
     compile fileTree(dir: 'libs', includes: ['*magicalcrops*.jar'])
