@@ -65,6 +65,8 @@ public class ConfigurationHandler {
     }
 
     public static String readGrassDrops() {
+        return readOrWrite("GrassDrops", IOHelper.getGrassDrops());
+        /*
         File file = new File(directory,"GrassDrops.txt");
         if(file.exists() && !file.isDirectory()) {
             try {
@@ -102,9 +104,12 @@ public class ConfigurationHandler {
             }
         }
         return null;
+        */
     }
 
     public static String readCustomCrops() {
+        return readOrWrite("CustomCrops", IOHelper.getCustomCropInstructions());
+        /*
         File file = new File(directory,"CustomCrops.txt");
         if(file.exists() && !file.isDirectory()) {
             try {
@@ -143,9 +148,12 @@ public class ConfigurationHandler {
             }
         }
         return null;
+        */
     }
 
     public static String readMutationData() {
+        return readOrWrite("Mutations", IOHelper.getDefaultMutations());
+        /*
         File file = new File(directory,"Mutations.txt");
         if(file.exists() && !file.isDirectory() && !generateDefaults) {
             try {
@@ -184,9 +192,12 @@ public class ConfigurationHandler {
             }
         }
         return null;
+        */
     }
 
     public static String readMutationChances() {
+        return readOrWrite("MutationChancesOverrides", IOHelper.getMutationChancesOverridesInstructions());
+        /*
         File file = new File(directory,"MutationChancesOverrides.txt");
         if(file.exists() && !file.isDirectory() && !generateDefaults) {
             try {
@@ -225,9 +236,12 @@ public class ConfigurationHandler {
             }
         }
         return null;
+        */
     }
 
     public static String readSeedBlackList() {
+        return readOrWrite("SeedBlackList", IOHelper.getSeedBlackListInstructions());
+        /*
         File file = new File(directory,"SeedBlackList.txt");
         if(file.exists() && !file.isDirectory() && !generateDefaults) {
             try {
@@ -263,6 +277,47 @@ public class ConfigurationHandler {
             }
             catch(IOException e) {
                 LogHelper.info("Caught IOException when writing seed blacklist");
+            }
+        }
+        return null;
+        */
+    }
+
+    private static String readOrWrite(String fileName, String defaultData) {
+        File file = new File(directory, fileName+".txt");
+        if(file.exists() && !file.isDirectory() && !generateDefaults) {
+            try {
+                FileInputStream inputStream = new FileInputStream(file);
+                byte[] input = new byte[(int) file.length()];
+                try {
+                    inputStream.read(input);
+                    inputStream.close();
+                    return new String(input, "UTF-8");
+                } catch (IOException e) {
+                    LogHelper.info("Caught IOException when reading "+fileName+".txt");
+                }
+            } catch(FileNotFoundException e) {
+                LogHelper.info("Caught IOException when reading "+fileName+".txt");
+            }
+        }
+        else {
+            BufferedWriter writer;
+            try {
+                writer = new BufferedWriter(new FileWriter(file));
+                try {
+                    writer.write(defaultData);
+                    writer.close();
+                    propGenerateDefaults.setToDefault();
+                    config.save();
+
+                    return defaultData;
+                }
+                catch(IOException e) {
+                    LogHelper.info("Caught IOException when writing "+fileName+".txt");
+                }
+            }
+            catch(IOException e) {
+                LogHelper.info("Caught IOException when writing "+fileName+".txt");
             }
         }
         return null;
