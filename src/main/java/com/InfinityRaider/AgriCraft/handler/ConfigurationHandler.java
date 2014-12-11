@@ -43,8 +43,10 @@ public class ConfigurationHandler {
         LogHelper.info("Configuration Loaded");
     }
 
+
+    //read values from the config
     public static void loadConfiguration() {
-        //read values from the config
+        //agricraft settings
         resourcePlants = config.getBoolean("Resource Crops","AGRICRAFT",false,"set to true if you wish to disable resource crops");
         mutationChance = (double) config.getFloat("Mutation Chance","AGRICRAFT", (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance");
         cropsPerCraft = config.getInt("Crops per craft", "AGRICRAFT", 1, 1, 4, "The number of crops you get per crafting operation");
@@ -56,10 +58,14 @@ public class ConfigurationHandler {
         propGenerateDefaults = config.get("AGRICRAFT", "GenerateDefaults", false, "set to true to regenerate a default mutations file (will turn back to false afterwards)");
         generateDefaults = propGenerateDefaults.getBoolean();
         customCrops = config.getBoolean("Custom crops", "AGRICRAFT", false, "set to true if you wish to create your own crops");
+
+        //mod integration
         integration_HC = ModIntegration.LoadedMods.harvestcraft && config.getBoolean("HarvestCraft","INTEGRATION",true,"Set to false to disable harvestCraft integration");
         integration_Nat = ModIntegration.LoadedMods.natura && config.getBoolean("Natura","INTEGRATION",true,"Set to false to disable Natura Integration");
         integration_WeeeFlowers = ModIntegration.LoadedMods.weeeFlowers && config.getBoolean("Weee Flowers","INTEGRATION",true,"Set to false to disable Weee Flowers Integration");
         integration_PlantMegaPack = ModIntegration.LoadedMods.plantMegaPack && config.getBoolean("Plant Mega Pack","INTEGRATION",true,"Set to false to disable Plant Mega Pack Integration");
+
+        //toggle debug mode
         debug = config.getBoolean("debug","DEBUG",false,"Set to true if you wish to enable debug mode");
         if(config.hasChanged()) {config.save();}
     }
