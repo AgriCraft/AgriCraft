@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -42,21 +42,21 @@ public abstract class IOHelper {
                 data = data + '\n' + osmiumMutation;
             }
         }
-        if(ConfigurationHandler.integration_Nat && ConfigurationHandler.integration_HC && LoadedMods.harvestcraft && LoadedMods.natura)  {
+        if(ConfigurationHandler.integration_Nat && ConfigurationHandler.integration_HC && ModIntegration.LoadedMods.harvestcraft && ModIntegration.LoadedMods.natura)  {
             data = data + '\n' + harvestcraftMutations + '\n' + barleyNaturaMutations;      //harvestcraft with natura barley
         }
         else {
-            if(ConfigurationHandler.integration_HC && LoadedMods.harvestcraft) {
+            if(ConfigurationHandler.integration_HC && ModIntegration.LoadedMods.harvestcraft) {
                 data = data + '\n' + harvestcraftMutations + '\n' + barleyHarvestCraftMutations;
             }
-            if(ConfigurationHandler.integration_Nat && LoadedMods.natura) {
+            if(ConfigurationHandler.integration_Nat && ModIntegration.LoadedMods.natura) {
                 data = data + '\n' + naturaMutations;
             }
         }
-        if(ConfigurationHandler.integration_WeeeFlowers && LoadedMods.weeeFlowers) {
+        if(ConfigurationHandler.integration_WeeeFlowers && ModIntegration.LoadedMods.weeeFlowers) {
             data = data +'\n' + weeeFlowersMutations;
         }
-        if(ConfigurationHandler.integration_PlantMegaPack && LoadedMods.plantMegaPack) {
+        if(ConfigurationHandler.integration_PlantMegaPack && ModIntegration.LoadedMods.plantMegaPack) {
             data = data + '\n' + plantMegaPackMutations;
         }
         return data;

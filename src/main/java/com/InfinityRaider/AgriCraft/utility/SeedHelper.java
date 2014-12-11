@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
@@ -100,15 +100,15 @@ public abstract class SeedHelper {
         if(getPlant(seed)== Blocks.nether_wart) {
             items.add(new ItemStack(seed, 1, 0));
         }
-        else if(LoadedMods.natura && getPlantDomain(seed).equalsIgnoreCase("natura")) {
+        else if(ModIntegration.LoadedMods.natura && getPlantDomain(seed).equalsIgnoreCase("natura")) {
             items.add(new ItemStack(NContent.plantItem, nr, meta*3));
         }
-        else if(LoadedMods.harvestcraft && getPlantDomain(seed).equalsIgnoreCase("harvestcraft")) {
+        else if(ModIntegration.LoadedMods.harvestcraft && getPlantDomain(seed).equalsIgnoreCase("harvestcraft")) {
             items.add(new ItemStack(getPlant(seed).getItemDropped(7, new Random(), 0), nr));
         }
         else {
             int harvestMeta = 7;
-            if(LoadedMods.plantMegaPack && getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
+            if(ModIntegration.LoadedMods.plantMegaPack && getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
                 harvestMeta=PlantMegaPackHelper.getTextureIndex(seed, 7);
             }
             ArrayList<ItemStack> defaultDrops = getPlant(seed).getDrops(world, x, y, z, harvestMeta, 0);
@@ -131,7 +131,7 @@ public abstract class SeedHelper {
 
     //check if the seed is valid
     public static boolean isValidSeed(ItemSeeds seed, int meta) {
-        if(LoadedMods.thaumicTinkerer && getPlantDomain(seed).equalsIgnoreCase(Names.thaumicTinkerer)) {
+        if(ModIntegration.LoadedMods.thaumicTinkerer && getPlantDomain(seed).equalsIgnoreCase(Names.thaumicTinkerer)) {
             LogHelper.debug("Thaumic Tinkerer infused seeds are not supported, sorry");
             return false;
         }

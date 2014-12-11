@@ -4,7 +4,7 @@ import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -17,7 +17,7 @@ public class NEIConfig implements IConfigureNEI {
 
     @Override
     public void loadConfig() {
-        if(LoadedMods.nei) {
+        if(ModIntegration.LoadedMods.nei) {
             //register NEI recipe handler
             if(ConfigurationHandler.enableNEI) {
                 LogHelper.info("Registering NEI recipe handler");

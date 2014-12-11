@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.handler;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -41,7 +41,7 @@ public class PlayerInteractEventHandler {
             }
             else if (event.world.getBlock(event.x, event.y, event.z) instanceof BlockCrop) {
                 //prevent Hunger Overhaul from meddling with my harvest logic
-                if(LoadedMods.hungerOverhaul) {
+                if(ModIntegration.LoadedMods.hungerOverhaul) {
                     if(event.entityPlayer.getCurrentEquippedItem()!=null) {
                         if(event.entityPlayer.getCurrentEquippedItem().getItem()==Items.dye && event.entityPlayer.getCurrentEquippedItem().getItemDamage()==15) {
                             //bonemeal

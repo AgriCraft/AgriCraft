@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -55,7 +55,7 @@ public abstract class RenderHelper {
         BlockBush plant = SeedHelper.getPlant(seed);
         int renderType = plant.getRenderType();
         String name = Item.itemRegistry.getNameForObject(seed);
-        if(LoadedMods.natura && name.indexOf(':')>=0 && name.substring(0,name.indexOf(':')).equalsIgnoreCase("Natura")) {
+        if(ModIntegration.LoadedMods.natura && name.indexOf(':')>=0 && name.substring(0,name.indexOf(':')).equalsIgnoreCase("Natura")) {
             renderType = meta==0?6:1;
         }
         return renderType;
@@ -63,10 +63,10 @@ public abstract class RenderHelper {
 
     //this method is used to convert the vanilla 0-7 meta growth stages to natura growth stages or nether wart growth stages
     public static int plantIconIndex(ItemSeeds seed, int seedMeta, int growthMeta) {
-        if(LoadedMods.natura && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("natura")) {
+        if(ModIntegration.LoadedMods.natura && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("natura")) {
             return NaturaHelper.getTextureIndex(growthMeta, seedMeta);
         }
-        else if(LoadedMods.plantMegaPack && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
+        else if(ModIntegration.LoadedMods.plantMegaPack && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
             return PlantMegaPackHelper.getTextureIndex(seed, growthMeta);
         }
         else if(seed== Items.nether_wart) {

@@ -16,7 +16,7 @@ package com.InfinityRaider.AgriCraft;
         ~ InfinityRaider
 */
 
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.handler.MutationHandler;
@@ -45,7 +45,7 @@ public class AgriCraft {
     public static void preInit(FMLPreInitializationEvent event) {
         LogHelper.info("Starting Pre-Initialization");
         //find loaded mods
-        LoadedMods.init();
+        ModIntegration.LoadedMods.init();
         //register forge event handlers
         proxy.registerEventHandlers();
         //setting up configuration file
@@ -77,6 +77,8 @@ public class AgriCraft {
         proxy.registerRenderers();
         //initialize recipes
         Recipes.init();
+        //configure mod integration
+        ModIntegration.init();
         LogHelper.info("Initialization Complete");
     }
 

@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.reference;
 
 //yes, I got the information for most harvestcraft plants from wikipedia, go ahead, call the fucking cops.
 
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.init.Items;
@@ -130,7 +130,7 @@ public final class SeedInformation {
     }
 
     private static String getHarvestcraftSeedInformation(ItemSeeds seed) {
-        if(LoadedMods.harvestcraft) {
+        if(ModIntegration.LoadedMods.harvestcraft) {
             if (seed == com.pam.harvestcraft.ItemRegistry.cottonseedItem) {
                 return hc_Cotton;
             } else if (seed == com.pam.harvestcraft.ItemRegistry.asparagusseedItem) {
@@ -254,10 +254,10 @@ public final class SeedInformation {
             if (seedStack.getItem() instanceof ItemModSeed) {
                 output = ((ItemModSeed) seedStack.getItem()).getInformation();
             }
-            else if (LoadedMods.natura && seedStack.getItem() instanceof mods.natura.items.NaturaSeeds) {
+            else if (ModIntegration.LoadedMods.natura && seedStack.getItem() instanceof mods.natura.items.NaturaSeeds) {
                 output = SeedInformation.getNaturaSeedInformation(seedStack.getItemDamage());
             }
-            else if (LoadedMods.harvestcraft && SeedHelper.getPlantDomain((ItemSeeds) seedStack.getItem()).equalsIgnoreCase("harvestcraft")) {
+            else if (ModIntegration.LoadedMods.harvestcraft && SeedHelper.getPlantDomain((ItemSeeds) seedStack.getItem()).equalsIgnoreCase("harvestcraft")) {
                 output = SeedInformation.getHarvestcraftSeedInformation((ItemSeeds) seedStack.getItem());
             }
             else {

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.init;
 
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
@@ -178,17 +178,17 @@ public class Seeds {
         }
 
         //register natura seeds to the ore dictionary if natura is installed
-        if(LoadedMods.natura) {
+        if(ModIntegration.LoadedMods.natura) {
             OreDictionary.registerOre(Names.listAllseed, NContent.plantItem);
         }
         //register ex nihilo seeds to the ore dictionary if ex nihilo is installed
-        if(LoadedMods.exNihilo) {
+        if(ModIntegration.LoadedMods.exNihilo) {
             OreDictionary.registerOre(Names.listAllseed, ExNihiloHelper.seedCarrot);
             OreDictionary.registerOre(Names.listAllseed, ExNihiloHelper.seedPotato);
             OreDictionary.registerOre(Names.listAllseed, ExNihiloHelper.seedSugarCane);
         }
         //register plant mega pack seeds to the ore dictionary if plant mega pack is installed
-        if(LoadedMods.plantMegaPack) {
+        if(ModIntegration.LoadedMods.plantMegaPack) {
             OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedOnion"));
             OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedSpinach"));
             OreDictionary.registerOre(Names.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedCelery"));

@@ -43,9 +43,6 @@ dependencies {
     compile fileTree(dir: 'libs', includes: ['*Baubles*.jar'])
     compile fileTree(dir: 'libs', includes: ['*Harvestcraft*.jar'])
     compile fileTree(dir: 'libs', includes: ['*Pams Mob Drop Crops*.zip'])
-    compile fileTree(dir: 'libs', includes: ['*CoFHCore*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*ThermalFoundation*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*MineFactoryReloaded*.jar'])
     compile fileTree(dir: 'libs', includes: ['*magicalcrops*.jar'])
     compile fileTree(dir: 'libs', includes: ['*witchery*.jar'])
 }
