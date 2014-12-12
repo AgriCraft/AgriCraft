@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 
 import java.util.List;
 
@@ -39,10 +40,10 @@ public class AgriCraftCropDataProvider implements IWailaDataProvider {
             int gain = crop.gain;
             int strength = crop.strength;
             String seedName = ((ItemSeeds) crop.seed).getItemStackDisplayName(new ItemStack((ItemSeeds) crop.seed, 1, crop.seedMeta));
-            list.add("Seed: "+seedName);
-            list.add(" - Growth: "+growth);
-            list.add(" - Gain: "+gain);
-            list.add(" - Strength: "+strength);
+            list.add(StatCollector.translateToLocal("agricraft_tooltip.seed")+": "+seedName);
+            list.add(" - "+ StatCollector.translateToLocal("agricraft_tooltip.growth")+": "+growth);
+            list.add(" - "+ StatCollector.translateToLocal("agricraft_tooltip.gain")+": "+gain);
+            list.add(" - "+ StatCollector.translateToLocal("agricraft_tooltip.strength")+": "+strength);
         }
         return list;
     }

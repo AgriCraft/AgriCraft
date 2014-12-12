@@ -10,6 +10,7 @@ import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 
 import java.util.List;
 
@@ -41,11 +42,11 @@ public class AgriCraftTankDataProvider implements IWailaDataProvider {
             //define material
             ItemStack materialStack =tank.getMaterial();
             String material = materialStack.getItem().getItemStackDisplayName(materialStack);
-            list.add("Material: "+material);
+            list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+material);
             //show contents
             int contents = tank.getFluidLevel();
             int capacity = tank.getTotalCapacity();
-            list.add("Water level: "+contents+"/"+capacity);
+            list.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel")+": "+contents+"/"+capacity);
         }
         return list;
     }
