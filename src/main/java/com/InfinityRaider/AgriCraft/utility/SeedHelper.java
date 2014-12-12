@@ -25,6 +25,8 @@ import java.util.Random;
 
 public abstract class SeedHelper {
     private static ItemStack[] seedBlackList;
+    private static ItemStack[] spreadChancesOverrides;
+    private static int[] spreadChances;
 
     public static void initSeedBlackList() {
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSeedBlackList());
@@ -36,6 +38,39 @@ public abstract class SeedHelper {
         for(ItemStack seed:seedBlackList) {
             LogHelper.info(" - "+Item.itemRegistry.getNameForObject(seed.getItem())+":"+seed.getItemDamage());
         }
+    }
+
+    public static void initSpreadChancesOverrides() {
+        //read mutation chance overrides & initialize the arrays
+        setMutationChances(IOHelper.getLinesArrayFromData(ConfigurationHandler.readSpreadChances()));
+        LogHelper.info("Registered Mutations Chances overrides:");
+        for(int i=0;i<spreadChances.length;i++) {
+            String mutation = spreadChancesOverrides[i].getItem()!=null?(Item.itemRegistry.getNameForObject(spreadChancesOverrides[i].getItem())+':'+spreadChancesOverrides[i].getItemDamage()):"null";
+            String chance = spreadChances[i]+" percent";
+            LogHelper.info(" - "+mutation + ": " + chance);
+        }
+    }
+
+    //initializes the mutation chances arrays
+    private static void setMutationChances(String[] data) {
+        spreadChancesOverrides = new ItemStack[data.length];
+        spreadChances = new int[data.length];
+        for(int i=0;i<data.length;i++) {
+            spreadChancesOverrides[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(0,data[i].indexOf(','))));
+            int chance = Integer.parseInt(data[i].substring(data[i].indexOf(',')+1));
+            spreadChances[i] = chance<0?0:(chance>100?100:chance);
+        }
+    }
+
+    public static double getSpreadChance(ItemSeeds seed, int meta) {
+        if(spreadChances.length>0) {
+            for (int i = 0; i < spreadChances.length; i++) {
+                if (seed == spreadChancesOverrides[i].getItem() && meta == spreadChancesOverrides[i].getItemDamage()) {
+                    return ((double) spreadChances[i]) / 100;
+                }
+            }
+        }
+        return 1.00/ SeedHelper.getSeedTier(seed);
     }
 
     public static int getSeedTier(ItemSeeds seed) {
@@ -50,6 +85,15 @@ public abstract class SeedHelper {
             return 2;
         }
         if(domain.equalsIgnoreCase("natura")) {
+            return 2;
+        }
+        if(domain.equalsIgnoreCase("magicalcrops")) {
+            return 4;
+        }
+        if(domain.equalsIgnoreCase("plantmegapack")) {
+            return 2;
+        }
+        if(domain.equalsIgnoreCase("weeeflowers")) {
             return 2;
         }
         return 1;

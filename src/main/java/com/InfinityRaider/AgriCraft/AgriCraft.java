@@ -89,6 +89,8 @@ public class AgriCraft {
         MutationHandler.init();
         //initialize blacklist
         SeedHelper.initSeedBlackList();
+        //read spread chance overrides
+        SeedHelper.initSpreadChancesOverrides();
         //initialize world gen
         if(!ConfigurationHandler.disableWorldGen) {
             WorldGen.init();

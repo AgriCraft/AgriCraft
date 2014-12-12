@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -73,8 +74,8 @@ public abstract class IOHelper {
     }
 
     //mutation chances overrides file contents
-    public static String getMutationChancesOverridesInstructions() {
-        return mutationChancesOverridesInstructions;
+    public static String getSpreadChancesOverridesInstructions() {
+        return spreadChancesOverridesInstructions;
     }
 
     public static String getSeedBlackListInstructions() {
@@ -205,6 +206,18 @@ public abstract class IOHelper {
         return new ItemStack((ItemSeeds) Item.itemRegistry.getObject(domain+':'+name),1,meta);
     }
 
+    //gets an itemstack with a block
+    public static ItemStack getBlock(String input) {
+        String domain = input.substring(0, input.indexOf(':'));
+        String name = input.substring(input.indexOf(':')+1);
+        int meta = 0;
+        if(name.indexOf(':')>0) {
+            meta = Integer.parseInt(name.substring(name.indexOf(':')+1));
+            name = name.substring(0, name.indexOf(':'));
+        }
+        return new ItemStack((Block) Block.blockRegistry.getObject(domain+":"+name),1 , meta);
+    }
+
     private static final String grassDropInstructions =
             "#Put a list of seeds here that will drop from tall grass with the following schematic: <seedname:seedmeta>,<weight>\n" +
             "#The seedname should be the name NEI gives you, the weight is the weighted chance for this seed to drop (for reference, minecraft wheat seeds have weight 10)\n" +
@@ -231,17 +244,21 @@ public abstract class IOHelper {
             "#Blacklisted seeds will not be able to planted on crops\n" +
             "#For example: AgriCraft:seedDandelion";
 
-    private static final String mutationChancesOverridesInstructions =
-            "#Define overides for mutation chances here: <mod>:<seedname>:<seedmeta>,<chance>\n" +
+    private static final String spreadChancesOverridesInstructions =
+            "#Define overides for spreading chances here: <mod>:<seedname>:<seedmeta>,<chance>\n" +
             "#You can these values from NEI, the data you put here will be corrected up to a certain level, but you should always try to use the values NEI gives you\n" +
-            "#The chance is an integer specified in percent, minimum is 0, maximum a 100\n" +
+            "#The chance is an integer specified in percent, minimum is 0, maximum a 100. Spread chance is the chance that crops will spread to empty crosscrops\n" +
             "#For example: AgriCraft:seedDandelion,85";
 
     private static final String mutationInstructions =
             "#Define mutations here: <mutation>=<parent1>+<parent2>\n" +
             "#To specify a crop, write <mod>:<cropname>:<meta>, all in lowercase (meta is optional)\n" +
             "#You can these values from NEI, the data you put here will be corrected up to a certain level, but you should always try to use the values NEI gives you\n" +
-            "#For example if you write harvestcraft:tomato, it will be corrected to harvestcraft=tomatoseedItem, or if you write minecraft:dandelion, it will become AgriCraft:seedDandelion";
+            "#For example if you write harvestcraft:tomato, it will be corrected to harvestcraft=tomatoseedItem, or if you write minecraft:dandelion, it will become AgriCraft:seedDandelion\n" +
+            "#Optionally you can also define a mutation like this: <mutation>=<parent1>+<parent2>,<id>,<block>\n" +
+            "#The crops are specified in the same way, the id must be an integer: 1 requires a specified block to be below the farmland and 2 requires a specific block nearby\n" +
+            "#The mutation will not occur if these requirements are not met. For example:\n" +
+            "#magicalcrops:magicalcrops_ModMagicSeedsLead=magicalcrops:magicalcrops_ModMagicSeedsCopper+magicalcrops:magicalcrops_ModMagicSeedsTin,1,ThermalFoundation:Ore:3";
 
     private static final String harvestcraftMutations =
             "harvestcraft:artichokeseedItem=harvestcraft:asparagusseedItem+harvestcraft:lettuceseedItem\n" +

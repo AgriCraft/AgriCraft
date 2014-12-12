@@ -327,17 +327,17 @@ public class GuiJournal extends GuiScreen {
             plantIcons[i] = RenderHelper.getIcon(SeedHelper.getPlant((ItemSeeds) seed.getItem()), RenderHelper.plantIconIndex((ItemSeeds) seed.getItem(), seed.getItemDamage(), i));
         }
         //get the icons for the parents that mutate into this seed
-        ItemStack[][] parents = MutationHandler.getParents(seed);
+        MutationHandler.Mutation[] parents = MutationHandler.getParentMutations(seed);
         ArrayList<IIcon> iconList0 = new ArrayList<IIcon>();
         ArrayList<IIcon> IconList1 = new ArrayList<IIcon>();
         ArrayList<ItemStack> list0 = new ArrayList<ItemStack>();
         ArrayList<ItemStack> list1 = new ArrayList<ItemStack>();
-        for (ItemStack[] parentCouple:parents) {
-            if (this.isSeedDiscovered(parentCouple[0]) && this.isSeedDiscovered(parentCouple[1])) {
-                iconList0.add(RenderHelper.getIcon(parentCouple[0].getItem(), parentCouple[0].getItemDamage()));
-                IconList1.add(RenderHelper.getIcon(parentCouple[1].getItem(), parentCouple[1].getItemDamage()));
-                list0.add(parentCouple[0]);
-                list1.add(parentCouple[1]);
+        for (MutationHandler.Mutation parentCouple:parents) {
+            if (this.isSeedDiscovered(parentCouple.parent1) && this.isSeedDiscovered(parentCouple.parent2)) {
+                iconList0.add(RenderHelper.getIcon(parentCouple.parent1.getItem(), parentCouple.parent1.getItemDamage()));
+                IconList1.add(RenderHelper.getIcon(parentCouple.parent2.getItem(), parentCouple.parent2.getItemDamage()));
+                list0.add(parentCouple.parent1);
+                list1.add(parentCouple.parent2);
             }
         }
         parentsIcons = new IIcon[iconList0.size()][2];
@@ -349,18 +349,18 @@ public class GuiJournal extends GuiScreen {
             discoveredParents[i][1]=list1.get(i);
         }
         //get the icons for the co parents and the mutations this seed can mutate to
-        ItemStack[] coParents = MutationHandler.getCoParents(seed);
-        ItemStack[] mutations = MutationHandler.getMutations(seed);
+        MutationHandler.Mutation[] mutations = MutationHandler.getMutations(seed);
         ArrayList<IIcon> coParentsIconList = new ArrayList<IIcon>();
         ArrayList<IIcon> mutationsIconList = new ArrayList<IIcon>();
         ArrayList<ItemStack> coParentsList = new ArrayList<ItemStack>();
         ArrayList<ItemStack> mutationsList = new ArrayList<ItemStack>();
-        for(int i=0;i<coParents.length;i++) {
-            if(this.isSeedDiscovered(coParents[i]) && this.isSeedDiscovered(mutations[i])) {
-                coParentsIconList.add(RenderHelper.getIcon(coParents[i].getItem(), coParents[i].getItemDamage()));
-                mutationsIconList.add(RenderHelper.getIcon(mutations[i].getItem(), mutations[i].getItemDamage()));
-                coParentsList.add(coParents[i]);
-                mutationsList.add(mutations[i]);
+        for (MutationHandler.Mutation mutation:mutations) {
+            ItemStack coParent = (mutation.parent1.getItem()==seed.getItem() && mutation.parent1.getItemDamage()==seed.getItemDamage())?mutation.parent2:mutation.parent1;
+            if (this.isSeedDiscovered(coParent) && this.isSeedDiscovered(mutation.result)) {
+                coParentsIconList.add(RenderHelper.getIcon(coParent.getItem(), coParent.getItemDamage()));
+                mutationsIconList.add(RenderHelper.getIcon(mutation.result.getItem(), mutation.result.getItemDamage()));
+                coParentsList.add(coParent);
+                mutationsList.add(mutation.result);
             }
         }
         this.coParentsIcons = coParentsIconList.toArray(new IIcon[coParentsIconList.size()]);

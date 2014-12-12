@@ -47,7 +47,7 @@ public class ConfigurationHandler {
     //read values from the config
     public static void loadConfiguration() {
         //agricraft settings
-        resourcePlants = config.getBoolean("Resource Crops","AGRICRAFT",false,"set to true if you wish to disable resource crops");
+        resourcePlants = config.getBoolean("Resource Crops","AGRICRAFT",false,"set to true if you wish to enable resource crops");
         mutationChance = (double) config.getFloat("Mutation Chance","AGRICRAFT", (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance");
         cropsPerCraft = config.getInt("Crops per craft", "AGRICRAFT", 1, 1, 4, "The number of crops you get per crafting operation");
         bonemealMutation = config.getBoolean("Bonemeal Mutations","AGRICRAFT", false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
@@ -82,8 +82,8 @@ public class ConfigurationHandler {
         return readOrWrite("Mutations", IOHelper.getDefaultMutations());
     }
 
-    public static String readMutationChances() {
-        return readOrWrite("MutationChancesOverrides", IOHelper.getMutationChancesOverridesInstructions());
+    public static String readSpreadChances() {
+        return readOrWrite("SpreadChancesOverrides", IOHelper.getSpreadChancesOverridesInstructions());
     }
 
     public static String readSeedBlackList() {

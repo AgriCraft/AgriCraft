@@ -1,90 +1,148 @@
 package com.InfinityRaider.AgriCraft.handler;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 
 public abstract class MutationHandler {
-    private static ItemStack[] mutations;
-    private static ItemStack[] parents1;
-    private static ItemStack[] parents2;
-    private static ItemStack[] mutationChanceOverrides;
-    private static int[] mutationChances;
+    private static Mutation[] mutations;
+
+    public static class Mutation {
+        public ItemStack result;
+        public ItemStack parent1;
+        public ItemStack parent2;
+        public int id;
+        public Block requirement;
+        public int requirementMeta;
+        public double chance;
+
+        public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int id, Block requirement, int requirementMeta, int chance) {
+            this.result = result;
+            this.parent1 = parent1;
+            this.parent2 = parent2;
+            this.id = id;
+            this.requirement = requirement;
+            this.requirementMeta = requirementMeta;
+            this.chance = ((double) chance)/100;
+        }
+
+        public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
+            this(result, parent1, parent2, 0, null, 0, 100);
+            this.chance = 1.00/ SeedHelper.getSeedTier((ItemSeeds) result.getItem());
+        }
+
+        public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int chance) {
+            this(result, parent1, parent2, 0, null, 0, chance);
+        }
+
+        public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int id, Block requirement, int requirementMeta) {
+            this(result, parent1, parent2, id, requirement, requirementMeta, 100);
+            this.chance = 1.00/ SeedHelper.getSeedTier((ItemSeeds) result.getItem());
+        }
+
+        //copy constructor
+        public Mutation(Mutation mutation) {
+            this.result = mutation.result;
+            this.parent1 = mutation.parent1;
+            this.parent2 = mutation.parent2;
+            this.id = mutation.id;
+            this.requirement = mutation.requirement;
+            this.requirementMeta = mutation.requirementMeta;
+        }
+
+        public void setChanceOverride(int chance) {
+            this.chance = chance;
+        }
+    }
 
     public static void init() {
         //Read mutations & initialize the mutation arrays
         setMutations(IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationData()));
 
         LogHelper.info("Registered Mutations:");
-        for(int i=0;i< mutations.length;i++) {
-            String mutation = mutations[i].getItem()!=null?(Item.itemRegistry.getNameForObject(mutations[i].getItem())+':'+mutations[i].getItemDamage()):"null";
-            String parent1 = parents1[i].getItem()!=null?(Item.itemRegistry.getNameForObject(parents1[i].getItem()))+':'+parents1[i].getItemDamage():"null";
-            String parent2 = parents2[i].getItem()!=null?(Item.itemRegistry.getNameForObject(parents2[i].getItem()))+':'+parents2[i].getItemDamage():"null";
-            LogHelper.info(" - "+mutation + " = " + parent1 + " + " + parent2);
-        }
-
-        //read mutation chance overrides & initialize the arrays
-        setMutationChances(IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationChances()));
-        LogHelper.info("Registered Mutations Chances overrides:");
-        for(int i=0;i< mutationChances.length;i++) {
-            String mutation = mutationChanceOverrides[i].getItem()!=null?(Item.itemRegistry.getNameForObject(mutationChanceOverrides[i].getItem())+':'+mutationChanceOverrides[i].getItemDamage()):"null";
-            String chance = mutationChances[i]+" percent";
-            LogHelper.info(" - "+mutation + ": " + chance);
+        for (Mutation mutation:mutations) {
+            String result = mutation.result.getItem() != null ? (Item.itemRegistry.getNameForObject(mutation.result.getItem()) + ':' + mutation.result.getItemDamage()) : "null";
+            String parent1 = mutation.parent1.getItem() != null ? (Item.itemRegistry.getNameForObject(mutation.parent1.getItem())) + ':' + mutation.parent1.getItemDamage() : "null";
+            String parent2 = mutation.parent2.getItem() != null ? (Item.itemRegistry.getNameForObject(mutation.parent2.getItem())) + ':' + mutation.parent2.getItemDamage() : "null";
+            String info = " - " + result + " = " + parent1 + " + " + parent2;
+            if (mutation.id == 0) {
+                LogHelper.info(info);
+            } else {
+                String block = mutation.requirement != null ? (Block.blockRegistry.getNameForObject(mutation.requirement) + ':' + mutation.requirementMeta) : "null";
+                String location = "";
+                if (mutation.id == 1) {
+                    location = "below";
+                } else if (mutation.id == 2) {
+                    location = "nearby";
+                }
+                LogHelper.info(info + " (Requires " + block + " " + location + ")");
+            }
         }
     }
 
     //initializes the mutations arrays
     private static void setMutations(String[] data) {
-        mutations = new ItemStack[data.length];
-        parents1 = new ItemStack[data.length];
-        parents2 = new ItemStack[data.length];
+        mutations = new Mutation[data.length];
         for(int i=0;i<data.length;i++) {
-            mutations[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(0,data[i].indexOf('='))));
-            parents1[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(data[i].indexOf('=')+1,data[i].indexOf('+'))));
-            parents2[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(data[i].indexOf('+')+1)));
-        }
-    }
-
-    //initializes the mutation chances arrays
-    private static void setMutationChances(String[] data) {
-        mutationChanceOverrides = new ItemStack[data.length];
-        mutationChances = new int[data.length];
-        for(int i=0;i<data.length;i++) {
-            mutationChanceOverrides[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(0,data[i].indexOf(','))));
-            int chance = Integer.parseInt(data[i].substring(data[i].indexOf(',')+1));
-            mutationChances[i] = chance<0?0:(chance>100?100:chance);
+            //read the stacks
+            ItemStack result = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(0,data[i].indexOf('='))));
+            ItemStack parent1 = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(data[i].indexOf('=') + 1, data[i].indexOf('+'))));
+            ItemStack parent2;
+            //parse the end of the string
+            int id = 0;
+            Block req = null;
+            int reqMeta = 0;
+            String nextPart = data[i].substring(data[i].indexOf('+')+1);
+            //check if a requirement is specified
+            if(nextPart.indexOf(',')>0) {
+                parent2 = IOHelper.getSeedStack(IOHelper.correctSeedName(nextPart.substring(0, nextPart.indexOf(','))));
+                nextPart = nextPart.substring(nextPart.indexOf(',')+1);
+                id = Integer.parseInt(nextPart.substring(0, nextPart.indexOf(',')));
+                //get the requirement
+                ItemStack blockStack = IOHelper.getBlock(nextPart.substring(nextPart.indexOf(',')+1));
+                req = ((ItemBlock) blockStack.getItem()).field_150939_a;
+                reqMeta = blockStack.getItemDamage();
+            }
+            //no requirement specified
+            else {
+                parent2 = IOHelper.getSeedStack(IOHelper.correctSeedName(nextPart));
+            }
+            mutations[i] = new Mutation(result, parent1, parent2, id, req, reqMeta, 100);
         }
     }
 
     //gets all the possible crossovers
-    public static ItemStack[] getCrossOvers(TileEntityCrop[] crops) {
+    public static Mutation[] getCrossOvers(TileEntityCrop[] crops) {
         TileEntityCrop[] parents = MutationHandler.getParents(crops);
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+        ArrayList<Mutation> list = new ArrayList<Mutation>();
         switch (parents.length) {
             case 2:
-                list.addAll(MutationHandler.getMutation(parents[0], parents[1]));
+                list.addAll(MutationHandler.getMutations(parents[0], parents[1]));
                 break;
             case 3:
-                list.addAll(MutationHandler.getMutation(parents[0], parents[1]));
-                list.addAll(MutationHandler.getMutation(parents[0], parents[2]));
-                list.addAll(MutationHandler.getMutation(parents[1], parents[2]));
+                list.addAll(MutationHandler.getMutations(parents[0], parents[1]));
+                list.addAll(MutationHandler.getMutations(parents[0], parents[2]));
+                list.addAll(MutationHandler.getMutations(parents[1], parents[2]));
                 break;
             case 4:
-                list.addAll(MutationHandler.getMutation(parents[0], parents[1]));
-                list.addAll(MutationHandler.getMutation(parents[0], parents[2]));
-                list.addAll(MutationHandler.getMutation(parents[0], parents[3]));
-                list.addAll(MutationHandler.getMutation(parents[1], parents[2]));
-                list.addAll(MutationHandler.getMutation(parents[1], parents[3]));
-                list.addAll(MutationHandler.getMutation(parents[2], parents[3]));
+                list.addAll(MutationHandler.getMutations(parents[0], parents[1]));
+                list.addAll(MutationHandler.getMutations(parents[0], parents[2]));
+                list.addAll(MutationHandler.getMutations(parents[0], parents[3]));
+                list.addAll(MutationHandler.getMutations(parents[1], parents[2]));
+                list.addAll(MutationHandler.getMutations(parents[1], parents[3]));
+                list.addAll(MutationHandler.getMutations(parents[2], parents[3]));
                 break;
         }
-        return cleanItemStackArray(list.toArray(new ItemStack[list.size()]));
+        return cleanMutationArray(list.toArray(new Mutation[list.size()]));
     }
 
     //gets an array of all the possible parents from the array containing all the neighbouring crops
@@ -99,18 +157,18 @@ public abstract class MutationHandler {
     }
 
     //finds the product of two parents
-    private static ArrayList<ItemStack> getMutation(TileEntityCrop parent1, TileEntityCrop parent2) {
+    private static ArrayList<Mutation> getMutations(TileEntityCrop parent1, TileEntityCrop parent2) {
         ItemSeeds seed1 = (ItemSeeds) parent1.seed;
         ItemSeeds seed2 = (ItemSeeds) parent2.seed;
         int meta1 = parent1.seedMeta;
         int meta2 = parent2.seedMeta;
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        for(int i=0;i<mutations.length;i++) {
-            if((seed1==parents1[i].getItem() && seed2==parents2[i].getItem()) && (meta1==parents1[i].getItemDamage() && meta2==parents2[i].getItemDamage())) {
-                list.add(mutations[i]);
+        ArrayList<Mutation> list = new ArrayList<Mutation>();
+        for (Mutation mutation:mutations) {
+            if ((seed1==mutation.parent1.getItem() && seed2==mutation.parent2.getItem()) && (meta1==mutation.parent1.getItemDamage() && meta2==mutation.parent2.getItemDamage())) {
+                list.add(mutation);
             }
-            if((seed1==parents2[i].getItem() && seed2==parents1[i].getItem()) && (meta1==parents2[i].getItemDamage() && meta2==parents1[i].getItemDamage())) {
-                list.add(mutations[i]);
+            if ((seed1==mutation.parent2.getItem() && seed2==mutation.parent1.getItem()) && (meta1==mutation.parent2.getItemDamage() && meta2==mutation.parent1.getItemDamage())) {
+                list.add(mutation);
             }
         }
         return list;
@@ -158,94 +216,61 @@ public abstract class MutationHandler {
        return input+ (int) Math.round(Math.abs(neighbors-2)*Math.random());
     }
 
-    //removes null instance from an ItemSeeds array
-    private static ItemStack[] cleanItemStackArray(ItemStack[] input) {
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        for(ItemStack seed:input) {
-            if (seed != null) {
-                list.add(seed);
+    //removes null instance from a mutations array
+    private static Mutation[] cleanMutationArray(Mutation[] input) {
+        ArrayList<Mutation> list = new ArrayList<Mutation>();
+        for(Mutation mutation:input) {
+            if (mutation.result != null) {
+                list.add(mutation);
             }
         }
-        return list.toArray(new ItemStack[list.size()]);
+        return list.toArray(new Mutation[list.size()]);
     }
 
 
     //public methods to read data from the mutations and parents arrays
 
     //gets all the mutations
-    public static ItemStack[] getMutations() {
+    public static Mutation[] getMutations() {
         return mutations.clone();
     }
 
     //gets all the parents
     public static ItemStack[][] getParents() {
         ItemStack[][] parents = new ItemStack[mutations.length][2];
-        for(int i=0;i<mutations.length;i++) {
-            parents[i][0] = parents1[i];
-            parents[i][1] = parents2[i];
+        for(int i=0;i< mutations.length;i++) {
+            parents[i][0] = mutations[i].parent1.copy();
+            parents[i][1] = mutations[i].parent2.copy();
         }
         return parents;
     }
 
-    //gets all the crops this crop can mutate to
-    //the mutation at a certain index corresponds to the co parent at the index of the array returned by getCoParents(ItemStack stack)
-    public static ItemStack[] getMutations(ItemStack stack) {
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+    //gets all the mutations this crop can mutate to
+    public static Mutation[] getMutations(ItemStack stack) {
+        ArrayList<Mutation> list = new ArrayList<Mutation>();
         if(stack.getItem() instanceof ItemSeeds) {
-            for (int i = 0; i < parents1.length; i++) {
-                if (parents2[i].getItem() == stack.getItem() && parents2[i].getItemDamage() == stack.getItemDamage()) {
-                    list.add(new ItemStack(mutations[i].getItem(), 1, mutations[i].getItemDamage()));
+            for (Mutation mutation:mutations) {
+                if (mutation.parent2.getItem() == stack.getItem() && mutation.parent2.getItemDamage() == stack.getItemDamage()) {
+                    list.add(new Mutation(mutation));
                 }
-                if (parents1[i].getItem() == stack.getItem() && parents1[i].getItemDamage() == stack.getItemDamage()) {
-                    list.add(new ItemStack(mutations[i].getItem(), 1, mutations[i].getItemDamage()));
+                if (mutation.parent1.getItem() == stack.getItem() && mutation.parent1.getItemDamage() == stack.getItemDamage()) {
+                    list.add(new Mutation(mutation));
                 }
             }
         }
-        return list.toArray(new ItemStack[list.size()]);
-    }
-
-    //gets all the other parents this crop can mutate with
-    //the parent at a certain index corresponds to the mutation at the index of the array returned by getMutations(ItemStack stack)
-    public static ItemStack[] getCoParents(ItemStack stack) {
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        if(stack.getItem() instanceof ItemSeeds) {
-            for (int i = 0; i < parents1.length; i++) {
-                if (parents2[i].getItem() == stack.getItem() && parents2[i].getItemDamage() == stack.getItemDamage()) {
-                    list.add(new ItemStack(parents1[i].getItem(), 1, parents1[i].getItemDamage()));
-                }
-                if (parents1[i].getItem() == stack.getItem() && parents1[i].getItemDamage() == stack.getItemDamage()) {
-                    list.add(new ItemStack(parents2[i].getItem(), 1, parents2[i].getItemDamage()));
-                }
-            }
-        }
-        return list.toArray(new ItemStack[list.size()]);
+        return list.toArray(new Mutation[list.size()]);
     }
 
     //gets the parents this crop mutates from
-    public static ItemStack[][] getParents(ItemStack stack) {
-        ArrayList<ItemStack[]> list = new ArrayList<ItemStack[]>();
+    public static Mutation[] getParentMutations(ItemStack stack) {
+        ArrayList<Mutation> list = new ArrayList<Mutation>();
         if(stack.getItem() instanceof ItemSeeds) {
-            for(int i=0;i<mutations.length;i++) {
-                if(mutations[i].getItem() == stack.getItem() && mutations[i].getItemDamage() == stack.getItemDamage()) {
-                    ItemStack[] entry = {new ItemStack(parents1[i].getItem(), 1, parents1[i].getItemDamage()), new ItemStack(parents2[i].getItem(), 1, parents2[i].getItemDamage())};
-                    list.add(entry);
-
+            for (Mutation mutation:mutations) {
+                if (mutation.result.getItem() == stack.getItem() && mutation.result.getItemDamage() == stack.getItemDamage()) {
+                    list.add(new Mutation(mutation));
                 }
             }
         }
-        ItemStack[][] result = new ItemStack[list.size()][2];
-        for(int i=0;i<list.size();i++) {
-            result[i] = list.get(i);
-        }
-        return result;
-    }
-
-    public static double getMutationChance(ItemSeeds seed, int meta) {
-        for(int i=0;i<mutationChances.length;i++) {
-            if(seed==mutationChanceOverrides[i].getItem() && meta==mutationChanceOverrides[i].getItemDamage()) {
-                return ((double)mutationChances[i])/100;
-            }
-        }
-        return 1.00/ SeedHelper.getSeedTier(seed);
+        return list.toArray(new Mutation[list.size()]);
     }
 }

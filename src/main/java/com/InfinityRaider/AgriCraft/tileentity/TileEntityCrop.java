@@ -8,6 +8,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
@@ -59,8 +60,12 @@ public class TileEntityCrop extends TileEntityAgricraft {
             //flag to check if the crop needs to update
             boolean change = false;
             //possible new plant
-            ItemSeeds seed=null;
-            int seedMeta=0;
+            ItemSeeds result=null;
+            int resultMeta=0;
+            int mutationId=0;
+            Block req=null;
+            int reqMeta = 0;
+            double chance=0;
             //find neighbours
             TileEntityCrop[] neighbours = new TileEntityCrop[4];
             neighbours[0] = (world.getTileEntity(x - 1, y, z) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x - 1, y, z) : null;
@@ -71,25 +76,30 @@ public class TileEntityCrop extends TileEntityAgricraft {
             if (Math.random() > ConfigurationHandler.mutationChance) {
                 int index = (int) Math.floor(Math.random() * neighbours.length);
                 if (neighbours[index]!=null && neighbours[index].seed!=null && neighbours[index].isMature()) {
-                    seed = (ItemSeeds) neighbours[index].seed;
-                    seedMeta = neighbours[index].seedMeta;
+                    result = (ItemSeeds) neighbours[index].seed;
+                    resultMeta = neighbours[index].seedMeta;
+                    chance = SeedHelper.getSpreadChance(result, resultMeta);
                 }
             } else {
-                ItemStack[] crossOvers = MutationHandler.getCrossOvers(neighbours);
-                if (crossOvers != null && crossOvers.length>0) {
+                MutationHandler.Mutation[] crossOvers = MutationHandler.getCrossOvers(neighbours);
+                if (crossOvers!=null && crossOvers.length>0) {
                     int index = (int) Math.floor(Math.random()*crossOvers.length);
-                    if(crossOvers[index].getItem()!=null) {
-                        seed = (ItemSeeds) crossOvers[index].getItem();
-                        seedMeta = crossOvers[index].getItemDamage();
+                    if(crossOvers[index].result.getItem()!=null) {
+                        result = (ItemSeeds) crossOvers[index].result.getItem();
+                        resultMeta = crossOvers[index].result.getItemDamage();
+                        mutationId = crossOvers[index].id;
+                        req = crossOvers[index].requirement;
+                        reqMeta = crossOvers[index].requirementMeta;
+                        chance = crossOvers[index].chance;
                     }
                 }
             }
             //try to set the new plant
-            if(seed!=null && SeedHelper.isValidSeed(seed, seedMeta)) {
-                if(Math.random()<MutationHandler.getMutationChance(seed, seedMeta)) {
+            if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && this.canMutate(result, resultMeta, mutationId, req, reqMeta)) {
+                if(Math.random()<chance) {
                     this.crossCrop = false;
                     int[] stats = MutationHandler.getStats(neighbours);
-                    this.setPlant(stats[0], stats[1], stats[2], seed, seedMeta);
+                    this.setPlant(stats[0], stats[1], stats[2], result, resultMeta);
                     change = true;
                 }
             }
@@ -100,6 +110,35 @@ public class TileEntityCrop extends TileEntityAgricraft {
                 world.notifyBlockChange(x, y, z, world.getBlock(x, y, z));      //lets the neighbors know this has been updated
             }
         }
+    }
+
+    //checks if a plant can mutate
+    private boolean canMutate(ItemSeeds seed, int seedMeta, int id, Block req, int reqMeta) {
+        if(this.canGrow(seed, seedMeta)) {
+            //id = 0: no requirement
+            //id = 1: block below farmland has to be the req block
+            //id = 2: block near has to be the req block
+            switch(id) {
+                case 0: return true;
+                case 1: return (this.worldObj.getBlock(this.xCoord, this.yCoord-2, this.zCoord)==req && this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord)==reqMeta);
+                case 2: return isBlockNear(req, reqMeta);
+            }
+        }
+        return false;
+    }
+
+    //checks if a given block is near
+    private boolean isBlockNear(Block block, int meta) {
+        for(int x=-3;x<=3;x++) {
+            for(int y=0;y<=3;y++) {
+                for(int z=-3;z<=3;z++) {
+                    if(this.worldObj.getBlock(this.xCoord+x, this.yCoord+y, this.zCoord+z)==block && this.worldObj.getBlockMetadata(this.xCoord+x, this.yCoord+y, this.zCoord+z)==meta) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     //sets the plant in the crop
@@ -132,21 +171,26 @@ public class TileEntityCrop extends TileEntityAgricraft {
 
     //check if the crop is fertile
     public boolean isFertile() {
-        BlockBush plant = SeedHelper.getPlant((ItemSeeds) this.seed);
-        if(this.worldObj.getBlock(this.xCoord,this.yCoord-1,this.zCoord) == net.minecraft.init.Blocks.farmland && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
-            if(plant instanceof BlockModPlant) {
-                BlockModPlant blockModPlant = (BlockModPlant) plant;
-                return blockModPlant.base == null || OreDictHelper.isSameOre(blockModPlant.base, blockModPlant.baseMeta, this.worldObj.getBlock(this.xCoord, this.yCoord - 2, this.zCoord), this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord));
-            }
-            return true;
-        }
-        return false;
+        return this.canGrow((ItemSeeds) this.seed, this.seedMeta);
     }
 
     //check the block if the plant is mature
     public boolean isMature() {
         if(!this.worldObj.isRemote) {
             return this.worldObj.getBlock(xCoord, yCoord, zCoord) != null && this.worldObj.getBlock(xCoord, yCoord, zCoord) instanceof BlockCrop && ((BlockCrop) this.worldObj.getBlock(xCoord, yCoord, zCoord)).isMature(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        }
+        return false;
+    }
+
+    //check if the seed can grow
+    private boolean canGrow(ItemSeeds seed, int meta) {
+        BlockBush plant = SeedHelper.getPlant(seed);
+        if(this.worldObj.getBlock(this.xCoord,this.yCoord-1,this.zCoord) == net.minecraft.init.Blocks.farmland && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
+            if(plant instanceof BlockModPlant) {
+                BlockModPlant blockModPlant = (BlockModPlant) plant;
+                return blockModPlant.base == null || OreDictHelper.isSameOre(blockModPlant.base, blockModPlant.baseMeta, this.worldObj.getBlock(this.xCoord, this.yCoord - 2, this.zCoord), this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord));
+            }
+            return true;
         }
         return false;
     }
