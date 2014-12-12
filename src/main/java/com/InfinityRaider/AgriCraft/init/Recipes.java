@@ -38,6 +38,9 @@ public class Recipes {
         //journal
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.journal,1), "csc", "sbs", "csc", 'c', Items.crops, 's', Names.listAllseed, 'b', net.minecraft.init.Items.writable_book));
         GameRegistry.addRecipe(new RecipeJournal());
+        //trowel
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.trowel, 1, 0), "  s","ii ", 's', "stickWood", 'i', "ingotIron"));
+        //irrigation systems
         if(!ConfigurationHandler.disableIrrigation) {
             //tank & channel
             GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterTank, 1, 0), tankSchematic));

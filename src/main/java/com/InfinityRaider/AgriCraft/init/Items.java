@@ -13,6 +13,7 @@ public class Items {
     public static ItemCrop crops;
     public static ItemSprinkler sprinkler;
     public static ItemJournal journal;
+    public static ItemTrowel trowel;
     public static ItemDebugger debugItem;
 
     //fruits
@@ -45,6 +46,8 @@ public class Items {
         RegisterHelper.registerItem(crops, Names.crops+"Item");
         journal = new ItemJournal();
         RegisterHelper.registerItem(journal, Names.journal);
+        trowel = new ItemTrowel();
+        RegisterHelper.registerItem(trowel, Names.trowel);
         if(!ConfigurationHandler.disableIrrigation) {
             sprinkler = new ItemSprinkler();
             RegisterHelper.registerItem(sprinkler, Names.sprinkler + "Item");
