@@ -7,6 +7,7 @@ Changelog
 -Added special mutations: either require a specific block near or a base block in order to mutate
 -Set magical crops seeds to tier 4
 -Added Waila integration for crops, tanks and irrigation channels
+-Added gardening trowel: can be used to move plants from one corp to another
 
 0.0.11
 -Config option to get more crops per crafting operation
