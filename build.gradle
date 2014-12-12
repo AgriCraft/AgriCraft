@@ -19,6 +19,10 @@ repositories {
         name = "chickenbones"
         url = "http://chickenbones.net/maven/"
     }
+    maven {
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }
 }
 apply plugin: 'forge'
 
@@ -43,6 +47,7 @@ dependencies {
     compile fileTree(dir: 'libs', includes: ['*Harvestcraft*.jar'])
     compile fileTree(dir: 'libs', includes: ['*Pams Mob Drop Crops*.zip'])
     compile fileTree(dir: 'libs', includes: ['*magicalcrops*.jar'])
+    compile fileTree(dir: 'libs', includes: ['*Waila*.jar'])
     compile fileTree(dir: 'libs', includes: ['*witchery*.jar'])
 }
 processResources

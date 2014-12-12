@@ -1,5 +1,13 @@
 Changelog
 ---------
+0.0.12
+-Fixed crash if OreDictionary planks weren't blocks
+-Underped resource crops in the configs
+-Rewrote mutations
+-Added special mutations: either require a specific block near or a base block in order to mutate
+-Set magical crops seeds to tier 4
+-Added Waila integration for crops, tanks and irrigation channels
+
 0.0.11
 -Config option to get more crops per crafting operation
 -Added support to translate the journal to other languages

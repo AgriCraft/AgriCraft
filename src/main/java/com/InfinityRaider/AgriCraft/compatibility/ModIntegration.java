@@ -19,8 +19,12 @@ public class ModIntegration {
         }
         //Thaumcraft
         if(LoadedMods.thaumcraft) {
-            FMLInterModComms.sendMessage("Thaumcraft", "harvestClickableCrop", new ItemStack(Blocks.blockCrop, 1, 7));
+            FMLInterModComms.sendMessage(Names.thaumcraft, "harvestClickableCrop", new ItemStack(Blocks.blockCrop, 1, 7));
             Aspects.registerAspects();
+        }
+        //Waila
+        if(LoadedMods.waila) {
+            FMLInterModComms.sendMessage(Names.waila, "register", "com.InfinityRaider.AgriCraft.compatibility.waila.WailaRegistry.initWaila");
         }
     }
     public static class LoadedMods {
@@ -35,6 +39,7 @@ public class ModIntegration {
         public static boolean railcraft;
         public static boolean thaumcraft;
         public static boolean mfr;
+        public static boolean waila;
 
         public static void init() {
             nei = Loader.isModLoaded(Names.nei);
@@ -48,6 +53,7 @@ public class ModIntegration {
             railcraft = Loader.isModLoaded(Names.railcraft);
             thaumcraft = Loader.isModLoaded(Names.thaumcraft);
             mfr = Loader.isModLoaded(Names.mfr);
+            waila = Loader.isModLoaded(Names.waila);
             LogHelper.info("Checking for loaded mods:");
             LogHelper.info(" - NEI loaded: "+nei);
             LogHelper.info(" - Pam's HarvestCraft loaded: "+harvestcraft);
@@ -60,6 +66,7 @@ public class ModIntegration {
             LogHelper.info(" - Railcraft loaded: "+railcraft);
             LogHelper.info(" - Thaumcraft loaded: "+thaumcraft);
             LogHelper.info(" - MineFactory Reloaded loaded: "+mfr);
+            LogHelper.info(" - Waila loaded: "+waila);
             LogHelper.info("Done");
         }
     }
