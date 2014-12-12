@@ -32,7 +32,7 @@ public class RecipeCustomWood implements IRecipe{
                 }
                 else {
                     if(recipe[row][column]) {
-                        if(OreDictHelper.hasOreId(stackInSlot, Names.plankWood)) {
+                        if(OreDictHelper.hasOreId(stackInSlot, Names.plankWood) && stackInSlot.getItem() instanceof ItemBlock) {
                             if(material==null) {
                                 material = stackInSlot.copy();
                             }
