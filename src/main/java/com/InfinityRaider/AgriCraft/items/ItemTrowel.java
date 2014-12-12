@@ -88,9 +88,12 @@ public class ItemTrowel extends ModItem {
 
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-       if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.seed) && stack.stackTagCompound.hasKey(Names.meta)) {
-           NBTTagCompound tag = stack.getTagCompound();
-           ItemStack seed = new ItemStack((Item) Item.itemRegistry.getObject(tag.getString(Names.seed)), 1, tag.getShort(Names.meta));
+        if(stack.getItemDamage()==0) {
+            list.add(StatCollector.translateToLocal("agricraft_tooltip.trowel"));
+        }
+        else if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.seed) && stack.stackTagCompound.hasKey(Names.meta)) {
+            NBTTagCompound tag = stack.getTagCompound();
+            ItemStack seed = new ItemStack((Item) Item.itemRegistry.getObject(tag.getString(Names.seed)), 1, tag.getShort(Names.meta));
             list.add(StatCollector.translateToLocal("agricraft_tooltip.seed")+": "+ seed.getItem().getItemStackDisplayName(seed));
         }
     }

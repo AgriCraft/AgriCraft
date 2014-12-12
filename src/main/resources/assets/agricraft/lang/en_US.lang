@@ -104,6 +104,7 @@ agricraft_journal.tier=Tier
 agricraft_journal.fruits=Fruits
 agricraft_journal.growthStages=Growth Stages
 agricraft_journal.mutations=Mutations
+agricraft_tooltip.trowel=Use this to move plants from one corp to another
 
 //agricraft seeds
 agricraft_journal.potato=The potato is the base of almost every meal, however some have even found ways to turn it into a beverage.
