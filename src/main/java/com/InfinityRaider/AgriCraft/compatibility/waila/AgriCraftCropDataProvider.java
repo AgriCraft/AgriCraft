@@ -36,14 +36,16 @@ public class AgriCraftCropDataProvider implements IWailaDataProvider {
         TileEntity te = dataAccessor.getTileEntity();
         if(block!=null && block instanceof BlockCrop && te!=null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
-            int growth = crop.growth;
-            int gain = crop.gain;
-            int strength = crop.strength;
-            String seedName = ((ItemSeeds) crop.seed).getItemStackDisplayName(new ItemStack((ItemSeeds) crop.seed, 1, crop.seedMeta));
-            list.add(StatCollector.translateToLocal("agricraft_tooltip.seed")+": "+seedName);
-            list.add(" - "+ StatCollector.translateToLocal("agricraft_tooltip.growth")+": "+growth);
-            list.add(" - "+ StatCollector.translateToLocal("agricraft_tooltip.gain")+": "+gain);
-            list.add(" - "+ StatCollector.translateToLocal("agricraft_tooltip.strength")+": "+strength);
+            if(crop.hasPlant()) {
+                int growth = crop.growth;
+                int gain = crop.gain;
+                int strength = crop.strength;
+                String seedName = ((ItemSeeds) crop.seed).getItemStackDisplayName(new ItemStack((ItemSeeds) crop.seed, 1, crop.seedMeta));
+                list.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + seedName);
+                list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + growth);
+                list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + gain);
+                list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + strength);
+            }
         }
         return list;
     }
