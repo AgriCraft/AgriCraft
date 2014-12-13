@@ -2,6 +2,9 @@ package com.InfinityRaider.AgriCraft.reference;
 
 public final class Names {
     //NBT tags
+    public static class NBT {
+
+    }
     public static final String growth = "growth";
     public static final String gain = "gain";
     public static final String strength = "strength";
@@ -16,7 +19,6 @@ public final class Names {
     public static final String material = "material";
     public static final String materialMeta = "matMeta";
     public static final String angle = "angle";
-    public static final String chestSpawned = "chestSpawned";
 
     //mod objects
     public static final String crop = "crop";

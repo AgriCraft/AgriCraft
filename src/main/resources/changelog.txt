@@ -72,6 +72,7 @@ Changelog
 -Cleaned up some code (it's still a mess, but just a little bit less of a mess)
 -Fixed opening Seed Analyzer gui pausing the game
 -Fixed some crops crashing the game while trying to harvest them
+-Updated bonemeal logic
 
 0.0.5
 -Added resource crops based on what ores have been registered in the ore dictionary
