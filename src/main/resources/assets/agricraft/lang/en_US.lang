@@ -5,6 +5,7 @@ itemGroup.agricraft=Agricraft
 item.agricraft:cropsItem.name=crops
 item.agricraft:journal.name=Agricultural Journal
 item.agricraft:trowel.name=Gardening Trowel
+item.agricraft:magnifyingGlass.name=Magnifying Glass
 item.agricraft:sprinklerItem.name=Sprinkler
 item.agricraft:debugger.name=Debugger
 item.agricraft:nuggetDiamond.name=Diamond Nugget
@@ -94,6 +95,10 @@ agricraft_tooltip.strength=Strength
 agricraft_tooltip.discoveredSeeds=Discovered Seeds
 agricraft_tooltip.material=Material
 agricraft_tooltip.waterLevel=Water level
+agricraft_tooltip.cropWithPlant=This crop has a plant
+agricraft_tooltip.crossCrop=This is a cross crop
+agricraft_tooltip.cropWithoutPlant=This crop doesn't have plant on it
+agricraft_tooltip.notCrop=This is not a crop
 
 //journal entries
 //---------------
@@ -105,6 +110,7 @@ agricraft_journal.fruits=Fruits
 agricraft_journal.growthStages=Growth Stages
 agricraft_journal.mutations=Mutations
 agricraft_tooltip.trowel=Use this to move plants from one corp to another
+agricraft_tooltip.magnifyingGlass=Use this to inspect crops
 
 //agricraft seeds
 agricraft_journal.potato=The potato is the base of almost every meal, however some have even found ways to turn it into a beverage.

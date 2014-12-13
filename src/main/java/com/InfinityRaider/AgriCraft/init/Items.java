@@ -14,6 +14,7 @@ public class Items {
     public static ItemSprinkler sprinkler;
     public static ItemJournal journal;
     public static ItemTrowel trowel;
+    public static ItemMagnifyingGlass magnifyingGlass;
     public static ItemDebugger debugItem;
 
     //fruits
@@ -48,6 +49,8 @@ public class Items {
         RegisterHelper.registerItem(journal, Names.journal);
         trowel = new ItemTrowel();
         RegisterHelper.registerItem(trowel, Names.trowel);
+        magnifyingGlass = new ItemMagnifyingGlass();
+        RegisterHelper.registerItem(magnifyingGlass, Names.magnifyingGlass);
         if(!ConfigurationHandler.disableIrrigation) {
             sprinkler = new ItemSprinkler();
             RegisterHelper.registerItem(sprinkler, Names.sprinkler + "Item");

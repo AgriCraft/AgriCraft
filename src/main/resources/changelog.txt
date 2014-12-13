@@ -8,6 +8,7 @@ Changelog
 -Set magical crops seeds to tier 4
 -Added Waila integration for crops, tanks and irrigation channels
 -Added gardening trowel: can be used to move plants from one corp to another
+-Added magnifying glass: use to inspect crops
 
 0.0.11
 -Config option to get more crops per crafting operation

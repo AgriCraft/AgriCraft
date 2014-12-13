@@ -26,6 +26,7 @@ public final class Names {
     public static final String seedAnalyzer = seed+analyzer;
     public static final String journal = "journal";
     public static final String trowel = "trowel";
+    public static final String magnifyingGlass = "magnifyingGlass";
     public static final String nugget = "nugget";
     public static final String ingot = "ingot";
     public static final String ore = "ore";

@@ -35,54 +35,52 @@ public class ItemTrowel extends ModItem {
     //this is called when you right click with this item in hand
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-        //if (!world.isRemote) {
-           if(world.getBlock(x, y, z)!=null && world.getBlock(x, y, z) instanceof BlockCrop) {
-               TileEntity te = world.getTileEntity(x, y, z);
-               if(te!=null && te instanceof TileEntityCrop) {
-                   TileEntityCrop crop = (TileEntityCrop) te;
-                   //put plant on trowel
-                   if(crop.hasPlant() && stack.getItemDamage()==0) {
-                       //put plant on trowel
-                       NBTTagCompound tag = new NBTTagCompound();
-                       tag.setShort(Names.growth, (short) crop.growth);
-                       tag.setShort(Names.gain, (short) crop.gain);
-                       tag.setShort(Names.strength, (short) crop.strength);
-                       tag.setString(Names.seed, crop.getSeedString());
-                       tag.setShort(Names.meta, (short) crop.seedMeta);
-                       tag.setShort(Names.materialMeta, (short) world.getBlockMetadata(x, y, z));
-                       stack.setTagCompound(tag);
-                       stack.setItemDamage(1);
-                       //clear crop
-                       crop.growth=0;
-                       crop.gain=0;
-                       crop.strength=0;
-                       crop.seed=null;
-                       crop.seedMeta=0;
-                       crop.markDirty();
-                       world.setBlockMetadataWithNotify(x, y, z, 0, 3);
-                       //return true to avoid further processing
-                       return true;
-                   }
-                   //plant crop from trowel
-                   else if(!crop.hasPlant() && !crop.crossCrop && stack.getItemDamage()==1) {
-                       //set crop
-                       NBTTagCompound tag = stack.getTagCompound();
-                       crop.growth = tag.getShort(Names.growth);
-                       crop.gain = tag.getShort(Names.gain);
-                       crop.strength = tag.getShort(Names.strength);
-                       crop.setSeed(tag.getString(Names.seed));
-                       crop.seedMeta = tag.getShort(Names.meta);
-                       world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.materialMeta), 3);
-                       crop.markDirty();
-                       //clear trowel
-                       stack.setTagCompound(null);
-                       stack.setItemDamage(0);
-                       //return true to avoid further processing
-                       return true;
-                   }
-               }
-           }
-        //}
+        if(world.getBlock(x, y, z)!=null && world.getBlock(x, y, z) instanceof BlockCrop) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            if(te!=null && te instanceof TileEntityCrop) {
+                TileEntityCrop crop = (TileEntityCrop) te;
+                //put plant on trowel
+                if(crop.hasPlant() && stack.getItemDamage()==0) {
+                    //put plant on trowel
+                    NBTTagCompound tag = new NBTTagCompound();
+                    tag.setShort(Names.growth, (short) crop.growth);
+                    tag.setShort(Names.gain, (short) crop.gain);
+                    tag.setShort(Names.strength, (short) crop.strength);
+                    tag.setString(Names.seed, crop.getSeedString());
+                    tag.setShort(Names.meta, (short) crop.seedMeta);
+                    tag.setShort(Names.materialMeta, (short) world.getBlockMetadata(x, y, z));
+                    stack.setTagCompound(tag);
+                    stack.setItemDamage(1);
+                    //clear crop
+                    crop.growth=0;
+                    crop.gain=0;
+                    crop.strength=0;
+                    crop.seed=null;
+                    crop.seedMeta=0;
+                    crop.markDirty();
+                    world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+                    //return true to avoid further processing
+                    return true;
+                }
+                //plant crop from trowel
+                else if(!crop.hasPlant() && !crop.crossCrop && stack.getItemDamage()==1) {
+                    //set crop
+                    NBTTagCompound tag = stack.getTagCompound();
+                    crop.growth = tag.getShort(Names.growth);
+                    crop.gain = tag.getShort(Names.gain);
+                    crop.strength = tag.getShort(Names.strength);
+                    crop.setSeed(tag.getString(Names.seed));
+                    crop.seedMeta = tag.getShort(Names.meta);
+                    world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.materialMeta), 3);
+                    crop.markDirty();
+                    //clear trowel
+                    stack.setTagCompound(null);
+                    stack.setItemDamage(0);
+                    //return true to avoid further processing
+                    return true;
+                }
+            }
+        }
         return false;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
     }
 

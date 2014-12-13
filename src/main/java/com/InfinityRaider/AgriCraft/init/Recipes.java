@@ -40,6 +40,8 @@ public class Recipes {
         GameRegistry.addRecipe(new RecipeJournal());
         //trowel
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.trowel, 1, 0), "  s","ii ", 's', "stickWood", 'i', "ingotIron"));
+        //magnifying glass
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.magnifyingGlass, 1, 0), "sgs", " s ", " s ", 's', "stickWood", 'g', "paneGlass"));
         //irrigation systems
         if(!ConfigurationHandler.disableIrrigation) {
             //tank & channel
