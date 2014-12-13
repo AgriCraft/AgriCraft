@@ -213,7 +213,16 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     //bonemeal can be applied to this plant
     @Override
     public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
-        return !this.isMature(world, x, y , z);
+        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+        if(crop.crossCrop) {
+            return ConfigurationHandler.bonemealMutation;
+        }
+        if(crop.hasPlant()) {
+            if(SeedHelper.getSeedTier((ItemSeeds) crop.seed)<4) {
+                return !this.isMature(world, x, y , z);
+            }
+        }
+        return false;
     }
 
     //this gets called when the player uses bonemeal on the crop
