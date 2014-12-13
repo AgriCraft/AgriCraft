@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.init.Seeds;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import cpw.mods.fml.common.Loader;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
