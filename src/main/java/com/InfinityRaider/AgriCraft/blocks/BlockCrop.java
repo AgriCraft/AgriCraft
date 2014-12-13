@@ -75,7 +75,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 update = true;
                 ArrayList<ItemStack> drops = SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
                 for (ItemStack drop : drops) {
-                    LogHelper.debug("Spawning item in world: " + Item.itemRegistry.getNameForObject(drop.getItem()) + ":" + drop.getItemDamage());
                     this.dropBlockAsItem(world, x, y, z, drop);
                 }
             }
