@@ -3,6 +3,8 @@ package com.InfinityRaider.AgriCraft.handler;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
+import com.InfinityRaider.AgriCraft.items.ItemMagnifyingGlass;
+import com.InfinityRaider.AgriCraft.items.ItemTrowel;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -52,10 +54,25 @@ public class PlayerInteractEventHandler {
                                 }
                             }
                         }
+                        //debugger can be used
                         else if(event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemDebugger) {
                             event.entityPlayer.getCurrentEquippedItem().getItem().onItemUse(event.entityPlayer.getCurrentEquippedItem(), event.entityPlayer, event.world, event.x, event.y, event.z, event.face, 0, 0, 0);
                         }
+                        //use the trowel or magnifying glass
+                        else if(event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemTrowel || event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemMagnifyingGlass) {
+                            event.entityPlayer.getCurrentEquippedItem().getItem().onItemUseFirst(event.entityPlayer.getCurrentEquippedItem(), event.entityPlayer, event.world, event.x, event.y, event.z, event.face, 0, 0, 0);
+                            event.setResult(Event.Result.DENY);
+                            event.useItem = Event.Result.DENY;
+                            event.useBlock = Event.Result.DENY;
+                            if(event.world.isRemote) {
+                                //send the right click to the server manually (cancelling the event will prevent the client from telling the server a right click happened, and nothing will happen, but we still want stuff to happen)
+                                FMLClientHandler.instance().getClientPlayerEntity().sendQueue.addToSendQueue(new C08PacketPlayerBlockPlacement(event.x, event.y, event.z, event.face, event.entityPlayer.inventory.getCurrentItem(), 0f, 0f, 0f));
+                            }
+                            event.setCanceled(true);
+                            return;
+                        }
                     }
+                    //call the block's onBlockActivated method
                     event.world.getBlock(event.x, event.y, event.z).onBlockActivated(event.world, event.x, event.y, event.z, event.entityPlayer, event.face, 0, 0, 0);
                     //cancel event to prevent the Hunger Overhaul event handler from being called
                     event.setResult(Event.Result.DENY);
