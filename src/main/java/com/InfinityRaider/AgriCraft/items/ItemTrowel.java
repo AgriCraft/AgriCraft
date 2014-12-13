@@ -43,12 +43,12 @@ public class ItemTrowel extends ModItem {
                 if(crop.hasPlant() && stack.getItemDamage()==0) {
                     //put plant on trowel
                     NBTTagCompound tag = new NBTTagCompound();
-                    tag.setShort(Names.growth, (short) crop.growth);
-                    tag.setShort(Names.gain, (short) crop.gain);
-                    tag.setShort(Names.strength, (short) crop.strength);
-                    tag.setString(Names.seed, crop.getSeedString());
-                    tag.setShort(Names.meta, (short) crop.seedMeta);
-                    tag.setShort(Names.materialMeta, (short) world.getBlockMetadata(x, y, z));
+                    tag.setShort(Names.NBT.growth, (short) crop.growth);
+                    tag.setShort(Names.NBT.gain, (short) crop.gain);
+                    tag.setShort(Names.NBT.strength, (short) crop.strength);
+                    tag.setString(Names.Objects.seed, crop.getSeedString());
+                    tag.setShort(Names.NBT.meta, (short) crop.seedMeta);
+                    tag.setShort(Names.NBT.materialMeta, (short) world.getBlockMetadata(x, y, z));
                     stack.setTagCompound(tag);
                     stack.setItemDamage(1);
                     //clear crop
@@ -66,12 +66,12 @@ public class ItemTrowel extends ModItem {
                 else if(!crop.hasPlant() && !crop.crossCrop && stack.getItemDamage()==1) {
                     //set crop
                     NBTTagCompound tag = stack.getTagCompound();
-                    crop.growth = tag.getShort(Names.growth);
-                    crop.gain = tag.getShort(Names.gain);
-                    crop.strength = tag.getShort(Names.strength);
-                    crop.setSeed(tag.getString(Names.seed));
-                    crop.seedMeta = tag.getShort(Names.meta);
-                    world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.materialMeta), 3);
+                    crop.growth = tag.getShort(Names.NBT.growth);
+                    crop.gain = tag.getShort(Names.NBT.gain);
+                    crop.strength = tag.getShort(Names.NBT.strength);
+                    crop.setSeed(tag.getString(Names.Objects.seed));
+                    crop.seedMeta = tag.getShort(Names.NBT.meta);
+                    world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.NBT.materialMeta), 3);
                     crop.markDirty();
                     //clear trowel
                     stack.setTagCompound(null);
@@ -89,9 +89,9 @@ public class ItemTrowel extends ModItem {
         if(stack.getItemDamage()==0) {
             list.add(StatCollector.translateToLocal("agricraft_tooltip.trowel"));
         }
-        else if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.seed) && stack.stackTagCompound.hasKey(Names.meta)) {
+        else if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.Objects.seed) && stack.stackTagCompound.hasKey(Names.NBT.meta)) {
             NBTTagCompound tag = stack.getTagCompound();
-            ItemStack seed = new ItemStack((Item) Item.itemRegistry.getObject(tag.getString(Names.seed)), 1, tag.getShort(Names.meta));
+            ItemStack seed = new ItemStack((Item) Item.itemRegistry.getObject(tag.getString(Names.Objects.seed)), 1, tag.getShort(Names.NBT.meta));
             list.add(StatCollector.translateToLocal("agricraft_tooltip.seed")+": "+ seed.getItem().getItemStackDisplayName(seed));
         }
     }

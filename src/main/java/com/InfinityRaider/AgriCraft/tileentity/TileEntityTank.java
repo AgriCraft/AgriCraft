@@ -18,9 +18,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setInteger(Names.connected, this.connectedTanks);
+        tag.setInteger(Names.NBT.connected, this.connectedTanks);
         if(this.fluidLevel>0) {
-            tag.setInteger(Names.level, this.fluidLevel);
+            tag.setInteger(Names.NBT.level, this.fluidLevel);
         }
     }
 
@@ -28,9 +28,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        this.connectedTanks = tag.getInteger(Names.connected);
-        if(tag.hasKey(Names.level)) {
-            this.fluidLevel = tag.getInteger(Names.level);
+        this.connectedTanks = tag.getInteger(Names.NBT.connected);
+        if(tag.hasKey(Names.NBT.level)) {
+            this.fluidLevel = tag.getInteger(Names.NBT.level);
         }
         else {
             this.fluidLevel=0;

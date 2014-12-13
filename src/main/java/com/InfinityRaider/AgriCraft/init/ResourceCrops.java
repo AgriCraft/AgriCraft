@@ -39,45 +39,45 @@ public class ResourceCrops {
             emeryllis = new BlockModPlant(farmland, net.minecraft.init.Blocks.emerald_ore, Items.nuggetEmerald, Items.nuggetEmeraldMeta, 5, 6);
             redstodendron = new BlockModPlant(farmland, net.minecraft.init.Blocks.redstone_ore, net.minecraft.init.Items.redstone, 0, 3, 6);
 
-            RegisterHelper.registerBlock(diamahlia, Names.cropDiamahlia);
-            RegisterHelper.registerBlock(ferranium, Names.cropFerranium);
-            RegisterHelper.registerBlock(aurigold, Names.cropAurigold);
-            RegisterHelper.registerBlock(lapender, Names.cropLapender);
-            RegisterHelper.registerBlock(emeryllis, Names.cropEmeryllis);
-            RegisterHelper.registerBlock(redstodendron, Names.cropRedstodendron);
+            RegisterHelper.registerBlock(diamahlia, Names.Crops.cropDiamahlia);
+            RegisterHelper.registerBlock(ferranium, Names.Crops.cropFerranium);
+            RegisterHelper.registerBlock(aurigold, Names.Crops.cropAurigold);
+            RegisterHelper.registerBlock(lapender, Names.Crops.cropLapender);
+            RegisterHelper.registerBlock(emeryllis, Names.Crops.cropEmeryllis);
+            RegisterHelper.registerBlock(redstodendron, Names.Crops.cropRedstodendron);
 
             //Modded resources
             if(OreDictHelper.oreCopper!=null) {
                 cuprosia = new BlockModPlant(farmland, OreDictHelper.oreCopper, OreDictHelper.oreCopperMeta, Items.nuggetCopper, Items.nuggetCopperMeta, 3, 6);
-                RegisterHelper.registerBlock(cuprosia, Names.cropCuprosia);
+                RegisterHelper.registerBlock(cuprosia, Names.Crops.cropCuprosia);
             }
             if(OreDictHelper.oreTin!=null) {
                 petinia = new BlockModPlant(farmland, OreDictHelper.oreTin, OreDictHelper.oreTinMeta, Items.nuggetTin, Items.nuggetTinMeta, 3, 6);
-                RegisterHelper.registerBlock(petinia, Names.cropPetinia);
+                RegisterHelper.registerBlock(petinia, Names.Crops.cropPetinia);
             }
             if(OreDictHelper.oreLead!=null) {
                 plombean = new BlockModPlant(farmland, OreDictHelper.oreLead, OreDictHelper.oreLeadMeta, Items.nuggetLead, Items.nuggetLeadMeta, 4, 6);
-                RegisterHelper.registerBlock(plombean, Names.cropPlombean);
+                RegisterHelper.registerBlock(plombean, Names.Crops.cropPlombean);
             }
             if(OreDictHelper.oreSilver!=null) {
                 silverweed = new BlockModPlant(farmland, OreDictHelper.oreSilver, OreDictHelper.oreSilverMeta, Items.nuggetSilver, Items.nuggetSilverMeta, 4, 6);
-                RegisterHelper.registerBlock(silverweed, Names.cropSilverweed);
+                RegisterHelper.registerBlock(silverweed, Names.Crops.cropSilverweed);
             }
             if(OreDictHelper.oreAluminum!=null) {
                 jaslumine = new BlockModPlant(farmland, OreDictHelper.oreAluminum, OreDictHelper.oreAluminumMeta, Items.nuggetAluminum, Items.nuggetAluminumMeta, 4, 1);
-                RegisterHelper.registerBlock(jaslumine, Names.cropJaslumine);
+                RegisterHelper.registerBlock(jaslumine, Names.Crops.cropJaslumine);
             }
             if(OreDictHelper.oreNickel!=null) {
                 niccissus = new BlockModPlant(farmland, OreDictHelper.oreNickel, OreDictHelper.oreNickelMeta, Items.nuggetNickel, Items.nuggetNickelMeta, 4, 6);
-                RegisterHelper.registerBlock(niccissus, Names.cropNiccissus);
+                RegisterHelper.registerBlock(niccissus, Names.Crops.cropNiccissus);
             }
             if(OreDictHelper.orePlatinum!=null) {
                 platiolus = new BlockModPlant(farmland, OreDictHelper.orePlatinum, OreDictHelper.orePlatinumMeta, Items.nuggetPlatinum, Items.nuggetPlatinumMeta, 4, 1);
-                RegisterHelper.registerBlock(platiolus, Names.cropPlatiolus);
+                RegisterHelper.registerBlock(platiolus, Names.Crops.cropPlatiolus);
             }
             if(OreDictHelper.oreOsmium!=null) {
                 osmonium = new BlockModPlant(farmland, OreDictHelper.oreOsmium, OreDictHelper.oreOsmiumMeta, Items.nuggetOsmium, Items.nuggetOsmiumMeta, 4, 6);
-                RegisterHelper.registerBlock(osmonium, Names.cropOsmonium);
+                RegisterHelper.registerBlock(osmonium, Names.Crops.cropOsmonium);
             }
 
             LogHelper.debug("Resource crops registered");

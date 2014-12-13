@@ -77,7 +77,7 @@ public abstract class OreDictHelper {
     public static void getRegisteredOres() {
         String[] oreDictNames = OreDictionary.getOreNames();
         for (String ore:oreDictNames) {
-            if(ore.equals(Names.oreCopper)) {
+            if(ore.equals(Names.Ores.oreCopper)) {
                 boolean flag = true;
                 int i = 0;
                 while(flag && i<OreDictionary.getOres(ore).size()) {
@@ -89,7 +89,7 @@ public abstract class OreDictHelper {
                     i++;
                 }
             }
-            else if(ore.equals(Names.oreTin)) {
+            else if(ore.equals(Names.Ores.oreTin)) {
                 boolean flag = true;
                 int i = 0;
                 while(flag && i<OreDictionary.getOres(ore).size()) {
@@ -101,7 +101,7 @@ public abstract class OreDictHelper {
                     i++;
                 }
             }
-            else if(ore.equals(Names.oreLead)) {
+            else if(ore.equals(Names.Ores.oreLead)) {
                 boolean flag = true;
                 int i = 0;
                 while(flag && i<OreDictionary.getOres(ore).size()) {
@@ -113,7 +113,7 @@ public abstract class OreDictHelper {
                     i++;
                 }
             }
-            else if(ore.equals(Names.oreSilver)) {
+            else if(ore.equals(Names.Ores.oreSilver)) {
                 boolean flag = true;
                 int i = 0;
                 while(flag && i<OreDictionary.getOres(ore).size()) {
@@ -125,7 +125,7 @@ public abstract class OreDictHelper {
                     i++;
                 }
             }
-            else if(ore.equals(Names.oreAluminum)) {
+            else if(ore.equals(Names.Ores.oreAluminum)) {
                 boolean flag = true;
                 int i = 0;
                 while(flag && i<OreDictionary.getOres(ore).size()) {
@@ -137,7 +137,7 @@ public abstract class OreDictHelper {
                     i++;
                 }
             }
-            else if(ore.equals(Names.oreNickel)) {
+            else if(ore.equals(Names.Ores.oreNickel)) {
                 boolean flag = true;
                 int i = 0;
                 while(flag && i<OreDictionary.getOres(ore).size()) {
@@ -149,7 +149,7 @@ public abstract class OreDictHelper {
                     i++;
                 }
             }
-            else if(ore.equals(Names.orePlatinum)) {
+            else if(ore.equals(Names.Ores.orePlatinum)) {
                 boolean flag = true;
                 int i = 0;
                 while(flag && i<OreDictionary.getOres(ore).size()) {
@@ -161,7 +161,7 @@ public abstract class OreDictHelper {
                     i++;
                 }
             }
-            else if(ore.equals(Names.oreOsmium)) {
+            else if(ore.equals(Names.Ores.oreOsmium)) {
                 boolean flag = true;
                 int i = 0;
                 while(flag && i<OreDictionary.getOres(ore).size()) {
@@ -173,67 +173,67 @@ public abstract class OreDictHelper {
                     i++;
                 }
             }
-            else if(ore.equals(Names.nuggetDiamond)) {
+            else if(ore.equals(Names.Nuggets.nuggetDiamond)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetDiamond = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetDiamondMeta = OreDictionary.getOres(ore).get(0).getItemDamage();
                 }
             }
-            else if(ore.equals(Names.nuggetEmerald)) {
+            else if(ore.equals(Names.Nuggets.nuggetEmerald)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetEmerald = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetEmeraldMeta = OreDictionary.getOres(ore).get(0).getItemDamage();
                 }
             }
-            else if(ore.equals(Names.nuggetIron)) {
+            else if(ore.equals(Names.Nuggets.nuggetIron)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetIron = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetIronMeta = OreDictionary.getOres(ore).get(0).getItemDamage();
                 }
             }
-            else if(ore.equals(Names.nuggetCopper)) {
+            else if(ore.equals(Names.Nuggets.nuggetCopper)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetCopper = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetCopperMeta = OreDictionary.getOres(ore).get(0).getItemDamage();
                 }
             }
-            else if(ore.equals(Names.nuggetTin)) {
+            else if(ore.equals(Names.Nuggets.nuggetTin)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetTin = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetTinMeta = OreDictionary.getOres(ore).get(0).getItemDamage();
                 }
             }
-            else if(ore.equals(Names.nuggetLead)) {
+            else if(ore.equals(Names.Nuggets.nuggetLead)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetLead = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetLeadMeta = OreDictionary.getOres(ore).get(0).getItemDamage();
                 }
             }
-            else if(ore.equals(Names.nuggetSilver)) {
+            else if(ore.equals(Names.Nuggets.nuggetSilver)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetSilver = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetSilverMeta = OreDictionary.getOres(ore).get(0).getItemDamage();
                 }
             }
-            else if(ore.equals(Names.nuggetAluminum)) {
+            else if(ore.equals(Names.Nuggets.nuggetAluminum)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetAluminum = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetAluminumMeta = OreDictionary.getOres(ore).get(0).getItemDamage();
                 }
             }
-            else if(ore.equals(Names.nuggetNickel)) {
+            else if(ore.equals(Names.Nuggets.nuggetNickel)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetNickel = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetNickelMeta = OreDictionary.getOres(ore).get(0).getItemDamage();
                 }
             }
-            else if(ore.equals(Names.nuggetPlatinum)) {
+            else if(ore.equals(Names.Nuggets.nuggetPlatinum)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetPlatinum = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetPlatinumMeta = OreDictionary.getOres(ore).get(0).getItemDamage();
                 }
             }
-            else if(ore.equals(Names.nuggetOsmium)) {
+            else if(ore.equals(Names.Nuggets.nuggetOsmium)) {
                 if(OreDictionary.getOres(ore).size()>0) {
                     Items.nuggetOsmium = OreDictionary.getOres(ore).get(0).getItem();
                     Items.nuggetOsmiumMeta = OreDictionary.getOres(ore).get(0).getItemDamage();

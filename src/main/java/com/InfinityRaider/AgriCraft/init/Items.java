@@ -44,16 +44,16 @@ public class Items {
 
     public static void init() {
         crops = new ItemCrop();
-        RegisterHelper.registerItem(crops, Names.crops+"Item");
+        RegisterHelper.registerItem(crops, Names.Objects.crops+"Item");
         journal = new ItemJournal();
-        RegisterHelper.registerItem(journal, Names.journal);
+        RegisterHelper.registerItem(journal, Names.Objects.journal);
         trowel = new ItemTrowel();
-        RegisterHelper.registerItem(trowel, Names.trowel);
+        RegisterHelper.registerItem(trowel, Names.Objects.trowel);
         magnifyingGlass = new ItemMagnifyingGlass();
-        RegisterHelper.registerItem(magnifyingGlass, Names.magnifyingGlass);
+        RegisterHelper.registerItem(magnifyingGlass, Names.Objects.magnifyingGlass);
         if(!ConfigurationHandler.disableIrrigation) {
             sprinkler = new ItemSprinkler();
-            RegisterHelper.registerItem(sprinkler, Names.sprinkler + "Item");
+            RegisterHelper.registerItem(sprinkler, Names.Objects.sprinkler + "Item");
         }
         if(ConfigurationHandler.debug) {
             debugItem = new ItemDebugger();
@@ -67,83 +67,83 @@ public class Items {
         //diamond nugget
         if(nuggetDiamond==null) {
             nuggetDiamond = new ModItem();
-            RegisterHelper.registerItem(nuggetDiamond,Names.nuggetDiamond);
-            OreDictionary.registerOre(Names.nuggetDiamond, Items.nuggetDiamond);
+            RegisterHelper.registerItem(nuggetDiamond, Names.Nuggets.nuggetDiamond);
+            OreDictionary.registerOre(Names.Nuggets.nuggetDiamond, Items.nuggetDiamond);
         }
         //emerald nugget
         if(nuggetEmerald==null) {
             nuggetEmerald = new ModItem();
-            RegisterHelper.registerItem(nuggetEmerald,Names.nuggetEmerald);
-            OreDictionary.registerOre(Names.nuggetEmerald, Items.nuggetEmerald);
+            RegisterHelper.registerItem(nuggetEmerald, Names.Nuggets.nuggetEmerald);
+            OreDictionary.registerOre(Names.Nuggets.nuggetEmerald, Items.nuggetEmerald);
         }
         //iron nugget
         if(nuggetIron==null) {
             nuggetIron = new ModItem();
-            RegisterHelper.registerItem(nuggetIron, Names.nuggetIron);
-            OreDictionary.registerOre(Names.nuggetIron, Items.nuggetIron);
+            RegisterHelper.registerItem(nuggetIron, Names.Nuggets.nuggetIron);
+            OreDictionary.registerOre(Names.Nuggets.nuggetIron, Items.nuggetIron);
         }
         //copper nugget
         if(OreDictHelper.oreCopper!=null) {
             if (nuggetCopper == null) {
                 nuggetCopper = new ModItem();
-                RegisterHelper.registerItem(nuggetCopper, Names.nuggetCopper);
-                OreDictionary.registerOre(Names.nuggetCopper, Items.nuggetCopper);
+                RegisterHelper.registerItem(nuggetCopper, Names.Nuggets.nuggetCopper);
+                OreDictionary.registerOre(Names.Nuggets.nuggetCopper, Items.nuggetCopper);
             }
         }
         //tin nugget
         if(OreDictHelper.oreTin!=null) {
             if (nuggetTin == null) {
                 nuggetTin = new ModItem();
-                RegisterHelper.registerItem(nuggetTin, Names.nuggetTin);
-                OreDictionary.registerOre(Names.nuggetTin, Items.nuggetTin);
+                RegisterHelper.registerItem(nuggetTin, Names.Nuggets.nuggetTin);
+                OreDictionary.registerOre(Names.Nuggets.nuggetTin, Items.nuggetTin);
             }
         }
         //lead nugget
         if(OreDictHelper.oreLead!=null) {
             if (nuggetLead == null) {
                 nuggetLead = new ModItem();
-                RegisterHelper.registerItem(nuggetLead, Names.nuggetLead);
-                OreDictionary.registerOre(Names.nuggetLead, Items.nuggetLead);
+                RegisterHelper.registerItem(nuggetLead, Names.Nuggets.nuggetLead);
+                OreDictionary.registerOre(Names.Nuggets.nuggetLead, Items.nuggetLead);
             }
         }
         //silver nugget
         if(OreDictHelper.oreSilver!=null) {
             if (nuggetSilver == null){
                 nuggetSilver = new ModItem();
-                RegisterHelper.registerItem(nuggetSilver, Names.nuggetSilver);
-                OreDictionary.registerOre(Names.nuggetSilver, Items.nuggetSilver);
+                RegisterHelper.registerItem(nuggetSilver, Names.Nuggets.nuggetSilver);
+                OreDictionary.registerOre(Names.Nuggets.nuggetSilver, Items.nuggetSilver);
             }
         }
         //aluminum nugget
         if(OreDictHelper.oreAluminum!=null) {
             if (nuggetAluminum == null) {
                 nuggetAluminum = new ModItem();
-                RegisterHelper.registerItem(nuggetAluminum, Names.nuggetAluminum);
-                OreDictionary.registerOre(Names.nuggetAluminum, Items.nuggetAluminum);
+                RegisterHelper.registerItem(nuggetAluminum, Names.Nuggets.nuggetAluminum);
+                OreDictionary.registerOre(Names.Nuggets.nuggetAluminum, Items.nuggetAluminum);
             }
         }
         //nickel nugget
         if(OreDictHelper.oreNickel!=null) {
             if (nuggetNickel == null) {
                 nuggetNickel = new ModItem();
-                RegisterHelper.registerItem(nuggetNickel, Names.nuggetNickel);
-                OreDictionary.registerOre(Names.nuggetNickel, Items.nuggetNickel);
+                RegisterHelper.registerItem(nuggetNickel, Names.Nuggets.nuggetNickel);
+                OreDictionary.registerOre(Names.Nuggets.nuggetNickel, Items.nuggetNickel);
             }
         }
         //platinum nugget
         if(OreDictHelper.orePlatinum!=null) {
             if (nuggetPlatinum == null) {
                 nuggetPlatinum = new ModItem();
-                RegisterHelper.registerItem(nuggetPlatinum, Names.nuggetPlatinum);
-                OreDictionary.registerOre(Names.nuggetPlatinum, Items.nuggetPlatinum);
+                RegisterHelper.registerItem(nuggetPlatinum, Names.Nuggets.nuggetPlatinum);
+                OreDictionary.registerOre(Names.Nuggets.nuggetPlatinum, Items.nuggetPlatinum);
             }
         }
         //osmium nugget
         if(OreDictHelper.oreOsmium!=null) {
             if (nuggetOsmium == null) {
                 nuggetOsmium = new ModItem();
-                RegisterHelper.registerItem(nuggetOsmium, Names.nuggetOsmium);
-                OreDictionary.registerOre(Names.nuggetOsmium, Items.nuggetOsmium);
+                RegisterHelper.registerItem(nuggetOsmium, Names.Nuggets.nuggetOsmium);
+                OreDictionary.registerOre(Names.Nuggets.nuggetOsmium, Items.nuggetOsmium);
             }
         }
     }

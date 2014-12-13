@@ -153,7 +153,7 @@ public abstract class IOHelper {
                 domain = "minecraft";
             }
             else {
-                if(name.length()<4 || !name.substring(0,4).equals(Names.seed)) {
+                if(name.length()<4 || !name.substring(0,4).equals(Names.Objects.seed)) {
                     if (name.substring(0, 5).equalsIgnoreCase("tulip")) {
                         name = "Tulip" + Character.toUpperCase(name.charAt(5)) + name.substring(6);
                     }
@@ -166,7 +166,7 @@ public abstract class IOHelper {
             if(name.indexOf(':')>=0) {
                 name = name.substring(0,name.indexOf(':'));
             }
-            if(name.length()<4 || !name.substring(0,4).equals(Names.seed)) {
+            if(name.length()<4 || !name.substring(0,4).equals(Names.Objects.seed)) {
                 name = "seed" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
             }
         }

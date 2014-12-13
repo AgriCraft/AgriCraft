@@ -15,7 +15,7 @@ public class TileEntityChannel extends TileEntityCustomWood {
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         if(this.lvl>0) {
-            tag.setInteger(Names.level, this.lvl);
+            tag.setInteger(Names.NBT.level, this.lvl);
         }
     }
 
@@ -23,8 +23,8 @@ public class TileEntityChannel extends TileEntityCustomWood {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if(tag.hasKey(Names.level)) {
-            this.lvl = tag.getInteger(Names.level);
+        if(tag.hasKey(Names.NBT.level)) {
+            this.lvl = tag.getInteger(Names.NBT.level);
         }
         else {
             this.lvl=0;

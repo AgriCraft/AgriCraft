@@ -175,7 +175,7 @@ public abstract class SeedHelper {
 
     //check if the seed is valid
     public static boolean isValidSeed(ItemSeeds seed, int meta) {
-        if(ModIntegration.LoadedMods.thaumicTinkerer && getPlantDomain(seed).equalsIgnoreCase(Names.thaumicTinkerer)) {
+        if(ModIntegration.LoadedMods.thaumicTinkerer && getPlantDomain(seed).equalsIgnoreCase(Names.Mods.thaumicTinkerer)) {
             LogHelper.debug("Thaumic Tinkerer infused seeds are not supported, sorry");
             return false;
         }
@@ -195,10 +195,10 @@ public abstract class SeedHelper {
 
     //define NBT tag
     public static void setNBT(NBTTagCompound tag, short growth, short gain, short strength, boolean analyzed) {
-        tag.setShort(Names.growth, growth==0?Constants.defaultGrowth:growth>10?10:growth);
-        tag.setShort(Names.gain, gain==0?Constants.defaultGain:gain>10?10:gain);
-        tag.setShort(Names.strength, strength==0?Constants.defaultGain:strength>10?10:strength);
-        tag.setBoolean(Names.analyzed, analyzed);
+        tag.setShort(Names.NBT.growth, growth==0?Constants.defaultGrowth:growth>10?10:growth);
+        tag.setShort(Names.NBT.gain, gain==0?Constants.defaultGain:gain>10?10:gain);
+        tag.setShort(Names.NBT.strength, strength==0?Constants.defaultGain:strength>10?10:strength);
+        tag.setBoolean(Names.NBT.analyzed, analyzed);
     }
 
     //get a string of information about the seed for the journal
@@ -211,7 +211,7 @@ public abstract class SeedHelper {
 
     //get a random seed
     public static ItemStack getRandomSeed(boolean setTag) {
-        ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.listAllseed);
+        ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
         ItemStack seed = null;
         while(seed==null || !(seed.getItem() instanceof ItemSeeds) || !isValidSeed((ItemSeeds) seed.getItem(), seed.getItemDamage())) {
             seed = seeds.get((int) Math.floor(Math.random()*seeds.size()));

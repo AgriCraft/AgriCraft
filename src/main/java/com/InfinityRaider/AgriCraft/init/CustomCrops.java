@@ -38,11 +38,11 @@ public class CustomCrops {
                 //cropData[6]: render type
                 //cropData[7]: information
                 customCrops[i] = new BlockModPlant(Block.getBlockFromName(cropData[3]), Integer.parseInt(cropData[4]), (Item) Item.itemRegistry.getObject(cropData[1]), Integer.parseInt(cropData[2]), Integer.parseInt(cropData[5]), Integer.parseInt(cropData[6]));
-                RegisterHelper.registerBlock(customCrops[i], Names.crop+ Character.toUpperCase(cropData[0].charAt(0))+cropData[0].substring(1));
+                RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop+ Character.toUpperCase(cropData[0].charAt(0))+cropData[0].substring(1));
 
                 customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(cropData[0].charAt(0))+cropData[0].substring(1) + " Seeds", cropData[7]);
-                RegisterHelper.registerItem(customSeeds[i], Names.seed+ Character.toUpperCase(cropData[0].charAt(0))+cropData[0].substring(1));
-                OreDictionary.registerOre(Names.listAllseed, CustomCrops.customSeeds[i]);
+                RegisterHelper.registerItem(customSeeds[i], Names.Objects.seed+ Character.toUpperCase(cropData[0].charAt(0))+cropData[0].substring(1));
+                OreDictionary.registerOre(Names.OreDict.listAllseed, CustomCrops.customSeeds[i]);
             }
             LogHelper.info("Custom crops registered");
         }

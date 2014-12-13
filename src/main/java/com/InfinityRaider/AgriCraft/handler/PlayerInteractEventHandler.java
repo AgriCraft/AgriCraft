@@ -33,7 +33,7 @@ public class PlayerInteractEventHandler {
                     else {
                         //prevent players from planting seeds with Gain, Growth and Strength stats
                         NBTTagCompound tag = event.entityPlayer.getCurrentEquippedItem().getTagCompound();
-                        if (tag.hasKey(Names.growth) && tag.hasKey(Names.gain) && tag.hasKey(Names.strength)) {
+                        if (tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
                             event.setResult(Event.Result.DENY);
                             event.setCanceled(true);
                             //TO-DO: create tile-entity to store seed data

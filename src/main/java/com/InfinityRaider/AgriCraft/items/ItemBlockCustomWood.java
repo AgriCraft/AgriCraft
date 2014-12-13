@@ -48,7 +48,7 @@ public class ItemBlockCustomWood extends ItemBlock {
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list) {
         ArrayList<ItemStack> registeredMaterials = new ArrayList<ItemStack>();
-        ArrayList<ItemStack> planks = OreDictionary.getOres(Names.plankWood);
+        ArrayList<ItemStack> planks = OreDictionary.getOres(Names.OreDict.plankWood);
         for(ItemStack plank:planks) {
             if(plank.getItem() instanceof ItemBlock) {
                 if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
@@ -91,10 +91,10 @@ public class ItemBlockCustomWood extends ItemBlock {
 
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-        if(stack.getItemDamage()==0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(Names.material) && stack.getTagCompound().hasKey(Names.materialMeta)) {
+        if(stack.getItemDamage()==0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(Names.NBT.material) && stack.getTagCompound().hasKey(Names.NBT.materialMeta)) {
             NBTTagCompound tag = stack.getTagCompound();
-            String name = tag.getString(Names.material);
-            int meta = tag.getInteger(Names.materialMeta);
+            String name = tag.getString(Names.NBT.material);
+            int meta = tag.getInteger(Names.NBT.materialMeta);
             ItemStack material = new ItemStack((Block) Block.blockRegistry.getObject(name), 1, meta);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+ material.getItem().getItemStackDisplayName(material));
         }

@@ -15,11 +15,11 @@ public class ItemToolTipHandler {
         ItemStack stack = event.itemStack;
         if(stack.getItem() instanceof ItemSeeds && stack.hasTagCompound()) {
             NBTTagCompound tag = stack.getTagCompound();
-            if(tag.hasKey(Names.growth) && tag.hasKey(Names.gain) && tag.hasKey(Names.strength) && tag.hasKey(Names.analyzed)) {
-                if(tag.getBoolean(Names.analyzed)) {
-                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + tag.getInteger(Names.growth));
-                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + tag.getInteger(Names.gain));
-                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + tag.getInteger(Names.strength));
+            if(tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength) && tag.hasKey(Names.NBT.analyzed)) {
+                if(tag.getBoolean(Names.NBT.analyzed)) {
+                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + tag.getInteger(Names.NBT.growth));
+                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + tag.getInteger(Names.NBT.gain));
+                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + tag.getInteger(Names.NBT.strength));
                 }
                 else {
                     event.toolTip.add(" "+ StatCollector.translateToLocal("agricraft_tooltip.unidentified"));

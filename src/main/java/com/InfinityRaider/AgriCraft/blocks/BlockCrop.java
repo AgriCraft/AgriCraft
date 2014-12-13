@@ -119,9 +119,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     return;
                 }
                 //get NBT data from the seeds
-                if (player.getCurrentEquippedItem().stackTagCompound != null && player.getCurrentEquippedItem().stackTagCompound.hasKey(Names.growth)) {
+                if (player.getCurrentEquippedItem().stackTagCompound != null && player.getCurrentEquippedItem().stackTagCompound.hasKey(Names.NBT.growth)) {
                     //NBT data was found: copy data to plant
-                    crop.setPlant(stack.stackTagCompound.getInteger(Names.growth), stack.stackTagCompound.getInteger(Names.gain), stack.stackTagCompound.getInteger(Names.strength), (ItemSeeds) stack.getItem(), stack.getItemDamage());
+                    crop.setPlant(stack.stackTagCompound.getInteger(Names.NBT.growth), stack.stackTagCompound.getInteger(Names.NBT.gain), stack.stackTagCompound.getInteger(Names.NBT.strength), (ItemSeeds) stack.getItem(), stack.getItemDamage());
                 } else {
                     //NBT data was not initialized: set defaults
                     crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, (ItemSeeds) stack.getItem(), stack.getItemDamage());

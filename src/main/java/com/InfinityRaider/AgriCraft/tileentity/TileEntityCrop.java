@@ -29,13 +29,13 @@ public class TileEntityCrop extends TileEntityAgricraft {
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        tag.setShort(Names.growth, (short) growth);
-        tag.setShort(Names.gain, (short) gain);
-        tag.setShort(Names.strength, (short) strength);
+        tag.setShort(Names.NBT.growth, (short) growth);
+        tag.setShort(Names.NBT.gain, (short) gain);
+        tag.setShort(Names.NBT.strength, (short) strength);
         tag.setBoolean("crossCrop",crossCrop);
         if(this.seed!=null) {
-            tag.setString(Names.seed, this.getSeedString());
-            tag.setShort(Names.meta, (short) seedMeta);
+            tag.setString(Names.Objects.seed, this.getSeedString());
+            tag.setShort(Names.NBT.meta, (short) seedMeta);
         }
         super.writeToNBT(tag);
     }
@@ -43,13 +43,13 @@ public class TileEntityCrop extends TileEntityAgricraft {
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        this.growth=tag.getInteger(Names.growth);
-        this.gain=tag.getInteger(Names.gain);
-        this.strength=tag.getInteger(Names.strength);
+        this.growth=tag.getInteger(Names.NBT.growth);
+        this.gain=tag.getInteger(Names.NBT.gain);
+        this.strength=tag.getInteger(Names.NBT.strength);
         this.crossCrop=tag.getBoolean("crossCrop");
-        if(tag.hasKey(Names.seed) && tag.hasKey(Names.meta)) {
-            this.setSeed(tag.getString(Names.seed));
-            this.seedMeta = tag.getInteger(Names.meta);
+        if(tag.hasKey(Names.Objects.seed) && tag.hasKey(Names.NBT.meta)) {
+            this.setSeed(tag.getString(Names.Objects.seed));
+            this.seedMeta = tag.getInteger(Names.NBT.meta);
         }
         super.readFromNBT(tag);
     }
@@ -198,10 +198,10 @@ public class TileEntityCrop extends TileEntityAgricraft {
     public ItemStack getSeedStack() {
         ItemStack seed = new ItemStack((ItemSeeds) this.seed, 1, this.seedMeta);
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setInteger(Names.growth, this.growth);
-        tag.setInteger(Names.gain, this.gain);
-        tag.setInteger(Names.strength, this.strength);
-        tag.setBoolean(Names.analyzed, false);
+        tag.setInteger(Names.NBT.growth, this.growth);
+        tag.setInteger(Names.NBT.gain, this.gain);
+        tag.setInteger(Names.NBT.strength, this.strength);
+        tag.setBoolean(Names.NBT.analyzed, false);
         seed.setTagCompound(tag);
         return seed;
     }

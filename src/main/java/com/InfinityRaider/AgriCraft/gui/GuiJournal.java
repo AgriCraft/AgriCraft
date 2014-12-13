@@ -70,8 +70,8 @@ public class GuiJournal extends GuiScreen {
     private void setDataFromNBT() {
         if(this.player.getCurrentEquippedItem()!=null && this.player.getCurrentEquippedItem().stackSize>0 && this.player.getCurrentEquippedItem().getItem() instanceof ItemJournal && this.player.getCurrentEquippedItem().hasTagCompound()) {
             NBTTagCompound tag = this.player.getCurrentEquippedItem().getTagCompound();
-            if(tag.hasKey(Names.discoveredSeeds)) {
-                NBTTagList tagList = tag.getTagList(Names.discoveredSeeds, 10);      //10 for tagCompound
+            if(tag.hasKey(Names.NBT.discoveredSeeds)) {
+                NBTTagList tagList = tag.getTagList(Names.NBT.discoveredSeeds, 10);      //10 for tagCompound
                 this.discoveredSeeds = new ItemStack[tagList.tagCount()];
                 for(int i=0;i<this.discoveredSeeds.length;i++) {
                     this.discoveredSeeds[i] = ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i));
@@ -81,8 +81,8 @@ public class GuiJournal extends GuiScreen {
             else {
                 this.discoveredSeeds = new ItemStack[0];
             }
-            if(tag.hasKey(Names.currentPage)) {
-                this.currentPage = tag.getShort(Names.currentPage);
+            if(tag.hasKey(Names.NBT.currentPage)) {
+                this.currentPage = tag.getShort(Names.NBT.currentPage);
             }
         }
     }

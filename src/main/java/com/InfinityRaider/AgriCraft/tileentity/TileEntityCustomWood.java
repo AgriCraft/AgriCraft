@@ -17,8 +17,8 @@ public class TileEntityCustomWood extends TileEntityAgricraft {
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         if(this.materialName!=null && !this.materialName.equals("")) {
-            tag.setString(Names.material, this.materialName);
-            tag.setInteger(Names.materialMeta, this.materialMeta);
+            tag.setString(Names.NBT.material, this.materialName);
+            tag.setInteger(Names.NBT.materialMeta, this.materialMeta);
         }
     }
 
@@ -26,9 +26,9 @@ public class TileEntityCustomWood extends TileEntityAgricraft {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if(tag.hasKey(Names.material) && tag.hasKey(Names.materialMeta)) {
-            this.materialName = tag.getString(Names.material);
-            this.materialMeta = tag.getInteger(Names.materialMeta);
+        if(tag.hasKey(Names.NBT.material) && tag.hasKey(Names.NBT.materialMeta)) {
+            this.materialName = tag.getString(Names.NBT.material);
+            this.materialMeta = tag.getInteger(Names.NBT.materialMeta);
         }
     }
 
@@ -38,9 +38,9 @@ public class TileEntityCustomWood extends TileEntityAgricraft {
 
     //set material from tag
     public void setMaterial(NBTTagCompound tag) {
-        if(tag!=null && tag.hasKey(Names.material) && tag.hasKey(Names.materialMeta)) {
-            this.materialName = tag.getString(Names.material);
-            this.materialMeta = tag.getInteger(Names.materialMeta);
+        if(tag!=null && tag.hasKey(Names.NBT.material) && tag.hasKey(Names.NBT.materialMeta)) {
+            this.materialName = tag.getString(Names.NBT.material);
+            this.materialMeta = tag.getInteger(Names.NBT.materialMeta);
         }
     }
 
@@ -78,8 +78,8 @@ public class TileEntityCustomWood extends TileEntityAgricraft {
     public NBTTagCompound getMaterialTag() {
         NBTTagCompound tag = new NBTTagCompound();
         if(this.materialName !=null && !this.materialName.equals("")) {
-            tag.setString(Names.material, this.materialName);
-            tag.setInteger(Names.materialMeta, this.materialMeta);
+            tag.setString(Names.NBT.material, this.materialName);
+            tag.setInteger(Names.NBT.materialMeta, this.materialMeta);
         }
         return tag;
     }

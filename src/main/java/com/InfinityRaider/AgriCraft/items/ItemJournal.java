@@ -51,8 +51,8 @@ public class ItemJournal extends ModItem {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
         int nr = 0;
-        if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.discoveredSeeds)) {
-            nr = stack.stackTagCompound.getTagList(Names.discoveredSeeds, 10).tagCount();
+        if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.discoveredSeeds)) {
+            nr = stack.stackTagCompound.getTagList(Names.NBT.discoveredSeeds, 10).tagCount();
         }
         list.add(StatCollector.translateToLocal("agricraft_tooltip.discoveredSeeds")+": "+nr);
     }

@@ -37,20 +37,20 @@ public class Crops {
         tulipPink = new BlockModPlant(net.minecraft.init.Items.dye, 9, 2);
         daisy = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
 
-        RegisterHelper.registerBlock(potato, Names.cropPotato);
-        RegisterHelper.registerBlock(carrot, Names.cropCarrot);
-        RegisterHelper.registerBlock(melon, Names.cropMelon);
-        RegisterHelper.registerBlock(pumpkin, Names.cropPumpkin);
-        RegisterHelper.registerBlock(sugarcane, Names.cropSugarcane);
-        RegisterHelper.registerBlock(dandelion, Names.cropDandelion);
-        RegisterHelper.registerBlock(poppy, Names.cropPoppy);
-        RegisterHelper.registerBlock(orchid, Names.cropOrchid);
-        RegisterHelper.registerBlock(allium, Names.cropAllium);
-        RegisterHelper.registerBlock(tulipRed, Names.cropTulipRed);
-        RegisterHelper.registerBlock(tulipOrange, Names.cropTulipOrange);
-        RegisterHelper.registerBlock(tulipWhite, Names.cropTulipWhite);
-        RegisterHelper.registerBlock(tulipPink, Names.cropTulipPink);
-        RegisterHelper.registerBlock(daisy, Names.cropDaisy);
+        RegisterHelper.registerBlock(potato, Names.Crops.cropPotato);
+        RegisterHelper.registerBlock(carrot, Names.Crops.cropCarrot);
+        RegisterHelper.registerBlock(melon, Names.Crops.cropMelon);
+        RegisterHelper.registerBlock(pumpkin, Names.Crops.cropPumpkin);
+        RegisterHelper.registerBlock(sugarcane, Names.Crops.cropSugarcane);
+        RegisterHelper.registerBlock(dandelion, Names.Crops.cropDandelion);
+        RegisterHelper.registerBlock(poppy, Names.Crops.cropPoppy);
+        RegisterHelper.registerBlock(orchid, Names.Crops.cropOrchid);
+        RegisterHelper.registerBlock(allium, Names.Crops.cropAllium);
+        RegisterHelper.registerBlock(tulipRed, Names.Crops.cropTulipRed);
+        RegisterHelper.registerBlock(tulipOrange, Names.Crops.cropTulipOrange);
+        RegisterHelper.registerBlock(tulipWhite, Names.Crops.cropTulipWhite);
+        RegisterHelper.registerBlock(tulipPink, Names.Crops.cropTulipPink);
+        RegisterHelper.registerBlock(daisy, Names.Crops.cropDaisy);
 
         LogHelper.info("Crops registered");
     }

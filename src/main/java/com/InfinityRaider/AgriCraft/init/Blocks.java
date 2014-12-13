@@ -16,16 +16,16 @@ public class Blocks {
 
     public static void init() {
         blockCrop = new BlockCrop();
-        RegisterHelper.registerBlock(blockCrop, Names.crops);
+        RegisterHelper.registerBlock(blockCrop, Names.Objects.crops);
         seedAnalyzer = new BlockSeedAnalyzer();
-        RegisterHelper.registerBlock(seedAnalyzer, Names.seedAnalyzer);
+        RegisterHelper.registerBlock(seedAnalyzer, Names.Objects.seedAnalyzer);
         if(!ConfigurationHandler.disableIrrigation) {
             blockWaterTank = new BlockWaterTank();
-            RegisterHelper.registerBlock(blockWaterTank, Names.tank, ItemBlockCustomWood.class);
+            RegisterHelper.registerBlock(blockWaterTank, Names.Objects.tank, ItemBlockCustomWood.class);
             blockWaterChannel = new BlockWaterChannel();
-            RegisterHelper.registerBlock(blockWaterChannel, Names.channel, ItemBlockCustomWood.class);
+            RegisterHelper.registerBlock(blockWaterChannel, Names.Objects.channel, ItemBlockCustomWood.class);
             blockSprinkler = new BlockSprinkler();
-            RegisterHelper.registerBlock(blockSprinkler, Names.sprinkler);
+            RegisterHelper.registerBlock(blockSprinkler, Names.Objects.sprinkler);
         }
         LogHelper.info("Blocks registered");
     }

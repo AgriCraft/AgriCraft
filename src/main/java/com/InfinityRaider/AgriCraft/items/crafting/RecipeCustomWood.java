@@ -32,7 +32,7 @@ public class RecipeCustomWood implements IRecipe{
                 }
                 else {
                     if(recipe[row][column]) {
-                        if(OreDictHelper.hasOreId(stackInSlot, Names.plankWood) && stackInSlot.getItem() instanceof ItemBlock) {
+                        if(OreDictHelper.hasOreId(stackInSlot, Names.OreDict.plankWood) && stackInSlot.getItem() instanceof ItemBlock) {
                             if(material==null) {
                                 material = stackInSlot.copy();
                             }
@@ -60,11 +60,11 @@ public class RecipeCustomWood implements IRecipe{
         ItemStack result;
         for(int i=0;i<invCrafting.getSizeInventory();i++) {
             if (invCrafting.getStackInSlot(i) != null && invCrafting.getStackInSlot(i).getItem() != null) {
-                if (OreDictHelper.hasOreId(invCrafting.getStackInSlot(i), Names.plankWood)) {
+                if (OreDictHelper.hasOreId(invCrafting.getStackInSlot(i), Names.OreDict.plankWood)) {
                     result = this.result.copy();
                     NBTTagCompound tag = new NBTTagCompound();
-                    tag.setString(Names.material, Block.blockRegistry.getNameForObject(((ItemBlock) invCrafting.getStackInSlot(i).getItem()).field_150939_a));
-                    tag.setInteger(Names.materialMeta, invCrafting.getStackInSlot(i).getItemDamage());
+                    tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(((ItemBlock) invCrafting.getStackInSlot(i).getItem()).field_150939_a));
+                    tag.setInteger(Names.NBT.materialMeta, invCrafting.getStackInSlot(i).getItemDamage());
                     result.stackTagCompound = tag;
                     return result;
                 }

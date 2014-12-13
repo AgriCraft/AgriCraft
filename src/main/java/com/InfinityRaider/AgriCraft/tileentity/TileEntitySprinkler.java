@@ -26,10 +26,10 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         if(this.counter>0) {
-            tag.setInteger(Names.level, this.counter);
+            tag.setInteger(Names.NBT.level, this.counter);
         }
         if(this.angle>0) {
-            tag.setFloat(Names.angle, this.angle);
+            tag.setFloat(Names.NBT.angle, this.angle);
         }
     }
 
@@ -37,14 +37,14 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if(tag.hasKey(Names.level)) {
-            this.counter = tag.getInteger(Names.level);
+        if(tag.hasKey(Names.NBT.level)) {
+            this.counter = tag.getInteger(Names.NBT.level);
         }
         else {
             this.counter=0;
         }
-        if(tag.hasKey(Names.angle)) {
-            this.angle = tag.getFloat(Names.angle);
+        if(tag.hasKey(Names.NBT.angle)) {
+            this.angle = tag.getFloat(Names.NBT.angle);
         }
         else {
             this.angle = 0;

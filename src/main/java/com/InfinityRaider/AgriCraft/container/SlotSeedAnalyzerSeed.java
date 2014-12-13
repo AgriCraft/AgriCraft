@@ -22,8 +22,8 @@ public class SlotSeedAnalyzerSeed extends Slot{
             }
             if(stack.hasTagCompound()) {
                 NBTTagCompound tag = stack.getTagCompound();
-                if(tag.hasKey(Names.analyzed)) {
-                    return !tag.getBoolean(Names.analyzed);
+                if(tag.hasKey(Names.NBT.analyzed)) {
+                    return !tag.getBoolean(Names.NBT.analyzed);
                 }
             }
             return true;

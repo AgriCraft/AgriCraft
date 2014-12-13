@@ -36,7 +36,7 @@ public class Recipes {
             GameRegistry.addShapelessRecipe(new ItemStack(Seeds.seedSugarcane), new ItemStack(ExNihiloHelper.seedSugarCane));
         }
         //journal
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.journal,1), "csc", "sbs", "csc", 'c', Items.crops, 's', Names.listAllseed, 'b', net.minecraft.init.Items.writable_book));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.journal,1), "csc", "sbs", "csc", 'c', Items.crops, 's', Names.OreDict.listAllseed, 'b', net.minecraft.init.Items.writable_book));
         GameRegistry.addRecipe(new RecipeJournal());
         //trowel
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.trowel, 1, 0), "  s","ii ", 's', "stickWood", 'i', "ingotIron"));
@@ -50,7 +50,7 @@ public class Recipes {
             GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_2));
             //change wooden bowl recipe
             RegisterHelper.removeRecipe(new ItemStack(net.minecraft.init.Items.bowl));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.bowl, 4), "w w", " w ", 'w', Names.slabWood));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.bowl, 4), "w w", " w ", 'w', Names.OreDict.slabWood));
             //sprinkler
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.sprinkler, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', net.minecraft.init.Blocks.iron_bars, 'c', net.minecraft.init.Items.bucket));
         }
@@ -63,59 +63,59 @@ public class Recipes {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.iron_ingot, 1), "nnn", "nnn", "nnn", 'n', "nuggetIron"));
             GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetIron,9),"ingotIron"));
             if(Items.nuggetCopper instanceof ModItem) {
-                ItemStack ingot = OreDictHelper.getIngot(Names.nuggetCopper);
+                ItemStack ingot = OreDictHelper.getIngot(Names.Nuggets.nuggetCopper);
                 if(ingot!=null && ingot.getItem()!=null) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', "nuggetCopper"));
-                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetCopper, 9), Names.ingotCopper));
+                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetCopper, 9), Names.Ingots.ingotCopper));
                 }
             }
             if(Items.nuggetTin instanceof ModItem) {
-                ItemStack ingot = OreDictHelper.getIngot(Names.nuggetTin);
+                ItemStack ingot = OreDictHelper.getIngot(Names.Nuggets.nuggetTin);
                 if(ingot!=null && ingot.getItem()!=null) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', "nuggetTin"));
-                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetTin, 9), Names.ingotTin));
+                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetTin, 9), Names.Ingots.ingotTin));
                 }
             }
             if(Items.nuggetLead instanceof ModItem) {
-                ItemStack ingot = OreDictHelper.getIngot(Names.nuggetLead);
+                ItemStack ingot = OreDictHelper.getIngot(Names.Nuggets.nuggetLead);
                 if(ingot!=null && ingot.getItem()!=null) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', "nuggetLead"));
-                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetLead, 9), Names.ingotLead));
+                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetLead, 9), Names.Ingots.ingotLead));
                 }
             }
             if(Items.nuggetSilver instanceof ModItem) {
-                ItemStack ingot = OreDictHelper.getIngot(Names.nuggetSilver);
+                ItemStack ingot = OreDictHelper.getIngot(Names.Nuggets.nuggetSilver);
                 if(ingot!=null && ingot.getItem()!=null) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', "nuggetSilver"));
-                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetSilver, 9), Names.ingotSilver));
+                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetSilver, 9), Names.Ingots.ingotSilver));
                 }
             }
             if(Items.nuggetAluminum instanceof ModItem) {
-                ItemStack ingot = OreDictHelper.getIngot(Names.nuggetAluminum);
+                ItemStack ingot = OreDictHelper.getIngot(Names.Nuggets.nuggetAluminum);
                 if(ingot!=null && ingot.getItem()!=null) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', "nuggetAluminum"));
-                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetAluminum, 9), Names.ingotAluminum));
+                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetAluminum, 9), Names.Ingots.ingotAluminum));
                 }
             }
             if(Items.nuggetNickel instanceof ModItem) {
-                ItemStack ingot = OreDictHelper.getIngot(Names.nuggetNickel);
+                ItemStack ingot = OreDictHelper.getIngot(Names.Nuggets.nuggetNickel);
                 if(ingot!=null && ingot.getItem()!=null) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', "nuggetNickel"));
-                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetNickel, 9), Names.ingotNickel));
+                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetNickel, 9), Names.Ingots.ingotNickel));
                 }
             }
             if(Items.nuggetPlatinum instanceof ModItem) {
-                ItemStack ingot = OreDictHelper.getIngot(Names.nuggetPlatinum);
+                ItemStack ingot = OreDictHelper.getIngot(Names.Nuggets.nuggetPlatinum);
                 if(ingot!=null && ingot.getItem()!=null) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', "nuggetPlatinum"));
-                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetPlatinum, 9), Names.ingotPlatinum));
+                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetPlatinum, 9), Names.Ingots.ingotPlatinum));
                 }
             }
             if(Items.nuggetOsmium instanceof ModItem) {
-                ItemStack ingot = OreDictHelper.getIngot(Names.nuggetOsmium);
+                ItemStack ingot = OreDictHelper.getIngot(Names.Nuggets.nuggetOsmium);
                 if(ingot!=null && ingot.getItem()!=null) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', "nuggetOsmium"));
-                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetOsmium, 9), Names.ingotOsmium));
+                    GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetOsmium, 9), Names.Ingots.ingotOsmium));
                 }
             }
         }

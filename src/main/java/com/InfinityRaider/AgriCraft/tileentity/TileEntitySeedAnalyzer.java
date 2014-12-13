@@ -25,12 +25,12 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         if(this.seed!=null && this.seed.getItem()!=null) {
             NBTTagCompound seedTag = new NBTTagCompound();
             this.seed.writeToNBT(seedTag);
-            tag.setTag(Names.seed, seedTag);
+            tag.setTag(Names.Objects.seed, seedTag);
         }
         if(this.journal!=null && this.journal.getItem()!=null) {
             NBTTagCompound journalTag = new NBTTagCompound();
             this.journal.writeToNBT(journalTag);
-            tag.setTag(Names.journal, journalTag);
+            tag.setTag(Names.Objects.journal, journalTag);
         }
         if(this.direction!=null) {
             tag.setByte("direction", (byte) this.direction.ordinal());
@@ -42,14 +42,14 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        if(tag.hasKey(Names.seed)) {
-            this.seed = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.seed));
+        if(tag.hasKey(Names.Objects.seed)) {
+            this.seed = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.Objects.seed));
         }
         else {
             this.seed = null;
         }
-        if(tag.hasKey(Names.journal)) {
-            this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.journal));
+        if(tag.hasKey(Names.Objects.journal)) {
+            this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.Objects.journal));
         }
         else {
             this.journal = null;
@@ -81,8 +81,8 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
             if(!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage())) {
                 return false;
             }
-            if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey(Names.analyzed)) {
-                return !stack.stackTagCompound.getBoolean(Names.analyzed);
+            if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey(Names.NBT.analyzed)) {
+                return !stack.stackTagCompound.getBoolean(Names.NBT.analyzed);
             }
             else {
                 return true;
@@ -116,8 +116,8 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         //analyze the seed
         if(this.seed.hasTagCompound()) {
             NBTTagCompound tag = this.seed.getTagCompound();
-            if(tag.hasKey(Names.growth) && tag.hasKey(Names.gain) && tag.hasKey(Names.strength)) {
-                tag.setBoolean(Names.analyzed, true);
+            if(tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
+                tag.setBoolean(Names.NBT.analyzed, true);
             } else {
                 SeedHelper.setNBT(tag, (short) 0, (short) 0, (short) 0, true);
             }
@@ -135,8 +135,8 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
             NBTTagCompound tag = this.journal.stackTagCompound;
             //check if the NBT tag has a list of discovered seeds and if it doesn't, create a new one
             NBTTagList list;
-            if(tag.hasKey(Names.discoveredSeeds)) {
-                list = tag.getTagList(Names.discoveredSeeds, 10);
+            if(tag.hasKey(Names.NBT.discoveredSeeds)) {
+                list = tag.getTagList(Names.NBT.discoveredSeeds, 10);
             }
             else {
                 list = new NBTTagList();
@@ -152,14 +152,14 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
             }
             NBTHelper.sortStacks(list);
             //add the NBT tag to the journal
-            tag.setTag(Names.discoveredSeeds, list);
+            tag.setTag(Names.NBT.discoveredSeeds, list);
         }
     }
 
     //checks if the analyzer is analyzing
     public boolean isAnalyzing() {
-        if(this.hasSeed() && this.seed.hasTagCompound() && this.seed.stackTagCompound.hasKey(Names.analyzed)) {
-            return (this.progress<this.maxProgress()) && !this.seed.stackTagCompound.getBoolean(Names.analyzed);
+        if(this.hasSeed() && this.seed.hasTagCompound() && this.seed.stackTagCompound.hasKey(Names.NBT.analyzed)) {
+            return (this.progress<this.maxProgress()) && !this.seed.stackTagCompound.getBoolean(Names.NBT.analyzed);
         }
         else {
             return this.hasSeed() && progress < maxProgress();
