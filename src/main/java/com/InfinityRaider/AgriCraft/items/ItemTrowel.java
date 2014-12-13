@@ -35,7 +35,7 @@ public class ItemTrowel extends ModItem {
     //this is called when you right click with this item in hand
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-        if (!world.isRemote) {
+        //if (!world.isRemote) {
            if(world.getBlock(x, y, z)!=null && world.getBlock(x, y, z) instanceof BlockCrop) {
                TileEntity te = world.getTileEntity(x, y, z);
                if(te!=null && te instanceof TileEntityCrop) {
@@ -53,13 +53,13 @@ public class ItemTrowel extends ModItem {
                        stack.setTagCompound(tag);
                        stack.setItemDamage(1);
                        //clear crop
-                       world.setBlockMetadataWithNotify(x, y, z, 0, 3);
                        crop.growth=0;
                        crop.gain=0;
                        crop.strength=0;
                        crop.seed=null;
                        crop.seedMeta=0;
                        crop.markDirty();
+                       world.setBlockMetadataWithNotify(x, y, z, 0, 3);
                        //return true to avoid further processing
                        return true;
                    }
@@ -82,7 +82,7 @@ public class ItemTrowel extends ModItem {
                    }
                }
            }
-        }
+        //}
         return false;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
     }
 
