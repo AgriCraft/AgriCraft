@@ -22,6 +22,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
     public int growth=0;
     public int gain=0;
     public int strength=0;
+    public boolean analyzed=false;
     public boolean crossCrop=false;
     public IPlantable seed = null;
     public int seedMeta = 0;
@@ -32,6 +33,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
         tag.setShort(Names.NBT.growth, (short) growth);
         tag.setShort(Names.NBT.gain, (short) gain);
         tag.setShort(Names.NBT.strength, (short) strength);
+        tag.setBoolean(Names.NBT.analyzed, analyzed);
         tag.setBoolean("crossCrop",crossCrop);
         if(this.seed!=null) {
             tag.setString(Names.Objects.seed, this.getSeedString());
@@ -46,6 +48,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
         this.growth=tag.getInteger(Names.NBT.growth);
         this.gain=tag.getInteger(Names.NBT.gain);
         this.strength=tag.getInteger(Names.NBT.strength);
+        this.analyzed=tag.hasKey(Names.NBT.analyzed) && tag.getBoolean(Names.NBT.analyzed);
         this.crossCrop=tag.getBoolean("crossCrop");
         if(tag.hasKey(Names.Objects.seed) && tag.hasKey(Names.NBT.meta)) {
             this.setSeed(tag.getString(Names.Objects.seed));
@@ -99,7 +102,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
                 if(Math.random()<chance) {
                     this.crossCrop = false;
                     int[] stats = MutationHandler.getStats(neighbours);
-                    this.setPlant(stats[0], stats[1], stats[2], result, resultMeta);
+                    this.setPlant(stats[0], stats[1], stats[2], false, result, resultMeta);
                     change = true;
                 }
             }
@@ -142,12 +145,13 @@ public class TileEntityCrop extends TileEntityAgricraft {
     }
 
     //sets the plant in the crop
-    public void setPlant(int growth, int gain, int strength, IPlantable seed, int seedMeta) {
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, IPlantable seed, int seedMeta) {
         if( (!this.crossCrop) && (!this.hasPlant())) {
             this.growth = growth;
             this.gain = gain;
             this.strength = strength;
             this.seed = seed;
+            this.analyzed = analyzed;
             this.seedMeta = seedMeta;
             this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
         }
@@ -201,7 +205,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
         tag.setInteger(Names.NBT.growth, this.growth);
         tag.setInteger(Names.NBT.gain, this.gain);
         tag.setInteger(Names.NBT.strength, this.strength);
-        tag.setBoolean(Names.NBT.analyzed, false);
+        tag.setBoolean(Names.NBT.analyzed, this.analyzed);
         seed.setTagCompound(tag);
         return seed;
     }

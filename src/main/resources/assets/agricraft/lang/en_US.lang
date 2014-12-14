@@ -92,6 +92,7 @@ agricraft_tooltip.seed=Seed
 agricraft_tooltip.growth=Growth
 agricraft_tooltip.gain=Gain
 agricraft_tooltip.strength=Strength
+agricraft_tooltip.analyzed=This seed is not yet analyzed
 agricraft_tooltip.discoveredSeeds=Discovered Seeds
 agricraft_tooltip.material=Material
 agricraft_tooltip.waterLevel=Water level

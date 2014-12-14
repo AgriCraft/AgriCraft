@@ -39,14 +39,20 @@ public class ItemMagnifyingGlass extends ModItem {
                     int growth = crop.growth;
                     int gain = crop.gain;
                     int strength = crop.strength;
+                    boolean analyzed = crop.analyzed;
                     String seedName = ((ItemSeeds) crop.seed).getItemStackDisplayName(new ItemStack((ItemSeeds) crop.seed, 1, crop.seedMeta));
                     int meta = world.getBlockMetadata(x, y, z);
                     float growthPercentage = ((float) meta)/((float) 7)*100.0F;
                     list.add(StatCollector.translateToLocal("agricraft_tooltip.cropWithPlant"));
                     list.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + seedName);
-                    list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + growth);
-                    list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + gain);
-                    list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + strength);
+                    if(analyzed) {
+                        list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + growth);
+                        list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + gain);
+                        list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + strength);
+                    }
+                    else {
+                        list.add(StatCollector.translateToLocal("agricraft_tooltip.analyzed"));
+                    }
                     if (growthPercentage < 100.0) {
                         list.add(String.format("Growth : %.0f %%", growthPercentage));
                     } else {

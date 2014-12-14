@@ -46,6 +46,7 @@ public class ItemTrowel extends ModItem {
                     tag.setShort(Names.NBT.growth, (short) crop.growth);
                     tag.setShort(Names.NBT.gain, (short) crop.gain);
                     tag.setShort(Names.NBT.strength, (short) crop.strength);
+                    tag.setBoolean(Names.NBT.analyzed, crop.analyzed);
                     tag.setString(Names.Objects.seed, crop.getSeedString());
                     tag.setShort(Names.NBT.meta, (short) crop.seedMeta);
                     tag.setShort(Names.NBT.materialMeta, (short) world.getBlockMetadata(x, y, z));
@@ -55,6 +56,7 @@ public class ItemTrowel extends ModItem {
                     crop.growth=0;
                     crop.gain=0;
                     crop.strength=0;
+                    crop.analyzed=false;
                     crop.seed=null;
                     crop.seedMeta=0;
                     crop.markDirty();
@@ -69,6 +71,7 @@ public class ItemTrowel extends ModItem {
                     crop.growth = tag.getShort(Names.NBT.growth);
                     crop.gain = tag.getShort(Names.NBT.gain);
                     crop.strength = tag.getShort(Names.NBT.strength);
+                    crop.analyzed = tag.getBoolean(Names.NBT.analyzed);
                     crop.setSeed(tag.getString(Names.Objects.seed));
                     crop.seedMeta = tag.getShort(Names.NBT.meta);
                     world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.NBT.materialMeta), 3);

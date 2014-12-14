@@ -121,10 +121,10 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 //get NBT data from the seeds
                 if (player.getCurrentEquippedItem().stackTagCompound != null && player.getCurrentEquippedItem().stackTagCompound.hasKey(Names.NBT.growth)) {
                     //NBT data was found: copy data to plant
-                    crop.setPlant(stack.stackTagCompound.getInteger(Names.NBT.growth), stack.stackTagCompound.getInteger(Names.NBT.gain), stack.stackTagCompound.getInteger(Names.NBT.strength), (ItemSeeds) stack.getItem(), stack.getItemDamage());
+                    crop.setPlant(stack.stackTagCompound.getInteger(Names.NBT.growth), stack.stackTagCompound.getInteger(Names.NBT.gain), stack.stackTagCompound.getInteger(Names.NBT.strength), stack.stackTagCompound.getBoolean(Names.NBT.analyzed), (ItemSeeds) stack.getItem(), stack.getItemDamage());
                 } else {
                     //NBT data was not initialized: set defaults
-                    crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, (ItemSeeds) stack.getItem(), stack.getItemDamage());
+                    crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, false, (ItemSeeds) stack.getItem(), stack.getItemDamage());
                 }
                 //take one seed away if the player is not in creative
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
@@ -274,9 +274,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 items.add(new ItemStack(Items.crops, 1));
             }
             if (crop.hasPlant()) {
-                ItemStack seedStack = new ItemStack((ItemSeeds) crop.seed, 1, crop.seedMeta);
-                seedStack.setTagCompound(new NBTTagCompound());
-                SeedHelper.setNBT(seedStack.stackTagCompound, (short) crop.growth, (short) crop.gain, (short) crop.strength, false);
+                ItemStack seedStack = crop.getSeedStack().copy();
                 items.add(seedStack);
                 if(crop.isMature()) {
                     items.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
