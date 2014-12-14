@@ -53,6 +53,7 @@ public class ItemMagnifyingGlass extends ModItem {
                     else {
                         list.add(StatCollector.translateToLocal("agricraft_tooltip.analyzed"));
                     }
+                    list.add(StatCollector.translateToLocal(crop.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
                     if (growthPercentage < 100.0) {
                         list.add(String.format("Growth : %.0f %%", growthPercentage));
                     } else {
