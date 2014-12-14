@@ -46,6 +46,8 @@ public class StructureGreenhouse extends StructureVillagePieces.Village {
             }
             this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + 7, 0);
         }
+        //clear the bounding box
+        this.clearBoundingBox(world, boundingBox);
         //cobblestone base
         this.fillWithBlocks(world, boundingBox, 0, 0, 0, xSize - 1, 0, zSize - 1, Blocks.cobblestone, Blocks.cobblestone, false);   //args: (world, boundingBox, minX, minY, MinZ, maxX, maxY, maxZ, placeBlock, replaceBlock, doReplace)
         //ring of gravel
@@ -166,6 +168,17 @@ public class StructureGreenhouse extends StructureVillagePieces.Village {
         return true;
     }
 
+    //clear bounding box
+    protected void clearBoundingBox(World world, StructureBoundingBox boundingBox) {
+        for(int x=boundingBox.minX;x<boundingBox.maxX;x++) {
+            for(int y=boundingBox.minY;y<boundingBox.maxY;y++) {
+                for(int z=boundingBox.minZ;z<boundingBox.maxZ;z++) {
+                    this.placeBlockAtCurrentPosition(world, Blocks.air, 0, x, y, z, boundingBox);
+                }
+            }
+        }
+    }
+
     //get random loot
     protected WeightedRandomChestContent[] getLoot() {
         int size = (int) Math.ceil(Math.random()*10);
@@ -191,7 +204,7 @@ public class StructureGreenhouse extends StructureVillagePieces.Village {
                 }
                 else {
                     ItemStack seed = SeedHelper.getRandomSeed(false);
-                    crop.setPlant((int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), (ItemSeeds) seed.getItem(), seed.getItemDamage());
+                    crop.setPlant((int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), false, (ItemSeeds) seed.getItem(), seed.getItemDamage());
                 }
             }
             return true;

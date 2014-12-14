@@ -42,6 +42,8 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
             }
             this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + 7, 0);
         }
+        //clear the bounding box
+        this.clearBoundingBox(world, boundingBox);
         //cobblestone base
         this.fillWithBlocks(world, boundingBox, 0, 0, 0, xSize-1, 0, zSize-1, Blocks.cobblestone, Blocks.cobblestone, false);   //args: (world, boundingBox, minX, minY, MinZ, maxX, maxY, maxZ, placeBlock, replaceBlock, doReplace)
         //ring of gravel
