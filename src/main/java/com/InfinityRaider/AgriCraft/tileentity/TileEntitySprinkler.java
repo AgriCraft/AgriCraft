@@ -91,7 +91,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
     private boolean sprinkle() {
         if(this.canSprinkle()) {
             TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord+1, this.zCoord);
-            counter = (counter+1)%30;
+            counter = (counter+1)%60;
             this.angle = (this.angle+0.05F)%360;
             this.markDirty();
             if(this.counter==0) {
@@ -109,8 +109,8 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
                 //irrigate farmland
                 this.worldObj.setBlockMetadataWithNotify(x, y, z, 7, 2);
             } else if(block instanceof BlockBush) {
-                //5% chance to force growth tick on plant, every 30 ticks
-                if(counter==0 && Math.random()<0.05) {
+                //10% chance to force growth tick on plant, every 30 ticks
+                if(counter==0 && Math.random()<0.1) {
                     block.updateTick(this.worldObj, x, y, z, new Random());
                 }
             }
