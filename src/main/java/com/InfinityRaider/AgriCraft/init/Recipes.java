@@ -2,24 +2,26 @@ package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
+import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.items.ModItem;
-import com.InfinityRaider.AgriCraft.items.crafting.RecipeCustomWood;
 import com.InfinityRaider.AgriCraft.items.crafting.RecipeJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-public class Recipes {
-    public static final boolean[][] tankSchematic = {{true, false, true}, {true, false, true}, {true, true, true}};
-    public static final boolean[][] channelSchematic_1 = {{true, false, true}, {false, true, false}, {false, false, false}};
-    public static final boolean[][] channelSchematic_2 = {{false, false, false}, {true, false, true}, {false, true, false}};
+import java.util.ArrayList;
 
+public class Recipes {
     public static void init() {
         //crop item
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.crops, ConfigurationHandler.cropsPerCraft), "stickWood", "stickWood", "stickWood", "stickWood"));
@@ -45,9 +47,7 @@ public class Recipes {
         //irrigation systems
         if(!ConfigurationHandler.disableIrrigation) {
             //tank & channel
-            GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterTank, 1, 0), tankSchematic));
-            GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_1));
-            GameRegistry.addRecipe(new RecipeCustomWood(new ItemStack(Blocks.blockWaterChannel, 6, 0), channelSchematic_2));
+            registerCustomWoodRecipes();
             //change wooden bowl recipe
             RegisterHelper.removeRecipe(new ItemStack(net.minecraft.init.Items.bowl));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.bowl, 4), "w w", " w ", 'w', Names.OreDict.slabWood));
@@ -121,5 +121,25 @@ public class Recipes {
         }
 
         LogHelper.info("Recipes Registered");
+    }
+
+    private static void registerCustomWoodRecipes() {
+        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+        ItemBlockCustomWood.getItemFromBlock(Blocks.blockWaterTank).getSubItems( ItemBlockCustomWood.getItemFromBlock(Blocks.blockWaterTank), AgriCraftTab.agriCraftTab, list);
+        for(ItemStack stack:list) {
+            if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.material) && stack.stackTagCompound.hasKey(Names.NBT.materialMeta)) {
+                String material = stack.stackTagCompound.getString(Names.NBT.material);
+                int meta = stack.stackTagCompound.getInteger(Names.NBT.materialMeta);
+                ItemStack plank = new ItemStack((Block) Block.blockRegistry.getObject(material), 1, meta);
+                ItemStack tank = new ItemStack(Blocks.blockWaterTank, 1);
+                ItemStack channel = new ItemStack(Blocks.blockWaterChannel, 6);
+                NBTTagCompound tag = NBTHelper.getMaterialTag(plank);
+                tank.stackTagCompound = (NBTTagCompound) tag.copy();
+                channel.stackTagCompound = (NBTTagCompound) tag.copy();
+                GameRegistry.addShapedRecipe(tank, new Object[] {"w w", "w w", "www", 'w', plank});
+                GameRegistry.addShapedRecipe(channel, new Object[] {"w w", " w ", 'w', plank});
+            }
+        }
+
     }
 }

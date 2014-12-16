@@ -3,6 +3,7 @@ Changelog
 -Waila and magnifying glass only show stats of analyzed plants
 -World gen blocks no longer generate inside greenhouses
 -Sprinklers consume less water and irrigate plants much much slower (it was quite op before)
+-Changed the way custom wood recipes are handled, they now show up in NEI
 
 0.0.12
 -Fixed crash if OreDictionary planks weren't blocks
