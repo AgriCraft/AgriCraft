@@ -40,7 +40,7 @@ public class GuiJournal extends GuiScreen {
     protected ItemStack[] fruits;
     //some gui properties and dimensions
     protected int currentPage = 0;
-    protected final int standardPages = 3;
+    protected final int standardPages = 2;
     private int xSize;
     private int ySize;
     private int guiLeft;
@@ -150,8 +150,8 @@ public class GuiJournal extends GuiScreen {
         //draw the contents of a page based on the current page
         switch(currentPage) {
             case 0: this.drawTitleScreen(); break;
-            case 1: this.drawTableOfContents(); break;
-            case 2: this.drawIntroduction(); break;
+            //case 1: this.drawTableOfContents(); break;
+            case 1: this.drawIntroduction(); break;
             default: this.drawSeedPage(currentPage - standardPages);
         }
         //draw the arrows if the mouse is hovering over the flip page area
