@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -424,8 +425,16 @@ public class GuiJournal extends GuiScreen {
             drawTexturedModalRect(xOffset-1+i*24, yOffset-1, 0, 238, 18, 18);
             GL11.glEnable(GL11.GL_LIGHTING);
             //draw the fruit texture
-            Minecraft.getMinecraft().getTextureManager().bindTexture(RenderHelper.getItemResource(fruitIcons[i]));
-            this.renderIconInGui(xOffset, yOffset, RenderHelper.getItemResource(fruitIcons[i]));
+            ResourceLocation texture;
+            if(fruits[i].getItem() instanceof ItemBlock) {
+                texture = RenderHelper.getBlockResource(fruitIcons[i]);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+            }
+            else {
+                texture = RenderHelper.getItemResource(fruitIcons[i]);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+            }
+            this.renderIconInGui(xOffset, yOffset, texture);
         }
         scale = 0.5F;
         GL11.glScalef(scale, scale, scale);

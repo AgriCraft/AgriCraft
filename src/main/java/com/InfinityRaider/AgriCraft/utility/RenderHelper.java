@@ -25,7 +25,7 @@ public abstract class RenderHelper {
 
     public static IIcon getIcon(Item item, int meta) {
         if(item instanceof ItemBlock) {
-            return ((ItemBlock) item).field_150939_a.getIcon(1, meta);
+            return ((ItemBlock) item).field_150939_a.getIcon(3, meta);
         }
         return item.getIconFromDamage(meta);
     }
