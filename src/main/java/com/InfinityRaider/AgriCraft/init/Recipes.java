@@ -14,6 +14,7 @@ import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -125,7 +126,7 @@ public class Recipes {
 
     private static void registerCustomWoodRecipes() {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        ItemBlockCustomWood.getItemFromBlock(Blocks.blockWaterTank).getSubItems( ItemBlockCustomWood.getItemFromBlock(Blocks.blockWaterTank), AgriCraftTab.agriCraftTab, list);
+        ((ItemBlockCustomWood) Item.getItemFromBlock(Blocks.blockWaterTank)).getSubItems(list);
         for(ItemStack stack:list) {
             if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.material) && stack.stackTagCompound.hasKey(Names.NBT.materialMeta)) {
                 String material = stack.stackTagCompound.getString(Names.NBT.material);

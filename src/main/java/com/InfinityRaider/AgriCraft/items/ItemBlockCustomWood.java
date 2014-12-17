@@ -47,6 +47,11 @@ public class ItemBlockCustomWood extends ItemBlock {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list) {
+        this.getSubItems(list);
+    }
+
+    //create this method to initiate recipes on the server as well
+    public void getSubItems(List list) {
         ArrayList<ItemStack> registeredMaterials = new ArrayList<ItemStack>();
         ArrayList<ItemStack> planks = OreDictionary.getOres(Names.OreDict.plankWood);
         for(ItemStack plank:planks) {
