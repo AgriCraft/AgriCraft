@@ -1,9 +1,15 @@
 Changelog
 ---------
+1.0.0
 -Waila and magnifying glass only show stats of analyzed plants
 -World gen blocks no longer generate inside greenhouses
 -Sprinklers consume less water and irrigate plants much much slower (it was quite op before)
 -Changed the way custom wood recipes are handled, they now show up in NEI
+-Sprinkler now always drops the right item
+-Tanks, channels and sprinklers are no longer destroyed in one hit
+-The math behind irrigation systems is now correct
+-Made irrigation systems less network intensive
+-In the journal, when a fruit is a block, it now loads the texture correctly
 
 0.0.12
 -Fixed crash if OreDictionary planks weren't blocks
