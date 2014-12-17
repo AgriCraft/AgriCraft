@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.particles.LiquidSprayFX;
@@ -70,8 +71,9 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
             for(int yOffset=1;yOffset<5;yOffset++) {
                 for(int xOffset=-3;xOffset<=3;xOffset++) {
                     for(int zOffset=-3;zOffset<=3;zOffset++) {
-                        if(this.sprinkle()) {
-                            this.irrigate(this.xCoord + xOffset, this.yCoord - yOffset, this.zCoord + zOffset);
+                        if(this.sprinkle() && this.irrigate(this.xCoord + xOffset, this.yCoord - yOffset, this.zCoord + zOffset)) {
+                            TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord+1, this.zCoord);
+                            channel.setFluidLevel(channel.getFluidLevel()-1);
                         }
                     }
                 }
@@ -94,28 +96,29 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
             counter = (counter+1)%60;
             this.angle = (this.angle+0.05F)%360;
             this.markDirty();
-            if(this.counter==0) {
-                channel.setFluidLevel(channel.getFluidLevel()-1);
-            }
             return true;
         }
         return false;
     }
 
-    private void irrigate(int x, int y, int z) {
+    //tries to irrigate a block, returns true if water needs to be consumed
+    private boolean irrigate(int x, int y, int z) {
         Block block = this.worldObj.getBlock(x, y, z);
+        boolean consumeWater = false;
         if(block!=null) {
-            if(block instanceof BlockFarmland && this.worldObj.getBlockMetadata(x, y, z) < 7) {
+            if(block instanceof BlockFarmland && this.worldObj.getBlockMetadata(x, y, z)<7) {
                 //irrigate farmland
                 this.worldObj.setBlockMetadataWithNotify(x, y, z, 7, 2);
+                consumeWater = ConfigurationHandler.hydrationConsumesWater && counter==0;
             } else if(block instanceof BlockBush) {
                 //10% chance to force growth tick on plant, every 30 ticks
                 if(counter==0 && Math.random()<0.1) {
                     block.updateTick(this.worldObj, x, y, z, new Random());
+                    consumeWater = true;
                 }
             }
         }
-
+        return  consumeWater;
     }
 
     @SideOnly(Side.CLIENT)

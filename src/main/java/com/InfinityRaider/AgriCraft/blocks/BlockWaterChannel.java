@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import cpw.mods.fml.relauncher.Side;
@@ -14,10 +15,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -27,6 +29,7 @@ public class BlockWaterChannel extends BlockContainer {
         super(Material.wood);
         this.setHardness(2.0F);
         this.setResistance(5.0F);
+        setHarvestLevel("axe", 0);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         //this.setBlockBounds(4*Constants.unit, 4*Constants.unit, 4*Constants.unit, 12*Constants.unit, 12*Constants.unit, 12*Constants.unit);
     }
@@ -42,15 +45,21 @@ public class BlockWaterChannel extends BlockContainer {
         world.removeTileEntity(x,y,z);
     }
 
-    //This gets called when the block is left clicked (player hits the block)
+    //override this to delay the removal of the tile entity until after harvestBlock() has been called
     @Override
-    public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+        return !player.capabilities.isCreativeMode || super.removedByPlayer(world, player, x, y, z, willHarvest);
+    }
+
+    //when the block is harvested
+    @Override
+    public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
         if((!world.isRemote) && (!player.isSneaking())) {
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
                 this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
             }
             world.setBlockToAir(x,y,z);
-            world.removeTileEntity(x,y,z);
+            world.removeTileEntity(x, y, z);
         }
     }
 
@@ -61,6 +70,46 @@ public class BlockWaterChannel extends BlockContainer {
             drop.setTagCompound(((TileEntityCustomWood) world.getTileEntity(x, y, z)).getMaterialTag());
             this.dropBlockAsItem(world, x, y, z, drop);
         }
+    }
+
+    //creative item picking
+    @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+        TileEntityCustomWood te = (TileEntityCustomWood) world.getTileEntity(x, y, z);
+        ItemStack stack = new ItemStack(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, 1, world.getBlockMetadata(x, y, z));
+        NBTTagCompound tag = te.getMaterialTag();
+        stack.stackTagCompound = tag;
+        return stack;
+    }
+
+    /**
+     * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
+     * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
+     */
+    @Override
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB box, List list, Entity entity) {
+        //adjacent boxes
+        TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
+        float f = Constants.unit;
+        if(channel.hasNeighbour('x', 1)) {
+            this.setBlockBounds((float) this.maxX-f, (float) this.minY, (float)this.minZ, f*16, (float)this.maxY, (float)this.maxZ);
+            super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
+        }
+        if(channel.hasNeighbour('x', -1)) {
+            this.setBlockBounds(0, (float) this.minY, (float)this.minZ, (float) this.minX+f, (float)this.maxY, (float)this.maxZ);
+            super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
+        }
+        if(channel.hasNeighbour('z', 1)) {
+            this.setBlockBounds((float) this.minX, (float) this.minY, (float)this.maxZ-f, (float) this.maxX, (float)this.maxY,  Constants.unit * 16);
+            super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
+    }
+        if(channel.hasNeighbour('z', -1)) {
+            this.setBlockBounds((float) this.minX, (float) this.minY, 0, (float) this.maxX, (float)this.maxY, (float)this.minZ+f);
+            super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
+        }
+        //central box
+        this.setBlockBounds(4*Constants.unit, 4*Constants.unit, 4*Constants.unit, 12*Constants.unit, 12*Constants.unit, 12*Constants.unit);
+        super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
     }
 
     @Override
@@ -74,11 +123,6 @@ public class BlockWaterChannel extends BlockContainer {
         return meta;
     }
 
-    @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List list, Entity entity) {
-
-    }
-
     //render methods
     //--------------
     @Override
@@ -87,8 +131,6 @@ public class BlockWaterChannel extends BlockContainer {
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
     @Override
     public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
-    @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return false;}
 
     @Override
     @SideOnly(Side.CLIENT)

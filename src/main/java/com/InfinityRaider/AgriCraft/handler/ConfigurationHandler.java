@@ -24,9 +24,13 @@ public class ConfigurationHandler {
     public static double mutationChance;
     public static int cropsPerCraft;
     public static boolean bonemealMutation;
-    public static boolean disableIrrigation;
     public static boolean disableWorldGen;
     public static boolean disableVanillaFarming;
+
+    public static boolean disableIrrigation;
+    public static boolean hydrationConsumesWater;
+    public static boolean placeWater;
+    public static boolean fillFromFlowingWater;
 
     public static boolean integration_HC;
     public static boolean integration_Nat;
@@ -51,13 +55,17 @@ public class ConfigurationHandler {
         mutationChance = (double) config.getFloat("Mutation Chance","AGRICRAFT", (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance");
         cropsPerCraft = config.getInt("Crops per craft", "AGRICRAFT", 1, 1, 4, "The number of crops you get per crafting operation");
         bonemealMutation = config.getBoolean("Bonemeal Mutations","AGRICRAFT", false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
-        disableIrrigation = config.getBoolean("Disable Irrigation","AGRICRAFT", false, "set to true if you want to disable irrigation systems");
         disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", "AGRICRAFT", false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
         disableWorldGen = config.getBoolean("Disable World Gen", "AGRICRAFT", false, "set to true to disable world gen, no greenhouses will spawn in villages");
         enableNEI = config.getBoolean("Enable NEI", "AGRICRAFT", true, "set to false if you wish to disable mutation recipes in NEI");
         propGenerateDefaults = config.get("AGRICRAFT", "GenerateDefaults", false, "set to true to regenerate a default mutations file (will turn back to false afterwards)");
         generateDefaults = propGenerateDefaults.getBoolean();
         customCrops = config.getBoolean("Custom crops", "AGRICRAFT", false, "set to true if you wish to create your own crops");
+
+        disableIrrigation = config.getBoolean("Disable Irrigation","IRRIGATION", false, "set to true if you want to disable irrigation systems");
+        hydrationConsumesWater = config.getBoolean("Hydrating farmland consumes farmland", "IRRIGATION", true, "set to false to stop consuming water when irrigating farmland (growing crops still consumes water");
+        placeWater = config.getBoolean("Spawn water after breaking tank", "IRRIGATION", true, "set to false to disable placing a source block when breaking non-empty tanks");
+        fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", "IRRIGATION", false, "set to true to let tanks fill up when water flows above them");
 
         //mod integration
         integration_HC = ModIntegration.LoadedMods.harvestcraft && config.getBoolean("HarvestCraft","INTEGRATION",true,"Set to false to disable harvestCraft integration");

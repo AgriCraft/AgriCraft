@@ -1,12 +1,14 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySprinkler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -16,14 +18,16 @@ import net.minecraft.world.World;
 public class BlockSprinkler extends BlockContainer {
     public BlockSprinkler() {
         super(Material.iron);
-        /*
+        this.setHardness(2.0F);
+        this.setResistance(5.0F);
+        setHarvestLevel("axe", 0);
         this.maxX = Constants.unit*12;
         this.minX = Constants.unit*4;
         this.maxZ = this.maxX;
         this.minZ = this.minX;
         this.maxY = Constants.unit*20;
-        this.minY = 8;
-        */
+        this.minY = Constants.unit*12;
+
     }
 
     @Override
@@ -34,6 +38,17 @@ public class BlockSprinkler extends BlockContainer {
     @Override
     public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
         return false;
+    }
+
+    @Override
+    public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
+        if((!world.isRemote) && (!player.isSneaking())) {
+            if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
+                this.dropBlockAsItem(world, x, y, z, meta, 0);
+            }
+            world.setBlockToAir(x,y,z);
+            world.removeTileEntity(x,y,z);
+        }
     }
 
     @Override

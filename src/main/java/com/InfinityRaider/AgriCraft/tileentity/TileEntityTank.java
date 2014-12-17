@@ -1,8 +1,10 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -42,11 +44,15 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public void updateEntity() {
         if(!this.worldObj.isRemote) {
             boolean change = this.updateMultiBlock();
-            if(this.worldObj.isRaining()) {
+            if(this.worldObj.canBlockSeeTheSky(this.xCoord, this.yCoord, this.zCoord) && this.worldObj.isRaining()) {
                 if(this.getYPosition()+1==this.getYSize()) {
                     this.setFluidLevel(this.fluidLevel+1);
                     change = true;
                 }
+            }
+            if(ConfigurationHandler.fillFromFlowingWater && (this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.water || this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.flowing_water)) {
+                this.setFluidLevel(this.fluidLevel+5);
+                change = true;
             }
             if(change) {
                 this.markDirty();
@@ -370,13 +376,19 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     }
 
     public float getFluidY() {
-        int totalHeight = 16*this.getYSize()-2;
-        return totalHeight*((float) this.fluidLevel)/((float) this.getTotalCapacity())+2;
+        return this.getFluidY(this.fluidLevel);
+    }
+
+    public float getFluidY(int volume) {
+        int totalHeight = 16*this.getYSize()-2;     //total height in 1/16th's of a block
+        return totalHeight*((float) volume)/((float) this.getTotalCapacity())+2;
     }
 
     public void setFluidLevel(int lvl) {
-        this.fluidLevel = lvl>this.getTotalCapacity()?this.getTotalCapacity():lvl;
-        this.syncFluidLevels();
+        if(lvl!=this.fluidLevel) {
+            this.fluidLevel = lvl > this.getTotalCapacity() ? this.getTotalCapacity() : lvl;
+            this.syncFluidLevels();
+        }
     }
 
     public int getSingleCapacity() {

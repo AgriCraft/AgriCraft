@@ -34,7 +34,7 @@ public class TileEntityChannel extends TileEntityCustomWood {
     public int getFluidLevel() {return this.lvl;}
 
     public void setFluidLevel(int lvl) {
-        if(lvl>=0 && lvl<=Constants.mB/2) {
+        if(lvl>=0 && lvl<=Constants.mB/2 && lvl!=this.lvl) {
             this.lvl = lvl;
             this.markDirty();
         }
@@ -60,21 +60,14 @@ public class TileEntityChannel extends TileEntityCustomWood {
         if (!this.worldObj.isRemote) {
             //find neighbours
             ArrayList<TileEntityCustomWood> neighbours = new ArrayList<TileEntityCustomWood>();
-            if(this.hasNeighbour('x', 1)) {
-                neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord));
-            }
-            if(this.hasNeighbour('x', -1)) {
-                neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord));
-            }
-            if(this.hasNeighbour('z', 1)) {
-                neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1));
-            }
-            if(this.hasNeighbour('z', -1)) {
-                neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1));
-            }
+            if(this.hasNeighbour('x', 1)) {neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord));}
+            if(this.hasNeighbour('x', -1)) {neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord));}
+            if(this.hasNeighbour('z', 1)) {neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1));}
+            if(this.hasNeighbour('z', -1)) {neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1));}
             //calculate total fluid lvl and capacity
-            int totalLvl = 0;
+            int totalLvl=0;
             int nr = 1;
+            int updatedLevel=this.getFluidLevel();
             for(TileEntityCustomWood te:neighbours) {
                 if(te instanceof TileEntityChannel) {
                     totalLvl = totalLvl + ((TileEntityChannel) te).lvl;
@@ -82,42 +75,53 @@ public class TileEntityChannel extends TileEntityCustomWood {
                 }
                 else {
                     TileEntityTank tank = (TileEntityTank) te;
-                    int yPos = tank.getYPosition();
-                    int tankArea = tank.getXSize()*tank.getZSize();
-                    float channelWaterHeight= 16*yPos+this.getFluidHeight();
-                    float tankWaterHeight = 16*((float) tank.getFluidLevel())/((float) tankArea*tank.getSingleCapacity());
-                    int totalVolume = tank.getFluidLevel() + this.lvl;
-                    //total volume is below the channel connection
-                    if(16*((float) totalVolume)/((float) tankArea*tank.getSingleCapacity()) <= 5+16*yPos) {
-                        this.setFluidLevel(0);
-                        tank.setFluidLevel(totalVolume);
-                    }
-                    //total volume is above the channel connection
-                    else if(16*((float) totalVolume-500)/((float) tankArea*tank.getSingleCapacity()) >= 12+16*yPos) {
-                        this.setFluidLevel(500);
-                        tank.setFluidLevel(totalVolume-500);
-                    }
-                    //total volume is between channel connection top and bottom
-                    else {
-                        int volumeInTank = ((16*yPos+5-2)*tank.getTotalCapacity())/(16*tank.getYSize()-2);
-                        int syncvolume = totalVolume-volumeInTank;
-                        float y = ((float) (7*syncvolume+5*(8000*tankArea+500)))/((float) (8000*tankArea+500));
-                        this.setFluidLevel(Math.round(500*(y-5)/7));
-                        tank.setFluidLevel(volumeInTank+Math.round(8000*tankArea*(y-5)/7));
+                    int Y = tank.getYPosition();
+                    float y_c= 16*Y+this.getFluidHeight();  //initial channel water y
+                    float y_t = tank.getFluidY();           //initial tank water y
+                    float y1 = (float) 5+16*Y;   //minimum y of the channel
+                    float y2 = (float) 12+16*Y;  //maximum y of the channel
+                    int V_tot = tank.getFluidLevel()+this.lvl;
+                    if(y_c!=y_t) {
+                        //total volume is below the channel connection
+                        if(tank.getFluidY(V_tot)<=y1) {
+                            updatedLevel=0;
+                            tank.setFluidLevel(V_tot);
+                        }
+                        //total volume is above the channel connection
+                        else if(tank.getFluidY(V_tot-500)>=y2) {
+                            updatedLevel=500;
+                            tank.setFluidLevel(V_tot-500);
+                        }
+                        //total volume is between channel connection top and bottom
+                        else {
+                            //some parameters
+                            int tankYSize = tank.getYSize();
+                            int C = tank.getTotalCapacity();
+                            //calculate the y corresponding to the total volume
+                            float enumerator = ((float) V_tot) + ((500*y1)/(y2-y1)+((float) 2*C)/((float) (16*tankYSize-2)));
+                            float denominator = (((float) 500)/(y2-y1)+((float) C)/((float) (16*tankYSize-2)));
+                            float y = enumerator/denominator;
+                            //convert the y to volumes
+                            int channelVolume = (int) Math.floor(500*(y-y1)/(y2-y1));
+                            int tankVolume = (int) Math.ceil(C*(y-2)/(16*tankYSize-2));
+                            updatedLevel=channelVolume;
+                            tank.setFluidLevel(tankVolume);
+                        }
                     }
                 }
             }
-            totalLvl = totalLvl+this.lvl;
-            //set fluid levels
-            this.lvl = totalLvl/nr;
-            this.markDirty();
-            for(TileEntityCustomWood te:neighbours) {
-                if(te instanceof TileEntityChannel) {
-                    ((TileEntityChannel) te).lvl = this.lvl;
-                    te.markDirty();
+            if(nr>1) {
+                totalLvl = totalLvl + updatedLevel;
+                int rest = totalLvl % nr;
+                int newLvl = totalLvl / nr;
+                //set fluid levels
+                for (TileEntityCustomWood te:neighbours) {
+                    if (te instanceof TileEntityChannel) {
+                        ((TileEntityChannel) te).setFluidLevel(newLvl);
+                    }
                 }
+                this.setFluidLevel(newLvl + rest);
             }
-
         }
     }
 }
