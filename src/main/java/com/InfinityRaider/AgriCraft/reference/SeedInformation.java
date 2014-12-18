@@ -9,6 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import plantmegapack.PlantMegaPack;
 
 public final class SeedInformation {
 //agricraft seeds
@@ -106,6 +107,17 @@ public final class SeedInformation {
     public static final String hc_WinterSquash = "agricraft_journal.hc_WinterSquash";
     public static final String hc_Zucchini = "agricraft_journal.hc_Zucchini";
 
+    //plant mega pack seeds
+    public static final String pmp_Onion = hc_Onion;
+    public static final String pmp_Spinach = "agricraft_journal.pmp_Spinach";
+    public static final String pmp_Celery = hc_Celery;
+    public static final String pmp_lettuce = hc_Lettuce;
+    public static final String pmp_Bellpepper = hc_Bellpepper;
+    public static final String pmp_Corn = hc_Corn;
+    public static final String pmp_Cucumber = hc_Cucumber;
+    public static final String pmp_Tomato = hc_Tomato;
+    public static final String pmp_Beet = hc_Beet;
+
     private static String getMinecraftSeedInformation(ItemSeeds seed) {
         if(seed == Items.wheat_seeds) {
             return wheat;
@@ -131,7 +143,7 @@ public final class SeedInformation {
 
     private static String getHarvestcraftSeedInformation(ItemSeeds seed) {
         if(ModIntegration.LoadedMods.harvestcraft) {
-            if (seed == com.pam.harvestcraft.ItemRegistry.cottonseedItem) {
+            if (seed==com.pam.harvestcraft.ItemRegistry.cottonseedItem) {
                 return hc_Cotton;
             } else if (seed == com.pam.harvestcraft.ItemRegistry.asparagusseedItem) {
                 return hc_Asparagus;
@@ -248,6 +260,31 @@ public final class SeedInformation {
         return "";
     }
 
+    private static String getPlantMegaPackSeedInformation(ItemSeeds seed) {
+        if(ModIntegration.LoadedMods.plantMegaPack) {
+            if (seed == PlantMegaPack.items.seedBeet) {
+                return pmp_Beet;
+            } else if (seed == PlantMegaPack.items.seedBellPepperYellow) {
+                return pmp_Bellpepper;
+            } else if (seed == PlantMegaPack.items.seedCelery) {
+                return pmp_Celery;
+            } else if (seed == PlantMegaPack.items.seedCorn) {
+                return pmp_Corn;
+            } else if (seed == PlantMegaPack.items.seedCucumber) {
+                return pmp_Cucumber;
+            } else if (seed == PlantMegaPack.items.seedLettuce) {
+                return pmp_lettuce;
+            } else if (seed == PlantMegaPack.items.seedOnion) {
+                return pmp_Onion;
+            } else if (seed == PlantMegaPack.items.seedSpinach) {
+                return pmp_Spinach;
+            } else if (seed == PlantMegaPack.items.seedTomato) {
+                return pmp_Tomato;
+            }
+        }
+        return "";
+    }
+
     public static String getSeedInformation(ItemStack seedStack) {
         String output = "";
         if (seedStack.getItem() instanceof ItemSeeds) {
@@ -259,6 +296,9 @@ public final class SeedInformation {
             }
             else if (ModIntegration.LoadedMods.harvestcraft && SeedHelper.getPlantDomain((ItemSeeds) seedStack.getItem()).equalsIgnoreCase("harvestcraft")) {
                 output = SeedInformation.getHarvestcraftSeedInformation((ItemSeeds) seedStack.getItem());
+            }
+            else if (ModIntegration.LoadedMods.plantMegaPack && SeedHelper.getPlantDomain((ItemSeeds) seedStack.getItem()).equalsIgnoreCase("plantmegapack")) {
+                output = SeedInformation.getPlantMegaPackSeedInformation((ItemSeeds) seedStack.getItem());
             }
             else {
                 output = SeedInformation.getMinecraftSeedInformation((ItemSeeds) seedStack.getItem());

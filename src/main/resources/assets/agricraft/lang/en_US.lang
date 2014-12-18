@@ -197,7 +197,7 @@ agricraft_journal.hc_Rutabaga=Some people carve out turnips in variable patterns
 agricraft_journal.hc_Rye=Rye is a grass grown extensively as a grain, a cover crop and as a forage crop.
 agricraft_journal.hc_Scallion=Scallion have a relatively mild onion flavour, and are used as a vegetable, either raw or cooked.
 agricraft_journal.hc_Seaweed=Seaweed is used in salad dressings and sauces, dietetic foods, and as a preservative in meat and fish products, dairy items and baked goods.
-agricraft_journal.hc_Soybean=Traditional nonfermented food uses of soybeans include soy milk, and from the latter tofu and tofu skin.
+agricraft_journal.hc_Soybean=Traditional non fermented food uses of soybeans include soy milk, and from the latter tofu and tofu skin.
 agricraft_journal.hc_SpiceLeaf=Spices are distinguished from herbs, which are parts of leafy green plants used for flavoring or as a garnish.
 agricraft_journal.hc_Strawberry=Strawberries are popular and rewarding plants to grow in the domestic environment, be it for consumption or exhibition purposes.
 agricraft_journal.hc_SweetPotato=Although the leaves and shoots are also edible, the starchy tuberous roots are by far the most important product.
@@ -207,3 +207,6 @@ agricraft_journal.hc_Turnip=The turnip is a root vegetable commonly grown in tem
 agricraft_journal.hc_WhiteMushroom=If you want to fly higher then a jetplane, these aren't the mushrooms you're looking for.
 agricraft_journal.hc_WinterSquash=Winter squash can be harvested whenever the fruits have turned a deep, solid color and the skin is hard.
 agricraft_journal.hc_Zucchini=Zucchini is usually served cooked, it can also be prepared using a variety of cooking techniques, including steamed, boiled, grilled, stuffed and baked, barbecued, fried, or incorporated in other recipes.
+
+//plant mega pack seeds
+agricraft_journal.pmp_Spinach=The cartoon character Popeye the Sailor Man is portrayed as having a strong affinity for spinach, becoming physically stronger after consuming it.
