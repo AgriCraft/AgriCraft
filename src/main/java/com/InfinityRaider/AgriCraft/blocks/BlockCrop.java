@@ -51,10 +51,33 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public void updateTick(World world, int x, int y, int z, Random rnd) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        if (crop.hasPlant()) {
-            super.updateTick(world, x, y, z, rnd);
-        } else if (crop.crossCrop) {
-            crop.crossOver(world, x, y, z);
+        if(crop.hasPlant()) {
+            int meta = this.getPlantMetadata(world, x, y, z);
+            if (meta < 7 && crop.isFertile()) {
+                double multiplier = 1.0 + (crop.growth + 0.00) / 10;
+                float growthRate = (float) SeedHelper.getBaseGrowth((ItemSeeds) crop.seed);
+                meta = (Math.random() > (growthRate * multiplier)/100) ? meta : meta + 1;
+                world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+            }
+        } else if(crop.weed) {
+            int meta = this.getPlantMetadata(world, x, y, z);
+            if (meta<7) {
+                double multiplier = 1.0 + (10 + 0.00) / 10;
+                float growthRate = (float) Constants.growthTier1;
+                meta = (Math.random() > (growthRate * multiplier)/100) ? meta : meta + 1;
+                world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+            }
+            else {
+                crop.spreadWeed();
+            }
+        } else {
+            //10%chance to spawn weeds
+            if(ConfigurationHandler.enableWeeds && Math.random()<0.10) {
+                crop.spawnWeed();
+            }
+            else if(crop.crossCrop) {
+                crop.crossOver();
+            }
         }
     }
 
@@ -63,12 +86,13 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         if(!world.isRemote) {
             boolean update = false;
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-            if(crop.crossCrop) {
+            if(crop.weed) {
+                crop.clearWeed();   //update is not needed because it is called in the clearWeed() method
+            }else if(crop.crossCrop) {
                 crop.crossCrop = false;
                 this.dropBlockAsItem(world, x, y, z, new ItemStack(Items.crops, 1));
                 update = true;
-            }
-            else if(crop.isMature()) {
+            } else if(crop.isMature()) {
                 crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
                 update = true;
                 ArrayList<ItemStack> drops = SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
@@ -77,7 +101,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 }
             }
             if (update) {
-                this.syncAndUpdate(world, x, y ,z);
+                crop.syncAndUpdate();
             }
         }
     }
@@ -95,7 +119,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 this.harvest(world, x, y, z);
             }
             if (update) {
-                this.syncAndUpdate(world, x, y ,z);
+                crop.syncAndUpdate();
             }
         }
     }
@@ -124,15 +148,8 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 //take one seed away if the player is not in creative
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
             }
-            this.syncAndUpdate(world, x, y ,z);
+            crop.syncAndUpdate();
         }
-    }
-
-    public void syncAndUpdate(World world, int x, int y, int z) {
-        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y ,z);
-        world.addBlockEvent(x,y,z,this,1,0); //lets the tile entity know it has been updated
-        crop.markDirty(); //lets Minecraft know the tile entity has changed
-        world.notifyBlockChange(x,y,z,this); //lets the neighbors know this has been updated
     }
 
     //This gets called when the block is right clicked (player uses the block)
@@ -228,7 +245,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             super.func_149853_b(world, rand, x, y, z);
         }
         else if(crop.crossCrop && ConfigurationHandler.bonemealMutation) {
-            crop.crossOver(world, x, y, z);
+            crop.crossOver();
         }
     }
 

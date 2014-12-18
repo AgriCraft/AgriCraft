@@ -100,6 +100,7 @@ agricraft_tooltip.material=Material
 agricraft_tooltip.waterLevel=Water level
 agricraft_tooltip.cropWithPlant=This crop has a plant
 agricraft_tooltip.crossCrop=This is a cross crop
+agricraft_tooltip.weeds=Weeds have sprouted here
 agricraft_tooltip.cropWithoutPlant=This crop doesn't have plant on it
 agricraft_tooltip.notCrop=This is not a crop
 agricraft_tooltip.trowel=Use this to move plants from one corp to another

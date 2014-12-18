@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -99,25 +99,14 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     //growing
     @Override
     public void updateTick(World world, int x, int y, int z, Random rnd) {
-        if(world.getTileEntity(x,y,z)!=null && world.getTileEntity(x,y,z) instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x,y,z);
-            int meta = this.getPlantMetadata(world, x, y, z);
-            if (meta < 7 && crop.isFertile()) {
-                double multiplier = 1.0 + (crop.growth + 0.00) / 10;
-                float growthRate = (float) SeedHelper.getBaseGrowth((ItemSeeds) crop.seed);
-                meta = (Math.random() > (growthRate * multiplier)/100) ? meta : meta + 1;
-                world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-            }
+        int meta = this.getPlantMetadata(world, x, y, z);
+        if (meta < 7 && this.isFertile(world, x, y ,z)) {
+            double rate = 1.0 + (1 + 0.00) / 10;
+            float growthRate = (float) SeedHelper.getBaseGrowth(this.tier);
+            meta = (Math.random() > (growthRate * rate)/100) ? meta : meta + 1;
+            world.setBlockMetadataWithNotify(x, y, z, meta, 2);
         }
-        else {
-            int meta = this.getPlantMetadata(world, x, y, z);
-            if (meta < 7 && this.isFertile(world, x, y ,z)) {
-                double rate = 1.0 + (1 + 0.00) / 10;
-                float growthRate = (float) SeedHelper.getBaseGrowth(this.tier);
-                meta = (Math.random() > (growthRate * rate)/100) ? meta : meta + 1;
-                world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-            }
-        }
+
     }
 
     //check if the plant is mature

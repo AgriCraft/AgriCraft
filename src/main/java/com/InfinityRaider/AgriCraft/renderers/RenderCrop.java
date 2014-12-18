@@ -39,7 +39,7 @@ public class RenderCrop extends TileEntitySpecialRenderer{
                 this.model.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);        //actually renders the model
             GL11.glPopMatrix();                                                         //close second gl renderer
         GL11.glPopMatrix();                                                             //close first gl renderer
-        if(crop.hasPlant()) {overlay(crop,x,y,z);}                                      //if the crop has a plant, render the plant texture
+        if(crop.hasPlant() || crop.weed) {overlay(crop,x,y,z);}                         //if the crop has a plant, render the plant texture
     }
 
     //sets the correct texture for the crop
@@ -65,7 +65,7 @@ public class RenderCrop extends TileEntitySpecialRenderer{
             GL11.glDisable(GL11.GL_LIGHTING);
             //bind the texture
             Minecraft.getMinecraft().renderEngine.bindTexture(resource);
-            drawPlant(tessellator, RenderHelper.getRenderType((ItemSeeds) crop.seed, crop.seedMeta));
+            drawPlant(tessellator, crop.weed?2:RenderHelper.getRenderType((ItemSeeds) crop.seed, crop.seedMeta));
         //don't forget to enable lighting again
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
@@ -208,12 +208,27 @@ public class RenderCrop extends TileEntitySpecialRenderer{
 
     //gets the location for the crop texture from a seed
     private ResourceLocation getResource(TileEntityCrop crop) {
-        BlockBush plant = SeedHelper.getPlant((ItemSeeds) crop.seed);
-        if(plant!=null) {
-            return RenderHelper.getResource(plant, RenderHelper.plantIconIndex((ItemSeeds) crop.seed, crop.seedMeta, crop.getBlockMetadata()));
-        }
-        else {
-            return new ResourceLocation(Reference.MOD_ID.toLowerCase() + "textures/blocks/" + "fileNotFound" + ".png");
+        if(crop.weed) {
+            int index;
+            switch(crop.getWorldObj().getBlockMetadata(crop.xCoord, crop.yCoord, crop.zCoord)) {
+                case 0: index=1;break;
+                case 1: index=1;break;
+                case 2: index=2;break;
+                case 3: index=2;break;
+                case 4: index=2;break;
+                case 5: index=3;break;
+                case 6: index=3;break;
+                case 7: index=4;break;
+                default: index=4;
+            }
+            return new ResourceLocation(Reference.MOD_ID.toLowerCase() + ":textures/blocks/" + "weedTexture" + index + ".png");
+        }else {
+            BlockBush plant = SeedHelper.getPlant((ItemSeeds) crop.seed);
+            if (plant != null) {
+                return RenderHelper.getResource(plant, RenderHelper.plantIconIndex((ItemSeeds) crop.seed, crop.seedMeta, crop.getBlockMetadata()));
+            } else {
+                return new ResourceLocation(Reference.MOD_ID.toLowerCase() + ":textures/blocks/" + "fileNotFound" + ".png");
+            }
         }
     }
 }

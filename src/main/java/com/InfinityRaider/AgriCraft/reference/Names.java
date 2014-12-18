@@ -7,6 +7,8 @@ public final class Names {
         public static final String gain = "gain";
         public static final String strength = "strength";
         public static final String analyzed = "analyzed";
+        public static final String crossCrop = "crossCrop";
+        public static final String weed = "weed";
         public static final String discoveredSeeds = "discoveredSeeds";
         public static final String currentPage = "currentPage";
         public static final String wood = "wood";

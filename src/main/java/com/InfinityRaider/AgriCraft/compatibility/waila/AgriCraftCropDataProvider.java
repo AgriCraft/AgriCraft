@@ -53,6 +53,9 @@ public class AgriCraftCropDataProvider implements IWailaDataProvider {
                 }
                 list.add(StatCollector.translateToLocal(crop.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
             }
+            else if(crop.weed) {
+                list.add(StatCollector.translateToLocal("agricraft_tooltip.weeds"));
+            }
         }
         return list;
     }

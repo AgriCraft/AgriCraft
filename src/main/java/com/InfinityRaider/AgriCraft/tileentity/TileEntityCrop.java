@@ -23,6 +23,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
     public int strength=0;
     public boolean analyzed=false;
     public boolean crossCrop=false;
+    public boolean weed=false;
     public IPlantable seed = null;
     public int seedMeta = 0;
 
@@ -33,7 +34,8 @@ public class TileEntityCrop extends TileEntityAgricraft {
         tag.setShort(Names.NBT.gain, (short) gain);
         tag.setShort(Names.NBT.strength, (short) strength);
         tag.setBoolean(Names.NBT.analyzed, analyzed);
-        tag.setBoolean("crossCrop",crossCrop);
+        tag.setBoolean(Names.NBT.crossCrop,crossCrop);
+        tag.setBoolean(Names.NBT.weed, weed);
         if(this.seed!=null) {
             tag.setString(Names.Objects.seed, this.getSeedString());
             tag.setShort(Names.NBT.meta, (short) seedMeta);
@@ -48,7 +50,8 @@ public class TileEntityCrop extends TileEntityAgricraft {
         this.gain=tag.getInteger(Names.NBT.gain);
         this.strength=tag.getInteger(Names.NBT.strength);
         this.analyzed=tag.hasKey(Names.NBT.analyzed) && tag.getBoolean(Names.NBT.analyzed);
-        this.crossCrop=tag.getBoolean("crossCrop");
+        this.crossCrop=tag.getBoolean(Names.NBT.crossCrop);
+        this.weed=tag.getBoolean(Names.NBT.weed);
         if(tag.hasKey(Names.Objects.seed) && tag.hasKey(Names.NBT.meta)) {
             this.setSeed(tag.getString(Names.Objects.seed));
             this.seedMeta = tag.getInteger(Names.NBT.meta);
@@ -56,9 +59,16 @@ public class TileEntityCrop extends TileEntityAgricraft {
         super.readFromNBT(tag);
     }
 
+    //updates the crop
+    public void syncAndUpdate() {
+        this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord), 1, 0);    //lets the tile entity know it has been updated
+        this.markDirty();                                               //lets Minecraft know the tile entity has changed
+        this.worldObj.notifyBlockChange(this.xCoord, this.yCoord, this.zCoord, this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord));      //lets the neighbors know this has been updated
+    }
+
     //the code that makes the crop cross with neighboring crops
-    public void crossOver(World world, int x, int y, int z) {
-        if(!world.isRemote) {
+    public void crossOver() {
+        if(!this.worldObj.isRemote) {
             //flag to check if the crop needs to update
             boolean change = false;
             //possible new plant
@@ -69,11 +79,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
             int reqMeta = 0;
             double chance=0;
             //find neighbours
-            TileEntityCrop[] neighbours = new TileEntityCrop[4];
-            neighbours[0] = (world.getTileEntity(x - 1, y, z) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x - 1, y, z) : null;
-            neighbours[1] = (world.getTileEntity(x + 1, y, z) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x + 1, y, z) : null;
-            neighbours[2] = (world.getTileEntity(x, y, z - 1) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x, y, z - 1) : null;
-            neighbours[3] = (world.getTileEntity(x, y, z + 1) instanceof TileEntityCrop) ? (TileEntityCrop) world.getTileEntity(x, y, z + 1) : null;
+            TileEntityCrop[] neighbours = this.findNeighbours();
             //find out the new plant
             if (Math.random() > ConfigurationHandler.mutationChance) {
                 int index = (int) Math.floor(Math.random() * neighbours.length);
@@ -107,11 +113,19 @@ public class TileEntityCrop extends TileEntityAgricraft {
             }
             //update the tile entity on a change
             if (change) {
-                world.addBlockEvent(x, y, z, world.getBlock(x, y, z), 1, 0);    //lets the tile entity know it has been updated
-                this.markDirty();                                               //lets Minecraft know the tile entity has changed
-                world.notifyBlockChange(x, y, z, world.getBlock(x, y, z));      //lets the neighbors know this has been updated
+                this.syncAndUpdate();
             }
         }
+    }
+
+    //finds neighbouring crops
+    private TileEntityCrop[] findNeighbours() {
+        TileEntityCrop[] neighbours = new TileEntityCrop[4];
+        neighbours[0] = (this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord) : null;
+        neighbours[1] = (this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord) : null;
+        neighbours[2] = (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1) : null;
+        neighbours[3] = (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1) : null;
+        return neighbours;
     }
 
     //checks if a plant can mutate
@@ -141,6 +155,42 @@ public class TileEntityCrop extends TileEntityAgricraft {
             }
         }
         return false;
+    }
+
+    //spawns weed in the crop
+    public void spawnWeed() {
+        this.weed=true;
+        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
+        this.growth=0;
+        this.gain=0;
+        this.strength=0;
+        this.analyzed=false;
+        this.crossCrop=false;
+        this.seed = null;
+        this.seedMeta = 0;
+        this.syncAndUpdate();
+    }
+
+    //spread the weed
+    public void spreadWeed() {
+        TileEntityCrop[] neighbours = this.findNeighbours();
+        for(TileEntityCrop crop:neighbours) {
+            if(ConfigurationHandler.enableWeeds && crop!=null && Math.random()<crop.getWeedSpawnChance()) {
+                crop.spawnWeed();
+            }
+        }
+    }
+
+    //clear the weed
+    public void clearWeed() {
+        this.weed=false;
+        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
+        this.syncAndUpdate();
+    }
+
+    //weed spawn chance
+    private double getWeedSpawnChance() {
+        return this.hasPlant()?((double) (10-this.strength))/10:1;
     }
 
     //sets the plant in the crop

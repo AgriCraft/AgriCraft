@@ -39,8 +39,12 @@ public class ItemTrowel extends ModItem {
             TileEntity te = world.getTileEntity(x, y, z);
             if(te!=null && te instanceof TileEntityCrop) {
                 TileEntityCrop crop = (TileEntityCrop) te;
+                //clear weed
+                if(crop.weed) {
+                    crop.clearWeed();
+                }
                 //put plant on trowel
-                if(crop.hasPlant() && stack.getItemDamage()==0) {
+                else if(crop.hasPlant() && stack.getItemDamage()==0) {
                     //put plant on trowel
                     NBTTagCompound tag = new NBTTagCompound();
                     tag.setShort(Names.NBT.growth, (short) crop.growth);

@@ -23,6 +23,7 @@ public class ConfigurationHandler {
     public static boolean resourcePlants;
     public static double mutationChance;
     public static int cropsPerCraft;
+    public static boolean enableWeeds;
     public static boolean bonemealMutation;
     public static boolean disableWorldGen;
     public static boolean disableVanillaFarming;
@@ -54,6 +55,7 @@ public class ConfigurationHandler {
         resourcePlants = config.getBoolean("Resource Crops","AGRICRAFT",false,"set to true if you wish to enable resource crops");
         mutationChance = (double) config.getFloat("Mutation Chance","AGRICRAFT", (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance");
         cropsPerCraft = config.getInt("Crops per craft", "AGRICRAFT", 1, 1, 4, "The number of crops you get per crafting operation");
+        enableWeeds = config.getBoolean("Enable weeds","AGRICRAFT",true,"set to false if you wish to disable weeds");
         bonemealMutation = config.getBoolean("Bonemeal Mutations","AGRICRAFT", false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
         disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", "AGRICRAFT", false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
         disableWorldGen = config.getBoolean("Disable World Gen", "AGRICRAFT", false, "set to true to disable world gen, no greenhouses will spawn in villages");

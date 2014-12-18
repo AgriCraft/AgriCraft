@@ -63,6 +63,9 @@ public class ItemMagnifyingGlass extends ModItem {
                 else if(crop.crossCrop) {
                     list.add(StatCollector.translateToLocal("agricraft_tooltip.crossCrop"));
                 }
+                else if(crop.weed) {
+                    list.add(StatCollector.translateToLocal("agricraft_tooltip.weeds"));
+                }
                 else {
                     list.add(StatCollector.translateToLocal("agricraft_tooltip.cropWithoutPlant"));
                 }
