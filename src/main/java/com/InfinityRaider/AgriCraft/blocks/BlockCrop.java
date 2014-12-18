@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,7 +19,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -87,13 +85,11 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public void setCrossCrop(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
             boolean update = false;
-            LogHelper.debug("Trying to set crosscrop");
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             if(!crop.crossCrop && !crop.hasPlant()) {
                 crop.crossCrop=true;
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode?player.getCurrentEquippedItem().stackSize:player.getCurrentEquippedItem().stackSize - 1;
                 update = true;
-                LogHelper.debug("Crosscrop set");
             }
             else {
                 this.harvest(world, x, y, z);
@@ -107,7 +103,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public void plantSeed(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-            LogHelper.debug("Trying to plant " + player.getCurrentEquippedItem().getItem().getUnlocalizedName());
             //is the cropEmpty a crosscrop or does it already have a plant
             if (crop.crossCrop || crop.hasPlant()) {
                 return;

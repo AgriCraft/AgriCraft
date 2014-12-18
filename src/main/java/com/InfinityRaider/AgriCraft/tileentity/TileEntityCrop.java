@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.block.Block;
@@ -117,7 +116,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
 
     //checks if a plant can mutate
     private boolean canMutate(ItemSeeds seed, int seedMeta, int id, Block req, int reqMeta) {
-        if(this.canGrow(seed, seedMeta)) {
+        if(this.canGrow(seed)) {
             //id = 0: no requirement
             //id = 1: block below farmland has to be the req block
             //id = 2: block near has to be the req block
@@ -160,7 +159,6 @@ public class TileEntityCrop extends TileEntityAgricraft {
     @Override
     public boolean receiveClientEvent(int id, int value) {
         if(worldObj.isRemote && id == 1) {
-            LogHelper.debug("Marking crop for update");
             this.worldObj.markBlockForUpdate(xCoord,yCoord,zCoord);
             this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
             Minecraft.getMinecraft().renderGlobal.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -175,19 +173,16 @@ public class TileEntityCrop extends TileEntityAgricraft {
 
     //check if the crop is fertile
     public boolean isFertile() {
-        return this.canGrow((ItemSeeds) this.seed, this.seedMeta);
+        return this.canGrow((ItemSeeds) this.seed);
     }
 
     //check the block if the plant is mature
     public boolean isMature() {
-        if(!this.worldObj.isRemote) {
-            return this.worldObj.getBlock(xCoord, yCoord, zCoord) != null && this.worldObj.getBlock(xCoord, yCoord, zCoord) instanceof BlockCrop && ((BlockCrop) this.worldObj.getBlock(xCoord, yCoord, zCoord)).isMature(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-        }
-        return false;
+        return !this.worldObj.isRemote && this.worldObj.getBlock(xCoord, yCoord, zCoord) != null && this.worldObj.getBlock(xCoord, yCoord, zCoord) instanceof BlockCrop && ((BlockCrop) this.worldObj.getBlock(xCoord, yCoord, zCoord)).isMature(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
     }
 
     //check if the seed can grow
-    private boolean canGrow(ItemSeeds seed, int meta) {
+    private boolean canGrow(ItemSeeds seed) {
         BlockBush plant = SeedHelper.getPlant(seed);
         if(this.worldObj.getBlock(this.xCoord,this.yCoord-1,this.zCoord) == net.minecraft.init.Blocks.farmland && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
             if(plant instanceof BlockModPlant) {
