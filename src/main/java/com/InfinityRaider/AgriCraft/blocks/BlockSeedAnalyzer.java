@@ -71,7 +71,14 @@ public class BlockSeedAnalyzer extends Block implements ITileEntityProvider {
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
          if(!world.isRemote) {
              world.removeTileEntity(x, y, z);
+             world.setBlockToAir(x, y, z);
          }
+    }
+
+    //override this to delay the removal of the tile entity until after harvestBlock() has been called
+    @Override
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+        return !player.capabilities.isCreativeMode || super.removedByPlayer(world, player, x, y, z, willHarvest);
     }
 
     //this gets called when the block is mined

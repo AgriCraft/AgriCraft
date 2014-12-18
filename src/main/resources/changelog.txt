@@ -22,6 +22,7 @@ Changelog
 -Added gardening trowel: can be used to move plants from one corp to another
 -Added magnifying glass: use to inspect crops
 -Added journal description for plant mega pack seeds
+-Fixed Seed Analyzer not dropping its contents when harvested
 
 0.0.11
 -Config option to get more crops per crafting operation
