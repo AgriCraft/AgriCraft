@@ -64,7 +64,7 @@ public class ItemBlockCustomWood extends ItemBlock {
                         plank.getItem().getSubItems(plank.getItem(), null, subItems);
                     }
                     else {
-                        for(int i=0;i<15;i++) {
+                        for(int i=0;i<16;i++) {
                             //on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
                             subItems.add(new ItemStack(plank.getItem(), 1, i));
                         }
