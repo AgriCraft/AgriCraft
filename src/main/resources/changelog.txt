@@ -10,6 +10,7 @@ Changelog
 -Made irrigation systems less network intensive
 -In the journal, when a fruit is a block, it now loads the texture correctly
 -Fixed some crop rendering derps (Marcin212)
+-World gen blocks no longer generate in greenhouses
 
 0.0.12
 -Fixed crash if OreDictionary planks weren't blocks

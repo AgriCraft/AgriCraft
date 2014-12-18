@@ -17,13 +17,14 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
     private static final int zSize = 16;
     //helper fields
     private int averageGroundLevel = -1;
-    public StructureGreenhouseIrrigated(StructureBoundingBox structureBoundingBox, int coordBaseMode) {
-        super(structureBoundingBox, coordBaseMode);
+
+    public StructureGreenhouseIrrigated(StructureVillagePieces.Start villagePiece, int nr, Random rand, StructureBoundingBox structureBoundingBox, int coordBaseMode) {
+        super(villagePiece, nr, rand, structureBoundingBox, coordBaseMode);
     }
     //public method to build the component
     public static StructureGreenhouseIrrigated buildComponent(StructureVillagePieces.Start villagePiece, List pieces, Random random, int p1, int p2, int p3, int p4, int p5) {
         StructureBoundingBox boundingBox = StructureBoundingBox.getComponentToAddBoundingBox(p1, p2, p3, 0, 0, 0, xSize, ySize, zSize, p4);
-        return (canVillageGoDeeper(boundingBox)) && (StructureComponent.findIntersecting(pieces, boundingBox) == null)?new StructureGreenhouseIrrigated(boundingBox, p4) : null;
+        return (canVillageGoDeeper(boundingBox)) && (StructureComponent.findIntersecting(pieces, boundingBox) == null)?new StructureGreenhouseIrrigated(villagePiece, p5, random, boundingBox, p4) : null;
     }
     //structure generation code
     @Override
@@ -55,9 +56,9 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.placeBlockAtCurrentPosition(world, Blocks.cobblestone, 0, 2, 1, 6, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.cobblestone, 0, 8, 1, 6, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.cobblestone, 0, 14, 1, 6, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.cobblestone, 0, 2, 1, 15, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.cobblestone, 0, 8, 1, 15, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.cobblestone, 0, 14, 1, 15, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.cobblestone, 0, 2, 1, 14, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.cobblestone, 0, 8, 1, 14, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.cobblestone, 0, 14, 1, 14, boundingBox);
         this.fillWithBlocks(world, boundingBox, 10, 1, 3, 10, 1, 5, Blocks.cobblestone, Blocks.cobblestone, false);
         this.fillWithBlocks(world, boundingBox, 13, 1, 3, 13, 1, 5, Blocks.cobblestone, Blocks.cobblestone, false);
         this.fillWithBlocks(world, boundingBox, 11, 1, 3, 12, 1, 3, Blocks.cobblestone, Blocks.cobblestone, false);
@@ -179,6 +180,34 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.placeBlockAtCurrentPosition(world, Blocks.wooden_door, 8, 1, 3, 10, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.wooden_door, 2, 15, 2, 10, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.wooden_door, 8, 15, 3, 10, boundingBox);
+        //place air blocks
+        this.fillWithBlocks(world, boundingBox, 0, 2, 0, 0, 9, 15, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 16, 2, 0, 16, 9, 15, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 0, 2, 0, 16, 9, 0, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 0, 2, 15, 16, 9, 15, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 2, 2, 7, 14, 5, 13, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 1, 7, 7, 14, 9, 13, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 1, 3, 7, 2, 9, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 2, 2, 7, 2, 2, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 3, 2, 2, 3, 3, 3, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 2, 2, 5, 9, 4, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 2, 5, 5, 4, 5, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 6, 5, 5, 9, 5, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 2, 6, 5, 9, 9, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 4, 3, 1, 5, 3, 1, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 4, 2, 4, 5, 3, 4, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 4, 2, 2, 5, 4, 3, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 6, 2, 2, 6, 3, 3, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 7, 2, 2, 9, 9, 4, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 10, 2, 2, 13, 9, 2, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 10, 6, 3, 13, 9, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 14, 2, 2, 14, 9, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 7, 3, 1, 15, 9, 1, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 15, 3, 2, 15, 9, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 11, 3, 4, 12, 4, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 11, 2, 6, 12, 4, 6, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 11, 2, 5, 12, 4, 5, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 12, 2, 4, 12, 4, 4, Blocks.air, Blocks.air, false);
         //place torches
         this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 0, 4, 6, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 0, 4, 9, boundingBox);
