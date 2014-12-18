@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -50,7 +51,7 @@ public class ItemBlockCustomWood extends ItemBlock {
         this.getSubItems(list);
     }
 
-    //create this method to initiate recipes on the server as well
+    //create this method to allow getting sub blocks server side as well
     public void getSubItems(List list) {
         ArrayList<ItemStack> registeredMaterials = new ArrayList<ItemStack>();
         ArrayList<ItemStack> planks = OreDictionary.getOres(Names.OreDict.plankWood);
@@ -58,7 +59,16 @@ public class ItemBlockCustomWood extends ItemBlock {
             if(plank.getItem() instanceof ItemBlock) {
                 if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
                     ArrayList<ItemStack> subItems = new ArrayList<ItemStack>();
-                    plank.getItem().getSubItems(plank.getItem(), null, subItems);
+                    Side side = FMLCommonHandler.instance().getEffectiveSide();
+                    if(side==Side.CLIENT) {
+                        plank.getItem().getSubItems(plank.getItem(), null, subItems);
+                    }
+                    else {
+                        for(int i=0;i<15;i++) {
+                            //on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
+                            subItems.add(new ItemStack(plank.getItem(), 1, i));
+                        }
+                    }
                     for (ItemStack subItem : subItems) {
                         this.addMaterialToList(subItem, list, 0, registeredMaterials);
                     }
@@ -70,7 +80,6 @@ public class ItemBlockCustomWood extends ItemBlock {
     }
 
     //checks if a list of materials (item stacks) has this material
-    @SideOnly(Side.CLIENT)
     private boolean hasMaterial(ArrayList<ItemStack> registeredMaterials, ItemStack material) {
         for(ItemStack stack:registeredMaterials) {
             if(material.getItem()==stack.getItem() && material.getItemDamage()==stack.getItemDamage()) {
@@ -81,7 +90,6 @@ public class ItemBlockCustomWood extends ItemBlock {
     }
 
     //adds a material (item stack) to a list if it's not registered in a list already
-    @SideOnly(Side.CLIENT)
     private void addMaterialToList(ItemStack stack, List list, int objectMeta, ArrayList<ItemStack> registeredMaterials) {
         if(!this.hasMaterial(registeredMaterials, stack)) {
             ItemStack entry = new ItemStack(this.field_150939_a, 1, objectMeta);
