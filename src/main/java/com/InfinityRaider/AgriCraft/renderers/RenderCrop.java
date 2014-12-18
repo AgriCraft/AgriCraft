@@ -87,7 +87,7 @@ public class RenderCrop extends TileEntitySpecialRenderer{
             //plane 1 front left
             RenderHelper.addScaledVertexWithUV(tessellator, 0-shift, 0, 4, 16, 16);
             RenderHelper.addScaledVertexWithUV(tessellator, 0-shift, 16, 4, 16, 0);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16-shift, 1, 4, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16-shift, 16, 4, 0, 0);
             RenderHelper.addScaledVertexWithUV(tessellator, 16-shift, 0, 4, 0, 16);
             //plane 1 back right
             RenderHelper.addScaledVertexWithUV(tessellator, shift*2, 0, 4, 16, 16);
@@ -122,8 +122,8 @@ public class RenderCrop extends TileEntitySpecialRenderer{
             //plane 3 front right
             RenderHelper.addScaledVertexWithUV(tessellator, shift*2, 0, 16, 0, 16);
             RenderHelper.addScaledVertexWithUV(tessellator, 16+shift*2, 0, 16, 16, 16);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16+shift*2, 1, 16, 16, 0);
-            RenderHelper.addScaledVertexWithUV(tessellator, shift*2, 1, 16, 0, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, 16+shift*2, 16, 16, 16, 0);
+            RenderHelper.addScaledVertexWithUV(tessellator, shift*2, 16, 16, 0, 0);
             //plane 3 front left
             RenderHelper.addScaledVertexWithUV(tessellator, 0-shift, 0, 16, 0, 16);
             RenderHelper.addScaledVertexWithUV(tessellator, 16-shift, 0, 16, 16, 16);
