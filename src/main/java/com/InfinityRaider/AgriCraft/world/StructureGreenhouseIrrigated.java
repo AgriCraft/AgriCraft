@@ -1,5 +1,4 @@
 package com.InfinityRaider.AgriCraft.world;
-
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
 import net.minecraft.init.Blocks;
@@ -9,10 +8,8 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import java.util.List;
 import java.util.Random;
-
 public class StructureGreenhouseIrrigated extends StructureGreenhouse {
     //structure dimensions
     private static final int xSize = 17;
@@ -20,17 +17,14 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
     private static final int zSize = 16;
     //helper fields
     private int averageGroundLevel = -1;
-
     public StructureGreenhouseIrrigated(StructureBoundingBox structureBoundingBox, int coordBaseMode) {
         super(structureBoundingBox, coordBaseMode);
     }
-
     //public method to build the component
     public static StructureGreenhouseIrrigated buildComponent(StructureVillagePieces.Start villagePiece, List pieces, Random random, int p1, int p2, int p3, int p4, int p5) {
         StructureBoundingBox boundingBox = StructureBoundingBox.getComponentToAddBoundingBox(p1, p2, p3, 0, 0, 0, xSize, ySize, zSize, p4);
         return (canVillageGoDeeper(boundingBox)) && (StructureComponent.findIntersecting(pieces, boundingBox) == null)?new StructureGreenhouseIrrigated(boundingBox, p4) : null;
     }
-
     //structure generation code
     @Override
     public boolean addComponentParts(World world, Random rand, StructureBoundingBox boundingBox) {
@@ -42,8 +36,6 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
             }
             this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + 7, 0);
         }
-        //clear the bounding box
-        this.clearBoundingBox(world, boundingBox);
         //cobblestone base
         this.fillWithBlocks(world, boundingBox, 0, 0, 0, xSize-1, 0, zSize-1, Blocks.cobblestone, Blocks.cobblestone, false);   //args: (world, boundingBox, minX, minY, MinZ, maxX, maxY, maxZ, placeBlock, replaceBlock, doReplace)
         //ring of gravel
@@ -228,7 +220,6 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
             for(int z=8;z<=12;z++) {
                 this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==11 &&z==10));
             }
-
         }
         //place water tank
         for(int x=3;x<=6;x++) {
@@ -254,7 +245,6 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.generateStructureSeedAnalyzer(world, boundingBox, 11, 2, 4, ForgeDirection.SOUTH);
         return true;
     }
-
     //place a tank
     protected boolean generateStructureWoodenTank(World world, StructureBoundingBox boundingBox, int x, int y, int z) {
         int xCoord = this.getXWithOffset(x, z);
@@ -272,7 +262,6 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
             return false;
         }
     }
-
     //place an irrigation channel
     protected boolean generateStructureIrrigationChannel(World world, StructureBoundingBox boundingBox, int x, int y, int z) {
         int xCoord = this.getXWithOffset(x, z);
@@ -290,7 +279,6 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
             return false;
         }
     }
-
     //place a sprinkler
     protected boolean generateStructureSprinkler(World world, StructureBoundingBox boundingBox, int x, int y, int z) {
         int xCoord = this.getXWithOffset(x, z);

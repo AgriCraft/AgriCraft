@@ -1,6 +1,6 @@
 Changelog
 ---------
-1.0.0
+1.0.3
 -Waila and magnifying glass only show stats of analyzed plants
 -Sprinklers consume less water and irrigate plants much much slower (it was quite op before)
 -Changed the way custom wood recipes are handled, they now show up in NEI

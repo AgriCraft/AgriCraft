@@ -69,10 +69,12 @@ public class TileEntityChannel extends TileEntityCustomWood {
             int nr = 1;
             int updatedLevel=this.getFluidLevel();
             for(TileEntityCustomWood te:neighbours) {
+                //neighbour is a channel: add its volume to the total and increase the count
                 if(te instanceof TileEntityChannel) {
                     totalLvl = totalLvl + ((TileEntityChannel) te).lvl;
                     nr++;
                 }
+                //neighbour is a tank: calculate the fluid levels of the tank and the channel
                 else {
                     TileEntityTank tank = (TileEntityTank) te;
                     int Y = tank.getYPosition();
@@ -97,7 +99,7 @@ public class TileEntityChannel extends TileEntityCustomWood {
                             //some parameters
                             int tankYSize = tank.getYSize();
                             int C = tank.getTotalCapacity();
-                            //calculate the y corresponding to the total volume
+                            //calculate the y corresponding to the total volume: y = f(V_tot), V_tank = f(y), V_channel = f(y)
                             float enumerator = ((float) V_tot) + ((500*y1)/(y2-y1)+((float) 2*C)/((float) (16*tankYSize-2)));
                             float denominator = (((float) 500)/(y2-y1)+((float) C)/((float) (16*tankYSize-2)));
                             float y = enumerator/denominator;
@@ -110,6 +112,7 @@ public class TileEntityChannel extends TileEntityCustomWood {
                     }
                 }
             }
+            //equalize water level over all neighbouring channels
             if(nr>1) {
                 totalLvl = totalLvl + updatedLevel;
                 int rest = totalLvl % nr;
