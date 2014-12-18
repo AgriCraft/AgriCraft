@@ -146,15 +146,6 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.placeBlockAtCurrentPosition(world, Blocks.glass, 0, 4, 5, 6, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.glass, 0, 1, 5, 10, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.glass, 0, 15, 5, 10, boundingBox);
-        //place fences
-        this.fillWithBlocks(world, boundingBox, 1, 2, 1, 2, 2, 1, Blocks.fence, Blocks.fence, false);
-        this.fillWithBlocks(world, boundingBox, 4, 2, 1, 5, 2, 1, Blocks.fence, Blocks.fence, false);
-        this.fillWithBlocks(world, boundingBox, 7, 2, 1, 15, 2, 1, Blocks.fence, Blocks.fence, false);
-        this.fillWithBlocks(world, boundingBox, 1, 2, 2, 1, 2, 5, Blocks.fence, Blocks.fence, false);
-        this.fillWithBlocks(world, boundingBox, 15, 2, 2, 15, 2, 5, Blocks.fence, Blocks.fence, false);
-        this.fillWithBlocks(world, boundingBox, 8, 4, 9, 8, 4, 11, Blocks.fence, Blocks.fence, false);
-        this.placeBlockAtCurrentPosition(world, Blocks.fence, 0, 8, 5, 9, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.fence, 0, 8, 5, 11, boundingBox);
         //wooden pillars
         this.fillWithBlocks(world, boundingBox, 3, 2, 1, 3, 4, 1, Blocks.planks, Blocks.planks, false);
         this.fillWithBlocks(world, boundingBox, 3, 2, 4, 3, 4, 4, Blocks.planks, Blocks.planks, false);
@@ -186,7 +177,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.fillWithBlocks(world, boundingBox, 0, 2, 0, 16, 9, 0, Blocks.air, Blocks.air, false);
         this.fillWithBlocks(world, boundingBox, 0, 2, 15, 16, 9, 15, Blocks.air, Blocks.air, false);
         this.fillWithBlocks(world, boundingBox, 2, 2, 7, 14, 5, 13, Blocks.air, Blocks.air, false);
-        this.fillWithBlocks(world, boundingBox, 1, 7, 7, 14, 9, 13, Blocks.air, Blocks.air, false);
+        this.fillWithBlocks(world, boundingBox, 1, 7, 6, 14, 9, 14, Blocks.air, Blocks.air, false);
         this.fillWithBlocks(world, boundingBox, 1, 3, 7, 2, 9, 5, Blocks.air, Blocks.air, false);
         this.fillWithBlocks(world, boundingBox, 2, 2, 7, 2, 2, 5, Blocks.air, Blocks.air, false);
         this.fillWithBlocks(world, boundingBox, 3, 2, 2, 3, 3, 3, Blocks.air, Blocks.air, false);
@@ -208,6 +199,15 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.fillWithBlocks(world, boundingBox, 11, 2, 6, 12, 4, 6, Blocks.air, Blocks.air, false);
         this.fillWithBlocks(world, boundingBox, 11, 2, 5, 12, 4, 5, Blocks.air, Blocks.air, false);
         this.fillWithBlocks(world, boundingBox, 12, 2, 4, 12, 4, 4, Blocks.air, Blocks.air, false);
+        //place fences
+        this.fillWithBlocks(world, boundingBox, 1, 2, 1, 2, 2, 1, Blocks.fence, Blocks.fence, false);
+        this.fillWithBlocks(world, boundingBox, 4, 2, 1, 5, 2, 1, Blocks.fence, Blocks.fence, false);
+        this.fillWithBlocks(world, boundingBox, 7, 2, 1, 15, 2, 1, Blocks.fence, Blocks.fence, false);
+        this.fillWithBlocks(world, boundingBox, 1, 2, 2, 1, 2, 5, Blocks.fence, Blocks.fence, false);
+        this.fillWithBlocks(world, boundingBox, 15, 2, 2, 15, 2, 5, Blocks.fence, Blocks.fence, false);
+        this.fillWithBlocks(world, boundingBox, 8, 4, 9, 8, 4, 11, Blocks.fence, Blocks.fence, false);
+        this.placeBlockAtCurrentPosition(world, Blocks.fence, 0, 8, 5, 9, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.fence, 0, 8, 5, 11, boundingBox);
         //place torches
         this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 0, 4, 6, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 0, 4, 9, boundingBox);

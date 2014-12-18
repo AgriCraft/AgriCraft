@@ -113,18 +113,18 @@ public class TileEntityChannel extends TileEntityCustomWood {
                 }
             }
             //equalize water level over all neighbouring channels
+            totalLvl = totalLvl + updatedLevel;
+            int rest = totalLvl % nr;
+            int newLvl = totalLvl / nr;
             if(nr>1) {
-                totalLvl = totalLvl + updatedLevel;
-                int rest = totalLvl % nr;
-                int newLvl = totalLvl / nr;
                 //set fluid levels
                 for (TileEntityCustomWood te:neighbours) {
                     if (te instanceof TileEntityChannel) {
                         ((TileEntityChannel) te).setFluidLevel(newLvl);
                     }
                 }
-                this.setFluidLevel(newLvl + rest);
             }
+            this.setFluidLevel(newLvl + rest);
         }
     }
 }
