@@ -6,6 +6,8 @@ itemGroup.agricraft=Agricraft
 //Items
 item.agricraft:cropsItem.name=Tuteurs
 item.agricraft:journal.name=Journal agricole
+item.agricraft:trowel.name=Transplantoir
+item.agricraft:magnifyingGlass.name=Loupe
 item.agricraft:sprinklerItem.name=Arroseur
 item.agricraft:debugger.name=Débogueur
 item.agricraft:nuggetDiamond.name=Pépite de diamant
@@ -88,11 +90,22 @@ tile.agricraft:cropOsmonium.name=Osmonium
 
 //tooltips
 agricraft_tooltip.unidentified=Inconnue
+agricraft_tooltip.seed=Graines
 agricraft_tooltip.growth=Croissance
 agricraft_tooltip.gain=Gain
 agricraft_tooltip.strength=Force
+agricraft_tooltip.analyzed=Cette graine n'a pas encore été analysée
+agricraft_tooltip.fertile=Cette plante est fertile et peut croitre
+agricraft_tooltip.notFertile=Cette plante ne peut pas croitre ici
 agricraft_tooltip.discoveredSeeds=Graines découvertes
 agricraft_tooltip.material=Matériaux
+agricraft_tooltip.waterLevel=niveau d'eau
+agricraft_tooltip.cropWithPlant=Ce tuteur a une plante
+agricraft_tooltip.crossCrop=Ceci est un tuteur croisé
+agricraft_tooltip.cropWithoutPlant=Ce tuteur n'a pas de plante sur lui
+agricraft_tooltip.notCrop=Ceci n'est pas un tuteur
+agricraft_tooltip.trowel=Utilisez-le pour déplacé les plantes d'un tuteur à l'autre
+agricraft_tooltip.magnifyingGlass=utilisez-la pour inspecter vos plantes
 
 //journal entries
 //---------------
