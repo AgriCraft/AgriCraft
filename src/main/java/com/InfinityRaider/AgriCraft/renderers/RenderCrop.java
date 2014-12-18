@@ -65,7 +65,7 @@ public class RenderCrop extends TileEntitySpecialRenderer{
             GL11.glDisable(GL11.GL_LIGHTING);
             //bind the texture
             Minecraft.getMinecraft().renderEngine.bindTexture(resource);
-           drawPlant(tessellator, RenderHelper.getRenderType((ItemSeeds) crop.seed, crop.seedMeta));
+            drawPlant(tessellator, RenderHelper.getRenderType((ItemSeeds) crop.seed, crop.seedMeta));
         //don't forget to enable lighting again
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
