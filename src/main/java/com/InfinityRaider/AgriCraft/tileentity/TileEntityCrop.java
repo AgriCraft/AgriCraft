@@ -175,7 +175,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
     public void spreadWeed() {
         TileEntityCrop[] neighbours = this.findNeighbours();
         for(TileEntityCrop crop:neighbours) {
-            if(ConfigurationHandler.enableWeeds && crop!=null && Math.random()<crop.getWeedSpawnChance()) {
+            if(ConfigurationHandler.enableWeeds && crop!=null && (!crop.weed) && Math.random()<crop.getWeedSpawnChance()) {
                 crop.spawnWeed();
             }
         }
@@ -190,7 +190,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
 
     //weed spawn chance
     private double getWeedSpawnChance() {
-        return this.hasPlant()?((double) (10-this.strength))/10:1;
+        return this.hasPlant()?((double) (10-this.strength))/10:(this.weed?0:1);
     }
 
     //sets the plant in the crop
