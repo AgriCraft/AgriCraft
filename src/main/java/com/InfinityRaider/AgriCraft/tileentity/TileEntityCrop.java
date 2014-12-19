@@ -59,13 +59,6 @@ public class TileEntityCrop extends TileEntityAgricraft {
         super.readFromNBT(tag);
     }
 
-    //updates the crop
-    public void syncAndUpdate() {
-        this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord), 1, 0);    //lets the tile entity know it has been updated
-        this.markDirty();                                               //lets Minecraft know the tile entity has changed
-        this.worldObj.notifyBlockChange(this.xCoord, this.yCoord, this.zCoord, this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord));      //lets the neighbors know this has been updated
-    }
-
     //the code that makes the crop cross with neighboring crops
     public void crossOver() {
         if(!this.worldObj.isRemote) {
@@ -113,7 +106,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
             }
             //update the tile entity on a change
             if (change) {
-                this.syncAndUpdate();
+                this.markDirty();
             }
         }
     }
@@ -168,7 +161,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
         this.crossCrop=false;
         this.seed = null;
         this.seedMeta = 0;
-        this.syncAndUpdate();
+        this.markDirty();
     }
 
     //spread the weed
@@ -185,7 +178,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
     public void clearWeed() {
         this.weed=false;
         this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
-        this.syncAndUpdate();
+        this.markDirty();
     }
 
     //weed spawn chance
