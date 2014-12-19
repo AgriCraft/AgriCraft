@@ -220,7 +220,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                     if(this.worldObj.getTileEntity(x, y ,z)!=null && this.worldObj.getTileEntity(x, y ,z) instanceof TileEntityTank) {
                         TileEntityTank tank =(TileEntityTank) this.worldObj.getTileEntity(x, y, z);
                         tank.fluidLevel = lvl;
-                        tank.markDirty();
+                        if(tank.getYPosition()==0) {
+                            tank.markDirty();
+                        }
                     }
                 }
             }

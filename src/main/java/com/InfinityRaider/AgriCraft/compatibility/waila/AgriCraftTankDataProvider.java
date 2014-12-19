@@ -44,7 +44,8 @@ public class AgriCraftTankDataProvider implements IWailaDataProvider {
             String material = materialStack.getItem().getItemStackDisplayName(materialStack);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+material);
             //show contents
-            int contents = tank.getFluidLevel();
+            TileEntityTank bottomTank = (TileEntityTank) tank.getWorldObj().getTileEntity(tank.xCoord, tank.yCoord-tank.getYPosition(), tank.zCoord);
+            int contents = bottomTank.getFluidLevel();
             int capacity = tank.getTotalCapacity();
             list.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel")+": "+contents+"/"+capacity);
         }
