@@ -157,7 +157,10 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
         //only make things happen serverside
         if(!world.isRemote) {
-            if(player.getCurrentEquippedItem()==null) {
+            if(player.isSneaking()) {
+                this.harvest(world, x, y, z);
+            }
+            else if(player.getCurrentEquippedItem()==null) {
                 //harvest operation
                 this.harvest(world, x, y, z);
             }
@@ -189,7 +192,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     //This gets called when the block is left clicked (player hits the block)
     @Override
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
-        if((!world.isRemote) && (!player.isSneaking())) {
+        if(!world.isRemote) {
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
                 this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
             }
@@ -203,21 +206,22 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
         if(!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-            ArrayList<ItemStack> drops= new ArrayList<ItemStack>();
-            if(crop.crossCrop) {
-                drops.add(new ItemStack(Items.crops, 2));
-            }
-            else {
-                drops.add(new ItemStack(Items.crops, 1));
-                if(crop.hasPlant()) {
-                    drops.add(crop.getSeedStack());
-                    if (this.isMature(world, x, y, z)) {
-                        drops.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+            if (crop != null) {
+                ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+                if (crop.crossCrop) {
+                    drops.add(new ItemStack(Items.crops, 2));
+                } else {
+                    drops.add(new ItemStack(Items.crops, 1));
+                    if (crop.hasPlant()) {
+                        drops.add(crop.getSeedStack());
+                        if (this.isMature(world, x, y, z)) {
+                            drops.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+                        }
                     }
                 }
-            }
-            for(ItemStack drop:drops) {
-                this.dropBlockAsItem(world, x, y, z, drop);
+                for (ItemStack drop : drops) {
+                    this.dropBlockAsItem(world, x, y, z, drop);
+                }
             }
         }
     }
