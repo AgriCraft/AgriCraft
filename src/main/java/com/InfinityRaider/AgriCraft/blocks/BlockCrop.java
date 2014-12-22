@@ -275,7 +275,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public boolean canBlockStay(World world, int x, int y, int z) {
         Block soil = world.getBlock(x,y-1,z);
-        return (soil==Blocks.farmland);
+        return (soil instanceof net.minecraft.block.BlockFarmland);
     }
 
     //get a list with items dropped by the the crop

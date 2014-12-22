@@ -25,6 +25,7 @@ public final class Names {
     public static class Objects {
         public static final String crop = "crop";
         public static final String crops = "crops";
+        public static final String farmland = "farmland";
         public static final String analyzer = "Analyzer";
         public static final String seed = "seed";
         public static final String seedAnalyzer = seed+analyzer;

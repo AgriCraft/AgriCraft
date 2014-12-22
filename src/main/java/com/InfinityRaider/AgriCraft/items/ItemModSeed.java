@@ -52,7 +52,7 @@ public class ItemModSeed extends ItemSeeds implements IPlantable{
             LogHelper.debug("Trying to plant seed "+stack.getItem().getUnlocalizedName()+" on crops");
             return true;
         }
-        if(world.getBlock(x,y,z)== net.minecraft.init.Blocks.farmland) {super.onItemUse(stack,player,world,x,y,z,side,f1,f2,f3);}
+        if(world.getBlock(x,y,z) instanceof net.minecraft.block.BlockFarmland) {super.onItemUse(stack,player,world,x,y,z,side,f1,f2,f3);}
         return false;
     }
 

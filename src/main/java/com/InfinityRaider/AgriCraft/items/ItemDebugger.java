@@ -3,19 +3,23 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedData;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class ItemDebugger extends ModItem {
@@ -29,24 +33,39 @@ public class ItemDebugger extends ModItem {
         if(!world.isRemote) {
             Block block = world.getBlock(x, y, z);
             LogHelper.debug("Clicked block at: (" + x + "," + y + "," + z + "): "+Block.blockRegistry.getNameForObject(block)+":"+world.getBlockMetadata(x, y, z));
-            //print data for crop
-            if (block == Blocks.blockCrop) {
-                TileEntityCrop cropTE = (TileEntityCrop) world.getTileEntity(x, y, z);
-                BlockCrop blockCropBlock = (BlockCrop) world.getBlock(x, y, z);
-                if (cropTE.crossCrop) {
-                    LogHelper.debug(" - This is a crosscrop");
+            if(block instanceof BlockBush) {
+                //print data for crop
+                if (block == Blocks.blockCrop) {
+                    TileEntityCrop cropTE = (TileEntityCrop) world.getTileEntity(x, y, z);
+                    BlockCrop blockCropBlock = (BlockCrop) world.getBlock(x, y, z);
+                    if (cropTE.crossCrop) {
+                        LogHelper.debug(" - This is a crosscrop");
+                    }
+                    if (cropTE.hasPlant()) {
+                        LogHelper.debug(" - This crop has a plant");
+                        LogHelper.debug(" - Seed: " + ((ItemSeeds) cropTE.seed).getUnlocalizedName());
+                        LogHelper.debug(" - RegisterName: " + Item.itemRegistry.getNameForObject(cropTE.seed) + ':' + cropTE.seedMeta);
+                        LogHelper.debug(" - Plant: " + SeedHelper.getPlant((ItemSeeds) cropTE.seed).getUnlocalizedName());
+                        LogHelper.debug(" - Meta: " + blockCropBlock.getPlantMetadata(world, x, y, z));
+                        LogHelper.debug(" - Growth: " + cropTE.growth);
+                        LogHelper.debug(" - Gain: " + cropTE.gain);
+                        LogHelper.debug(" - Strength: " + cropTE.strength);
+                        LogHelper.debug(" - Fertile: " + cropTE.isFertile());
+                        LogHelper.debug(" - Mature: " + cropTE.isMature());
+                    }
                 }
-                if (cropTE.hasPlant()) {
-                    LogHelper.debug(" - This crop has a plant");
-                    LogHelper.debug(" - Seed: " + ((ItemSeeds) cropTE.seed).getUnlocalizedName());
-                    LogHelper.debug(" - RegisterName: " + Item.itemRegistry.getNameForObject(cropTE.seed) + ':' + cropTE.seedMeta);
-                    LogHelper.debug(" - Plant: " + SeedHelper.getPlant((ItemSeeds) cropTE.seed).getUnlocalizedName());
-                    LogHelper.debug(" - Meta: " + blockCropBlock.getPlantMetadata(world, x, y, z));
-                    LogHelper.debug(" - Growth: " + cropTE.growth);
-                    LogHelper.debug(" - Gain: " + cropTE.gain);
-                    LogHelper.debug(" - Strength: " + cropTE.strength);
-                    LogHelper.debug(" - Fertile: " + cropTE.isFertile());
-                    LogHelper.debug(" - Mature: " + cropTE.isMature());
+                //print data for a random plant
+                else {
+                    TileEntity te = world.getTileEntity(x, y-1, z);
+                    LogHelper.debug("This is a plant "+(te==null?"without tile entity":"with tile entity"));
+                    if(te!= null && te instanceof TileEntitySeedData) {
+                        LogHelper.debug("Found seedData:");
+                        TileEntitySeedData seedData = (TileEntitySeedData) te;
+                        LogHelper.debug(" - Growth: " + seedData.growth);
+                        LogHelper.debug(" - Gain: " + seedData.gain);
+                        LogHelper.debug(" - Strength: " + seedData.strength);
+                        LogHelper.debug(" - Analyzed: " + seedData.analyzed);
+                    }
                 }
             }
             //print data for tank
