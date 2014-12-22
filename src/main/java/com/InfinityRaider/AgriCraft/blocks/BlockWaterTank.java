@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -55,18 +56,19 @@ public class BlockWaterTank extends BlockContainer{
     //override this to delay the removal of the tile entity until after harvestBlock() has been called
     @Override
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-        return !player.capabilities.isCreativeMode || super.removedByPlayer(world, player, x, y, z, willHarvest);
+        if(willHarvest) {
+            this.harvestBlock(world, player, x, y, z, world.getBlockMetadata(x, y, z));
+        }
+        return super.removedByPlayer(world, player, x, y, z, false);
     }
 
     //when the block is harvested
     @Override
     public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
-        if((!world.isRemote) && (!player.isSneaking())) {
+        if((!world.isRemote)) {
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
-                this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
+                this.dropBlockAsItem(world, x, y, z, meta, 0);
             }
-            world.setBlockToAir(x,y,z);
-            world.removeTileEntity(x,y,z);
         }
     }
 
@@ -159,15 +161,18 @@ public class BlockWaterTank extends BlockContainer{
     //when the block is broken
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+        LogHelper.debug("breaking tank");
         boolean placeWater = false;
+        LogHelper.debug("TileEntity found: "+(world.getTileEntity(x, y , z)!=null));
         if(world.getTileEntity(x, y , z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityTank) {
             TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y ,z);
             tank.breakMultiBlock();
-            placeWater = tank.getFluidLevel()>Constants.mB;
+            placeWater = tank.getFluidLevel()>=Constants.mB;
         }
         world.removeTileEntity(x,y,z);
         if(ConfigurationHandler.placeWater && placeWater) {
             world.setBlock(x, y, z, Blocks.water, 0, 3);
+            Blocks.water.onNeighborBlockChange(world, x, y, z, null);
         }
         else {
             world.setBlockToAir(x, y, z);
