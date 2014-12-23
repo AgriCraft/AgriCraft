@@ -271,13 +271,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         return world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityCrop && ((TileEntityCrop) world.getTileEntity(x, y, z)).isFertile();
     }
 
-    //see if the block can stay
-    @Override
-    public boolean canBlockStay(World world, int x, int y, int z) {
-        Block soil = world.getBlock(x,y-1,z);
-        return (soil instanceof net.minecraft.block.BlockFarmland);
-    }
-
     //get a list with items dropped by the the crop
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {

@@ -157,6 +157,26 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         return 1;
     }
 
+    //neighboring blocks get updated
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+        //check if crops can stay
+        if(!this.canBlockStay(world,x,y,z)) {
+            //the crop will be destroyed
+            this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+            world.setBlockToAir(x, y, z);
+        }
+    }
+
+    //see if the block can stay
+    @Override
+    public boolean canBlockStay(World world, int x, int y, int z) {
+        Block soil = world.getBlock(x,y-1,z);
+        return (soil instanceof net.minecraft.block.BlockFarmland);
+    }
+
+
+
     //check if the plant can grow
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
