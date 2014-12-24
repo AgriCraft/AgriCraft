@@ -5,6 +5,8 @@ Changelog
 -Water residue after breaking a tank now flows
 -Fixed a spelling error in the en_US.lang file
 -Disabling Vanilla farming in the config actually disables Vanilla farming
+-sprinkler now uses oak planks as breaking particles instead of missing textures
+-tanks will never fill up in deserts (it can rain in deserts apparently, but it doesn't render the particles)
 
 1.0.3
 -Waila and magnifying glass only show stats of analyzed plants
