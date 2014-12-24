@@ -48,10 +48,10 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
             if(this.worldObj.canBlockSeeTheSky(this.xCoord, this.yCoord, this.zCoord) && this.worldObj.isRaining()) {
                 if(this.getYPosition()+1==this.getYSize()) {
                     BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(this.xCoord, this.zCoord);
-                   if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
+                    if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
                        this.setFluidLevel(this.fluidLevel + 1);
                        change = true;
-                   }
+                    }
                 }
             }
             if(ConfigurationHandler.fillFromFlowingWater && (this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.water || this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.flowing_water)) {
