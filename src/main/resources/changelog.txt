@@ -1,5 +1,11 @@
 Changelog
 ---------
+1.0.4
+-Fixed shift-clicking crops crash
+-Water residue after breaking a tank now flows
+-Fixed a spelling error in the en_US.lang file
+-Disabling Vanilla farming in the config actually disables Vanilla farming
+
 1.0.3
 -Waila and magnifying glass only show stats of analyzed plants
 -Sprinklers consume less water and irrigate plants much much slower (it was quite op before)
