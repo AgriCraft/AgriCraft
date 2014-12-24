@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
@@ -46,8 +47,11 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
             boolean change = this.updateMultiBlock();
             if(this.worldObj.canBlockSeeTheSky(this.xCoord, this.yCoord, this.zCoord) && this.worldObj.isRaining()) {
                 if(this.getYPosition()+1==this.getYSize()) {
-                    this.setFluidLevel(this.fluidLevel+1);
-                    change = true;
+                    BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(this.xCoord, this.zCoord);
+                   if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
+                       this.setFluidLevel(this.fluidLevel + 1);
+                       change = true;
+                   }
                 }
             }
             if(ConfigurationHandler.fillFromFlowingWater && (this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.water || this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.flowing_water)) {
