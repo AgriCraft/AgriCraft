@@ -31,7 +31,7 @@ public class BlockWaterChannel extends BlockContainer {
         this.setResistance(5.0F);
         setHarvestLevel("axe", 0);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
-        //this.setBlockBounds(4*Constants.unit, 4*Constants.unit, 4*Constants.unit, 12*Constants.unit, 12*Constants.unit, 12*Constants.unit);
+        this.setBlockBounds(4*Constants.unit, 4*Constants.unit, 4*Constants.unit, 12*Constants.unit, 12*Constants.unit, 12*Constants.unit);
     }
 
     @Override
@@ -87,29 +87,31 @@ public class BlockWaterChannel extends BlockContainer {
      * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
      */
     @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB box, List list, Entity entity) {
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB mask, List list, Entity entity) {
         //adjacent boxes
         TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
-        float f = Constants.unit;
+        float f = Constants.unit;   //one 16th of a block
+        float min = 4*f;
+        float max = 12*f;
         if(channel.hasNeighbour('x', 1)) {
-            this.setBlockBounds((float) this.maxX-f, (float) this.minY, (float)this.minZ, f*16, (float)this.maxY, (float)this.maxZ);
-            super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
+            this.setBlockBounds(max-f, min, min, f*16, max, max);
+            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
         }
         if(channel.hasNeighbour('x', -1)) {
-            this.setBlockBounds(0, (float) this.minY, (float)this.minZ, (float) this.minX+f, (float)this.maxY, (float)this.maxZ);
-            super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
+            this.setBlockBounds(0, min, min, min+f, max, max);
+            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
         }
         if(channel.hasNeighbour('z', 1)) {
-            this.setBlockBounds((float) this.minX, (float) this.minY, (float)this.maxZ-f, (float) this.maxX, (float)this.maxY,  Constants.unit * 16);
-            super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
-    }
+            this.setBlockBounds(min, min, max-f, max, max,  f*16);
+            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
+        }
         if(channel.hasNeighbour('z', -1)) {
-            this.setBlockBounds((float) this.minX, (float) this.minY, 0, (float) this.maxX, (float)this.maxY, (float)this.minZ+f);
-            super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
+            this.setBlockBounds(min, min, 0, max, max, min+f);
+            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
         }
         //central box
-        this.setBlockBounds(4*Constants.unit, 4*Constants.unit, 4*Constants.unit, 12*Constants.unit, 12*Constants.unit, 12*Constants.unit);
-        super.addCollisionBoxesToList(world, x, y, z, box, list, entity);
+        this.setBlockBounds(min, min, min, max, max, max);
+        super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
     }
 
     @Override
