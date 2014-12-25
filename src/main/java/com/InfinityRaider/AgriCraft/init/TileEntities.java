@@ -15,8 +15,6 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileEntityTank.class, Reference.MOD_ID+':'+ Names.TileEntity.tileEntity+'_'+ Names.Objects.tank);
         GameRegistry.registerTileEntity(TileEntityChannel.class, Reference.MOD_ID+':'+ Names.TileEntity.tileEntity+'_'+ Names.Objects.channel);
         GameRegistry.registerTileEntity(TileEntitySprinkler.class, Reference.MOD_ID+':'+ Names.TileEntity.tileEntity+'_'+ Names.Objects.sprinkler);
-        GameRegistry.registerTileEntity(TileEntitySeedData.class, Reference.MOD_ID+':'+Names.TileEntity.tileEntity+'_'+Names.Objects.farmland);
-
         LogHelper.info("Tile Entities registered");
     }
 }
