@@ -9,8 +9,47 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
+import java.io.*;
+
 //class containing the default mutations for each supported mod
 public abstract class IOHelper {
+    //reads and writes text files
+    public static String readOrWrite(String directory, String fileName, String defaultData, boolean reset) {
+        File file = new File(directory, fileName+".txt");
+        if(file.exists() && !file.isDirectory() && !reset) {
+            try {
+                FileInputStream inputStream = new FileInputStream(file);
+                byte[] input = new byte[(int) file.length()];
+                try {
+                    inputStream.read(input);
+                    inputStream.close();
+                    return new String(input, "UTF-8");
+                } catch (IOException e) {
+                    LogHelper.info("Caught IOException when reading "+fileName+".txt");
+                }
+            } catch(FileNotFoundException e) {
+                LogHelper.info("Caught IOException when reading "+fileName+".txt");
+            }
+        }
+        else {
+            BufferedWriter writer;
+            try {
+                writer = new BufferedWriter(new FileWriter(file));
+                try {
+                    writer.write(defaultData);
+                    writer.close();
+                    return defaultData;
+                }
+                catch(IOException e) {
+                    LogHelper.info("Caught IOException when writing "+fileName+".txt");
+                }
+            }
+            catch(IOException e) {
+                LogHelper.info("Caught IOException when writing "+fileName+".txt");
+            }
+        }
+        return null;
+    }
 
     //get the mutations file contents
     public static String getDefaultMutations() {

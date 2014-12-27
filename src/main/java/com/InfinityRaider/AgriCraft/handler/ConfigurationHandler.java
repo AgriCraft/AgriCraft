@@ -81,26 +81,31 @@ public class ConfigurationHandler {
     }
 
     public static String readGrassDrops() {
-        return readOrWrite("GrassDrops", IOHelper.getGrassDrops());
+        return IOHelper.readOrWrite(directory, "GrassDrops", IOHelper.getGrassDrops(), false);
     }
 
     public static String readCustomCrops() {
-        return readOrWrite("CustomCrops", IOHelper.getCustomCropInstructions());
+        return IOHelper.readOrWrite(directory, "CustomCrops", IOHelper.getCustomCropInstructions(), false);
     }
 
     public static String readMutationData() {
-        return readOrWrite("Mutations", IOHelper.getDefaultMutations());
+        String data = IOHelper.readOrWrite(directory, "Mutations", IOHelper.getDefaultMutations(), generateDefaults);
+        if(generateDefaults) {
+            ConfigurationHandler.propGenerateDefaults.setToDefault();
+        }
+        return data;
     }
 
     public static String readSpreadChances() {
-        return readOrWrite("SpreadChancesOverrides", IOHelper.getSpreadChancesOverridesInstructions());
+        return IOHelper.readOrWrite(directory, "SpreadChancesOverrides", IOHelper.getSpreadChancesOverridesInstructions(), false);
     }
 
     public static String readSeedBlackList() {
-        return readOrWrite("SeedBlackList", IOHelper.getSeedBlackListInstructions());
+        return IOHelper.readOrWrite(directory, "SeedBlackList", IOHelper.getSeedBlackListInstructions(), false);
     }
 
-    private static String readOrWrite(String fileName, String defaultData) {
+    /*
+    private static String readOrWrite(String directory, String fileName, String defaultData) {
         File file = new File(directory, fileName+".txt");
         if(file.exists() && !file.isDirectory() && !generateDefaults) {
             try {
@@ -139,4 +144,5 @@ public class ConfigurationHandler {
         }
         return null;
     }
+    */
 }
