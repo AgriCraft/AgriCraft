@@ -26,7 +26,8 @@ public class PlayerInteractEventHandler {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             if (event.world.getBlock(event.x, event.y, event.z) instanceof BlockFarmland) {
                 if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
-                    if (ConfigurationHandler.disableVanillaFarming && SeedHelper.isValidSeed((ItemSeeds) event.entityPlayer.getCurrentEquippedItem().getItem(), event.entityPlayer.getCurrentEquippedItem().getItemDamage())) {
+                    if (ConfigurationHandler.disableVanillaFarming && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSeeds  && SeedHelper.isValidSeed((ItemSeeds) event.entityPlayer.getCurrentEquippedItem().getItem(), event.entityPlayer.getCurrentEquippedItem().getItemDamage())) {
+                        //what about items that are plantable (implementing IPlantable), but not instance of ItemSeeds, need to think this over
                         this.denyEvent(event, false);
                     } else if(event.entityPlayer.getCurrentEquippedItem().hasTagCompound()){
                         NBTTagCompound tag = (NBTTagCompound) event.entityPlayer.getCurrentEquippedItem().getTagCompound().copy();
