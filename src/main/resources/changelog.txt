@@ -1,5 +1,10 @@
 Changelog
 ---------
+1.0.5
+-Fixed crash when disabling vanilla farming
+-Fixed servers kicking you out when breaking tanks
+-Network optimization for irrigation systems (marcin212)
+
 1.0.4
 -Fixed shift-clicking crops crash
 -Water residue after breaking a tank now flows
