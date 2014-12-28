@@ -9,7 +9,9 @@ import java.util.ArrayList;
 
 public class TileEntityChannel extends TileEntityCustomWood {
     private int lvl;
-
+    private int lastLvl = 0;
+    private int timer = 0;
+    
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
@@ -36,7 +38,6 @@ public class TileEntityChannel extends TileEntityCustomWood {
     public void setFluidLevel(int lvl) {
         if(lvl>=0 && lvl<=Constants.mB/2 && lvl!=this.lvl) {
             this.lvl = lvl;
-            this.markDirty();
         }
     }
 
@@ -58,6 +59,14 @@ public class TileEntityChannel extends TileEntityCustomWood {
     @Override
     public void updateEntity() {
         if (!this.worldObj.isRemote) {
+        	timer++;
+        	if(timer%20==0){
+        		timer = 0;
+        		if(lastLvl != lvl){
+        			lastLvl = lvl;
+                    this.markDirty();
+        		}
+        	}
             //find neighbours
             ArrayList<TileEntityCustomWood> neighbours = new ArrayList<TileEntityCustomWood>();
             if(this.hasNeighbour('x', 1)) {neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord));}
