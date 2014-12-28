@@ -1,4 +1,5 @@
 package com.InfinityRaider.AgriCraft.world;
+
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
 import net.minecraft.init.Blocks;
@@ -8,6 +9,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import java.util.List;
 import java.util.Random;
 public class StructureGreenhouseIrrigated extends StructureGreenhouse {

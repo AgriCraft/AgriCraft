@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 //Tile Entity to store seed data
 public class TileEntitySeedData extends TileEntityAgricraft {
