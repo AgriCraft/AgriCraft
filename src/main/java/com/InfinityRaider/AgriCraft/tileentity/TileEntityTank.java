@@ -92,9 +92,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     //returns the number of blocks in the multiblock
     public int getConnectedTanks() {return this.connectedTanks;}
 
-    //sets the number of connected tanks
-    public void setConnectedTanks(int nr) {this.connectedTanks = nr;}
-
     //check if a tile entity is instance of TileEntityTank and is the same material
     public boolean isSameTank(TileEntity tileEntity) {
         if(tileEntity!=null && tileEntity instanceof TileEntityTank) {
