@@ -59,6 +59,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                 this.setFluidLevel(this.fluidLevel+5);
                 change = true;
             }
+            //Only send update to the client every 20ticks to reduce network stress (thanks, Marcin212)
             if(change && timer>20) {
                 this.markDirty();
                 timer = 0;
