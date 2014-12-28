@@ -21,7 +21,7 @@ import java.util.Random;
 public class TileEntitySprinkler extends TileEntityAgricraft{
     private int counter = 0;
     public float angle = 0.0F;
-
+    private boolean isSprinkled = false;
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
@@ -29,9 +29,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
         if(this.counter>0) {
             tag.setInteger(Names.NBT.level, this.counter);
         }
-        if(this.angle>0) {
-            tag.setFloat(Names.NBT.angle, this.angle);
-        }
+        tag.setBoolean(Names.NBT.isSprinkled, isSprinkled);
     }
 
     //this loads the saved data for the tile entity
@@ -44,12 +42,13 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
         else {
             this.counter=0;
         }
-        if(tag.hasKey(Names.NBT.angle)) {
-            this.angle = tag.getFloat(Names.NBT.angle);
-        }
-        else {
-            this.angle = 0;
-        }
+        
+        if(tag.hasKey(Names.NBT.isSprinkled)) {
+             this.isSprinkled = tag.getBoolean(Names.NBT.isSprinkled);
+         }
+         else {
+             this.isSprinkled = false;
+         }
     }
 
     //checks if the sprinkler is connected to an irrigation channel
@@ -80,8 +79,8 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
             }
         }
         else {
-            if(this.canSprinkle()) {
-                this.renderLiquidSpray();
+            if(this.isSprinkled) {
+            	this.renderLiquidSpray();
             }
         }
     }
@@ -91,14 +90,13 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
     }
 
     private boolean sprinkle() {
-        if(this.canSprinkle()) {
-            TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord+1, this.zCoord);
-            counter = (counter+1)%60;
-            this.angle = (this.angle+0.05F)%360;
-            this.markDirty();
-            return true;
+    	boolean newState  = this.canSprinkle();
+    	if(newState) counter = (counter+1)%60;
+        if(newState != this.isSprinkled) {
+        	this.isSprinkled = newState;
+        	this.markDirty();
         }
-        return false;
+        return this.isSprinkled;
     }
 
     //tries to irrigate a block, returns true if water needs to be consumed
@@ -123,6 +121,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
 
     @SideOnly(Side.CLIENT)
     private void renderLiquidSpray() {
+        this.angle = (this.angle+5F)%360;
         for(int i=0;i<4;i++) {
             float alpha = (this.angle+90*i)*((float)Math.PI)/180;
             double xOffset = (4*Constants.unit)*Math.cos(alpha);

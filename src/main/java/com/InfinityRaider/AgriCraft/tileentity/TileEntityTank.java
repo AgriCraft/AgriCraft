@@ -14,7 +14,8 @@ import net.minecraftforge.fluids.*;
 public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler {
     protected int connectedTanks=1;
     protected int fluidLevel=0;
-
+    private int timer = 0;
+    
     //OVERRIDES
     //---------
     //this saves the data on the tile entity
@@ -58,9 +59,11 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                 this.setFluidLevel(this.fluidLevel+5);
                 change = true;
             }
-            if(change) {
+            if(change && timer>20) {
                 this.markDirty();
+                timer = 0;
             }
+            timer++;
         }
     }
 
@@ -217,6 +220,8 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         int xSize = this.getXSize();
         int ySize = this.getYSize();
         int zSize = this.getZSize();
+        boolean change = timer>20;
+        if(change) timer = 0;
         //iterate trough the x-, y- and z-directions if all blocks are tanks
         for (int x = this.xCoord - xPos; x < this.xCoord - xPos + xSize; x++) {
             for (int y = this.yCoord - yPos; y < this.yCoord - yPos + ySize; y++) {
@@ -225,7 +230,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                         TileEntityTank tank =(TileEntityTank) this.worldObj.getTileEntity(x, y, z);
                         tank.fluidLevel = lvl;
                         if(tank.getYPosition()==0) {
-                            tank.markDirty();
+                        	if(change){
+                        		tank.markDirty();
+                        	}
                         }
                     }
                 }
