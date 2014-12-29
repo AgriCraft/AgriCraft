@@ -3,10 +3,12 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
+import com.InfinityRaider.AgriCraft.proxy.ClientProxy;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -309,13 +311,13 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
 
     //rendering stuff
     @Override
-    public int getRenderType() {return -1;}                 //get default render type: net.minecraft.client.renderer
+    public int getRenderType() {return ClientProxy.cropRenderID;}                 //get default render type: net.minecraft.client.renderer
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
     @Override
     public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return false;}
+    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return true;}
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {return false;}        //no particles when this block gets hit
