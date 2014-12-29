@@ -55,12 +55,13 @@ public class TileEntityCrop extends TileEntityAgricraft {
             this.setSeed(tag.getString(Names.Objects.seed));
             this.seedMeta = tag.getInteger(Names.NBT.meta);
         }
+        if(worldObj != null)
+            this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         super.readFromNBT(tag);
     }
 
     //the code that makes the crop cross with neighboring crops
     public void crossOver() {
-        if(!this.worldObj.isRemote) {
             //flag to check if the crop needs to update
             boolean change = false;
             //possible new plant
@@ -107,7 +108,7 @@ public class TileEntityCrop extends TileEntityAgricraft {
             if (change) {
                 this.markDirty();
             }
-        }
+        
     }
 
     //finds neighbouring crops
@@ -195,6 +196,8 @@ public class TileEntityCrop extends TileEntityAgricraft {
             this.analyzed = analyzed;
             this.seedMeta = seedMeta;
             this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
+            this.markDirty();
+            this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
     }
 

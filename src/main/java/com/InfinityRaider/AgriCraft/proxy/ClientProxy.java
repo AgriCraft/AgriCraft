@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
 import codechicken.nei.api.API;
+
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
@@ -9,7 +10,9 @@ import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.renderers.*;
 import com.InfinityRaider.AgriCraft.tileentity.*;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
@@ -22,12 +25,14 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.Iterator;
 
 public class ClientProxy extends CommonProxy {
+    public static int cropRenderID = -1;
+
     //register custom renderers
     public void registerRenderers() {
         //crops
-        TileEntitySpecialRenderer renderCrops = new RenderCrop();
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrop.class, renderCrops);
-
+        cropRenderID = RenderingRegistry.getNextAvailableRenderId();
+        RenderCrop renderCrops = new RenderCrop();
+        RenderingRegistry.registerBlockHandler(cropRenderID, renderCrops);
         //seed analyzer
         TileEntitySpecialRenderer  renderAnalyzer = new RenderSeedAnalyzer();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySeedAnalyzer.class, renderAnalyzer);
