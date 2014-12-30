@@ -25,25 +25,30 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.Iterator;
 
 public class ClientProxy extends CommonProxy {
-    public static int cropRenderID = -1;
+    public static int croprenderid = -1;
+    public static int tankRenderId = -1;
+    public static int channelRenderId = -1;
 
     //register custom renderers
     public void registerRenderers() {
         //crops
-        cropRenderID = RenderingRegistry.getNextAvailableRenderId();
+        croprenderid = RenderingRegistry.getNextAvailableRenderId();
         RenderCrop renderCrops = new RenderCrop();
-        RenderingRegistry.registerBlockHandler(cropRenderID, renderCrops);
+        RenderingRegistry.registerBlockHandler(croprenderid, renderCrops);
+
         //seed analyzer
         TileEntitySpecialRenderer  renderAnalyzer = new RenderSeedAnalyzer();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySeedAnalyzer.class, renderAnalyzer);
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.seedAnalyzer), new RenderItemSeedAnalyzer(renderAnalyzer, new TileEntitySeedAnalyzer()));
 
         //water tank
+        tankRenderId = RenderingRegistry.getNextAvailableRenderId();
         TileEntitySpecialRenderer renderTank = new RenderTank();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, renderTank);
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockWaterTank), new RenderItemTank(renderTank, new TileEntityTank()));
 
         //water channel
+        channelRenderId = RenderingRegistry.getNextAvailableRenderId();
         TileEntitySpecialRenderer renderChannel = new RenderChannel();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChannel.class, renderChannel);
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockWaterChannel), new RenderItemChannel(renderChannel, new TileEntityChannel()));

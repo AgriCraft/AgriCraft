@@ -311,7 +311,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
 
     //rendering stuff
     @Override
-    public int getRenderType() {return ClientProxy.cropRenderID;}                 //get default render type: net.minecraft.client.renderer
+    public int getRenderType() {return ClientProxy.croprenderid;}                 //get default render type: net.minecraft.client.renderer
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
     @Override

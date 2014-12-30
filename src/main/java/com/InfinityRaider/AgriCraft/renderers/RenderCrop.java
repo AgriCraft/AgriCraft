@@ -17,20 +17,18 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 public class RenderCrop implements ISimpleBlockRenderingHandler {
 
     @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelId,
-            RenderBlocks renderer) {
+    public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
-            Block block, int modelId, RenderBlocks renderer) {
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (tileEntity instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) tileEntity;
             this.renderBase(renderer, block, x, y, z);
             BlockBush plant = SeedHelper.getPlant((ItemSeeds) crop.seed);
-            if(crop.crossCrop)
-            {
+            //render four horizontal sticks (crosscrop)
+            if(crop.crossCrop) {
                 renderer.setRenderBounds(0.1875F, 0.6875F , 0.0F, 0.125F, 0.6F, 1.0F);
                 renderer.renderStandardBlock(block, x, y, z);
                 
@@ -48,7 +46,8 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
         }
         return true;
     }
-    
+
+    //render four sticks vertical in the ground
     private void renderBase(RenderBlocks renderer, Block block, int x, int y, int z){
         renderer.setRenderBounds(0.125F, -0.125F, 0.125F, 0.1875F, Constants.unit * 13, 0.1875F);
         renderer.renderStandardBlock(block, x, y, z);
@@ -71,7 +70,7 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
 
     @Override
     public int getRenderId() {
-        return ClientProxy.cropRenderID;
+        return ClientProxy.croprenderid;
     }
 
 }
