@@ -15,11 +15,11 @@ public class TileEntityCustomWood extends TileEntityAgricraft {
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
         if(this.materialName!=null && !this.materialName.equals("")) {
             tag.setString(Names.NBT.material, this.materialName);
             tag.setInteger(Names.NBT.materialMeta, this.materialMeta);
         }
+        super.writeToNBT(tag);
     }
 
     //this loads the saved data for the tile entity

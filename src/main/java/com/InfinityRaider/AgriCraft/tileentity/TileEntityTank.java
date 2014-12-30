@@ -21,11 +21,11 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
         tag.setInteger(Names.NBT.connected, this.connectedTanks);
         if(this.fluidLevel>0) {
             tag.setInteger(Names.NBT.level, this.fluidLevel);
         }
+        super.writeToNBT(tag);
     }
 
     //this loads the saved data for the tile entity
@@ -59,8 +59,8 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                 this.setFluidLevel(this.fluidLevel+5);
                 change = true;
             }
-            //Only send update to the client every 20ticks to reduce network stress (thanks, Marcin212)
-            if(change && timer>20) {
+            //Only send update to the client every 10 ticks to reduce network stress (thanks, Marcin212)
+            if(change && timer>10) {
                 this.markDirty();
                 timer = 0;
             }

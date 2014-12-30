@@ -150,6 +150,7 @@ public class BlockWaterTank extends BlockContainer{
             }
             if(update) {
                 tank.markDirty();
+                world.markBlockForUpdate(x, y, z);
                 return true;
             }
             else {

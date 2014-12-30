@@ -59,9 +59,9 @@ public class TileEntityChannel extends TileEntityCustomWood {
     @Override
     public void updateEntity() {
         if (!this.worldObj.isRemote) {
-            //Only send update to the client every 20ticks to reduce network stress (thanks, Marcin212)
+            //Only send update to the client every 5 ticks to reduce network stress (thanks, Marcin212)
         	timer++;
-        	if(timer%20==0){
+        	if(timer%5==0){
         		timer = 0;
         		if(lastLvl != lvl){
         			lastLvl = lvl;
