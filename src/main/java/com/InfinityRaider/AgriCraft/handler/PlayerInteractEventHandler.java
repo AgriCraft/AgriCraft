@@ -35,7 +35,9 @@ public class PlayerInteractEventHandler {
                         }
                     }
                 }
-            } else if (event.world.getBlock(event.x, event.y, event.z) instanceof BlockCrop) {
+            }
+            /*
+            else if (event.world.getBlock(event.x, event.y, event.z) instanceof BlockCrop) {
                 //prevent Hunger Overhaul from meddling with my harvest logic
                 if (ModIntegration.LoadedMods.hungerOverhaul) {
                     if (event.entityPlayer.getCurrentEquippedItem() != null) {
@@ -65,6 +67,7 @@ public class PlayerInteractEventHandler {
                     this.denyEvent(event, event.world.isRemote);
                 }
             }
+            */
         }
     }
 

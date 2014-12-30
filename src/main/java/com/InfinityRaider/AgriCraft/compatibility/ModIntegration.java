@@ -13,6 +13,10 @@ import powercrystals.minefactoryreloaded.api.FactoryRegistry;
 public class ModIntegration {
 
     public static void init() {
+        //Hunger Overhaul
+        if(LoadedMods.hungerOverhaul) {
+            FMLInterModComms.sendMessage("HungerOverhaul", "BlacklistRightClick", "com.InfinityRaider.AgriCraft.blocks.BlockCrop");
+        }
         //MFR
         if(LoadedMods.mfr) {
             FactoryRegistry.sendMessage("registerHarvestable", new AgriCraftHarvestable());
