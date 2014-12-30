@@ -33,6 +33,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGrowable {
+    @SideOnly(Side.CLIENT)
+    private IIcon[] weedIcons;
+
     public BlockCrop() {
         super(Blocks.farmland, null, null, 0, 0, 6);
         this.isBlockContainer = true;
@@ -330,11 +333,31 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
         this.blockIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1));
+        this.weedIcons = new IIcon[4];
+        for(int i=0;i<weedIcons.length;i++) {
+            this.weedIcons[i] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1) + "WeedTexture" + (i + 1));
+        }
     }
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
         return this.blockIcon;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getWeedIcon(int meta) {
+        int index = 0;
+        switch(meta) {
+            case 0:index = 0;break;
+            case 1:index = 0;break;
+            case 2:index = 1;break;
+            case 3:index = 1;break;
+            case 4:index = 1;break;
+            case 5:index = 2;break;
+            case 6:index = 2;break;
+            case 7:index = 3;break;
+        }
+        return this.weedIcons[index];
     }
 
     @Override
