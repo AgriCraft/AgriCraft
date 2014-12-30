@@ -4,18 +4,15 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 public class RenderItemChannel implements IItemRenderer {
-    TileEntitySpecialRenderer renderer;
     private TileEntity tileEntity;
 
-    public RenderItemChannel(TileEntitySpecialRenderer renderer, TileEntity tileEntity) {
-        this.renderer = renderer;
+    public RenderItemChannel(TileEntity tileEntity) {
         this.tileEntity = tileEntity;
     }
 

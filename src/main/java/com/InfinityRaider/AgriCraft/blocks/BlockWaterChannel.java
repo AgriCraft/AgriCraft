@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
@@ -128,7 +129,7 @@ public class BlockWaterChannel extends BlockContainer {
     //render methods
     //--------------
     @Override
-    public int getRenderType() {return -1;}                 //get default render type: net.minecraft.client.renderer
+    public int getRenderType() {return AgriCraft.proxy.getRenderId(Constants.channelId);}
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
     @Override
