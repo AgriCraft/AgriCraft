@@ -27,4 +27,9 @@ public final class Constants {
     public static final int nei_X2 = 106;
     public static final int nei_X3 = 75;
     public static final int nei_Y = 29;
+
+    //id's
+    public static final int cropId = 0;
+    public static final int tankId = 1;
+    public static final int channelId = 2;
 }

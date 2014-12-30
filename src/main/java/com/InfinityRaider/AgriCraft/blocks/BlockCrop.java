@@ -1,9 +1,11 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.proxy.ClientProxy;
+import com.InfinityRaider.AgriCraft.proxy.CommonProxy;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -310,8 +312,8 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     }
 
     //rendering stuff
-    @Override
-    public int getRenderType() {return ClientProxy.croprenderid;}                 //get default render type: net.minecraft.client.renderer
+    @Override public int getRenderType() {return AgriCraft.proxy.getRenderId(Constants.cropId);}       //get the correct render type
+
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
     @Override

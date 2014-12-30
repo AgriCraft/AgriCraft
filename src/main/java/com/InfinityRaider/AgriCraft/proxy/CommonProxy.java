@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.init.TileEntities;
 import net.minecraftforge.common.MinecraftForge;
 
 public abstract class CommonProxy implements IProxy {
+
     public void registerTileEntities() {
         TileEntities.init();
     }

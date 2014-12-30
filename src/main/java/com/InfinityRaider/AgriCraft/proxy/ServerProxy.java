@@ -14,4 +14,9 @@ public class ServerProxy extends CommonProxy {
 
     @Override
     public void registerEventHandlers() {super.registerEventHandlers();}
+
+    @Override
+    public int getRenderId(int nr) {
+        return 0;
+    }
 }

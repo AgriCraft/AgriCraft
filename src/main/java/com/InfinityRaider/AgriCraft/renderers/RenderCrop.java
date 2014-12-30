@@ -7,6 +7,7 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
+import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.proxy.ClientProxy;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -70,7 +71,7 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
 
     @Override
     public int getRenderId() {
-        return ClientProxy.croprenderid;
+        return AgriCraft.proxy.getRenderId(Constants.cropId);
     }
 
 }
