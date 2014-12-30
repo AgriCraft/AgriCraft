@@ -55,8 +55,6 @@ public class TileEntityCrop extends TileEntityAgricraft {
             this.setSeed(tag.getString(Names.Objects.seed));
             this.seedMeta = tag.getInteger(Names.NBT.meta);
         }
-        if(worldObj != null)
-            this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         super.readFromNBT(tag);
     }
 

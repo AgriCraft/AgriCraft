@@ -27,4 +27,12 @@ public class TileEntityAgricraft extends TileEntity {
         this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
         super.markDirty();
     }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        if(worldObj != null) {
+            this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        }
+        super.readFromNBT(tag);
+    }
 }
