@@ -197,7 +197,6 @@ public class TileEntityCrop extends TileEntityAgricraft {
             this.seedMeta = seedMeta;
             this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
             this.markDirty();
-            this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
     }
 
