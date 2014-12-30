@@ -24,13 +24,13 @@ public class TileEntityChannel extends TileEntityCustomWood {
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
         if(tag.hasKey(Names.NBT.level)) {
             this.lvl = tag.getInteger(Names.NBT.level);
         }
         else {
             this.lvl=0;
         }
+        super.readFromNBT(tag);
     }
 
     public int getFluidLevel() {return this.lvl;}

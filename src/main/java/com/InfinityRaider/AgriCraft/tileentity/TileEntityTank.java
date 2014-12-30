@@ -31,7 +31,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
         this.connectedTanks = tag.getInteger(Names.NBT.connected);
         if(tag.hasKey(Names.NBT.level)) {
             this.fluidLevel = tag.getInteger(Names.NBT.level);
@@ -39,6 +38,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         else {
             this.fluidLevel=0;
         }
+        super.readFromNBT(tag);
     }
 
     //updates the tile entity every tick
