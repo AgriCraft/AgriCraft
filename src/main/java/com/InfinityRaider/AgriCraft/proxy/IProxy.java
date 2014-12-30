@@ -13,4 +13,6 @@ public interface IProxy {
     public void hideItemInNEI(ItemStack stack);
 
     public void registerEventHandlers();
+
+    public int getCropRenderID();
 }
