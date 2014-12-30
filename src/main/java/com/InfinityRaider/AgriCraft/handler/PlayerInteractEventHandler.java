@@ -1,12 +1,6 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.items.ItemDebugger;
-import com.InfinityRaider.AgriCraft.items.ItemMagnifyingGlass;
-import com.InfinityRaider.AgriCraft.items.ItemTrowel;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -36,38 +30,6 @@ public class PlayerInteractEventHandler {
                     }
                 }
             }
-            /*
-            else if (event.world.getBlock(event.x, event.y, event.z) instanceof BlockCrop) {
-                //prevent Hunger Overhaul from meddling with my harvest logic
-                if (ModIntegration.LoadedMods.hungerOverhaul) {
-                    if (event.entityPlayer.getCurrentEquippedItem() != null) {
-                        if (event.entityPlayer.getCurrentEquippedItem().getItem() == Items.dye && event.entityPlayer.getCurrentEquippedItem().getItemDamage() == 15) {
-                            //bonemeal
-                            if (!((TileEntityCrop) event.world.getTileEntity(event.x, event.y, event.z)).isMature()) {
-                                if (!event.world.isRemote) {
-                                    event.setResult(Event.Result.ALLOW);
-                                    return;
-                                }
-                            }
-                        }
-                        //debugger can be used
-                        else if (event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemDebugger) {
-                            event.entityPlayer.getCurrentEquippedItem().getItem().onItemUse(event.entityPlayer.getCurrentEquippedItem(), event.entityPlayer, event.world, event.x, event.y, event.z, event.face, 0, 0, 0);
-                        }
-                        //use the trowel or magnifying glass
-                        else if (event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemTrowel || event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemMagnifyingGlass) {
-                            event.entityPlayer.getCurrentEquippedItem().getItem().onItemUseFirst(event.entityPlayer.getCurrentEquippedItem(), event.entityPlayer, event.world, event.x, event.y, event.z, event.face, 0, 0, 0);
-                            this.denyEvent(event, event.world.isRemote);
-                            return;
-                        }
-                    }
-                    //call the block's onBlockActivated method
-                    event.world.getBlock(event.x, event.y, event.z).onBlockActivated(event.world, event.x, event.y, event.z, event.entityPlayer, event.face, 0, 0, 0);
-                    //cancel event to prevent the Hunger Overhaul event handler from being called
-                    this.denyEvent(event, event.world.isRemote);
-                }
-            }
-            */
         }
     }
 

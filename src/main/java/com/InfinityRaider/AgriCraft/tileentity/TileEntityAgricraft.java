@@ -23,9 +23,9 @@ public class TileEntityAgricraft extends TileEntity {
     //this gets called when the tile entity should get updated on the client
     @Override
     public void markDirty() {
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
         super.markDirty();
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Override
