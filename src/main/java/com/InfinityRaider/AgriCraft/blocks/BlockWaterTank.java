@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -195,13 +196,13 @@ public class BlockWaterTank extends BlockContainer{
     //render methods
     //--------------
     @Override
-    public int getRenderType() {return -1;}                 //get default render type: net.minecraft.client.renderer
+    public int getRenderType() {return AgriCraft.proxy.getRenderId(Constants.tankId);}                 //get the correct renderId
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
     @Override
     public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return false;}
+    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return true;}
 
     @Override
     @SideOnly(Side.CLIENT)

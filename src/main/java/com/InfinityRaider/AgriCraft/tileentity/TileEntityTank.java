@@ -174,7 +174,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                     }
                 }
             }
-
             return true;
         }
         return false;

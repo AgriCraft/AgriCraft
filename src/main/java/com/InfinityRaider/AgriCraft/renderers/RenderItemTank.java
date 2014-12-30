@@ -11,11 +11,9 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 public class RenderItemTank implements IItemRenderer {
-    TileEntitySpecialRenderer renderer;
     private TileEntity tileEntity;
 
-    public RenderItemTank(TileEntitySpecialRenderer renderer, TileEntity tileEntity) {
-        this.renderer = renderer;
+    public RenderItemTank(TileEntity tileEntity) {
         this.tileEntity = tileEntity;
     }
 

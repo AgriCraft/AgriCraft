@@ -77,9 +77,15 @@ public abstract class RenderHelper {
         }
     }
 
-    //adds a vertex to the tessellator scaled with 1/46th of a block
+    //adds a vertex to the tessellator scaled with 1/16th of a block
     public static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v) {
         float unit = Constants.unit;
         tessellator.addVertexWithUV(x*unit, y*unit, z*unit, u*unit, v*unit);
+    }
+
+    //same as above method, but does not require the correct texture to be bound
+    public static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v, IIcon icon) {
+        float unit = Constants.unit;
+        tessellator.addVertexWithUV(x*unit, y*unit, z*unit, icon.getInterpolatedU(u), icon.getInterpolatedV(v));
     }
 }
