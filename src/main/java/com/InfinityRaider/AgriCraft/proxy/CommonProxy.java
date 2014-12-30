@@ -5,6 +5,12 @@ import com.InfinityRaider.AgriCraft.init.TileEntities;
 import net.minecraftforge.common.MinecraftForge;
 
 public abstract class CommonProxy implements IProxy {
+    private int cropRenderID = -1;
+
+    public int getCropRenderID() {
+        return cropRenderID;
+    }
+
     public void registerTileEntities() {
         TileEntities.init();
     }

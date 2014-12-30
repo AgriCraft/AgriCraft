@@ -25,8 +25,6 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.Iterator;
 
 public class ClientProxy extends CommonProxy {
-    public static int cropRenderID = -1;
-
     //register custom renderers
     public void registerRenderers() {
         //crops
