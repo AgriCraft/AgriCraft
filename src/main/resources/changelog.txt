@@ -1,5 +1,10 @@
 Changelog
 ---------
+1.1.0
+-Rewrote rendering code to improve performance
+-Fixed gardening trowel bug
+-Changed Hunger Overhaul compatibility (you need to update HO to newest version as well)
+
 1.0.5
 -Fixed crash when disabling vanilla farming
 -Fixed servers kicking you out when breaking tanks
