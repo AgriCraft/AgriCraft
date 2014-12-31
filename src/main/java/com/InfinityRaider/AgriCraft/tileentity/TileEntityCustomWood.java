@@ -81,6 +81,11 @@ public class TileEntityCustomWood extends TileEntityAgricraft {
             tag.setString(Names.NBT.material, this.materialName);
             tag.setInteger(Names.NBT.materialMeta, this.materialMeta);
         }
+        else {
+            //default to oak planks
+            tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(Blocks.planks));
+            tag.setInteger(Names.NBT.materialMeta, 0);
+        }
         return tag;
     }
 
