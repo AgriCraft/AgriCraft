@@ -226,7 +226,9 @@ public class TileEntityCrop extends TileEntityAgricraft {
     //check if the seed can grow
     private boolean canGrow(ItemSeeds seed) {
         BlockBush plant = SeedHelper.getPlant(seed);
-        if(this.worldObj.getBlock(this.xCoord,this.yCoord-1,this.zCoord) instanceof net.minecraft.block.BlockFarmland && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
+        Block soil = this.worldObj.getBlock(this.xCoord,this.yCoord-1,this.zCoord);
+        int soilMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord - 1, this.zCoord);
+        if(BlockCrop.isSoilFertile(soil, soilMeta) && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
             if(plant instanceof BlockModPlant) {
                 BlockModPlant blockModPlant = (BlockModPlant) plant;
                 return blockModPlant.base == null || OreDictHelper.isSameOre(blockModPlant.base, blockModPlant.baseMeta, this.worldObj.getBlock(this.xCoord, this.yCoord - 2, this.zCoord), this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord));

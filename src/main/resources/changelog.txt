@@ -1,5 +1,9 @@
 Changelog
 ---------
+1.1.1
+-Fixed Null Pointer Exception in certain cases when breaking tanks
+-Crops can be set on Forestry humus
+
 1.1.0
 -Rewrote rendering code to improve performance
 -Fixed gardening trowel bug

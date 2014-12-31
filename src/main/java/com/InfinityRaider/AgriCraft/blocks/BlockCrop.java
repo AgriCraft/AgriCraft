@@ -14,6 +14,7 @@ import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.particle.EffectRenderer;
@@ -276,6 +277,16 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
         return world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityCrop && ((TileEntityCrop) world.getTileEntity(x, y, z)).isFertile();
+    }
+
+    public static boolean isSoilFertile(Block block, int meta) {
+        if( block instanceof BlockFarmland) {
+            return true;
+        }
+        else {
+            //To do: create config to white list other blocks as suitable soil
+            return (block == Block.blockRegistry.getObject("Forestry:soil") && meta == 0);
+        }
     }
 
     //get a list with items dropped by the the crop
