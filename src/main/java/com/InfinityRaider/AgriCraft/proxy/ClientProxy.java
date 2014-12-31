@@ -41,6 +41,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     //register custom renderers
+    @Override
     public void registerRenderers() {
         //crops
         cropRenderId = RenderingRegistry.getNextAvailableRenderId();
@@ -81,6 +82,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     //initialize NEI
+    @Override
     public void initNEI() {
         if (ModIntegration.LoadedMods.nei) {
             NEIConfig configNEI = new NEIConfig();
@@ -89,6 +91,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     //hide items in NEI
+    @Override
     public void hideItemInNEI(ItemStack stack) {
         Iterator mods = Loader.instance().getActiveModList().iterator();
         ModContainer modContainer;

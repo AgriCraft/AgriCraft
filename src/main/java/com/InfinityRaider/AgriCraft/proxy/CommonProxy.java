@@ -6,10 +6,12 @@ import net.minecraftforge.common.MinecraftForge;
 
 public abstract class CommonProxy implements IProxy {
 
+    @Override
     public void registerTileEntities() {
         TileEntities.init();
     }
 
+    @Override
     public void registerEventHandlers() {
         PlayerInteractEventHandler playerInteractEventHandler = new PlayerInteractEventHandler();
 
