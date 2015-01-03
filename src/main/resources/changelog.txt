@@ -4,6 +4,7 @@ Changelog
 -Fixed Null Pointer Exception in certain cases when breaking tanks
 -Crops can be set on Forestry humus
 -Fixed config reading bug
+-Custom Plants will now correctly drop their fruit if their fruit is a seed
 
 1.1.0
 -Rewrote rendering code to improve performance
