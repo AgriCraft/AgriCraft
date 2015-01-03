@@ -90,7 +90,7 @@ public final class SeedInformation {
             informationTable.put(PlantMegaPack.items.seedSpinach, new String[]{pmp_Spinach});
             informationTable.put(PlantMegaPack.items.seedCelery, new String[]{pmp_Celery});
             informationTable.put(PlantMegaPack.items.seedLettuce, new String[]{pmp_lettuce});
-            informationTable.put(PlantMegaPack.items.seedBellPepperYellow, new String[]{pmp_Bellpepper});;
+            informationTable.put(PlantMegaPack.items.seedBellPepperYellow, new String[]{pmp_Bellpepper});
             informationTable.put(PlantMegaPack.items.seedCorn, new String[]{pmp_Corn});
             informationTable.put(PlantMegaPack.items.seedCucumber, new String[]{pmp_Cucumber});
             informationTable.put(PlantMegaPack.items.seedTomato, new String[]{pmp_Tomato});
