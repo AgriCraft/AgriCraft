@@ -4,15 +4,118 @@ package com.InfinityRaider.AgriCraft.reference;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mods.natura.common.NContent;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import plantmegapack.PlantMegaPack;
 
+import java.util.HashMap;
+
 public final class SeedInformation {
-//agricraft seeds
+    private static final HashMap<Item, String[]> informationTable = new HashMap<Item, String[]>();
+
+    @SideOnly(Side.CLIENT)
+    public static void init() {
+        informationTable.put(Items.wheat_seeds, new String[]{wheat});
+        informationTable.put(Items.pumpkin_seeds, new String[]{pumpkin});
+        informationTable.put(Items.melon_seeds, new String[]{melon});
+        if(ModIntegration.LoadedMods.natura) {
+            informationTable.put(NContent.seeds, new String[]{barleyNatura,cottonNatura});
+        }
+        if(ModIntegration.LoadedMods.harvestcraft) {
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.artichokeseedItem, new String[]{hc_Artichoke});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.asparagusseedItem, new String[]{hc_Asparagus});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.bambooshootseedItem, new String[]{hc_BambooShoot});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.barleyseedItem, new String[]{hc_Barley});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.beanseedItem, new String[]{hc_Bean});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.beetseedItem, new String[]{hc_Beet});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.bellpepperseedItem, new String[]{hc_Bellpepper});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.blackberryseedItem, new String[]{hc_Blackberry});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.blueberryseedItem, new String[]{hc_Blueberry});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.broccoliseedItem, new String[]{hc_Broccoli});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.brusselsproutseedItem, new String[]{hc_BrusselsSprout});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.cabbageseedItem, new String[]{hc_Cabbage});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.cactusfruitseedItem, new String[]{hc_CactusFruit});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.candleberryseedItem, new String[]{hc_CandleBerry});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.cantaloupeseedItem, new String[]{hc_Cantaloupe});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.cauliflowerseedItem, new String[]{hc_Cauliflower});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.celeryseedItem, new String[]{hc_Celery});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.chilipepperseedItem, new String[]{hc_ChiliPepper});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.coffeeseedItem, new String[]{hc_Coffee});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.cornseedItem, new String[]{hc_Corn});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.cottonseedItem, new String[]{hc_Cotton});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.cranberryseedItem, new String[]{hc_Cranberry});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.cucumberseedItem, new String[]{hc_Cucumber});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.eggplantseedItem, new String[]{hc_Eggplant});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.garlicseedItem, new String[]{hc_Garlic});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.gingerseedItem, new String[]{hc_Ginger});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.grapeseedItem, new String[]{hc_Grape});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.kiwiseedItem, new String[]{hc_Kiwi});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.leekseedItem, new String[]{hc_Leek});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.lettuceseedItem, new String[]{hc_Lettuce});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.mustardseedItem, new String[]{hc_Mustard});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.oatsseedItem, new String[]{hc_Oats});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.okraseedItem, new String[]{hc_Okra});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.onionseedItem, new String[]{hc_Onion});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.parsnipseedItem, new String[]{hc_Parsnip});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.peanutseedItem, new String[]{hc_Peanut});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.peasseedItem, new String[]{hc_Peas});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.pineappleseedItem, new String[]{hc_Pineapple});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.radishseedItem, new String[]{hc_Radish});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.raspberryseedItem, new String[]{hc_Raspberry});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.rhubarbseedItem, new String[]{hc_Rhubarb});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.riceseedItem, new String[]{hc_Rice});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.rutabagaseedItem, new String[]{hc_Rutabaga});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.ryeseedItem, new String[]{hc_Rye});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.scallionseedItem, new String[]{hc_Scallion});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.seaweedseedItem, new String[]{hc_Seaweed});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.soybeanseedItem, new String[]{hc_Soybean});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.spiceleafseedItem, new String[]{hc_SpiceLeaf});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.strawberryseedItem, new String[]{hc_Strawberry});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.sweetpotatoseedItem, new String[]{hc_SweetPotato});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.teaseedItem, new String[]{hc_Tea});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.tomatoseedItem, new String[]{hc_Tomato});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.turnipseedItem, new String[]{hc_Turnip});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.whitemushroomseedItem, new String[]{hc_WhiteMushroom});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.wintersquashseedItem, new String[]{hc_WinterSquash});
+            informationTable.put(com.pam.harvestcraft.ItemRegistry.zucchiniseedItem, new String[]{hc_Zucchini});
+        }
+        if(ModIntegration.LoadedMods.plantMegaPack) {
+            informationTable.put(PlantMegaPack.items.seedBeet, new String[]{pmp_Onion});
+            informationTable.put(PlantMegaPack.items.seedSpinach, new String[]{pmp_Spinach});
+            informationTable.put(PlantMegaPack.items.seedCelery, new String[]{pmp_Celery});
+            informationTable.put(PlantMegaPack.items.seedLettuce, new String[]{pmp_lettuce});
+            informationTable.put(PlantMegaPack.items.seedBellPepperYellow, new String[]{pmp_Bellpepper});;
+            informationTable.put(PlantMegaPack.items.seedCorn, new String[]{pmp_Corn});
+            informationTable.put(PlantMegaPack.items.seedCucumber, new String[]{pmp_Cucumber});
+            informationTable.put(PlantMegaPack.items.seedTomato, new String[]{pmp_Tomato});
+            informationTable.put(PlantMegaPack.items.seedBeet, new String[]{pmp_Beet});
+        }
+    }
+
+    //retrieve seed information
+    public static String getSeedInformation(ItemStack seedStack) {
+        String output = "";
+        if (seedStack.getItem() instanceof ItemSeeds) {
+            if (seedStack.getItem() instanceof ItemModSeed) {
+                output = ((ItemModSeed) seedStack.getItem()).getInformation();
+            }
+            else {
+                String[] info = informationTable.get(seedStack.getItem());
+                if(info!=null && info.length>seedStack.getItemDamage()) {
+                    output = info[seedStack.getItemDamage()];
+                }
+            }
+        }
+        return StatCollector.translateToLocal(output);
+    }
+
+    //agricraft seeds
     public static final String potato = "agricraft_journal.potato";
     public static final String carrot = "agricraft_journal.carrot";
     public static final String sugarcane = "agricraft_journal.sugarcane";
@@ -117,193 +220,4 @@ public final class SeedInformation {
     public static final String pmp_Cucumber = hc_Cucumber;
     public static final String pmp_Tomato = hc_Tomato;
     public static final String pmp_Beet = hc_Beet;
-
-    private static String getMinecraftSeedInformation(ItemSeeds seed) {
-        if(seed == Items.wheat_seeds) {
-            return wheat;
-        }
-        if(seed == Items.pumpkin_seeds) {
-            return pumpkin;
-        }
-        if(seed == Items.melon_seeds) {
-            return melon;
-        }
-        return "";
-    }
-
-    private static String getNaturaSeedInformation(int meta) {
-        if(meta == 0) {
-            return barleyNatura;
-        }
-        if(meta == 1) {
-            return cottonNatura;
-        }
-        return "";
-    }
-
-    private static String getHarvestcraftSeedInformation(ItemSeeds seed) {
-        if(ModIntegration.LoadedMods.harvestcraft) {
-            if (seed==com.pam.harvestcraft.ItemRegistry.cottonseedItem) {
-                return hc_Cotton;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.asparagusseedItem) {
-                return hc_Asparagus;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.barleyseedItem) {
-                return hc_Barley;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.beanseedItem) {
-                return hc_Bean;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.beetseedItem) {
-                return hc_Beet;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.broccoliseedItem) {
-                return hc_Broccoli;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.whitemushroomseedItem) {
-                return hc_WhiteMushroom;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.cauliflowerseedItem) {
-                return hc_Cauliflower;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.celeryseedItem) {
-                return hc_Celery;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.cranberryseedItem) {
-                return hc_Cranberry;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.garlicseedItem) {
-                return hc_Garlic;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.gingerseedItem) {
-                return hc_Ginger;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.leekseedItem) {
-                return hc_Leek;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.lettuceseedItem) {
-                return hc_Lettuce;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.oatsseedItem) {
-                return hc_Oats;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.onionseedItem) {
-                return hc_Onion;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.parsnipseedItem) {
-                return hc_Parsnip;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.peanutseedItem) {
-                return hc_Peanut;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.pineappleseedItem) {
-                return hc_Pineapple;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.radishseedItem) {
-                return hc_Radish;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.riceseedItem) {
-                return hc_Rice;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.rutabagaseedItem) {
-                return hc_Rutabaga;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.ryeseedItem) {
-                return hc_Rye;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.scallionseedItem) {
-                return hc_Scallion;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.soybeanseedItem) {
-                return hc_Soybean;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.spiceleafseedItem) {
-                return hc_SpiceLeaf;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.sweetpotatoseedItem) {
-                return hc_SweetPotato;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.teaseedItem) {
-                return hc_Tea;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.turnipseedItem) {
-                return hc_Turnip;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.artichokeseedItem) {
-                return hc_Artichoke;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.bellpepperseedItem) {
-                return hc_Bellpepper;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.blackberryseedItem) {
-                return hc_Blackberry;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.blueberryseedItem) {
-                return hc_Blueberry;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.brusselsproutseedItem) {
-                return hc_BrusselsSprout;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.cabbageseedItem) {
-                return hc_Cabbage;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.cactusfruitseedItem) {
-                return hc_CactusFruit;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.candleberryseedItem) {
-                return hc_CandleBerry;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.cantaloupeseedItem) {
-                return hc_Cantaloupe;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.chilipepperseedItem) {
-                return hc_ChiliPepper;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.coffeeseedItem) {
-                return hc_Coffee;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.cornseedItem) {
-                return hc_Corn;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.cucumberseedItem) {
-                return hc_Cucumber;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.eggplantseedItem) {
-                return hc_Eggplant;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.grapeseedItem) {
-                return hc_Grape;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.kiwiseedItem) {
-                return hc_Kiwi;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.mustardseedItem) {
-                return hc_Mustard;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.okraseedItem) {
-                return hc_Okra;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.peasseedItem) {
-                return hc_Peas;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.raspberryseedItem) {
-                return hc_Raspberry;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.rhubarbseedItem) {
-                return hc_Rhubarb;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.seaweedseedItem) {
-                return hc_Seaweed;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.strawberryseedItem) {
-                return hc_Strawberry;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.tomatoseedItem) {
-                return hc_Tomato;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.wintersquashseedItem) {
-                return hc_WinterSquash;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.zucchiniseedItem) {
-                return hc_Zucchini;
-            } else if (seed == com.pam.harvestcraft.ItemRegistry.bambooshootseedItem) {
-                return hc_BambooShoot;
-            }
-        }
-        return "";
-    }
-
-    private static String getPlantMegaPackSeedInformation(ItemSeeds seed) {
-        if(ModIntegration.LoadedMods.plantMegaPack) {
-            if (seed == PlantMegaPack.items.seedBeet) {
-                return pmp_Beet;
-            } else if (seed == PlantMegaPack.items.seedBellPepperYellow) {
-                return pmp_Bellpepper;
-            } else if (seed == PlantMegaPack.items.seedCelery) {
-                return pmp_Celery;
-            } else if (seed == PlantMegaPack.items.seedCorn) {
-                return pmp_Corn;
-            } else if (seed == PlantMegaPack.items.seedCucumber) {
-                return pmp_Cucumber;
-            } else if (seed == PlantMegaPack.items.seedLettuce) {
-                return pmp_lettuce;
-            } else if (seed == PlantMegaPack.items.seedOnion) {
-                return pmp_Onion;
-            } else if (seed == PlantMegaPack.items.seedSpinach) {
-                return pmp_Spinach;
-            } else if (seed == PlantMegaPack.items.seedTomato) {
-                return pmp_Tomato;
-            }
-        }
-        return "";
-    }
-
-    public static String getSeedInformation(ItemStack seedStack) {
-        String output = "";
-        if (seedStack.getItem() instanceof ItemSeeds) {
-            if (seedStack.getItem() instanceof ItemModSeed) {
-                output = ((ItemModSeed) seedStack.getItem()).getInformation();
-            }
-            else if (ModIntegration.LoadedMods.natura && seedStack.getItem() instanceof mods.natura.items.NaturaSeeds) {
-                output = SeedInformation.getNaturaSeedInformation(seedStack.getItemDamage());
-            }
-            else if (ModIntegration.LoadedMods.harvestcraft && SeedHelper.getPlantDomain((ItemSeeds) seedStack.getItem()).equalsIgnoreCase("harvestcraft")) {
-                output = SeedInformation.getHarvestcraftSeedInformation((ItemSeeds) seedStack.getItem());
-            }
-            else if (ModIntegration.LoadedMods.plantMegaPack && SeedHelper.getPlantDomain((ItemSeeds) seedStack.getItem()).equalsIgnoreCase("plantmegapack")) {
-                output = SeedInformation.getPlantMegaPackSeedInformation((ItemSeeds) seedStack.getItem());
-            }
-            else {
-                output = SeedInformation.getMinecraftSeedInformation((ItemSeeds) seedStack.getItem());
-            }
-        }
-        return StatCollector.translateToLocal(output);
-    }
 }

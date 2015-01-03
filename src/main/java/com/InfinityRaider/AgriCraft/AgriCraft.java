@@ -23,6 +23,7 @@ import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -97,6 +98,8 @@ public class AgriCraft {
         }
         //configure NEI
         proxy.initNEI();
+        //init seed information
+        proxy.initSeedInfo();
         LogHelper.info("Post-Initialization Complete");
     }
 }
