@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -140,22 +141,33 @@ public abstract class SeedHelper {
     //gets the fruits
     public static ArrayList<ItemStack> getPlantFruits(ItemSeeds seed, World world, int x, int y, int z, int gain, int meta) {
         int nr =  (int) (Math.ceil((gain + 0.00) / 3));
+        BlockBush plant = getPlant(seed);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        if(getPlant(seed)== Blocks.nether_wart) {
+        //nether wart exception
+        if(plant==Blocks.nether_wart) {
             items.add(new ItemStack(seed, 1, 0));
         }
+        //agricraft crop
+        else if(plant instanceof BlockModPlant) {
+            items.add(((BlockModPlant) plant).getFruit(nr));
+        }
+        //natura crop
         else if(ModIntegration.LoadedMods.natura && getPlantDomain(seed).equalsIgnoreCase("natura")) {
             items.add(new ItemStack(NContent.plantItem, nr, meta*3));
         }
+        //harvestcraft crop
         else if(ModIntegration.LoadedMods.harvestcraft && getPlantDomain(seed).equalsIgnoreCase("harvestcraft")) {
             items.add(new ItemStack(getPlant(seed).getItemDropped(7, new Random(), 0), nr));
         }
+        //other crop
         else {
             int harvestMeta = 7;
+            //plant mega pack crop
             if(ModIntegration.LoadedMods.plantMegaPack && getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
                 harvestMeta=PlantMegaPackHelper.getTextureIndex(seed, 7);
             }
-            ArrayList<ItemStack> defaultDrops = getPlant(seed).getDrops(world, x, y, z, harvestMeta, 0);
+            //other crop
+            ArrayList<ItemStack> defaultDrops = plant.getDrops(world, x, y, z, harvestMeta, 0);
             for (ItemStack drop : defaultDrops) {
                 if (!(drop.getItem() instanceof ItemSeeds) && drop.getItem()!=null) {
                     boolean add = true;

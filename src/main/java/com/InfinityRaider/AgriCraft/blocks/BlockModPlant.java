@@ -85,6 +85,12 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         }
     }
 
+    public ItemSeeds getSeed() {return this.seed;}
+
+    public ItemStack getFruit() {return this.getFruit(1);}
+
+    public ItemStack getFruit(int nr) {return new ItemStack(this.fruit, nr, this.fruitMeta);}
+
     //register icons
     @Override
     @SideOnly(Side.CLIENT)
