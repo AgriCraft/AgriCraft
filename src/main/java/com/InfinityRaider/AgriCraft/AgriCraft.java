@@ -68,8 +68,6 @@ public class AgriCraft {
         ResourceCrops.init();
         //register seeds
         Seeds.init();
-        //initialize custom crops
-        CustomCrops.init();
         //register gui handler
         NetworkRegistry.INSTANCE.registerGuiHandler(instance , new GuiHandler());
         //initialize tile entities
@@ -86,6 +84,8 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event) {
         LogHelper.info("Starting Post-Initialization");
+        //initialize custom crops
+        CustomCrops.init();
         //initialize mutations
         MutationHandler.init();
         //initialize blacklist
