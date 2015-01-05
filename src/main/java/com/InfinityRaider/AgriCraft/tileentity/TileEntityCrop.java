@@ -6,7 +6,10 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.client.Minecraft;
@@ -14,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.common.IPlantable;
 
 public class TileEntityCrop extends TileEntityAgricraft {
@@ -257,5 +261,32 @@ public class TileEntityCrop extends TileEntityAgricraft {
     //a helper method for ItemSeed <-> String conversion for storing seed as a string in NBT
     public void setSeed(String input) {
         this.seed = input.equalsIgnoreCase("none")?null:(ItemSeeds) Item.itemRegistry.getObject(input);
+    }
+
+    //get the plant icon
+    @SideOnly(Side.CLIENT)
+    public IIcon getPlantIcon() {
+        IIcon icon = null;
+        if(this.hasPlant()) {
+            int meta = RenderHelper.plantIconIndex((ItemSeeds) this.seed, this.seedMeta, this.getBlockMetadata());
+            icon = SeedHelper.getPlant((ItemSeeds) this.seed).getIcon(0, meta);
+        }
+        else if(this.weed) {
+            icon = ((BlockCrop) this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)).getWeedIcon(this.getBlockMetadata());
+        }
+        return icon;
+    }
+
+    //get the rendertype
+    @SideOnly(Side.CLIENT)
+    public int getRenderType() {
+        int type = -1;
+        if(this.hasPlant()) {
+            type = RenderHelper.getRenderType((ItemSeeds) this.seed, this.seedMeta);
+        }
+        else if(this.weed) {
+            type = 6;
+        }
+        return type;
     }
 }

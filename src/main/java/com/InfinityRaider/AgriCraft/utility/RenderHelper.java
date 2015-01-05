@@ -54,9 +54,11 @@ public abstract class RenderHelper {
     public static int getRenderType(ItemSeeds seed, int meta) {
         BlockBush plant = SeedHelper.getPlant(seed);
         int renderType = plant.getRenderType();
-        String name = Item.itemRegistry.getNameForObject(seed);
-        if(ModIntegration.LoadedMods.natura && name.indexOf(':')>=0 && name.substring(0,name.indexOf(':')).equalsIgnoreCase("Natura")) {
-            renderType = meta==0?6:1;
+        if(ModIntegration.LoadedMods.natura) {
+            String name = Item.itemRegistry.getNameForObject(seed);
+            if (name.indexOf(':') >= 0 && name.substring(0, name.indexOf(':')).equalsIgnoreCase("Natura")) {
+                renderType = meta == 0 ? 6 : 1;
+            }
         }
         return renderType;
     }
