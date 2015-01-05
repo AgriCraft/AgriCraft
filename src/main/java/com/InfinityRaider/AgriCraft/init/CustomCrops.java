@@ -8,7 +8,9 @@ import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
+import net.minecraft.init.*;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
@@ -28,21 +30,42 @@ public class CustomCrops {
             customCrops = new BlockModPlant[cropsRawData.length];
             customSeeds = new ItemModSeed[cropsRawData.length];
             for(int i=0;i<cropsRawData.length;i++) {
-                String[] cropData = IOHelper.getCropData(cropsRawData[i]);
+                String[] cropData = IOHelper.getData(cropsRawData[i]);
                 //cropData[0]: name
-                //cropData[1]: fruit name
-                //cropData[2]: fruit meta
-                //cropData[3]: base block name
-                //cropData[4]: base block meta
-                //cropData[5]: tier
-                //cropData[6]: render type
-                //cropData[7]: information
-                customCrops[i] = new BlockModPlant(Block.getBlockFromName(cropData[3]), Integer.parseInt(cropData[4]), (Item) Item.itemRegistry.getObject(cropData[1]), Integer.parseInt(cropData[2]), Integer.parseInt(cropData[5]), Integer.parseInt(cropData[6]));
-                RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop+ Character.toUpperCase(cropData[0].charAt(0))+cropData[0].substring(1));
+                //cropData[1]: fruit name:meta
+                //cropData[2]: base block name:meta
+                //cropData[3]: tier
+                //cropData[4]: render type
+                //cropData[5]: information
+                boolean success = cropData.length==6;
+                String errorMsg = "Incorrect amount of arguments";
+                LogHelper.debug("parsing "+cropsRawData[i]);
+                if(success) {
+                    ItemStack fruitStack = IOHelper.getStack(cropData[1]);
+                    Item fruit = fruitStack!=null?fruitStack.getItem():null;
+                    errorMsg = "Invalid fruit";
+                    success = fruit!=null;
+                    if(success) {
+                        String name = cropData[0];
+                        int fruitMeta = fruitStack.getItemDamage(); ItemStack base = IOHelper.getStack(cropData[2]);
+                        Block baseBlock = base!=null?((ItemBlock) base.getItem()).field_150939_a:null;
+                        int baseMeta = base!=null?base.getItemDamage():0;
+                        int tier = Integer.parseInt(cropData[3]);
+                        int renderType = Integer.parseInt(cropData[4]);
+                        String info = cropData[5];
 
-                customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(cropData[0].charAt(0))+cropData[0].substring(1) + " Seeds", cropData[7]);
-                RegisterHelper.registerItem(customSeeds[i], Names.Objects.seed+ Character.toUpperCase(cropData[0].charAt(0))+cropData[0].substring(1));
-                OreDictionary.registerOre(Names.OreDict.listAllseed, CustomCrops.customSeeds[i]);
+                        customCrops[i] = new BlockModPlant(baseBlock, baseMeta, fruit, fruitMeta, tier, renderType);
+                        RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop + Character.toUpperCase(name.charAt(0)) + name.substring(1));
+
+                        customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds", info);
+                        RegisterHelper.registerItem(customSeeds[i], Names.Objects.seed + Character.toUpperCase(name.charAt(0)) + name.substring(1));
+
+                        OreDictionary.registerOre(Names.OreDict.listAllseed, CustomCrops.customSeeds[i]);
+                    }
+                }
+                if(!success) {
+                    LogHelper.info("Error when adding custom crop: "+errorMsg+" (line: "+cropsRawData[i]+")");
+                }
             }
             LogHelper.info("Custom crops registered");
         }
@@ -51,17 +74,24 @@ public class CustomCrops {
     private static void initGrassSeeds() {
         String[] rawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readGrassDrops());
         for(String data: rawData) {
-            if(data.indexOf(',') > 0) {
-                String seedName = data.substring(0, data.indexOf(','));
-                int meta = 0;
-                if(seedName.indexOf(':') > 0) {
-                    meta = Integer.parseInt(seedName.substring(seedName.indexOf(':') + 1));
-                    seedName = seedName.substring(0, seedName.indexOf(':'));
+            String[] dropData = IOHelper.getData(data);
+            boolean success = dropData.length==2;
+            String errorMsg = "Incorrect amount of arguments";
+            LogHelper.debug("parsing "+data);
+            if(success) {
+                ItemStack seedStack = IOHelper.getStack(dropData[0]);
+                Item drop = seedStack!=null?seedStack.getItem():null;
+                success = drop!=null;
+                errorMsg = "Invalid fruit";
+                if(success) {
+                    int meta = seedStack.getItemDamage();
+                    int weight = Integer.parseInt(dropData[1]);
+                    MinecraftForge.addGrassSeed(new ItemStack(drop, 1, meta), 10);
+                    LogHelper.info("Registered " + Item.itemRegistry.getNameForObject(drop) + ":" + meta + " as a drop from grass (weight: " + weight + ')');
                 }
-                Item drop = (Item) Item.itemRegistry.getObject(seedName);
-                int weight = Integer.parseInt(data.substring(data.indexOf(',') + 1));
-                MinecraftForge.addGrassSeed(new ItemStack(drop, 1, meta), 10);
-                LogHelper.info("Registered " + Item.itemRegistry.getNameForObject(drop) + ":" + meta + "as a drop from grass (weight: " + weight + ')');
+            }
+            if(!success) {
+                LogHelper.info("Error when adding grass drop: "+errorMsg+" (line: "+data+")");
             }
         }
     }

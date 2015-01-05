@@ -2,11 +2,9 @@ package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.reference.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 import java.io.*;
@@ -135,8 +133,8 @@ public abstract class IOHelper {
         if (unprocessed.length()>0) {
             for (int i=0;i<count;i++) {
                 String line = (unprocessed.substring(0,unprocessed.indexOf('\n'))).trim();
-                if (line.length() > 0 && line.charAt(0) != '#') {
-                    data.add(line);
+                if ((line.trim()).length() > 0 && line.charAt(0) != '#') {
+                    data.add(line.trim());
                 }
                 unprocessed = unprocessed.substring(unprocessed.indexOf('\n')+1);
             }
@@ -147,109 +145,47 @@ public abstract class IOHelper {
         return data.toArray(new String[data.size()]);
     }
 
-    public static String[] getCropData(String input) {
-        String[] output = new String[8];
+    //splits a comma seperated string into an array
+    public static String[] getData(String input) {
+        ArrayList<String> output = new ArrayList<String>();
         int start = 0;
-        int stop;
-        for(int i=0;i<output.length;i++) {
-            if(output[i]==null || output[i].equals("")) {
-                stop = input.indexOf(',', start);
-                output[i] = i == output.length - 1 ? input.substring(start) : input.substring(start, stop);
-                start = stop + 1;
-                if (i == 1 || i == 3) {
-                    if (output[i].indexOf(':', output[i].indexOf(':') + 1) >= 0) {
-                        output[i + 1] = output[i].substring((output[i].indexOf(':', output[i].indexOf(':') + 1) + 1));
-                        output[i] = output[i].substring(0, output[i].indexOf(':', output[i].indexOf(':') + 1));
-                    }
-                    else {
-                        output[i+1] = "0";
-                    }
+        for(int i=0;i<input.length();i++) {
+            if(input.charAt(i)==',') {
+                String element = (input.substring(start, i)).trim();
+                if(element.length()>0) {
+                    output.add(element);
                 }
+                start = i+1;
             }
-            LogHelper.debug("CropData["+i+"]: "+output[i]);
+        }
+        String element = (input.substring(start)).trim();
+        if(element.length()>0) {
+            output.add(element);
+        }
+        return output.toArray(new String[output.size()]);
+    }
+
+    //gets an itemstack from a string: name:meta
+    public static ItemStack getStack(String input) {
+        ItemStack output = null;
+        int index1 = input.indexOf(':',0);
+        if(index1>0) {
+            int index2 = input.indexOf(':', index1 + 1);
+            String name = input;
+            String meta = "0";
+            if (index2 > 0) {
+                meta = input.substring(index2 + 1);
+                name = input.substring(0, index2);
+            }
+            Block block = (Block) Block.blockRegistry.getObject(name);
+            Item item = (Item) Item.itemRegistry.getObject(name);
+            if (block != null && block != Blocks.air) {
+                output = new ItemStack(block, 1, Integer.parseInt(meta));
+            } else if (item != null) {
+                output = new ItemStack(item, 1, Integer.parseInt(meta));
+            }
         }
         return output;
-    }
-
-    //corrects the seed names
-    public static String correctSeedName(String input) {
-        String domain = input.substring(0,input.indexOf(':'));
-        String name = input.substring(input.indexOf(':')+1);
-        if(domain.equalsIgnoreCase("minecraft")) {
-            if(name.indexOf(':')>=0) {
-                name = name.substring(0,name.indexOf(':'));
-            }
-            if(name.equalsIgnoreCase("wheat") || name.equalsIgnoreCase("melon") || name.equalsIgnoreCase("pumpkin")) {
-                name = name + "_seeds";
-                domain = "minecraft";
-            }
-            else if(name.equalsIgnoreCase("wheat_seeds") || name.equalsIgnoreCase("melon_seeds")|| name.equalsIgnoreCase("pumpkin_seeds") || name.equalsIgnoreCase("nether_wart")) {
-                domain = "minecraft";
-            }
-            else {
-                if(name.length()<4 || !name.substring(0,4).equals(Names.Objects.seed)) {
-                    if (name.substring(0, 5).equalsIgnoreCase("tulip")) {
-                        name = "Tulip" + Character.toUpperCase(name.charAt(5)) + name.substring(6);
-                    }
-                }
-                domain =  Reference.MOD_ID;
-            }
-        }
-        if(domain.equalsIgnoreCase(Reference.MOD_ID)) {
-            domain = Reference.MOD_ID;
-            if(name.indexOf(':')>=0) {
-                name = name.substring(0,name.indexOf(':'));
-            }
-            if(name.length()<4 || !name.substring(0,4).equals(Names.Objects.seed)) {
-                name = "seed" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-            }
-        }
-        else if(domain.equalsIgnoreCase("harvestcraft")) {
-            domain = "harvestcraft";
-            if(name.indexOf(':')>=0) {
-                name = name.substring(0,name.indexOf(':'));
-            }
-            if(name.length()<8 || !name.substring(name.length()-8).equals("seedItem")) {
-                name = name + "seedItem";
-            }
-        }
-        else if(domain.equalsIgnoreCase("natura")) {
-            domain = "Natura";
-            int meta = 0;
-            if (name.indexOf(':') >= 0) {
-                meta = Integer.parseInt(name.substring(name.indexOf(':') + 1));
-                name = name.substring(0, name.indexOf(':'));
-            }
-            if (name.equalsIgnoreCase("cotton")) {
-                meta = 1;
-            }
-            name = "barley.seed:" + meta;
-        }
-        return domain + ':' + name;
-    }
-
-    //gets an item stack with the correct meta
-    public static ItemStack getSeedStack(String input) {
-        String domain = input.substring(0,input.indexOf(':'));
-        String name = input.substring(input.indexOf(':')+1);
-        int meta = 0;
-        if(name.indexOf(':')>=0) {
-            meta = Integer.parseInt(name.substring(name.indexOf(':')+1));
-            name = name.substring(0, name.indexOf(':'));
-        }
-        return new ItemStack((ItemSeeds) Item.itemRegistry.getObject(domain+':'+name),1,meta);
-    }
-
-    //gets an itemstack with a block
-    public static ItemStack getBlock(String input) {
-        String domain = input.substring(0, input.indexOf(':'));
-        String name = input.substring(input.indexOf(':')+1);
-        int meta = 0;
-        if(name.indexOf(':')>0) {
-            meta = Integer.parseInt(name.substring(name.indexOf(':')+1));
-            name = name.substring(0, name.indexOf(':'));
-        }
-        return new ItemStack((Block) Block.blockRegistry.getObject(domain+":"+name),1 , meta);
     }
 
     private static final String grassDropInstructions =
@@ -274,21 +210,20 @@ public abstract class IOHelper {
 
     private static final String seedBlackListInstructions =
             "#Define blacklisted seeds here: <mod>:<seedname>:<seedmeta>\n" +
-            "#You can these values from NEI, the data you put here will be corrected up to a certain level, but you should always try to use the values NEI gives you\n" +
+            "#You can get these values from NEI\n" +
             "#Blacklisted seeds will not be able to planted on crops\n" +
             "#For example: AgriCraft:seedDandelion";
 
     private static final String spreadChancesOverridesInstructions =
             "#Define overides for spreading chances here: <mod>:<seedname>:<seedmeta>,<chance>\n" +
-            "#You can these values from NEI, the data you put here will be corrected up to a certain level, but you should always try to use the values NEI gives you\n" +
+            "#You can get these values from NEI (example: minecraft:wheat_seeds is the vanilla seeds)\n" +
             "#The chance is an integer specified in percent, minimum is 0, maximum a 100. Spread chance is the chance that crops will spread to empty crosscrops\n" +
             "#For example: AgriCraft:seedDandelion,85";
 
     private static final String mutationInstructions =
             "#Define mutations here: <mutation>=<parent1>+<parent2>\n" +
             "#To specify a crop, write <mod>:<cropname>:<meta>, all in lowercase (meta is optional)\n" +
-            "#You can these values from NEI, the data you put here will be corrected up to a certain level, but you should always try to use the values NEI gives you\n" +
-            "#For example if you write harvestcraft:tomato, it will be corrected to harvestcraft=tomatoseedItem, or if you write minecraft:dandelion, it will become AgriCraft:seedDandelion\n" +
+            "#You can get these values from NEI (example: minecraft:wheat_seeds is the vanilla seeds)\n" +
             "#Optionally you can also define a mutation like this: <mutation>=<parent1>+<parent2>,<id>,<block>\n" +
             "#The crops are specified in the same way, the id must be an integer: 1 requires a specified block to be below the farmland and 2 requires a specific block nearby\n" +
             "#The mutation will not occur if these requirements are not met. For example:\n" +
@@ -340,7 +275,7 @@ public abstract class IOHelper {
             "harvestcraft:soybeanseedItem=harvestcraft:beanseedItem+harvestcraft:riceseedItem\n" +
             "harvestcraft:spiceleafseedItem=harvestcraft:teaseedItem+harvestcraft:chilipepperseedItem\n" +
             "harvestcraft:sweetpotatoseedItem=AgriCraft:seedPotato+AgriCraft:seedSugarcane\n" +
-            "harvestcraft:teaseedItem=harvestcraft:seaweedseedItem+AgriCraft:Daisy\n" +
+            "harvestcraft:teaseedItem=harvestcraft:seaweedseedItem+AgriCraft:seedDaisy\n" +
             "harvestcraft:tomatoseedItem=harvestcraft:sweetpotatoseedItem+AgriCraft:seedCarrot\n" +
             "harvestcraft:turnipseedItem=harvestcraft:parsnipseedItem+harvestcraft:radishseedItem\n" +
             "harvestcraft:wintersquashseedItem=minecraft:pumpkin_seeds+harvestcraft:zucchiniseedItem\n" +
@@ -367,7 +302,7 @@ public abstract class IOHelper {
     private static final String minecraftMutations =
             "AgriCraft:seedSugarcane=minecraft:wheat_seeds+AgriCraft:seedCarrot\n" +
             "minecraft:pumpkin_seeds=AgriCraft:seedPotato+AgriCraft:seedCarrot\n" +
-            "minecraft:melon_seeds=AgriCraft:carrot+minecraft:pumpkin_seeds\n" +
+            "minecraft:melon_seeds=AgriCraft:seedCarrot+minecraft:pumpkin_seeds\n" +
             "AgriCraft:seedPoppy=AgriCraft:seedSugarcane+minecraft:pumpkin_seeds\n" +
             "AgriCraft:seedDandelion=AgriCraft:seedSugarcane+minecraft:melon_seeds\n" +
             "AgriCraft:seedOrchid=AgriCraft:seedPoppy+AgriCraft:seedDandelion\n" +
@@ -399,7 +334,7 @@ public abstract class IOHelper {
     private static final String barleyNaturaMutations =
             "Natura:barley.seed:0=minecraft:wheat_seeds+AgriCraft:seedSugarcane\n" +
             "harvestcraft:cornseedItem=Natura:barley.seed:0+harvestcraft:ryeseedItem\n" +
-            "harvestcraft:ryeseedItem=Natura:barley+minecraft:wheat_seeds\n" +
+            "harvestcraft:ryeseedItem=Natura:barley.seed:0+minecraft:wheat_seeds\n" +
             "Natura:barley.seed:1=Natura:barley.seed:0+AgriCraft:seedDaisy";
 
     private static final String plantMegaPackMutations =
@@ -420,7 +355,7 @@ public abstract class IOHelper {
             "AgriCraft:seedPetinia=AgriCraft:seedLapender+AgriCraft:seedDaisy";
 
     private static final String leadMutation =
-            "AgriCraft:seedPlombean=Agricraft:seedFerranium+AgriCraft:seedPotato";
+            "AgriCraft:seedPlombean=AgriCraft:seedFerranium+AgriCraft:seedPotato";
 
     private static final String silverMutation =
             "AgriCraft:seedSilverweed=AgriCraft:seedAurigold+AgriCraft:seedAllium";

@@ -27,14 +27,25 @@ import java.util.Random;
 public abstract class SeedHelper {
     private static ItemStack[] seedBlackList;
     private static ItemStack[] spreadChancesOverrides;
-    private static int[] spreadChances;
+    private static Integer[] spreadChances;
 
     public static void initSeedBlackList() {
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSeedBlackList());
-        seedBlackList = new ItemStack[data.length];
-       for(int i=0;i<data.length;i++) {
-           seedBlackList[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i]));
+        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+        for(String line:data) {
+            LogHelper.debug("parsing "+line);
+            ItemStack seedStack = IOHelper.getStack(line);
+            Item seed = seedStack!=null?seedStack.getItem():null;
+            boolean success = seed!=null && seed instanceof ItemSeeds;
+            String errorMsg = "Invalid seed";
+            if(success) {
+                list.add(seedStack);
+            }
+            else {
+                LogHelper.info("Error when adding seed to blacklist: "+errorMsg+" (line: "+line+")");
+            }
         }
+        seedBlackList = list.toArray(new ItemStack[list.size()]);
         LogHelper.info("Registered seeds blacklist:");
         for(ItemStack seed:seedBlackList) {
             LogHelper.info(" - "+Item.itemRegistry.getNameForObject(seed.getItem())+":"+seed.getItemDamage());
@@ -53,14 +64,36 @@ public abstract class SeedHelper {
     }
 
     //initializes the mutation chances arrays
-    private static void setMutationChances(String[] data) {
-        spreadChancesOverrides = new ItemStack[data.length];
-        spreadChances = new int[data.length];
-        for(int i=0;i<data.length;i++) {
-            spreadChancesOverrides[i] = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(0,data[i].indexOf(','))));
-            int chance = Integer.parseInt(data[i].substring(data[i].indexOf(',')+1));
-            spreadChances[i] = chance<0?0:(chance>100?100:chance);
+    private static void setMutationChances(String[] input) {
+        ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
+        ArrayList<Integer> chances = new ArrayList<Integer>();
+        LogHelper.debug("reading mutation chance overrides");
+        for(String line:input) {
+            String[] data = IOHelper.getData(line);
+            boolean success = data.length==2;
+            String errorMsg = "Incorrect amount of arguments";
+            LogHelper.debug("parsing "+line);
+            if(success) {
+                ItemStack seedStack = IOHelper.getStack(data[0]);
+                Item seed = seedStack!=null?seedStack.getItem():null;
+                success = seed!=null && seed instanceof ItemSeeds;
+                errorMsg = "Invalid seed";
+                if(success) {
+                    int chance = Integer.parseInt(data[1]);
+                    success = chance>=0 && chance<=100;
+                    errorMsg = "Chance should be between 0 and 100";
+                    if(success) {
+                        stacks.add(seedStack);
+                        chances.add(chance);
+                    }
+                }
+            }
+            if(!success) {
+                LogHelper.info("Error when adding mutation chance override: "+errorMsg+" (line: "+line+")");
+            }
         }
+        spreadChancesOverrides = stacks.toArray(new ItemStack[stacks.size()]);
+        spreadChances = chances.toArray(new Integer[chances.size()]);
     }
 
     public static double getSpreadChance(ItemSeeds seed, int meta) {

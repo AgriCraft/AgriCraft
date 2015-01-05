@@ -65,8 +65,16 @@ public abstract class MutationHandler {
 
     public static void init() {
         //Read mutations & initialize the mutation arrays
-        setMutations(IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationData()));
-
+        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationData());
+        ArrayList<Mutation> list = new ArrayList<Mutation>();
+        for(String line:data) {
+            Mutation mutation = readMutation(line);
+            if(mutation!=null) {
+                list.add(mutation);
+            }
+        }
+        mutations = list.toArray(new Mutation[list.size()]);
+        //print registered mutations to the log
         LogHelper.info("Registered Mutations:");
         for (Mutation mutation:mutations) {
             String result = mutation.result.getItem() != null ? (Item.itemRegistry.getNameForObject(mutation.result.getItem()) + ':' + mutation.result.getItemDamage()) : "null";
@@ -88,35 +96,57 @@ public abstract class MutationHandler {
         }
     }
 
-    //initializes the mutations arrays
-    private static void setMutations(String[] data) {
-        mutations = new Mutation[data.length];
-        for(int i=0;i<data.length;i++) {
-            //read the stacks
-            ItemStack result = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(0,data[i].indexOf('='))));
-            ItemStack parent1 = IOHelper.getSeedStack(IOHelper.correctSeedName(data[i].substring(data[i].indexOf('=') + 1, data[i].indexOf('+'))));
-            ItemStack parent2;
-            //parse the end of the string
-            int id = 0;
-            Block req = null;
-            int reqMeta = 0;
-            String nextPart = data[i].substring(data[i].indexOf('+')+1);
-            //check if a requirement is specified
-            if(nextPart.indexOf(',')>0) {
-                parent2 = IOHelper.getSeedStack(IOHelper.correctSeedName(nextPart.substring(0, nextPart.indexOf(','))));
-                nextPart = nextPart.substring(nextPart.indexOf(',')+1);
-                id = Integer.parseInt(nextPart.substring(0, nextPart.indexOf(',')));
-                //get the requirement
-                ItemStack blockStack = IOHelper.getBlock(nextPart.substring(nextPart.indexOf(',')+1));
-                req = ((ItemBlock) blockStack.getItem()).field_150939_a;
-                reqMeta = blockStack.getItemDamage();
+    private static Mutation readMutation(String input) {
+        Mutation mutation = null;
+        String[] data = IOHelper.getData(input);
+        boolean success = data.length==1 || data.length==3;
+        String errorMsg = "invalid number of arguments";
+        if(success) {
+            String mutationData = data[0];
+            int indexEquals = mutationData.indexOf('=');
+            int indexPlus = mutationData.indexOf('+');
+            success = (indexEquals>0 && indexPlus>indexEquals);
+            errorMsg = "Mutation is not defined correctly";
+            if(success) {
+                //read the stacks
+                ItemStack resultStack = IOHelper.getStack(mutationData.substring(0,indexEquals));
+                ItemStack parentStack1 = IOHelper.getStack(mutationData.substring(indexEquals + 1, indexPlus));
+                ItemStack parentStack2 = IOHelper.getStack(mutationData.substring(indexPlus+1));
+                Item result = resultStack!=null?resultStack.getItem():null;
+                Item parent1 = parentStack1!=null?parentStack1.getItem():null;
+                Item parent2 = parentStack2!=null?parentStack2.getItem():null;
+                success = result!=null && result instanceof ItemSeeds;
+                errorMsg = "resulting stack is not correct";
+                if(success) {
+                    success =  parent1!=null &&  parent1 instanceof ItemSeeds;
+                    errorMsg = "first parent stack is not correct";
+                    if(success) {
+                        success =  parent2!=null &&  parent2 instanceof ItemSeeds;
+                        errorMsg = "second parent stack is not correct";
+                        if(success) {
+                            if(data.length==1) {
+                                mutation = new Mutation(resultStack, parentStack1, parentStack2);
+                            }
+                            else {
+                                ItemStack reqBlockStack = IOHelper.getStack(data[2]);
+                                Block reqBlock = (reqBlockStack!=null && reqBlockStack.getItem() instanceof ItemBlock)?((ItemBlock) reqBlockStack.getItem()).field_150939_a:null;
+                                success = reqBlock!=null;
+                                errorMsg = "invalid required block";
+                                if(success) {
+                                    int id = Integer.parseInt(data[1]);
+                                    int reqMeta = reqBlockStack.getItemDamage();
+                                    mutation = new Mutation(resultStack, parentStack1, parentStack2, id, reqBlock, reqMeta);
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            //no requirement specified
-            else {
-                parent2 = IOHelper.getSeedStack(IOHelper.correctSeedName(nextPart));
-            }
-            mutations[i] = new Mutation(result, parent1, parent2, id, req, reqMeta, 100);
         }
+        if(!success) {
+            LogHelper.info("Error when reading mutation: "+errorMsg+" (line: "+input+")");
+        }
+        return mutation;
     }
 
     //gets all the possible crossovers
