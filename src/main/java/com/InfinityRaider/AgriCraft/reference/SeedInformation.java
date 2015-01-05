@@ -16,6 +16,7 @@ import plantmegapack.PlantMegaPack;
 
 import java.util.HashMap;
 
+@SideOnly(Side.CLIENT)
 public final class SeedInformation {
     private static final HashMap<Item, String[]> informationTable = new HashMap<Item, String[]>();
 

@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -16,6 +17,7 @@ import net.minecraftforge.common.IPlantable;
 
 public class ItemModSeed extends ItemSeeds implements IPlantable{
     private String displayName;
+    @SideOnly(Side.CLIENT)
     private String information;
 
     public ItemModSeed(BlockModPlant plant, String information) {
@@ -29,7 +31,9 @@ public class ItemModSeed extends ItemSeeds implements IPlantable{
 
     public ItemModSeed(BlockModPlant plant, Block soil, String information) {
         super(plant, soil);
-        this.information = information;
+        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT) {
+            this.information = information;
+        }
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
     }
 
@@ -42,6 +46,7 @@ public class ItemModSeed extends ItemSeeds implements IPlantable{
         return (BlockModPlant) this.getPlant(null, 0, 0, 0);
     }
 
+    @SideOnly(Side.CLIENT)
     public String getInformation() {
         return this.information;
     }
