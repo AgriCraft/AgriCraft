@@ -5,6 +5,9 @@ Changelog
 -Crops can be set on Forestry humus
 -Fixed config reading bug
 -Custom Plants will now correctly drop their fruit if their fruit is a seed
+-Plants rendering in a cross will now render 4 smaller plants again
+-PMP & Natura crops now render with the correct icons again
+-Moved custom crops registering to post init to allow other mod items (which might register in init) to be used as drops
 
 1.1.0
 -Rewrote rendering code to improve performance

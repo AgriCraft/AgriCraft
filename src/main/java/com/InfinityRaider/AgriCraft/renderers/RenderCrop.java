@@ -108,7 +108,7 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
             RenderHelper.addScaledVertexWithUV(tessellator, (0-shift)*f, 16*f, 4, 16, 0, icon);
             //plane 2 front right
             RenderHelper.addScaledVertexWithUV(tessellator, 4, 0, (shift*2)*f, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 4, 0, (16+shift*2*f), 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4, 0, (16+shift*2)*f, 16, 16, icon);
             RenderHelper.addScaledVertexWithUV(tessellator, 4, 16*f, (16+shift*2)*f, 16, 0, icon);
             RenderHelper.addScaledVertexWithUV(tessellator, 4, 16*f, (shift*2)*f, 0, 0, icon);
             //plane 2 front left
