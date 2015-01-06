@@ -24,12 +24,19 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         PositionedStack parent1;
         PositionedStack parent2;
         PositionedStack result;
+        PositionedStack requiredBlock;
 
         //constructor
         public CachedCropMutationRecipe(MutationHandler.Mutation mutation) {
-            this.parent1 = new PositionedStack(mutation.parent1.copy(), Constants.nei_X1, Constants.nei_Y);
-            this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y);
-            this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y);
+            this.parent1 = new PositionedStack(mutation.parent1.copy(), Constants.nei_X1, Constants.nei_Y1);
+            this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y1);
+            this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y1);
+            switch(mutation.id) {
+                case 0:requiredBlock = null;break;
+                case 1:requiredBlock = new PositionedStack(new ItemStack(mutation.requirement, 1, mutation.requirementMeta), Constants.nei_X3, Constants.nei_Y2);break;
+                case 2:requiredBlock = new PositionedStack(new ItemStack(mutation.requirement, 1, mutation.requirementMeta), Constants.nei_X4, Constants.nei_Y2);break;
+            }
+
         }
 
         //Override and return null because a mutation recipe needs two ingredients
@@ -44,6 +51,9 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             ArrayList<PositionedStack> list = new ArrayList<PositionedStack>();
             list.add(parent1);
             list.add(parent2);
+            if(requiredBlock!=null) {
+                list.add(requiredBlock);
+            }
             return list;
         }
 
@@ -118,7 +128,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         return new ResourceLocation(Reference.MOD_ID.toLowerCase(),"textures/gui/nei/cropMutation.png").toString();
     }
 
-    //defines rectangles on the recipe gui wich can be clicked to show all crop mutation recipes
+    //defines rectangles on the recipe gui which can be clicked to show all crop mutation recipes
     @Override
     public void loadTransferRects() {
         transferRects.add(new RecipeTransferRect(new Rectangle(65, 13, 4, 39), id));

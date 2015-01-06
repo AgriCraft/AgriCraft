@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.handler;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -125,6 +127,12 @@ public abstract class MutationHandler {
                         errorMsg = "second parent stack is not correct";
                         if(success) {
                             if(data.length==1) {
+                                /*
+                                if(result instanceof ItemModSeed && ((BlockModPlant) SeedHelper.getPlant( (ItemSeeds) result)).base!=null) {
+                                    BlockModPlant plant = (BlockModPlant) SeedHelper.getPlant((ItemSeeds) result);
+                                    mutation = new Mutation(resultStack, parentStack1, parentStack2, 1, plant.base, plant.baseMeta);
+                                }
+                                */
                                 mutation = new Mutation(resultStack, parentStack1, parentStack2);
                             }
                             else {
