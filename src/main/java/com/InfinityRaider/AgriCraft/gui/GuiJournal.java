@@ -187,7 +187,9 @@ public class GuiJournal extends GuiScreen {
                 int xOffset = x-this.guiLeft-30;
                 int index = (int) Math.floor(((float) xOffset) / 24);
                 if(index>=0 && index<this.fruits.length) {
-                    tooltip[0] = this.fruits[index].getDisplayName();
+                    if(this.fruits[index]!=null && this.fruits[index].getItem()!=null) {
+                        tooltip[0] = this.fruits[index].getDisplayName();
+                    }
                 }
             }
         }
@@ -320,7 +322,9 @@ public class GuiJournal extends GuiScreen {
         this.fruits = new ItemStack[fruitDrops.size()];
         for(int i=0;i< fruitIcons.length;i++) {
             this.fruits[i] = fruitDrops.get(i);
-            this.fruitIcons[i] = RenderHelper.getIcon(fruitDrops.get(i).getItem(), fruitDrops.get(i).getItemDamage());
+            if(fruits[i]!=null && fruits[i].getItem()!=null) {
+                this.fruitIcons[i] = RenderHelper.getIcon(fruitDrops.get(i).getItem(), fruitDrops.get(i).getItemDamage());
+            }
         }
         //get the growth stage icons
         plantIcons = new IIcon[8];
@@ -418,6 +422,7 @@ public class GuiJournal extends GuiScreen {
         int yOffset = this.guiTop+91;
         float scale;
         for(int i=0;i<fruitIcons.length;i++) {
+            if(fruitIcons[i]!=null) {
             //draw an outline
             GL11.glDisable(GL11.GL_LIGHTING);
             Minecraft.getMinecraft().getTextureManager().bindTexture(textureSeedPage);
@@ -425,16 +430,16 @@ public class GuiJournal extends GuiScreen {
             drawTexturedModalRect(xOffset-1+i*24, yOffset-1, 0, 238, 18, 18);
             GL11.glEnable(GL11.GL_LIGHTING);
             //draw the fruit texture
-            ResourceLocation texture;
-            if(fruits[i].getItem() instanceof ItemBlock) {
-                texture = RenderHelper.getBlockResource(fruitIcons[i]);
-                Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+                ResourceLocation texture;
+                if (fruits[i].getItem() instanceof ItemBlock) {
+                    texture = RenderHelper.getBlockResource(fruitIcons[i]);
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+                } else {
+                    texture = RenderHelper.getItemResource(fruitIcons[i]);
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+                }
+                this.renderIconInGui(xOffset, yOffset, texture);
             }
-            else {
-                texture = RenderHelper.getItemResource(fruitIcons[i]);
-                Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-            }
-            this.renderIconInGui(xOffset, yOffset, texture);
         }
         scale = 0.5F;
         GL11.glScalef(scale, scale, scale);

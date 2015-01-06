@@ -44,10 +44,11 @@ public class CustomCrops {
                     ItemStack fruitStack = IOHelper.getStack(cropData[1]);
                     Item fruit = fruitStack!=null?fruitStack.getItem():null;
                     errorMsg = "Invalid fruit";
-                    success = fruit!=null;
+                    success = (fruit!=null) || (cropData[1].equals("null")) ;
                     if(success) {
                         String name = cropData[0];
-                        int fruitMeta = fruitStack.getItemDamage(); ItemStack base = IOHelper.getStack(cropData[2]);
+                        int fruitMeta = fruit!=null?fruitStack.getItemDamage():0;
+                        ItemStack base = IOHelper.getStack(cropData[2]);
                         Block baseBlock = base!=null?((ItemBlock) base.getItem()).field_150939_a:null;
                         int baseMeta = base!=null?base.getItemDamage():0;
                         int tier = Integer.parseInt(cropData[3]);
