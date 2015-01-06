@@ -2,12 +2,14 @@ Changelog
 ---------
 1.1.1
 -Fixed Null Pointer Exception in certain cases when breaking tanks
--Crops can be set on Forestry humus
 -Fixed config reading bug
 -Custom Plants will now correctly drop their fruit if their fruit is a seed
 -Plants rendering in a cross will now render 4 smaller plants again
 -PMP & Natura crops now render with the correct icons again
 -Moved custom crops registering to post init to allow other mod items (which might register in init) to be used as drops
+-Instead of crashing the game, faulty config entries will be pointed out in the log (back up your old configs and enable regenerate defaults in the main config)
+-Updated the NEI handler to show required blocks below/near
+-Added a config to specify fertile soils for crops
 
 1.1.0
 -Rewrote rendering code to improve performance
