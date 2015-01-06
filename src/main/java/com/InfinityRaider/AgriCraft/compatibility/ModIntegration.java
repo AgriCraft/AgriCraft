@@ -44,12 +44,14 @@ public class ModIntegration {
         public static boolean thaumcraft;
         public static boolean mfr;
         public static boolean waila;
+        public static boolean forestry;
 
         public static void init() {
             nei = Loader.isModLoaded(Names.Mods.nei);
             harvestcraft = Loader.isModLoaded(Names.Mods.harvestcraft);
             natura = Loader.isModLoaded(Names.Mods.natura);
             weeeFlowers = Loader.isModLoaded(Names.Mods.weeeFlowers);
+            forestry = Loader.isModLoaded(Names.Mods.forestry);
             thaumicTinkerer = Loader.isModLoaded(Names.Mods.thaumicTinkerer);
             hungerOverhaul = Loader.isModLoaded(Names.Mods.hungerOverhaul);
             exNihilo = Loader.isModLoaded(Names.Mods.exNihilo);
@@ -63,6 +65,7 @@ public class ModIntegration {
             LogHelper.info(" - Pam's HarvestCraft loaded: "+harvestcraft);
             LogHelper.info(" - Natura loaded: "+natura);
             LogHelper.info(" - Pam's Weee Flowers loaded: "+weeeFlowers);
+            LogHelper.info(" - Forestry loaded: "+forestry);
             LogHelper.info(" - Thaumic tinkerer loaded: "+thaumicTinkerer);
             LogHelper.info(" - Hunger Overhaul loaded: "+hungerOverhaul);
             LogHelper.info(" - Ex Nihilo loaded: "+exNihilo);

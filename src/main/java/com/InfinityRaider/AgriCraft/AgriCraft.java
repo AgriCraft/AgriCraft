@@ -16,6 +16,7 @@ package com.InfinityRaider.AgriCraft;
         ~ InfinityRaider
 */
 
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
@@ -92,6 +93,8 @@ public class AgriCraft {
         SeedHelper.initSeedBlackList();
         //read spread chance overrides
         SeedHelper.initSpreadChancesOverrides();
+        //read soil whitelist
+        BlockCrop.initSoils();
         //initialize world gen
         if(!ConfigurationHandler.disableWorldGen) {
             WorldGen.init();

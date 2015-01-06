@@ -211,6 +211,7 @@ public final class Names {
         public static final String harvestcraft = "harvestcraft";
         public static final String natura = "Natura";
         public static final String weeeFlowers = "weeeflowers";
+        public static final String forestry = "Forestry";
         public static final String nei = "NotEnoughItems";
         public static final String thaumicTinkerer = "ThaumicTinkerer";
         public static final String hungerOverhaul= "HungerOverhaul";

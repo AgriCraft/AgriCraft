@@ -81,11 +81,11 @@ public class ConfigurationHandler {
     }
 
     public static String readGrassDrops() {
-        return IOHelper.readOrWrite(directory, "GrassDrops", IOHelper.getGrassDrops(), false);
+        return IOHelper.readOrWrite(directory, "GrassDrops", IOHelper.getGrassDrops());
     }
 
     public static String readCustomCrops() {
-        return IOHelper.readOrWrite(directory, "CustomCrops", IOHelper.getCustomCropInstructions(), false);
+        return IOHelper.readOrWrite(directory, "CustomCrops", IOHelper.getCustomCropInstructions());
     }
 
     public static String readMutationData() {
@@ -97,52 +97,14 @@ public class ConfigurationHandler {
     }
 
     public static String readSpreadChances() {
-        return IOHelper.readOrWrite(directory, "SpreadChancesOverrides", IOHelper.getSpreadChancesOverridesInstructions(), false);
+        return IOHelper.readOrWrite(directory, "SpreadChancesOverrides", IOHelper.getSpreadChancesOverridesInstructions());
     }
 
     public static String readSeedBlackList() {
-        return IOHelper.readOrWrite(directory, "SeedBlackList", IOHelper.getSeedBlackListInstructions(), false);
+        return IOHelper.readOrWrite(directory, "SeedBlackList", IOHelper.getSeedBlackListInstructions());
     }
 
-    /*
-    private static String readOrWrite(String directory, String fileName, String defaultData) {
-        File file = new File(directory, fileName+".txt");
-        if(file.exists() && !file.isDirectory() && !generateDefaults) {
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                byte[] input = new byte[(int) file.length()];
-                try {
-                    inputStream.read(input);
-                    inputStream.close();
-                    return new String(input, "UTF-8");
-                } catch (IOException e) {
-                    LogHelper.info("Caught IOException when reading "+fileName+".txt");
-                }
-            } catch(FileNotFoundException e) {
-                LogHelper.info("Caught IOException when reading "+fileName+".txt");
-            }
-        }
-        else {
-            BufferedWriter writer;
-            try {
-                writer = new BufferedWriter(new FileWriter(file));
-                try {
-                    writer.write(defaultData);
-                    writer.close();
-                    propGenerateDefaults.setToDefault();
-                    config.save();
-
-                    return defaultData;
-                }
-                catch(IOException e) {
-                    LogHelper.info("Caught IOException when writing "+fileName+".txt");
-                }
-            }
-            catch(IOException e) {
-                LogHelper.info("Caught IOException when writing "+fileName+".txt");
-            }
-        }
-        return null;
+    public static String readSoils() {
+        return IOHelper.readOrWrite(directory, "SoilWhitelist", IOHelper.getSoilwhitelistData());
     }
-    */
 }

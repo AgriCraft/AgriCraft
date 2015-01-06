@@ -7,6 +7,8 @@ import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.InfinityRaider.AgriCraft.utility.IOHelper;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 
 import cpw.mods.fml.relauncher.Side;
@@ -20,6 +22,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -32,6 +35,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGrowable {
+    private static Block[] soils;
+    private static int[] soilMeta;
+
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
 
@@ -278,13 +284,16 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     }
 
     public static boolean isSoilFertile(Block block, int meta) {
-        if( block instanceof BlockFarmland) {
+        if (block instanceof BlockFarmland) {
             return true;
+        } else {
+            for (int i = 0; i < soils.length; i++) {
+                if (block == soils[i] && meta == soilMeta[i]) {
+                    return true;
+                }
+            }
         }
-        else {
-            //To do: create config to white list other blocks as suitable soil
-            return (block == Block.blockRegistry.getObject("Forestry:soil") && meta == 0);
-        }
+        return false;
     }
 
     //get a list with items dropped by the the crop
@@ -374,5 +383,31 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         super.onBlockEventReceived(world,x,y,z,id,data);
         TileEntity tileEntity = world.getTileEntity(x,y,z);
         return (tileEntity!=null)&&(tileEntity.receiveClientEvent(id,data));
+    }
+
+    public static void initSoils() {
+        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
+        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+        for(String line:data) {
+            LogHelper.debug("parsing " + line);
+            ItemStack stack = IOHelper.getStack(line);
+            Block block = (stack!=null && stack.getItem() instanceof ItemBlock)?((ItemBlock) stack.getItem()).field_150939_a:null;
+            boolean success = block!=null;
+            String errorMsg = "Invalid block";
+            if(success) {
+                list.add(stack);
+            }
+            else {
+                LogHelper.info("Error when adding block to soil whitelist: "+errorMsg+" (line: "+line+")");
+            }
+        }
+        soils = new Block[list.size()];
+        soilMeta = new int[list.size()];
+        LogHelper.info("Registered soil whitelist:");
+        for(int i=0;i<soils.length;i++) {
+            soils[i] = ((ItemBlock) list.get(i).getItem()).field_150939_a;
+            soilMeta[i] = list.get(i).getItemDamage();
+            LogHelper.info(" - "+Block.blockRegistry.getNameForObject(soils[i])+":"+soilMeta[i]);
+        }
     }
 }

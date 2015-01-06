@@ -13,6 +13,11 @@ import java.util.ArrayList;
 //class containing the default mutations for each supported mod
 public abstract class IOHelper {
     //reads and writes text files
+    public static String readOrWrite(String directory, String fileName, String defaultData) {
+        return readOrWrite(directory, fileName, defaultData, false);
+    }
+
+    //reads and writes text files
     public static String readOrWrite(String directory, String fileName, String defaultData, boolean reset) {
         File file = new File(directory, fileName+".txt");
         if(file.exists() && !file.isDirectory() && !reset) {
@@ -120,6 +125,14 @@ public abstract class IOHelper {
         return seedBlackListInstructions;
     }
 
+    public static String getSoilwhitelistData() {
+        String output = soilWhitelistInstructions;
+        if(ModIntegration.LoadedMods.forestry) {
+            output = output +"\n" + "Forestry:soil:0";
+        }
+        return soilWhitelistInstructions;
+    }
+
     //turns the raw data string into an array (each array element is a line from the string)
     public static String[] getLinesArrayFromData(String input) {
         int count = 0;
@@ -181,6 +194,8 @@ public abstract class IOHelper {
             Item item = (Item) Item.itemRegistry.getObject(name);
             if (block != null && block != Blocks.air) {
                 output = new ItemStack(block, 1, Integer.parseInt(meta));
+            }else if(block==Blocks.air && name.equals("minecraft:air")) {
+                output = new ItemStack(Blocks.air, 1, 0);
             } else if (item != null) {
                 output = new ItemStack(item, 1, Integer.parseInt(meta));
             }
@@ -213,6 +228,12 @@ public abstract class IOHelper {
             "#You can get these values from NEI\n" +
             "#Blacklisted seeds will not be able to planted on crops\n" +
             "#For example: AgriCraft:seedDandelion";
+
+    private static final String soilWhitelistInstructions =
+            "#Define blocks to whitelist as fertile soil here: <mod>:<blockname>:<blockmeta>\n" +
+            "#You can get these values from NEI\n" +
+            "#Whitelisting a block as a fertile soil means you can plant crops on them\n" +
+            "#For example: minecraft:sand:0";
 
     private static final String spreadChancesOverridesInstructions =
             "#Define overides for spreading chances here: <mod>:<seedname>:<seedmeta>,<chance>\n" +
