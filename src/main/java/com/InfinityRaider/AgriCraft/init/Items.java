@@ -55,10 +55,8 @@ public class Items {
             sprinkler = new ItemSprinkler();
             RegisterHelper.registerItem(sprinkler, Names.Objects.sprinkler + "Item");
         }
-        if(ConfigurationHandler.debug) {
-            debugItem = new ItemDebugger();
-            RegisterHelper.registerItem(debugItem, "debugger");
-        }
+        debugItem = new ItemDebugger();
+        RegisterHelper.registerItem(debugItem, "debugger");
         LogHelper.info("Items Registered");
 }
 
