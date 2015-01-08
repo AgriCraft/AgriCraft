@@ -82,90 +82,86 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
         Tessellator tessellator = Tessellator.instance;
         tessellator.addTranslation(x, y, z);
         if(renderType != 6) {
-            //the shift along x and z axis
-            int shift = 4;
-            //scale factor
-            float f = 0.8F;
             //plane 1 front right
-            RenderHelper.addScaledVertexWithUV(tessellator, shift*2*f, 0, 4.001F, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, shift*2*f, 16*f, 4.001F, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16+shift*2)*f, 16*f, 4.001F, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16+shift*2)*f, 0, 4.001F, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 6, 0, 4.001F, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 6, 12, 4.001F, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 18, 12, 4.001F, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 18, 0, 4.001F, 0, 16, icon);
             //plane 1 front left
-            RenderHelper.addScaledVertexWithUV(tessellator, (0-shift)*f, 0, 3.999F, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (0-shift)*f, 16*f, 3.999F, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16-shift)*f, 16*f, 3.999F, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16-shift)*f, 0, 3.999F, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, -2, 0, 3.999F, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, -2, 12, 3.999F, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 10, 12, 3.999F, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 10, 0, 3.999F, 0, 16, icon);
             //plane 1 back right
-            RenderHelper.addScaledVertexWithUV(tessellator, (shift*2)*f, 0, 4.001F, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16+shift*2)*f, 0, 4.001F, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16+shift*2)*f, 16*f, 4.001F, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (shift*2)*f, 16*f, 4.001F, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 6, 0, 4.001F, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 18, 0, 4.001F, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 18, 12, 4.001F, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 6, 12, 4.001F, 16, 0, icon);
             //plane 1 back left
-            RenderHelper.addScaledVertexWithUV(tessellator, (0-shift)*f, 0, 3.999F, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16-shift)*f, 0, 3.999F, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16-shift)*f, 16*f, 3.999F, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (0-shift)*f, 16*f, 3.999F, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, -2, 0, 3.999F, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 10, 0, 3.999F, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 10, 12, 3.999F, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, -2, 12, 3.999F, 16, 0, icon);
             //plane 2 front right
-            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 0, (shift*2)*f, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 0, (16+shift*2)*f, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 16*f, (16+shift*2)*f, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 16*f, (shift*2)*f, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 0, 6, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 0, 18, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 12, 18, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 12, 6, 0, 0, icon);
             //plane 2 front left
-            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 0, (0-shift)*f, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 0, (16-shift)*f, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 16*f, (16-shift)*f, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 16*f, (0-shift)*f, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 0, -2, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 0, 10, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 12, 10, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 12, -2, 0, 0, icon);
             //plane 2 back right
-            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 0, (shift*2)*f, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 16*f, (shift*2)*f, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 16*f, (16+shift*2)*f, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 0, (16+shift*2)*f, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 0, 6, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 12, 6, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 12, 18, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, 0, 18, 16, 16, icon);
             //plane 2 back right
-            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 0, (0-shift)*f, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 16*f, (0-shift)*f, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 16*f, (16-shift)*f, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 0, (16-shift)*f, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 0, -2, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 12, -2, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 12, 10, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 4.001F, 0, 10, 16, 16, icon);
             //plane 3 front right
-            RenderHelper.addScaledVertexWithUV(tessellator, (shift*2)*f, 0, 11.999F, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16+shift*2)*f, 0, 11.999F, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16+shift*2)*f, 16*f, 11.999F, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (shift*2)*f, 16*f, 11.999F, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 6, 0, 11.999F, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 18, 0, 11.999F, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 18, 12, 11.999F, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 6, 12, 11.999F, 0, 0, icon);
             //plane 3 front left
-            RenderHelper.addScaledVertexWithUV(tessellator, (0-shift)*f, 0, 12.001F, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16-shift)*f, 0, 12.001F, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16-shift)*f, 16*f, 12.001F, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (0-shift)*f, 16*f, 12.001F, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, -2, 0, 12.001F, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 10, 0, 12.001F, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 10, 12, 12.001F, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, -2, 12, 12.001F, 0, 0, icon);
             //plane 3 back right
-            RenderHelper.addScaledVertexWithUV(tessellator, (shift*2)*f, 0, 11.999F, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (shift*2)*f, 16*f, 11.999F, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16+shift*2)*f, 16*f, 11.999F, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16+shift*2)*f, 0, 11.999F, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 6, 0, 11.999F, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 6, 12, 11.999F, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 18, 12, 11.999F, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 18, 0, 11.999F, 16, 16, icon);
             //plane 3 back left
-            RenderHelper.addScaledVertexWithUV(tessellator, (0-shift)*f, 0, 12.001F, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (0-shift)*f, 16*f, 12.001F, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16-shift)*f, 16*f, 12.001F, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, (16-shift)*f, 0, 12.001F, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, -2, 0, 12.001F, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, -2, 12, 12.001F, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 10, 12, 12.001F, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 10, 0, 12.001F, 16, 16, icon);
             //plane 4 front right
-            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 0, (16+shift*2)*f, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 0, (shift*2)*f, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 16*f, (shift*2)*f, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 16*f, (16+shift*2)*f, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 0, 18, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 0, 6, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 12, 6, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 12, 18, 0, 0, icon);
             //plane 4 front left
-            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 0, (16-shift)*f, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 0, (0-shift)*f, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 16*f, (0-shift)*f, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 16*f, (16-shift)*f, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 0, 10, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 0, -2, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 12, -2, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 12, 10, 0, 0, icon);
             //plane 4 back right
-            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 0, (16+shift*2)*f, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 16*f, (16+shift*2)*f, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 16*f, (shift*2)*f, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 0, (shift*2)*f, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 0, 18, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 12, 18, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 12, 6, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, 0, 6, 16, 16, icon);
             //plane 4 back left
-            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 0, (16-shift)*f, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 16*f, (16-shift)*f, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 16*f, (0-shift)*f, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 0,(0-shift)*f, 16, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 0, 10, 0, 16, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 12, 10, 0, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 12, -2, 16, 0, icon);
+            RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, 0,-2, 16, 16, icon);
         }
         else {
             //plane 1 front
