@@ -1,5 +1,9 @@
 Changelog
 ---------
+1.1.2
+-Changed AgriCraft creative tab logo
+-Fixed certain crops rendering crooked
+
 1.1.1
 -Fixed Null Pointer Exception in certain cases when breaking tanks
 -Fixed config reading bug
