@@ -8,6 +8,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -20,7 +21,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.IPlantable;
 
-public class TileEntityCrop extends TileEntityAgricraft {
+import java.util.List;
+
+public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public int growth=0;
     public int gain=0;
     public int strength=0;
@@ -288,5 +291,32 @@ public class TileEntityCrop extends TileEntityAgricraft {
             type = 6;
         }
         return type;
+    }
+
+    @Override
+    public void addDebugInfo(List<String> list) {
+        list.add("CROP:");
+        if(this.crossCrop) {
+            list.add(" - This is a crosscrop");
+        }
+        else if(this.hasPlant()) {
+            list.add(" - This crop has a plant");
+            list.add(" - Seed: " + ((ItemSeeds) this.seed).getUnlocalizedName());
+            list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject(this.seed) + ':' + this.seedMeta);
+            list.add(" - Plant: " + SeedHelper.getPlant((ItemSeeds) this.seed).getUnlocalizedName());
+            list.add(" - Meta: " + this.getBlockMetadata());
+            list.add(" - Growth: " + this.growth);
+            list.add(" - Gain: " + this.gain);
+            list.add(" - Strength: " + this.strength);
+            list.add(" - Fertile: " + this.isFertile());
+            list.add(" - Mature: " + this.isMature());
+        }
+        else if(this.weed) {
+            list.add(" - This crop has weeds");
+            list.add(" - Meta: " + this.getBlockMetadata());
+        }
+        else {
+            list.add(" - This crop has no plant");
+        }
     }
 }

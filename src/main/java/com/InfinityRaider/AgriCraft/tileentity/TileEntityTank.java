@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,7 +12,9 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
-public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler {
+import java.util.List;
+
+public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler, IDebuggable {
     protected int connectedTanks=1;
     protected int fluidLevel=0;
     private int timer = 0;
@@ -474,5 +477,28 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         FluidTankInfo[] info = new FluidTankInfo[1];
         info[0] = new FluidTankInfo(this.getContents(), this.getTotalCapacity());
         return info;
+    }
+
+    //debug info
+    @Override
+    public void addDebugInfo(List<String> list) {
+        list.add("TANK:");
+        list.add("Tank: " + (this.isWood() ? "wood" : "iron") + " (single capacity: " + this.getSingleCapacity() + ")");
+        list.add("  - MultiBlock: " + this.isMultiBlock());
+        list.add("  - Connected tanks: " + this.getConnectedTanks());
+        int[] size = this.getDimensions();
+        list.add("  - MultiBlock Size: " + size[0] + "x" + size[1] + "x" + size[2]);
+        list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + this.getTotalCapacity());
+        list.add("  - FluidHeight: " + this.getFluidY());
+        boolean left = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord));
+        boolean right = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord));
+        boolean back = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1));
+        boolean front = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1));
+        boolean top = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord));
+        boolean below = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord - 1, this.zCoord));
+        list.add("  - Found multiblock partners on: " + (left ? "left, " : "") + (right ? "right, " : "") + (back ? "back, " : "") + (front ? "front, " : "") + (top ? "top, " : "") + (below ? "below" : ""));
+        list.add("Water level is on layer " + (int) Math.floor(((float) this.getFluidLevel() - 0.1F) / ((float) (this.getSingleCapacity() * this.getXSize() * this.getZSize()))) + ".");
+        list.add("this clicked is on  layer " + this.getYPosition() + ".");
+        list.add("Water height is " + this.getFluidY());
     }
 }

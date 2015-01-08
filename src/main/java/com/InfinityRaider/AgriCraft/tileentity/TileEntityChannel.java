@@ -2,12 +2,14 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class TileEntityChannel extends TileEntityCustomWood {
+public class TileEntityChannel extends TileEntityCustomWood implements IDebuggable{
     private int lvl;
     private int lastLvl = 0;
     private int timer = 0;
@@ -136,5 +138,13 @@ public class TileEntityChannel extends TileEntityCustomWood {
             }
             this.setFluidLevel(newLvl + rest);
         }
+    }
+
+    @Override
+    public void addDebugInfo(List<String> list) {
+        list.add("CHANNEL:");
+        super.addDebugInfo(list);
+        list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + Constants.mB / 2);
+        list.add("  - FluidHeight: " + this.getFluidHeight());
     }
 }

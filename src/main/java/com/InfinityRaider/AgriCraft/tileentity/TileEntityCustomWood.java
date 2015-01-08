@@ -1,13 +1,17 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 
-public class TileEntityCustomWood extends TileEntityAgricraft {
+import java.util.List;
+
+public class TileEntityCustomWood extends TileEntityAgricraft implements IDebuggable {
     protected String materialName;
     protected int materialMeta;
 
@@ -97,5 +101,10 @@ public class TileEntityCustomWood extends TileEntityAgricraft {
         else {
             return Blocks.planks.getIcon(0, 0);
         }
+    }
+
+    @Override
+    public void addDebugInfo(List<String> list) {
+        list.add("this material is: " + Item.itemRegistry.getNameForObject(this.getMaterial().getItem()) + ":" + this.getMaterial().getItemDamage());
     }
 }
