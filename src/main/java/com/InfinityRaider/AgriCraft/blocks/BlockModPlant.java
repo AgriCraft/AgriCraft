@@ -109,7 +109,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         if (meta < 7 && this.isFertile(world, x, y ,z)) {
             double rate = 1.0 + (1 + 0.00) / 10;
             float growthRate = (float) SeedHelper.getBaseGrowth(this.tier);
-            meta = (Math.random() > (growthRate * rate)/100) ? meta : meta + 1;
+            meta = (rnd.nextDouble() > (growthRate * rate)/100) ? meta : meta + 1;
             world.setBlockMetadataWithNotify(x, y, z, meta, 2);
         }
 

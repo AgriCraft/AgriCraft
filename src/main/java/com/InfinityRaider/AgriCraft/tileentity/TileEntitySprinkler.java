@@ -110,7 +110,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
                 consumeWater = ConfigurationHandler.hydrationConsumesWater;
             } else if(block instanceof BlockBush) {
                 //20% chance to force growth tick on plant, every 60 ticks
-                if(counter==0 && Math.random()<0.2) {
+                if(counter==0 && Constants.rand.nextDouble()<0.2) {
                     block.updateTick(this.worldObj, x, y, z, new Random());
                     consumeWater = true;
                 }
