@@ -67,6 +67,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
     @Override
     public void updateEntity() {
         if(!worldObj.isRemote) {
+            if(this.canSprinkle()) counter = (counter+1)%60;
             for(int yOffset=1;yOffset<5;yOffset++) {
                 for(int xOffset=-3;xOffset<=3;xOffset++) {
                     for(int zOffset=-3;zOffset<=3;zOffset++) {
@@ -91,7 +92,6 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
 
     private boolean sprinkle() {
     	boolean newState  = this.canSprinkle();
-    	if(newState) counter = (counter+1)%60;
         if(newState != this.isSprinkled) {
         	this.isSprinkled = newState;
         	this.markDirty();
