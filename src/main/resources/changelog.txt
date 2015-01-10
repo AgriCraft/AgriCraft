@@ -4,6 +4,7 @@ Changelog
 -Changed AgriCraft creative tab logo
 -Fixed certain crops rendering crooked
 -Changed Sprinkler to use a fixed configurable amount of water
+-Added configuration GUIs for some config categories
 -Fixed water draining bug in irrigation systems
 -Added option to clear all registered seed drops
 
