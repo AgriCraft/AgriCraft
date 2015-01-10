@@ -132,7 +132,9 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
                 //set fluid levels
                 for (TileEntityCustomWood te:neighbours) {
                     if (te instanceof TileEntityChannel) {
-                        ((TileEntityChannel) te).setFluidLevel(newLvl);
+                        int lvl = rest==0?newLvl:newLvl+1;
+                        rest = rest==0?0:rest-1;
+                        ((TileEntityChannel) te).setFluidLevel(lvl);
                     }
                 }
             }
