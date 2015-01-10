@@ -5,6 +5,7 @@ Changelog
 -Fixed certain crops rendering crooked
 -Changed Sprinkler to use a fixed configurable amount of water
 -Fixed water draining bug in irrigation systems
+-Added option to clear all registered seed drops
 
 1.1.1
 -Fixed Null Pointer Exception in certain cases when breaking tanks

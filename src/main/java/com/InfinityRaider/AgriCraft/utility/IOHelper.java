@@ -113,7 +113,7 @@ public abstract class IOHelper {
 
     //get the grass drops file contents
     public static String getGrassDrops() {
-        return grassDropInstructions;
+        return grassDropInstructions + "\n" + "AgriCraft:seedCarrot,10" + "\n" + "AgriCraft:seedPotato,10";
     }
 
     //mutation chances overrides file contents

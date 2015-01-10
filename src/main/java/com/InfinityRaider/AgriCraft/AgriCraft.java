@@ -24,7 +24,6 @@ import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -86,7 +85,7 @@ public class AgriCraft {
     public static void postInit(FMLPostInitializationEvent event) {
         LogHelper.info("Starting Post-Initialization");
         //initialize custom crops
-        CustomCrops.init();
+        CustomCrops.initCustomCrops();
         //initialize mutations
         MutationHandler.init();
         //initialize blacklist
@@ -95,6 +94,8 @@ public class AgriCraft {
         SeedHelper.initSpreadChancesOverrides();
         //read soil whitelist
         BlockCrop.initSoils();
+        //grass drops
+        CustomCrops.initGrassSeeds();
         //initialize world gen
         if(!ConfigurationHandler.disableWorldGen) {
             WorldGen.init();

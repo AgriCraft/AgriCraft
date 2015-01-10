@@ -12,19 +12,18 @@ import net.minecraft.init.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class CustomCrops {
     public static BlockModPlant[] customCrops;
     public static ItemModSeed[] customSeeds;
 
-    public static void init() {
-        initCustomCrops();
-        initGrassSeeds();
-    }
-
-    private static void initCustomCrops() {
+    public static void initCustomCrops() {
         if(ConfigurationHandler.customCrops) {
             String[] cropsRawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readCustomCrops());
             customCrops = new BlockModPlant[cropsRawData.length];
@@ -72,7 +71,28 @@ public class CustomCrops {
         }
     }
 
-    private static void initGrassSeeds() {
+    public static void initGrassSeeds() {
+        if(ConfigurationHandler.wipeTallGrassDrops) {
+            List seedList = null;
+            boolean error = false;
+            try {
+                Field fieldSeedList = (ForgeHooks.class).getDeclaredField("seedList");
+                fieldSeedList.setAccessible(true);
+                seedList = (List) fieldSeedList.get(null);
+            } catch (NoSuchFieldException e) {
+                error = true;
+            } catch (IllegalAccessException e) {
+                error = true;
+            }
+            if(error) {
+                LogHelper.info("Error when wiping tall grass drops: couldn't get seed list");
+            } else {
+                for (Object seed : seedList) {
+                    seedList.remove(seed);
+                }
+                LogHelper.info("Wiped seed entries");
+            }
+        }
         String[] rawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readGrassDrops());
         for(String data: rawData) {
             String[] dropData = IOHelper.getData(data);
