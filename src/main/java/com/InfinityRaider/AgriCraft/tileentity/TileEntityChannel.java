@@ -140,6 +140,10 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
         }
     }
 
+    public void drainFluid(int amount) {
+        setFluidLevel(lvl - amount);
+    }
+
     @Override
     public void addDebugInfo(List<String> list) {
         list.add("CHANNEL:");

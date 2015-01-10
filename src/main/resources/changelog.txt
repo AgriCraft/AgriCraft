@@ -3,6 +3,7 @@ Changelog
 1.1.2
 -Changed AgriCraft creative tab logo
 -Fixed certain crops rendering crooked
+-Changed Sprinkler to use a fixed configurable amount of water
 
 1.1.1
 -Fixed Null Pointer Exception in certain cases when breaking tanks

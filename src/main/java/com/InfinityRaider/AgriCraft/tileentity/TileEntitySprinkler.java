@@ -19,9 +19,13 @@ import net.minecraft.util.Vec3;
 import java.util.Random;
 
 public class TileEntitySprinkler extends TileEntityAgricraft{
+
+    private static final double GROWTH_CHANCE = 0.2;
+
     private int counter = 0;
     public float angle = 0.0F;
     private boolean isSprinkled = false;
+
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
@@ -66,14 +70,15 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
 
     @Override
     public void updateEntity() {
-        if(!worldObj.isRemote) {
-            if(this.canSprinkle()) counter = (counter+1)%60;
-            for(int yOffset=1;yOffset<5;yOffset++) {
-                for(int xOffset=-3;xOffset<=3;xOffset++) {
-                    for(int zOffset=-3;zOffset<=3;zOffset++) {
-                        if(this.sprinkle() && this.irrigate(this.xCoord + xOffset, this.yCoord - yOffset, this.zCoord + zOffset)) {
-                            TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord+1, this.zCoord);
-                            channel.setFluidLevel(channel.getFluidLevel()-1);
+        if (!worldObj.isRemote) {
+            if (this.sprinkle()) {
+                counter = ++counter % 60;
+                drainWaterFromChannel();
+
+                for (int yOffset = 1; yOffset < 5; yOffset++) {
+                    for (int xOffset = -3; xOffset <= 3; xOffset++) {
+                        for (int zOffset = -3; zOffset <= 3; zOffset++) {
+                            this.irrigate(this.xCoord + xOffset, this.yCoord - yOffset, this.zCoord + zOffset);
                         }
                     }
                 }
@@ -99,24 +104,28 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
         return this.isSprinkled;
     }
 
-    //tries to irrigate a block, returns true if water needs to be consumed
-    private boolean irrigate(int x, int y, int z) {
+    /** Depending on the block type either irrigates farmland or forces plant growth (based on chance) */
+    private void irrigate(int x, int y, int z) {
         Block block = this.worldObj.getBlock(x, y, z);
-        boolean consumeWater = false;
-        if(block!=null) {
-            if(block instanceof BlockFarmland && this.worldObj.getBlockMetadata(x, y, z)<7) {
-                //irrigate farmland
+        if (block != null) {
+            if (block instanceof BlockFarmland && this.worldObj.getBlockMetadata(x, y, z) < 7) {
+                // irrigate farmland
                 this.worldObj.setBlockMetadataWithNotify(x, y, z, 7, 2);
-                consumeWater = ConfigurationHandler.hydrationConsumesWater;
-            } else if(block instanceof BlockBush) {
-                //20% chance to force growth tick on plant, every 60 ticks
-                if(counter==0 && Constants.rand.nextDouble()<0.2) {
-                    block.updateTick(this.worldObj, x, y, z, new Random());
-                    consumeWater = true;
+            } else if (block instanceof BlockBush) {
+                // 20% chance to force growth tick on plant, every 60 ticks
+                if (counter == 0 && Constants.rand.nextDouble() <= GROWTH_CHANCE) {
+                    block.updateTick(this.worldObj, x, y, z, Constants.rand);
                 }
             }
         }
-        return  consumeWater;
+    }
+
+    /** Called once per tick, drains water out of the WaterChannel one y-level above */
+    private void drainWaterFromChannel() {
+        if (counter % 10 == 0) {
+            TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord);
+            channel.drainFluid(ConfigurationHandler.sprinklerRatePerHalfSecond);
+        }
     }
 
     @SideOnly(Side.CLIENT)

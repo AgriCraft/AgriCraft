@@ -29,7 +29,8 @@ public class ConfigurationHandler {
     public static boolean disableVanillaFarming;
 
     public static boolean disableIrrigation;
-    public static boolean hydrationConsumesWater;
+    public static int sprinklerRatePerSecond;
+    public static int sprinklerRatePerHalfSecond;
     public static boolean placeWater;
     public static boolean fillFromFlowingWater;
 
@@ -65,7 +66,8 @@ public class ConfigurationHandler {
         customCrops = config.getBoolean("Custom crops", "AGRICRAFT", false, "set to true if you wish to create your own crops");
 
         disableIrrigation = config.getBoolean("Disable Irrigation","IRRIGATION", false, "set to true if you want to disable irrigation systems");
-        hydrationConsumesWater = config.getBoolean("Hydrating farmland consumes farmland", "IRRIGATION", true, "set to false to stop consuming water when irrigating farmland (growing crops still consumes water");
+        sprinklerRatePerSecond = config.getInt("Sprinkler water usage", "IRRIGATION", 10, 0, 10000, "Water usage of the sprinkler in mB per second");
+        sprinklerRatePerHalfSecond = Math.round(sprinklerRatePerSecond / 2);
         placeWater = config.getBoolean("Spawn water after breaking tank", "IRRIGATION", true, "set to false to disable placing a source block when breaking non-empty tanks");
         fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", "IRRIGATION", false, "set to true to let tanks fill up when water flows above them");
 
