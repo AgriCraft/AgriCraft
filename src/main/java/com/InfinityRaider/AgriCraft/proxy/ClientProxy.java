@@ -18,7 +18,6 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -70,9 +69,8 @@ public class ClientProxy extends CommonProxy {
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockWaterChannel), new RenderItemChannel(new TileEntityChannel()));
 
         //channel valve
-        valveRenderId = RenderingRegistry.getNextAvailableRenderId();
-        RenderValve renderValve = new RenderValve();
-        RenderingRegistry.registerBlockHandler(valveRenderId, renderValve);
+        TileEntitySpecialRenderer renderValve = new RenderValve();
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityValve.class, renderValve);
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockChannelValve), new RenderItemChannel(new TileEntityValve()));
 
         //sprinkler

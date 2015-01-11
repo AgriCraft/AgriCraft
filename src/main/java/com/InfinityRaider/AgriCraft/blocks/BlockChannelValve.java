@@ -22,6 +22,16 @@ public class BlockChannelValve extends BlockContainer {
 
     @Override
     public int getRenderType() {
-        return AgriCraft.proxy.getRenderId(Constants.valveId);
+        return -1;
+    }
+
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
     }
 }
