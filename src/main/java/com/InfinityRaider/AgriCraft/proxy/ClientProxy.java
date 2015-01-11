@@ -30,6 +30,7 @@ public class ClientProxy extends CommonProxy {
     public static int cropRenderId = -1;
     public static int tankRenderId = -1;
     public static int channelRenderId = -1;
+    public static int valveRenderId = -1;
 
     @Override
     public int getRenderId(int nr) {
@@ -37,6 +38,7 @@ public class ClientProxy extends CommonProxy {
             case Constants.cropId: return cropRenderId;
             case Constants.tankId: return tankRenderId;
             case Constants.channelId: return channelRenderId;
+            case Constants.valveId: return valveRenderId;
         }
         return -1;
     }
@@ -65,6 +67,11 @@ public class ClientProxy extends CommonProxy {
         RenderChannel renderChannel = new RenderChannel();
         RenderingRegistry.registerBlockHandler(channelRenderId, renderChannel);
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockWaterChannel), new RenderItemChannel(new TileEntityChannel()));
+
+        //channel valve
+        TileEntitySpecialRenderer renderValve = new RenderValve();
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityValve.class, renderValve);
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockChannelValve), new RenderItemChannel(new TileEntityValve()));
 
         //sprinkler
         TileEntitySpecialRenderer renderSprinkler = new RenderSprinkler();

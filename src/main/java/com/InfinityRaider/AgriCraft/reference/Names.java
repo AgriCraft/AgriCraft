@@ -38,6 +38,7 @@ public final class Names {
         public static final String ore = "ore";
         public static final String tank = "waterTank";
         public static final String channel = "waterChannel";
+        public static final String valve = "channelValve";
         public static final String sprinkler = "sprinkler";
     }
 

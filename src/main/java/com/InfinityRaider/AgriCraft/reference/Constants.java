@@ -37,4 +37,5 @@ public final class Constants {
     public static final int cropId = 0;
     public static final int tankId = 1;
     public static final int channelId = 2;
+    public static final int valveId = 3;
 }

@@ -12,6 +12,7 @@ public class Blocks {
     public static BlockSeedAnalyzer seedAnalyzer;
     public static BlockWaterTank blockWaterTank;
     public static BlockWaterChannel blockWaterChannel;
+    public static BlockChannelValve blockChannelValve;
     public static BlockSprinkler blockSprinkler;
 
     public static void init() {
@@ -24,6 +25,8 @@ public class Blocks {
             RegisterHelper.registerBlock(blockWaterTank, Names.Objects.tank, ItemBlockCustomWood.class);
             blockWaterChannel = new BlockWaterChannel();
             RegisterHelper.registerBlock(blockWaterChannel, Names.Objects.channel, ItemBlockCustomWood.class);
+            blockChannelValve = new BlockChannelValve();
+            RegisterHelper.registerBlock(blockChannelValve, Names.Objects.valve, ItemBlockCustomWood.class);
             blockSprinkler = new BlockSprinkler();
             RegisterHelper.registerBlock(blockSprinkler, Names.Objects.sprinkler);
         }
