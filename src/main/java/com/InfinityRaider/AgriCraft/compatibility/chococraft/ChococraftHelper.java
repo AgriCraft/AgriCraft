@@ -17,7 +17,7 @@ public class ChococraftHelper {
         Item lovely = ChocoCraftItems.gysahlLoverlyItem;
         Item golden = ChocoCraftItems.gysahlGoldenItem;
         double random = rand.nextDouble();
-        ItemStack fruitStack = (random<gain*0.04?new ItemStack(lovely, 1):new ItemStack(normal, nr));
+        ItemStack fruitStack;
         if(gain==10) {
             Item fruit = random<0.2?golden:(random<0.6?lovely:null);
             if(fruit==null) {
@@ -26,6 +26,9 @@ public class ChococraftHelper {
             else {
                 fruitStack = new ItemStack(fruit, 1);
             }
+        }
+        else {
+            fruitStack = (random<gain*0.04?new ItemStack(lovely, 1):new ItemStack(normal, nr));
         }
         return fruitStack;
     }
