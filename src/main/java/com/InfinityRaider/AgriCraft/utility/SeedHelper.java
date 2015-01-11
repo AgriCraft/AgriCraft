@@ -1,7 +1,9 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import chococraft.common.items.seeds.ItemGysahlSeeds;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChococraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
@@ -192,12 +194,16 @@ public abstract class SeedHelper {
         else if(ModIntegration.LoadedMods.harvestcraft && getPlantDomain(seed).equalsIgnoreCase("harvestcraft")) {
             items.add(new ItemStack(getPlant(seed).getItemDropped(7, new Random(), 0), nr));
         }
+        //chococraft crop
+        else if(ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
+            items.add(ChococraftHelper.getFruit(gain, nr));
+        }
         //other crop
         else {
             int harvestMeta = 7;
             //plant mega pack crop
             if(ModIntegration.LoadedMods.plantMegaPack && getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
-                harvestMeta=PlantMegaPackHelper.getTextureIndex(seed, 7);
+                harvestMeta=PlantMegaPackHelper.getTextureIndex(seed, harvestMeta);
             }
             //other crop
             ArrayList<ItemStack> defaultDrops = plant.getDrops(world, x, y, z, harvestMeta, 0);

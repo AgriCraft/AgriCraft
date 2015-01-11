@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import chococraft.common.items.seeds.ItemGysahlSeeds;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChococraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -43,7 +45,7 @@ public abstract class RenderHelper {
 
     public static ResourceLocation getItemResource(IIcon icon) {
         String path = icon.getIconName();
-        String domain = path.substring(0,path.indexOf(":")+1);
+        String domain = path.substring(0, path.indexOf(":") + 1);
         String file = path.substring(path.indexOf(':')+1);
         return new ResourceLocation(domain+"textures/items/"+file+".png");
     }
@@ -70,6 +72,9 @@ public abstract class RenderHelper {
         }
         else if(ModIntegration.LoadedMods.plantMegaPack && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
             return PlantMegaPackHelper.getTextureIndex(seed, growthMeta);
+        }
+        else if(ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
+            return ChococraftHelper.transformMeta(growthMeta);
         }
         else if(seed== Items.nether_wart) {
             return (int) Math.ceil(( (float) growthMeta-2)/2);

@@ -103,6 +103,14 @@ public abstract class IOHelper {
         if(ConfigurationHandler.integration_PlantMegaPack && ModIntegration.LoadedMods.plantMegaPack) {
             data = data + '\n' + plantMegaPackMutations;
         }
+        if(ConfigurationHandler.integration_Chococraft && ModIntegration.LoadedMods.chococraft) {
+            if(ConfigurationHandler.integration_HC && ModIntegration.LoadedMods.harvestcraft) {
+                data = data + '\n' + chococraft_harvestcraftMutations;
+            }
+            else {
+                data = data + '\n' + chococraftMutations;
+            }
+        }
         return data;
     }
 
@@ -368,6 +376,12 @@ public abstract class IOHelper {
             "plantmegapack:seedBellPepperYellow=AgriCraft:seedCarrot+AgriCraft:seedDandelion\n" +
             "plantmegapack:seedOnion=plantmegapack:seedBellPepperYellow+plantmegapack:seedLettuce\n" +
             "plantmegapack:seedCucumber=plantmegapack:seedBeet+plantmegapack:seedBellPepperYellow";
+
+    private static final String chococraftMutations =
+            "chococraft:Gysahl_Seeds=Agricraft:seedPotato+AgriCraft:seedTulipRed";
+
+    private static final String chococraft_harvestcraftMutations =
+            "chococraft:Gysahl_Seeds=harvestcraft:rutabagaseedItem+harvestcraft:beetseedItem";
 
     private static final String copperMutation =
             "AgriCraft:seedCuprosia=AgriCraft:seedRedstodendron+AgriCraft:seedTulipOrange";

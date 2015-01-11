@@ -47,6 +47,7 @@ public class ConfigurationHandler {
     public static boolean integration_Nat;
     public static boolean integration_WeeeFlowers;
     public static boolean integration_PlantMegaPack;
+    public static boolean integration_Chococraft;
 
     public static void init(FMLPreInitializationEvent event) {
         directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
@@ -87,6 +88,7 @@ public class ConfigurationHandler {
         integration_Nat = ModIntegration.LoadedMods.natura && config.getBoolean("Natura",CATEGORY_INTEGRATION,true,"Set to false to disable Natura Integration");
         integration_WeeeFlowers = ModIntegration.LoadedMods.weeeFlowers && config.getBoolean("Weee Flowers",CATEGORY_INTEGRATION,true,"Set to false to disable Weee Flowers Integration");
         integration_PlantMegaPack = ModIntegration.LoadedMods.plantMegaPack && config.getBoolean("Plant Mega Pack",CATEGORY_INTEGRATION,true,"Set to false to disable Plant Mega Pack Integration");
+        integration_Chococraft = ModIntegration.LoadedMods.chococraft && config.getBoolean("ChocoCraft",CATEGORY_INTEGRATION,true,"Set to false to disable Chococraft Integration");
 
         //toggle debug mode
         debug = config.getBoolean("debug",CATEGORY_DEBUG,false,"Set to true if you wish to enable debug mode");

@@ -6,6 +6,7 @@ Changelog
 -Changed Sprinkler to use a fixed configurable amount of water
 -Fixed water draining bug in irrigation systems
 -Added option to clear all registered seed drops
+-Added support for Chococraft gysahls
 
 1.1.1
 -Fixed Null Pointer Exception in certain cases when breaking tanks

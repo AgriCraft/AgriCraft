@@ -45,6 +45,7 @@ public class ModIntegration {
         public static boolean mfr;
         public static boolean waila;
         public static boolean forestry;
+        public static boolean chococraft;
 
         public static void init() {
             nei = Loader.isModLoaded(Names.Mods.nei);
@@ -60,6 +61,7 @@ public class ModIntegration {
             thaumcraft = Loader.isModLoaded(Names.Mods.thaumcraft);
             mfr = Loader.isModLoaded(Names.Mods.mfr);
             waila = Loader.isModLoaded(Names.Mods.waila);
+            chococraft = Loader.isModLoaded(Names.Mods.chococraft);
             LogHelper.info("Checking for loaded mods:");
             LogHelper.info(" - NEI loaded: "+nei);
             LogHelper.info(" - Pam's HarvestCraft loaded: "+harvestcraft);
@@ -74,6 +76,7 @@ public class ModIntegration {
             LogHelper.info(" - Thaumcraft loaded: "+thaumcraft);
             LogHelper.info(" - MineFactory Reloaded loaded: "+mfr);
             LogHelper.info(" - Waila loaded: "+waila);
+            LogHelper.info(" - Chococraft loaded: "+chococraft);
             LogHelper.info("Done");
         }
     }

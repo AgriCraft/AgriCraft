@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.reference;
 
 //yes, I got the information for most harvestcraft plants from wikipedia, go ahead, call the fucking cops.
 
+import chococraft.common.config.ChocoCraftItems;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import cpw.mods.fml.relauncher.Side;
@@ -96,6 +97,9 @@ public final class SeedInformation {
             informationTable.put(PlantMegaPack.items.seedCucumber, new String[]{pmp_Cucumber});
             informationTable.put(PlantMegaPack.items.seedTomato, new String[]{pmp_Tomato});
             informationTable.put(PlantMegaPack.items.seedBeet, new String[]{pmp_Beet});
+        }
+        if(ModIntegration.LoadedMods.chococraft) {
+            informationTable.put(ChocoCraftItems.gysahlSeedsItem, new String[]{cc_gysahl});
         }
     }
 
@@ -221,4 +225,7 @@ public final class SeedInformation {
     public static final String pmp_Cucumber = hc_Cucumber;
     public static final String pmp_Tomato = hc_Tomato;
     public static final String pmp_Beet = hc_Beet;
+
+    //chococraft seeds
+    public static final String cc_gysahl ="agricraft_journal.cc_Gysahl";
 }
