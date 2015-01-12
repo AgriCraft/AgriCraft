@@ -93,7 +93,7 @@ public abstract class MutationHandler {
                 } else if (mutation.id == 2) {
                     location = "nearby";
                 }
-                LogHelper.info(info + " (Requires " + block + " " + location + ")");
+                LogHelper.info(new StringBuffer(info).append(" (Requires ").append(block).append(" ").append(location).append(")"));
             }
         }
     }
@@ -152,7 +152,7 @@ public abstract class MutationHandler {
             }
         }
         if(!success) {
-            LogHelper.info("Error when reading mutation: "+errorMsg+" (line: "+input+")");
+            LogHelper.info(new StringBuffer("Error when reading mutation: ").append(errorMsg).append(" (line: ").append(input).append(")"));
         }
         return mutation;
     }

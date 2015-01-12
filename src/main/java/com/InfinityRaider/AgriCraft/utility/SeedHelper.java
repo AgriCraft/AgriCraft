@@ -43,7 +43,7 @@ public abstract class SeedHelper {
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSeedBlackList());
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         for(String line:data) {
-            LogHelper.debug("parsing "+line);
+            LogHelper.debug(new StringBuffer("parsing ").append(line));
             ItemStack seedStack = IOHelper.getStack(line);
             Item seed = seedStack!=null?seedStack.getItem():null;
             boolean success = seed!=null && seed instanceof ItemSeeds;
@@ -52,13 +52,13 @@ public abstract class SeedHelper {
                 list.add(seedStack);
             }
             else {
-                LogHelper.info("Error when adding seed to blacklist: "+errorMsg+" (line: "+line+")");
+                LogHelper.info(new StringBuffer("Error when adding seed to blacklist: ").append(errorMsg).append(" (line: ").append(line).append(")"));
             }
         }
         seedBlackList = list.toArray(new ItemStack[list.size()]);
         LogHelper.info("Registered seeds blacklist:");
         for(ItemStack seed:seedBlackList) {
-            LogHelper.info(" - "+Item.itemRegistry.getNameForObject(seed.getItem())+":"+seed.getItemDamage());
+            LogHelper.info(new StringBuffer(" - ").append(Item.itemRegistry.getNameForObject(seed.getItem())).append(":").append(seed.getItemDamage()));
         }
     }
 

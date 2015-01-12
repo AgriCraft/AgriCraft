@@ -38,7 +38,7 @@ public class CustomCrops {
                 //cropData[5]: information
                 boolean success = cropData.length==6;
                 String errorMsg = "Incorrect amount of arguments";
-                LogHelper.debug("parsing "+cropsRawData[i]);
+                LogHelper.debug(new StringBuffer("parsing ").append(cropsRawData[i]));
                 if(success) {
                     ItemStack fruitStack = IOHelper.getStack(cropData[1]);
                     Item fruit = fruitStack!=null?fruitStack.getItem():null;
@@ -64,7 +64,7 @@ public class CustomCrops {
                     }
                 }
                 if(!success) {
-                    LogHelper.info("Error when adding custom crop: "+errorMsg+" (line: "+cropsRawData[i]+")");
+                    LogHelper.info(new StringBuffer("Error when adding custom crop: ").append(errorMsg).append(" (line: ").append(cropsRawData[i]).append(")"));
                 }
             }
             LogHelper.info("Custom crops registered");
@@ -87,9 +87,7 @@ public class CustomCrops {
             if(error) {
                 LogHelper.info("Error when wiping tall grass drops: couldn't get seed list");
             } else {
-                for (Object seed : seedList) {
-                    seedList.remove(seed);
-                }
+                seedList.clear();
                 LogHelper.info("Wiped seed entries");
             }
         }
@@ -108,11 +106,11 @@ public class CustomCrops {
                     int meta = seedStack.getItemDamage();
                     int weight = Integer.parseInt(dropData[1]);
                     MinecraftForge.addGrassSeed(new ItemStack(drop, 1, meta), 10);
-                    LogHelper.info("Registered " + Item.itemRegistry.getNameForObject(drop) + ":" + meta + " as a drop from grass (weight: " + weight + ')');
+                    LogHelper.info(new StringBuffer("Registered ").append(Item.itemRegistry.getNameForObject(drop)).append(":").append(meta).append(" as a drop from grass (weight: ").append(weight).append(')'));
                 }
             }
             if(!success) {
-                LogHelper.info("Error when adding grass drop: "+errorMsg+" (line: "+data+")");
+                LogHelper.info(new StringBuffer("Error when adding grass drop: ").append(errorMsg).append(" (line: ").append(data).append(")"));
             }
         }
     }
