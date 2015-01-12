@@ -40,6 +40,7 @@ public class ModIntegration {
         public static boolean weeeFlowers;
         public static boolean exNihilo;
         public static boolean plantMegaPack;
+        public static boolean magicalCrops;
         public static boolean railcraft;
         public static boolean thaumcraft;
         public static boolean mfr;
@@ -57,6 +58,7 @@ public class ModIntegration {
             hungerOverhaul = Loader.isModLoaded(Names.Mods.hungerOverhaul);
             exNihilo = Loader.isModLoaded(Names.Mods.exNihilo);
             plantMegaPack = Loader.isModLoaded(Names.Mods.plantMegaPack);
+            magicalCrops = Loader.isModLoaded(Names.Mods.magicalCrops);
             railcraft = Loader.isModLoaded(Names.Mods.railcraft);
             thaumcraft = Loader.isModLoaded(Names.Mods.thaumcraft);
             mfr = Loader.isModLoaded(Names.Mods.mfr);
@@ -72,6 +74,7 @@ public class ModIntegration {
             LogHelper.info(" - Hunger Overhaul loaded: "+hungerOverhaul);
             LogHelper.info(" - Ex Nihilo loaded: "+exNihilo);
             LogHelper.info(" - Plant Mega Pack loaded: "+plantMegaPack);
+            LogHelper.info(" - Magical Crops loaded: "+magicalCrops);
             LogHelper.info(" - Railcraft loaded: "+railcraft);
             LogHelper.info(" - Thaumcraft loaded: "+thaumcraft);
             LogHelper.info(" - MineFactory Reloaded loaded: "+mfr);

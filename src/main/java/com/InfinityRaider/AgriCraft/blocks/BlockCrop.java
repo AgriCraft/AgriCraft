@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
@@ -11,6 +12,7 @@ import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 
+import com.mark719.magicalcrops.items.ItemMagicalCropFertilizer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -184,6 +186,10 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             else if(player.getCurrentEquippedItem().getItem()==net.minecraft.init.Items.dye && player.getCurrentEquippedItem().getItemDamage()==15) {
                 return false;
             }
+            //magical crops fertiliser
+            else if(ModIntegration.LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && player.getCurrentEquippedItem().getItem() instanceof ItemMagicalCropFertilizer) {
+                return this.applyMagicalFertiliser(world, x, y, z, player);
+            }
             //allow the debugger to be used
             else if(player.getCurrentEquippedItem().getItem() instanceof ItemDebugger) {
                 return false;
@@ -263,6 +269,19 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         else if(crop.crossCrop && ConfigurationHandler.bonemealMutation) {
             crop.crossOver();
         }
+    }
+
+    //magical fertiliser
+    private boolean applyMagicalFertiliser(World world, int x, int y, int z, EntityPlayer player) {
+        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+        boolean allow = crop.hasPlant() && !crop.isMature() && crop.isFertile();
+        if(allow) {
+            this.func_149853_b(world, new Random(), x, y ,z);
+            if(!player.capabilities.isCreativeMode) {
+                player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
+            }
+        }
+        return allow;
     }
 
     //neighboring blocks get updated
