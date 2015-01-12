@@ -8,6 +8,8 @@ Changelog
 -Fixed water draining bug in irrigation systems
 -Added option to clear all registered seed drops
 -Added support for Chococraft gysahls
+-Added a config to override seed tiers
+-Made Magic Fertiliser from Magical Crops work on tier 4 & 5 crops (can be disabled in the config)
 
 1.1.1
 -Fixed Null Pointer Exception in certain cases when breaking tanks

@@ -73,7 +73,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     //calculates the number of ticks it takes to analyze the seed
     public int maxProgress() {
-        return seed==null || !(seed.getItem() instanceof ItemSeeds)?0: SeedHelper.getSeedTier((ItemSeeds) seed.getItem())*20;
+        return seed==null || !(seed.getItem() instanceof ItemSeeds)?0: SeedHelper.getSeedTier((ItemSeeds) seed.getItem(), seed.getItemDamage())*20;
     }
 
     public static boolean isValid(ItemStack stack) {

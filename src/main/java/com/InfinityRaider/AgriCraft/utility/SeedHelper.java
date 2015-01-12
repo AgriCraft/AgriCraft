@@ -24,14 +24,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public abstract class SeedHelper {
     private static ItemStack[] seedBlackList;
-    private static ItemStack[] spreadChancesOverrides;
-    private static Integer[] spreadChances;
+    private static HashMap<ItemSeeds, Integer[]> spreadChances;
+    private static HashMap<ItemSeeds, Integer[]> seedTiers;
 
-    public static void initSeedBlackList() {
+    public static void init() {
+        initSeedBlackList();
+        initSpreadChancesOverrides();
+        initTiers();
+    }
+
+    private static void initSeedBlackList() {
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSeedBlackList());
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         for(String line:data) {
@@ -54,21 +62,38 @@ public abstract class SeedHelper {
         }
     }
 
-    public static void initSpreadChancesOverrides() {
+    private static void initSpreadChancesOverrides() {
         //read mutation chance overrides & initialize the arrays
         setMutationChances(IOHelper.getLinesArrayFromData(ConfigurationHandler.readSpreadChances()));
         LogHelper.info("Registered Mutations Chances overrides:");
-        for(int i=0;i<spreadChances.length;i++) {
-            String mutation = spreadChancesOverrides[i].getItem()!=null?(Item.itemRegistry.getNameForObject(spreadChancesOverrides[i].getItem())+':'+spreadChancesOverrides[i].getItemDamage()):"null";
-            String chance = spreadChances[i]+" percent";
-            LogHelper.info(" - "+mutation + ": " + chance);
+        for(Map.Entry<ItemSeeds, Integer[]> entry:spreadChances.entrySet()) {
+            for(int i=0;i<entry.getValue().length;i++) {
+                Integer chance = entry.getValue()[i];
+                if(chance!=null) {
+                    StringBuffer override = new StringBuffer(" - ").append(Item.itemRegistry.getNameForObject(entry.getKey())).append(':').append(i).append(" - ").append(chance).append(" percent");
+                    LogHelper.info(override);
+                }
+            }
         }
     }
 
-    //initializes the mutation chances arrays
+    private static void initTiers() {
+        setSeedTiers(IOHelper.getLinesArrayFromData(ConfigurationHandler.readSeedTiers()));
+        LogHelper.info("Registered seed tiers:");
+        for(Map.Entry<ItemSeeds, Integer[]> entry:seedTiers.entrySet()) {
+            for(int i=0;i<entry.getValue().length;i++) {
+                Integer tier = entry.getValue()[i];
+                if(tier!=null) {
+                    StringBuffer override = new StringBuffer(" - ").append(Item.itemRegistry.getNameForObject(entry.getKey())).append(':').append(i).append(" - tier:").append(tier);
+                    LogHelper.info(override);
+                }
+            }
+        }
+    }
+
+    //initializes the mutation chances overrides
     private static void setMutationChances(String[] input) {
-        ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
-        ArrayList<Integer> chances = new ArrayList<Integer>();
+        spreadChances = new HashMap<ItemSeeds, Integer[]>();
         LogHelper.debug("reading mutation chance overrides");
         for(String line:input) {
             String[] data = IOHelper.getData(line);
@@ -77,46 +102,84 @@ public abstract class SeedHelper {
             LogHelper.debug("parsing "+line);
             if(success) {
                 ItemStack seedStack = IOHelper.getStack(data[0]);
-                Item seed = seedStack!=null?seedStack.getItem():null;
-                success = seed!=null && seed instanceof ItemSeeds;
+                Item seedItem = seedStack!=null?seedStack.getItem():null;
+                success = seedItem!=null && seedItem instanceof ItemSeeds;
                 errorMsg = "Invalid seed";
                 if(success) {
                     int chance = Integer.parseInt(data[1]);
                     success = chance>=0 && chance<=100;
                     errorMsg = "Chance should be between 0 and 100";
                     if(success) {
-                        stacks.add(seedStack);
-                        chances.add(chance);
+                        ItemSeeds seed = (ItemSeeds) seedStack.getItem();
+                        if(spreadChances.get(seed)==null) {
+                            spreadChances.put(seed, new Integer[16]);
+                        }
+                        spreadChances.get(seed)[seedStack.getItemDamage()] = chance;
                     }
                 }
             }
             if(!success) {
-                LogHelper.info("Error when adding mutation chance override: "+errorMsg+" (line: "+line+")");
+                LogHelper.info(new StringBuffer("Error when adding mutation chance override: ").append(errorMsg).append(" (line: ").append(line).append(")"));
             }
         }
-        spreadChancesOverrides = stacks.toArray(new ItemStack[stacks.size()]);
-        spreadChances = chances.toArray(new Integer[chances.size()]);
+    }
+
+    //initializes the seed tier overrides
+    private static void setSeedTiers(String[] input) {
+        seedTiers = new HashMap<ItemSeeds, Integer[]>();
+        LogHelper.debug("reading seed tier overrides");
+        for(String line:input) {
+            String[] data = IOHelper.getData(line);
+            boolean success = data.length==2;
+            String errorMsg = "Incorrect amount of arguments";
+            LogHelper.debug("parsing "+line);
+            if(success) {
+                ItemStack seedStack = IOHelper.getStack(data[0]);
+                Item seedItem = seedStack!=null?seedStack.getItem():null;
+                success = seedItem!=null && seedItem instanceof ItemSeeds;
+                errorMsg = "Invalid seed";
+                if(success) {
+                    int tier = Integer.parseInt(data[1]);
+                    success = tier>=1 && tier<=5;
+                    errorMsg = "Chance should be between 1 and 5";
+                    if(success) {
+                        ItemSeeds seed = (ItemSeeds) seedStack.getItem();
+                        if(seedTiers.get(seed)==null) {
+                            seedTiers.put(seed, new Integer[16]);
+                        }
+                        seedTiers.get(seed)[seedStack.getItemDamage()] = tier;
+                    }
+                }
+            }
+            if(!success) {
+                LogHelper.info(new StringBuffer("Error when adding seed tier override: ").append(errorMsg).append(" (line: ").append(line).append(")"));
+            }
+        }
     }
 
     public static double getSpreadChance(ItemSeeds seed, int meta) {
-        if(spreadChances.length>0) {
-            for (int i = 0; i < spreadChances.length; i++) {
-                if (seed == spreadChancesOverrides[i].getItem() && meta == spreadChancesOverrides[i].getItemDamage()) {
-                    return ((double) spreadChances[i]) / 100;
-                }
-            }
+        Integer value = spreadChances.get(seed)[meta];
+        if(value!=null) {
+            return ((double) value) / 100;
         }
-        return 1.00/ SeedHelper.getSeedTier(seed);
+        return 1.00/ SeedHelper.getSeedTier(seed, meta);
     }
 
-    public static int getSeedTier(ItemSeeds seed) {
+    public static int getSeedTier(ItemSeeds seed, int meta) {
         if(seed == null) {
             return 0;
         }
-        String domain = Item.itemRegistry.getNameForObject(seed).substring(0, Item.itemRegistry.getNameForObject(seed).indexOf(':'));
-        if(domain.equalsIgnoreCase("agricraft")) {
+        Integer[] tierArray = seedTiers.get(seed);
+        if(tierArray!=null && tierArray.length>meta) {
+            Integer tier = seedTiers.get(seed)[meta];
+            if (tier != null) {
+                return tier;
+            }
+        }
+        if(seed instanceof ItemModSeed) {
             return ((ItemModSeed) seed).getPlant().tier;
         }
+        String domain = Item.itemRegistry.getNameForObject(seed).substring(0, Item.itemRegistry.getNameForObject(seed).indexOf(':'));
         if(domain.equalsIgnoreCase("harvestcraft")) {
             return 2;
         }
@@ -239,8 +302,8 @@ public abstract class SeedHelper {
     }
 
     //get the base growth
-    public static int getBaseGrowth(ItemSeeds seed) {
-        return getBaseGrowth(getSeedTier(seed));
+    public static int getBaseGrowth(ItemSeeds seed, int meta) {
+        return getBaseGrowth(getSeedTier(seed, meta));
     }
 
     //define NBT tag

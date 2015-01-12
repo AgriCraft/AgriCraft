@@ -129,6 +129,12 @@ public abstract class IOHelper {
         return spreadChancesOverridesInstructions;
     }
 
+    //seed tier overrides file contents
+    public static String getSeedTierOverridesInstructions() {
+        return seedTierOverridesInstructions;
+    }
+
+    //seed black list
     public static String getSeedBlackListInstructions() {
         return seedBlackListInstructions;
     }
@@ -244,10 +250,16 @@ public abstract class IOHelper {
             "#For example: minecraft:sand:0";
 
     private static final String spreadChancesOverridesInstructions =
-            "#Define overides for spreading chances here: <mod>:<seedname>:<seedmeta>,<chance>\n" +
+            "#Define overrides for spreading chances here: <mod>:<seedname>:<seedmeta>,<chance>\n" +
             "#You can get these values from NEI (example: minecraft:wheat_seeds is the vanilla seeds)\n" +
             "#The chance is an integer specified in percent, minimum is 0, maximum a 100. Spread chance is the chance that crops will spread to empty crosscrops\n" +
             "#For example: AgriCraft:seedDandelion,85";
+
+    private static final String seedTierOverridesInstructions =
+            "#Define overrides for seed tiers here: <mod>:<seedname>:<seedmeta>,<tier>\n" +
+            "#You can get these values from NEI (example: minecraft:wheat_seeds is the vanilla seeds)\n" +
+            "#The tier is an integer between 1 and 5 (1 and 5 included). The higher the tier, the slower it will grow, mutate, be analysed, ...\n" +
+            "#For example: AgriCraft:seedDandelion,2";
 
     private static final String mutationInstructions =
             "#Define mutations here: <mutation>=<parent1>+<parent2>\n" +

@@ -408,7 +408,7 @@ public class GuiJournal extends GuiScreen {
 
     //writes the seed tier
     private void writeSeedTier(int index) {
-        int tier = SeedHelper.getSeedTier((ItemSeeds) discoveredSeeds[index].getItem());
+        int tier = SeedHelper.getSeedTier((ItemSeeds) discoveredSeeds[index].getItem(), discoveredSeeds[index].getItemDamage());
         String write = StatCollector.translateToLocal("agricraft_journal.tier")+": "+tier;
         float scale = 0.5F;
         GL11.glScalef(scale, scale, scale);

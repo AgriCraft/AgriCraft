@@ -38,7 +38,7 @@ public abstract class MutationHandler {
 
         public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
             this(result, parent1, parent2, 0, null, 0, 100);
-            this.chance = 1.00/ SeedHelper.getSeedTier((ItemSeeds) result.getItem());
+            this.chance = 1.00/ SeedHelper.getSeedTier((ItemSeeds) result.getItem(), result.getItemDamage());
         }
 
         public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int chance) {
@@ -47,7 +47,7 @@ public abstract class MutationHandler {
 
         public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int id, Block requirement, int requirementMeta) {
             this(result, parent1, parent2, id, requirement, requirementMeta, 100);
-            this.chance = 1.00/ SeedHelper.getSeedTier((ItemSeeds) result.getItem());
+            this.chance = 1.00/ SeedHelper.getSeedTier((ItemSeeds) result.getItem(), result.getItemDamage());
         }
 
         //copy constructor

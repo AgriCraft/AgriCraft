@@ -86,12 +86,10 @@ public class AgriCraft {
         LogHelper.info("Starting Post-Initialization");
         //initialize custom crops
         CustomCrops.initCustomCrops();
+        //initialize seed overrides
+        SeedHelper.init();
         //initialize mutations
         MutationHandler.init();
-        //initialize blacklist
-        SeedHelper.initSeedBlackList();
-        //read spread chance overrides
-        SeedHelper.initSpreadChancesOverrides();
         //read soil whitelist
         BlockCrop.initSoils();
         //grass drops

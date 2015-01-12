@@ -117,6 +117,10 @@ public class ConfigurationHandler {
         return IOHelper.readOrWrite(directory, "SpreadChancesOverrides", IOHelper.getSpreadChancesOverridesInstructions());
     }
 
+    public static String readSeedTiers() {
+        return IOHelper.readOrWrite(directory, "SeedTiers", IOHelper.getSeedTierOverridesInstructions());
+    }
+
     public static String readSeedBlackList() {
         return IOHelper.readOrWrite(directory, "SeedBlackList", IOHelper.getSeedBlackListInstructions());
     }
