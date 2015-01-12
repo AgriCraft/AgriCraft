@@ -276,7 +276,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         boolean allow = crop.hasPlant() && !crop.isMature() && crop.isFertile();
         if(allow) {
-            this.func_149853_b(world, new Random(), x, y ,z);
+            this.func_149853_b(world, world.rand, x, y ,z);
             if(!player.capabilities.isCreativeMode) {
                 player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
             }
