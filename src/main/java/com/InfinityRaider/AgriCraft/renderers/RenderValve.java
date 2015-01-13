@@ -16,7 +16,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 
-public class RenderValve extends RenderChannel implements ISimpleBlockRenderingHandler {
+public class RenderValve extends RenderChannel {
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
