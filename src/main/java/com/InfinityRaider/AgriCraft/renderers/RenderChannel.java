@@ -60,7 +60,7 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
         return AgriCraft.proxy.getRenderId(Constants.channelId);
     }
 
-    private void renderWoodChannel(TileEntityChannel channel, Tessellator tessellator) {
+    protected void renderWoodChannel(TileEntityChannel channel, Tessellator tessellator) {
         this.renderBottom(channel, tessellator);
         this.renderSide(channel, tessellator, 'x', -1);
         this.renderSide(channel, tessellator, 'x', 1);
@@ -84,7 +84,7 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
     }
 
     //renders one of the four sides of a channel
-    private void renderSide(TileEntityChannel channel, Tessellator tessellator, char axis, int direction) {
+    protected void renderSide(TileEntityChannel channel, Tessellator tessellator, char axis, int direction) {
         if((axis=='x' || axis=='z') && (direction==1 || direction==-1)) {
             //checks if there is a neighbouring block that this block can connect to
             boolean neighbour = channel.hasNeighbour(axis, direction);

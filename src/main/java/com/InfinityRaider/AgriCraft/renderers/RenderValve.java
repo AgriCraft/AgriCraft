@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityValve;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
@@ -11,7 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 
 
-public class RenderValve implements ISimpleBlockRenderingHandler {
+public class RenderValve extends RenderChannel implements ISimpleBlockRenderingHandler {
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
@@ -22,42 +23,49 @@ public class RenderValve implements ISimpleBlockRenderingHandler {
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
         TileEntityValve valve = (TileEntityValve) world.getTileEntity(x, y, z);
         if (valve != null) {
-            renderer.setRenderBounds(3 * Constants.unit, 4 * Constants.unit, 3 * Constants.unit,
-                    13 * Constants.unit, 12 * Constants.unit, 13 * Constants.unit);
+            Tessellator tessellator = Tessellator.instance;
+            float f = Constants.unit;
+            //render the channel
+            tessellator.addTranslation(x, y, z);
+            this.renderWoodChannel(valve, tessellator);
+            tessellator.addTranslation(-x, -y, -z);
+            /*
+            renderer.setRenderBounds(3 * f, 4 * f, 3 * f, 13 * f, 12 * f, 13 * f);
             renderer.renderStandardBlock(block, x, y, z);
+            */
 
+            //render the top iron part
             renderer.setOverrideBlockTexture(Blocks.iron_block.getIcon(0, 0));
-            renderer.setRenderBounds(5 * Constants.unit, 11.8f * Constants.unit, 5 * Constants.unit,
-                    11 * Constants.unit, 15.8f * Constants.unit, 11 * Constants.unit);
+            renderer.setRenderBounds(5 * f, 11.8f * f, 5 * f, 11 * f, 15.8f * f, 11 * f);
             if (valve.isPowered()) {
-                Tessellator.instance.addTranslation(0, -3 * Constants.unit, 0);
+                tessellator.addTranslation(0, -3 * f, 0);
                 renderer.renderStandardBlock(block, x, y, z);
-                Tessellator.instance.addTranslation(0, 3 * Constants.unit, 0);
+                tessellator.addTranslation(0, 3 * f, 0);
             } else {
                 renderer.renderStandardBlock(block, x, y, z);
             }
-
-            renderer.setRenderBounds(5 * Constants.unit, 0.2f * Constants.unit, 5 * Constants.unit,
-                    11 * Constants.unit, 4.2f * Constants.unit, 11 * Constants.unit);
+            //render the bottom iron part
+            renderer.setRenderBounds(5 * f, 0.2f * f, 5 * f, 11 * f, 4.2f * f, 11 * f);
             if (valve.isPowered()) {
-                Tessellator.instance.addTranslation(0, 3 * Constants.unit, 0);
+                tessellator.addTranslation(0, 3 * f, 0);
                 renderer.renderStandardBlock(block, x, y, z);
-                Tessellator.instance.addTranslation(0, -3 * Constants.unit, 0);
+                tessellator.addTranslation(0, -3 * f, 0);
             } else {
                 renderer.renderStandardBlock(block, x, y, z);
             }
+            //render the wooden guide rails
+            renderer.setOverrideBlockTexture(valve.getIcon());
+            renderer.setRenderBounds(3.999F * f, 0, 3.999F * f, 5.999F * f, 1, 5.999F* f);
+            renderer.renderStandardBlock(block, x, y, z);
+            tessellator.addTranslation(6 * f, 0, 0);
+            renderer.renderStandardBlock(block, x, y, z);
+            tessellator.addTranslation(0, 0, 6 * f);
+            renderer.renderStandardBlock(block, x, y, z);
+            tessellator.addTranslation(-6 * f, 0, 0);
+            renderer.renderStandardBlock(block, x, y, z);
+            tessellator.addTranslation(0, 0, -6 * f);
+            renderer.clearOverrideBlockTexture();
 
-            renderer.setOverrideBlockTexture(block.getIcon(0, 0));
-            renderer.setRenderBounds(4 * Constants.unit, 0, 4 * Constants.unit,
-                    6 * Constants.unit, 1, 6 * Constants.unit);
-            renderer.renderStandardBlock(block, x, y, z);
-            Tessellator.instance.addTranslation(6 * Constants.unit, 0, 0);
-            renderer.renderStandardBlock(block, x, y, z);
-            Tessellator.instance.addTranslation(0, 0, 6 * Constants.unit);
-            renderer.renderStandardBlock(block, x, y, z);
-            Tessellator.instance.addTranslation(-6 * Constants.unit, 0, 0);
-            renderer.renderStandardBlock(block, x, y, z);
-            Tessellator.instance.addTranslation(0, 0, -6 * Constants.unit);
         }
         return true;
     }

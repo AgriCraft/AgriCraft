@@ -128,16 +128,23 @@ public class Recipes {
         ((ItemBlockCustomWood) Item.getItemFromBlock(Blocks.blockWaterTank)).getSubItems(list);
         for(ItemStack stack:list) {
             if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.material) && stack.stackTagCompound.hasKey(Names.NBT.materialMeta)) {
+                //get material
                 String material = stack.stackTagCompound.getString(Names.NBT.material);
                 int meta = stack.stackTagCompound.getInteger(Names.NBT.materialMeta);
                 ItemStack plank = new ItemStack((Block) Block.blockRegistry.getObject(material), 1, meta);
+                //define stacks
                 ItemStack tank = new ItemStack(Blocks.blockWaterTank, 1);
                 ItemStack channel = new ItemStack(Blocks.blockWaterChannel, 6);
+                ItemStack valve = new ItemStack(Blocks.blockChannelValve, 1);
+                //set NBT
                 NBTTagCompound tag = NBTHelper.getMaterialTag(plank);
                 tank.stackTagCompound = (NBTTagCompound) tag.copy();
                 channel.stackTagCompound = (NBTTagCompound) tag.copy();
+                valve.stackTagCompound = (NBTTagCompound) tag.copy();
+                //register recipes
                 GameRegistry.addShapedRecipe(tank, new Object[] {"w w", "w w", "www", 'w', plank});
                 GameRegistry.addShapedRecipe(channel, new Object[] {"w w", " w ", 'w', plank});
+                GameRegistry.addShapelessRecipe(valve, new ItemStack(net.minecraft.init.Items.iron_ingot, 1), new ItemStack(net.minecraft.init.Blocks.lever, 1), channel);
             }
         }
 
