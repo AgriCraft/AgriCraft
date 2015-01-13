@@ -55,6 +55,8 @@ tile.agricraft:waterTank.0.name=Wooden Water Tank
 tile.agricraft:waterTank.1.name=Iron Water Tank
 tile.agricraft:waterChannel.0.name=Wooden Irrigation Channel
 tile.agricraft:waterChannel.1.name=Iron Irrigation Pipe
+tile.agricraft:channelValve.0.name=Wooden Channel Valve
+tile.agricraft:channelValve.1.name=Iron Pipe Valve
 
 tile.agricraft:cropPotato.name=Potato
 tile.agricraft:cropCarrot.name=Carrot
@@ -105,6 +107,8 @@ agricraft_tooltip.cropWithoutPlant=This crop doesn't have plant on it
 agricraft_tooltip.notCrop=This is not a crop
 agricraft_tooltip.trowel=Use this to move plants from one crop to another
 agricraft_tooltip.magnifyingGlass=Use this to inspect crops
+agricraft_tooltip.closed=Closed
+agricraft_tooltip.open=Open
 
 //journal entries
 //---------------

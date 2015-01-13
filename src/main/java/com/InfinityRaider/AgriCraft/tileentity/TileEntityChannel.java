@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityChannel extends TileEntityCustomWood implements IDebuggable{
-    private int lvl;
-    private int lastLvl = 0;
-    private int timer = 0;
+    protected int lvl;
+    protected int lastLvl = 0;
+    protected int timer = 0;
     
     //this saves the data on the tile entity
     @Override
@@ -83,8 +83,10 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
             for(TileEntityCustomWood te:neighbours) {
                 //neighbour is a channel: add its volume to the total and increase the count
                 if(te instanceof TileEntityChannel) {
-                    totalLvl = totalLvl + ((TileEntityChannel) te).lvl;
-                    nr++;
+                    if(!(te instanceof TileEntityValve && ((TileEntityValve) te).isPowered())) {
+                        totalLvl = totalLvl + ((TileEntityChannel) te).lvl;
+                        nr++;
+                    }
                 }
                 //neighbour is a tank: calculate the fluid levels of the tank and the channel
                 else {
@@ -132,9 +134,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
                 //set fluid levels
                 for (TileEntityCustomWood te:neighbours) {
                     if (te instanceof TileEntityChannel) {
-                        int lvl = rest==0?newLvl:newLvl+1;
-                        rest = rest==0?0:rest-1;
-                        ((TileEntityChannel) te).setFluidLevel(lvl);
+                        if(!(te instanceof TileEntityValve && ((TileEntityValve) te).isPowered())) {
+                            int lvl = rest==0?newLvl:newLvl+1;
+                            rest = rest==0?0:rest-1;
+                            ((TileEntityChannel) te).setFluidLevel(lvl);
+                        }
                     }
                 }
             }

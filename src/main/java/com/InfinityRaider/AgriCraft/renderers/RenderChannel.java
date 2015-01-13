@@ -160,7 +160,7 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
        IIcon icon = channel.getIcon();
     }
 
-    private void drawWater(TileEntityChannel channel, Tessellator tessellator) {
+    protected void drawWater(TileEntityChannel channel, Tessellator tessellator) {
         float y = channel.getFluidHeight();
         //the texture
         IIcon icon = Blocks.water.getIcon(1, 0);
@@ -184,7 +184,7 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
         this.connectWater(channel, tessellator, 'z', -1, y, icon);
     }
 
-    private void connectWater(TileEntityChannel channel, Tessellator tessellator, char axis, int direction, float y, IIcon icon) {
+    protected void connectWater(TileEntityChannel channel, Tessellator tessellator, char axis, int direction, float y, IIcon icon) {
         if(axis=='x' || axis=='z') {
             //checks if there is a neighbouring block that this block can connect to
             if(channel.hasNeighbour(axis, direction)) {
