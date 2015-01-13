@@ -20,6 +20,7 @@ public final class Names {
         public static final String materialMeta = "matMeta";
         public static final String angle = "angle";
         public static final String isSprinkled = "isSprinkled";
+        public static final String power = "powerrrr";
     }
 
     //mod objects

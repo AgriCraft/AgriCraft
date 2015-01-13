@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityValve;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -21,7 +22,23 @@ public class BlockChannelValve extends BlockContainer {
         this.setResistance(5.0F);
         setHarvestLevel("axe", 0);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
-        this.setBlockBounds(4*Constants.unit, 4*Constants.unit, 4*Constants.unit, 12*Constants.unit, 12*Constants.unit, 12*Constants.unit);
+        this.setBlockBounds(4*Constants.unit, 0, 4*Constants.unit, 12*Constants.unit, 1, 12*Constants.unit);
+    }
+
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+        if (!world.isRemote) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            if(te !=null && te instanceof TileEntityValve) {
+                TileEntityValve valve = (TileEntityValve) te;
+                boolean wasPowered = valve.isPowered();
+                boolean isPowered = world.isBlockIndirectlyGettingPowered(x, y, z);
+                if(isPowered!=wasPowered) {
+                    valve.setPowered(isPowered);
+                    valve.markDirty();
+                }
+            }
+        }
     }
 
     @Override
@@ -41,7 +58,7 @@ public class BlockChannelValve extends BlockContainer {
 
     @Override
     public boolean isOpaqueCube() {
-        return true;
+        return false;
     }
 
     @Override

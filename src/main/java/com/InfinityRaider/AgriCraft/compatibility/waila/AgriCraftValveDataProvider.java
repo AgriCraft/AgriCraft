@@ -47,7 +47,8 @@ public class AgriCraftValveDataProvider implements IWailaDataProvider {
             String material = materialStack.getItem().getItemStackDisplayName(materialStack);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+material);
             //show status
-            String status = valve.isPowered()?"agricraft_tooltip.closed":"agricraft_tooltip.open";
+            String status = StatCollector.translateToLocal(valve.isPowered()?"agricraft_tooltip.closed":"agricraft_tooltip.open");
+            list.add(StatCollector.translateToLocal("agricraft_tooltip.state")+": "+status);
             //show contents
             int contents = valve.getFluidLevel();
             int capacity = 500;

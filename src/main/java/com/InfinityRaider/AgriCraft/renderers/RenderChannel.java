@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityValve;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
@@ -173,10 +174,10 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
         tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(channel.getWorldObj(), channel.xCoord, channel.yCoord, channel.zCoord));
         tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
         //draw central water level
-        RenderHelper.addScaledVertexWithUV(tessellator, 5, y, 5, 5, 5, icon);
-        RenderHelper.addScaledVertexWithUV(tessellator, 5, y, 11, 5, 11, icon);
-        RenderHelper.addScaledVertexWithUV(tessellator, 11, y, 11, 11, 11, icon);
-        RenderHelper.addScaledVertexWithUV(tessellator, 11, y, 5, 11, 5, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 5, y-0.001f, 5, 5, 5, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 5, y-0.001f, 11, 5, 11, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 11, y-0.001f, 11, 11, 11, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 11, y-0.001f, 5, 11, 5, icon);
         //connect to edges
         this.connectWater(channel, tessellator, 'x', 1, y, icon);
         this.connectWater(channel, tessellator, 'z', 1, y, icon);
@@ -192,16 +193,21 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
                 TileEntityCustomWood te = (TileEntityCustomWood) channel.getWorldObj().getTileEntity(channel.xCoord+(x?direction:0), channel.yCoord, channel.zCoord+(x?0:direction));
                 float y2;
                 if(te instanceof TileEntityChannel) {
-                    y2 = (y + ((TileEntityChannel) te).getFluidHeight())/2;
+                    if(te instanceof TileEntityValve && ((TileEntityValve) te).isPowered()) {
+                        y2 = y;
+                    }
+                    else {
+                        y2 = (y + ((TileEntityChannel) te).getFluidHeight()) / 2;
+                    }
                 }
                 else {
                     float lvl = ((TileEntityTank) te).getFluidY()-16*((TileEntityTank) te).getYPosition();
                     y2 = lvl>12?12:lvl<5?(5-0.0001F):lvl;
                 }
-                RenderHelper.addScaledVertexWithUV(tessellator, x ? (5.5F + direction * 5.5F) : 11, x ? y : y2, x ? 5 : (5.5F + direction * 5.5F), x ? (5.5F + direction * 5.5F) : 11, x ? 5 : (5.5F + direction * 5.5F), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(5.5F+direction*5.5F):5, x?y:y2, x?11:(5.5F+direction*5.5F), x?(5.5F+direction*5.5F):5, x?11:(5.5F+direction*5.5F), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):5, x?y2:y, x?11:(10.5F+direction*5.5F), x?(10.5F+direction*5.5F):5, x?11:(10.5F+direction*5.5F), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):11, x?y2:y, x?5:(10.5F+direction*5.5F), x?(10.5F+direction*5.5F):11, x?5:(10.5F+direction*5.5F), icon);
+                RenderHelper.addScaledVertexWithUV(tessellator, x ? (5.5F + direction * 5.5F) : 11, (x?y :y2)-0.001f, x ? 5 : (5.5F + direction * 5.5F), x ? (5.5F + direction * 5.5F) : 11, x ? 5 : (5.5F + direction * 5.5F), icon);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(5.5F+direction*5.5F):5, (x?y:y2)-0.001f, x?11:(5.5F+direction*5.5F), x?(5.5F+direction*5.5F):5, x?11:(5.5F+direction*5.5F), icon);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):5, (x?y2:y)-0.001f, x?11:(10.5F+direction*5.5F), x?(10.5F+direction*5.5F):5, x?11:(10.5F+direction*5.5F), icon);
+                RenderHelper.addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):11, (x?y2:y)-0.001f, x?5:(10.5F+direction*5.5F), x?(10.5F+direction*5.5F):11, x?5:(10.5F+direction*5.5F), icon);
             }
         }
     }

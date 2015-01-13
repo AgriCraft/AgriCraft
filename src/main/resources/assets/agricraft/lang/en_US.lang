@@ -109,6 +109,7 @@ agricraft_tooltip.trowel=Use this to move plants from one crop to another
 agricraft_tooltip.magnifyingGlass=Use this to inspect crops
 agricraft_tooltip.closed=Closed
 agricraft_tooltip.open=Open
+agricraft_tooltip.state=State
 
 //journal entries
 //---------------
