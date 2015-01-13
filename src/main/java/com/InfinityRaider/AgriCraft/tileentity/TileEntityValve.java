@@ -15,15 +15,13 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        if(this.powered) {
-            tag.setBoolean(Names.NBT.power, true);
-        }
+        tag.setBoolean(Names.NBT.power, powered);
     }
 
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        this.powered = tag.hasKey(Names.NBT.power);
+        this.powered = tag.getBoolean(Names.NBT.power);
         super.readFromNBT(tag);
     }
 
@@ -36,9 +34,15 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
         }
     }
 
-    public boolean isPowered() {return powered;}
+    public void updatePowerStatus() {
+        boolean wasPowered = powered;
+        powered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+        if (powered != wasPowered) {
+            markDirty();
+        }
+    }
 
-    public void setPowered(boolean powered) {this.powered = powered;}
+    public boolean isPowered() {return powered;}
 
     @Override
     public void addDebugInfo(List<String> list) {

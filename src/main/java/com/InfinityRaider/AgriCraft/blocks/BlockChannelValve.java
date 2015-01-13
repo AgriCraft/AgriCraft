@@ -33,18 +33,10 @@ public class BlockChannelValve extends BlockContainer {
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
         if (!world.isRemote) {
-            TileEntity te = world.getTileEntity(x, y, z);
-            if(te !=null && te instanceof TileEntityValve) {
-                TileEntityValve valve = (TileEntityValve) te;
-                boolean wasPowered = valve.isPowered();
-                boolean isPowered = world.isBlockIndirectlyGettingPowered(x, y, z);
-                if(isPowered!=wasPowered) {
-                    valve.setPowered(isPowered);
-                    valve.markDirty();
-                }
-            }
+            updatePowerStatus(world, x, y, z);
         }
     }
+
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
         super.breakBlock(world,x,y,z,block,meta);
@@ -64,7 +56,7 @@ public class BlockChannelValve extends BlockContainer {
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
                 this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
             }
-            world.setBlockToAir(x,y,z);
+            world.setBlockToAir(x, y, z);
             world.removeTileEntity(x, y, z);
         }
     }
@@ -86,6 +78,21 @@ public class BlockChannelValve extends BlockContainer {
         NBTTagCompound tag = te.getMaterialTag();
         stack.stackTagCompound = tag;
         return stack;
+    }
+
+    @Override
+    public void onPostBlockPlaced(World world, int x, int y, int z, int metadata) {
+        if (!world.isRemote) {
+            updatePowerStatus(world, x, y, z);
+        }
+    }
+
+    private void updatePowerStatus(World world, int x, int y, int z) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te !=null && te instanceof TileEntityValve) {
+            TileEntityValve valve = (TileEntityValve) te;
+            valve.updatePowerStatus();
+        }
     }
 
     @Override
