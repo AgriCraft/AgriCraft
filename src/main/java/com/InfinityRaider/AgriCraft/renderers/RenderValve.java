@@ -26,13 +26,10 @@ public class RenderValve extends RenderChannel implements ISimpleBlockRenderingH
             Tessellator tessellator = Tessellator.instance;
             float f = Constants.unit;
             //render the channel
+            tessellator.setColorRGBA_F(1, 1, 1, 1);
             tessellator.addTranslation(x, y, z);
             this.renderWoodChannel(valve, tessellator);
             tessellator.addTranslation(-x, -y, -z);
-            /*
-            renderer.setRenderBounds(3 * f, 4 * f, 3 * f, 13 * f, 12 * f, 13 * f);
-            renderer.renderStandardBlock(block, x, y, z);
-            */
 
             //render the top iron part
             renderer.setOverrideBlockTexture(Blocks.iron_block.getIcon(0, 0));

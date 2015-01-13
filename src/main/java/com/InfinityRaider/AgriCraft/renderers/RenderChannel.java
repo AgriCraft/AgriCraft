@@ -25,7 +25,7 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         Tessellator tessellator = Tessellator.instance;
-        //translate Tesselator to the right position
+        //translate Tessellator to the right position
         tessellator.addTranslation(x, y, z);
         //set colors
         tessellator.setColorRGBA_F(1, 1, 1, 1);
