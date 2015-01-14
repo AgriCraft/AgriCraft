@@ -40,6 +40,10 @@ public class RenderItemValve implements IItemRenderer {
         Tessellator tessellator = Tessellator.instance;
         //render the model
         GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+
         //translate the matrix to the right spot
         GL11.glTranslated(x,y,z);
         //draw the tank
@@ -49,6 +53,8 @@ public class RenderItemValve implements IItemRenderer {
         else if(meta==1) {
             this.drawIronChannel(valve, tessellator);
         }
+
+        GL11.glPopAttrib();
         GL11.glPopMatrix();
     }
 
