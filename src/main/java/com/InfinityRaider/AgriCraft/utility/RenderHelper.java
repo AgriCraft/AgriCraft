@@ -95,4 +95,43 @@ public abstract class RenderHelper {
         float unit = Constants.unit;
         tessellator.addVertexWithUV(x*unit, y*unit, z*unit, icon.getInterpolatedU(u), icon.getInterpolatedV(v));
     }
+
+    //draws a rectangular prism
+    public static void drawScaledPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon) {
+        //front plane
+        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, minY, icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, minY, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, minZ, minX, maxY, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, minZ, maxX, maxY, icon);
+        //back plane
+        addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxX, minY, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, maxY, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, maxY, icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, maxZ, minX, minY, icon);
+        //right plane
+        addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxZ, minY, icon);
+        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, minZ, minY, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, minZ, minZ, maxY, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxZ, maxY, icon);
+        //left plane
+        addScaledVertexWithUV(tessellator, minX, maxY, maxZ, maxZ, minY, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, maxZ, maxZ, maxY, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, minZ, minZ, maxY, icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minZ, minY, icon);
+        //top plane
+        addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxX, minZ,icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, maxZ, minX, minZ,icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, maxZ,icon);
+        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, maxZ,icon);
+        //bottom plane
+        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, minZ, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, minZ, maxX, maxZ, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, minZ, minX, maxZ, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, minZ, icon);
+    }
+
+    //draws a rectangular prism
+    public static void drawPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon) {
+        drawScaledPrism(tessellator, minX*16, minY*16, minZ*16, maxX*16, maxY*16, maxZ*16, icon);
+    }
 }
