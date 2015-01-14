@@ -55,7 +55,7 @@ dependencies {
     compile fileTree(dir: 'libs', includes: ['*plantmegapack*.jar'])
     compile fileTree(dir: 'libs', includes: ['*ChocoCraft*.jar'])
     compile fileTree(dir: 'libs', includes: ['*TConstruct*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*witchery*.jar'])
+    compile fileTree(dir: 'libs', includes: ['*Botania*.jar'])
 }
 processResources
         {
