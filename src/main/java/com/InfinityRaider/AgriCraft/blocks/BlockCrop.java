@@ -32,11 +32,12 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import vazkii.botania.api.item.IGrassHornExcempt;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGrowable {
+public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGrowable, IGrassHornExcempt {
     private static Block[] soils;
     private static int[] soilMeta;
 
@@ -310,6 +311,31 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 if (block == soils[i] && meta == soilMeta[i]) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    //Botania horn of the wild support
+    @Override
+    public boolean canUproot(World world, int x, int y, int z) {
+        if(!world.isRemote) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            if(te!=null && te instanceof TileEntityCrop) {
+                TileEntityCrop crop = (TileEntityCrop) te;
+                if(crop.hasPlant()) {
+                    ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+                    if(crop.isMature()) {
+                        crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
+                        drops.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+                    }
+                    drops.add(crop.getSeedStack());
+                    for (ItemStack drop : drops) {
+                        this.dropBlockAsItem(world, x, y, z, drop);
+                    }
+                }
+                crop.clearPlant();
+                crop.markDirty();
             }
         }
         return false;

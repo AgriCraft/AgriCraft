@@ -205,6 +205,19 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
     }
 
+    //clears the plant in the crop
+    public void clearPlant() {
+        if(!this.crossCrop) {
+            this.growth = 0;
+            this.gain = 0;
+            this.strength = 0;
+            this.seed = null;
+            this.seedMeta = 0;
+            this.analyzed = false;
+            this.weed = false;
+        }
+    }
+
     @Override
     public boolean receiveClientEvent(int id, int value) {
         if(worldObj.isRemote && id == 1) {
