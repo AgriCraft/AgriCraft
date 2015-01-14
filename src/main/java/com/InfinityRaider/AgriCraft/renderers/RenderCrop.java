@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -13,6 +14,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import org.lwjgl.opengl.GL11;
 
 public class RenderCrop implements ISimpleBlockRenderingHandler {
 
@@ -44,7 +46,7 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
             }
             else if (icon!=null && renderType>=0) {
                 //render the plant
-                this.renderPlant(icon, x, y, z, renderType);
+                this.renderPlant(renderer, icon, x, y, z, renderType);
             }
         }
 
@@ -78,9 +80,11 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
     }
 
     //draws the plant on the crops
-    private void renderPlant(IIcon icon, int x, int y, int z, int renderType) {
+    private void renderPlant(RenderBlocks renderer, IIcon icon, int x, int y, int z, int renderType) {
         Tessellator tessellator = Tessellator.instance;
         tessellator.addTranslation(x, y, z);
+        tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
+        tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
         if(renderType != 6) {
             //plane 1 front right
             RenderHelper.addScaledVertexWithUV(tessellator, 6, 0, 4.001F, 16, 16, icon);
