@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.world;
 
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -191,7 +192,7 @@ public class StructureGreenhouse extends StructureVillagePieces.Village {
             world.setBlock(xCoord, yCoord, zCoord, com.InfinityRaider.AgriCraft.init.Blocks.blockCrop, 0, 2);
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(xCoord, yCoord, zCoord);
             if (crop!=null) {
-                if(crosscrop) {
+                if(crosscrop && !ConfigurationHandler.enableWeeds) {
                     crop.crossCrop=true;
                 }
                 else {
