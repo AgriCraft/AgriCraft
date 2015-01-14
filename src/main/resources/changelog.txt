@@ -3,6 +3,7 @@ Changelog
 1.1.2
 -Changed AgriCraft creative tab logo
 -Fixed certain crops rendering crooked
+-Fixed crop lighting
 -Changed Sprinkler to use a fixed configurable amount of water
 -Added configuration GUIs for some config categories
 -Fixed water draining bug in irrigation systems
@@ -10,6 +11,7 @@ Changelog
 -Added support for Chococraft gysahls
 -Added a config to override seed tiers
 -Made Magic Fertiliser from Magical Crops work on tier 4 & 5 crops (can be disabled in the config)
+-Botania Horn of the Wild will no longer wipe crops away, instead it will clear them
 
 1.1.1
 -Fixed Null Pointer Exception in certain cases when breaking tanks
