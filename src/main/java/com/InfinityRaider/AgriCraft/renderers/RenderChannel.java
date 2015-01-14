@@ -204,11 +204,15 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
                     float lvl = ((TileEntityTank) te).getFluidY()-16*((TileEntityTank) te).getYPosition();
                     y2 = lvl>12?12:lvl<5?(5-0.0001F):lvl;
                 }
-                RenderHelper.addScaledVertexWithUV(tessellator, x ? (5.5F + direction * 5.5F) : 11, (x?y :y2)-0.001f, x ? 5 : (5.5F + direction * 5.5F), x ? (5.5F + direction * 5.5F) : 11, x ? 5 : (5.5F + direction * 5.5F), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(5.5F+direction*5.5F):5, (x?y:y2)-0.001f, x?11:(5.5F+direction*5.5F), x?(5.5F+direction*5.5F):5, x?11:(5.5F+direction*5.5F), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):5, (x?y2:y)-0.001f, x?11:(10.5F+direction*5.5F), x?(10.5F+direction*5.5F):5, x?11:(10.5F+direction*5.5F), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):11, (x?y2:y)-0.001f, x?5:(10.5F+direction*5.5F), x?(10.5F+direction*5.5F):11, x?5:(10.5F+direction*5.5F), icon);
+                this.drawWaterEdge(tessellator, x, direction, y, y2, icon);
             }
         }
+    }
+
+    protected void drawWaterEdge(Tessellator tessellator, boolean xAxis, int direction, float lvl1, float lvl2, IIcon icon) {
+        RenderHelper.addScaledVertexWithUV(tessellator, xAxis ? (5.5F + direction * 5.5F) : 11, (xAxis?lvl1 :lvl2)-0.001f, xAxis ? 5 : (5.5F + direction * 5.5F), xAxis ? (5.5F + direction * 5.5F) : 11, xAxis ? 5 : (5.5F + direction * 5.5F), icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, xAxis?(5.5F+direction*5.5F):5, (xAxis?lvl1:lvl2)-0.001f, xAxis?11:(5.5F+direction*5.5F), xAxis?(5.5F+direction*5.5F):5, xAxis?11:(5.5F+direction*5.5F), icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, xAxis?(10.5F+direction*5.5F):5, (xAxis?lvl2:lvl1)-0.001f, xAxis?11:(10.5F+direction*5.5F), xAxis?(10.5F+direction*5.5F):5, xAxis?11:(10.5F+direction*5.5F), icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, xAxis?(10.5F+direction*5.5F):11, (xAxis?lvl2:lvl1)-0.001f, xAxis?5:(10.5F+direction*5.5F), xAxis?(10.5F+direction*5.5F):11, xAxis?5:(10.5F+direction*5.5F), icon);
     }
 }

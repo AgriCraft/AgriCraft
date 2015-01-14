@@ -44,7 +44,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     }
 
     public float getFluidHeight() {
-        return 5+7*((float) this.lvl)/((float) Constants.mB/2);
+        return this.getFluidHeight(this.lvl);
+    }
+
+    public float getFluidHeight(int lvl) {
+        return 5+7*((float) lvl)/((float) Constants.mB/2);
     }
 
     public boolean hasNeighbour(char axis, int direction) {

@@ -81,15 +81,19 @@ public class RenderValve extends RenderChannel {
                     TileEntityCustomWood te = (TileEntityCustomWood) channel.getWorldObj().getTileEntity(channel.xCoord + (x ? direction : 0), channel.yCoord, channel.zCoord + (x ? 0 : direction));
                     float y2;
                     if (te instanceof TileEntityChannel) {
-                        y2 = ((TileEntityChannel) te).getFluidHeight();
+                        if(te instanceof TileEntityValve && valve.isPowered() && ((TileEntityValve) te).isPowered()) {
+                            TileEntityValve valve2 = (TileEntityValve) te;
+                            int lvl = (int) Math.sqrt(valve.getFluidLevel()*valve2.getFluidLevel());
+                            y2 = valve.getFluidHeight(lvl);
+                        }
+                        else {
+                            y2 = ((TileEntityChannel) te).getFluidHeight();
+                        }
                     } else {
                         float lvl = ((TileEntityTank) te).getFluidY() - 16 * ((TileEntityTank) te).getYPosition();
                         y2 = lvl > 12 ? 12 : lvl < 5 ? (5 - 0.0001F) : lvl;
                     }
-                    RenderHelper.addScaledVertexWithUV(tessellator, x ? (5.5F + direction * 5.5F) : 11, y2-0.001f, x ? 5 : (5.5F + direction * 5.5F), x ? (5.5F + direction * 5.5F) : 11, x ? 5 : (5.5F + direction * 5.5F), icon);
-                    RenderHelper.addScaledVertexWithUV(tessellator, x ? (5.5F + direction * 5.5F) : 5, y2-0.001f, x ? 11 : (5.5F + direction * 5.5F), x ? (5.5F + direction * 5.5F) : 5, x ? 11 : (5.5F + direction * 5.5F), icon);
-                    RenderHelper.addScaledVertexWithUV(tessellator, x ? (10.5F + direction * 5.5F) : 5, y2-0.001f, x ? 11 : (10.5F + direction * 5.5F), x ? (10.5F + direction * 5.5F) : 5, x ? 11 : (10.5F + direction * 5.5F), icon);
-                    RenderHelper.addScaledVertexWithUV(tessellator, x ? (10.5F + direction * 5.5F) : 11, y2-0.001f, x ? 5 : (10.5F + direction * 5.5F), x ? (10.5F + direction * 5.5F) : 11, x ? 5 : (10.5F + direction * 5.5F), icon);
+                    this.drawWaterEdge(tessellator, x, direction, y2, y2, icon);
                 } else {
                     super.connectWater(channel, tessellator, axis, direction, y, icon);
                 }
