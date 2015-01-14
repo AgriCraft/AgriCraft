@@ -74,7 +74,7 @@ public class RenderItemValve implements IItemRenderer {
         RenderHelper.drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, ironIcon);
         RenderHelper.drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, ironIcon);
         RenderHelper.drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, ironIcon);
-        RenderHelper.drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.001f, 5.5f, 11, ironIcon);
+        RenderHelper.drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.999f, 5.5f, 11, ironIcon);
 
         //render the wooden guide rails along x-axis
         RenderHelper.drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon);

@@ -107,7 +107,7 @@ public class RenderValve extends RenderChannel {
                     renderer.renderStandardBlock(block, x, y, z);
                 }
             }
-            renderer.setRenderBounds(14.001*f, 0.999f*f, 5*f, 15.001*f, 5.5f*f, 11*f);
+            renderer.setRenderBounds(14.001*f, 0.999f*f, 5*f, 15.999*f, 5.5f*f, 11*f);
             if(xPos) {
                 if (valve.isPowered()) {
                     tessellator.addTranslation(0, 3 * f, 0);
