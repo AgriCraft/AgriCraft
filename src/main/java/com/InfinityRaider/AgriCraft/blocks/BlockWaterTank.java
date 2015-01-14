@@ -1,23 +1,16 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -28,16 +21,10 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.List;
-
-public class BlockWaterTank extends BlockContainer{
+public class BlockWaterTank extends BlockCustomWood{
 
     public BlockWaterTank() {
-        super(Material.wood);
-        this.setHardness(2.0F);
-        this.setResistance(5.0F);
-        setHarvestLevel("axe", 0);
-        this.setCreativeTab(AgriCraftTab.agriCraftTab);
+        super();
     }
 
     @Override
@@ -49,10 +36,8 @@ public class BlockWaterTank extends BlockContainer{
     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
         if(!world.isRemote) {
             ItemStack drop = new ItemStack(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, 1);
-            if(world.getTileEntity(x, y, z)!=null) {
-                drop.setTagCompound(((TileEntityCustomWood) world.getTileEntity(x, y, z)).getMaterialTag());
-                this.dropBlockAsItem(world, x, y, z, drop);
-            }
+            this.setTag(world, x, y ,z, drop);
+            this.dropBlockAsItem(world, x, y, z, drop);
         }
     }
 
@@ -78,10 +63,8 @@ public class BlockWaterTank extends BlockContainer{
     //creative item picking
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-        TileEntityCustomWood te = (TileEntityCustomWood) world.getTileEntity(x, y, z);
         ItemStack stack = new ItemStack(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, 1, world.getBlockMetadata(x, y, z));
-        NBTTagCompound tag = te.getMaterialTag();
-        stack.stackTagCompound = tag;
+        this.setTag(world, x, y, z, stack);
         return stack;
     }
 
@@ -182,12 +165,6 @@ public class BlockWaterTank extends BlockContainer{
                 world.setBlockToAir(x, y, z);
             }
         }
-    }
-
-    @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        list.add(new ItemStack(item, 1, 0));    //wooden tank
-        list.add(new ItemStack(item, 1, 1));    //iron tank
     }
 
     @Override
