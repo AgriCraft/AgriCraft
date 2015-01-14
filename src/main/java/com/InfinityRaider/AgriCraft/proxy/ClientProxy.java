@@ -72,7 +72,7 @@ public class ClientProxy extends CommonProxy {
         valveRenderId = RenderingRegistry.getNextAvailableRenderId();
         RenderValve renderValve = new RenderValve();
         RenderingRegistry.registerBlockHandler(valveRenderId, renderValve);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockChannelValve), new RenderItemChannel(new TileEntityValve()));
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockChannelValve), new RenderItemValve(new TileEntityValve()));
 
         //sprinkler
         TileEntitySpecialRenderer renderSprinkler = new RenderSprinkler();
