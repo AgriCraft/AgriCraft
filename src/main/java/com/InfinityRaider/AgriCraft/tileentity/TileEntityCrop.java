@@ -215,6 +215,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.seedMeta = 0;
             this.analyzed = false;
             this.weed = false;
+            this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
         }
     }
 

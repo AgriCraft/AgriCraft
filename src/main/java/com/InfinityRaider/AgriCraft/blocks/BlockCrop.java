@@ -326,7 +326,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 if(crop.hasPlant()) {
                     ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
                     if(crop.isMature()) {
-                        crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
                         drops.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
                     }
                     drops.add(crop.getSeedStack());
