@@ -36,12 +36,17 @@ minecraft {
 }
 
 dependencies {
-// http://files.minecraftforge.net/CodeChickenLib/
+    // http://files.minecraftforge.net/CodeChickenLib/
     compile "codechicken:CodeChickenLib:1.7.10-1.1.1.104:dev"
-// http://chickenbones.net/maven
+
+    // http://chickenbones.net/maven
     compile "codechicken:CodeChickenCore:1.7.10-1.0.3.26:dev"
     compile "codechicken:NotEnoughItems:1.7.10-1.0.3.67:dev"
-//some more mods
+
+    // http://mobiusstrip.eu/maven
+    compile "mcp.mobius.waila:Waila:1.5.5_1.7.10:dev"
+
+    //some more mods
     compile fileTree(dir: 'libs', includes: ['*Mantle*.jar'])
     compile fileTree(dir: 'libs', includes: ['*natura*.jar'])
     compile fileTree(dir: 'libs', includes: ['*Harvestcraft*.jar'])
@@ -50,7 +55,6 @@ dependencies {
     compile fileTree(dir: 'libs', includes: ['*plantmegapack*.jar'])
     compile fileTree(dir: 'libs', includes: ['*ChocoCraft*.jar'])
     compile fileTree(dir: 'libs', includes: ['*TConstruct*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*Waila*.jar'])
     compile fileTree(dir: 'libs', includes: ['*witchery*.jar'])
 }
 processResources
