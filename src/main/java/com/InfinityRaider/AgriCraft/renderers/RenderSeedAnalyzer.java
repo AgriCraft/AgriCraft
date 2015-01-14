@@ -90,6 +90,6 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
         if(direction == ForgeDirection.EAST) {
             return 270;
         }
-        return 0;
+        return 180;
     }
 }
