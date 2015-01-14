@@ -35,36 +35,117 @@ public class RenderValve extends RenderChannel {
             this.renderWoodChannel(valve, tessellator);
             this.drawWater(valve, tessellator);
             tessellator.addTranslation(-x, -y, -z);
-            //render the top iron part
+
+            boolean xPos = valve.hasNeighbour('x', 1);
+            boolean xNeg = valve.hasNeighbour('x', -1);
+            boolean zPos = valve.hasNeighbour('z', 1);
+            boolean zNeg = valve.hasNeighbour('z', -1);
+
+            //render the iron valves
             renderer.setOverrideBlockTexture(Blocks.iron_block.getIcon(0, 0));
-            renderer.setRenderBounds(5*f, 11.5f*f, 5*f, 11*f, 15.001*f, 11*f);
-            if (valve.isPowered()) {
-                tessellator.addTranslation(0, -3*f, 0);
-                renderer.renderStandardBlock(block, x, y, z);
-                tessellator.addTranslation(0, 3*f, 0);
-            } else {
-                renderer.renderStandardBlock(block, x, y, z);
+            renderer.setRenderBounds(5*f, 11.5f*f, 0.001*f, 11*f, 15.001*f, 1.999*f);
+            if(zNeg) {
+                if (valve.isPowered()) {
+                    tessellator.addTranslation(0, -3 * f, 0);
+                    renderer.renderStandardBlock(block, x, y, z);
+                    tessellator.addTranslation(0, 3 * f, 0);
+                } else {
+                    renderer.renderStandardBlock(block, x, y, z);
+                }
             }
-            //render the bottom iron part
-            renderer.setRenderBounds(5*f, 0.999f*f, 5*f, 11*f, 5.5f*f, 11*f);
-            if (valve.isPowered()) {
-                tessellator.addTranslation(0, 3*f, 0);
-                renderer.renderStandardBlock(block, x, y, z);
-                tessellator.addTranslation(0, -3*f, 0);
-            } else {
-                renderer.renderStandardBlock(block, x, y, z);
+            renderer.setRenderBounds(5*f, 0.999f*f, 0.001*f, 11*f, 5.5f*f, 1.999*f);
+            if(zNeg) {
+                if (valve.isPowered()) {
+                    tessellator.addTranslation(0, 3 * f, 0);
+                    renderer.renderStandardBlock(block, x, y, z);
+                    tessellator.addTranslation(0, -3 * f, 0);
+                } else {
+                    renderer.renderStandardBlock(block, x, y, z);
+                }
             }
-            //render the wooden guide rails
+            renderer.setRenderBounds(5*f, 11.5f*f, 14.001*f, 11*f, 15.001*f, 15.999*f);
+            if(zPos) {
+                if (valve.isPowered()) {
+                    tessellator.addTranslation(0, -3 * f, 0);
+                    renderer.renderStandardBlock(block, x, y, z);
+                    tessellator.addTranslation(0, 3 * f, 0);
+                } else {
+                    renderer.renderStandardBlock(block, x, y, z);
+                }
+            }
+            renderer.setRenderBounds(5*f, 0.999f*f, 14.001*f, 11*f, 5.5f*f, 15.999*f);
+            if(zPos) {
+                if (valve.isPowered()) {
+                    tessellator.addTranslation(0, 3 * f, 0);
+                    renderer.renderStandardBlock(block, x, y, z);
+                    tessellator.addTranslation(0, -3 * f, 0);
+                } else {
+                    renderer.renderStandardBlock(block, x, y, z);
+                }
+            }
+            renderer.setRenderBounds(0.001*f, 11.5f*f, 5*f, 1.999*f, 15.001*f, 11*f);
+            if(xNeg) {
+                if (valve.isPowered()) {
+                    tessellator.addTranslation(0, -3 * f, 0);
+                    renderer.renderStandardBlock(block, x, y, z);
+                    tessellator.addTranslation(0, 3 * f, 0);
+                } else {
+                    renderer.renderStandardBlock(block, x, y, z);
+                }
+            }
+            renderer.setRenderBounds(0.001*f, 0.999f*f, 5*f, 1.999*f, 5.5f*f, 11*f);
+            if(xNeg) {
+                if (valve.isPowered()) {
+                    tessellator.addTranslation(0, 3 * f, 0);
+                    renderer.renderStandardBlock(block, x, y, z);
+                    tessellator.addTranslation(0, -3 * f, 0);
+                } else {
+                    renderer.renderStandardBlock(block, x, y, z);
+                }
+            }
+            renderer.setRenderBounds(14.001*f, 11.5f*f, 5*f, 15.999*f, 15.001*f, 11*f);
+            if(xPos) {
+                if (valve.isPowered()) {
+                    tessellator.addTranslation(0, -3 * f, 0);
+                    renderer.renderStandardBlock(block, x, y, z);
+                    tessellator.addTranslation(0, 3 * f, 0);
+                } else {
+                    renderer.renderStandardBlock(block, x, y, z);
+                }
+            }
+            renderer.setRenderBounds(14.001*f, 0.999f*f, 5*f, 15.001*f, 5.5f*f, 11*f);
+            if(xPos) {
+                if (valve.isPowered()) {
+                    tessellator.addTranslation(0, 3 * f, 0);
+                    renderer.renderStandardBlock(block, x, y, z);
+                    tessellator.addTranslation(0, -3 * f, 0);
+                } else {
+                    renderer.renderStandardBlock(block, x, y, z);
+                }
+            }
+
+            //render the wooden guide rails along x-axis
             renderer.setOverrideBlockTexture(valve.getIcon());
-            renderer.setRenderBounds(3.999F*f, 0, 3.999F*f, 5.999F*f, 1, 5.999F* f);
-            renderer.renderStandardBlock(block, x, y, z);
+            renderer.setRenderBounds(3.999F * f, 0, 0, 5.999F * f, 1, 2 * f);
+            if(zNeg) {renderer.renderStandardBlock(block, x, y, z);}
             tessellator.addTranslation(6*f, 0, 0);
-            renderer.renderStandardBlock(block, x, y, z);
-            tessellator.addTranslation(0, 0, 6*f);
-            renderer.renderStandardBlock(block, x, y, z);
+            if(zNeg) {renderer.renderStandardBlock(block, x, y, z);}
+            tessellator.addTranslation(0, 0, 14*f);
+            if(zPos) {renderer.renderStandardBlock(block, x, y, z);}
             tessellator.addTranslation(-6*f, 0, 0);
-            renderer.renderStandardBlock(block, x, y, z);
+            if(zPos) {renderer.renderStandardBlock(block, x, y, z);}
+            tessellator.addTranslation(0, 0, -14 * f);
+
+            //render the wooden guide rails along z-axis
+            renderer.setRenderBounds(0, 0, 3.999F*f, 2*f, 1, 5.999F*f);
+            if(xNeg) {renderer.renderStandardBlock(block, x, y, z);}
+            tessellator.addTranslation(0, 0, 6*f);
+            if(xNeg) {renderer.renderStandardBlock(block, x, y, z);}
+            tessellator.addTranslation(14*f, 0, 0);
+            if(xPos) {renderer.renderStandardBlock(block, x, y, z);}
             tessellator.addTranslation(0, 0, -6*f);
+            if(xPos) {renderer.renderStandardBlock(block, x, y, z);}
+            tessellator.addTranslation(-14*f, 0, 0);
             renderer.clearOverrideBlockTexture();
         }
         return true;
@@ -78,21 +159,7 @@ public class RenderValve extends RenderChannel {
             if(channel.hasNeighbour(axis, direction)) {
                 if (valve.isPowered()) {
                     boolean x = axis == 'x';
-                    TileEntityCustomWood te = (TileEntityCustomWood) channel.getWorldObj().getTileEntity(channel.xCoord + (x ? direction : 0), channel.yCoord, channel.zCoord + (x ? 0 : direction));
-                    float y2;
-                    if (te instanceof TileEntityChannel) {
-                        if(te instanceof TileEntityValve && valve.isPowered() && ((TileEntityValve) te).isPowered()) {
-                            TileEntityValve valve2 = (TileEntityValve) te;
-                            int lvl = (int) Math.sqrt(valve.getFluidLevel()*valve2.getFluidLevel());
-                            y2 = valve.getFluidHeight(lvl);
-                        }
-                        else {
-                            y2 = ((TileEntityChannel) te).getFluidHeight();
-                        }
-                    } else {
-                        float lvl = ((TileEntityTank) te).getFluidY() - 16 * ((TileEntityTank) te).getYPosition();
-                        y2 = lvl > 12 ? 12 : lvl < 5 ? (5 - 0.0001F) : lvl;
-                    }
+                    float y2 = valve.getFluidHeight();
                     this.drawWaterEdge(tessellator, x, direction, y2, y2, icon);
                 } else {
                     super.connectWater(channel, tessellator, axis, direction, y, icon);
