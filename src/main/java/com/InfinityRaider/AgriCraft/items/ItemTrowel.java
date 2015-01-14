@@ -58,14 +58,7 @@ public class ItemTrowel extends ModItem {
                         stack.setTagCompound(tag);
                         stack.setItemDamage(1);
                         //clear crop
-                        crop.growth = 0;
-                        crop.gain = 0;
-                        crop.strength = 0;
-                        crop.analyzed = false;
-                        crop.seed = null;
-                        crop.seedMeta = 0;
-                        crop.markDirty();
-                        world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+                        crop.clearPlant();
                         //return true to avoid further processing
                         return true;
                     }

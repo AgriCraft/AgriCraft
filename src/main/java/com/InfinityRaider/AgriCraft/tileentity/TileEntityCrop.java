@@ -62,6 +62,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.setSeed(tag.getString(Names.Objects.seed));
             this.seedMeta = tag.getInteger(Names.NBT.meta);
         }
+        else {
+            this.seed=null;
+            this.seedMeta=0;
+        }
         super.readFromNBT(tag);
     }
 
@@ -200,7 +204,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.seed = seed;
             this.analyzed = analyzed;
             this.seedMeta = seedMeta;
-            this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
+            this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
             this.markDirty();
         }
     }
@@ -215,7 +219,8 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.seedMeta = 0;
             this.analyzed = false;
             this.weed = false;
-            this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
+            this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
+            this.markDirty();
         }
     }
 

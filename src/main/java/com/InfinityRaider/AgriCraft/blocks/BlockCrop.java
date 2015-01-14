@@ -334,7 +334,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     }
                 }
                 crop.clearPlant();
-                crop.markDirty();
             }
         }
         return false;
