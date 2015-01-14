@@ -1,17 +1,19 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
+import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class RenderItemSeedAnalyzer implements IItemRenderer {
     TileEntitySpecialRenderer renderer;
-    private TileEntity tileEntity;
+    private TileEntitySeedAnalyzer seedAnalyzer;
 
     public RenderItemSeedAnalyzer(TileEntitySpecialRenderer renderer, TileEntity tileEntity) {
         this.renderer = renderer;
-        this.tileEntity = tileEntity;
+        this.seedAnalyzer = (TileEntitySeedAnalyzer) tileEntity;
     }
 
     @Override
@@ -26,6 +28,7 @@ public class RenderItemSeedAnalyzer implements IItemRenderer {
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        this.renderer.renderTileEntityAt(this.tileEntity, 0.0, 0.0, 0.0, 0.0F);
+        seedAnalyzer.direction = ForgeDirection.SOUTH;
+        this.renderer.renderTileEntityAt(seedAnalyzer, 0.0, 0.0, 0.0, 0.0F);
     }
 }
