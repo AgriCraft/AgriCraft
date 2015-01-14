@@ -1,10 +1,12 @@
 Changelog
 ---------
-1.1.2
+1.2.0
 -Changed AgriCraft creative tab logo
 -Fixed certain crops rendering crooked
 -Fixed crop lighting
 -Changed Sprinkler to use a fixed configurable amount of water
+-Added channel valves to irrigation systems
+-Overhauled irrigation systems: sprinklers will keep consuming water but there are now valves to close channels
 -Added configuration GUIs for some config categories
 -Fixed water draining bug in irrigation systems
 -Added option to clear all registered seed drops
