@@ -4,7 +4,9 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityValve;
+import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLever;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
@@ -143,6 +145,22 @@ public class RenderValve extends RenderChannel {
             renderer.clearOverrideBlockTexture();
         }
         return true;
+    }
+
+    @Override
+    protected void renderSide(TileEntityChannel channel, Tessellator tessellator, char axis, int direction) {
+        boolean x = axis=='x';
+        Block neighbour = channel.getWorldObj().getBlock(channel.xCoord+(x?direction:0), channel.yCoord, channel.zCoord+(x?0:direction));
+        if(neighbour instanceof BlockLever && RenderHelper.isLeverFacingBlock(channel.getWorldObj().getBlockMetadata(channel.xCoord+(x?direction:0), channel.yCoord, channel.zCoord+(x?0:direction)), axis, direction)) {
+            IIcon icon = channel.getIcon();
+            if(x) {
+                RenderHelper.drawScaledPrism(tessellator, direction>0?12:0, 4, 5, direction>0?16:4, 12, 11, icon);
+            }
+            else {
+                RenderHelper.drawScaledPrism(tessellator, 5, 4, direction>0?12:0, 11, 12, direction>0?16:4, icon);
+            }
+        }
+        super.renderSide(channel, tessellator, axis, direction);
     }
 
     @Override

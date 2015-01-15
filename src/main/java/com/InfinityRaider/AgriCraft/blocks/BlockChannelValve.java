@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityValve;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLever;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -11,6 +12,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 
 public class BlockChannelValve extends BlockCustomWood {
@@ -24,6 +26,9 @@ public class BlockChannelValve extends BlockCustomWood {
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
         if (!world.isRemote) {
             updatePowerStatus(world, x, y, z);
+            if(block instanceof BlockLever) {
+                world.markBlockForUpdate(x, y, z);
+            }
         }
     }
 
@@ -57,6 +62,12 @@ public class BlockChannelValve extends BlockCustomWood {
             TileEntityValve valve = (TileEntityValve) te;
             valve.updatePowerStatus();
         }
+    }
+
+    //allows levers to be attached to the block
+    @Override
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+        return side!=ForgeDirection.UP;
     }
 
     @Override
