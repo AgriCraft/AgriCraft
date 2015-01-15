@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
@@ -40,7 +41,8 @@ public abstract class DebugHelper {
             ((IDebuggable) tile).addDebugInfo(list);
         }
         else {
-            list.add("not debuggable");
+            list.add("Block: "+ Block.blockRegistry.getNameForObject(world.getBlock(x, y, z)));
+            list.add("Meta: "+world.getBlockMetadata(x, y, z));
         }
     }
 }
