@@ -56,7 +56,9 @@ tile.agricraft:seedAnalyzer.name=Analyseur de graines
 tile.agricraft:waterTank.0.name=Réservoire d'eau en bois
 tile.agricraft:waterTank.1.name=Réservoire d'eau en fer
 tile.agricraft:waterChannel.0.name=Cannal d'irrigation en bois
-tile.agricraft:waterChannel.1.name=Tuyau d'irrigation en fer
+tile.agricraft:waterChannel.1.name=Cannal d'irrigation en fer
+tile.agricraft:channelValve.0.name=Vanne de cannal en bois
+tile.agricraft:channelValve.1.name=Vanne de cannal en fer
 
 tile.agricraft:cropPotato.name=Pomme de terre
 tile.agricraft:cropCarrot.name=Carotte
@@ -99,13 +101,17 @@ agricraft_tooltip.fertile=Cette plante est fertile et peut croitre
 agricraft_tooltip.notFertile=Cette plante ne peut pas croitre ici
 agricraft_tooltip.discoveredSeeds=Graines découvertes
 agricraft_tooltip.material=Matériaux
-agricraft_tooltip.waterLevel=niveau d'eau
+agricraft_tooltip.waterLevel=Niveau d'eau
 agricraft_tooltip.cropWithPlant=Ce tuteur a une plante
 agricraft_tooltip.crossCrop=Ceci est un tuteur croisé
+agricraft_tooltip.weeds=Les mauvaises herbe ont poussées ici
 agricraft_tooltip.cropWithoutPlant=Ce tuteur n'a pas de plante sur lui
 agricraft_tooltip.notCrop=Ceci n'est pas un tuteur
 agricraft_tooltip.trowel=Utilisez-le pour déplacé les plantes d'un tuteur à l'autre
 agricraft_tooltip.magnifyingGlass=utilisez-la pour inspecter vos plantes
+agricraft_tooltip.closed=Fermé
+agricraft_tooltip.open=Ouvert
+agricraft_tooltip.state=Etat
 
 //journal entries
 //---------------
@@ -212,3 +218,6 @@ agricraft_journal.hc_Zucchini=La courgette est d'habitude servie cuisinée, elle
 
 //plant mega pack seeds
 agricraft_journal.pmp_Spinach=Le personnage de dessin animé Popeye le marin est dépeint comme ayant une grosse affinité aux épinards, Le rendant plus fort dès qu'il les consomment.
+
+//chococraft seeds
+agricraft_journal.cc_Gysahl=Le gysahl vert est l'en-cas préféré de Chocobo légendaire. Parfois un gysahl vert peut produire un gysahl charmant et certains disent qu'une plante bien cultivée peut produire gysahl d'or.
