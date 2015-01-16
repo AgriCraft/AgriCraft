@@ -83,7 +83,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 world.setBlockMetadataWithNotify(x, y, z, meta, 2);
             }
             else {
-                crop.spreadWeed();
+                if(ConfigurationHandler.enableWeeds) {
+                    crop.spreadWeed();
+                }
             }
         } else {
             //10%chance to spawn weeds

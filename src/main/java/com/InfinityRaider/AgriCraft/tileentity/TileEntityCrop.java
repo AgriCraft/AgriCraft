@@ -161,15 +161,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //spawns weed in the crop
     public void spawnWeed() {
-        this.weed=true;
-        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
-        this.growth=0;
-        this.gain=0;
-        this.strength=0;
-        this.analyzed=false;
         this.crossCrop=false;
-        this.seed = null;
-        this.seedMeta = 0;
+        this.clearPlant();
+        this.weed=true;
         this.markDirty();
     }
 
@@ -177,7 +171,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public void spreadWeed() {
         TileEntityCrop[] neighbours = this.findNeighbours();
         for(TileEntityCrop crop:neighbours) {
-            if(ConfigurationHandler.enableWeeds && crop!=null && (!crop.weed) && Math.random()<crop.getWeedSpawnChance()) {
+            if(crop!=null && (!crop.weed) && Math.random()<crop.getWeedSpawnChance()) {
                 crop.spawnWeed();
             }
         }
