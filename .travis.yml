@@ -15,6 +15,7 @@ deploy:
   provider: releases
   api-key: "e5b90da5b83aebc4f3da5c09476f27e2d9215968"
   file: "./build/libs/AgriCraft-*.jar"
+  file_glob: true
   skip_cleanup: true
   on:
     all_branches: true
