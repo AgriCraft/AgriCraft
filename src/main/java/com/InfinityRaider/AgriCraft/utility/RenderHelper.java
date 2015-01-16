@@ -120,25 +120,25 @@ public abstract class RenderHelper {
     //draws a rectangular prism
     public static void drawScaledPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon) {
         //front plane
-        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, maxY, icon);
-        addScaledVertexWithUV(tessellator, maxX, minY, minZ, maxX, minY, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, minZ, minX, minY, icon);
-        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, maxY, icon);
+        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, 16 - maxY, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, minZ, maxX, 16-minY, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, minZ, minX, 16-minY, icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, 16-maxY, icon);
         //back plane
-        addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxX, maxY, icon);
-        addScaledVertexWithUV(tessellator, minX, maxY, maxZ, minX, maxY, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, minY, icon);
-        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, minY, icon);
+        addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxX, 16-maxY, icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, maxZ, minX, 16-maxY, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, 16-minY, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, 16-minY, icon);
         //right plane
-        addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxZ, maxY, icon);
-        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxZ, minY, icon);
-        addScaledVertexWithUV(tessellator, maxX, minY, minZ, minZ, minY, icon);
-        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, minZ, maxY, icon);
+        addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxZ, 16-maxY, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxZ, 16-minY, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, minZ, minZ, 16-minY, icon);
+        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, minZ, 16-maxY, icon);
         //left plane
-        addScaledVertexWithUV(tessellator, minX, maxY, maxZ, maxZ, maxY, icon);
-        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minZ, maxY, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, minZ, minZ, minY, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, maxZ, maxZ, minY, icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, maxZ, maxZ, 16-maxY, icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minZ, 16-maxY, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, minZ, minZ, 16-minY, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, maxZ, maxZ, 16-minY, icon);
         //top plane
         addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxX, maxZ, icon);
         addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, minZ, icon);
