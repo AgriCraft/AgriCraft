@@ -158,9 +158,9 @@ public abstract class SeedHelper {
     }
 
     public static double getSpreadChance(ItemSeeds seed, int meta) {
-        Integer value = spreadChances.get(seed)[meta];
-        if(value!=null) {
-            return ((double) value) / 100;
+        Integer[] value = spreadChances.get(seed);
+        if(value!=null && value.length>meta && value[meta]!=null) {
+            return ((double) value[meta]) / 100;
         }
         return 1.00/ SeedHelper.getSeedTier(seed, meta);
     }
