@@ -1,4 +1,11 @@
 language: java
 
 before_install:
-  - chmod +x gradlew
+  - chmod +x gradlew install_deps.sh
+  - ./install_deps.sh
+
+install: ./gradlew setupCIWorkspace -S
+
+env:
+  global:
+    TERM=dumb
