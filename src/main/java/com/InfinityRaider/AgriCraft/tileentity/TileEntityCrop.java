@@ -192,7 +192,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //weed spawn chance
     private double getWeedSpawnChance() {
-        return this.hasPlant()?((double) (10-this.strength))/10:(this.weed?0:1);
+        if(this.hasPlant()) {
+            return ConfigurationHandler.weedsWipePlants?((double) (10 - this.strength))/10:0;
+        }
+        else {
+            return this.weed ? 0 : 1;
+        }
     }
 
     //sets the plant in the crop
