@@ -5,7 +5,19 @@ before_install:
   - ./install_deps.sh
 
 install: ./gradlew setupCIWorkspace -S
+script: ./gradlew build -S
 
 env:
   global:
     TERM=dumb
+
+deploy:
+  provider: releases
+  api-key: "e5b90da5b83aebc4f3da5c09476f27e2d9215968"
+  file: "./build/libs/AgriCraft-*.jar"
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
+
+after_success: dpl --provider=releases --api-key="e5b90da5b83aebc4f3da5c09476f27e2d9215968" --file="build/libs/AgriCraft-*.jar" --file_glob=true
