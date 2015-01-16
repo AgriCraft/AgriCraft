@@ -225,6 +225,7 @@ public final class Names {
         public static final String mfr = "MineFactoryReloaded";
         public static final String waila = "Waila";
         public static final String chococraft = "chococraft";
+        public static final String mcMultipart = "McMultipart";
     }
 
     //item registry keywords
