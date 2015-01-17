@@ -226,6 +226,7 @@ public final class Names {
         public static final String waila = "Waila";
         public static final String chococraft = "chococraft";
         public static final String mcMultipart = "McMultipart";
+        public static final String minetweaker = "MineTweaker3";
     }
 
     //item registry keywords

@@ -55,8 +55,9 @@ dependencies {
     compile fileTree(dir: 'libs', includes: ['*plantmegapack*.jar'])
     compile fileTree(dir: 'libs', includes: ['*ChocoCraft*.jar'])
     compile fileTree(dir: 'libs', includes: ['*TConstruct*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*Botania*.jar'])
+    compile fileTree(dir: 'libs', includes: ['MineTweaker3-Dev*.jar'])
 }
+
 processResources
         {
 // this will ensure that this task is redone when the versions change.
