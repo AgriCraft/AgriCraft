@@ -79,6 +79,28 @@ public class BlockWaterChannel extends BlockCustomWood {
     }
 
     @Override
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+        TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
+        float f = Constants.unit;
+        AxisAlignedBB minBB = AxisAlignedBB.getBoundingBox(4 * f, 4 * f, 4 * f, 12 * f, 12 * f, 12 * f);
+        float min = 4 * f;
+        float max = 12 * f;
+        if (channel.hasNeighbour('x', 1)) {
+            minBB.setBounds(minBB.minX, min, minBB.minZ, 1, max, minBB.maxZ);
+        }
+        if (channel.hasNeighbour('x', -1)) {
+            minBB.setBounds(0, min, minBB.minZ, minBB.maxX, max, minBB.maxZ);
+        }
+        if (channel.hasNeighbour('z', 1)) {
+            minBB.setBounds(minBB.minX, min, minBB.minZ, minBB.maxX, max, 1);
+        }
+        if (channel.hasNeighbour('z', -1)) {
+            minBB.setBounds(minBB.minX, min, 0, minBB.maxX, max, minBB.maxZ);
+        }
+        return minBB.getOffsetBoundingBox(x, y, z);
+    }
+
+    @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
         list.add(new ItemStack(item, 1, 0));    //wooden channel
         list.add(new ItemStack(item, 1, 1));    //iron pipe
