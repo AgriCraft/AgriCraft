@@ -68,19 +68,13 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
         LogHelper.info("Starting Initialization");
-        //register resource crops
         ResourceCrops.init();
-        //register seeds
         Seeds.init();
-        //register gui handler
+
         NetworkRegistry.INSTANCE.registerGuiHandler(instance , new GuiHandler());
-        //initialize tile entities
         proxy.registerTileEntities();
-        //initialize renderers
         proxy.registerRenderers();
-        //initialize recipes
-        Recipes.init();
-        //configure mod integration
+
         ModIntegration.init();
 
         if (Loader.isModLoaded(Names.Mods.minetweaker)) {
@@ -93,23 +87,19 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event) {
         LogHelper.info("Starting Post-Initialization");
-        //initialize custom crops
+
+        Recipes.init();
         CustomCrops.initCustomCrops();
-        //initialize seed overrides
         SeedHelper.init();
-        //initialize mutations
         MutationHandler.init();
-        //read soil whitelist
         BlockCrop.initSoils();
-        //grass drops
         CustomCrops.initGrassSeeds();
-        //initialize world gen
+
         if(!ConfigurationHandler.disableWorldGen) {
             WorldGen.init();
         }
-        //configure NEI
+
         proxy.initNEI();
-        //init seed information
         proxy.initSeedInfo();
         LogHelper.info("Post-Initialization Complete");
     }
