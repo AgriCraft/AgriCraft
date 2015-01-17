@@ -49,6 +49,7 @@ public class ModIntegration {
         public static boolean chococraft;
         public static boolean mcMultipart;
         public static boolean minetweaker;
+        public static boolean extraUtilities;
 
         public static void init() {
             nei = Loader.isModLoaded(Names.Mods.nei);
@@ -68,6 +69,7 @@ public class ModIntegration {
             chococraft = Loader.isModLoaded(Names.Mods.chococraft);
             mcMultipart = Loader.isModLoaded(Names.Mods.mcMultipart);
             minetweaker = Loader.isModLoaded(Names.Mods.minetweaker);
+            extraUtilities = Loader.isModLoaded(Names.Mods.extraUtilities);
 
             LogHelper.info("Checking for loaded mods:");
             LogHelper.info(" - NEI loaded: "+nei);
@@ -87,6 +89,7 @@ public class ModIntegration {
             LogHelper.info(" - Chococraft loaded: "+chococraft);
             LogHelper.info(" - McMultipart loaded: "+mcMultipart);
             LogHelper.info(" - MineTweaker loaded: "+minetweaker);
+            LogHelper.info(" - ExtraUtilities loaded: "+extraUtilities);
             LogHelper.info("Done");
         }
     }
