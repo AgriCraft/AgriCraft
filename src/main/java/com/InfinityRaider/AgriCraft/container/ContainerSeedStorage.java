@@ -15,10 +15,23 @@ public class ContainerSeedStorage extends ContainerAgricraft {
     public ContainerSeedStorage(InventoryPlayer inventory, TileEntitySeedStorage te) {
         super(inventory, 8+16*5, 94);
         this.te = te;
-        this.entries = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>>();
+        this.initEntries();
+    }
+
+    private void initEntries() {
+        if(this.te!=null) {
+            entries = te.getContents();
+        }
+        else {
+            this.entries = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>>();
+        }
     }
 
     public void addSeed(ItemStack stack) {
+        addSeedToEntries(this.entries, stack);
+    }
+
+    public static void addSeedToEntries(HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> entries, ItemStack stack) {
         if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
             HashMap<Integer, ArrayList<ItemStack>> itemEntry = entries.get(stack.getItem());
             //there is an entry for this item
