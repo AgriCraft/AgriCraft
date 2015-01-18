@@ -13,7 +13,7 @@ public class ContainerSeedStorage extends ContainerAgricraft {
     public TileEntitySeedStorage te;
 
     public ContainerSeedStorage(InventoryPlayer inventory, TileEntitySeedStorage te) {
-        super(inventory, 8+16*5, 94);
+        super(inventory, 82, 94);
         this.te = te;
         this.initEntries();
     }

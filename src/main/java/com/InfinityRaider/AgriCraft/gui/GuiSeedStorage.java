@@ -14,7 +14,7 @@ public class GuiSeedStorage extends GuiContainer {
     public GuiSeedStorage(InventoryPlayer inventory, TileEntitySeedStorage te) {
         super(new ContainerSeedStorage(inventory, te));
         this.te = te;
-        this.xSize = 176+16*5;
+        this.xSize = 250;
         this.ySize = 176;
     }
 
