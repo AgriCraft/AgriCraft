@@ -13,30 +13,19 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
-public class ContainerSeedAnalyzer extends Container {
+public class ContainerSeedAnalyzer extends ContainerAgricraft {
     public TileEntitySeedAnalyzer seedAnalyzer;
     public int progress;
     public static final int seedSlotId = 0;
     public static final int journalSlotId = 1;
 
     public ContainerSeedAnalyzer(InventoryPlayer inventory, TileEntitySeedAnalyzer seedAnalyzer) {
+        super(inventory, 8, 94);
         this.seedAnalyzer = seedAnalyzer;
         //add seed slot to the container
         this.addSlotToContainer(new SlotSeedAnalyzerSeed(seedAnalyzer, seedSlotId, 80, 40));
         //add journal slot to the container
         this.addSlotToContainer(new SlotSeedAnalyzerJournal(seedAnalyzer, journalSlotId, 152, 68));
-        //add player's inventory to the container
-        for(int i=0;i<3;i++) {
-            for(int j=0;j<9;j++) {
-                //new Slot(inventory, slot index, x coordinate, y coordinate)
-                this.addSlotToContainer(new Slot(inventory, j+i*9+9, 8+j*18, 94+i*18));
-            }
-        }
-        //add player's hot bar to the container
-        for(int i=0;i<9;i++) {
-            //new Slot(inventory, slot index, x coordinate, y coordinate)
-            this.addSlotToContainer(new Slot(inventory, i, 8 + i*18, 152));
-        }
     }
 
     @Override
@@ -80,11 +69,6 @@ public class ContainerSeedAnalyzer extends Container {
         if(type==0) {
             this.seedAnalyzer.progress = newValue;
         }
-    }
-
-    @Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return true;
     }
 
     //this gets called when a player shift clicks a stack into the inventory
