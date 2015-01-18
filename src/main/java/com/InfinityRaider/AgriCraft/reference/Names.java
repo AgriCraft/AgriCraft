@@ -41,6 +41,7 @@ public final class Names {
         public static final String channel = "waterChannel";
         public static final String valve = "channelValve";
         public static final String sprinkler = "sprinkler";
+        public static final String seedStorage = "seedStorage";
     }
 
     //tile entities

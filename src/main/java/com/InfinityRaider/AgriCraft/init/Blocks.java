@@ -14,12 +14,16 @@ public class Blocks {
     public static BlockWaterChannel blockWaterChannel;
     public static BlockChannelValve blockChannelValve;
     public static BlockSprinkler blockSprinkler;
+    public static BlockSeedStorage blockSeedStorage;
 
     public static void init() {
         blockCrop = new BlockCrop();
         RegisterHelper.registerBlock(blockCrop, Names.Objects.crops);
         seedAnalyzer = new BlockSeedAnalyzer();
         RegisterHelper.registerBlock(seedAnalyzer, Names.Objects.seedAnalyzer);
+        if(ConfigurationHandler.enableSeedStorage) {
+            blockSeedStorage = new BlockSeedStorage();
+        }
         if(!ConfigurationHandler.disableIrrigation) {
             blockWaterTank = new BlockWaterTank();
             RegisterHelper.registerBlock(blockWaterTank, Names.Objects.tank, ItemBlockCustomWood.class);

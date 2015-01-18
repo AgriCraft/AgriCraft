@@ -12,6 +12,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockSeedStorage extends BlockCustomWood {
+    public BlockSeedStorage() {
+        super();
+    }
+
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntitySeedStorage();

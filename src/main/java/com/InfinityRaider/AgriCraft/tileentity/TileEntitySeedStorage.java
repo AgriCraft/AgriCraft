@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorage;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

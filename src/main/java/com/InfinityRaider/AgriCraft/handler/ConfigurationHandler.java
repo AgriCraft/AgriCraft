@@ -37,6 +37,7 @@ public class ConfigurationHandler {
     public static boolean disableWorldGen;
     public static boolean disableVanillaFarming;
     public static boolean wipeTallGrassDrops;
+    public static boolean enableSeedStorage;
 
     public static boolean disableIrrigation;
     public static int sprinklerRatePerSecond;
@@ -79,6 +80,7 @@ public class ConfigurationHandler {
         generateDefaults = propGenerateDefaults.getBoolean();
         customCrops = config.getBoolean("Custom crops", CATEGORY_AGRICRAFT, false, "set to true if you wish to create your own crops");
         wipeTallGrassDrops = config.getBoolean("Clear tall grass drops", CATEGORY_AGRICRAFT, false, "set to true to clear the list of items dropping from tall grass (Will run before adding seeds defined in the grass drops config).");
+        enableSeedStorage = config.getBoolean("Enable seed storage system", CATEGORY_AGRICRAFT, true, "set to false to disable the seed storage system");
 
         disableIrrigation = config.getBoolean("Disable Irrigation", CATEGORY_IRRIGATION, false, "set to true if you want to disable irrigation systems");
         sprinklerRatePerSecond = config.getInt("Sprinkler water usage", CATEGORY_IRRIGATION, 10, 0, 10000, "Water usage of the sprinkler in mB per second");
