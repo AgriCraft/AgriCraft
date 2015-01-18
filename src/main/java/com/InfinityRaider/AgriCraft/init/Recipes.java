@@ -15,13 +15,25 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Recipes {
+
+    /** Will be replaced with all the custom woods in CustomWood recipes */
+    public static final ItemStack REFERENCE = new ItemStack(net.minecraft.init.Blocks.planks, 1);
+
+    /** Holds all the custom woods for CustomWood items, will get filled on init() */
+    private static final List<ItemStack> woodList = new ArrayList<ItemStack>();
+
     public static void init() {
         //crop item
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.crops, ConfigurationHandler.cropsPerCraft), "stickWood", "stickWood", "stickWood", "stickWood"));
@@ -46,6 +58,8 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.magnifyingGlass, 1, 0), "sgs", " s ", " s ", 's', "stickWood", 'g', "paneGlass"));
         //irrigation systems
         if(!ConfigurationHandler.disableIrrigation) {
+            ((ItemBlockCustomWood) Item.getItemFromBlock(Blocks.blockWaterTank)).getSubItems(woodList);
+
             //tank & channel
             registerCustomWoodRecipes();
             //change wooden bowl recipe
@@ -124,28 +138,109 @@ public class Recipes {
     }
 
     private static void registerCustomWoodRecipes() {
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        ((ItemBlockCustomWood) Item.getItemFromBlock(Blocks.blockWaterTank)).getSubItems(list);
-        for(ItemStack stack:list) {
+        ItemStack channel = new ItemStack(Blocks.blockWaterChannel, 1);
+
+        registerCustomWoodRecipe(Blocks.blockWaterTank, 1, true, new Object[] {"w w", "w w", "www", 'w', REFERENCE});
+        registerCustomWoodRecipe(Blocks.blockWaterChannel, 6, true, new Object[] {"w w", " w ", 'w', REFERENCE});
+        registerCustomWoodRecipe(Blocks.blockChannelValve, 1, false, new ItemStack(net.minecraft.init.Items.iron_ingot, 1), new ItemStack(net.minecraft.init.Blocks.lever, 1), channel);
+    }
+
+    /**
+     * Adds the given recipe for every available wood type.
+     * @params Same as for GameRegistry. The only difference is that planks will get replaced with the different woods.
+     */
+    public static void registerCustomWoodRecipe(Block block, int stackSize, boolean shaped, Object... params) {
+        for (ItemStack stack : woodList) {
             if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.material) && stack.stackTagCompound.hasKey(Names.NBT.materialMeta)) {
                 //get material
                 String material = stack.stackTagCompound.getString(Names.NBT.material);
                 int meta = stack.stackTagCompound.getInteger(Names.NBT.materialMeta);
                 ItemStack plank = new ItemStack((Block) Block.blockRegistry.getObject(material), 1, meta);
-                //define stacks
-                ItemStack tank = new ItemStack(Blocks.blockWaterTank, 1);
-                ItemStack channel = new ItemStack(Blocks.blockWaterChannel, 6);
-                ItemStack valve = new ItemStack(Blocks.blockChannelValve, 1);
+
+                Object[] ingredients = Arrays.copyOf(params, params.length);
+
+                // replace all planks with the custom ones
+                for (int i = 0; i < ingredients.length; i++) {
+                    if (ingredients[i] instanceof ItemStack && ((ItemStack) ingredients[i]).isItemEqual(REFERENCE)) {
+                        ingredients[i] = plank;
+                    }
+
+                    // Also replace ItemBlockCustomWood with the correct verison
+                    if (ingredients[i] instanceof ItemStack && ingredients[i] != null
+                            && ((ItemStack)ingredients[i]).getItem() instanceof ItemBlockCustomWood) {
+                        ItemStack existing = (ItemStack) ingredients[i];
+                        ItemStack replacement = new ItemStack(existing.getItem(), existing.stackSize);
+                        replacement.stackTagCompound = (NBTTagCompound) NBTHelper.getMaterialTag(plank).copy();
+                        ingredients[i] = replacement;
+                    }
+                }
+
+                ItemStack itemStack = new ItemStack(block, stackSize);
+
                 //set NBT
                 NBTTagCompound tag = NBTHelper.getMaterialTag(plank);
-                tank.stackTagCompound = (NBTTagCompound) tag.copy();
-                channel.stackTagCompound = (NBTTagCompound) tag.copy();
-                valve.stackTagCompound = (NBTTagCompound) tag.copy();
+                itemStack.stackTagCompound = (NBTTagCompound) tag.copy();
+
                 //register recipes
-                GameRegistry.addShapedRecipe(tank, new Object[] {"w w", "w w", "www", 'w', plank});
-                GameRegistry.addShapedRecipe(channel, new Object[] {"w w", " w ", 'w', plank});
-                GameRegistry.addShapelessRecipe(valve, new ItemStack(net.minecraft.init.Items.iron_ingot, 1), new ItemStack(net.minecraft.init.Blocks.lever, 1), channel);
+                if (shaped)
+                    GameRegistry.addShapedRecipe(itemStack, ingredients);
+                else
+                    GameRegistry.addShapelessRecipe(itemStack, ingredients);
             }
+
+        }
+    }
+
+    public static void registerCustomWoodRecipe(IRecipe recipe) {
+        for (ItemStack stack : woodList) {
+            if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.material) && stack.stackTagCompound.hasKey(Names.NBT.materialMeta)) {
+                //get material
+                String material = stack.stackTagCompound.getString(Names.NBT.material);
+                int meta = stack.stackTagCompound.getInteger(Names.NBT.materialMeta);
+                ItemStack plank = new ItemStack((Block) Block.blockRegistry.getObject(material), 1, meta);
+
+                ItemStack[] ingredients;
+                if (recipe instanceof ShapedRecipes) {
+                    ItemStack[] recipeItems = ((ShapedRecipes) recipe).recipeItems;
+                    ingredients = Arrays.copyOf(recipeItems, recipeItems.length);
+                } else {
+                    ItemStack[] recipeItems = (ItemStack[]) ((ShapelessRecipes) recipe).recipeItems.toArray(new ItemStack[]{});
+                    ingredients = Arrays.copyOf(recipeItems, recipeItems.length);
+                }
+
+                // replace all planks with the custom ones
+                for (int i = 0; i < ingredients.length; i++) {
+                    if (ingredients[i] != null && ingredients[i].isItemEqual(REFERENCE)) {
+                        ingredients[i] = plank;
+                    }
+
+                    // Also replace ItemBlockCustomWood with the correct verison
+                    if (ingredients[i] != null && ingredients[i].getItem() instanceof ItemBlockCustomWood) {
+                        ingredients[i] = new ItemStack(ingredients[i].getItem(), ingredients[i].stackSize, ingredients[i].getItemDamage());
+                        ingredients[i].stackTagCompound = (NBTTagCompound) NBTHelper.getMaterialTag(plank).copy();
+                    }
+                }
+
+                ItemStack outputStack = recipe.getRecipeOutput();
+                ItemStack itemStack = new ItemStack(outputStack.getItem(), outputStack.stackSize);
+
+                //set NBT
+                NBTTagCompound tag = NBTHelper.getMaterialTag(plank);
+                itemStack.stackTagCompound = (NBTTagCompound) tag.copy();
+
+                //register recipes
+                if (recipe instanceof ShapedRecipes) {
+                    ShapedRecipes shapedRecipes = (ShapedRecipes) recipe;
+                    IRecipe finalRecipe = new ShapedRecipes(shapedRecipes.recipeWidth, shapedRecipes.recipeHeight,
+                        ingredients, itemStack);
+                    GameRegistry.addRecipe(finalRecipe);
+                } else {
+                    ShapelessRecipes shapeless = (ShapelessRecipes) recipe;
+                    IRecipe finalRecipe = new ShapelessRecipes(itemStack, Arrays.asList(ingredients));
+                    GameRegistry.addRecipe(finalRecipe);
+                }
+            }
+
         }
 
     }
