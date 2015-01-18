@@ -34,9 +34,8 @@ public class CustomWood {
     }
 
     @ZenMethod
-    public static void addShapeless(IItemStack output, IItemStack[][] inputs) {
-        MineTweakerAPI.logError("addShapeless currently not supported as it causes crashes.");
-        // addRecipe(output, inputs, false);
+    public static void addShapeless(IItemStack output, IItemStack[] inputs) {
+        addRecipe(output, new IItemStack[][] {inputs}, false);
     }
 
     private static void addRecipe(IItemStack output, IItemStack[][] inputs, boolean shaped) {
@@ -47,7 +46,7 @@ public class CustomWood {
 
         ItemStack outputStack = MineTweakerMC.getItemStack(output);
         if (outputStack.getItem() instanceof ItemBlockCustomWood) {
-            if (inputs.length != 3) {
+            if (shaped && inputs.length != 3) {
                 MineTweakerAPI.logError("Unable to add recipe with input rows other than 3");
                 return;
             }
