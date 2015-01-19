@@ -46,4 +46,11 @@ public class BlockSeedStorage extends BlockCustomWood {
         }
         return true;
     }
+
+    @Override
+    public boolean onBlockEventReceived(World world, int x, int y, int z, int id, int data) {
+        super.onBlockEventReceived(world, x, y, z, id, data);
+        TileEntity tileentity = world.getTileEntity(x, y, z);
+        return tileentity != null && tileentity.receiveClientEvent(id, data);
+    }
 }

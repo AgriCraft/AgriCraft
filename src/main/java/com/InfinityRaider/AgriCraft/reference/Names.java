@@ -21,6 +21,8 @@ public final class Names {
         public static final String angle = "angle";
         public static final String isSprinkled = "isSprinkled";
         public static final String power = "powerrrr";
+        public static final String inventory = "inventory";
+        public static final String size = "size";
     }
 
     //mod objects
