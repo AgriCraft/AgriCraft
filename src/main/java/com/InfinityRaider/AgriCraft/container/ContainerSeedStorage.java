@@ -1,7 +1,9 @@
 package com.InfinityRaider.AgriCraft.container;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedStorage;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
@@ -74,5 +76,43 @@ public class ContainerSeedStorage extends ContainerAgricraft {
     @Override
     public void putStackInSlot(int Slot, ItemStack stack) {
         this.addSeed(stack);
+    }
+
+    //this gets called when a player shift clicks a stack into the inventory
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int clickedSlot) {
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(clickedSlot);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+            //try to move item from the container into the player's inventory
+            if (clickedSlot>35) {
+                if (!this.mergeItemStack(itemstack1, 0, inventorySlots.size(), false)) {
+                    return null;
+                }
+            }
+            else {
+                //try to move item from the player's inventory into the container
+                if(itemstack1.getItem()!=null) {
+                    if(itemstack1.getItem() instanceof ItemSeeds) {
+                        if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                            return null;
+                        }
+                    }
+                }
+            }
+            if (itemstack1.stackSize == 0) {
+                slot.putStack(null);
+            }
+            else {
+                slot.onSlotChanged();
+            }
+            if (itemstack1.stackSize == itemstack.stackSize) {
+                return null;
+            }
+            slot.onPickupFromSlot(player, itemstack1);
+        }
+        return itemstack;
     }
 }

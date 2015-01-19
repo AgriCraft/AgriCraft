@@ -70,12 +70,16 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements IInve
 
     public HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> getContents() {
         HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> contents = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>>();
+        this.addContents(contents);
+        return contents;
+    }
+
+    public void addContents(HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> contents) {
         if(this.inventory!=null) {
             for (ItemStack stack : this.inventory) {
                 ContainerSeedStorage.addSeedToEntries(contents, stack);
             }
         }
-        return contents;
     }
 
     //sets the direction based on an int
