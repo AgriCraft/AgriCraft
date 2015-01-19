@@ -81,6 +81,12 @@ dependencies {
     testCompile "org.mockito:mockito-core:1.+"
 }
 
+allprojects {
+    if (System.getenv("TRAVIS_BUILD_NUMBER") != null) {
+        version += "-b${System.getenv("TRAVIS_BUILD_NUMBER")}"
+    }
+}
+
 processResources {
     inputs.property "version", project.modVersion
     inputs.property "mcversion", project.minecraft.version
