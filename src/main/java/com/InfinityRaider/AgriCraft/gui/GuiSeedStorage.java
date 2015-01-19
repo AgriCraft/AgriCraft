@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -23,8 +24,8 @@ public class GuiSeedStorage extends GuiContainer {
     public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedStorage.png");
     private ArrayList<ItemStack> seedStacks;
     private ItemStack activeEntry;
-    private float scrollPercentEntries;
-    private float scrollPercentActive;
+    private int scrollPositionEntries;
+    private int scrollPositionActive;
 
     private static int buttonIdGrowth = 0;
     private static int buttonIdGain = 1;
@@ -52,6 +53,7 @@ public class GuiSeedStorage extends GuiContainer {
 
     protected void setActiveEntry(int i) {
         this.activeEntry = seedStacks.get(i);
+        this.scrollPositionActive = 0;
         this.updateScreen();
     }
 
@@ -86,8 +88,8 @@ public class GuiSeedStorage extends GuiContainer {
 
     private void drawActiveEntry() {
         if(this.activeEntry!=null && this.activeEntry.getItem()!=null) {
-            ArrayList<ItemStack> activeEntries = ( ((ContainerSeedStorage) this.inventorySlots).entries ).get(this.activeEntry.getItem()).get(this.activeEntry.getItemDamage());
-            for(ItemStack stack:activeEntries) {
+            ArrayList<Slot> activeEntries = ( ((ContainerSeedStorage) this.inventorySlots).entries ).get(this.activeEntry.getItem()).get(this.activeEntry.getItemDamage());
+            for(Slot slot:activeEntries) {
 
             }
         }
@@ -95,9 +97,9 @@ public class GuiSeedStorage extends GuiContainer {
 
     private void loadSeedStacks() {
         seedStacks = new ArrayList<ItemStack>();
-        HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> stored = ((ContainerSeedStorage) this.inventorySlots).te.getContents();
-        for(Map.Entry<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> seedItemEntry:stored.entrySet()) {
-            for(Map.Entry<Integer, ArrayList<ItemStack>> seedMetaEntry:seedItemEntry.getValue().entrySet()) {
+        HashMap<ItemSeeds, HashMap<Integer, ArrayList<Slot>>> stored = ((ContainerSeedStorage) this.inventorySlots).entries;
+        for(Map.Entry<ItemSeeds, HashMap<Integer, ArrayList<Slot>>> seedItemEntry:stored.entrySet()) {
+            for(Map.Entry<Integer, ArrayList<Slot>> seedMetaEntry:seedItemEntry.getValue().entrySet()) {
                 seedStacks.add(new ItemStack(seedItemEntry.getKey(), seedMetaEntry.getKey()));
             }
         }
