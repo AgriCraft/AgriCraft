@@ -21,7 +21,17 @@ public class SeedMutation {
 
     @ZenMethod
     public static void add(IItemStack result, IItemStack parent1, IItemStack parent2) {
+        ItemStack resultToAdd = MineTweakerMC.getItemStack(result);
+        ItemStack parent1ToAdd = MineTweakerMC.getItemStack(parent1);
+        ItemStack parent2ToAdd = MineTweakerMC.getItemStack(parent2);
 
+        if (resultToAdd.getItem() instanceof ItemSeeds && parent1ToAdd.getItem() instanceof ItemSeeds
+                && parent2ToAdd.getItem() instanceof ItemSeeds) {
+            MineTweakerAPI.apply(new AddAction(resultToAdd, parent1ToAdd, parent2ToAdd));
+        } else {
+            MineTweakerAPI.logError("Adding mutation with result '" + resultToAdd.getDisplayName()
+                    + "' failed. All 3 have to be of type ItemSeeds.");
+        }
     }
 
     @ZenMethod
@@ -31,6 +41,49 @@ public class SeedMutation {
             MineTweakerAPI.apply(new RemoveAction(resultToRemove));
         } else {
             MineTweakerAPI.logError(resultToRemove.getDisplayName() + " is not of type ItemSeeds.");
+        }
+    }
+
+    private static class AddAction implements IUndoableAction {
+
+        private final Mutation mutation;
+
+        public AddAction(ItemStack resultToAdd, ItemStack parent1ToAdd, ItemStack parent2ToAdd) {
+            mutation = new Mutation(resultToAdd, parent1ToAdd, parent2ToAdd);
+        }
+
+        @Override
+        public void apply() {
+            MutationHandler.add(mutation);
+        }
+
+        @Override
+        public boolean canUndo() {
+            return true;
+        }
+
+        @Override
+        public void undo() {
+            MutationHandler.remove(mutation);
+        }
+
+        @Override
+        public String describe() {
+            return "Adding mutation '" + getEquationString() + "'";
+        }
+
+        @Override
+        public String describeUndo() {
+            return "Removing previously added mutation '" + getEquationString() + "'";
+        }
+
+        @Override
+        public Object getOverrideKey() {
+            return null;
+        }
+
+        private String getEquationString() {
+            return mutation.result.getDisplayName() + " = " + mutation.parent1.getDisplayName() + " + " + mutation.parent2;
         }
     }
 
