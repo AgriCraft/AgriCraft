@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
+import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzer;
@@ -46,7 +47,7 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
         //set up the tessellator
         Tessellator tessellator = Tessellator.instance;
         //grab the texture
-        ResourceLocation resource = RenderHelper.getResource(analyzer.getStackInSlot(0).getItem(),analyzer.getStackInSlot(0).getItemDamage());
+        ResourceLocation resource = RenderHelper.getResource(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId).getItem(),analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId).getItemDamage());
         //define rotation angle in function of system time
         float angle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);   //credits to Pahimar
         GL11.glPushMatrix();

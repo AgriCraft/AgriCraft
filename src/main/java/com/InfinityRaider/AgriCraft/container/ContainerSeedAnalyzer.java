@@ -7,7 +7,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
@@ -16,8 +15,8 @@ import net.minecraft.item.ItemStack;
 public class ContainerSeedAnalyzer extends ContainerAgricraft {
     public TileEntitySeedAnalyzer seedAnalyzer;
     public int progress;
-    public static final int seedSlotId = 0;
-    public static final int journalSlotId = 1;
+    public static final int seedSlotId = 36;
+    public static final int journalSlotId = 37;
 
     public ContainerSeedAnalyzer(InventoryPlayer inventory, TileEntitySeedAnalyzer seedAnalyzer) {
         super(inventory, 8, 94);
@@ -80,7 +79,7 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             //try to move item from the analyzer into the player's inventory
-            if (clickedSlot==0 || clickedSlot==1) {
+            if (clickedSlot==seedSlotId || clickedSlot==journalSlotId) {
                 if (!this.mergeItemStack(itemstack1, 2, inventorySlots.size(), false)) {
                     return null;
                 }
@@ -92,12 +91,12 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
                         if (!SeedHelper.isValidSeed((ItemSeeds) itemstack1.getItem(), itemstack1.getItemDamage())) {
                             return null;
                         }
-                        if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                        if (!this.mergeItemStack(itemstack1, seedSlotId, seedSlotId+1, false)) {
                             return null;
                         }
                     }
                     else if(itemstack1.getItem() instanceof ItemJournal) {
-                        if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
+                        if (!this.mergeItemStack(itemstack1, journalSlotId, journalSlotId+1, false)) {
                             return null;
                         }
                     }

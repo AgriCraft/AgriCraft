@@ -187,7 +187,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //-----------------
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[]{0,1};
+        return new int[]{ContainerSeedAnalyzer.seedSlotId,ContainerSeedAnalyzer.journalSlotId};
     }
 
     //check if item can be inserted
