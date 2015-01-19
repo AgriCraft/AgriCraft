@@ -27,6 +27,8 @@ repositories {
 
 apply plugin: 'forge'
 apply plugin: 'java'
+apply plugin: 'sonar-runner'
+apply plugin: 'jacoco'
 
 ext.configFile = file "build.properties"
 
@@ -73,6 +75,10 @@ dependencies {
     compile fileTree(dir: 'libs', includes: ['*ChocoCraft*.jar'])
     compile fileTree(dir: 'libs', includes: ['*TConstruct*.jar'])
     compile fileTree(dir: 'libs', includes: ['MineTweaker3-Dev*.jar'])
+
+    // Test dependencies
+    testCompile "junit:junit:4.12"
+    testCompile "org.mockito:mockito-core:1.+"
 }
 
 processResources {
