@@ -1,16 +1,13 @@
 package com.InfinityRaider.AgriCraft.mutation;
 
-import com.InfinityRaider.AgriCraft.handler.MutationHandler;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
-/**
-* User: Simon
-* Date: 19.01.2015
-*/
+
 public class Mutation {
+
     public ItemStack result;
     public ItemStack parent1;
     public ItemStack parent2;

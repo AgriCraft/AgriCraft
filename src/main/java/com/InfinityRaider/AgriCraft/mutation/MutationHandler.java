@@ -11,21 +11,24 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class MutationHandler {
-    private static Mutation[] mutations;
+
+    private static List<Mutation> mutations;
 
     public static void init() {
         //Read mutations & initialize the mutation arrays
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationData());
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
+        List<Mutation> list = new ArrayList<Mutation>();
         for(String line:data) {
             Mutation mutation = readMutation(line);
             if(mutation!=null) {
                 list.add(mutation);
             }
         }
-        mutations = list.toArray(new Mutation[list.size()]);
+        mutations = list;
+
         //print registered mutations to the log
         LogHelper.info("Registered Mutations:");
         for (Mutation mutation:mutations) {
@@ -219,15 +222,15 @@ public abstract class MutationHandler {
 
     //gets all the mutations
     public static Mutation[] getMutations() {
-        return mutations.clone();
+        return mutations.toArray(new Mutation[0]);
     }
 
     //gets all the parents
     public static ItemStack[][] getParents() {
-        ItemStack[][] parents = new ItemStack[mutations.length][2];
-        for(int i=0;i< mutations.length;i++) {
-            parents[i][0] = mutations[i].parent1.copy();
-            parents[i][1] = mutations[i].parent2.copy();
+        ItemStack[][] parents = new ItemStack[mutations.size()][2];
+        for(int i=0;i< mutations.size();i++) {
+            parents[i][0] = mutations.get(i).parent1.copy();
+            parents[i][1] = mutations.get(i).parent2.copy();
         }
         return parents;
     }

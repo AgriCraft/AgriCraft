@@ -1,7 +1,8 @@
 package com.InfinityRaider.AgriCraft.gui;
 
-import com.InfinityRaider.AgriCraft.handler.MutationHandler;
+import com.InfinityRaider.AgriCraft.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
+import com.InfinityRaider.AgriCraft.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
@@ -332,12 +333,12 @@ public class GuiJournal extends GuiScreen {
             plantIcons[i] = RenderHelper.getIcon(SeedHelper.getPlant((ItemSeeds) seed.getItem()), RenderHelper.plantIconIndex((ItemSeeds) seed.getItem(), seed.getItemDamage(), i));
         }
         //get the icons for the parents that mutate into this seed
-        MutationHandler.Mutation[] parents = MutationHandler.getParentMutations(seed);
+        Mutation[] parents = MutationHandler.getParentMutations(seed);
         ArrayList<IIcon> iconList0 = new ArrayList<IIcon>();
         ArrayList<IIcon> IconList1 = new ArrayList<IIcon>();
         ArrayList<ItemStack> list0 = new ArrayList<ItemStack>();
         ArrayList<ItemStack> list1 = new ArrayList<ItemStack>();
-        for (MutationHandler.Mutation parentCouple:parents) {
+        for (Mutation parentCouple:parents) {
             if (this.isSeedDiscovered(parentCouple.parent1) && this.isSeedDiscovered(parentCouple.parent2)) {
                 iconList0.add(RenderHelper.getIcon(parentCouple.parent1.getItem(), parentCouple.parent1.getItemDamage()));
                 IconList1.add(RenderHelper.getIcon(parentCouple.parent2.getItem(), parentCouple.parent2.getItemDamage()));
@@ -354,12 +355,12 @@ public class GuiJournal extends GuiScreen {
             discoveredParents[i][1]=list1.get(i);
         }
         //get the icons for the co parents and the mutations this seed can mutate to
-        MutationHandler.Mutation[] mutations = MutationHandler.getMutations(seed);
+        Mutation[] mutations = MutationHandler.getMutations(seed);
         ArrayList<IIcon> coParentsIconList = new ArrayList<IIcon>();
         ArrayList<IIcon> mutationsIconList = new ArrayList<IIcon>();
         ArrayList<ItemStack> coParentsList = new ArrayList<ItemStack>();
         ArrayList<ItemStack> mutationsList = new ArrayList<ItemStack>();
-        for (MutationHandler.Mutation mutation:mutations) {
+        for (Mutation mutation:mutations) {
             ItemStack coParent = (mutation.parent1.getItem()==seed.getItem() && mutation.parent1.getItemDamage()==seed.getItemDamage())?mutation.parent2:mutation.parent1;
             if (this.isSeedDiscovered(coParent) && this.isSeedDiscovered(mutation.result)) {
                 coParentsIconList.add(RenderHelper.getIcon(coParent.getItem(), coParent.getItemDamage()));

@@ -3,7 +3,8 @@ package com.InfinityRaider.AgriCraft.tileentity;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.handler.MutationHandler;
+import com.InfinityRaider.AgriCraft.mutation.MutationHandler;
+import com.InfinityRaider.AgriCraft.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
@@ -91,7 +92,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
                     chance = SeedHelper.getSpreadChance(result, resultMeta);
                 }
             } else {
-                MutationHandler.Mutation[] crossOvers = MutationHandler.getCrossOvers(neighbours);
+                Mutation[] crossOvers = MutationHandler.getCrossOvers(neighbours);
                 if (crossOvers!=null && crossOvers.length>0) {
                     int index = (int) Math.floor(Math.random()*crossOvers.length);
                     if(crossOvers[index].result.getItem()!=null) {

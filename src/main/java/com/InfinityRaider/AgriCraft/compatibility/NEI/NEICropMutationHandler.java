@@ -2,7 +2,8 @@ package com.InfinityRaider.AgriCraft.compatibility.NEI;
 
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.InfinityRaider.AgriCraft.handler.MutationHandler;
+import com.InfinityRaider.AgriCraft.mutation.MutationHandler;
+import com.InfinityRaider.AgriCraft.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import net.minecraft.item.ItemSeeds;
@@ -27,7 +28,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         PositionedStack requiredBlock;
 
         //constructor
-        public CachedCropMutationRecipe(MutationHandler.Mutation mutation) {
+        public CachedCropMutationRecipe(Mutation mutation) {
             this.parent1 = new PositionedStack(mutation.parent1.copy(), Constants.nei_X1, Constants.nei_Y1);
             this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y1);
             this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y1);
@@ -68,8 +69,8 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     @Override
     public void loadCraftingRecipes(String id, Object... results) {
         if(id.equalsIgnoreCase(NEICropMutationHandler.id)) {
-            MutationHandler.Mutation[] mutations = MutationHandler.getMutations();
-            for (MutationHandler.Mutation mutation:mutations) {
+            Mutation[] mutations = MutationHandler.getMutations();
+            for (Mutation mutation:mutations) {
                 if (mutation.result.getItem() != null && mutation.parent1.getItem() != null && mutation.parent2.getItem() != null) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));
                 }
@@ -88,8 +89,8 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     @Override
     public void loadCraftingRecipes(ItemStack result) {
         if(result.getItem() instanceof ItemSeeds) {
-            MutationHandler.Mutation[] mutations = MutationHandler.getParentMutations(result);
-            for(MutationHandler.Mutation mutation:mutations) {
+            Mutation[] mutations = MutationHandler.getParentMutations(result);
+            for(Mutation mutation:mutations) {
                 if (mutation.parent1.getItem()!=null && mutation.parent2.getItem()!=null) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));
                 }
@@ -101,8 +102,8 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
         if(ingredient.getItem() instanceof ItemSeeds) {
-            MutationHandler.Mutation[] mutations = MutationHandler.getMutations(ingredient);
-            for (MutationHandler.Mutation mutation:mutations) {
+            Mutation[] mutations = MutationHandler.getMutations(ingredient);
+            for (Mutation mutation:mutations) {
                 if (mutation.result.getItem() != null && mutation.parent1.getItem() != null && mutation.parent2.getItem() != null) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));
                 }

@@ -235,13 +235,10 @@ public class Recipes {
                         ingredients, itemStack);
                     GameRegistry.addRecipe(finalRecipe);
                 } else {
-                    ShapelessRecipes shapeless = (ShapelessRecipes) recipe;
                     IRecipe finalRecipe = new ShapelessRecipes(itemStack, Arrays.asList(ingredients));
                     GameRegistry.addRecipe(finalRecipe);
                 }
             }
-
         }
-
     }
 }
