@@ -7,6 +7,8 @@ import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.minecraft.MineTweakerMC;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -21,13 +23,20 @@ public class SeedMutation {
 
     @ZenMethod
     public static void add(IItemStack result, IItemStack parent1, IItemStack parent2) {
+        add(result, parent1, parent2, Mutation.DEFAULT_ID, null);
+    }
+
+    @ZenMethod
+    public static void add(IItemStack result, IItemStack parent1, IItemStack parent2, int id, IItemStack block) {
         ItemStack resultToAdd = MineTweakerMC.getItemStack(result);
         ItemStack parent1ToAdd = MineTweakerMC.getItemStack(parent1);
         ItemStack parent2ToAdd = MineTweakerMC.getItemStack(parent2);
+        ItemStack blockRequired = MineTweakerMC.getItemStack(block);
 
         if (resultToAdd.getItem() instanceof ItemSeeds && parent1ToAdd.getItem() instanceof ItemSeeds
-                && parent2ToAdd.getItem() instanceof ItemSeeds) {
-            MineTweakerAPI.apply(new AddAction(resultToAdd, parent1ToAdd, parent2ToAdd));
+                && parent2ToAdd.getItem() instanceof ItemSeeds && blockRequired.getItem() instanceof ItemBlock) {
+            Block blockRequiredAsBlock = Block.getBlockFromItem(blockRequired.getItem());
+            MineTweakerAPI.apply(new AddAction(resultToAdd, parent1ToAdd, parent2ToAdd, id, blockRequiredAsBlock));
         } else {
             MineTweakerAPI.logError("Adding mutation with result '" + resultToAdd.getDisplayName()
                     + "' failed. All 3 have to be of type ItemSeeds.");
@@ -48,8 +57,8 @@ public class SeedMutation {
 
         private final Mutation mutation;
 
-        public AddAction(ItemStack resultToAdd, ItemStack parent1ToAdd, ItemStack parent2ToAdd) {
-            mutation = new Mutation(resultToAdd, parent1ToAdd, parent2ToAdd);
+        public AddAction(ItemStack resultToAdd, ItemStack parent1ToAdd, ItemStack parent2ToAdd, int id, Block block) {
+            mutation = new Mutation(resultToAdd, parent1ToAdd, parent2ToAdd, id, block, Mutation.DEFAULT_REQUIREMENT_META);
         }
 
         @Override
@@ -83,7 +92,7 @@ public class SeedMutation {
         }
 
         private String getEquationString() {
-            return mutation.result.getDisplayName() + " = " + mutation.parent1.getDisplayName() + " + " + mutation.parent2;
+            return mutation.result.getDisplayName() + " = " + mutation.parent1.getDisplayName() + " + " + mutation.parent2.getDisplayName();
         }
     }
 
