@@ -19,6 +19,7 @@ package com.InfinityRaider.AgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.CustomWood;
+import com.InfinityRaider.AgriCraft.compatibility.minetweaker.SeedBlacklist;
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.SeedMutation;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
@@ -81,6 +82,7 @@ public class AgriCraft {
         if (Loader.isModLoaded(Names.Mods.minetweaker)) {
             MineTweakerAPI.registerClass(CustomWood.class);
             MineTweakerAPI.registerClass(SeedMutation.class);
+            MineTweakerAPI.registerClass(SeedBlacklist.class);
         }
 
         LogHelper.info("Initialization Complete");

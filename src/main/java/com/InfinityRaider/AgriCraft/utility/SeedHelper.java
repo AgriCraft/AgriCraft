@@ -23,13 +23,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public abstract class SeedHelper {
-    private static ItemStack[] seedBlackList;
+    private static List<ItemStack> seedBlackList;
     private static HashMap<ItemSeeds, Integer[]> spreadChances;
     private static HashMap<ItemSeeds, Integer[]> seedTiers;
 
@@ -55,7 +52,7 @@ public abstract class SeedHelper {
                 LogHelper.info(new StringBuffer("Error when adding seed to blacklist: ").append(errorMsg).append(" (line: ").append(line).append(")"));
             }
         }
-        seedBlackList = list.toArray(new ItemStack[list.size()]);
+        seedBlackList = list;
         LogHelper.info("Registered seeds blacklist:");
         for(ItemStack seed:seedBlackList) {
             LogHelper.info(new StringBuffer(" - ").append(Item.itemRegistry.getNameForObject(seed.getItem())).append(":").append(seed.getItemDamage()));
@@ -338,5 +335,13 @@ public abstract class SeedHelper {
             seed.stackTagCompound = tag;
         }
         return seed;
+    }
+
+    public static void addAllToSeedBlacklist(Collection<? extends ItemStack> seeds) {
+        seedBlackList.addAll(seeds);
+    }
+
+    public static void removeAllFromSeedBlacklist(Collection<? extends ItemStack> seeds) {
+        seedBlackList.removeAll(seeds);
     }
 }
