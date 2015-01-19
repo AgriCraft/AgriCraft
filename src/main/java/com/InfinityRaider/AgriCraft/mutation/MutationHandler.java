@@ -282,6 +282,16 @@ public abstract class MutationHandler {
         return removedMutations;
     }
 
+    /** Adds the given mutation to the mutations list */
+    public static void add(Mutation mutation) {
+        mutations.add(mutation);
+    }
+
+    /** Removes the given mutation from the mutations list */
+    public static void remove(Mutation mutation) {
+        mutations.remove(mutation);
+    }
+
     /**
      * Adds all mutations back into the mutation list. Does not perform and validation.
      */
