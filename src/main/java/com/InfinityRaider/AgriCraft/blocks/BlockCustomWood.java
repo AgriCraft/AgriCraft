@@ -38,7 +38,6 @@ public abstract class BlockCustomWood extends BlockContainer {
                 this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
             }
             world.setBlockToAir(x, y, z);
-            world.removeTileEntity(x, y, z);
         }
     }
 

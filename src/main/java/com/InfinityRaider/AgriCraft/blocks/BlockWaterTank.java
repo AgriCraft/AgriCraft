@@ -36,20 +36,11 @@ public class BlockWaterTank extends BlockCustomWood{
     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
         if(!world.isRemote) {
             ItemStack drop = new ItemStack(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, 1);
-            this.setTag(world, x, y ,z, drop);
+            this.setTag(world, x, y, z, drop);
             this.dropBlockAsItem(world, x, y, z, drop);
         }
     }
-
-    //override this to delay the removal of the tile entity until after harvestBlock() has been called
-    @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-        if(willHarvest) {
-            this.harvestBlock(world, player, x, y, z, world.getBlockMetadata(x, y, z));
-        }
-        return super.removedByPlayer(world, player, x, y, z, false);
-    }
-
+/*
     //when the block is harvested
     @Override
     public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
@@ -59,7 +50,7 @@ public class BlockWaterTank extends BlockCustomWood{
             }
         }
     }
-
+*/
     //creative item picking
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
