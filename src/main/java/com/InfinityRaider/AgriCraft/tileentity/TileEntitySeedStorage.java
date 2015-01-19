@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorage;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -13,12 +12,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class TileEntitySeedStorage extends TileEntityCustomWood implements IInventory{
     public ForgeDirection direction;
     public int usingPlayers;
-    private ArrayList<ItemStack> inventory;
+    private ArrayList<ItemStack> inventory = new ArrayList<ItemStack>();
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
@@ -52,7 +50,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements IInve
             }
         }
         else {
-            this.inventory = null;
+            this.inventory = new ArrayList<ItemStack>();
         }
         super.readFromNBT(tag);
     }
