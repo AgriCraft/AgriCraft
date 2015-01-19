@@ -11,6 +11,8 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class MutationHandler {
@@ -262,5 +264,28 @@ public abstract class MutationHandler {
             }
         }
         return list.toArray(new Mutation[list.size()]);
+    }
+
+    /**
+     * Removes all mutations where the given parameter is the result of a mutation
+     * @return Removed mutations
+     */
+    public static List<Mutation> removeMutationsByResult(ItemStack result) {
+        List<Mutation> removedMutations = new ArrayList<Mutation>();
+        for (Iterator<Mutation> iter = mutations.iterator(); iter.hasNext();) {
+            Mutation mutation = iter.next();
+            if (mutation.result.isItemEqual(result)) {
+                iter.remove();
+                removedMutations.add(mutation);
+            }
+        }
+        return removedMutations;
+    }
+
+    /**
+     * Adds all mutations back into the mutation list. Does not perform and validation.
+     */
+    public static void addAll(Collection<? extends Mutation> mutationsToAdd) {
+        mutations.addAll(mutationsToAdd);
     }
 }
