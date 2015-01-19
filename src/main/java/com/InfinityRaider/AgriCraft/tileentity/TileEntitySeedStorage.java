@@ -68,20 +68,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements IInve
         }
     }
 
-    public HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> getContents() {
-        HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> contents = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>>();
-        this.addContents(contents);
-        return contents;
-    }
-
-    public void addContents(HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> contents) {
-        if(this.inventory!=null) {
-            for (ItemStack stack : this.inventory) {
-                ContainerSeedStorage.addSeedToEntries(contents, stack);
-            }
-        }
-    }
-
     //sets the direction based on an int
     public void setDirection(int direction) {
         this.direction = ForgeDirection.getOrientation(direction);
@@ -90,6 +76,10 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements IInve
 
     //INVENTORY METHODS
     //-----------------
+    public ArrayList<ItemStack> getInventory() {
+        return this.inventory;
+    }
+
     @Override
     public int getSizeInventory() {
         return this.inventory==null?1:this.inventory.size()+1;

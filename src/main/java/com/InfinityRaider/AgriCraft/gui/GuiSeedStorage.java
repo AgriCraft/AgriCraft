@@ -36,6 +36,25 @@ public class GuiSeedStorage extends GuiContainer {
         this.ySize = 176;
     }
 
+    @Override
+    protected void actionPerformed(GuiButton button) {
+        if(button.id<=buttonIdStrength) {
+            this.sortByStat(button.id);
+        }
+        else {
+            this.setActiveEntry(button.id-1-buttonIdStrength);
+        }
+    }
+
+    protected void sortByStat(int id) {
+
+    }
+
+    protected void setActiveEntry(int i) {
+        this.activeEntry = seedStacks.get(i);
+        this.updateScreen();
+    }
+
     //draw foreground
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
@@ -46,9 +65,9 @@ public class GuiSeedStorage extends GuiContainer {
 
     private void drawButtons() {
         //buttons
-        int buttonX = 194;
+        int buttonX = 184;
         int buttonY = 7;
-        int buttonWidth = 50;
+        int buttonWidth = 60;
         int buttonHeight = 12;
         this.buttonList.add(new GuiButton(buttonIdGrowth, this.guiLeft + buttonX, this.guiTop + buttonY, buttonWidth, buttonHeight, "Growth"));
         this.buttonList.add(new GuiButton(buttonIdGain, this.guiLeft + buttonX, this.guiTop + buttonY+buttonHeight+1, buttonWidth, buttonHeight, "Gain"));
@@ -67,7 +86,10 @@ public class GuiSeedStorage extends GuiContainer {
 
     private void drawActiveEntry() {
         if(this.activeEntry!=null && this.activeEntry.getItem()!=null) {
+            ArrayList<ItemStack> activeEntries = ( ((ContainerSeedStorage) this.inventorySlots).entries ).get(this.activeEntry.getItem()).get(this.activeEntry.getItemDamage());
+            for(ItemStack stack:activeEntries) {
 
+            }
         }
     }
 

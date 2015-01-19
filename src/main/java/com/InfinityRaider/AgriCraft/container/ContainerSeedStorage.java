@@ -11,39 +11,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ContainerSeedStorage extends ContainerAgricraft {
-    public HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> entries;
+    public HashMap<ItemSeeds, HashMap<Integer, ArrayList<Slot>>> entries;
     public TileEntitySeedStorage te;
+    private int lastSlotId;
 
     public ContainerSeedStorage(InventoryPlayer inventory, TileEntitySeedStorage te) {
         super(inventory, 82, 94);
+        this.lastSlotId = 35;
         this.te = te;
-        this.initEntries();
-    }
-
-    private void initEntries() {
-        if(this.te!=null) {
-            entries = te.getContents();
-        }
-        else {
-            this.entries = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>>();
+        this.entries = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<Slot>>>();
+        for(ItemStack seedStack:te.getInventory()) {
+            this.addSeed(seedStack);
         }
     }
 
     public void addSeed(ItemStack stack) {
-        addSeedToEntries(this.entries, stack);
-    }
-
-    public static void addSeedToEntries(HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> entries, ItemStack stack) {
         if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
-            HashMap<Integer, ArrayList<ItemStack>> itemEntry = entries.get(stack.getItem());
+            HashMap<Integer, ArrayList<Slot>> itemEntry = entries.get(stack.getItem());
             //there is an entry for this item
             if(itemEntry !=null) {
-                ArrayList<ItemStack> seedEntries = itemEntry.get(stack.getItemDamage());
+                ArrayList<Slot> seedEntries = itemEntry.get(stack.getItemDamage());
                 //there is an entry for this item and meta
                 if(seedEntries!=null) {
                     boolean seedAdded = false;
-                    for(ItemStack seedStack:seedEntries) {
+                    for(Slot slot:seedEntries) {
                         //there is an entry with equal NBT
+                        ItemStack seedStack = slot.getStack();
                         if(ItemStack.areItemStackTagsEqual(seedStack, stack)) {
                             //if we don't go trough the method to set/get stacksize we can get stacks over 64 stuffed away
                             seedStack.stackSize = seedStack.stackSize + stack.stackSize;
@@ -52,25 +45,33 @@ public class ContainerSeedStorage extends ContainerAgricraft {
                     }
                     //there is no entry with equal NBT
                     if(!seedAdded) {
-                        seedEntries.add(stack.copy());
+                        seedEntries.add(addNewSlot(stack.copy()));
                     }
                 }
                 //there is not yet an entry for this  meta
                 else {
-                    ArrayList<ItemStack> newList = new ArrayList<ItemStack>();
-                    newList.add(stack.copy());
+                    ArrayList<Slot> newList = new ArrayList<Slot>();
+                    newList.add(addNewSlot(stack.copy()));
                     itemEntry.put(stack.getItemDamage(), newList);
                 }
             }
             //there is no entry for this item yet
             else {
-                ArrayList<ItemStack> newList = new ArrayList<ItemStack>();
-                newList.add(stack.copy());
-                HashMap<Integer, ArrayList<ItemStack>> newEntry = new HashMap<Integer, ArrayList<ItemStack>>();
+                ArrayList<Slot> newList = new ArrayList<Slot>();
+                newList.add(addNewSlot(stack.copy()));
+                HashMap<Integer, ArrayList<Slot>> newEntry = new HashMap<Integer, ArrayList<Slot>>();
                 newEntry.put(stack.getItemDamage(), newList);
                 entries.put((ItemSeeds) stack.getItem(), newEntry);
             }
         }
+    }
+
+    private Slot addNewSlot(ItemStack stack) {
+        Slot newSlot = new Slot(this.te, this.lastSlotId+1, 0, 0);
+        this.addSlotToContainer(newSlot);
+        this.lastSlotId++;
+        newSlot.putStack(stack.copy());
+        return newSlot;
     }
 
     @Override
