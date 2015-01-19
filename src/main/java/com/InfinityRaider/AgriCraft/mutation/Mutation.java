@@ -8,6 +8,9 @@ import net.minecraft.item.ItemStack;
 
 public class Mutation {
 
+    public static final int DEFAULT_ID = 0;
+    public static final int DEFAULT_REQUIREMENT_META = 0;
+
     public ItemStack result;
     public ItemStack parent1;
     public ItemStack parent2;
@@ -27,12 +30,12 @@ public class Mutation {
     }
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
-        this(result, parent1, parent2, 0, null, 0, 100);
+        this(result, parent1, parent2, DEFAULT_ID, null, DEFAULT_REQUIREMENT_META, 100);
         this.chance = 1.00/ SeedHelper.getSeedTier((ItemSeeds) result.getItem(), result.getItemDamage());
     }
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int chance) {
-        this(result, parent1, parent2, 0, null, 0, chance);
+        this(result, parent1, parent2, DEFAULT_ID, null, DEFAULT_REQUIREMENT_META, chance);
     }
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int id, Block requirement, int requirementMeta) {
