@@ -1,14 +1,15 @@
 package com.InfinityRaider.AgriCraft.gui;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorage;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
@@ -61,11 +62,11 @@ public class GuiSeedStorage extends GuiContainer {
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        this.drawButtons();
+        this.addButtons();
         this.drawActiveEntry();
     }
 
-    private void drawButtons() {
+    private void addButtons() {
         //buttons
         int buttonX = 184;
         int buttonY = 7;
@@ -79,10 +80,7 @@ public class GuiSeedStorage extends GuiContainer {
         int xOffset = 7;
         int yOffset = 8;
         for(int i=0;i<seedStacks.size();i++) {
-            this.buttonList.add(new SeedButton(buttonIdStrength+1+i, this.guiLeft + xOffset, this.guiTop + yOffset, seedStacks.get(i)));
-            xOffset = xOffset+16;
-            yOffset = yOffset+xOffset>64?16:0;
-            xOffset = xOffset%64;
+            this.buttonList.add(new SeedButton(buttonIdStrength+1+i, this.guiLeft + xOffset + (16*i)%64, this.guiTop + yOffset + 16*(i/4), seedStacks.get(i)));
         }
     }
 
@@ -131,25 +129,30 @@ public class GuiSeedStorage extends GuiContainer {
 
         //copied from vanilla code, just replaced the texture
         @Override
-        public void drawButton(Minecraft minecraft, int x, int y){
+        public void drawButton(Minecraft minecraft, int cursorX, int cursorY){
             if (this.visible){
-                FontRenderer fontrenderer = minecraft.fontRenderer;
                 minecraft.getTextureManager().bindTexture(this.texture);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                this.field_146123_n = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
-                int k = this.getHoverState(this.field_146123_n);
+                //checks if the button is highlighted or not
+                this.field_146123_n = cursorX >= this.xPosition && cursorY >= this.yPosition && cursorX < this.xPosition + this.width && cursorY < this.yPosition + this.height;
                 GL11.glEnable(GL11.GL_BLEND);
                 OpenGlHelper.glBlendFunc(770, 771, 1, 0);
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 46 + k * 20, this.width / 2, this.height);
-                this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
-                this.mouseDragged(minecraft, x, y);
-                int l = 14737632;
-                if (packedFGColour != 0) {l = packedFGColour;}
-                else if (!this.enabled) {l = 10526880;}
-                else if (this.field_146123_n) {l = 16777120;}
-                this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, l);
+                this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 0, this.width, this.height);
+                this.mouseDragged(minecraft, cursorX, cursorY);
             }
+        }
+
+        @Override
+        public void drawTexturedModalRect(int xPos, int yPos, int u, int v, int width, int height) {
+            float f = Constants.unit;
+            Tessellator tessellator = Tessellator.instance;
+            tessellator.startDrawingQuads();
+            tessellator.addVertexWithUV(xPos, yPos + height, this.zLevel, (double) u*f, (double) (v+height)*f);
+            tessellator.addVertexWithUV(xPos + width, yPos + height, this.zLevel, (double) (u+width)*f, (double) (v+height)*f);
+            tessellator.addVertexWithUV(xPos + width, yPos, this.zLevel, (double) (u+width)*f, (double) v*f);
+            tessellator.addVertexWithUV(xPos, yPos, this.zLevel, (double) u*f, (double) v*f);
+            tessellator.draw();
         }
     }
 }
