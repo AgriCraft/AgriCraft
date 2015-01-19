@@ -34,8 +34,10 @@ public class TileEntitySeedStorage extends TileEntityCustomWood {
 
     public HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> getContents() {
         HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> contents = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>>();
-        for(ItemStack stack:inventory) {
-            ContainerSeedStorage.addSeedToEntries(contents, stack);
+        if(this.inventory!=null) {
+            for (ItemStack stack : this.inventory) {
+                ContainerSeedStorage.addSeedToEntries(contents, stack);
+            }
         }
         return contents;
     }

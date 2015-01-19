@@ -74,7 +74,7 @@ public class GuiSeedStorage extends GuiContainer {
 
     private void loadSeedStacks() {
         seedStacks = new ArrayList<ItemStack>();
-        HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> stored = ((ContainerSeedStorage) this.inventorySlots).entries;
+        HashMap<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> stored = this.te.getContents();
         for(Map.Entry<ItemSeeds, HashMap<Integer, ArrayList<ItemStack>>> seedItemEntry:stored.entrySet()) {
             for(Map.Entry<Integer, ArrayList<ItemStack>> seedMetaEntry:seedItemEntry.getValue().entrySet()) {
                 seedStacks.add(new ItemStack(seedItemEntry.getKey(), seedMetaEntry.getKey()));
