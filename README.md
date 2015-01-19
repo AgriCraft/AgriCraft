@@ -11,7 +11,7 @@ FTB Thread: [FTB Thread](http://forum.feed-the-beast.com/threads/1-7-10-agricraf
 
 AgriCraft internals (such as MineTweaker3 integration) are documented here in the GitHub Wiki
 ([Link](https://github.com/InfinityRaider/AgriCraft/wiki)). Reason is that
-these kind of information is, most of the time, only needed by pack creators and not the average user.
+this kind of information is, most of the time, only needed by pack creators and not the average user.
 
 
 ## MineTweaker3 support
