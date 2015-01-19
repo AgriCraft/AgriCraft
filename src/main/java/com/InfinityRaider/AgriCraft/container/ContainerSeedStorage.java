@@ -89,7 +89,7 @@ public class ContainerSeedStorage extends ContainerAgricraft {
             itemstack = itemstack1.copy();
             //try to move item from the container into the player's inventory
             if (clickedSlot>35) {
-                if (!this.mergeItemStack(itemstack1, 0, inventorySlots.size(), false)) {
+                if (!this.mergeItemStack(itemstack1, 0, 36, false)) {
                     return null;
                 }
             }
@@ -97,7 +97,7 @@ public class ContainerSeedStorage extends ContainerAgricraft {
                 //try to move item from the player's inventory into the container
                 if(itemstack1.getItem()!=null) {
                     if(itemstack1.getItem() instanceof ItemSeeds) {
-                        if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                        if (!this.mergeItemStack(itemstack1, 36, inventorySlots.size(), false)) {
                             return null;
                         }
                     }
@@ -115,5 +115,49 @@ public class ContainerSeedStorage extends ContainerAgricraft {
             slot.onPickupFromSlot(player, itemstack1);
         }
         return itemstack;
+    }
+
+    @Override
+    protected boolean mergeItemStack(ItemStack stack, int startSlot, int endSlot, boolean iterateBackwards) {
+        boolean flag = false;
+        int k = iterateBackwards?endSlot - 1:startSlot;
+        Slot currentSlot;
+        ItemStack currentStack;
+        while (stack.stackSize > 0 && (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot)) {
+            currentSlot = (Slot)this.inventorySlots.get(k);
+            currentStack = currentSlot.getStack();
+            if (currentStack != null && currentStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == currentStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, currentStack)) {
+                int l = currentStack.stackSize + stack.stackSize;
+                if (l <= stack.getMaxStackSize()) {
+                    stack.stackSize = 0;
+                    currentStack.stackSize = l;
+                    currentSlot.onSlotChanged();
+                    flag = true;
+                }
+                else if (currentStack.stackSize < stack.getMaxStackSize()) {
+                    stack.stackSize -= stack.getMaxStackSize() - currentStack.stackSize;
+                    currentStack.stackSize = stack.getMaxStackSize();
+                    currentSlot.onSlotChanged();
+                    flag = true;
+                }
+            }
+            k = iterateBackwards?k-1:k+1;
+        }
+        if (stack.stackSize > 0) {
+            k = iterateBackwards?endSlot-1:startSlot;
+            while (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot) {
+                currentSlot = (Slot)this.inventorySlots.get(k);
+                currentStack = currentSlot.getStack();
+                if (currentStack == null) {
+                    currentSlot.putStack(stack.copy());
+                    currentSlot.onSlotChanged();
+                    stack.stackSize = 0;
+                    flag = true;
+                    break;
+                }
+                k = iterateBackwards?k-1:k+1;
+            }
+        }
+        return flag;
     }
 }
