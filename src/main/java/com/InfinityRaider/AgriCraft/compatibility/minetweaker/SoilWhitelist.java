@@ -28,7 +28,7 @@ public class SoilWhitelist {
         if (areValidSoils(soilsToAdd)) {
             MineTweakerAPI.apply(new AddAction(soilsToAdd));
         } else {
-            MineTweakerAPI.logError("Error adding seeds to the blacklist. All provided items must be of type ItemSeeds.");
+            MineTweakerAPI.logError("Error adding soils to the whitelist. All provided items must be of type ItemBlock.");
         }
     }
 
@@ -45,7 +45,7 @@ public class SoilWhitelist {
         if (areValidSoils(soilsToRemove)) {
             MineTweakerAPI.apply(new RemoveAction(soilsToRemove));
         } else {
-            MineTweakerAPI.logError("Error removing seeds from the blacklist. All provided items must be of type ItemSeeds.");
+            MineTweakerAPI.logError("Error removing soils from the whitelist. All provided items must be of type ItemBlock.");
         }
     }
 
