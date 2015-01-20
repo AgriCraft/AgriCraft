@@ -181,8 +181,6 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         return (soil instanceof net.minecraft.block.BlockFarmland);
     }
 
-
-
     //check if the plant can grow
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
