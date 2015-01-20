@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class SoilWhitelistHelper {
+public class SoilWhitelist {
 
     /** List of ItemStacks which all contain ItemBlocks */
     private static final List<ItemStack> soilWhitelist = new ArrayList<ItemStack>();

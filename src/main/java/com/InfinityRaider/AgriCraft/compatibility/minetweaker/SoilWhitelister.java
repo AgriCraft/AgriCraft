@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
-import com.InfinityRaider.AgriCraft.farming.SoilWhitelistHelper;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
@@ -15,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @ZenClass("mods.agricraft.SoilWhitelist")
-public class SoilWhitelist {
+public class SoilWhitelister {
 
     @ZenMethod
     public static void add(IItemStack soil) {
@@ -72,7 +71,7 @@ public class SoilWhitelist {
 
         @Override
         public void apply() {
-            SoilWhitelistHelper.addAllToSoilWhitelist(soils);
+            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.addAllToSoilWhitelist(soils);
         }
 
         @Override
@@ -82,7 +81,7 @@ public class SoilWhitelist {
 
         @Override
         public void undo() {
-            SoilWhitelistHelper.removeAllFromSoilWhitelist(soils);
+            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.removeAllFromSoilWhitelist(soils);
         }
 
         @Override
@@ -112,7 +111,7 @@ public class SoilWhitelist {
 
         @Override
         public void apply() {
-            SoilWhitelistHelper.removeAllFromSoilWhitelist(soils);
+            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.removeAllFromSoilWhitelist(soils);
         }
 
         @Override
@@ -122,7 +121,7 @@ public class SoilWhitelist {
 
         @Override
         public void undo() {
-            SoilWhitelistHelper.addAllToSoilWhitelist(soils);
+            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.addAllToSoilWhitelist(soils);
         }
 
         @Override

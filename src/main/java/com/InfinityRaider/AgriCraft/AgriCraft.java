@@ -18,7 +18,7 @@ package com.InfinityRaider.AgriCraft;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.*;
-import com.InfinityRaider.AgriCraft.farming.SoilWhitelistHelper;
+import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
@@ -81,7 +81,7 @@ public class AgriCraft {
             MineTweakerAPI.registerClass(CustomWood.class);
             MineTweakerAPI.registerClass(SeedMutation.class);
             MineTweakerAPI.registerClass(SeedBlacklist.class);
-            MineTweakerAPI.registerClass(SoilWhitelist.class);
+            MineTweakerAPI.registerClass(SoilWhitelister.class);
             MineTweakerAPI.registerClass(SpreadChance.class);
         }
 
@@ -96,7 +96,7 @@ public class AgriCraft {
         CustomCrops.initCustomCrops();
         SeedHelper.init();
         MutationHandler.init();
-        SoilWhitelistHelper.initSoils();
+        SoilWhitelist.initSoils();
         CustomCrops.initGrassSeeds();
 
         if(!ConfigurationHandler.disableWorldGen) {

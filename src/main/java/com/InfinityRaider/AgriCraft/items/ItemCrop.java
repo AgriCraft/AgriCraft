@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
-import com.InfinityRaider.AgriCraft.farming.SoilWhitelistHelper;
+import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +22,7 @@ public class ItemCrop extends ModItem {
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
-            if (SoilWhitelistHelper.isSoilFertile(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z)) && world.getBlock(x, y + 1, z).getMaterial()== Material.air && side == 1) {
+            if (SoilWhitelist.isSoilFertile(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z)) && world.getBlock(x, y + 1, z).getMaterial()== Material.air && side == 1) {
                 world.setBlock(x, y + 1, z, Blocks.blockCrop);
                 stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
                 return false;

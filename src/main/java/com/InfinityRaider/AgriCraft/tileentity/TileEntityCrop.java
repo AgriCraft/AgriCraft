@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.farming.SoilWhitelistHelper;
+import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
@@ -255,7 +255,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         BlockBush plant = SeedHelper.getPlant(seed);
         Block soil = this.worldObj.getBlock(this.xCoord,this.yCoord-1,this.zCoord);
         int soilMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord - 1, this.zCoord);
-        if(SoilWhitelistHelper.isSoilFertile(soil, soilMeta) && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
+        if(SoilWhitelist.isSoilFertile(soil, soilMeta) && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
             if(plant instanceof BlockModPlant) {
                 BlockModPlant blockModPlant = (BlockModPlant) plant;
                 return blockModPlant.base == null || OreDictHelper.isSameOre(blockModPlant.base, blockModPlant.baseMeta, this.worldObj.getBlock(this.xCoord, this.yCoord - 2, this.zCoord), this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord));
