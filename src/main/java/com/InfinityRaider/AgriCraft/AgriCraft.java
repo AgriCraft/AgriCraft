@@ -81,7 +81,7 @@ public class AgriCraft {
             MineTweakerAPI.registerClass(CustomWood.class);
             MineTweakerAPI.registerClass(SeedMutation.class);
             MineTweakerAPI.registerClass(SeedBlacklist.class);
-            MineTweakerAPI.registerClass(SoilWhitelist.class);
+            // MineTweakerAPI.registerClass(SoilWhitelist.class);
             MineTweakerAPI.registerClass(SpreadChance.class);
         }
 
