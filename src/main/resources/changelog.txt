@@ -1,6 +1,6 @@
 Changelog
 ---------
-1.2.0
+1.2.1
 -Changed AgriCraft creative tab logo
 -Fixed certain crops rendering crooked
 -Fixed crop lighting
