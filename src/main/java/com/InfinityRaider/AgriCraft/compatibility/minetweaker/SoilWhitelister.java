@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
+import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
+import com.google.common.base.Joiner;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
@@ -71,7 +73,7 @@ public class SoilWhitelister {
 
         @Override
         public void apply() {
-            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.addAllToSoilWhitelist(soils);
+            SoilWhitelist.addAllToSoilWhitelist(soils);
         }
 
         @Override
@@ -81,17 +83,17 @@ public class SoilWhitelister {
 
         @Override
         public void undo() {
-            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.removeAllFromSoilWhitelist(soils);
+            SoilWhitelist.removeAllFromSoilWhitelist(soils);
         }
 
         @Override
         public String describe() {
-            return "Adding soils to whitelist.";
+            return "Adding soils [" + Joiner.on(", ").join(soils) + "] to whitelist.";
         }
 
         @Override
         public String describeUndo() {
-            return "Removing previously added soils from the whitelist.";
+            return "Removing previously added soils [" + Joiner.on(", ").join(soils) + "] from the whitelist.";
         }
 
         @Override
@@ -111,7 +113,7 @@ public class SoilWhitelister {
 
         @Override
         public void apply() {
-            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.removeAllFromSoilWhitelist(soils);
+            SoilWhitelist.removeAllFromSoilWhitelist(soils);
         }
 
         @Override
@@ -121,17 +123,17 @@ public class SoilWhitelister {
 
         @Override
         public void undo() {
-            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.addAllToSoilWhitelist(soils);
+            SoilWhitelist.addAllToSoilWhitelist(soils);
         }
 
         @Override
         public String describe() {
-            return "Removing soils from the whitelist.";
+            return "Removing soils [" + Joiner.on(", ").join(soils) + "] from the whitelist.";
         }
 
         @Override
         public String describeUndo() {
-            return "Adding previously removed soils to the whitelist.";
+            return "Adding previously removed soils [" + Joiner.on(", ").join(soils) + "] to the whitelist.";
         }
 
         @Override

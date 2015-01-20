@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import com.google.common.base.Joiner;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
@@ -87,12 +88,12 @@ public class SeedBlacklist {
 
         @Override
         public String describe() {
-            return "Adding seeds to the blacklist.";
+            return "Adding seeds [" + Joiner.on(", ").join(seeds) + "] to the blacklist.";
         }
 
         @Override
         public String describeUndo() {
-            return "Removing previously added seeds from the blacklist.";
+            return "Removing previously added seeds [" + Joiner.on(", ").join(seeds) + "] from the blacklist.";
         }
 
         @Override
@@ -127,12 +128,12 @@ public class SeedBlacklist {
 
         @Override
         public String describe() {
-            return "Removing seeds from the blacklist.";
+            return "Removing seeds [" + Joiner.on(", ").join(seeds) + "] from the blacklist.";
         }
 
         @Override
         public String describeUndo() {
-            return "Adding previously removed seeds to the blacklist.";
+            return "Adding previously removed seeds [" + Joiner.on(", ").join(seeds) + "] to the blacklist.";
         }
 
         @Override
