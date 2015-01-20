@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.mutation;
+package com.InfinityRaider.AgriCraft.farming.mutation;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;

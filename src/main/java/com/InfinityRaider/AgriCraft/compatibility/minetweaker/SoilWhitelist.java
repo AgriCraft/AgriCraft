@@ -1,12 +1,11 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.minecraft.MineTweakerMC;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -14,20 +13,20 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import java.util.Arrays;
 import java.util.List;
 
-@ZenClass("mods.agricraft.SeedBlacklist")
-public class SeedBlacklist {
+@ZenClass("mods.agricraft.SoilWhitelist")
+public class SoilWhitelist {
 
     @ZenMethod
-    public static void add(IItemStack seed) {
-        add(new IItemStack[] { seed });
+    public static void add(IItemStack soil) {
+        add(new IItemStack[] { soil });
     }
 
 
     @ZenMethod
-    public static void add(IItemStack[] seeds) {
-        ItemStack[] seedsToAdd = MineTweakerMC.getItemStacks(seeds);
-        if (areValidSeeds(seedsToAdd)) {
-            MineTweakerAPI.apply(new AddAction(seedsToAdd));
+    public static void add(IItemStack[] soils) {
+        ItemStack[] soilsToAdd = MineTweakerMC.getItemStacks(soils);
+        if (areValidSoils(soilsToAdd)) {
+            MineTweakerAPI.apply(new AddAction(soilsToAdd));
         } else {
             MineTweakerAPI.logError("Error adding seeds to the blacklist. All provided items must be of type ItemSeeds.");
         }
@@ -35,26 +34,26 @@ public class SeedBlacklist {
 
 
     @ZenMethod
-    public static void remove(IItemStack seed) {
-        remove(new IItemStack[] { seed });
+    public static void remove(IItemStack soil) {
+        remove(new IItemStack[] { soil });
     }
 
 
     @ZenMethod
-    public static void remove(IItemStack[] seeds) {
-        ItemStack[] seedsToRemove = MineTweakerMC.getItemStacks(seeds);
-        if (areValidSeeds(seedsToRemove)) {
-            MineTweakerAPI.apply(new RemoveAction(seedsToRemove));
+    public static void remove(IItemStack[] soils) {
+        ItemStack[] soilsToRemove = MineTweakerMC.getItemStacks(soils);
+        if (areValidSoils(soilsToRemove)) {
+            MineTweakerAPI.apply(new RemoveAction(soilsToRemove));
         } else {
             MineTweakerAPI.logError("Error removing seeds from the blacklist. All provided items must be of type ItemSeeds.");
         }
     }
 
 
-    /** @return False, if one of the provided ItemStacks is not of type ItemSeeds, true otherwise */
-    private static boolean areValidSeeds(ItemStack[] seeds) {
-        for (ItemStack stack : seeds) {
-            if (!(stack.getItem() instanceof ItemSeeds)) {
+    /** @return False, if one of the provided ItemStacks is not of type ItemBlock, true otherwise */
+    private static boolean areValidSoils(ItemStack[] soils) {
+        for (ItemStack stack : soils) {
+            if (!(stack.getItem() instanceof ItemBlock)) {
                 return false;
             }
         }
@@ -64,15 +63,15 @@ public class SeedBlacklist {
 
     private static class AddAction implements IUndoableAction {
 
-        private final List<ItemStack> seeds;
+        private final List<ItemStack> soils;
 
-        public AddAction(ItemStack[] seeds) {
-            this.seeds = Arrays.asList(seeds);
+        public AddAction(ItemStack[] soils) {
+            this.soils = Arrays.asList(soils);
         }
 
         @Override
         public void apply() {
-            SeedHelper.addAllToSeedBlacklist(seeds);
+            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.addAllToSoilWhitelist(soils);
         }
 
         @Override
@@ -82,17 +81,17 @@ public class SeedBlacklist {
 
         @Override
         public void undo() {
-            SeedHelper.removeAllFromSeedBlacklist(seeds);
+            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.removeAllFromSoilWhitelist(soils);
         }
 
         @Override
         public String describe() {
-            return "Adding seeds to the blacklist.";
+            return "Adding soils to whitelist.";
         }
 
         @Override
         public String describeUndo() {
-            return "Removing previously added seeds from the blacklist.";
+            return "Removing previously added soils from the whitelist.";
         }
 
         @Override
@@ -104,15 +103,15 @@ public class SeedBlacklist {
 
     private static class RemoveAction implements IUndoableAction {
 
-        private final List<ItemStack> seeds;
+        private final List<ItemStack> soils;
 
-        public RemoveAction(ItemStack[] seeds) {
-            this.seeds = Arrays.asList(seeds);
+        public RemoveAction(ItemStack[] soils) {
+            this.soils = Arrays.asList(soils);
         }
 
         @Override
         public void apply() {
-            SeedHelper.removeAllFromSeedBlacklist(seeds);
+            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.removeAllFromSoilWhitelist(soils);
         }
 
         @Override
@@ -122,17 +121,17 @@ public class SeedBlacklist {
 
         @Override
         public void undo() {
-            SeedHelper.addAllToSeedBlacklist(seeds);
+            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.addAllToSoilWhitelist(soils);
         }
 
         @Override
         public String describe() {
-            return "Removing seeds from the blacklist.";
+            return "Removing soils from the whitelist.";
         }
 
         @Override
         public String describeUndo() {
-            return "Adding previously removed seeds to the blacklist.";
+            return "Adding previously removed soils to the whitelist.";
         }
 
         @Override

@@ -2,8 +2,8 @@ package com.InfinityRaider.AgriCraft.compatibility.NEI;
 
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.InfinityRaider.AgriCraft.mutation.MutationHandler;
-import com.InfinityRaider.AgriCraft.mutation.Mutation;
+import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
+import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import net.minecraft.item.ItemSeeds;
