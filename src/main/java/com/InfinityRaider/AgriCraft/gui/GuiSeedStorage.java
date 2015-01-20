@@ -25,8 +25,11 @@ public class GuiSeedStorage extends GuiContainer {
     public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedStorage.png");
     private ArrayList<ItemStack> seedStacks;
     private ItemStack activeEntry;
+
     private int scrollPositionEntries;
     private int scrollPositionActive;
+    private static int maxNrVerticalSeeds = 10;
+    private static int maxNrHorizontalSeeds = 6;
 
     private static int buttonIdGrowth = 0;
     private static int buttonIdGain = 1;

@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.container;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedStorage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -67,7 +68,7 @@ public class ContainerSeedStorage extends ContainerAgricraft {
     }
 
     private Slot addNewSlot(ItemStack stack) {
-        Slot newSlot = new Slot(this.te, this.lastSlotId+1, 0, 0);
+        Slot newSlot = new SeedSlot(this.te, this.lastSlotId+1, 0, 0);
         this.addSlotToContainer(newSlot);
         this.lastSlotId++;
         newSlot.putStack(stack.copy());
@@ -159,5 +160,16 @@ public class ContainerSeedStorage extends ContainerAgricraft {
             }
         }
         return flag;
+    }
+
+    public static class SeedSlot extends Slot {
+        public boolean hidden;
+
+        public SeedSlot(IInventory inventory, int index, int xPos, int yPos) {
+            super(inventory, index, xPos, yPos);
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack stack) {return stack.getItem() instanceof ItemSeeds;}
     }
 }
