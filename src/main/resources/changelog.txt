@@ -15,7 +15,7 @@ Changelog
 -Made Magic Fertiliser from Magical Crops work on tier 4 & 5 crops (can be disabled in the config)
 -Botania Horn of the Wild will no longer wipe crops away, instead it will clear them
 -Added a config option to disable weeds from taking over plants (they will still spread to nearby empty crops)
--Added Minetweaker support for custom wood recipes (tanks, channels, valves)
+-Added Minetweaker support for various aspects of AgriCraft. Check the GitHub wiki for documentation.
 
 1.1.1
 -Fixed Null Pointer Exception in certain cases when breaking tanks

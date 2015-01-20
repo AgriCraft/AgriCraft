@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
-import com.InfinityRaider.AgriCraft.mutation.Mutation;
-import com.InfinityRaider.AgriCraft.mutation.MutationHandler;
+import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
+import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;

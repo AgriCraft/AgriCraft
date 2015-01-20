@@ -16,14 +16,12 @@ package com.InfinityRaider.AgriCraft;
         ~ InfinityRaider
 */
 
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.compatibility.minetweaker.CustomWood;
-import com.InfinityRaider.AgriCraft.compatibility.minetweaker.SeedBlacklist;
-import com.InfinityRaider.AgriCraft.compatibility.minetweaker.SeedMutation;
+import com.InfinityRaider.AgriCraft.compatibility.minetweaker.*;
+import com.InfinityRaider.AgriCraft.farming.SoilWhitelistHelper;
+import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
-import com.InfinityRaider.AgriCraft.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -83,6 +81,8 @@ public class AgriCraft {
             MineTweakerAPI.registerClass(CustomWood.class);
             MineTweakerAPI.registerClass(SeedMutation.class);
             MineTweakerAPI.registerClass(SeedBlacklist.class);
+            // MineTweakerAPI.registerClass(SoilWhitelist.class);
+            MineTweakerAPI.registerClass(SpreadChance.class);
         }
 
         LogHelper.info("Initialization Complete");
@@ -96,7 +96,7 @@ public class AgriCraft {
         CustomCrops.initCustomCrops();
         SeedHelper.init();
         MutationHandler.init();
-        BlockCrop.initSoils();
+        SoilWhitelistHelper.initSoils();
         CustomCrops.initGrassSeeds();
 
         if(!ConfigurationHandler.disableWorldGen) {

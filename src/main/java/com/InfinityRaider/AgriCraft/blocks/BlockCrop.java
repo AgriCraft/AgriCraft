@@ -8,15 +8,11 @@ import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-
 import com.mark719.magicalcrops.items.ItemMagicalCropFertilizer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.particle.EffectRenderer;
@@ -24,7 +20,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -38,8 +33,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGrowable, IGrassHornExcempt {
-    private static Block[] soils;
-    private static int[] soilMeta;
 
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
@@ -311,19 +304,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         return world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityCrop && ((TileEntityCrop) world.getTileEntity(x, y, z)).isFertile();
     }
 
-    public static boolean isSoilFertile(Block block, int meta) {
-        if (block instanceof BlockFarmland) {
-            return true;
-        } else {
-            for (int i = 0; i < soils.length; i++) {
-                if (block == soils[i] && meta == soilMeta[i]) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     //Botania horn of the wild support
     @Override
     public boolean canUproot(World world, int x, int y, int z) {
@@ -436,29 +416,4 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         return (tileEntity!=null)&&(tileEntity.receiveClientEvent(id,data));
     }
 
-    public static void initSoils() {
-        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        for(String line:data) {
-            LogHelper.debug("parsing " + line);
-            ItemStack stack = IOHelper.getStack(line);
-            Block block = (stack!=null && stack.getItem() instanceof ItemBlock)?((ItemBlock) stack.getItem()).field_150939_a:null;
-            boolean success = block!=null;
-            String errorMsg = "Invalid block";
-            if(success) {
-                list.add(stack);
-            }
-            else {
-                LogHelper.info("Error when adding block to soil whitelist: "+errorMsg+" (line: "+line+")");
-            }
-        }
-        soils = new Block[list.size()];
-        soilMeta = new int[list.size()];
-        LogHelper.info("Registered soil whitelist:");
-        for(int i=0;i<soils.length;i++) {
-            soils[i] = ((ItemBlock) list.get(i).getItem()).field_150939_a;
-            soilMeta[i] = list.get(i).getItemDamage();
-            LogHelper.info(" - "+Block.blockRegistry.getNameForObject(soils[i])+":"+soilMeta[i]);
-        }
-    }
 }

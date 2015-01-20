@@ -344,4 +344,16 @@ public abstract class SeedHelper {
     public static void removeAllFromSeedBlacklist(Collection<? extends ItemStack> seeds) {
         seedBlackList.removeAll(seeds);
     }
+
+    /** @return The previous spread chance of the given seed */
+    public static int overrideSpreadChance(ItemSeeds seed, int meta, int chance) {
+        int oldChance = (int) (getSpreadChance(seed, meta) * 100);
+        Integer[] chances = spreadChances.get(seed);
+        if (chances == null) {
+            chances = new Integer[16];
+            spreadChances.put(seed, chances);
+        }
+        chances[meta] = chance;
+        return oldChance;
+    }
 }

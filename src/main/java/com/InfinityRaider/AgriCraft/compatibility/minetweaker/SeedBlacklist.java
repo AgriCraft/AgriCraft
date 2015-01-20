@@ -42,9 +42,9 @@ public class SeedBlacklist {
 
     @ZenMethod
     public static void remove(IItemStack[] seeds) {
-        ItemStack[] seedsToAdd = MineTweakerMC.getItemStacks(seeds);
-        if (areValidSeeds(seedsToAdd)) {
-            MineTweakerAPI.apply(new RemoveAction(seedsToAdd));
+        ItemStack[] seedsToRemove = MineTweakerMC.getItemStacks(seeds);
+        if (areValidSeeds(seedsToRemove)) {
+            MineTweakerAPI.apply(new RemoveAction(seedsToRemove));
         } else {
             MineTweakerAPI.logError("Error removing seeds from the blacklist. All provided items must be of type ItemSeeds.");
         }
