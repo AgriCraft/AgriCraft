@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
+import com.InfinityRaider.AgriCraft.farming.SoilWhitelistHelper;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
@@ -71,7 +72,7 @@ public class SoilWhitelist {
 
         @Override
         public void apply() {
-            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.addAllToSoilWhitelist(soils);
+            SoilWhitelistHelper.addAllToSoilWhitelist(soils);
         }
 
         @Override
@@ -81,7 +82,7 @@ public class SoilWhitelist {
 
         @Override
         public void undo() {
-            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.removeAllFromSoilWhitelist(soils);
+            SoilWhitelistHelper.removeAllFromSoilWhitelist(soils);
         }
 
         @Override
@@ -111,7 +112,7 @@ public class SoilWhitelist {
 
         @Override
         public void apply() {
-            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.removeAllFromSoilWhitelist(soils);
+            SoilWhitelistHelper.removeAllFromSoilWhitelist(soils);
         }
 
         @Override
@@ -121,7 +122,7 @@ public class SoilWhitelist {
 
         @Override
         public void undo() {
-            com.InfinityRaider.AgriCraft.farming.SoilWhitelist.addAllToSoilWhitelist(soils);
+            SoilWhitelistHelper.addAllToSoilWhitelist(soils);
         }
 
         @Override
