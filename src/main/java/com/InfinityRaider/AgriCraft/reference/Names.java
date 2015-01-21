@@ -231,6 +231,7 @@ public final class Names {
         public static final String mcMultipart = "McMultipart";
         public static final String minetweaker = "MineTweaker3";
         public static final String extraUtilities = "ExtraUtilities";
+        public static final String botania = "Botania";
     }
 
     //item registry keywords

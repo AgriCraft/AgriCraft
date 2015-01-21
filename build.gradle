@@ -65,7 +65,6 @@ dependencies {
     compile "mcp.mobius.waila:Waila:1.5.5_1.7.10:dev"
 
     //some more mods
-    compile fileTree(dir: 'libs', includes: ['Botania*.jar'])
     compile fileTree(dir: 'libs', includes: ['*Mantle*.jar'])
     compile fileTree(dir: 'libs', includes: ['*natura*.jar'])
     compile fileTree(dir: 'libs', includes: ['*Harvestcraft*.jar'])

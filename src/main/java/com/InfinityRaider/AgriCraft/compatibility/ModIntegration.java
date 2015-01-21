@@ -50,6 +50,7 @@ public class ModIntegration {
         public static boolean mcMultipart;
         public static boolean minetweaker;
         public static boolean extraUtilities;
+        public static boolean botania;
 
         public static void init() {
             nei = Loader.isModLoaded(Names.Mods.nei);
@@ -70,6 +71,7 @@ public class ModIntegration {
             mcMultipart = Loader.isModLoaded(Names.Mods.mcMultipart);
             minetweaker = Loader.isModLoaded(Names.Mods.minetweaker);
             extraUtilities = Loader.isModLoaded(Names.Mods.extraUtilities);
+            botania = Loader.isModLoaded(Names.Mods.botania);
 
             LogHelper.info("Checking for loaded mods:");
             LogHelper.info(" - NEI loaded: "+nei);
@@ -90,6 +92,7 @@ public class ModIntegration {
             LogHelper.info(" - McMultipart loaded: "+mcMultipart);
             LogHelper.info(" - MineTweaker loaded: "+minetweaker);
             LogHelper.info(" - ExtraUtilities loaded: "+extraUtilities);
+            LogHelper.info(" - Botania loaded: "+botania);
             LogHelper.info("Done");
         }
     }
