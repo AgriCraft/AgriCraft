@@ -224,7 +224,7 @@ public abstract class MutationHandler {
 
     //gets all the mutations
     public static Mutation[] getMutations() {
-        return mutations.toArray(new Mutation[0]);
+        return mutations.toArray(new Mutation[mutations.size()]);
     }
 
     //gets all the parents
@@ -245,7 +245,7 @@ public abstract class MutationHandler {
                 if (mutation.parent2.getItem() == stack.getItem() && mutation.parent2.getItemDamage() == stack.getItemDamage()) {
                     list.add(new Mutation(mutation));
                 }
-                if (mutation.parent1.getItem() == stack.getItem() && mutation.parent1.getItemDamage() == stack.getItemDamage()) {
+                if (!(mutation.parent2.getItem() == mutation.parent1.getItem() && mutation.parent2.getItemDamage() == mutation.parent1.getItemDamage()) && (mutation.parent1.getItem() == stack.getItem() && mutation.parent1.getItemDamage() == stack.getItemDamage())) {
                     list.add(new Mutation(mutation));
                 }
             }
