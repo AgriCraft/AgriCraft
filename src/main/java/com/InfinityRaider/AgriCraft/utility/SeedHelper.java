@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChococraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
+import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
@@ -12,8 +13,10 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import mods.natura.common.NContent;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -296,6 +299,19 @@ public abstract class SeedHelper {
             }
         }
         return true;
+    }
+
+    public static boolean isCorrectSoil(Block soil, int soilMeta, ItemSeeds seed, int seedMeta) {
+        if(seed instanceof ItemModSeed) {
+            Block requiredSoil = ((ItemModSeed) seed).getPlant().soil;
+            if(requiredSoil!=null) {
+                return requiredSoil==soil;
+            }
+        }
+        if(seed==Items.nether_wart) {
+            return soil == Blocks.soul_sand;
+        }
+        return SoilWhitelist.isSoilFertile(soil, soilMeta);
     }
 
     //get the base growth

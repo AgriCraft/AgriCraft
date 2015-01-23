@@ -33,7 +33,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     private int renderType;
 
     public BlockModPlant(Item fruit) {
-        this(Blocks.farmland, null, 0, fruit, 0, 1, 6);
+        this(null, null, 0, fruit, 0, 1, 6);
     }
 
     public BlockModPlant(Block soil, Item fruit) {
@@ -41,15 +41,19 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     }
 
     public BlockModPlant(Item fruit, int fruitMeta) {
-        this(Blocks.farmland, null, 0, fruit, fruitMeta, 1, 6);
+        this(null, null, 0, fruit, fruitMeta, 1, 6);
     }
 
     public BlockModPlant(Item fruit, int fruitMeta, int tier) {
-        this(Blocks.farmland, null, 0, fruit, fruitMeta, tier, 6);
+        this(null, null, 0, fruit, fruitMeta, tier, 6);
     }
 
     public BlockModPlant(Block soil, Block base, Item fruit, int tier, int renderType) {
         this(soil, base, 0, fruit, 0, tier, renderType);
+    }
+
+    public BlockModPlant(Block soil, Item fruit, int fruitMeta) {
+        this(soil, null, 0, fruit, fruitMeta, 1, 6);
     }
 
     public BlockModPlant(Block base, int baseMeta, Item fruit, int fruitMeta, int tier, int renderType) {

@@ -4,6 +4,10 @@ Changelog
 1.2.2
 -Fixes (hard) runtime dependency on Botania
 -TConstruct scythes can be used for aoe harvesting (right click on crops to aoe harvest)
+-Crops can now be applied on sand and soul sand by default
+-Seeds now require the correct soil when being planted on a crop
+-Changed the way the soil whitelist works: whitelisted soils only apply to crops that need farmland
+-Added cactus crop
 
 1.2.1
 -Changed AgriCraft creative tab logo

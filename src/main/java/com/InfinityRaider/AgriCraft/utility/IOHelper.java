@@ -247,7 +247,8 @@ public abstract class IOHelper {
             "#Define blocks to whitelist as fertile soil here: <mod>:<blockname>:<blockmeta>\n" +
             "#You can get these values from NEI\n" +
             "#Whitelisting a block as a fertile soil means you can plant crops on them\n" +
-            "#For example: minecraft:sand:0";
+            "#Note that this only works for crops that can be planted on farmland, crops that require a specific soil (e.g. nether wart or cactus) will still need that particular soil\n" +
+            "#For example: Forestry:soil:0 (this will add forestry humus to the whitelist)";
 
     private static final String spreadChancesOverridesInstructions =
             "#Define overrides for spreading chances here: <mod>:<seedname>:<seedmeta>,<chance>\n" +
@@ -342,6 +343,7 @@ public abstract class IOHelper {
 
     private static final String minecraftMutations =
             "AgriCraft:seedSugarcane=minecraft:wheat_seeds+AgriCraft:seedCarrot\n" +
+            "AgriCraft:seedCactus=AgriCraft:seedSugarCane+AgriCraft:seedPoppy\n" +
             "minecraft:pumpkin_seeds=AgriCraft:seedPotato+AgriCraft:seedCarrot\n" +
             "minecraft:melon_seeds=AgriCraft:seedCarrot+minecraft:pumpkin_seeds\n" +
             "AgriCraft:seedPoppy=AgriCraft:seedSugarcane+minecraft:pumpkin_seeds\n" +

@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.items.ItemCrop;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -142,13 +143,13 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         if(!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             //is the cropEmpty a crosscrop or does it already have a plant
-            if (crop.crossCrop || crop.hasPlant()) {
+            if (crop.crossCrop || crop.hasPlant() || !(player.getCurrentEquippedItem().getItem() instanceof ItemSeeds)) {
                 return;
             }
             //the seed can be planted here
             else {
                 ItemStack stack = player.getCurrentEquippedItem();
-                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage())) {
+                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage()) || !SeedHelper.isCorrectSoil(world.getBlock(x, y-1, z), world.getBlockMetadata(x, y-1, z), (ItemSeeds) stack.getItem(), stack.getItemDamage())) {
                     return;
                 }
                 //get NBT data from the seeds
@@ -309,7 +310,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     //see if the block can stay
     @Override
     public boolean canBlockStay(World world, int x, int y, int z) {
-        return (SoilWhitelist.isSoilFertile(world.getBlock(x, y - 1, z), world.getBlockMetadata(x, y - 1, z)));
+        Block soil = world.getBlock(x, y - 1, z);
+        int soilMeta = world.getBlockMetadata(x, y - 1, z);
+        return ItemCrop.isSoilValid(soil, soilMeta);
     }
 
     //see if the block can grow

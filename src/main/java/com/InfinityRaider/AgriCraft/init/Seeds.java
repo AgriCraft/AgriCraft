@@ -28,6 +28,7 @@ public class Seeds {
     public static ItemModSeed seedTulipWhite;
     public static ItemModSeed seedTulipPink;
     public static ItemModSeed seedDaisy;
+    public static ItemModSeed seedCactus;
 
     //resource crop seeds
     public static ItemModSeed seedDiamahlia;
@@ -59,6 +60,7 @@ public class Seeds {
         seedTulipWhite = new ItemModSeed(Crops.tulipWhite, SeedInformation.tulipWhite);
         seedTulipPink = new ItemModSeed(Crops.tulipPink, SeedInformation.tulipPink);
         seedDaisy = new ItemModSeed(Crops.daisy, SeedInformation.daisy);
+        seedCactus = new ItemModSeed(Crops.cactus, SeedInformation.cactus);
 
         RegisterHelper.registerItem(seedPotato, Names.Seeds.seedPotato);
         RegisterHelper.registerItem(seedCarrot, Names.Seeds.seedCarrot);
@@ -72,6 +74,7 @@ public class Seeds {
         RegisterHelper.registerItem(seedTulipWhite, Names.Seeds.seedTulipWhite);
         RegisterHelper.registerItem(seedTulipPink, Names.Seeds.seedTulipPink);
         RegisterHelper.registerItem(seedDaisy, Names.Seeds.seedDaisy);
+        RegisterHelper.registerItem(seedCactus, Names.Seeds.seedCactus);
 
         OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedPotato);
         OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedCarrot);
@@ -85,6 +88,7 @@ public class Seeds {
         OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedTulipWhite);
         OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedTulipPink);
         OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedDaisy);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedCactus);
 
         Crops.potato.initializeSeed(seedPotato);
         Crops.carrot.initializeSeed(seedCarrot);
@@ -98,6 +102,7 @@ public class Seeds {
         Crops.tulipWhite.initializeSeed(seedTulipWhite);
         Crops.tulipPink.initializeSeed(seedTulipPink);
         Crops.daisy.initializeSeed(seedDaisy);
+        Crops.cactus.initializeSeed(seedCactus);
 
         //resource crop seeds
         if(ConfigurationHandler.resourcePlants) {

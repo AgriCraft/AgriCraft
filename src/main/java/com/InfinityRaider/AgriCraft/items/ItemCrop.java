@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,12 +23,17 @@ public class ItemCrop extends ModItem {
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
-            if (SoilWhitelist.isSoilFertile(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z)) && world.getBlock(x, y + 1, z).getMaterial()== Material.air && side == 1) {
+            if (isSoilValid(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z)) && world.getBlock(x, y + 1, z).getMaterial()== Material.air && side == 1) {
                 world.setBlock(x, y + 1, z, Blocks.blockCrop);
                 stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
                 return false;
             }
         }
         return false;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
+    }
+
+    public static boolean isSoilValid(Block soil, int soilMeta) {
+        return soil==net.minecraft.init.Blocks.sand || soil==net.minecraft.init.Blocks.soul_sand || SoilWhitelist.isSoilFertile(soil, soilMeta);
+
     }
 }

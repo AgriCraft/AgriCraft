@@ -51,6 +51,7 @@ public class NEIConfig implements IConfigureNEI {
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.tulipWhite, 1, i));
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.tulipPink, 1, i));
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.daisy, 1, i));
+            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.cactus, 1, i));
             //hide resource crops
             if(ConfigurationHandler.resourcePlants) {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.diamahlia, 1, i));

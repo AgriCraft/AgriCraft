@@ -134,7 +134,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //checks if a plant can mutate
     private boolean canMutate(ItemSeeds seed, int seedMeta, int id, Block req, int reqMeta) {
-        if(this.canGrow(seed)) {
+        if(this.canGrow(seed, seedMeta)) {
             //id = 0: no requirement
             //id = 1: block below farmland has to be the req block
             //id = 2: block near has to be the req block
@@ -242,7 +242,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //check if the crop is fertile
     public boolean isFertile() {
-        return this.canGrow((ItemSeeds) this.seed);
+        return this.canGrow((ItemSeeds) this.seed, this.seedMeta);
     }
 
     //check the block if the plant is mature
@@ -251,11 +251,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     //check if the seed can grow
-    private boolean canGrow(ItemSeeds seed) {
+    private boolean canGrow(ItemSeeds seed, int seedMeta) {
         BlockBush plant = SeedHelper.getPlant(seed);
         Block soil = this.worldObj.getBlock(this.xCoord,this.yCoord-1,this.zCoord);
         int soilMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord - 1, this.zCoord);
-        if(SoilWhitelist.isSoilFertile(soil, soilMeta) && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
+        if(SeedHelper.isCorrectSoil(soil, soilMeta, seed, seedMeta) && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
             if(plant instanceof BlockModPlant) {
                 BlockModPlant blockModPlant = (BlockModPlant) plant;
                 return blockModPlant.base == null || OreDictHelper.isSameOre(blockModPlant.base, blockModPlant.baseMeta, this.worldObj.getBlock(this.xCoord, this.yCoord - 2, this.zCoord), this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord));

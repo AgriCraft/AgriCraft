@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import net.minecraft.init.*;
 
 public class Crops {
     public static BlockModPlant potato;
@@ -20,13 +21,14 @@ public class Crops {
     public static BlockModPlant tulipWhite;
     public static BlockModPlant tulipPink;
     public static BlockModPlant daisy;
+    public static BlockModPlant cactus;
 
     public static void init() {
         potato = new BlockModPlant(net.minecraft.init.Items.potato);
         carrot = new BlockModPlant(net.minecraft.init.Items.carrot);
         melon = new BlockModPlant(net.minecraft.init.Items.melon);
         pumpkin = new BlockModPlant(net.minecraft.item.Item.getItemFromBlock(net.minecraft.init.Blocks.pumpkin));
-        sugarcane = new BlockModPlant(net.minecraft.init.Items.reeds);
+        sugarcane = new BlockModPlant(net.minecraft.init.Blocks.sand, net.minecraft.init.Items.reeds);
         dandelion = new BlockModPlant(net.minecraft.init.Items.dye, 11);
         poppy = new BlockModPlant(net.minecraft.init.Items.dye, 1);
         orchid = new BlockModPlant(net.minecraft.init.Items.dye, 12);
@@ -36,6 +38,7 @@ public class Crops {
         tulipWhite = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
         tulipPink = new BlockModPlant(net.minecraft.init.Items.dye, 9, 2);
         daisy = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
+        cactus = new BlockModPlant(net.minecraft.init.Blocks.sand, net.minecraft.init.Items.dye, 2);
 
         RegisterHelper.registerBlock(potato, Names.Crops.cropPotato);
         RegisterHelper.registerBlock(carrot, Names.Crops.cropCarrot);
@@ -51,6 +54,7 @@ public class Crops {
         RegisterHelper.registerBlock(tulipWhite, Names.Crops.cropTulipWhite);
         RegisterHelper.registerBlock(tulipPink, Names.Crops.cropTulipPink);
         RegisterHelper.registerBlock(daisy, Names.Crops.cropDaisy);
+        RegisterHelper.registerBlock(cactus, Names.Crops.cropCactus);
 
         LogHelper.info("Crops registered");
     }

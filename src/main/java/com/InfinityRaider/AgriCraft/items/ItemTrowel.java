@@ -5,11 +5,13 @@ import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -66,19 +68,23 @@ public class ItemTrowel extends ModItem {
                     else if (!crop.hasPlant() && !crop.crossCrop && stack.getItemDamage() == 1) {
                         //set crop
                         NBTTagCompound tag = stack.getTagCompound();
-                        crop.growth = tag.getShort(Names.NBT.growth);
-                        crop.gain = tag.getShort(Names.NBT.gain);
-                        crop.strength = tag.getShort(Names.NBT.strength);
-                        crop.analyzed = tag.getBoolean(Names.NBT.analyzed);
-                        crop.setSeed(tag.getString(Names.Objects.seed));
-                        crop.seedMeta = tag.getShort(Names.NBT.meta);
-                        world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.NBT.materialMeta), 3);
-                        crop.markDirty();
-                        //clear trowel
-                        stack.setTagCompound(null);
-                        stack.setItemDamage(0);
-                        //return true to avoid further processing
-                        return true;
+                        ItemSeeds seed = (ItemSeeds) Item.itemRegistry.getObject(tag.getString(Names.Objects.seed));
+                        int seedMeta = tag.getShort(Names.NBT.meta);
+                        if(SeedHelper.isCorrectSoil(world.getBlock(x, y-1, z), world.getBlockMetadata(x, y - 1, z), seed, seedMeta)) {
+                            crop.growth = tag.getShort(Names.NBT.growth);
+                            crop.gain = tag.getShort(Names.NBT.gain);
+                            crop.strength = tag.getShort(Names.NBT.strength);
+                            crop.analyzed = tag.getBoolean(Names.NBT.analyzed);
+                            crop.seed = seed;
+                            crop.seedMeta = seedMeta;
+                            world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.NBT.materialMeta), 3);
+                            crop.markDirty();
+                            //clear trowel
+                            stack.setTagCompound(null);
+                            stack.setItemDamage(0);
+                            //return true to avoid further processing
+                            return true;
+                        }
                     }
                 }
             }

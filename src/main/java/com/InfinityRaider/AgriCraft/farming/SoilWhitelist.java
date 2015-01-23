@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
@@ -33,6 +34,7 @@ public class SoilWhitelist {
     }
 
     public static void initSoils() {
+        //reads custom entries
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
         for(String line:data) {
             LogHelper.debug("parsing " + line);
@@ -40,7 +42,7 @@ public class SoilWhitelist {
             Block block = (stack!=null && stack.getItem() instanceof ItemBlock)?((ItemBlock) stack.getItem()).field_150939_a:null;
             boolean success = block!=null;
             String errorMsg = "Invalid block";
-            if(success) {
+            if(success && !soilWhitelist.contains(stack)) {
                 soilWhitelist.add(stack);
             }
             else {

@@ -133,6 +133,7 @@ public final class SeedInformation {
     public static final String tulipRed = "agricraft_journal.tulipRed";
     public static final String tulipWhite = "agricraft_journal.tulipWhite";
     public static final String daisy = "agricraft_journal.daisy";
+    public static final String cactus = "agricraft_journal.cactus";
     public static final String diamahlia = "agricraft_journal.diamahlia";
     public static final String aurigold = "agricraft_journal.aurigold";
     public static final String ferranium = "agricraft_journal.ferranium";
