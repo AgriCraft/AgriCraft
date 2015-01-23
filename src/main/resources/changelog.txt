@@ -3,6 +3,7 @@ Changelog
 
 1.2.2
 -Fixes (hard) runtime dependency on Botania
+-TConstruct scythes can be used for aoe harvesting (right click on crops to aoe harvest)
 
 1.2.1
 -Changed AgriCraft creative tab logo

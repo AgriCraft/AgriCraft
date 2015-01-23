@@ -51,6 +51,7 @@ public class ModIntegration {
         public static boolean minetweaker;
         public static boolean extraUtilities;
         public static boolean botania;
+        public static boolean tconstruct;
 
         public static void init() {
             nei = Loader.isModLoaded(Names.Mods.nei);
@@ -72,6 +73,7 @@ public class ModIntegration {
             minetweaker = Loader.isModLoaded(Names.Mods.minetweaker);
             extraUtilities = Loader.isModLoaded(Names.Mods.extraUtilities);
             botania = Loader.isModLoaded(Names.Mods.botania);
+            tconstruct = Loader.isModLoaded(Names.Mods.tconstruct);
 
             LogHelper.info("Checking for loaded mods:");
             LogHelper.info(" - NEI loaded: "+nei);
@@ -93,6 +95,7 @@ public class ModIntegration {
             LogHelper.info(" - MineTweaker loaded: "+minetweaker);
             LogHelper.info(" - ExtraUtilities loaded: "+extraUtilities);
             LogHelper.info(" - Botania loaded: "+botania);
+            LogHelper.info(" - Tinker's Construct loaded: "+tconstruct);
             LogHelper.info("Done");
         }
     }

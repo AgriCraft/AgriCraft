@@ -232,6 +232,7 @@ public final class Names {
         public static final String minetweaker = "MineTweaker3";
         public static final String extraUtilities = "ExtraUtilities";
         public static final String botania = "Botania";
+        public static final String tconstruct = "TConstruct";
     }
 
     //item registry keywords

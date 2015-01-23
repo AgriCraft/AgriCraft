@@ -28,6 +28,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import tconstruct.items.tools.Scythe;
+import tconstruct.library.tools.AbilityHelper;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -92,7 +94,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     }
 
     //this harvests the crop
-    public void harvest(World world, int x, int y, int z) {
+    public boolean harvest(World world, int x, int y, int z) {
         if(!world.isRemote) {
             boolean update = false;
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
@@ -113,7 +115,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             if (update) {
                 crop.markDirty();
             }
+            return update;
         }
+        return false;
     }
 
     public void setCrossCrop(World world, int x, int y, int z, EntityPlayer player) {
@@ -189,6 +193,16 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             //allow the debugger to be used
             else if(player.getCurrentEquippedItem().getItem() instanceof ItemDebugger) {
                 return false;
+            }
+            //tinker's construct scythe
+            else if(ModIntegration.LoadedMods.tconstruct && player.getCurrentEquippedItem().getItem() instanceof Scythe) {
+                for(int xPos=x-1;xPos<=x+1;xPos++) {
+                    for(int zPos=z-1;zPos<=z+1;zPos++) {
+                        if(world.getBlock(xPos, y, zPos) instanceof BlockCrop && this.harvest(world, xPos, y, zPos)) {
+                            AbilityHelper.damageTool(player.getCurrentEquippedItem(), 1, player, false);
+                        }
+                    }
+                }
             }
             else {
                 //harvest operation
