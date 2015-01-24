@@ -286,8 +286,13 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     private boolean applyMagicalFertiliser(World world, int x, int y, int z, EntityPlayer player) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         boolean allow = crop.hasPlant() && !crop.isMature() && crop.isFertile();
-        if(allow) {
-            this.func_149853_b(world, world.rand, x, y ,z);
+        if (allow) {
+            if (ConfigurationHandler.integration_instantMagicFertiliser)  {
+                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
+            } else {
+                this.func_149853_b(world, world.rand, x, y, z);
+            }
+
             if(!player.capabilities.isCreativeMode) {
                 player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
             }
