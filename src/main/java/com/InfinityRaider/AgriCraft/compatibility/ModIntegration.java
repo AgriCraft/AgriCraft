@@ -1,12 +1,14 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
 import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.AgriCraftHarvestable;
+import com.InfinityRaider.AgriCraft.compatibility.minetweaker.*;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.Aspects;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
+import minetweaker.MineTweakerAPI;
 import net.minecraft.item.ItemStack;
 import powercrystals.minefactoryreloaded.api.FactoryRegistry;
 
@@ -29,6 +31,14 @@ public class ModIntegration {
         //Waila
         if(LoadedMods.waila) {
             FMLInterModComms.sendMessage(Names.Mods.waila, "register", "com.InfinityRaider.AgriCraft.compatibility.waila.WailaRegistry.initWaila");
+        }
+        //Minetweaker
+        if (LoadedMods.minetweaker) {
+            MineTweakerAPI.registerClass(CustomWood.class);
+            MineTweakerAPI.registerClass(SeedMutation.class);
+            MineTweakerAPI.registerClass(SeedBlacklist.class);
+            MineTweakerAPI.registerClass(SoilWhitelister.class);
+            MineTweakerAPI.registerClass(SpreadChance.class);
         }
     }
     public static class LoadedMods {

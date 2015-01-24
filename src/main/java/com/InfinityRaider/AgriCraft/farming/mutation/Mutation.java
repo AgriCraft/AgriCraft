@@ -56,4 +56,23 @@ public class Mutation {
     public void setChanceOverride(int chance) {
         this.chance = chance;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        boolean isEqual = false;
+        if(object instanceof Mutation) {
+            Mutation mutation = (Mutation) object;
+            if(this.chance==mutation.chance && this.requirement==mutation.requirement && this.requirementMeta==mutation.requirementMeta && this.id==mutation.id) {
+                if(this.result.isItemEqual(mutation.result)) {
+                    if(this.parent1.isItemEqual(mutation.parent1) && this.parent2.isItemEqual(mutation.parent2)) {
+                        isEqual = true;
+                    }
+                    else if(this.parent1.isItemEqual(mutation.parent2) && this.parent2.isItemEqual(mutation.parent1)) {
+                        isEqual = true;
+                    }
+                }
+            }
+        }
+        return isEqual;
+    }
 }

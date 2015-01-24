@@ -17,26 +17,22 @@ package com.InfinityRaider.AgriCraft;
 */
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.compatibility.minetweaker.*;
 import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import minetweaker.MineTweakerAPI;
 
 @Mod(modid = Reference.MOD_ID,name = Reference.MOD_NAME,version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class AgriCraft {
@@ -76,14 +72,6 @@ public class AgriCraft {
         proxy.registerRenderers();
 
         ModIntegration.init();
-
-        if (Loader.isModLoaded(Names.Mods.minetweaker)) {
-            MineTweakerAPI.registerClass(CustomWood.class);
-            MineTweakerAPI.registerClass(SeedMutation.class);
-            MineTweakerAPI.registerClass(SeedBlacklist.class);
-            MineTweakerAPI.registerClass(SoilWhitelister.class);
-            MineTweakerAPI.registerClass(SpreadChance.class);
-        }
 
         LogHelper.info("Initialization Complete");
     }

@@ -25,7 +25,7 @@ public abstract class MutationHandler {
         List<Mutation> list = new ArrayList<Mutation>();
         for(String line:data) {
             Mutation mutation = readMutation(line);
-            if(mutation!=null) {
+            if(mutation!=null && !list.contains(mutation)) {
                 list.add(mutation);
             }
         }
