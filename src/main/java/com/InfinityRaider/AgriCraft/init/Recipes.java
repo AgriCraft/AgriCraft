@@ -153,9 +153,7 @@ public class Recipes {
                 //get material
                 NBTTagCompound materialTag = stack.getTagCompound();
                 ItemStack plank = new ItemStack((Block) Block.blockRegistry.getObject(materialTag.getString(Names.NBT.material)), 1, materialTag.getInteger(Names.NBT.materialMeta));
-
                 Object[] ingredients = Arrays.copyOf(params, params.length);
-
                 // replace all planks with the custom ones
                 for (int i = 0; i < ingredients.length; i++) {
                     if (ingredients[i] instanceof ItemStack && ((ItemStack) ingredients[i]).isItemEqual(REFERENCE)) {
@@ -166,10 +164,8 @@ public class Recipes {
                         ((ItemStack) ingredients[i]).stackTagCompound = materialTag;
                     }
                 }
-
                 ItemStack result = new ItemStack(block, stackSize);
                 result.stackTagCompound = materialTag;
-
                 //register recipes
                 if (shaped)
                     GameRegistry.addShapedRecipe(result, ingredients);
@@ -178,7 +174,6 @@ public class Recipes {
             }
         }
     }
-
     public static void registerCustomWoodRecipe(IRecipe recipe) {
         if(recipe instanceof ShapedRecipes) {
             ShapedRecipes shapedRecipe = (ShapedRecipes) recipe;
@@ -189,40 +184,8 @@ public class Recipes {
             registerCustomWoodRecipe(((ItemBlock) shapelessRecipe.getRecipeOutput().getItem()).field_150939_a, shapelessRecipe.getRecipeOutput().stackSize, false, shapelessRecipe.recipeItems.toArray(new ItemStack[]{}));
         }
     }
-
-<<<<<<< HEAD
-        /*
-        for (ItemStack stack : woodList) {
-            if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.material) && stack.stackTagCompound.hasKey(Names.NBT.materialMeta)) {
-                //get material
-                String material = stack.stackTagCompound.getString(Names.NBT.material);
-                int meta = stack.stackTagCompound.getInteger(Names.NBT.materialMeta);
-                ItemStack plank = new ItemStack((Block) Block.blockRegistry.getObject(material), 1, meta);
-
-                ItemStack[] ingredients;
-                if (recipe instanceof ShapedRecipes) {
-                    ItemStack[] recipeItems = ((ShapedRecipes) recipe).recipeItems;
-                    ingredients = Arrays.copyOf(recipeItems, recipeItems.length);
-                } else {
-                    ItemStack[] recipeItems = (ItemStack[]) ((ShapelessRecipes) recipe).recipeItems.toArray(new ItemStack[]{});
-                    ingredients = Arrays.copyOf(recipeItems, recipeItems.length);
-                }
-
-                // replace all planks with the custom ones
-                for (int i = 0; i < ingredients.length; i++) {
-                    if (ingredients[i] != null && ingredients[i].isItemEqual(REFERENCE)) {
-                        ingredients[i] = plank;
-                    }
-
-                    // Also replace ItemBlockCustomWood with the correct version
-                    if (ingredients[i] != null && ingredients[i].getItem() instanceof ItemBlockCustomWood) {
-                        ingredients[i] = new ItemStack(ingredients[i].getItem(), ingredients[i].stackSize, ingredients[i].getItemDamage());
-                        ingredients[i].stackTagCompound = (NBTTagCompound) NBTHelper.getMaterialTag(plank).copy();
-                    }
-=======
     private static void addShapelessCustomWoodRecipe(ItemStack output, Object... params) {
         List recipeItemsCopy = new ArrayList();
-
         for(int j = 0; j < params.length; ++j) {
             Object recipeItem = params[j];
             if(recipeItem instanceof ItemStack) {
@@ -232,13 +195,10 @@ public class Recipes {
             } else {
                 if(!(recipeItem instanceof Block)) {
                     throw new RuntimeException("Invalid shapeless recipe!");
->>>>>>> 57c650d40749a4c34dcbd6ec302b3f32a0a6c3c8
                 }
-
                 recipeItemsCopy.add(new ItemStack((Block) recipeItem));
             }
         }
-
         ShapelessCustomWoodRecipe recipe = new ShapelessCustomWoodRecipe(output, recipeItemsCopy);
         GameRegistry.addRecipe(recipe);
     }
