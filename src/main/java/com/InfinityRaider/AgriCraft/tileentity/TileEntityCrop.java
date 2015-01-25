@@ -268,10 +268,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public ItemStack getSeedStack() {
         ItemStack seed = new ItemStack((ItemSeeds) this.seed, 1, this.seedMeta);
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setInteger(Names.NBT.growth, this.growth);
-        tag.setInteger(Names.NBT.gain, this.gain);
-        tag.setInteger(Names.NBT.strength, this.strength);
-        tag.setBoolean(Names.NBT.analyzed, this.analyzed);
+        SeedHelper.setNBT(tag, (short) this.growth, (short) this.gain, (short) this.strength, this.analyzed);
         seed.setTagCompound(tag);
         return seed;
     }
