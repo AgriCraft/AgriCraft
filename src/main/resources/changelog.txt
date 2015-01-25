@@ -9,6 +9,7 @@ Changelog
 -Changed the way the soil whitelist works: whitelisted soils only apply to crops that need farmland
 -Added cactus crop
 -Added configurable instant-growth for magical fertiliser
+-Fixed seeds with identical stats sometimes not stacking
 
 1.2.1
 -Changed AgriCraft creative tab logo

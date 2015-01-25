@@ -190,7 +190,7 @@ public class Recipes {
         }
         else if (recipe instanceof ShapelessRecipes) {
             ShapelessRecipes shapelessRecipe = (ShapelessRecipes) recipe;
-            registerCustomWoodRecipe(((ItemBlock) shapelessRecipe.getRecipeOutput().getItem()).field_150939_a, shapelessRecipe.getRecipeOutput().stackSize, false, shapelessRecipe.recipeItems);
+            registerCustomWoodRecipe(((ItemBlock) shapelessRecipe.getRecipeOutput().getItem()).field_150939_a, shapelessRecipe.getRecipeOutput().stackSize, false, shapelessRecipe.recipeItems.toArray(new ItemStack[]{}));
         }
 
         /*
