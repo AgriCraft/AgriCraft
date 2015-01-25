@@ -201,7 +201,7 @@ public class Recipes {
             ShapelessRecipes shapelessRecipe = (ShapelessRecipes) recipe;
             registerCustomWoodRecipe(((ItemBlock) shapelessRecipe.getRecipeOutput().getItem()).field_150939_a, shapelessRecipe.getRecipeOutput().stackSize, false, shapelessRecipe.recipeItems);
         }
-        
+
         /*
         for (ItemStack stack : woodList) {
             if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.material) && stack.stackTagCompound.hasKey(Names.NBT.materialMeta)) {
