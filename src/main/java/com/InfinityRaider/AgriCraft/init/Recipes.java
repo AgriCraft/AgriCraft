@@ -216,7 +216,7 @@ public class Recipes {
                         ingredients[i] = plank;
                     }
 
-                    // Also replace ItemBlockCustomWood with the correct verison
+                    // Also replace ItemBlockCustomWood with the correct version
                     if (ingredients[i] != null && ingredients[i].getItem() instanceof ItemBlockCustomWood) {
                         ingredients[i] = new ItemStack(ingredients[i].getItem(), ingredients[i].stackSize, ingredients[i].getItemDamage());
                         ingredients[i].stackTagCompound = (NBTTagCompound) NBTHelper.getMaterialTag(plank).copy();
