@@ -10,6 +10,7 @@ Changelog
 -Added cactus crop
 -Added configurable instant-growth for magical fertiliser
 -Fixed seeds with identical stats sometimes not stacking
+-Fixed shapeless custom wood recipes not working correctly
 
 1.2.1
 -Changed AgriCraft creative tab logo

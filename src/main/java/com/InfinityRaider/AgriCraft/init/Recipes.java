@@ -7,10 +7,7 @@ import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.items.ModItem;
 import com.InfinityRaider.AgriCraft.items.crafting.RecipeJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.NBTHelper;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import com.InfinityRaider.AgriCraft.utility.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -177,22 +174,23 @@ public class Recipes {
                 if (shaped)
                     GameRegistry.addShapedRecipe(result, ingredients);
                 else
-                    GameRegistry.addShapelessRecipe(result, ingredients);
+                    addShapelessCustomWoodRecipe(result, ingredients);
             }
-
         }
     }
 
     public static void registerCustomWoodRecipe(IRecipe recipe) {
         if(recipe instanceof ShapedRecipes) {
             ShapedRecipes shapedRecipe = (ShapedRecipes) recipe;
-            registerCustomWoodRecipe(((ItemBlock) shapedRecipe.getRecipeOutput().getItem()).field_150939_a, shapedRecipe.getRecipeOutput().stackSize, true, shapedRecipe.recipeItems);
+            registerCustomWoodRecipe(((ItemBlock) shapedRecipe.getRecipeOutput().getItem()).field_150939_a, shapedRecipe.getRecipeOutput().stackSize, true, (Object[]) shapedRecipe.recipeItems);
         }
         else if (recipe instanceof ShapelessRecipes) {
             ShapelessRecipes shapelessRecipe = (ShapelessRecipes) recipe;
             registerCustomWoodRecipe(((ItemBlock) shapelessRecipe.getRecipeOutput().getItem()).field_150939_a, shapelessRecipe.getRecipeOutput().stackSize, false, shapelessRecipe.recipeItems.toArray(new ItemStack[]{}));
         }
+    }
 
+<<<<<<< HEAD
         /*
         for (ItemStack stack : woodList) {
             if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.material) && stack.stackTagCompound.hasKey(Names.NBT.materialMeta)) {
@@ -221,27 +219,27 @@ public class Recipes {
                         ingredients[i] = new ItemStack(ingredients[i].getItem(), ingredients[i].stackSize, ingredients[i].getItemDamage());
                         ingredients[i].stackTagCompound = (NBTTagCompound) NBTHelper.getMaterialTag(plank).copy();
                     }
+=======
+    private static void addShapelessCustomWoodRecipe(ItemStack output, Object... params) {
+        List recipeItemsCopy = new ArrayList();
+
+        for(int j = 0; j < params.length; ++j) {
+            Object recipeItem = params[j];
+            if(recipeItem instanceof ItemStack) {
+                recipeItemsCopy.add(((ItemStack) recipeItem).copy());
+            } else if(recipeItem instanceof Item) {
+                recipeItemsCopy.add(new ItemStack((Item) recipeItem));
+            } else {
+                if(!(recipeItem instanceof Block)) {
+                    throw new RuntimeException("Invalid shapeless recipe!");
+>>>>>>> 57c650d40749a4c34dcbd6ec302b3f32a0a6c3c8
                 }
 
-                ItemStack outputStack = recipe.getRecipeOutput();
-                ItemStack itemStack = new ItemStack(outputStack.getItem(), outputStack.stackSize);
-
-                //set NBT
-                NBTTagCompound tag = NBTHelper.getMaterialTag(plank);
-                itemStack.stackTagCompound = (NBTTagCompound) tag.copy();
-
-                //register recipes
-                if (recipe instanceof ShapedRecipes) {
-                    ShapedRecipes shapedRecipes = (ShapedRecipes) recipe;
-                    IRecipe finalRecipe = new ShapedRecipes(shapedRecipes.recipeWidth, shapedRecipes.recipeHeight,
-                        ingredients, itemStack);
-                    GameRegistry.addRecipe(finalRecipe);
-                } else {
-                    IRecipe finalRecipe = new ShapelessRecipes(itemStack, Arrays.asList(ingredients));
-                    GameRegistry.addRecipe(finalRecipe);
-                }
+                recipeItemsCopy.add(new ItemStack((Block) recipeItem));
             }
         }
-        */
+
+        ShapelessCustomWoodRecipe recipe = new ShapelessCustomWoodRecipe(output, recipeItemsCopy);
+        GameRegistry.addRecipe(recipe);
     }
 }
