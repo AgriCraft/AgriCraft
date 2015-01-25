@@ -195,7 +195,7 @@ public class RenderValve extends RenderChannel {
             if(channel.hasNeighbour(axis, direction)) {
                 if (valve.isPowered()) {
                     boolean x = axis == 'x';
-                    float y2 = valve.getFluidHeight();
+                    float y2 = valve.getDiscreteScaledFluidHeight();
                     this.drawWaterEdge(tessellator, x, direction, y2, y2, icon);
                 } else {
                     super.connectWater(channel, tessellator, axis, direction, y, icon);

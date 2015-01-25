@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityChannel extends TileEntityCustomWood implements IDebuggable{
+
+    protected static final int DISCRETE_MAX = 16;
+    protected static final float DISCRETE_FACTOR = (float) DISCRETE_MAX / 500.0F;
+    protected static final float SCALE_FACTOR = 500.0F / (float) DISCRETE_MAX;
+
     protected int lvl;
     protected int lastLvl = 0;
     protected int lastDiscreteLevel = 0;
@@ -51,6 +56,10 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
         return this.getFluidHeight(this.lvl);
     }
 
+    public float getDiscreteScaledFluidHeight() {
+        return getFluidHeight(getDiscreteScaledFluidLevel());
+    }
+
     public float getFluidHeight(int lvl) {
         return 5+7*((float) lvl)/((float) Constants.mB/2);
     }
@@ -74,8 +83,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
             if(timer%5==0){
         		timer = 0;
 
-                float smallestPart = 16 / 500.0F;
-                int discreteLevel = Math.round(smallestPart * lvl);
+                int discreteLevel = getDiscreteFluidLevel();
                 if (lastDiscreteLevel  != discreteLevel) {
                     lastDiscreteLevel = discreteLevel;
                     this.markDirty();
@@ -106,7 +114,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
                 else {
                     TileEntityTank tank = (TileEntityTank) te;
                     int Y = tank.getYPosition();
-                    float y_c= 16*Y+this.getFluidHeight();  //initial channel water y
+                    // float y_c= 16*Y+this.getFluidHeight();  //initial channel water y
+                    float y_c = 16 * Y + getDiscreteScaledFluidHeight();
                     float y_t = tank.getFluidY();           //initial tank water y
                     float y1 = (float) 5+16*Y;   //minimum y of the channel
                     float y2 = (float) 12+16*Y;  //maximum y of the channel
@@ -162,6 +171,20 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
 
     public void drainFluid(int amount) {
         setFluidLevel(lvl - amount);
+    }
+
+    /** Maps the current fluid level into the integer interval [0, 16] */
+    public int getDiscreteFluidLevel() {
+        return Math.round(DISCRETE_FACTOR * lvl);
+    }
+
+    /** Scales the discrete fluid level back to the interval [0, 500] */
+    public int getDiscreteScaledFluidLevel() {
+        int discreteFluidLevel = getDiscreteFluidLevel();
+        if (discreteFluidLevel == 0 && lvl > 0)
+            discreteFluidLevel = 1;
+
+        return Math.round(SCALE_FACTOR * discreteFluidLevel);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
             if(channel.getBlockMetadata()==0) {
                 this.renderWoodChannel(channel, tessellator);
                 //draw the waterTexture
-                if(channel.getFluidLevel()>0) {
+                if(channel.getDiscreteScaledFluidLevel()>0) {
                     this.drawWater(channel, tessellator);
                 }
             }
@@ -170,7 +170,7 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
     }
 
     protected void drawWater(TileEntityChannel channel, Tessellator tessellator) {
-        float y = channel.getFluidHeight();
+        float y = channel.getDiscreteScaledFluidHeight();
         //the texture
         IIcon icon = Blocks.water.getIcon(1, 0);
         //stolen from Vanilla code
@@ -205,7 +205,7 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
                         y2 = y;
                     }
                     else {
-                        y2 = (y + ((TileEntityChannel) te).getFluidHeight()) / 2;
+                        y2 = (y + ((TileEntityChannel) te).getDiscreteScaledFluidHeight()) / 2;
                     }
                 }
                 else {
