@@ -154,10 +154,8 @@ public class Recipes {
         for (ItemStack stack : woodList) {
             if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.material) && stack.stackTagCompound.hasKey(Names.NBT.materialMeta)) {
                 //get material
-                String material = stack.stackTagCompound.getString(Names.NBT.material);
-                int meta = stack.stackTagCompound.getInteger(Names.NBT.materialMeta);
-                ItemStack plank = new ItemStack((Block) Block.blockRegistry.getObject(material), 1, meta);
-                NBTTagCompound materialTag = NBTHelper.getMaterialTag(plank);
+                NBTTagCompound materialTag = stack.getTagCompound();
+                ItemStack plank = new ItemStack((Block) Block.blockRegistry.getObject(materialTag.getString(Names.NBT.material)), 1, materialTag.getInteger(Names.NBT.materialMeta));
 
                 Object[] ingredients = Arrays.copyOf(params, params.length);
 
@@ -166,27 +164,20 @@ public class Recipes {
                     if (ingredients[i] instanceof ItemStack && ((ItemStack) ingredients[i]).isItemEqual(REFERENCE)) {
                         ingredients[i] = plank;
                     }
-
                     // Also replace ItemBlockCustomWood with the correct version
-                    if (ingredients[i] instanceof ItemStack && ingredients[i] != null
-                            && ((ItemStack)ingredients[i]).getItem() instanceof ItemBlockCustomWood) {
-                        ItemStack existing = (ItemStack) ingredients[i];
-                        ItemStack replacement = new ItemStack(existing.getItem(), existing.stackSize);
-                        replacement.stackTagCompound = (NBTTagCompound) materialTag.copy();
-                        ingredients[i] = replacement;
+                    if (ingredients[i] instanceof ItemStack && ingredients[i]!=null && ((ItemStack)ingredients[i]).getItem() instanceof ItemBlockCustomWood) {
+                        ((ItemStack) ingredients[i]).stackTagCompound = materialTag;
                     }
                 }
 
-                ItemStack itemStack = new ItemStack(block, stackSize);
-
-                //set NBT
-                itemStack.stackTagCompound = (NBTTagCompound) materialTag.copy();
+                ItemStack result = new ItemStack(block, stackSize);
+                result.stackTagCompound = materialTag;
 
                 //register recipes
                 if (shaped)
-                    GameRegistry.addShapedRecipe(itemStack, ingredients);
+                    GameRegistry.addShapedRecipe(result, ingredients);
                 else
-                    GameRegistry.addShapelessRecipe(itemStack, ingredients);
+                    GameRegistry.addShapelessRecipe(result, ingredients);
             }
 
         }
