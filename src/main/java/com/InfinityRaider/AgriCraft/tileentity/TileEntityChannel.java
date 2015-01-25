@@ -2,7 +2,10 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.RenderChannel;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -12,6 +15,7 @@ import java.util.List;
 public class TileEntityChannel extends TileEntityCustomWood implements IDebuggable{
     protected int lvl;
     protected int lastLvl = 0;
+    protected int lastDiscreteLevel = 0;
     protected int timer = 0;
     
     //this saves the data on the tile entity
@@ -67,13 +71,19 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
         if (!this.worldObj.isRemote) {
             //Only send update to the client every 5 ticks to reduce network stress (thanks, Marcin212)
         	timer++;
-        	if(timer%5==0){
+            if(timer%5==0){
         		timer = 0;
-        		if(lastLvl != lvl){
-        			lastLvl = lvl;
+
+                float smallestPart = 16 / 500.0F;
+                int discreteLevel = Math.round(smallestPart * lvl);
+                if (lastDiscreteLevel  != discreteLevel) {
+                    lastDiscreteLevel = discreteLevel;
                     this.markDirty();
-        		}
+                }
+
+                lastLvl = lvl;
         	}
+
             //find neighbours
             ArrayList<TileEntityCustomWood> neighbours = new ArrayList<TileEntityCustomWood>();
             if(this.hasNeighbour('x', 1)) {neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord));}

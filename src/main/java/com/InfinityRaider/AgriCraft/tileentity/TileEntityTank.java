@@ -17,6 +17,7 @@ import java.util.List;
 public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler, IDebuggable {
     protected int connectedTanks=1;
     protected int fluidLevel=0;
+    protected int lastDiscreteFluidLevel = 0;
     private int timer = 0;
     
     //OVERRIDES
@@ -64,8 +65,14 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
             }
             //Only send update to the client every 10 ticks to reduce network stress (thanks, Marcin212)
             if(change && timer>10) {
-                this.markDirty();
                 timer = 0;
+
+                float smallestPart = 32.0f / getTotalCapacity();
+                int discreteFluidLevel = Math.round(smallestPart * fluidLevel);
+                if (lastDiscreteFluidLevel != discreteFluidLevel) {
+                    lastDiscreteFluidLevel = discreteFluidLevel;
+                    this.markDirty();
+                }
             }
             timer++;
         }
@@ -173,7 +180,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                         TileEntityTank tank = ((TileEntityTank) this.worldObj.getTileEntity(x, y, z));
                         tank.connectedTanks = xSize * ySize * zSize;
                         tank.setFluidLevel(lvl);
-                        tank.markDirty();
                     }
                 }
             }
@@ -204,7 +210,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                     TileEntityTank tank = (TileEntityTank) this.worldObj.getTileEntity(this.xCoord-xPos+x, this.yCoord-yPos+y, this.zCoord-zPos+z);
                     tank.connectedTanks = 1;
                     tank.fluidLevel = levels[y];
-                    tank.markDirty();
                 }
             }
         }
@@ -229,11 +234,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                     if(this.worldObj.getTileEntity(x, y ,z)!=null && this.worldObj.getTileEntity(x, y ,z) instanceof TileEntityTank) {
                         TileEntityTank tank =(TileEntityTank) this.worldObj.getTileEntity(x, y, z);
                         tank.fluidLevel = lvl;
-                        if(tank.getYPosition()==0) {
-                        	if(change){
-                        		tank.markDirty();
-                        	}
-                        }
                     }
                 }
             }
@@ -435,7 +435,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         int filled = Math.min(resource.amount, this.getTotalCapacity() - this.getFluidLevel());
         if(doFill) {
             this.setFluidLevel(this.getFluidLevel()+filled);
-            this.markDirty();
         }
         return filled;
     }
@@ -449,7 +448,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         int drained = Math.min(resource.amount, this.getFluidLevel());
         if(doDrain) {
            this.setFluidLevel(this.fluidLevel-drained);
-            this.markDirty();
         }
         return new FluidStack(FluidRegistry.WATER, drained);
     }

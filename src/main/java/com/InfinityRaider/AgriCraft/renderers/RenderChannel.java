@@ -16,7 +16,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
 public class RenderChannel implements ISimpleBlockRenderingHandler {
+
+    public static AtomicInteger renderCallCounter = new AtomicInteger(0);
+
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
 
@@ -24,6 +30,8 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+        renderCallCounter.incrementAndGet();
+
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         Tessellator tessellator = Tessellator.instance;
         //translate Tessellator to the right position
