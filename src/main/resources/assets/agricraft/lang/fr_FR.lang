@@ -1,5 +1,3 @@
-//Credits for French translation to Mazdallier
-
 //Creative Tabs
 itemGroup.agricraft=Agricraft
 
@@ -33,6 +31,7 @@ item.agricraft:seedTulipOrange.name=Bulbe de tulipe orange
 item.agricraft:seedTulipWhite.name=Bulbe de tulipe blanche
 item.agricraft:seedTulipPink.name=Bulbe de tulipe rose
 item.agricraft:seedDaisy.name=Graines de pâquerette
+item.agricraft:seedCactus.name=Graine de cactus
 
 item.agricraft:seedFerranium.name=Graines de ferranium
 item.agricraft:seedAurigold.name=Graines de aurigold 
@@ -74,6 +73,7 @@ tile.agricraft:cropTulipOrange.name=Tulipe orange
 tile.agricraft:cropTulipWhite.name=Tulipe blanche
 tile.agricraft:cropTulipPink.name=Tulipe rose
 tile.agricraft:cropDaisy.name=Pâquerette
+tile.agricraft:cropCactus.name=Cactus
 
 tile.agricraft:cropFerranium.name=Ferranium
 tile.agricraft:cropAurigold.name=Aurigold
@@ -136,6 +136,7 @@ agricraft_journal.tulipOrange=Orange, l'une des nombreuses couleures dans le spe
 agricraft_journal.tulipRed=Il y a une citation : \"Il y a 50 carreaux de tulipes, mais le rouge est le plus beau\".
 agricraft_journal.tulipWhite=Il y a beaucoup de fleurs blanches, mais beaucoup disent que la tulipe blanche est la fleur blanche des fleurs blanches.
 agricraft_journal.daisy=Les pâquerettes sont tout à fait communes, mais néanmoins de jolies petites fleurs blanches.
+agricraft_journal.cactus=Les cactus peuvent être cultivés pour produire une substance verte souvent utilisée comme la teinture.
 agricraft_journal.diamahlia=Beaucoup continue de croire que cette fleur n'existe que dans les contes et légendes. Cependant, quelques agronomes disent qu'ils ont réussi à obtenir de cette légendaire plante.
 agricraft_journal.aurigold=L'aurigold est une fleur rare et légendaire qui s'alimente des minuscules fractions d'or dans le sol. Seul un agronome très patient et habile peut cultiver ce bijou.
 agricraft_journal.ferranium=Les racines de cette plante étrange ne craignent pas de l'eau. Elles creusent juste dans le sol en absorbant les particules de fer pour se renforcer.
