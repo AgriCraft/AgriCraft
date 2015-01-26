@@ -80,7 +80,7 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
             itemstack = itemstack1.copy();
             //try to move item from the analyzer into the player's inventory
             if (clickedSlot==seedSlotId || clickedSlot==journalSlotId) {
-                if (!this.mergeItemStack(itemstack1, 2, inventorySlots.size(), false)) {
+                if (!this.mergeItemStack(itemstack1, 0, inventorySlots.size(), false)) {
                     return null;
                 }
             }
@@ -120,12 +120,10 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
     @Override
     protected boolean mergeItemStack(ItemStack stack, int start, int stop, boolean backwards)  {
         boolean foundSlot = false;
-        int slotIndex = start;
-        if (backwards) {
-            slotIndex = stop - 1;
-        }
+        int slotIndex = backwards?stop-1:start;
         Slot slot;
         ItemStack stackInSlot;
+        //try to stack with existing stacks first
         if (stack.isStackable()) {
             while (stack.stackSize > 0 && (!backwards && slotIndex < stop || backwards && slotIndex >= start)) {
                 slot = (Slot)this.inventorySlots.get(slotIndex);
@@ -145,22 +143,13 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
                         foundSlot = true;
                     }
                 }
-                if (backwards) {
-                    --slotIndex;
-                }
-                else {
-                    ++slotIndex;
-                }
+                slotIndex = backwards?slotIndex-1:slotIndex+1;
             }
         }
+        //put in empty slot
         if (stack.stackSize > 0) {
-            if (backwards) {
-                slotIndex = stop - 1;
-            }
-            else {
-                slotIndex = start;
-            }
-            while (!backwards && slotIndex < stop || backwards && slotIndex >= start) {
+            slotIndex = backwards?stop-1:start;
+            while (!backwards && slotIndex < stop || backwards && slotIndex >= start && !foundSlot) {
                 slot = (Slot)this.inventorySlots.get(slotIndex);
                 stackInSlot = slot.getStack();
                 if (stackInSlot == null && slot.isItemValid(stack)) {
@@ -170,12 +159,7 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
                     foundSlot = true;
                     break;
                 }
-                if (backwards) {
-                    --slotIndex;
-                }
-                else {
-                    ++slotIndex;
-                }
+                slotIndex = backwards?slotIndex-1:slotIndex+1;
             }
         }
         return foundSlot;
