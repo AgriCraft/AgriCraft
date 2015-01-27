@@ -13,6 +13,7 @@ Changelog
 -Fixed shapeless custom wood recipes not working correctly
 -Fixed vanilla farming only disabling for farmland
 -Added crops for botania's petals
+-Fixes lag issues regarding the irrigation system
 
 1.2.1
 -Changed AgriCraft creative tab logo
