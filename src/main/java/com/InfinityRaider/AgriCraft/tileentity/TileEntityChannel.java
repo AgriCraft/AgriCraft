@@ -86,7 +86,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
                 int discreteLevel = getDiscreteFluidLevel();
                 if (lastDiscreteLevel  != discreteLevel) {
                     lastDiscreteLevel = discreteLevel;
-                    this.markDirty();
+                    markDirtyAndMarkForUpdate();
                 }
 
                 lastLvl = lvl;

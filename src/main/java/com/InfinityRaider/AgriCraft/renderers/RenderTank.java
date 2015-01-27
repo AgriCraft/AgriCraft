@@ -34,7 +34,7 @@ public class RenderTank implements ISimpleBlockRenderingHandler {
             if(tank.getBlockMetadata()==0) {
                 this.drawWoodTank(tank, tessellator);
                 //draw the waterTexture
-                if(tank.getFluidLevel()>0) {
+                if(tank.getScaledDiscreteFluidLevel()>0) {
                     this.drawWater(tank, tessellator);
                 }
             }
@@ -183,7 +183,7 @@ public class RenderTank implements ISimpleBlockRenderingHandler {
     private void drawWater(TileEntityTank tank, Tessellator tessellator) {
         //only render water on the bottom layer
         if(tank.getYPosition()==0) {
-            float y = tank.getFluidY()-0.01F; //-0.0001F to avoid Z-fighting on maximum filled tanks
+            float y = tank.getScaledDiscreteFluidY()-0.01F; //-0.0001F to avoid Z-fighting on maximum filled tanks
             //the texture
             IIcon icon = Blocks.water.getIcon(1,0);
             //stolen from Vanilla code

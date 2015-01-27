@@ -17,7 +17,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class RenderChannel implements ISimpleBlockRenderingHandler {
 
@@ -209,7 +208,7 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
                     }
                 }
                 else {
-                    float lvl = ((TileEntityTank) te).getFluidY()-16*((TileEntityTank) te).getYPosition();
+                    float lvl = ((TileEntityTank) te).getScaledDiscreteFluidY()-16*((TileEntityTank) te).getYPosition();
                     y2 = lvl>12?12:lvl<5?(5-0.0001F):lvl;
                 }
                 this.drawWaterEdge(tessellator, x, direction, y, y2, icon);
