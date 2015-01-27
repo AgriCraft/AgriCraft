@@ -52,6 +52,25 @@ public class NEIConfig implements IConfigureNEI {
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.tulipPink, 1, i));
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.daisy, 1, i));
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.cactus, 1, i));
+            //hide botania crops
+            if(ConfigurationHandler.integration_Botania) {
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaWhite, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaOrange, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaMagenta, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaLightBlue, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaYellow, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaLime, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaPink, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaGray, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaLightGray, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaCyan, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaPurple, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaBlue, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaBrown, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaGreen, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaRed, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaBlack, 1, i));
+            }
             //hide resource crops
             if(ConfigurationHandler.resourcePlants) {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.diamahlia, 1, i));

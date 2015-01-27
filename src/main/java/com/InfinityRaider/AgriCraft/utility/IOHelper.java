@@ -86,6 +86,9 @@ public abstract class IOHelper {
                 data = data + '\n' + osmiumMutation;
             }
         }
+        if(ConfigurationHandler.integration_Botania) {
+            data = data + '\n' + botaniaMutations;
+        }
         if(ConfigurationHandler.integration_Nat && ConfigurationHandler.integration_HC && ModIntegration.LoadedMods.harvestcraft && ModIntegration.LoadedMods.natura)  {
             data = data + '\n' + harvestcraftMutations + '\n' + barleyNaturaMutations;      //harvestcraft with natura barley
         }
@@ -341,9 +344,27 @@ public abstract class IOHelper {
             "weeeflowers:Cyan Flower Seed=weeeflowers:Lime Flower Seed+weeeflowers:Light Blue Flower Seed\n" +
             "weeeflowers:Brown Flower Seed=weeeflowers:Green Flower Seed+weeeflowers:Red Flower Seed";
 
+    private static final String botaniaMutations =
+            "AgriCraft:seedBotaniaRed=AgriCraft:seedPoppy+AgriCraft:seedTulipRed\n" +
+            "AgriCraft:seedBotaniaYellow=AgriCraft:seedDandelion+AgriCraft:seedTulipOrange\n" +
+            "AgriCraft:seedBotaniaBlue=AgriCraft:seedOrchid+AgriCraft:seedAllium\n" +
+            "AgriCraft:seedBotaniaOrange=AgriCraft:seedBotaniaYellow+AgriCraft:seedBotaniaRed\n" +
+            "AgriCraft:seedBotaniaPurple=AgriCraft:seedBotaniaMagenta+AgriCraft:seedBotaniaBlue\n" +
+            "AgriCraft:seedBotaniaGreen=AgriCraft:seedBotaniaBlue+AgriCraft:seedBotaniaYellow\n" +
+            "AgriCraft:seedBotaniaMagenta=AgriCraft:seedBotaniaRed+AgriCraft:seedBotaniaBlue\n" +
+            "AgriCraft:seedBotaniaPink=AgriCraft:seedBotaniaPurple+AgriCraft:seedBotaniaWhite\n" +
+            "AgriCraft:seedBotaniaLime=AgriCraft:seedBotaniaWhite+AgriCraft:seedBotaniaGreen\n" +
+            "AgriCraft:seedBotaniaCyan=AgriCraft:seedBotaniaGreen+AgriCraft:seedBotaniaBlue\n" +
+            "AgriCraft:seedBotaniaLightBlue=AgriCraft:seedBotaniaBlue+AgriCraft:seedBotaniaWhite\n" +
+            "AgriCraft:seedBotaniaBlack=AgriCraft:seedBotaniaBlue+AgriCraft:seedCactus\n" +
+            "AgriCraft:seedBotaniaWhite=AgriCraft:seedTulipWhite+AgriCraft:seedDaisy\n" +
+            "AgriCraft:seedBotaniaGray=AgriCraft:seedBotaniaBlack+AgriCraft:seedBotaniaWhite\n" +
+            "AgriCraft:seedBotaniaLightGray=AgriCraft:seedBotaniaGray+AgriCraft:seedBotaniaWhite\n" +
+            "AgriCraft:seedBotaniaBrown=AgriCraft:seedBotaniaPurple+AgriCraft:seedBotaniaGreen";
+
     private static final String minecraftMutations =
             "AgriCraft:seedSugarcane=minecraft:wheat_seeds+AgriCraft:seedCarrot\n" +
-            "AgriCraft:seedCactus=AgriCraft:seedSugarCane+AgriCraft:seedPoppy\n" +
+            "AgriCraft:seedCactus=AgriCraft:seedSugarcane+AgriCraft:seedPoppy\n" +
             "minecraft:pumpkin_seeds=AgriCraft:seedPotato+AgriCraft:seedCarrot\n" +
             "minecraft:melon_seeds=AgriCraft:seedCarrot+minecraft:pumpkin_seeds\n" +
             "AgriCraft:seedPoppy=AgriCraft:seedSugarcane+minecraft:pumpkin_seeds\n" +
@@ -398,7 +419,7 @@ public abstract class IOHelper {
             "chococraft:Gysahl_Seeds=harvestcraft:rutabagaseedItem+harvestcraft:beetseedItem";
 
     private static final String copperMutation =
-            "AgriCraft:seedCuprosia=AgriCraft:seedRedstodendron+AgriCraft:seedTulipOrange";
+            "AgriCraft:seedCuprosia=AgriCraft:seedRedstodendron+AgriCraft:seedTulipRed";
 
     private static final String tinMutation =
             "AgriCraft:seedPetinia=AgriCraft:seedLapender+AgriCraft:seedDaisy";

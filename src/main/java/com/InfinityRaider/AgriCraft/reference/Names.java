@@ -68,10 +68,23 @@ public final class Names {
 
     //colors
     public static class Colors {
-        public static final String red = "Red";
-        public static final String orange = "Orange";
         public static final String white = "White";
+        public static final String orange = "Orange";
+        public static final String magenta = "Magenta";
+        public static final String lightBlue = "LightBlue";
+        public static final String yellow = "Yellow";
+        public static final String lime = "Lime";
         public static final String pink = "Pink";
+        public static final String gray = "Gray";
+        public static final String lightGray = "LightGray";
+        public static final String cyan = "Cyan";
+        public static final String purple = "Purple";
+        public static final String blue = "Blue";
+        public static final String brown = "Brown";
+        public static final String green = "Green";
+        public static final String red = "Red";
+        public static final String black = "Black";
+
     }
 
     //plants
@@ -174,6 +187,22 @@ public final class Names {
         public static final String cropNiccissus = Objects.crop+ Plants.niccissus;
         public static final String cropPlatiolus = Objects.crop+ Plants.platiolus;
         public static final String cropOsmonium = Objects.crop+ Plants.osmonium;
+        public static final String cropBotaniaWhite = Objects.crop + Mods.botania + Colors.white;
+        public static final String cropBotaniaOrange = Objects.crop + Mods.botania + Colors.orange;
+        public static final String cropBotaniaMagenta = Objects.crop + Mods.botania + Colors.magenta;
+        public static final String cropBotaniaLightBlue = Objects.crop + Mods.botania + Colors.lightBlue;
+        public static final String cropBotaniaYellow = Objects.crop + Mods.botania + Colors.yellow;
+        public static final String cropBotaniaLime = Objects.crop + Mods.botania + Colors.lime;
+        public static final String cropBotaniaPink = Objects.crop + Mods.botania + Colors.pink;
+        public static final String cropBotaniaGray = Objects.crop + Mods.botania + Colors.gray;
+        public static final String cropBotaniaLightGray = Objects.crop + Mods.botania + Colors.lightGray;
+        public static final String cropBotaniaCyan = Objects.crop + Mods.botania + Colors.cyan;
+        public static final String cropBotaniaPurple = Objects.crop + Mods.botania + Colors.purple;
+        public static final String cropBotaniaBlue = Objects.crop + Mods.botania + Colors.blue;
+        public static final String cropBotaniaBrown = Objects.crop + Mods.botania + Colors.brown;
+        public static final String cropBotaniaGreen = Objects.crop + Mods.botania + Colors.green;
+        public static final String cropBotaniaRed = Objects.crop + Mods.botania + Colors.red;
+        public static final String cropBotaniaBlack = Objects.crop + Mods.botania + Colors.black;
     }
 
     //seeds
@@ -205,6 +234,22 @@ public final class Names {
         public static final String seedNiccissus = Objects.seed+ Plants.niccissus;
         public static final String seedPlatiolus = Objects.seed+ Plants.platiolus;
         public static final String seedOsmonium = Objects.seed+ Plants.osmonium;
+        public static final String seedBotaniaWhite = Objects.seed + Mods.botania + Colors.white;
+        public static final String seedBotaniaOrange = Objects.seed + Mods.botania + Colors.orange;
+        public static final String seedBotaniaMagenta = Objects.seed + Mods.botania + Colors.magenta;
+        public static final String seedBotaniaLightBlue = Objects.seed + Mods.botania + Colors.lightBlue;
+        public static final String seedBotaniaYellow = Objects.seed + Mods.botania + Colors.yellow;
+        public static final String seedBotaniaLime = Objects.seed + Mods.botania + Colors.lime;
+        public static final String seedBotaniaPink = Objects.seed + Mods.botania + Colors.pink;
+        public static final String seedBotaniaGray = Objects.seed + Mods.botania + Colors.gray;
+        public static final String seedBotaniaLightGray = Objects.seed + Mods.botania + Colors.lightGray;
+        public static final String seedBotaniaCyan = Objects.seed + Mods.botania + Colors.cyan;
+        public static final String seedBotaniaPurple = Objects.seed + Mods.botania + Colors.purple;
+        public static final String seedBotaniaBlue = Objects.seed + Mods.botania + Colors.blue;
+        public static final String seedBotaniaBrown = Objects.seed + Mods.botania + Colors.brown;
+        public static final String seedBotaniaGreen = Objects.seed + Mods.botania + Colors.green;
+        public static final String seedBotaniaRed = Objects.seed + Mods.botania + Colors.red;
+        public static final String seedBotaniaBlack = Objects.seed + Mods.botania + Colors.black;
     }
 
     //ore dictionary entries

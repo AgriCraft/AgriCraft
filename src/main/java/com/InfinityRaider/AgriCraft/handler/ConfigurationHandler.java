@@ -50,6 +50,7 @@ public class ConfigurationHandler {
     public static boolean integration_WeeeFlowers;
     public static boolean integration_PlantMegaPack;
     public static boolean integration_Chococraft;
+    public static boolean integration_Botania;
     public static boolean integration_allowMagicFertiliser;
     public static boolean integration_instantMagicFertiliser;
 
@@ -90,11 +91,12 @@ public class ConfigurationHandler {
         fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", CATEGORY_IRRIGATION, false, "set to true to let tanks fill up when water flows above them");
 
         //mod integration
-        integration_HC = ModIntegration.LoadedMods.harvestcraft && config.getBoolean("HarvestCraft",CATEGORY_INTEGRATION,true,"Set to false to disable harvestCraft integration");
-        integration_Nat = ModIntegration.LoadedMods.natura && config.getBoolean("Natura",CATEGORY_INTEGRATION,true,"Set to false to disable Natura Integration");
-        integration_WeeeFlowers = ModIntegration.LoadedMods.weeeFlowers && config.getBoolean("Weee Flowers",CATEGORY_INTEGRATION,true,"Set to false to disable Weee Flowers Integration");
-        integration_PlantMegaPack = ModIntegration.LoadedMods.plantMegaPack && config.getBoolean("Plant Mega Pack",CATEGORY_INTEGRATION,true,"Set to false to disable Plant Mega Pack Integration");
-        integration_Chococraft = ModIntegration.LoadedMods.chococraft && config.getBoolean("ChocoCraft",CATEGORY_INTEGRATION,true,"Set to false to disable Chococraft Integration");
+        integration_HC = ModIntegration.LoadedMods.harvestcraft && config.getBoolean("HarvestCraft",CATEGORY_INTEGRATION, true,"Set to false to disable harvestCraft integration");
+        integration_Nat = ModIntegration.LoadedMods.natura && config.getBoolean("Natura",CATEGORY_INTEGRATION, true,"Set to false to disable Natura Integration");
+        integration_WeeeFlowers = ModIntegration.LoadedMods.weeeFlowers && config.getBoolean("Weee Flowers",CATEGORY_INTEGRATION, true,"Set to false to disable Weee Flowers Integration");
+        integration_PlantMegaPack = ModIntegration.LoadedMods.plantMegaPack && config.getBoolean("Plant Mega Pack",CATEGORY_INTEGRATION, true,"Set to false to disable Plant Mega Pack Integration");
+        integration_Chococraft = ModIntegration.LoadedMods.chococraft && config.getBoolean("ChocoCraft",CATEGORY_INTEGRATION, true,"Set to false to disable Chococraft Integration");
+        integration_Botania = ModIntegration.LoadedMods.botania && config.getBoolean("Botania", CATEGORY_INTEGRATION, true, "Set to false to disable Chococraft Integration");
         integration_allowMagicFertiliser = ModIntegration.LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser",CATEGORY_INTEGRATION,true,"Set to false to disable using magical fertiliser on crops");
         integration_instantMagicFertiliser = ModIntegration.LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser Instant Growth", CATEGORY_INTEGRATION, false, "Set to true to insta-grow plants on which the magical fertiliser is used on");
 

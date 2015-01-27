@@ -48,6 +48,10 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         this(null, null, 0, fruit, fruitMeta, tier, 6);
     }
 
+    public BlockModPlant(Item fruit, int fruitMeta, int tier, int renderType) {
+        this(null, null, 0, fruit, fruitMeta, tier, renderType);
+    }
+
     public BlockModPlant(Block soil, Block base, Item fruit, int tier, int renderType) {
         this(soil, base, 0, fruit, 0, tier, renderType);
     }

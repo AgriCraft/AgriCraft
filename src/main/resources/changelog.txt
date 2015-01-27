@@ -11,6 +11,8 @@ Changelog
 -Added configurable instant-growth for magical fertiliser
 -Fixed seeds with identical stats sometimes not stacking
 -Fixed shapeless custom wood recipes not working correctly
+-Fixed vanilla farming only disabling for farmland
+-Added crops for botania's petals
 
 1.2.1
 -Changed AgriCraft creative tab logo
