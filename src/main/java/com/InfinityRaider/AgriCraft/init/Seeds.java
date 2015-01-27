@@ -30,6 +30,24 @@ public class Seeds {
     public static ItemModSeed seedDaisy;
     public static ItemModSeed seedCactus;
 
+    //botania flower seeds
+    public static ItemModSeed seedBotaniaWhite;
+    public static ItemModSeed seedBotaniaOrange;
+    public static ItemModSeed seedBotaniaMagenta;
+    public static ItemModSeed seedBotaniaLightBlue;
+    public static ItemModSeed seedBotaniaYellow;
+    public static ItemModSeed seedBotaniaLime;
+    public static ItemModSeed seedBotaniaPink;
+    public static ItemModSeed seedBotaniaGray;    //I'm in favor of the British grey, but I'm just being consistent with Vazkii being consistent with Vanilla
+    public static ItemModSeed seedBotaniaLightGray;
+    public static ItemModSeed seedBotaniaCyan;
+    public static ItemModSeed seedBotaniaPurple;
+    public static ItemModSeed seedBotaniaBlue;
+    public static ItemModSeed seedBotaniaBrown;
+    public static ItemModSeed seedBotaniaGreen;
+    public static ItemModSeed seedBotaniaRed;
+    public static ItemModSeed seedBotaniaBlack;
+
     //resource crop seeds
     public static ItemModSeed seedDiamahlia;
     public static ItemModSeed seedFerranium;
@@ -62,47 +80,20 @@ public class Seeds {
         seedDaisy = new ItemModSeed(Crops.daisy, SeedInformation.daisy);
         seedCactus = new ItemModSeed(Crops.cactus, SeedInformation.cactus);
 
-        RegisterHelper.registerItem(seedPotato, Names.Seeds.seedPotato);
-        RegisterHelper.registerItem(seedCarrot, Names.Seeds.seedCarrot);
-        RegisterHelper.registerItem(seedSugarcane, Names.Seeds.seedSugarcane);
-        RegisterHelper.registerItem(seedDandelion, Names.Seeds.seedDandelion);
-        RegisterHelper.registerItem(seedPoppy, Names.Seeds.seedPoppy);
-        RegisterHelper.registerItem(seedOrchid, Names.Seeds.seedOrchid);
-        RegisterHelper.registerItem(seedAllium, Names.Seeds.seedAllium);
-        RegisterHelper.registerItem(seedTulipRed, Names.Seeds.seedTulipRed);
-        RegisterHelper.registerItem(seedTulipOrange, Names.Seeds.seedTulipOrange);
-        RegisterHelper.registerItem(seedTulipWhite, Names.Seeds.seedTulipWhite);
-        RegisterHelper.registerItem(seedTulipPink, Names.Seeds.seedTulipPink);
-        RegisterHelper.registerItem(seedDaisy, Names.Seeds.seedDaisy);
-        RegisterHelper.registerItem(seedCactus, Names.Seeds.seedCactus);
+        RegisterHelper.registerSeed(seedPotato, Names.Seeds.seedPotato, Crops.potato);
+        RegisterHelper.registerSeed(seedCarrot, Names.Seeds.seedCarrot, Crops.carrot);
+        RegisterHelper.registerSeed(seedSugarcane, Names.Seeds.seedSugarcane, Crops.sugarcane);
+        RegisterHelper.registerSeed(seedDandelion, Names.Seeds.seedDandelion, Crops.dandelion);
+        RegisterHelper.registerSeed(seedPoppy, Names.Seeds.seedPoppy, Crops.poppy);
+        RegisterHelper.registerSeed(seedOrchid, Names.Seeds.seedOrchid, Crops.orchid);
+        RegisterHelper.registerSeed(seedAllium, Names.Seeds.seedAllium, Crops.allium);
+        RegisterHelper.registerSeed(seedTulipRed, Names.Seeds.seedTulipRed, Crops.tulipRed);
+        RegisterHelper.registerSeed(seedTulipOrange, Names.Seeds.seedTulipOrange, Crops.tulipOrange);
+        RegisterHelper.registerSeed(seedTulipWhite, Names.Seeds.seedTulipWhite, Crops.tulipWhite);
+        RegisterHelper.registerSeed(seedTulipPink, Names.Seeds.seedTulipPink, Crops.tulipPink);
+        RegisterHelper.registerSeed(seedDaisy, Names.Seeds.seedDaisy, Crops.daisy);
+        RegisterHelper.registerSeed(seedCactus, Names.Seeds.seedCactus, Crops.cactus);
 
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedPotato);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedCarrot);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedSugarcane);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedDandelion);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedPoppy);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedOrchid);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedAllium);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedTulipRed);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedTulipOrange);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedTulipWhite);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedTulipPink);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedDaisy);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedCactus);
-
-        Crops.potato.initializeSeed(seedPotato);
-        Crops.carrot.initializeSeed(seedCarrot);
-        Crops.sugarcane.initializeSeed(seedSugarcane);
-        Crops.dandelion.initializeSeed(seedDandelion);
-        Crops.poppy.initializeSeed(seedPoppy);
-        Crops.orchid.initializeSeed(seedOrchid);
-        Crops.allium.initializeSeed(seedAllium);
-        Crops.tulipRed.initializeSeed(seedTulipRed);
-        Crops.tulipOrange.initializeSeed(seedTulipOrange);
-        Crops.tulipWhite.initializeSeed(seedTulipWhite);
-        Crops.tulipPink.initializeSeed(seedTulipPink);
-        Crops.daisy.initializeSeed(seedDaisy);
-        Crops.cactus.initializeSeed(seedCactus);
 
         //resource crop seeds
         if(ConfigurationHandler.resourcePlants) {
@@ -114,72 +105,44 @@ public class Seeds {
             seedEmeryllis = new ItemModSeed(ResourceCrops.emeryllis, SeedInformation.emeryllis);
             seedRedstodendron = new ItemModSeed(ResourceCrops.redstodendron, SeedInformation.redstodendron);
 
-            RegisterHelper.registerItem(seedFerranium, Names.Seeds.seedFerranium);
-            RegisterHelper.registerItem(seedDiamahlia, Names.Seeds.seedDiamahlia);
-            RegisterHelper.registerItem(seedAurigold, Names.Seeds.seedAurigold);
-            RegisterHelper.registerItem(seedLapender, Names.Seeds.seedLapender);
-            RegisterHelper.registerItem(seedEmeryllis, Names.Seeds.seedEmeryllis);
-            RegisterHelper.registerItem(seedRedstodendron, Names.Seeds.seedRedstodendron);
-
-            OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedDiamahlia);
-            OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedFerranium);
-            OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedAurigold);
-            OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedLapender);
-
-            ResourceCrops.diamahlia.initializeSeed(seedDiamahlia);
-            ResourceCrops.ferranium.initializeSeed(seedFerranium);
-            ResourceCrops.aurigold.initializeSeed(seedAurigold);
-            ResourceCrops.lapender.initializeSeed(seedLapender);
-            ResourceCrops.emeryllis.initializeSeed(seedEmeryllis);
-            ResourceCrops.redstodendron.initializeSeed(seedRedstodendron);
+            RegisterHelper.registerSeed(seedFerranium, Names.Seeds.seedFerranium, ResourceCrops.ferranium);
+            RegisterHelper.registerSeed(seedDiamahlia, Names.Seeds.seedDiamahlia, ResourceCrops.diamahlia);
+            RegisterHelper.registerSeed(seedAurigold, Names.Seeds.seedAurigold, ResourceCrops.aurigold);
+            RegisterHelper.registerSeed(seedLapender, Names.Seeds.seedLapender, ResourceCrops.lapender);
+            RegisterHelper.registerSeed(seedEmeryllis, Names.Seeds.seedEmeryllis, ResourceCrops.emeryllis);
+            RegisterHelper.registerSeed(seedRedstodendron, Names.Seeds.seedRedstodendron, ResourceCrops.redstodendron);
 
             if(OreDictHelper.oreCopper!=null) {
                 seedCuprosia = new ItemModSeed(ResourceCrops.cuprosia, SeedInformation.cuprosia);
-                RegisterHelper.registerItem(seedCuprosia, Names.Seeds.seedCuprosia);
-                OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedCuprosia);
-                ResourceCrops.cuprosia.initializeSeed(seedCuprosia);
+                RegisterHelper.registerSeed(seedCuprosia, Names.Seeds.seedCuprosia, ResourceCrops.cuprosia);
             }
             if(OreDictHelper.oreTin!=null) {
                 seedPetinia = new ItemModSeed(ResourceCrops.petinia, SeedInformation.petinia);
-                RegisterHelper.registerItem(seedPetinia, Names.Seeds.seedPetinia);
-                OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedPetinia);
-                ResourceCrops.petinia.initializeSeed(Seeds.seedPetinia);
+                RegisterHelper.registerSeed(seedPetinia, Names.Seeds.seedPetinia, ResourceCrops.petinia);
             }
             if(OreDictHelper.oreLead!=null) {
                 seedPlombean = new ItemModSeed(ResourceCrops.plombean, SeedInformation.plombean);
-                RegisterHelper.registerItem(seedPlombean, Names.Seeds.seedPlombean);
-                OreDictionary.registerOre(Names.OreDict.listAllseed, seedPlombean);
-                ResourceCrops.plombean.initializeSeed(Seeds.seedPlombean);
+                RegisterHelper.registerSeed(seedPlombean, Names.Seeds.seedPlombean, ResourceCrops.plombean);
             }
             if(OreDictHelper.oreSilver!=null) {
                 seedSilverweed = new ItemModSeed(ResourceCrops.silverweed, SeedInformation.silverweed);
-                RegisterHelper.registerItem(seedSilverweed, Names.Seeds.seedSilverweed);
-                OreDictionary.registerOre(Names.OreDict.listAllseed, seedSilverweed);
-                ResourceCrops.silverweed.initializeSeed(Seeds.seedSilverweed);
+                RegisterHelper.registerSeed(seedSilverweed, Names.Seeds.seedSilverweed, ResourceCrops.silverweed);
             }
             if(OreDictHelper.oreAluminum!=null) {
                 seedJaslumine = new ItemModSeed(ResourceCrops.jaslumine, SeedInformation.jaslumine);
-                RegisterHelper.registerItem(seedJaslumine, Names.Seeds.seedJaslumine);
-                OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedJaslumine);
-                ResourceCrops.jaslumine.initializeSeed(Seeds.seedJaslumine);
+                RegisterHelper.registerSeed(seedJaslumine, Names.Seeds.seedJaslumine, ResourceCrops.jaslumine);
             }
             if(OreDictHelper.oreNickel!=null) {
                 seedNiccissus = new ItemModSeed(ResourceCrops.niccissus, SeedInformation.niccissus);
-                RegisterHelper.registerItem(seedNiccissus, Names.Seeds.seedNiccissus);
-                OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedNiccissus);
-                ResourceCrops.niccissus.initializeSeed(Seeds.seedNiccissus);
+                RegisterHelper.registerSeed(seedNiccissus, Names.Seeds.seedNiccissus, ResourceCrops.niccissus);
             }
             if(OreDictHelper.orePlatinum!=null) {
                 seedPlatiolus = new ItemModSeed(ResourceCrops.platiolus, SeedInformation.platiolus);
-                RegisterHelper.registerItem(seedPlatiolus, Names.Seeds.seedPlatiolus);
-                OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedPlatiolus);
-                ResourceCrops.platiolus.initializeSeed(Seeds.seedPlatiolus);
+                RegisterHelper.registerSeed(seedPlatiolus, Names.Seeds.seedPlatiolus, ResourceCrops.platiolus);
             }
             if(OreDictHelper.oreOsmium!=null) {
                 seedOsmonium = new ItemModSeed(ResourceCrops.osmonium, SeedInformation.osmonium);
-                RegisterHelper.registerItem(seedOsmonium, Names.Seeds.seedOsmonium);
-                OreDictionary.registerOre(Names.OreDict.listAllseed, Seeds.seedOsmonium);
-                ResourceCrops.osmonium.initializeSeed(Seeds.seedOsmonium);
+                RegisterHelper.registerSeed(seedOsmonium, Names.Seeds.seedOsmonium, ResourceCrops.osmonium);
             }
         }
 
