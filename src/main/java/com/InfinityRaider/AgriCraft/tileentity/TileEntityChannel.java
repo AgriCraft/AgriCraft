@@ -175,15 +175,15 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
 
     /** Maps the current fluid level into the integer interval [0, 16] */
     public int getDiscreteFluidLevel() {
-        return Math.round(DISCRETE_FACTOR * lvl);
+        int discreteFluidLevel = Math.round(DISCRETE_FACTOR * lvl);
+        if (discreteFluidLevel == 0 && lvl > 0)
+            discreteFluidLevel = 1;
+        return discreteFluidLevel;
     }
 
     /** Scales the discrete fluid level back to the interval [0, 500] */
     public int getDiscreteScaledFluidLevel() {
         int discreteFluidLevel = getDiscreteFluidLevel();
-        if (discreteFluidLevel == 0 && lvl > 0)
-            discreteFluidLevel = 1;
-
         return Math.round(SCALE_FACTOR * discreteFluidLevel);
     }
 
