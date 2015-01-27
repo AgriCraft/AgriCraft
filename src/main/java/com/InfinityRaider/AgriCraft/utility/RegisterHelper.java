@@ -1,13 +1,17 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 
@@ -31,6 +35,12 @@ public abstract class RegisterHelper {
         item.setUnlocalizedName(Reference.MOD_ID.toLowerCase()+':'+name);
         LogHelper.info("registering " + item.getUnlocalizedName());
         GameRegistry.registerItem(item, name);
+    }
+
+    public static void registerSeed(ItemSeeds seed, String name, BlockModPlant plant) {
+        registerItem(seed, name);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seed);
+        plant.initializeSeed(seed);
     }
 
     public static void removeRecipe(ItemStack stack) {
