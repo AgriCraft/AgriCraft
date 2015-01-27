@@ -99,7 +99,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
     	boolean newState  = this.canSprinkle();
         if(newState != this.isSprinkled) {
         	this.isSprinkled = newState;
-        	this.markDirty();
+        	this.markDirtyAndMarkForUpdate();
         }
         return this.isSprinkled;
     }

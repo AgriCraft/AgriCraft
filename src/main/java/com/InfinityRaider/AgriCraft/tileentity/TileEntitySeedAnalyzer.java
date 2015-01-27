@@ -105,7 +105,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
             change = true;
         }
         if(change) {
-            this.markDirty();
+            this.markDirtyAndMarkForUpdate();
             this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord), 0, 0);
             this.worldObj.notifyBlockChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
         }

@@ -125,7 +125,7 @@ public class BlockWaterTank extends BlockCustomWood{
                 }
             }
             if(update) {
-                tank.markDirty();
+                tank.markDirtyAndMarkForUpdate();
                 world.markBlockForUpdate(x, y, z);
                 return true;
             }
