@@ -154,6 +154,25 @@ public final class SeedInformation {
     public static final String pumpkin = "agricraft_journal.pumpkin";
     public static final String melon = "agricraft_journal.melon";
 
+    //botania seeds
+    public static final String botaniaWhite = "agricraft_journal.botaniaWhite";
+    public static final String botaniaOrange = "agricraft_journal.botaniaOrange";
+    public static final String botaniaMagenta = "agricraft_journal.botaniaMagenta";
+    public static final String botaniaLightBlue = "agricraft_journal.botaniaLightBlue";
+    public static final String botaniaYellow = "agricraft_journal.botaniaYellow";
+    public static final String botaniaLime = "agricraft_journal.botaniaLime";
+    public static final String botaniaPink = "agricraft_journal.botaniaPink";
+    public static final String botaniaGray = "agricraft_journal.botaniaGray";
+    public static final String botaniaLightGray = "agricraft_journal.botaniaLightGray";
+    public static final String botaniaCyan = "agricraft_journal.botaniaCyan";
+    public static final String botaniaPurple = "agricraft_journal.botaniaPurple";
+    public static final String botaniaBlue = "agricraft_journal.botaniaBlue";
+    public static final String botaniaBrown = "agricraft_journal.botaniaBrown";
+    public static final String botaniaGreen = "agricraft_journal. botaniaGreen";
+    public static final String botaniaRed = "agricraft_journal.botaniaRed";
+    public static final String botaniaBlack = "agricraft_journal.botaniaBlack";
+
+
     //natura seeds
     public static final String barleyNatura = "agricraft_journal.barleyNatura";
     public static final String cottonNatura = "agricraft_journal.cottonNatura";
