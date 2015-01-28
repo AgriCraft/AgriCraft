@@ -3,6 +3,9 @@ package com.InfinityRaider.AgriCraft.reference;
 import java.util.Random;
 
 public final class Constants {
+
+    public static final boolean LOG_RENDER_CALLS = false;
+
     public static final Random rand = new Random();
     // 1/16th
     public static final float unit = 0.06250F;

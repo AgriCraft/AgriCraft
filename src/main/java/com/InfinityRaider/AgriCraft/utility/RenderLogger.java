@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.RenderChannel;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -11,6 +12,9 @@ public class RenderLogger {
 
     @SubscribeEvent
     public void onTick(TickEvent.ServerTickEvent event) {
+        if (!Constants.LOG_RENDER_CALLS)
+            return;
+
         timer++;
         if (timer % 40 == 0) {
             timer = 0;
