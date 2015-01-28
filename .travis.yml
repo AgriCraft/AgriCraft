@@ -11,6 +11,13 @@ env:
   global:
     TERM=dumb
 
+sudo: false
+
+cache:
+  directories:
+    - ./libs
+    - $HOME/.m2
+
 deploy:
   provider: releases
   api-key: "e5b90da5b83aebc4f3da5c09476f27e2d9215968"
