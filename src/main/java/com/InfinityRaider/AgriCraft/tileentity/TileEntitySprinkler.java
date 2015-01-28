@@ -16,11 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
 
-import java.util.Random;
-
 public class TileEntitySprinkler extends TileEntityAgricraft{
-
-    private static final int GROWTH_INTERVAL = 100;
 
     private int counter = 0;
     public float angle = 0.0F;
@@ -112,7 +108,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
                 // irrigate farmland
                 this.worldObj.setBlockMetadataWithNotify(x, y, z, 7, 2);
             } else if (block instanceof BlockBush) {
-                // 20% chance to force growth tick on plant, every 100 ticks (5 seconds)
+                // x chance to force growth tick on plant every y ticks
                 if (counter == 0 && Constants.rand.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
                     block.updateTick(this.worldObj, x, y, z, Constants.rand);
                 }
