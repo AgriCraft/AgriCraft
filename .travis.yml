@@ -17,6 +17,7 @@ cache:
   directories:
     - ./libs
     - $HOME/.m2
+    - $HOME/.gradle/minecraft
 
 deploy:
   provider: releases
