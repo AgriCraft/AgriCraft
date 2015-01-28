@@ -73,7 +73,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 if (meta < 7 && crop.isFertile()) {
                     double multiplier = 1.0 + (crop.growth + 0.00) / 10;
                     float growthRate = (float) SeedHelper.getBaseGrowth((ItemSeeds) crop.seed, crop.seedMeta);
-                    boolean shouldGrow = allowGrowthResult == Event.Result.ALLOW || rnd.nextDouble() <= (growthRate * multiplier)/100;
+                    boolean shouldGrow = (rnd.nextDouble()<=(growthRate * multiplier)/100);
                     if (shouldGrow) {
                         meta++;
                         world.setBlockMetadataWithNotify(x, y, z, meta, 2);
@@ -88,7 +88,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 if (meta<7) {
                     double multiplier = 1.0 + (10 + 0.00) / 10;
                     float growthRate = (float) Constants.growthTier1;
-                    boolean shouldGrow = allowGrowthResult == Event.Result.ALLOW || rnd.nextDouble() <= (growthRate * multiplier)/100;
+                    boolean shouldGrow = (rnd.nextDouble()<=(growthRate * multiplier)/100);
                     if (shouldGrow) {
                         meta++;
                         world.setBlockMetadataWithNotify(x, y, z, meta, 2);
