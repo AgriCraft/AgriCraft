@@ -16,6 +16,7 @@ Changelog
 -Fixes lag issues regarding the irrigation system
 -Crops will follow Hunger Overhaul's rules (Squeek502)
 -Added growth rate configuration for sprinkler
+-Fixed seed duplication bug involving the Seed Analyzer
 
 1.2.1
 -Changed AgriCraft creative tab logo
