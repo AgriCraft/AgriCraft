@@ -16,8 +16,7 @@ sudo: false
 cache:
   directories:
     - ./libs
-    - $HOME/.m2
-    - $HOME/.gradle/minecraft
+    - $HOME/.gradle/caches
 
 deploy:
   provider: releases
