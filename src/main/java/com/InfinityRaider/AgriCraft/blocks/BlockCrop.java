@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
-import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemCrop;
@@ -13,6 +12,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.mark719.magicalcrops.items.ItemMagicalCropFertilizer;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -33,11 +33,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tconstruct.items.tools.Scythe;
 import tconstruct.library.tools.AbilityHelper;
+import vazkii.botania.api.item.IGrassHornExcempt;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGrowable {
+@Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IGrassHornExcempt")
+public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGrowable, IGrassHornExcempt {
 
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
@@ -369,6 +371,29 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
         super.breakBlock(world,x,y,z,block,meta);
         world.removeTileEntity(x,y,z);
+    }
+
+    //Botania horn of the wild support
+    @Override
+    public boolean canUproot(World world, int x, int y, int z) {
+        if(!world.isRemote) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            if(te!=null && te instanceof TileEntityCrop) {
+                TileEntityCrop crop = (TileEntityCrop) te;
+                if(crop.hasPlant()) {
+                    ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+                    if(crop.isMature()) {
+                        drops.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+                    }
+                    drops.add(crop.getSeedStack());
+                    for (ItemStack drop : drops) {
+                        this.dropBlockAsItem(world, x, y, z, drop);
+                    }
+                }
+                crop.clearPlant();
+            }
+        }
+        return false;
     }
 
     //return the crops item if this block is called

@@ -21,7 +21,7 @@ public class Blocks {
     public static BlockSeedStorage blockSeedStorage;
 
     public static void init() {
-        blockCrop = getBlockCrop();
+        blockCrop = new BlockCrop();
         RegisterHelper.registerBlock(blockCrop, Names.Objects.crops);
         seedAnalyzer = new BlockSeedAnalyzer();
         RegisterHelper.registerBlock(seedAnalyzer, Names.Objects.seedAnalyzer);
@@ -40,18 +40,5 @@ public class Blocks {
             RegisterHelper.registerBlock(blockSprinkler, Names.Objects.sprinkler);
         }
         LogHelper.info("Blocks registered");
-    }
-
-    private static BlockCrop getBlockCrop() {
-        if (ModIntegration.LoadedMods.botania) {
-            try {
-                Class<BlockCrop> clazz = (Class<BlockCrop>) Class.forName("com.InfinityRaider.AgriCraft.blocks.BlockCropBotania");
-                return clazz.newInstance();
-            } catch (Exception e) {
-                FMLLog.log(Reference.MOD_ID, Level.ERROR, e, "Unable to create BlockCropBotania instance.");
-            }
-        }
-
-        return new BlockCrop();
     }
 }

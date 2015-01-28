@@ -81,6 +81,7 @@ dependencies {
     compile fileTree(dir: 'libs', includes: ['*ChocoCraft*.jar'])
     compile fileTree(dir: 'libs', includes: ['*TConstruct*.jar'])
     compile fileTree(dir: 'libs', includes: ['MineTweaker3-Dev*.jar'])
+    compile fileTree(dir: 'libs', includes: ['Botania*.jar'])
 
     // Test dependencies
     testCompile "junit:junit:4.12"
