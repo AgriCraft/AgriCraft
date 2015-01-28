@@ -1,11 +1,13 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -99,11 +101,11 @@ public class BlockSeedAnalyzer extends Block implements ITileEntityProvider {
         items.add(new ItemStack(Item.getItemFromBlock(Blocks.seedAnalyzer), 1, 0));
         if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntitySeedAnalyzer) {
             TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(x, y, z);
-            if(analyzer.getStackInSlot(0)!=null) {
-                items.add(analyzer.getStackInSlot(0));
+            if(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId)!=null) {
+                items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId));
             }
-            if(analyzer.getStackInSlot(1)!=null) {
-                items.add(analyzer.getStackInSlot(1));
+            if(analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId)!=null) {
+                items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId));
             }
         }
         return items;
