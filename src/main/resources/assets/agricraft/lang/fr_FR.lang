@@ -33,6 +33,23 @@ item.agricraft:seedTulipPink.name=Bulbe de tulipe rose
 item.agricraft:seedDaisy.name=Graines de pâquerette
 item.agricraft:seedCactus.name=Graine de cactus
 
+item.agricraft:seedBotaniaWhite.name=Graines de fleur mystique blanche
+item.agricraft:seedBotaniaOrange.name=Graines de fleur mystique orange
+item.agricraft:seedBotaniaMagenta.name=Graines de fleur mystique magenta
+item.agricraft:seedBotaniaLightBlue.name=Graines de fleur mystique bleue claire
+item.agricraft:seedBotaniaYellow.name=Graines de fleur mystique jaune
+item.agricraft:seedBotaniaLime.name=Graines de fleur mystique citron
+item.agricraft:seedBotaniaPink.name=Graines de fleur mystique rose
+item.agricraft:seedBotaniaGray.name=Graines de fleur mystique grise
+item.agricraft:seedBotaniaLightGray.name=Graines de fleur mystique grise claire
+item.agricraft:seedBotaniaCyan.name=Graines de fleur mystique cyan
+item.agricraft:seedBotaniaPurple.name=Graines de fleur mystique violette
+item.agricraft:seedBotaniaBlue.name=Graines de fleur mystique bleue
+item.agricraft:seedBotaniaBrown.name=Graines de fleur mystique marron
+item.agricraft:seedBotaniaGreen.name=Graines de fleur mystique verte
+item.agricraft:seedBotaniaRed.name=Graines de fleur mystique rouge
+item.agricraft:seedBotaniaBlack.name=Graines de fleur mystique noire
+
 item.agricraft:seedFerranium.name=Graines de ferranium
 item.agricraft:seedAurigold.name=Graines de aurigold 
 item.agricraft:seedDiamahlia.name=Graines de diamahlia 
@@ -74,6 +91,23 @@ tile.agricraft:cropTulipWhite.name=Tulipe blanche
 tile.agricraft:cropTulipPink.name=Tulipe rose
 tile.agricraft:cropDaisy.name=Pâquerette
 tile.agricraft:cropCactus.name=Cactus
+
+tile.agricraft:cropBotaniaWhite.name=Fleur mystique blanche
+tile.agricraft:cropBotaniaOrange.name=Fleur mystique orange
+tile.agricraft:cropBotaniaMagenta.name=Fleur mystique magenta
+tile.agricraft:cropBotaniaLightBlue.name=Fleur mystique bleue claire
+tile.agricraft:cropBotaniaYellow.name=Fleur mystique jaune
+tile.agricraft:cropBotaniaLime.name=Fleur mystique citron
+tile.agricraft:cropBotaniaPink.name=Fleur mystique rose
+tile.agricraft:cropBotaniaGray.name=Fleur mystique grise
+tile.agricraft:cropBotaniaLightGray.name=Fleur mystique grise claire
+tile.agricraft:cropBotaniaCyan.name=Fleur mystique cyan
+tile.agricraft:cropBotaniaPurple.name=Fleur mystique violette
+tile.agricraft:cropBotaniaBlue.name=Fleur mystique bleue
+tile.agricraft:cropBotaniaBrown.name=Fleur mystique marron
+tile.agricraft:cropBotaniaGreen.name=Fleur mystique verte
+tile.agricraft:cropBotaniaRed.name=Fleur mystique rouge
+tile.agricraft:cropBotaniaBlack.name=Fleur mystique noire
 
 tile.agricraft:cropFerranium.name=Ferranium
 tile.agricraft:cropAurigold.name=Aurigold
@@ -151,6 +185,24 @@ agricraft_journal.jaslumine=Les forgerons y froncent les sourcils à sa vue, mai
 agricraft_journal.niccissus=Quand elle fleurit, ces fleurs révèlent des pépites faites de nickel. C'est toujours un mystère comment cette plante grandit.
 agricraft_journal.platiolus=Le platine est une matière rare, la plupart des métallurgistes iront chez l'agronome au lieu des mineurs pour se le procurer.
 agricraft_journal.osmonium=Un agronome réussissant à cultiver ces fleurs trouvera un bon marché auprès des ingénieurs.
+
+//botania seeds
+agricraft_journal.botaniaWhite=Cette fleur mystique a de jolies pétales blanches, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaOrange=Cette fleur mystique a de jolies pétales oranges, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaMagenta=Cette fleur mystique a de jolies pétales magenta, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaLightBlue=Cette fleur mystique a de jolies pétales bleues claires, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaYellow=Cette fleur mystique a de jolies pétales jaunes, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaLime=Cette fleur mystique a de jolies pétales citron, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaPink=Cette fleur mystique a de jolies pétales roses, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaGray=Cette fleur mystique a de jolies pétales grises, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaLightGray=Cette fleur mystique a de jolies pétales grises claires, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaCyan=Cette fleur mystique a de jolies pétales cyan, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaPurple=Cette fleur mystique a de jolies pétales violettes, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaBlue=Cette fleur mystique a de jolies pétales bleues, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaBrown=Cette fleur mystique a de jolies pétales marron, qui sait à quoi elles pourraient être utiles.
+agricraft_journal. botaniaGreen=Cette fleur mystique a de jolies pétales vertes, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaRed=Cette fleur mystique a de jolies pétales rouges, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaBlack=Cette fleur mystique a de jolies pétales noires, qui sait à quoi elles pourraient être utiles.
 
 //minecraft seeds
 agricraft_journal.wheat=Le blé est une culture très commune, mais très nutritive.
