@@ -23,6 +23,10 @@ repositories {
         name "Mobius Repo"
         url "http://mobiusstrip.eu/maven"
     }
+    maven {
+        name "squeek"
+        url "http://www.ryanliptak.com/maven/"
+    }
 }
 
 apply plugin: 'forge'
@@ -63,6 +67,9 @@ dependencies {
 
     // http://mobiusstrip.eu/maven
     compile "mcp.mobius.waila:Waila:1.5.5_1.7.10:dev"
+
+    // http://www.ryanliptak.com/maven/
+    compile "applecore:AppleCore:1.7.10-1.0.2+87.f5270:api"
 
     //some more mods
     compile fileTree(dir: 'libs', includes: ['*Mantle*.jar'])

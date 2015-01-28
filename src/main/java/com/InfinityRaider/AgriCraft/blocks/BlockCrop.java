@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
@@ -12,6 +13,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.mark719.magicalcrops.items.ItemMagicalCropFertilizer;
+import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -63,24 +65,38 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public void updateTick(World world, int x, int y, int z, Random rnd) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         if(crop.hasPlant()) {
-            int meta = this.getPlantMetadata(world, x, y, z);
-            if (meta < 7 && crop.isFertile()) {
-                double multiplier = 1.0 + (crop.growth + 0.00) / 10;
-                float growthRate = (float) SeedHelper.getBaseGrowth((ItemSeeds) crop.seed, crop.seedMeta);
-                meta = (rnd.nextDouble() > (growthRate * multiplier)/100) ? meta : meta + 1;
-                world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+            Event.Result allowGrowthResult = AppleCoreHelper.validateGrowthTick(this, world, x, y, z, rnd);
+            if (allowGrowthResult != Event.Result.DENY) {
+                int meta = this.getPlantMetadata(world, x, y, z);
+                if (meta < 7 && crop.isFertile()) {
+                    double multiplier = 1.0 + (crop.growth + 0.00) / 10;
+                    float growthRate = (float) SeedHelper.getBaseGrowth((ItemSeeds) crop.seed, crop.seedMeta);
+                    boolean shouldGrow = allowGrowthResult == Event.Result.ALLOW || rnd.nextDouble() <= (growthRate * multiplier)/100;
+                    if (shouldGrow) {
+                        meta++;
+                        world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+                        AppleCoreHelper.announceGrowthTick(this, world, x, y, z);
+                    }
+                }
             }
         } else if(crop.weed) {
-            int meta = this.getPlantMetadata(world, x, y, z);
-            if (meta<7) {
-                double multiplier = 1.0 + (10 + 0.00) / 10;
-                float growthRate = (float) Constants.growthTier1;
-                meta = (rnd.nextDouble() > (growthRate * multiplier)/100) ? meta : meta + 1;
-                world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-            }
-            else {
-                if(ConfigurationHandler.enableWeeds) {
-                    crop.spreadWeed();
+            Event.Result allowGrowthResult = AppleCoreHelper.validateGrowthTick(this, world, x, y, z, rnd);
+            if (allowGrowthResult != Event.Result.DENY) {
+                int meta = this.getPlantMetadata(world, x, y, z);
+                if (meta<7) {
+                    double multiplier = 1.0 + (10 + 0.00) / 10;
+                    float growthRate = (float) Constants.growthTier1;
+                    boolean shouldGrow = allowGrowthResult == Event.Result.ALLOW || rnd.nextDouble() <= (growthRate * multiplier)/100;
+                    if (shouldGrow) {
+                        meta++;
+                        world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+                        AppleCoreHelper.announceGrowthTick(this, world, x, y, z);
+                    }
+                }
+                else {
+                    if(ConfigurationHandler.enableWeeds) {
+                        crop.spreadWeed();
+                    }
                 }
             }
         } else {
