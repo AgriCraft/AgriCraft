@@ -42,6 +42,10 @@ public class ConfigurationHandler {
     public static boolean disableIrrigation;
     public static int sprinklerRatePerSecond;
     public static int sprinklerRatePerHalfSecond;
+    public static int sprinklerGrowthChance;
+    public static float sprinklerGrowthChancePercent;
+    public static int sprinklerGrowthInterval;
+    public static int sprinklerGrowthIntervalTicks = 100;
     public static boolean placeWater;
     public static boolean fillFromFlowingWater;
 
@@ -87,6 +91,10 @@ public class ConfigurationHandler {
         disableIrrigation = config.getBoolean("Disable Irrigation", CATEGORY_IRRIGATION, false, "set to true if you want to disable irrigation systems");
         sprinklerRatePerSecond = config.getInt("Sprinkler water usage", CATEGORY_IRRIGATION, 10, 0, 10000, "Water usage of the sprinkler in mB per second");
         sprinklerRatePerHalfSecond = Math.round(sprinklerRatePerSecond / 2);
+        sprinklerGrowthChance = config.getInt("Sprinkler growth chance", CATEGORY_IRRIGATION, 20, 0, 100, "Every x seconds each plant in sprinkler range has this chance to growth tick");
+        sprinklerGrowthChancePercent = sprinklerGrowthChance / 100F;
+        sprinklerGrowthInterval = config.getInt("Sprinkler growth interval", CATEGORY_IRRIGATION, 5, 1, 300, "Every x seconds each plant in sprinkler range has y chance to growth tick");
+        sprinklerGrowthIntervalTicks = sprinklerGrowthInterval * 20;
         placeWater = config.getBoolean("Spawn water after breaking tank", CATEGORY_IRRIGATION, true, "set to false to disable placing a source block when breaking non-empty tanks");
         fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", CATEGORY_IRRIGATION, false, "set to true to let tanks fill up when water flows above them");
 

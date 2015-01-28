@@ -20,7 +20,7 @@ import java.util.Random;
 
 public class TileEntitySprinkler extends TileEntityAgricraft{
 
-    private static final double GROWTH_CHANCE = 0.2;
+    private static final int GROWTH_INTERVAL = 100;
 
     private int counter = 0;
     public float angle = 0.0F;
@@ -72,7 +72,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
     public void updateEntity() {
         if (!worldObj.isRemote) {
             if (this.sprinkle()) {
-                counter = ++counter % 60;
+                counter = ++counter % ConfigurationHandler.sprinklerGrowthIntervalTicks;
                 drainWaterFromChannel();
 
                 for (int yOffset = 1; yOffset < 5; yOffset++) {
@@ -112,8 +112,8 @@ public class TileEntitySprinkler extends TileEntityAgricraft{
                 // irrigate farmland
                 this.worldObj.setBlockMetadataWithNotify(x, y, z, 7, 2);
             } else if (block instanceof BlockBush) {
-                // 20% chance to force growth tick on plant, every 60 ticks
-                if (counter == 0 && Constants.rand.nextDouble() <= GROWTH_CHANCE) {
+                // 20% chance to force growth tick on plant, every 100 ticks (5 seconds)
+                if (counter == 0 && Constants.rand.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
                     block.updateTick(this.worldObj, x, y, z, Constants.rand);
                 }
             }
