@@ -80,7 +80,7 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
             itemstack = itemstack1.copy();
             //try to move item from the analyzer into the player's inventory
             if (clickedSlot==seedSlotId || clickedSlot==journalSlotId) {
-                if (!this.mergeItemStack(itemstack1, 0, inventorySlots.size(), false)) {
+                if (!this.mergeItemStack(itemstack1, 0, inventorySlots.size() - 2, false)) {
                     return null;
                 }
             }
