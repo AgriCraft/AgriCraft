@@ -14,6 +14,7 @@ Changelog
 -Fixed vanilla farming only disabling for farmland
 -Added crops for botania's petals
 -Fixes lag issues regarding the irrigation system
+-Crops will follow Hunger Overhaul's rules (Squeek502)
 
 1.2.1
 -Changed AgriCraft creative tab logo
