@@ -119,8 +119,4 @@ sourceSets {
             runtimeClasspath += api.output
         }
     }
-
-    main {
-        output.resourcesDir = output.classesDir
-    }
 }
