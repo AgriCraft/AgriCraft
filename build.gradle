@@ -71,18 +71,6 @@ dependencies {
     // http://www.ryanliptak.com/maven/
     compile "applecore:AppleCore:1.7.10-1.0.2+87.f5270:api"
 
-    //some more mods
-    compile fileTree(dir: 'libs', includes: ['*Mantle*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*natura*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*Harvestcraft*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*Pams Mob Drop Crops*.zip'])
-    compile fileTree(dir: 'libs', includes: ['*magicalcrops*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*plantmegapack*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*ChocoCraft*.jar'])
-    compile fileTree(dir: 'libs', includes: ['*TConstruct*.jar'])
-    compile fileTree(dir: 'libs', includes: ['MineTweaker3-Dev*.jar'])
-    compile fileTree(dir: 'libs', includes: ['Botania*.jar'])
-
     // Test dependencies
     testCompile "junit:junit:4.12"
     testCompile "org.mockito:mockito-core:1.10.8"
