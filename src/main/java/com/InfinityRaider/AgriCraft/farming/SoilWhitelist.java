@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 

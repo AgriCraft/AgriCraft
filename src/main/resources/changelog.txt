@@ -7,7 +7,7 @@ Changelog
 -Crops can now be applied on sand and soul sand by default
 -Seeds now require the correct soil when being planted on a crop
 -Changed the way the soil whitelist works: whitelisted soils only apply to crops that need farmland
--Added cactus crop
+-Added cactus and mushroom crops
 -Added configurable instant-growth for magical fertiliser
 -Fixed seeds with identical stats sometimes not stacking
 -Fixed shapeless custom wood recipes not working correctly

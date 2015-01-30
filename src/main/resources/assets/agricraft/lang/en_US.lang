@@ -32,6 +32,8 @@ item.agricraft:seedTulipWhite.name=White Tulip Seeds
 item.agricraft:seedTulipPink.name=Pink Tulip Seeds
 item.agricraft:seedDaisy.name=Daisy Seeds
 item.agricraft:seedCactus.name=Cactus Seeds
+item.agricraft:seedShroomRed.name=Red Mushroom Spore
+item.agricraft:seedShroomBrown.name=Brown Mushroom Seeds
 
 item.agricraft:seedBotaniaWhite.name=Mystical White Flower Seeds
 item.agricraft:seedBotaniaOrange.name=Mystical Orange Flower Seeds
@@ -91,6 +93,8 @@ tile.agricraft:cropTulipWhite.name=White Tulip
 tile.agricraft:cropTulipPink.name=Pink Tulip
 tile.agricraft:cropDaisy.name=Daisy
 tile.agricraft:cropCactus.name=Cactus
+tile.agricraft:cropShroomRed.name=Red Mushroom
+tile.agricraft:cropShroomBrown.name=Brown Mushroom
 
 tile.agricraft:cropBotaniaWhite.name=Mystical White Flower
 tile.agricraft:cropBotaniaOrange.name=Mystical Orange Flower
@@ -171,6 +175,8 @@ agricraft_journal.tulipRed=There is a saying: 'there are 50 shades of tulip, but
 agricraft_journal.tulipWhite=There are many white flowers, but many say the white tulip is the white flower of white flowers.
 agricraft_journal.daisy=Daisies are quite common, but nonetheless pretty white flowers.
 agricraft_journal.cactus=Cacti can be grown to produce a green tinted substance which is often used as dye.
+agricraft_journal.shroomRed=This red fungus tastes actually quite nice and would make a fine ingredient for mushroom stew.
+agricraft_journal.shroomBrown=This brown fungus tastes actually quite nice and would make a fine ingredient for mushroom stew.
 agricraft_journal.diamahlia=Many still believe this flower only exists in tales and stories. However some agriculturists say they have succeeded in obtaining this legendary plant.
 agricraft_journal.aurigold=Aurigold is a rare and fabled flower that feeds on tiny fractions of gold in the soil, only a very patient and skilled agriculturist is able to cultivate this jewel.
 agricraft_journal.ferranium=This strange plant's roots do not care for water. They just burrow in the soil while absorbing iron particles to strengthen itself.

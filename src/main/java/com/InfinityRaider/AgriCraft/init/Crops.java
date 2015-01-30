@@ -7,6 +7,8 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.init.*;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import vazkii.botania.common.item.ModItems;
 
 public class Crops {
@@ -25,6 +27,8 @@ public class Crops {
     public static BlockModPlant tulipPink;
     public static BlockModPlant daisy;
     public static BlockModPlant cactus;
+    public static BlockModPlant shroomRed;
+    public static BlockModPlant shroomBrown;
 
     public static BlockModPlant botaniaWhite;
     public static BlockModPlant botaniaOrange;
@@ -58,7 +62,9 @@ public class Crops {
         tulipWhite = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
         tulipPink = new BlockModPlant(net.minecraft.init.Items.dye, 9, 2);
         daisy = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
-        cactus = new BlockModPlant(net.minecraft.init.Blocks.sand, net.minecraft.init.Items.dye, 2);
+        cactus = new BlockModPlant(Blocks.sand, net.minecraft.init.Items.dye, 2);
+        shroomRed = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.red_mushroom));
+        shroomBrown = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.brown_mushroom));
 
         RegisterHelper.registerBlock(potato, Names.Crops.cropPotato);
         RegisterHelper.registerBlock(carrot, Names.Crops.cropCarrot);
@@ -75,6 +81,8 @@ public class Crops {
         RegisterHelper.registerBlock(tulipPink, Names.Crops.cropTulipPink);
         RegisterHelper.registerBlock(daisy, Names.Crops.cropDaisy);
         RegisterHelper.registerBlock(cactus, Names.Crops.cropCactus);
+        RegisterHelper.registerBlock(shroomRed, Names.Crops.cropShroomRed);
+        RegisterHelper.registerBlock(shroomBrown, Names.Crops.cropShroomBrown);
 
         if(ModIntegration.LoadedMods.botania && ConfigurationHandler.integration_Botania) {
             botaniaWhite = new BlockModPlant(ModItems.petal, 0, 3, 1);

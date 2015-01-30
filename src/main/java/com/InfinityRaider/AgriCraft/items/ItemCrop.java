@@ -9,7 +9,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
+
 public class ItemCrop extends ModItem {
+    private static Block[] soils = {net.minecraft.init.Blocks.sand, net.minecraft.init.Blocks.soul_sand, net.minecraft.init.Blocks.mycelium};
     public ItemCrop() {
         super();
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
@@ -33,7 +36,7 @@ public class ItemCrop extends ModItem {
     }
 
     public static boolean isSoilValid(Block soil, int soilMeta) {
-        return soil==net.minecraft.init.Blocks.sand || soil==net.minecraft.init.Blocks.soul_sand || SoilWhitelist.isSoilFertile(soil, soilMeta);
+        return Arrays.asList(soils).contains(soil) || SoilWhitelist.isSoilFertile(soil, soilMeta);
 
     }
 }

@@ -101,6 +101,7 @@ public final class Names {
         public static final String tulip = "Tulip";
         public static final String daisy = "Daisy";
         public static final String cactus = "Cactus";
+        public static final String shroom = "Shroom";
         public static final String diamahlia = "Diamahlia";
         public static final String aurigold = "Aurigold";
         public static final String ferranium = "Ferranium";
@@ -173,6 +174,8 @@ public final class Names {
         public static final String cropTulipPink = Objects.crop+ Plants.tulip+ Colors.pink;
         public static final String cropDaisy = Objects.crop+ Plants.daisy;
         public static final String cropCactus = Objects.crop + Plants.cactus;
+        public static final String cropShroomRed = Objects.crop + Plants.shroom + Colors.red;
+        public static final String cropShroomBrown = Objects.crop + Plants.shroom + Colors.brown;
         public static final String cropDiamahlia = Objects.crop+ Plants.diamahlia;
         public static final String cropAurigold = Objects.crop+ Plants.aurigold;
         public static final String cropFerranium = Objects.crop+ Plants.ferranium;
@@ -220,6 +223,8 @@ public final class Names {
         public static final String seedTulipPink = Objects.seed+ Plants.tulip+ Colors.pink;
         public static final String seedDaisy = Objects.seed+ Plants.daisy;
         public static final String seedCactus = Objects.seed+ Plants.cactus;
+        public static final String seedShroomRed = Objects.seed + Plants.shroom + Colors.red;
+        public static final String seedShroomBrown = Objects.seed + Plants.shroom + Colors.brown;
         public static final String seedDiamahlia = Objects.seed+ Plants.diamahlia;
         public static final String seedAurigold = Objects.seed+ Plants.aurigold;
         public static final String seedFerranium = Objects.seed+ Plants.ferranium;

@@ -29,6 +29,8 @@ public class Seeds {
     public static ItemModSeed seedTulipPink;
     public static ItemModSeed seedDaisy;
     public static ItemModSeed seedCactus;
+    public static ItemModSeed seedShroomRed;
+    public static ItemModSeed seedShroomBrown;
 
     //botania flower seeds
     public static ItemModSeed seedBotaniaWhite;
@@ -79,6 +81,8 @@ public class Seeds {
         seedTulipPink = new ItemModSeed(Crops.tulipPink, SeedInformation.tulipPink);
         seedDaisy = new ItemModSeed(Crops.daisy, SeedInformation.daisy);
         seedCactus = new ItemModSeed(Crops.cactus, SeedInformation.cactus);
+        seedShroomRed = new ItemModSeed(Crops.shroomRed, SeedInformation.shroomRed);
+        seedShroomBrown = new ItemModSeed(Crops.shroomBrown, SeedInformation.shroomBrown);
 
         RegisterHelper.registerSeed(seedPotato, Names.Seeds.seedPotato, Crops.potato);
         RegisterHelper.registerSeed(seedCarrot, Names.Seeds.seedCarrot, Crops.carrot);
@@ -93,6 +97,8 @@ public class Seeds {
         RegisterHelper.registerSeed(seedTulipPink, Names.Seeds.seedTulipPink, Crops.tulipPink);
         RegisterHelper.registerSeed(seedDaisy, Names.Seeds.seedDaisy, Crops.daisy);
         RegisterHelper.registerSeed(seedCactus, Names.Seeds.seedCactus, Crops.cactus);
+        RegisterHelper.registerSeed(seedShroomRed, Names.Seeds.seedShroomRed, Crops.shroomRed);
+        RegisterHelper.registerSeed(seedShroomBrown, Names.Seeds.seedShroomBrown, Crops.shroomBrown);
 
         //botania flower seeds
         if(ConfigurationHandler.integration_Botania) {
