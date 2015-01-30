@@ -16,19 +16,25 @@ public class AppleCoreHelper {
     static {
         try {
             hasDispatcher = isAppleCoreLoaded && Class.forName("squeek.applecore.api.IAppleCoreDispatcher") != null;
-        } catch (ClassNotFoundException e) {
+        } catch(ClassNotFoundException e) {
             hasDispatcher = false;
         }
     }
 
     @Optional.Method(modid = AppleCoreHelper.MODID)
     private static Event.Result validateAppleCoreGrowthTick(Block block, World world, int x, int y, int z, Random random) {
-        return AppleCoreAPI.dispatcher.validatePlantGrowth(block, world, x, y, z, random);
+        Event.Result result = Event.Result.DEFAULT;
+        if(AppleCoreAPI.dispatcher!=null) {
+            result = AppleCoreAPI.dispatcher.validatePlantGrowth(block, world, x, y, z, random);
+        }
+        return result;
     }
 
     @Optional.Method(modid = AppleCoreHelper.MODID)
     private static void announceAppleCoreGrowthTick(Block block, World world, int x, int y, int z) {
-        AppleCoreAPI.dispatcher.announcePlantGrowth(block, world, x, y, z);
+        if(AppleCoreAPI.dispatcher!=null) {
+            AppleCoreAPI.dispatcher.announcePlantGrowth(block, world, x, y, z);
+        }
     }
 
     public static Event.Result validateGrowthTick(Block block, World world, int x, int y, int z, Random random) {
