@@ -132,7 +132,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 }
             }
             if (update) {
-                crop.markDirty();
+                crop.markDirtyAndMarkForUpdate();
             }
             return update;
         }
@@ -152,7 +152,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 this.harvest(world, x, y, z);
             }
             if (update) {
-                crop.markDirty();
+                crop.markDirtyAndMarkForUpdate();
             }
         }
     }
@@ -181,7 +181,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 //take one seed away if the player is not in creative
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
             }
-            crop.markDirty();
+            crop.markDirtyAndMarkForUpdate();
         }
     }
 

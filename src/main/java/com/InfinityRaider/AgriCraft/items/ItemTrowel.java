@@ -78,7 +78,7 @@ public class ItemTrowel extends ModItem {
                             crop.seed = seed;
                             crop.seedMeta = seedMeta;
                             world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.NBT.materialMeta), 3);
-                            crop.markDirty();
+                            crop.markDirtyAndMarkForUpdate();
                             //clear trowel
                             stack.setTagCompound(null);
                             stack.setItemDamage(0);
