@@ -81,7 +81,6 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         this.fruitMeta = fruitMeta;
         this.tier = tier;
         this.setTickRandomly(true);
-        this.setBlockBounds(0.0F,0.0F,0.0F,1.0F,1.0F,1.0F);
         this.useNeighborBrightness = true;
         this.renderType = renderType==1?renderType:6;
     }
