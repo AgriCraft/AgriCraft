@@ -46,6 +46,7 @@ public class Recipes {
             GameRegistry.addShapelessRecipe(new ItemStack(Seeds.seedPotato), new ItemStack(ExNihiloHelper.seedPotato));
             GameRegistry.addShapelessRecipe(new ItemStack(Seeds.seedCarrot), new ItemStack(ExNihiloHelper.seedCarrot));
             GameRegistry.addShapelessRecipe(new ItemStack(Seeds.seedSugarcane), new ItemStack(ExNihiloHelper.seedSugarCane));
+            GameRegistry.addShapelessRecipe(new ItemStack(Seeds.seedCactus), new ItemStack(ExNihiloHelper.seedCactus));
         }
         //journal
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.journal,1), "csc", "sbs", "csc", 'c', Items.crops, 's', Names.OreDict.listAllseed, 'b', net.minecraft.init.Items.writable_book));
