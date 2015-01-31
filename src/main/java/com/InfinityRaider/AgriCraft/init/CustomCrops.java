@@ -54,12 +54,12 @@ public class CustomCrops {
                         errorMsg = "Invalid soil: soil should be null, minecraft:sand, minecraft:soul_sand or minecraft:mycelium";
                         success = soil==null || ItemCrop.isSoilValid(soil, 0);
                         if(success) {
-                            ItemStack base = IOHelper.getStack(cropData[2]);
+                            ItemStack base = IOHelper.getStack(cropData[3]);
                             Block baseBlock = base != null ? ((ItemBlock) base.getItem()).field_150939_a : null;
                             int baseMeta = base != null ? base.getItemDamage() : 0;
-                            int tier = Integer.parseInt(cropData[3]);
-                            int renderType = Integer.parseInt(cropData[4]);
-                            String info = cropData[5];
+                            int tier = Integer.parseInt(cropData[4]);
+                            int renderType = Integer.parseInt(cropData[5]);
+                            String info = cropData[6];
 
                             customCrops[i] = new BlockModPlant(soil, baseBlock, baseMeta, fruit, fruitMeta, tier, renderType, true);
                             RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop + Character.toUpperCase(name.charAt(0)) + name.substring(1));
