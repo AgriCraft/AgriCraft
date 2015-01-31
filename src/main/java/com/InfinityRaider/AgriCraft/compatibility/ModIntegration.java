@@ -39,6 +39,7 @@ public class ModIntegration {
             MineTweakerAPI.registerClass(SeedBlacklist.class);
             MineTweakerAPI.registerClass(SoilWhitelister.class);
             MineTweakerAPI.registerClass(SpreadChance.class);
+            MineTweakerAPI.registerClass(CropProduct.class);
         }
     }
     public static class LoadedMods {
