@@ -22,7 +22,7 @@ public class WorldGen {
         //add irrigated greenhouses to villages
         if(!ConfigurationHandler.disableIrrigation) {
             try {
-                MapGenStructureIO.func_143031_a(StructureGreenhouseIrrigated.class, Reference.MOD_ID + ":Greenhouse");
+                MapGenStructureIO.func_143031_a(StructureGreenhouseIrrigated.class, Reference.MOD_ID + ":GreenhouseIrrigated");
             } catch (Exception exception) {
                 LogHelper.info("Failed to load greenhouse to villages");
             }

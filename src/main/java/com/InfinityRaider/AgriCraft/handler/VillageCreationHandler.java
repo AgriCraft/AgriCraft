@@ -14,7 +14,7 @@ public class VillageCreationHandler {
         @Override
         public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int i) {
             //args: structure, weight, max spawns
-            return new StructureVillagePieces.PieceWeight(StructureGreenhouse.class, 10, 1);
+            return new StructureVillagePieces.PieceWeight(StructureGreenhouse.class, 10, (int) random.nextDouble());
         }
 
         @Override
@@ -33,7 +33,7 @@ public class VillageCreationHandler {
         @Override
         public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int i) {
             //args: structure, weight, max spawns
-            return new StructureVillagePieces.PieceWeight(StructureGreenhouseIrrigated.class, 2, 1);
+            return new StructureVillagePieces.PieceWeight(StructureGreenhouseIrrigated.class, 2, (int) (random.nextDouble()*5/6));
         }
 
         @Override

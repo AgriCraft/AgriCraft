@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 import java.util.Random;
-public class StructureGreenhouse extends StructureVillagePieces.Village {
+public class StructureGreenhouse extends StructureVillagePieces.House1 {
     //structure dimensions
     private static final int xSize = 17;
     private static final int ySize = 10;
@@ -26,6 +26,7 @@ public class StructureGreenhouse extends StructureVillagePieces.Village {
     private int averageGroundLevel = -1;
 
     public StructureGreenhouse(StructureVillagePieces.Start villagePiece, int nr, Random rand, StructureBoundingBox structureBoundingBox, int coordBaseMode) {
+        super();
         this.coordBaseMode = coordBaseMode;
         this.boundingBox = structureBoundingBox;
     }
