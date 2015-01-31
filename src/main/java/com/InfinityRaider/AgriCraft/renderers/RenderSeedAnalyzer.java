@@ -1,9 +1,11 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzer;
+import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzerBook;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -16,11 +18,15 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
     private ResourceLocation texture;
-    private final ModelSeedAnalyzer model;
+    private ResourceLocation bookTexture;
+    private final ModelSeedAnalyzer modelSeedAnalyzer;
+    private final ModelSeedAnalyzerBook modelBook;
 
     public RenderSeedAnalyzer() {
         this.texture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/seedAnalyzer.png");
-        this.model = new ModelSeedAnalyzer();
+        this.bookTexture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/seedAnalyzerBook.png");
+        this.modelSeedAnalyzer = new ModelSeedAnalyzer();
+        this.modelBook = new ModelSeedAnalyzerBook();
     }
 
     @Override
@@ -33,7 +39,11 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
             GL11.glRotatef(getAngle(analyzer.direction), 0.0F, 1.0F, 0.0F);             //rotates the renderer to render the model in the right orientation
             GL11.glPushMatrix();                                                        //initiate second gl renderer
                 GL11.glRotatef(180, 0F, 0F, 1F);                                        //rotate the renderer so the model doesn't render upside down
-                this.model.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);        //actually renders the model
+                this.modelSeedAnalyzer.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);        //actually renders the model
+                if(analyzer.hasJournal() && ConfigurationHandler.renderBookInAnalyzer) {
+                    Minecraft.getMinecraft().renderEngine.bindTexture(this.bookTexture);
+                    this.modelBook.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+                }
             GL11.glPopMatrix();                                                         //close second gl renderer
         GL11.glPopMatrix();                                                             //close first gl renderer
         if(analyzer.seed!=null) {
