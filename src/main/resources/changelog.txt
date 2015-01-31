@@ -17,6 +17,8 @@ Changelog
 -Crops will follow Hunger Overhaul's rules (Squeek502)
 -Added growth rate configuration for sprinkler
 -Fixed seed duplication bug involving the Seed Analyzer
+-Added the option to set the soil for a custom crop (this will require you to add one argument to all your custom crops)
+-Added the option to add and remove fruits from custom crops with minetweaker
 
 1.2.1
 -Changed AgriCraft creative tab logo
@@ -34,7 +36,6 @@ Changelog
 -Botania Horn of the Wild will no longer wipe crops away, instead it will clear them
 -Added a config option to disable weeds from taking over plants (they will still spread to nearby empty crops)
 -Added Minetweaker support for various aspects of AgriCraft. Check the GitHub wiki for documentation.
--Added the option to set the soil for a custom crop (this will require you to add one argument to all your custom crops)
 
 1.1.1
 -Fixed Null Pointer Exception in certain cases when breaking tanks
