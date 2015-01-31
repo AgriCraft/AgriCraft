@@ -247,7 +247,7 @@ public abstract class SeedHelper {
         }
         //agricraft crop
         else if(plant instanceof BlockModPlant) {
-            items.add(((BlockModPlant) plant).getFruit(nr));
+            items.addAll(((BlockModPlant) plant).getFruit(nr, world.rand));
         }
         //natura crop
         else if(ModIntegration.LoadedMods.natura && getPlantDomain(seed).equalsIgnoreCase("natura")) {

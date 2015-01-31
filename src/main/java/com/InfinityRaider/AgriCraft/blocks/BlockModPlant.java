@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 
+import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -24,9 +25,9 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     public Block soil;
     public Block base;
     public int baseMeta;
-    public Item fruit;
+    public CropProduce products = new CropProduce();
+    public ArrayList<ItemStack> fruits;
     private ItemSeeds seed;
-    public int fruitMeta;
     public int tier;
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
@@ -77,8 +78,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         this.soil = soil;
         this.base = base;
         this.baseMeta = baseMeta;
-        this.fruit = fruit;
-        this.fruitMeta = fruitMeta;
+        this.products.addProduce(new ItemStack(fruit, 1, fruitMeta), 10);
         this.tier = tier;
         this.setTickRandomly(true);
         this.useNeighborBrightness = true;
@@ -94,9 +94,9 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
 
     public ItemSeeds getSeed() {return this.seed;}
 
-    public ItemStack getFruit() {return this.getFruit(1);}
+    public ArrayList<ItemStack> getFruit(Random rand) {return this.getFruit(1, rand);}
 
-    public ItemStack getFruit(int nr) {return new ItemStack(this.fruit, nr, this.fruitMeta);}
+    public ArrayList<ItemStack> getFruit(int nr, Random rand) {return this.products.getProduce(nr, rand);}
 
     //register icons
     @Override
@@ -154,7 +154,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         list.add(new ItemStack(this.seed, 1, 0));
         if(metadata==7) {
-            list.add(new ItemStack(this.fruit, 1, this.fruitMeta));
+            list.addAll(this.getFruit(world.rand));
         }
         return list;
     }
@@ -208,7 +208,12 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     //return the fruit
     @Override
     protected Item func_149865_P() {
-        return this.fruit;
+        Item item = null;
+        ArrayList<ItemStack> items = this.getFruit(new Random());
+        if(items!=null && items.size()>0 && items.get(0)!=null) {
+            item = items.get(0).getItem();
+        }
+        return item;
     }
 
     @Override
