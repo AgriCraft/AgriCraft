@@ -32,6 +32,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
     private int renderType;
+    private boolean isEditable;
 
     public BlockModPlant(Item fruit) {
         this(null, null, 0, fruit, 0, 1, 6);
@@ -74,15 +75,20 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     }
 
     public BlockModPlant(Block soil, Block base, int baseMeta, Item fruit, int fruitMeta, int tier, int renderType) {
+        this(soil, base, baseMeta, fruit, fruitMeta, tier, renderType, false);
+    }
+
+    public BlockModPlant(Block soil, Block base, int baseMeta, Item fruit, int fruitMeta, int tier, int renderType, boolean isCustom) {
         super();
         this.soil = soil;
         this.base = base;
         this.baseMeta = baseMeta;
-        this.products.addProduce(new ItemStack(fruit, 1, fruitMeta), 10);
+        this.products.addProduce(new ItemStack(fruit, 1, fruitMeta));
         this.tier = tier;
         this.setTickRandomly(true);
         this.useNeighborBrightness = true;
         this.renderType = renderType==1?renderType:6;
+        this.isEditable = isCustom;
     }
 
     //set seed
@@ -97,6 +103,10 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     public ArrayList<ItemStack> getFruit(Random rand) {return this.getFruit(1, rand);}
 
     public ArrayList<ItemStack> getFruit(int nr, Random rand) {return this.products.getProduce(nr, rand);}
+
+    public boolean canEdit() {
+        return this.isEditable;
+    }
 
     //register icons
     @Override

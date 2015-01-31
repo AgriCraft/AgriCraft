@@ -6,8 +6,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CropProduce {
+    public static final int DEFAULT_WEIGHT = 10;
     private ArrayList<Product> products = new ArrayList<Product>();
     private int totalWeight;
+
+    public void addProduce(ItemStack stack) {
+        this.addProduce(stack, DEFAULT_WEIGHT);
+    }
 
     public void addProduce(ItemStack stack, int weight) {
         this.addProduce(stack, weight, false);
@@ -48,6 +53,25 @@ public class CropProduce {
             amount--;
         }
         return results;
+    }
+
+    public ArrayList<ItemStack> getAllProducts() {
+        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
+        for(Product product:this.products) {
+            fruits.add(product.product.copy());
+        }
+        return fruits;
+    }
+
+    public int getWeight(ItemStack stack) {
+        int weight = 0;
+        for (Product product:products) {
+            if (product.product.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(stack, product.product)) {
+                weight = product.weight;
+                break;
+            }
+        }
+        return weight;
     }
 
 
