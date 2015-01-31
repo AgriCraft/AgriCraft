@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.items.ItemCrop;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
@@ -9,6 +10,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.init.*;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -32,12 +34,13 @@ public class CustomCrops {
                 String[] cropData = IOHelper.getData(cropsRawData[i]);
                 //cropData[0]: name
                 //cropData[1]: fruit name:meta
-                //cropData[2]: base block name:meta
-                //cropData[3]: tier
-                //cropData[4]: render type
-                //cropData[5]: information
-                boolean success = cropData.length==6;
-                String errorMsg = "Incorrect amount of arguments";
+                //cropData[2]: soil
+                //cropData[3]: base block name:meta
+                //cropData[4]: tier
+                //cropData[5]: render type
+                //cropData[6]: information
+                boolean success = cropData.length==7;
+                String errorMsg = "Incorrect amount of arguments, arguments should be: (name, fruit:fruitMeta, soil, baseBlock:baseBlockMeta, tier, renderType, information)";
                 LogHelper.debug(new StringBuffer("parsing ").append(cropsRawData[i]));
                 if(success) {
                     ItemStack fruitStack = IOHelper.getStack(cropData[1]);
@@ -47,20 +50,23 @@ public class CustomCrops {
                     if(success) {
                         String name = cropData[0];
                         int fruitMeta = fruit!=null?fruitStack.getItemDamage():0;
-                        ItemStack base = IOHelper.getStack(cropData[2]);
-                        Block baseBlock = base!=null?((ItemBlock) base.getItem()).field_150939_a:null;
-                        int baseMeta = base!=null?base.getItemDamage():0;
-                        int tier = Integer.parseInt(cropData[3]);
-                        int renderType = Integer.parseInt(cropData[4]);
-                        String info = cropData[5];
+                        Block soil = cropData[2].equalsIgnoreCase("null")?null:((Block) Block.blockRegistry.getObject(cropData[2]));
+                        errorMsg = "Invalid soil: soil should be null, minecraft:sand, minecraft:soul_sand or minecraft:mycelium";
+                        success = soil==null || ItemCrop.isSoilValid(soil, 0);
+                        if(success) {
+                            ItemStack base = IOHelper.getStack(cropData[2]);
+                            Block baseBlock = base != null ? ((ItemBlock) base.getItem()).field_150939_a : null;
+                            int baseMeta = base != null ? base.getItemDamage() : 0;
+                            int tier = Integer.parseInt(cropData[3]);
+                            int renderType = Integer.parseInt(cropData[4]);
+                            String info = cropData[5];
 
-                        customCrops[i] = new BlockModPlant(baseBlock, baseMeta, fruit, fruitMeta, tier, renderType);
-                        RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop + Character.toUpperCase(name.charAt(0)) + name.substring(1));
+                            customCrops[i] = new BlockModPlant(soil, baseBlock, baseMeta, fruit, fruitMeta, tier, renderType, true);
+                            RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop + Character.toUpperCase(name.charAt(0)) + name.substring(1));
 
-                        customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds", info);
-                        RegisterHelper.registerItem(customSeeds[i], Names.Objects.seed + Character.toUpperCase(name.charAt(0)) + name.substring(1));
-
-                        OreDictionary.registerOre(Names.OreDict.listAllseed, CustomCrops.customSeeds[i]);
+                            customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds", info);
+                            RegisterHelper.registerSeed(customSeeds[i], Names.Objects.seed + Character.toUpperCase(name.charAt(0)) + name.substring(1), customCrops[i]);
+                        }
                     }
                 }
                 if(!success) {
