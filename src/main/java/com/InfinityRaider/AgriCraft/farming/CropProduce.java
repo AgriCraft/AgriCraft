@@ -48,6 +48,7 @@ public class CropProduce {
                 stop = stop - product.weight;
                 if (stop <= 0) {
                     results.add(product.product.copy());
+                    break;
                 }
             }
             amount--;
