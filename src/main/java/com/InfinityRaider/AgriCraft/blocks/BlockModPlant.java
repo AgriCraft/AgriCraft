@@ -100,6 +100,8 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
 
     public ItemSeeds getSeed() {return this.seed;}
 
+    public ArrayList<ItemStack> getFruits() {return this.products.getAllProducts();}
+
     public ArrayList<ItemStack> getFruit(Random rand) {return this.getFruit(1, rand);}
 
     public ArrayList<ItemStack> getFruit(int nr, Random rand) {return this.products.getProduce(nr, rand);}

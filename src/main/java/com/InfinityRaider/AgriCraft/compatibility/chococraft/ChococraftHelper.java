@@ -6,11 +6,20 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class ChococraftHelper {
 
     private static Random rand = new Random();
+
+    public static ArrayList<ItemStack> getFruits() {
+        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
+        fruits.add(new ItemStack(ChocoCraftBlocks.gysahlGreenBlock));
+        fruits.add(new ItemStack(ChocoCraftItems.gysahlLoverlyItem));
+        fruits.add(new ItemStack(ChocoCraftItems.gysahlGoldenItem));
+        return fruits;
+    }
 
     public static ItemStack getFruit(int gain, int nr) {
         Block normal = ChocoCraftBlocks.gysahlGreenBlock;

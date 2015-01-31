@@ -318,7 +318,8 @@ public class GuiJournal extends GuiScreen {
         //get the seed icon
         seedIcon = RenderHelper.getIcon(seed.getItem(), seed.getItemDamage());
         //get the fruit icons
-        ArrayList<ItemStack> fruitDrops = SeedHelper.getPlantFruits((ItemSeeds) seed.getItem(), player.getEntityWorld(), player.serverPosX, player.serverPosY, player.serverPosZ, 1, seed.getItemDamage());     //serverPosX, Y, Z are client only, but this gui only gets called client side, so no problem
+        //ArrayList<ItemStack> fruitDrops = SeedHelper.getPlantFruits((ItemSeeds) seed.getItem(), player.getEntityWorld(), player.serverPosX, player.serverPosY, player.serverPosZ, 1, seed.getItemDamage());     //serverPosX, Y, Z are client only, but this gui only gets called client side, so no problem
+        ArrayList<ItemStack> fruitDrops = SeedHelper.getAllPlantFruits((ItemSeeds) seed.getItem(), player.getEntityWorld(), player.serverPosX, player.serverPosY, player.serverPosZ, 1, seed.getItemDamage());
         fruitIcons = new IIcon[fruitDrops.size()];
         this.fruits = new ItemStack[fruitDrops.size()];
         for(int i=0;i< fruitIcons.length;i++) {
@@ -439,7 +440,7 @@ public class GuiJournal extends GuiScreen {
                     texture = RenderHelper.getItemResource(fruitIcons[i]);
                     Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
                 }
-                this.renderIconInGui(xOffset, yOffset, texture);
+                this.renderIconInGui(xOffset+i*24, yOffset, texture);
             }
         }
         scale = 0.5F;

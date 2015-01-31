@@ -287,6 +287,24 @@ public abstract class SeedHelper {
         return items;
     }
 
+    //get all plant fruits
+    public static ArrayList<ItemStack> getAllPlantFruits(ItemSeeds seed, World world, int x, int y, int z, int gain, int meta) {
+        BlockBush plant = getPlant(seed);
+        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        if(plant instanceof BlockModPlant) {
+            items.addAll(((BlockModPlant) plant).getFruits());
+        }
+        //chococraft crop
+        else if(ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
+            items.addAll(ChococraftHelper.getFruits());
+        }
+        //other crop
+        else {
+            items = getPlantFruits(seed, world, x, y, z, gain, meta);
+        }
+        return items;
+    }
+
     //check if the seed is valid
     public static boolean isValidSeed(ItemSeeds seed, int meta) {
         if(ModIntegration.LoadedMods.thaumicTinkerer && getPlantDomain(seed).equalsIgnoreCase(Names.Mods.thaumicTinkerer)) {
