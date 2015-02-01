@@ -46,7 +46,9 @@ public class SlotSeedStorage extends Slot {
      */
     @Override
     public ItemStack getStack() {
-        return this.seed;
+        ItemStack stack = this.seed.copy();
+        stack.stackSize = this.count;
+        return stack;
     }
 
     /**

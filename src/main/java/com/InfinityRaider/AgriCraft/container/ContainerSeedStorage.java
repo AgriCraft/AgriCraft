@@ -3,16 +3,17 @@ package com.InfinityRaider.AgriCraft.container;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedStorage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ContainerSeedStorage extends ContainerAgricraft {
-    public HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> entries;
+    public HashMap<Integer, SlotSeedStorage> seedSlots;
     public TileEntitySeedStorage te;
     private int lastSlotId;
 
@@ -20,68 +21,50 @@ public class ContainerSeedStorage extends ContainerAgricraft {
         super(inventory, 82, 94);
         this.lastSlotId = this.PLAYER_INVENTORY_SIZE -1;
         this.te = te;
-        this.entries = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>>();
+        this.seedSlots = new HashMap<Integer, SlotSeedStorage>();
         for(ItemStack seedStack:te.getInventory()) {
-            this.addSeed(seedStack);
+            this.addNewSlot(seedStack);
         }
     }
 
-    public void addSeed(ItemStack stack) {
-        if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
-            HashMap<Integer, ArrayList<SlotSeedStorage>> itemEntry = entries.get(stack.getItem());
-            //there is an entry for this item
-            if(itemEntry !=null) {
-                ArrayList<SlotSeedStorage> seedEntries = itemEntry.get(stack.getItemDamage());
-                //there is an entry for this item and meta
-                if(seedEntries!=null) {
-                    boolean seedAdded = false;
-                    for(Slot slot:seedEntries) {
-                        //there is an entry with equal NBT
-                        ItemStack seedStack = slot.getStack();
-                        if(ItemStack.areItemStackTagsEqual(seedStack, stack)) {
-                            //if we don't go trough the method to set/get stacksize we can get stacks over 64 stuffed away
-                            seedStack.stackSize = seedStack.stackSize + stack.stackSize;
-                            seedAdded = true;
-                        }
-                    }
-                    //there is no entry with equal NBT
-                    if(!seedAdded) {
-                        seedEntries.add(addNewSlot(stack));
-                    }
-                }
-                //there is not yet an entry for this  meta
-                else {
-                    ArrayList<SlotSeedStorage> newList = new ArrayList<SlotSeedStorage>();
-                    newList.add(addNewSlot(stack));
-                    itemEntry.put(stack.getItemDamage(), newList);
-                }
-            }
-            //there is no entry for this item yet
-            else {
-                ArrayList<SlotSeedStorage> newList = new ArrayList<SlotSeedStorage>();
-                newList.add(addNewSlot(stack));
-                HashMap<Integer, ArrayList<SlotSeedStorage>> newEntry = new HashMap<Integer, ArrayList<SlotSeedStorage>>();
-                newEntry.put(stack.getItemDamage(), newList);
-                entries.put((ItemSeeds) stack.getItem(), newEntry);
-            }
-        }
-    }
-
-    private SlotSeedStorage addNewSlot(ItemStack stack) {
-        SlotSeedStorage newSlot = new SlotSeedStorage(this, this.te, this.lastSlotId+1, 0, 0, stack);
-        this.addSlotToContainer(newSlot);
-        this.lastSlotId++;
+    public SlotSeedStorage addNewSlot(ItemStack stack) {
+        this.lastSlotId = this.lastSlotId+1;
+        SlotSeedStorage newSlot = new SlotSeedStorage(this, this.te, this.lastSlotId, 0, 0, stack);
+        this.seedSlots.put(this.lastSlotId, newSlot);
         return newSlot;
     }
 
+    public ArrayList<SlotSeedStorage> getSeedSlots() {
+        ArrayList<SlotSeedStorage> slots = new ArrayList<SlotSeedStorage>();
+        for(Map.Entry<Integer, SlotSeedStorage> slotEntry:seedSlots.entrySet()) {
+            if(slotEntry!=null) {
+                slots.add(slotEntry.getValue());
+            }
+        }
+        return slots;
+    }
+
+    /**
+     * returns a list if itemStacks, for each slot.
+     */
     @Override
-    public void putStackInSlot(int Slot, ItemStack stack) {
-        this.addSeed(stack);
+    public List getInventory() {
+        ArrayList arraylist = new ArrayList();
+        for (int i = 0; i < this.inventorySlots.size(); ++i) {
+            arraylist.add(((Slot)this.inventorySlots.get(i)).getStack());
+        }
+
+        return arraylist;
     }
 
     @Override
     public Slot getSlot(int id) {
-        return (Slot) this.inventorySlots.get(id);
+        if(id<this.PLAYER_INVENTORY_SIZE) {
+            return (Slot) this.inventorySlots.get(id);
+        }
+        else {
+            return this.seedSlots.get(id);
+        }
     }
 
     //this gets called when a player shift clicks a stack into the inventory
