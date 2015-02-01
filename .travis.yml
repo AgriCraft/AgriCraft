@@ -27,3 +27,9 @@ deploy:
   on:
     tags: true
     all_branches: true
+
+
+# blacklist instable branches
+branches:
+  except:
+    - 1.8
