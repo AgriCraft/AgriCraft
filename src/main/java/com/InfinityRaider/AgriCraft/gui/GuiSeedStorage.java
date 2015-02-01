@@ -7,16 +7,20 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -24,9 +28,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@SideOnly(Side.CLIENT)
 public class GuiSeedStorage extends GuiContainer {
     public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedStorage.png");
-    public HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> entries;
     private ItemStack activeEntry;
 
     private int scrollPositionVertical;
@@ -47,88 +51,6 @@ public class GuiSeedStorage extends GuiContainer {
         super(new ContainerSeedStorage(inventory, te));
         this.xSize = 250;
         this.ySize = 176;
-        this.setEntries();
-    }
-
-    public void setEntries() {
-        this.entries = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>>();
-        for(SlotSeedStorage slot:((ContainerSeedStorage) this.inventorySlots).getSeedSlots()) {
-            this.addSlotToEntries(slot);
-        }
-    }
-
-    //puts an existing slot from the container in the gui map
-    public void addSlotToEntries(SlotSeedStorage slot) {
-        if(slot!=null && slot.getStack()!=null && slot.getStack().getItem() instanceof ItemSeeds) {
-            ItemStack stack = slot.getStack();
-            ItemSeeds seed = (ItemSeeds) stack.getItem();
-            int seedMeta = stack.getItemDamage();
-            HashMap<Integer, ArrayList<SlotSeedStorage>> itemEntry = entries.get(seed);
-            //there is already an entry for this item
-            if(itemEntry != null) {
-                ArrayList<SlotSeedStorage> metaEntry = itemEntry.get(seedMeta);
-                //there is already an entry for this item & meta
-                if(metaEntry != null) {
-                    metaEntry.add(slot);
-                }
-                //there is no entry for this meta
-                else {
-                    ArrayList<SlotSeedStorage> newSlotList = new ArrayList<SlotSeedStorage>();
-                    newSlotList.add(slot);
-                    itemEntry.put(seedMeta, newSlotList);
-                }
-            }
-            //there is no entry for this seed yet
-            else {
-                ArrayList<SlotSeedStorage> newSlotList = new ArrayList<SlotSeedStorage>();
-                newSlotList.add(slot);
-                HashMap<Integer, ArrayList<SlotSeedStorage>> newMetaEntry = new HashMap<Integer, ArrayList<SlotSeedStorage>>();
-                newMetaEntry.put(seedMeta, newSlotList);
-                this.entries.put(seed, newMetaEntry);
-            }
-        }
-    }
-
-    //adds an itemstack to the container
-    public void addEntry(ItemStack stack) {
-        ContainerSeedStorage container = (ContainerSeedStorage) this.inventorySlots;
-        if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
-            HashMap<Integer, ArrayList<SlotSeedStorage>> itemEntry = entries.get(stack.getItem());
-            //there is an entry for this item
-            if(itemEntry !=null) {
-                ArrayList<SlotSeedStorage> seedEntries = itemEntry.get(stack.getItemDamage());
-                //there is an entry for this item and meta
-                if(seedEntries!=null) {
-                    boolean seedAdded = false;
-                    for(SlotSeedStorage slot:seedEntries) {
-                        //there is an entry with equal NBT
-                        ItemStack seedStack = slot.getStack();
-                        if(ItemStack.areItemStackTagsEqual(seedStack, stack)) {
-                            slot.count = slot.count + stack.stackSize;
-                            seedAdded = true;
-                        }
-                    }
-                    //there is no entry with equal NBT
-                    if(!seedAdded) {
-                        seedEntries.add(container.addNewSlot(stack));
-                    }
-                }
-                //there is not yet an entry for this  meta
-                else {
-                    ArrayList<SlotSeedStorage> newList = new ArrayList<SlotSeedStorage>();
-                    newList.add(container.addNewSlot(stack));
-                    itemEntry.put(stack.getItemDamage(), newList);
-                }
-            }
-            //there is no entry for this item yet
-            else {
-                ArrayList<SlotSeedStorage> newList = new ArrayList<SlotSeedStorage>();
-                newList.add(container.addNewSlot(stack));
-                HashMap<Integer, ArrayList<SlotSeedStorage>> newEntry = new HashMap<Integer, ArrayList<SlotSeedStorage>>();
-                newEntry.put(stack.getItemDamage(), newList);
-                entries.put((ItemSeeds) stack.getItem(), newEntry);
-            }
-        }
     }
 
     @Override
@@ -166,10 +88,9 @@ public class GuiSeedStorage extends GuiContainer {
     //returns an array list of all the kinds of seeds that are in the storage
     public ArrayList<ItemStack> getSeedStacks() {
         ArrayList<ItemStack> seedStacks = new ArrayList<ItemStack>();
-        for(Map.Entry<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> seedItemEntry:this.entries.entrySet()) {
-            for(Map.Entry<Integer, ArrayList<SlotSeedStorage>> seedMetaEntry:seedItemEntry.getValue().entrySet()) {
-                seedStacks.add(new ItemStack(seedItemEntry.getKey(), seedMetaEntry.getKey()));
-            }
+        ContainerSeedStorage container = (ContainerSeedStorage) this.inventorySlots;
+        for(SlotSeedStorage slot: container.seedSlots.values()) {
+            seedStacks.add(slot.getStack());
         }
         return  seedStacks;
     }
@@ -177,15 +98,18 @@ public class GuiSeedStorage extends GuiContainer {
     //returns an array list of all the slots holding seeds of this active seeds
     public ArrayList<SlotSeedStorage> getActiveEntries() {
         ArrayList<SlotSeedStorage> seeds = new ArrayList<SlotSeedStorage>();
-        for(Map.Entry<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> seedItemEntry:this.entries.entrySet()) {
-            if(this.activeEntry.getItem()==seedItemEntry.getKey()) {
-                for(Map.Entry<Integer, ArrayList<SlotSeedStorage>> seedMetaEntry:seedItemEntry.getValue().entrySet()) {
-                    if(seedMetaEntry.getKey()==this.activeEntry.getItemDamage()) {
-                        seeds = seedMetaEntry.getValue();
-                        break;
+        if(this.activeEntry!=null) {
+            HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> entries = ((ContainerSeedStorage) this.inventorySlots).entries;
+            for (Map.Entry<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> seedItemEntry : entries.entrySet()) {
+                if (this.activeEntry.getItem() == seedItemEntry.getKey()) {
+                    for (Map.Entry<Integer, ArrayList<SlotSeedStorage>> seedMetaEntry : seedItemEntry.getValue().entrySet()) {
+                        if (seedMetaEntry.getKey() == this.activeEntry.getItemDamage()) {
+                            seeds = seedMetaEntry.getValue();
+                            break;
+                        }
                     }
+                    break;
                 }
-                break;
             }
         }
         return seeds;
@@ -225,7 +149,7 @@ public class GuiSeedStorage extends GuiContainer {
 
     private void drawActiveEntry() {
         if(this.activeEntry!=null && this.activeEntry.getItem()!=null) {
-            ArrayList<SlotSeedStorage> activeEntries = ( this.entries ).get(this.activeEntry.getItem()).get(this.activeEntry.getItemDamage());
+            ArrayList<SlotSeedStorage> activeEntries = this.getActiveEntries();
             for(Slot slot:activeEntries) {
 
             }
@@ -270,6 +194,21 @@ public class GuiSeedStorage extends GuiContainer {
                 this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 0, this.width, this.height);
                 this.mouseDragged(minecraft, cursorX, cursorY);
             }
+        }
+
+        public void drawSeedSlot(SlotSeedStorage slot) {
+            ItemStack stack = slot.getStack();
+            FontRenderer fontRendererObj = Minecraft.getMinecraft().fontRenderer;
+            GL11.glTranslatef(0.0F, 0.0F, 32.0F);
+            this.zLevel = 200.0F;
+            itemRender.zLevel = 200.0F;
+            FontRenderer font = null;
+            if (stack != null) font = stack.getItem().getFontRenderer(stack);
+            if (font == null) font = fontRendererObj;
+            itemRender.renderItemAndEffectIntoGUI(font, Minecraft.getMinecraft().getTextureManager(), stack, slot.xDisplayPosition, slot.yDisplayPosition);
+            itemRender.renderItemOverlayIntoGUI(font, Minecraft.getMinecraft().getTextureManager(), stack, slot.xDisplayPosition, slot.yDisplayPosition, null);
+            this.zLevel = 0.0F;
+            itemRender.zLevel = 0.0F;
         }
 
         @Override

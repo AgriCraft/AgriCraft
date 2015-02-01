@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class SlotSeedStorage extends Slot {
     public boolean active = false;
-    public ItemStack seed;
+    private ItemStack seed;
     public int index;
     public int count;
     public ContainerSeedStorage container;
@@ -65,6 +65,10 @@ public class SlotSeedStorage extends Slot {
      */
     @Override
     public void putStack(ItemStack stack) {
+        if(this.seed==null) {
+            this.seed = stack.copy();
+            this.count = 0;
+        }
         this.count = count + stack.stackSize;
         this.onSlotChanged();
     }
@@ -100,14 +104,6 @@ public class SlotSeedStorage extends Slot {
             this.count = count - amount;
         }
         return result;
-    }
-
-    /**
-     * returns true if this slot is in par2 of par1
-     */
-    @Override
-    public boolean isSlotInInventory(IInventory inv, int index) {
-        return inv==this.inventory && index<this.container.getNumberOfSlots()+container.PLAYER_INVENTORY_SIZE;
     }
 
     /** The index of the slot in the inventory. */
