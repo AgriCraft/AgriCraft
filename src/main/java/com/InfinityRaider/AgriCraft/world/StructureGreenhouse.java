@@ -25,6 +25,8 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
     //helper fields
     private int averageGroundLevel = -1;
 
+    public StructureGreenhouse() {}
+
     public StructureGreenhouse(StructureVillagePieces.Start villagePiece, int nr, Random rand, StructureBoundingBox structureBoundingBox, int coordBaseMode) {
         super();
         this.coordBaseMode = coordBaseMode;
