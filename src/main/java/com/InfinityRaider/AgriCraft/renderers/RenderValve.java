@@ -1,17 +1,15 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
-import codechicken.microblock.BlockMicroMaterial;
-import codechicken.multipart.*;
+import codechicken.multipart.BlockMultipart;
+import codechicken.multipart.TMultiPart;
+import codechicken.multipart.TileMultipart;
 import codechicken.multipart.minecraft.LeverPart;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityValve;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
-import cpw.mods.fml.common.Loader;
-import mods.natura.plugins.fmp.ForgeMultiPart;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.client.renderer.RenderBlocks;

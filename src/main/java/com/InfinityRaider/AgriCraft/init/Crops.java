@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import net.minecraft.init.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import vazkii.botania.common.item.ModItems;
