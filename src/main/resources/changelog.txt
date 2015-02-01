@@ -2,23 +2,23 @@ Changelog
 ---------
 
 1.2.2
--Fixes (hard) runtime dependency on Botania
--TConstruct scythes can be used for aoe harvesting (right click on crops to aoe harvest)
--Crops can now be applied on sand and soul sand by default
--Seeds now require the correct soil when being planted on a crop
--Changed the way the soil whitelist works: whitelisted soils only apply to crops that need farmland
--Added cactus and mushroom crops
--Added configurable instant-growth for magical fertiliser
--Fixed seeds with identical stats sometimes not stacking
--Fixed shapeless custom wood recipes not working correctly
--Fixed vanilla farming only disabling for farmland
--Added crops for botania's petals
--Fixes lag issues regarding the irrigation system
--Crops will follow Hunger Overhaul's rules (Squeek502)
--Added growth rate configuration for sprinkler
--Fixed seed duplication bug involving the Seed Analyzer
--Added the option to set the soil for a custom crop (this will require you to add one argument to all your custom crops)
--Added the option to add and remove fruits from custom crops with minetweaker
+-ADDED:  TConstruct scythes can be used for aoe harvesting (right click on crops to aoe harvest)
+-ADDED:  Cactus and mushroom crops
+-ADDED:  Configurable instant-growth for magical fertiliser
+-ADDED:  Crops for botania's petals
+-ADDED:  Growth rate configuration for sprinkler
+-ADDED:  The option to set the soil for a custom crop (this will require you to add one argument to all your custom crops)
+-ADDED:  The option to add and remove fruits from custom crops with minetweaker (multiple fruits have are weighted)
+-CHANGE: Crops can now be applied on sand and soul sand by default
+-CHANGE: Seeds now require the correct soil when being planted on a crop
+-CHANGE: Soil whitelist: whitelisted soils only apply to crops that need farmland
+-CHANGE: Crops will follow Hunger Overhaul's rules (Squeek502)
+-FIXED:  Hard runtime dependency on Botania
+-FIXED:  Seeds with identical stats sometimes not stacking
+-FIXED:  shapeless custom wood recipes not working correctly
+-FIXED:  Vanilla farming only disabling for farmland
+-FIXED:  Lag issues regarding the irrigation system (still being looked at)
+-FIXED:  Seed duplication bug involving the Seed Analyzer
 
 1.2.1
 -Changed AgriCraft creative tab logo
