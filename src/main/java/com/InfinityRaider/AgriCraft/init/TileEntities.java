@@ -14,7 +14,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileEntitySeedAnalyzer.class, Reference.MOD_ID+':'+ Names.TileEntity.tileEntity+'_'+ Names.Objects.seedAnalyzer);
         GameRegistry.registerTileEntity(TileEntityCustomWood.class, Reference.MOD_ID+':'+ Names.TileEntity.tileEntity+'_'+"customWood");
         if(ConfigurationHandler.enableSeedStorage) {
-            // GameRegistry.registerTileEntity(TileEntitySeedStorage.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.seedStorage);
+            GameRegistry.registerTileEntity(TileEntitySeedStorage.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.seedStorage);
         }
         if(!ConfigurationHandler.disableIrrigation) {
             GameRegistry.registerTileEntity(TileEntityTank.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.tank);

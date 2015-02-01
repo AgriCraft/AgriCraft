@@ -6,6 +6,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 
 public abstract class ContainerAgricraft extends Container {
+    public int PLAYER_INVENTORY_SIZE = 36;
+
     public ContainerAgricraft(InventoryPlayer inventory, int xOffset, int yOffset) {
         //add player's inventory to the container
         for(int i=0;i<3;i++) {
