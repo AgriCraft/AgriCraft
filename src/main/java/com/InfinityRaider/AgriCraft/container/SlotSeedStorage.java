@@ -51,6 +51,18 @@ public class SlotSeedStorage extends Slot {
         return stack;
     }
 
+    public void set(int x, int y) {
+        this.active = true;
+        this.xDisplayPosition = x;
+        this.yDisplayPosition = y;
+    }
+
+    public void reset() {
+        this.active = false;
+        this.xDisplayPosition = 0;
+        this.yDisplayPosition = 0;
+    }
+
     /**
      * Returns if this slot contains a stack.
      */

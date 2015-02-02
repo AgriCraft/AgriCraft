@@ -135,7 +135,7 @@ public class ContainerSeedStorage extends ContainerAgricraft {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             //try to move item from the container into the player's inventory
-            if (clickedSlot<this.PLAYER_INVENTORY_SIZE) {
+            if (clickedSlot>=this.PLAYER_INVENTORY_SIZE) {
                 if (!this.mergeItemStack(itemstack1, 0, 36, false)) {
                     return null;
                 }
