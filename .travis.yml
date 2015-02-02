@@ -27,10 +27,3 @@ deploy:
   on:
     tags: true
     all_branches: true
-
-
-# whitelist stable branches
-branches:
-  only:
-    - master
-    - 1.8
