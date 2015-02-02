@@ -29,7 +29,6 @@ deploy:
     all_branches: true
 
 
-# blacklist instable branches
+# whitelist stable branches
 branches:
-  except:
-    - 1.8
+  only: master
