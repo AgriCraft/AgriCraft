@@ -31,4 +31,6 @@ deploy:
 
 # whitelist stable branches
 branches:
-  only: master
+  only:
+    - master
+    - 1.8
