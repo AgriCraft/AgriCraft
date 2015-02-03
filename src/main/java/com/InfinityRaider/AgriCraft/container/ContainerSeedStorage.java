@@ -137,6 +137,32 @@ public class ContainerSeedStorage extends ContainerAgricraft {
         }
     }
 
+    public void setActiveEntries(ItemStack stack) {
+        if(stack!=null && stack.getItem()!=null) {
+            ItemSeeds seed = (ItemSeeds) stack.getItem();
+            int seedMeta = stack.getItemDamage();
+            ArrayList<SlotSeedStorage> activeEntries = this.entries.get(seed).get(seedMeta);
+            if (activeEntries != null) {
+                int xOffset = 82;
+                int yOffset = 8;
+                for (int i = 0; i < activeEntries.size(); i++) {
+                    SlotSeedStorage slot = activeEntries.get(i);
+                    slot.set(xOffset + 16 * i, yOffset, this.PLAYER_INVENTORY_SIZE+i);
+                    this.inventorySlots.add(slot);
+                    this.inventoryItemStacks.add(slot.getStack());
+                }
+            }
+        }
+    }
+
+    public void clearActiveEntries() {
+        for(int i=this.inventoryItemStacks.size()-1;i>=this.PLAYER_INVENTORY_SIZE;i--) {
+            ((SlotSeedStorage) this.inventorySlots.get(i)).reset();
+            this.inventorySlots.remove(i);
+            this.inventoryItemStacks.remove(i);
+        }
+    }
+
     //checks if the player can drag a stack over this slot to split it
     public boolean canDragIntoSlot(Slot slot)
     {

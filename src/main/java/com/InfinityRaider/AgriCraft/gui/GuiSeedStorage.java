@@ -2,6 +2,8 @@ package com.InfinityRaider.AgriCraft.gui;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorage;
 import com.InfinityRaider.AgriCraft.container.SlotSeedStorage;
+import com.InfinityRaider.AgriCraft.network.MessageContainerSeedStorage;
+import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -106,37 +108,7 @@ public class GuiSeedStorage extends GuiContainer {
 
     protected void setActiveEntries(ItemStack stack) {
         ContainerSeedStorage container= (ContainerSeedStorage) this.inventorySlots;
-        //disable the previous active slots
-        if(this.activeEntries!=null) {
-            for (SlotSeedStorage slot : this.activeEntries) {
-                slot.reset();
-                container.inventorySlots.remove(slot);
-            }
-        }
-        /*
-        for(int i=container.inventoryItemStacks.size()-1;i>=container.PLAYER_INVENTORY_SIZE;i--) {
-            container.inventoryItemStacks.remove(i);
-        }
-        */
-        //get the new entries
-        if(stack!=null && stack.getItem()!=null) {
-            this.activeEntries = new ArrayList<SlotSeedStorage>();
-            HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> entries = ((ContainerSeedStorage) this.inventorySlots).entries;
-            ItemSeeds seed = (ItemSeeds) stack.getItem();
-            int seedMeta = stack.getItemDamage();
-            this.activeEntries = entries.get(seed).get(seedMeta);
-            //activate the new active slots
-            if (this.activeEntries != null) {
-                int xOffset = 82;
-                int yOffset = 8;
-                for (int i = 0; i < this.activeEntries.size(); i++) {
-                    SlotSeedStorage slot = this.activeEntries.get(i);
-                    slot.set(xOffset + 16 * i, yOffset, container.PLAYER_INVENTORY_SIZE+i);
-                    container.inventorySlots.add(slot);
-                    //container.inventoryItemStacks.add(slot.getStack());
-                }
-            }
-        }
+        NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(Minecraft.getMinecraft().thePlayer, stack.getItem(), stack.getItemDamage()));
     }
 
     private void loadButtons() {
