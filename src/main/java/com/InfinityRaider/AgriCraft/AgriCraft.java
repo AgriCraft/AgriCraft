@@ -22,6 +22,7 @@ import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.init.*;
+import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -50,6 +51,8 @@ public class AgriCraft {
         ModIntegration.LoadedMods.init();
         //register forge event handlers
         proxy.registerEventHandlers();
+        //register packet handler
+        NetworkWrapperAgriCraft.init();
         //setting up configuration file
         ConfigurationHandler.init(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());

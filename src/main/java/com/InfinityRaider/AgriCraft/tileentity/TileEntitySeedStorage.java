@@ -29,9 +29,11 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements IInve
         if(this.inventory!=null && this.inventory.size()>0) {
             NBTTagList tagList = new NBTTagList();
             for(ItemStack seedStack:inventory) {
-                NBTTagCompound stackTag = new NBTTagCompound();
-                seedStack.writeToNBT(stackTag);
-                tagList.appendTag(stackTag);
+                if(seedStack!=null) {
+                    NBTTagCompound stackTag = new NBTTagCompound();
+                    seedStack.writeToNBT(stackTag);
+                    tagList.appendTag(stackTag);
+                }
             }
             tag.setTag(Names.NBT.inventory, tagList);
             tag.setInteger(Names.NBT.size, inventory.size());

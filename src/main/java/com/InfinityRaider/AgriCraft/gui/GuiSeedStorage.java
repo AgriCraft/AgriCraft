@@ -108,6 +108,17 @@ public class GuiSeedStorage extends GuiContainer {
 
     protected void setActiveEntries(ItemStack stack) {
         ContainerSeedStorage container= (ContainerSeedStorage) this.inventorySlots;
+        //set the active entries array list
+        this.activeEntries = new ArrayList<SlotSeedStorage>();
+        HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> entries = container.entries;
+        ItemSeeds seed = (ItemSeeds) stack.getItem();
+        int seedMeta = stack.getItemDamage();
+        this.activeEntries = entries.get(seed).get(seedMeta);
+        //clear previous active entries
+        container.clearActiveEntries();
+        //set the new active entries
+        container.setActiveEntries(stack);
+        //tell the server to load the slots for the active entries
         NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(Minecraft.getMinecraft().thePlayer, stack.getItem(), stack.getItemDamage()));
     }
 
