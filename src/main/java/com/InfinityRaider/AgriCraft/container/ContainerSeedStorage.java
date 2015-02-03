@@ -28,7 +28,9 @@ public class ContainerSeedStorage extends ContainerAgricraft {
         this.entries = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>>();
         this.seedSlots = new HashMap<Integer, SlotSeedStorage>();
         for(ItemStack seedStack:te.getInventory()) {
-            this.addSeedToStorage(seedStack);
+            if(seedStack!=null && seedStack.getItem()!=null) {
+                this.addSeedToStorage(seedStack);
+            }
         }
     }
 
