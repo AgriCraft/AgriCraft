@@ -16,13 +16,9 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -117,8 +113,13 @@ public class GuiSeedStorage extends GuiContainer {
                 container.inventorySlots.remove(slot);
             }
         }
+        /*
+        for(int i=container.inventoryItemStacks.size()-1;i>=container.PLAYER_INVENTORY_SIZE;i--) {
+            container.inventoryItemStacks.remove(i);
+        }
+        */
+        //get the new entries
         if(stack!=null && stack.getItem()!=null) {
-            //get the new entries
             this.activeEntries = new ArrayList<SlotSeedStorage>();
             HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> entries = ((ContainerSeedStorage) this.inventorySlots).entries;
             ItemSeeds seed = (ItemSeeds) stack.getItem();
@@ -130,8 +131,9 @@ public class GuiSeedStorage extends GuiContainer {
                 int yOffset = 8;
                 for (int i = 0; i < this.activeEntries.size(); i++) {
                     SlotSeedStorage slot = this.activeEntries.get(i);
-                    slot.set(xOffset + 16 * i, yOffset);
+                    slot.set(xOffset + 16 * i, yOffset, container.PLAYER_INVENTORY_SIZE+i);
                     container.inventorySlots.add(slot);
+                    //container.inventoryItemStacks.add(slot.getStack());
                 }
             }
         }
@@ -171,69 +173,6 @@ public class GuiSeedStorage extends GuiContainer {
         }
         return seeds;
     }
-
-    /*
-    public void drawActiveSeedSlots() {
-        if(this.activeEntries!=null) {
-            for(SlotSeedStorage slot:activeEntries) {
-                int x = slot.xDisplayPosition;
-                int y = slot.yDisplayPosition;
-                ItemStack itemstack = slot.getStack();
-                boolean flag1 = false;
-                boolean flag2 = false;
-                String s = null;
-                flag2 = slot == this.clickedSlot && this.draggedStack != null && !this.isRightMouseClick;
-                ItemStack itemstack1 = this.mc.thePlayer.inventory.getItemStack();
-                if (slot == this.clickedSlot && this.draggedStack != null && this.isRightMouseClick && itemstack != null) {
-                    itemstack = itemstack.copy();
-                    itemstack.stackSize /= 2;
-                } else if (this.field_147007_t && this.field_147008_s.contains(slot) && itemstack1 != null) {
-                    if (this.field_147008_s.size() == 1) {
-                        return;
-                    }
-                    if (Container.func_94527_a(slot, itemstack1, true) && this.inventorySlots.canDragIntoSlot(slot)) {
-                        itemstack = itemstack1.copy();
-                        flag1 = true;
-                        Container.func_94525_a(this.field_147008_s, this.field_146987_F, itemstack, slot.getStack() == null ? 0 : slot.getStack().stackSize);
-                        if (itemstack.stackSize > itemstack.getMaxStackSize()) {
-                            s = EnumChatFormatting.YELLOW + "" + itemstack.getMaxStackSize();
-                            itemstack.stackSize = itemstack.getMaxStackSize();
-                        }
-                        if (itemstack.stackSize > slot.getSlotStackLimit()) {
-                            s = EnumChatFormatting.YELLOW + "" + slot.getSlotStackLimit();
-                            itemstack.stackSize = slot.getSlotStackLimit();
-                        }
-                    } else {
-                        this.field_147008_s.remove(slot);
-                        this.func_146980_g();
-                    }
-                }
-                this.zLevel = 100.0F;
-                itemRender.zLevel = 100.0F;
-                if (itemstack == null) {
-                    IIcon iicon = slot.getBackgroundIconIndex();
-                    if (iicon != null) {
-                        GL11.glDisable(GL11.GL_LIGHTING);
-                        this.mc.getTextureManager().bindTexture(TextureMap.locationItemsTexture);
-                        this.drawTexturedModelRectFromIcon(x, y, iicon, 16, 16);
-                        GL11.glEnable(GL11.GL_LIGHTING);
-                        flag2 = true;
-                    }
-                }
-                if (!flag2) {
-                    if (flag1) {
-                        drawRect(x, y, x + 16, y + 16, -2130706433);
-                    }
-                    GL11.glEnable(GL11.GL_DEPTH_TEST);
-                    itemRender.renderItemAndEffectIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), itemstack, x, y);
-                    itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), itemstack, x, y, s);
-                }
-                itemRender.zLevel = 0.0F;
-                this.zLevel = 0.0F;
-            }
-        }
-    }
-    */
 
     //opening the gui doesn't pause the game
     @Override

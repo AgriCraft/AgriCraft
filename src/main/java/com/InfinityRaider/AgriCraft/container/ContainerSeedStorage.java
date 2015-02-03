@@ -2,17 +2,17 @@ package com.InfinityRaider.AgriCraft.container;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedStorage;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ContainerSeedStorage extends ContainerAgricraft {
     //one hash map to quickly find the correct slot based on a stack and another based on the slot id
@@ -103,6 +103,17 @@ public class ContainerSeedStorage extends ContainerAgricraft {
     }
 
     @Override
+    public Slot getSlotFromInventory(IInventory inventory, int slotIndex) {
+        Slot slot = this.seedSlots.get(slotIndex);
+        if(slot!=null && slot instanceof SlotSeedStorage) {
+            if (slot.isSlotInInventory(inventory, slotIndex)) {
+                return slot;
+            }
+        }
+        return super.getSlotFromInventory(inventory, slotIndex);
+    }
+
+    @Override
     public Slot getSlot(int id) {
         if(id<this.PLAYER_INVENTORY_SIZE) {
             return (Slot) this.inventorySlots.get(id);
@@ -124,6 +135,12 @@ public class ContainerSeedStorage extends ContainerAgricraft {
         for(int i=this.PLAYER_INVENTORY_SIZE;i<stackArray.length;i++) {
             this.addSeedToStorage(stackArray[i]);
         }
+    }
+
+    //checks if the player can drag a stack over this slot to split it
+    public boolean canDragIntoSlot(Slot slot)
+    {
+        return !(slot instanceof SlotSeedStorage);
     }
 
     //this gets called when a player shift clicks a stack into the inventory
@@ -210,5 +227,27 @@ public class ContainerSeedStorage extends ContainerAgricraft {
             }
         }
         return flag;
+    }
+
+    //par1: slotIndex
+    //par2: 0 = LMB, 1 = RMB, 2 = MMB
+    //par3: 1 = shift, 3 = MMB
+    @Override
+    public ItemStack slotClick(int slotIndex, int mouseButton, int shiftHeld, EntityPlayer player) {
+        LogHelper.debug("Slot CLicked: par1 = "+slotIndex+", par2 = "+mouseButton+", par3 = "+shiftHeld);
+        if(slotIndex>=this.PLAYER_INVENTORY_SIZE) {
+            SlotSeedStorage slot = (SlotSeedStorage) this.getSlot(slotIndex);
+        }
+        return super.slotClick(slotIndex, mouseButton, shiftHeld, player);
+    }
+
+    @Override
+    public void onContainerClosed(EntityPlayer player) {
+        this.te.setInventory(this.entries);
+        InventoryPlayer inventoryplayer = player.inventory;
+        if (inventoryplayer.getItemStack() != null) {
+            player.dropPlayerItemWithRandomChoice(inventoryplayer.getItemStack(), false);
+            inventoryplayer.setItemStack(null);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
+import com.InfinityRaider.AgriCraft.container.SlotSeedStorage;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -12,6 +13,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TileEntitySeedStorage extends TileEntityCustomWood implements IInventory{
     public ForgeDirection direction;
@@ -132,6 +135,23 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements IInve
         else {
             this.inventory = new ArrayList<ItemStack>();
             this.inventory.add(inputStack);
+        }
+    }
+
+    public void setInventory(HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> entries) {
+        this.inventory.clear();
+        for(Map.Entry<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> seedEntry:entries.entrySet()) {
+            if(seedEntry!=null && seedEntry.getKey()!=null && seedEntry.getValue()!=null) {
+                for(Map.Entry<Integer, ArrayList<SlotSeedStorage>> metaEntry:seedEntry.getValue().entrySet()) {
+                    if(metaEntry!=null && metaEntry.getKey()!=null && metaEntry.getValue()!=null) {
+                        for(SlotSeedStorage slot:metaEntry.getValue()) {
+                            if(slot!=null) {
+                                this.inventory.add(slot.getStack());
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

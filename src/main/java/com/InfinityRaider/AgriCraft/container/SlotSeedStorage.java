@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.container;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
@@ -23,6 +24,7 @@ public class SlotSeedStorage extends Slot {
         this.seed = stack.copy();
         this.count = stack.stackSize;
         this.seed.stackSize = 1;
+        this.slotNumber = this.index;
     }
 
     /**
@@ -46,21 +48,26 @@ public class SlotSeedStorage extends Slot {
      */
     @Override
     public ItemStack getStack() {
-        ItemStack stack = this.seed.copy();
-        stack.stackSize = this.count;
+        ItemStack stack = null;
+        if(this.seed!=null) {
+            stack = this.seed.copy();
+            stack.stackSize = this.count;
+        }
         return stack;
     }
 
-    public void set(int x, int y) {
+    public void set(int x, int y, int nr) {
         this.active = true;
         this.xDisplayPosition = x;
         this.yDisplayPosition = y;
+        this.slotNumber = nr;
     }
 
     public void reset() {
         this.active = false;
         this.xDisplayPosition = 0;
         this.yDisplayPosition = 0;
+        this.slotNumber = this.index;
     }
 
     /**
@@ -77,11 +84,19 @@ public class SlotSeedStorage extends Slot {
      */
     @Override
     public void putStack(ItemStack stack) {
-        if(this.seed==null) {
-            this.seed = stack.copy();
-            this.count = 0;
+        if(stack!=null) {
+            if (this.seed == null) {
+                this.seed = stack.copy();
+                this.count = 0;
+            }
+            this.count = count + stack.stackSize;
         }
-        this.count = count + stack.stackSize;
+        else {
+            this.count = count<64?0:count-64;
+            if(count<=0) {
+                this.seed = null;
+            }
+        }
         this.onSlotChanged();
     }
 
@@ -122,6 +137,13 @@ public class SlotSeedStorage extends Slot {
     @Override
     public int getSlotIndex() {
         return this.index;
+    }
+
+    /**
+     * Return whether this slot's stack can be taken from this slot.
+     */
+    public boolean canTakeStack(EntityPlayer player) {
+        return true;
     }
 
     public boolean isActive() {
