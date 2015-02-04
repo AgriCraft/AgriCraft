@@ -19,13 +19,15 @@ public class MessageContainerSeedStorage implements IMessage {
     private Item item;
     private int meta;
     private EntityPlayer player;
+    private int offset;
 
     public MessageContainerSeedStorage() {}
 
-    public MessageContainerSeedStorage(EntityPlayer player, Item item, int meta) {
+    public MessageContainerSeedStorage(EntityPlayer player, Item item, int meta, int offset) {
         this.item = item;
         this.meta = meta;
         this.player = player;
+        this.offset = offset;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class MessageContainerSeedStorage implements IMessage {
         int playerNameLength = buf.readInt();
         String playerName = new String(buf.readBytes(playerNameLength).array());
         this.player = this.getPlayer(playerName);
-
+        this.offset = buf.readInt();
     }
 
     private EntityPlayer getPlayer(String name) {
@@ -62,6 +64,7 @@ public class MessageContainerSeedStorage implements IMessage {
         String playerName = this.player.getDisplayName();
         buf.writeInt(playerName.length());
         buf.writeBytes(playerName.getBytes());
+        buf.writeInt(this.offset);
     }
 
     public static class MessageHandler implements IMessageHandler<MessageContainerSeedStorage, IMessage> {
@@ -71,7 +74,7 @@ public class MessageContainerSeedStorage implements IMessage {
             if(container!=null && container instanceof ContainerSeedStorage) {
                 ContainerSeedStorage storage = (ContainerSeedStorage) container;
                 storage.clearActiveEntries();
-                storage.setActiveEntries(new ItemStack(message.item, 1, message.meta));
+                storage.setActiveEntries(new ItemStack(message.item, 1, message.meta), message.offset);
                 storage.detectAndSendChanges();
             }
             return null;

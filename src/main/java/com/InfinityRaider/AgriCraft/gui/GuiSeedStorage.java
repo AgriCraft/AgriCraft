@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -30,12 +31,14 @@ import java.util.*;
 @SideOnly(Side.CLIENT)
 public class GuiSeedStorage extends GuiContainer {
     public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedStorage.png");
-    private ArrayList<SlotSeedStorage> activeEntries;
+
+    public ItemSeeds activeSeed;
+    public int activeMeta;
 
     private int scrollPositionVertical;
     private int scrollPositionHorizontal;
-    private static final int maxNrVerticalSeeds = 10;
-    private static final int maxNrHorizontalSeeds = 6;
+    public static final int maxNrVerticalSeeds = 10;
+    public static final int maxNrHorizontalSeeds = 6;
 
     private static final int buttonIdGrowth = 0;
     private static final int buttonIdGain = 1;
@@ -55,7 +58,6 @@ public class GuiSeedStorage extends GuiContainer {
     @Override
     public void drawScreen(int x, int y, float f) {
         super.drawScreen(x, y, f);
-        //this.drawActiveSeedSlots();
     }
 
     @Override
@@ -70,20 +72,29 @@ public class GuiSeedStorage extends GuiContainer {
     public void drawGuiContainerForegroundLayer(int x, int y) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         this.loadButtons();
+        if(this.activeSeed!=null) {
+            this.drawActiveEntries();
+        }
+    }
+
+    private void drawActiveEntries() {
+        ArrayList<SlotSeedStorage> slots = this.getActiveSlots();
+        
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
         LogHelper.debug("Pressed button: " + button.id);
-        if(button.id<=buttonIdStrength) {
+        if(button.id<=buttonIdStrength && this.activeSeed!=null) {
             this.sortByStat(button.id);
+            this.setActiveEntries();
         }
         else if(button.id<=buttonIdScrollRight) {
             switch(button.id) {
-                case buttonIdScrollDown: this.scrollPositionVertical = this.scrollPositionVertical +1; break;
-                case buttonIdScrollUp: this.scrollPositionVertical = this.scrollPositionVertical +1; break;
-                case buttonIdScrollRight: this.scrollPositionHorizontal = this.scrollPositionHorizontal +1; break;
-                case buttonIdScrollLeft: this.scrollPositionHorizontal = this.scrollPositionHorizontal-1; break;
+                case buttonIdScrollDown: this.scrollVertical(-1); break;
+                case buttonIdScrollUp: this.scrollVertical(1); break;
+                case buttonIdScrollRight: this.scrollHorizontal(1); break;
+                case buttonIdScrollLeft: this.scrollHorizontal(-1); break;
             }
         }
         else {
@@ -94,6 +105,46 @@ public class GuiSeedStorage extends GuiContainer {
         this.updateScreen();
     }
 
+    private void scrollVertical(int amount) {
+        int newPos = this.scrollPositionVertical+amount;
+        newPos = newPos<0?0:newPos;
+        int maxScrollY = this.getMaxVerticalScroll();
+        newPos = newPos>maxScrollY?maxScrollY:newPos;
+        this.scrollPositionVertical = newPos;
+    }
+
+    private int getMaxVerticalScroll() {
+        int nrSeedButtons = this.buttonList.size()-buttonIdScrollRight-1;
+        int nrRows = (nrSeedButtons%4>0?1:0) + nrSeedButtons/4;
+        if(nrRows<=maxNrVerticalSeeds) {
+            return 0;
+        }
+        else {
+            return nrRows-maxNrVerticalSeeds;
+        }
+    }
+
+    private void scrollHorizontal(int amount) {
+        if(this.activeSeed!=null) {
+            int newPos = this.scrollPositionHorizontal + amount;
+            newPos = newPos < 0 ? 0 : newPos;
+            int maxScrollX = this.getMaxHorizontalScroll();
+            newPos = newPos > maxScrollX ? maxScrollX : newPos;
+            this.scrollPositionHorizontal = newPos;
+            this.setActiveEntries();
+        }
+    }
+
+    private int getMaxHorizontalScroll() {
+        int nrSlots = this.getActiveEntries().size();
+        if(nrSlots<=maxNrHorizontalSeeds) {
+            return 0;
+        }
+        else {
+            return nrSlots-maxNrHorizontalSeeds;
+        }
+    }
+
     protected void sortByStat(int id) {
         String stat=null;
         switch(id) {
@@ -101,25 +152,70 @@ public class GuiSeedStorage extends GuiContainer {
             case buttonIdGain: stat = Names.NBT.gain; break;
             case buttonIdStrength: stat = Names.NBT.strength; break;
         }
-        if(stat!=null) {
+        if(stat!=null && this.activeSeed!=null) {
+            ArrayList<SlotSeedStorage> list = this.getActiveEntries();
+            for(int i=list.size()-1;i>=0;i--) {
+                if(list.get(i)==null) {
+                    list.remove(i);
+                }
+            }
+            if(list.size()==0) {return;}
+            SlotSeedStorage first;
+            ArrayList<SlotSeedStorage> newList = new ArrayList<SlotSeedStorage>();
+            while(list.size()>0) {
+                first = list.get(0);
+                for (SlotSeedStorage slot : list) {
+                    NBTTagCompound firstTag = first.getStack().stackTagCompound;
+                    NBTTagCompound thisTag = slot.getStack().stackTagCompound;
+                    if (thisTag.getInteger(stat) > firstTag.getInteger(stat)) {
+                        first = slot;
+                    }
+                }
+                newList.add(first);
+                list.remove(first);
+            }
+            ((ContainerSeedStorage) this.inventorySlots).entries.get(this.activeSeed).put(this.activeMeta, newList);
+        }
+    }
 
+    protected void setActiveEntries() {
+        if(this.activeSeed!=null) {
+            this.setActiveEntries(new ItemStack(this.activeSeed, 1, this.activeMeta));
         }
     }
 
     protected void setActiveEntries(ItemStack stack) {
+        this.activeSeed = (ItemSeeds) stack.getItem();
+        this.activeMeta = stack.getItemDamage();
         ContainerSeedStorage container= (ContainerSeedStorage) this.inventorySlots;
-        //set the active entries array list
-        this.activeEntries = new ArrayList<SlotSeedStorage>();
-        HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> entries = container.entries;
-        ItemSeeds seed = (ItemSeeds) stack.getItem();
-        int seedMeta = stack.getItemDamage();
-        this.activeEntries = entries.get(seed).get(seedMeta);
         //clear previous active entries
         container.clearActiveEntries();
         //set the new active entries
-        container.setActiveEntries(stack);
+        container.setActiveEntries(stack, this.scrollPositionHorizontal);
         //tell the server to load the slots for the active entries
-        NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(Minecraft.getMinecraft().thePlayer, stack.getItem(), stack.getItemDamage()));
+        NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(Minecraft.getMinecraft().thePlayer, stack.getItem(), stack.getItemDamage(), this.scrollPositionHorizontal));
+    }
+
+    //gets an array list of all the slots in the container corresponding to the active seed
+    protected ArrayList<SlotSeedStorage> getActiveEntries() {
+        ContainerSeedStorage container= (ContainerSeedStorage) this.inventorySlots;
+        ArrayList<SlotSeedStorage> list = new ArrayList<SlotSeedStorage>();
+        if(this.activeSeed!=null) {
+            list = container.entries.get(this.activeSeed).get(this.activeMeta);
+        }
+        return list;
+    }
+
+    //gets an array list of the active slots in the container corresponding to the active seed
+    protected ArrayList<SlotSeedStorage> getActiveSlots() {
+        ContainerSeedStorage container= (ContainerSeedStorage) this.inventorySlots;
+        ArrayList<SlotSeedStorage> list = new ArrayList<SlotSeedStorage>();
+        if(this.activeSeed!=null) {
+            for(int i=container.PLAYER_INVENTORY_SIZE;i<container.inventorySlots.size();i++) {
+                list.add((SlotSeedStorage) container.inventorySlots.get(i));
+            }
+        }
+        return list;
     }
 
     private void loadButtons() {

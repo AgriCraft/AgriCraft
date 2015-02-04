@@ -10,6 +10,8 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.ArrayList;
+
 public class SlotSeedStorage extends Slot {
     public boolean active = false;
     private ItemStack seed;
@@ -115,22 +117,44 @@ public class SlotSeedStorage extends Slot {
      */
     @Override
     public ItemStack decrStackSize(int amount) {
+        amount = amount>64?64:amount;
         ItemStack result = this.seed.copy();
         if(amount==count) {
             result.stackSize = amount;
-            this.count = 0;
-            this.seed = null;
+            this.clearSlot();
         }
         else if(amount>count) {
             result.stackSize = count;
-            this.count = 0;
-            this.seed = null;
+            this.clearSlot();
         }
         else {
             result.stackSize = count;
             this.count = count - amount;
         }
         return result;
+    }
+
+    protected void clearSlot() {
+        ItemStack stack = this.seed.copy();
+        ItemSeeds item = (ItemSeeds) stack.getItem();
+        if(this.container.entries.get(item)!=null) {
+            if(this.container.entries.get(item).get(stack.getItemDamage())!=null) {
+                //remove this slot from the maps
+                ArrayList<SlotSeedStorage> list = this.container.entries.get(item).get(stack.getItemDamage());
+                list.remove(this);
+                container.seedSlots.remove(this.index);
+                //this slot was the last entry for that meta, so remove that meta from the map as well
+                if(list.size()==0) {
+                    container.entries.get(item).remove(stack.getItemDamage());
+                    //this meta entry was the last for that item, so remove that item from the map
+                    if(container.entries.get(item).size()==0) {
+                        container.entries.remove(item);
+                    }
+                }
+            }
+        }
+        this.seed=null;
+        this.count=0;
     }
 
     /** The index of the slot in the inventory. */
@@ -155,7 +179,4 @@ public class SlotSeedStorage extends Slot {
     public boolean func_111238_b() {
         return this.active;
     }
-
-
-
 }

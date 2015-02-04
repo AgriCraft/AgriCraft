@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.container.SlotSeedStorage;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemSeeds;
@@ -14,9 +15,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class TileEntitySeedStorage extends TileEntityCustomWood implements IInventory{
+public class TileEntitySeedStorage extends TileEntityCustomWood implements IInventory, IDebuggable{
     public ForgeDirection direction;
     public int usingPlayers;
     private ArrayList<ItemStack> inventory = new ArrayList<ItemStack>();
@@ -147,7 +149,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements IInve
                 for(Map.Entry<Integer, ArrayList<SlotSeedStorage>> metaEntry:seedEntry.getValue().entrySet()) {
                     if(metaEntry!=null && metaEntry.getKey()!=null && metaEntry.getValue()!=null) {
                         for(SlotSeedStorage slot:metaEntry.getValue()) {
-                            if(slot!=null) {
+                            if(slot!=null && slot.getStack()!=null && slot.getStack().getItem()!=null) {
                                 this.inventory.add(slot.getStack());
                             }
                         }
@@ -155,6 +157,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements IInve
                 }
             }
         }
+        this.markDirty();
     }
 
     @Override
@@ -199,5 +202,14 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements IInve
             }
         }
         return allow;
+    }
+
+    //Debug method
+    @Override
+    public void addDebugInfo(List<String> list) {
+        list.add("Inventory Contents");
+        for(ItemStack stack:this.inventory) {
+            list.add(stack.stackSize+"x "+stack.getDisplayName());
+        }
     }
 }

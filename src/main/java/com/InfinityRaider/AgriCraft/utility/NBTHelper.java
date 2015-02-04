@@ -32,7 +32,6 @@ public abstract class NBTHelper {
     }
 
     public static void sortStacks(NBTTagList list) {
-        int nr = list.tagCount();
         //if the list has no or one stack, nothing has to be sorted
         if(list.tagCount()<2) {
             return;

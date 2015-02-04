@@ -44,5 +44,6 @@ public abstract class DebugHelper {
             list.add("Block: "+ Block.blockRegistry.getNameForObject(world.getBlock(x, y, z)));
             list.add("Meta: "+world.getBlockMetadata(x, y, z));
         }
+        list.add(" ");
     }
 }
