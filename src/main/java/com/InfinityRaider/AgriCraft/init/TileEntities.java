@@ -25,9 +25,11 @@ public class TileEntities {
             GameRegistry.registerTileEntity(TileEntityValve.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.valve);
             GameRegistry.registerTileEntity(TileEntitySprinkler.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.sprinkler);
         }
-        if(ConfigurationHandler.enableSeedStorage) {
+        if(!ConfigurationHandler.disableSeedStorage) {
             GameRegistry.registerTileEntity(TileEntitySeedStorage.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.seedStorage);
-            GameRegistry.registerTileEntity(TileEntitySeedStorageController.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.seedStorageController);
+            if(!ConfigurationHandler.disableSeedWarehouse) {
+                GameRegistry.registerTileEntity(TileEntitySeedStorageController.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.seedStorageController);
+            }
         }
         LogHelper.info("Tile Entities registered");
     }

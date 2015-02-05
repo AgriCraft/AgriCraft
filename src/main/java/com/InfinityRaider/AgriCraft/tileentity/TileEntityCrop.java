@@ -84,6 +84,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             //find neighbours
             TileEntityCrop[] neighbours = this.findNeighbours();
             //find out the new plant
+            boolean didMutate = false;
             if (Math.random() > ConfigurationHandler.mutationChance) {
                 int index = (int) Math.floor(Math.random() * neighbours.length);
                 if (neighbours[index]!=null && neighbours[index].seed!=null && neighbours[index].isMature()) {
@@ -109,7 +110,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && this.canMutate(result, resultMeta, mutationId, req, reqMeta)) {
                 if(Math.random()<chance) {
                     this.crossCrop = false;
-                    int[] stats = MutationHandler.getStats(neighbours);
+                    int[] stats = MutationHandler.getStats(neighbours, didMutate);
                     this.setPlant(stats[0], stats[1], stats[2], false, result, resultMeta);
                     change = true;
                 }

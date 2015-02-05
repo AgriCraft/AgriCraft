@@ -32,11 +32,13 @@ public class Blocks {
             blockSprinkler = new BlockSprinkler();
             RegisterHelper.registerBlock(blockSprinkler, Names.Objects.sprinkler);
         }
-        if(ConfigurationHandler.enableSeedStorage) {
+        if(!ConfigurationHandler.disableSeedStorage) {
             blockSeedStorage = new BlockSeedStorage();
             RegisterHelper.registerBlock(blockSeedStorage, Names.Objects.seedStorage, ItemBlockCustomWood.class);
-            blockSeedStorageController = new BlockSeedStorageController();
-            RegisterHelper.registerBlock(blockSeedStorageController, Names.Objects.seedStorageController, ItemBlockCustomWood.class);
+            if(!ConfigurationHandler.disableSeedWarehouse) {
+                blockSeedStorageController = new BlockSeedStorageController();
+                RegisterHelper.registerBlock(blockSeedStorageController, Names.Objects.seedStorageController, ItemBlockCustomWood.class);
+            }
         }
         LogHelper.info("Blocks registered");
     }

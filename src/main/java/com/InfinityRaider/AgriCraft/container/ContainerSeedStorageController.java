@@ -340,7 +340,7 @@ public class ContainerSeedStorageController extends ContainerAgricraft {
         }
         return super.slotClick(slotIndex, mouseButton, shiftHeld, player);
     }
-
+/*
     @Override
     public void onContainerClosed(EntityPlayer player) {
         if(FMLCommonHandler.instance().getEffectiveSide()==Side.SERVER) {
@@ -352,5 +352,5 @@ public class ContainerSeedStorageController extends ContainerAgricraft {
             inventoryplayer.setItemStack(null);
         }
     }
-
+*/
 }

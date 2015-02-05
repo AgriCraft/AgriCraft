@@ -167,7 +167,7 @@ public abstract class MutationHandler {
     }
 
     //logic for stat inheritance
-    public static int[] getStats(TileEntityCrop[] input) {
+    public static int[] getStats(TileEntityCrop[] input, boolean mutation) {
         int[] output = new int[3];
         TileEntityCrop[] neighbors = getParents(input);
         int size = neighbors.length;
@@ -182,11 +182,12 @@ public abstract class MutationHandler {
         int meanGrowth = getMean(growth);
         int meanGain = getMean(gain);
         int meanStrength = getMean(strength);
-        output[0] = getGain(meanGrowth, size);
-        output[1] = getGain(meanGain, size);
-        output[2] = getGain(meanStrength, size);
+        int divisor = mutation?1:ConfigurationHandler.cropStatDivisor;
+        output[0] = Math.max(1, getGain(meanGrowth, size)/divisor);
+        output[1] = Math.max(1, getGain(meanGain, size)/divisor);
+        output[2] = Math.max(1, getGain(meanStrength, size)/divisor);
         for(int i=0;i<output.length;i++) {
-            output[i] = output[i]>10?10:output[i];
+            output[i] = output[i]>ConfigurationHandler.cropStatCap?ConfigurationHandler.cropStatCap:output[i];
         }
         return output;
     }

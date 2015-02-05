@@ -1,6 +1,8 @@
 Changelog
 ---------
 1.2.3
+-ADDED:  A config option to change the maximum stat cap on crops
+-ADDED:  A config option to divide the stats on a newly mutated crops
 -CHANGE: The background of the seed portrait in the journal is now the required soil
 -CHANGE: You can now specify any block as a specific soil for custom crops
 -FIXED:  Moved Botania crops to post init to possibly fix the crops not dropping petals

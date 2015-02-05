@@ -19,6 +19,7 @@ public class ConfigurationHandler {
     public static final String CATEGORY_DEBUG = "debug";
     public static final String CATEGORY_INTEGRATION = "integration";
     public static final String CATEGORY_IRRIGATION = "irrigation";
+    public static final String CATEGORY_STORAGE = "storage";
 
     public static Configuration config;
     private static String directory;
@@ -32,14 +33,18 @@ public class ConfigurationHandler {
     public static boolean resourcePlants;
     public static double mutationChance;
     public static int cropsPerCraft;
+    public static int cropStatCap;
+    public static int cropStatDivisor;
     public static boolean enableWeeds;
     public static boolean weedsWipePlants;
     public static boolean bonemealMutation;
     public static boolean disableWorldGen;
     public static boolean disableVanillaFarming;
     public static boolean wipeTallGrassDrops;
-    public static boolean enableSeedStorage;
     public static boolean renderBookInAnalyzer;
+
+    public static boolean disableSeedStorage;
+    public static boolean disableSeedWarehouse;
 
     public static boolean disableIrrigation;
     public static int sprinklerRatePerSecond;
@@ -78,6 +83,8 @@ public class ConfigurationHandler {
         resourcePlants = config.getBoolean("Resource Crops",CATEGORY_AGRICRAFT,false,"set to true if you wish to enable resource crops");
         mutationChance = (double) config.getFloat("Mutation Chance",CATEGORY_AGRICRAFT, (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance");
         cropsPerCraft = config.getInt("Crops per craft", CATEGORY_AGRICRAFT, 1, 1, 4, "The number of crops you get per crafting operation");
+        cropStatCap = config.getInt("Crop stat cap", CATEGORY_AGRICRAFT, 10, 1, 10, "The maximum attainable value of the stats on a crop");
+        cropStatDivisor = config.getInt("Crop stat divisor", CATEGORY_AGRICRAFT, 2, 1, 3, "On a mutation the stats on the crop will be divided by this number");
         enableWeeds = config.getBoolean("Enable weeds", CATEGORY_AGRICRAFT, true, "set to false if you wish to disable weeds");
         weedsWipePlants = enableWeeds && config.getBoolean("Weeds can overtake plants",CATEGORY_AGRICRAFT,true,"set to false if you don't want weeds to be able to overgrow other plants");
         bonemealMutation = config.getBoolean("Bonemeal Mutations",CATEGORY_AGRICRAFT, false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
@@ -88,8 +95,10 @@ public class ConfigurationHandler {
         generateDefaults = propGenerateDefaults.getBoolean();
         customCrops = config.getBoolean("Custom crops", CATEGORY_AGRICRAFT, false, "set to true if you wish to create your own crops");
         wipeTallGrassDrops = config.getBoolean("Clear tall grass drops", CATEGORY_AGRICRAFT, false, "set to true to clear the list of items dropping from tall grass (Will run before adding seeds defined in the grass drops config).");
-        enableSeedStorage = config.getBoolean("Enable seed storage system", CATEGORY_AGRICRAFT, true, "set to false to disable the seed storage system");
         renderBookInAnalyzer = config.getBoolean("Render journal in analyzer", CATEGORY_AGRICRAFT, true, "set to false to not render the journal on the analyzer");
+
+        disableSeedStorage = config.getBoolean("Disable seed storage system", CATEGORY_STORAGE, false, "set to true to disable the seed storage systems");
+        disableSeedWarehouse = config.getBoolean("Disable seed storage warehouses", CATEGORY_STORAGE, false, "set to true to disable the seed storage warehouse blocks");
 
         disableIrrigation = config.getBoolean("Disable Irrigation", CATEGORY_IRRIGATION, false, "set to true if you want to disable irrigation systems");
         sprinklerRatePerSecond = config.getInt("Sprinkler water usage", CATEGORY_IRRIGATION, 10, 0, 10000, "Water usage of the sprinkler in mB per second");
