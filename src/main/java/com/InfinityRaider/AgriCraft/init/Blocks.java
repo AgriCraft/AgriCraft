@@ -23,7 +23,7 @@ public class Blocks {
         RegisterHelper.registerBlock(seedAnalyzer, Names.Objects.seedAnalyzer);
         if(ConfigurationHandler.enableSeedStorage) {
             blockSeedStorage = new BlockSeedStorage();
-            RegisterHelper.registerBlock(blockSeedStorage, Names.Objects.seedStorage, ItemBlockCustomWood.class);
+            // RegisterHelper.registerBlock(blockSeedStorage, Names.Objects.seedStorage, ItemBlockCustomWood.class);
         }
         if(!ConfigurationHandler.disableIrrigation) {
             blockWaterTank = new BlockWaterTank();
