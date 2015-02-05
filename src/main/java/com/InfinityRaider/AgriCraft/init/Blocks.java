@@ -15,16 +15,13 @@ public class Blocks {
     public static BlockChannelValve blockChannelValve;
     public static BlockSprinkler blockSprinkler;
     public static BlockSeedStorage blockSeedStorage;
+    public static BlockSeedStorageController blockSeedStorageController;
 
     public static void init() {
         blockCrop = new BlockCrop();
         RegisterHelper.registerBlock(blockCrop, Names.Objects.crops);
         seedAnalyzer = new BlockSeedAnalyzer();
         RegisterHelper.registerBlock(seedAnalyzer, Names.Objects.seedAnalyzer);
-        if(ConfigurationHandler.enableSeedStorage) {
-            blockSeedStorage = new BlockSeedStorage();
-            RegisterHelper.registerBlock(blockSeedStorage, Names.Objects.seedStorage, ItemBlockCustomWood.class);
-        }
         if(!ConfigurationHandler.disableIrrigation) {
             blockWaterTank = new BlockWaterTank();
             RegisterHelper.registerBlock(blockWaterTank, Names.Objects.tank, ItemBlockCustomWood.class);
@@ -34,6 +31,12 @@ public class Blocks {
             RegisterHelper.registerBlock(blockChannelValve, Names.Objects.valve, ItemBlockCustomWood.class);
             blockSprinkler = new BlockSprinkler();
             RegisterHelper.registerBlock(blockSprinkler, Names.Objects.sprinkler);
+        }
+        if(ConfigurationHandler.enableSeedStorage) {
+            blockSeedStorage = new BlockSeedStorage();
+            RegisterHelper.registerBlock(blockSeedStorage, Names.Objects.seedStorage, ItemBlockCustomWood.class);
+            blockSeedStorageController = new BlockSeedStorageController();
+            RegisterHelper.registerBlock(blockSeedStorageController, Names.Objects.seedStorageController, ItemBlockCustomWood.class);
         }
         LogHelper.info("Blocks registered");
     }

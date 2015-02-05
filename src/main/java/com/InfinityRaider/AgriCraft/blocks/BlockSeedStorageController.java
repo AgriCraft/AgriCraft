@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
+import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -11,14 +12,14 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockSeedStorage extends BlockCustomWood {
-    public BlockSeedStorage() {
+public class BlockSeedStorageController extends BlockCustomWood {
+    public BlockSeedStorageController() {
         super();
     }
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new TileEntitySeedStorage();
+        return new TileEntitySeedStorageController();
     }
 
     //this sets the block's orientation based upon the direction the player is looking when the block is placed
@@ -42,7 +43,7 @@ public class BlockSeedStorage extends BlockCustomWood {
             return false;
         }
         if(!world.isRemote) {
-            player.openGui(AgriCraft.instance, GuiHandler.seedStorageID, world, x, y, z);
+            player.openGui(AgriCraft.instance, GuiHandler.seedStorageControllerID, world, x, y, z);
         }
         return true;
     }

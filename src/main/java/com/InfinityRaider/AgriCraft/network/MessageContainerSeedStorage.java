@@ -1,12 +1,11 @@
 package com.InfinityRaider.AgriCraft.network;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorage;
+import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageController;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -71,8 +70,8 @@ public class MessageContainerSeedStorage implements IMessage {
         @Override
         public IMessage onMessage(MessageContainerSeedStorage message, MessageContext context) {
             Container container = message.player.openContainer;
-            if(container!=null && container instanceof ContainerSeedStorage) {
-                ContainerSeedStorage storage = (ContainerSeedStorage) container;
+            if(container!=null && container instanceof ContainerSeedStorageController) {
+                ContainerSeedStorageController storage = (ContainerSeedStorageController) container;
                 storage.clearActiveEntries();
                 storage.setActiveEntries(new ItemStack(message.item, 1, message.meta), message.offset);
                 storage.detectAndSendChanges();

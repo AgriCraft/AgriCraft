@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.world;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityTank;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;

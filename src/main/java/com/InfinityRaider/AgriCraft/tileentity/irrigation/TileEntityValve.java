@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.tileentity;
+package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
 
 import com.InfinityRaider.AgriCraft.reference.Constants;

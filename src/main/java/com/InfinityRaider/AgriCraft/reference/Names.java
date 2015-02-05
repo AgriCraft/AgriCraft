@@ -23,6 +23,12 @@ public final class Names {
         public static final String power = "powerrrr";
         public static final String inventory = "inventory";
         public static final String size = "size";
+        public static final String count = "count";
+        public static final String seed = "seed";
+        public static final String tag = "tag";
+        public static final String x = "agricraftX";
+        public static final String y = "agricraftY";
+        public static final String z = "agricraftZ";
     }
 
     //mod objects
@@ -44,6 +50,7 @@ public final class Names {
         public static final String valve = "channelValve";
         public static final String sprinkler = "sprinkler";
         public static final String seedStorage = "seedStorage";
+        public static final String seedStorageController = "seedStorageController";
     }
 
     //tile entities

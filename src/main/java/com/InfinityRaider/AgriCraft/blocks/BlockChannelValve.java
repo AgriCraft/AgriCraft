@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityValve;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.init.Blocks;

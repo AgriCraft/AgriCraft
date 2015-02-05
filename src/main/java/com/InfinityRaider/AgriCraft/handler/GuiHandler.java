@@ -2,11 +2,14 @@ package com.InfinityRaider.AgriCraft.handler;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorage;
+import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageController;
 import com.InfinityRaider.AgriCraft.gui.GuiJournal;
 import com.InfinityRaider.AgriCraft.gui.GuiSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.gui.GuiSeedStorage;
+import com.InfinityRaider.AgriCraft.gui.GuiSeedStorageController;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedStorage;
+import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
+import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -16,6 +19,7 @@ public class GuiHandler implements IGuiHandler{
     public static final int seedAnalyzerID = 1;
     public static final int journalID = 2;
     public static final int seedStorageID = 3;
+    public static final int seedStorageControllerID = 4;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -29,6 +33,10 @@ public class GuiHandler implements IGuiHandler{
             case(seedStorageID):
                 if(te != null && te instanceof TileEntitySeedStorage) {
                     return new ContainerSeedStorage(player.inventory, (TileEntitySeedStorage) te);
+                }
+            case(seedStorageControllerID):
+                if(te != null && te instanceof TileEntitySeedStorageController) {
+                    return new ContainerSeedStorageController(player.inventory, (TileEntitySeedStorageController) te);
                 }
         }
         return null;
@@ -47,6 +55,10 @@ public class GuiHandler implements IGuiHandler{
             case (seedStorageID):
                 if (te != null && te instanceof TileEntitySeedStorage) {
                     return new GuiSeedStorage(player.inventory, (TileEntitySeedStorage) te);
+                }
+            case (seedStorageControllerID):
+                if (te != null && te instanceof TileEntitySeedStorageController) {
+                    return new GuiSeedStorageController(player.inventory, (TileEntitySeedStorageController) te);
                 }
             default: return null;
         }

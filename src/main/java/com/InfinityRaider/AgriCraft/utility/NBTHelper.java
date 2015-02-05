@@ -31,6 +31,20 @@ public abstract class NBTHelper {
         return false;
     }
 
+    public static void addCoordsToNBT(int x, int y, int z, NBTTagCompound tag) {
+        tag.setInteger(Names.NBT.x, x);
+        tag.setInteger(Names.NBT.y, y);
+        tag.setInteger(Names.NBT.z, z);
+    }
+
+    public static int[] getCoordsFromNBT(NBTTagCompound tag) {
+        int[] coords = null;
+        if(tag.hasKey(Names.NBT.x) && tag.hasKey(Names.NBT.y) && tag.hasKey(Names.NBT.z)) {
+            coords = new int[] {tag.getInteger(Names.NBT.x), tag.getInteger(Names.NBT.y), tag.getInteger(Names.NBT.z)};
+        }
+        return coords;
+    }
+
     public static void sortStacks(NBTTagList list) {
         //if the list has no or one stack, nothing has to be sorted
         if(list.tagCount()<2) {

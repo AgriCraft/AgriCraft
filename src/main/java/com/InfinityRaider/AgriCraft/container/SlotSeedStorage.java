@@ -17,9 +17,9 @@ public class SlotSeedStorage extends Slot {
     private ItemStack seed;
     public int index;
     public int count;
-    public ContainerSeedStorage container;
+    public ContainerSeedStorageController container;
 
-    public SlotSeedStorage(ContainerSeedStorage container, IInventory inventory, int id, int xOffset, int yOffset, ItemStack stack) {
+    public SlotSeedStorage(ContainerSeedStorageController container, IInventory inventory, int id, int xOffset, int yOffset, ItemStack stack) {
         super(inventory, id, xOffset, yOffset);
         this.container = container;
         this.index = id;
@@ -155,6 +155,7 @@ public class SlotSeedStorage extends Slot {
         }
         this.seed=null;
         this.count=0;
+        container.resetActiveEntries(stack, 0);
     }
 
     /** The index of the slot in the inventory. */

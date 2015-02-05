@@ -1,8 +1,9 @@
-package com.InfinityRaider.AgriCraft.tileentity;
+package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
