@@ -83,6 +83,10 @@ public class Crops {
         RegisterHelper.registerBlock(shroomRed, Names.Crops.cropShroomRed);
         RegisterHelper.registerBlock(shroomBrown, Names.Crops.cropShroomBrown);
 
+        LogHelper.info("Crops registered");
+    }
+
+    public static void initBotaniaCrops() {
         if(ModIntegration.LoadedMods.botania && ConfigurationHandler.integration_Botania) {
             botaniaWhite = new BlockModPlant(ModItems.petal, 0, 3, 1);
             botaniaOrange = new BlockModPlant(ModItems.petal, 1, 3, 1);
@@ -117,8 +121,10 @@ public class Crops {
             RegisterHelper.registerBlock(botaniaGreen, Names.Crops.cropBotaniaGreen);
             RegisterHelper.registerBlock(botaniaRed, Names.Crops.cropBotaniaRed);
             RegisterHelper.registerBlock(botaniaBlack, Names.Crops.cropBotaniaBlack);
-        }
 
-        LogHelper.info("Crops registered");
+            Seeds.initBotaniaSeeds();
+
+            LogHelper.info("Botania crops registered");
+        }
     }
 }
