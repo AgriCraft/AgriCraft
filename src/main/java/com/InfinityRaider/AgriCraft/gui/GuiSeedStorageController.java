@@ -31,7 +31,7 @@ import java.util.*;
 
 @SideOnly(Side.CLIENT)
 public class GuiSeedStorageController extends GuiContainer {
-    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedStorage.png");
+    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedStorageController.png");
 
     public ItemSeeds activeSeed;
     public int activeMeta;
