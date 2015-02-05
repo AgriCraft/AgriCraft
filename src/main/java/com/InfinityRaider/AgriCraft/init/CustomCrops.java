@@ -48,22 +48,22 @@ public class CustomCrops {
                         String name = cropData[0];
                         int fruitMeta = fruit!=null?fruitStack.getItemDamage():0;
                         Block soil = cropData[2].equalsIgnoreCase("null")?null:((Block) Block.blockRegistry.getObject(cropData[2]));
-                        errorMsg = "Invalid soil: soil should be null, minecraft:sand, minecraft:soul_sand or minecraft:mycelium";
-                        success = soil==null || ItemCrop.isSoilValid(soil, 0);
-                        if(success) {
-                            ItemStack base = IOHelper.getStack(cropData[3]);
-                            Block baseBlock = base != null ? ((ItemBlock) base.getItem()).field_150939_a : null;
-                            int baseMeta = base != null ? base.getItemDamage() : 0;
-                            int tier = Integer.parseInt(cropData[4]);
-                            int renderType = Integer.parseInt(cropData[5]);
-                            String info = cropData[6];
-
-                            customCrops[i] = new BlockModPlant(soil, baseBlock, baseMeta, fruit, fruitMeta, tier, renderType, true);
-                            RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop + Character.toUpperCase(name.charAt(0)) + name.substring(1));
-
-                            customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds", info);
-                            RegisterHelper.registerSeed(customSeeds[i], Names.Objects.seed + Character.toUpperCase(name.charAt(0)) + name.substring(1), customCrops[i]);
+                        if(soil!=null && !ItemCrop.isSoilValid(soil, 0)) {
+                            ItemCrop.addBlockToSoils(soil);
                         }
+                        ItemStack base = IOHelper.getStack(cropData[3]);
+                        Block baseBlock = base != null ? ((ItemBlock) base.getItem()).field_150939_a : null;
+                        int baseMeta = base != null ? base.getItemDamage() : 0;
+                        int tier = Integer.parseInt(cropData[4]);
+                        int renderType = Integer.parseInt(cropData[5]);
+                        String info = cropData[6];
+
+                        customCrops[i] = new BlockModPlant(soil, baseBlock, baseMeta, fruit, fruitMeta, tier, renderType, true);
+                        RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop + Character.toUpperCase(name.charAt(0)) + name.substring(1));
+
+                        customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds", info);
+                        RegisterHelper.registerSeed(customSeeds[i], Names.Objects.seed + Character.toUpperCase(name.charAt(0)) + name.substring(1), customCrops[i]);
+
                     }
                 }
                 if(!success) {
