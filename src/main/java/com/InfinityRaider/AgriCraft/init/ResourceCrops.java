@@ -26,7 +26,7 @@ public class ResourceCrops {
 
     public static void init() {
         if (ConfigurationHandler.resourcePlants) {
-            Block farmland = net.minecraft.init.Blocks.farmland;
+            Block farmland = null;
 
             OreDictHelper.getRegisteredOres();
             Items.initFruits();
