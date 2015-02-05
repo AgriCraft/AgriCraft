@@ -36,6 +36,11 @@ public interface ISeedStorageController {
     public ArrayList<int[]> getControlledCoordinates();
 
     /**
+     * Returns the coordinates of the controller
+     */
+    public int[] getCoordinates();
+
+    /**
      * Gets the id of the controllable in this controller
      */
     public int getControllableID(ISeedStorageControllable controllable);

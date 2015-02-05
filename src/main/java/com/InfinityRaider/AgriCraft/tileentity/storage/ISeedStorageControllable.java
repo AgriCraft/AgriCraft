@@ -10,11 +10,6 @@ import java.util.ArrayList;
 
 public interface ISeedStorageControllable extends IInventory{
     /**
-     * Returns a list of all the slots in this inventory, all the slots in this inventory must have the same type of seed
-     */
-    public ArrayList<SeedStorageSlot> getInventorySlots();
-
-    /**
      * Returns a list of all the stacks in this inventory, all the slots in this inventory must have the same type of seed
      */
     public ArrayList<ItemStack> getInventory();

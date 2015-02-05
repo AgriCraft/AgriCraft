@@ -29,11 +29,6 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
                     HashMap<Integer, ArrayList<SlotSeedStorage>> subMap = map.get(seed);
                     if (subMap == null) {
                         subMap = new HashMap<Integer, ArrayList<SlotSeedStorage>>();
-                    } else {
-                        ArrayList<SlotSeedStorage> existingList = subMap.get(seedMeta);
-                        if (existingList != null) {
-                            existingList.addAll(list);
-                        }
                     }
                     subMap.put(seedMeta, list);
                 }
@@ -78,6 +73,11 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
             coords.add(controllable.getCoords());
         }
         return coords;
+    }
+
+    @Override
+    public int[] getCoordinates() {
+        return new int[] {this.xCoord, this.yCoord, this.zCoord};
     }
 
     @Override

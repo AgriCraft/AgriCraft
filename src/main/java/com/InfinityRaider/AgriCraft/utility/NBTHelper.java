@@ -31,6 +31,12 @@ public abstract class NBTHelper {
         return false;
     }
 
+    public static void addCoordsToNBT(int[] coords, NBTTagCompound tag) {
+        if(coords!=null && coords.length==3) {
+            addCoordsToNBT(coords[0], coords[1], coords[2], tag);
+        }
+    }
+
     public static void addCoordsToNBT(int x, int y, int z, NBTTagCompound tag) {
         tag.setInteger(Names.NBT.x, x);
         tag.setInteger(Names.NBT.y, y);

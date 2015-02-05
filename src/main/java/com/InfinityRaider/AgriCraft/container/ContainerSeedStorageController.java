@@ -110,7 +110,8 @@ public class ContainerSeedStorageController extends ContainerAgricraft {
     public SlotSeedStorage getNewSeedSlot(ItemStack stack) {
         this.lastSlotId = this.lastSlotId+1;
         IInventory inventory = this.te.getControllable(stack);
-        SlotSeedStorage newSlot = new SlotSeedStorage(this, inventory, this.lastSlotId, 0, 0, stack);
+        SlotSeedStorage newSlot = new SlotSeedStorage(inventory, this.lastSlotId, stack);
+        newSlot.addActiveContainer(this);
         this.seedSlots.put(lastSlotId, newSlot);
         return newSlot;
     }

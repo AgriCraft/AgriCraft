@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
@@ -17,11 +18,10 @@ public class SlotSeedStorage extends Slot {
     private ItemStack seed;
     public int index;
     public int count;
-    public ContainerSeedStorageController container;
+    public ArrayList<Container> activeContainers;
 
-    public SlotSeedStorage(ContainerSeedStorageController container, IInventory inventory, int id, int xOffset, int yOffset, ItemStack stack) {
-        super(inventory, id, xOffset, yOffset);
-        this.container = container;
+    public SlotSeedStorage(IInventory inventory, int id, ItemStack stack) {
+        super(inventory, id, 0, 0);
         this.index = id;
         this.seed = stack.copy();
         this.count = stack.stackSize;
@@ -70,6 +70,16 @@ public class SlotSeedStorage extends Slot {
         this.xDisplayPosition = 0;
         this.yDisplayPosition = 0;
         this.slotNumber = this.index;
+    }
+
+    public void addActiveContainer(Container container) {
+        if(!this.activeContainers.contains(container)) {
+            this.activeContainers.add(container);
+        }
+    }
+
+    public void removeActiveContainer(Container container) {
+        this.activeContainers.remove(container);
     }
 
     /**
@@ -136,26 +146,44 @@ public class SlotSeedStorage extends Slot {
 
     protected void clearSlot() {
         ItemStack stack = this.seed.copy();
+        this.seed=null;
+        this.count=0;
+        for(Container container:this.activeContainers) {
+            if(container!=null) {
+                if(container instanceof ContainerSeedStorageController) {
+                    this.clearFromSeedStorageController((ContainerSeedStorageController) container, stack);
+                }
+                else if(container instanceof ContainerSeedStorage) {
+                    this.clearFromSeedStorage((ContainerSeedStorage) container, stack);
+                }
+            }
+        }
+    }
+
+    protected void clearFromSeedStorageController(ContainerSeedStorageController container, ItemStack stack) {
         ItemSeeds item = (ItemSeeds) stack.getItem();
-        if(this.container.entries.get(item)!=null) {
-            if(this.container.entries.get(item).get(stack.getItemDamage())!=null) {
+        if (container.entries.get(item) != null) {
+            if (container.entries.get(item).get(stack.getItemDamage()) != null) {
                 //remove this slot from the maps
-                ArrayList<SlotSeedStorage> list = this.container.entries.get(item).get(stack.getItemDamage());
+                ArrayList<SlotSeedStorage> list = container.entries.get(item).get(stack.getItemDamage());
                 list.remove(this);
                 container.seedSlots.remove(this.index);
                 //this slot was the last entry for that meta, so remove that meta from the map as well
-                if(list.size()==0) {
+                if (list.size() == 0) {
                     container.entries.get(item).remove(stack.getItemDamage());
                     //this meta entry was the last for that item, so remove that item from the map
-                    if(container.entries.get(item).size()==0) {
+                    if (container.entries.get(item).size() == 0) {
                         container.entries.remove(item);
                     }
                 }
             }
         }
-        this.seed=null;
-        this.count=0;
+        this.removeActiveContainer(container);
         container.resetActiveEntries(stack, 0);
+    }
+
+    protected void clearFromSeedStorage(ContainerSeedStorage container, ItemStack stack) {
+        this.removeActiveContainer(container);
     }
 
     /** The index of the slot in the inventory. */
