@@ -229,6 +229,20 @@ public abstract class SeedHelper {
         }
     }
 
+    public static Block getSoil(ItemStack stack) {
+        Block soil = null;
+        if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
+            ItemSeeds seed = (ItemSeeds) stack.getItem();
+            if(seed instanceof ItemModSeed) {
+                soil = ((ItemModSeed) seed).getPlant().soil;
+            }
+            else if(seed == Items.nether_wart) {
+                soil = Blocks.soul_sand;
+            }
+        }
+        return soil;
+    }
+
     //gets the seed domain
     public static String getPlantDomain(ItemSeeds seed) {
         String name = Item.itemRegistry.getNameForObject(seed);
@@ -325,7 +339,7 @@ public abstract class SeedHelper {
                 return requiredSoil==soil;
             }
         }
-        if(seed==Items.nether_wart) {
+        else if(seed==Items.nether_wart) {
             return soil == Blocks.soul_sand;
         }
         return SoilWhitelist.isSoilFertile(soil, soilMeta);

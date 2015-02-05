@@ -8,10 +8,12 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -380,7 +382,11 @@ public class GuiJournal extends GuiScreen {
     private void drawSeedTitle(int index) {
         ItemStack seed = discoveredSeeds[index];
         String title = seed.getDisplayName();
+        Block soil = SeedHelper.getSoil(seed);
         Minecraft.getMinecraft().getTextureManager().bindTexture(RenderHelper.getItemResource(seedIcon));
+        if(soil!=null) {
+            this.renderIconInGui(this.guiLeft + 26, this.guiTop + 11, RenderHelper.getBlockResource(soil.getIcon(1, 0)));
+        }
         this.renderIconInGui(this.guiLeft + 25, this.guiTop + 11, RenderHelper.getItemResource(seedIcon));
         float scale = 0.8F;
         while(this.fontRendererObj.getStringWidth(title)*scale>74) {

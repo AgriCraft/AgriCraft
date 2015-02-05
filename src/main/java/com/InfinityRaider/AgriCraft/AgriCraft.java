@@ -84,6 +84,8 @@ public class AgriCraft {
     public static void postInit(FMLPostInitializationEvent event) {
         LogHelper.info("Starting Post-Initialization");
 
+        Crops.initBotaniaCrops();
+
         Recipes.init();
         CustomCrops.initCustomCrops();
         SeedHelper.init();

@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -197,27 +198,21 @@ public abstract class IOHelper {
 
     //gets an itemstack from a string: name:meta
     public static ItemStack getStack(String input) {
-        ItemStack output = null;
-        int index1 = input.indexOf(':',0);
-        if(index1>0) {
-            int index2 = input.indexOf(':', index1 + 1);
-            String name = input;
-            String meta = "0";
-            if (index2 > 0) {
-                meta = input.substring(index2 + 1);
-                name = input.substring(0, index2);
-            }
-            Block block = (Block) Block.blockRegistry.getObject(name);
-            Item item = (Item) Item.itemRegistry.getObject(name);
-            if (block != null && block != Blocks.air) {
-                output = new ItemStack(block, 1, Integer.parseInt(meta));
-            }else if(block==Blocks.air && name.equals("minecraft:air")) {
-                output = new ItemStack(Blocks.air, 1, 0);
-            } else if (item != null) {
-                output = new ItemStack(item, 1, Integer.parseInt(meta));
-            }
+        String[] data = input.split(":");
+        int meta = 0;
+
+        if (data.length <= 1) {
+            return null;
         }
-        return output;
+        if (data.length == 3) {
+            meta = Integer.parseInt(data[2]);
+        }
+
+        Item item = GameRegistry.findItem(data[0], data[1]);
+        if (item != null) {
+            return new ItemStack(item, 1, meta);
+        }
+        return null;
     }
 
     private static final String grassDropInstructions =
