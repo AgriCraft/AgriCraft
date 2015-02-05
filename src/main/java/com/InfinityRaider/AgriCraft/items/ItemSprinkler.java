@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -21,7 +22,7 @@ public class ItemSprinkler extends ModItem {
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
-            if (world.getBlock(x, y, z) instanceof BlockWaterChannel && world.getBlock(x, y - 1, z) == net.minecraft.init.Blocks.air) {
+            if (world.getBlock(x, y, z) instanceof BlockWaterChannel && world.getBlock(x, y - 1, z).getMaterial()== Material.air) {
                 world.setBlock(x, y - 1, z, Blocks.blockSprinkler);
                 stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
                 return false;

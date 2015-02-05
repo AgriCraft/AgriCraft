@@ -7,6 +7,7 @@ Changelog
 -CHANGE: You can now specify any block as a specific soil for custom crops
 -FIXED:  Moved Botania crops to post init to possibly fix the crops not dropping petals
 -FIXED:  Nether wart not being recognised as a valid seed (Marcin212)
+-FIXED:  Sprinklers no longer hate railcraft hidden blocks
 
 1.2.2
 -ADDED:  TConstruct scythes can be used for aoe harvesting (right click on crops to aoe harvest)
