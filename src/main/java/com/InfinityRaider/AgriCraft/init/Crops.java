@@ -50,7 +50,7 @@ public class Crops {
         potato = new BlockModPlant(net.minecraft.init.Items.potato);
         carrot = new BlockModPlant(net.minecraft.init.Items.carrot);
         melon = new BlockModPlant(net.minecraft.init.Items.melon);
-        pumpkin = new BlockModPlant(net.minecraft.item.Item.getItemFromBlock(net.minecraft.init.Blocks.pumpkin));
+        pumpkin = new BlockModPlant(Item.getItemFromBlock(Blocks.pumpkin));
         sugarcane = new BlockModPlant(net.minecraft.init.Blocks.sand, net.minecraft.init.Items.reeds);
         dandelion = new BlockModPlant(net.minecraft.init.Items.dye, 11);
         poppy = new BlockModPlant(net.minecraft.init.Items.dye, 1);
@@ -61,7 +61,7 @@ public class Crops {
         tulipWhite = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
         tulipPink = new BlockModPlant(net.minecraft.init.Items.dye, 9, 2);
         daisy = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
-        cactus = new BlockModPlant(Blocks.sand, net.minecraft.init.Items.dye, 2);
+        cactus = new BlockModPlant(Blocks.sand, ConfigurationHandler.cactusGivesCactus?Item.getItemFromBlock(Blocks.cactus):net.minecraft.init.Items.dye, 2);
         shroomRed = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.red_mushroom));
         shroomBrown = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.brown_mushroom));
 
