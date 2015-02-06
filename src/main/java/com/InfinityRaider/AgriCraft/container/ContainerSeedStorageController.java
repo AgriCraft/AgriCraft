@@ -17,11 +17,14 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ContainerSeedStorageController extends ContainerAgricraft {
     //one hash map to quickly find the correct slot based on a stack
-    public HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> entries;
+    public Map<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> entries;
     //another map based on the slot id
     public HashMap<Integer, SlotSeedStorage> seedSlots;
     public TileEntitySeedStorageController te;
@@ -38,9 +41,9 @@ public class ContainerSeedStorageController extends ContainerAgricraft {
     private void initSeedSlots() {
         if(this.entries!=null) {
             this.seedSlots = new HashMap<Integer, SlotSeedStorage>();
-            for(Map.Entry<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> seedEntry:entries.entrySet()) {
+            for(Map.Entry<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> seedEntry:entries.entrySet()) {
                 if(seedEntry!=null && seedEntry.getKey()!=null && seedEntry.getValue()!=null) {
-                    for(Map.Entry<Integer, ArrayList<SlotSeedStorage>> metaEntry:seedEntry.getValue().entrySet()) {
+                    for(Map.Entry<Integer, List<SlotSeedStorage>> metaEntry:seedEntry.getValue().entrySet()) {
                         if(metaEntry!=null && metaEntry.getKey()!=null && metaEntry.getValue()!=null) {
                             for(SlotSeedStorage slot:metaEntry.getValue()) {
                                 this.seedSlots.put(slot.index, slot);
@@ -59,10 +62,10 @@ public class ContainerSeedStorageController extends ContainerAgricraft {
             ItemSeeds seed = (ItemSeeds) stack.getItem();
             //There is a value for this seed
             if (this.entries.get(seed) != null) {
-                HashMap<Integer, ArrayList<SlotSeedStorage>> metaMap = this.entries.get(seed);
+                Map<Integer, List<SlotSeedStorage>> metaMap = this.entries.get(seed);
                 //There is a value for this meta
                 if (metaMap.get(stack.getItemDamage()) != null && metaMap.get(stack.getItemDamage()).size() > 0) {
-                    ArrayList<SlotSeedStorage> list = metaMap.get(stack.getItemDamage());
+                    List<SlotSeedStorage> list = metaMap.get(stack.getItemDamage());
                     for (SlotSeedStorage slot : list) {
                         if (slot != null && slot.getStack() != null) {
                             ItemStack stackInSlot = slot.getStack();
@@ -98,7 +101,7 @@ public class ContainerSeedStorageController extends ContainerAgricraft {
                 ArrayList<SlotSeedStorage> newList = new ArrayList<SlotSeedStorage>();
                 newList.add(this.getNewSeedSlot(stack));
                 //create new hash map for this seed
-                HashMap<Integer, ArrayList<SlotSeedStorage>> newMetaMap = new HashMap<Integer, ArrayList<SlotSeedStorage>>();
+                Map<Integer, List<SlotSeedStorage>> newMetaMap = new HashMap<Integer, List<SlotSeedStorage>>();
                 newMetaMap.put(stack.getItemDamage(), newList);
                 this.entries.put(seed, newMetaMap);
                 success = true;
@@ -196,9 +199,9 @@ public class ContainerSeedStorageController extends ContainerAgricraft {
         if(stack!=null && stack.getItem()!=null) {
             ItemSeeds seed = (ItemSeeds) stack.getItem();
             int seedMeta = stack.getItemDamage();
-            HashMap<Integer, ArrayList<SlotSeedStorage>> map = this.entries.get(seed);
+            Map<Integer, List<SlotSeedStorage>> map = this.entries.get(seed);
             if(map!=null) {
-                ArrayList<SlotSeedStorage> activeEntries =map.get(seedMeta);
+                List<SlotSeedStorage> activeEntries =map.get(seedMeta);
                 if (activeEntries != null) {
                     int xOffset = 82;
                     int yOffset = 8;

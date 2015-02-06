@@ -8,27 +8,29 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TileEntitySeedStorageController extends TileEntityCustomWood implements  ISeedStorageController{
     private ArrayList<ISeedStorageControllable> controllables = new ArrayList<ISeedStorageControllable>();
     public boolean isControlling;
 
     @Override
-    public HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> getInventoryMap(ContainerSeedStorageController container) {
-        HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> map = new HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>>();
+    public Map<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> getInventoryMap(ContainerSeedStorageController container) {
+        Map<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> map = new HashMap<ItemSeeds, Map<Integer, List<SlotSeedStorage>>>();
         for(ISeedStorageControllable controllable:controllables) {
             if (controllable.hasLockedSeed()) {
                 ArrayList<SlotSeedStorage> list = controllable.getInventorySlots(container);
                 ItemSeeds seed = (ItemSeeds) controllable.getLockedSeed().getItem();
                 int seedMeta = controllable.getLockedSeed().getItemDamage();
                 if (map.get(seed) == null) {
-                    HashMap<Integer, ArrayList<SlotSeedStorage>> subMap = new HashMap<Integer, ArrayList<SlotSeedStorage>>();
+                    Map<Integer, List<SlotSeedStorage>> subMap = new HashMap<Integer, List<SlotSeedStorage>>();
                     subMap.put(seedMeta, list);
                     map.put(seed, subMap);
                 } else {
-                    HashMap<Integer, ArrayList<SlotSeedStorage>> subMap = map.get(seed);
+                    Map<Integer, List<SlotSeedStorage>> subMap = map.get(seed);
                     if (subMap == null) {
-                        subMap = new HashMap<Integer, ArrayList<SlotSeedStorage>>();
+                        subMap = new HashMap<Integer, List<SlotSeedStorage>>();
                     }
                     subMap.put(seedMeta, list);
                 }
