@@ -199,60 +199,7 @@ public class ContainerSeedStorageController extends ContainerSeedStorageDummy {
         }
     }
 
-<<<<<<< HEAD
-=======
-    public ItemStack getActiveSeed() {
-        ItemStack seed = null;
-        if(this.inventorySlots.size()>36) {
-            seed = ((SlotSeedStorage) this.inventorySlots.get(36)).getStack().copy();
-            seed.stackSize = 1;
-        }
-        return seed;
-    }
 
-    public void resetActiveEntries() {
-        this.resetActiveEntries(this.getActiveSeed(), 0);
-    }
-
-    public void resetActiveEntries(ItemStack stack, int offset) {
-        this.clearActiveEntries();
-        this.setActiveEntries(stack, offset);
-        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT) {
-            NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(Minecraft.getMinecraft().thePlayer, stack.getItem(), stack.getItemDamage(), offset));
-        }
-    }
-
-    public void setActiveEntries(ItemStack stack, int offset) {
-        if(stack!=null && stack.getItem()!=null) {
-            ItemSeeds seed = (ItemSeeds) stack.getItem();
-            int seedMeta = stack.getItemDamage();
-            Map<Integer, List<SlotSeedStorage>> map = this.entries.get(seed);
-            if(map!=null) {
-                List<SlotSeedStorage> activeEntries =map.get(seedMeta);
-                if (activeEntries != null) {
-                    int xOffset = 82;
-                    int yOffset = 8;
-                    int stopIndex = Math.min(activeEntries.size(), offset + GuiSeedStorageController.maxNrHorizontalSeeds);
-                    for (int i = offset; i < stopIndex; i++) {
-                        SlotSeedStorage slot = activeEntries.get(i);
-                        slot.set(xOffset + 16 * i, yOffset, this.PLAYER_INVENTORY_SIZE + i);
-                        this.inventorySlots.add(slot);
-                        this.inventoryItemStacks.add(slot.getStack());
-                    }
-                }
-            }
-        }
-    }
-
-    public void clearActiveEntries() {
-        for(int i=this.inventoryItemStacks.size()-1;i>=this.PLAYER_INVENTORY_SIZE;i--) {
-            ((SlotSeedStorage) this.inventorySlots.get(i)).reset();
-            this.inventorySlots.remove(i);
-            this.inventoryItemStacks.remove(i);
-        }
-    }
-
->>>>>>> becbf054ccd4b84b75b2e1782fe20478589fd668
     //checks if the player can drag a stack over this slot to split it
     @Override
     public boolean canDragIntoSlot(Slot slot) {
