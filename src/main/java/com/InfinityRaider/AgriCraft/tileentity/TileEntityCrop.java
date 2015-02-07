@@ -77,9 +77,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             //possible new plant
             ItemSeeds result=null;
             int resultMeta=0;
-            int mutationId=0;
-            Block req=null;
-            int reqMeta = 0;
             double chance=0;
             //find neighbours
             TileEntityCrop[] neighbours = this.findNeighbours();
@@ -99,15 +96,13 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
                     if(crossOvers[index].result.getItem()!=null) {
                         result = (ItemSeeds) crossOvers[index].result.getItem();
                         resultMeta = crossOvers[index].result.getItemDamage();
-                        mutationId = crossOvers[index].id;
-                        req = crossOvers[index].requirement;
-                        reqMeta = crossOvers[index].requirementMeta;
                         chance = crossOvers[index].chance;
+                        didMutate = true;
                     }
                 }
             }
             //try to set the new plant
-            if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && this.canMutate(result, resultMeta, mutationId, req, reqMeta)) {
+            if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && this.canMutate(result, resultMeta)) {
                 if(Math.random()<chance) {
                     this.crossCrop = false;
                     int[] stats = MutationHandler.getStats(neighbours, didMutate);
@@ -133,15 +128,16 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     //checks if a plant can mutate
-    private boolean canMutate(ItemSeeds seed, int seedMeta, int id, Block req, int reqMeta) {
-        if(this.canGrow(seed, seedMeta)) {
-            //id = 0: no requirement
-            //id = 1: block below farmland has to be the req block
-            //id = 2: block near has to be the req block
-            switch(id) {
-                case 0: return true;
-                case 1: return (this.worldObj.getBlock(this.xCoord, this.yCoord-2, this.zCoord)==req && this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord)==reqMeta);
-                case 2: return isBlockNear(req, reqMeta);
+    private boolean canMutate(ItemSeeds seed, int seedMeta) {
+        if (this.canGrow(seed, seedMeta)) {
+            BlockModPlant blockPlant = (BlockModPlant) SeedHelper.getPlant(seed);
+            Block req = blockPlant.getGrowthRequirement().getRequiredBlock().getBlock();
+            int reqMeta = blockPlant.getGrowthRequirement().getRequiredBlock().getMeta();
+
+            switch (blockPlant.getGrowthRequirement().getRequiredType()) {
+                case NONE: return true;
+                case BELOW: return (this.worldObj.getBlock(this.xCoord, this.yCoord-2, this.zCoord)==req && this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord)==reqMeta);
+                case NEARBY: return isBlockNear(req, reqMeta);
             }
         }
         return false;
@@ -258,7 +254,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         if(SeedHelper.isCorrectSoil(soil, soilMeta, seed, seedMeta) && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
             if(plant instanceof BlockModPlant) {
                 BlockModPlant blockModPlant = (BlockModPlant) plant;
-                return blockModPlant.base == null || OreDictHelper.isSameOre(blockModPlant.base, blockModPlant.baseMeta, this.worldObj.getBlock(this.xCoord, this.yCoord - 2, this.zCoord), this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord));
+                return !blockModPlant.getGrowthRequirement().requiresBaseBlock() || OreDictHelper.isSameOre(blockModPlant.getGrowthRequirement().getRequiredBlock(), this.worldObj.getBlock(this.xCoord, this.yCoord - 2, this.zCoord), this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord));
             }
             return true;
         }

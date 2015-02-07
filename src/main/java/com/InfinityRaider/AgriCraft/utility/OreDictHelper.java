@@ -71,6 +71,10 @@ public abstract class OreDictHelper {
         return false;
     }
 
+    public static boolean isSameOre(BlockWithMeta block1, Block block2, int meta2) {
+        return isSameOre(block1.getBlock(), block1.getMeta(), block2, meta2);
+    }
+
     //checks if two blocks have the same ore dictionary entry
     public static boolean isSameOre(Block block1, int meta1, Block block2, int meta2) {
         if(block1==block2 && meta1==meta2) {

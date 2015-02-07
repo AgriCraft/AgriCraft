@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
@@ -17,6 +18,14 @@ public class SoilWhitelist {
 
     /** List of ItemStacks which all contain ItemBlocks */
     private static final List<ItemStack> soilWhitelist = new ArrayList<ItemStack>();
+
+    static {
+        soilWhitelist.add(new ItemStack(Blocks.farmland));
+    }
+
+    public static List<ItemStack> getWhitelist() {
+        return soilWhitelist;
+    }
 
     public static boolean isSoilFertile(Block block, int meta) {
         if (block instanceof BlockFarmland) {

@@ -234,7 +234,7 @@ public abstract class SeedHelper {
         if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
             ItemSeeds seed = (ItemSeeds) stack.getItem();
             if(seed instanceof ItemModSeed) {
-                soil = ((ItemModSeed) seed).getPlant().soil;
+                soil = ((ItemModSeed) seed).getPlant().getGrowthRequirement().getSoils().get(0).getBlock();
             }
             else if(seed == Items.nether_wart) {
                 soil = Blocks.soul_sand;
@@ -338,10 +338,7 @@ public abstract class SeedHelper {
 
     public static boolean isCorrectSoil(Block soil, int soilMeta, ItemSeeds seed, int seedMeta) {
         if(seed instanceof ItemModSeed) {
-            Block requiredSoil = ((ItemModSeed) seed).getPlant().soil;
-            if(requiredSoil!=null) {
-                return requiredSoil==soil;
-            }
+            return ((ItemModSeed) seed).getPlant().getGrowthRequirement().isValidSoil(soil);
         }
         else if(seed==Items.nether_wart) {
             return soil == Blocks.soul_sand;

@@ -2,6 +2,8 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -22,9 +24,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockModPlant extends BlockCrops implements IGrowable {
-    public Block soil;
-    public Block base;
-    public int baseMeta;
+
+    private GrowthRequirement growthRequirement;
+
     public CropProduce products = new CropProduce();
     public ArrayList<ItemStack> fruits;
     private ItemSeeds seed;
@@ -80,9 +82,17 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
 
     public BlockModPlant(Block soil, Block base, int baseMeta, Item fruit, int fruitMeta, int tier, int renderType, boolean isCustom) {
         super();
-        this.soil = soil;
-        this.base = base;
-        this.baseMeta = baseMeta;
+
+        GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
+        if (base != null)
+            builder.requiredBlock(new BlockWithMeta(base, baseMeta), GrowthRequirement.RequirementType.BELOW);
+
+        if (soil == null || soil == Blocks.farmland) {
+            growthRequirement = builder.defaultSoils().build();
+        } else {
+            growthRequirement = builder.soils(new BlockWithMeta(soil)).build();
+        }
+
         this.products.addProduce(new ItemStack(fruit, 1, fruitMeta));
         this.tier = tier;
         this.setTickRandomly(true);
@@ -203,8 +213,8 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     //check if the plant can grow
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
-        if(this.soil == world.getBlock(x,y-1,z) && world.getBlockLightValue(x,y+1,z)>8) {
-            if((this.base==null) || OreDictHelper.isSameOre(this.base, this.baseMeta, world.getBlock(x, y - 2, z), world.getBlockMetadata(x, y - 2, z))) {
+        if(growthRequirement.isValidSoil(world.getBlock(x,y-1,z)) && world.getBlockLightValue(x,y+1,z)>8) {
+            if (!growthRequirement.requiresBaseBlock() || OreDictHelper.isSameOre(growthRequirement.getRequiredBlock(), world.getBlock(x, y - 2, z), world.getBlockMetadata(x, y - 2, z))) {
                 return true;
             }
         }
@@ -231,5 +241,9 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     @Override
     public int getRenderType() {
         return this.renderType;
+    }
+
+    public GrowthRequirement getGrowthRequirement() {
+        return growthRequirement;
     }
 }
