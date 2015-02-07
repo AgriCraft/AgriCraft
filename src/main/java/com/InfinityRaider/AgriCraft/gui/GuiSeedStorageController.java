@@ -53,29 +53,9 @@ public class GuiSeedStorageController extends GuiSeedStorageDummy {
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        this.loadButtons();
+        this.loadButtons(184, 7);
         if(this.activeSeed!=null) {
-            this.drawActiveEntries();
-        }
-    }
-
-    private void drawActiveEntries() {
-        int xOffset = 82;
-        int yOffset = 35;
-        int textureSize = 256;
-        ArrayList<SlotSeedStorage> slots = this.getActiveSlots();
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(this.texture);
-        for(int i=0;i<slots.size();i++) {
-            SlotSeedStorage slot = slots.get(i);
-            if(slot!=null && slot.getStack()!=null) {
-                int growth = slot.getStack().stackTagCompound.getInteger(Names.NBT.growth);
-                int gain = slot.getStack().stackTagCompound.getInteger(Names.NBT.gain);
-                int strength = slot.getStack().stackTagCompound.getInteger(Names.NBT.strength);
-                this.drawTexturedModalRect(xOffset+i*16+1,  yOffset-growth,   0, textureSize-growth,   3, growth);
-                this.drawTexturedModalRect(xOffset+i*16+6,  yOffset-gain,     0, textureSize-gain,     3, gain);
-                this.drawTexturedModalRect(xOffset+i*16+11, yOffset-strength, 0, textureSize-strength, 3, strength);
-            }
+            this.drawActiveEntries(this.texture, 82, 35);
         }
     }
 
@@ -93,17 +73,9 @@ public class GuiSeedStorageController extends GuiSeedStorageDummy {
         this.updateScreen();
     }
 
-
-    private void loadButtons() {
-        this.buttonList.clear();
-        //buttons
-        int buttonX = 184;
-        int buttonY = 7;
-        int buttonWidth = 60;
-        int buttonHeight = 12;
-        this.buttonList.add(new GuiButton(buttonIdGrowth, this.guiLeft + buttonX, this.guiTop + buttonY, buttonWidth, buttonHeight, "Growth"));
-        this.buttonList.add(new GuiButton(buttonIdGain, this.guiLeft + buttonX, this.guiTop + buttonY+buttonHeight+1, buttonWidth, buttonHeight, "Gain"));
-        this.buttonList.add(new GuiButton(buttonIdStrength, this.guiLeft +  buttonX, this.guiTop + buttonY+2*(buttonHeight+1), buttonWidth, buttonHeight, "Strength"));
+    @Override
+    protected void loadButtons(int x, int y) {
+        super.loadButtons(x, y);
         //seed buttons
         int xOffset = 7;
         int yOffset = 8;

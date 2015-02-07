@@ -29,6 +29,7 @@ public class SlotSeedStorage extends Slot {
         this.count = stack.stackSize;
         this.seed.stackSize = 1;
         this.slotNumber = this.index;
+        this.activeContainers = new ArrayList<Container>();
     }
 
     /**

@@ -243,6 +243,10 @@ public abstract class SeedHelper {
         return soil;
     }
 
+    public static boolean isAnalyzedSeed(ItemStack seedStack) {
+        return (seedStack!=null) && (seedStack.getItem()!=null) && (seedStack.getItem() instanceof ItemSeeds) && (seedStack.hasTagCompound()) && (seedStack.stackTagCompound.hasKey(Names.NBT.analyzed)) && (seedStack.stackTagCompound.getBoolean(Names.NBT.analyzed));
+    }
+
     //gets the seed domain
     public static String getPlantDomain(ItemSeeds seed) {
         String name = Item.itemRegistry.getNameForObject(seed);

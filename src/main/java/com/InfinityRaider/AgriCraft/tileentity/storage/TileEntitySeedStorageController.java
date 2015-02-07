@@ -20,7 +20,7 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
         Map<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> map = new HashMap<ItemSeeds, Map<Integer, List<SlotSeedStorage>>>();
         for(ISeedStorageControllable controllable:controllables) {
             if (controllable.hasLockedSeed()) {
-                ArrayList<SlotSeedStorage> list = controllable.getInventorySlots(container);
+                ArrayList<SlotSeedStorage> list = controllable.getInventorySlots();
                 ItemSeeds seed = (ItemSeeds) controllable.getLockedSeed().getItem();
                 int seedMeta = controllable.getLockedSeed().getItemDamage();
                 if (map.get(seed) == null) {

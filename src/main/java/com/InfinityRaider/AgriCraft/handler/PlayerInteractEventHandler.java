@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.handler;
 
+import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.items.ItemCrop;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -7,6 +8,7 @@ import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraftforge.common.IPlantable;
@@ -18,18 +20,20 @@ public class PlayerInteractEventHandler {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             Block block = event.world.getBlock(event.x, event.y, event.z);
             int meta = event.world.getBlockMetadata(event.x, event.y, event.z);
-            if (ItemCrop.isSoilValid(block, meta)) {
-                if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
+            if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
+                if (ItemCrop.isSoilValid(block, meta)) {
                     if (ConfigurationHandler.disableVanillaFarming) {
                         //for now, disable vanilla farming for every IPlantable, if people start to need exceptions I'll add in exceptions
                         this.denyEvent(event, false);
-                    } else if(event.entityPlayer.getCurrentEquippedItem().hasTagCompound()){
+                    } else if (event.entityPlayer.getCurrentEquippedItem().hasTagCompound()) {
                         NBTTagCompound tag = (NBTTagCompound) event.entityPlayer.getCurrentEquippedItem().getTagCompound().copy();
                         if (tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
                             //WIP: place a tile entity storing the seeds data
                             this.denyEvent(event, false);
                         }
                     }
+                } else if (block== Blocks.blockSeedStorage && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
+                    Blocks.blockSeedStorage.onBlockActivated(event.world, event.x, event.y, event.z, event.entityPlayer, event.face, 0, 0, 0);
                 }
             }
         }

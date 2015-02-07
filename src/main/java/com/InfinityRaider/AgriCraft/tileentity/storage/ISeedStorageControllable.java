@@ -22,7 +22,7 @@ public interface ISeedStorageControllable extends IInventory{
     /**
      * Returns a list of all the slots in this inventory, all the slots in this inventory must have the same type of seed
      */
-    public ArrayList<SlotSeedStorage> getInventorySlots(ContainerSeedStorageDummy container);
+    public ArrayList<SlotSeedStorage> getInventorySlots();
 
     /**
      * Returns the coordinates of the controller controlling this controllable

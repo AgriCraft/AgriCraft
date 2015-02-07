@@ -136,7 +136,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public ArrayList<SlotSeedStorage> getInventorySlots(ContainerSeedStorageDummy container) {
+    public ArrayList<SlotSeedStorage> getInventorySlots() {
         return this.inventory;
     }
 
@@ -167,8 +167,16 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public void setLockedSeed(ItemSeeds seed, int meta) {
-        this.lockedSeed = seed;
-        this.lockedSeedMeta = meta;
+        boolean flag = !this.hasLockedSeed();
+        if(!flag) {
+            flag = this.inventory==null || this.inventory.size()==0;
+        }
+        if(flag) {
+            this.lockedSeed = seed;
+            this.lockedSeedMeta = meta;
+            this.inventory = new ArrayList<SlotSeedStorage>();
+            this.markDirty();
+        }
     }
 
     @Override
@@ -296,7 +304,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     //Debug method
     @Override
     public void addDebugInfo(List<String> list) {
-        list.add("Locked Seed: "+this.getLockedSeed().getDisplayName());
+        String info = this.lockedSeed==null?"null":this.getLockedSeed().getDisplayName();
+        list.add("Locked Seed: "+info);
     }
 
 }
