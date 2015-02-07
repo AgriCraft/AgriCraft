@@ -43,12 +43,10 @@ public class BlockSeedStorage extends BlockCustomWood {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
         LogHelper.debug("Right clicked block");
         if(!world.isRemote) {
-            if(player.isSneaking()) {
-                ItemStack stack = player.getCurrentEquippedItem();
-                if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
-                    LogHelper.debug("Trying to lock seed storage to "+stack.getDisplayName());
-                    ((TileEntitySeedStorage) world.getTileEntity(x, y, z)).setLockedSeed((ItemSeeds) stack.getItem(), stack.getItemDamage());
-                }
+            ItemStack stack = player.getCurrentEquippedItem();
+            if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
+                LogHelper.debug("Trying to lock seed storage to "+stack.getDisplayName());
+                ((TileEntitySeedStorage) world.getTileEntity(x, y, z)).setLockedSeed((ItemSeeds) stack.getItem(), stack.getItemDamage());
             }
             else {
                 player.openGui(AgriCraft.instance, GuiHandler.seedStorageID, world, x, y, z);

@@ -32,9 +32,12 @@ public class PlayerInteractEventHandler {
                             this.denyEvent(event, false);
                         }
                     }
-                } else if (block== Blocks.blockSeedStorage && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
+                }
+                /*
+                else if (block== Blocks.blockSeedStorage && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
                     Blocks.blockSeedStorage.onBlockActivated(event.world, event.x, event.y, event.z, event.entityPlayer, event.face, 0, 0, 0);
                 }
+                */
             }
         }
     }

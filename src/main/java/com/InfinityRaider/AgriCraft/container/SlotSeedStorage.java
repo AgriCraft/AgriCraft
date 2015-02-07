@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 public class SlotSeedStorage extends Slot {
@@ -151,19 +152,25 @@ public class SlotSeedStorage extends Slot {
         ItemStack stack = this.seed.copy();
         this.seed=null;
         this.count=0;
-        for(Container container:this.activeContainers) {
+        Iterator it = this.activeContainers.iterator();
+        while(it.hasNext()) {
+            Container container = (Container) it.next();
             if(container!=null) {
                 if(container instanceof ContainerSeedStorageController) {
-                    this.clearFromSeedStorageController((ContainerSeedStorageController) container, stack);
+                    if(this.clearFromSeedStorageController((ContainerSeedStorageController) container, stack)) {
+                        it.remove();
+                    }
                 }
                 else if(container instanceof ContainerSeedStorage) {
-                    this.clearFromSeedStorage((ContainerSeedStorage) container, stack);
+                    if(this.clearFromSeedStorage((ContainerSeedStorage) container)) {
+                        it.remove();
+                    }
                 }
             }
         }
     }
 
-    protected void clearFromSeedStorageController(ContainerSeedStorageController container, ItemStack stack) {
+    private boolean clearFromSeedStorageController(ContainerSeedStorageController container, ItemStack stack) {
         ItemSeeds item = (ItemSeeds) stack.getItem();
         if (container.entries.get(item) != null) {
             if (container.entries.get(item).get(stack.getItemDamage()) != null) {
@@ -181,12 +188,15 @@ public class SlotSeedStorage extends Slot {
                 }
             }
         }
-        this.removeActiveContainer(container);
-        container.resetActiveEntries(stack, 0);
+        container.resetActiveEntries(0);
+        return true;
     }
 
-    protected void clearFromSeedStorage(ContainerSeedStorage container, ItemStack stack) {
-        this.removeActiveContainer(container);
+    private boolean clearFromSeedStorage(ContainerSeedStorage container) {
+        List<SlotSeedStorage> list = container.getAllSlots();
+        list.remove(this);
+        container.resetActiveEntries(0);
+        return true;
     }
 
     /** The index of the slot in the inventory. */

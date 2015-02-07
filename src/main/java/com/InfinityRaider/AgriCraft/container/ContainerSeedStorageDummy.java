@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
@@ -43,14 +44,17 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
     }
 
     public void resetActiveEntries() {
-        this.resetActiveEntries(this.getActiveSeed(), 0);
+        this.resetActiveEntries(0);
     }
 
-    public void resetActiveEntries(ItemStack stack, int offset) {
+    public void resetActiveEntries(int offset) {
+        ItemStack stack = this.getActiveSeed();
         this.clearActiveEntries();
         this.setActiveEntries(stack, offset);
         if(FMLCommonHandler.instance().getEffectiveSide()== Side.CLIENT) {
-            NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(Minecraft.getMinecraft().thePlayer, stack.getItem(), stack.getItemDamage(), offset));
+            Item item = stack==null?null:stack.getItem();
+            int meta = stack==null?0:stack.getItemDamage();
+            NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(Minecraft.getMinecraft().thePlayer, item, meta, offset));
         }
     }
 

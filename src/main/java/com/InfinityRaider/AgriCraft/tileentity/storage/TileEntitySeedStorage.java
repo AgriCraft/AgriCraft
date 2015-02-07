@@ -306,6 +306,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public void addDebugInfo(List<String> list) {
         String info = this.lockedSeed==null?"null":this.getLockedSeed().getDisplayName();
         list.add("Locked Seed: "+info);
+        list.add("Number of seeds: "+this.inventory.size());
     }
 
 }

@@ -86,7 +86,7 @@ public class ContainerSeedStorageController extends ContainerSeedStorageDummy {
                         list.add(this.getNewSeedSlot(stack));
                         ItemStack activeSeed = this.getActiveSeed();
                         if(activeSeed!=null && stack.getItem()==activeSeed.getItem() && stack.getItemDamage()==activeSeed.getItemDamage()) {
-                            this.resetActiveEntries(activeSeed, 0);
+                            this.resetActiveEntries();
                         }
                         success = true;
                     }

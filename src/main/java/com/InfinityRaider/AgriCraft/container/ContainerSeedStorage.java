@@ -34,7 +34,7 @@ public class ContainerSeedStorage extends ContainerSeedStorageDummy {
     @Override
     public boolean addSeedToStorage(ItemStack seedStack) {
         boolean success = false;
-        if(SeedHelper.isAnalyzedSeed(seedStack) && seedStack.getItem()==te.getLockedSeed().getItem() && seedStack.getItemDamage()==te.getLockedSeed().getItemDamage()) {
+        if(SeedHelper.isAnalyzedSeed(seedStack)) {
             for(SlotSeedStorage slot:te.getInventorySlots()) {
                 if(ItemStack.areItemStackTagsEqual(slot.getStack(), seedStack)) {
                     slot.putStack(seedStack);
@@ -46,9 +46,22 @@ public class ContainerSeedStorage extends ContainerSeedStorageDummy {
                 SlotSeedStorage newSlot = new SlotSeedStorage(te, slots.size(), seedStack);
                 newSlot.addActiveContainer(this);
                 te.getInventorySlots().add(newSlot);
+                success = true;
             }
         }
+        if(success) {
+            this.resetActiveEntries();
+        }
         return success;
+    }
+
+    @Override
+    public ItemStack getActiveSeed() {
+        ItemStack seed = null;
+        if(this.te.hasLockedSeed()) {
+            seed = this.te.getLockedSeed();
+        }
+        return seed;
     }
 
     @Override
