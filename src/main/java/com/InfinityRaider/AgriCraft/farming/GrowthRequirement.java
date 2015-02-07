@@ -15,13 +15,20 @@ import java.util.List;
  */
 public class GrowthRequirement {
 
+    /** Maximum allowed brightness, exclusive **/
+    private int maxBrightness = 16;
+    /** Minimum allowed brightness, inclusive **/
+    private int minBrightness = 0;
+
+    private final List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
+
+
     public static enum RequirementType {
         NONE, BELOW, NEARBY
     }
 
-    private final List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
-
     private BlockWithMeta requiredBlock;
+    private boolean oreDict;
     private RequirementType requiredType = RequirementType.NONE;
 
     private GrowthRequirement() {
@@ -73,18 +80,25 @@ public class GrowthRequirement {
         }
 
         /** Adds a required block to this GrowthRequirement instance */
-        public Builder requiredBlock(BlockWithMeta requiredBlock, RequirementType requiredType) {
-            if (requiredBlock == null || requiredType == RequirementType.NONE)
+        public Builder requiredBlock(BlockWithMeta requiredBlock, RequirementType requiredType, boolean oreDict) {
+            if (requiredBlock == null || requiredType == RequirementType.NONE) {
                 throw new IllegalArgumentException("Required block must be not null and required type must be other than NONE.");
-
+            }
             growthRequirement.requiredBlock = requiredBlock;
             growthRequirement.requiredType = requiredType;
+            growthRequirement.oreDict = oreDict;
             return this;
         }
 
         /** Adds all the given soils to the soil requirements list */
         public Builder soils(BlockWithMeta... soils) {
             growthRequirement.soils.addAll(Arrays.asList(soils));
+            return this;
+        }
+
+        public Builder brightnessRange(int min, int max) {
+            this.growthRequirement.minBrightness = min;
+            this.growthRequirement.maxBrightness = max;
             return this;
         }
 
