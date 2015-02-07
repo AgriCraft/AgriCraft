@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class GuiSeedStorageDummy extends GuiContainer {
     public ContainerSeedStorageDummy container;
@@ -87,7 +88,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
             case buttonIdStrength: stat = Names.NBT.strength; break;
         }
         if(stat!=null && this.activeSeed!=null) {
-            ArrayList<SlotSeedStorage> list = this.getActiveEntries();
+            List<SlotSeedStorage> list = this.getActiveEntries();
             for(int i=list.size()-1;i>=0;i--) {
                 if(list.get(i)==null) {
                     list.remove(i);
@@ -172,9 +173,9 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     //gets an array list of all the slots in the container corresponding to the active seed
-    protected ArrayList<SlotSeedStorage> getActiveEntries() {
+    protected List<SlotSeedStorage> getActiveEntries() {
         ContainerSeedStorageController container = (ContainerSeedStorageController) this.container;
-        ArrayList<SlotSeedStorage> list = new ArrayList<SlotSeedStorage>();
+        List<SlotSeedStorage> list = new ArrayList<SlotSeedStorage>();
         if(this.activeSeed!=null) {
             list = container.entries.get(this.activeSeed).get(this.activeMeta);
         }

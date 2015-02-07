@@ -132,9 +132,9 @@ public class ContainerSeedStorageController extends ContainerSeedStorageDummy {
         if(stack!=null && stack.getItem()!=null) {
             ItemSeeds seed = (ItemSeeds) stack.getItem();
             int seedMeta = stack.getItemDamage();
-            HashMap<Integer, ArrayList<SlotSeedStorage>> map = this.entries.get(seed);
+            Map<Integer, List<SlotSeedStorage>> map = this.entries.get(seed);
             if(map!=null) {
-                ArrayList<SlotSeedStorage> activeEntries = map.get(seedMeta);
+                List<SlotSeedStorage> activeEntries = map.get(seedMeta);
                 if (activeEntries != null) {
                     int xOffset = 82;
                     int yOffset = 8;
