@@ -5,9 +5,9 @@ before_install:
   - ./install_deps.sh
 
 install: ./gradlew setupCIWorkspace -S
-script: ./gradlew build -S
-
-after_script: rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+script:
+ - ./gradlew build -S
+ - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 
 env:
   global:
