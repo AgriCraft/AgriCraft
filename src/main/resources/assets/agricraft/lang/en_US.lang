@@ -151,6 +151,13 @@ agricraft_tooltip.closed=Closed
 agricraft_tooltip.open=Open
 agricraft_tooltip.state=State
 
+// nei GUI
+agricraft_nei.mutation.title=Crop Mutation
+agricraft_nei.soil=Soil
+agricraft_nei.needs=Needs
+agricraft_nei.below=Below
+agricraft_nei.nearby=Nearby
+
 //journal entries
 //---------------
 //headers

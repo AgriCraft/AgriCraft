@@ -32,9 +32,9 @@ public final class Constants {
     public static final int nei_X1 = 44;
     public static final int nei_X2 = 106;
     public static final int nei_X3 = 75;
-    public static final int nei_Y1 = 10;
-    public static final int nei_Y2 = 46;
-    public static final int nei_Y3 = 67;
+    public static final int nei_Y1 = 21;
+    public static final int nei_Y2 = 47;
+    public static final int nei_Y3 = 68;
 
     //id's
     public static final int cropId = 0;
