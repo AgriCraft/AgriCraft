@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -85,12 +84,12 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
 
         GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
         if (base != null)
-            builder.requiredBlock(new BlockWithMeta(base, baseMeta), GrowthRequirement.RequirementType.BELOW);
+            builder.requiredBlock(new BlockWithMeta(base, baseMeta), GrowthRequirement.RequirementType.BELOW, true);
 
         if (soil == null || soil == Blocks.farmland) {
-            growthRequirement = builder.defaultSoils().build();
+            growthRequirement = builder.build();
         } else {
-            growthRequirement = builder.soils(new BlockWithMeta(soil)).build();
+            growthRequirement = builder.soil(new BlockWithMeta(soil)).build();
         }
 
         this.products.addProduce(new ItemStack(fruit, 1, fruitMeta));
@@ -213,12 +212,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     //check if the plant can grow
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
-        if(growthRequirement.isValidSoil(world.getBlock(x,y-1,z)) && world.getBlockLightValue(x,y+1,z)>8) {
-            if (!growthRequirement.requiresBaseBlock() || OreDictHelper.isSameOre(growthRequirement.getRequiredBlock(), world.getBlock(x, y - 2, z), world.getBlockMetadata(x, y - 2, z))) {
-                return true;
-            }
-        }
-        return false;
+        return this.growthRequirement.canGrow(world, x, y, z);
     }
 
     //return the seeds
