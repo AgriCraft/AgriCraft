@@ -23,7 +23,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public int usingPlayers;
     private ItemSeeds lockedSeed;
     private int lockedSeedMeta;
-    private ArrayList<SlotSeedStorage> inventory = new ArrayList<SlotSeedStorage>();
+    private List<SlotSeedStorage> inventory = new ArrayList<SlotSeedStorage>();
     private ISeedStorageController controller;
 
     @Override
@@ -125,7 +125,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public void setInventory(ArrayList<SlotSeedStorage> list) {
+    public void setInventory(List<SlotSeedStorage> list) {
         if(list!=null) {
            this.inventory = list;
         }
@@ -136,7 +136,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public ArrayList<SlotSeedStorage> getInventorySlots() {
+    public List<SlotSeedStorage> getInventorySlots() {
         return this.inventory;
     }
 

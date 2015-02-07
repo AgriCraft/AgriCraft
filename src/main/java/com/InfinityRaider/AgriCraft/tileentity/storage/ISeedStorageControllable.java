@@ -7,6 +7,7 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ISeedStorageControllable extends IInventory{
     /**
@@ -17,12 +18,12 @@ public interface ISeedStorageControllable extends IInventory{
     /**
      * Sets the inventory based off a lit of slots, pass null in the arguments to clear the inventory
      */
-    public void setInventory(ArrayList<SlotSeedStorage> list);
+    public void setInventory(List<SlotSeedStorage> list);
 
     /**
      * Returns a list of all the slots in this inventory, all the slots in this inventory must have the same type of seed
      */
-    public ArrayList<SlotSeedStorage> getInventorySlots();
+    public List<SlotSeedStorage> getInventorySlots();
 
     /**
      * Returns the coordinates of the controller controlling this controllable

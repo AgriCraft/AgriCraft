@@ -20,7 +20,7 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
         Map<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> map = new HashMap<ItemSeeds, Map<Integer, List<SlotSeedStorage>>>();
         for(ISeedStorageControllable controllable:controllables) {
             if (controllable.hasLockedSeed()) {
-                ArrayList<SlotSeedStorage> list = controllable.getInventorySlots();
+                List<SlotSeedStorage> list = controllable.getInventorySlots();
                 ItemSeeds seed = (ItemSeeds) controllable.getLockedSeed().getItem();
                 int seedMeta = controllable.getLockedSeed().getItemDamage();
                 if (map.get(seed) == null) {
@@ -40,12 +40,12 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
     }
 
     @Override
-    public void setControlledInventories(HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> map) {
+    public void setControlledInventories(Map<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> map) {
         for(ISeedStorageControllable controllable:this.controllables) {
             if (controllable.hasLockedSeed()) {
                 ItemSeeds seed = (ItemSeeds) controllable.getLockedSeed().getItem();
                 int meta = controllable.getLockedSeed().getItemDamage();
-                HashMap<Integer, ArrayList<SlotSeedStorage>> metaMap = map.get(seed);
+                Map<Integer, List<SlotSeedStorage>> metaMap = map.get(seed);
                 if(metaMap!=null) {
                     controllable.setInventory(metaMap.get(meta));
                 }

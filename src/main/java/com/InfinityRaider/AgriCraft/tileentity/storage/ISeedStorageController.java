@@ -19,7 +19,7 @@ public interface ISeedStorageController {
     /**
      * Sets the inventories of all the controllables from a hashmap
      */
-    public void setControlledInventories(HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> map);
+    public void setControlledInventories(Map<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> map);
 
     /**
      * Adds a controllable to this controller

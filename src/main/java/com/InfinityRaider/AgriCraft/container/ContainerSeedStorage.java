@@ -2,6 +2,9 @@ package com.InfinityRaider.AgriCraft.container;
 
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -69,12 +72,20 @@ public class ContainerSeedStorage extends ContainerSeedStorageDummy {
         int xOffset = 6;
         int yOffset = 7;
         int stopIndex = Math.min(te.getInventorySlots().size(), offset + this.maxNrHorizontalSeeds);
-        ArrayList<SlotSeedStorage> activeEntries = te.getInventorySlots();
+        List<SlotSeedStorage> activeEntries = te.getInventorySlots();
         for (int i = offset; i < stopIndex; i++) {
             SlotSeedStorage slot = activeEntries.get(i);
             slot.set(xOffset + 16 * i, yOffset, this.PLAYER_INVENTORY_SIZE + i);
             this.inventorySlots.add(slot);
             this.inventoryItemStacks.add(slot.getStack());
         }
+    }
+
+    @Override
+    public void onContainerClosed(EntityPlayer player) {
+        if(FMLCommonHandler.instance().getEffectiveSide()== Side.SERVER) {
+            this.te.setInventory(this.slots);
+        }
+        super.onContainerClosed(player);
     }
 }
