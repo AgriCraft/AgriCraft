@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class SlotSeedStorage extends Slot {
     public boolean active = false;
@@ -165,7 +167,7 @@ public class SlotSeedStorage extends Slot {
         if (container.entries.get(item) != null) {
             if (container.entries.get(item).get(stack.getItemDamage()) != null) {
                 //remove this slot from the maps
-                ArrayList<SlotSeedStorage> list = container.entries.get(item).get(stack.getItemDamage());
+                List<SlotSeedStorage> list = container.entries.get(item).get(stack.getItemDamage());
                 list.remove(this);
                 container.seedSlots.remove(this.index);
                 //this slot was the last entry for that meta, so remove that meta from the map as well
@@ -207,5 +209,22 @@ public class SlotSeedStorage extends Slot {
     @SideOnly(Side.CLIENT)
     public boolean func_111238_b() {
         return this.active;
+    }
+
+    /** Compares two slots by the given integer NBT stat */
+    public static class SlotSeedComparator implements Comparator<SlotSeedStorage> {
+
+        private final String stat;
+
+        public SlotSeedComparator(String stat) {
+            this.stat = stat;
+        }
+
+        @Override
+        public int compare(SlotSeedStorage o1, SlotSeedStorage o2) {
+            int stat1 = o1.getStack().stackTagCompound.getInteger(stat);
+            int stat2 = o2.getStack().stackTagCompound.getInteger(stat);
+            return stat1 - stat2;
+        }
     }
 }
