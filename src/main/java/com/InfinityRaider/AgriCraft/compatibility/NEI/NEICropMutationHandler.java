@@ -150,6 +150,11 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         return new ResourceLocation(Reference.MOD_ID.toLowerCase(),"textures/gui/nei/cropMutation.png").toString();
     }
 
+    @Override
+    public int recipiesPerPage() {
+        return 1;
+    }
+
     //defines rectangles on the recipe gui which can be clicked to show all crop mutation recipes
     @Override
     public void loadTransferRects() {
