@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.*;
 
-public class ContainerSeedStorageController extends ContainerAgricraft {
+public class ContainerSeedStorageController extends ContainerSeedStorageDummy {
     //one hash map to quickly find the correct slot based on a stack
     public HashMap<ItemSeeds, HashMap<Integer, ArrayList<SlotSeedStorage>>> entries;
     //another map based on the slot id
@@ -33,6 +33,8 @@ public class ContainerSeedStorageController extends ContainerAgricraft {
         this.te = te;
         this.entries = te.getInventoryMap(this);
         this.initSeedSlots();
+        this.activeSlotOffsetX = 82;
+        this.activeSlotOffsetY = 8;
     }
 
     private void initSeedSlots() {
@@ -122,6 +124,29 @@ public class ContainerSeedStorageController extends ContainerAgricraft {
         return slots;
     }
 
+    @Override
+    public void setActiveEntries(ItemStack stack, int offset) {
+        if(stack!=null && stack.getItem()!=null) {
+            ItemSeeds seed = (ItemSeeds) stack.getItem();
+            int seedMeta = stack.getItemDamage();
+            HashMap<Integer, ArrayList<SlotSeedStorage>> map = this.entries.get(seed);
+            if(map!=null) {
+                ArrayList<SlotSeedStorage> activeEntries = map.get(seedMeta);
+                if (activeEntries != null) {
+                    int xOffset = 82;
+                    int yOffset = 8;
+                    int stopIndex = Math.min(activeEntries.size(), offset + GuiSeedStorageController.maxNrHorizontalSeeds);
+                    for (int i = offset; i < stopIndex; i++) {
+                        SlotSeedStorage slot = activeEntries.get(i);
+                        slot.set(xOffset + 16 * i, yOffset, this.PLAYER_INVENTORY_SIZE + i);
+                        this.inventorySlots.add(slot);
+                        this.inventoryItemStacks.add(slot.getStack());
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * returns a list if itemStacks, for each slot.
      */
@@ -171,58 +196,8 @@ public class ContainerSeedStorageController extends ContainerAgricraft {
         }
     }
 
-    public ItemStack getActiveSeed() {
-        ItemStack seed = null;
-        if(this.inventorySlots.size()>36) {
-            seed = ((SlotSeedStorage) this.inventorySlots.get(36)).getStack().copy();
-            seed.stackSize = 1;
-        }
-        return seed;
-    }
-
-    public void resetActiveEntries() {
-        this.resetActiveEntries(this.getActiveSeed(), 0);
-    }
-
-    public void resetActiveEntries(ItemStack stack, int offset) {
-        this.clearActiveEntries();
-        this.setActiveEntries(stack, offset);
-        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT) {
-            NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(Minecraft.getMinecraft().thePlayer, stack.getItem(), stack.getItemDamage(), offset));
-        }
-    }
-
-    public void setActiveEntries(ItemStack stack, int offset) {
-        if(stack!=null && stack.getItem()!=null) {
-            ItemSeeds seed = (ItemSeeds) stack.getItem();
-            int seedMeta = stack.getItemDamage();
-            HashMap<Integer, ArrayList<SlotSeedStorage>> map = this.entries.get(seed);
-            if(map!=null) {
-                ArrayList<SlotSeedStorage> activeEntries =map.get(seedMeta);
-                if (activeEntries != null) {
-                    int xOffset = 82;
-                    int yOffset = 8;
-                    int stopIndex = Math.min(activeEntries.size(), offset + GuiSeedStorageController.maxNrHorizontalSeeds);
-                    for (int i = offset; i < stopIndex; i++) {
-                        SlotSeedStorage slot = activeEntries.get(i);
-                        slot.set(xOffset + 16 * i, yOffset, this.PLAYER_INVENTORY_SIZE + i);
-                        this.inventorySlots.add(slot);
-                        this.inventoryItemStacks.add(slot.getStack());
-                    }
-                }
-            }
-        }
-    }
-
-    public void clearActiveEntries() {
-        for(int i=this.inventoryItemStacks.size()-1;i>=this.PLAYER_INVENTORY_SIZE;i--) {
-            ((SlotSeedStorage) this.inventorySlots.get(i)).reset();
-            this.inventorySlots.remove(i);
-            this.inventoryItemStacks.remove(i);
-        }
-    }
-
     //checks if the player can drag a stack over this slot to split it
+    @Override
     public boolean canDragIntoSlot(Slot slot) {
         return !(slot instanceof SlotSeedStorage);
     }

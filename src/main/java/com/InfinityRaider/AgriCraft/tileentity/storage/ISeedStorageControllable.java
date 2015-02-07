@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageController;
+import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
 import com.InfinityRaider.AgriCraft.container.SlotSeedStorage;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemSeeds;
@@ -22,7 +22,7 @@ public interface ISeedStorageControllable extends IInventory{
     /**
      * Returns a list of all the slots in this inventory, all the slots in this inventory must have the same type of seed
      */
-    public ArrayList<SlotSeedStorage> getInventorySlots(ContainerSeedStorageController container);
+    public ArrayList<SlotSeedStorage> getInventorySlots(ContainerSeedStorageDummy container);
 
     /**
      * Returns the coordinates of the controller controlling this controllable

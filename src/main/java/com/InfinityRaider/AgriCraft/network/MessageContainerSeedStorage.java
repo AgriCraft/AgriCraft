@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.network;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageController;
+import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -70,8 +71,8 @@ public class MessageContainerSeedStorage implements IMessage {
         @Override
         public IMessage onMessage(MessageContainerSeedStorage message, MessageContext context) {
             Container container = message.player.openContainer;
-            if(container!=null && container instanceof ContainerSeedStorageController) {
-                ContainerSeedStorageController storage = (ContainerSeedStorageController) container;
+            if(container!=null && container instanceof ContainerSeedStorageDummy) {
+                ContainerSeedStorageDummy storage = (ContainerSeedStorageDummy) container;
                 storage.clearActiveEntries();
                 storage.setActiveEntries(new ItemStack(message.item, 1, message.meta), message.offset);
                 storage.detectAndSendChanges();
