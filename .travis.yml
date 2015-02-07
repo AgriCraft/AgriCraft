@@ -7,6 +7,8 @@ before_install:
 install: ./gradlew setupCIWorkspace -S
 script: ./gradlew build -S
 
+after_script: rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
 env:
   global:
     TERM=dumb
