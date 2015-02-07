@@ -25,6 +25,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         PositionedStack parent1;
         PositionedStack parent2;
         PositionedStack result;
+        PositionedStack soil;
         PositionedStack requiredBlock;
 
         //constructor
@@ -32,10 +33,10 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             this.parent1 = new PositionedStack(mutation.parent1.copy(), Constants.nei_X1, Constants.nei_Y1);
             this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y1);
             this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y1);
+            
             switch(mutation.id) {
                 case 0:requiredBlock = null;break;
                 case 1:requiredBlock = new PositionedStack(new ItemStack(mutation.requirement, 1, mutation.requirementMeta), Constants.nei_X3, Constants.nei_Y2);break;
-                case 2:requiredBlock = new PositionedStack(new ItemStack(mutation.requirement, 1, mutation.requirementMeta), Constants.nei_X4, Constants.nei_Y2);break;
             }
 
         }
@@ -132,9 +133,9 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     //defines rectangles on the recipe gui which can be clicked to show all crop mutation recipes
     @Override
     public void loadTransferRects() {
-        transferRects.add(new RecipeTransferRect(new Rectangle(65, 13, 4, 39), id));
-        transferRects.add(new RecipeTransferRect(new Rectangle(97, 13, 4, 39), id));
-        transferRects.add(new RecipeTransferRect(new Rectangle(59, 19, 48, 4), id));
+        transferRects.add(new RecipeTransferRect(new Rectangle(65, 2, 4, 39), id));
+        transferRects.add(new RecipeTransferRect(new Rectangle(97, 2, 4, 39), id));
+        transferRects.add(new RecipeTransferRect(new Rectangle(59, 8, 48, 4), id));
     }
 
 }
