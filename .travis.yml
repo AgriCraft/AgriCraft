@@ -22,7 +22,7 @@ cache:
 
 deploy:
   provider: releases
-  api-key: "e5b90da5b83aebc4f3da5c09476f27e2d9215968"
+  api-key: "GI0yeA9rWkvBcv+DcViPFLHNrbszCWV/jZKmKeJ6zFwzHxhcfWL58LAHuA1WIR/OSIF0Lfcqi/EmIwHaZx1BjSmI2P7Wbps3lW7nSPP9FEUQob3kQm0dLGookrp5C+a37SH7Zv4HvV2JlmYjFjo8dB4nC81Rs/uY0KQlwuinHDM="
   file: "./build/libs/AgriCraft-*.jar"
   file_glob: true
   skip_cleanup: true
