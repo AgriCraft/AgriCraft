@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
 import com.InfinityRaider.AgriCraft.container.SlotSeedStorage;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -23,7 +22,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public int usingPlayers;
     private ItemSeeds lockedSeed;
     private int lockedSeedMeta;
-    private List<SlotSeedStorage> inventory = new ArrayList<SlotSeedStorage>();
+    private List<NBTTagCompound> tags = new ArrayList<NBTTagCompound>();
+    private List<Integer> amounts = new ArrayList<Integer>();
     private ISeedStorageController controller;
 
     @Override
@@ -32,7 +32,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if(this.direction!=null) {
             tag.setByte("direction", (byte) this.direction.ordinal());
         }
-        if(this.inventory!=null && this.inventory.size()>0 && this.lockedSeed!=null) {
+        if(this.tags!=null && this.tags.size()>0 && this.lockedSeed!=null) {
             //add the locked seed
             NBTTagCompound seedTag = new NBTTagCompound();
             ItemStack seedStack = new ItemStack(lockedSeed, 1, lockedSeedMeta);
@@ -40,18 +40,20 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             tag.setTag(Names.NBT.seed, seedTag);
             //add the slots
             NBTTagList tagList = new NBTTagList();
-            for(SlotSeedStorage slot:inventory) {
-                if(slot!=null && slot.getStack()!=null) {
-                    //tag for the stack
+            for(int i=0;i<tags.size();i++) {
+                NBTTagCompound tagAt = tags.get(i);
+                int count = amounts.get(i);
+                if(tagAt!=null) {
+                    //tag
                     NBTTagCompound slotTag = new NBTTagCompound();
-                    slotTag.setInteger(Names.NBT.count, slot.count);
-                    slotTag.setTag(Names.NBT.tag, slot.getStack().stackTagCompound);
+                    slotTag.setInteger(Names.NBT.count, count);
+                    slotTag.setTag(Names.NBT.tag, tagAt);
                     //add the tag to the list
                     tagList.appendTag(slotTag);
                 }
             }
             tag.setTag(Names.NBT.inventory, tagList);
-            tag.setInteger(Names.NBT.size, inventory.size());
+            tag.setInteger(Names.NBT.size, tags.size());
         }
         if(this.hasController()) {
             NBTHelper.addCoordsToNBT(this.controller.getCoordinates(), tag);
@@ -64,28 +66,22 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if(tag.hasKey("direction")) {
             this.setDirection(tag.getByte("direction"));
         }
+        this.tags = new ArrayList<NBTTagCompound>();
+        this.amounts = new ArrayList<Integer>();
         if(tag.hasKey(Names.NBT.seed) && tag.hasKey(Names.NBT.inventory) && tag.hasKey(Names.NBT.size)) {
             //read the locked seed
             ItemStack seedStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.NBT.seed));
             this.lockedSeed = (ItemSeeds) seedStack.getItem();
             this.lockedSeedMeta = seedStack.getItemDamage();
             //read the slots
-            this.inventory = new ArrayList<SlotSeedStorage>();
-            NBTTagList tagList = tag.getTagList(Names.NBT.inventory, tag.getInteger(Names.NBT.size));
+           NBTTagList tagList = tag.getTagList(Names.NBT.inventory, tag.getInteger(Names.NBT.size));
             for(int i=0;i<tagList.tagCount();i++) {
                 //get the tag at teh current index
                 NBTTagCompound slotTag = tagList.getCompoundTagAt(i);
                 //get the data on the tag
-                int count = slotTag.getInteger(Names.NBT.count);
-                NBTTagCompound stackTag = (NBTTagCompound) slotTag.getTag(Names.NBT.tag);
-                //add slot to inventory
-                ItemStack slotStack = new ItemStack(this.lockedSeed, count, this.lockedSeedMeta);
-                slotStack.stackTagCompound = stackTag;
-                this.inventory.add(new SlotSeedStorage(this, this.inventory.size(), slotStack));
+                amounts.add(slotTag.getInteger(Names.NBT.count));
+                tags.add((NBTTagCompound) slotTag.getTag(Names.NBT.tag));
             }
-        }
-        else {
-            this.inventory = new ArrayList<SlotSeedStorage>();
         }
         int[] coords = NBTHelper.getCoordsFromNBT(tag);
         if(coords!=null && coords.length==3) {
@@ -117,8 +113,10 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         ArrayList<ItemStack> stacks = null;
         if(this.hasLockedSeed()) {
             stacks = new ArrayList<ItemStack>();
-            for(SlotSeedStorage slot : this.inventory) {
-                stacks.add(slot.getStack());
+            for(int i=0;i<this.tags.size();i++) {
+                ItemStack stack = new ItemStack(this.lockedSeed, amounts.get(i), this.lockedSeedMeta);
+                stack.stackTagCompound = tags.get(i);
+                stacks.add(stack);
             }
         }
         return stacks;
@@ -126,18 +124,24 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public void setInventory(List<SlotSeedStorage> list) {
+        this.tags = new ArrayList<NBTTagCompound>();
+        this.amounts = new ArrayList<Integer>();
         if(list!=null) {
-           this.inventory = list;
-        }
-        else {
-            this.inventory = null;
+          for(int i=0;i<list.size();i++) {
+              tags.add(list.get(i).getStack().stackTagCompound);
+              amounts.add(list.get(i).count);
+          }
         }
         this.markDirty();
     }
 
     @Override
     public List<SlotSeedStorage> getInventorySlots() {
-        return this.inventory;
+        ArrayList<SlotSeedStorage> slots = new ArrayList<SlotSeedStorage>();
+        for(int i=0;i<this.tags.size();i++) {
+            slots.add(new SlotSeedStorage(this, this.getControllableID()*1000+i, this.getStackInSlot(i)));
+        }
+        return slots;
     }
 
     @Override
@@ -169,12 +173,13 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public void setLockedSeed(ItemSeeds seed, int meta) {
         boolean flag = !this.hasLockedSeed();
         if(!flag) {
-            flag = this.inventory==null || this.inventory.size()==0;
+            flag = this.tags==null || this.tags.size()==0;
         }
         if(flag) {
             this.lockedSeed = seed;
             this.lockedSeedMeta = meta;
-            this.inventory = new ArrayList<SlotSeedStorage>();
+            this.tags = new ArrayList<NBTTagCompound>();
+            this.amounts = new ArrayList<Integer>();
             this.markDirty();
         }
     }
@@ -200,15 +205,15 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     // so the maximum amount of different slots in the inventory is 1000
     @Override
     public int getSizeInventory() {
-        return this.inventory==null?1:this.inventory.size()+1;
+        return this.tags==null?1:this.tags.size()+1;
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
         slot = slot%1000;
         ItemStack stackInSlot = null;
-        if(this.inventory!=null && this.inventory.size()>slot) {
-            stackInSlot = this.inventory.get(slot).getStack();
+        if(this.tags!=null && this.tags.size()>slot) {
+            stackInSlot = new ItemStack(this.lockedSeed, amounts.get(slot), this.lockedSeedMeta);
         }
         return stackInSlot;
     }
@@ -219,11 +224,13 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         ItemStack stackInSlot = this.getStackInSlot(slot);
         if(stackInSlot!=null) {
             if(stackInSlot.stackSize<=amount) {
-                this.inventory.remove(slot);
+                this.tags.set(slot, null);
+                this.amounts.set(slot, 0);
+
             }
             else {
                 stackInSlot.stackSize = stackInSlot.stackSize-amount;
-                this.inventory.get(slot).count = stackInSlot.stackSize;
+                this.amounts.set(slot, stackInSlot.stackSize);
             }
         }
         return stackInSlot;
@@ -233,9 +240,10 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public ItemStack getStackInSlotOnClosing(int slot) {
         slot = slot%1000;
         ItemStack stackInSlot = null;
-        if(this.inventory!=null && this.inventory.size()>slot) {
+        if(this.tags!=null) {
             stackInSlot = this.getStackInSlot(slot).copy();
-            this.inventory.remove(slot);
+            //this.tags.remove(slot);
+            //this.amounts.remove(slot);
         }
         return stackInSlot;
     }
@@ -244,15 +252,16 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public void setInventorySlotContents(int slot, ItemStack inputStack) {
         slot = slot%1000;
         if(this.isItemValidForSlot(slot, inputStack)) {
-            if (this.inventory != null) {
-                if (this.inventory.size() > slot) {
-                    this.inventory.set(slot, new SlotSeedStorage(this, slot, inputStack));
-                } else {
-                    this.inventory.add(new SlotSeedStorage(this, this.inventory.size(), inputStack));
-                }
+            if (this.tags == null) {
+                this.tags = new ArrayList<NBTTagCompound>();
+                this.amounts = new ArrayList<Integer>();
+            }
+            if (this.tags.size() > slot) {
+                this.tags.set(slot, inputStack.getTagCompound());
+                this.amounts.set(slot, inputStack.stackSize);
             } else {
-                this.inventory = new ArrayList<SlotSeedStorage>();
-                this.inventory.add(new SlotSeedStorage(this, 0, inputStack));
+                this.tags.add(inputStack.stackTagCompound);
+                this.amounts.add(inputStack.stackSize);
             }
         }
     }
@@ -269,7 +278,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public int getInventoryStackLimit() {
-        return 0;
+        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -295,7 +304,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if(allow) {
             allow = stack.stackTagCompound.hasKey(Names.NBT.analyzed) && stack.stackTagCompound.getBoolean(Names.NBT.analyzed);
             if(allow) {
-                allow = this.inventory.size()<=slot || ItemStack.areItemStackTagsEqual(stack, this.getStackInSlot(slot));
+                allow = this.tags.size()<=slot || ItemStack.areItemStackTagsEqual(stack, this.getStackInSlot(slot));
             }
         }
         return allow;
@@ -306,7 +315,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public void addDebugInfo(List<String> list) {
         String info = this.lockedSeed==null?"null":this.getLockedSeed().getDisplayName();
         list.add("Locked Seed: "+info);
-        list.add("Number of seeds: "+this.inventory.size());
+        list.add("Number of seeds: "+this.tags.size());
     }
 
 }

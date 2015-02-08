@@ -57,7 +57,7 @@ public class MessageContainerSeedStorage implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buf) {
-        String itemName = Item.itemRegistry.getNameForObject(this.item);
+        String itemName = this.item==null?"null":Item.itemRegistry.getNameForObject(this.item);
         buf.writeInt(itemName.length());
         buf.writeBytes(itemName.getBytes());
         buf.writeInt(this.meta);

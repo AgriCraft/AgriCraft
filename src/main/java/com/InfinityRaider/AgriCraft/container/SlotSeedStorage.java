@@ -161,11 +161,13 @@ public class SlotSeedStorage extends Slot {
                         it.remove();
                     }
                 }
+                /*
                 else if(container instanceof ContainerSeedStorage) {
                     if(this.clearFromSeedStorage((ContainerSeedStorage) container)) {
                         it.remove();
                     }
                 }
+                */
             }
         }
     }
@@ -191,14 +193,14 @@ public class SlotSeedStorage extends Slot {
         container.resetActiveEntries(0);
         return true;
     }
-
+/*
     private boolean clearFromSeedStorage(ContainerSeedStorage container) {
         List<SlotSeedStorage> list = container.getAllSlots();
         list.remove(this);
         container.resetActiveEntries(0);
         return true;
     }
-
+*/
     /** The index of the slot in the inventory. */
     @Override
     public int getSlotIndex() {
