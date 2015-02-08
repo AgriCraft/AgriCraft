@@ -21,8 +21,8 @@ public class TileEntityAgricraft extends TileEntity {
     }
 
     public void markDirtyAndMarkForUpdate() {
-        worldObj.func_147451_t(xCoord, yCoord, zCoord);
         markDirty();
+        worldObj.func_147451_t(xCoord, yCoord, zCoord);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 

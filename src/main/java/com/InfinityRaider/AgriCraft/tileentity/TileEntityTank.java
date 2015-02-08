@@ -21,7 +21,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     protected int connectedTanks=1;
     protected int fluidLevel=0;
     protected int lastDiscreteFluidLevel = 0;
-    private int timer = 0;
     
     //OVERRIDES
     //---------
@@ -52,31 +51,17 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     @Override
     public void updateEntity() {
         if(!this.worldObj.isRemote) {
-            boolean change = this.updateMultiBlock();
             if(this.worldObj.canBlockSeeTheSky(this.xCoord, this.yCoord, this.zCoord) && this.worldObj.isRaining()) {
                 if(this.getYPosition()+1==this.getYSize()) {
                     BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(this.xCoord, this.zCoord);
                     if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
                        this.setFluidLevel(this.fluidLevel + 1);
-                       change = true;
                     }
                 }
             }
             if(ConfigurationHandler.fillFromFlowingWater && (this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.water || this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.flowing_water)) {
                 this.setFluidLevel(this.fluidLevel+5);
-                change = true;
             }
-            //Only send update to the client every 10 ticks to reduce network stress (thanks, Marcin212)
-            if(change && timer>10) {
-                timer = 0;
-
-                int discreteFluidLevel = getDiscreteFluidLevel();
-                if (lastDiscreteFluidLevel != discreteFluidLevel) {
-                    lastDiscreteFluidLevel = discreteFluidLevel;
-                    markDirtyAndMarkForUpdate();
-                }
-            }
-            timer++;
         }
     }
 
@@ -90,6 +75,14 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
             super.receiveClientEvent(id, value);
         }
         return true;
+    }
+
+    public void syncToClient(boolean forceUpdate) {
+        boolean change = forceUpdate || this.getDiscreteFluidLevel()!=lastDiscreteFluidLevel;
+        if(change) {
+            this.lastDiscreteFluidLevel = this.getDiscreteFluidLevel();
+            this.markDirtyAndMarkForUpdate();
+        }
     }
 
 
@@ -122,6 +115,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         boolean change = false;
         if(!this.isMultiBlock()) {
             change = this.checkForMultiBlock();
+        }
+        if(change) {
+            this.syncToClient(true);
         }
         return change;
     }
@@ -186,7 +182,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                         TileEntityTank tank = ((TileEntityTank) this.worldObj.getTileEntity(x, y, z));
                         tank.connectedTanks = xSize * ySize * zSize;
                         tank.setFluidLevel(lvl);
-                        tank.markDirtyAndMarkForUpdate();
                     }
                 }
             }
@@ -217,14 +212,14 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                     TileEntityTank tank = (TileEntityTank) this.worldObj.getTileEntity(this.xCoord-xPos+x, this.yCoord-yPos+y, this.zCoord-zPos+z);
                     tank.connectedTanks = 1;
                     tank.fluidLevel = levels[y];
-                    tank.markDirtyAndMarkForUpdate();
+                    tank.syncToClient(true);
                 }
             }
         }
     }
 
     //syncs this fluid level to all tanks in the multiblock
-    public void syncFluidLevels(boolean forceUpdate) {
+    public void syncFluidLevels() {
         int lvl = this.fluidLevel;
         //get dimensions of the multiblock
         int xPos = this.getXPosition();
@@ -233,23 +228,24 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         int xSize = this.getXSize();
         int ySize = this.getYSize();
         int zSize = this.getZSize();
-        boolean change = timer>20 || forceUpdate;
-        if(change) timer = 0;
-        //iterate trough the x-, y- and z-directions if all blocks are tanks
-        for (int x = this.xCoord - xPos; x < this.xCoord - xPos + xSize; x++) {
-            for (int y = this.yCoord - yPos; y < this.yCoord - yPos + ySize; y++) {
-                for (int z = this.zCoord - zPos; z < this.zCoord - zPos + zSize; z++) {
-                    if(this.worldObj.getTileEntity(x, y ,z)!=null && this.worldObj.getTileEntity(x, y ,z) instanceof TileEntityTank) {
-                        TileEntityTank tank =(TileEntityTank) this.worldObj.getTileEntity(x, y, z);
-                        tank.fluidLevel = lvl;
-                        if (change && tank.getYPosition() == 0) {
-                            tank.markDirtyAndMarkForUpdate();
+        if(xSize*ySize*zSize!=1) {
+            //iterate trough the x-, y- and z-directions if all blocks are tanks
+            for (int x = this.xCoord - xPos; x < this.xCoord - xPos + xSize; x++) {
+                for (int y = this.yCoord - yPos; y < this.yCoord - yPos + ySize; y++) {
+                    for (int z = this.zCoord - zPos; z < this.zCoord - zPos + zSize; z++) {
+                        if (this.worldObj.getTileEntity(x, y, z) != null && this.worldObj.getTileEntity(x, y, z) instanceof TileEntityTank) {
+                            TileEntityTank tank = (TileEntityTank) this.worldObj.getTileEntity(x, y, z);
+                            tank.fluidLevel = lvl;
+                            if (tank.getYPosition() == 0) {
+                                tank.syncToClient(false);
+                            }
                         }
                     }
                 }
             }
+        } else {
+            this.syncToClient(false);
         }
-
     }
 
     //returns the xPosition of this block in along a row of these blocks along the X-axis
@@ -404,8 +400,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public int getDiscreteFluidLevel() {
         float discreteFactor = (float) DISCRETE_MAX / (float) getSingleCapacity();
         int discreteFluidLevel = Math.round(discreteFactor * fluidLevel);
-        if (discreteFluidLevel == 0 && fluidLevel > 0)
+        if (discreteFluidLevel == 0 && fluidLevel > 0) {
             discreteFluidLevel = 1;
+        }
         return discreteFluidLevel;
     }
 
@@ -431,7 +428,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public void setFluidLevel(int lvl) {
         if(lvl!=this.fluidLevel) {
             this.fluidLevel = lvl > this.getTotalCapacity() ? this.getTotalCapacity() : lvl;
-            this.syncFluidLevels(false);
+            this.syncFluidLevels();
         }
     }
 
@@ -465,7 +462,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         int filled = Math.min(resource.amount, this.getTotalCapacity() - this.getFluidLevel());
         if(doFill) {
             this.setFluidLevel(this.getFluidLevel()+filled);
-            syncFluidLevels(true);
         }
         return filled;
     }
@@ -479,7 +475,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         int drained = Math.min(resource.amount, this.getFluidLevel());
         if(doDrain) {
             this.setFluidLevel(this.fluidLevel-drained);
-            syncFluidLevels(true);
         }
         return new FluidStack(FluidRegistry.WATER, drained);
     }
