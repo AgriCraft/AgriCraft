@@ -163,6 +163,16 @@ public class BlockWaterTank extends BlockCustomWood{
         return meta;
     }
 
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+        if(!world.isRemote) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            if (te != null && te instanceof TileEntityTank) {
+                ((TileEntityTank) te).updateMultiBlock();
+            }
+        }
+    }
+
 
     //render methods
     //--------------
