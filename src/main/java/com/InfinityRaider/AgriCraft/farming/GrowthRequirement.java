@@ -1,49 +1,49 @@
 package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.utility.*;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Encodes all requirements a plant needs to mutate and grow
  * Uses the Builder class inside to construct instances.
  */
 public class GrowthRequirement {
-
+    //static fields storing other requirements for seeds from other mods
     public static final GrowthRequirement DEFAULT = new GrowthRequirement();
-    public static HashMap<ItemSeeds, HashMap<Integer, GrowthRequirement>> overrides = new HashMap<ItemSeeds, HashMap<Integer, GrowthRequirement>>();
+    public static Map<ItemSeeds, Map<Integer, GrowthRequirement>> overrides = new HashMap<ItemSeeds, Map<Integer, GrowthRequirement>>();
 
+    //brightness
     /** Maximum allowed brightness, exclusive **/
     private int maxBrightness = 16;
     /** Minimum allowed brightness, inclusive **/
     private int minBrightness = 8;
 
+    //soil
     private static List<BlockWithMeta> defaultSoils = new ArrayList<BlockWithMeta>();
     private static List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
     private BlockWithMeta soil = null;
 
+    //block requirement
+    private BlockWithMeta requiredBlock = null;
+    private boolean oreDict = false;
+    private RequirementType requiredType = RequirementType.NONE;
     public static enum RequirementType {
         NONE, BELOW, NEARBY
     }
 
-    private BlockWithMeta requiredBlock = null;
-    private boolean oreDict = false;
-    private RequirementType requiredType = RequirementType.NONE;
-
-    private GrowthRequirement() {
-    }
-
+    //Methods to check if a seed can grow
+    //-----------------------------------
     /** @Checks if all the requirements are met */
     public boolean canGrow(World world, int x, int y, int z) {
         return this.isValidSoil(world.getBlock(x, y-1, z), world.getBlockMetadata(x, y-1, z)) && this.isBrightnessGood(world.getBlockLightValue(x, y, z)) && this.isBaseBlockPresent(world, x, y, z);
@@ -133,13 +133,130 @@ public class GrowthRequirement {
         return requiredType;
     }
 
-    public static List<BlockWithMeta> getSoils() {
-        return soils;
+
+
+    //Methods to change specific requirements
+    //--------------------------------------
+    public BlockWithMeta getSoil() {return this.soil;}
+
+    public void setSoil(BlockWithMeta soil) {
+        this.soil = soil;
+        if(!soils.contains(soil)) {
+            soils.add(soil);
+        }
     }
 
-    public static boolean isSoilValid(Block block, int meta) {
-        return soils.contains(new BlockWithMeta(block, meta));
+    public int[] getBrightnessRange() {return new int[] {minBrightness, maxBrightness};}
+
+    public void setBrightnessRange(int min, int max) {
+        this.minBrightness = min;
+        this.maxBrightness = max;
     }
+
+
+
+    //Methods for fertile soils
+    //-------------------------
+    public static boolean isSoilValid(Block block, int meta) {
+        BlockWithMeta soil = new BlockWithMeta(block, meta);
+        return soils.contains(soil) || defaultSoils.contains(soil);
+    }
+
+    public static void initSoils() {
+        //add standard soils
+        defaultSoils.add(new BlockWithMeta(Blocks.farmland, 7));
+        if(ModIntegration.LoadedMods.forestry) {
+            defaultSoils.add(new BlockWithMeta((Block) Block.blockRegistry.getObject("Forestry:soil"), 0));
+        }
+        //reads custom entries
+        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
+        for(String line:data) {
+            LogHelper.debug("parsing " + line);
+            ItemStack stack = IOHelper.getStack(line);
+            Block block = (stack!=null && stack.getItem() instanceof ItemBlock)?((ItemBlock) stack.getItem()).field_150939_a:null;
+            boolean success = block!=null;
+            String errorMsg = "Invalid block";
+            if(success && !soils.contains(new BlockWithMeta(block, stack.getItemDamage()))) {
+                soils.add(new BlockWithMeta(block, stack.getItemDamage()));
+            }
+            else {
+                LogHelper.info("Error when adding block to soil whitelist: "+errorMsg+" (line: "+line+")");
+            }
+        }
+        LogHelper.info("Registered soil whitelist:");
+        for (BlockWithMeta soil : soils) {
+            LogHelper.info(" - " + Block.blockRegistry.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
+        }
+    }
+
+    public static void addAllToSoilWhitelist(Collection<? extends BlockWithMeta> list) {
+        defaultSoils.addAll(list);
+    }
+
+    public static void removeAllFromSoilWhitelist(Collection<? extends  BlockWithMeta> list) {
+        defaultSoils.removeAll(list);
+    }
+
+
+
+    //Methods to get/set requirements for seeds
+    //-----------------------------------------
+    /** Finds the growth requirement for a seed */
+    public static GrowthRequirement getGrowthRequirement(ItemSeeds seed, int meta) {
+        if(SeedHelper.getPlant(seed) instanceof BlockModPlant) {
+            return ((BlockModPlant) SeedHelper.getPlant(seed)).getGrowthRequirement();
+        }
+        else if (overrides.get(seed)!=null && overrides.get(seed).get(meta)!=null) {
+            return overrides.get(seed).get(meta);
+        }
+        return DEFAULT;
+    }
+
+    /** Removes the requirement for a seed */
+    public static void resetGrowthRequirement(ItemSeeds seed, int meta) {
+        if(seed instanceof ItemModSeed) {
+            ((ItemModSeed) seed).getPlant().setGrowthRequirement(DEFAULT);
+        }
+        else {
+            Map<Integer, GrowthRequirement> metaMap = overrides.get(seed);
+            if(metaMap!=null) {
+                metaMap.remove(meta);
+                if(metaMap.size()==0) {
+                    overrides.remove(seed);
+                }
+            }
+        }
+    }
+
+    /** Checks if a seed is using the default requirements */
+    public static boolean hasDefault(ItemSeeds seed, int meta) {
+        if(SeedHelper.getPlant(seed) instanceof BlockModPlant) {
+            return false;
+        }
+        if (overrides.get(seed)!=null && overrides.get(seed).get(meta)!=null) {
+            return false;
+        }
+        return true;
+    }
+
+    /** adds a new requirement to a seed */
+    public static void setRequirement(ItemSeeds seed, int meta, GrowthRequirement req) {
+        Map<Integer, GrowthRequirement> metaMap = overrides.get(seed);
+        if(metaMap!=null) {
+            metaMap.put(meta, req);
+        }
+        else {
+            metaMap = new HashMap<Integer, GrowthRequirement>();
+            metaMap.put(meta, req);
+            overrides.put(seed, metaMap);
+        }
+    }
+
+
+
+    //Builder class
+    //-------------
+    private GrowthRequirement() {}
 
     public static class Builder {
 
@@ -178,16 +295,5 @@ public class GrowthRequirement {
         public GrowthRequirement build() {
             return growthRequirement;
         }
-    }
-
-    /** Finds the growth requirement for a seed */
-    public static GrowthRequirement getGrowthRequirement(ItemSeeds seed, int meta) {
-        if(SeedHelper.getPlant(seed) instanceof BlockModPlant) {
-            return ((BlockModPlant) SeedHelper.getPlant(seed)).getGrowthRequirement();
-        }
-        else if (overrides.get(seed)!=null && overrides.get(seed).get(meta)!=null) {
-            return overrides.get(seed).get(meta);
-        }
-        return DEFAULT;
     }
 }

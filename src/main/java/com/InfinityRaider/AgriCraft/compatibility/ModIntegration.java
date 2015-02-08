@@ -37,9 +37,13 @@ public class ModIntegration {
             MineTweakerAPI.registerClass(CustomWood.class);
             MineTweakerAPI.registerClass(SeedMutation.class);
             MineTweakerAPI.registerClass(SeedBlacklist.class);
-            MineTweakerAPI.registerClass(SoilWhitelister.class);
             MineTweakerAPI.registerClass(SpreadChance.class);
             MineTweakerAPI.registerClass(CropProduct.class);
+            MineTweakerAPI.registerClass(Growing.class);
+            MineTweakerAPI.registerClass(Growing.FertileSoils.class);
+            MineTweakerAPI.registerClass(Growing.Soil.class);
+            MineTweakerAPI.registerClass(Growing.Brightness.class);
+            MineTweakerAPI.registerClass(Growing.BaseBlock.class);
         }
     }
     public static class LoadedMods {

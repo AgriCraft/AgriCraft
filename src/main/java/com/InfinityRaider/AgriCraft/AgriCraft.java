@@ -17,7 +17,7 @@ package com.InfinityRaider.AgriCraft;
 */
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
@@ -93,7 +93,7 @@ public class AgriCraft {
         CustomCrops.initCustomCrops();
         SeedHelper.init();
         MutationHandler.init();
-        SoilWhitelist.initSoils();
+        GrowthRequirement.initSoils();
         CustomCrops.initGrassSeeds();
 
         if(!ConfigurationHandler.disableWorldGen) {

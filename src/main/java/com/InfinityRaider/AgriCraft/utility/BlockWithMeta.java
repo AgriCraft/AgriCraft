@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 /**
  * Simple utility class combining a Block with a meta value.
@@ -25,6 +26,15 @@ public class BlockWithMeta {
 
     public int getMeta() {
         return meta;
+    }
+
+    public ItemStack toStack() {
+        return new ItemStack(this.block, 1, this.meta);
+    }
+
+    @Override
+    public String toString() {
+        return Block.blockRegistry.getNameForObject(this.block)+":"+this.meta;
     }
 
     @Override

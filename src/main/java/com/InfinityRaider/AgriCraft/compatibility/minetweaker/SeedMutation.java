@@ -37,8 +37,8 @@ public class SeedMutation {
     }
 
     @ZenMethod
-    public static void remove(IItemStack seed) {
-        ItemStack resultToRemove = MineTweakerMC.getItemStack(seed);
+    public static void remove(IItemStack result) {
+        ItemStack resultToRemove = MineTweakerMC.getItemStack(result);
         if (resultToRemove.getItem() instanceof ItemSeeds) {
             MineTweakerAPI.apply(new RemoveAction(resultToRemove));
         } else {

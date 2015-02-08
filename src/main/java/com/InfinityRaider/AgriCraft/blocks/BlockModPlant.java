@@ -240,4 +240,8 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     public GrowthRequirement getGrowthRequirement() {
         return growthRequirement;
     }
+
+    public void setGrowthRequirement(GrowthRequirement req) {
+        this.growthRequirement = req;
+    }
 }

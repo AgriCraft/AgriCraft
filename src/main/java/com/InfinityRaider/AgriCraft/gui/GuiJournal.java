@@ -1,10 +1,12 @@
 package com.InfinityRaider.AgriCraft.gui;
 
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -382,10 +384,10 @@ public class GuiJournal extends GuiScreen {
     private void drawSeedTitle(int index) {
         ItemStack seed = discoveredSeeds[index];
         String title = seed.getDisplayName();
-        Block soil = SeedHelper.getSoil(seed);
+        BlockWithMeta soil = GrowthRequirement.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage()).getSoil();
         Minecraft.getMinecraft().getTextureManager().bindTexture(RenderHelper.getItemResource(seedIcon));
         if(soil!=null) {
-            this.renderIconInGui(this.guiLeft + 26, this.guiTop + 11, RenderHelper.getBlockResource(soil.getIcon(1, 0)));
+            this.renderIconInGui(this.guiLeft + 26, this.guiTop + 11, RenderHelper.getBlockResource(soil.getBlock().getIcon(1, soil.getMeta())));
         }
         this.renderIconInGui(this.guiLeft + 25, this.guiTop + 11, RenderHelper.getItemResource(seedIcon));
         float scale = 0.8F;

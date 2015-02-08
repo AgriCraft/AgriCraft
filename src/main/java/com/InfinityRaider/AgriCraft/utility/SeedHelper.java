@@ -5,8 +5,6 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChococraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
-import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
@@ -14,7 +12,6 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import mods.natura.common.NContent;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.init.Blocks;
@@ -228,20 +225,6 @@ public abstract class SeedHelper {
                 return (BlockBush) seed.getPlant(null, 0, 0, 0);
             }
         }
-    }
-
-    public static Block getSoil(ItemStack stack) {
-        Block soil = null;
-        if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
-            ItemSeeds seed = (ItemSeeds) stack.getItem();
-            if(seed instanceof ItemModSeed) {
-                soil = ((ItemModSeed) seed).getPlant().getGrowthRequirement().getSoils().get(0).getBlock();
-            }
-            else if(seed == Items.nether_wart) {
-                soil = Blocks.soul_sand;
-            }
-        }
-        return soil;
     }
 
     public static boolean isAnalyzedSeed(ItemStack seedStack) {

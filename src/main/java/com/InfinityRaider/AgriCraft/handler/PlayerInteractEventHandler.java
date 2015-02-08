@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.handler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -22,7 +21,7 @@ public class PlayerInteractEventHandler {
             Block block = event.world.getBlock(event.x, event.y, event.z);
             int meta = event.world.getBlockMetadata(event.x, event.y, event.z);
             if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
-                if (GrowthRequirement.getSoils().contains(new BlockWithMeta(block, meta))) {
+                if (GrowthRequirement.isSoilValid(block, meta)) {
                     if (ConfigurationHandler.disableVanillaFarming) {
                         //for now, disable vanilla farming for every IPlantable, if people start to need exceptions I'll add in exceptions
                         this.denyEvent(event, false);

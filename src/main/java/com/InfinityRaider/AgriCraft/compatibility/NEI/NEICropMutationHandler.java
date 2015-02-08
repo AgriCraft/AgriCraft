@@ -49,7 +49,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             if (blockBush instanceof BlockModPlant) {
                 BlockModPlant blockPlant = (BlockModPlant) blockBush;
                 GrowthRequirement growthReq = blockPlant.getGrowthRequirement();
-                Block soilBlock = growthReq.getSoils().get(0).getBlock();
+                Block soilBlock = growthReq.getSoil()==null?null:growthReq.getSoil().getBlock();
 
                 this.soil = new PositionedStack(new ItemStack(soilBlock), Constants.nei_X3, Constants.nei_Y2);
                 this.requiredType = growthReq.getRequiredType();
