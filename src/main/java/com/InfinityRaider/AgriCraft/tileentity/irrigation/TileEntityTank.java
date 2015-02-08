@@ -20,7 +20,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     protected static final int DISCRETE_MAX = 32;
 
     protected int connectedTanks=1;
-    protected int fluidLevel=0;
+    private int fluidLevel=0;
     protected int lastDiscreteFluidLevel = 0;
     
     //OVERRIDES
