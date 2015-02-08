@@ -262,13 +262,10 @@ public abstract class IOHelper {
             "#For example: AgriCraft:seedDandelion,2";
 
     private static final String mutationInstructions =
+            "#ONLY MODIFY THIS CONFIG IF YOU DO NOT WANT TO USE MINETWEAKER, IF YOU WANT TO MODIFY MUTATIONS USE MINETWEAKER, THIS CONFIG IS ONLY FOR PEOPLE WHO DON'T USE MINETWEAKER\n" +
             "#Define mutations here: <mutation>=<parent1>+<parent2>\n" +
             "#To specify a crop, write <mod>:<cropname>:<meta>, all in lowercase (meta is optional)\n" +
-            "#You can get these values from NEI (example: minecraft:wheat_seeds is the vanilla seeds)\n" +
-            "#Optionally you can also define a mutation like this: <mutation>=<parent1>+<parent2>,<id>,<block>\n" +
-            "#The crops are specified in the same way, the id must be an integer: 1 requires a specified block to be below the farmland and 2 requires a specific block nearby\n" +
-            "#The mutation will not occur if these requirements are not met. For example:\n" +
-            "#magicalcrops:magicalcrops_ModMagicSeedsLead=magicalcrops:magicalcrops_ModMagicSeedsCopper+magicalcrops:magicalcrops_ModMagicSeedsTin,1,ThermalFoundation:Ore:3";
+            "#You can get these values from NEI (example: minecraft:wheat_seeds is the vanilla seeds)\n";
 
     private static final String harvestcraftMutations =
             "harvestcraft:artichokeseedItem=harvestcraft:asparagusseedItem+harvestcraft:lettuceseedItem\n" +
