@@ -143,6 +143,10 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         if(!world.isRemote) {
             boolean update = false;
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+            if (crop.weed) {
+                return;
+            }
+
             if(!crop.crossCrop && !crop.hasPlant()) {
                 crop.crossCrop=true;
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode?player.getCurrentEquippedItem().stackSize:player.getCurrentEquippedItem().stackSize - 1;
