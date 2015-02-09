@@ -1,18 +1,9 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.utility.*;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.*;
 
 /**
  * Encodes all requirements a plant needs to mutate and grow
@@ -21,7 +12,8 @@ import java.util.*;
 public class GrowthRequirement {
     //static fields storing other requirements for seeds from other mods
     public static final GrowthRequirement DEFAULT = new GrowthRequirement();
-    public static Map<ItemSeeds, Map<Integer, GrowthRequirement>> overrides = new HashMap<ItemSeeds, Map<Integer, GrowthRequirement>>();
+
+    public static final int NEARBY_DEFAULT_RANGE = 4;
 
     //brightness
     /** Maximum allowed brightness, exclusive **/
@@ -29,9 +21,6 @@ public class GrowthRequirement {
     /** Minimum allowed brightness, inclusive **/
     private int minBrightness = 8;
 
-    //soil
-    private static List<BlockWithMeta> defaultSoils = new ArrayList<BlockWithMeta>();
-    private static List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
     private BlockWithMeta soil = null;
 
     //block requirement
@@ -44,7 +33,7 @@ public class GrowthRequirement {
 
     //Methods to check if a seed can grow
     //-----------------------------------
-    /** @Checks if all the requirements are met */
+    /** @return true, if all the requirements are met */
     public boolean canGrow(World world, int x, int y, int z) {
         return this.isValidSoil(world.getBlock(x, y-1, z), world.getBlockMetadata(x, y-1, z)) && this.isBrightnessGood(world.getBlockLightValue(x, y, z)) && this.isBaseBlockPresent(world, x, y, z);
     }
@@ -61,7 +50,7 @@ public class GrowthRequirement {
     }
 
     /** @return true, if the correct base block is below **/
-    public boolean isBaseBlockBelow(World world, int x, int y, int z) {
+    private boolean isBaseBlockBelow(World world, int x, int y, int z) {
         if(this.requiresBaseBlock() && this.requiredType==RequirementType.BELOW) {
             return this.isBlockAdequate(world.getBlock(x, y - 2, z), world.getBlockMetadata(x, y - 2, z));
         }
@@ -69,9 +58,9 @@ public class GrowthRequirement {
     }
 
     /** @return true, if the correct base block is below **/
-    public boolean isBaseBlockNear(World world, int x, int y, int z) {
+    private boolean isBaseBlockNear(World world, int x, int y, int z) {
         if(this.requiresBaseBlock() && this.requiredType==RequirementType.NEARBY) {
-            int range = 4;
+            int range = NEARBY_DEFAULT_RANGE;
             for (int xPos = x - range; xPos <= x + range; x++) {
                 for (int yPos = y - range; yPos <= y + range; y++) {
                     for (int zPos = z - range; zPos <= z + range; z++) {
@@ -87,7 +76,7 @@ public class GrowthRequirement {
     }
 
     /** @return true, if this block corresponds to the required block **/
-    public boolean isBlockAdequate(Block block, int meta) {
+    private boolean isBlockAdequate(Block block, int meta) {
         if(this.oreDict) {
             return OreDictHelper.isSameOre(block, meta, this.requiredBlock.getBlock(), this.requiredBlock.getMeta());
         }
@@ -106,7 +95,7 @@ public class GrowthRequirement {
        if(this.requiresSpecificSoil()) {
            return this.soil.equals(new BlockWithMeta(block, meta));
        } else {
-           return defaultSoils.contains(new BlockWithMeta(block, meta));
+           return GrowthRequirements.defaultSoils.contains(new BlockWithMeta(block, meta));
        }
     }
 
@@ -125,15 +114,9 @@ public class GrowthRequirement {
         return new ItemStack(requiredBlock.getBlock(), 1, requiredBlock.getMeta());
     }
 
-    public BlockWithMeta getRequiredBlock() {
-        return requiredBlock;
-    }
-
     public RequirementType getRequiredType() {
         return requiredType;
     }
-
-
 
     //Methods to change specific requirements
     //--------------------------------------
@@ -141,9 +124,7 @@ public class GrowthRequirement {
 
     public void setSoil(BlockWithMeta soil) {
         this.soil = soil;
-        if(!soils.contains(soil)) {
-            soils.add(soil);
-        }
+        GrowthRequirements.soils.add(soil);
     }
 
     public int[] getBrightnessRange() {return new int[] {minBrightness, maxBrightness};}
@@ -152,106 +133,6 @@ public class GrowthRequirement {
         this.minBrightness = min;
         this.maxBrightness = max;
     }
-
-
-
-    //Methods for fertile soils
-    //-------------------------
-    public static boolean isSoilValid(Block block, int meta) {
-        BlockWithMeta soil = new BlockWithMeta(block, meta);
-        return soils.contains(soil) || defaultSoils.contains(soil);
-    }
-
-    public static void initSoils() {
-        //add standard soils
-        defaultSoils.add(new BlockWithMeta(Blocks.farmland, 7));
-        if(ModIntegration.LoadedMods.forestry) {
-            defaultSoils.add(new BlockWithMeta((Block) Block.blockRegistry.getObject("Forestry:soil"), 0));
-        }
-        //reads custom entries
-        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
-        for(String line:data) {
-            LogHelper.debug("parsing " + line);
-            ItemStack stack = IOHelper.getStack(line);
-            Block block = (stack!=null && stack.getItem() instanceof ItemBlock)?((ItemBlock) stack.getItem()).field_150939_a:null;
-            boolean success = block!=null;
-            String errorMsg = "Invalid block";
-            if(success && !soils.contains(new BlockWithMeta(block, stack.getItemDamage()))) {
-                soils.add(new BlockWithMeta(block, stack.getItemDamage()));
-            }
-            else {
-                LogHelper.info("Error when adding block to soil whitelist: "+errorMsg+" (line: "+line+")");
-            }
-        }
-        LogHelper.info("Registered soil whitelist:");
-        for (BlockWithMeta soil : soils) {
-            LogHelper.info(" - " + Block.blockRegistry.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
-        }
-    }
-
-    public static void addAllToSoilWhitelist(Collection<? extends BlockWithMeta> list) {
-        defaultSoils.addAll(list);
-    }
-
-    public static void removeAllFromSoilWhitelist(Collection<? extends  BlockWithMeta> list) {
-        defaultSoils.removeAll(list);
-    }
-
-
-
-    //Methods to get/set requirements for seeds
-    //-----------------------------------------
-    /** Finds the growth requirement for a seed */
-    public static GrowthRequirement getGrowthRequirement(ItemSeeds seed, int meta) {
-        if(SeedHelper.getPlant(seed) instanceof BlockModPlant) {
-            return ((BlockModPlant) SeedHelper.getPlant(seed)).getGrowthRequirement();
-        }
-        else if (overrides.get(seed)!=null && overrides.get(seed).get(meta)!=null) {
-            return overrides.get(seed).get(meta);
-        }
-        return DEFAULT;
-    }
-
-    /** Removes the requirement for a seed */
-    public static void resetGrowthRequirement(ItemSeeds seed, int meta) {
-        if(seed instanceof ItemModSeed) {
-            ((ItemModSeed) seed).getPlant().setGrowthRequirement(DEFAULT);
-        }
-        else {
-            Map<Integer, GrowthRequirement> metaMap = overrides.get(seed);
-            if(metaMap!=null) {
-                metaMap.remove(meta);
-                if(metaMap.size()==0) {
-                    overrides.remove(seed);
-                }
-            }
-        }
-    }
-
-    /** Checks if a seed is using the default requirements */
-    public static boolean hasDefault(ItemSeeds seed, int meta) {
-        if(SeedHelper.getPlant(seed) instanceof BlockModPlant) {
-            return false;
-        }
-        if (overrides.get(seed)!=null && overrides.get(seed).get(meta)!=null) {
-            return false;
-        }
-        return true;
-    }
-
-    /** adds a new requirement to a seed */
-    public static void setRequirement(ItemSeeds seed, int meta, GrowthRequirement req) {
-        Map<Integer, GrowthRequirement> metaMap = overrides.get(seed);
-        if(metaMap!=null) {
-            metaMap.put(meta, req);
-        }
-        else {
-            metaMap = new HashMap<Integer, GrowthRequirement>();
-            metaMap.put(meta, req);
-            overrides.put(seed, metaMap);
-        }
-    }
-
 
 
     //Builder class
@@ -279,8 +160,8 @@ public class GrowthRequirement {
 
         /** Sets the required soil */
         public Builder soil(BlockWithMeta block) {
-            if(!soils.contains(block)) {
-                soils.add(block);
+            if(!GrowthRequirements.soils.contains(block)) {
+                GrowthRequirements.soils.add(block);
             }
             growthRequirement.soil= block;
             return this;

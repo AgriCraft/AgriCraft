@@ -3,10 +3,9 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
-import com.InfinityRaider.AgriCraft.items.ItemCrop;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -168,7 +167,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             //the seed can be planted here
             else {
                 ItemStack stack = player.getCurrentEquippedItem();
-                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage()) || !GrowthRequirement.getGrowthRequirement((ItemSeeds) stack.getItem(), stack.getItemDamage()).canGrow(world, x, y, z)) {
+                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage()) || !GrowthRequirements.getGrowthRequirement((ItemSeeds) stack.getItem(), stack.getItemDamage()).canGrow(world, x, y, z)) {
                     return;
                 }
                 //get NBT data from the seeds
@@ -336,7 +335,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public boolean canBlockStay(World world, int x, int y, int z) {
         Block soil = world.getBlock(x, y - 1, z);
         int soilMeta = world.getBlockMetadata(x, y - 1, z);
-        return GrowthRequirement.isSoilValid(soil, soilMeta);
+        return GrowthRequirements.isSoilValid(soil, soilMeta);
     }
 
     //see if the block can grow

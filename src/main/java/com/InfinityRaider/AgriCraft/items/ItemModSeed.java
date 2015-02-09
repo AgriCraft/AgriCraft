@@ -2,10 +2,9 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -59,7 +58,7 @@ public class ItemModSeed extends ItemSeeds implements IPlantable{
             LogHelper.debug("Trying to plant seed "+stack.getItem().getUnlocalizedName()+" on crops");
             return true;
         }
-        if(GrowthRequirement.getGrowthRequirement((ItemSeeds) stack.getItem(), stack.getItemDamage()).isValidSoil(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z))) {
+        if(GrowthRequirements.getGrowthRequirement((ItemSeeds) stack.getItem(), stack.getItemDamage()).isValidSoil(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z))) {
             super.onItemUse(stack,player,world,x,y,z,side,f1,f2,f3);
         }
         return false;

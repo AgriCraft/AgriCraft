@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.google.common.hash.Hashing;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -45,5 +46,12 @@ public class BlockWithMeta {
             return block.block == this.block && block.meta == this.meta;
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Hashing.md5().newHasher()
+                .putInt(block.hashCode())
+                .putInt(meta).hash().asInt();
     }
 }

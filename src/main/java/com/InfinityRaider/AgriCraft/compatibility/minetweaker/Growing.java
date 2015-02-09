@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
 import com.google.common.base.Joiner;
 import minetweaker.IUndoableAction;
@@ -77,7 +78,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                GrowthRequirement.addAllToSoilWhitelist(soils);
+                GrowthRequirements.addAllToSoilWhitelist(soils);
             }
 
             @Override
@@ -87,7 +88,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                GrowthRequirement.removeAllFromSoilWhitelist(soils);
+                GrowthRequirements.removeAllFromSoilWhitelist(soils);
             }
 
             @Override
@@ -120,7 +121,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                GrowthRequirement.removeAllFromSoilWhitelist(soils);
+                GrowthRequirements.removeAllFromSoilWhitelist(soils);
             }
 
             @Override
@@ -130,7 +131,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                GrowthRequirement.addAllToSoilWhitelist(soils);
+                GrowthRequirements.addAllToSoilWhitelist(soils);
             }
 
             @Override
@@ -192,12 +193,12 @@ public class Growing {
 
             @Override
             public void apply() {
-                if(GrowthRequirement.hasDefault(seed, meta)) {
+                if(GrowthRequirements.hasDefault(seed, meta)) {
                     GrowthRequirement req = (new GrowthRequirement.Builder()).soil(this.soil).build();
-                    GrowthRequirement.setRequirement(this.seed, this.meta, req);
+                    GrowthRequirements.setRequirement(this.seed, this.meta, req);
                 }
                 else {
-                    GrowthRequirement req = GrowthRequirement.getGrowthRequirement(this.seed, this.meta);
+                    GrowthRequirement req = GrowthRequirements.getGrowthRequirement(this.seed, this.meta);
                     req.setSoil(soil);
                 }
             }
@@ -236,14 +237,14 @@ public class Growing {
             public ClearAction(ItemStack stack) {
                 this.seed = (ItemSeeds) stack.getItem();
                 this.meta = stack.getItemDamage();
-                this.hadReq = !GrowthRequirement.hasDefault(seed, meta);
-                this.oldSoil = GrowthRequirement.getGrowthRequirement(seed, meta).getSoil();
+                this.hadReq = !GrowthRequirements.hasDefault(seed, meta);
+                this.oldSoil = GrowthRequirements.getGrowthRequirement(seed, meta).getSoil();
             }
 
             @Override
             public void apply() {
                 if(hadReq) {
-                    GrowthRequirement req = GrowthRequirement.getGrowthRequirement(seed, meta);
+                    GrowthRequirement req = GrowthRequirements.getGrowthRequirement(seed, meta);
                     req.setSoil(null);
                 }
                 //if it didn't have a requirement, there is no need to add one because the default has no specific soil anyway
@@ -257,10 +258,10 @@ public class Growing {
             @Override
             public void undo() {
                 if(hadReq) {
-                    GrowthRequirement req = GrowthRequirement.getGrowthRequirement(seed, meta);
+                    GrowthRequirement req = GrowthRequirements.getGrowthRequirement(seed, meta);
                     req.setSoil(oldSoil);
                 } else {
-                    GrowthRequirement.resetGrowthRequirement(seed, meta);
+                    GrowthRequirements.resetGrowthRequirement(seed, meta);
                 }
             }
 
@@ -321,8 +322,8 @@ public class Growing {
                 this.meta = stack.getItemDamage();
                 this.min = min;
                 this.max = max;
-                this.hadReq = !GrowthRequirement.hasDefault(seed, meta);
-                int[] old = GrowthRequirement.getGrowthRequirement(seed, meta).getBrightnessRange();
+                this.hadReq = !GrowthRequirements.hasDefault(seed, meta);
+                int[] old = GrowthRequirements.getGrowthRequirement(seed, meta).getBrightnessRange();
                 oldMin = old[0];
                 oldMax = old[1];
             }
@@ -330,12 +331,12 @@ public class Growing {
             @Override
             public void apply() {
                 if(hadReq) {
-                    GrowthRequirement req = GrowthRequirement.getGrowthRequirement(seed, meta);
+                    GrowthRequirement req = GrowthRequirements.getGrowthRequirement(seed, meta);
                     req.setBrightnessRange(min, max);
                 }
                 else {
                     GrowthRequirement req = (new GrowthRequirement.Builder()).brightnessRange(min, max).build();
-                    GrowthRequirement.setRequirement(seed, meta, req);
+                    GrowthRequirements.setRequirement(seed, meta, req);
                 }
             }
 
@@ -347,11 +348,11 @@ public class Growing {
             @Override
             public void undo() {
                 if(hadReq) {
-                    GrowthRequirement req = GrowthRequirement.getGrowthRequirement(seed, meta);
+                    GrowthRequirement req = GrowthRequirements.getGrowthRequirement(seed, meta);
                     req.setBrightnessRange(oldMin, oldMax);
                 }
                 else {
-                    GrowthRequirement.resetGrowthRequirement(seed, meta);
+                    GrowthRequirements.resetGrowthRequirement(seed, meta);
                 }
             }
 
