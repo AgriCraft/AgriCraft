@@ -155,14 +155,16 @@ public class Growing {
     @ZenClass("mods.agricraft.Growing.Soil")
     public static class Soil {
         @ZenMethod
-        public static void set(ItemStack seed, ItemStack soil) {
+        public static void set(IItemStack seed, IItemStack soil) {
+            ItemStack seedStack = MineTweakerMC.getItemStack(seed);
+            ItemStack soilStack = MineTweakerMC.getItemStack(soil);
             String error = "Invalid first argument: has to be a seed";
-            boolean success = seed.getItem()!=null && seed.getItem() instanceof ItemSeeds;
+            boolean success = seedStack.getItem()!=null && seedStack.getItem() instanceof ItemSeeds;
             if(success) {
                 error = "Invalid second argument: has to be a block";
-                success = soil.getItem()!=null && soil.getItem() instanceof ItemBlock;
+                success = soilStack.getItem()!=null && soilStack.getItem() instanceof ItemBlock;
                 if(success) {
-                    MineTweakerAPI.apply(new SetAction(seed, new BlockWithMeta(((ItemBlock) soil.getItem()).field_150939_a, soil.getItemDamage())));
+                    MineTweakerAPI.apply(new SetAction(seedStack, new BlockWithMeta(((ItemBlock) soilStack.getItem()).field_150939_a, soilStack.getItemDamage())));
                 }
             }
             if(!success) {
@@ -171,9 +173,10 @@ public class Growing {
         }
 
         @ZenMethod
-        public static void clear(ItemStack seed) {
-            if(seed.getItem()!=null && seed.getItem() instanceof ItemSeeds) {
-                MineTweakerAPI.apply(new ClearAction(seed));
+        public static void clear(IItemStack seed) {
+            ItemStack seedStack = MineTweakerMC.getItemStack(seed);
+            if(seedStack.getItem()!=null && seedStack.getItem() instanceof ItemSeeds) {
+                MineTweakerAPI.apply(new ClearAction(seedStack));
             }
             else {
                 MineTweakerAPI.logError("Error when trying to set soil: Invalid argument: has to be a seed");
@@ -285,9 +288,10 @@ public class Growing {
     /**Provides functionality to set the light level requirement for a plant*/
     @ZenClass("mods.agricraft.Growing.Brightness")
     public static class Brightness {
-        @ZenMethod public static void set(ItemStack seed, int min, int max) {
+        @ZenMethod public static void set(IItemStack seed, int min, int max) {
+            ItemStack seedStack = MineTweakerMC.getItemStack(seed);
             String error = "Invalid first argument: has to be a seed";
-            boolean success = seed.getItem()!=null && seed.getItem() instanceof ItemSeeds;
+            boolean success = seedStack.getItem()!=null && seedStack.getItem() instanceof ItemSeeds;
             if(success) {
                 error = "Invalid second argument: has to be larger than or equal to 0";
                 success = min>=0;
@@ -298,7 +302,7 @@ public class Growing {
                         error = "maximum should be higher than the minimum";
                         success = max<16;
                         if(success) {
-                            MineTweakerAPI.apply(new SetAction(seed, min, max));
+                            MineTweakerAPI.apply(new SetAction(seedStack, min, max));
                         }
                     }
                 }
