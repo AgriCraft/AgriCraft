@@ -150,6 +150,7 @@ agricraft_tooltip.magnifyingGlass=Use this to inspect crops
 agricraft_tooltip.closed=Closed
 agricraft_tooltip.open=Open
 agricraft_tooltip.state=State
+agricraft_tooltip.empty=No seed planted
 
 // nei GUI
 agricraft_nei.mutation.title=Crop Mutation

@@ -56,6 +56,10 @@ public class AgriCraftCropDataProvider implements IWailaDataProvider {
             else if(crop.weed) {
                 list.add(StatCollector.translateToLocal("agricraft_tooltip.weeds"));
             }
+            else {
+                list.clear();
+                list.add(StatCollector.translateToLocal("agricraft_tooltip.empty"));
+            }
         }
         return list;
     }
