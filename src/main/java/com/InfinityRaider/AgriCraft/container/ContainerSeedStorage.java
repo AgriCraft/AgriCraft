@@ -44,7 +44,7 @@ public class ContainerSeedStorage extends ContainerAgricraft {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             //try to move item from the container into the player's inventory
-            if (slot instanceof SlotSeedStorage) {
+            if (clickedSlot>=PLAYER_INVENTORY_SIZE) {
                 if (!this.mergeItemStack(itemstack1, 0, 36, false)) {
                     return null;
                 }
@@ -99,5 +99,56 @@ public class ContainerSeedStorage extends ContainerAgricraft {
             }
         }
         return success;
+    }
+
+    /**
+     * Tries to merge an itemstack into a range of slots, return true if the stack was (partly) merged
+     */
+    @Override
+    protected boolean mergeItemStack(ItemStack stack, int startSlot, int endSlot, boolean iterateBackwards) {
+        boolean flag = false;
+        int k = iterateBackwards?endSlot - 1:startSlot;
+        Slot currentSlot;
+        ItemStack currentStack;
+        //look for identical stacks to merge with
+        while (stack.stackSize > 0 && (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot)) {
+            currentSlot = (Slot)this.inventorySlots.get(k);
+            currentStack = currentSlot.getStack();
+            if (currentStack != null && currentStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == currentStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, currentStack)) {
+                int l = currentStack.stackSize + stack.stackSize;
+                //total stacksize is smaller than the limit: merge entire stack into this stack
+                if (l <= stack.getMaxStackSize()) {
+                    stack.stackSize = 0;
+                    currentStack.stackSize = l;
+                    currentSlot.onSlotChanged();
+                    flag = true;
+                }
+                //total stacksize exceeds the limit: merge part of the stack into this stack
+                else if (currentStack.stackSize < stack.getMaxStackSize()) {
+                    stack.stackSize -= stack.getMaxStackSize() - currentStack.stackSize;
+                    currentStack.stackSize = stack.getMaxStackSize();
+                    currentSlot.onSlotChanged();
+                    flag = true;
+                }
+            }
+            k = iterateBackwards?k-1:k+1;
+        }
+        //couldn't completely merge stack with an existing slot, find the first empty slot to put the rest of the stack in
+        if (stack.stackSize > 0) {
+            k = iterateBackwards?endSlot-1:startSlot;
+            while (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot) {
+                currentSlot = (Slot)this.inventorySlots.get(k);
+                currentStack = currentSlot.getStack();
+                if (currentStack == null) {
+                    currentSlot.putStack(stack.copy());
+                    currentSlot.onSlotChanged();
+                    stack.stackSize = 0;
+                    flag = true;
+                    break;
+                }
+                k = iterateBackwards?k-1:k+1;
+            }
+        }
+        return flag;
     }
 }
