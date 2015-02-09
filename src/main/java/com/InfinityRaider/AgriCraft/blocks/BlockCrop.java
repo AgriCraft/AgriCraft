@@ -248,6 +248,11 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         }
     }
 
+    @Override
+    public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
+        this.onBlockClicked(world, x, y, z, player);
+    }
+
     //item drops
     @Override
     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
