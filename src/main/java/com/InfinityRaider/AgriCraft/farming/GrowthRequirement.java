@@ -173,10 +173,8 @@ public class GrowthRequirement {
 
         /** Sets the required soil */
         public Builder soil(BlockWithMeta block) {
-            if(!GrowthRequirements.soils.contains(block)) {
-                GrowthRequirements.soils.add(block);
-            }
-            growthRequirement.soil= block;
+            GrowthRequirements.soils.add(block);
+            growthRequirement.soil = block;
             return this;
         }
 
