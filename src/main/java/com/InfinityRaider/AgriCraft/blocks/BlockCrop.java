@@ -194,6 +194,12 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
         //only make things happen serverside
         if(!world.isRemote) {
+            // When hand rake is enabled and the block has weeds, abandon all hope
+            TileEntity te = world.getTileEntity(x, y, z);
+            if (ConfigurationHandler.enableHandRake && te != null && te instanceof TileEntityCrop && ((TileEntityCrop)te).weed) {
+                return false;
+            }
+
             if(player.isSneaking()) {
                 this.harvest(world, x, y, z);
             }
