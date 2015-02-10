@@ -16,6 +16,7 @@ public class Items {
     public static ItemTrowel trowel;
     public static ItemMagnifyingGlass magnifyingGlass;
     public static ItemDebugger debugItem;
+    public static ItemHandRake handRake;
 
     //fruits
     public static Item nuggetDiamond;
@@ -57,6 +58,8 @@ public class Items {
         }
         debugItem = new ItemDebugger();
         RegisterHelper.registerItem(debugItem, "debugger");
+        handRake = new ItemHandRake();
+        RegisterHelper.registerItem(handRake, Names.Objects.handRake);
         LogHelper.info("Items Registered");
 }
 
