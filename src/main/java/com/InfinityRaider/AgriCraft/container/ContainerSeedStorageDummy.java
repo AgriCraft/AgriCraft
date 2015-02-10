@@ -12,16 +12,8 @@ import net.minecraft.item.ItemStack;
 import java.util.List;
 
 public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
-    public final int maxVertSlots;
-    public final int maxHorSlots;
-
-    protected int activeSlotOffsetX;
-    protected int activeSlotOffsetY;
-
-    public ContainerSeedStorageDummy(InventoryPlayer inventory, int xOffset, int yOffset, int maxVert, int maxHor) {
+    public ContainerSeedStorageDummy(InventoryPlayer inventory, int xOffset, int yOffset) {
         super(inventory, xOffset, yOffset);
-        maxVertSlots = maxVert;
-        maxHorSlots = maxHor;
     }
 
     public abstract boolean addSeedToStorage(ItemStack stack);

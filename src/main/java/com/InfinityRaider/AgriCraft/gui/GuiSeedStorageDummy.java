@@ -23,8 +23,8 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     //the container for this gui
     public ContainerSeedStorageDummy container;
     //data for the active buttons
-    public ItemSeeds activeSeed;
-    public int activeMeta;
+    protected ItemSeeds activeSeed;
+    protected int activeMeta;
     protected int scrollPositionVertical;
     protected int scrollPositionHorizontal;
     //button id constants
@@ -40,6 +40,8 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     protected static final int buttonIdLeftEnd = 9;
     protected static final int buttonIdRightEnd = 10;
     //other button stuff
+    private final int maxVertSlots;
+    private final int maxHorSlots;
     private final int sortButtonX;
     private final int sortButtonY;
     private int lastButtonId = buttonIdRightEnd;
@@ -50,9 +52,11 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     private final int seedSlotButtonOffset_Y;
     protected List<ButtonSeedStorage.SeedSlot> seedSlotButtons;
 
-    public GuiSeedStorageDummy(ContainerSeedStorageDummy container, int sortButtonX, int sortButtonY, int setActiveSeedButtonsX, int setActiveSeedButtonsY, int seedSlotsX, int seedSlotsY) {
+    public GuiSeedStorageDummy(ContainerSeedStorageDummy container, int maxVertSlots, int maxHorSlots, int sortButtonX, int sortButtonY, int setActiveSeedButtonsX, int setActiveSeedButtonsY, int seedSlotsX, int seedSlotsY) {
         super(container);
         this.container = container;
+        this.maxVertSlots = maxVertSlots;
+        this.maxHorSlots = maxHorSlots;
         this.sortButtonX = sortButtonX;
         this.sortButtonY = sortButtonY;
         this.setActiveSeedButtonOffset_X = setActiveSeedButtonsX;
@@ -73,10 +77,10 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     private void initSetActiveSeedButtons() {
-        this.setActiveSeedButtons = new ArrayList<ButtonSeedStorage.SetActiveSeed>();
         if(this.setActiveSeedButtonOffset_X<0 || this.setActiveSeedButtonOffset_Y<0) {
             return;
         }
+        this.setActiveSeedButtons = new ArrayList<ButtonSeedStorage.SetActiveSeed>();
         List<ItemStack> list = container.getSeedEntries();
         if(list!=null) {
             for (int i = 0; i < list.size(); i++) {
@@ -90,8 +94,15 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     private void initSeedSlotButtons() {
+        if(this.activeSeed==null) {
+            return;
+        }
         this.seedSlotButtons = new ArrayList<ButtonSeedStorage.SeedSlot>();
         List<SeedStorageSlot> list = this.container.getSeedSlots(this.activeSeed, this.activeMeta);
+        for(int i=scrollPositionHorizontal;i<Math.min(list.size(),scrollPositionHorizontal+maxHorSlots);i++) {
+            SeedStorageSlot slot = list.get(i);
+            seedSlotButtons.add(new ButtonSeedStorage.SeedSlot(slot.getId(), seedSlotButtonOffset_X+i*16, seedSlotButtonOffset_Y, slot.getStack(this.activeSeed, this.activeMeta)));
+        }
     }
 
     @Override
@@ -152,7 +163,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         }
     }
 
-    protected void scrollVertical(int amount) {
+    private void scrollVertical(int amount) {
         int newPos = this.scrollPositionVertical+amount;
         newPos = newPos<0?0:newPos;
         int maxScrollY = this.getMaxVerticalScroll();
@@ -160,18 +171,18 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         this.scrollPositionVertical = newPos;
     }
 
-    protected int getMaxVerticalScroll() {
+    private int getMaxVerticalScroll() {
         int nrSeedButtons = this.setActiveSeedButtons.size();
         int nrRows = (nrSeedButtons%4>0?1:0) + nrSeedButtons/4;
-        if(nrRows<=this.container.maxVertSlots) {
+        if(nrRows<=this.maxVertSlots) {
             return 0;
         }
         else {
-            return nrRows-container.maxVertSlots;
+            return nrRows-maxVertSlots;
         }
     }
 
-    protected void scrollHorizontal(int amount) {
+    private void scrollHorizontal(int amount) {
         if(this.activeSeed!=null) {
             int newPos = this.scrollPositionHorizontal + amount;
             newPos = newPos < 0 ? 0 : newPos;
@@ -181,13 +192,13 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         }
     }
 
-    protected int getMaxHorizontalScroll() {
+    private int getMaxHorizontalScroll() {
         int nrSlots = this.seedSlotButtons.size();
-        if(nrSlots<=container.maxHorSlots) {
+        if(nrSlots<=maxHorSlots) {
             return 0;
         }
         else {
-            return nrSlots-container.maxHorSlots;
+            return nrSlots-maxHorSlots;
         }
     }
 

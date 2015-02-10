@@ -12,12 +12,11 @@ import java.util.List;
 
 public class ContainerSeedStorageController extends ContainerSeedStorageDummy {
     public TileEntitySeedStorageController te;
+    private static final int invOffsetX = 82;
+    private static final int invOffsetY = 94;
 
     public ContainerSeedStorageController(InventoryPlayer inventory, TileEntitySeedStorageController te) {
-        super(inventory, 82, 94, 10, 6);
-        this.te = te;
-        this.activeSlotOffsetX = 82;
-        this.activeSlotOffsetY = 8;
+        super(inventory, invOffsetX, invOffsetY);
     }
 
 

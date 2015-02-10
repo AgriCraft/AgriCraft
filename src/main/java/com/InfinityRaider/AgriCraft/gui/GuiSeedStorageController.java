@@ -17,7 +17,7 @@ public class GuiSeedStorageController extends GuiSeedStorageDummy {
     private static final int sizeY = 176;
 
     public GuiSeedStorageController(InventoryPlayer inventory, TileEntitySeedStorageController te) {
-        super(new ContainerSeedStorageController(inventory, te), 184, 7, 7, 8, 82, 8);
+        super(new ContainerSeedStorageController(inventory, te), 10, 6, 184, 7, 7, 8, 82, 8);
         this.xSize = sizeX;
         this.ySize = sizeY;
     }

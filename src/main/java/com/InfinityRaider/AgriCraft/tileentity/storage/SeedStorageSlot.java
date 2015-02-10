@@ -8,8 +8,8 @@ public class SeedStorageSlot {
     public NBTTagCompound tag;
     public int count;
 
-    public final int slotId;
-    public final int invId;
+    final int slotId;
+    final int invId;
 
     public SeedStorageSlot(NBTTagCompound tag, int nr, int slotId, int invId) {
         this.tag = tag;
@@ -22,5 +22,9 @@ public class SeedStorageSlot {
         ItemStack stack = new ItemStack(item, count, meta);
         stack.stackTagCompound = tag;
         return stack;
+    }
+
+    public int getId() {
+        return 1000*invId + slotId;
     }
 }
