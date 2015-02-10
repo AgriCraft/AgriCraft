@@ -53,11 +53,9 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
                 for (BlockWithMeta blockWithMeta : GrowthRequirements.defaultSoils) {
                     soils.add(new PositionedStack(new ItemStack(blockWithMeta.getBlock()), Constants.nei_X3, Constants.nei_Y2));
                 }
-                setIngredientPermutation(soils, new ItemStack(Blocks.farmland));
             }
 
             this.requiredType = growthReq.getRequiredType();
-
             if (requiredType != GrowthRequirement.RequirementType.NONE) {
                 requiredBlock = new PositionedStack(growthReq.requiredBlockAsItemStack(), Constants.nei_X3, Constants.nei_Y3);
             }
