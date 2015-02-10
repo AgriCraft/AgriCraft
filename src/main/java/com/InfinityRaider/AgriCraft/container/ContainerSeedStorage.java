@@ -19,18 +19,6 @@ public class ContainerSeedStorage extends ContainerSeedStorageDummy {
     }
 
     public boolean addSeedToStorage(ItemStack seedStack) {
-        boolean success = false;
-
-        return success;
-    }
-
-    @Override
-    public List<ItemStack> getSeedEntries() {
-        return null;
-    }
-
-    @Override
-    public List<SeedStorageSlot> getSeedSlots(ItemSeeds seed, int meta) {
-        return this.te.getSlots(seed, meta);
+        return this.te.addStackToInventory(seedStack);
     }
 }

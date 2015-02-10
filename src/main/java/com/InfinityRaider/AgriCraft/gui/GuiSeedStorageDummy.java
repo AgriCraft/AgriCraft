@@ -153,7 +153,6 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
 
     }
 
-    //TODO: rewrite method
     private void sortByStat(List<SeedStorageSlot> list) {
         String stat=null;
         switch(this.sortStatId) {

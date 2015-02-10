@@ -6,10 +6,7 @@ import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
     public ContainerSeedStorageDummy(InventoryPlayer inventory, int xOffset, int yOffset) {
@@ -17,10 +14,6 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
     }
 
     public abstract boolean addSeedToStorage(ItemStack stack);
-
-    public abstract List<ItemStack> getSeedEntries();
-
-    public abstract List<SeedStorageSlot> getSeedSlots(ItemSeeds seed, int meta);
 
     /**
      * Handles shift clicking in the inventory, return the stack that was transferred

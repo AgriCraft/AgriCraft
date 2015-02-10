@@ -66,7 +66,17 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
 
     @Override
     public ISeedStorageControllable getControllable(ItemStack stack) {
-        return null;
+        ISeedStorageControllable controllable = null;
+        for(ISeedStorageControllable controlled:this.controllables) {
+            if(controlled!=null && controlled.hasLockedSeed()) {
+                ItemStack controlledStack = controlled.getLockedSeed();
+                if(controlledStack.isItemEqual(stack)) {
+                    controllable = controlled;
+                    break;
+                }
+            }
+        }
+        return controllable;
     }
 
 
