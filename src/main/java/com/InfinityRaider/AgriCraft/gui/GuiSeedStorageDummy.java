@@ -23,8 +23,8 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     //the container for this gui
     public ContainerSeedStorageDummy container;
     //data for the active buttons
-    private ItemSeeds activeSeed;
-    private int activeMeta;
+    ItemSeeds activeSeed;
+    int activeMeta;
     private int scrollPositionVertical;
     private int scrollPositionHorizontal;
     private int sortStatId = -1;
@@ -149,7 +149,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         this.updateScreen();
     }
 
-    protected void onSeedSlotClick(int slotIndex) {
+    private void onSeedSlotClick(int slotIndex) {
 
     }
 
@@ -162,7 +162,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
             case buttonIdStrength: stat = Names.NBT.strength; break;
         }
         if(stat!=null && this.activeSeed!=null) {
-        
+
         }
     }
 
@@ -205,25 +205,21 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         }
     }
 
-    //TODO: rewrite method
     protected void drawActiveEntries(ResourceLocation texture, int xOffset, int yOffset) {
-        /*
         int textureSize = 256;
-        ArrayList<SlotSeedStorage> slots = new ArrayList<SlotSeedStorage>();
         GL11.glColor4f(1F, 1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-        for(int i=0;i<slots.size();i++) {
-            SlotSeedStorage slot = slots.get(i);
-            if(slot!=null && slot.getStack()!=null) {
-                int growth = slot.getStack().stackTagCompound.getInteger(Names.NBT.growth);
-                int gain = slot.getStack().stackTagCompound.getInteger(Names.NBT.gain);
-                int strength = slot.getStack().stackTagCompound.getInteger(Names.NBT.strength);
+        for(int i=0;i<this.seedSlotButtons.size();i++) {
+            ButtonSeedStorage.SeedSlot slot = seedSlotButtons.get(i);
+            if(slot!=null && slot.stack!=null) {
+                int growth = slot.stack.stackTagCompound.getInteger(Names.NBT.growth);
+                int gain = slot.stack.stackTagCompound.getInteger(Names.NBT.gain);
+                int strength = slot.stack.stackTagCompound.getInteger(Names.NBT.strength);
                 this.drawTexturedModalRect(xOffset+i*16+1,  yOffset-growth,   0, textureSize-growth,   3, growth);
                 this.drawTexturedModalRect(xOffset+i*16+6,  yOffset-gain,     0, textureSize-gain,     3, gain);
                 this.drawTexturedModalRect(xOffset+i*16+11, yOffset-strength, 0, textureSize-strength, 3, strength);
             }
         }
-        */
     }
 
     protected void setActiveSeed(ButtonSeedStorage.SetActiveSeed button) {
