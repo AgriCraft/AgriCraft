@@ -23,10 +23,11 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     //the container for this gui
     public ContainerSeedStorageDummy container;
     //data for the active buttons
-    protected ItemSeeds activeSeed;
-    protected int activeMeta;
-    protected int scrollPositionVertical;
-    protected int scrollPositionHorizontal;
+    private ItemSeeds activeSeed;
+    private int activeMeta;
+    private int scrollPositionVertical;
+    private int scrollPositionHorizontal;
+    private int sortStatId = -1;
     //button id constants
     protected static final int buttonIdGrowth = 0;
     protected static final int buttonIdGain = 1;
@@ -99,6 +100,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         }
         this.seedSlotButtons = new ArrayList<ButtonSeedStorage.SeedSlot>();
         List<SeedStorageSlot> list = this.container.getSeedSlots(this.activeSeed, this.activeMeta);
+        this.sortByStat(list);
         for(int i=scrollPositionHorizontal;i<Math.min(list.size(),scrollPositionHorizontal+maxHorSlots);i++) {
             SeedStorageSlot slot = list.get(i);
             seedSlotButtons.add(new ButtonSeedStorage.SeedSlot(slot.getId(), seedSlotButtonOffset_X+i*16, seedSlotButtonOffset_Y, slot.getStack(this.activeSeed, this.activeMeta)));
@@ -107,14 +109,14 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-       if(button instanceof ButtonSeedStorage.SetActiveSeed) {
+        if(button instanceof ButtonSeedStorage.SetActiveSeed) {
             this.setActiveSeed((ButtonSeedStorage.SetActiveSeed) button);
         }
         else if(button instanceof ButtonSeedStorage.SeedSlot) {
             this.onSeedSlotClick(button.id);
         }
         else if (button.id <= buttonIdStrength && this.activeSeed != null) {
-            this.sortByStat(button.id);
+            this.sortStatId = button.id;
 
         } else {
             switch (button.id) {
@@ -144,6 +146,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
                     break;
             }
         }
+        this.updateScreen();
     }
 
     protected void onSeedSlotClick(int slotIndex) {
@@ -151,15 +154,15 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     //TODO: rewrite method
-    private void sortByStat(int id) {
+    private void sortByStat(List<SeedStorageSlot> list) {
         String stat=null;
-        switch(id) {
+        switch(this.sortStatId) {
             case buttonIdGrowth: stat = Names.NBT.growth; break;
             case buttonIdGain: stat = Names.NBT.gain; break;
             case buttonIdStrength: stat = Names.NBT.strength; break;
         }
         if(stat!=null && this.activeSeed!=null) {
-
+        
         }
     }
 
