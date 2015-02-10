@@ -58,8 +58,10 @@ public class Items {
         }
         debugItem = new ItemDebugger();
         RegisterHelper.registerItem(debugItem, "debugger");
-        handRake = new ItemHandRake();
-        RegisterHelper.registerItem(handRake, Names.Objects.handRake);
+        if (ConfigurationHandler.enableHandRake) {
+            handRake = new ItemHandRake();
+            RegisterHelper.registerItem(handRake, Names.Objects.handRake);
+        }
         LogHelper.info("Items Registered");
 }
 
