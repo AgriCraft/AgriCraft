@@ -18,10 +18,9 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import java.util.ArrayList;
 import java.util.List;
 
-@ZenClass("mods.agricraft.Growing")
 public class Growing {
     /**Provides functionality to add and remove fertile soils*/
-    @ZenClass("mods.agricraft.Growing.FertileSoils")
+    @ZenClass("mods.agricraft.growing.FertileSoils")
     public static class FertileSoils {
         @ZenMethod
         public static void add(IItemStack soil) {
@@ -152,7 +151,7 @@ public class Growing {
     }
 
     /**Provides functionality to set or clear a specific soil for a plant*/
-    @ZenClass("mods.agricraft.Growing.Soil")
+    @ZenClass("mods.agricraft.growing.Soil")
     public static class Soil {
         @ZenMethod
         public static void set(IItemStack seed, IItemStack soil) {
@@ -239,7 +238,7 @@ public class Growing {
     }
 
     /**Provides functionality to set the light level requirement for a plant*/
-    @ZenClass("mods.agricraft.Growing.Brightness")
+    @ZenClass("mods.agricraft.growing.Brightness")
     public static class Brightness {
         @ZenMethod public static void set(IItemStack seed, int min, int max) {
             ItemStack seedStack = MineTweakerMC.getItemStack(seed);
@@ -317,7 +316,7 @@ public class Growing {
     }
 
     /**Provides functionality to set or clear a base block requirement for a plant*/
-    @ZenClass("mods.agricraft.Growing.BaseBlock")
+    @ZenClass("mods.agricraft.growing.BaseBlock")
     public static class BaseBlock {
 
         @ZenMethod
