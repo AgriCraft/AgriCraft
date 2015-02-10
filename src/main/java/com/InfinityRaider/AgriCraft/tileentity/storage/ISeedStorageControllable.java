@@ -4,13 +4,18 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ISeedStorageControllable extends IInventory{
     /**
      * Returns a list of all the stacks in this inventory, all the slots in this inventory must have the same type of seed
      */
-    public ArrayList<ItemStack> getInventory();
+    public List<ItemStack> getInventory();
+
+    /**
+     * Returns a list of all the slots in the inventory corresponding to that seed
+     */
+    public List<SeedStorageSlot> getSlots(ItemSeeds seed, int meta);
 
     /**
      * Returns the coordinates of the controller controlling this controllable

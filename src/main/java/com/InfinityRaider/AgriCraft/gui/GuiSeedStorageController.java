@@ -12,17 +12,14 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiSeedStorageController extends GuiSeedStorageDummy {
-    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedStorageController.png");
+    private static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedStorageController.png");
+    private static final int sizeX = 250;
+    private static final int sizeY = 176;
 
     public GuiSeedStorageController(InventoryPlayer inventory, TileEntitySeedStorageController te) {
         super(new ContainerSeedStorageController(inventory, te), 184, 7, 7, 8, 82, 8);
-        this.xSize = 250;
-        this.ySize = 176;
-    }
-
-    @Override
-    public void drawScreen(int x, int y, float f) {
-        super.drawScreen(x, y, f);
+        this.xSize = sizeX;
+        this.ySize = sizeY;
     }
 
     @Override
@@ -39,11 +36,5 @@ public class GuiSeedStorageController extends GuiSeedStorageDummy {
         if(this.activeSeed!=null) {
             this.drawActiveEntries(this.texture, 82, 35);
         }
-    }
-
-    //opening the gui doesn't pause the game
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 }

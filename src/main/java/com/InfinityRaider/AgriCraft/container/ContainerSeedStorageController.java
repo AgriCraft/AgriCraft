@@ -1,17 +1,13 @@
 package com.InfinityRaider.AgriCraft.container;
 
+import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerSeedStorageController extends ContainerSeedStorageDummy {
@@ -39,6 +35,11 @@ public class ContainerSeedStorageController extends ContainerSeedStorageDummy {
     @Override
     public List<ItemStack> getSeedEntries() {
         return null;
+    }
+
+    @Override
+    public List<SeedStorageSlot> getSeedSlots(ItemSeeds seed, int meta) {
+        return this.te.getSlots(seed, meta);
     }
 
     /**

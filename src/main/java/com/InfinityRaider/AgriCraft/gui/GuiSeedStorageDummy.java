@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.gui;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -89,7 +90,8 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     private void initSeedSlotButtons() {
-
+        this.seedSlotButtons = new ArrayList<ButtonSeedStorage.SeedSlot>();
+        List<SeedStorageSlot> list = this.container.getSeedSlots(this.activeSeed, this.activeMeta);
     }
 
     @Override
@@ -138,7 +140,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     //TODO: rewrite method
-    protected void sortByStat(int id) {
+    private void sortByStat(int id) {
         String stat=null;
         switch(id) {
             case buttonIdGrowth: stat = Names.NBT.growth; break;
@@ -219,8 +221,14 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         this.activeMeta = stack.getItemDamage();
     }
 
+    //opening the gui doesn't pause the game
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
+
     //set active seed button class
-    protected static abstract class ButtonSeedStorage extends GuiButton {
+    private static abstract class ButtonSeedStorage extends GuiButton {
         public ItemStack stack;
 
         public ButtonSeedStorage(int id, int xPos, int yPos, ItemStack stack) {
