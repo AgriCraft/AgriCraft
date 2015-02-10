@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
-import com.InfinityRaider.AgriCraft.container.SlotSeedStorage;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -120,28 +119,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             }
         }
         return stacks;
-    }
-
-    @Override
-    public void setInventory(List<SlotSeedStorage> list) {
-        this.tags = new ArrayList<NBTTagCompound>();
-        this.amounts = new ArrayList<Integer>();
-        if(list!=null) {
-          for(int i=0;i<list.size();i++) {
-              tags.add(list.get(i).getStack().stackTagCompound);
-              amounts.add(list.get(i).count);
-          }
-        }
-        this.markDirty();
-    }
-
-    @Override
-    public List<SlotSeedStorage> getInventorySlots() {
-        ArrayList<SlotSeedStorage> slots = new ArrayList<SlotSeedStorage>();
-        for(int i=0;i<this.tags.size();i++) {
-            slots.add(new SlotSeedStorage(this, this.getControllableID()*1000+i, this.getStackInSlot(i)));
-        }
-        return slots;
     }
 
     @Override

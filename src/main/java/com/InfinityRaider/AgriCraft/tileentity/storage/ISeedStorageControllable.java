@@ -1,29 +1,16 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
-import com.InfinityRaider.AgriCraft.container.SlotSeedStorage;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public interface ISeedStorageControllable extends IInventory{
     /**
      * Returns a list of all the stacks in this inventory, all the slots in this inventory must have the same type of seed
      */
     public ArrayList<ItemStack> getInventory();
-
-    /**
-     * Sets the inventory based off a lit of slots, pass null in the arguments to clear the inventory
-     */
-    public void setInventory(List<SlotSeedStorage> list);
-
-    /**
-     * Returns a list of all the slots in this inventory, all the slots in this inventory must have the same type of seed
-     */
-    public List<SlotSeedStorage> getInventorySlots();
 
     /**
      * Returns the coordinates of the controller controlling this controllable

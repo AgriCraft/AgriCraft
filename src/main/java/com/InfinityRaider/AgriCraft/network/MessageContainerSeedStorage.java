@@ -73,8 +73,6 @@ public class MessageContainerSeedStorage implements IMessage {
             Container container = message.player.openContainer;
             if(container!=null && container instanceof ContainerSeedStorageDummy) {
                 ContainerSeedStorageDummy storage = (ContainerSeedStorageDummy) container;
-                storage.clearActiveEntries();
-                storage.setActiveEntries(new ItemStack(message.item, 1, message.meta), message.offset);
                 storage.detectAndSendChanges();
             }
             return null;

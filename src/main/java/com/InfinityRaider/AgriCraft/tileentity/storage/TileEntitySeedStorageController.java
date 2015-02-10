@@ -1,60 +1,13 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageController;
-import com.InfinityRaider.AgriCraft.container.SlotSeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class TileEntitySeedStorageController extends TileEntityCustomWood implements  ISeedStorageController{
     private ArrayList<ISeedStorageControllable> controllables = new ArrayList<ISeedStorageControllable>();
     public boolean isControlling;
-
-    @Override
-    public Map<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> getInventoryMap(ContainerSeedStorageController container) {
-        Map<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> map = new HashMap<ItemSeeds, Map<Integer, List<SlotSeedStorage>>>();
-        for(ISeedStorageControllable controllable:controllables) {
-            if (controllable.hasLockedSeed()) {
-                List<SlotSeedStorage> list = controllable.getInventorySlots();
-                ItemSeeds seed = (ItemSeeds) controllable.getLockedSeed().getItem();
-                int seedMeta = controllable.getLockedSeed().getItemDamage();
-                if (map.get(seed) == null) {
-                    Map<Integer, List<SlotSeedStorage>> subMap = new HashMap<Integer, List<SlotSeedStorage>>();
-                    subMap.put(seedMeta, list);
-                    map.put(seed, subMap);
-                } else {
-                    Map<Integer, List<SlotSeedStorage>> subMap = map.get(seed);
-                    if (subMap == null) {
-                        subMap = new HashMap<Integer, List<SlotSeedStorage>>();
-                    }
-                    subMap.put(seedMeta, list);
-                }
-            }
-        }
-        return map;
-    }
-
-    @Override
-    public void setControlledInventories(Map<ItemSeeds, Map<Integer, List<SlotSeedStorage>>> map) {
-        for(ISeedStorageControllable controllable:this.controllables) {
-            if (controllable.hasLockedSeed()) {
-                ItemSeeds seed = (ItemSeeds) controllable.getLockedSeed().getItem();
-                int meta = controllable.getLockedSeed().getItemDamage();
-                Map<Integer, List<SlotSeedStorage>> metaMap = map.get(seed);
-                if(metaMap!=null) {
-                    controllable.setInventory(metaMap.get(meta));
-                }
-                else {
-                    controllable.setInventory(null);
-                }
-            }
-        }
-    }
 
     @Override
     public void addControllable(ISeedStorageControllable controllable) {
