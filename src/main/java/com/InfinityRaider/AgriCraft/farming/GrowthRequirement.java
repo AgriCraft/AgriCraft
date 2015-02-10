@@ -134,6 +134,19 @@ public class GrowthRequirement {
         this.maxBrightness = max;
     }
 
+    public void setRequiredBlock(BlockWithMeta requiredBlock, RequirementType requirementType, boolean oreDict) {
+        this.requiredBlock = requiredBlock;
+        this.requiredType = requirementType;
+        this.oreDict = oreDict;
+    }
+
+    public BlockWithMeta getRequiredBlock() {
+        return requiredBlock;
+    }
+
+    public boolean isOreDict() {
+        return oreDict;
+    }
 
     //Builder class
     //-------------

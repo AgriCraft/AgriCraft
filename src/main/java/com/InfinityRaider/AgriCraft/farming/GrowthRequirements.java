@@ -4,10 +4,7 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import com.InfinityRaider.AgriCraft.utility.*;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -22,7 +19,7 @@ import java.util.*;
  */
 public class GrowthRequirements {
 
-    private static Map<ItemSeeds, Map<Integer, GrowthRequirement>> overrides = new HashMap<ItemSeeds, Map<Integer, GrowthRequirement>>();
+    private static Map<ItemWithMeta, GrowthRequirement> overrides = new HashMap<ItemWithMeta, GrowthRequirement>();
 
     // Package private so GrowthRequirement can access it
     static Set<BlockWithMeta> defaultSoils = new HashSet<BlockWithMeta>();
@@ -69,54 +66,19 @@ public class GrowthRequirements {
         defaultSoils.removeAll(list);
     }
 
-    /** Finds the growth requirement for a seed */
+    /**
+     * @return growthRequirement of the given seed.
+     */
     public static GrowthRequirement getGrowthRequirement(ItemSeeds seed, int meta) {
-        if(SeedHelper.getPlant(seed) instanceof BlockModPlant) {
+        if (SeedHelper.getPlant(seed) instanceof BlockModPlant) {
             return ((BlockModPlant) SeedHelper.getPlant(seed)).getGrowthRequirement();
         }
-        else if (overrides.get(seed)!=null && overrides.get(seed).get(meta)!=null) {
-            return overrides.get(seed).get(meta);
-        }
-        return GrowthRequirement.DEFAULT;
-    }
 
-    /** Removes the requirement for a seed */
-    public static void resetGrowthRequirement(ItemSeeds seed, int meta) {
-        if(seed instanceof ItemModSeed) {
-            ((ItemModSeed) seed).getPlant().setGrowthRequirement(GrowthRequirement.DEFAULT);
+        GrowthRequirement growthRequirement = overrides.get(new ItemWithMeta(seed, meta));
+        if (growthRequirement == null) {
+            growthRequirement = new GrowthRequirement.Builder().build();
+            overrides.put(new ItemWithMeta(seed, meta), growthRequirement);
         }
-        else {
-            Map<Integer, GrowthRequirement> metaMap = overrides.get(seed);
-            if(metaMap!=null) {
-                metaMap.remove(meta);
-                if(metaMap.size()==0) {
-                    overrides.remove(seed);
-                }
-            }
-        }
-    }
-
-    /** Checks if a seed is using the default requirements */
-    public static boolean hasDefault(ItemSeeds seed, int meta) {
-        if(SeedHelper.getPlant(seed) instanceof BlockModPlant) {
-            return false;
-        }
-        if (overrides.get(seed)!=null && overrides.get(seed).get(meta)!=null) {
-            return false;
-        }
-        return true;
-    }
-
-    /** adds a new requirement to a seed */
-    public static void setRequirement(ItemSeeds seed, int meta, GrowthRequirement req) {
-        Map<Integer, GrowthRequirement> metaMap = overrides.get(seed);
-        if(metaMap!=null) {
-            metaMap.put(meta, req);
-        }
-        else {
-            metaMap = new HashMap<Integer, GrowthRequirement>();
-            metaMap.put(meta, req);
-            overrides.put(seed, metaMap);
-        }
+        return growthRequirement;
     }
 }

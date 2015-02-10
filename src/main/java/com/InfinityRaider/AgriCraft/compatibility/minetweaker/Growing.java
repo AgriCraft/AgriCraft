@@ -176,7 +176,7 @@ public class Growing {
         public static void clear(IItemStack seed) {
             ItemStack seedStack = MineTweakerMC.getItemStack(seed);
             if(seedStack.getItem()!=null && seedStack.getItem() instanceof ItemSeeds) {
-                MineTweakerAPI.apply(new ClearAction(seedStack));
+                MineTweakerAPI.apply(new SetAction(seedStack, null));
             }
             else {
                 MineTweakerAPI.logError("Error when trying to set soil: Invalid argument: has to be a seed");
@@ -184,11 +184,16 @@ public class Growing {
         }
 
         private static class SetAction implements IUndoableAction {
+
+            private final ItemStack seedStack;
             private final ItemSeeds seed;
             private final int meta;
             private final BlockWithMeta soil;
 
+            private BlockWithMeta oldSoil;
+
             public SetAction(ItemStack seed, BlockWithMeta block) {
+                this.seedStack = seed;
                 this.seed = (ItemSeeds) seed.getItem();
                 this.meta = seed.getItemDamage();
                 this.soil = block;
@@ -196,61 +201,9 @@ public class Growing {
 
             @Override
             public void apply() {
-                if(GrowthRequirements.hasDefault(seed, meta)) {
-                    GrowthRequirement req = (new GrowthRequirement.Builder()).soil(this.soil).build();
-                    GrowthRequirements.setRequirement(this.seed, this.meta, req);
-                }
-                else {
-                    GrowthRequirement req = GrowthRequirements.getGrowthRequirement(this.seed, this.meta);
-                    req.setSoil(soil);
-                }
-            }
-
-            @Override
-            public boolean canUndo() {
-                return false;
-            }
-
-            @Override
-            public void undo() {
-            }
-
-            @Override
-            public String describe() {
-                return "Setting soil for "+(new ItemStack(seed, 1, meta)).getDisplayName() + " to "+soil.toStack().getDisplayName();
-            }
-
-            @Override
-            public String describeUndo() {
-                return "Undoing set soil for "+(new ItemStack(seed, 1, meta)).getDisplayName() + " to "+soil.toStack().getDisplayName();
-            }
-
-            @Override
-            public Object getOverrideKey() {
-                return null;
-            }
-        }
-
-        private static class ClearAction implements IUndoableAction {
-            private final ItemSeeds seed;
-            private final int meta;
-            private final boolean hadReq;
-            private final BlockWithMeta oldSoil;
-
-            public ClearAction(ItemStack stack) {
-                this.seed = (ItemSeeds) stack.getItem();
-                this.meta = stack.getItemDamage();
-                this.hadReq = !GrowthRequirements.hasDefault(seed, meta);
-                this.oldSoil = GrowthRequirements.getGrowthRequirement(seed, meta).getSoil();
-            }
-
-            @Override
-            public void apply() {
-                if(hadReq) {
-                    GrowthRequirement req = GrowthRequirements.getGrowthRequirement(seed, meta);
-                    req.setSoil(null);
-                }
-                //if it didn't have a requirement, there is no need to add one because the default has no specific soil anyway
+                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, meta);
+                oldSoil = growthReq.getSoil();
+                growthReq.setSoil(soil);
             }
 
             @Override
@@ -260,22 +213,20 @@ public class Growing {
 
             @Override
             public void undo() {
-                if(hadReq) {
-                    GrowthRequirement req = GrowthRequirements.getGrowthRequirement(seed, meta);
-                    req.setSoil(oldSoil);
-                } else {
-                    GrowthRequirements.resetGrowthRequirement(seed, meta);
-                }
+                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, meta);
+                growthReq.setSoil(oldSoil);
             }
 
             @Override
             public String describe() {
-                return "Clearing soil for "+(new ItemStack(seed, 1, meta)).getDisplayName();
+                String soilText = soil != null ? soil.toStack().getDisplayName() : "DEFAULT";
+                return "Setting soil for " + seedStack.getDisplayName() + " to " + soilText;
             }
 
             @Override
             public String describeUndo() {
-                return "Resetting cleared soil for "+(new ItemStack(seed, 1, meta)).getDisplayName();
+                String soilText = oldSoil != null ? oldSoil.toStack().getDisplayName() : "DEFAULT";
+                return "Reverting soil for " + seedStack.getDisplayName() + " to " + soilText;
             }
 
             @Override
@@ -283,6 +234,8 @@ public class Growing {
                 return null;
             }
         }
+
+
     }
 
     /**Provides functionality to set the light level requirement for a plant*/
@@ -313,35 +266,26 @@ public class Growing {
         }
 
         private static class SetAction implements IUndoableAction {
+
             private final ItemSeeds seed;
             private final int meta;
             private final int min;
             private final int max;
-            private final boolean hadReq;
-            private final int oldMin;
-            private final int oldMax;
+
+            private int[] old;
 
             public SetAction(ItemStack stack, int min, int max) {
                 this.seed = (ItemSeeds) stack.getItem();
                 this.meta = stack.getItemDamage();
                 this.min = min;
                 this.max = max;
-                this.hadReq = !GrowthRequirements.hasDefault(seed, meta);
-                int[] old = GrowthRequirements.getGrowthRequirement(seed, meta).getBrightnessRange();
-                oldMin = old[0];
-                oldMax = old[1];
             }
 
             @Override
             public void apply() {
-                if(hadReq) {
-                    GrowthRequirement req = GrowthRequirements.getGrowthRequirement(seed, meta);
-                    req.setBrightnessRange(min, max);
-                }
-                else {
-                    GrowthRequirement req = (new GrowthRequirement.Builder()).brightnessRange(min, max).build();
-                    GrowthRequirements.setRequirement(seed, meta, req);
-                }
+                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, meta);
+                old = growthReq.getBrightnessRange();
+                growthReq.setBrightnessRange(min, max);
             }
 
             @Override
@@ -351,13 +295,8 @@ public class Growing {
 
             @Override
             public void undo() {
-                if(hadReq) {
-                    GrowthRequirement req = GrowthRequirements.getGrowthRequirement(seed, meta);
-                    req.setBrightnessRange(oldMin, oldMax);
-                }
-                else {
-                    GrowthRequirements.resetGrowthRequirement(seed, meta);
-                }
+                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, meta);
+                growthReq.setBrightnessRange(old[0], old[1]);
             }
 
             @Override
@@ -367,7 +306,7 @@ public class Growing {
 
             @Override
             public String describeUndo() {
-                return "Resetting brightness range of "+(new ItemStack(seed, 1, meta)).getDisplayName() + " to ["+oldMin+", "+oldMax+"[";
+                return "Resetting brightness range of "+(new ItemStack(seed, 1, meta)).getDisplayName() + " to ["+old[0]+", "+old[1]+"[";
             }
 
             @Override
@@ -381,5 +320,102 @@ public class Growing {
     @ZenClass("mods.agricraft.Growing.BaseBlock")
     public static class BaseBlock {
 
+        @ZenMethod
+        public static void set(IItemStack seed, IItemStack base, int type, boolean oreDict) {
+            if (type < 1 || type > 2) {
+                MineTweakerAPI.logError("Type needs to be either 1 (below) or 2 (nearby)");
+                return;
+            }
+
+            ItemStack seedIS = MineTweakerMC.getItemStack(seed);
+            if (seedIS == null || !(seedIS.getItem() instanceof ItemSeeds)) {
+                MineTweakerAPI.logError("Seeds has to be non-null and of type ItemSeeds.");
+                return;
+            }
+
+            ItemStack baseIS = MineTweakerMC.getItemStack(base);
+            if (baseIS == null || !(baseIS.getItem() instanceof ItemBlock)) {
+                MineTweakerAPI.logError("Base has to be non-null and ot type ItemBlock.");
+                return;
+            }
+
+            BlockWithMeta baseWM = new BlockWithMeta(((ItemBlock) baseIS.getItem()).field_150939_a, baseIS.getItemDamage());
+            GrowthRequirement.RequirementType reqType = type == 1 ? GrowthRequirement.RequirementType.BELOW
+                    : GrowthRequirement.RequirementType.NEARBY;
+            MineTweakerAPI.apply(new SetAction(seedIS, baseWM, reqType, oreDict));
+        }
+
+        @ZenMethod
+        public static void clear(IItemStack seed) {
+            ItemStack seedIS = MineTweakerMC.getItemStack(seed);
+            if (seedIS == null || !(seedIS.getItem() instanceof ItemSeeds)) {
+                MineTweakerAPI.logError("Seeds has to be non-null and of type ItemSeeds.");
+                return;
+            }
+
+            MineTweakerAPI.apply(new SetAction(seedIS, null, GrowthRequirement.RequirementType.NONE, false));
+        }
+
+        private static class SetAction implements IUndoableAction {
+
+            private final ItemStack seedStack;
+            private final ItemSeeds seed;
+            private final int seedMeta;
+            private final BlockWithMeta base;
+            private final GrowthRequirement.RequirementType type;
+            private final boolean oreDict;
+
+            private BlockWithMeta oldReqBlock;
+            private GrowthRequirement.RequirementType oldRequiredType;
+            private boolean oldReqBlockIsOreDict;
+
+            public SetAction(ItemStack seed, BlockWithMeta base, GrowthRequirement.RequirementType type, boolean oreDict) {
+                this.seedStack = seed;
+                this.seed = (ItemSeeds) seed.getItem();
+                this.seedMeta = seed.getItemDamage();
+                this.base = base;
+                this.type = type;
+                this.oreDict = oreDict;
+            }
+
+            @Override
+            public void apply() {
+                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, seedMeta);
+                oldReqBlock = growthReq.getRequiredBlock();
+                oldRequiredType = growthReq.getRequiredType();
+                oldReqBlockIsOreDict = growthReq.isOreDict();
+                growthReq.setRequiredBlock(base, type, oreDict);
+            }
+
+            @Override
+            public boolean canUndo() {
+                return true;
+            }
+
+            @Override
+            public void undo() {
+                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, seedMeta);
+                growthReq.setRequiredBlock(oldReqBlock, oldRequiredType, oldReqBlockIsOreDict);
+            }
+
+            @Override
+            public String describe() {
+                String blockString = base != null ? base.getBlock().getLocalizedName() : "DEFAULT";
+                return "Setting base block requirement for seed " + seedStack.getDisplayName() + " to "
+                        + blockString + " (" + type.toString() +  ")";
+            }
+
+            @Override
+            public String describeUndo() {
+                String blockString = oldReqBlock != null ? oldReqBlock.getBlock().getLocalizedName() : "DEFAULT";
+                return "Resetting base block requirement for seed " + seedStack.getDisplayName() + " to "
+                        + blockString + " (" + oldRequiredType.toString() + ")";
+            }
+
+            @Override
+            public Object getOverrideKey() {
+                return null;
+            }
+        }
     }
 }
