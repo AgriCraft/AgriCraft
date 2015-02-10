@@ -5,6 +5,7 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -12,6 +13,7 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -45,18 +47,15 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y1);
             this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y1);
 
-            BlockBush blockBush = SeedHelper.getPlant((ItemSeeds) mutation.result.getItem());
-            if (blockBush instanceof BlockModPlant) {
-                BlockModPlant blockPlant = (BlockModPlant) blockBush;
-                GrowthRequirement growthReq = blockPlant.getGrowthRequirement();
-                Block soilBlock = growthReq.getSoil()==null?null:growthReq.getSoil().getBlock();
 
-                this.soil = new PositionedStack(new ItemStack(soilBlock), Constants.nei_X3, Constants.nei_Y2);
-                this.requiredType = growthReq.getRequiredType();
+            GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement((ItemSeeds) result.item.getItem(), result.item.getItemDamage());
+            Block soilBlock = growthReq.getSoil()==null? Blocks.farmland:growthReq.getSoil().getBlock();
 
-                if (requiredType != GrowthRequirement.RequirementType.NONE) {
-                    requiredBlock = new PositionedStack(growthReq.requiredBlockAsItemStack(), Constants.nei_X3, Constants.nei_Y3);
-                }
+            this.soil = new PositionedStack(new ItemStack(soilBlock), Constants.nei_X3, Constants.nei_Y2);
+            this.requiredType = growthReq.getRequiredType();
+
+            if (requiredType != GrowthRequirement.RequirementType.NONE) {
+                requiredBlock = new PositionedStack(growthReq.requiredBlockAsItemStack(), Constants.nei_X3, Constants.nei_Y3);
             }
         }
 
