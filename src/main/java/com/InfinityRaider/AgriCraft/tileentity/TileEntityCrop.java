@@ -1,19 +1,17 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
@@ -77,9 +75,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             //possible new plant
             ItemSeeds result=null;
             int resultMeta=0;
-            int mutationId=0;
-            Block req=null;
-            int reqMeta = 0;
             double chance=0;
             //find neighbours
             TileEntityCrop[] neighbours = this.findNeighbours();
@@ -99,15 +94,13 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
                     if(crossOvers[index].result.getItem()!=null) {
                         result = (ItemSeeds) crossOvers[index].result.getItem();
                         resultMeta = crossOvers[index].result.getItemDamage();
-                        mutationId = crossOvers[index].id;
-                        req = crossOvers[index].requirement;
-                        reqMeta = crossOvers[index].requirementMeta;
                         chance = crossOvers[index].chance;
+                        didMutate = true;
                     }
                 }
             }
             //try to set the new plant
-            if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && this.canMutate(result, resultMeta, mutationId, req, reqMeta)) {
+            if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && GrowthRequirements.getGrowthRequirement(result, resultMeta).canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord)) {
                 if(Math.random()<chance) {
                     this.crossCrop = false;
                     int[] stats = MutationHandler.getStats(neighbours, didMutate);
@@ -130,21 +123,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         neighbours[2] = (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1) : null;
         neighbours[3] = (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1) : null;
         return neighbours;
-    }
-
-    //checks if a plant can mutate
-    private boolean canMutate(ItemSeeds seed, int seedMeta, int id, Block req, int reqMeta) {
-        if(this.canGrow(seed, seedMeta)) {
-            //id = 0: no requirement
-            //id = 1: block below farmland has to be the req block
-            //id = 2: block near has to be the req block
-            switch(id) {
-                case 0: return true;
-                case 1: return (this.worldObj.getBlock(this.xCoord, this.yCoord-2, this.zCoord)==req && this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord)==reqMeta);
-                case 2: return isBlockNear(req, reqMeta);
-            }
-        }
-        return false;
     }
 
     //checks if a given block is near
@@ -242,27 +220,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //check if the crop is fertile
     public boolean isFertile() {
-        return this.canGrow((ItemSeeds) this.seed, this.seedMeta);
+        return GrowthRequirements.getGrowthRequirement((ItemSeeds) this.seed, this.seedMeta).canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
     }
 
     //check the block if the plant is mature
     public boolean isMature() {
         return !this.worldObj.isRemote && this.worldObj.getBlock(xCoord, yCoord, zCoord) != null && this.worldObj.getBlock(xCoord, yCoord, zCoord) instanceof BlockCrop && ((BlockCrop) this.worldObj.getBlock(xCoord, yCoord, zCoord)).isMature(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-    }
-
-    //check if the seed can grow
-    private boolean canGrow(ItemSeeds seed, int seedMeta) {
-        BlockBush plant = SeedHelper.getPlant(seed);
-        Block soil = this.worldObj.getBlock(this.xCoord,this.yCoord-1,this.zCoord);
-        int soilMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord - 1, this.zCoord);
-        if(SeedHelper.isCorrectSoil(soil, soilMeta, seed, seedMeta) && this.worldObj.getBlockLightValue(this.xCoord,this.yCoord+1,this.zCoord)>8) {
-            if(plant instanceof BlockModPlant) {
-                BlockModPlant blockModPlant = (BlockModPlant) plant;
-                return blockModPlant.base == null || OreDictHelper.isSameOre(blockModPlant.base, blockModPlant.baseMeta, this.worldObj.getBlock(this.xCoord, this.yCoord - 2, this.zCoord), this.worldObj.getBlockMetadata(this.xCoord, this.yCoord-2, this.zCoord));
-            }
-            return true;
-        }
-        return false;
     }
 
     public ItemStack getSeedStack() {

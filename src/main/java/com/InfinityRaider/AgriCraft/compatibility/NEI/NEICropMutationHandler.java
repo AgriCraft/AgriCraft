@@ -4,13 +4,14 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockBush;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -27,9 +28,6 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     private static String id = "cropMutation";
 
     private static final int COLOR_BLACK = 1644054;
-    private static final int REQ_NONE = 0;
-    private static final int REQ_BELOW = 1;
-    private static final int REQ_NEARBY = 2;
 
     //the class defining a mutation recipe (must be contained in a TemplateRecipeHandler class)
     public class CachedCropMutationRecipe extends TemplateRecipeHandler.CachedRecipe {
@@ -39,7 +37,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         PositionedStack result;
         PositionedStack soil;
         PositionedStack requiredBlock;
-        int requiredType = REQ_NONE;
+        GrowthRequirement.RequirementType requiredType;
 
         //constructor
         public CachedCropMutationRecipe(Mutation mutation) {
@@ -47,25 +45,18 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y1);
             this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y1);
 
-            BlockModPlant blockPlant = (BlockModPlant) SeedHelper.getPlant((ItemSeeds) mutation.result.getItem());
-            Block soilBlock = blockPlant.soil != null ? blockPlant.soil : Blocks.farmland;
+            BlockBush blockBush = SeedHelper.getPlant((ItemSeeds) mutation.result.getItem());
+            if (blockBush instanceof BlockModPlant) {
+                BlockModPlant blockPlant = (BlockModPlant) blockBush;
+                GrowthRequirement growthReq = blockPlant.getGrowthRequirement();
+                Block soilBlock = growthReq.getSoil()==null?null:growthReq.getSoil().getBlock();
 
-            this.soil = new PositionedStack(new ItemStack(soilBlock), Constants.nei_X3, Constants.nei_Y2);
-            
-            switch(mutation.id) {
-                case 0:
-                    // Built-in mutations have their information in the BlockModPlant
-                    if (blockPlant.base != null) {
-                        requiredBlock = new PositionedStack(new ItemStack(blockPlant.base, 1, blockPlant.baseMeta), Constants.nei_X3, Constants.nei_Y3);
-                        requiredType = REQ_BELOW;
-                    }
-                    break;
+                this.soil = new PositionedStack(new ItemStack(soilBlock), Constants.nei_X3, Constants.nei_Y2);
+                this.requiredType = growthReq.getRequiredType();
 
-                case 1:
-                case 2:
-                    requiredBlock = new PositionedStack(new ItemStack(mutation.requirement, 1, mutation.requirementMeta), Constants.nei_X3, Constants.nei_Y3);
-                    requiredType = mutation.id;
-                    break;
+                if (requiredType != GrowthRequirement.RequirementType.NONE) {
+                    requiredBlock = new PositionedStack(growthReq.requiredBlockAsItemStack(), Constants.nei_X3, Constants.nei_Y3);
+                }
             }
         }
 
@@ -159,6 +150,11 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         return new ResourceLocation(Reference.MOD_ID.toLowerCase(),"textures/gui/nei/cropMutation.png").toString();
     }
 
+    @Override
+    public int recipiesPerPage() {
+        return 1;
+    }
+
     //defines rectangles on the recipe gui which can be clicked to show all crop mutation recipes
     @Override
     public void loadTransferRects() {
@@ -178,9 +174,10 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         String soil = StatCollector.translateToLocal("agricraft_nei.soil");
         GuiDraw.drawStringR(soil + ":", Constants.nei_X3 - 7, Constants.nei_Y2 + 4, COLOR_BLACK, false);
 
-        if (mutationRecipe.requiredType != REQ_NONE) {
+        if (mutationRecipe.requiredType != GrowthRequirement.RequirementType.NONE) {
             String needs = StatCollector.translateToLocal("agricraft_nei.needs");
-            String modifier = mutationRecipe.requiredType == REQ_BELOW ? StatCollector.translateToLocal("agricraft_nei.below")
+            String modifier = mutationRecipe.requiredType == GrowthRequirement.RequirementType.BELOW
+                    ? StatCollector.translateToLocal("agricraft_nei.below")
                     : StatCollector.translateToLocal("agricraft_nei.nearby");
 
             GuiDraw.drawStringR(needs + ":", Constants.nei_X3 - 7, Constants.nei_Y3 + 4, COLOR_BLACK, false);

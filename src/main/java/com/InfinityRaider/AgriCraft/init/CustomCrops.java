@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemCrop;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
@@ -48,9 +49,6 @@ public class CustomCrops {
                         String name = cropData[0];
                         int fruitMeta = fruit!=null?fruitStack.getItemDamage():0;
                         Block soil = cropData[2].equalsIgnoreCase("null")?null:((Block) Block.blockRegistry.getObject(cropData[2]));
-                        if(soil!=null && !ItemCrop.isSoilValid(soil, 0)) {
-                            ItemCrop.addBlockToSoils(soil);
-                        }
                         ItemStack base = IOHelper.getStack(cropData[3]);
                         Block baseBlock = base != null ? ((ItemBlock) base.getItem()).field_150939_a : null;
                         int baseMeta = base != null ? base.getItemDamage() : 0;

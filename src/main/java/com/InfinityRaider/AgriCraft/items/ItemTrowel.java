@@ -2,10 +2,10 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -70,7 +70,7 @@ public class ItemTrowel extends ModItem {
                         NBTTagCompound tag = stack.getTagCompound();
                         ItemSeeds seed = (ItemSeeds) Item.itemRegistry.getObject(tag.getString(Names.Objects.seed));
                         int seedMeta = tag.getShort(Names.NBT.meta);
-                        if(SeedHelper.isCorrectSoil(world.getBlock(x, y-1, z), world.getBlockMetadata(x, y - 1, z), seed, seedMeta)) {
+                        if(GrowthRequirements.getGrowthRequirement(seed, seedMeta).isValidSoil(world.getBlock(x, y - 1, z), world.getBlockMetadata(x, y - 1, z))) {
                             crop.growth = tag.getShort(Names.NBT.growth);
                             crop.gain = tag.getShort(Names.NBT.gain);
                             crop.strength = tag.getShort(Names.NBT.strength);

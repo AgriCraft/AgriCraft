@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChococraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
-import com.InfinityRaider.AgriCraft.farming.SoilWhitelist;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
@@ -13,7 +12,6 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import mods.natura.common.NContent;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.init.Blocks;
@@ -229,20 +227,6 @@ public abstract class SeedHelper {
         }
     }
 
-    public static Block getSoil(ItemStack stack) {
-        Block soil = null;
-        if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
-            ItemSeeds seed = (ItemSeeds) stack.getItem();
-            if(seed instanceof ItemModSeed) {
-                soil = ((ItemModSeed) seed).getPlant().soil;
-            }
-            else if(seed == Items.nether_wart) {
-                soil = Blocks.soul_sand;
-            }
-        }
-        return soil;
-    }
-
     public static boolean isAnalyzedSeed(ItemStack seedStack) {
         return (seedStack!=null) && (seedStack.getItem()!=null) && (seedStack.getItem() instanceof ItemSeeds) && (seedStack.hasTagCompound()) && (seedStack.stackTagCompound.hasKey(Names.NBT.analyzed)) && (seedStack.stackTagCompound.getBoolean(Names.NBT.analyzed));
     }
@@ -334,19 +318,6 @@ public abstract class SeedHelper {
             }
         }
         return true;
-    }
-
-    public static boolean isCorrectSoil(Block soil, int soilMeta, ItemSeeds seed, int seedMeta) {
-        if(seed instanceof ItemModSeed) {
-            Block requiredSoil = ((ItemModSeed) seed).getPlant().soil;
-            if(requiredSoil!=null) {
-                return requiredSoil==soil;
-            }
-        }
-        else if(seed==Items.nether_wart) {
-            return soil == Blocks.soul_sand;
-        }
-        return SoilWhitelist.isSoilFertile(soil, soilMeta);
     }
 
     //get the base growth

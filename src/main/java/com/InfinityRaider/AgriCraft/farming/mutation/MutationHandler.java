@@ -4,9 +4,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
@@ -38,18 +36,7 @@ public abstract class MutationHandler {
             String parent1 = mutation.parent1.getItem() != null ? (Item.itemRegistry.getNameForObject(mutation.parent1.getItem())) + ':' + mutation.parent1.getItemDamage() : "null";
             String parent2 = mutation.parent2.getItem() != null ? (Item.itemRegistry.getNameForObject(mutation.parent2.getItem())) + ':' + mutation.parent2.getItemDamage() : "null";
             String info = " - " + result + " = " + parent1 + " + " + parent2;
-            if (mutation.id == 0) {
-                LogHelper.info(info);
-            } else {
-                String block = mutation.requirement != null ? (Block.blockRegistry.getNameForObject(mutation.requirement) + ':' + mutation.requirementMeta) : "null";
-                String location = "";
-                if (mutation.id == 1) {
-                    location = "below";
-                } else if (mutation.id == 2) {
-                    location = "nearby";
-                }
-                LogHelper.info(new StringBuffer(info).append(" (Requires ").append(block).append(" ").append(location).append(")"));
-            }
+            LogHelper.info(info);
         }
     }
 
@@ -81,26 +68,7 @@ public abstract class MutationHandler {
                         success =  parent2!=null &&  parent2 instanceof ItemSeeds;
                         errorMsg = "second parent stack is not correct";
                         if(success) {
-                            if(data.length==1) {
-                                /*
-                                if(result instanceof ItemModSeed && ((BlockModPlant) SeedHelper.getPlant( (ItemSeeds) result)).base!=null) {
-                                    BlockModPlant plant = (BlockModPlant) SeedHelper.getPlant((ItemSeeds) result);
-                                    mutation = new Mutation(resultStack, parentStack1, parentStack2, 1, plant.base, plant.baseMeta);
-                                }
-                                */
-                                mutation = new Mutation(resultStack, parentStack1, parentStack2);
-                            }
-                            else {
-                                ItemStack reqBlockStack = IOHelper.getStack(data[2]);
-                                Block reqBlock = (reqBlockStack!=null && reqBlockStack.getItem() instanceof ItemBlock)?((ItemBlock) reqBlockStack.getItem()).field_150939_a:null;
-                                success = reqBlock!=null;
-                                errorMsg = "invalid required block";
-                                if(success) {
-                                    int id = Integer.parseInt(data[1]);
-                                    int reqMeta = reqBlockStack.getItemDamage();
-                                    mutation = new Mutation(resultStack, parentStack1, parentStack2, id, reqBlock, reqMeta);
-                                }
-                            }
+                            mutation = new Mutation(resultStack, parentStack1, parentStack2);
                         }
                     }
                 }
@@ -226,16 +194,6 @@ public abstract class MutationHandler {
     //gets all the mutations
     public static Mutation[] getMutations() {
         return mutations.toArray(new Mutation[mutations.size()]);
-    }
-
-    //gets all the parents
-    public static ItemStack[][] getParents() {
-        ItemStack[][] parents = new ItemStack[mutations.size()][2];
-        for(int i=0;i< mutations.size();i++) {
-            parents[i][0] = mutations.get(i).parent1.copy();
-            parents[i][1] = mutations.get(i).parent2.copy();
-        }
-        return parents;
     }
 
     //gets all the mutations this crop can mutate to
