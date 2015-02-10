@@ -8,6 +8,11 @@ import java.util.List;
 
 public interface ISeedStorageController {
     /**
+     * Tries to add a stack to the inventory, returns true on success
+     */
+    public boolean addStackToInventory(ItemStack stack);
+
+    /**
      * Returns a list of all the slots in the inventory corresponding to that seed
      */
     public List<SeedStorageSlot> getSlots(ItemSeeds seed, int meta);

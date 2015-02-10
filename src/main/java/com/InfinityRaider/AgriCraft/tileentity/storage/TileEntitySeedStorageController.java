@@ -12,6 +12,16 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
     public boolean isControlling;
 
     @Override
+    public boolean addStackToInventory(ItemStack stack) {
+        boolean success = false;
+        ISeedStorageControllable controllable = this.getControllable(stack);
+        if(controllable!=null) {
+            success = controllable.addStackToInventory(stack);
+        }
+        return success;
+    }
+
+    @Override
     public List<SeedStorageSlot> getSlots(ItemSeeds seed, int meta) {
         return this.getControllable(new ItemStack(seed, 1, meta)).getSlots(seed, meta);
     }

@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
-import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
@@ -97,8 +96,30 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
 
+
     //SEED STORAGE METHODS
     //--------------------
+    @Override
+    public boolean addStackToInventory(ItemStack stack) {
+        boolean success = false;
+        if(this.hasLockedSeed() && SeedHelper.isAnalyzedSeed(stack) && this.lockedSeed==stack.getItem() && this.lockedSeedMeta==stack.getItemDamage()) {
+            int lastId = 0;
+            for(Map.Entry<Integer, SeedStorageSlot> entry:this.slots.entrySet()) {
+                if(entry!=null && entry.getValue()!=null) {
+                    lastId = entry.getKey()>lastId?entry.getKey():lastId;
+                    if(ItemStack.areItemStackTagsEqual(entry.getValue().getStack(this.lockedSeed, this.lockedSeedMeta), stack)) {
+                        this.setInventorySlotContents(entry.getKey(), stack);
+                        success = true;
+                        break;
+                    }
+                }
+            }
+            if(!success) {
+                this.slots.put(lastId+1, new SeedStorageSlot(stack.getTagCompound(), stack.stackSize, lastId+1, this.getControllableID()));
+            }
+        }
+        return success;
+    }
     @Override
     public ArrayList<ItemStack> getInventory() {
         ArrayList<ItemStack> stacks = null;

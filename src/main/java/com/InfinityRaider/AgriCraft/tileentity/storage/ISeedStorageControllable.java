@@ -8,6 +8,11 @@ import java.util.List;
 
 public interface ISeedStorageControllable extends IInventory{
     /**
+     * Tries to add a stack to the inventory, returns true on success
+     */
+    public boolean addStackToInventory(ItemStack stack);
+
+    /**
      * Returns a list of all the stacks in this inventory, all the slots in this inventory must have the same type of seed
      */
     public List<ItemStack> getInventory();
