@@ -3,16 +3,15 @@ package com.InfinityRaider.AgriCraft.compatibility.NEI;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -37,7 +36,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         PositionedStack parent1;
         PositionedStack parent2;
         PositionedStack result;
-        PositionedStack soil;
+        List<PositionedStack> soils = new ArrayList<PositionedStack>();
         PositionedStack requiredBlock;
         GrowthRequirement.RequirementType requiredType;
 
@@ -47,11 +46,17 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y1);
             this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y1);
 
-
             GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement((ItemSeeds) result.item.getItem(), result.item.getItemDamage());
-            Block soilBlock = growthReq.getSoil()==null? Blocks.farmland:growthReq.getSoil().getBlock();
+            if (growthReq.getSoil() != null) {
+                Block soilBlock = growthReq.getSoil().getBlock();
+                soils.add(new PositionedStack(new ItemStack(soilBlock), Constants.nei_X3, Constants.nei_Y2));
+            } else {
+                for (BlockWithMeta blockWithMeta : GrowthRequirements.defaultSoils) {
+                    soils.add(new PositionedStack(new ItemStack(blockWithMeta.getBlock()), Constants.nei_X3, Constants.nei_Y2));
+                }
+                setIngredientPermutation(soils, new ItemStack(Blocks.farmland));
+            }
 
-            this.soil = new PositionedStack(new ItemStack(soilBlock), Constants.nei_X3, Constants.nei_Y2);
             this.requiredType = growthReq.getRequiredType();
 
             if (requiredType != GrowthRequirement.RequirementType.NONE) {
@@ -71,7 +76,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             List<PositionedStack> list = new ArrayList<PositionedStack>();
             list.add(parent1);
             list.add(parent2);
-            list.add(soil);
+            list.add(soils.get(NEICropMutationHandler.this.cycleticks / 20 % soils.size()));
             if(requiredBlock!=null) {
                 list.add(requiredBlock);
             }

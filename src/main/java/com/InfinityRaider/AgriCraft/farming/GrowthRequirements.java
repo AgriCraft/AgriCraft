@@ -22,7 +22,7 @@ public class GrowthRequirements {
     private static Map<ItemWithMeta, GrowthRequirement> overrides = new HashMap<ItemWithMeta, GrowthRequirement>();
 
     // Package private so GrowthRequirement can access it
-    static Set<BlockWithMeta> defaultSoils = new HashSet<BlockWithMeta>();
+    public static Set<BlockWithMeta> defaultSoils = new HashSet<BlockWithMeta>();
     static Set<BlockWithMeta> soils = new HashSet<BlockWithMeta>();
 
     //Methods for fertile soils
