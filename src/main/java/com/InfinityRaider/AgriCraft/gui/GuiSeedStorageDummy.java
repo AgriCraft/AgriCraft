@@ -162,7 +162,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
             case buttonIdStrength: stat = Names.NBT.strength; break;
         }
         if(stat!=null && this.activeSeed!=null) {
-
+            Collections.sort(list, new SeedStorageSlot.SlotComparator(stat));
         }
     }
 
