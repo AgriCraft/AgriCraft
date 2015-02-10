@@ -3,11 +3,16 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -22,6 +27,8 @@ public class ItemHandRake extends Item {
     private static final int WOOD_VARIANT_META = 0;
     private static final int IRON_VARIANT_META = 1;
     private static final Random random = new Random();
+
+    private final IIcon[] icons = new IIcon[2];
 
     public ItemHandRake() {
         setCreativeTab(AgriCraftTab.agriCraftTab);
@@ -51,6 +58,18 @@ public class ItemHandRake extends Item {
         return true;
     }
 
+    /**
+     * Calculates the new weed growth age depending on the used tool variant
+     * @return 0, if iron variant is used, otherwise a random value of the interval [0, currentWeedMeta]
+     */
+    private int calculateGrowthStage(int toolMeta, int currentWeedMeta) {
+        if (toolMeta == IRON_VARIANT_META) {
+            return 0;
+        }
+
+        return random.nextInt(currentWeedMeta + 1);
+    }
+
     @Override
     public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
         list.add(new ItemStack(item, 1, WOOD_VARIANT_META));
@@ -69,15 +88,25 @@ public class ItemHandRake extends Item {
         }
     }
 
-    /**
-     * Calculates the new weed growth age depending on the used tool variant
-     * @return 0, if iron variant is used, otherwise a random value of the interval [0, currentWeedMeta]
-     */
-    private int calculateGrowthStage(int toolMeta, int currentWeedMeta) {
-        if (toolMeta == IRON_VARIANT_META) {
-            return 0;
-        }
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+        list.add(StatCollector.translateToLocal("agricraft_tooltip.handRake"));
+    }
 
-        return random.nextInt(currentWeedMeta + 1);
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister reg) {
+        LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
+        icons[0] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1)+"_wood");
+        icons[1] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1)+"_iron");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconFromDamage(int meta) {
+        if(meta<=1) {
+            return this.icons[meta];
+        }
+        return null;
     }
 }

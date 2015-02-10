@@ -149,6 +149,7 @@ agricraft_tooltip.cropWithoutPlant=This crop doesn't have plant on it
 agricraft_tooltip.notCrop=This is not a crop
 agricraft_tooltip.trowel=Use this to move plants from one crop to another
 agricraft_tooltip.magnifyingGlass=Use this to inspect crops
+agricraft_tooltip.handRake=Use this to remove weeds from crops
 agricraft_tooltip.closed=Closed
 agricraft_tooltip.open=Open
 agricraft_tooltip.state=State
