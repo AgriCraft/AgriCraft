@@ -116,6 +116,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             }
             if(!success) {
                 this.slots.put(lastId+1, new SeedStorageSlot(stack.getTagCompound(), stack.stackSize, lastId+1, this.getControllableID()));
+                success = true;
             }
         }
         if(success) {

@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
+import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,6 +27,10 @@ public class SeedStorageSlot {
         return stack;
     }
 
+    private int getTotalStat() {
+        return tag.getInteger(Names.NBT.growth) + tag.getInteger(Names.NBT.gain) + tag.getInteger(Names.NBT.strength);
+    }
+
     public int getId() {
         return 1000*invId + slotId;
     }
@@ -43,7 +48,10 @@ public class SeedStorageSlot {
         public int compare(SeedStorageSlot o1, SeedStorageSlot o2) {
             int stat1 = o1.tag.getInteger(stat);
             int stat2 = o2.tag.getInteger(stat);
-            return stat1 - stat2;
+            if(stat2 == stat1) {
+                return o2.getTotalStat() - o1.getTotalStat();
+            }
+            return stat2 - stat1;
         }
     }
 }

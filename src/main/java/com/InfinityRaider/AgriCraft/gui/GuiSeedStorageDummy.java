@@ -3,12 +3,8 @@ package com.InfinityRaider.AgriCraft.gui;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
-import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageController;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -17,7 +13,6 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -248,6 +243,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         public ButtonSeedStorage(int id, int xPos, int yPos, ItemStack stack) {
             super(id, xPos, yPos, 16, 16, "");
             this.stack = stack;
+            this.visible=true;
         }
 
         protected ResourceLocation getTexture() {
