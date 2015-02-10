@@ -18,16 +18,18 @@ import java.util.List;
 public class MessageContainerSeedStorage implements IMessage {
     private Item item;
     private int meta;
+    private int amount;
     private EntityPlayer player;
-    private int offset;
+    private int slotId;
 
     public MessageContainerSeedStorage() {}
 
-    public MessageContainerSeedStorage(EntityPlayer player, Item item, int meta, int offset) {
-        this.item = item;
-        this.meta = meta;
+    public MessageContainerSeedStorage(ItemStack stack, EntityPlayer player, int slotId) {
+        this.item = stack.getItem();
+        this.meta = stack.getItemDamage();
+        this.amount = stack.stackSize;
         this.player = player;
-        this.offset = offset;
+        this.slotId = slotId;
     }
 
     @Override
@@ -36,10 +38,11 @@ public class MessageContainerSeedStorage implements IMessage {
         String itemName = new String(buf.readBytes(itemNameLength).array());
         this.item = (Item) Item.itemRegistry.getObject(itemName);
         this.meta = buf.readInt();
+        this.amount = buf.readInt();
         int playerNameLength = buf.readInt();
         String playerName = new String(buf.readBytes(playerNameLength).array());
         this.player = this.getPlayer(playerName);
-        this.offset = buf.readInt();
+        this.slotId = buf.readInt();
     }
 
     private EntityPlayer getPlayer(String name) {
@@ -61,10 +64,11 @@ public class MessageContainerSeedStorage implements IMessage {
         buf.writeInt(itemName.length());
         buf.writeBytes(itemName.getBytes());
         buf.writeInt(this.meta);
+        buf.writeInt(this.amount);
         String playerName = this.player.getDisplayName();
         buf.writeInt(playerName.length());
         buf.writeBytes(playerName.getBytes());
-        buf.writeInt(this.offset);
+        buf.writeInt(this.slotId);
     }
 
     public static class MessageHandler implements IMessageHandler<MessageContainerSeedStorage, IMessage> {
@@ -73,7 +77,7 @@ public class MessageContainerSeedStorage implements IMessage {
             Container container = message.player.openContainer;
             if(container!=null && container instanceof ContainerSeedStorageDummy) {
                 ContainerSeedStorageDummy storage = (ContainerSeedStorageDummy) container;
-                storage.detectAndSendChanges();
+                storage.moveStackFromTileEntityToPlayer(message.slotId, new ItemStack(message.item, message.amount, message.meta));
             }
             return null;
         }

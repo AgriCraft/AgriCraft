@@ -1,19 +1,85 @@
 package com.InfinityRaider.AgriCraft.container;
 
+import com.InfinityRaider.AgriCraft.network.MessageContainerSeedStorage;
+import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
+import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
+import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageController;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+
+import java.util.List;
 
 public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
     public ContainerSeedStorageDummy(InventoryPlayer inventory, int xOffset, int yOffset) {
         super(inventory, xOffset, yOffset);
     }
 
+    /**
+     * tries to add a stack to the storage, return true on success
+     */
     public abstract boolean addSeedToStorage(ItemStack stack);
+
+    /**
+     * Gets a list off all the different kinds of seeds in the storage
+     */
+    public abstract List<ItemStack> getSeedEntries();
+
+    /**
+     * Gets a list off all the slots corresponding to this seed and meta
+     */
+    public abstract List<SeedStorageSlot> getSeedSlots(ItemSeeds seed, int meta);
+
+    /**
+     * Gets a list off all the slots corresponding to this seed and meta
+     */
+    public abstract TileEntity getTileEntity();
+
+    public ISeedStorageControllable getControllable(ItemStack stack) {
+        TileEntity te = this.getTileEntity();
+        ISeedStorageControllable controllable = null;
+        if(te != null) {
+            if (te instanceof ISeedStorageController) {
+                controllable = ((ISeedStorageController) te).getControllable(stack);
+            } else if (te instanceof ISeedStorageControllable) {
+                controllable = (ISeedStorageControllable) te;
+            }
+        }
+        return controllable;
+    }
+
+    /**
+     * Tries to move an item stack form the correct tile entity to the player's inventory
+     */
+    public void moveStackFromTileEntityToPlayer(int slotId, ItemStack stack) {
+        ISeedStorageControllable controllable = this.getControllable(stack);
+        if(controllable!=null) {
+            ItemStack stackToMove = controllable.getStackInSlot(slotId);
+            stackToMove.stackSize = stack.stackSize;
+            stackToMove.stackTagCompound = controllable.getStackInSlot(slotId).stackTagCompound;
+            if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
+                if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                    //this method is only called form the gui client side, so we need to manually tell the server to execute it there as well
+                    NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(stack, Minecraft.getMinecraft().thePlayer, slotId));
+                }
+                else {
+                    //on the server decrease the size of the stack, this gets synced to the client from this method
+                    controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
+                }
+            } else {
+                return;
+            }
+        }
+    }
 
     /**
      * Handles shift clicking in the inventory, return the stack that was transferred
@@ -44,10 +110,7 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
             if (itemstack1.stackSize == itemstack.stackSize) {
                 return null;
             }
-            //it's possible that the slot gets set to null if the complete stack is taken out
-            if(slot!=null) {
-                slot.onPickupFromSlot(player, itemstack1);
-            }
+            slot.onPickupFromSlot(player, itemstack1);
         }
         return itemstack;
     }

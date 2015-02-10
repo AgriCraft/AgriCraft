@@ -13,6 +13,11 @@ public interface ISeedStorageController {
     public boolean addStackToInventory(ItemStack stack);
 
     /**
+     * Returns a list of all the kinds of seeds
+     */
+    public List<ItemStack> getControlledSeeds();
+
+    /**
      * Returns a list of all the slots in the inventory corresponding to that seed
      */
     public List<SeedStorageSlot> getSlots(ItemSeeds seed, int meta);

@@ -3,8 +3,12 @@ package com.InfinityRaider.AgriCraft.gui;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
+import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageController;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -13,6 +17,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -87,8 +92,8 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
             for (int i = 0; i < list.size(); i++) {
                 int xOffset = this.guiLeft + this.setActiveSeedButtonOffset_X + (16*i)%64;
                 int yOffset = this.guiTop + this.setActiveSeedButtonOffset_Y + 16*(i/4);
-                this.setActiveSeedButtons.add(new ButtonSeedStorage.SetActiveSeed(this.lastButtonId+i+1, xOffset, yOffset, list.get(i)));
                 this.lastButtonId++;
+                this.setActiveSeedButtons.add(new ButtonSeedStorage.SetActiveSeed(this.lastButtonId, xOffset, yOffset, list.get(i)));
             }
             this.buttonList.addAll(this.setActiveSeedButtons);
         }
@@ -100,11 +105,15 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         }
         this.seedSlotButtons = new ArrayList<ButtonSeedStorage.SeedSlot>();
         List<SeedStorageSlot> list = this.container.getSeedSlots(this.activeSeed, this.activeMeta);
-        this.sortByStat(list);
-        for(int i=scrollPositionHorizontal;i<Math.min(list.size(),scrollPositionHorizontal+maxHorSlots);i++) {
-            SeedStorageSlot slot = list.get(i);
-            seedSlotButtons.add(new ButtonSeedStorage.SeedSlot(slot.getId(), seedSlotButtonOffset_X+i*16, seedSlotButtonOffset_Y, slot.getStack(this.activeSeed, this.activeMeta)));
+        if(list!=null) {
+            this.sortByStat(list);
+            for (int i = scrollPositionHorizontal; i < Math.min(list.size(), scrollPositionHorizontal + maxHorSlots); i++) {
+                SeedStorageSlot slot = list.get(i);
+                this.lastButtonId++;
+                seedSlotButtons.add(new ButtonSeedStorage.SeedSlot(this.lastButtonId, seedSlotButtonOffset_X + i * 16, seedSlotButtonOffset_Y, slot.getStack(this.activeSeed, this.activeMeta), slot.getId()));
+            }
         }
+        this.buttonList.addAll(this.seedSlotButtons);
     }
 
     @Override
@@ -113,7 +122,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
             this.setActiveSeed((ButtonSeedStorage.SetActiveSeed) button);
         }
         else if(button instanceof ButtonSeedStorage.SeedSlot) {
-            this.onSeedSlotClick(button.id);
+            this.container.moveStackFromTileEntityToPlayer(((ButtonSeedStorage.SeedSlot) button).slotId, new ItemStack(this.activeSeed, 1, this.activeMeta));
         }
         else if (button.id <= buttonIdStrength && this.activeSeed != null) {
             this.sortStatId = button.id;
@@ -147,10 +156,6 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
             }
         }
         this.updateScreen();
-    }
-
-    private void onSeedSlotClick(int slotIndex) {
-
     }
 
     private void sortByStat(List<SeedStorageSlot> list) {
@@ -362,8 +367,10 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         }
 
         protected static final class SeedSlot extends ButtonSeedStorage {
-            public SeedSlot(int id, int xPos, int yPos, ItemStack seedStack) {
-                super(id, xPos, yPos, seedStack);
+            public int slotId;
+            public SeedSlot(int ButtonId, int xPos, int yPos, ItemStack seedStack, int slotId) {
+                super(ButtonId, xPos, yPos, seedStack);
+                this.slotId = slotId;
             }
 
             /**
