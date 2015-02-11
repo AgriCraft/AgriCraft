@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.compatibility.waila;
 import com.InfinityRaider.AgriCraft.blocks.BlockChannelValve;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import mcp.mobius.waila.api.IWailaConfigHandler;
