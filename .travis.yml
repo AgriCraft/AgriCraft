@@ -9,7 +9,7 @@ script:
  - ./gradlew build -S
  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 
-after_sucess: ./gradlew curse -S
+after_success: ./gradlew curse -S
 
 env:
   global:
