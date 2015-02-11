@@ -61,6 +61,6 @@ public class AgriCraftHarvestable implements IFactoryHarvestable {
     @Override
     public void postHarvest (World world, int x, int y, int z) {
         world.setBlockMetadataWithNotify(x, y, z, 2, 3);
-        world.getTileEntity(x, y, z).markDirty();
+        ((TileEntityCrop) world.getTileEntity(x, y, z)).markForUpdate();
     }
 }

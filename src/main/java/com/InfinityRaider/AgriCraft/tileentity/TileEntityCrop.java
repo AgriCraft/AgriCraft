@@ -110,7 +110,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             }
             //update the tile entity on a change
             if (change) {
-                markDirtyAndMarkForUpdate();
+                markForUpdate();
             }
         
     }
@@ -144,7 +144,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         this.crossCrop=false;
         this.clearPlant();
         this.weed=true;
-        this.markDirtyAndMarkForUpdate();
+        this.markForUpdate();
     }
 
     //spread the weed
@@ -161,7 +161,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public void clearWeed() {
         this.weed=false;
         this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
-        this.markDirtyAndMarkForUpdate();
+        this.markForUpdate();
     }
 
     //weed spawn chance
@@ -184,7 +184,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.analyzed = analyzed;
             this.seedMeta = seedMeta;
             this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
-            this.markDirtyAndMarkForUpdate();
+            this.markForUpdate();
         }
     }
 
@@ -199,7 +199,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.analyzed = false;
             this.weed = false;
             this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
-            this.markDirtyAndMarkForUpdate();
+            this.markForUpdate();
         }
     }
 

@@ -20,10 +20,8 @@ public class TileEntityAgricraft extends TileEntity {
         readFromNBT(pkt.func_148857_g());
     }
 
-    public void markDirtyAndMarkForUpdate() {
-        markDirty();
-        worldObj.func_147451_t(xCoord, yCoord, zCoord);
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    public void markForUpdate() {
+        this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Override

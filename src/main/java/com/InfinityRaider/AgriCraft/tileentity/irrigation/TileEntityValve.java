@@ -38,7 +38,7 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
         boolean wasPowered = powered;
         powered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
         if (powered != wasPowered) {
-            markDirtyAndMarkForUpdate();
+            markForUpdate();
         }
     }
 

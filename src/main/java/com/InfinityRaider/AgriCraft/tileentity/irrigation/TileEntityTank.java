@@ -66,23 +66,11 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         }
     }
 
-    //called on client event
-    @Override
-    public boolean receiveClientEvent(int id, int value) {
-        if(worldObj.isRemote) {
-            this.worldObj.markBlockForUpdate(xCoord,yCoord,zCoord);
-            this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
-            Minecraft.getMinecraft().renderGlobal.markBlockForUpdate(xCoord, yCoord, zCoord);
-            super.receiveClientEvent(id, value);
-        }
-        return true;
-    }
-
     public void syncToClient(boolean forceUpdate) {
         boolean change = forceUpdate || this.getDiscreteFluidLevel()!=lastDiscreteFluidLevel;
         if(change) {
             this.lastDiscreteFluidLevel = this.getDiscreteFluidLevel();
-            this.markDirtyAndMarkForUpdate();
+            this.markForUpdate();
         }
     }
 
