@@ -104,7 +104,7 @@ processResources {
 
 curse {
     onlyIf {
-        (System.env.TRAVIS_TAG != null || getCommitMsg.commitMsg().contains("[cf push]")) && System.env.CFKEY != null
+        (!System.env.TRAVIS_TAG.isEmpty() || getCommitMsg.commitMsg().contains("[cf push]")) && System.env.CFKEY != null
     }
 
     apiKey = System.env.CFKEY
