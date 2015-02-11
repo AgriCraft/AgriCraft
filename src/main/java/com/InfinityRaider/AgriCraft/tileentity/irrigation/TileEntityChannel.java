@@ -17,9 +17,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     protected static final float SCALE_FACTOR = 500.0F / (float) DISCRETE_MAX;
 
     protected int lvl;
-    protected int lastLvl = 0;
     protected int lastDiscreteLevel = 0;
-    protected int timer = 0;
     
     //this saves the data on the tile entity
     @Override
@@ -47,6 +45,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     public void setFluidLevel(int lvl) {
         if(lvl>=0 && lvl<=Constants.mB/2 && lvl!=this.lvl) {
             this.lvl = lvl;
+            syncToClient(false);
         }
     }
 
@@ -158,7 +157,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
                 }
             }
             this.setFluidLevel(newLvl + rest);
-            this.syncToClient(false);
         }
     }
 

@@ -62,8 +62,8 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         this.sortButtonY = sortButtonY;
         this.setActiveSeedButtonOffset_X = setActiveSeedButtonsX;
         this.setActiveSeedButtonOffset_Y = setActiveSeedButtonsY;
-        this.seedSlotButtonOffset_X = seedSlotsX;
-        this.seedSlotButtonOffset_Y = seedSlotsY;
+        this.seedSlotButtonOffset_X = this.guiLeft + seedSlotsX;
+        this.seedSlotButtonOffset_Y = this.guiTop + seedSlotsY;
     }
 
     protected void loadButtons() {

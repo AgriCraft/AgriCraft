@@ -68,8 +68,10 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
             stackToMove.stackTagCompound = controllable.getStackInSlot(slotId).stackTagCompound;
             if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
                 if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                    controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
                     //this method is only called form the gui client side, so we need to manually tell the server to execute it there as well
                     NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(stack, Minecraft.getMinecraft().thePlayer, slotId));
+                    controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
                 }
                 else {
                     //on the server decrease the size of the stack, this gets synced to the client from this method

@@ -105,8 +105,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if(this.hasLockedSeed() && SeedHelper.isAnalyzedSeed(stack) && this.lockedSeed==stack.getItem() && this.lockedSeedMeta==stack.getItemDamage()) {
             int lastId = 0;
             for(Map.Entry<Integer, SeedStorageSlot> entry:this.slots.entrySet()) {
-                if(entry!=null && entry.getValue()!=null) {
-                    lastId = entry.getKey()>lastId?entry.getKey():lastId;
+                lastId = entry.getKey()>lastId?entry.getKey():lastId;
+                if(entry.getValue()!=null) {
                     if(ItemStack.areItemStackTagsEqual(entry.getValue().getStack(this.lockedSeed, this.lockedSeedMeta), stack)) {
                         this.setInventorySlotContents(entry.getKey(), stack);
                         success = true;
@@ -120,7 +120,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             }
         }
         if(success) {
-            this.markDirty();
+            this.markForUpdate();
         }
         return success;
     }
@@ -177,7 +177,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if(!this.hasLockedSeed()) {
             this.lockedSeed = seed;
             this.lockedSeedMeta = meta;
-            this.markDirty();
+            this.markForUpdate();
         }
     }
 
@@ -234,7 +234,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                 }
             }
         }
-        this.markDirty();
+        this.markForUpdate();
         return stackInSlot;
     }
 
@@ -260,7 +260,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             else {
                 this.slots.put(slot, new SeedStorageSlot(inputStack.getTagCompound(), inputStack.stackSize, slot, this.getControllableID()));
             }
-            this.markDirty();
+            this.markForUpdate();
         }
     }
 
@@ -305,8 +305,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     @Override
     public void addDebugInfo(List<String> list) {
         String info = this.lockedSeed==null?"null":this.getLockedSeed().getDisplayName();
+        int size = this.slots==null?0:this.slots.size();
         list.add("Locked Seed: "+info);
-        list.add("Number of seeds: "+this.slots.size());
+        list.add("Number of seeds: "+size);
     }
 
 }

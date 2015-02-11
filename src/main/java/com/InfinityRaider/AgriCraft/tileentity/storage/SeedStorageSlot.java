@@ -32,7 +32,7 @@ public class SeedStorageSlot {
     }
 
     public int getId() {
-        return 1000*invId + slotId;
+        return invId>=0?(1000*invId) + slotId:slotId;
     }
 
     /** Compares 2 SeedStorageSlots by the given stat */
