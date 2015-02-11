@@ -115,15 +115,9 @@ curse {
     releaseType = project.hasProperty('releaseType') ? project.releaseType : ""
 }
 
-import org.apache.tools.ant.taskdefs.condition.Os
-
 task getCommitMsg(type: Exec) {
     def commit = System.env.TRAVIS_COMMIT != null ? System.env.TRAVIS_COMMIT : ""
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        commandLine 'cmd', '/c', "git log --format=%B -n 1 ${commit}"
-    } else {
-        commandLine 'git', "log --format=%B -n 1 ${commit}"
-    }
+    commandLine "git log --format=%B -n 1 ${commit}".split(' ')
     standardOutput = new ByteArrayOutputStream()
     ext.commitMsg = {
         return standardOutput.toString()
