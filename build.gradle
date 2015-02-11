@@ -76,7 +76,7 @@ dependencies {
 allprojects {
     if (System.getenv("TRAVIS") != null) {
         def tag = System.getenv("TRAVIS_TAG");
-        if (tag != null && !tag.empty()) {
+        if (tag != null && !tag.isEmpty()) {
             project.ext.releaseType = tag.contains("SNAPSHOT") ? "alpha" : "release"
             version += tag.contains("SNAPSHOT") ? "-b${System.getenv("TRAVIS_BUILD_NUMBER")}" : ""
         } else {
