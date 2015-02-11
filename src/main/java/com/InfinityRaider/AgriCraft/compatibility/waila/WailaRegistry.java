@@ -16,20 +16,23 @@ public class WailaRegistry {
         registry.registerBodyProvider(cropProvider, BlockCrop.class);
 
         if(!ConfigurationHandler.disableIrrigation) {
-            //tanks
+            // tanks
             IWailaDataProvider tankProvider = new AgriCraftTankDataProvider();
             registry.registerStackProvider(tankProvider, BlockWaterTank.class);
             registry.registerBodyProvider(tankProvider, BlockWaterTank.class);
+            registry.registerNBTProvider(tankProvider, BlockWaterTank.class);
 
             //channels
             IWailaDataProvider channelProvider = new AgriCraftChannelDataProvider();
             registry.registerStackProvider(channelProvider, BlockWaterChannel.class);
             registry.registerBodyProvider(channelProvider, BlockWaterChannel.class);
+            registry.registerNBTProvider(channelProvider, BlockWaterChannel.class);
 
             //valves
             IWailaDataProvider valveProvider = new AgriCraftValveDataProvider();
             registry.registerStackProvider(valveProvider, BlockChannelValve.class);
             registry.registerBodyProvider(valveProvider, BlockChannelValve.class);
+            registry.registerNBTProvider(valveProvider, BlockChannelValve.class);
         }
     }
 }

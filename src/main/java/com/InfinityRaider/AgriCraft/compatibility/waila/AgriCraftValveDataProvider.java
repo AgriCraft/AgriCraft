@@ -2,15 +2,20 @@ package com.InfinityRaider.AgriCraft.compatibility.waila;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockChannelValve;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +53,7 @@ public class AgriCraftValveDataProvider implements IWailaDataProvider {
             String status = StatCollector.translateToLocal(valve.isPowered()?"agricraft_tooltip.closed":"agricraft_tooltip.open");
             list.add(StatCollector.translateToLocal("agricraft_tooltip.state")+": "+status);
             //show contents
-            int contents = valve.getFluidLevel();
+            int contents = dataAccessor.getNBTData().getInteger(Names.NBT.level);
             int capacity = 500;
             list.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel")+": "+contents+"/"+capacity);
         }
@@ -58,5 +63,14 @@ public class AgriCraftValveDataProvider implements IWailaDataProvider {
     @Override
     public List<String> getWailaTail(ItemStack itemStack, List<String> list, IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
         return list;
+    }
+
+    @Override
+    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
+        if (te != null && te instanceof TileEntityValve) {
+            TileEntityValve valve = (TileEntityValve) te;
+            tag.setInteger(Names.NBT.level, valve.getFluidLevel());
+        }
+        return tag;
     }
 }

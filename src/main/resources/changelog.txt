@@ -10,6 +10,8 @@ Changelog
 -FIXED:  Moved Botania crops to post init to possibly fix the crops not dropping petals
 -FIXED:  Nether wart not being recognised as a valid seed (Marcin212)
 -FIXED:  Sprinklers no longer hate railcraft hidden blocks
+-FIXED:  Sprinkler not stopping when water in the channel above ran out
+-FIXED:  Waila not showing accurate fluid levels for channel, tank and valve
 
 1.2.2
 -ADDED:  TConstruct scythes can be used for aoe harvesting (right click on crops to aoe harvest)
