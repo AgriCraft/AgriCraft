@@ -89,7 +89,8 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
     }
 
     public boolean canSprinkle() {
-        return this.isConnected() && ((TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord+1, this.zCoord)).getFluidLevel() > 0;
+        return this.isConnected() && ((TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord+1, this.zCoord)).getFluidLevel()
+                > ConfigurationHandler.sprinklerRatePerHalfSecond;
     }
 
     private boolean sprinkle() {
