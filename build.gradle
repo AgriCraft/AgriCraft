@@ -30,17 +30,12 @@ repositories {
 }
 
 apply plugin: 'forge'
+apply plugin: 'curseforge'
 apply plugin: 'java'
 apply plugin: 'sonar-runner'
 apply plugin: 'jacoco'
 
-ext.configFile = file "build.properties"
-
-configFile.withReader {
-    def prop = new Properties();
-    prop.load(it)
-    ext.config = new ConfigSlurper().parse prop
-}
+ext.config = parseConfig(file('build.properties'))
 
 ext.modVersion = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}"
 version = "${config.version.minecraft}-${modVersion}"
@@ -79,8 +74,15 @@ dependencies {
 }
 
 allprojects {
-    if (System.getenv("TRAVIS_BUILD_NUMBER") != null) {
-        version += "-b${System.getenv("TRAVIS_BUILD_NUMBER")}"
+    if (System.getenv("TRAVIS") != null) {
+        def tag = System.getenv("TRAVIS_TAG");
+        if (tag != null) {
+            project.ext.releaseType = tag.contains("SNAPSHOT") ? "alpha" : "release"
+            version += tag.contains("SNAPSHOT") ? "-b${System.getenv("TRAVIS_BUILD_NUMBER")}" : ""
+        } else {
+            version += "-b${System.getenv("TRAVIS_BUILD_NUMBER")}"
+            project.ext.releaseType = "alpha"
+        }
     }
 }
 
@@ -97,6 +99,44 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+curse {
+    onlyIf {
+        (System.env.TRAVIS_TAG != null || getCommitMsg.commitMsg().contains("[cf push]")) && System.env.CFKEY != null
+    }
+
+    apiKey = System.env.CFKEY
+    projectId = "225635"
+    changelog = """
+            See http://forum.feed-the-beast.com/threads/1-7-10-agricraft.50964/
+    """
+    releaseType = project.hasProperty('releaseType') ? project.releaseType : ""
+}
+
+import org.apache.tools.ant.taskdefs.condition.Os
+
+task getCommitMsg(type: Exec) {
+    def commit = System.env.TRAVIS_COMMIT != null ? System.env.TRAVIS_COMMIT : ""
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine 'cmd', '/c', "git log --format=%B -n 1 ${commit}"
+    } else {
+        commandLine "git log --format=%B -n 1 ${commit}"
+    }
+    standardOutput = new ByteArrayOutputStream()
+    ext.commitMsg = {
+        return standardOutput.toString()
+    }
+}
+
+curse.dependsOn getCommitMsg
+
+def parseConfig(File config) {
+    config.withReader {
+        def prop = new Properties()
+        prop.load(it)
+        return (new ConfigSlurper().parse(prop))
     }
 }
 

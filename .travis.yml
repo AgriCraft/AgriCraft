@@ -9,6 +9,8 @@ script:
  - ./gradlew build -S
  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 
+after_sucess: ./gradlew curse -S
+
 env:
   global:
     TERM=dumb
