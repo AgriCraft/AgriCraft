@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -67,6 +68,9 @@ public class RenderChannel extends TileEntitySpecialRenderer implements ISimpleB
             TileEntityChannel channel = (TileEntityChannel) tileEntity;
             if(channel.getBlockMetadata()==0) {
                 this.renderWoodChannel(channel, tessellator);
+                if(channel.getDiscreteScaledFluidLevel()>0) {
+                    this.drawWater(channel, tessellator);
+                }
             }
             else if(channel.getBlockMetadata()==1) {
                 this.renderIronChannel(channel, tessellator);
@@ -193,17 +197,14 @@ public class RenderChannel extends TileEntitySpecialRenderer implements ISimpleB
         float y = channel.getDiscreteScaledFluidHeight();
         //the texture
         IIcon icon = Blocks.water.getIcon(1, 0);
-        ResourceLocation waterTexture = RenderHelper.getBlockResource(icon);
         //stolen from Vanilla code
         int l = Blocks.water.colorMultiplier(channel.getWorldObj(), channel.xCoord, channel.yCoord, channel.zCoord);
         float f = (float)(l >> 16 & 255) / 255.0F;
         float f1 = (float)(l >> 8 & 255) / 255.0F;
-        float f2 = (float)(l & 255) / 255.0F;
+        float f2 = (float) (l & 255) / 255.0F;
         float f4 = 1.0F;
         tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(channel.getWorldObj(), channel.xCoord, channel.yCoord, channel.zCoord));
         tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
-
-        Minecraft.getMinecraft().renderEngine.bindTexture(waterTexture);
 
         //draw central water level
         RenderHelper.addScaledVertexWithUV(tessellator, 5, y-0.001f, 5, 5, 5, icon);
