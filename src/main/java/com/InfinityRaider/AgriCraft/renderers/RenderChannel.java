@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
@@ -33,12 +34,12 @@ public class RenderChannel extends TileEntitySpecialRenderer implements ISimpleB
         TileEntityChannel channel = (TileEntityChannel) te;
         if (channel.getDiscreteScaledFluidLevel() > 0) {
             GL11.glPushMatrix();                                                            //initiate first gl renderer
-                GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);    //sets the rendering origin to the right spot
+                GL11.glTranslatef((float) x, (float) y, (float) z);    //sets the rendering origin to the right spot
                 GL11.glPushMatrix();                                                        //initiate second gl renderer
-                    //GL11.glRotatef(180, 0F, 0F, 1F);                                        //rotate the renderer so the model doesn't render upside down
                     //draw the waterTexture
                     Tessellator tessellator = Tessellator.instance;
                     tessellator.startDrawingQuads();
+                        GL11.glColor3f(1, 1, 1);
                         this.drawWater(channel, tessellator);
                     tessellator.draw();
                 GL11.glPopMatrix();                                                         //close second gl renderer
@@ -192,6 +193,7 @@ public class RenderChannel extends TileEntitySpecialRenderer implements ISimpleB
         float y = channel.getDiscreteScaledFluidHeight();
         //the texture
         IIcon icon = Blocks.water.getIcon(1, 0);
+        ResourceLocation waterTexture = RenderHelper.getBlockResource(icon);
         //stolen from Vanilla code
         int l = Blocks.water.colorMultiplier(channel.getWorldObj(), channel.xCoord, channel.yCoord, channel.zCoord);
         float f = (float)(l >> 16 & 255) / 255.0F;
@@ -200,6 +202,9 @@ public class RenderChannel extends TileEntitySpecialRenderer implements ISimpleB
         float f4 = 1.0F;
         tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(channel.getWorldObj(), channel.xCoord, channel.yCoord, channel.zCoord));
         tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
+
+        Minecraft.getMinecraft().renderEngine.bindTexture(waterTexture);
+
         //draw central water level
         RenderHelper.addScaledVertexWithUV(tessellator, 5, y-0.001f, 5, 5, 5, icon);
         RenderHelper.addScaledVertexWithUV(tessellator, 5, y-0.001f, 11, 5, 11, icon);
