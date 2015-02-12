@@ -11,12 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityChannel extends TileEntityCustomWood implements IDebuggable{
+    private static final int SYNC_WATER_ID = 0;
 
     protected static final int DISCRETE_MAX = 16;
     protected static final float DISCRETE_FACTOR = (float) DISCRETE_MAX / 500.0F;
     protected static final float SCALE_FACTOR = 500.0F / (float) DISCRETE_MAX;
 
-    protected int lvl;
+    private int lvl;
     protected int lastDiscreteLevel = 0;
     
     //this saves the data on the tile entity
@@ -164,8 +165,17 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
         boolean change = forceUpdate || this.getDiscreteFluidLevel()!=lastDiscreteLevel;
         if(change) {
             this.lastDiscreteLevel = this.getDiscreteFluidLevel();
-            this.markForUpdate();
+            this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), SYNC_WATER_ID, this.lvl);
         }
+    }
+
+    @Override
+    public boolean receiveClientEvent(int id, int data) {
+        if(id==SYNC_WATER_ID) {
+            this.lvl = data;
+            return true;
+        }
+        return false;
     }
 
     public void drainFluid(int amount) {

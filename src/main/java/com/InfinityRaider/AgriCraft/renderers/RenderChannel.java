@@ -9,18 +9,42 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import org.lwjgl.opengl.GL11;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class RenderChannel implements ISimpleBlockRenderingHandler {
+public class RenderChannel extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler {
 
     public static AtomicInteger renderCallCounter = new AtomicInteger(0);
+
+    public RenderChannel() {}
+
+    @Override
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
+        TileEntityChannel channel = (TileEntityChannel) te;
+        if (channel.getDiscreteScaledFluidLevel() > 0) {
+            GL11.glPushMatrix();                                                            //initiate first gl renderer
+                GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);    //sets the rendering origin to the right spot
+                GL11.glPushMatrix();                                                        //initiate second gl renderer
+                    //GL11.glRotatef(180, 0F, 0F, 1F);                                        //rotate the renderer so the model doesn't render upside down
+                    //draw the waterTexture
+                    Tessellator tessellator = Tessellator.instance;
+                    tessellator.startDrawingQuads();
+                        this.drawWater(channel, tessellator);
+                    tessellator.draw();
+                GL11.glPopMatrix();                                                         //close second gl renderer
+            GL11.glPopMatrix();                                                             //close first gl renderer
+        }
+    }
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
@@ -42,10 +66,6 @@ public class RenderChannel implements ISimpleBlockRenderingHandler {
             TileEntityChannel channel = (TileEntityChannel) tileEntity;
             if(channel.getBlockMetadata()==0) {
                 this.renderWoodChannel(channel, tessellator);
-                //draw the waterTexture
-                if(channel.getDiscreteScaledFluidLevel()>0) {
-                    this.drawWater(channel, tessellator);
-                }
             }
             else if(channel.getBlockMetadata()==1) {
                 this.renderIronChannel(channel, tessellator);

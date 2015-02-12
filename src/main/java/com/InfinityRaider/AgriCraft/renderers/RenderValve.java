@@ -21,6 +21,8 @@ import net.minecraft.world.IBlockAccess;
 
 public class RenderValve extends RenderChannel {
 
+    public RenderValve() {}
+
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {}
 
@@ -34,7 +36,6 @@ public class RenderValve extends RenderChannel {
             tessellator.setColorRGBA_F(1, 1, 1, 1);
             tessellator.addTranslation(x, y, z);
             this.renderWoodChannel(valve, tessellator);
-            this.drawWater(valve, tessellator);
             tessellator.addTranslation(-x, -y, -z);
 
             boolean xPos = valve.hasNeighbour('x', 1);
