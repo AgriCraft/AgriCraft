@@ -105,9 +105,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         if(!this.isMultiBlock()) {
             change = this.checkForMultiBlock();
         }
-        if(change) {
-            this.syncToClient(true);
-        }
         return change;
     }
 
@@ -171,6 +168,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                         TileEntityTank tank = ((TileEntityTank) this.worldObj.getTileEntity(x, y, z));
                         tank.connectedTanks = xSize * ySize * zSize;
                         tank.setFluidLevel(lvl);
+                        tank.syncToClient(true);
                     }
                 }
             }

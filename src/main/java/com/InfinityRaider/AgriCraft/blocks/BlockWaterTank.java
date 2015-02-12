@@ -196,13 +196,4 @@ public class BlockWaterTank extends BlockCustomWood{
         }
         return null;
     }
-
-    @Override
-    public boolean onBlockEventReceived(World world, int x, int y, int z, int id, int data) {
-        super.onBlockEventReceived(world, x, y , z, id, data);
-        if(world.getTileEntity(x, y, z)!=null) {
-            return (world.getTileEntity(x, y, z)).receiveClientEvent(id, data);
-        }
-        return false;
-    }
 }
