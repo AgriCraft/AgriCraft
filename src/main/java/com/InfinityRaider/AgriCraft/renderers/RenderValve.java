@@ -156,28 +156,28 @@ public class RenderValve extends RenderChannel {
     protected void renderSide(TileEntityChannel channel, Tessellator tessellator, char axis, int direction) {
         boolean x = axis=='x';
         Block neighbour = channel.getWorldObj().getBlock(channel.xCoord+(x?direction:0), channel.yCoord, channel.zCoord+(x?0:direction));
-        if(neighbour instanceof BlockLever && RenderHelper.isLeverFacingBlock(channel.getWorldObj().getBlockMetadata(channel.xCoord+(x?direction:0), channel.yCoord, channel.zCoord+(x?0:direction)), axis, direction)) {
-            IIcon icon = channel.getIcon();
-            if(x) {
-                RenderHelper.drawScaledPrism(tessellator, direction>0?12:0, 4, 5, direction>0?16:4, 12, 11, icon);
-            }
-            else {
-                RenderHelper.drawScaledPrism(tessellator, 5, 4, direction>0?12:0, 11, 12, direction>0?16:4, icon);
-            }
-        } else if (ModIntegration.LoadedMods.mcMultipart && (neighbour instanceof BlockMultipart)) {
-            TileMultipart tile = BlockMultipart.getTile(channel.getWorldObj(), channel.xCoord + (x ? direction : 0), channel.yCoord, channel.zCoord + (x ? 0 : direction));
-            for (TMultiPart multiPart : tile.jPartList()) {
-                if (multiPart instanceof LeverPart) {
-                    LeverPart leverPart = (LeverPart) multiPart;
-                    if (RenderHelper.isLeverFacingBlock(leverPart.getMetadata(), axis, direction)) {
-                        IIcon icon = channel.getIcon();
-                        if(x) {
-                            RenderHelper.drawScaledPrism(tessellator, direction>0?12:0, 4, 5, direction>0?16:4, 12, 11, icon);
+        if(neighbour!=null) {
+            if (neighbour instanceof BlockLever && RenderHelper.isLeverFacingBlock(channel.getWorldObj().getBlockMetadata(channel.xCoord + (x ? direction : 0), channel.yCoord, channel.zCoord + (x ? 0 : direction)), axis, direction)) {
+                IIcon icon = channel.getIcon();
+                if (x) {
+                    RenderHelper.drawScaledPrism(tessellator, direction > 0 ? 12 : 0, 4, 5, direction > 0 ? 16 : 4, 12, 11, icon);
+                } else {
+                    RenderHelper.drawScaledPrism(tessellator, 5, 4, direction > 0 ? 12 : 0, 11, 12, direction > 0 ? 16 : 4, icon);
+                }
+            } else if (ModIntegration.LoadedMods.mcMultipart && (neighbour instanceof BlockMultipart)) {
+                TileMultipart tile = BlockMultipart.getTile(channel.getWorldObj(), channel.xCoord + (x ? direction : 0), channel.yCoord, channel.zCoord + (x ? 0 : direction));
+                for (TMultiPart multiPart : tile.jPartList()) {
+                    if (multiPart instanceof LeverPart) {
+                        LeverPart leverPart = (LeverPart) multiPart;
+                        if (RenderHelper.isLeverFacingBlock(leverPart.getMetadata(), axis, direction)) {
+                            IIcon icon = channel.getIcon();
+                            if (x) {
+                                RenderHelper.drawScaledPrism(tessellator, direction > 0 ? 12 : 0, 4, 5, direction > 0 ? 16 : 4, 12, 11, icon);
+                            } else {
+                                RenderHelper.drawScaledPrism(tessellator, 5, 4, direction > 0 ? 12 : 0, 11, 12, direction > 0 ? 16 : 4, icon);
+                            }
+                            break;
                         }
-                        else {
-                            RenderHelper.drawScaledPrism(tessellator, 5, 4, direction>0?12:0, 11, 12, direction>0?16:4, icon);
-                        }
-                        break;
                     }
                 }
             }
