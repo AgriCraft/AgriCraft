@@ -161,8 +161,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         if (growthStage == 0) {
             this.weed = false;
         }
-
-        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
+        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, growthStage, 3);
         this.markForUpdate();
     }
 

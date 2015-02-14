@@ -67,7 +67,7 @@ public class ItemHandRake extends Item {
             return 0;
         }
 
-        return random.nextInt(currentWeedMeta + 1);
+        return Math.max(random.nextInt(currentWeedMeta/2+1)-1, 0)+currentWeedMeta/2;
     }
 
     @Override
