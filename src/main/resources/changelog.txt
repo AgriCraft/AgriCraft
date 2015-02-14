@@ -1,6 +1,8 @@
 Changelog
 ---------
+
 1.3.0
+-ADDED:  Hand Rake tool which, when enabled, is the only thing that can remove weeds
 -ADDED:  A config option to change the maximum stat cap on crops
 -ADDED:  A config option to divide the stats on a newly mutated crops
 -ADDED:  A config option to let the cactus crop produce cactus blocks instead of cactus green

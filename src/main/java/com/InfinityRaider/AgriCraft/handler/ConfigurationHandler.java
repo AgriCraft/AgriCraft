@@ -37,6 +37,7 @@ public class ConfigurationHandler {
     public static int cropStatDivisor;
     public static boolean enableWeeds;
     public static boolean weedsWipePlants;
+    public static boolean enableHandRake;
     public static boolean bonemealMutation;
     public static boolean disableWorldGen;
     public static boolean disableVanillaFarming;
@@ -88,6 +89,7 @@ public class ConfigurationHandler {
         cropStatDivisor = config.getInt("Crop stat divisor", CATEGORY_AGRICRAFT, 2, 1, 3, "On a mutation the stats on the crop will be divided by this number");
         enableWeeds = config.getBoolean("Enable weeds", CATEGORY_AGRICRAFT, true, "set to false if you wish to disable weeds");
         weedsWipePlants = enableWeeds && config.getBoolean("Weeds can overtake plants",CATEGORY_AGRICRAFT,true,"set to false if you don't want weeds to be able to overgrow other plants");
+        enableHandRake = enableWeeds && config.getBoolean("Enable Hand Rake", CATEGORY_AGRICRAFT, true, "When enabled, weeds can only be removed by using this Hand Rake tool");
         bonemealMutation = config.getBoolean("Bonemeal Mutations",CATEGORY_AGRICRAFT, false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
         disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", CATEGORY_AGRICRAFT, false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
         disableWorldGen = config.getBoolean("Disable World Gen", CATEGORY_AGRICRAFT, false, "set to true to disable world gen, no greenhouses will spawn in villages");

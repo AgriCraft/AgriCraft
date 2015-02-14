@@ -51,6 +51,7 @@ public final class Names {
         public static final String sprinkler = "sprinkler";
         public static final String seedStorage = "seedStorage";
         public static final String seedStorageController = "seedStorageController";
+        public static final String handRake = "handRake";
     }
 
     //tile entities
