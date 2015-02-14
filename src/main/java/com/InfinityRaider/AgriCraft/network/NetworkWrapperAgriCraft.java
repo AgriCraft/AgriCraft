@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public abstract class NetworkWrapperAgriCraft {
     public static final int messageContainerSeedStorage_ID = 0;
+    public static final int messageTileEntitySeedStorage_ID = 1;
 
     public static SimpleNetworkWrapper wrapper;
 
@@ -17,5 +18,6 @@ public abstract class NetworkWrapperAgriCraft {
 
     private static void initMessages() {
         wrapper.registerMessage(MessageContainerSeedStorage.MessageHandler.class, MessageContainerSeedStorage.class, messageContainerSeedStorage_ID, Side.SERVER);
+        wrapper.registerMessage(MessageTileEntitySeedStorage.MessageHandler.class, MessageTileEntitySeedStorage.class, messageTileEntitySeedStorage_ID, Side.CLIENT);
     }
 }

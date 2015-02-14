@@ -1,11 +1,16 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
+import com.InfinityRaider.AgriCraft.network.MessageTileEntitySeedStorage;
+import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -95,6 +100,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         this.direction = ForgeDirection.getOrientation(direction);
     }
 
+    public void syncSlotToClient(int slot) {
+        NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageTileEntitySeedStorage(this.xCoord, this.yCoord, this.zCoord, slots.get(slot)), new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 16*10));
+    }
 
 
     //SEED STORAGE METHODS
@@ -102,25 +110,27 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     @Override
     public boolean addStackToInventory(ItemStack stack) {
         boolean success = false;
-        if(this.hasLockedSeed() && SeedHelper.isAnalyzedSeed(stack) && this.lockedSeed==stack.getItem() && this.lockedSeedMeta==stack.getItemDamage()) {
-            int lastId = 0;
-            for(Map.Entry<Integer, SeedStorageSlot> entry:this.slots.entrySet()) {
-                lastId = entry.getKey()>lastId?entry.getKey():lastId;
-                if(entry.getValue()!=null) {
-                    if(ItemStack.areItemStackTagsEqual(entry.getValue().getStack(this.lockedSeed, this.lockedSeedMeta), stack)) {
-                        this.setInventorySlotContents(entry.getKey(), stack);
-                        success = true;
-                        break;
+        if(!this.worldObj.isRemote) {
+            if (this.hasLockedSeed() && SeedHelper.isAnalyzedSeed(stack) && this.lockedSeed == stack.getItem() && this.lockedSeedMeta == stack.getItemDamage()) {
+                int lastId = 0;
+                for (Map.Entry<Integer, SeedStorageSlot> entry : this.slots.entrySet()) {
+                    lastId = entry.getKey() > lastId ? entry.getKey() : lastId;
+                    if (entry.getValue() != null) {
+                        if (ItemStack.areItemStackTagsEqual(entry.getValue().getStack(this.lockedSeed, this.lockedSeedMeta), stack)) {
+                            this.setInventorySlotContents(entry.getKey(), stack);
+                            success = true;
+                            break;
+                        }
                     }
                 }
+                if (!success) {
+                    this.slots.put(lastId + 1, new SeedStorageSlot(stack.getTagCompound(), stack.stackSize, lastId + 1, this.getControllableID()));
+                    success = true;
+                }
             }
-            if(!success) {
-                this.slots.put(lastId+1, new SeedStorageSlot(stack.getTagCompound(), stack.stackSize, lastId+1, this.getControllableID()));
-                success = true;
+            if (success) {
+                this.markForUpdate();
             }
-        }
-        if(success) {
-            this.markForUpdate();
         }
         return success;
     }
@@ -259,6 +269,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             }
             else {
                 this.slots.put(slot, new SeedStorageSlot(inputStack.getTagCompound(), inputStack.stackSize, slot, this.getControllableID()));
+            }
+            if(FMLCommonHandler.instance().getSide()== Side.SERVER) {
+                this.syncSlotToClient(slot);
             }
             this.markForUpdate();
         }

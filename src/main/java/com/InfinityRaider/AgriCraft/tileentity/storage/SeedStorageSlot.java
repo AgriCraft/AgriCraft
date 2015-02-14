@@ -27,12 +27,20 @@ public class SeedStorageSlot {
         return stack;
     }
 
+    public NBTTagCompound getTag() {
+        return this.tag;
+    }
+
     private int getTotalStat() {
         return tag.getInteger(Names.NBT.growth) + tag.getInteger(Names.NBT.gain) + tag.getInteger(Names.NBT.strength);
     }
 
     public int getId() {
         return invId>=0?(1000*invId) + slotId:slotId;
+    }
+
+    public int getSlotId() {
+        return this.slotId;
     }
 
     /** Compares 2 SeedStorageSlots by the given stat */
