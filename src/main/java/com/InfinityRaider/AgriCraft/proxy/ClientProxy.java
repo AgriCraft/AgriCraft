@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.proxy;
 import codechicken.nei.api.API;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
@@ -20,9 +21,11 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -88,6 +91,11 @@ public class ClientProxy extends CommonProxy {
         TileEntitySpecialRenderer renderSprinkler = new RenderSprinkler();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, renderSprinkler);
         MinecraftForgeClient.registerItemRenderer(Items.sprinkler, new RenderItemSprinkler());
+
+        //villager
+        if (!ConfigurationHandler.disableWorldGen && ConfigurationHandler.villagerEnabled) {
+            VillagerRegistry.instance().registerVillagerSkin(78943, new ResourceLocation("textures/entity/villager/farmer.png"));  //For now, it uses the texture for the vanilla farmer
+        }
 
         LogHelper.info("Renderers registered");
     }

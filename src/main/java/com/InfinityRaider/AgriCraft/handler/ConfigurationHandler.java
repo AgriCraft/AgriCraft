@@ -57,6 +57,8 @@ public class ConfigurationHandler {
     public static int sprinklerGrowthIntervalTicks = 100;
     public static boolean placeWater;
     public static boolean fillFromFlowingWater;
+    public static int villagerID;
+    public static boolean villagerEnabled;
 
     public static boolean integration_HC;
     public static boolean integration_Nat;
@@ -123,6 +125,10 @@ public class ConfigurationHandler {
         integration_Botania = ModIntegration.LoadedMods.botania && config.getBoolean("Botania", CATEGORY_INTEGRATION, true, "Set to false to disable Botania Integration");
         integration_allowMagicFertiliser = ModIntegration.LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser",CATEGORY_INTEGRATION,true,"Set to false to disable using magical fertiliser on crops");
         integration_instantMagicFertiliser = ModIntegration.LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser Instant Growth", CATEGORY_INTEGRATION, false, "Set to true to insta-grow plants on which the magical fertiliser is used on");
+
+        villagerID = config.getInt("Villager ID", CATEGORY_AGRICRAFT, 10, 7, 99, "The profession ID the villager uses");
+        villagerEnabled = config.getBoolean("Enable villagers",CATEGORY_AGRICRAFT, true, "Set to false if you wish to disable villagers spawning in the ArgiCraft houses");
+
 
         //toggle debug mode
         debug = config.getBoolean("debug",CATEGORY_DEBUG,false,"Set to true if you wish to enable debug mode");

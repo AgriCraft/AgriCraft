@@ -171,6 +171,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
                 this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==0 && x%2==0) || (x==11 &&z==5));
             }
         }
+        this.spawnVillagers(world, boundingBox, 3, 1, 3, 1);
         return true;
     }
 
@@ -228,5 +229,10 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         else {
             return false;
         }
+    }
+
+    @Override
+    protected int getVillagerType (int par1) {
+        return ConfigurationHandler.villagerEnabled ? ConfigurationHandler.villagerID : 0;
     }
 }

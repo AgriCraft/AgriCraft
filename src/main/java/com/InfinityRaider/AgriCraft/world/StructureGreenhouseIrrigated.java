@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.world;
 
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import net.minecraft.init.Blocks;
@@ -276,6 +277,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.generateStructureSprinkler(world, boundingBox, 11, 4, 10);
         //place seed analyzer
         this.generateStructureSeedAnalyzer(world, boundingBox, 11, 2, 4, ForgeDirection.SOUTH);
+        this.spawnVillagers(world, boundingBox, 3, 1, 3, 1);
         return true;
     }
     //place a tank
@@ -324,5 +326,10 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         else {
             return false;
         }
+    }
+
+    @Override
+    protected int getVillagerType (int par1) {
+        return ConfigurationHandler.villagerEnabled ? ConfigurationHandler.villagerID : 0;
     }
 }
