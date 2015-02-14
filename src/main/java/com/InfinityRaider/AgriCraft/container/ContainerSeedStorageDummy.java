@@ -68,13 +68,13 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
             stackToMove.stackTagCompound = controllable.getStackInSlot(slotId).stackTagCompound;
             if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
                 if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-                    controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
-                    //this method is only called form the gui client side, so we need to manually tell the server to execute it there as well
+                    LogHelper.debug("Sending command to server");
+                    //this method is only called form the gui client side, so we need to manually tell the server to execute it there
                     NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(stack, Minecraft.getMinecraft().thePlayer, slotId));
-                    controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
                 }
                 else {
-                    //on the server decrease the size of the stack
+                    LogHelper.debug("Command received");
+                    //on the server decrease the size of the stack, where it is synced to the client
                     controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
                 }
             } else {
@@ -175,11 +175,5 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
     public ItemStack slotClick(int slotIndex, int mouseButton, int shiftHeld, EntityPlayer player) {
         LogHelper.debug("Slot CLicked: par1 = " + slotIndex + ", par2 = " + mouseButton + ", par3 = " + shiftHeld);
         return super.slotClick(slotIndex, mouseButton, shiftHeld, player);
-    }
-
-    @Override
-    public void onContainerClosed(EntityPlayer player) {
-        this.getTileEntity().markDirty();
-        super.onContainerClosed(player);
     }
 }

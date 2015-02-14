@@ -5,13 +5,9 @@ import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -25,7 +21,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public ForgeDirection direction;
     private ItemSeeds lockedSeed;
     private int lockedSeedMeta;
-    private Map<Integer, SeedStorageSlot> slots;
+    private Map<Integer, SeedStorageSlot> slots = new HashMap<Integer, SeedStorageSlot>();
     private ISeedStorageController controller;
 
     @Override
@@ -96,8 +92,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public boolean receiveClientEvent(int eventID, int usingPlayers) {
-        return super.receiveClientEvent(eventID, usingPlayers);
+    public boolean receiveClientEvent(int id, int data) {
+        this.decrStackSize(id, data);
+        return true;
     }
 
     //sets the direction based on an int
@@ -106,7 +103,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     public void syncSlotToClient(int slot) {
-        NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageTileEntitySeedStorage(this.xCoord, this.yCoord, this.zCoord, slots.get(slot)), new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 16*10));
+        NetworkWrapperAgriCraft.wrapper.sendToDimension(new MessageTileEntitySeedStorage(this.xCoord, this.yCoord, this.zCoord, slots.get(slot)), this.worldObj.provider.dimensionId);
     }
 
 
@@ -232,23 +229,23 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
-        if(!worldObj.isRemote) {
-            slot = slot % 1000;
-            ItemStack stackInSlot = null;
-            if (this.slots != null) {
-                SeedStorageSlot slotAt = this.slots.get(slot);
-                if (slotAt != null) {
-                    stackInSlot = slotAt.getStack(this.lockedSeed, this.lockedSeedMeta);
-                    if (slotAt.count <= amount) {
-                        this.slots.remove(slot);
-                    } else {
-                        slotAt.count = slotAt.count - amount;
-                    }
+        slot = slot % 1000;
+        ItemStack stackInSlot = null;
+        if (this.slots != null) {
+            SeedStorageSlot slotAt = this.slots.get(slot);
+            if (slotAt != null) {
+                stackInSlot = slotAt.getStack(this.lockedSeed, this.lockedSeedMeta);
+                if (slotAt.count <= amount) {
+                    this.slots.remove(slot);
+                } else {
+                    slotAt.count = slotAt.count - amount;
                 }
             }
-            return stackInSlot;
         }
-        return null;
+        if(!worldObj.isRemote) {
+            this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), slot, amount);
+        }
+        return stackInSlot;
     }
 
     @Override
