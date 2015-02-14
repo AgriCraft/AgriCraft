@@ -124,7 +124,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                     }
                 }
                 if (!success) {
-                    this.slots.put(lastId + 1, new SeedStorageSlot(stack.getTagCompound(), stack.stackSize, lastId + 1, this.getControllableID()));
+                    this.setInventorySlotContents(lastId+1, stack);
                     success = true;
                 }
             }
@@ -270,7 +270,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             else {
                 this.slots.put(slot, new SeedStorageSlot(inputStack.getTagCompound(), inputStack.stackSize, slot, this.getControllableID()));
             }
-            if(FMLCommonHandler.instance().getSide()== Side.SERVER) {
+            if(FMLCommonHandler.instance().getSide() == Side.SERVER) {
                 this.syncSlotToClient(slot);
             }
             this.markForUpdate();
