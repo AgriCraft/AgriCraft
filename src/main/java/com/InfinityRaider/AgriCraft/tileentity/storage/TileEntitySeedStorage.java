@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
@@ -124,12 +125,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                     }
                 }
                 if (!success) {
-                    this.setInventorySlotContents(lastId+1, stack);
+                    this.setInventorySlotContents(lastId + 1, stack);
                     success = true;
                 }
-            }
-            if (success) {
-                this.markForUpdate();
             }
         }
         return success;
@@ -230,22 +228,23 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
-        slot = slot%1000;
-        ItemStack stackInSlot = null;
-        if(this.slots!=null) {
-            SeedStorageSlot slotAt = this.slots.get(slot);
-            if (slotAt != null) {
-                stackInSlot = slotAt.getStack(this.lockedSeed, this.lockedSeedMeta);
-                if(slotAt.count<=amount) {
-                    this.slots.remove(slot);
-                }
-                else {
-                    slotAt.count = slotAt.count-amount;
+        if(!worldObj.isRemote) {
+            slot = slot % 1000;
+            ItemStack stackInSlot = null;
+            if (this.slots != null) {
+                SeedStorageSlot slotAt = this.slots.get(slot);
+                if (slotAt != null) {
+                    stackInSlot = slotAt.getStack(this.lockedSeed, this.lockedSeedMeta);
+                    if (slotAt.count <= amount) {
+                        this.slots.remove(slot);
+                    } else {
+                        slotAt.count = slotAt.count - amount;
+                    }
                 }
             }
+            return stackInSlot;
         }
-        this.markForUpdate();
-        return stackInSlot;
+        return null;
     }
 
     @Override
@@ -270,10 +269,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             else {
                 this.slots.put(slot, new SeedStorageSlot(inputStack.getTagCompound(), inputStack.stackSize, slot, this.getControllableID()));
             }
-            if(FMLCommonHandler.instance().getSide() == Side.SERVER) {
+            if(!this.worldObj.isRemote) {
                 this.syncSlotToClient(slot);
             }
-            this.markForUpdate();
         }
     }
 

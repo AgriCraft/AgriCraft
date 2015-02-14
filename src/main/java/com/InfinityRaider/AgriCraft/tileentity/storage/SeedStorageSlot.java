@@ -39,10 +39,6 @@ public class SeedStorageSlot {
         return invId>=0?(1000*invId) + slotId:slotId;
     }
 
-    public int getSlotId() {
-        return this.slotId;
-    }
-
     /** Compares 2 SeedStorageSlots by the given stat */
     public static class SlotComparator implements Comparator<SeedStorageSlot> {
 

@@ -74,7 +74,7 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
                     controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
                 }
                 else {
-                    //on the server decrease the size of the stack, this gets synced to the client from this method
+                    //on the server decrease the size of the stack
                     controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
                 }
             } else {

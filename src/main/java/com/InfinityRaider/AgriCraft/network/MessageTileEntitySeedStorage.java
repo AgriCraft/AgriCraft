@@ -30,12 +30,17 @@ public class MessageTileEntitySeedStorage implements IMessage {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.slotId = slot.getSlotId();
-        this.amount = slot.count;
-        NBTTagCompound tag = slot.getTag();
-        this.growth = tag.getInteger(Names.NBT.growth);
-        this.gain = tag.getInteger(Names.NBT.gain);
-        this.strength = tag.getInteger(Names.NBT.strength);
+        if(slot!=null) {
+            this.slotId = slot.getId();
+            this.amount = slot.count;
+            NBTTagCompound tag = slot.getTag();
+            this.growth = tag.getInteger(Names.NBT.growth);
+            this.gain = tag.getInteger(Names.NBT.gain);
+            this.strength = tag.getInteger(Names.NBT.strength);
+        }
+        else {
+            this.slotId = -1;
+        }
     }
 
     private NBTTagCompound getTag() {
@@ -50,10 +55,12 @@ public class MessageTileEntitySeedStorage implements IMessage {
         this.y = buf.readInt();
         this.z = buf.readInt();
         this.slotId = buf.readInt();
-        this.amount = buf.readInt();
-        this.growth = buf.readInt();
-        this.gain = buf.readInt();
-        this.strength = buf.readInt();
+        if(this.slotId>=0) {
+            this.amount = buf.readInt();
+            this.growth = buf.readInt();
+            this.gain = buf.readInt();
+            this.strength = buf.readInt();
+        }
     }
 
     @Override
@@ -62,10 +69,12 @@ public class MessageTileEntitySeedStorage implements IMessage {
         buf.writeInt(this.y);
         buf.writeInt(this.z);
         buf.writeInt(this.slotId);
-        buf.writeInt(this.amount);
-        buf.writeInt(this.growth);
-        buf.writeInt(this.gain);
-        buf.writeInt(this.strength);
+        if(this.slotId>=0) {
+            buf.writeInt(this.amount);
+            buf.writeInt(this.growth);
+            buf.writeInt(this.gain);
+            buf.writeInt(this.strength);
+        }
     }
 
     public static class MessageHandler implements IMessageHandler<MessageTileEntitySeedStorage, IMessage> {
