@@ -233,6 +233,6 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 
     @Override
     protected int getVillagerType (int par1) {
-        return ConfigurationHandler.villagerID;
+        return ConfigurationHandler.villagerEnabled ? ConfigurationHandler.villagerID : 0;
     }
 }

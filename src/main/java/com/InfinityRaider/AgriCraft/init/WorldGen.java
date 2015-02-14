@@ -30,7 +30,9 @@ public class WorldGen {
             VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseIrrigatedHandler());
         }
 
-        VillagerRegistry.instance().registerVillagerId(ConfigurationHandler.villagerID);
-        VillagerRegistry.instance().registerVillageTradeHandler(ConfigurationHandler.villagerID, new VillagerTradeHandler());
+        if (ConfigurationHandler.villagerEnabled) {
+            VillagerRegistry.instance().registerVillagerId(ConfigurationHandler.villagerID);
+            VillagerRegistry.instance().registerVillageTradeHandler(ConfigurationHandler.villagerID, new VillagerTradeHandler());
+        }
     }
 }
