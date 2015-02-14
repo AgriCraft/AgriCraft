@@ -18,6 +18,10 @@ public class TileEntityAgricraft extends TileEntity {
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt){
         readFromNBT(pkt.func_148857_g());
+        if(this.worldObj.isRemote) {
+            //cause a block update on the client to re-render the block
+            this.markForUpdate();
+        }
     }
 
     public void markForUpdate() {

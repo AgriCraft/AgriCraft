@@ -207,6 +207,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 //harvest operation
                 this.harvest(world, x, y, z);
             }
+            else if(player.getCurrentEquippedItem().getItem()==Items.debugItem) {
+                return false;
+            }
             //check to see if the player clicked with crops (crosscrop attempt)
             else if(player.getCurrentEquippedItem().getItem()==Items.crops) {
                 this.setCrossCrop(world, x, y, z, player);
@@ -309,6 +312,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         if(crop.hasPlant() && this.isFertile(world, x, y ,z)) {
             super.func_149853_b(world, rand, x, y, z);
+            crop.markForUpdate();
         }
         else if(crop.crossCrop && ConfigurationHandler.bonemealMutation) {
             crop.crossOver();
