@@ -23,12 +23,4 @@ public class TileEntityAgricraft extends TileEntity {
     public void markForUpdate() {
         this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        if(worldObj != null) {
-            this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
-        super.readFromNBT(tag);
-    }
 }

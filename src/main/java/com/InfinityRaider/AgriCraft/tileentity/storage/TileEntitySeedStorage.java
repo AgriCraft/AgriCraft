@@ -40,7 +40,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             ItemStack seedStack = new ItemStack(lockedSeed, 1, lockedSeedMeta);
             seedStack.writeToNBT(seedTag);
             tag.setTag(Names.NBT.seed, seedTag);
-            if(this.slots!=null && this.slots.size()>0) {
+            if(this.slots!=null) {
                 //add the slots
                 NBTTagList tagList = new NBTTagList();
                 for (Map.Entry<Integer, SeedStorageSlot> entry:slots.entrySet()) {
@@ -49,7 +49,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                         //tag
                         NBTTagCompound slotTag = new NBTTagCompound();
                         slotTag.setInteger(Names.NBT.count, slot.count);
-                        slotTag.setTag(Names.NBT.tag, slot.tag);
+                        slotTag.setTag(Names.NBT.tag, slot.getTag());
                         //add the tag to the list
                         tagList.appendTag(slotTag);
                     }

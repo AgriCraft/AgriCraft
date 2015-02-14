@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import java.util.Comparator;
 
 public class SeedStorageSlot {
-    public NBTTagCompound tag;
+    private NBTTagCompound tag;
     public int count;
 
     final int slotId;
@@ -28,7 +28,7 @@ public class SeedStorageSlot {
     }
 
     public NBTTagCompound getTag() {
-        return this.tag;
+        return (NBTTagCompound) this.tag.copy();
     }
 
     private int getTotalStat() {
