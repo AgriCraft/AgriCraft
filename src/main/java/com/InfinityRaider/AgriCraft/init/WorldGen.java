@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.VillageCreationHandler;
+import com.InfinityRaider.AgriCraft.handler.VillagerTradeHandler;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouse;
@@ -28,5 +29,8 @@ public class WorldGen {
             }
             VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseIrrigatedHandler());
         }
+
+        VillagerRegistry.instance().registerVillagerId(ConfigurationHandler.villagerID);
+        VillagerRegistry.instance().registerVillageTradeHandler(ConfigurationHandler.villagerID, new VillagerTradeHandler());
     }
 }
