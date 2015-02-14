@@ -35,6 +35,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
         tag.setShort(Names.NBT.growth, (short) growth);
         tag.setShort(Names.NBT.gain, (short) gain);
         tag.setShort(Names.NBT.strength, (short) strength);
@@ -45,12 +46,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             tag.setString(Names.Objects.seed, this.getSeedString());
             tag.setShort(Names.NBT.meta, (short) seedMeta);
         }
-        super.writeToNBT(tag);
     }
 
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
         this.growth=tag.getInteger(Names.NBT.growth);
         this.gain=tag.getInteger(Names.NBT.gain);
         this.strength=tag.getInteger(Names.NBT.strength);
@@ -65,7 +66,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.seed=null;
             this.seedMeta=0;
         }
-        super.readFromNBT(tag);
     }
 
     //the code that makes the crop cross with neighboring crops
