@@ -176,4 +176,10 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
         LogHelper.debug("Slot CLicked: par1 = " + slotIndex + ", par2 = " + mouseButton + ", par3 = " + shiftHeld);
         return super.slotClick(slotIndex, mouseButton, shiftHeld, player);
     }
+
+    @Override
+    public void onContainerClosed(EntityPlayer player) {
+        this.getTileEntity().markDirty();
+        super.onContainerClosed(player);
+    }
 }

@@ -46,15 +46,17 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                 for (Map.Entry<Integer, SeedStorageSlot> entry:slots.entrySet()) {
                     if(entry!=null && entry.getValue()!=null) {
                         SeedStorageSlot slot = entry.getValue();
+                        NBTTagCompound stackTag = slot.getTag();
                         //tag
                         NBTTagCompound slotTag = new NBTTagCompound();
                         slotTag.setInteger(Names.NBT.count, slot.count);
-                        slotTag.setTag(Names.NBT.tag, slot.getTag());
+                        slotTag.setShort(Names.NBT.growth, stackTag.getShort(Names.NBT.growth));
+                        slotTag.setShort(Names.NBT.gain, stackTag.getShort(Names.NBT.gain));
+                        slotTag.setShort(Names.NBT.strength, stackTag.getShort(Names.NBT.strength));
                         //add the tag to the list
                         tagList.appendTag(slotTag);
                     }
                 }
-                tag.setInteger(Names.NBT.size, tagList.tagCount());
                 tag.setTag(Names.NBT.inventory, tagList);
             }
         }
@@ -75,13 +77,15 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             ItemStack seedStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.NBT.seed));
             this.lockedSeed = (ItemSeeds) seedStack.getItem();
             this.lockedSeedMeta = seedStack.getItemDamage();
-            if(tag.hasKey(Names.NBT.inventory) && tag.hasKey(Names.NBT.size)) {
+            if(tag.hasKey(Names.NBT.inventory)) {
                 //read the slots
-                NBTTagList tagList = tag.getTagList(Names.NBT.inventory, tag.getInteger(Names.NBT.size));
+                NBTTagList tagList = tag.getTagList(Names.NBT.inventory, 10);
                 int invId = this.getControllableID();
                 for (int i = 0; i < tagList.tagCount(); i++) {
                     NBTTagCompound slotTag = tagList.getCompoundTagAt(i);
-                    slots.put(i, new SeedStorageSlot((NBTTagCompound) slotTag.getTag(Names.NBT.tag), slotTag.getInteger(Names.NBT.count), i, invId));
+                    NBTTagCompound stackTag = new NBTTagCompound();
+                    SeedHelper.setNBT(stackTag, slotTag.getShort(Names.NBT.growth), slotTag.getShort(Names.NBT.gain), slotTag.getShort(Names.NBT.strength), true);
+                    slots.put(i, new SeedStorageSlot(stackTag, slotTag.getInteger(Names.NBT.count), i, invId));
                 }
             }
         }

@@ -21,7 +21,7 @@ public final class Names {
         public static final String angle = "angle";
         public static final String isSprinkled = "isSprinkled";
         public static final String power = "powerrrr";
-        public static final String inventory = "inventory";
+        public static final String inventory = "agricraftInv";
         public static final String size = "size";
         public static final String count = "count";
         public static final String seed = "seed";
