@@ -1,17 +1,16 @@
 Changelog
 ---------
-
 1.3.0
 -ADDED:  A config option to change the maximum stat cap on crops
 -ADDED:  A config option to divide the stats on a newly mutated crops
--CHANGE: NEI will show the needed soil and required base block (if any) for mutations
--FIXED:  Sprinklers no longer hate railcraft hidden blocks
-
-1.2.3
 -ADDED:  A config option to let the cactus crop produce cactus blocks instead of cactus green
 -CHANGE: The background of the seed portrait in the journal is now the required soil
 -CHANGE: You can now specify any block as a specific soil for custom crops
 -CHANGE: Adding cross-crop sticks won't clear weeds anymore
+-CHANGE: Overhauled the way mutation requirements work: instead of setting specific requirements for mutations, you now have to set specific requirements for growing.
+-CHANGE: The requirement for a mutation to happen is the same as for growing: A plant can only mutate if it can grow there
+-CHANGE: NEI will show the needed soil and required base block (if any) for mutations
+-FIXED:  Sprinklers no longer hate railcraft hidden blocks
 -FIXED:  Moved Botania crops to post init to possibly fix the crops not dropping petals
 -FIXED:  Nether wart not being recognised as a valid seed (Marcin212)
 -FIXED:  Sprinkler not stopping when water in the channel above ran out
