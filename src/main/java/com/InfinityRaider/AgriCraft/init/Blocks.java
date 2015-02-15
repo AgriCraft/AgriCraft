@@ -31,7 +31,7 @@ public class Blocks {
             RegisterHelper.registerBlock(blockChannelValve, Names.Objects.valve, ItemBlockCustomWood.class);
             blockSprinkler = new BlockSprinkler();
             RegisterHelper.registerBlock(blockSprinkler, Names.Objects.sprinkler);
-        }/*
+        }
         if(!ConfigurationHandler.disableSeedStorage) {
             blockSeedStorage = new BlockSeedStorage();
             RegisterHelper.registerBlock(blockSeedStorage, Names.Objects.seedStorage, ItemBlockCustomWood.class);
@@ -40,7 +40,7 @@ public class Blocks {
                 RegisterHelper.registerBlock(blockSeedStorageController, Names.Objects.seedStorageController, ItemBlockCustomWood.class);
             }
         }
-        */
+        
         LogHelper.info("Blocks registered");
     }
 }

@@ -93,7 +93,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public boolean receiveClientEvent(int id, int data) {
-        this.decrStackSize(id, data);
+        if(this.worldObj.isRemote) {
+            this.decrStackSize(id, data);
+        }
         return true;
     }
 

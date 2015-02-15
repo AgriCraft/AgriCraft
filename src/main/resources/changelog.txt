@@ -8,6 +8,7 @@ Changelog
 -ADDED:  A config option to let the cactus crop produce cactus blocks instead of cactus green
 -ADDED:  Villagers for the greenhouse (Elec332)
 -ADDED:  MineTweaker3 support for changing growth requirements
+-ADDED:  Canadian French translations (DragonsLover)
 -CHANGE: The background of the seed portrait in the journal is now the required soil
 -CHANGE: You can now specify any block as a specific soil for custom crops
 -CHANGE: Adding cross-crop sticks won't clear weeds anymore
