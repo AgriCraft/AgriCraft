@@ -1,0 +1,293 @@
+//Creative Tabs
+itemGroup.agricraft=Agricraft
+
+//Items
+item.agricraft:cropsItem.name=Tuteurs
+item.agricraft:journal.name=Journal agricole
+item.agricraft:trowel.name=Transplantoir
+item.agricraft:magnifyingGlass.name=Loupe
+item.agricraft:sprinklerItem.name=Arroseur
+item.agricraft:debugger.name=Débogueur
+item.agricraft:handRake.wood.name=Râteau à main en bois
+item.agricraft:handRake.iron.name=Râteau à main en fer
+
+item.agricraft:nuggetDiamond.name=Pépite de diamant
+item.agricraft:nuggetIron.name=Pépite de fer
+item.agricraft:nuggetEmerald.name=Pépite d'émeraude
+item.agricraft:nuggetTin.name=Pépite d'étain
+item.agricraft:nuggetLead.name=Pépite de plomb
+item.agricraft:nuggetSilver.name=Pépite d'argent
+item.agricraft:nuggetAluminum.name=Pépite d'aluminium
+item.agricraft:nuggetNickel.name=Pépite de nickel
+item.agricraft:nuggetPlatinum.name=Pépite de platine
+item.agricraft:nuggetOsmium.name=Pépite d'osmium
+
+item.agricraft:seedPotato.name=Semences de patate
+item.agricraft:seedCarrot.name=Semences de carotte
+item.agricraft:seedSugarcane.name=Boutures de canne à sucre
+item.agricraft:seedDandelion.name=Graine de pissenlit
+item.agricraft:seedPoppy.name=Graine de coquelicot
+item.agricraft:seedOrchid.name=Graine d'orchidée bleue
+item.agricraft:seedAllium.name=Bulbe d'allium
+item.agricraft:seedTulipRed.name=Bulbe de tulipe rouge
+item.agricraft:seedTulipOrange.name=Bulbe de tulipe orange
+item.agricraft:seedTulipWhite.name=Bulbe de tulipe blanche
+item.agricraft:seedTulipPink.name=Bulbe de tulipe rose
+item.agricraft:seedDaisy.name=Graine de marguerite
+item.agricraft:seedCactus.name=Graines de cactus
+item.agricraft:seedShroomRed.name=Spores de champignon rouge
+item.agricraft:seedShroomBrown.name=Spores de champignon brun
+
+item.agricraft:seedBotaniaWhite.name=Graines de fleur mystique blanche
+item.agricraft:seedBotaniaOrange.name=Graines de fleur mystique orange
+item.agricraft:seedBotaniaMagenta.name=Graines de fleur mystique magenta
+item.agricraft:seedBotaniaLightBlue.name=Graines de fleur mystique bleu pâle
+item.agricraft:seedBotaniaYellow.name=Graines de fleur mystique jaune
+item.agricraft:seedBotaniaLime.name=Graines de fleur mystique lime
+item.agricraft:seedBotaniaPink.name=Graines de fleur mystique rose
+item.agricraft:seedBotaniaGray.name=Graines de fleur mystique grise
+item.agricraft:seedBotaniaLightGray.name=Graines de fleur mystique gris pâle
+item.agricraft:seedBotaniaCyan.name=Graines de fleur mystique cyan
+item.agricraft:seedBotaniaPurple.name=Graines de fleur mystique mauve
+item.agricraft:seedBotaniaBlue.name=Graines de fleur mystique bleue
+item.agricraft:seedBotaniaBrown.name=Graines de fleur mystique brune
+item.agricraft:seedBotaniaGreen.name=Graines de fleur mystique verte
+item.agricraft:seedBotaniaRed.name=Graines de fleur mystique rouge
+item.agricraft:seedBotaniaBlack.name=Graines de fleur mystique noire
+
+item.agricraft:seedFerranium.name=Graines de ferranium
+item.agricraft:seedAurigold.name=Graines d'aurigold
+item.agricraft:seedDiamahlia.name=Graines de diamahlia
+item.agricraft:seedLapender.name=Graines de lapender
+item.agricraft:seedEmeryllis.name=Graines d'emeryllis
+item.agricraft:seedRedstodendron.name=Graines de redstodendron
+item.agricraft:seedCuprosia.name=Graines de cuprosia
+item.agricraft:seedPetinia.name=Graines de petinia
+item.agricraft:seedPlombean.name=Graines de plombean
+item.agricraft:seedSilverweed.name=Graines de silverweed
+item.agricraft:seedJaslumine.name=Graines de jaslumine
+item.agricraft:seedNiccissus.name=Graines de niccissus
+item.agricraft:seedPlatiolus.name=Graines de platiolus
+item.agricraft:seedOsmonium.name=Graines d'osmonium
+
+//blocks
+tile.agricraft:crops.name=Tuteurs
+tile.agricraft:seedAnalyzer.name=Analyseur de graines
+tile.agricraft:waterTank.0.name=Tank d'eau en bois
+tile.agricraft:waterTank.1.name=Tank d'eau en fer
+tile.agricraft:waterChannel.0.name=Canal d'irrigation en bois
+tile.agricraft:waterChannel.1.name=Canal d'irrigation en fer
+tile.agricraft:channelValve.0.name=Vanne de canal en bois
+tile.agricraft:channelValve.1.name=Vanne de canal en fer
+
+tile.agricraft:cropPotato.name=Patates
+tile.agricraft:cropCarrot.name=Carottes
+tile.agricraft:cropSugarcane.name=Cannes à sucre
+tile.agricraft:cropMelon.name=Melon d'eau
+tile.agricraft:cropPumpkin.name=Citrouille
+tile.agricraft:cropDandelion.name=Pissenlit
+tile.agricraft:cropPoppy.name=Coquelicot
+tile.agricraft:cropOrchid.name=Orchidées bleues
+tile.agricraft:cropAllium.name=Allium
+tile.agricraft:cropTulipRed.name=Tulipe rouge
+tile.agricraft:cropTulipOrange.name=Tulipe orange
+tile.agricraft:cropTulipWhite.name=Tulipe blanche
+tile.agricraft:cropTulipPink.name=Tulipe rose
+tile.agricraft:cropDaisy.name=Marguerite
+tile.agricraft:cropCactus.name=Cactus
+tile.agricraft:cropShroomRed.name=Champignon rouge
+tile.agricraft:cropShroomBrown.name=Champignon brun
+
+tile.agricraft:cropBotaniaWhite.name=Fleur mystique blanche
+tile.agricraft:cropBotaniaOrange.name=Fleur mystique orange
+tile.agricraft:cropBotaniaMagenta.name=Fleur mystique magenta
+tile.agricraft:cropBotaniaLightBlue.name=Fleur mystique bleu pâle
+tile.agricraft:cropBotaniaYellow.name=Fleur mystique jaune
+tile.agricraft:cropBotaniaLime.name=Fleur mystique lime
+tile.agricraft:cropBotaniaPink.name=Fleur mystique rose
+tile.agricraft:cropBotaniaGray.name=Fleur mystique grise
+tile.agricraft:cropBotaniaLightGray.name=Fleur mystique gris pâle
+tile.agricraft:cropBotaniaCyan.name=Fleur mystique cyan
+tile.agricraft:cropBotaniaPurple.name=Fleur mystique mauve
+tile.agricraft:cropBotaniaBlue.name=Fleur mystique bleue
+tile.agricraft:cropBotaniaBrown.name=Fleur mystique brune
+tile.agricraft:cropBotaniaGreen.name=Fleur mystique verte
+tile.agricraft:cropBotaniaRed.name=Fleur mystique rouge
+tile.agricraft:cropBotaniaBlack.name=Fleur mystique noire
+
+tile.agricraft:cropFerranium.name=Ferranium
+tile.agricraft:cropAurigold.name=Aurigold
+tile.agricraft:cropDiamahlia.name=Diamahlia
+tile.agricraft:cropLapender.name=Lapender
+tile.agricraft:cropEmeryllis.name=Emeryllis
+tile.agricraft:cropRedstodendron.name=Redstodendron
+tile.agricraft:cropCuprosia.name=Cuprosia
+tile.agricraft:cropPetinia.name=Petinia
+tile.agricraft:cropPlombean.name=Plombean
+tile.agricraft:cropSilverweed.name=Silverweed
+tile.agricraft:cropJaslumine.name=Jaslumine
+tile.agricraft:cropNiccissus.name=Niccissus
+tile.agricraft:cropPlatiolus.name=Platiolus
+tile.agricraft:cropOsmonium.name=Osmonium
+
+//tooltips
+agricraft_tooltip.unidentified=Non identifiée(s)
+agricraft_tooltip.seed=Graine(s) 
+agricraft_tooltip.growth=Croissance 
+agricraft_tooltip.gain=Gain 
+agricraft_tooltip.strength=Force 
+agricraft_tooltip.analyzed=Cette graine n'a pas encore été analysée
+agricraft_tooltip.fertile=Cette plante est fertile et peut grandir
+agricraft_tooltip.notFertile=Cette plante ne peut pas grandir ici
+agricraft_tooltip.discoveredSeeds=Graines découvertes 
+agricraft_tooltip.material=Matériau 
+agricraft_tooltip.waterLevel=Niveau d'eau 
+agricraft_tooltip.cropWithPlant=Ces tuteurs ont une plante
+agricraft_tooltip.crossCrop=Ce sont des tuteurs croisés
+agricraft_tooltip.weeds=Des mauvaises herbes ont poussé ici
+agricraft_tooltip.cropWithoutPlant=Ces tuteurs n'ont pas de plante
+agricraft_tooltip.notCrop=Ce ne sont pas des tuteurs
+agricraft_tooltip.trowel=Utilisez ceci pour déplacer les plantes de tuteurs à d'autres
+agricraft_tooltip.magnifyingGlass=Utilisez ceci pour inspecter les cultures
+agricraft_tooltip.handRake=Utilisez ceci pour enlever les mauvaises herbes des cultures
+agricraft_tooltip.closed=Fermée
+agricraft_tooltip.open=Ouverte
+agricraft_tooltip.state=État 
+agricraft_tooltip.empty=Aucune graine de plantée
+
+// nei GUI
+agricraft_nei.mutation.title=Mutation des cultures
+agricraft_nei.soil=Sol
+agricraft_nei.needs=Requiert
+agricraft_nei.below=En-dessous
+agricraft_nei.nearby=À côté
+
+//journal entries
+//---------------
+//headers
+agricraft_journal.introduction=Bienvenue à la cultivation agricole ! Aujourd'hui, je vous apprendrai les bases de l'agriculture avec des tuteurs. Pour commencer, vous aurez besoin de placer 4 bâtons en forme de carré dans une grille de fabrication : cela va faire des tuteurs. Ceux-ci peuvent être placés sur de la terre labourée et des graines peuvent ensuite y être plantées. Vous pouvez aussi appliquer un autre lot de tuteurs sur ceux déjà existants, cela va créer des tuteurs croisés. Si vous plantez deux plantes ou plus dans des tuteurs adjacents à des tuteurs croisés, il y aura une chance pour qu'une mutation se produise.\nDans ce journal, vous pouvez suivre toutes vos découvertes de mutations de cultures. Pour enregistrer des graines découvertes, placez le journal dans un analyseur de graines et analysez-les. Cela va vous révéler les propriétés des graines en plus de les avoir enregistrées dans ce journal. Si vous souhaitez copier le journal, placez-le dans une grille de fabrication avec un livre et plume vierge.
+agricraft_journal.information=Information 
+agricraft_journal.tier=Niveau 
+agricraft_journal.fruits=Fruits 
+agricraft_journal.growthStages=Stades de croissance 
+agricraft_journal.mutations=Mutations 
+
+//agricraft seeds
+agricraft_journal.potato=La patate est la base de presque tout repas, toutefois certains ont même trouvé des façons d'en faire un breuvage.
+agricraft_journal.carrot=La carotte est un légume adapté pour certaines diètes.
+agricraft_journal.sugarcane=D'habitude, la canne à sucre pousse uniquement près de l'eau, mais un agriculteur devrait être capable de produire une mutation de cette plante pour la faire pousser n'importe où.
+agricraft_journal.dandelion=Les pissenlits sont des fleurs jaunes généralement trouvées dans des endroits exposés au soleil.
+agricraft_journal.poppy=Bien que très commun, le coquelicot reste une très belle fleur d'un rouge vif.
+agricraft_journal.orchid=Une fleur bien jolie dans les jardins. En fait, aucun jardin n'est complet sans avoir des orchidées.
+agricraft_journal.allium=L'allium est une fleur qui est cultivée pour ses pétales mauves.
+agricraft_journal.tulipPink=La tulipe existe en plusieurs variétés de couleurs, mais seul un vrai agriculteur apprécie celle qui est rose.
+agricraft_journal.tulipOrange=Orange, l'une des variétés de couleurs dans le spectre des tulipes.
+agricraft_journal.tulipRed=Il existe une citation : "Il y a 50 nuances de tulipe, mais la rouge est la plus belle".
+agricraft_journal.tulipWhite=Il y a plusieurs fleurs blanches, mais beaucoup disent que la tulipe blanche et la fleur blanche de toutes les fleurs blanches.
+agricraft_journal.daisy=Les marguerites sont plutôt communes, mais restent néanmoins de belles fleurs blanches.
+agricraft_journal.cactus=Le cactus peut être cultivé pour produire une substance colorée verte souvent utilisée comme colorant.
+agricraft_journal.shroomRed=Ce champignon rouge goûte plutôt bon actuellement et cela en fait un bon ingrédient pour de la crème de champignons.
+agricraft_journal.shroomBrown=Ce champignon brun goûte plutôt bon actuellement et cela en fait un bon ingrédient pour de la crème de champignons.
+agricraft_journal.diamahlia=Beaucoup croient encore que cette fleur existe uniquement dans les contes et les légendes. Toutefois, certains agriculteurs affirment avoir réussi à obtenir cette plante légendaire.
+agricraft_journal.aurigold=L'aurigold est une fleur rare et légendaire qui se nourrit de minuscules fragments d'or dans le sol. Seul un très patient agriculteur expérimenté est capable de cultiver ce bijou.
+agricraft_journal.ferranium=Les racines de cette plante étrange se fichent de l'eau. Elles s'enterrent dans le sol tout en absorbant des particules de fer pour se renforcer.
+agricraft_journal.lapender=En plus de sa belle couleur bleue, cette fleur produit des galets brillants.
+agricraft_journal.emeryllis=Si vous parlez à un agriculteur de village, il pourra vous raconter des histoires sur cette plante et des richesses qu'elle produirait.
+agricraft_journal.redstodendron=Une aura étrange semble émaner des buissons de redstodendron.
+agricraft_journal.cuprosia=Le cuprosia est une fleur bizarre qui extrait du cuivre du sol afin de faire jaillir ses beaux pétales.
+agricraft_journal.petinia=Cette fleur prospère uniquement sur du sol riche en étain.
+agricraft_journal.plombean=Parfois, le monde se trompe sur cette plante pour ses fèves régulières et ils meurent d'empoisonnement au plomb après en avoir mangées.
+agricraft_journal.silverweed=Parfois, des agriculteurs moins compétents confondent cette plante précieuse pour de la mauvaise herbe et s'en débarrassent.
+agricraft_journal.jaslumine=Les forgerons désapprouvent cette fleur, mais certains croient que l'aluminium peut être utilisé. C'est pourquoi la plupart essayent de faire pousser cette fleur.
+agricraft_journal.niccissus=Lorsque cette plante fleurit, ses fleurs révèlent des pépites faites de nickel. Comment cette plante pousse demeure toujours un mystère.
+agricraft_journal.platiolus=Le platine est un matériau rare, plusieurs métallurgistes vont chez les agriculteurs au-lieu des mineurs pour en obtenir.
+agricraft_journal.osmonium=Un agriculteur réussissant de faire pousser ces fleurs fera bon marché auprès d'ingénieurs.
+
+//botania seeds
+agricraft_journal.botaniaWhite=Cette fleur mystique a de jolis pétales blancs, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaOrange=Cette fleur mystique a de jolis pétales orange, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaMagenta=Cette fleur mystique a de jolis pétales magenta, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaLightBlue=Cette fleur mystique a de jolis pétales bleu pâle, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaYellow=Cette fleur mystique a de jolis pétales jaunes, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaLime=Cette fleur mystique a de jolis pétales lime, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaPink=Cette fleur mystique a de jolis pétales roses, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaGray=Cette fleur mystique a de jolis pétales gris, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaLightGray=Cette fleur mystique a de jolis pétales gris pâle, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaCyan=Cette fleur mystique a de jolis pétales cyan, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaPurple=Cette fleur mystique a de jolis pétales mauves, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaBlue=Cette fleur mystique a de jolis pétales bleus, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaBrown=Cette fleur mystique a de jolis pétales bruns, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaGreen=Cette fleur mystique a de jolis pétales verts, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaRed=Cette fleur mystique a de jolis pétales rouges, qui sait en quoi ils pourraient être utiles.
+agricraft_journal.botaniaBlack=Cette fleur mystique a de jolis pétales noirs, qui sait en quoi ils pourraient être utiles.
+
+//minecraft seeds
+agricraft_journal.wheat=Le blé est une culture très commune et très nutritive.
+agricraft_journal.pumpkin=La plupart du monde considèrent les citrouilles comme un légume décoratif, alors que d'autres aiment le goût des tartes à la citrouille.
+agricraft_journal.melon=À cause de son goût sucré et sa chair très humide, le melon est un fruit aimé de tous.
+
+//natura seeds
+agricraft_journal.barleyNatura=Certaines personnes préfèrent le goût du pain d'orge à celui de blé, alors que d'autres affirment que ça goûte exactement pareil.
+agricraft_journal.cottonNatura=Le coton est beaucoup demandé dans l'industrie du textile et cela en fait un atout précieux.
+
+//harvestcraft seeds
+agricraft_journal.hc_Artichoke=La portion comestible de l'artichaut consiste à son capitule avant que les fleurs n'éclosent.
+agricraft_journal.hc_Asparagus=L'asperge a été utilisé comme légume et en médecine, il a une saveur très délicate.
+agricraft_journal.hc_BambooShoot=Les pousses de bambou sont des pousses comestibles qui sont utilisées dans d'innombrables plats et bouillons asiatiques.
+agricraft_journal.hc_Bean=Les haricots sont une culture d'été qui ont besoin de chaudes températures pour grandir.
+agricraft_journal.hc_Beet=Les racines généralement mauve foncé des bettes sont mangées crues, grillées, bouillies ou rôties.
+agricraft_journal.hc_Bellpepper=Le plus souvent, les piments sont verts, jaunes, orange et rouges.
+agricraft_journal.hc_Blackberry=Ce fruit mou est populaire pour être utilisé dans les desserts, les confitures et les gelées, mais aussi parfois pour du vin et du vinaigre.
+agricraft_journal.hc_Blueberry=Les bleuets sont des plantes vivaces à fleurs avec des baies de couleur indigo.
+agricraft_journal.hc_Broccoli=Le brocoli est une plante verte comestible de la famille des choux, dont sa large tête fleurissante est utilisée comme un légume.
+agricraft_journal.hc_BrusselsSprout=Le chou de Bruxelles a longtemps été populaire à Bruxelles, en Belgique, et son origine peut provenir de là.
+agricraft_journal.hc_Cabbage=Le chou est généralement cultivé pour sa tête densément feuillue, qui se produit durant la première année de son cycle bisannuel.
+agricraft_journal.hc_CactusFruit=Typiquement, ses fruits poussent avec des épines, manipulez avec précaution...
+agricraft_journal.hc_CandleBerry=Le cirier est un petit arbuste qui produit des petits fruits.
+agricraft_journal.hc_Cantaloupe=La cantaloupe est normalement mangée comme fruit frais, en salade, ou comme dessert avec de la crème glacée ou de la costarde.
+agricraft_journal.hc_Cauliflower=Le chou-fleur peut être rôti, boulli, frit, cuit à la vapeur ou mangé cru.
+agricraft_journal.hc_Celery=Le céleri est une variété de plante communément utilisée comme un légume, la tige étant la partie comestible.
+agricraft_journal.hc_ChiliPepper=Le piment fort a plusieurs utilisations culinaires, en trempettes ou simplement pour pimenter vos repas.
+agricraft_journal.hc_Coffee=Ces grains sont la base pour une tasse de café fumante pour commencer votre journée, donc la base de votre journée.
+agricraft_journal.hc_Corn=À cause de ses racines peu profondes, le blé d'inde est vulnérable aux sécheresses, intolérant des sols pauvres en nutriments, et est sujet d'être déraciné par de forts vents.
+agricraft_journal.hc_Cranberry=Le jus de canneberge est habituellement sucré ou mélangé avec d'autres jus de fruit pour réduire son aigreur naturel.
+agricraft_journal.hc_Cucumber=Le concombre est une vigne grimpante qui donne des fruits cylindriques qui sont utilisés comme légumes culinaires.
+agricraft_journal.hc_Eggplant=Son fruit cru peut avoir un goût un peu amer, mais devient tendre une fois cuit et développe une saveur riche et complexe.
+agricraft_journal.hc_Garlic=L'ail pousse facilement et peut être cultivé à l'année longue dans des climats doux.
+agricraft_journal.hc_Ginger=Le gingembre produit des groupes de boutons à fleur roses et blancs qui éclosent en de fleurs jaunes.
+agricraft_journal.hc_Grape=Le raisin est une baie fruitée des vignes boisées à feuilles caduques. Les fruits peuvent être mangés crus ou être utilisés pour faire du vin, de la confiture, du jus, de la gelée, de l'extrait de pépin de raisin, des raisins secs, du vinaigre et de l'huile de pépin de raisin.
+agricraft_journal.hc_Kiwi=Le kiki peut être cultivé dans la plupart des climats tempérés avec la chaleur adéquate de l'été.
+agricraft_journal.hc_Leek=Plutôt que de former une bulbe étroite comme l'oignon, le poireau produit un long cylindre de gaines foliaires groupées qui sont généralement blanchies en poussant le sol autour d'elles.
+agricraft_journal.hc_Lettuce=Généralement cultivée comme plante annuelle, la laitue est facilement cultivée, bien qu'elle requiert des températures relativement basses pour l'empêcher de fleurir rapidement.
+agricraft_journal.hc_Mustard=Les graines de moutarde prennent généralement de trois à dix jours pour germer si elles sont placées sous des conditions appropriées, incluant une atmosphère froide et un sol relativement humide.
+agricraft_journal.hc_Oats=L'avoine est appropriée pour la consommation humaine en tant que farine ou flocons, mais l'une des utilisations les plus communes est pour nourrir le bétail.
+agricraft_journal.hc_Okra=Les plantes de gombo sont prisées pour leurs cosses de graines vertes comestibles.
+agricraft_journal.hc_Onion=La plante d'oignon a une touffe de feuilles bleu-vert creuses et la bulbe à la base de la plante commence à grossir lorsqu'une certaine durée du jour est atteinte.
+agricraft_journal.hc_Parsnip=Le panais est un légume à racine étroitement lié à la carotte et au persil.
+agricraft_journal.hc_Peanut=Les pinottes ont plusieurs utilisations. Elles peuvent être mangées crues ou utilisées dans les recettes, réduites en solvants et en huiles, utilisées en médecine et en matériaux textiles, transformées en beurre de pinottes, et avoir bien d'autres utilisations.
+agricraft_journal.hc_Peas=Les pois sont botaniquement un fruit, puisque qu'ils contiennent des graines développées de l'ovaire d'une fleur (de pois).
+agricraft_journal.hc_Pineapple=Les ananas sont consommés frais, cuits, en jus, préservés, et sont retrouvés dans une grande quantité de cuisines.
+agricraft_journal.hc_Radish=Les radis sont surtout utilisés en salades, mais apparaissent aussi dans plusieurs plats européens.
+agricraft_journal.hc_Raspberry=Les plantes de framboise ne devraient pas être plantées où les patates, les tomates, les piments, les aubergines ou les plantes à bulbes ont grandi précédemment, sans une fumigation préalable du sol.
+agricraft_journal.hc_Rhubarb=En cuisine, les tiges sont souvent coupées en petits morceaux et cuites dans de l'eau bouillante avec du sucre ajouté.
+agricraft_journal.hc_Rice=La méthode traditionnelle pour cultiver le riz est d'innonder les champs durant, ou après, avoir mis les jeunes plants.
+agricraft_journal.hc_Rutabaga=Certaines personnes sculptent les navets jaunes en formes variées (souvent des visages) et les utilisent comme lanternes pour éloigner les mauvais esprits.
+agricraft_journal.hc_Rye=Le seigle est une herbe considérablement cultivée comme céréale, comme culture de couverture et comme culture de fourrage.
+agricraft_journal.hc_Scallion=L'échalote a une saveur d'oignon relativement douce, et est utilisée comme un légume, autant crue que cuite.
+agricraft_journal.hc_Seaweed=L'algue est utilisée dans les vinaigrettes et sauces à salade, les nourritures diététiques, et comme agent de conservation pour les produits de viande et de poisson, les produits laitiers et les aliments cuits.
+agricraft_journal.hc_Soybean=Les utilisations alimentaires non-fermentées traditionnelles de soya incluent le lait de soya, et de ce dernier, le tofu et la peau de tofu.
+agricraft_journal.hc_SpiceLeaf=Les épices sont distinguées des herbes en faisant partie de plantes vertes feuillues utilisées pour leur arôme ou comme garniture.
+agricraft_journal.hc_Strawberry=Les fraises sont des plantes populaires et gratifiantes pour grandir dans un environnement domestique, que ce soit pour la consommation ou la décoration.
+agricraft_journal.hc_SweetPotato=Bien que les feuilles et les pousses soient aussi comestibles, les racines tubéreuses riches en féculents sont de loin le plus important produit.
+agricraft_journal.hc_Tea=Le thé peut être préparé en versant de l'eau chaude ou bouillante sur les feuilles séchées de la plante de thé.
+agricraft_journal.hc_Tomato=La tomate est consommée de diverses façons, incluant crue, comme ingrédient dans divers plats, sauces, salades, et boissons.
+agricraft_journal.hc_Turnip=Le navet est un légume racine communément cultivé dans des climats tempérés à travers le monde pour sa racine blanche et bulbeuse.
+agricraft_journal.hc_WhiteMushroom=Si vous voulez planer plus haut qu'un jet privé, alors ces champignons ne sont pas ceux que vous cherchez !
+agricraft_journal.hc_WinterSquash=La courge d'hiver peut être récoltée chaque fois que les fruits ont viré d'une couleur solide et profonde et que la peau est dure.
+agricraft_journal.hc_Zucchini=Le zucchini est généralement servi cuit, il peut également être préparé en utilisant une variété de techniques culinaires, comme cuit à la vapeur, bouilli, grillé, farci puis cuit, cuit au barbecue, frit, ou incorporé dams d'autres recettes.
+
+//plant mega pack seeds
+agricraft_journal.pmp_Spinach=Le personnage de dessin animé "Popeye le marin" était caricaturé d'avoir une grosse affinité pour les épinards, devenant physiquement plus fort après en avoir mangé.
+
+//chococraft seeds
+agricraft_journal.cc_Gysahl=Le gysahl vert est le casse-croûte favori des Chocobos légendaires. Parfois, un gysahl vert peut produire un charment gysahl et certains disent qu'une plante de gysahl bien cultivée peut produire un gysahl doré.
