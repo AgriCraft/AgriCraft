@@ -110,7 +110,7 @@ curse {
     apiKey = System.env.CFKEY
     projectId = "225635"
     changelog = """
-            See http://forum.feed-the-beast.com/threads/1-7-10-agricraft.50964/
+            See https://github.com/InfinityRaider/AgriCraft/blob/master/src/main/resources/changelog.txt
     """
     releaseType = project.hasProperty('releaseType') ? project.releaseType : ""
 }
