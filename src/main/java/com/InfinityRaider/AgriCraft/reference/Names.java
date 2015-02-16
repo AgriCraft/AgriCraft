@@ -164,7 +164,7 @@ public final class Names {
         public static final String orePlatinum = Objects.ore+ Resources.platinum;
         public static final String oreOsmium = Objects.ore+ Resources.osmium;
     }
-
+/*
     //crops
     public static class Crops {
         public static final String cropPotato = Objects.crop+ Plants.potato;
@@ -264,7 +264,7 @@ public final class Names {
         public static final String seedBotaniaRed = Objects.seed + Mods.botania + Colors.red;
         public static final String seedBotaniaBlack = Objects.seed + Mods.botania + Colors.black;
     }
-
+*/
     //ore dictionary entries
     public static class OreDict {
         public static final String listAllseed = "listAllseed";

@@ -57,10 +57,10 @@ public class CustomCrops {
                         String info = cropData[6];
 
                         customCrops[i] = new BlockModPlant(soil, baseBlock, baseMeta, fruit, fruitMeta, tier, renderType, true);
-                        RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop + Character.toUpperCase(name.charAt(0)) + name.substring(1));
+                        RegisterHelper.registerCrop(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1));
 
                         customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds", info);
-                        RegisterHelper.registerSeed(customSeeds[i], Names.Objects.seed + Character.toUpperCase(name.charAt(0)) + name.substring(1), customCrops[i]);
+                        RegisterHelper.registerSeed(customSeeds[i], customCrops[i]);
 
                     }
                 }

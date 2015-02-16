@@ -40,7 +40,7 @@ public class Blocks {
                 RegisterHelper.registerBlock(blockSeedStorageController, Names.Objects.seedStorageController, ItemBlockCustomWood.class);
             }
         }
-        
+
         LogHelper.info("Blocks registered");
     }
 }

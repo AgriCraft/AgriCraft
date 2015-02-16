@@ -3,11 +3,15 @@ package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.minecraft.MineTweakerMC;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -67,6 +71,11 @@ public class CropProduct {
         @Override
         public void apply() {
             crop.products.addProduce(fruit, weight);
+            String oreDictTag = crop.getUnlocalizedName().substring(crop.getUnlocalizedName().indexOf(':'));
+            LogHelper.debug("Registering "+fruit.getDisplayName()+" to the ore dictionary as "+oreDictTag);
+            if(!OreDictHelper.hasOreId(fruit, oreDictTag)) {
+                OreDictionary.registerOre(oreDictTag, fruit);
+            }
         }
 
         @Override
@@ -77,6 +86,7 @@ public class CropProduct {
         @Override
         public void undo() {
             crop.products.removeProduce(fruit);
+            //TODO: remove oredict tag from the product (preferably with the minetweaker method)
         }
 
         @Override
@@ -110,6 +120,7 @@ public class CropProduct {
         @Override
         public void apply() {
             crop.products.removeProduce(fruit);
+            //TODO: remove oredict tag from the product (preferably with the minetweaker method)
         }
 
         @Override
