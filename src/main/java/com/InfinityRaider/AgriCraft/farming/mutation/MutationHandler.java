@@ -150,7 +150,7 @@ public abstract class MutationHandler {
         int meanGrowth = getMean(growth);
         int meanGain = getMean(gain);
         int meanStrength = getMean(strength);
-        int divisor = mutation?1:ConfigurationHandler.cropStatDivisor;
+        int divisor = mutation?ConfigurationHandler.cropStatDivisor:1;
         output[0] = Math.max(1, getGain(meanGrowth, size)/divisor);
         output[1] = Math.max(1, getGain(meanGain, size)/divisor);
         output[2] = Math.max(1, getGain(meanStrength, size)/divisor);
