@@ -8,6 +8,8 @@ item.agricraft:trowel.name=Transplantoir
 item.agricraft:magnifyingGlass.name=Loupe
 item.agricraft:sprinklerItem.name=Arroseur
 item.agricraft:debugger.name=Débogueur
+item.agricraft:handRake.wood.name=Râteau en bois
+item.agricraft:handRake.iron.name=Râteau en fer
 item.agricraft:nuggetDiamond.name=Pépite de diamant
 item.agricraft:nuggetIron.name=Pépite de fer
 item.agricraft:nuggetEmerald.name=Pépite d'émeraude
@@ -142,14 +144,23 @@ agricraft_tooltip.material=Matériaux
 agricraft_tooltip.waterLevel=Niveau d'eau
 agricraft_tooltip.cropWithPlant=Ce tuteur a une plante
 agricraft_tooltip.crossCrop=Ceci est un tuteur croisé
-agricraft_tooltip.weeds=Les mauvaises herbe ont poussées ici
+agricraft_tooltip.weeds=Les mauvaises herbes ont poussées ici
 agricraft_tooltip.cropWithoutPlant=Ce tuteur n'a pas de plante sur lui
 agricraft_tooltip.notCrop=Ceci n'est pas un tuteur
 agricraft_tooltip.trowel=Utilisez-le pour déplacé les plantes d'un tuteur à l'autre
 agricraft_tooltip.magnifyingGlass=utilisez-la pour inspecter vos plantes
+agricraft_tooltip.handRake=utilisez ceci pour enlever les mauvaises herbes
 agricraft_tooltip.closed=Fermé
 agricraft_tooltip.open=Ouvert
 agricraft_tooltip.state=Etat
+agricraft_tooltip.empty=Pas de semis
+
+// nei GUI
+agricraft_nei.mutation.title=Tuteur de mutation
+agricraft_nei.soil=Sol
+agricraft_nei.needs=Demande
+agricraft_nei.below=Dessous
+agricraft_nei.nearby=Près de
 
 //journal entries
 //---------------
