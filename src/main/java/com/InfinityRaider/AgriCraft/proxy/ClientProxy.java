@@ -97,7 +97,7 @@ public class ClientProxy extends CommonProxy {
             VillagerRegistry.instance().registerVillagerSkin(78943, new ResourceLocation("textures/entity/villager/farmer.png"));  //For now, it uses the texture for the vanilla farmer
         }
 
-        LogHelper.info("Renderers registered");
+        LogHelper.debug("Renderers registered");
     }
 
     //register forge event handlers

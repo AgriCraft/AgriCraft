@@ -41,6 +41,6 @@ public class Blocks {
             }
         }
         */
-        LogHelper.info("Blocks registered");
+        LogHelper.debug("Blocks registered");
     }
 }

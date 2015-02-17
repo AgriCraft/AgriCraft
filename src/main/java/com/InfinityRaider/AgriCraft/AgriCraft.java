@@ -46,7 +46,7 @@ public class AgriCraft {
 
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
-        LogHelper.info("Starting Pre-Initialization");
+        LogHelper.debug("Starting Pre-Initialization");
         //find loaded mods
         ModIntegration.LoadedMods.init();
         //register forge event handlers
@@ -65,12 +65,12 @@ public class AgriCraft {
         Crops.init();
         //initialize items
         Items.init();
-        LogHelper.info("Pre-Initialization Complete");
+        LogHelper.debug("Pre-Initialization Complete");
     }
 
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
-        LogHelper.info("Starting Initialization");
+        LogHelper.debug("Starting Initialization");
         ResourceCrops.init();
         Seeds.init();
 
@@ -80,12 +80,12 @@ public class AgriCraft {
 
         ModIntegration.init();
 
-        LogHelper.info("Initialization Complete");
+        LogHelper.debug("Initialization Complete");
     }
 
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event) {
-        LogHelper.info("Starting Post-Initialization");
+        LogHelper.debug("Starting Post-Initialization");
 
         Crops.initBotaniaCrops();
 
@@ -102,6 +102,6 @@ public class AgriCraft {
 
         proxy.initNEI();
         proxy.initSeedInfo();
-        LogHelper.info("Post-Initialization Complete");
+        LogHelper.debug("Post-Initialization Complete");
     }
 }

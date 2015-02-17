@@ -180,7 +180,7 @@ public class Seeds {
             OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("witchery:seedsartichoke"));
             OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("witchery:seedssnowbell"));
         }
-        LogHelper.info("Seeds registered");
+        LogHelper.debug("Seeds registered");
     }
 
     //botania flower seeds

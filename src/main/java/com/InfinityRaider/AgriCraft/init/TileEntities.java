@@ -32,6 +32,6 @@ public class TileEntities {
             }
         }
         */
-        LogHelper.info("Tile Entities registered");
+        LogHelper.debug("Tile Entities registered");
     }
 }

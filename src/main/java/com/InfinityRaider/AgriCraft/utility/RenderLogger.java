@@ -20,7 +20,7 @@ public class RenderLogger {
             timer = 0;
 
             int callsPerSecond = RenderChannel.renderCallCounter.getAndSet(0);
-            LogHelper.info("Calls since previous output: " + callsPerSecond);
+            LogHelper.debug("Calls since previous output: " + callsPerSecond);
         }
     }
 }
