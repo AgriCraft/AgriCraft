@@ -61,9 +61,9 @@ public class GrowthRequirement {
     private boolean isBaseBlockNear(World world, int x, int y, int z) {
         if(this.requiresBaseBlock() && this.requiredType==RequirementType.NEARBY) {
             int range = NEARBY_DEFAULT_RANGE;
-            for (int xPos = x - range; xPos <= x + range; x++) {
-                for (int yPos = y - range; yPos <= y + range; y++) {
-                    for (int zPos = z - range; zPos <= z + range; z++) {
+            for (int xPos = x - range; xPos <= x + range; xPos++) {
+                for (int yPos = y - range; yPos <= y + range; yPos++) {
+                    for (int zPos = z - range; zPos <= z + range; zPos++) {
                         if(this.isBlockAdequate(world.getBlock(xPos, yPos, zPos), world.getBlockMetadata(xPos, yPos, zPos))) {
                             return true;
                         }
