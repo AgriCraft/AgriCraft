@@ -2,9 +2,11 @@ package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.utility.*;
+import com.jaquadro.minecraft.gardencontainers.block.BlockLargePot;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -28,7 +30,11 @@ public class GrowthRequirements {
     //Methods for fertile soils
     //-------------------------
     public static boolean isSoilValid(Block block, int meta) {
-        BlockWithMeta soil = new BlockWithMeta(block, meta);
+        BlockWithMeta soil;
+        if(ModIntegration.LoadedMods.gardenStuff && block instanceof BlockLargePot) {
+            soil = GardenStuffHelper.getSoil(block, meta);
+        }
+        soil = new BlockWithMeta(block, meta);
         return soils.contains(soil) || defaultSoils.contains(soil);
     }
 
