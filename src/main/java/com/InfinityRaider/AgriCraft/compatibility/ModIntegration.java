@@ -67,6 +67,7 @@ public class ModIntegration {
         public static boolean extraUtilities;
         public static boolean botania;
         public static boolean tconstruct;
+        public static boolean gardenStuff;
 
         public static void init() {
             nei = Loader.isModLoaded(Names.Mods.nei);
@@ -89,29 +90,31 @@ public class ModIntegration {
             extraUtilities = Loader.isModLoaded(Names.Mods.extraUtilities);
             botania = Loader.isModLoaded(Names.Mods.botania);
             tconstruct = Loader.isModLoaded(Names.Mods.tconstruct);
-
-            LogHelper.debug("Checking for loaded mods:");
-            LogHelper.debug(" - NEI loaded: "+nei);
-            LogHelper.debug(" - Pam's HarvestCraft loaded: "+harvestcraft);
-            LogHelper.debug(" - Natura loaded: "+natura);
-            LogHelper.debug(" - Pam's Weee Flowers loaded: "+weeeFlowers);
-            LogHelper.debug(" - Forestry loaded: "+forestry);
-            LogHelper.debug(" - Thaumic tinkerer loaded: "+thaumicTinkerer);
-            LogHelper.debug(" - Hunger Overhaul loaded: "+hungerOverhaul);
-            LogHelper.debug(" - Ex Nihilo loaded: "+exNihilo);
-            LogHelper.debug(" - Plant Mega Pack loaded: "+plantMegaPack);
-            LogHelper.debug(" - Magical Crops loaded: "+magicalCrops);
-            LogHelper.debug(" - Railcraft loaded: "+railcraft);
-            LogHelper.debug(" - Thaumcraft loaded: "+thaumcraft);
-            LogHelper.debug(" - MineFactory Reloaded loaded: "+mfr);
-            LogHelper.debug(" - Waila loaded: "+waila);
-            LogHelper.debug(" - Chococraft loaded: "+chococraft);
-            LogHelper.debug(" - McMultipart loaded: "+mcMultipart);
-            LogHelper.debug(" - MineTweaker loaded: "+minetweaker);
-            LogHelper.debug(" - ExtraUtilities loaded: "+extraUtilities);
-            LogHelper.debug(" - Botania loaded: "+botania);
-            LogHelper.debug(" - Tinker's Construct loaded: "+tconstruct);
-            LogHelper.debug("Done");
+            gardenStuff = Loader.isModLoaded(Names.Mods.gardenStuff);
+            
+            LogHelper.info("Checking for loaded mods:");
+            LogHelper.info(" - NEI loaded: "+nei);
+            LogHelper.info(" - Pam's HarvestCraft loaded: "+harvestcraft);
+            LogHelper.info(" - Natura loaded: "+natura);
+            LogHelper.info(" - Pam's Weee Flowers loaded: "+weeeFlowers);
+            LogHelper.info(" - Forestry loaded: "+forestry);
+            LogHelper.info(" - Thaumic tinkerer loaded: "+thaumicTinkerer);
+            LogHelper.info(" - Hunger Overhaul loaded: "+hungerOverhaul);
+            LogHelper.info(" - Ex Nihilo loaded: "+exNihilo);
+            LogHelper.info(" - Plant Mega Pack loaded: "+plantMegaPack);
+            LogHelper.info(" - Magical Crops loaded: "+magicalCrops);
+            LogHelper.info(" - Railcraft loaded: "+railcraft);
+            LogHelper.info(" - Thaumcraft loaded: "+thaumcraft);
+            LogHelper.info(" - MineFactory Reloaded loaded: "+mfr);
+            LogHelper.info(" - Waila loaded: "+waila);
+            LogHelper.info(" - Chococraft loaded: "+chococraft);
+            LogHelper.info(" - McMultipart loaded: "+mcMultipart);
+            LogHelper.info(" - MineTweaker loaded: "+minetweaker);
+            LogHelper.info(" - ExtraUtilities loaded: "+extraUtilities);
+            LogHelper.info(" - Botania loaded: "+botania);
+            LogHelper.info(" - Tinker's Construct loaded: "+tconstruct);
+            LogHelper.info(" - Garden Stuff loaded: "+gardenStuff);
+            LogHelper.info("Done");
         }
     }
 
