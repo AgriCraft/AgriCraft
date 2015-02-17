@@ -77,7 +77,7 @@ public class ConfigurationHandler {
             loadConfiguration();
         }
 
-        LogHelper.info("Configuration Loaded");
+        LogHelper.debug("Configuration Loaded");
     }
 
 
@@ -171,7 +171,7 @@ public class ConfigurationHandler {
     public void onCOnfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.modID.equals(Reference.MOD_ID)) {
             loadConfiguration();
-            LogHelper.info("Configuration reloaded.");
+            LogHelper.debug("Configuration reloaded.");
         }
     }
 }

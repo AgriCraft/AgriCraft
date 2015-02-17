@@ -31,7 +31,6 @@ public class TileEntities {
                 GameRegistry.registerTileEntity(TileEntitySeedStorageController.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.seedStorageController);
             }
         }
-
-        LogHelper.info("Tile Entities registered");
+        LogHelper.debug("Tile Entities registered");
     }
 }

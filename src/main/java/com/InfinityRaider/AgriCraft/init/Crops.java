@@ -83,7 +83,7 @@ public class Crops {
         RegisterHelper.registerBlock(shroomRed, Names.Crops.cropShroomRed);
         RegisterHelper.registerBlock(shroomBrown, Names.Crops.cropShroomBrown);
 
-        LogHelper.info("Crops registered");
+        LogHelper.debug("Crops registered");
     }
 
     public static void initBotaniaCrops() {
@@ -124,7 +124,7 @@ public class Crops {
 
             Seeds.initBotaniaSeeds();
 
-            LogHelper.info("Botania crops registered");
+            LogHelper.debug("Botania crops registered");
         }
     }
 }

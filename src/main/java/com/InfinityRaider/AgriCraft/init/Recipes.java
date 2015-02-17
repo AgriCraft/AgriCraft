@@ -139,7 +139,7 @@ public class Recipes {
             }
         }
 
-        LogHelper.info("Recipes Registered");
+        LogHelper.debug("Recipes Registered");
     }
 
     private static void registerCustomWoodRecipes() {

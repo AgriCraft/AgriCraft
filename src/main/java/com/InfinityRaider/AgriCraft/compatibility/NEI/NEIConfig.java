@@ -20,7 +20,7 @@ public class NEIConfig implements IConfigureNEI {
         if(ModIntegration.LoadedMods.nei) {
             //register NEI recipe handler
             if(ConfigurationHandler.enableNEI) {
-                LogHelper.info("Registering NEI recipe handler");
+                LogHelper.debug("Registering NEI recipe handler");
                 API.registerRecipeHandler(new NEICropMutationHandler());
                 API.registerUsageHandler(new NEICropMutationHandler());
             }
@@ -30,7 +30,7 @@ public class NEIConfig implements IConfigureNEI {
     }
 
     private static void hideItems() {
-        LogHelper.info("Hiding crops in NEI");
+        LogHelper.debug("Hiding crops in NEI");
         for (int i = 0; i < 16; i++) {
             //hide crops block
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockCrop, 1, i));
