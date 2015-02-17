@@ -1,9 +1,5 @@
 Changelog
 ---------
-1.3.1
--FIXED:  Fixed crop not re-rendering on changes
--FIXED:  Stats are now being reduced on mutating instead of spreading
--FIXED:  Seeds being able to be planted on unhydrated farmland while farming was disabled
 
 1.3.0
 -ADDED:  Hand Rake tool which, when enabled, is the only thing that can remove weeds
@@ -24,6 +20,16 @@ Changelog
 -FIXED:  Nether wart not being recognised as a valid seed (Marcin212)
 -FIXED:  Sprinkler not stopping when water in the channel above ran out
 -FIXED:  Waila not showing accurate fluid levels for channel, tank and valve
+
+-alpha2:
+    -FIXED:  Fixed crop not re-rendering on changes
+    -FIXED:  Stats are now being reduced on mutating instead of spreading
+    -FIXED:  Seeds being able to be planted on unhydrated farmland while farming was disabled
+
+-alpha3:
+    -FIXED:  NEI mutation GUI ignoring soil meta value
+    -FIXED:  Infinite loop when specifying BaseBlock of type 2
+
 
 1.2.2
 -ADDED:  TConstruct scythes can be used for aoe harvesting (right click on crops to aoe harvest)
