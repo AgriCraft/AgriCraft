@@ -12,6 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import java.util.*;
 
@@ -29,12 +30,16 @@ public class GrowthRequirements {
 
     //Methods for fertile soils
     //-------------------------
-    public static boolean isSoilValid(Block block, int meta) {
+    public static boolean isSoilValid(World world, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
+        int meta = world.getBlockMetadata(x, y, z);
         BlockWithMeta soil;
         if(ModIntegration.LoadedMods.gardenStuff && block instanceof BlockLargePot) {
-            soil = GardenStuffHelper.getSoil(block, meta);
+            soil = GardenStuffHelper.getSoil(world, x, y, z);
         }
-        soil = new BlockWithMeta(block, meta);
+        else {
+            soil = new BlockWithMeta(block, meta);
+        }
         return soils.contains(soil) || defaultSoils.contains(soil);
     }
 
