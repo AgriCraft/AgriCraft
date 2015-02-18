@@ -26,6 +26,14 @@ public class MutationEngine {
 
     public INewSeedStrategy rollStrategy() {
         boolean spreading = random.nextDouble() > ConfigurationHandler.mutationChance;
-        return spreading ? new SpreadStrategy() : new MutateStrategy();
+        return spreading ? new SpreadStrategy(this) : new MutateStrategy(this);
+    }
+
+    public TileEntityCrop getCrop() {
+        return crop;
+    }
+
+    public Random getRandom() {
+        return random;
     }
 }

@@ -1,19 +1,17 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+public class MutateStrategy extends BaseStrategy {
 
-import java.util.Random;
-
-public class MutateStrategy implements INewSeedStrategy {
-
-    private static final Random random = new Random();
+    public MutateStrategy(MutationEngine mutationEngine) {
+        super(mutationEngine);
+    }
 
     @Override
-    public StrategyResult executeStrategy(TileEntityCrop crop) {
-        Mutation[] crossOvers = MutationHandler.getCrossOvers(crop.getMatureNeighbours());
+    public StrategyResult executeStrategy() {
+        Mutation[] crossOvers = MutationHandler.getCrossOvers(engine.getCrop().getMatureNeighbours());
         if (crossOvers != null && crossOvers.length > 0) {
-            int index = random.nextInt(crossOvers.length);
+            int index = engine.getRandom().nextInt(crossOvers.length);
             if (crossOvers[index].result.getItem() != null) {
                 return StrategyResult.fromMutation(crossOvers[index]);
             }

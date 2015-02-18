@@ -4,20 +4,21 @@ package com.InfinityRaider.AgriCraft.farming.mutation;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 import java.util.List;
-import java.util.Random;
 
-public class SpreadStrategy implements INewSeedStrategy {
+public class SpreadStrategy extends BaseStrategy {
 
-    private static final Random random = new Random();
+    public SpreadStrategy(MutationEngine mutationEngine) {
+        super(mutationEngine);
+    }
 
     @Override
-    public StrategyResult executeStrategy(TileEntityCrop crop) {
-        List<TileEntityCrop> matureNeighbours = crop.getMatureNeighbours();
+    public StrategyResult executeStrategy() {
+        List<TileEntityCrop> matureNeighbours = engine.getCrop().getMatureNeighbours();
         if (matureNeighbours.isEmpty()) {
             return null;
         }
 
-        int index = random.nextInt(matureNeighbours.size());
+        int index = engine.getRandom().nextInt(matureNeighbours.size());
         TileEntityCrop neighbour = matureNeighbours.get(index);
         return StrategyResult.fromTileEntityCrop(neighbour);
     }

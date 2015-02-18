@@ -74,7 +74,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public void crossOver() {
         MutationEngine mutationEngine = new MutationEngine(this);
         INewSeedStrategy strategy = mutationEngine.rollStrategy();
-        StrategyResult strategyResult = strategy.executeStrategy(this);
+        StrategyResult strategyResult = strategy.executeStrategy();
 
         //flag to check if the crop needs to update
         boolean change = false;
