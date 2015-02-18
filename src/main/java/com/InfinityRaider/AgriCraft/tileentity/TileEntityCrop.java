@@ -16,9 +16,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
@@ -112,6 +115,28 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
                 markForUpdate();
             }
         
+    }
+
+    /**
+     * @returns a list with all neighbours of type <code>TileEntityCrop</code> in the
+     *          NORTH, SOUTH, EAST and WEST direction
+     */
+    public List<TileEntityCrop> getNeighbours() {
+        List<TileEntityCrop> neighbours = new ArrayList<TileEntityCrop>();
+        addNeighbour(neighbours, ForgeDirection.NORTH);
+        addNeighbour(neighbours, ForgeDirection.SOUTH);
+        addNeighbour(neighbours, ForgeDirection.EAST);
+        addNeighbour(neighbours, ForgeDirection.WEST);
+        return neighbours;
+    }
+
+    private void addNeighbour(List<TileEntityCrop> neighbours, ForgeDirection direction) {
+        TileEntity te = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+        if (te == null || !(te instanceof TileEntityCrop)) {
+            return;
+        }
+
+        neighbours.add((TileEntityCrop) te);
     }
 
     //finds neighbouring crops
