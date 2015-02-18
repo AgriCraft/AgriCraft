@@ -81,7 +81,7 @@ public abstract class MutationHandler {
     }
 
     //gets all the possible crossovers
-    public static Mutation[] getCrossOvers(TileEntityCrop[] crops) {
+    public static Mutation[] getCrossOvers(List<TileEntityCrop> crops) {
         TileEntityCrop[] parents = MutationHandler.getParents(crops);
         ArrayList<Mutation> list = new ArrayList<Mutation>();
         switch (parents.length) {
@@ -106,7 +106,7 @@ public abstract class MutationHandler {
     }
 
     //gets an array of all the possible parents from the array containing all the neighbouring crops
-    private static TileEntityCrop[] getParents(TileEntityCrop[] input) {
+    private static TileEntityCrop[] getParents(List<TileEntityCrop> input) {
         ArrayList<TileEntityCrop> list = new ArrayList<TileEntityCrop>();
         for(TileEntityCrop crop:input) {
             if (crop != null && crop.isMature()) {
@@ -135,7 +135,7 @@ public abstract class MutationHandler {
     }
 
     //logic for stat inheritance
-    public static int[] getStats(TileEntityCrop[] input, boolean mutation) {
+    public static int[] getStats(List<TileEntityCrop> input, boolean mutation) {
         int[] output = new int[3];
         TileEntityCrop[] neighbors = getParents(input);
         int size = neighbors.length;

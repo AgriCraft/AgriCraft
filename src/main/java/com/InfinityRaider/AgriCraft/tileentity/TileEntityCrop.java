@@ -2,8 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
-import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
-import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
+import com.InfinityRaider.AgriCraft.farming.mutation.*;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
@@ -73,48 +72,33 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //the code that makes the crop cross with neighboring crops
     public void crossOver() {
-            //flag to check if the crop needs to update
-            boolean change = false;
-            //possible new plant
-            ItemSeeds result=null;
-            int resultMeta=0;
-            double chance=0;
-            //find neighbours
-            TileEntityCrop[] neighbours = this.findNeighbours();
-            //find out the new plant
-            boolean didMutate = false;
-            if (Math.random() > ConfigurationHandler.mutationChance) {
-                int index = (int) Math.floor(Math.random() * neighbours.length);
-                if (neighbours[index]!=null && neighbours[index].seed!=null && neighbours[index].isMature()) {
-                    result = (ItemSeeds) neighbours[index].seed;
-                    resultMeta = neighbours[index].seedMeta;
-                    chance = SeedHelper.getSpreadChance(result, resultMeta);
-                }
-            } else {
-                Mutation[] crossOvers = MutationHandler.getCrossOvers(neighbours);
-                if (crossOvers!=null && crossOvers.length>0) {
-                    int index = (int) Math.floor(Math.random()*crossOvers.length);
-                    if(crossOvers[index].result.getItem()!=null) {
-                        result = (ItemSeeds) crossOvers[index].result.getItem();
-                        resultMeta = crossOvers[index].result.getItemDamage();
-                        chance = crossOvers[index].chance;
-                        didMutate = true;
-                    }
-                }
+        MutationEngine mutationEngine = new MutationEngine(this);
+        INewSeedStrategy strategy = mutationEngine.rollStrategy();
+        StrategyResult strategyResult = strategy.executeStrategy(this);
+
+        //flag to check if the crop needs to update
+        boolean change = false;
+
+        // TODO: remove this after we have moved stats also to the strategies
+        boolean didMutate = strategy instanceof MutateStrategy;
+
+        ItemSeeds result = strategyResult.getSeed();
+        int resultMeta = strategyResult.getMeta();
+        double chance = strategyResult.getChance();
+
+        //try to set the new plant
+        if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && GrowthRequirements.getGrowthRequirement(result, resultMeta).canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord)) {
+            if(Math.random()<chance) {
+                this.crossCrop = false;
+                int[] stats = MutationHandler.getStats(getNeighbours(), didMutate);
+                this.setPlant(stats[0], stats[1], stats[2], false, result, resultMeta);
+                change = true;
             }
-            //try to set the new plant
-            if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && GrowthRequirements.getGrowthRequirement(result, resultMeta).canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord)) {
-                if(Math.random()<chance) {
-                    this.crossCrop = false;
-                    int[] stats = MutationHandler.getStats(neighbours, didMutate);
-                    this.setPlant(stats[0], stats[1], stats[2], false, result, resultMeta);
-                    change = true;
-                }
-            }
-            //update the tile entity on a change
-            if (change) {
-                markForUpdate();
-            }
+        }
+        //update the tile entity on a change
+        if (change) {
+            markForUpdate();
+        }
         
     }
 
