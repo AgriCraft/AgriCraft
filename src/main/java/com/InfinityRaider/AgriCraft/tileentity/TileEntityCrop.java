@@ -22,6 +22,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
@@ -118,7 +119,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /**
-     * @returns a list with all neighbours of type <code>TileEntityCrop</code> in the
+     * @return a list with all neighbours of type <code>TileEntityCrop</code> in the
      *          NORTH, SOUTH, EAST and WEST direction
      */
     public List<TileEntityCrop> getNeighbours() {
@@ -137,6 +138,20 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
 
         neighbours.add((TileEntityCrop) te);
+    }
+
+    /**
+     * @return a list with only mature neighbours of type <code>TileEntityCrop</code>
+     */
+    public List<TileEntityCrop> getMatureNeighbours() {
+        List<TileEntityCrop> neighbours = getNeighbours();
+        for (Iterator<TileEntityCrop> iterator = neighbours.iterator(); iterator.hasNext(); ) {
+            TileEntityCrop crop = iterator.next();
+            if (!crop.isMature()) {
+                iterator.remove();
+            }
+        }
+        return neighbours;
     }
 
     //finds neighbouring crops

@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.test.util;
 
 
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -14,15 +15,9 @@ public class MutationWorldSimulator {
     private final World world;
     private final TileEntityCrop targetCrop;
 
-    private final int x;
-    private final int y;
-    private final int z;
-
     public MutationWorldSimulator(int x, int y, int z) {
         world = mock(World.class);
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        world.isRemote = false;
 
         targetCrop = new TileEntityCrop();
         targetCrop.setWorldObj(world);
@@ -44,6 +39,12 @@ public class MutationWorldSimulator {
         crop.gain = gain;
         crop.strength = strength;
 
-        when(world.getTileEntity(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ)).thenReturn(crop);
+        crop.xCoord = targetCrop.xCoord + direction.offsetX;
+        crop.yCoord = targetCrop.yCoord + direction.offsetY;
+        crop.zCoord = targetCrop.zCoord + direction.offsetZ;
+
+        when(world.getTileEntity(crop.xCoord, crop.yCoord, crop.zCoord)).thenReturn(crop);
+        when(world.getBlock(crop.xCoord, crop.yCoord, crop.zCoord)).thenReturn(new BlockCrop());
+        when(world.getBlockMetadata(crop.xCoord, crop.yCoord, crop.zCoord)).thenReturn(meta);
     }
 }
