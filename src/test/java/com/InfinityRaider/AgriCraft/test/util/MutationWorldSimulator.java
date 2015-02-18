@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class MutationEngineWorld {
+public class MutationWorldSimulator {
 
     private final World world;
     private final TileEntityCrop targetCrop;
@@ -18,7 +18,7 @@ public class MutationEngineWorld {
     private final int y;
     private final int z;
 
-    public MutationEngineWorld(int x, int y, int z) {
+    public MutationWorldSimulator(int x, int y, int z) {
         world = mock(World.class);
         this.x = x;
         this.y = y;

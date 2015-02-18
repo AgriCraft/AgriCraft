@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Seeds;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.test.util.MutationEngineWorld;
+import com.InfinityRaider.AgriCraft.test.util.MutationWorldSimulator;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -37,11 +37,11 @@ public class MutationEngineTest {
      */
     @Test
     public void testRetrieveNeighbours() {
-        MutationEngineWorld mutationEngineWorld = new MutationEngineWorld(5, 5, 5);
-        mutationEngineWorld.addNeighbour(ForgeDirection.NORTH, Seeds.seedSugarcane, 0, 1, 1, 1);
-        mutationEngineWorld.addNeighbour(ForgeDirection.WEST, Seeds.seedShroomBrown, 5, 1, 1, 1);
+        MutationWorldSimulator mutationWorldSimulator = new MutationWorldSimulator(5, 5, 5);
+        mutationWorldSimulator.addNeighbour(ForgeDirection.NORTH, Seeds.seedSugarcane, 0, 1, 1, 1);
+        mutationWorldSimulator.addNeighbour(ForgeDirection.WEST, Seeds.seedShroomBrown, 5, 1, 1, 1);
 
-        TileEntityCrop crop = mutationEngineWorld.getTargetCrop();
+        TileEntityCrop crop = mutationWorldSimulator.getTargetCrop();
         MutationEngine engine = new MutationEngine(crop);
         List<TileEntityCrop> neighbours = engine.getNeighbours();
 
