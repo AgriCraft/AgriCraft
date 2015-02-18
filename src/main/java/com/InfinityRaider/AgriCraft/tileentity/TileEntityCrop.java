@@ -34,6 +34,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public IPlantable seed = null;
     public int seedMeta = 0;
 
+    private final MutationEngine mutationEngine;
+
+    public TileEntityCrop() {
+        this.mutationEngine = new MutationEngine(this);
+    }
+
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
@@ -72,34 +78,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //the code that makes the crop cross with neighboring crops
     public void crossOver() {
-        MutationEngine mutationEngine = new MutationEngine(this);
-        INewSeedStrategy strategy = mutationEngine.rollStrategy();
-        StrategyResult strategyResult = strategy.executeStrategy();
-
-        //flag to check if the crop needs to update
-        boolean change = false;
-
-        // TODO: remove this after we have moved stats also to the strategies
-        boolean didMutate = strategy instanceof MutateStrategy;
-
-        ItemSeeds result = strategyResult.getSeed();
-        int resultMeta = strategyResult.getMeta();
-        double chance = strategyResult.getChance();
-
-        //try to set the new plant
-        if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && GrowthRequirements.getGrowthRequirement(result, resultMeta).canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord)) {
-            if(Math.random()<chance) {
-                this.crossCrop = false;
-                int[] stats = MutationHandler.getStats(getNeighbours(), didMutate);
-                this.setPlant(stats[0], stats[1], stats[2], false, result, resultMeta);
-                change = true;
-            }
-        }
-        //update the tile entity on a change
-        if (change) {
+        boolean changed = mutationEngine.executeCrossOver();
+        if (changed) {
             markForUpdate();
         }
-        
     }
 
     /**
