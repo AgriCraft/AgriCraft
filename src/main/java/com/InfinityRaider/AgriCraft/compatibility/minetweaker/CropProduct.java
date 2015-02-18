@@ -10,6 +10,8 @@ import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.minecraft.MineTweakerMC;
+import minetweaker.mc1710.item.MCItemStack;
+import minetweaker.mc1710.oredict.MCOreDictEntry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -71,7 +73,7 @@ public class CropProduct {
         @Override
         public void apply() {
             crop.products.addProduce(fruit, weight);
-            String oreDictTag = crop.getUnlocalizedName().substring(crop.getUnlocalizedName().indexOf(':'));
+            String oreDictTag = this.fruitTag();
             LogHelper.debug("Registering "+fruit.getDisplayName()+" to the ore dictionary as "+oreDictTag);
             if(!OreDictHelper.hasOreId(fruit, oreDictTag)) {
                 OreDictionary.registerOre(oreDictTag, fruit);
@@ -86,7 +88,8 @@ public class CropProduct {
         @Override
         public void undo() {
             crop.products.removeProduce(fruit);
-            //TODO: remove oredict tag from the product (preferably with the minetweaker method)
+            MCOreDictEntry ore = new MCOreDictEntry(this.fruitTag());
+            ore.remove(new MCItemStack(this.fruit));
         }
 
         @Override
@@ -102,6 +105,10 @@ public class CropProduct {
         @Override
         public Object getOverrideKey() {
             return null;
+        }
+
+        private String fruitTag() {
+            return crop.getUnlocalizedName().substring(crop.getUnlocalizedName().indexOf(':'));
         }
     }
 
@@ -120,7 +127,8 @@ public class CropProduct {
         @Override
         public void apply() {
             crop.products.removeProduce(fruit);
-            //TODO: remove oredict tag from the product (preferably with the minetweaker method)
+            MCOreDictEntry ore = new MCOreDictEntry(this.fruitTag());
+            ore.remove(new MCItemStack(this.fruit));
         }
 
         @Override
@@ -131,6 +139,11 @@ public class CropProduct {
         @Override
         public void undo() {
             crop.products.addProduce(fruit, weight);
+            String oreDictTag = this.fruitTag();
+            LogHelper.debug("Registering "+fruit.getDisplayName()+" to the ore dictionary as "+oreDictTag);
+            if(!OreDictHelper.hasOreId(fruit, oreDictTag)) {
+                OreDictionary.registerOre(oreDictTag, fruit);
+            }
         }
 
         @Override
@@ -146,6 +159,10 @@ public class CropProduct {
         @Override
         public Object getOverrideKey() {
             return null;
+        }
+
+        private String fruitTag() {
+            return crop.getUnlocalizedName().substring(crop.getUnlocalizedName().indexOf(':'));
         }
     }
 }
