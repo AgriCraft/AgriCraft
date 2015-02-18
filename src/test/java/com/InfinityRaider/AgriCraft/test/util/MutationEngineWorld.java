@@ -46,8 +46,4 @@ public class MutationEngineWorld {
 
         when(world.getTileEntity(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ)).thenReturn(crop);
     }
-
-    public World getWorld() {
-        return world;
-    }
 }
