@@ -13,7 +13,10 @@ public class MutateStrategy extends BaseStrategy {
         if (crossOvers != null && crossOvers.length > 0) {
             int index = engine.getRandom().nextInt(crossOvers.length);
             if (crossOvers[index].result.getItem() != null) {
-                return StrategyResult.fromMutation(crossOvers[index]);
+                StrategyResult result = StrategyResult.fromMutation(crossOvers[index]);
+                int[] stats = MutationHandler.getStats(engine.getCrop().getMatureNeighbours(), true);
+                result.setStats(stats[0], stats[1], stats[2]);
+                return result;
             }
         }
         return null;

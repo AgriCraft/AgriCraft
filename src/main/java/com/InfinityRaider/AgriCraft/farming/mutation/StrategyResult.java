@@ -14,6 +14,10 @@ public class StrategyResult {
     private final int meta;
     private final double chance;
 
+    private int growth;
+    private int gain;
+    private int strength;
+
     public StrategyResult(ItemSeeds seed, int meta, double chance) {
         this.seed = seed;
         this.meta = meta;
@@ -47,5 +51,23 @@ public class StrategyResult {
 
     public double getChance() {
         return chance;
+    }
+
+    public int getGain() {
+        return gain;
+    }
+
+    public int getGrowth() {
+        return growth;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStats(int growth, int gain, int strength) {
+        this.growth = growth;
+        this.gain = gain;
+        this.strength = strength;
     }
 }

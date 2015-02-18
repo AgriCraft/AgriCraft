@@ -1,10 +1,10 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import net.minecraft.item.ItemSeeds;
 
 import java.util.Random;
 
@@ -33,29 +33,29 @@ public class MutationEngine {
      */
     public boolean executeCrossOver() {
         INewSeedStrategy strategy = rollStrategy();
-        StrategyResult strategyResult = strategy.executeStrategy();
-
-        //flag to check if the crop needs to update
-        boolean change = false;
-
-        // TODO: remove this after we have moved stats also to the strategies
-        boolean didMutate = strategy instanceof MutateStrategy;
-
-        ItemSeeds result = strategyResult.getSeed();
-        int resultMeta = strategyResult.getMeta();
-        double chance = strategyResult.getChance();
-
-        //try to set the new plant
-        if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && GrowthRequirements.getGrowthRequirement(result, resultMeta).canGrow(crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord)) {
-            if(Math.random()<chance) {
-                crop.crossCrop = false;
-                int[] stats = MutationHandler.getStats(crop.getNeighbours(), didMutate);
-                crop.setPlant(stats[0], stats[1], stats[2], false, result, resultMeta);
-                change = true;
-            }
+        StrategyResult result = strategy.executeStrategy();
+        if (result == null) {
+            return false;
         }
 
-        return change;
+        if (resultIsValid(result) && random.nextDouble() < result.getChance()) {
+            applyResult(result);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean resultIsValid(StrategyResult result) {
+        GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(result.getSeed(), result.getMeta());
+
+        boolean valid = result.getSeed() != null && SeedHelper.isValidSeed(result.getSeed(), result.getMeta());
+        return valid && growthReq.canGrow(crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord);
+    }
+
+    private void applyResult(StrategyResult result) {
+        crop.crossCrop = false;
+        crop.setPlant(result.getGrowth(), result.getGain(), result.getStrength(), false, result.getSeed(), result.getMeta());
     }
 
     public INewSeedStrategy rollStrategy() {
