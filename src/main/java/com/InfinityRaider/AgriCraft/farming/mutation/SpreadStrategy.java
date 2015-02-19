@@ -12,7 +12,7 @@ public class SpreadStrategy extends BaseStrategy {
     }
 
     @Override
-    public StrategyResult executeStrategy() {
+    public CrossOverResult executeStrategy() {
         List<TileEntityCrop> matureNeighbours = engine.getCrop().getMatureNeighbours();
         if (matureNeighbours.isEmpty()) {
             return null;
@@ -20,7 +20,7 @@ public class SpreadStrategy extends BaseStrategy {
 
         int index = engine.getRandom().nextInt(matureNeighbours.size());
         TileEntityCrop neighbour = matureNeighbours.get(index);
-        StrategyResult result = StrategyResult.fromTileEntityCrop(neighbour);
+        CrossOverResult result = CrossOverResult.fromTileEntityCrop(neighbour);
         int[] stats = MutationHandler.getStats(matureNeighbours, false);
         result.setStats(stats[0], stats[1], stats[2]);
         return result;

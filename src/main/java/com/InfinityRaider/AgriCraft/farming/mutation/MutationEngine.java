@@ -28,37 +28,28 @@ public class MutationEngine {
     }
 
     /**
-     * Applies one of the 2 strategies and updates the TileEntity
-     * @return true, if a new plant was set in the TileEntity
+     * Applies one of the 2 strategies and notifies the TE if it should update
      */
-    public boolean executeCrossOver() {
-        INewSeedStrategy strategy = rollStrategy();
-        StrategyResult result = strategy.executeStrategy();
+    public void executeCrossOver() {
+        ICrossOverStrategy strategy = rollStrategy();
+        CrossOverResult result = strategy.executeStrategy();
         if (result == null) {
-            return false;
+            return;
         }
 
         if (resultIsValid(result) && random.nextDouble() < result.getChance()) {
-            applyResult(result);
-            return true;
+            crop.applyCrossOverResult(result);
         }
-
-        return false;
     }
 
-    private boolean resultIsValid(StrategyResult result) {
+    private boolean resultIsValid(CrossOverResult result) {
         GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(result.getSeed(), result.getMeta());
 
         boolean valid = result.getSeed() != null && SeedHelper.isValidSeed(result.getSeed(), result.getMeta());
         return valid && growthReq.canGrow(crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord);
     }
 
-    private void applyResult(StrategyResult result) {
-        crop.crossCrop = false;
-        crop.setPlant(result.getGrowth(), result.getGain(), result.getStrength(), false, result.getSeed(), result.getMeta());
-    }
-
-    public INewSeedStrategy rollStrategy() {
+    public ICrossOverStrategy rollStrategy() {
         boolean spreading = random.nextDouble() > ConfigurationHandler.mutationChance;
         return spreading ? new SpreadStrategy(this) : new MutateStrategy(this);
     }

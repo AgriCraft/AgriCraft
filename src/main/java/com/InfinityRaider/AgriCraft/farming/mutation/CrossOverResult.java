@@ -8,7 +8,7 @@ import net.minecraft.item.ItemSeeds;
  * Represents the result of a specific <code>INewSeedStrategy</code> containing
  * the seed plus meta and the chance to happen.
  */
-public class StrategyResult {
+public class CrossOverResult {
 
     private final ItemSeeds seed;
     private final int meta;
@@ -18,27 +18,27 @@ public class StrategyResult {
     private int gain;
     private int strength;
 
-    public StrategyResult(ItemSeeds seed, int meta, double chance) {
+    public CrossOverResult(ItemSeeds seed, int meta, double chance) {
         this.seed = seed;
         this.meta = meta;
         this.chance = chance;
     }
 
     /** Creates a new instance based on the planted seed of the given TE. Does not validate the TE */
-    public static StrategyResult fromTileEntityCrop(TileEntityCrop crop) {
+    public static CrossOverResult fromTileEntityCrop(TileEntityCrop crop) {
         ItemSeeds seed = (ItemSeeds) crop.seed;
         int meta = crop.seedMeta;
         double chance = SeedHelper.getSpreadChance(seed, meta);
 
-        return new StrategyResult(seed, meta, chance);
+        return new CrossOverResult(seed, meta, chance);
     }
 
     /** Creates a new instanced based off the result of the given mutation. Does not validate the mutation object */
-    public static StrategyResult fromMutation(Mutation mutation) {
+    public static CrossOverResult fromMutation(Mutation mutation) {
         ItemSeeds seed = (ItemSeeds) mutation.result.getItem();
         int meta = mutation.result.getItemDamage();
 
-        return new StrategyResult(seed, meta, mutation.chance);
+        return new CrossOverResult(seed, meta, mutation.chance);
     }
 
     public ItemSeeds getSeed() {

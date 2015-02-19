@@ -78,10 +78,14 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //the code that makes the crop cross with neighboring crops
     public void crossOver() {
-        boolean changed = mutationEngine.executeCrossOver();
-        if (changed) {
-            markForUpdate();
-        }
+        mutationEngine.executeCrossOver();
+    }
+
+    /** Called by the mutation engine to apply the result of a cross over */
+    public void applyCrossOverResult(CrossOverResult result) {
+        crossCrop = false;
+        setPlant(result.getGrowth(), result.getGain(), result.getStrength(), false, result.getSeed(), result.getMeta());
+        markForUpdate();
     }
 
     /**
