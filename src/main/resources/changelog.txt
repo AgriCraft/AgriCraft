@@ -30,6 +30,9 @@ Changelog
     -FIXED:  NEI mutation GUI ignoring soil meta value
     -FIXED:  Infinite loop when specifying BaseBlock of type 2
 
+-alpha4:
+    -CHANGE: Potatoes sometimes drop poisonous potatoes now
+
 
 1.2.2
 -ADDED:  TConstruct scythes can be used for aoe harvesting (right click on crops to aoe harvest)
