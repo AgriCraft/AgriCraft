@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CropProduce {
-    public static final int DEFAULT_WEIGHT = 10;
+    public static final int DEFAULT_WEIGHT = 100;
     private ArrayList<Product> products = new ArrayList<Product>();
     private int totalWeight;
 

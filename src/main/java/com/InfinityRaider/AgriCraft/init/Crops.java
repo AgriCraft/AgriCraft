@@ -7,7 +7,9 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import vazkii.botania.common.item.ModItems;
 
 public class Crops {
@@ -48,6 +50,7 @@ public class Crops {
 
     public static void init() {
         potato = new BlockModPlant(net.minecraft.init.Items.potato);
+        potato.products.addProduce(new ItemStack(Items.poisonous_potato), 10);
         carrot = new BlockModPlant(net.minecraft.init.Items.carrot);
         melon = new BlockModPlant(net.minecraft.init.Items.melon);
         pumpkin = new BlockModPlant(Item.getItemFromBlock(Blocks.pumpkin));
