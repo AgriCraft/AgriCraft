@@ -70,12 +70,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
     }
 
-    //read data from packet
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt){
-        readFromNBT(pkt.func_148857_g());
-    }
-
     //the code that makes the crop cross with neighboring crops
     public void crossOver() {
             //flag to check if the crop needs to update

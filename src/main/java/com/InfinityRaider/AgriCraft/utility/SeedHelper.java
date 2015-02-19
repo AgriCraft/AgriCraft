@@ -239,48 +239,72 @@ public abstract class SeedHelper {
 
     //gets the fruits
     public static ArrayList<ItemStack> getPlantFruits(ItemSeeds seed, World world, int x, int y, int z, int gain, int meta) {
-        int nr =  (int) (Math.ceil((gain + 0.00) / 3));
-        BlockBush plant = getPlant(seed);
+        int nr = (int) (Math.ceil((gain + 0.00) / 3));
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        //nether wart exception
-        if(plant==Blocks.nether_wart) {
-            items.add(new ItemStack(seed, 1, 0));
+        //agricraft seed
+        if (seed instanceof ItemModSeed) {
+            BlockModPlant plant = (BlockModPlant) getPlant(seed);
+            items.addAll(plant.getFruit(nr, world.rand));
         }
-        //agricraft crop
-        else if(plant instanceof BlockModPlant) {
-            items.addAll(((BlockModPlant) plant).getFruit(nr, world.rand));
-        }
-        //natura crop
-        else if(ModIntegration.LoadedMods.natura && getPlantDomain(seed).equalsIgnoreCase("natura")) {
-            items.add(new ItemStack(NContent.plantItem, nr, meta*3));
-        }
-        //harvestcraft crop
-        else if(ModIntegration.LoadedMods.harvestcraft && getPlantDomain(seed).equalsIgnoreCase("harvestcraft")) {
-            items.add(new ItemStack(getPlant(seed).getItemDropped(7, new Random(), 0), nr));
-        }
-        //chococraft crop
-        else if(ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
+        //chococraft seed
+        else if (ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
             items.add(ChococraftHelper.getFruit(gain, nr));
         }
-        //other crop
+        //use oredict to get the drops
         else {
-            int harvestMeta = 7;
-            //plant mega pack crop
-            if(ModIntegration.LoadedMods.plantMegaPack && getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
-                harvestMeta=PlantMegaPackHelper.getTextureIndex(seed, harvestMeta);
+            int[] oreIDs = OreDictionary.getOreIDs(new ItemStack(seed, 1, meta));
+            ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
+            for (int id : oreIDs) {
+                String seedOreName = OreDictionary.getOreName(id);
+                LogHelper.debug("Getting fruits for oredict entry " + seedOreName);
+                if (seedOreName.substring(0, 4).equals(Names.Objects.seed)) {
+                    String fruitOreName = Names.Objects.crop + seedOreName.substring(4);
+                    LogHelper.debug(fruitOreName);
+                    fruits = OreDictionary.getOres(fruitOreName);
+                    break;
+                }
             }
-            //other crop
-            ArrayList<ItemStack> defaultDrops = plant.getDrops(world, x, y, z, harvestMeta, 0);
-            for (ItemStack drop : defaultDrops) {
-                if (!(drop.getItem() instanceof ItemSeeds) && drop.getItem()!=null) {
-                    boolean add = true;
-                    for(ItemStack item:items) {
-                        if(item.getItem()==drop.getItem() && item.getItemDamage()==drop.getItemDamage()) {
-                            add = false;
+            while (fruits.size() > 0 && nr > 0) {
+                int index = world.rand.nextInt(fruits.size());
+                ItemStack fruit = fruits.get(index);
+                fruit.stackSize = 1;
+                items.add(fruit);
+                nr--;
+            }
+
+        }
+        //didn't succeed to find fruits trough the ore dictionary
+        if (!(items.size() > 0)) {
+            LogHelper.debug("didn't find fruit trough ore dictionary");
+            BlockBush plant = getPlant(seed);
+            //nether wart exception
+            if (plant == Blocks.nether_wart) {
+                items.add(new ItemStack(seed, 1, 0));
+            }
+            //natura crop exception
+            else if (ModIntegration.LoadedMods.natura && getPlantDomain(seed).equalsIgnoreCase("natura")) {
+                items.add(new ItemStack(NContent.plantItem, nr, meta * 3));
+            }
+            //other crop exception
+            else {
+                int harvestMeta = 7;
+                //plant mega pack crop
+                if (ModIntegration.LoadedMods.plantMegaPack && getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
+                    harvestMeta = PlantMegaPackHelper.getTextureIndex(seed, harvestMeta);
+                }
+                //other crop
+                ArrayList<ItemStack> defaultDrops = plant.getDrops(world, x, y, z, harvestMeta, 0);
+                for (ItemStack drop : defaultDrops) {
+                    if (!(drop.getItem() instanceof ItemSeeds) && drop.getItem() != null) {
+                        boolean add = true;
+                        for (ItemStack item : items) {
+                            if (item.getItem() == drop.getItem() && item.getItemDamage() == drop.getItemDamage()) {
+                                add = false;
+                            }
                         }
-                    }
-                    if(add) {
-                        items.add(new ItemStack(drop.getItem(), nr, drop.getItemDamage()));
+                        if (add) {
+                            items.add(new ItemStack(drop.getItem(), nr, drop.getItemDamage()));
+                        }
                     }
                 }
             }
@@ -301,6 +325,21 @@ public abstract class SeedHelper {
         }
         //other crop
         else {
+            int[] oreIDs = OreDictionary.getOreIDs(new ItemStack(seed, 1, meta));
+            ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
+            for(int id:oreIDs) {
+                String seedOreName = OreDictionary.getOreName(id);
+                if(seedOreName.substring(0,4).equals(Names.Objects.seed)) {
+                    String fruitOreName = Names.Objects.crop + seedOreName.substring(4);
+                    fruits = OreDictionary.getOres(fruitOreName);
+                    break;
+                }
+            }
+            if(fruits.size()>0) {
+                items.addAll(fruits);
+            }
+        }
+        if(!(items.size()>0)) {
             items = getPlantFruits(seed, world, x, y, z, gain, meta);
         }
         return items;
