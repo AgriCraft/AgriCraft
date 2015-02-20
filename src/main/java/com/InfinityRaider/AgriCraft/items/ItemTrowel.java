@@ -70,7 +70,7 @@ public class ItemTrowel extends ModItem {
                         NBTTagCompound tag = stack.getTagCompound();
                         ItemSeeds seed = (ItemSeeds) Item.itemRegistry.getObject(tag.getString(Names.Objects.seed));
                         int seedMeta = tag.getShort(Names.NBT.meta);
-                        if(GrowthRequirements.getGrowthRequirement(seed, seedMeta).isValidSoil(world.getBlock(x, y - 1, z), world.getBlockMetadata(x, y - 1, z))) {
+                        if(GrowthRequirements.getGrowthRequirement(seed, seedMeta).isValidSoil(world, x, y - 1, z)) {
                             crop.growth = tag.getShort(Names.NBT.growth);
                             crop.gain = tag.getShort(Names.NBT.gain);
                             crop.strength = tag.getShort(Names.NBT.strength);

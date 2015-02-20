@@ -352,9 +352,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     //see if the block can stay
     @Override
     public boolean canBlockStay(World world, int x, int y, int z) {
-        Block soil = world.getBlock(x, y - 1, z);
-        int soilMeta = world.getBlockMetadata(x, y - 1, z);
-        return GrowthRequirements.isSoilValid(soil, soilMeta);
+        return GrowthRequirements.isSoilValid(world, x, y-1, z);
     }
 
     //see if the block can grow

@@ -2,14 +2,19 @@ package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.utility.*;
+import com.jaquadro.minecraft.gardencontainers.block.BlockLargePot;
+import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
+import com.jaquadro.minecraft.gardencore.core.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import java.util.*;
 
@@ -27,8 +32,16 @@ public class GrowthRequirements {
 
     //Methods for fertile soils
     //-------------------------
-    public static boolean isSoilValid(Block block, int meta) {
-        BlockWithMeta soil = new BlockWithMeta(block, meta);
+    public static boolean isSoilValid(World world, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
+        int meta = world.getBlockMetadata(x, y ,z);
+        BlockWithMeta soil;
+        if(ModIntegration.LoadedMods.gardenStuff && block instanceof BlockLargePot) {
+            soil = GardenStuffHelper.getSoil((TileEntityGarden) world.getTileEntity(x, y, z));
+        }
+        else {
+            soil = new BlockWithMeta(block, meta);
+        }
         return soils.contains(soil) || defaultSoils.contains(soil);
     }
 
@@ -37,6 +50,9 @@ public class GrowthRequirements {
         defaultSoils.add(new BlockWithMeta(Blocks.farmland, 7));
         if(ModIntegration.LoadedMods.forestry) {
             defaultSoils.add(new BlockWithMeta((Block) Block.blockRegistry.getObject("Forestry:soil"), 0));
+        }
+        if(ModIntegration.LoadedMods.gardenStuff) {
+            defaultSoils.add(new BlockWithMeta(ModBlocks.gardenFarmland, 0));
         }
         //reads custom entries
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
