@@ -33,6 +33,7 @@ Changelog
     -ADDED:  Compatibility with Jaquadro's GardenStuff (crops can be planted on them
     -CHANGE: Potatoes sometimes drop poisonous potatoes now
     -CHANGE: Register seeds and their produce as seed<Name> and crop<Name> in the ore dictionary
+    -FIXED:  Moved resource crops to post-init to enable resource crops for mods that register their ore dictionary entries too late
 
 
 1.2.2

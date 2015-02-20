@@ -71,7 +71,6 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
         LogHelper.debug("Starting Initialization");
-        ResourceCrops.init();
         Seeds.init();
 
         NetworkRegistry.INSTANCE.registerGuiHandler(instance , new GuiHandler());
@@ -87,6 +86,7 @@ public class AgriCraft {
     public static void postInit(FMLPostInitializationEvent event) {
         LogHelper.debug("Starting Post-Initialization");
 
+        ResourceCrops.init();
         Crops.initBotaniaCrops();
 
         Recipes.init();

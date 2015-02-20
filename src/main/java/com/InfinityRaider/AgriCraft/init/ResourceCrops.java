@@ -23,12 +23,13 @@ public class ResourceCrops {
     public static BlockModPlant niccissus;
     public static BlockModPlant platiolus;
     public static BlockModPlant osmonium;
+
     public static void init() {
         if (ConfigurationHandler.resourcePlants) {
             Block farmland = null;
             OreDictHelper.getRegisteredOres();
             Items.initFruits();
-//Vanilla resources
+            //Vanilla resources
             diamahlia = new BlockModPlant(farmland, net.minecraft.init.Blocks.diamond_ore, Items.nuggetDiamond, Items.nuggetDiamondMeta, 5, 6);
             ferranium = new BlockModPlant(farmland, net.minecraft.init.Blocks.iron_ore, Items.nuggetIron, Items.nuggetIronMeta, 4, 1);
             aurigold = new BlockModPlant(farmland, net.minecraft.init.Blocks.gold_ore, net.minecraft.init.Items.gold_nugget, 0, 4, 6);
@@ -41,7 +42,7 @@ public class ResourceCrops {
             RegisterHelper.registerCrop(lapender, Names.Plants.lapender);
             RegisterHelper.registerCrop(emeryllis, Names.Plants.emeryllis);
             RegisterHelper.registerCrop(redstodendron, Names.Plants.redstodendron);
-//Modded resources
+            //Modded resources
             if(OreDictHelper.oreCopper!=null) {
                 cuprosia = new BlockModPlant(farmland, OreDictHelper.oreCopper, OreDictHelper.oreCopperMeta, Items.nuggetCopper, Items.nuggetCopperMeta, 3, 6);
                 RegisterHelper.registerCrop(cuprosia, Names.Plants.cuprosia);
@@ -74,6 +75,7 @@ public class ResourceCrops {
                 osmonium = new BlockModPlant(farmland, OreDictHelper.oreOsmium, OreDictHelper.oreOsmiumMeta, Items.nuggetOsmium, Items.nuggetOsmiumMeta, 4, 6);
                 RegisterHelper.registerCrop(osmonium, Names.Plants.osmonium);
             }
+            Seeds.initResourceSeeds();
             LogHelper.debug("Resource crops registered");
         }
     }
