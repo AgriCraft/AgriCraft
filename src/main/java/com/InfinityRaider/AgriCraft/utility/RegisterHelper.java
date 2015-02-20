@@ -21,7 +21,7 @@ public abstract class RegisterHelper {
     }
     public static void registerBlock(Block block,String name, Class<? extends ItemBlock> itemClass) {
         block.setBlockName(Reference.MOD_ID.toLowerCase()+':'+name);
-        LogHelper.debug("registering " + block.getUnlocalizedName());
+        LogHelper.info("registering " + block.getUnlocalizedName());
         if(itemClass!=null) {
             GameRegistry.registerBlock(block, itemClass, name);
         }
@@ -29,13 +29,23 @@ public abstract class RegisterHelper {
             GameRegistry.registerBlock(block, name);
         }
     }
+    public static void registerCrop(BlockModPlant plant, String name) {
+        registerBlock(plant, Names.Objects.crop+name);
+        for(ItemStack fruit:plant.products.getAllProducts()) {
+            if(fruit!=null && fruit.getItem()!=null && !OreDictHelper.hasOreId(fruit, Names.Objects.crop + name)) {
+                OreDictionary.registerOre(Names.Objects.crop + name, fruit);
+            }
+        }
+    }
     public static void registerItem(Item item,String name) {
         item.setUnlocalizedName(Reference.MOD_ID.toLowerCase()+':'+name);
-        LogHelper.debug("registering " + item.getUnlocalizedName());
+        LogHelper.info("registering " + item.getUnlocalizedName());
         GameRegistry.registerItem(item, name);
     }
-    public static void registerSeed(ItemSeeds seed, String name, BlockModPlant plant) {
+    public static void registerSeed(ItemSeeds seed, BlockModPlant plant) {
+        String name = Names.Objects.seed + plant.getUnlocalizedName().substring(plant.getUnlocalizedName().indexOf(':')+5);
         registerItem(seed, name);
+        OreDictionary.registerOre(name, seed);
         OreDictionary.registerOre(Names.OreDict.listAllseed, seed);
         plant.initializeSeed(seed);
     }
