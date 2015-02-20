@@ -27,7 +27,6 @@ public class ResourceCrops {
     public static void init() {
         if (ConfigurationHandler.resourcePlants) {
             Block farmland = null;
-
             OreDictHelper.getRegisteredOres();
             Items.initFruits();
 
@@ -38,7 +37,6 @@ public class ResourceCrops {
             lapender = new BlockModPlant(farmland, net.minecraft.init.Blocks.lapis_ore, net.minecraft.init.Items.dye, 4, 3, 6);
             emeryllis = new BlockModPlant(farmland, net.minecraft.init.Blocks.emerald_ore, Items.nuggetEmerald, Items.nuggetEmeraldMeta, 5, 6);
             redstodendron = new BlockModPlant(farmland, net.minecraft.init.Blocks.redstone_ore, net.minecraft.init.Items.redstone, 0, 3, 6);
-
             RegisterHelper.registerBlock(diamahlia, Names.Crops.cropDiamahlia);
             RegisterHelper.registerBlock(ferranium, Names.Crops.cropFerranium);
             RegisterHelper.registerBlock(aurigold, Names.Crops.cropAurigold);
@@ -79,7 +77,6 @@ public class ResourceCrops {
                 osmonium = new BlockModPlant(farmland, OreDictHelper.oreOsmium, OreDictHelper.oreOsmiumMeta, Items.nuggetOsmium, Items.nuggetOsmiumMeta, 4, 6);
                 RegisterHelper.registerBlock(osmonium, Names.Crops.cropOsmonium);
             }
-
             LogHelper.debug("Resource crops registered");
         }
     }

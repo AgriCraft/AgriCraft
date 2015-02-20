@@ -48,6 +48,7 @@ public class Crops {
     public static BlockModPlant botaniaRed;
     public static BlockModPlant botaniaBlack;
 
+
     public static void init() {
         potato = new BlockModPlant(net.minecraft.init.Items.potato);
         potato.products.addProduce(new ItemStack(Items.poisonous_potato), 10);
@@ -67,7 +68,6 @@ public class Crops {
         cactus = new BlockModPlant(Blocks.sand, ConfigurationHandler.cactusGivesCactus?Item.getItemFromBlock(Blocks.cactus):net.minecraft.init.Items.dye, 2);
         shroomRed = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.red_mushroom));
         shroomBrown = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.brown_mushroom));
-
         RegisterHelper.registerBlock(potato, Names.Crops.cropPotato);
         RegisterHelper.registerBlock(carrot, Names.Crops.cropCarrot);
         RegisterHelper.registerBlock(melon, Names.Crops.cropMelon);
@@ -85,10 +85,8 @@ public class Crops {
         RegisterHelper.registerBlock(cactus, Names.Crops.cropCactus);
         RegisterHelper.registerBlock(shroomRed, Names.Crops.cropShroomRed);
         RegisterHelper.registerBlock(shroomBrown, Names.Crops.cropShroomBrown);
-
         LogHelper.debug("Crops registered");
     }
-
     public static void initBotaniaCrops() {
         if(ModIntegration.LoadedMods.botania && ConfigurationHandler.integration_Botania) {
             botaniaWhite = new BlockModPlant(ModItems.petal, 0, 3, 1);
@@ -107,7 +105,6 @@ public class Crops {
             botaniaGreen = new BlockModPlant(ModItems.petal, 13, 3, 1);
             botaniaRed = new BlockModPlant(ModItems.petal, 14, 3, 1);
             botaniaBlack = new BlockModPlant(ModItems.petal, 15, 3, 1);
-
             RegisterHelper.registerBlock(botaniaWhite, Names.Crops.cropBotaniaWhite);
             RegisterHelper.registerBlock(botaniaOrange, Names.Crops.cropBotaniaOrange);
             RegisterHelper.registerBlock(botaniaMagenta, Names.Crops.cropBotaniaMagenta);
@@ -124,9 +121,7 @@ public class Crops {
             RegisterHelper.registerBlock(botaniaGreen, Names.Crops.cropBotaniaGreen);
             RegisterHelper.registerBlock(botaniaRed, Names.Crops.cropBotaniaRed);
             RegisterHelper.registerBlock(botaniaBlack, Names.Crops.cropBotaniaBlack);
-
             Seeds.initBotaniaSeeds();
-
             LogHelper.debug("Botania crops registered");
         }
     }
