@@ -91,7 +91,7 @@ public class ModIntegration {
             botania = Loader.isModLoaded(Names.Mods.botania);
             tconstruct = Loader.isModLoaded(Names.Mods.tconstruct);
             gardenStuff = Loader.isModLoaded(Names.Mods.gardenStuff);
-            
+
             LogHelper.info("Checking for loaded mods:");
             LogHelper.info(" - NEI loaded: "+nei);
             LogHelper.info(" - Pam's HarvestCraft loaded: "+harvestcraft);

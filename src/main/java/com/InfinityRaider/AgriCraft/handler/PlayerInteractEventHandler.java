@@ -18,9 +18,8 @@ public class PlayerInteractEventHandler {
     public void onPlayerUseItemEvent(PlayerInteractEvent event) {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             Block block = event.world.getBlock(event.x, event.y, event.z);
-            int meta = event.world.getBlockMetadata(event.x, event.y, event.z);
             if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
-                if (GrowthRequirements.isSoilValid(block, meta) || block == Blocks.farmland) {
+                if (GrowthRequirements.isSoilValid(event.world, event.x, event.y, event.z) || block == Blocks.farmland) {
                     if (ConfigurationHandler.disableVanillaFarming) {
                         //for now, disable vanilla farming for every IPlantable, if people start to need exceptions I'll add in exceptions
                         this.denyEvent(event, false);

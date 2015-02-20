@@ -58,7 +58,7 @@ public class ItemModSeed extends ItemSeeds implements IPlantable{
             LogHelper.debug("Trying to plant seed "+stack.getItem().getUnlocalizedName()+" on crops");
             return true;
         }
-        if(GrowthRequirements.getGrowthRequirement((ItemSeeds) stack.getItem(), stack.getItemDamage()).isValidSoil(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z))) {
+        if(GrowthRequirements.getGrowthRequirement((ItemSeeds) stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y, z)) {
             super.onItemUse(stack,player,world,x,y,z,side,f1,f2,f3);
         }
         return false;
