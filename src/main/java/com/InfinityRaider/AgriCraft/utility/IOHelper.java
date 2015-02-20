@@ -3,8 +3,6 @@ package com.InfinityRaider.AgriCraft.utility;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

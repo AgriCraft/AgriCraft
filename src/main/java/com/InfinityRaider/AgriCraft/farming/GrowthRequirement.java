@@ -2,7 +2,8 @@ package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
-import com.InfinityRaider.AgriCraft.utility.*;
+import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.jaquadro.minecraft.gardencontainers.block.BlockLargePot;
 import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
 import net.minecraft.block.Block;
