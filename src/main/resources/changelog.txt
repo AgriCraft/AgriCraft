@@ -32,6 +32,7 @@ Changelog
 
 -alpha4:
     -CHANGE: Potatoes sometimes drop poisonous potatoes now
+    -CHANGE: Register seeds and their produce as seed<Name> and crop<Name> in the ore dictionary
 
 
 1.2.2

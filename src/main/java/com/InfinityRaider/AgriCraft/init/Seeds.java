@@ -83,7 +83,6 @@ public class Seeds {
         seedCactus = new ItemModSeed(Crops.cactus, SeedInformation.cactus);
         seedShroomRed = new ItemModSeed(Crops.shroomRed, SeedInformation.shroomRed);
         seedShroomBrown = new ItemModSeed(Crops.shroomBrown, SeedInformation.shroomBrown);
-
         RegisterHelper.registerSeed(seedPotato, Names.Seeds.seedPotato, Crops.potato);
         RegisterHelper.registerSeed(seedCarrot, Names.Seeds.seedCarrot, Crops.carrot);
         RegisterHelper.registerSeed(seedSugarcane, Names.Seeds.seedSugarcane, Crops.sugarcane);
@@ -99,7 +98,6 @@ public class Seeds {
         RegisterHelper.registerSeed(seedCactus, Names.Seeds.seedCactus, Crops.cactus);
         RegisterHelper.registerSeed(seedShroomRed, Names.Seeds.seedShroomRed, Crops.shroomRed);
         RegisterHelper.registerSeed(seedShroomBrown, Names.Seeds.seedShroomBrown, Crops.shroomBrown);
-
         //resource crop seeds
         if(ConfigurationHandler.resourcePlants) {
             //vanilla resources
@@ -109,14 +107,12 @@ public class Seeds {
             seedLapender = new ItemModSeed(ResourceCrops.lapender, SeedInformation.lapender);
             seedEmeryllis = new ItemModSeed(ResourceCrops.emeryllis, SeedInformation.emeryllis);
             seedRedstodendron = new ItemModSeed(ResourceCrops.redstodendron, SeedInformation.redstodendron);
-
             RegisterHelper.registerSeed(seedFerranium, Names.Seeds.seedFerranium, ResourceCrops.ferranium);
             RegisterHelper.registerSeed(seedDiamahlia, Names.Seeds.seedDiamahlia, ResourceCrops.diamahlia);
             RegisterHelper.registerSeed(seedAurigold, Names.Seeds.seedAurigold, ResourceCrops.aurigold);
             RegisterHelper.registerSeed(seedLapender, Names.Seeds.seedLapender, ResourceCrops.lapender);
             RegisterHelper.registerSeed(seedEmeryllis, Names.Seeds.seedEmeryllis, ResourceCrops.emeryllis);
             RegisterHelper.registerSeed(seedRedstodendron, Names.Seeds.seedRedstodendron, ResourceCrops.redstodendron);
-
             if(OreDictHelper.oreCopper!=null) {
                 seedCuprosia = new ItemModSeed(ResourceCrops.cuprosia, SeedInformation.cuprosia);
                 RegisterHelper.registerSeed(seedCuprosia, Names.Seeds.seedCuprosia, ResourceCrops.cuprosia);
@@ -150,7 +146,6 @@ public class Seeds {
                 RegisterHelper.registerSeed(seedOsmonium, Names.Seeds.seedOsmonium, ResourceCrops.osmonium);
             }
         }
-
         //register natura seeds to the ore dictionary if natura is installed
         if(ModIntegration.LoadedMods.natura) {
             OreDictionary.registerOre(Names.OreDict.listAllseed, NContent.plantItem);
@@ -182,7 +177,6 @@ public class Seeds {
         }
         LogHelper.debug("Seeds registered");
     }
-
     //botania flower seeds
     public static void initBotaniaSeeds() {
         if (ConfigurationHandler.integration_Botania) {
@@ -202,7 +196,6 @@ public class Seeds {
             seedBotaniaGreen = new ItemModSeed(Crops.botaniaGreen, SeedInformation.botaniaGreen);
             seedBotaniaRed = new ItemModSeed(Crops.botaniaRed, SeedInformation.botaniaRed);
             seedBotaniaBlack = new ItemModSeed(Crops.botaniaBlack, SeedInformation.botaniaBlack);
-
             RegisterHelper.registerSeed(seedBotaniaWhite, Names.Seeds.seedBotaniaWhite, Crops.botaniaWhite);
             RegisterHelper.registerSeed(seedBotaniaOrange, Names.Seeds.seedBotaniaOrange, Crops.botaniaOrange);
             RegisterHelper.registerSeed(seedBotaniaMagenta, Names.Seeds.seedBotaniaMagenta, Crops.botaniaMagenta);
