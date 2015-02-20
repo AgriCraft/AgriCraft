@@ -60,7 +60,7 @@ public class Crops {
         tulipWhite = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
         tulipPink = new BlockModPlant(net.minecraft.init.Items.dye, 9, 2);
         daisy = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
-        cactus = new BlockModPlant(Blocks.sand, ConfigurationHandler.cactusGivesCactus?Item.getItemFromBlock(Blocks.cactus):net.minecraft.init.Items.dye, 2);
+        cactus = new BlockModPlant(Blocks.sand, ConfigurationHandler.cactusGivesCactus?Item.getItemFromBlock(Blocks.cactus):net.minecraft.init.Items.dye, ConfigurationHandler.cactusGivesCactus?0:2);
         shroomRed = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.red_mushroom));
         shroomBrown = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.brown_mushroom));
         RegisterHelper.registerCrop(potato, Names.Plants.potato);
