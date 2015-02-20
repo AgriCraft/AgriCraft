@@ -63,8 +63,9 @@ public class Seeds {
     public static ItemModSeed seedNiccissus;
     public static ItemModSeed seedPlatiolus;
     public static ItemModSeed seedOsmonium;
+    
     public static void init() {
-//vanilla crop seeds
+        //vanilla crop seeds
         seedPotato = new ItemModSeed(Crops.potato, SeedInformation.potato);
         seedCarrot = new ItemModSeed(Crops.carrot, SeedInformation.carrot);
         seedSugarcane = new ItemModSeed(Crops.sugarcane, SeedInformation.sugarcane);
@@ -95,9 +96,10 @@ public class Seeds {
         RegisterHelper.registerSeed(seedCactus, Crops.cactus);
         RegisterHelper.registerSeed(seedShroomRed, Crops.shroomRed);
         RegisterHelper.registerSeed(seedShroomBrown, Crops.shroomBrown);
-//resource crop seeds
+
+        //resource crop seeds
         if(ConfigurationHandler.resourcePlants) {
-//vanilla resources
+            //vanilla resources
             seedDiamahlia = new ItemModSeed(ResourceCrops.diamahlia, SeedInformation.diamahlia);
             seedFerranium = new ItemModSeed(ResourceCrops.ferranium, SeedInformation.ferranium);
             seedAurigold = new ItemModSeed(ResourceCrops.aurigold, SeedInformation.aurigold);
@@ -143,17 +145,17 @@ public class Seeds {
                 RegisterHelper.registerSeed(seedOsmonium,ResourceCrops.osmonium);
             }
         }
-//register natura seeds to the ore dictionary if natura is installed
+        //register natura seeds to the ore dictionary if natura is installed
         if(ModIntegration.LoadedMods.natura) {
             OreDictionary.registerOre(Names.OreDict.listAllseed, NContent.plantItem);
         }
-//register ex nihilo seeds to the ore dictionary if ex nihilo is installed
+        //register ex nihilo seeds to the ore dictionary if ex nihilo is installed
         if(ModIntegration.LoadedMods.exNihilo) {
             OreDictionary.registerOre(Names.OreDict.listAllseed, ExNihiloHelper.seedCarrot);
             OreDictionary.registerOre(Names.OreDict.listAllseed, ExNihiloHelper.seedPotato);
             OreDictionary.registerOre(Names.OreDict.listAllseed, ExNihiloHelper.seedSugarCane);
         }
-//register plant mega pack seeds to the ore dictionary if plant mega pack is installed
+        //register plant mega pack seeds to the ore dictionary if plant mega pack is installed
         if(ModIntegration.LoadedMods.plantMegaPack) {
             OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedOnion"));
             OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedSpinach"));
@@ -165,7 +167,7 @@ public class Seeds {
             OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedTomato"));
             OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedBeet"));
         }
-//register witchery seeds to the ore dictionary if witchery is installed
+        //register witchery seeds to the ore dictionary if witchery is installed
         if(Loader.isModLoaded("witchery")) {
             OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("witchery:seedsbelladonna"));
             OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("witchery:seedsmandrake"));

@@ -19,6 +19,7 @@ public abstract class RegisterHelper {
     public static void registerBlock(Block block,String name) {
         RegisterHelper.registerBlock(block, name, null);
     }
+
     public static void registerBlock(Block block,String name, Class<? extends ItemBlock> itemClass) {
         block.setBlockName(Reference.MOD_ID.toLowerCase()+':'+name);
         LogHelper.info("registering " + block.getUnlocalizedName());
@@ -29,6 +30,7 @@ public abstract class RegisterHelper {
             GameRegistry.registerBlock(block, name);
         }
     }
+
     public static void registerCrop(BlockModPlant plant, String name) {
         registerBlock(plant, Names.Objects.crop+name);
         for(ItemStack fruit:plant.products.getAllProducts()) {
@@ -37,11 +39,13 @@ public abstract class RegisterHelper {
             }
         }
     }
+
     public static void registerItem(Item item,String name) {
         item.setUnlocalizedName(Reference.MOD_ID.toLowerCase()+':'+name);
         LogHelper.info("registering " + item.getUnlocalizedName());
         GameRegistry.registerItem(item, name);
     }
+
     public static void registerSeed(ItemSeeds seed, BlockModPlant plant) {
         String name = Names.Objects.seed + plant.getUnlocalizedName().substring(plant.getUnlocalizedName().indexOf(':')+5);
         registerItem(seed, name);
@@ -49,6 +53,7 @@ public abstract class RegisterHelper {
         OreDictionary.registerOre(Names.OreDict.listAllseed, seed);
         plant.initializeSeed(seed);
     }
+
     public static void removeRecipe(ItemStack stack) {
         ArrayList recipes = (ArrayList) CraftingManager.getInstance().getRecipeList();
         ItemStack result;

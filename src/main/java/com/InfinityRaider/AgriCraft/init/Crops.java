@@ -7,9 +7,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import vazkii.botania.common.item.ModItems;
 
 public class Crops {
@@ -46,6 +44,7 @@ public class Crops {
     public static BlockModPlant botaniaGreen;
     public static BlockModPlant botaniaRed;
     public static BlockModPlant botaniaBlack;
+
     public static void init() {
         potato = new BlockModPlant(net.minecraft.init.Items.potato);
         carrot = new BlockModPlant(net.minecraft.init.Items.carrot);
@@ -83,6 +82,7 @@ public class Crops {
         RegisterHelper.registerCrop(shroomBrown, Names.Plants.shroom + Names.Colors.brown);
         LogHelper.info("Crops registered");
     }
+
     public static void initBotaniaCrops() {
         if(ModIntegration.LoadedMods.botania && ConfigurationHandler.integration_Botania) {
             botaniaWhite = new BlockModPlant(ModItems.petal, 0, 3, 1);
