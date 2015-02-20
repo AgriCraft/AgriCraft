@@ -22,7 +22,6 @@ import java.util.List;
 public class CustomCrops {
     public static BlockModPlant[] customCrops;
     public static ItemModSeed[] customSeeds;
-
     public static void initCustomCrops() {
         if(ConfigurationHandler.customCrops) {
             String[] cropsRawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readCustomCrops());
@@ -30,13 +29,13 @@ public class CustomCrops {
             customSeeds = new ItemModSeed[cropsRawData.length];
             for(int i=0;i<cropsRawData.length;i++) {
                 String[] cropData = IOHelper.getData(cropsRawData[i]);
-                //cropData[0]: name
-                //cropData[1]: fruit name:meta
-                //cropData[2]: soil
-                //cropData[3]: base block name:meta
-                //cropData[4]: tier
-                //cropData[5]: render type
-                //cropData[6]: information
+//cropData[0]: name
+//cropData[1]: fruit name:meta
+//cropData[2]: soil
+//cropData[3]: base block name:meta
+//cropData[4]: tier
+//cropData[5]: render type
+//cropData[6]: information
                 boolean success = cropData.length==7;
                 String errorMsg = "Incorrect amount of arguments, arguments should be: (name, fruit:fruitMeta, soil, baseBlock:baseBlockMeta, tier, renderType, information)";
                 LogHelper.debug(new StringBuffer("parsing ").append(cropsRawData[i]));
@@ -55,13 +54,10 @@ public class CustomCrops {
                         int tier = Integer.parseInt(cropData[4]);
                         int renderType = Integer.parseInt(cropData[5]);
                         String info = cropData[6];
-
                         customCrops[i] = new BlockModPlant(soil, baseBlock, baseMeta, fruit, fruitMeta, tier, renderType, true);
-                        RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop + Character.toUpperCase(name.charAt(0)) + name.substring(1));
-
+                        RegisterHelper.registerCrop(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1));
                         customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds", info);
-                        RegisterHelper.registerSeed(customSeeds[i], Names.Objects.seed + Character.toUpperCase(name.charAt(0)) + name.substring(1), customCrops[i]);
-
+                        RegisterHelper.registerSeed(customSeeds[i], customCrops[i]);
                     }
                 }
                 if(!success) {
@@ -71,7 +67,6 @@ public class CustomCrops {
             LogHelper.info("Custom crops registered");
         }
     }
-
     public static void initGrassSeeds() {
         if(ConfigurationHandler.wipeTallGrassDrops) {
             List seedList = null;
