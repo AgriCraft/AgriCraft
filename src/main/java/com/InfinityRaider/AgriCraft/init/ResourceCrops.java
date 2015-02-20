@@ -75,6 +75,7 @@ public class ResourceCrops {
                 osmonium = new BlockModPlant(farmland, OreDictHelper.oreOsmium, OreDictHelper.oreOsmiumMeta, Items.nuggetOsmium, Items.nuggetOsmiumMeta, 4, 6);
                 RegisterHelper.registerCrop(osmonium, Names.Plants.osmonium);
             }
+            Seeds.initResourceSeeds();
             LogHelper.debug("Resource crops registered");
         }
     }
