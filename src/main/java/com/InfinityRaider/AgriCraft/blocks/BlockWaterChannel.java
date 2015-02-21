@@ -58,29 +58,32 @@ public class BlockWaterChannel extends BlockCustomWood {
     @Override
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB mask, List list, Entity entity) {
         //adjacent boxes
-        TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
-        float f = Constants.unit;   //one 16th of a block
-        float min = 4*f;
-        float max = 12*f;
-        if(channel.hasNeighbour('x', 1)) {
-            this.setBlockBounds(max-f, min, min, f*16, max, max);
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te != null && te instanceof TileEntityChannel) {
+            TileEntityChannel channel = (TileEntityChannel) te;
+            float f = Constants.unit;   //one 16th of a block
+            float min = 4 * f;
+            float max = 12 * f;
+            if (channel.hasNeighbour('x', 1)) {
+                this.setBlockBounds(max - f, min, min, f * 16, max, max);
+                super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
+            }
+            if (channel.hasNeighbour('x', -1)) {
+                this.setBlockBounds(0, min, min, min + f, max, max);
+                super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
+            }
+            if (channel.hasNeighbour('z', 1)) {
+                this.setBlockBounds(min, min, max - f, max, max, f * 16);
+                super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
+            }
+            if (channel.hasNeighbour('z', -1)) {
+                this.setBlockBounds(min, min, 0, max, max, min + f);
+                super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
+            }
+            //central box
+            this.setBlockBounds(min, min, min, max, max, max);
             super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
         }
-        if(channel.hasNeighbour('x', -1)) {
-            this.setBlockBounds(0, min, min, min+f, max, max);
-            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
-        }
-        if(channel.hasNeighbour('z', 1)) {
-            this.setBlockBounds(min, min, max-f, max, max,  f*16);
-            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
-        }
-        if(channel.hasNeighbour('z', -1)) {
-            this.setBlockBounds(min, min, 0, max, max, min+f);
-            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
-        }
-        //central box
-        this.setBlockBounds(min, min, min, max, max, max);
-        super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
     }
 
     @Override
