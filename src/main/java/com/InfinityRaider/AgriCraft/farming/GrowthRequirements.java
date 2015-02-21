@@ -7,7 +7,6 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.utility.*;
 import com.jaquadro.minecraft.gardencontainers.block.BlockLargePot;
 import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
-import com.jaquadro.minecraft.gardencore.core.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -51,7 +50,7 @@ public class GrowthRequirements {
             defaultSoils.add(new BlockWithMeta((Block) Block.blockRegistry.getObject("Forestry:soil"), 0));
         }
         if(ModIntegration.LoadedMods.gardenStuff) {
-            defaultSoils.add(new BlockWithMeta(ModBlocks.gardenFarmland, 0));
+            defaultSoils.add(new BlockWithMeta((Block) Block.blockRegistry.getObject("GardenCore:garden_farmland"), 0));
         }
         //reads custom entries
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
