@@ -117,16 +117,16 @@ tile.agricraft:cropBotaniaGreen.name=绿色神秘花
 tile.agricraft:cropBotaniaRed.name=红色神秘花
 tile.agricraft:cropBotaniaBlack.name=黑色神秘花
 
-tile.agricraft:cropFerranium.name=Ferranium
+tile.agricraft:cropFerranium.name=铁叶草
 tile.agricraft:cropAurigold.name=Aurigold
-tile.agricraft:cropDiamahlia.name=Diamahlia
-tile.agricraft:cropLapender.name=Lapender
-tile.agricraft:cropEmeryllis.name=Emeryllis
-tile.agricraft:cropRedstodendron.name=Redstodendron
-tile.agricraft:cropCuprosia.name=Cuprosia
-tile.agricraft:cropPetinia.name=Petinia
-tile.agricraft:cropPlombean.name=Plombean
-tile.agricraft:cropSilverweed.name=Silverweed
+tile.agricraft:cropDiamahlia.name=钻石花
+tile.agricraft:cropLapender.name=天青花
+tile.agricraft:cropEmeryllis.name=翡翠草
+tile.agricraft:cropRedstodendron.name=红灌木
+tile.agricraft:cropCuprosia.name=赤铜花
+tile.agricraft:cropPetinia.name=锡白草
+tile.agricraft:cropPlombean.name=铅斑豆
+tile.agricraft:cropSilverweed.name=银辉草
 tile.agricraft:cropJaslumine.name=Jaslumine
 tile.agricraft:cropNiccissus.name=Niccissus
 tile.agricraft:cropPlatiolus.name=Platiolus
@@ -145,7 +145,7 @@ agricraft_tooltip.discoveredSeeds=已发现种子
 agricraft_tooltip.material=材质
 agricraft_tooltip.waterLevel=水位
 agricraft_tooltip.cropWithPlant=这个作物架上有作物
-agricraft_tooltip.crossCrop=This is a cross crop
+agricraft_tooltip.crossCrop=这是一个杂交架
 agricraft_tooltip.weeds=杂草开始在这里生长了
 agricraft_tooltip.cropWithoutPlant=这个作物架是空的
 agricraft_tooltip.notCrop=这不是作物架
@@ -175,62 +175,62 @@ agricraft_journal.growthStages=生长阶段
 agricraft_journal.mutations=可能变异
 
 //agricraft seeds
-agricraft_journal.potato=The potato is the base of almost every meal, however some have even found ways to turn it into a beverage.
-agricraft_journal.carrot=The carrot is a vegetable suited for many diets.
-agricraft_journal.sugarcane=Usually reeds only grow near water, but an agriculturist should be able to mutate this plant into growing about everywhere.
-agricraft_journal.dandelion=Dandelions are yellow flowers found very commonly in every location exposed to the sun.
-agricraft_journal.poppy=Though it is very common, it is still a very pretty, deep red flower.
-agricraft_journal.orchid=A flower which looks good in many gardens, in fact no garden is complete without orchids in it.
-agricraft_journal.allium=Allium is a flower that is grown for it's purple petals.
-agricraft_journal.tulipPink=The tulip comes in many colors, but only a true agriculturist appreciates the pink ones.
-agricraft_journal.tulipOrange=Orange, one of the many colors in the tulip spectrum.
-agricraft_journal.tulipRed=There is a saying: 'there are 50 shades of tulip, but red is the most beautiful'.
-agricraft_journal.tulipWhite=There are many white flowers, but many say the white tulip is the white flower of white flowers.
-agricraft_journal.daisy=Daisies are quite common, but nonetheless pretty white flowers.
-agricraft_journal.cactus=Cacti can be grown to produce a green tinted substance which is often used as dye.
-agricraft_journal.shroomRed=This red fungus tastes actually quite nice and would make a fine ingredient for mushroom stew.
-agricraft_journal.shroomBrown=This brown fungus tastes actually quite nice and would make a fine ingredient for mushroom stew.
-agricraft_journal.diamahlia=Many still believe this flower only exists in tales and stories. However some agriculturists say they have succeeded in obtaining this legendary plant.
-agricraft_journal.aurigold=Aurigold is a rare and fabled flower that feeds on tiny fractions of gold in the soil, only a very patient and skilled agriculturist is able to cultivate this jewel.
-agricraft_journal.ferranium=This strange plant's roots do not care for water. They just burrow in the soil while absorbing iron particles to strengthen itself.
-agricraft_journal.lapender=Besides it's beautiful blue color this flower also produces shiny pebbles.
-agricraft_journal.emeryllis=If you talk to the village agriculturist, they will be able to tell you tales about this plant and the infinite riches it would provide.
-agricraft_journal.redstodendron=A strange aura seems to be emanating from redstodendron bushes.
-agricraft_journal.cuprosia=Cuprosia is an odd flower which extracts copper from the soil to spring it's beautiful petals.
-agricraft_journal.petinia=This flower only thrives on soils rich in tin.
-agricraft_journal.plombean=Sometimes people mistake this plant for regular beans and die of lead poisoning after consuming the fruits.
-agricraft_journal.silverweed=Sometimes, less competent agriculturists mistake this valuable plant for weeds and discard it.
-agricraft_journal.jaslumine=Blacksmiths frown down upon it, but many believe aluminium has it's uses. That's why some still try to grow this flower.
-agricraft_journal.niccissus=When it blooms, it's flowers reveal nuggets made of nickel, its still a mystery how this plant grows.
-agricraft_journal.platiolus=Platinum is a rare material, most metallurgists will go to agriculturist instead of miners to get hold of it.
-agricraft_journal.osmonium=An agriculturist managing to grow these flowers will find a good market of engineers.
+agricraft_journal.potato=马铃薯几乎可以说是每一顿饭的主食,甚至还有人找出了把马铃薯做成饮料的办法.
+agricraft_journal.carrot=胡萝卜是一种可以加进任何饭菜里的蔬菜.
+agricraft_journal.sugarcane=通常芦苇只长在水边,但是一个农学家应该有能力让它在任何地方都能生长.
+agricraft_journal.dandelion=蒲公英有着黄色的花,你可以在任何暴露在太阳下的地方找到它.
+agricraft_journal.poppy=尽管很普通,它依旧长有鲜艳的红色的花.
+agricraft_journal.orchid=这种花放进大多数花园里都会很好看,但事实是:任何少了兰花的花园都不是完整的花园.
+agricraft_journal.allium=绒球葱是一种为了其紫色花瓣而种植的花.
+agricraft_journal.tulipPink=郁金香有很多颜色,但只有真正的农学家才会欣赏粉色的郁金香.
+agricraft_journal.tulipOrange=橙色,郁金香家族的组成颜色之一.
+agricraft_journal.tulipRed=曾有人说过:'郁金香五十种色彩之中,最美丽的是红色的那一个'.
+agricraft_journal.tulipWhite=虽然有很多白花,但是有很多人说白郁金香是白花之中的白花.
+agricraft_journal.daisy=法兰西菊确实很普通,虽然它也是很白的花.
+agricraft_journal.cactus=种植仙人掌可以获取常用作绿色染料的绿色物质.
+agricraft_journal.shroomRed=这种红色蘑菇的味道确实很好,它绝对是蘑菇煲的上好材料.
+agricraft_journal.shroomBrown=这种棕色蘑菇的味道确实很好,它绝对是蘑菇煲的上好材料.
+agricraft_journal.diamahlia=仍有很多人相信这种花只存在于神话和传说中.然而,有些农学家声称他们已经成功得到了这种传奇的植物.
+agricraft_journal.aurigold=Aurigold是一种罕见的,只存在于寓言里的花,以土壤中含量甚微的金为养料,只有十分耐心并且技术高超的农学家才可以培养出这罕见的珍宝.
+agricraft_journal.ferranium=这奇怪的植物的根并不在意水源.它们只是深深地扎根于土壤中,吸收铁的粒子以强化自身.
+agricraft_journal.lapender=在它鲜艳的蓝色背后,这种花可以产出闪亮的小石头.
+agricraft_journal.emeryllis=如果你和一个村庄里的农学家交谈,它们将会告诉你这种可以带来无限财富的植物的传说.
+agricraft_journal.redstodendron=奇异的光辉似乎正从redstodendron灌木从中散发出来.
+agricraft_journal.cuprosia=Cuprosia是一种奇怪的花,它从土壤中提取铜,以滋养其美丽的花瓣.
+agricraft_journal.petinia=这种花只能在富含锡的土壤中生长茂盛.
+agricraft_journal.plombean=有时人们会以为这是普通的豆子,然后在吃下其果实后中毒身亡.
+agricraft_journal.silverweed=有时,阅历不够的农学家会将这珍贵的作物当作杂草并丢弃.
+agricraft_journal.jaslumine=铁匠们表示并不看好,但很多人相信铝是有用的.这就是为什么还有那么多人尝试培育这种花.
+agricraft_journal.niccissus=当它开花时,它的花中就会出现镍的小颗粒,至于这种花是怎么生长的至今不得而知.
+agricraft_journal.platiolus=铂是稀有金属,大多数冶金学家会去找农学家而非矿工去购买.
+agricraft_journal.osmonium=一个成功培育出这种花的农学家将会得到工程师们的广大市场.
 
 //botania seeds
-agricraft_journal.botaniaWhite=This mystical flower has pretty white petals, who knows what they might be useful for.
-agricraft_journal.botaniaOrange=This mystical flower has pretty orange petals, who knows what they might be useful for.
-agricraft_journal.botaniaMagenta=This mystical flower has pretty magenta petals, who knows what they might be useful for.
-agricraft_journal.botaniaLightBlue=This mystical flower has pretty blue petals, who knows what they might be useful for.
-agricraft_journal.botaniaYellow=This mystical flower has pretty yellow petals, who knows what they might be useful for.
-agricraft_journal.botaniaLime=This mystical flower has pretty lime petals, who knows what they might be useful for.
-agricraft_journal.botaniaPink=This mystical flower has pretty pink petals, who knows what they might be useful for.
-agricraft_journal.botaniaGray=This mystical flower has pretty gray petals, who knows what they might be useful for.
-agricraft_journal.botaniaLightGray=This mystical flower has light gray pretty petals, who knows what they might be useful for.
-agricraft_journal.botaniaCyan=This mystical flower has pretty cyan petals, who knows what they might be useful for.
-agricraft_journal.botaniaPurple=This mystical flower has pretty purple petals, who knows what they might be useful for.
-agricraft_journal.botaniaBlue=This mystical flower has pretty blue petals, who knows what they might be useful for.
-agricraft_journal.botaniaBrown=This mystical flower has pretty brown petals, who knows what they might be useful for.
-agricraft_journal. botaniaGreen=This mystical flower has pretty green petals, who knows what they might be useful for.
-agricraft_journal.botaniaRed=This mystical flower has pretty red petals, who knows what they might be useful for.
-agricraft_journal.botaniaBlack=This mystical flower has pretty black petals, who knows what they might be useful for.
+agricraft_journal.botaniaWhite=这神秘的鲜花里有着大量白色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaOrange=这神秘的鲜花里有着大量橙色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaMagenta=这神秘的鲜花里有着大量品红色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaLightBlue=这神秘的鲜花里有着大量淡蓝色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaYellow=这神秘的鲜花里有着大量黄色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaLime=这神秘的鲜花里有着大量黄绿色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaPink=这神秘的鲜花里有着大量粉色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaGray=这神秘的鲜花里有着大量灰色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaLightGray=这神秘的鲜花里有着大量淡灰色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaCyan=这神秘的鲜花里有着大量青色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaPurple=这神秘的鲜花里有着大量紫色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaBlue=这神秘的鲜花里有着大量蓝色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaBrown=这神秘的鲜花里有着大量棕色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal. botaniaGreen=这神秘的鲜花里有着大量绿色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaRed=这神秘的鲜花里有着大量红色花瓣,又有谁知道它们可能被用作什么呢.
+agricraft_journal.botaniaBlack=这神秘的鲜花里有着大量黑色花瓣,又有谁知道它们可能被用作什么呢.
 
 //minecraft seeds
-agricraft_journal.wheat=Wheat is a very common, but very nutritious crop.
-agricraft_journal.pumpkin=Most people consider pumpkins as a decorative vegetable, while others like the taste of pumpkin pies.
-agricraft_journal.melon=Because of it's sweet taste and high moisture content, the melon is a fruit loved by all.
+agricraft_journal.wheat=小麦是一种非常普遍,营养价值又高的作物.
+agricraft_journal.pumpkin=大多数人认为南瓜是一种装饰性的蔬菜,然而也有人喜欢南瓜派的味道.
+agricraft_journal.melon=人们都喜欢西瓜,因为西瓜的甜和含水量高.
 
 //natura seeds
-agricraft_journal.barleyNatura=Some people prefer the taste of barley bread over regular bread, while others claim it tastes exactly the same.
-agricraft_journal.cottonNatura=Cotton has a high demand in the textile industry and is therefore a very valuable asset.
+agricraft_journal.barleyNatura=相比于普通面包,一些人更喜欢大麦面包的味道, 然而也有一些人声称它们的味道是一样的.
+agricraft_journal.cottonNatura=棉花在纺织工业的高需求量决定了它是一种有价值的财产.
 
 //harvestcraft seeds
 agricraft_journal.hc_Artichoke=The edible portion of the artichoke consists of the flower buds before the flowers come into bloom.
@@ -289,7 +289,7 @@ agricraft_journal.hc_WinterSquash=Winter squash can be harvested whenever the fr
 agricraft_journal.hc_Zucchini=Zucchini is usually served cooked, it can also be prepared using a variety of cooking techniques, including steamed, boiled, grilled, stuffed and baked, barbecued, fried, or incorporated in other recipes.
 
 //plant mega pack seeds
-agricraft_journal.pmp_Spinach=The cartoon character Popeye the Sailor Man is portrayed as having a strong affinity for spinach, becoming physically stronger after consuming it.
+agricraft_journal.pmp_Spinach=卡通动漫角色"大力水手"被描绘为一个对菠菜有强烈喜爱的人,在吃过菠菜后会变得力大无穷.
 
 //chococraft seeds
-agricraft_journal.cc_Gysahl=The gysahl green is the favorite snack of the fabled Chocobo. Sometimes a gysahl green can produce a lovely gysahl and some say that a well cultivated gysahl plant can produce a golden gysahl.
+agricraft_journal.cc_Gysahl=基沙尔野菜是虚构的生物"陆行鸟"的最爱的食物.有时一棵基沙尔野菜可以长出可爱的基沙尔野菜,还有人说细心培育的基沙尔野菜可以长出金基沙尔野菜.
