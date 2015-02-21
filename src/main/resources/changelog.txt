@@ -35,6 +35,7 @@ Changelog
     -CHANGE: Register seeds and their produce as seed<Name> and crop<Name> in the ore dictionary
     -FIXED:  Moved resource crops to post-init to enable resource crops for mods that register their ore dictionary entries too late
     -FIXED:  Cactus crop dropping cactus with metadata 2 if the config option was on
+    -FIXED:  Crash with CoFH
 
 
 1.2.2
