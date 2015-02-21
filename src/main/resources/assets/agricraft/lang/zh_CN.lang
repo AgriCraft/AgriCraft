@@ -1,0 +1,295 @@
+//WIP. Welcome to assist me.
+
+//Creative Tabs
+itemGroup.agricraft=AgriCraft
+
+//Items
+item.agricraft:cropsItem.name=作物
+item.agricraft:journal.name=农学研究随笔
+item.agricraft:trowel.name=园丁铲
+item.agricraft:magnifyingGlass.name=放大镜
+item.agricraft:sprinklerItem.name=洒水壶
+item.agricraft:debugger.name=调试器
+item.agricraft:handRake.wood.name=木耙
+item.agricraft:handRake.iron.name=铁耙
+item.agricraft:nuggetDiamond.name=钻石颗粒
+item.agricraft:nuggetIron.name=铁颗粒
+item.agricraft:nuggetEmerald.name=绿宝石颗粒
+item.agricraft:nuggetTin.name=锡颗粒
+item.agricraft:nuggetLead.name=铅颗粒
+item.agricraft:nuggetSilver.name=银颗粒
+item.agricraft:nuggetAluminum.name=铝颗粒
+item.agricraft:nuggetNickel.name=镍颗粒
+item.agricraft:nuggetPlatinum.name=铂颗粒
+item.agricraft:nuggetOsmium.name=锇颗粒
+
+item.agricraft:seedPotato.name=马铃薯种子
+item.agricraft:seedCarrot.name=胡萝卜种子
+item.agricraft:seedSugarcane.name=甘蔗种子
+item.agricraft:seedDandelion.name=蒲公英种子
+item.agricraft:seedPoppy.name=罂粟种子
+item.agricraft:seedOrchid.name=兰花种子
+item.agricraft:seedAllium.name=绒球葱种子
+item.agricraft:seedTulipRed.name=红色郁金香种子
+item.agricraft:seedTulipOrange.name=橙色郁金香种子
+item.agricraft:seedTulipWhite.name=白色郁金香种子
+item.agricraft:seedTulipPink.name=粉色郁金香种子
+item.agricraft:seedDaisy.name=法兰西菊种子
+item.agricraft:seedCactus.name=仙人掌种子
+item.agricraft:seedShroomRed.name=红色蘑菇孢子
+item.agricraft:seedShroomBrown.name=棕色蘑菇孢子
+
+item.agricraft:seedBotaniaWhite.name=白色神秘花种子
+item.agricraft:seedBotaniaOrange.name=橙色神秘花种子
+item.agricraft:seedBotaniaMagenta.name=品红色神秘花种子
+item.agricraft:seedBotaniaLightBlue.name=淡蓝色神秘花种子
+item.agricraft:seedBotaniaYellow.name=黄色神秘花种子
+item.agricraft:seedBotaniaLime.name=黄绿色神秘花种子
+item.agricraft:seedBotaniaPink.name=粉色神秘花种子
+item.agricraft:seedBotaniaGray.name=灰色神秘花种子
+item.agricraft:seedBotaniaLightGray.name=淡灰色神秘花种子
+item.agricraft:seedBotaniaCyan.name=青色神秘花种子
+item.agricraft:seedBotaniaPurple.name=紫色神秘花种子
+item.agricraft:seedBotaniaBlue.name=蓝色神秘花种子
+item.agricraft:seedBotaniaBrown.name=棕色神秘花种子
+item.agricraft:seedBotaniaGreen.name=绿色神秘花种子
+item.agricraft:seedBotaniaRed.name=红色神秘花种子
+item.agricraft:seedBotaniaBlack.name=黑色神秘花种子
+
+item.agricraft:seedFerranium.name=Ferranium种子
+item.agricraft:seedAurigold.name=Aurigold种子
+item.agricraft:seedDiamahlia.name=Diamahlia种子
+item.agricraft:seedLapender.name=Lapender种子
+item.agricraft:seedEmeryllis.name=Emeryllis种子
+item.agricraft:seedRedstodendron.name=Redstodendron种子
+item.agricraft:seedCuprosia.name=Cuprosia种子
+item.agricraft:seedPetinia.name=Petinia种子
+item.agricraft:seedPlombean.name=Plombean种子
+item.agricraft:seedSilverweed.name=Silverweed种子
+item.agricraft:seedJaslumine.name=Jaslumine种子
+item.agricraft:seedNiccissus.name=Niccissus种子
+item.agricraft:seedPlatiolus.name=Platiolus种子
+item.agricraft:seedOsmonium.name=Osmonium种子
+
+
+//blocks
+tile.agricraft:crops.name=作物
+tile.agricraft:seedAnalyzer.name=种子分析仪
+tile.agricraft:waterTank.0.name=木质水箱
+tile.agricraft:waterTank.1.name=铁质水箱
+tile.agricraft:waterChannel.0.name=木质浇灌水道
+tile.agricraft:waterChannel.1.name=铁质浇灌水道
+tile.agricraft:channelValve.0.name=木质水道阀门
+tile.agricraft:channelValve.1.name=铁质水道阀门
+
+tile.agricraft:cropPotato.name=马铃薯
+tile.agricraft:cropCarrot.name=胡萝卜
+tile.agricraft:cropSugarcane.name=甘蔗
+tile.agricraft:cropMelon.name=西瓜
+tile.agricraft:cropPumpkin.name=南瓜
+tile.agricraft:cropDandelion.name=蒲公英
+tile.agricraft:cropPoppy.name=罂粟
+tile.agricraft:cropOrchid.name=兰花
+tile.agricraft:cropAllium.name=绒球葱
+tile.agricraft:cropTulipRed.name=红郁金香
+tile.agricraft:cropTulipOrange.name=橙郁金香
+tile.agricraft:cropTulipWhite.name=白郁金香
+tile.agricraft:cropTulipPink.name=粉郁金香
+tile.agricraft:cropDaisy.name=法兰西菊
+tile.agricraft:cropCactus.name=仙人掌
+tile.agricraft:cropShroomRed.name=红蘑菇
+tile.agricraft:cropShroomBrown.name=棕蘑菇
+
+tile.agricraft:cropBotaniaWhite.name=白色神秘花
+tile.agricraft:cropBotaniaOrange.name=橙色神秘花
+tile.agricraft:cropBotaniaMagenta.name=品红色神秘花
+tile.agricraft:cropBotaniaLightBlue.name=淡蓝色神秘花
+tile.agricraft:cropBotaniaYellow.name=黄色神秘花
+tile.agricraft:cropBotaniaLime.name=黄绿色神秘花
+tile.agricraft:cropBotaniaPink.name=粉色神秘花
+tile.agricraft:cropBotaniaGray.name=灰色神秘花
+tile.agricraft:cropBotaniaLightGray.name=淡灰色神秘花
+tile.agricraft:cropBotaniaCyan.name=青色神秘花
+tile.agricraft:cropBotaniaPurple.name=紫色神秘花
+tile.agricraft:cropBotaniaBlue.name=蓝色神秘花
+tile.agricraft:cropBotaniaBrown.name=棕色神秘花
+tile.agricraft:cropBotaniaGreen.name=绿色神秘花
+tile.agricraft:cropBotaniaRed.name=红色神秘花
+tile.agricraft:cropBotaniaBlack.name=黑色神秘花
+
+tile.agricraft:cropFerranium.name=Ferranium
+tile.agricraft:cropAurigold.name=Aurigold
+tile.agricraft:cropDiamahlia.name=Diamahlia
+tile.agricraft:cropLapender.name=Lapender
+tile.agricraft:cropEmeryllis.name=Emeryllis
+tile.agricraft:cropRedstodendron.name=Redstodendron
+tile.agricraft:cropCuprosia.name=Cuprosia
+tile.agricraft:cropPetinia.name=Petinia
+tile.agricraft:cropPlombean.name=Plombean
+tile.agricraft:cropSilverweed.name=Silverweed
+tile.agricraft:cropJaslumine.name=Jaslumine
+tile.agricraft:cropNiccissus.name=Niccissus
+tile.agricraft:cropPlatiolus.name=Platiolus
+tile.agricraft:cropOsmonium.name=Osmonium
+
+//tooltips
+agricraft_tooltip.unidentified=未识别
+agricraft_tooltip.seed=种子名字
+agricraft_tooltip.growth=生长速度
+agricraft_tooltip.gain=产量
+agricraft_tooltip.strength=抗性
+agricraft_tooltip.analyzed=这股种子还未经分析过
+agricraft_tooltip.fertile=这里土壤肥沃,作物可以生长
+agricraft_tooltip.notFertile=这种作物不能种在这里
+agricraft_tooltip.discoveredSeeds=已发现种子
+agricraft_tooltip.material=材质
+agricraft_tooltip.waterLevel=水位
+agricraft_tooltip.cropWithPlant=这个作物架上有作物
+agricraft_tooltip.crossCrop=This is a cross crop
+agricraft_tooltip.weeds=杂草开始在这里生长了
+agricraft_tooltip.cropWithoutPlant=这个作物架是空的
+agricraft_tooltip.notCrop=这不是作物架
+agricraft_tooltip.trowel=用这个把作物从一个作物架上移动到另一个上
+agricraft_tooltip.magnifyingGlass=用这个来检查作物
+agricraft_tooltip.handRake=用这个铲除作物架上的杂草
+agricraft_tooltip.closed=关闭
+agricraft_tooltip.open=开启
+agricraft_tooltip.state=阶段
+agricraft_tooltip.empty=这里没有种植作物
+
+// nei GUI
+agricraft_nei.mutation.title=作物杂交
+agricraft_nei.soil=土壤
+agricraft_nei.needs=需要
+agricraft_nei.below=底部
+agricraft_nei.nearby=旁边
+
+//journal entries
+//---------------
+//headers
+agricraft_journal.introduction=欢迎来到农业耕种的世界,今天我将会教你基础的作物架种植技术. 首先你要用4个木棍合成一个作物架.它可以放置在湿润的耕地上,这样种子就可以直接种植在作物架上.你还可以在作物架上再放一个作物架,而这样会形成一个杂交架.如果你把两个或者更多作物种在了杂交架旁边,杂交架上就有可能出现变异. \nIn this journal you can keep track of all your discovered crop mutations. To register a discovered seed, put the journal in a seed-analyser and then analyse the seed. This will reveal to you the properties of the seed as well as registering it in this journal. If you ever wish to copy the journal, put it in a crafting grid together with a blank book and quill.
+agricraft_journal.information=信息
+agricraft_journal.tier=级别
+agricraft_journal.fruits=果实
+agricraft_journal.growthStages=生长阶段
+agricraft_journal.mutations=可能变异
+
+//agricraft seeds
+agricraft_journal.potato=The potato is the base of almost every meal, however some have even found ways to turn it into a beverage.
+agricraft_journal.carrot=The carrot is a vegetable suited for many diets.
+agricraft_journal.sugarcane=Usually reeds only grow near water, but an agriculturist should be able to mutate this plant into growing about everywhere.
+agricraft_journal.dandelion=Dandelions are yellow flowers found very commonly in every location exposed to the sun.
+agricraft_journal.poppy=Though it is very common, it is still a very pretty, deep red flower.
+agricraft_journal.orchid=A flower which looks good in many gardens, in fact no garden is complete without orchids in it.
+agricraft_journal.allium=Allium is a flower that is grown for it's purple petals.
+agricraft_journal.tulipPink=The tulip comes in many colors, but only a true agriculturist appreciates the pink ones.
+agricraft_journal.tulipOrange=Orange, one of the many colors in the tulip spectrum.
+agricraft_journal.tulipRed=There is a saying: 'there are 50 shades of tulip, but red is the most beautiful'.
+agricraft_journal.tulipWhite=There are many white flowers, but many say the white tulip is the white flower of white flowers.
+agricraft_journal.daisy=Daisies are quite common, but nonetheless pretty white flowers.
+agricraft_journal.cactus=Cacti can be grown to produce a green tinted substance which is often used as dye.
+agricraft_journal.shroomRed=This red fungus tastes actually quite nice and would make a fine ingredient for mushroom stew.
+agricraft_journal.shroomBrown=This brown fungus tastes actually quite nice and would make a fine ingredient for mushroom stew.
+agricraft_journal.diamahlia=Many still believe this flower only exists in tales and stories. However some agriculturists say they have succeeded in obtaining this legendary plant.
+agricraft_journal.aurigold=Aurigold is a rare and fabled flower that feeds on tiny fractions of gold in the soil, only a very patient and skilled agriculturist is able to cultivate this jewel.
+agricraft_journal.ferranium=This strange plant's roots do not care for water. They just burrow in the soil while absorbing iron particles to strengthen itself.
+agricraft_journal.lapender=Besides it's beautiful blue color this flower also produces shiny pebbles.
+agricraft_journal.emeryllis=If you talk to the village agriculturist, they will be able to tell you tales about this plant and the infinite riches it would provide.
+agricraft_journal.redstodendron=A strange aura seems to be emanating from redstodendron bushes.
+agricraft_journal.cuprosia=Cuprosia is an odd flower which extracts copper from the soil to spring it's beautiful petals.
+agricraft_journal.petinia=This flower only thrives on soils rich in tin.
+agricraft_journal.plombean=Sometimes people mistake this plant for regular beans and die of lead poisoning after consuming the fruits.
+agricraft_journal.silverweed=Sometimes, less competent agriculturists mistake this valuable plant for weeds and discard it.
+agricraft_journal.jaslumine=Blacksmiths frown down upon it, but many believe aluminium has it's uses. That's why some still try to grow this flower.
+agricraft_journal.niccissus=When it blooms, it's flowers reveal nuggets made of nickel, its still a mystery how this plant grows.
+agricraft_journal.platiolus=Platinum is a rare material, most metallurgists will go to agriculturist instead of miners to get hold of it.
+agricraft_journal.osmonium=An agriculturist managing to grow these flowers will find a good market of engineers.
+
+//botania seeds
+agricraft_journal.botaniaWhite=This mystical flower has pretty white petals, who knows what they might be useful for.
+agricraft_journal.botaniaOrange=This mystical flower has pretty orange petals, who knows what they might be useful for.
+agricraft_journal.botaniaMagenta=This mystical flower has pretty magenta petals, who knows what they might be useful for.
+agricraft_journal.botaniaLightBlue=This mystical flower has pretty blue petals, who knows what they might be useful for.
+agricraft_journal.botaniaYellow=This mystical flower has pretty yellow petals, who knows what they might be useful for.
+agricraft_journal.botaniaLime=This mystical flower has pretty lime petals, who knows what they might be useful for.
+agricraft_journal.botaniaPink=This mystical flower has pretty pink petals, who knows what they might be useful for.
+agricraft_journal.botaniaGray=This mystical flower has pretty gray petals, who knows what they might be useful for.
+agricraft_journal.botaniaLightGray=This mystical flower has light gray pretty petals, who knows what they might be useful for.
+agricraft_journal.botaniaCyan=This mystical flower has pretty cyan petals, who knows what they might be useful for.
+agricraft_journal.botaniaPurple=This mystical flower has pretty purple petals, who knows what they might be useful for.
+agricraft_journal.botaniaBlue=This mystical flower has pretty blue petals, who knows what they might be useful for.
+agricraft_journal.botaniaBrown=This mystical flower has pretty brown petals, who knows what they might be useful for.
+agricraft_journal. botaniaGreen=This mystical flower has pretty green petals, who knows what they might be useful for.
+agricraft_journal.botaniaRed=This mystical flower has pretty red petals, who knows what they might be useful for.
+agricraft_journal.botaniaBlack=This mystical flower has pretty black petals, who knows what they might be useful for.
+
+//minecraft seeds
+agricraft_journal.wheat=Wheat is a very common, but very nutritious crop.
+agricraft_journal.pumpkin=Most people consider pumpkins as a decorative vegetable, while others like the taste of pumpkin pies.
+agricraft_journal.melon=Because of it's sweet taste and high moisture content, the melon is a fruit loved by all.
+
+//natura seeds
+agricraft_journal.barleyNatura=Some people prefer the taste of barley bread over regular bread, while others claim it tastes exactly the same.
+agricraft_journal.cottonNatura=Cotton has a high demand in the textile industry and is therefore a very valuable asset.
+
+//harvestcraft seeds
+agricraft_journal.hc_Artichoke=The edible portion of the artichoke consists of the flower buds before the flowers come into bloom.
+agricraft_journal.hc_Asparagus=Asparagus has been used as a vegetable and medicine, it has a very delicate flavour.
+agricraft_journal.hc_BambooShoot=Bamboo shoots or bamboo sprouts are the edible shoots which are used in numerous Asian dishes and broths.
+agricraft_journal.hc_Bean=Beans are a summer crop that needs warm temperatures to grow.
+agricraft_journal.hc_Beet=The usually deep purple roots of beet are eaten either raw, grilled, boiled, or roasted.
+agricraft_journal.hc_Bellpepper=Most often bell peppers are green, yellow, orange, and red.
+agricraft_journal.hc_Blackberry=The soft fruit is popular for use in desserts, jams, seedless jelly, and sometimes wine.
+agricraft_journal.hc_Blueberry=Blueberries are perennial flowering plants with indigo-colored berries.
+agricraft_journal.hc_Broccoli=Broccoli is an edible green plant in the cabbage family, whose large flowering head is used as a vegetable.
+agricraft_journal.hc_BrusselsSprout=The Brussels sprout has long been popular in Brussels, Belgium, and may have originated there.
+agricraft_journal.hc_Cabbage=Cabbage is generally grown for its densely leaved heads, produced during the first year of its biennial cycle.
+agricraft_journal.hc_CactusFruit=The fruits typically grow spikes as well, handle with caution.
+agricraft_journal.hc_CandleBerry=The candleberry is a small shrub that produces small fruits.
+agricraft_journal.hc_Cantaloupe=Cantaloupe is normally eaten as a fresh fruit, as a salad, or as a dessert with ice cream or custard.
+agricraft_journal.hc_Cauliflower=Cauliflower can be roasted, boiled, fried, steamed, or eaten raw.
+agricraft_journal.hc_Celery=Celery is a plant variety commonly used as a vegetable, the stem is the edible part.
+agricraft_journal.hc_ChiliPepper=The spicy chili has many culinary uses, from dips to spicing up your meal.
+agricraft_journal.hc_Coffee=These beans are the base for a steaming cup of coffee to start your day, so basicly the base of your day.
+agricraft_journal.hc_Corn=Because of its shallow roots, corn is susceptible to droughts, intolerant of nutrient-deficient soils, and prone to be uprooted by severe winds
+agricraft_journal.hc_Cranberry=Cranberry juice is usually sweetened or blended with other fruit juices to reduce its natural tartness.
+agricraft_journal.hc_Cucumber=The cucumber is a creeping vine that bears cylindrical fruits that are used as culinary vegetables.
+agricraft_journal.hc_Eggplant=The raw fruit can have a somewhat bitter taste, but becomes tender when cooked and develops a rich, complex flavor.
+agricraft_journal.hc_Garlic=Garlic is easy to grow and can be grown year-round in mild climates.
+agricraft_journal.hc_Ginger=Ginger produces clusters of white and pink flower buds that bloom into yellow flowers.
+agricraft_journal.hc_Grape=A grape is a fruiting berry of the deciduous woody vines and the fruits can be eaten raw or they can be used for making wine, jam, juice, jelly, grape seed extract, raisins, vinegar, and grape seed oil.
+agricraft_journal.hc_Kiwi=Kiwifruit can be grown in most temperate climates with adequate summer heat.
+agricraft_journal.hc_Leek=Rather than forming a tight bulb like the onion, the leek produces a long cylinder of bundled leaf sheaths that are generally blanched by pushing soil around them.
+agricraft_journal.hc_Lettuce=Generally grown as a hardy annual, lettuce is easily cultivated, although it requires relatively low temperatures to prevent it from flowering quickly.
+agricraft_journal.hc_Mustard=Mustard seeds generally take three to ten days to germinate if placed under the proper conditions, which include a cold atmosphere and relatively moist soil.
+agricraft_journal.hc_Oats=Oats are suitable for human consumption as oatmeal and rolled oats, but one of the most common uses is as livestock feed.
+agricraft_journal.hc_Okra=Okra plants are valued for their edible green seed pods.
+agricraft_journal.hc_Onion=The onion plant has a fan of hollow, bluish-green leaves and the bulb at the base of the plant begins to swell when a certain day-length is reached.
+agricraft_journal.hc_Parsnip=The parsnip is a root vegetable closely related to the carrot and parsley.
+agricraft_journal.hc_Peanut=Peanuts have many uses. They can be eaten raw, used in recipes, made into solvents and oils, medicines, textile materials, and peanut butter, as well as many other uses.
+agricraft_journal.hc_Peas=Peas are botanically a fruit, since they contain seeds developed from the ovary of a (pea) flower.
+agricraft_journal.hc_Pineapple=Pineapples are consumed fresh, cooked, juiced, and preserved, and are found in a wide array of cuisines.
+agricraft_journal.hc_Radish=Radishes are mostly used in salads but also appear in many European dishes.[
+agricraft_journal.hc_Raspberry=Raspberry plants should not be planted where potatoes, tomatoes, peppers, eggplants, or bulbs have previously been grown, without prior fumigation of the soil.
+agricraft_journal.hc_Rhubarb=For cooking, the stalks are often cut into small pieces and stewed (boiled in water) with added sugar.
+agricraft_journal.hc_Rice=The traditional method for cultivating rice is flooding the fields while, or after, setting the young seedlings.
+agricraft_journal.hc_Rutabaga=Some people carve out turnips in variable patterns (mostly faces) and used them as lanterns to ward off harmful spirits.
+agricraft_journal.hc_Rye=Rye is a grass grown extensively as a grain, a cover crop and as a forage crop.
+agricraft_journal.hc_Scallion=Scallion have a relatively mild onion flavour, and are used as a vegetable, either raw or cooked.
+agricraft_journal.hc_Seaweed=Seaweed is used in salad dressings and sauces, dietetic foods, and as a preservative in meat and fish products, dairy items and baked goods.
+agricraft_journal.hc_Soybean=Traditional non fermented food uses of soybeans include soy milk, and from the latter tofu and tofu skin.
+agricraft_journal.hc_SpiceLeaf=Spices are distinguished from herbs, which are parts of leafy green plants used for flavoring or as a garnish.
+agricraft_journal.hc_Strawberry=Strawberries are popular and rewarding plants to grow in the domestic environment, be it for consumption or exhibition purposes.
+agricraft_journal.hc_SweetPotato=Although the leaves and shoots are also edible, the starchy tuberous roots are by far the most important product.
+agricraft_journal.hc_Tea=Tea can be prepared by pouring hot or boiling water over cured leaves of the tea plant
+agricraft_journal.hc_Tomato=The tomato is consumed in diverse ways, including raw, as an ingredient in many dishes, sauces, salads, and drinks.
+agricraft_journal.hc_Turnip=The turnip is a root vegetable commonly grown in temperate climates worldwide for its white, bulbous taproot.
+agricraft_journal.hc_WhiteMushroom=If you want to fly higher then a jetplane, these aren't the mushrooms you're looking for.
+agricraft_journal.hc_WinterSquash=Winter squash can be harvested whenever the fruits have turned a deep, solid color and the skin is hard.
+agricraft_journal.hc_Zucchini=Zucchini is usually served cooked, it can also be prepared using a variety of cooking techniques, including steamed, boiled, grilled, stuffed and baked, barbecued, fried, or incorporated in other recipes.
+
+//plant mega pack seeds
+agricraft_journal.pmp_Spinach=The cartoon character Popeye the Sailor Man is portrayed as having a strong affinity for spinach, becoming physically stronger after consuming it.
+
+//chococraft seeds
+agricraft_journal.cc_Gysahl=The gysahl green is the favorite snack of the fabled Chocobo. Sometimes a gysahl green can produce a lovely gysahl and some say that a well cultivated gysahl plant can produce a golden gysahl.
