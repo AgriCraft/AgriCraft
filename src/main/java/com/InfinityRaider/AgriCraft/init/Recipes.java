@@ -75,12 +75,18 @@ public class Recipes {
         }
         //fruits
         if(ConfigurationHandler.resourcePlants) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.diamond, 1), "nnn", "nnn", "nnn", 'n',"nuggetDiamond"));
-            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetDiamond,9),"gemDiamond"));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.emerald,1), "nnn", "nnn", "nnn", 'n', "nuggetEmerald"));
-            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetEmerald,9),"gemEmerald"));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.iron_ingot, 1), "nnn", "nnn", "nnn", 'n', "nuggetIron"));
-            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetIron,9),"ingotIron"));
+            if(Items.nuggetDiamond instanceof ModItem) {
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.diamond, 1), "nnn", "nnn", "nnn", 'n', "nuggetDiamond"));
+                GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetDiamond, 9), "gemDiamond"));
+            }
+            if(Items.nuggetEmerald instanceof ModItem) {
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.emerald, 1), "nnn", "nnn", "nnn", 'n', "nuggetEmerald"));
+                GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetEmerald, 9), "gemEmerald"));
+            }
+            if(Items.nuggetIron instanceof ModItem) {
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.iron_ingot, 1), "nnn", "nnn", "nnn", 'n', "nuggetIron"));
+                GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.nuggetIron, 9), "ingotIron"));
+            }
             if(Items.nuggetCopper instanceof ModItem) {
                 ItemStack ingot = OreDictHelper.getIngot(Names.Nuggets.nuggetCopper);
                 if(ingot!=null && ingot.getItem()!=null) {
