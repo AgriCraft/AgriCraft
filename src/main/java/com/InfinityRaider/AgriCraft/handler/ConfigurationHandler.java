@@ -16,6 +16,7 @@ import java.io.File;
 public class ConfigurationHandler {
 
     public static final String CATEGORY_AGRICRAFT = "agricraft";
+    public static final String CATEGORY_FARMING = "farming";
     public static final String CATEGORY_DEBUG = "debug";
     public static final String CATEGORY_INTEGRATION = "integration";
     public static final String CATEGORY_IRRIGATION = "irrigation";
@@ -32,6 +33,8 @@ public class ConfigurationHandler {
     public static boolean customCrops;
     public static boolean resourcePlants;
     public static double mutationChance;
+    public static boolean singleSpreadsIncrement;
+    public static int spreadingDifficulty;
     public static int cropsPerCraft;
     public static int cropStatCap;
     public static int cropStatDivisor;
@@ -86,6 +89,8 @@ public class ConfigurationHandler {
         //agricraft settings
         resourcePlants = config.getBoolean("Resource Crops",CATEGORY_AGRICRAFT,false,"set to true if you wish to enable resource crops");
         mutationChance = (double) config.getFloat("Mutation Chance",CATEGORY_AGRICRAFT, (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance");
+        singleSpreadsIncrement = config.getBoolean("Single spread stat increase",CATEGORY_AGRICRAFT, false, "Set to true to allow crops that spread from one single crop to increase stats");
+        spreadingDifficulty = config.getInt("Farming difficulty",CATEGORY_AGRICRAFT,3,1,3, "Farming difficulty: 1 = Crops can inherit stats from any crop. 2 = Crops only inherit stats from parent and identical crops. 3 = Same as 2, but any other nearby crop will affect stats negatively.");
         cropsPerCraft = config.getInt("Crops per craft", CATEGORY_AGRICRAFT, 1, 1, 4, "The number of crops you get per crafting operation");
         cropStatCap = config.getInt("Crop stat cap", CATEGORY_AGRICRAFT, 10, 1, 10, "The maximum attainable value of the stats on a crop");
         cropStatDivisor = config.getInt("Crop stat divisor", CATEGORY_AGRICRAFT, 2, 1, 3, "On a mutation the stats on the crop will be divided by this number");

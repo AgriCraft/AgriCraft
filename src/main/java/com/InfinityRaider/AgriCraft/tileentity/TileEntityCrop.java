@@ -2,8 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
-import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
-import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
+import com.InfinityRaider.AgriCraft.farming.mutation.*;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
@@ -16,9 +15,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
@@ -28,8 +31,14 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public boolean analyzed=false;
     public boolean crossCrop=false;
     public boolean weed=false;
-    public IPlantable seed = null;
+    public ItemSeeds seed = null;
     public int seedMeta = 0;
+
+    private final MutationEngine mutationEngine;
+
+    public TileEntityCrop() {
+        this.mutationEngine = new MutationEngine(this);
+    }
 
     //this saves the data on the tile entity
     @Override
@@ -69,58 +78,49 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //the code that makes the crop cross with neighboring crops
     public void crossOver() {
-            //flag to check if the crop needs to update
-            boolean change = false;
-            //possible new plant
-            ItemSeeds result=null;
-            int resultMeta=0;
-            double chance=0;
-            //find neighbours
-            TileEntityCrop[] neighbours = this.findNeighbours();
-            //find out the new plant
-            boolean didMutate = false;
-            if (Math.random() > ConfigurationHandler.mutationChance) {
-                int index = (int) Math.floor(Math.random() * neighbours.length);
-                if (neighbours[index]!=null && neighbours[index].seed!=null && neighbours[index].isMature()) {
-                    result = (ItemSeeds) neighbours[index].seed;
-                    resultMeta = neighbours[index].seedMeta;
-                    chance = SeedHelper.getSpreadChance(result, resultMeta);
-                }
-            } else {
-                Mutation[] crossOvers = MutationHandler.getCrossOvers(neighbours);
-                if (crossOvers!=null && crossOvers.length>0) {
-                    int index = (int) Math.floor(Math.random()*crossOvers.length);
-                    if(crossOvers[index].result.getItem()!=null) {
-                        result = (ItemSeeds) crossOvers[index].result.getItem();
-                        resultMeta = crossOvers[index].result.getItemDamage();
-                        chance = crossOvers[index].chance;
-                        didMutate = true;
-                    }
-                }
-            }
-            //try to set the new plant
-            if(result!=null && SeedHelper.isValidSeed(result, resultMeta) && GrowthRequirements.getGrowthRequirement(result, resultMeta).canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord)) {
-                if(Math.random()<chance) {
-                    this.crossCrop = false;
-                    int[] stats = MutationHandler.getStats(neighbours, didMutate);
-                    this.setPlant(stats[0], stats[1], stats[2], false, result, resultMeta);
-                    change = true;
-                }
-            }
-            //update the tile entity on a change
-            if (change) {
-                markForUpdate();
-            }
-        
+        mutationEngine.executeCrossOver();
     }
 
-    //finds neighbouring crops
-    private TileEntityCrop[] findNeighbours() {
-        TileEntityCrop[] neighbours = new TileEntityCrop[4];
-        neighbours[0] = (this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord) : null;
-        neighbours[1] = (this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord) : null;
-        neighbours[2] = (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1) : null;
-        neighbours[3] = (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1) : null;
+    /** Called by the mutation engine to apply the result of a cross over */
+    public void applyCrossOverResult(CrossOverResult result) {
+        crossCrop = false;
+        setPlant(result.getGrowth(), result.getGain(), result.getStrength(), false, result.getSeed(), result.getMeta());
+        markForUpdate();
+    }
+
+    /**
+     * @return a list with all neighbours of type <code>TileEntityCrop</code> in the
+     *          NORTH, SOUTH, EAST and WEST direction
+     */
+    public List<TileEntityCrop> getNeighbours() {
+        List<TileEntityCrop> neighbours = new ArrayList<TileEntityCrop>();
+        addNeighbour(neighbours, ForgeDirection.NORTH);
+        addNeighbour(neighbours, ForgeDirection.SOUTH);
+        addNeighbour(neighbours, ForgeDirection.EAST);
+        addNeighbour(neighbours, ForgeDirection.WEST);
+        return neighbours;
+    }
+
+    private void addNeighbour(List<TileEntityCrop> neighbours, ForgeDirection direction) {
+        TileEntity te = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+        if (te == null || !(te instanceof TileEntityCrop)) {
+            return;
+        }
+
+        neighbours.add((TileEntityCrop) te);
+    }
+
+    /**
+     * @return a list with only mature neighbours of type <code>TileEntityCrop</code>
+     */
+    public List<TileEntityCrop> getMatureNeighbours() {
+        List<TileEntityCrop> neighbours = getNeighbours();
+        for (Iterator<TileEntityCrop> iterator = neighbours.iterator(); iterator.hasNext(); ) {
+            TileEntityCrop crop = iterator.next();
+            if (!crop.isMature()) {
+                iterator.remove();
+            }
+        }
         return neighbours;
     }
 
@@ -134,10 +134,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //spread the weed
     public void spreadWeed() {
-        TileEntityCrop[] neighbours = this.findNeighbours();
+        List<TileEntityCrop> neighbours = this.getNeighbours();
         for(TileEntityCrop crop:neighbours) {
             if(crop!=null && (!crop.weed) && Math.random()<crop.getWeedSpawnChance()) {
                 crop.spawnWeed();
+                break;
             }
         }
     }
@@ -166,7 +167,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     //sets the plant in the crop
-    public void setPlant(int growth, int gain, int strength, boolean analyzed, IPlantable seed, int seedMeta) {
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, ItemSeeds seed, int seedMeta) {
         if( (!this.crossCrop) && (!this.hasPlant())) {
             this.growth = growth;
             this.gain = gain;
