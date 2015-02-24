@@ -196,52 +196,51 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         if(!world.isRemote) {
             // When hand rake is enabled and the block has weeds, abandon all hope
             TileEntity te = world.getTileEntity(x, y, z);
-            if (ConfigurationHandler.enableHandRake && te != null && te instanceof TileEntityCrop && ((TileEntityCrop)te).weed) {
-                return false;
-            }
-
-            if(player.isSneaking()) {
-                this.harvest(world, x, y, z);
-            }
-            else if(player.getCurrentEquippedItem()==null) {
-                //harvest operation
-                this.harvest(world, x, y, z);
-            }
-            else if(player.getCurrentEquippedItem().getItem()==Items.debugItem) {
-                return false;
-            }
-            //check to see if the player clicked with crops (crosscrop attempt)
-            else if(player.getCurrentEquippedItem().getItem()==Items.crops) {
-                this.setCrossCrop(world, x, y, z, player);
-            }
-            //check to see if the player wants to use bonemeal
-            else if(player.getCurrentEquippedItem().getItem()==net.minecraft.init.Items.dye && player.getCurrentEquippedItem().getItemDamage()==15) {
-                return false;
-            }
-            //magical crops fertiliser
-            else if(ModIntegration.LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && player.getCurrentEquippedItem().getItem() instanceof ItemMagicalCropFertilizer) {
-                return this.applyMagicalFertiliser(world, x, y, z, player);
-            }
-            //allow the debugger to be used
-            else if(player.getCurrentEquippedItem().getItem() instanceof ItemDebugger) {
-                return false;
-            }
-            //tinker's construct scythe
-            else if(ModIntegration.LoadedMods.tconstruct && player.getCurrentEquippedItem().getItem() instanceof Scythe) {
-                for(int xPos=x-1;xPos<=x+1;xPos++) {
-                    for(int zPos=z-1;zPos<=z+1;zPos++) {
-                        if(world.getBlock(xPos, y, zPos) instanceof BlockCrop && this.harvest(world, xPos, y, zPos)) {
-                            AbilityHelper.damageTool(player.getCurrentEquippedItem(), 1, player, false);
+            if (te != null && te instanceof TileEntityCrop) {
+                TileEntityCrop crop = (TileEntityCrop) te;
+                if (ConfigurationHandler.enableHandRake && crop.weed) {
+                    return false;
+                }
+                if (player.isSneaking()) {
+                    this.harvest(world, x, y, z);
+                } else if (player.getCurrentEquippedItem() == null) {
+                    //harvest operation
+                    this.harvest(world, x, y, z);
+                } else if (player.getCurrentEquippedItem().getItem() == Items.debugItem) {
+                    return false;
+                }
+                //check to see if the player clicked with crops (crosscrop attempt)
+                else if (player.getCurrentEquippedItem().getItem() == Items.crops) {
+                    this.setCrossCrop(world, x, y, z, player);
+                }
+                //check to see if the player wants to use bonemeal
+                else if (player.getCurrentEquippedItem().getItem() == net.minecraft.init.Items.dye && player.getCurrentEquippedItem().getItemDamage() == 15) {
+                    return false;
+                }
+                //magical crops fertiliser
+                else if (ModIntegration.LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && player.getCurrentEquippedItem().getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
+                    return this.applyMagicalFertiliser(world, x, y, z, player);
+                }
+                //allow the debugger to be used
+                else if (player.getCurrentEquippedItem().getItem() instanceof ItemDebugger) {
+                    return false;
+                }
+                //tinker's construct scythe
+                else if (ModIntegration.LoadedMods.tconstruct && player.getCurrentEquippedItem().getItem() instanceof Scythe) {
+                    for (int xPos = x - 1; xPos <= x + 1; xPos++) {
+                        for (int zPos = z - 1; zPos <= z + 1; zPos++) {
+                            if (world.getBlock(xPos, y, zPos) instanceof BlockCrop && this.harvest(world, xPos, y, zPos)) {
+                                AbilityHelper.damageTool(player.getCurrentEquippedItem(), 1, player, false);
+                            }
                         }
                     }
-                }
-            }
-            else {
-                //harvest operation
-                this.harvest(world, x, y, z);
-                //check to see if clicked with seeds
-                if(player.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
-                    this.plantSeed(world, x, y, z, player);
+                } else {
+                    //harvest operation
+                    this.harvest(world, x, y, z);
+                    //check to see if clicked with seeds
+                    if (player.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
+                        this.plantSeed(world, x, y, z, player);
+                    }
                 }
             }
         }
