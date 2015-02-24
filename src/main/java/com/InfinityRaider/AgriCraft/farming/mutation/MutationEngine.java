@@ -36,7 +36,6 @@ public class MutationEngine {
         if (result == null) {
             return;
         }
-
         if (resultIsValid(result) && random.nextDouble() < result.getChance()) {
             crop.applyCrossOverResult(result);
         }

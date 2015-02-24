@@ -21,8 +21,7 @@ public class SpreadStrategy extends BaseStrategy {
         int index = engine.getRandom().nextInt(matureNeighbours.size());
         TileEntityCrop neighbour = matureNeighbours.get(index);
         CrossOverResult result = CrossOverResult.fromTileEntityCrop(neighbour);
-        int[] stats = MutationHandler.getStats(matureNeighbours, false);
-        result.setStats(stats[0], stats[1], stats[2]);
+        MutationHandler.setResultStats(result, matureNeighbours, false);
         return result;
     }
 }

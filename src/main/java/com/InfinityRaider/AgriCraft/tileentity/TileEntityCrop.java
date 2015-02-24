@@ -31,7 +31,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public boolean analyzed=false;
     public boolean crossCrop=false;
     public boolean weed=false;
-    public IPlantable seed = null;
+    public ItemSeeds seed = null;
     public int seedMeta = 0;
 
     private final MutationEngine mutationEngine;
@@ -124,16 +124,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         return neighbours;
     }
 
-    //finds neighbouring crops
-    private TileEntityCrop[] findNeighbours() {
-        TileEntityCrop[] neighbours = new TileEntityCrop[4];
-        neighbours[0] = (this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord) : null;
-        neighbours[1] = (this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord) : null;
-        neighbours[2] = (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1) : null;
-        neighbours[3] = (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1) instanceof TileEntityCrop) ? (TileEntityCrop) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1) : null;
-        return neighbours;
-    }
-
     //spawns weed in the crop
     public void spawnWeed() {
         this.crossCrop=false;
@@ -144,10 +134,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //spread the weed
     public void spreadWeed() {
-        TileEntityCrop[] neighbours = this.findNeighbours();
+        List<TileEntityCrop> neighbours = this.getNeighbours();
         for(TileEntityCrop crop:neighbours) {
             if(crop!=null && (!crop.weed) && Math.random()<crop.getWeedSpawnChance()) {
                 crop.spawnWeed();
+                break;
             }
         }
     }
@@ -176,7 +167,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     //sets the plant in the crop
-    public void setPlant(int growth, int gain, int strength, boolean analyzed, IPlantable seed, int seedMeta) {
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, ItemSeeds seed, int seedMeta) {
         if( (!this.crossCrop) && (!this.hasPlant())) {
             this.growth = growth;
             this.gain = gain;
