@@ -11,7 +11,6 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import com.mark719.magicalcrops.items.ItemMagicalCropFertilizer;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
@@ -72,7 +71,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 int meta = this.getPlantMetadata(world, x, y, z);
                 if (meta < 7 && crop.isFertile()) {
                     double multiplier = 1.0 + (crop.growth + 0.00) / 10;
-                    float growthRate = (float) SeedHelper.getBaseGrowth((ItemSeeds) crop.seed, crop.seedMeta);
+                    float growthRate = (float) SeedHelper.getBaseGrowth(crop.seed, crop.seedMeta);
                     boolean shouldGrow = (rnd.nextDouble()<=(growthRate * multiplier)/100);
                     if (shouldGrow) {
                         meta++;
@@ -126,7 +125,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             } else if(crop.isMature()) {
                 crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
                 update = true;
-                ArrayList<ItemStack> drops = SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
+                ArrayList<ItemStack> drops = SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
                 for (ItemStack drop : drops) {
                     this.dropBlockAsItem(world, x, y, z, drop);
                 }
@@ -279,7 +278,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     if (crop.hasPlant()) {
                         drops.add(crop.getSeedStack());
                         if (this.isMature(world, x, y, z)) {
-                            drops.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+                            drops.addAll(SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
                         }
                     }
                 }
@@ -298,7 +297,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             return ConfigurationHandler.bonemealMutation;
         }
         if(crop.hasPlant()) {
-            if(SeedHelper.getSeedTier((ItemSeeds) crop.seed, crop.seedMeta)<4) {
+            if(SeedHelper.getSeedTier(crop.seed, crop.seedMeta)<4) {
                 return !this.isMature(world, x, y , z);
             }
         }
@@ -375,7 +374,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 ItemStack seedStack = crop.getSeedStack().copy();
                 items.add(seedStack);
                 if(crop.isMature()) {
-                    items.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
+                    items.addAll(SeedHelper.getPlantFruits(crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
                 }
             }
         }
@@ -399,7 +398,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 if(crop.hasPlant()) {
                     ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
                     if(crop.isMature()) {
-                        drops.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+                        drops.addAll(SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
                     }
                     drops.add(crop.getSeedStack());
                     for (ItemStack drop : drops) {

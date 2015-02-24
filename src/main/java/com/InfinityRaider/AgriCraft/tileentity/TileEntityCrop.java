@@ -211,7 +211,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //check if the crop is fertile
     public boolean isFertile() {
-        return GrowthRequirements.getGrowthRequirement((ItemSeeds) this.seed, this.seedMeta).canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        return GrowthRequirements.getGrowthRequirement(this.seed, this.seedMeta).canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
     }
 
     //check the block if the plant is mature
@@ -220,7 +220,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     public ItemStack getSeedStack() {
-        ItemStack seed = new ItemStack((ItemSeeds) this.seed, 1, this.seedMeta);
+        ItemStack seed = new ItemStack(this.seed, 1, this.seedMeta);
         NBTTagCompound tag = new NBTTagCompound();
         SeedHelper.setNBT(tag, (short) this.growth, (short) this.gain, (short) this.strength, this.analyzed);
         seed.setTagCompound(tag);
@@ -242,8 +242,8 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public IIcon getPlantIcon() {
         IIcon icon = null;
         if(this.hasPlant()) {
-            int meta = RenderHelper.plantIconIndex((ItemSeeds) this.seed, this.seedMeta, this.getBlockMetadata());
-            icon = SeedHelper.getPlant((ItemSeeds) this.seed).getIcon(0, meta);
+            int meta = RenderHelper.plantIconIndex(this.seed, this.seedMeta, this.getBlockMetadata());
+            icon = SeedHelper.getPlant(this.seed).getIcon(0, meta);
         }
         else if(this.weed) {
             icon = ((BlockCrop) this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)).getWeedIcon(this.getBlockMetadata());
@@ -256,7 +256,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public int getRenderType() {
         int type = -1;
         if(this.hasPlant()) {
-            type = RenderHelper.getRenderType((ItemSeeds) this.seed, this.seedMeta);
+            type = RenderHelper.getRenderType(this.seed, this.seedMeta);
         }
         else if(this.weed) {
             type = 6;
@@ -272,9 +272,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
         else if(this.hasPlant()) {
             list.add(" - This crop has a plant");
-            list.add(" - Seed: " + ((ItemSeeds) this.seed).getUnlocalizedName());
+            list.add(" - Seed: " + (this.seed).getUnlocalizedName());
             list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject(this.seed) + ':' + this.seedMeta);
-            list.add(" - Plant: " + SeedHelper.getPlant((ItemSeeds) this.seed).getUnlocalizedName());
+            list.add(" - Plant: " + SeedHelper.getPlant(this.seed).getUnlocalizedName());
             list.add(" - Meta: " + this.getBlockMetadata());
             list.add(" - Growth: " + this.growth);
             list.add(" - Gain: " + this.gain);
