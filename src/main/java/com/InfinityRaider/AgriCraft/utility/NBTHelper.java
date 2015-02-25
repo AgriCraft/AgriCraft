@@ -9,10 +9,14 @@ import net.minecraft.nbt.NBTTagList;
 
 public abstract class NBTHelper {
     public static NBTTagCompound getMaterialTag(ItemStack stack) {
-        NBTTagCompound tag = new NBTTagCompound();
+        NBTTagCompound tag = null;
         if(stack!=null && stack.getItem()!=null) {
-            tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(((ItemBlock) stack.getItem()).field_150939_a));
-            tag.setInteger(Names.NBT.materialMeta, stack.getItemDamage());
+            String name = Block.blockRegistry.getNameForObject(((ItemBlock) stack.getItem()).field_150939_a);
+            if(name!=null && !name.equals("")) {
+                tag = new NBTTagCompound();
+                tag.setString(Names.NBT.material, name);
+                tag.setInteger(Names.NBT.materialMeta, stack.getItemDamage());
+            }
         }
         return tag;
     }
