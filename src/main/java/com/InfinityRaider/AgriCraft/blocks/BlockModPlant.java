@@ -83,9 +83,9 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         super();
 
         GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
-        if (base != null)
+        if (base != null) {
             builder.requiredBlock(new BlockWithMeta(base, baseMeta), GrowthRequirement.RequirementType.BELOW, true);
-
+        }
         if (soil == null || soil == Blocks.farmland) {
             growthRequirement = builder.build();
         } else {

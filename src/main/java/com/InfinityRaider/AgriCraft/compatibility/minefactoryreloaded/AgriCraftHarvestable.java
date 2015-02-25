@@ -5,8 +5,8 @@ import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import powercrystals.minefactoryreloaded.api.HarvestType;
 import powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
@@ -48,7 +48,7 @@ public class AgriCraftHarvestable implements IFactoryHarvestable {
         if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             if (crop.hasPlant() && crop.isMature()) {
-                items.addAll(SeedHelper.getPlantFruits((ItemSeeds) crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
+                items.addAll(SeedHelper.getPlantFruits(crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
             }
         }
         return items;
@@ -60,7 +60,15 @@ public class AgriCraftHarvestable implements IFactoryHarvestable {
 
     @Override
     public void postHarvest (World world, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
+        if(block==null || !(block instanceof BlockCrop)) {
+            return;
+        }
+        TileEntity te = world.getTileEntity(x, y, z);
+        if(te==null || !(te instanceof TileEntityCrop)) {
+            return;
+        }
         world.setBlockMetadataWithNotify(x, y, z, 2, 3);
-        ((TileEntityCrop) world.getTileEntity(x, y, z)).markForUpdate();
+        ((TileEntityCrop) te).markForUpdate();
     }
 }
