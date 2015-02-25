@@ -135,7 +135,7 @@ public class GrowthRequirement {
 
     public void setSoil(BlockWithMeta soil) {
         this.soil = soil;
-        GrowthRequirements.soils.add(soil);
+        GrowthRequirements.addSoil(soil);
     }
 
     public int[] getBrightnessRange() {return new int[] {minBrightness, maxBrightness};}
@@ -184,7 +184,7 @@ public class GrowthRequirement {
 
         /** Sets the required soil */
         public Builder soil(BlockWithMeta block) {
-            GrowthRequirements.soils.add(block);
+            GrowthRequirements.addSoil(block);
             growthRequirement.soil = block;
             return this;
         }

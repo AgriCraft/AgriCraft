@@ -25,19 +25,18 @@ public class GrowthRequirements {
     private static Map<ItemWithMeta, GrowthRequirement> overrides = new HashMap<ItemWithMeta, GrowthRequirement>();
 
     // Package private so GrowthRequirement can access it
-    public static Set<BlockWithMeta> defaultSoils = new HashSet<BlockWithMeta>();
-    static Set<BlockWithMeta> soils = new HashSet<BlockWithMeta>();
+    public static List<BlockWithMeta> defaultSoils = new ArrayList<BlockWithMeta>();
+    static List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
 
     //Methods for fertile soils
     //-------------------------
     public static boolean isSoilValid(World world, int x, int y, int z) {
         Block block = world.getBlock(x, y, z);
-        int meta = world.getBlockMetadata(x, y ,z);
+        int meta = world.getBlockMetadata(x, y, z);
         BlockWithMeta soil;
-        if(ModIntegration.LoadedMods.gardenStuff && block instanceof BlockLargePot) {
+        if (ModIntegration.LoadedMods.gardenStuff && block instanceof BlockLargePot) {
             soil = GardenStuffHelper.getSoil((TileEntityGarden) world.getTileEntity(x, y, z));
-        }
-        else {
+        } else {
             soil = new BlockWithMeta(block, meta);
         }
         return soils.contains(soil) || defaultSoils.contains(soil);
@@ -45,25 +44,25 @@ public class GrowthRequirements {
 
     public static void initSoils() {
         //add standard soils
-        defaultSoils.add(new BlockWithMeta(Blocks.farmland, 7));
-        if(ModIntegration.LoadedMods.forestry) {
-            defaultSoils.add(new BlockWithMeta((Block) Block.blockRegistry.getObject("Forestry:soil"), 0));
+        addDefaultSoil(new BlockWithMeta(Blocks.farmland));
+        if (ModIntegration.LoadedMods.forestry) {
+            addDefaultSoil(new BlockWithMeta((Block) Block.blockRegistry.getObject("Forestry:soil"), 0));
         }
-        if(ModIntegration.LoadedMods.gardenStuff) {
-            defaultSoils.add(new BlockWithMeta((Block) Block.blockRegistry.getObject("GardenCore:garden_farmland"), 0));
+        if (ModIntegration.LoadedMods.gardenStuff) {
+            addDefaultSoil(new BlockWithMeta((Block) Block.blockRegistry.getObject("GardenCore:garden_farmland"), 0));
         }
         //reads custom entries
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
-        for(String line:data) {
+        for (String line : data) {
             LogHelper.debug("parsing " + line);
             ItemStack stack = IOHelper.getStack(line);
-            Block block = (stack!=null && stack.getItem() instanceof ItemBlock)?((ItemBlock) stack.getItem()).field_150939_a:null;
-            boolean success = block!=null;
+            Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).field_150939_a : null;
+            boolean success = block != null;
             String errorMsg = "Invalid block";
             if (success) {
-                soils.add(new BlockWithMeta(block, stack.getItemDamage()));
+                addDefaultSoil(new BlockWithMeta(block, stack.getItemDamage()));
             } else {
-                LogHelper.info("Error when adding block to soil whitelist: "+errorMsg+" (line: "+line+")");
+                LogHelper.info("Error when adding block to soil whitelist: " + errorMsg + " (line: " + line + ")");
             }
         }
         LogHelper.info("Registered soil whitelist:");
@@ -73,10 +72,12 @@ public class GrowthRequirements {
     }
 
     public static void addAllToSoilWhitelist(Collection<? extends BlockWithMeta> list) {
-        defaultSoils.addAll(list);
+        for (BlockWithMeta block : list) {
+            addDefaultSoil(block);
+        }
     }
 
-    public static void removeAllFromSoilWhitelist(Collection<? extends  BlockWithMeta> list) {
+    public static void removeAllFromSoilWhitelist(Collection<? extends BlockWithMeta> list) {
         defaultSoils.removeAll(list);
     }
 
@@ -95,4 +96,17 @@ public class GrowthRequirements {
         }
         return growthRequirement;
     }
+
+    public static void addSoil(BlockWithMeta block) {
+        if (!soils.contains(block)) {
+            soils.add(block);
+        }
+    }
+
+    public static void addDefaultSoil(BlockWithMeta block) {
+        if (!defaultSoils.contains(block)) {
+            defaultSoils.add(block);
+        }
+    }
+
 }
