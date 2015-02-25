@@ -33,7 +33,7 @@ public class MutationEngine {
     public void executeCrossOver() {
         ICrossOverStrategy strategy = rollStrategy();
         CrossOverResult result = strategy.executeStrategy();
-        if (result == null) {
+        if (result == null || result.getSeed()==null) {
             return;
         }
         if (resultIsValid(result) && random.nextDouble() < result.getChance()) {

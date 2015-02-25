@@ -102,9 +102,9 @@ public class ItemBlockCustomWood extends ItemBlock {
             NBTTagCompound tag = NBTHelper.getMaterialTag(stack);
             if (tag != null) {
                 entry.setTagCompound(tag);
+                list.add(entry);
+                registeredMaterials.add(stack);
             }
-            list.add(entry);
-            registeredMaterials.add(stack);
         }
     }
 
