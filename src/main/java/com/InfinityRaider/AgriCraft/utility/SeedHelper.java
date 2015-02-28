@@ -11,6 +11,7 @@ import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.SeedInformation;
+import ivorius.psychedelicraft.blocks.IvTilledFieldPlant;
 import mods.natura.common.NContent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -219,12 +220,7 @@ public abstract class SeedHelper {
             return Crops.pumpkin;
         }
         else {
-            if(seed.getPlant(null, 0, 0, 0) instanceof BlockCrops) {
-                return (BlockCrops) seed.getPlant(null, 0, 0, 0);
-            }
-            else {
-                return seed.getPlant(null, 0, 0, 0);
-            }
+            return seed.getPlant(null, 0, 0, 0);
         }
     }
 
@@ -245,48 +241,59 @@ public abstract class SeedHelper {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         //nether wart exception
         if(plant==Blocks.nether_wart) {
-            items.add(new ItemStack(seed, 1, 0));
+            LogHelper.debug("Getting fruit for nether wart");
+            items.add(new ItemStack(seed, nr, 0));
         }
         //agricraft crop
         else if(plant instanceof BlockModPlant) {
+            LogHelper.debug("Getting fruit for agricraft plant");
             items.addAll(((BlockModPlant) plant).getFruit(nr, world.rand));
         }
         //natura crop
         else if(ModIntegration.LoadedMods.natura && getPlantDomain(seed).equalsIgnoreCase("natura")) {
+            LogHelper.debug("Getting fruit for natura plant");
             items.add(new ItemStack(NContent.plantItem, nr, meta*3));
-        }
-        //harvestcraft crop
-        else if(ModIntegration.LoadedMods.harvestcraft && getPlantDomain(seed).equalsIgnoreCase("harvestcraft")) {
-            items.add(new ItemStack(getPlant(seed).getItemDropped(7, new Random(), 0), nr));
         }
         //chococraft crop
         else if(ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
+            LogHelper.debug("Getting fruit for gyshahls");
             items.add(ChococraftHelper.getFruit(gain, nr));
+        }
+        else if(ModIntegration.LoadedMods.psychedelicraft && plant instanceof IvTilledFieldPlant) {
+            LogHelper.debug("Getting fruit for psychedelicraft plant");
         }
         //other crop
         else {
+            LogHelper.debug("Getting fruit from ore dictionary");
+            addFruitsFromOreDict(items, seed, meta, world.rand, nr);
+        }
+        if(items.size()==0) {
+            LogHelper.debug("Getting fruit from plant");
             int harvestMeta = 7;
             //plant mega pack crop
             if(ModIntegration.LoadedMods.plantMegaPack && getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
                 harvestMeta=PlantMegaPackHelper.getTextureIndex(seed, harvestMeta);
             }
-            //other crop
-            ArrayList<ItemStack> defaultDrops = plant.getDrops(world, x, y, z, harvestMeta, 0);
-            for (ItemStack drop : defaultDrops) {
-                if (!(drop.getItem() instanceof ItemSeeds) && drop.getItem()!=null) {
-                    boolean add = true;
-                    for(ItemStack item:items) {
-                        if(item.getItem()==drop.getItem() && item.getItemDamage()==drop.getItemDamage()) {
-                            add = false;
-                        }
+            addFruitsFromPlant(items, plant, world, x, y, z, harvestMeta, nr);
+        }
+        return items;
+    }
+
+    public static void addFruitsFromPlant(List<ItemStack> items, Block plant, World world, int x, int y, int z, int harvestMeta, int nr) {
+        ArrayList<ItemStack> defaultDrops = plant.getDrops(world, x, y, z, harvestMeta, 0);
+        for (ItemStack drop : defaultDrops) {
+            if (!(drop.getItem() instanceof ItemSeeds) && drop.getItem()!=null) {
+                boolean add = true;
+                for(ItemStack item:items) {
+                    if(item.getItem()==drop.getItem() && item.getItemDamage()==drop.getItemDamage()) {
+                        add = false;
                     }
-                    if(add) {
-                        items.add(new ItemStack(drop.getItem(), nr, drop.getItemDamage()));
-                    }
+                }
+                if(add) {
+                    items.add(new ItemStack(drop.getItem(), nr, drop.getItemDamage()));
                 }
             }
         }
-        return items;
     }
 
     //get all plant fruits
@@ -302,9 +309,32 @@ public abstract class SeedHelper {
         }
         //other crop
         else {
+            items = (ArrayList<ItemStack>) getFruitsFromOreDict(seed, meta);
+        }
+        if(items.size()==0) {
             items = getPlantFruits(seed, world, x, y, z, gain, meta);
         }
         return items;
+    }
+
+    public static void addFruitsFromOreDict(List<ItemStack> list, ItemSeeds seed, int meta, Random rand, int nr) {
+        int counter = 0;
+        List<ItemStack> fruits = getFruitsFromOreDict(seed, meta);
+        while(counter<nr) {
+            ItemStack newFruit = fruits.get(rand.nextInt(fruits.size())).copy();
+            newFruit.stackSize = 1;
+            list.add(newFruit);
+            counter++;
+        }
+    }
+
+    public static List<ItemStack> getFruitsFromOreDict(ItemSeeds seed, int meta) {
+        for(int id:OreDictionary.getOreIDs(new ItemStack(seed, 1, meta))) {
+            if(OreDictionary.getOreName(id).substring(0,4).equalsIgnoreCase("seed")) {
+                return OreDictionary.getOres("crop"+OreDictionary.getOreName(id).substring(4));
+            }
+        }
+        return null;
     }
 
     //check if the seed is valid
