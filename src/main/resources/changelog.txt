@@ -8,47 +8,37 @@ Changelog
 -ADDED:  A config option to let the cactus crop produce cactus blocks instead of cactus green
 -ADDED:  Villagers for the greenhouse (Elec332)
 -ADDED:  MineTweaker3 support for changing growth requirements
+-ADDED:  Compatibility with Jaquadro's GardenStuff (crops can be planted on them
+-ADDED:  zh_CH.lang (3TUSK)
+-ADDED:  Support for psychedelicraft (Will work when the newer version of Psychedelicraft is released)
+-ADDED:  Other mods can make their seed/fruit compatible by registering the seed as "seed<YourPlantName>" and the fruit as "crop<YourPlantName>" to the ore dictionary
+-ADDED:  The particle setting will now decrease the number of particles from the sprinkler
 -CHANGE: The background of the seed portrait in the journal is now the required soil
 -CHANGE: You can now specify any block as a specific soil for custom crops
 -CHANGE: Adding cross-crop sticks won't clear weeds anymore
 -CHANGE: Overhauled the way mutation requirements work: instead of setting specific requirements for mutations, you now have to set specific requirements for growing.
 -CHANGE: The requirement for a mutation to happen is the same as for growing: A plant can only mutate if it can grow there
 -CHANGE: NEI will show the needed soil and required base block (if any) for mutations
+-CHANGE: Potatoes sometimes drop poisonous potatoes now
+-CHANGE: Register seeds and their produce as seed<Name> and crop<Name> in the ore dictionary
+-CHANGE: Spreading from only 1 crop will not cause any stat increases (unless toggled in the config)
+-CHANGE: Added a difficulty for increasing stats in the config. 1: all surrounding crops will affect stat increase. 2: Only parent/identical crops will affect stat increase. 3: Same as 2, but other crops will affect stat inheritance negatively
+-CHANGE: Made the recipe for crops shaped to prevent conflicts with buildcraft wooden gears
 -FIXED:  Sprinklers no longer hate railcraft hidden blocks
 -FIXED:  Moved Botania crops to post init to possibly fix the crops not dropping petals
 -FIXED:  Nether wart not being recognised as a valid seed (Marcin212)
 -FIXED:  Sprinkler not stopping when water in the channel above ran out
 -FIXED:  Waila not showing accurate fluid levels for channel, tank and valve
-
--alpha2:
-    -FIXED:  Fixed crop not re-rendering on changes
-    -FIXED:  Stats are now being reduced on mutating instead of spreading
-    -FIXED:  Seeds being able to be planted on unhydrated farmland while farming was disabled
-
--alpha3:
-    -FIXED:  NEI mutation GUI ignoring soil meta value
-    -FIXED:  Infinite loop when specifying BaseBlock of type 2
-
--alpha4:
-    -ADDED:  Compatibility with Jaquadro's GardenStuff (crops can be planted on them
-    -ADDED:  zh_CH.lang (3TUSK)
-    -CHANGE: Potatoes sometimes drop poisonous potatoes now
-    -CHANGE: Register seeds and their produce as seed<Name> and crop<Name> in the ore dictionary
-    -FIXED:  Moved resource crops to post-init to enable resource crops for mods that register their ore dictionary entries too late
-    -FIXED:  Cactus crop dropping cactus with metadata 2 if the config option was on
-
--alpha5:
-    -FIXED:  Crash with CoFH
-    -FIXED:  (hopefully) Fixed weird ingot to nugget recipes getting registered
-
--alpha6:
-    -ADDED:  Support for psychedelicraft
-    -ADDED:  Other mods can make their seed/fruit compatible by registering the seed as "seed<YourPlantName>" and the fruit as "crop<YourPlantName>" to the ore dictionary
-    -ADDED:  The particle setting will now decrease the number of particles from the sprinkler
-    -CHANGE: Spreading from only 1 crop will not cause any stat increases (unless toggled in the config)
-    -CHANGE: Added a difficulty for increasing stats in the config. 1: all surrounding crops will affect stat increase. 2: Only parent/identical crops will affect stat increase. 3: Same as 2, but other crops will affect stat inheritance negatively
-    -CHANGE: Made the recipe for crops shaped to prevent conflicts with buildcraft wooden gears
-    -FIXED:  Nether wart always yielding one fruit, regardless of gain level
+-FIXED:  Fixed crop not re-rendering on changes
+-FIXED:  Stats are now being reduced on mutating instead of spreading
+-FIXED:  Seeds being able to be planted on unhydrated farmland while farming was disabled
+-FIXED:  NEI mutation GUI ignoring soil meta value
+-FIXED:  Infinite loop when specifying BaseBlock of type 2
+-FIXED:  Moved resource crops to post-init to enable resource crops for mods that register their ore dictionary entries too late
+-FIXED:  Cactus crop dropping cactus with metadata 2 if the config option was on
+-FIXED:  Crash with CoFH
+-FIXED:  (hopefully) Fixed weird ingot to nugget recipes getting registered
+-FIXED:  Nether wart always yielding one fruit, regardless of gain level
 
 1.2.2
 -ADDED:  TConstruct scythes can be used for aoe harvesting (right click on crops to aoe harvest)
