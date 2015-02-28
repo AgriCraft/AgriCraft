@@ -45,8 +45,6 @@ Changelog
 -alpha6:
     -CHANGE: Spreading from only 1 crop will not cause any stat increases (unless toggled in the config)
     -CHANGE: Added a difficulty for increasing stats in the config. 1: all surrounding crops will affect stat increase. 2: Only parent/identical crops will affect stat increase. 3: Same as 2, but other crops will affect stat inheritance negatively
-
--alpha7
     -ADDED: Support for psychedelicraft
     -ADDED: Other mods can make their seed/fruit compatible by registering the seed as "seed<YourPlantName>" and the fruit as "crop<YourPlantName>" to the ore dictionary
 

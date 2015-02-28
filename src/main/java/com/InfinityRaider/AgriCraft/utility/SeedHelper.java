@@ -318,11 +318,13 @@ public abstract class SeedHelper {
     public static void addFruitsFromOreDict(List<ItemStack> list, ItemSeeds seed, int meta, Random rand, int nr) {
         int counter = 0;
         List<ItemStack> fruits = getFruitsFromOreDict(seed, meta);
-        while(counter<nr) {
-            ItemStack newFruit = fruits.get(rand.nextInt(fruits.size())).copy();
-            newFruit.stackSize = 1;
-            list.add(newFruit);
-            counter++;
+        if(fruits!=null && fruits.size()>0) {
+            while (counter < nr) {
+                ItemStack newFruit = fruits.get(rand.nextInt(fruits.size())).copy();
+                newFruit.stackSize = 1;
+                list.add(newFruit);
+                counter++;
+            }
         }
     }
 
