@@ -257,9 +257,6 @@ public abstract class SeedHelper {
             LogHelper.debug("Getting fruit for gyshahls");
             items.add(ChococraftHelper.getFruit(gain, nr));
         }
-        else if(ModIntegration.LoadedMods.psychedelicraft && plant instanceof IvTilledFieldPlant) {
-            LogHelper.debug("Getting fruit for psychedelicraft plant");
-        }
         //other crop
         else {
             LogHelper.debug("Getting fruit from ore dictionary");
