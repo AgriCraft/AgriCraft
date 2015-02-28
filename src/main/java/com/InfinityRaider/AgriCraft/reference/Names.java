@@ -195,6 +195,7 @@ public final class Names {
         public static final String botania = "Botania";
         public static final String tconstruct = "TConstruct";
         public static final String gardenStuff = "GardenCore";
+        public static final String psychedelicraft = "psychedelicraft";
     }
 
     //item registry keywords

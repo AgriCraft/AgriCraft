@@ -71,6 +71,7 @@ public class ConfigurationHandler {
     public static boolean integration_Botania;
     public static boolean integration_allowMagicFertiliser;
     public static boolean integration_instantMagicFertiliser;
+    public static boolean integration_Psychedelicraft;
 
     public static void init(FMLPreInitializationEvent event) {
         directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
@@ -122,14 +123,15 @@ public class ConfigurationHandler {
         fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", CATEGORY_IRRIGATION, false, "set to true to let tanks fill up when water flows above them");
 
         //mod integration
-        integration_HC = ModIntegration.LoadedMods.harvestcraft && config.getBoolean("HarvestCraft",CATEGORY_INTEGRATION, true,"Set to false to disable harvestCraft integration");
-        integration_Nat = ModIntegration.LoadedMods.natura && config.getBoolean("Natura",CATEGORY_INTEGRATION, true,"Set to false to disable Natura Integration");
-        integration_WeeeFlowers = ModIntegration.LoadedMods.weeeFlowers && config.getBoolean("Weee Flowers",CATEGORY_INTEGRATION, true,"Set to false to disable Weee Flowers Integration");
-        integration_PlantMegaPack = ModIntegration.LoadedMods.plantMegaPack && config.getBoolean("Plant Mega Pack",CATEGORY_INTEGRATION, true,"Set to false to disable Plant Mega Pack Integration");
-        integration_Chococraft = ModIntegration.LoadedMods.chococraft && config.getBoolean("ChocoCraft",CATEGORY_INTEGRATION, true,"Set to false to disable Chococraft Integration");
-        integration_Botania = ModIntegration.LoadedMods.botania && config.getBoolean("Botania", CATEGORY_INTEGRATION, true, "Set to false to disable Botania Integration");
+        integration_HC = ModIntegration.LoadedMods.harvestcraft && config.getBoolean("HarvestCraft",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Pam's HarvestCraft");
+        integration_Nat = ModIntegration.LoadedMods.natura && config.getBoolean("Natura",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Natura");
+        integration_WeeeFlowers = ModIntegration.LoadedMods.weeeFlowers && config.getBoolean("Weee Flowers",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Pam's Weee Flowers");
+        integration_PlantMegaPack = ModIntegration.LoadedMods.plantMegaPack && config.getBoolean("Plant Mega Pack",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Plant Mega Pack");
+        integration_Chococraft = ModIntegration.LoadedMods.chococraft && config.getBoolean("ChocoCraft",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Chococraft");
+        integration_Botania = ModIntegration.LoadedMods.botania && config.getBoolean("Botania", CATEGORY_INTEGRATION, true, "Set to false to disable Botania Mystical Flower Seeds");
         integration_allowMagicFertiliser = ModIntegration.LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser",CATEGORY_INTEGRATION,true,"Set to false to disable using magical fertiliser on crops");
         integration_instantMagicFertiliser = ModIntegration.LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser Instant Growth", CATEGORY_INTEGRATION, false, "Set to true to insta-grow plants on which the magical fertiliser is used on");
+        integration_Psychedelicraft = ModIntegration.LoadedMods.psychedelicraft && config.getBoolean("Psychedelicraft",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Psychedelicraft");
 
         villagerID = config.getInt("Villager ID", CATEGORY_AGRICRAFT, 10, 7, 99, "The profession ID the villager uses");
         villagerEnabled = config.getBoolean("Enable villagers",CATEGORY_AGRICRAFT, true, "Set to false if you wish to disable villagers spawning in the ArgiCraft houses");
