@@ -129,15 +129,19 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
     @SideOnly(Side.CLIENT)
     private void renderLiquidSpray() {
         this.angle = (this.angle+5F)%360;
-        for(int i=0;i<4;i++) {
-            float alpha = (this.angle+90*i)*((float)Math.PI)/180;
-            double xOffset = (4*Constants.unit)*Math.cos(alpha);
-            double zOffset = (4*Constants.unit)*Math.sin(alpha);
-            float radius = 0.3F;
-            for(int j=0;j<=4;j++) {
-                float beta = -j*((float)Math.PI)/(8.0F);
-                Vec3 vector = Vec3.createVectorHelper(radius*Math.cos(alpha), radius*Math.sin(beta), radius*Math.sin(alpha));
-                this.spawnLiquidSpray(xOffset*(4-j)/4, zOffset*(4-j)/4, vector);
+        int particleSetting = Minecraft.getMinecraft().gameSettings.particleSetting;    //0 = all, 1 = decreased; 2 = minimal;
+        counter = (counter+1)%(particleSetting+1);
+        if(counter==0) {
+            for (int i = 0; i < 4; i++) {
+                float alpha = (this.angle + 90 * i) * ((float) Math.PI) / 180;
+                double xOffset = (4 * Constants.unit) * Math.cos(alpha);
+                double zOffset = (4 * Constants.unit) * Math.sin(alpha);
+                float radius = 0.3F;
+                for (int j = 0; j <= 4; j++) {
+                    float beta = -j * ((float) Math.PI) / (8.0F);
+                    Vec3 vector = Vec3.createVectorHelper(radius * Math.cos(alpha), radius * Math.sin(beta), radius * Math.sin(alpha));
+                    this.spawnLiquidSpray(xOffset * (4 - j) / 4, zOffset * (4 - j) / 4, vector);
+                }
             }
         }
     }
