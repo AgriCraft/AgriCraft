@@ -54,7 +54,7 @@ public abstract class RenderHelper {
     //1: diagonals of the block
     //6: four lines parallel to the block edges
     public static int getRenderType(ItemSeeds seed, int meta) {
-        BlockBush plant = SeedHelper.getPlant(seed);
+        Block plant = SeedHelper.getPlant(seed);
         int renderType = plant.getRenderType();
         if(ModIntegration.LoadedMods.natura) {
             String name = Item.itemRegistry.getNameForObject(seed);
