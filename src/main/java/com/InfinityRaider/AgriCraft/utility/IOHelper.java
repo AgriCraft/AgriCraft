@@ -115,6 +115,9 @@ public abstract class IOHelper {
                 data = data + '\n' + chococraftMutations;
             }
         }
+        if(ConfigurationHandler.integration_Psychedelicraft && ModIntegration.LoadedMods.psychedelicraft) {
+            data = data + '\n' + psychedelicraftMutations;
+        }
         return data;
     }
 
@@ -412,6 +415,12 @@ public abstract class IOHelper {
 
     private static final String chococraft_harvestcraftMutations =
             "chococraft:Gysahl_Seeds=harvestcraft:rutabagaseedItem+harvestcraft:beetseedItem";
+
+    private static final String psychedelicraftMutations =
+            "psychedelicraft:tobaccoSeeds=AgriCraft:seedShroomBrown+minecraft:nether_wart\n" +
+            "psychedelicraft:hop_seeds=psychedelicraft:tobaccoSeeds+minecraft:wheat_seeds\n" +
+            "psychedelicraft:cannabisSeeds=psychedelicraft:tobaccoSeeds+psychedelicraft:hop_seeds\n" +
+            "psychedelicraft:cocaSeeds=psychedelicraft:cannabisSeeds+psychedelicraft:hop_seeds";
 
     private static final String copperMutation =
             "AgriCraft:seedCuprosia=AgriCraft:seedRedstodendron+AgriCraft:seedTulipRed";
