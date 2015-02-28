@@ -37,7 +37,7 @@ public class Recipes {
 
     public static void init() {
         //crop item
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.crops, ConfigurationHandler.cropsPerCraft), "stickWood", "stickWood", "stickWood", "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.crops, ConfigurationHandler.cropsPerCraft), "ss", "ss", 's', "stickWood"));
         if(ConfigurationHandler.cropsPerCraft==3) {GameRegistry.addShapelessRecipe(new ItemStack(net.minecraft.init.Items.stick, 6 / ConfigurationHandler.cropsPerCraft), new ItemStack(Items.crops), new ItemStack(Items.crops));}
         else {GameRegistry.addShapelessRecipe(new ItemStack(net.minecraft.init.Items.stick, 4 / ConfigurationHandler.cropsPerCraft), new ItemStack(Items.crops));}
         //seed analyzer
