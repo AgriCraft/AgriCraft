@@ -12,6 +12,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import mods.natura.common.NContent;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.init.Blocks;
@@ -207,7 +208,7 @@ public abstract class SeedHelper {
     }
 
     //find the crop for a seed
-    public static BlockBush getPlant(ItemSeeds seed) {
+    public static Block getPlant(ItemSeeds seed) {
         if(seed == null) {
             return null;
         }
@@ -222,7 +223,7 @@ public abstract class SeedHelper {
                 return (BlockCrops) seed.getPlant(null, 0, 0, 0);
             }
             else {
-                return (BlockBush) seed.getPlant(null, 0, 0, 0);
+                return seed.getPlant(null, 0, 0, 0);
             }
         }
     }
@@ -240,7 +241,7 @@ public abstract class SeedHelper {
     //gets the fruits
     public static ArrayList<ItemStack> getPlantFruits(ItemSeeds seed, World world, int x, int y, int z, int gain, int meta) {
         int nr =  (int) (Math.ceil((gain + 0.00) / 3));
-        BlockBush plant = getPlant(seed);
+        Block plant = getPlant(seed);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         //nether wart exception
         if(plant==Blocks.nether_wart) {
@@ -290,7 +291,7 @@ public abstract class SeedHelper {
 
     //get all plant fruits
     public static ArrayList<ItemStack> getAllPlantFruits(ItemSeeds seed, World world, int x, int y, int z, int gain, int meta) {
-        BlockBush plant = getPlant(seed);
+        Block plant = getPlant(seed);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if(plant instanceof BlockModPlant) {
             items.addAll(((BlockModPlant) plant).getFruits());
