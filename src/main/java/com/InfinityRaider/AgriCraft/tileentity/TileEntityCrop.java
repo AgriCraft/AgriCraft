@@ -92,16 +92,14 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public void applyGrowthTick(boolean forced) {
         if(!this.hasOverride() || this.getOverride().hasDefaultGrowth()) {
             int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-            worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta+1, 2);
-            AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
+            if(meta<7) {
+                worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, 2);
+                AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
+            }
         }
         else if(forced) {
             this.getOverride().increaseGrowth();
         }
-    }
-
-    public void harvestAction() {
-
     }
 
     //the code that makes the crop cross with neighboring crops
