@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.farming.mutation;
+package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.farming.CropOverride;
 
