@@ -14,6 +14,7 @@ import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -196,9 +197,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             return this.weed ? 0 : 1;
         }
     }
-
     //sets the plant in the crop
     public void setPlant(int growth, int gain, int strength, boolean analyzed, ItemSeeds seed, int seedMeta) {
+        this.setPlant(growth, gain, strength, analyzed, seed, seedMeta, null);
+    }
+    //sets the plant in the crop
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, ItemSeeds seed, int seedMeta, EntityPlayer player) {
         if( (!this.crossCrop) && (!this.hasPlant())) {
             this.growth = growth;
             this.gain = gain;
@@ -206,6 +210,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.seed = seed;
             this.analyzed = analyzed;
             this.seedMeta = seedMeta;
+            if(this.hasOverride()) {
+                ((ICropOverridingSeed) seed).getOverride(this).onSeedPlanted(player);
+            }
             this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
             this.markForUpdate();
         }

@@ -2,10 +2,13 @@ package com.InfinityRaider.AgriCraft.farming;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 
 public abstract class CropOverride {
+    /** This is called when a seed is planted. Argument is the player that planted the seed, this is null when the seed got planted due to a mutation, crossover or world gen */
+    public abstract void onSeedPlanted(EntityPlayer player);
 
     /** Return false if you want to define custom growing logic */
     public abstract boolean hasDefaultGrowth();
