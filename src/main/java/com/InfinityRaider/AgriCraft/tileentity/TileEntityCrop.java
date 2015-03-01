@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.farming.CropOverride;
 import com.InfinityRaider.AgriCraft.farming.mutation.*;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -32,6 +33,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public boolean weed=false;
     public ItemSeeds seed = null;
     public int seedMeta = 0;
+    private CropOverride override;
 
     private final MutationEngine mutationEngine;
 
@@ -72,6 +74,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         else {
             this.seed=null;
             this.seedMeta=0;
+        }
+        if(this.seed!=null && this.seed instanceof ICropOverridingSeed) {
+            this.override = ((ICropOverridingSeed) seed).getOverride().setTileEntity(this);
+        }
+        else {
+            this.override = null;
         }
     }
 
@@ -235,6 +243,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     //a helper method for ItemSeed <-> String conversion for storing seed as a string in NBT
     public void setSeed(String input) {
         this.seed = input.equalsIgnoreCase("none")?null:(ItemSeeds) Item.itemRegistry.getObject(input);
+    }
+
+    public boolean hasOverride() {
+        return this.override!=null;
     }
 
     //get the plant icon
