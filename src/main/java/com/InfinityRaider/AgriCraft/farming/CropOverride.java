@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.farming;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 
 public abstract class CropOverride {
@@ -30,4 +31,10 @@ public abstract class CropOverride {
     /** Returns a relevant icon */
     @SideOnly(Side.CLIENT)
     public abstract IIcon getIcon();
+
+    /** Return an NBT tag with stored relevant data */
+    public abstract NBTTagCompound saveToNBT();
+
+    /** Loads relevant data from NBT*/
+    public abstract void loadFromNBT(NBTTagCompound tag);
 }

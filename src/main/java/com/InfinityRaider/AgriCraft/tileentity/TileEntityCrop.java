@@ -55,6 +55,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         if(this.seed!=null) {
             tag.setString(Names.Objects.seed, this.getSeedString());
             tag.setShort(Names.NBT.meta, (short) seedMeta);
+            if(seed instanceof ICropOverridingSeed) {
+                NBTTagCompound overrideData = ((ICropOverridingSeed) seed).getOverride(this).saveToNBT();
+                if(overrideData!=null) {
+                    tag.setTag(Names.NBT.override, overrideData);
+                }
+            }
         }
     }
 
@@ -71,6 +77,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         if(tag.hasKey(Names.Objects.seed) && tag.hasKey(Names.NBT.meta)) {
             this.setSeed(tag.getString(Names.Objects.seed));
             this.seedMeta = tag.getInteger(Names.NBT.meta);
+            if(seed instanceof ICropOverridingSeed && tag.hasKey(Names.NBT.override)) {
+                NBTTagCompound overrideData = tag.getCompoundTag(Names.NBT.override);
+                ((ICropOverridingSeed) seed).getOverride(this).loadFromNBT(overrideData);
+            }
         }
         else {
             this.seed=null;
