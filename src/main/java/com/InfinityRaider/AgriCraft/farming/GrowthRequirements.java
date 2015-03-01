@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -88,7 +87,12 @@ public class GrowthRequirements {
         if (seed instanceof IAgriCraftSeed) {
             return ((IAgriCraftSeed) seed).getPlant().getGrowthRequirement();
         }
-
+        else if(seed instanceof ICropOverridingSeed) {
+            ICropOverridingSeed overrider = (ICropOverridingSeed) seed;
+            if(overrider.hasGrowthRequirement()) {
+                return overrider.getGrowthRequirement();
+            }
+        }
         GrowthRequirement growthRequirement = overrides.get(new ItemWithMeta(seed, meta));
         if (growthRequirement == null) {
             growthRequirement = new GrowthRequirement.Builder().build();

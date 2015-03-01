@@ -27,12 +27,6 @@ public abstract class CropOverride {
     /** Immune to weeds or not */
     public abstract boolean immuneToWeed();
 
-    /** Return true if this has its own custom growth requirement */
-    public abstract boolean hasGrowthRequirement();
-
-    /** Returns a custom growth requirement if needed*/
-    public abstract GrowthRequirement getGrowthRequirement();
-
     /** Returns a relevant icon */
     @SideOnly(Side.CLIENT)
     public abstract IIcon getIcon();

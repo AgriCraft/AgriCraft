@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
+import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.farming.CropOverride;
 import com.InfinityRaider.AgriCraft.farming.ICropOverridingSeed;
@@ -75,6 +76,22 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.seed=null;
             this.seedMeta=0;
         }
+    }
+
+    /** Apply a growth increment, if forced is true this will always increase the growth. */
+    public void applyGrowthTick(boolean forced) {
+        if(!this.hasOverride() || this.getOverride().hasDefaultGrowth()) {
+            int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+            worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta+1, 2);
+            AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
+        }
+        else if(forced) {
+            this.getOverride().increaseGrowth();
+        }
+    }
+
+    public void harvestAction() {
+
     }
 
     //the code that makes the crop cross with neighboring crops
@@ -160,7 +177,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     //weed spawn chance
     private double getWeedSpawnChance() {
         if(this.hasPlant()) {
-            return ConfigurationHandler.weedsWipePlants?((double) (10 - this.strength))/10:0;
+            if(this.hasOverride() && this.getOverride().immuneToWeed()) {
+                return 0;
+            }
+            else {
+                return ConfigurationHandler.weedsWipePlants ? ((double) (10 - this.strength)) / 10 : 0;
+            }
         }
         else {
             return this.weed ? 0 : 1;
