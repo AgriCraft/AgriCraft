@@ -306,7 +306,7 @@ public abstract class SeedHelper {
         else {
             items = (ArrayList<ItemStack>) getFruitsFromOreDict(seed, meta);
         }
-        if(items.size()==0) {
+        if(items == null || items.size()==0) {
             items = getPlantFruits(seed, world, x, y, z, gain, meta);
         }
         return items;
