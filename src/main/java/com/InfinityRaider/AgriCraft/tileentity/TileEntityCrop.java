@@ -77,7 +77,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.seedMeta=0;
         }
         if(this.seed!=null && this.seed instanceof ICropOverridingSeed) {
-            this.override = ((ICropOverridingSeed) seed).getOverride().setTileEntity(this);
+            this.override = ((ICropOverridingSeed) seed).getOverride(this);
         }
         else {
             this.override = null;

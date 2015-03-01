@@ -1,19 +1,8 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.util.IIcon;
 
 public abstract class CropOverride {
-    private TileEntityCrop crop;
-
-    public final CropOverride setTileEntity(TileEntityCrop crop) {
-        this.crop = crop;
-        return this;
-    }
-
-    public final TileEntityCrop getCrop() {
-        return this.crop;
-    }
 
     /** Return false if you want to define custom growing logic */
     public abstract boolean hasDefaultGrowth();
