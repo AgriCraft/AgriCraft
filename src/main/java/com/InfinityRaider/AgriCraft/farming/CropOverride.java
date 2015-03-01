@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import net.minecraft.util.IIcon;
 
 public abstract class CropOverride {
     private TileEntityCrop crop;
@@ -40,4 +41,7 @@ public abstract class CropOverride {
 
     /** Returns a custom growth requirement if needed*/
     public abstract GrowthRequirement getGrowthRequirement();
+
+    /** Returns a relevant icon */
+    public abstract IIcon getIcon();
 }
