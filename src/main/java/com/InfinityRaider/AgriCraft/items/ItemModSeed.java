@@ -3,6 +3,8 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.farming.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -14,9 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
 
-public class ItemModSeed extends ItemSeeds implements IPlantable{
+public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
     private String displayName;
     @SideOnly(Side.CLIENT)
     private String information;
@@ -43,10 +44,16 @@ public class ItemModSeed extends ItemSeeds implements IPlantable{
         this.displayName = name;
     }
 
-    public BlockModPlant getPlant() {
+    public IAgriCraftPlant getPlant() {
         return (BlockModPlant) this.getPlant(null, 0, 0, 0);
     }
 
+    @Override
+    public int tier() {
+        return ((BlockModPlant) this.getPlant()).tier;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public String getInformation() {
         return this.information;

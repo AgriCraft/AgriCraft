@@ -5,6 +5,8 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChococraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
+import com.InfinityRaider.AgriCraft.farming.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
@@ -173,8 +175,8 @@ public abstract class SeedHelper {
                 return tier;
             }
         }
-        if(seed instanceof ItemModSeed) {
-            return ((ItemModSeed) seed).getPlant().tier;
+        if(seed instanceof IAgriCraftSeed) {
+            return ((IAgriCraftSeed) seed).tier();
         }
         String domain = Item.itemRegistry.getNameForObject(seed).substring(0, Item.itemRegistry.getNameForObject(seed).indexOf(':'));
         if(domain.equalsIgnoreCase("harvestcraft")) {
@@ -243,9 +245,9 @@ public abstract class SeedHelper {
             items.add(new ItemStack(seed, nr, 0));
         }
         //agricraft crop
-        else if(plant instanceof BlockModPlant) {
+        else if(plant instanceof IAgriCraftPlant) {
             LogHelper.debug("Getting fruit for agricraft plant");
-            items.addAll(((BlockModPlant) plant).getFruit(nr, world.rand));
+            items.addAll(((IAgriCraftPlant) plant).getFruit(nr, world.rand));
         }
         //natura crop
         else if(ModIntegration.LoadedMods.natura && getPlantDomain(seed).equalsIgnoreCase("natura")) {
@@ -295,8 +297,8 @@ public abstract class SeedHelper {
     public static ArrayList<ItemStack> getAllPlantFruits(ItemSeeds seed, World world, int x, int y, int z, int gain, int meta) {
         Block plant = getPlant(seed);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        if(plant instanceof BlockModPlant) {
-            items.addAll(((BlockModPlant) plant).getFruits());
+        if(plant instanceof IAgriCraftPlant) {
+            items.addAll(((IAgriCraftPlant) plant).getFruits());
         }
         //chococraft crop
         else if(ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
@@ -306,7 +308,7 @@ public abstract class SeedHelper {
         else {
             items = (ArrayList<ItemStack>) getFruitsFromOreDict(seed, meta);
         }
-        if(items.size()==0) {
+        if(items==null || items.size()==0) {
             items = getPlantFruits(seed, world, x, y, z, gain, meta);
         }
         return items;

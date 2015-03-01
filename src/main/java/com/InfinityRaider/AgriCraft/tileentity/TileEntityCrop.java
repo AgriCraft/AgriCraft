@@ -34,7 +34,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public boolean weed=false;
     public ItemSeeds seed = null;
     public int seedMeta = 0;
-    private CropOverride override;
 
     private final MutationEngine mutationEngine;
 
@@ -75,12 +74,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         else {
             this.seed=null;
             this.seedMeta=0;
-        }
-        if(this.seed!=null && this.seed instanceof ICropOverridingSeed) {
-            this.override = ((ICropOverridingSeed) seed).getOverride(this);
-        }
-        else {
-            this.override = null;
         }
     }
 
@@ -247,7 +240,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     public boolean hasOverride() {
-        return this.override!=null;
+        return this.seed instanceof ICropOverridingSeed;
+    }
+
+    public CropOverride getOverride() {
+        return this.hasOverride()?((ICropOverridingSeed) this.seed).getOverride(this):null;
     }
 
     //get the plant icon
@@ -255,8 +252,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public IIcon getPlantIcon() {
         IIcon icon = null;
         if(this.hasPlant()) {
-            int meta = RenderHelper.plantIconIndex(this.seed, this.seedMeta, this.getBlockMetadata());
-            icon = SeedHelper.getPlant(this.seed).getIcon(0, meta);
+            icon = RenderHelper.getPlantIcon(seed, seedMeta, this.getBlockMetadata());
         }
         else if(this.weed) {
             icon = ((BlockCrop) this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)).getWeedIcon(this.getBlockMetadata());

@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.IIcon;
 
 public abstract class CropOverride {
@@ -32,5 +34,6 @@ public abstract class CropOverride {
     public abstract GrowthRequirement getGrowthRequirement();
 
     /** Returns a relevant icon */
+    @SideOnly(Side.CLIENT)
     public abstract IIcon getIcon();
 }

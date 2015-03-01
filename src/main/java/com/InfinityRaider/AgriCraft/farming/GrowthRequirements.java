@@ -85,8 +85,8 @@ public class GrowthRequirements {
      * @return growthRequirement of the given seed.
      */
     public static GrowthRequirement getGrowthRequirement(ItemSeeds seed, int meta) {
-        if (SeedHelper.getPlant(seed) instanceof BlockModPlant) {
-            return ((BlockModPlant) SeedHelper.getPlant(seed)).getGrowthRequirement();
+        if (seed instanceof IAgriCraftSeed) {
+            return ((IAgriCraftSeed) seed).getPlant().getGrowthRequirement();
         }
 
         GrowthRequirement growthRequirement = overrides.get(new ItemWithMeta(seed, meta));

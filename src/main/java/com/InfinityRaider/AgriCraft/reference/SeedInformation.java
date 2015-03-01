@@ -4,6 +4,7 @@ package com.InfinityRaider.AgriCraft.reference;
 
 import chococraft.common.config.ChocoCraftItems;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -107,8 +108,8 @@ public final class SeedInformation {
     public static String getSeedInformation(ItemStack seedStack) {
         String output = "";
         if (seedStack.getItem() instanceof ItemSeeds) {
-            if (seedStack.getItem() instanceof ItemModSeed) {
-                output = ((ItemModSeed) seedStack.getItem()).getInformation();
+            if (seedStack.getItem() instanceof IAgriCraftSeed) {
+                output = ((IAgriCraftSeed) seedStack.getItem()).getInformation();
             }
             else {
                 String[] info = informationTable.get(seedStack.getItem());

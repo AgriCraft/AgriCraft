@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChococraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
+import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.mark719.magicalcrops.crops.BlockMagicalCrops;
@@ -69,6 +70,16 @@ public abstract class RenderHelper {
         return renderType;
     }
 
+    public static IIcon getPlantIcon(ItemSeeds seed, int seedMeta, int growthMeta) {
+        if(seed instanceof IAgriCraftSeed) {
+            return ((IAgriCraftSeed) seed).getPlant().getIcon(growthMeta);
+        }
+        else {
+            growthMeta = plantIconIndex(seed, seedMeta, growthMeta);
+            return getIcon(SeedHelper.getPlant(seed), growthMeta);
+        }
+    }
+
     //this method is used to convert the vanilla 0-7 meta growth stages to natura growth stages or nether wart growth stages
     public static int plantIconIndex(ItemSeeds seed, int seedMeta, int growthMeta) {
         Block plant = null;
@@ -78,7 +89,7 @@ public abstract class RenderHelper {
             LogHelper.debug("Couldn't grab plant");
         }
 
-        if(seed instanceof ItemModSeed) {
+        if(seed instanceof IAgriCraftSeed) {
             return growthMeta;
         }
         else if(ModIntegration.LoadedMods.magicalCrops && plant!=null && plant instanceof BlockMagicalCrops) {
