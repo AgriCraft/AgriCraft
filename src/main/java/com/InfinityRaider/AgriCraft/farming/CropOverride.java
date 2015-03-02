@@ -16,6 +16,12 @@ public abstract class CropOverride {
     /** This is called when the crop doesn't follow default growing and should advance one growth stage*/
     public abstract void increaseGrowth();
 
+    /** Return false if this has custom bone meal logic */
+    public abstract boolean hasDefaultBonemeal();
+
+    /** Gets called when bonemeal is applied */
+    public abstract void applyBonemeal();
+
     /** Return false if you want to define custom harvesting logic (right clicks)*/
     public abstract boolean hasDefaultHarvesting();
 

@@ -197,10 +197,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             return this.weed ? 0 : 1;
         }
     }
+
     //sets the plant in the crop
     public void setPlant(int growth, int gain, int strength, boolean analyzed, ItemSeeds seed, int seedMeta) {
         this.setPlant(growth, gain, strength, analyzed, seed, seedMeta, null);
     }
+
     //sets the plant in the crop
     public void setPlant(int growth, int gain, int strength, boolean analyzed, ItemSeeds seed, int seedMeta, EntityPlayer player) {
         if( (!this.crossCrop) && (!this.hasPlant())) {
@@ -302,7 +304,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public int getRenderType() {
         int type = -1;
         if(this.hasPlant()) {
-            type = RenderHelper.getRenderType(this.seed, this.seedMeta);
+            if(this.hasOverride()) {
+                type = ((ICropOverridingSeed) seed).getRenderType();
+            }
+            else {
+                type = RenderHelper.getRenderType(this.seed, this.seedMeta);
+            }
         }
         else if(this.weed) {
             type = 6;
