@@ -1,5 +1,11 @@
 Changelog
 ---------
+1.3.1
+-ADDED:  Nitor Wart: a new crop that produces glowstone dust
+-CHANGE: Renamed Mushroom Seeds to Spores
+-FIXED:  Various crashes related to analyzed seeds in the journal after removing mods
+-FIXED:  Unable to plant crops on soul sand
+-FIXED:  Broken scythes will no longer harvest crops
 
 1.3.0
 -ADDED:  Hand Rake tool which, when enabled, is the only thing that can remove weeds
