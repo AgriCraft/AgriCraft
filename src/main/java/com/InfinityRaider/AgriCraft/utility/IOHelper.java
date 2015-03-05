@@ -373,7 +373,9 @@ public abstract class IOHelper {
             "AgriCraft:seedTulipPink=AgriCraft:seedAllium+AgriCraft:seedDandelion\n" +
             "AgriCraft:seedDaisy=AgriCraft:seedDandelion+AgriCraft:seedOrchid\n" +
             "AgriCraft:seedShroomRed=minecraft:nether_wart+AgriCraft:seedPoppy\n" +
-            "AgriCraft:seedShroomBrown=minecraft:nether_wart+AgriCraft:seedPotato\n";
+            "AgriCraft:seedShroomBrown=minecraft:nether_wart+AgriCraft:seedPotato\n" +
+            "AgriCraft:seedNitorWart=minecraft:nether_wart+AgriCraft:seedTulipOrange";
+
 
     private static final String agricraftMutations =
             "AgriCraft:seedRedstodendron=AgriCraft:seedTulipRed+AgriCraft:seedDaisy\n" +

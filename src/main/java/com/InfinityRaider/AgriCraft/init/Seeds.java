@@ -31,6 +31,7 @@ public class Seeds {
     public static ItemModSeed seedCactus;
     public static ItemModSeed seedShroomRed;
     public static ItemModSeed seedShroomBrown;
+    public static ItemModSeed seedNitorWart;
     //botania flower seeds
     public static ItemModSeed seedBotaniaWhite;
     public static ItemModSeed seedBotaniaOrange;
@@ -81,6 +82,7 @@ public class Seeds {
         seedCactus = new ItemModSeed(Crops.cactus, SeedInformation.cactus);
         seedShroomRed = new ItemModSeed(Crops.shroomRed, SeedInformation.shroomRed);
         seedShroomBrown = new ItemModSeed(Crops.shroomBrown, SeedInformation.shroomBrown);
+        seedNitorWart = new ItemModSeed(Crops.nitorWart, SeedInformation.nitorWart);
         RegisterHelper.registerSeed(seedPotato, Crops.potato);
         RegisterHelper.registerSeed(seedCarrot, Crops.carrot);
         RegisterHelper.registerSeed(seedSugarcane, Crops.sugarcane);
@@ -96,6 +98,7 @@ public class Seeds {
         RegisterHelper.registerSeed(seedCactus, Crops.cactus);
         RegisterHelper.registerSeed(seedShroomRed, Crops.shroomRed);
         RegisterHelper.registerSeed(seedShroomBrown, Crops.shroomBrown);
+        RegisterHelper.registerSeed(seedNitorWart, Crops.nitorWart);
 
         //register natura seeds to the ore dictionary if natura is installed
         if(ModIntegration.LoadedMods.natura) {

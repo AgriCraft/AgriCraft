@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import vazkii.botania.common.item.ModItems;
 
 public class Crops {
+    //AgriCraft crops
     public static BlockModPlant potato;
     public static BlockModPlant carrot;
     public static BlockModPlant melon;
@@ -31,6 +32,9 @@ public class Crops {
     public static BlockModPlant shroomRed;
     public static BlockModPlant shroomBrown;
     public static BlockModPlant botaniaWhite;
+    public static BlockModPlant nitorWart;
+
+    //Botania crops
     public static BlockModPlant botaniaOrange;
     public static BlockModPlant botaniaMagenta;
     public static BlockModPlant botaniaLightBlue;
@@ -46,6 +50,7 @@ public class Crops {
     public static BlockModPlant botaniaGreen;
     public static BlockModPlant botaniaRed;
     public static BlockModPlant botaniaBlack;
+
     public static void init() {
         potato = new BlockModPlant(net.minecraft.init.Items.potato);
         carrot = new BlockModPlant(net.minecraft.init.Items.carrot);
@@ -64,6 +69,7 @@ public class Crops {
         cactus = new BlockModPlant(Blocks.sand, ConfigurationHandler.cactusGivesCactus?Item.getItemFromBlock(Blocks.cactus):net.minecraft.init.Items.dye, ConfigurationHandler.cactusGivesCactus?0:2);
         shroomRed = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.red_mushroom));
         shroomBrown = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.brown_mushroom));
+        nitorWart = new BlockModPlant(Blocks.soul_sand, net.minecraft.init.Blocks.glowstone, net.minecraft.init.Items.glowstone_dust, 4, 6);
         RegisterHelper.registerCrop(potato, Names.Plants.potato);
         RegisterHelper.registerCrop(carrot, Names.Plants.carrot);
         RegisterHelper.registerCrop(melon, Names.Plants.melon);
@@ -81,6 +87,7 @@ public class Crops {
         RegisterHelper.registerCrop(cactus, Names.Plants.cactus);
         RegisterHelper.registerCrop(shroomRed, Names.Plants.shroom + Names.Colors.red);
         RegisterHelper.registerCrop(shroomBrown, Names.Plants.shroom + Names.Colors.brown);
+        RegisterHelper.registerCrop(nitorWart, Names.Plants.nitorWart);
         LogHelper.info("Crops registered");
     }
     public static void initBotaniaCrops() {

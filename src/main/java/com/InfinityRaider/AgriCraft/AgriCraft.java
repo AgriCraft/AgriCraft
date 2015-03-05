@@ -93,7 +93,7 @@ public class AgriCraft {
         CustomCrops.initCustomCrops();
         SeedHelper.init();
         MutationHandler.init();
-        GrowthRequirements.initSoils();
+        GrowthRequirements.init();
         CustomCrops.initGrassSeeds();
 
         if(!ConfigurationHandler.disableWorldGen) {

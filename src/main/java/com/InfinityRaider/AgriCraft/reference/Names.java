@@ -124,6 +124,7 @@ public final class Names {
         public static final String niccissus = "Niccissus";
         public static final String platiolus = "Platiolus";
         public static final String osmonium = "Osmonium";
+        public static final String nitorWart = "NitorWart";
     }
 
     //nuggets
