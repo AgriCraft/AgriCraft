@@ -56,6 +56,8 @@ public abstract class NBTHelper {
     }
 
     public static void sortStacks(NBTTagList list) {
+        //clear empty tags from the list
+        clearEmptyStacksFromNBT(list);
         //if the list has no or one stack, nothing has to be sorted
         if(list.tagCount()<2) {
             return;
@@ -87,6 +89,15 @@ public abstract class NBTHelper {
             NBTTagCompound tag = new NBTTagCompound();
             stack.writeToNBT(tag);
             list.appendTag(tag);
+        }
+    }
+
+    public static void clearEmptyStacksFromNBT(NBTTagList list) {
+        for(int i=list.tagCount()-1;i>=0;i--) {
+            ItemStack stack = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(i));
+            if(stack==null || stack.getItem()==null) {
+                list.removeTag(i);
+            }
         }
     }
 }
