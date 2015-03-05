@@ -5,11 +5,14 @@ import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -42,8 +45,17 @@ public class ItemJournal extends ModItem {
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+        ItemStack journal = player.getCurrentEquippedItem();
+        if(journal.hasTagCompound()) {
+            NBTTagCompound tag = journal.stackTagCompound;
+            if(tag.hasKey(Names.NBT.discoveredSeeds)){
+                NBTTagList list = tag.getTagList(Names.NBT.discoveredSeeds, 10);
+                NBTHelper.clearEmptyStacksFromNBT(list);
+                tag.setTag(Names.NBT.discoveredSeeds, list);
+            }
+        }
         if(world.isRemote) {
-            player.openGui(AgriCraft.instance, GuiHandler.seedAnalyzerID, world, player.serverPosX, player.serverPosY, player.serverPosZ);
+            player.openGui(AgriCraft.instance, GuiHandler.journalID, world, player.serverPosX, player.serverPosY, player.serverPosZ);
         }
         return stack;
     }

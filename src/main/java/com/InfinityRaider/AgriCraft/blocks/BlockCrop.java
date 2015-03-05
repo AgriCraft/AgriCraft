@@ -25,6 +25,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -226,9 +227,18 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 }
                 //tinker's construct scythe
                 else if (ModIntegration.LoadedMods.tconstruct && player.getCurrentEquippedItem().getItem() instanceof Scythe) {
+                    NBTTagCompound tag = player.getCurrentEquippedItem().stackTagCompound;
+                    if(tag==null || !tag.hasKey("InfiTool")) {
+                        //invalid tool
+                        return true;
+                    }
+                    NBTTagCompound toolTag = tag.getCompoundTag("InfiTool");
                     for (int xPos = x - 1; xPos <= x + 1; xPos++) {
                         for (int zPos = z - 1; zPos <= z + 1; zPos++) {
-                            if (world.getBlock(xPos, y, zPos) instanceof BlockCrop && this.harvest(world, xPos, y, zPos)) {
+                            if(toolTag.getBoolean("Broken")) {
+                                break;
+                            }
+                            else if (world.getBlock(xPos, y, zPos) instanceof BlockCrop && this.harvest(world, xPos, y, zPos)) {
                                 AbilityHelper.damageTool(player.getCurrentEquippedItem(), 1, player, false);
                             }
                         }

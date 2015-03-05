@@ -9,6 +9,7 @@ import com.jaquadro.minecraft.gardencontainers.block.BlockLargePot;
 import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -42,8 +43,13 @@ public class GrowthRequirements {
         return soils.contains(soil) || defaultSoils.contains(soil);
     }
 
-    public static void initSoils() {
-        //add standard soils
+    public static void init() {
+        registerSoils();
+        registerOverrides();
+        registerCustomEntries();
+    }
+
+    private static void registerSoils() {
         addDefaultSoil(new BlockWithMeta(Blocks.farmland));
         if (ModIntegration.LoadedMods.forestry) {
             addDefaultSoil(new BlockWithMeta((Block) Block.blockRegistry.getObject("Forestry:soil"), 0));
@@ -51,6 +57,15 @@ public class GrowthRequirements {
         if (ModIntegration.LoadedMods.gardenStuff) {
             addDefaultSoil(new BlockWithMeta((Block) Block.blockRegistry.getObject("GardenCore:garden_farmland"), 0));
         }
+    }
+
+    private static void registerOverrides() {
+        //adds a growth requirement for nether wart
+        GrowthRequirement netherWartReq = new GrowthRequirement.Builder().soil(new BlockWithMeta(Blocks.soul_sand)).brightnessRange(0,8).build();
+        overrides.put(new ItemWithMeta(Items.nether_wart, 0), netherWartReq);
+    }
+
+    private static void registerCustomEntries() {
         //reads custom entries
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
         for (String line : data) {
@@ -68,8 +83,7 @@ public class GrowthRequirements {
         LogHelper.info("Registered soil whitelist:");
         for (BlockWithMeta soil : soils) {
             LogHelper.info(" - " + Block.blockRegistry.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
-        }
-    }
+        }}
 
     public static void addAllToSoilWhitelist(Collection<? extends BlockWithMeta> list) {
         for (BlockWithMeta block : list) {
@@ -88,7 +102,6 @@ public class GrowthRequirements {
         if (SeedHelper.getPlant(seed) instanceof BlockModPlant) {
             return ((BlockModPlant) SeedHelper.getPlant(seed)).getGrowthRequirement();
         }
-
         GrowthRequirement growthRequirement = overrides.get(new ItemWithMeta(seed, meta));
         if (growthRequirement == null) {
             growthRequirement = new GrowthRequirement.Builder().build();
