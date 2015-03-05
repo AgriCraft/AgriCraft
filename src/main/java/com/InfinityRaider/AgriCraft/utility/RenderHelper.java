@@ -81,9 +81,6 @@ public abstract class RenderHelper {
         if(seed instanceof ItemModSeed) {
             return growthMeta;
         }
-        else if(ModIntegration.LoadedMods.magicalCrops && plant!=null && plant instanceof BlockMagicalCrops) {
-            return growthMeta;
-        }
         else if(ModIntegration.LoadedMods.natura && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("natura")) {
             return NaturaHelper.getTextureIndex(growthMeta, seedMeta);
         }
