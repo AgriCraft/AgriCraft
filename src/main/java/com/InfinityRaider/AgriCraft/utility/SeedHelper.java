@@ -338,10 +338,12 @@ public abstract class SeedHelper {
 
     //check if the seed is valid
     public static boolean isValidSeed(ItemSeeds seed, int meta) {
+        /*
         if(ModIntegration.LoadedMods.thaumicTinkerer && getPlantDomain(seed).equalsIgnoreCase(Names.Mods.thaumicTinkerer)) {
             LogHelper.debug("Thaumic Tinkerer infused seeds are not supported, sorry");
             return false;
         }
+        */
         for(ItemStack blacklistedSeed:seedBlackList) {
             if(blacklistedSeed.getItem()==seed && blacklistedSeed.getItemDamage()==meta) {
                 return false;
