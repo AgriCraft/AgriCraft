@@ -1,5 +1,5 @@
 package com.InfinityRaider.AgriCraft.compatibility.thaumictinkerer;
-/*
+
 import com.InfinityRaider.AgriCraft.farming.CropOverride;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.entity.player.EntityPlayer;
@@ -78,4 +78,3 @@ public class ThaumicTinkererOverride extends CropOverride {
 
     }
 }
-*/
