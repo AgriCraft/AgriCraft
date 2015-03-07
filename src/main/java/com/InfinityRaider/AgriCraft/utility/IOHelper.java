@@ -296,6 +296,7 @@ public abstract class IOHelper {
             "harvestcraft:kiwiseedItem=harvestcraft:cantaloupeseedItem+harvestcraft:strawberryseedItem\n" +
             "harvestcraft:leekseedItem=harvestcraft:scallionseedItem+harvestcraft:celeryseedItem\n" +
             "harvestcraft:lettuceseedItem=AgriCraft:seedDaisy+harvestcraft:celeryseedItem\n" +
+            "harvestcraft:spinachseedItem=harvestcraft:lettuceseedItem+AgriCraft:seedCactus\n" +
             "harvestcraft:mustardseedItem=harvestcraft:chilipepperseedItem+harvestcraft:beanseedItem\n" +
             "harvestcraft:oatsseedItem=harvestcraft:cornseedItem+harvestcraft:riceseedItem\n" +
             "harvestcraft:okraseedItem=harvestcraft:beanseedItem+harvestcraft:leekseedItem\n" +
@@ -305,6 +306,7 @@ public abstract class IOHelper {
             "harvestcraft:peasseedItem=harvestcraft:soybeanseedItem+harvestcraft:okraseedItem\n" +
             "harvestcraft:pineappleseedItem=harvestcraft:bambooshootseedItem+harvestcraft:cantaloupeseedItem\n" +
             "harvestcraft:radishseedItem=harvestcraft:tomatoseedItem+harvestcraft:brusselsproutseedItem\n" +
+            "harvestcraft:strawberryseedItem=harvestcraft:radishseedItem+AgriCraft:seedPoppy\n" +
             "harvestcraft:raspberryseedItem=harvestcraft:strawberryseedItem+AgriCraft:seedTulipRed\n" +
             "harvestcraft:rhubarbseedItem=AgriCraft:seedSugarcane+harvestcraft:lettuceseedItem\n" +
             "harvestcraft:riceseedItem=harvestcraft:ryeseedItem+AgriCraft:seedSugarcane\n" +
@@ -318,7 +320,8 @@ public abstract class IOHelper {
             "harvestcraft:tomatoseedItem=harvestcraft:sweetpotatoseedItem+AgriCraft:seedCarrot\n" +
             "harvestcraft:turnipseedItem=harvestcraft:parsnipseedItem+harvestcraft:radishseedItem\n" +
             "harvestcraft:wintersquashseedItem=minecraft:pumpkin_seeds+harvestcraft:zucchiniseedItem\n" +
-            "harvestcraft:zucchiniseedItem=minecraft:pumpkin_seeds+harvestcraft:cucumberseedItem";
+            "harvestcraft:zucchiniseedItem=minecraft:pumpkin_seeds+harvestcraft:cucumberseedItem\n" +
+            "harvestcraft:whitemushroomseedItem=AgriCraft:seedShroomRed+AgriCraft:seedShroomBrown";
 
     private static final String weeeFlowersMutations =
             "weeeflowers:Red Flower Seed=AgriCraft:seedPoppy+AgriCraft:seedCarrot\n" +
