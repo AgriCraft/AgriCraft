@@ -237,6 +237,7 @@ public abstract class SeedHelper {
         int nr =  (int) (Math.ceil((gain + 0.00) / 3));
         Block plant = getPlant(seed);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        Random rand = world!=null?world.rand:new Random();
         //nether wart exception
         if(plant==Blocks.nether_wart) {
             LogHelper.debug("Getting fruit for nether wart");
@@ -245,7 +246,7 @@ public abstract class SeedHelper {
         //agricraft crop
         else if(plant instanceof BlockModPlant) {
             LogHelper.debug("Getting fruit for agricraft plant");
-            items.addAll(((BlockModPlant) plant).getFruit(nr, world.rand));
+            items.addAll(((BlockModPlant) plant).getFruit(nr, rand));
         }
         //natura crop
         else if(ModIntegration.LoadedMods.natura && getPlantDomain(seed).equalsIgnoreCase("natura")) {
@@ -260,7 +261,7 @@ public abstract class SeedHelper {
         //other crop
         else {
             LogHelper.debug("Getting fruit from ore dictionary");
-            addFruitsFromOreDict(items, seed, meta, world.rand, nr);
+            addFruitsFromOreDict(items, seed, meta, rand, nr);
         }
         if(items.size()==0) {
             LogHelper.debug("Getting fruit from plant");
@@ -405,5 +406,9 @@ public abstract class SeedHelper {
         }
         chances[meta] = chance;
         return oldChance;
+    }
+
+    public static boolean isValidSeedStack(ItemStack stack) {
+        return stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds && isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage());
     }
 }

@@ -54,7 +54,6 @@ public class NEIConfig implements IConfigureNEI {
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.cactus, 1, i));
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.shroomRed, 1, i));
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.shroomBrown, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.nitorWart, 1, i));
             //hide botania crops
             if(ConfigurationHandler.integration_Botania) {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaWhite, 1, i));
@@ -82,6 +81,7 @@ public class NEIConfig implements IConfigureNEI {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.lapender, 1, i));
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.emeryllis, 1, i));
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.redstodendron, 1, i));
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.nitorWart, 1, i));
                 if(OreDictHelper.oreCopper!=null) {
                     AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.cuprosia, 1, i));
                 }

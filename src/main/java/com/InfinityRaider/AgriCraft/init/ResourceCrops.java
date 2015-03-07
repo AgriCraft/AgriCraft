@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
+import net.minecraft.init.*;
 
 public class ResourceCrops {
     public static BlockModPlant diamahlia;
@@ -23,6 +24,7 @@ public class ResourceCrops {
     public static BlockModPlant niccissus;
     public static BlockModPlant platiolus;
     public static BlockModPlant osmonium;
+    public static BlockModPlant nitorWart;
 
     public static void init() {
         if (ConfigurationHandler.resourcePlants) {
@@ -36,12 +38,14 @@ public class ResourceCrops {
             lapender = new BlockModPlant(farmland, net.minecraft.init.Blocks.lapis_ore, net.minecraft.init.Items.dye, 4, 3, 6);
             emeryllis = new BlockModPlant(farmland, net.minecraft.init.Blocks.emerald_ore, Items.nuggetEmerald, Items.nuggetEmeraldMeta, 5, 6);
             redstodendron = new BlockModPlant(farmland, net.minecraft.init.Blocks.redstone_ore, net.minecraft.init.Items.redstone, 0, 3, 6);
+            nitorWart = new BlockModPlant(net.minecraft.init.Blocks.soul_sand, net.minecraft.init.Blocks.glowstone, net.minecraft.init.Items.glowstone_dust, 4, 6);
             RegisterHelper.registerCrop(diamahlia, Names.Plants.diamahlia);
             RegisterHelper.registerCrop(ferranium, Names.Plants.ferranium);
             RegisterHelper.registerCrop(aurigold, Names.Plants.aurigold);
             RegisterHelper.registerCrop(lapender, Names.Plants.lapender);
             RegisterHelper.registerCrop(emeryllis, Names.Plants.emeryllis);
             RegisterHelper.registerCrop(redstodendron, Names.Plants.redstodendron);
+            RegisterHelper.registerCrop(nitorWart, Names.Plants.nitorWart);
             //Modded resources
             if(OreDictHelper.oreCopper!=null) {
                 cuprosia = new BlockModPlant(farmland, OreDictHelper.oreCopper, OreDictHelper.oreCopperMeta, Items.nuggetCopper, Items.nuggetCopperMeta, 3, 6);

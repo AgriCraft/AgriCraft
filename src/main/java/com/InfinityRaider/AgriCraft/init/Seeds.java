@@ -31,7 +31,6 @@ public class Seeds {
     public static ItemModSeed seedCactus;
     public static ItemModSeed seedShroomRed;
     public static ItemModSeed seedShroomBrown;
-    public static ItemModSeed seedNitorWart;
 
     //botania flower seeds
     public static ItemModSeed seedBotaniaWhite;
@@ -66,6 +65,7 @@ public class Seeds {
     public static ItemModSeed seedNiccissus;
     public static ItemModSeed seedPlatiolus;
     public static ItemModSeed seedOsmonium;
+    public static ItemModSeed seedNitorWart;
 
     public static void init() {
         //vanilla crop seeds
@@ -84,7 +84,6 @@ public class Seeds {
         seedCactus = new ItemModSeed(Crops.cactus, SeedInformation.cactus);
         seedShroomRed = new ItemModSeed(Crops.shroomRed, SeedInformation.shroomRed);
         seedShroomBrown = new ItemModSeed(Crops.shroomBrown, SeedInformation.shroomBrown);
-        seedNitorWart = new ItemModSeed(Crops.nitorWart, SeedInformation.nitorWart);
         RegisterHelper.registerSeed(seedPotato, Crops.potato);
         RegisterHelper.registerSeed(seedCarrot, Crops.carrot);
         RegisterHelper.registerSeed(seedSugarcane, Crops.sugarcane);
@@ -100,7 +99,6 @@ public class Seeds {
         RegisterHelper.registerSeed(seedCactus, Crops.cactus);
         RegisterHelper.registerSeed(seedShroomRed, Crops.shroomRed);
         RegisterHelper.registerSeed(seedShroomBrown, Crops.shroomBrown);
-        RegisterHelper.registerSeed(seedNitorWart, Crops.nitorWart);
 
         //register natura seeds to the ore dictionary if natura is installed
         if(ModIntegration.LoadedMods.natura) {
@@ -144,12 +142,14 @@ public class Seeds {
             seedLapender = new ItemModSeed(ResourceCrops.lapender, SeedInformation.lapender);
             seedEmeryllis = new ItemModSeed(ResourceCrops.emeryllis, SeedInformation.emeryllis);
             seedRedstodendron = new ItemModSeed(ResourceCrops.redstodendron, SeedInformation.redstodendron);
+            seedNitorWart = new ItemModSeed(ResourceCrops.nitorWart, SeedInformation.nitorWart);
             RegisterHelper.registerSeed(seedFerranium, ResourceCrops.ferranium);
             RegisterHelper.registerSeed(seedDiamahlia, ResourceCrops.diamahlia);
             RegisterHelper.registerSeed(seedAurigold, ResourceCrops.aurigold);
             RegisterHelper.registerSeed(seedLapender, ResourceCrops.lapender);
             RegisterHelper.registerSeed(seedEmeryllis, ResourceCrops.emeryllis);
             RegisterHelper.registerSeed(seedRedstodendron, ResourceCrops.redstodendron);
+            RegisterHelper.registerSeed(seedNitorWart, ResourceCrops.nitorWart);
             //modded resources
             if (OreDictHelper.oreCopper != null) {
                 seedCuprosia = new ItemModSeed(ResourceCrops.cuprosia, SeedInformation.cuprosia);
