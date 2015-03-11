@@ -99,7 +99,7 @@ public class CustomCrops {
                 if(success) {
                     int meta = seedStack.getItemDamage();
                     int weight = Integer.parseInt(dropData[1]);
-                    MinecraftForge.addGrassSeed(new ItemStack(drop, 1, meta), 10);
+                    MinecraftForge.addGrassSeed(new ItemStack(drop, 1, meta), weight);
                     LogHelper.info(new StringBuffer("Registered ").append(Item.itemRegistry.getNameForObject(drop)).append(":").append(meta).append(" as a drop from grass (weight: ").append(weight).append(')'));
                 }
             }
