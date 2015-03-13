@@ -31,6 +31,7 @@ public class Seeds {
     public static ItemModSeed seedCactus;
     public static ItemModSeed seedShroomRed;
     public static ItemModSeed seedShroomBrown;
+
     //botania flower seeds
     public static ItemModSeed seedBotaniaWhite;
     public static ItemModSeed seedBotaniaOrange;
@@ -48,6 +49,7 @@ public class Seeds {
     public static ItemModSeed seedBotaniaGreen;
     public static ItemModSeed seedBotaniaRed;
     public static ItemModSeed seedBotaniaBlack;
+
     //resource crop seeds
     public static ItemModSeed seedDiamahlia;
     public static ItemModSeed seedFerranium;
@@ -222,4 +224,3 @@ public class Seeds {
         }
     }
 }
-

@@ -8,6 +8,7 @@ import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -62,8 +63,8 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         this.sortButtonY = sortButtonY;
         this.setActiveSeedButtonOffset_X = setActiveSeedButtonsX;
         this.setActiveSeedButtonOffset_Y = setActiveSeedButtonsY;
-        this.seedSlotButtonOffset_X = this.guiLeft + seedSlotsX;
-        this.seedSlotButtonOffset_Y = this.guiTop + seedSlotsY;
+        this.seedSlotButtonOffset_X = seedSlotsX;
+        this.seedSlotButtonOffset_Y =seedSlotsY;
     }
 
     protected void loadButtons() {
@@ -88,7 +89,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
                 int xOffset = this.guiLeft + this.setActiveSeedButtonOffset_X + (16*i)%64;
                 int yOffset = this.guiTop + this.setActiveSeedButtonOffset_Y + 16*(i/4);
                 this.lastButtonId++;
-                this.setActiveSeedButtons.add(new ButtonSeedStorage.SetActiveSeed(this.lastButtonId, xOffset, yOffset, list.get(i)));
+                this.setActiveSeedButtons.add(new ButtonSeedStorage.SetActiveSeed(this, this.lastButtonId, xOffset, yOffset, list.get(i)));
             }
             this.buttonList.addAll(this.setActiveSeedButtons);
         }
@@ -105,7 +106,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
             for (int i = scrollPositionHorizontal; i < Math.min(list.size(), scrollPositionHorizontal + maxHorSlots); i++) {
                 SeedStorageSlot slot = list.get(i);
                 this.lastButtonId++;
-                seedSlotButtons.add(new ButtonSeedStorage.SeedSlot(this.lastButtonId, seedSlotButtonOffset_X + i * 16, seedSlotButtonOffset_Y, slot.getStack(this.activeSeed, this.activeMeta), slot.getId()));
+                seedSlotButtons.add(new ButtonSeedStorage.SeedSlot(this, this.lastButtonId, this.guiLeft + seedSlotButtonOffset_X + i * 16, this.guiTop + seedSlotButtonOffset_Y, slot.getStack(this.activeSeed, this.activeMeta), slot.getId()));
             }
         }
         this.buttonList.addAll(this.seedSlotButtons);
@@ -239,11 +240,13 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     //set active seed button class
     private static abstract class ButtonSeedStorage extends GuiButton {
         public ItemStack stack;
+        private GuiSeedStorageDummy gui;
 
-        public ButtonSeedStorage(int id, int xPos, int yPos, ItemStack stack) {
+        public ButtonSeedStorage(GuiSeedStorageDummy gui, int id, int xPos, int yPos, ItemStack stack) {
             super(id, xPos, yPos, 16, 16, "");
             this.stack = stack;
             this.visible=true;
+            this.gui = gui;
         }
 
         protected ResourceLocation getTexture() {
@@ -332,8 +335,8 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         }
 
         protected static final class SetActiveSeed extends ButtonSeedStorage {
-            public SetActiveSeed(int id, int xPos, int yPos, ItemStack seedStack) {
-                super(id, xPos, yPos, seedStack);
+            public SetActiveSeed(GuiSeedStorageDummy gui, int id, int xPos, int yPos, ItemStack seedStack) {
+                super(gui, id, xPos, yPos, seedStack);
             }
 
             /**
@@ -350,7 +353,8 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
                     GL11.glEnable(GL11.GL_BLEND);
                     OpenGlHelper.glBlendFunc(770, 771, 1, 0);
                     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                    this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 16, 16, 16);
+                    GuiScreen.itemRender.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stack, this.xPosition, this.yPosition);
+                    //this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 16, 16, 16);
                     this.mouseDragged(minecraft, x, y);
                     //render the tooltip if the mouse is over the button
                     if(this.getHoverState(true)==2) {
@@ -364,8 +368,8 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
 
         protected static final class SeedSlot extends ButtonSeedStorage {
             public int slotId;
-            public SeedSlot(int ButtonId, int xPos, int yPos, ItemStack seedStack, int slotId) {
-                super(ButtonId, xPos, yPos, seedStack);
+            public SeedSlot(GuiSeedStorageDummy gui, int ButtonId, int xPos, int yPos, ItemStack seedStack, int slotId) {
+                super(gui, ButtonId, xPos, yPos, seedStack);
                 this.slotId = slotId;
             }
 

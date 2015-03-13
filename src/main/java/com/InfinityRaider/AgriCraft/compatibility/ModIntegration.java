@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
+import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.AgriCraftHarvestable;
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.*;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.Aspects;
@@ -15,6 +16,9 @@ import powercrystals.minefactoryreloaded.api.FactoryRegistry;
 public class ModIntegration {
 
     public static void init() {
+        // Apple Core
+        AppleCoreHelper.init();
+
         //Hunger Overhaul
         if(LoadedMods.hungerOverhaul) {
             FMLInterModComms.sendMessage("HungerOverhaul", "BlacklistRightClick", "com.InfinityRaider.AgriCraft.blocks.BlockCrop");
