@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class AppleCoreHelper {
     public static final String MODID = "AppleCore";
-    public static final boolean isAppleCoreLoaded;
+    public static boolean isAppleCoreLoaded;
     public static boolean hasDispatcher;
 
     public static void init() {
