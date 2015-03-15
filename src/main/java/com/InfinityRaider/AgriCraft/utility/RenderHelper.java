@@ -8,10 +8,8 @@ import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHel
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.mark719.magicalcrops.crops.BlockMagicalCrops;
 import ivorius.psychedelicraft.blocks.IvTilledFieldPlant;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;

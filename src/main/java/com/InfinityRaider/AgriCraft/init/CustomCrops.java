@@ -1,11 +1,8 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.ItemCrop;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
@@ -29,13 +26,13 @@ public class CustomCrops {
             customSeeds = new ItemModSeed[cropsRawData.length];
             for(int i=0;i<cropsRawData.length;i++) {
                 String[] cropData = IOHelper.getData(cropsRawData[i]);
-//cropData[0]: name
-//cropData[1]: fruit name:meta
-//cropData[2]: soil
-//cropData[3]: base block name:meta
-//cropData[4]: tier
-//cropData[5]: render type
-//cropData[6]: information
+                //cropData[0]: name
+                //cropData[1]: fruit name:meta
+                //cropData[2]: soil
+                //cropData[3]: base block name:meta
+                //cropData[4]: tier
+                //cropData[5]: render type
+                //cropData[6]: information
                 boolean success = cropData.length==7;
                 String errorMsg = "Incorrect amount of arguments, arguments should be: (name, fruit:fruitMeta, soil, baseBlock:baseBlockMeta, tier, renderType, information)";
                 LogHelper.debug(new StringBuffer("parsing ").append(cropsRawData[i]));
@@ -67,6 +64,7 @@ public class CustomCrops {
             LogHelper.info("Custom crops registered");
         }
     }
+
     public static void initGrassSeeds() {
         if(ConfigurationHandler.wipeTallGrassDrops) {
             List seedList = null;

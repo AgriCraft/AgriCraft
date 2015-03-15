@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.compatibility.gardenstuff;
 
 import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
 import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 

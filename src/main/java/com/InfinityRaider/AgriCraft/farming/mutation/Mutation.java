@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 

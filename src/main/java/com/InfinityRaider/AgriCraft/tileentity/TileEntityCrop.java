@@ -2,7 +2,8 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
-import com.InfinityRaider.AgriCraft.farming.mutation.*;
+import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
+import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;

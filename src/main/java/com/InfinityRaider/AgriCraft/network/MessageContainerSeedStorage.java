@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.network;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageController;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
