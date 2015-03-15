@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.google.common.hash.Hashing;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 

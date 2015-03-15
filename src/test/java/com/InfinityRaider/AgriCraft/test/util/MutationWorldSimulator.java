@@ -3,8 +3,8 @@ package com.InfinityRaider.AgriCraft.test.util;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import net.minecraft.world.World;
 import net.minecraft.item.ItemSeeds;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import static org.mockito.Mockito.mock;
