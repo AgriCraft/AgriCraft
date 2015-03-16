@@ -2,7 +2,7 @@
 itemGroup.agricraft=Agricraft
 
 //Items
-item.agricraft:cropsItem.name=crops
+item.agricraft:cropsItem.name=Crops
 item.agricraft:journal.name=Agricultural Journal
 item.agricraft:trowel.name=Gardening Trowel
 item.agricraft:magnifyingGlass.name=Magnifying Glass
