@@ -148,3 +148,12 @@ sourceSets {
         }
     }
 }
+
+task apiJar(type: Jar) {
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+    include 'com/InfinityRaider/AgriCraft/api/**/*'
+    classifier = 'api'
+}
+
+build.dependsOn apiJar

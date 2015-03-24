@@ -1,12 +1,14 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.InfinityRaider.AgriCraft.api.v1.IBlockWithMeta;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 /**
  * Simple utility class combining a Block with a meta value.
  */
-public class BlockWithMeta {
+public class BlockWithMeta implements IBlockWithMeta {
 
     private final Block block;
     private final int meta;
@@ -26,15 +28,27 @@ public class BlockWithMeta {
         this.ignoreMeta = fuzzy;
     }
 
-    public Block getBlock() {
+    /* (non-Javadoc)
+	 * @see com.InfinityRaider.AgriCraft.utility.IBlockWithMeta#getBlock()
+	 */
+    @Override
+	public Block getBlock() {
         return block;
     }
 
-    public int getMeta() {
+    /* (non-Javadoc)
+	 * @see com.InfinityRaider.AgriCraft.utility.IBlockWithMeta#getMeta()
+	 */
+    @Override
+	public int getMeta() {
         return meta;
     }
 
-    public boolean ignoreMeta() {
+    /* (non-Javadoc)
+	 * @see com.InfinityRaider.AgriCraft.utility.IBlockWithMeta#ignoreMeta()
+	 */
+    @Override
+	public boolean ignoreMeta() {
         return ignoreMeta;
     }
 
