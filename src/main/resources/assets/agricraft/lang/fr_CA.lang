@@ -37,6 +37,7 @@ item.agricraft:seedDaisy.name=Graine de marguerite
 item.agricraft:seedCactus.name=Graines de cactus
 item.agricraft:seedShroomRed.name=Spores de champignon rouge
 item.agricraft:seedShroomBrown.name=Spores de champignon brun
+item.agricraft:seedNitorWart.name=Spores de verrues du Nitor
 
 item.agricraft:seedBotaniaWhite.name=Graines de fleur mystique blanche
 item.agricraft:seedBotaniaOrange.name=Graines de fleur mystique orange
@@ -97,6 +98,7 @@ tile.agricraft:cropDaisy.name=Marguerite
 tile.agricraft:cropCactus.name=Cactus
 tile.agricraft:cropShroomRed.name=Champignon rouge
 tile.agricraft:cropShroomBrown.name=Champignon brun
+tile.agricraft:cropNitorWart.name=Verrues du Nitor
 
 tile.agricraft:cropBotaniaWhite.name=Fleur mystique blanche
 tile.agricraft:cropBotaniaOrange.name=Fleur mystique orange
@@ -188,6 +190,7 @@ agricraft_journal.daisy=Les marguerites sont plutôt communes, mais restent néa
 agricraft_journal.cactus=Le cactus peut être cultivé pour produire une substance colorée verte souvent utilisée comme colorant.
 agricraft_journal.shroomRed=Ce champignon rouge goûte plutôt bon actuellement et cela en fait un bon ingrédient pour de la crème de champignons.
 agricraft_journal.shroomBrown=Ce champignon brun goûte plutôt bon actuellement et cela en fait un bon ingrédient pour de la crème de champignons.
+agricraft_journal.nitorWart=On croyait que cette plante du Nether était éteinte, les anciens parlent d'elle extrayant les particules de glowstone de l'environnement pour produire de la poudre lumineuse.
 agricraft_journal.diamahlia=Beaucoup croient encore que cette fleur existe uniquement dans les contes et les légendes. Toutefois, certains agriculteurs affirment avoir réussi à obtenir cette plante légendaire.
 agricraft_journal.aurigold=L'aurigold est une fleur rare et légendaire qui se nourrit de minuscules fragments d'or dans le sol. Seul un très patient agriculteur expérimenté est capable de cultiver ce bijou.
 agricraft_journal.ferranium=Les racines de cette plante étrange se fichent de l'eau. Elles s'enterrent dans le sol tout en absorbant des particules de fer pour se renforcer.
