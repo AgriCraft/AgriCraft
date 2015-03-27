@@ -62,7 +62,7 @@ public class Items {
             handRake = new ItemHandRake();
             RegisterHelper.registerItem(handRake, Names.Objects.handRake);
         }
-        LogHelper.info("Items Registered");
+        LogHelper.debug("Items Registered");
 }
 
     //fruits

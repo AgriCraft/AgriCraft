@@ -3,11 +3,16 @@ package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.minecraft.MineTweakerMC;
+import minetweaker.mc1710.item.MCItemStack;
+import minetweaker.mc1710.oredict.MCOreDictEntry;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -32,7 +37,7 @@ public class CropProduct {
             MineTweakerAPI.logError("Adding fruit: '"+fruitToAdd.getDisplayName()+"' to '"+seedToChange.getDisplayName()+"' failed: "+error);
         }
     }
-
+    
     @ZenMethod
     public static void remove(IItemStack seed, IItemStack fruit) {
         ItemStack seedToChange = MineTweakerMC.getItemStack(seed);
@@ -56,7 +61,6 @@ public class CropProduct {
         private BlockModPlant crop;
         private ItemStack fruit;
         private int weight;
-
         public AddAction(BlockModPlant crop, ItemStack fruitToAdd, int weight) {
             this.crop = crop;
             this.fruit = fruitToAdd.copy();
@@ -67,6 +71,11 @@ public class CropProduct {
         @Override
         public void apply() {
             crop.products.addProduce(fruit, weight);
+            String oreDictTag = this.fruitTag();
+            LogHelper.debug("Registering "+fruit.getDisplayName()+" to the ore dictionary as "+oreDictTag);
+            if(!OreDictHelper.hasOreId(fruit, oreDictTag)) {
+                OreDictionary.registerOre(oreDictTag, fruit);
+            }
         }
 
         @Override
@@ -77,6 +86,8 @@ public class CropProduct {
         @Override
         public void undo() {
             crop.products.removeProduce(fruit);
+            MCOreDictEntry ore = new MCOreDictEntry(this.fruitTag());
+            ore.remove(new MCItemStack(this.fruit));
         }
 
         @Override
@@ -93,13 +104,15 @@ public class CropProduct {
         public Object getOverrideKey() {
             return null;
         }
+        private String fruitTag() {
+            return crop.getUnlocalizedName().substring(crop.getUnlocalizedName().indexOf(':'));
+        }
     }
 
     private static class RemoveAction implements IUndoableAction {
         private BlockModPlant crop;
         private ItemStack fruit;
         private int weight;
-
         public RemoveAction(BlockModPlant crop, ItemStack fruit) {
             this.crop = crop;
             this.fruit = fruit.copy();
@@ -110,6 +123,8 @@ public class CropProduct {
         @Override
         public void apply() {
             crop.products.removeProduce(fruit);
+            MCOreDictEntry ore = new MCOreDictEntry(this.fruitTag());
+            ore.remove(new MCItemStack(this.fruit));
         }
 
         @Override
@@ -120,6 +135,11 @@ public class CropProduct {
         @Override
         public void undo() {
             crop.products.addProduce(fruit, weight);
+            String oreDictTag = this.fruitTag();
+            LogHelper.debug("Registering " + fruit.getDisplayName() + " to the ore dictionary as " + oreDictTag);
+            if(!OreDictHelper.hasOreId(fruit, oreDictTag)) {
+                OreDictionary.registerOre(oreDictTag, fruit);
+            }
         }
 
         @Override
@@ -135,6 +155,9 @@ public class CropProduct {
         @Override
         public Object getOverrideKey() {
             return null;
+        }
+        private String fruitTag() {
+            return crop.getUnlocalizedName().substring(crop.getUnlocalizedName().indexOf(':'));
         }
     }
 }

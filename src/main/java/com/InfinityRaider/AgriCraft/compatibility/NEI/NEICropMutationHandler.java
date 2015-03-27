@@ -10,8 +10,6 @@ import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -47,11 +45,10 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
 
             GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement((ItemSeeds) result.item.getItem(), result.item.getItemDamage());
             if (growthReq.getSoil() != null) {
-                Block soilBlock = growthReq.getSoil().getBlock();
-                soils.add(new PositionedStack(new ItemStack(soilBlock), Constants.nei_X3, Constants.nei_Y2));
+                soils.add(new PositionedStack(growthReq.getSoil().toStack(), Constants.nei_X3, Constants.nei_Y2));
             } else {
                 for (BlockWithMeta blockWithMeta : GrowthRequirements.defaultSoils) {
-                    soils.add(new PositionedStack(new ItemStack(blockWithMeta.getBlock()), Constants.nei_X3, Constants.nei_Y2));
+                    soils.add(new PositionedStack(blockWithMeta.toStack(), Constants.nei_X3, Constants.nei_Y2));
                 }
             }
 

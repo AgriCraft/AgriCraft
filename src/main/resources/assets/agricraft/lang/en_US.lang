@@ -2,7 +2,7 @@
 itemGroup.agricraft=Agricraft
 
 //Items
-item.agricraft:cropsItem.name=crops
+item.agricraft:cropsItem.name=Crops
 item.agricraft:journal.name=Agricultural Journal
 item.agricraft:trowel.name=Gardening Trowel
 item.agricraft:magnifyingGlass.name=Magnifying Glass
@@ -34,8 +34,9 @@ item.agricraft:seedTulipWhite.name=White Tulip Seeds
 item.agricraft:seedTulipPink.name=Pink Tulip Seeds
 item.agricraft:seedDaisy.name=Daisy Seeds
 item.agricraft:seedCactus.name=Cactus Seeds
-item.agricraft:seedShroomRed.name=Red Mushroom Spore
-item.agricraft:seedShroomBrown.name=Brown Mushroom Seeds
+item.agricraft:seedShroomRed.name=Red Mushroom Spores
+item.agricraft:seedShroomBrown.name=Brown Mushroom Spores
+item.agricraft:seedNitorWart.name=Nitor Wart Spores
 
 item.agricraft:seedBotaniaWhite.name=Mystical White Flower Seeds
 item.agricraft:seedBotaniaOrange.name=Mystical Orange Flower Seeds
@@ -97,6 +98,7 @@ tile.agricraft:cropDaisy.name=Daisy
 tile.agricraft:cropCactus.name=Cactus
 tile.agricraft:cropShroomRed.name=Red Mushroom
 tile.agricraft:cropShroomBrown.name=Brown Mushroom
+tile.agricraft:cropNitorWart.name=Nitor Wart
 
 tile.agricraft:cropBotaniaWhite.name=Mystical White Flower
 tile.agricraft:cropBotaniaOrange.name=Mystical Orange Flower
@@ -165,7 +167,7 @@ agricraft_nei.nearby=Nearby
 //journal entries
 //---------------
 //headers
-agricraft_journal.introduction=Welcome to Agricultural farming, today I will teach you the basics of farming with crops. To start you will need to put 4 sticks in a crafting grid, this will make crops. These can be put on farmland and seeds can then be planted in them. You can also apply a second set of crops to an existing crop, this will create a cross-crop. If you plant two or more plants in crops adjacent to a cross-crop, there is a chance for a mutation to occur. \nIn this journal you can keep track of all your discovered crop mutations. To register a discovered seed, put the journal in a seed-analyser and then analyse the seed. This will reveal to you the properties of the seed as well as registering it in this journal. If you ever wish to copy the journal, put it in a crafting grid together with a blank book and quill.
+agricraft_journal.introduction=Welcome to Agricultural farming, today I will teach you the basics of farming with crops. To start you will need to put 4 sticks in a crafting grid, this will make crops. These can be put on farmland and seeds can then be planted in them. You can also apply a second set of crops to an existing crop, this will create a cross-crop. If you plant two or more plants in crops adjacent to a cross-crop, there is a chance for a mutation to occur. In this journal you can keep track of all your discovered crop mutations. To register a discovered seed, put the journal in a seed-analyser and then analyse the seed. This will reveal to you the properties of the seed as well as registering it in this journal. If you ever wish to copy the journal, put it in a crafting grid together with a blank book and quill.
 agricraft_journal.information=Information
 agricraft_journal.tier=Tier
 agricraft_journal.fruits=Fruits
@@ -188,6 +190,7 @@ agricraft_journal.daisy=Daisies are quite common, but nonetheless pretty white f
 agricraft_journal.cactus=Cacti can be grown to produce a green tinted substance which is often used as dye.
 agricraft_journal.shroomRed=This red fungus tastes actually quite nice and would make a fine ingredient for mushroom stew.
 agricraft_journal.shroomBrown=This brown fungus tastes actually quite nice and would make a fine ingredient for mushroom stew.
+agricraft_journal.nitorWart=This nether crop was believed to be extinct, elders speak of it extracting glowstone particles from the environment to produce bright dusts.
 agricraft_journal.diamahlia=Many still believe this flower only exists in tales and stories. However some agriculturists say they have succeeded in obtaining this legendary plant.
 agricraft_journal.aurigold=Aurigold is a rare and fabled flower that feeds on tiny fractions of gold in the soil, only a very patient and skilled agriculturist is able to cultivate this jewel.
 agricraft_journal.ferranium=This strange plant's roots do not care for water. They just burrow in the soil while absorbing iron particles to strengthen itself.

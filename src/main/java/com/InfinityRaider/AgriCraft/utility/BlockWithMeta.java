@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.google.common.hash.Hashing;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -11,14 +10,20 @@ public class BlockWithMeta {
 
     private final Block block;
     private final int meta;
+    private final boolean ignoreMeta;
 
     public BlockWithMeta(Block block) {
-        this(block, 0);
+        this(block, 0, true);
     }
 
     public BlockWithMeta(Block block, int meta) {
+        this(block, meta, false);
+    }
+
+    public BlockWithMeta(Block block, int meta, boolean fuzzy) {
         this.block = block;
         this.meta = meta;
+        this.ignoreMeta = fuzzy;
     }
 
     public Block getBlock() {
@@ -27,6 +32,10 @@ public class BlockWithMeta {
 
     public int getMeta() {
         return meta;
+    }
+
+    public boolean ignoreMeta() {
+        return ignoreMeta;
     }
 
     public ItemStack toStack() {
@@ -40,18 +49,18 @@ public class BlockWithMeta {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
+        if (obj == null) {
+            return false;
+        }
         if (obj instanceof BlockWithMeta) {
             BlockWithMeta block = (BlockWithMeta) obj;
-            return block.block == this.block && block.meta == this.meta;
+            if(this.ignoreMeta || block.ignoreMeta) {
+                return block.block == this.block;
+            }
+            else {
+                return block.block == this.block && block.meta == this.meta;
+            }
         }
         return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Hashing.md5().newHasher()
-                .putInt(block.hashCode())
-                .putInt(meta).hash().asInt();
     }
 }

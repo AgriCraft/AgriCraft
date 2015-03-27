@@ -11,9 +11,11 @@ import java.util.Random;
 
 public class AppleCoreHelper {
     public static final String MODID = "AppleCore";
-    public static final boolean isAppleCoreLoaded = Loader.isModLoaded(AppleCoreHelper.MODID);
+    public static boolean isAppleCoreLoaded;
     public static boolean hasDispatcher;
-    static {
+
+    public static void init() {
+        isAppleCoreLoaded = Loader.isModLoaded(AppleCoreHelper.MODID);
         try {
             hasDispatcher = isAppleCoreLoaded && Class.forName("squeek.applecore.api.IAppleCoreDispatcher") != null;
         } catch(ClassNotFoundException e) {

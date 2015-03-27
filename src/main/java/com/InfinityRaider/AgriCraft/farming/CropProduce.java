@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CropProduce {
-    public static final int DEFAULT_WEIGHT = 10;
+    public static final int DEFAULT_WEIGHT = 100;
     private ArrayList<Product> products = new ArrayList<Product>();
     private int totalWeight;
 
@@ -18,11 +18,19 @@ public class CropProduce {
         this.addProduce(stack, weight, false);
     }
 
+    public void addProduce(ItemStack stack, int weight, int minGain) {
+        this.addProduce(stack, weight, minGain, false);
+    }
+
     public void addProduce(ItemStack stack, int weight, boolean overwrite) {
+        this.addProduce(stack, weight, 1, overwrite);
+    }
+
+    public void addProduce(ItemStack stack, int weight, int minGain, boolean overwrite) {
         if(overwrite) {
             this.removeProduce(stack);
         }
-        this.products.add(new Product(stack, weight));
+        this.products.add(new Product(stack, weight, minGain));
         this.totalWeight = this.totalWeight + weight;
     }
 
@@ -79,11 +87,17 @@ public class CropProduce {
     private static class Product {
         protected ItemStack product;
         protected int weight;
+        protected int minGain;
 
         public Product(ItemStack product, int weight) {
+            this(product, weight, 1);
+        }
+
+        public Product(ItemStack product, int weight, int minGain) {
             this.product = product.copy();
             this.product.stackSize = 1;
             this.weight = weight;
+            this.minGain = minGain;
         }
     }
 }

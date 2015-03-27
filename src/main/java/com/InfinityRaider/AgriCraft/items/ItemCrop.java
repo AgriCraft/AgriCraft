@@ -22,7 +22,7 @@ public class ItemCrop extends ModItem {
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
-            if (GrowthRequirements.isSoilValid(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z)) && world.getBlock(x, y + 1, z).getMaterial()== Material.air && side == 1) {
+            if (GrowthRequirements.isSoilValid(world, x, y, z) && world.getBlock(x, y + 1, z).getMaterial()== Material.air && side == 1) {
                 world.setBlock(x, y + 1, z, Blocks.blockCrop);
                 stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
                 return false;

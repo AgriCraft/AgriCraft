@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
+import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.AgriCraftHarvestable;
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.*;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.Aspects;
@@ -15,6 +16,9 @@ import powercrystals.minefactoryreloaded.api.FactoryRegistry;
 public class ModIntegration {
 
     public static void init() {
+        // Apple Core
+        AppleCoreHelper.init();
+
         //Hunger Overhaul
         if(LoadedMods.hungerOverhaul) {
             FMLInterModComms.sendMessage("HungerOverhaul", "BlacklistRightClick", "com.InfinityRaider.AgriCraft.blocks.BlockCrop");
@@ -67,6 +71,8 @@ public class ModIntegration {
         public static boolean extraUtilities;
         public static boolean botania;
         public static boolean tconstruct;
+        public static boolean gardenStuff;
+        public static boolean psychedelicraft;
 
         public static void init() {
             nei = Loader.isModLoaded(Names.Mods.nei);
@@ -89,6 +95,8 @@ public class ModIntegration {
             extraUtilities = Loader.isModLoaded(Names.Mods.extraUtilities);
             botania = Loader.isModLoaded(Names.Mods.botania);
             tconstruct = Loader.isModLoaded(Names.Mods.tconstruct);
+            gardenStuff = Loader.isModLoaded(Names.Mods.gardenStuff);
+            psychedelicraft = Loader.isModLoaded(Names.Mods.psychedelicraft);
 
             LogHelper.info("Checking for loaded mods:");
             LogHelper.info(" - NEI loaded: "+nei);
@@ -111,6 +119,8 @@ public class ModIntegration {
             LogHelper.info(" - ExtraUtilities loaded: "+extraUtilities);
             LogHelper.info(" - Botania loaded: "+botania);
             LogHelper.info(" - Tinker's Construct loaded: "+tconstruct);
+            LogHelper.info(" - Garden Stuff loaded: "+gardenStuff);
+            LogHelper.info(" - Psychedelicraft loaded: "+psychedelicraft);
             LogHelper.info("Done");
         }
     }

@@ -81,7 +81,7 @@ public abstract class MutationHandler {
     }
 
     //gets all the possible crossovers
-    public static Mutation[] getCrossOvers(TileEntityCrop[] crops) {
+    public static Mutation[] getCrossOvers(List<TileEntityCrop> crops) {
         TileEntityCrop[] parents = MutationHandler.getParents(crops);
         ArrayList<Mutation> list = new ArrayList<Mutation>();
         switch (parents.length) {
@@ -106,7 +106,7 @@ public abstract class MutationHandler {
     }
 
     //gets an array of all the possible parents from the array containing all the neighbouring crops
-    private static TileEntityCrop[] getParents(TileEntityCrop[] input) {
+    private static TileEntityCrop[] getParents(List<TileEntityCrop> input) {
         ArrayList<TileEntityCrop> list = new ArrayList<TileEntityCrop>();
         for(TileEntityCrop crop:input) {
             if (crop != null && crop.isMature()) {
@@ -135,46 +135,78 @@ public abstract class MutationHandler {
     }
 
     //logic for stat inheritance
-    public static int[] getStats(TileEntityCrop[] input, boolean mutation) {
-        int[] output = new int[3];
-        TileEntityCrop[] neighbors = getParents(input);
-        int size = neighbors.length;
+    public static void setResultStats(CrossOverResult result, List<TileEntityCrop> input, boolean mutation) {
+        TileEntityCrop[] parents = getParents(input);
+        int size = parents.length;
         int[] growth = new int[size];
         int[] gain = new int[size];
         int[] strength = new int[size];
         for(int i=0;i<size;i++) {
-            growth[i] = neighbors[i].growth;
-            gain[i] = neighbors[i].gain;
-            strength[i] = neighbors[i].strength;
+            int multiplier = ConfigurationHandler.spreadingDifficulty;
+            if(multiplier>1) {
+                //multiplier is the difficulty
+                //1: this code isn't reached and all surrounding crops affect stat gain positively (multiplier = 1 for incompatible crops)
+                //2: only parent/identical seeds can affect stat gain (multiplier = -1 for incompatible crops)
+                //3: any neighbouring plant that isn't a parent/same seed affects stat gain negatively (multiplier = 0 for incompatible crops)
+                multiplier = canInheritStats(result.getSeed(), result.getMeta(), parents[i].seed, parents[i].seedMeta)?1:(multiplier==3?0:-1);
+            }
+            growth[i] = multiplier * parents[i].growth;
+            gain[i] = multiplier*parents[i].gain;
+            strength[i] = multiplier*parents[i].strength;
         }
         int meanGrowth = getMean(growth);
         int meanGain = getMean(gain);
         int meanStrength = getMean(strength);
-        int divisor = mutation?1:ConfigurationHandler.cropStatDivisor;
-        output[0] = Math.max(1, getGain(meanGrowth, size)/divisor);
-        output[1] = Math.max(1, getGain(meanGain, size)/divisor);
-        output[2] = Math.max(1, getGain(meanStrength, size)/divisor);
-        for(int i=0;i<output.length;i++) {
-            output[i] = output[i]>ConfigurationHandler.cropStatCap?ConfigurationHandler.cropStatCap:output[i];
-        }
-        return output;
+        int divisor = mutation?ConfigurationHandler.cropStatDivisor:1;
+        result.setStats(calculateStats(meanGrowth, size, divisor), calculateStats(meanGain, size, divisor), calculateStats(meanStrength, size, divisor));
     }
 
-    //returns the mean value of an int array
+    /**returns the mean value of an int array, this ignores negative values in the array*/
     private static int getMean(int[] input) {
+        int sum = 0;
+        int total = input.length;
         int mean = 0;
-        if(input.length>0) {
+        if(total>0) {
             for (int nr : input) {
-                mean = mean + nr;
+                if(nr>=0) {
+                    sum = sum + nr;
+                }
+                else {
+                    total--;
+                }
             }
-            mean = Math.round(((float) mean) / ((float) input.length));
+            if(total>0) {
+                mean = Math.round(((float) sum) / ((float) total));
+            }
         }
         return mean;
     }
 
-    //returns the added value for a statistic
-    private static int getGain(int input, int neighbors) {
-       return input+ (int) Math.round(Math.abs(neighbors-2)*Math.random());
+    /** calculates the new stats based on an input stat, the nr of neighbours and a divisor*/
+    private static int calculateStats(int input, int neighbours, int divisor) {
+        if(neighbours == 1 && ConfigurationHandler.singleSpreadsIncrement) {
+            neighbours = 2;
+        }
+        return Math.max(1, (input + (int) Math.round(Math.abs(neighbours-1)*Math.random()))/divisor);
+    }
+
+    private static boolean canInheritStats(ItemSeeds child, int childMeta, ItemSeeds seed, int seedMeta) {
+        boolean b = child==seed && childMeta==seedMeta;
+        if(!b) {
+            for(Mutation mutation:getParentMutations(child, childMeta)) {
+                if(mutation!=null) {
+                    if(mutation.parent1.getItem()==seed && mutation.parent1.getItemDamage()==seedMeta) {
+                        b = true;
+                        break;
+                    }
+                    else if(mutation.parent2.getItem()==seed && mutation.parent2.getItemDamage()==seedMeta) {
+                        b = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return b;
     }
 
     //removes null instance from a mutations array
@@ -210,6 +242,10 @@ public abstract class MutationHandler {
             }
         }
         return list.toArray(new Mutation[list.size()]);
+    }
+
+    public static Mutation[] getParentMutations(ItemSeeds seed, int meta) {
+        return getParentMutations(new ItemStack(seed, 1, meta));
     }
 
     //gets the parents this crop mutates from

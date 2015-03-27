@@ -27,6 +27,10 @@ repositories {
         name "squeek"
         url "http://www.ryanliptak.com/maven/"
     }
+    ivy {
+        name "MineTweaker3"
+        artifactPattern "http://minetweaker3.powerofbytes.com/download/[module]-[revision].[ext]"
+    }
 }
 
 apply plugin: 'forge'
@@ -65,6 +69,8 @@ dependencies {
 
     // http://www.ryanliptak.com/maven/
     compile "applecore:AppleCore:1.7.10-1.0.2+87.f5270:api"
+
+    compile name: 'MineTweaker3', version: "Dev-${config.version.minecraft}-${config.version.minetweaker}", ext: 'jar'
 
     // Test dependencies
     testCompile "junit:junit:4.12"
@@ -110,7 +116,7 @@ curse {
     apiKey = System.env.CFKEY
     projectId = "225635"
     changelog = """
-            See http://forum.feed-the-beast.com/threads/1-7-10-agricraft.50964/
+            See https://github.com/InfinityRaider/AgriCraft/blob/master/src/main/resources/changelog.txt
     """
     releaseType = project.hasProperty('releaseType') ? project.releaseType : ""
 }

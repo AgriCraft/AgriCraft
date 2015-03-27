@@ -14,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -387,7 +386,8 @@ public class GuiJournal extends GuiScreen {
         if(soil!=null) {
             this.renderIconInGui(this.guiLeft + 26, this.guiTop + 11, RenderHelper.getBlockResource(soil.getBlock().getIcon(1, soil.getMeta())));
         }
-        this.renderIconInGui(this.guiLeft + 25, this.guiTop + 11, RenderHelper.getItemResource(seedIcon));
+        GuiScreen.itemRender.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), seed, this.guiLeft + 25, this.guiTop + 11);
+        //this.renderIconInGui(this.guiLeft + 25, this.guiTop + 11, RenderHelper.getItemResource(seedIcon));
         float scale = 0.8F;
         while(this.fontRendererObj.getStringWidth(title)*scale>74) {
             scale = scale - 0.1F;
@@ -438,15 +438,7 @@ public class GuiJournal extends GuiScreen {
             drawTexturedModalRect(xOffset-1+i*24, yOffset-1, 0, 238, 18, 18);
             GL11.glEnable(GL11.GL_LIGHTING);
             //draw the fruit texture
-                ResourceLocation texture;
-                if (fruits[i].getItem() instanceof ItemBlock) {
-                    texture = RenderHelper.getBlockResource(fruitIcons[i]);
-                    Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-                } else {
-                    texture = RenderHelper.getItemResource(fruitIcons[i]);
-                    Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-                }
-                this.renderIconInGui(xOffset+i*24, yOffset, texture);
+            GuiScreen.itemRender.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), fruits[i], xOffset+i*24, yOffset);
             }
         }
         scale = 0.5F;

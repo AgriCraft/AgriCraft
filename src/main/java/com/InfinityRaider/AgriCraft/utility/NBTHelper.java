@@ -9,10 +9,14 @@ import net.minecraft.nbt.NBTTagList;
 
 public abstract class NBTHelper {
     public static NBTTagCompound getMaterialTag(ItemStack stack) {
-        NBTTagCompound tag = new NBTTagCompound();
+        NBTTagCompound tag = null;
         if(stack!=null && stack.getItem()!=null) {
-            tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(((ItemBlock) stack.getItem()).field_150939_a));
-            tag.setInteger(Names.NBT.materialMeta, stack.getItemDamage());
+            String name = Block.blockRegistry.getNameForObject(((ItemBlock) stack.getItem()).field_150939_a);
+            if(name!=null && !name.equals("")) {
+                tag = new NBTTagCompound();
+                tag.setString(Names.NBT.material, name);
+                tag.setInteger(Names.NBT.materialMeta, stack.getItemDamage());
+            }
         }
         return tag;
     }
@@ -52,6 +56,8 @@ public abstract class NBTHelper {
     }
 
     public static void sortStacks(NBTTagList list) {
+        //clear empty tags from the list
+        clearEmptyStacksFromNBT(list);
         //if the list has no or one stack, nothing has to be sorted
         if(list.tagCount()<2) {
             return;
@@ -83,6 +89,15 @@ public abstract class NBTHelper {
             NBTTagCompound tag = new NBTTagCompound();
             stack.writeToNBT(tag);
             list.appendTag(tag);
+        }
+    }
+
+    public static void clearEmptyStacksFromNBT(NBTTagList list) {
+        for(int i=list.tagCount()-1;i>=0;i--) {
+            ItemStack stack = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(i));
+            if(stack==null || stack.getItem()==null) {
+                list.removeTag(i);
+            }
         }
     }
 }

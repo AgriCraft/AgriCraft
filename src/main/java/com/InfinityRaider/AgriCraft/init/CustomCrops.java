@@ -1,11 +1,8 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.ItemCrop;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
@@ -22,7 +19,6 @@ import java.util.List;
 public class CustomCrops {
     public static BlockModPlant[] customCrops;
     public static ItemModSeed[] customSeeds;
-
     public static void initCustomCrops() {
         if(ConfigurationHandler.customCrops) {
             String[] cropsRawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readCustomCrops());
@@ -55,13 +51,10 @@ public class CustomCrops {
                         int tier = Integer.parseInt(cropData[4]);
                         int renderType = Integer.parseInt(cropData[5]);
                         String info = cropData[6];
-
                         customCrops[i] = new BlockModPlant(soil, baseBlock, baseMeta, fruit, fruitMeta, tier, renderType, true);
-                        RegisterHelper.registerBlock(customCrops[i], Names.Objects.crop + Character.toUpperCase(name.charAt(0)) + name.substring(1));
-
+                        RegisterHelper.registerCrop(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1));
                         customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds", info);
-                        RegisterHelper.registerSeed(customSeeds[i], Names.Objects.seed + Character.toUpperCase(name.charAt(0)) + name.substring(1), customCrops[i]);
-
+                        RegisterHelper.registerSeed(customSeeds[i], customCrops[i]);
                     }
                 }
                 if(!success) {
@@ -106,7 +99,7 @@ public class CustomCrops {
                 if(success) {
                     int meta = seedStack.getItemDamage();
                     int weight = Integer.parseInt(dropData[1]);
-                    MinecraftForge.addGrassSeed(new ItemStack(drop, 1, meta), 10);
+                    MinecraftForge.addGrassSeed(new ItemStack(drop, 1, meta), weight);
                     LogHelper.info(new StringBuffer("Registered ").append(Item.itemRegistry.getNameForObject(drop)).append(":").append(meta).append(" as a drop from grass (weight: ").append(weight).append(')'));
                 }
             }

@@ -10,7 +10,7 @@ import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import com.InfinityRaider.AgriCraft.renderers.*;
-import com.InfinityRaider.AgriCraft.tileentity.*;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
@@ -97,7 +97,7 @@ public class ClientProxy extends CommonProxy {
             VillagerRegistry.instance().registerVillagerSkin(78943, new ResourceLocation("textures/entity/villager/farmer.png"));  //For now, it uses the texture for the vanilla farmer
         }
 
-        LogHelper.info("Renderers registered");
+        LogHelper.debug("Renderers registered");
     }
 
     //register forge event handlers

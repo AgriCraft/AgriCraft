@@ -3,8 +3,6 @@ package com.InfinityRaider.AgriCraft.utility;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -114,6 +112,9 @@ public abstract class IOHelper {
             else {
                 data = data + '\n' + chococraftMutations;
             }
+        }
+        if(ConfigurationHandler.integration_Psychedelicraft && ModIntegration.LoadedMods.psychedelicraft) {
+            data = data + '\n' + psychedelicraftMutations;
         }
         return data;
     }
@@ -295,6 +296,7 @@ public abstract class IOHelper {
             "harvestcraft:kiwiseedItem=harvestcraft:cantaloupeseedItem+harvestcraft:strawberryseedItem\n" +
             "harvestcraft:leekseedItem=harvestcraft:scallionseedItem+harvestcraft:celeryseedItem\n" +
             "harvestcraft:lettuceseedItem=AgriCraft:seedDaisy+harvestcraft:celeryseedItem\n" +
+            "harvestcraft:spinachseedItem=harvestcraft:lettuceseedItem+AgriCraft:seedCactus\n" +
             "harvestcraft:mustardseedItem=harvestcraft:chilipepperseedItem+harvestcraft:beanseedItem\n" +
             "harvestcraft:oatsseedItem=harvestcraft:cornseedItem+harvestcraft:riceseedItem\n" +
             "harvestcraft:okraseedItem=harvestcraft:beanseedItem+harvestcraft:leekseedItem\n" +
@@ -304,6 +306,7 @@ public abstract class IOHelper {
             "harvestcraft:peasseedItem=harvestcraft:soybeanseedItem+harvestcraft:okraseedItem\n" +
             "harvestcraft:pineappleseedItem=harvestcraft:bambooshootseedItem+harvestcraft:cantaloupeseedItem\n" +
             "harvestcraft:radishseedItem=harvestcraft:tomatoseedItem+harvestcraft:brusselsproutseedItem\n" +
+            "harvestcraft:strawberryseedItem=harvestcraft:radishseedItem+AgriCraft:seedPoppy\n" +
             "harvestcraft:raspberryseedItem=harvestcraft:strawberryseedItem+AgriCraft:seedTulipRed\n" +
             "harvestcraft:rhubarbseedItem=AgriCraft:seedSugarcane+harvestcraft:lettuceseedItem\n" +
             "harvestcraft:riceseedItem=harvestcraft:ryeseedItem+AgriCraft:seedSugarcane\n" +
@@ -317,7 +320,8 @@ public abstract class IOHelper {
             "harvestcraft:tomatoseedItem=harvestcraft:sweetpotatoseedItem+AgriCraft:seedCarrot\n" +
             "harvestcraft:turnipseedItem=harvestcraft:parsnipseedItem+harvestcraft:radishseedItem\n" +
             "harvestcraft:wintersquashseedItem=minecraft:pumpkin_seeds+harvestcraft:zucchiniseedItem\n" +
-            "harvestcraft:zucchiniseedItem=minecraft:pumpkin_seeds+harvestcraft:cucumberseedItem";
+            "harvestcraft:zucchiniseedItem=minecraft:pumpkin_seeds+harvestcraft:cucumberseedItem\n" +
+            "harvestcraft:whitemushroomseedItem=AgriCraft:seedShroomRed+AgriCraft:seedShroomBrown";
 
     private static final String weeeFlowersMutations =
             "weeeflowers:Red Flower Seed=AgriCraft:seedPoppy+AgriCraft:seedCarrot\n" +
@@ -370,7 +374,9 @@ public abstract class IOHelper {
             "AgriCraft:seedTulipPink=AgriCraft:seedAllium+AgriCraft:seedDandelion\n" +
             "AgriCraft:seedDaisy=AgriCraft:seedDandelion+AgriCraft:seedOrchid\n" +
             "AgriCraft:seedShroomRed=minecraft:nether_wart+AgriCraft:seedPoppy\n" +
-            "AgriCraft:seedShroomBrown=minecraft:nether_wart+AgriCraft:seedPotato\n";
+            "AgriCraft:seedShroomBrown=minecraft:nether_wart+AgriCraft:seedPotato\n" +
+            "AgriCraft:seedNitorWart=minecraft:nether_wart+AgriCraft:seedTulipOrange";
+
 
     private static final String agricraftMutations =
             "AgriCraft:seedRedstodendron=AgriCraft:seedTulipRed+AgriCraft:seedDaisy\n" +
@@ -412,6 +418,12 @@ public abstract class IOHelper {
 
     private static final String chococraft_harvestcraftMutations =
             "chococraft:Gysahl_Seeds=harvestcraft:rutabagaseedItem+harvestcraft:beetseedItem";
+
+    private static final String psychedelicraftMutations =
+            "psychedelicraft:tobaccoSeeds=AgriCraft:seedShroomBrown+minecraft:nether_wart\n" +
+            "psychedelicraft:hop_seeds=psychedelicraft:tobaccoSeeds+minecraft:wheat_seeds\n" +
+            "psychedelicraft:cannabisSeeds=psychedelicraft:tobaccoSeeds+psychedelicraft:hop_seeds\n" +
+            "psychedelicraft:cocaSeeds=psychedelicraft:cannabisSeeds+psychedelicraft:hop_seeds";
 
     private static final String copperMutation =
             "AgriCraft:seedCuprosia=AgriCraft:seedRedstodendron+AgriCraft:seedTulipRed";

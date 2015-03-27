@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import vazkii.botania.common.item.ModItems;
 
 public class Crops {
+    //AgriCraft crops
     public static BlockModPlant potato;
     public static BlockModPlant carrot;
     public static BlockModPlant melon;
@@ -28,15 +29,16 @@ public class Crops {
     public static BlockModPlant cactus;
     public static BlockModPlant shroomRed;
     public static BlockModPlant shroomBrown;
-
     public static BlockModPlant botaniaWhite;
+
+    //Botania crops
     public static BlockModPlant botaniaOrange;
     public static BlockModPlant botaniaMagenta;
     public static BlockModPlant botaniaLightBlue;
     public static BlockModPlant botaniaYellow;
     public static BlockModPlant botaniaLime;
     public static BlockModPlant botaniaPink;
-    public static BlockModPlant botaniaGray;    //I'm in favor of the British grey, but I'm just being consistent with Vazkii being consistent with Vanilla
+    public static BlockModPlant botaniaGray; //I'm in favor of the British grey, but I'm just being consistent with Vazkii being consistent with Vanilla
     public static BlockModPlant botaniaLightGray;
     public static BlockModPlant botaniaCyan;
     public static BlockModPlant botaniaPurple;
@@ -61,28 +63,26 @@ public class Crops {
         tulipWhite = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
         tulipPink = new BlockModPlant(net.minecraft.init.Items.dye, 9, 2);
         daisy = new BlockModPlant(net.minecraft.init.Items.dye, 7, 2);
-        cactus = new BlockModPlant(Blocks.sand, ConfigurationHandler.cactusGivesCactus?Item.getItemFromBlock(Blocks.cactus):net.minecraft.init.Items.dye, 2);
+        cactus = new BlockModPlant(Blocks.sand, ConfigurationHandler.cactusGivesCactus?Item.getItemFromBlock(Blocks.cactus):net.minecraft.init.Items.dye, ConfigurationHandler.cactusGivesCactus?0:2);
         shroomRed = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.red_mushroom));
         shroomBrown = new BlockModPlant(Blocks.mycelium, Item.getItemFromBlock(Blocks.brown_mushroom));
-
-        RegisterHelper.registerBlock(potato, Names.Crops.cropPotato);
-        RegisterHelper.registerBlock(carrot, Names.Crops.cropCarrot);
-        RegisterHelper.registerBlock(melon, Names.Crops.cropMelon);
-        RegisterHelper.registerBlock(pumpkin, Names.Crops.cropPumpkin);
-        RegisterHelper.registerBlock(sugarcane, Names.Crops.cropSugarcane);
-        RegisterHelper.registerBlock(dandelion, Names.Crops.cropDandelion);
-        RegisterHelper.registerBlock(poppy, Names.Crops.cropPoppy);
-        RegisterHelper.registerBlock(orchid, Names.Crops.cropOrchid);
-        RegisterHelper.registerBlock(allium, Names.Crops.cropAllium);
-        RegisterHelper.registerBlock(tulipRed, Names.Crops.cropTulipRed);
-        RegisterHelper.registerBlock(tulipOrange, Names.Crops.cropTulipOrange);
-        RegisterHelper.registerBlock(tulipWhite, Names.Crops.cropTulipWhite);
-        RegisterHelper.registerBlock(tulipPink, Names.Crops.cropTulipPink);
-        RegisterHelper.registerBlock(daisy, Names.Crops.cropDaisy);
-        RegisterHelper.registerBlock(cactus, Names.Crops.cropCactus);
-        RegisterHelper.registerBlock(shroomRed, Names.Crops.cropShroomRed);
-        RegisterHelper.registerBlock(shroomBrown, Names.Crops.cropShroomBrown);
-
+        RegisterHelper.registerCrop(potato, Names.Plants.potato);
+        RegisterHelper.registerCrop(carrot, Names.Plants.carrot);
+        RegisterHelper.registerCrop(melon, Names.Plants.melon);
+        RegisterHelper.registerCrop(pumpkin, Names.Plants.pumpkin);
+        RegisterHelper.registerCrop(sugarcane, Names.Plants.sugarcane);
+        RegisterHelper.registerCrop(dandelion, Names.Plants.dandelion);
+        RegisterHelper.registerCrop(poppy, Names.Plants.poppy);
+        RegisterHelper.registerCrop(orchid, Names.Plants.orchid);
+        RegisterHelper.registerCrop(allium, Names.Plants.allium);
+        RegisterHelper.registerCrop(tulipRed, Names.Plants.tulip + Names.Colors.red);
+        RegisterHelper.registerCrop(tulipOrange, Names.Plants.tulip + Names.Colors.orange);
+        RegisterHelper.registerCrop(tulipWhite, Names.Plants.tulip + Names.Colors.white);
+        RegisterHelper.registerCrop(tulipPink, Names.Plants.tulip + Names.Colors.pink);
+        RegisterHelper.registerCrop(daisy, Names.Plants.daisy);
+        RegisterHelper.registerCrop(cactus, Names.Plants.cactus);
+        RegisterHelper.registerCrop(shroomRed, Names.Plants.shroom + Names.Colors.red);
+        RegisterHelper.registerCrop(shroomBrown, Names.Plants.shroom + Names.Colors.brown);
         LogHelper.info("Crops registered");
     }
 
@@ -104,26 +104,23 @@ public class Crops {
             botaniaGreen = new BlockModPlant(ModItems.petal, 13, 3, 1);
             botaniaRed = new BlockModPlant(ModItems.petal, 14, 3, 1);
             botaniaBlack = new BlockModPlant(ModItems.petal, 15, 3, 1);
-
-            RegisterHelper.registerBlock(botaniaWhite, Names.Crops.cropBotaniaWhite);
-            RegisterHelper.registerBlock(botaniaOrange, Names.Crops.cropBotaniaOrange);
-            RegisterHelper.registerBlock(botaniaMagenta, Names.Crops.cropBotaniaMagenta);
-            RegisterHelper.registerBlock(botaniaLightBlue, Names.Crops.cropBotaniaLightBlue);
-            RegisterHelper.registerBlock(botaniaYellow, Names.Crops.cropBotaniaYellow);
-            RegisterHelper.registerBlock(botaniaLime, Names.Crops.cropBotaniaLime);
-            RegisterHelper.registerBlock(botaniaPink, Names.Crops.cropBotaniaPink);
-            RegisterHelper.registerBlock(botaniaGray, Names.Crops.cropBotaniaGray);
-            RegisterHelper.registerBlock(botaniaLightGray, Names.Crops.cropBotaniaLightGray);
-            RegisterHelper.registerBlock(botaniaCyan, Names.Crops.cropBotaniaCyan);
-            RegisterHelper.registerBlock(botaniaPurple, Names.Crops.cropBotaniaPurple);
-            RegisterHelper.registerBlock(botaniaBlue, Names.Crops.cropBotaniaBlue);
-            RegisterHelper.registerBlock(botaniaBrown, Names.Crops.cropBotaniaBrown);
-            RegisterHelper.registerBlock(botaniaGreen, Names.Crops.cropBotaniaGreen);
-            RegisterHelper.registerBlock(botaniaRed, Names.Crops.cropBotaniaRed);
-            RegisterHelper.registerBlock(botaniaBlack, Names.Crops.cropBotaniaBlack);
-
+            RegisterHelper.registerCrop(botaniaWhite, Names.Mods.botania + Names.Colors.white);
+            RegisterHelper.registerCrop(botaniaOrange, Names.Mods.botania + Names.Colors.orange);
+            RegisterHelper.registerCrop(botaniaMagenta, Names.Mods.botania + Names.Colors.magenta);
+            RegisterHelper.registerCrop(botaniaLightBlue, Names.Mods.botania + Names.Colors.lightBlue);
+            RegisterHelper.registerCrop(botaniaYellow, Names.Mods.botania + Names.Colors.yellow);
+            RegisterHelper.registerCrop(botaniaLime, Names.Mods.botania + Names.Colors.lime);
+            RegisterHelper.registerCrop(botaniaPink, Names.Mods.botania + Names.Colors.pink);
+            RegisterHelper.registerCrop(botaniaGray, Names.Mods.botania + Names.Colors.gray);
+            RegisterHelper.registerCrop(botaniaLightGray, Names.Mods.botania + Names.Colors.lightGray);
+            RegisterHelper.registerCrop(botaniaCyan, Names.Mods.botania + Names.Colors.cyan);
+            RegisterHelper.registerCrop(botaniaPurple, Names.Mods.botania + Names.Colors.purple);
+            RegisterHelper.registerCrop(botaniaBlue, Names.Mods.botania + Names.Colors.blue);
+            RegisterHelper.registerCrop(botaniaBrown, Names.Mods.botania + Names.Colors.brown);
+            RegisterHelper.registerCrop(botaniaGreen, Names.Mods.botania + Names.Colors.green);
+            RegisterHelper.registerCrop(botaniaRed, Names.Mods.botania + Names.Colors.red);
+            RegisterHelper.registerCrop(botaniaBlack, Names.Mods.botania + Names.Colors.black);
             Seeds.initBotaniaSeeds();
-
             LogHelper.info("Botania crops registered");
         }
     }

@@ -1,6 +1,11 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import com.InfinityRaider.AgriCraft.utility.*;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
+import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import com.jaquadro.minecraft.gardencontainers.block.BlockLargePot;
+import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -35,7 +40,7 @@ public class GrowthRequirement {
     //-----------------------------------
     /** @return true, if all the requirements are met */
     public boolean canGrow(World world, int x, int y, int z) {
-        return this.isValidSoil(world.getBlock(x, y-1, z), world.getBlockMetadata(x, y-1, z)) && this.isBrightnessGood(world.getBlockLightValue(x, y, z)) && this.isBaseBlockPresent(world, x, y, z);
+        return this.isValidSoil(world, x, y-1, z) && this.isBrightnessGood(world.getBlockLightValue(x, y, z)) && this.isBaseBlockPresent(world, x, y, z);
     }
 
     /** @return true, if the correct base block is present **/
@@ -61,9 +66,9 @@ public class GrowthRequirement {
     private boolean isBaseBlockNear(World world, int x, int y, int z) {
         if(this.requiresBaseBlock() && this.requiredType==RequirementType.NEARBY) {
             int range = NEARBY_DEFAULT_RANGE;
-            for (int xPos = x - range; xPos <= x + range; x++) {
-                for (int yPos = y - range; yPos <= y + range; y++) {
-                    for (int zPos = z - range; zPos <= z + range; z++) {
+            for (int xPos = x - range; xPos <= x + range; xPos++) {
+                for (int yPos = y - range; yPos <= y + range; yPos++) {
+                    for (int zPos = z - range; zPos <= z + range; zPos++) {
                         if(this.isBlockAdequate(world.getBlock(xPos, yPos, zPos), world.getBlockMetadata(xPos, yPos, zPos))) {
                             return true;
                         }
@@ -91,12 +96,18 @@ public class GrowthRequirement {
     }
 
     /** @return true, if the given block is a valid soil */
-    public boolean isValidSoil(Block block, int meta) {
-       if(this.requiresSpecificSoil()) {
-           return this.soil.equals(new BlockWithMeta(block, meta));
-       } else {
-           return GrowthRequirements.defaultSoils.contains(new BlockWithMeta(block, meta));
-       }
+    public boolean isValidSoil(World world, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
+        int meta = world.getBlockMetadata(x, y, z);
+        BlockWithMeta soil = new BlockWithMeta(block, meta);
+        if(ModIntegration.LoadedMods.gardenStuff && block instanceof BlockLargePot) {
+            soil = GardenStuffHelper.getSoil((TileEntityGarden) world.getTileEntity(x, y, z));
+        }
+        if(this.requiresSpecificSoil()) {
+           return this.soil.equals(soil);
+        } else {
+           return GrowthRequirements.defaultSoils.contains(soil);
+        }
     }
 
     /** @return true, if the given block requires a specific soil */
@@ -124,7 +135,7 @@ public class GrowthRequirement {
 
     public void setSoil(BlockWithMeta soil) {
         this.soil = soil;
-        GrowthRequirements.soils.add(soil);
+        GrowthRequirements.addSoil(soil);
     }
 
     public int[] getBrightnessRange() {return new int[] {minBrightness, maxBrightness};}
@@ -173,7 +184,7 @@ public class GrowthRequirement {
 
         /** Sets the required soil */
         public Builder soil(BlockWithMeta block) {
-            GrowthRequirements.soils.add(block);
+            GrowthRequirements.addSoil(block);
             growthRequirement.soil = block;
             return this;
         }
