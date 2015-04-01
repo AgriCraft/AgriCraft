@@ -25,9 +25,9 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
         if (tileEntity instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) tileEntity;
             this.renderBase(renderer, block, x, y, z);
-            IIcon icon = crop.hasOverride()?crop.getOverride().getIcon():crop.getPlantIcon();
+            IIcon icon = crop.getPlantIcon();
             int renderType = crop.getRenderType();
-            if (crop.crossCrop) {
+            if (crop.isCrossCrop()) {
                 //render four horizontal sticks (crosscrop)
                 renderer.setRenderBounds(0.1875F, 0.6875F, 0.0F, 0.125F, 0.6F, 1.0F);
                 renderer.renderStandardBlock(block, x, y, z);

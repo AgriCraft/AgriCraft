@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.AgriCraftHarvestable;
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.*;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.Aspects;
-import com.InfinityRaider.AgriCraft.compatibility.thaumictinkerer.ThaumicTinkererHelper;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -35,7 +34,7 @@ public class ModIntegration {
         }
         //Thaumic Tinkerer
         if(LoadedMods.thaumicTinkerer) {
-            ThaumicTinkererHelper.init();
+            //ThaumicTinkererHelper.init();
         }
         //Waila
         if(LoadedMods.waila) {

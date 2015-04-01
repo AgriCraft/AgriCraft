@@ -60,28 +60,28 @@ public abstract class IOHelper {
         data = data + '\n' + minecraftMutations;                                 //minecraft mutations
         if(ConfigurationHandler.resourcePlants) {
             data = data + '\n' + agricraftMutations;                             //agricraft mutations
-            if(OreDictHelper.oreCopper!=null) {
+            if(OreDictHelper.getOreBlockForName("Copper")!=null) {
                 data = data + '\n' + copperMutation;
             }
-            if(OreDictHelper.oreTin!=null) {
+            if(OreDictHelper.getOreBlockForName("Tin")!=null) {
                 data = data + '\n' + tinMutation;
             }
-            if(OreDictHelper.oreLead!=null) {
+            if(OreDictHelper.getOreBlockForName("Lead")!=null) {
                 data = data + '\n' + leadMutation;
             }
-            if(OreDictHelper.oreSilver!=null) {
+            if(OreDictHelper.getOreBlockForName("Silver")!=null) {
                 data = data + '\n' + silverMutation;
             }
-            if(OreDictHelper.oreAluminum!=null) {
+            if(OreDictHelper.getOreBlockForName("Aluminum")!=null) {
                 data = data + '\n' + aluminumMutation;
             }
-            if(OreDictHelper.oreNickel!=null) {
+            if(OreDictHelper.getOreBlockForName("Nickel")!=null) {
                 data = data + '\n' + nickelMutation;
             }
-            if(OreDictHelper.orePlatinum!=null) {
+            if(OreDictHelper.getOreBlockForName("Platinum")!=null) {
                 data = data + '\n' + platinumMutation;
             }
-            if(OreDictHelper.oreOsmium!=null) {
+            if(OreDictHelper.getOreBlockForName("Osmium")!=null) {
                 data = data + '\n' + osmiumMutation;
             }
         }

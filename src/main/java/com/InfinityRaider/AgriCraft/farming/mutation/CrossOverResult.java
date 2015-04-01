@@ -26,8 +26,8 @@ public class CrossOverResult {
 
     /** Creates a new instance based on the planted seed of the given TE. Does not validate the TE */
     public static CrossOverResult fromTileEntityCrop(TileEntityCrop crop) {
-        ItemSeeds seed = (ItemSeeds) crop.seed;
-        int meta = crop.seedMeta;
+        ItemSeeds seed = (ItemSeeds) crop.getSeedStack().getItem();
+        int meta = crop.getSeedStack().getItemDamage();
         double chance = SeedHelper.getSpreadChance(seed, meta);
 
         return new CrossOverResult(seed, meta, chance);

@@ -7,7 +7,6 @@ import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHel
 import com.InfinityRaider.AgriCraft.farming.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.SeedInformation;
@@ -211,10 +210,10 @@ public abstract class SeedHelper {
             return null;
         }
         else if(seed == Items.melon_seeds) {
-            return Crops.melon;
+            return (Block) Block.blockRegistry.getObject("AgriCraft:cropMelon");
         }
         else if(seed == Items.pumpkin_seeds) {
-            return Crops.pumpkin;
+            return (Block) Block.blockRegistry.getObject("AgriCraft:cropPumpkin");
         }
         else {
             return seed.getPlant(null, 0, 0, 0);
@@ -296,7 +295,7 @@ public abstract class SeedHelper {
         Block plant = getPlant(seed);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if(plant instanceof IAgriCraftPlant) {
-            items.addAll(((IAgriCraftPlant) plant).getFruits());
+            items.addAll(((IAgriCraftPlant) plant).getAllFruits());
         }
         //chococraft crop
         else if(ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
@@ -348,11 +347,6 @@ public abstract class SeedHelper {
             }
         }
         return true;
-    }
-
-    //get the base growth
-    public static int getBaseGrowth(ItemSeeds seed, int meta) {
-        return getBaseGrowth(getSeedTier(seed, meta));
     }
 
     //define NBT tag

@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
@@ -57,6 +58,11 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
     @SideOnly(Side.CLIENT)
     public String getInformation() {
         return this.information;
+    }
+
+    @Override
+    public IIcon getIcon(ItemStack stack) {
+        return getIconFromDamage(stack.getItemDamage());
     }
 
     @Override

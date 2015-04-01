@@ -18,7 +18,6 @@ public final class Names {
         public static final String meta = "meta";
         public static final String material = "material";
         public static final String materialMeta = "matMeta";
-        public static final String angle = "angle";
         public static final String isSprinkled = "isSprinkled";
         public static final String power = "powerrrr";
         public static final String inventory = "agricraftInv";
@@ -98,34 +97,7 @@ public final class Names {
 
     //plants
     public static class Plants {
-        public static final String potato = "Potato";
-        public static final String carrot = "Carrot";
-        public static final String melon = "Melon";
-        public static final String pumpkin = "Pumpkin";
-        public static final String sugarcane = "Sugarcane";
-        public static final String dandelion = "Dandelion";
-        public static final String poppy = "Poppy";
-        public static final String orchid = "Orchid";
-        public static final String allium = "Allium";
-        public static final String tulip = "Tulip";
-        public static final String daisy = "Daisy";
-        public static final String cactus = "Cactus";
-        public static final String shroom = "Shroom";
-        public static final String diamahlia = "Diamahlia";
-        public static final String aurigold = "Aurigold";
-        public static final String ferranium = "Ferranium";
-        public static final String lapender = "Lapender";
-        public static final String emeryllis = "Emeryllis";
-        public static final String redstodendron = "Redstodendron";
-        public static final String cuprosia = "Cuprosia";
-        public static final String petinia = "Petinia";
-        public static final String plombean = "Plombean";
-        public static final String silverweed = "Silverweed";
-        public static final String jaslumine = "Jaslumine";
-        public static final String niccissus = "Niccissus";
-        public static final String platiolus = "Platiolus";
-        public static final String osmonium = "Osmonium";
-        public static final String nitorWart = "NitorWart";
+
     }
 
     //nuggets

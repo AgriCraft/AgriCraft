@@ -8,7 +8,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
@@ -36,11 +35,12 @@ public class ItemMagnifyingGlass extends ModItem {
             if(world.getBlock(x, y, z)!=null && world.getBlock(x, y, z) instanceof BlockCrop && world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityCrop) {
                 TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
                 if(crop.hasPlant()) {
-                    int growth = crop.growth;
-                    int gain = crop.gain;
-                    int strength = crop.strength;
-                    boolean analyzed = crop.analyzed;
-                    String seedName = ((ItemSeeds) crop.seed).getItemStackDisplayName(new ItemStack((ItemSeeds) crop.seed, 1, crop.seedMeta));
+                    int growth = crop.getGrowth();
+                    int gain = crop.getGain();
+                    int strength = crop.getStrength();
+                    boolean analyzed = crop.isAnalyzed();
+                    ItemStack seed = crop.getSeedStack();
+                    String seedName = seed.getItem().getItemStackDisplayName(seed);
                     int meta = world.getBlockMetadata(x, y, z);
                     float growthPercentage = ((float) meta)/((float) 7)*100.0F;
                     list.add(StatCollector.translateToLocal("agricraft_tooltip.cropWithPlant"));
@@ -60,10 +60,10 @@ public class ItemMagnifyingGlass extends ModItem {
                         list.add("Growth : Mature");
                     }
                 }
-                else if(crop.crossCrop) {
+                else if(crop.isCrossCrop()) {
                     list.add(StatCollector.translateToLocal("agricraft_tooltip.crossCrop"));
                 }
-                else if(crop.weed) {
+                else if(crop.hasWeed()) {
                     list.add(StatCollector.translateToLocal("agricraft_tooltip.weeds"));
                 }
                 else {

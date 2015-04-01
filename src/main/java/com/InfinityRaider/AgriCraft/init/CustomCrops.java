@@ -51,7 +51,7 @@ public class CustomCrops {
                         int tier = Integer.parseInt(cropData[4]);
                         int renderType = Integer.parseInt(cropData[5]);
                         String info = cropData[6];
-                        customCrops[i] = new BlockModPlant(soil, baseBlock, baseMeta, fruit, fruitMeta, tier, renderType, true);
+                        customCrops[i] = new BlockModPlant(fruit, fruitMeta, soil, baseBlock, baseMeta, tier, renderType, true);
                         RegisterHelper.registerCrop(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1));
                         customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds", info);
                         RegisterHelper.registerSeed(customSeeds[i], customCrops[i]);

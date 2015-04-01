@@ -11,6 +11,8 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
+import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
+import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -26,12 +28,14 @@ public class TileEntities {
             GameRegistry.registerTileEntity(TileEntityValve.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.valve);
             GameRegistry.registerTileEntity(TileEntitySprinkler.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.sprinkler);
         }
+        /*
         if(!ConfigurationHandler.disableSeedStorage) {
             GameRegistry.registerTileEntity(TileEntitySeedStorage.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.seedStorage);
             if(!ConfigurationHandler.disableSeedWarehouse) {
                 GameRegistry.registerTileEntity(TileEntitySeedStorageController.class, Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + Names.Objects.seedStorageController);
             }
         }
+        */
         LogHelper.debug("Tile Entities registered");
     }
 }

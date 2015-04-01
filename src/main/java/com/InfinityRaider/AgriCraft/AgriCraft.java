@@ -62,7 +62,7 @@ public class AgriCraft {
         //initialize blocks
         Blocks.init();
         //initialize crops
-        Crops.init();
+        Crops.initDefaults();
         //initialize items
         Items.init();
         LogHelper.debug("Pre-Initialization Complete");
@@ -71,7 +71,7 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
         LogHelper.debug("Starting Initialization");
-        Seeds.init();
+        Crops.initBotaniaCrops();
 
         NetworkRegistry.INSTANCE.registerGuiHandler(instance , new GuiHandler());
         proxy.registerTileEntities();

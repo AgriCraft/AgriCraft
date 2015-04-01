@@ -48,7 +48,7 @@ public class AgriCraftHarvestable implements IFactoryHarvestable {
         if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             if (crop.hasPlant() && crop.isMature()) {
-                items.addAll(SeedHelper.getPlantFruits(crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
+                items.addAll(crop.getFruits());
             }
         }
         return items;

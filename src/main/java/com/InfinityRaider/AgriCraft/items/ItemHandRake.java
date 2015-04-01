@@ -48,7 +48,7 @@ public class ItemHandRake extends Item {
         }
 
         TileEntityCrop crop = (TileEntityCrop) te;
-        if (!crop.weed) {
+        if (!crop.hasWeed()) {
             return true;
         }
 

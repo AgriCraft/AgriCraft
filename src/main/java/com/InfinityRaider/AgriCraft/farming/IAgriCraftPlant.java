@@ -16,11 +16,14 @@ public interface IAgriCraftPlant extends IGrowable {
     /** Gets the seed for this plant */
     public IAgriCraftSeed getSeed();
 
+    /** Gets an ItemStack with the correct seed */
+    public ItemStack getSeedStack(int amount);
+
     /** Gets an arraylist of all possible fruit drops from this plant */
-    public ArrayList<ItemStack> getFruits();
+    public ArrayList<ItemStack> getAllFruits();
 
     /** Returns a random fruit for this plant */
-    public ItemStack getFruit(Random rand);
+    public ItemStack getRandomFruit(Random rand);
 
     /** Returns an ArrayList with amount of  andom fruit stacks for this plant */
     public ArrayList<ItemStack> getFruit(int amount, Random rand);
@@ -28,4 +31,9 @@ public interface IAgriCraftPlant extends IGrowable {
     /** Gets the icon for the growth stage, going from 0 to 7. 0 is a newly planted plant and 7 is a mature plant */
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int meta);
+
+    /** Determines how the plant is rendered, return false to render as wheat (#), true to render as a flower (X) */
+    @SideOnly(Side.CLIENT)
+    public abstract boolean renderAsFlower();
+
 }

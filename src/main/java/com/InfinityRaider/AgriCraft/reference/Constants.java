@@ -24,6 +24,7 @@ public final class Constants {
     public static final short defaultGrowth = 1;
     public static final short defaultGain = 1;
     public static final short defaultStrength = 1;
+    public static final int defaultTier = 1;
 
     //default mutation chance
     public static final double defaultMutationChance = 0.2;

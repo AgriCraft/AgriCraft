@@ -8,7 +8,6 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -40,11 +39,11 @@ public class AgriCraftCropDataProvider implements IWailaDataProvider {
         if(block!=null && block instanceof BlockCrop && te!=null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             if(crop.hasPlant()) {
-                int growth = crop.growth;
-                int gain = crop.gain;
-                int strength = crop.strength;
-                boolean analyzed = crop.analyzed;
-                String seedName = ((ItemSeeds) crop.seed).getItemStackDisplayName(new ItemStack((ItemSeeds) crop.seed, 1, crop.seedMeta));
+                int growth = crop.getGrowth();
+                int gain = crop.getGain();
+                int strength = crop.getStrength();
+                boolean analyzed = crop.isAnalyzed();
+                String seedName = crop.getSeedStack().getDisplayName();
                 list.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + seedName);
                 if(analyzed) {
                     list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + growth);
@@ -56,7 +55,7 @@ public class AgriCraftCropDataProvider implements IWailaDataProvider {
                 }
                 list.add(StatCollector.translateToLocal(crop.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
             }
-            else if(crop.weed) {
+            else if(crop.hasWeed()) {
                 list.add(StatCollector.translateToLocal("agricraft_tooltip.weeds"));
             }
             else {

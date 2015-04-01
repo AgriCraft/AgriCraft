@@ -198,7 +198,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(xCoord, yCoord, zCoord);
             if (crop!=null) {
                 if(crosscrop && !ConfigurationHandler.enableWeeds) {
-                    crop.crossCrop=true;
+                    crop.setCrossCrop(true);
                 }
                 else {
                     ItemStack seed = SeedHelper.getRandomSeed(false);
