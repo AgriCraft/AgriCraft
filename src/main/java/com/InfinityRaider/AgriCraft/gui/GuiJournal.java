@@ -332,7 +332,7 @@ public class GuiJournal extends GuiScreen {
         //get the growth stage icons
         plantIcons = new IIcon[8];
         for(int i=0;i< plantIcons.length;i++) {
-            plantIcons[i] = RenderHelper.getIcon(SeedHelper.getPlant((ItemSeeds) seed.getItem()), RenderHelper.plantIconIndex((ItemSeeds) seed.getItem(), seed.getItemDamage(), i));
+            plantIcons[i] = RenderHelper.getPlantIcon((ItemSeeds) seed.getItem(), seed.getItemDamage(), i);
         }
         //get the icons for the parents that mutate into this seed
         Mutation[] parents = MutationHandler.getParentMutations(seed);

@@ -29,6 +29,7 @@ public final class Names {
         public static final String x = "agricraftX";
         public static final String y = "agricraftY";
         public static final String z = "agricraftZ";
+        public static final String override = "override";
     }
 
     //mod objects

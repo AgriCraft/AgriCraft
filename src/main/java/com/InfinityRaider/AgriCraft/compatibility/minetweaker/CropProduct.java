@@ -26,7 +26,7 @@ public class CropProduct {
         String error = "Invalid Seed";
         boolean success = seedToChange!=null && seedToChange.getItem()!=null && seedToChange.getItem() instanceof ItemModSeed;
         if(success) {
-            BlockModPlant crop = ((ItemModSeed) seedToChange.getItem()).getPlant();
+            BlockModPlant crop = (BlockModPlant) ((ItemModSeed) seedToChange.getItem()).getPlant();
             error = "This crop's fruits can't be changed";
             success = crop.canEdit();
             if(success) {
@@ -45,7 +45,7 @@ public class CropProduct {
         String error = "Invalid Seed";
         boolean success = seedToChange!=null && seedToChange.getItem()!=null && seedToChange.getItem() instanceof ItemModSeed;
         if(success) {
-            BlockModPlant crop = ((ItemModSeed) seedToChange.getItem()).getPlant();
+            BlockModPlant crop = (BlockModPlant) ((ItemModSeed) seedToChange.getItem()).getPlant();
             error = "This crop's fruits can't be changed";
             success = crop.canEdit();
             if(success) {

@@ -1,9 +1,12 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
+import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
+import com.InfinityRaider.AgriCraft.farming.CropOverride;
+import com.InfinityRaider.AgriCraft.farming.ICropOverridingSeed;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
@@ -12,6 +15,7 @@ import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -53,6 +57,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         if(this.seed!=null) {
             tag.setString(Names.Objects.seed, this.getSeedString());
             tag.setShort(Names.NBT.meta, (short) seedMeta);
+            if(seed instanceof ICropOverridingSeed) {
+                NBTTagCompound overrideData = ((ICropOverridingSeed) seed).getOverride(this).saveToNBT();
+                if(overrideData!=null) {
+                    tag.setTag(Names.NBT.override, overrideData);
+                }
+            }
         }
     }
 
@@ -69,10 +79,28 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         if(tag.hasKey(Names.Objects.seed) && tag.hasKey(Names.NBT.meta)) {
             this.setSeed(tag.getString(Names.Objects.seed));
             this.seedMeta = tag.getInteger(Names.NBT.meta);
+            if(seed instanceof ICropOverridingSeed && tag.hasKey(Names.NBT.override)) {
+                NBTTagCompound overrideData = tag.getCompoundTag(Names.NBT.override);
+                ((ICropOverridingSeed) seed).getOverride(this).loadFromNBT(overrideData);
+            }
         }
         else {
             this.seed=null;
             this.seedMeta=0;
+        }
+    }
+
+    /** Apply a growth increment, if forced is true this will always increase the growth. */
+    public void applyGrowthTick(boolean forced) {
+        if(!this.hasOverride() || this.getOverride().hasDefaultGrowth()) {
+            int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+            if(meta<7) {
+                worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, 2);
+                AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
+            }
+        }
+        else if(forced) {
+            this.getOverride().increaseGrowth();
         }
     }
 
@@ -159,7 +187,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     //weed spawn chance
     private double getWeedSpawnChance() {
         if(this.hasPlant()) {
-            return ConfigurationHandler.weedsWipePlants?((double) (10 - this.strength))/10:0;
+            if(this.hasOverride() && this.getOverride().immuneToWeed()) {
+                return 0;
+            }
+            else {
+                return ConfigurationHandler.weedsWipePlants ? ((double) (10 - this.strength)) / 10 : 0;
+            }
         }
         else {
             return this.weed ? 0 : 1;
@@ -168,6 +201,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     //sets the plant in the crop
     public void setPlant(int growth, int gain, int strength, boolean analyzed, ItemSeeds seed, int seedMeta) {
+        this.setPlant(growth, gain, strength, analyzed, seed, seedMeta, null);
+    }
+
+    //sets the plant in the crop
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, ItemSeeds seed, int seedMeta, EntityPlayer player) {
         if( (!this.crossCrop) && (!this.hasPlant())) {
             this.growth = growth;
             this.gain = gain;
@@ -175,6 +213,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.seed = seed;
             this.analyzed = analyzed;
             this.seedMeta = seedMeta;
+            if(this.hasOverride()) {
+                ((ICropOverridingSeed) seed).getOverride(this).onSeedPlanted(player);
+            }
             this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
             this.markForUpdate();
         }
@@ -238,13 +279,20 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         this.seed = input.equalsIgnoreCase("none")?null:(ItemSeeds) Item.itemRegistry.getObject(input);
     }
 
+    public boolean hasOverride() {
+        return this.seed instanceof ICropOverridingSeed;
+    }
+
+    public CropOverride getOverride() {
+        return this.hasOverride()?((ICropOverridingSeed) this.seed).getOverride(this):null;
+    }
+
     //get the plant icon
     @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon() {
         IIcon icon = null;
         if(this.hasPlant()) {
-            int meta = RenderHelper.plantIconIndex(this.seed, this.seedMeta, this.getBlockMetadata());
-            icon = SeedHelper.getPlant(this.seed).getIcon(0, meta);
+            icon = RenderHelper.getPlantIcon(seed, seedMeta, this.getBlockMetadata());
         }
         else if(this.weed) {
             icon = ((BlockCrop) this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)).getWeedIcon(this.getBlockMetadata());
@@ -257,7 +305,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public int getRenderType() {
         int type = -1;
         if(this.hasPlant()) {
-            type = RenderHelper.getRenderType(this.seed, this.seedMeta);
+            if(this.hasOverride()) {
+                type = ((ICropOverridingSeed) seed).getRenderType();
+            }
+            else {
+                type = RenderHelper.getRenderType(this.seed, this.seedMeta);
+            }
         }
         else if(this.weed) {
             type = 6;

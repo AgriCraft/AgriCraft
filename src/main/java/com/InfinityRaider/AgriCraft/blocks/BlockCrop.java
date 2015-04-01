@@ -75,9 +75,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     float growthRate = (float) SeedHelper.getBaseGrowth(crop.seed, crop.seedMeta);
                     boolean shouldGrow = (rnd.nextDouble()<=(growthRate * multiplier)/100);
                     if (shouldGrow) {
-                        meta++;
-                        world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-                        AppleCoreHelper.announceGrowthTick(this, world, x, y, z);
+                        crop.applyGrowthTick(false);
                     }
                 }
             }
@@ -90,9 +88,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     float growthRate = (float) Constants.growthTier1;
                     boolean shouldGrow = (rnd.nextDouble()<=(growthRate * multiplier)/100);
                     if (shouldGrow) {
-                        meta++;
-                        world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-                        AppleCoreHelper.announceGrowthTick(this, world, x, y, z);
+                        crop.applyGrowthTick(false);
                     }
                 }
                 else {
@@ -124,11 +120,16 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 this.dropBlockAsItem(world, x, y, z, new ItemStack(Items.crops, 1));
                 update = true;
             } else if(crop.isMature()) {
-                crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
-                update = true;
-                ArrayList<ItemStack> drops = SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
-                for (ItemStack drop : drops) {
-                    this.dropBlockAsItem(world, x, y, z, drop);
+                if(crop.hasOverride() && !crop.getOverride().hasDefaultHarvesting()) {
+                    crop.getOverride().onHarvest();
+                }
+                else {
+                    crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
+                    update = true;
+                    ArrayList<ItemStack> drops = SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
+                    for (ItemStack drop : drops) {
+                        this.dropBlockAsItem(world, x, y, z, drop);
+                    }
                 }
             }
             if (update) {
@@ -177,10 +178,10 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 //get NBT data from the seeds
                 if (player.getCurrentEquippedItem().stackTagCompound != null && player.getCurrentEquippedItem().stackTagCompound.hasKey(Names.NBT.growth)) {
                     //NBT data was found: copy data to plant
-                    crop.setPlant(stack.stackTagCompound.getInteger(Names.NBT.growth), stack.stackTagCompound.getInteger(Names.NBT.gain), stack.stackTagCompound.getInteger(Names.NBT.strength), stack.stackTagCompound.getBoolean(Names.NBT.analyzed), (ItemSeeds) stack.getItem(), stack.getItemDamage());
+                    crop.setPlant(stack.stackTagCompound.getInteger(Names.NBT.growth), stack.stackTagCompound.getInteger(Names.NBT.gain), stack.stackTagCompound.getInteger(Names.NBT.strength), stack.stackTagCompound.getBoolean(Names.NBT.analyzed), (ItemSeeds) stack.getItem(), stack.getItemDamage(), player);
                 } else {
                     //NBT data was not initialized: set defaults
-                    crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, false, (ItemSeeds) stack.getItem(), stack.getItemDamage());
+                    crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, false, (ItemSeeds) stack.getItem(), stack.getItemDamage(), player);
                 }
                 //take one seed away if the player is not in creative
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
@@ -280,20 +281,25 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         if(!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             if (crop != null) {
-                ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-                if (crop.crossCrop) {
-                    drops.add(new ItemStack(Items.crops, 2));
-                } else {
-                    drops.add(new ItemStack(Items.crops, 1));
-                    if (crop.hasPlant()) {
-                        drops.add(crop.getSeedStack());
-                        if (this.isMature(world, x, y, z)) {
-                            drops.addAll(SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+                if(crop.hasOverride() && !crop.getOverride().hasDefaultBreaking()) {
+                    crop.getOverride().onBreak();
+                }
+                else {
+                    ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+                    if (crop.crossCrop) {
+                        drops.add(new ItemStack(Items.crops, 2));
+                    } else {
+                        drops.add(new ItemStack(Items.crops, 1));
+                        if (crop.hasPlant()) {
+                            drops.add(crop.getSeedStack());
+                            if (this.isMature(world, x, y, z)) {
+                                drops.addAll(SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+                            }
                         }
                     }
-                }
-                for (ItemStack drop : drops) {
-                    this.dropBlockAsItem(world, x, y, z, drop);
+                    for (ItemStack drop : drops) {
+                        this.dropBlockAsItem(world, x, y, z, drop);
+                    }
                 }
             }
         }
@@ -319,6 +325,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     public void func_149853_b(World world, Random rand, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         if(crop.hasPlant() && this.isFertile(world, x, y ,z)) {
+            if(crop.hasOverride() && !crop.getOverride().hasDefaultBonemeal()) {
+                crop.getOverride().applyBonemeal();
+            }
             super.func_149853_b(world, rand, x, y, z);
             crop.markForUpdate();
         }

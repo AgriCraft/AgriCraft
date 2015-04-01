@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
+import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -46,7 +48,7 @@ public abstract class RegisterHelper {
         GameRegistry.registerItem(item, name);
     }
 
-    public static void registerSeed(ItemSeeds seed, BlockModPlant plant) {
+    public static void registerSeed(ItemModSeed seed, BlockModPlant plant) {
         String name = Names.Objects.seed + plant.getUnlocalizedName().substring(plant.getUnlocalizedName().indexOf(':')+5);
         registerItem(seed, name);
         OreDictionary.registerOre(name, seed);

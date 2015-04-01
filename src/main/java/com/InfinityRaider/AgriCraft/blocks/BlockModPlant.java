@@ -3,6 +3,9 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
+import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -14,7 +17,6 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -22,13 +24,13 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlockModPlant extends BlockCrops implements IGrowable {
+public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPlant {
 
     private GrowthRequirement growthRequirement;
 
     public CropProduce products = new CropProduce();
     public ArrayList<ItemStack> fruits;
-    private ItemSeeds seed;
+    private ItemModSeed seed;
     public int tier;
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
@@ -101,19 +103,29 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     }
 
     //set seed
-    public void initializeSeed(ItemSeeds seed) {
+    public void initializeSeed(ItemModSeed seed) {
         if(this.seed==null) {
             this.seed = seed;
         }
     }
 
-    public ItemSeeds getSeed() {return this.seed;}
+    @Override
+    public IAgriCraftSeed getSeed() {return this.seed;}
 
+    @Override
     public ArrayList<ItemStack> getFruits() {return this.products.getAllProducts();}
 
-    public ArrayList<ItemStack> getFruit(Random rand) {return this.getFruit(1, rand);}
+    @Override
+    public ItemStack getFruit(Random rand) {return this.getFruit(1, rand).get(0);}
 
+    @Override
     public ArrayList<ItemStack> getFruit(int nr, Random rand) {return this.products.getProduce(nr, rand);}
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int meta) {
+        return this.getIcon(0, meta);
+    }
 
     public boolean canEdit() {
         return this.isEditable;
@@ -175,7 +187,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         list.add(new ItemStack(this.seed, 1, 0));
         if(metadata==7) {
-            list.addAll(this.getFruit(world.rand));
+            list.add(this.getFruit(world.rand));
         }
         return list;
     }
@@ -224,12 +236,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     //return the fruit
     @Override
     protected Item func_149865_P() {
-        Item item = null;
-        ArrayList<ItemStack> items = this.getFruit(new Random());
-        if(items!=null && items.size()>0 && items.get(0)!=null) {
-            item = items.get(0).getItem();
-        }
-        return item;
+        return this.getFruit(new Random()).getItem();
     }
 
     @Override
@@ -237,6 +244,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         return this.renderType;
     }
 
+    @Override
     public GrowthRequirement getGrowthRequirement() {
         return growthRequirement;
     }

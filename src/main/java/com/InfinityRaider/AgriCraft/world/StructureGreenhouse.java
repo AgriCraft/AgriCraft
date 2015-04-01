@@ -17,6 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 import java.util.Random;
+
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
     //structure dimensions
     private static final int xSize = 17;
