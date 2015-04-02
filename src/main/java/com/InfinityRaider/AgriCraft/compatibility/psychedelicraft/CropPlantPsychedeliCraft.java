@@ -13,7 +13,12 @@ public class CropPlantPsychedeliCraft extends CropPlantTallGeneric {
 
     @Override
     public int transformMeta(int growthStage) {
-        return growthStage;
+        if(growthStage<=maxMetaBottomBlock()) {
+            return growthStage * 4;
+        } else if(growthStage!=7) {
+            return(growthStage-2)*4;
+        }
+        return 11;
     }
 
     @Override

@@ -18,25 +18,8 @@ public abstract class CropPlantTall extends CropPlant {
     public abstract int maxMetaBottomBlock();
 
     @Override
-    public boolean onHarvest(World world, int x, int y, int z) {
-        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        ArrayList<ItemStack> list = this.getFruitsOnHarvest(crop.getGain(), world.rand);
-        world.setBlockMetadataWithNotify(x, y, z, maxMetaBottomBlock(), 3);
-        for(ItemStack drop:list) {
-            float f = 0.7F;
-            double d0 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-            double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-            double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-            EntityItem entityitem = new EntityItem(world, (double)x + d0, (double)y + d1, (double)z + d2, drop);
-            entityitem.delayBeforeCanPickup = 10;
-            world.spawnEntityInWorld(entityitem);
-        }
-        return false;
-    }
-
-    @Override
     public boolean isMature(World world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z)>=14;
+        return world.getBlockMetadata(x, y, z)>=7;
     }
 
     @Override
