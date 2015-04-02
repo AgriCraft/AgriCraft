@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.witchery;
 
-import com.InfinityRaider.AgriCraft.farming.CropPlantGeneric;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantGeneric;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
 
 public class CropPlantWitchery extends CropPlantGeneric {
@@ -19,6 +21,7 @@ public class CropPlantWitchery extends CropPlantGeneric {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public String getInformation() {
         return "agricraft_journal.wi_"+getSeed().getUnlocalizedName();
     }

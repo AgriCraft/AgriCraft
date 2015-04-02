@@ -2,8 +2,10 @@ package com.InfinityRaider.AgriCraft.compatibility.chococraft;
 
 import chococraft.common.config.ChocoCraftBlocks;
 import chococraft.common.config.ChocoCraftItems;
-import com.InfinityRaider.AgriCraft.farming.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
@@ -82,17 +84,20 @@ public class CropPlantGhyshal extends CropPlant {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon(int growthStage) {
         int meta = (int) Math.ceil(( (float) growthStage ) / 2.0F );
         return ChocoCraftBlocks.gysahlStemBlock.getIcon(0, meta);
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return true;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public String getInformation() {
         return "agricraft_journal.ghyshal";
     }

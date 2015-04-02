@@ -33,7 +33,7 @@ public class PlantMegaPackHelper {
                 if (obj instanceof ItemSeeds) {
                     ItemSeeds seed = (ItemSeeds) obj;
                     if (seed == PlantMegaPack.items.seedCorn) {
-
+                        CropPlantHandler.registerPlant(new CropPlantPMPDouble(seed));
                     } else {
                         CropPlantHandler.registerPlant(new CropPlantPMPSingle(seed));
                     }

@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
-import com.InfinityRaider.AgriCraft.farming.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
@@ -122,7 +122,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     /** check the block if the plant is mature */
     public boolean isMature() {
-        return !this.worldObj.isRemote && this.worldObj.getBlock(xCoord, yCoord, zCoord) != null && this.worldObj.getBlock(xCoord, yCoord, zCoord) instanceof BlockCrop && ((BlockCrop) this.worldObj.getBlock(xCoord, yCoord, zCoord)).isMature(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        return this.hasPlant() && this.plant.isMature(worldObj, xCoord, yCoord, zCoord);
     }
 
     /** gets the fruits for this plant */
@@ -227,14 +227,14 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         this.plant = CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta));
     }
 
-    /** Apply a growth increment, if forced is true this will always increase the growth. */
+    /** Apply a growth increment */
     public void applyGrowthTick() {
         int flag = 2;
         int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
         if(hasPlant()) {
             flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta) ? 2 : 4;
         }
-        if (meta < 7) {
+        if (hasWeed() || !plant.isMature(worldObj, xCoord, yCoord, zCoord)) {
             worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, flag);
             AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
         }

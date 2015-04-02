@@ -69,8 +69,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         if(crop.hasPlant()) {
             Event.Result allowGrowthResult = AppleCoreHelper.validateGrowthTick(this, world, x, y, z, rnd);
             if (allowGrowthResult != Event.Result.DENY) {
-                int meta = this.getPlantMetadata(world, x, y, z);
-                if (meta < 7 && crop.isFertile()) {
+                if (!crop.isMature() && crop.isFertile()) {
                     double multiplier = 1.0 + (crop.getGrowth() + 0.00) / 10;
                     float growthRate = (float) crop.getGrowthRate();
                     boolean shouldGrow = (rnd.nextDouble()<=(growthRate * multiplier)/100);
@@ -428,16 +427,21 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
 
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
+
     @Override
     public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
+
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return true;}
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {return false;}        //no particles when this block gets hit
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer effectRenderer) {return false;}     //no particles when destroyed
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {

@@ -127,7 +127,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
 
     //check if the plant is mature
     public boolean isMature(World world, int x, int y, int z) {
-        return this.getPlantMetadata(world,x,y,z)==7;
+        return ((TileEntityCrop) world.getTileEntity(x, y, z)).isMature();
     }
 
     //render different stages

@@ -1,11 +1,14 @@
-package com.InfinityRaider.AgriCraft.farming;
+package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -48,7 +51,7 @@ public abstract class CropPlant {
     /** Returns an ArrayList with amount of random fruit stacks for this plant */
     public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
 
-    /** Gets right before a harvest attempt, return false to prevent further processing */
+    /** Gets called right before a harvest attempt, return false to prevent further processing */
     public boolean onHarvest(World world, int x, int y, int z) {
         return true;
     }
@@ -62,6 +65,11 @@ public abstract class CropPlant {
     /** Checks if the plant can grow on this position */
     public abstract boolean isFertile(World world, int x, int y, int z);
 
+    /** Checks if the plant is mature */
+    public boolean isMature(World world, int x, int y, int z) {
+        return world.getBlockMetadata(x, y, z)>=7;
+    }
+
     /** Gets the icon for the plant, growthstage goes from 0 to 7 (both inclusive, 0 is sprout and 7 is mature) */
     @SideOnly(Side.CLIENT)
     public abstract IIcon getPlantIcon(int growthStage);
@@ -73,4 +81,10 @@ public abstract class CropPlant {
     /** Gets some information about the plant for the journal */
     @SideOnly(Side.CLIENT)
     public abstract String getInformation();
+
+    /** This gets called to render the plant on the crop, can be overridden if you want to do your own rendering */
+    @SideOnly(Side.CLIENT)
+    public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
+        PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(world.getBlockMetadata(x, y, z)), 0);
+    }
 }

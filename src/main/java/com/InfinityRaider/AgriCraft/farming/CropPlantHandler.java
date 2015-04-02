@@ -2,6 +2,8 @@ package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAgriCraft;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.init.CustomCrops;
@@ -16,6 +18,10 @@ import java.util.HashMap;
 
 public class CropPlantHandler {
     private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, CropPlant>>();
+
+    public static void registerPlant(IAgriCraftPlant plant) throws DuplicateCropPlantException, BlacklistedCropPlantException {
+        registerPlant(new CropPlantAgriCraft(plant));
+    }
 
     public static void registerPlant(CropPlant plant) throws DuplicateCropPlantException, BlacklistedCropPlantException {
         ItemStack stack = plant.getSeed();

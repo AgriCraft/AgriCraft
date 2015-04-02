@@ -1,61 +1,59 @@
 package com.InfinityRaider.AgriCraft.compatibility.plantmegapack;
-
-import com.InfinityRaider.AgriCraft.farming.CropPlantDouble;
-import net.minecraft.item.ItemStack;
+;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantTallGeneric;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Random;
+public class CropPlantPMPDouble extends CropPlantTallGeneric {
 
-public class CropPlantPMPDouble extends CropPlantDouble {
-    @Override
-    public int tier() {
-        return 0;
+    public CropPlantPMPDouble(ItemSeeds seed) {
+        super(seed);
     }
 
     @Override
-    public ItemStack getSeed() {
-        return null;
+    public int transformMeta(int growthStage) {
+        return growthStage;
     }
 
     @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        return null;
+    public int halfMeta() {
+        return 1;
     }
 
     @Override
-    public ItemStack getRandomFruit(Random rand) {
-        return null;
+    public boolean isMature(World world, int x, int y, int z) {
+        return world.getBlockMetadata(x, y, z)>=7;
     }
 
-    @Override
-    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
-        return null;
-    }
 
     @Override
-    public boolean canBonemeal() {
-        return false;
-    }
-
-    @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return false;
-    }
-
-    @Override
-    public IIcon getPlantIcon(int growthStage) {
-        return null;
-    }
-
-    @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
-        return false;
+        return true;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public String getInformation() {
-        return null;
+        return "agricraft_journal.pmp_"+getSeed().getUnlocalizedName();
     }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getBottomIcon(int growthStage) {
+        if(growthStage<2) {
+            return getPlantIcon(growthStage);
+        }
+        return getPlantIcon(2);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean renderTopLayer(int growthStage) {
+        return growthStage>1;
+    }
+
 }

@@ -1,6 +1,9 @@
-package com.InfinityRaider.AgriCraft.farming;
+package com.InfinityRaider.AgriCraft.farming.cropplant;
 
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -9,11 +12,10 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-/** Generic abstract implementation of the cropPlant, will work for most crops that follow the vanilla item seeds*/
-public abstract class CropPlantGeneric extends CropPlant{
+public abstract class CropPlantTallGeneric extends CropPlantTall {
     private final ItemSeeds seed;
 
-    public CropPlantGeneric(ItemSeeds seed) {
+    public CropPlantTallGeneric(ItemSeeds seed) {
         this.seed = seed;
     }
 
@@ -21,7 +23,7 @@ public abstract class CropPlantGeneric extends CropPlant{
 
     @Override
     public int tier() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -29,10 +31,9 @@ public abstract class CropPlantGeneric extends CropPlant{
         return new ItemStack(seed);
     }
 
-
     @Override
     public ArrayList<ItemStack> getAllFruits() {
-        return(OreDictHelper.getFruitsFromOreDict(getSeed()));
+        return OreDictHelper.getFruitsFromOreDict(getSeed());
     }
 
     @Override
@@ -55,12 +56,8 @@ public abstract class CropPlantGeneric extends CropPlant{
         return list;
     }
 
-    public boolean canBonemeal() {
-        return true;
-    }
-
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+    public boolean canBonemeal() {
         return true;
     }
 
@@ -70,6 +67,7 @@ public abstract class CropPlantGeneric extends CropPlant{
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon(int growthStage) {
         //for the Vanilla SeedItem class the arguments for this method are not used
         return seed.getPlant(null, 0, 0 ,0).getIcon(0, transformMeta(growthStage));

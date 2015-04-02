@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
@@ -25,8 +26,6 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
         if (tileEntity instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) tileEntity;
             this.renderBase(renderer, block, x, y, z);
-            IIcon icon = crop.getPlantIcon();
-            int renderType = crop.getRenderType();
             if (crop.isCrossCrop()) {
                 //render four horizontal sticks (crosscrop)
                 renderer.setRenderBounds(0.1875F, 0.6875F, 0.0F, 0.125F, 0.6F, 1.0F);
@@ -41,9 +40,14 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
                 renderer.setRenderBounds(0.0F, 0.6875F, 0.1875, 1.0F, 0.6F, 0.125F);
                 renderer.renderStandardBlock(block, x, y, z);
             }
-            else if (icon!=null && renderType>=0) {
+            else if (crop.hasPlant()) {
                 //render the plant
-                this.renderPlant(renderer, icon, x, y, z, renderType);
+                CropPlantHandler.getPlantFromStack(crop.getSeedStack()).renderPlantInCrop(world, x, y, z, renderer);
+                /*
+                int renderType = crop.getRenderType();
+                IIcon icon = crop.getPlantIcon();
+                this.renderPlantLayer(renderer, icon, x, y, z, renderType);
+                */
             }
         }
 
@@ -76,8 +80,9 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
         return AgriCraft.proxy.getRenderId(Constants.cropId);
     }
 
+    /*
     //draws the plant on the crops
-    private void renderPlant(RenderBlocks renderer, IIcon icon, int x, int y, int z, int renderType) {
+    private void renderPlantLayer(RenderBlocks renderer, IIcon icon, int x, int y, int z, int renderType) {
         Tessellator tessellator = Tessellator.instance;
         tessellator.addTranslation(x, y, z);
         tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
@@ -208,4 +213,5 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
         }
         tessellator.addTranslation(-x, -y, -z);
     }
+    */
 }

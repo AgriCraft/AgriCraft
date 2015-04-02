@@ -9,6 +9,7 @@ import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.AgriCraftH
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.*;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
+import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.Aspects;
 import com.InfinityRaider.AgriCraft.compatibility.witchery.WitcheryHelper;
 import com.InfinityRaider.AgriCraft.init.Blocks;
@@ -100,7 +101,7 @@ public class ModIntegration {
             PlantMegaPackHelper.initPlants();
         }
         if(LoadedMods.psychedelicraft) {
-
+            PsychedelicraftHelper.initPlants();
         }
         if(LoadedMods.witchery) {
             WitcheryHelper.initPlants();

@@ -1,8 +1,10 @@
 package com.InfinityRaider.AgriCraft.compatibility.magicalcrops;
 
-import com.InfinityRaider.AgriCraft.farming.CropPlantGeneric;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantGeneric;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.mark719.magicalcrops.crops.BlockMagicalCrops;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -51,11 +53,13 @@ public class CropPlantMagicalCrops extends CropPlantGeneric {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return true;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public String getInformation() {
         return "agricraft_journal.mc_"+getSeed().getUnlocalizedName();
     }

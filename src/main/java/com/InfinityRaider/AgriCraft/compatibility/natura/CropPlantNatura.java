@@ -1,7 +1,9 @@
 package com.InfinityRaider.AgriCraft.compatibility.natura;
 
-import com.InfinityRaider.AgriCraft.farming.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import mods.natura.common.NContent;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -67,6 +69,7 @@ public class CropPlantNatura extends CropPlant {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon(int growthStage) {
         //barley: seedMeta = 0
         //cotton: seedMeta = 1
@@ -85,11 +88,13 @@ public class CropPlantNatura extends CropPlant {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return seedMeta==1;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public String getInformation() {
         return "agricraft_journal."+(seedMeta==0?"barleyNatura":"cottonNatura");
     }

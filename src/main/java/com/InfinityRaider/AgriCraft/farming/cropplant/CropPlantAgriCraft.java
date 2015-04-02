@@ -1,5 +1,6 @@
-package com.InfinityRaider.AgriCraft.farming;
+package com.InfinityRaider.AgriCraft.farming.cropplant;
 
+import com.InfinityRaider.AgriCraft.farming.IAgriCraftPlant;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
@@ -64,6 +65,7 @@ public class CropPlantAgriCraft extends CropPlant {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return plant.renderAsFlower();
     }
