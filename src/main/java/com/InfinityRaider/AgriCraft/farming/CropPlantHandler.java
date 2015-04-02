@@ -73,7 +73,7 @@ public class CropPlantHandler {
         }
     }
 
-    //TODO: fix pumpkins, melons & nether wart
+    //TODO: fix pumpkins, melons, wheat & nether wart
     public static void init() {
         //register vanilla plants
         for(BlockModPlant plant : Crops.defaultCrops) {

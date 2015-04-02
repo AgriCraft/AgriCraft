@@ -68,6 +68,15 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
 
     @Override
     @SideOnly(Side.CLIENT)
+    public IIcon getBottomIcon(int growthStage) {
+        if(growthStage<maxMetaBottomBlock()) {
+            return getPlantIcon(growthStage);
+        }
+        return getPlantIcon(maxMetaBottomBlock());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon(int growthStage) {
         //for the Vanilla SeedItem class the arguments for this method are not used
         return seed.getPlant(null, 0, 0 ,0).getIcon(0, transformMeta(growthStage));

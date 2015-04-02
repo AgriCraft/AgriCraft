@@ -14,14 +14,14 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 public abstract class CropPlantTall extends CropPlant {
-
-    public abstract int halfMeta();
+    /** The metadata value for when the bottom block is "fully grown" and the second block starts growing*/
+    public abstract int maxMetaBottomBlock();
 
     @Override
     public boolean onHarvest(World world, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         ArrayList<ItemStack> list = this.getFruitsOnHarvest(crop.getGain(), world.rand);
-        world.setBlockMetadataWithNotify(x, y, z, halfMeta(), 3);
+        world.setBlockMetadataWithNotify(x, y, z, maxMetaBottomBlock(), 3);
         for(ItemStack drop:list) {
             float f = 0.7F;
             double d0 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
@@ -49,7 +49,7 @@ public abstract class CropPlantTall extends CropPlant {
 
     @SideOnly(Side.CLIENT)
     public boolean renderTopLayer(int growthStage) {
-        return growthStage>7;
+        return growthStage> maxMetaBottomBlock();
     }
 
     @Override
