@@ -1,5 +1,12 @@
 package com.InfinityRaider.AgriCraft.farming;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.init.Crops;
+import com.InfinityRaider.AgriCraft.init.CustomCrops;
+import com.InfinityRaider.AgriCraft.init.ResourceCrops;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,6 +18,7 @@ public class CropPlantHandler {
 
     public static void registerPlant(CropPlant plant) throws DuplicateCropPlantException {
         ItemStack stack = plant.getSeed();
+        LogHelper.debug("Registering plant for "+stack.getUnlocalizedName());
         Item seed = stack.getItem();
         int meta = stack.getItemDamage();
         HashMap<Integer, CropPlant> entryForSeed = cropPlants.get(seed);
@@ -45,6 +53,59 @@ public class CropPlantHandler {
         } catch(NullPointerException nullPointerException) {
             return null;
         }
+    }
+
+    public static void init() {
+        //register vanilla plants
+        for(BlockModPlant plant : Crops.defaultCrops) {
+            CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+            try {
+                registerPlant(cropPlant);
+            } catch(DuplicateCropPlantException e) {
+                e.printStackTrace();
+            }
+        }
+        //register botania plants
+        if(ConfigurationHandler.integration_Botania) {
+            for(BlockModPlant plant : Crops.botaniaCrops) {
+                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+                try {
+                    registerPlant(cropPlant);
+                } catch(DuplicateCropPlantException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        //register resource plants
+        if(ConfigurationHandler.resourcePlants) {
+            for(BlockModPlant plant : ResourceCrops.vanillaCrops) {
+                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+                try {
+                    registerPlant(cropPlant);
+                } catch(DuplicateCropPlantException e) {
+                    e.printStackTrace();
+                }
+            }
+            for(BlockModPlant plant : ResourceCrops.modCrops) {
+                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+                try {
+                    registerPlant(cropPlant);
+                } catch(DuplicateCropPlantException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        //register custom crops
+        for(BlockModPlant plant : CustomCrops.customCrops) {
+            CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+            try {
+                registerPlant(cropPlant);
+            } catch(DuplicateCropPlantException e) {
+                e.printStackTrace();
+            }
+        }
+        //register mod crops
+        ModIntegration.initModPlants();
     }
 
     public static final class DuplicateCropPlantException extends Exception {

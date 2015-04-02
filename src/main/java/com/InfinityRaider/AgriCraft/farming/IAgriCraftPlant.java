@@ -25,7 +25,7 @@ public interface IAgriCraftPlant extends IGrowable {
     /** Returns a random fruit for this plant */
     public ItemStack getRandomFruit(Random rand);
 
-    /** Returns an ArrayList with amount of  andom fruit stacks for this plant */
+    /** Returns an ArrayList with amount of  random fruit stacks for this plant */
     public ArrayList<ItemStack> getFruit(int amount, Random rand);
 
     /** Gets the icon for the growth stage, going from 0 to 7. 0 is a newly planted plant and 7 is a mature plant */

@@ -1,9 +1,16 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
+import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChocoCraftHelper;
+import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
+import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
+import com.InfinityRaider.AgriCraft.compatibility.magicalcrops.MagicalCropsHelper;
 import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.AgriCraftHarvestable;
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.*;
+import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
+import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.Aspects;
+import com.InfinityRaider.AgriCraft.compatibility.witchery.WitcheryHelper;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -18,14 +25,33 @@ public class ModIntegration {
     public static void init() {
         // Apple Core
         AppleCoreHelper.init();
-
+        //ChocoCraft
+        if(LoadedMods.chococraft) {
+            ChocoCraftHelper.init();
+        }
+        //Ex Nihilo
+        if(LoadedMods.exNihilo) {
+            ExNihiloHelper.init();
+        }
         //Hunger Overhaul
         if(LoadedMods.hungerOverhaul) {
             FMLInterModComms.sendMessage("HungerOverhaul", "BlacklistRightClick", "com.InfinityRaider.AgriCraft.blocks.BlockCrop");
         }
+        //Magical Crops oredicting
+        if(LoadedMods.magicalCrops) {
+            MagicalCropsHelper.init();
+        }
         //MFR
         if(LoadedMods.mfr) {
             FactoryRegistry.sendMessage("registerHarvestable", new AgriCraftHarvestable());
+        }
+        //Natura
+        if(LoadedMods.natura) {
+            NaturaHelper.init();
+        }
+        //Plant mega pack
+        if(LoadedMods.plantMegaPack) {
+            PlantMegaPackHelper.init();
         }
         //Thaumcraft
         if(LoadedMods.thaumcraft) {
@@ -33,9 +59,11 @@ public class ModIntegration {
             Aspects.registerAspects();
         }
         //Thaumic Tinkerer
+        /*
         if(LoadedMods.thaumicTinkerer) {
-            //ThaumicTinkererHelper.init();
+            ThaumicTinkererHelper.init();
         }
+        */
         //Waila
         if(LoadedMods.waila) {
             FMLInterModComms.sendMessage(Names.Mods.waila, "register", "com.InfinityRaider.AgriCraft.compatibility.waila.WailaRegistry.initWaila");
@@ -54,6 +82,31 @@ public class ModIntegration {
             MineTweakerAPI.registerClass(Growing.BaseBlock.class);
         }
     }
+
+    public static void initModPlants() {
+        if(LoadedMods.chococraft) {
+            ChocoCraftHelper.initPlants();
+        }
+        if(LoadedMods.harvestcraft) {
+            HarvestcraftHelper.initPlants();
+        }
+        if(LoadedMods.magicalCrops) {
+            MagicalCropsHelper.initPlants();
+        }
+        if(LoadedMods.natura) {
+            NaturaHelper.initPlants();
+        }
+        if(LoadedMods.plantMegaPack) {
+            PlantMegaPackHelper.initPlants();
+        }
+        if(LoadedMods.psychedelicraft) {
+
+        }
+        if(LoadedMods.witchery) {
+            WitcheryHelper.initPlants();
+        }
+    }
+
     public static class LoadedMods {
         public static boolean nei;
         public static boolean harvestcraft;
@@ -77,6 +130,7 @@ public class ModIntegration {
         public static boolean tconstruct;
         public static boolean gardenStuff;
         public static boolean psychedelicraft;
+        public static boolean witchery;
 
         public static void init() {
             nei = Loader.isModLoaded(Names.Mods.nei);
@@ -101,31 +155,33 @@ public class ModIntegration {
             tconstruct = Loader.isModLoaded(Names.Mods.tconstruct);
             gardenStuff = Loader.isModLoaded(Names.Mods.gardenStuff);
             psychedelicraft = Loader.isModLoaded(Names.Mods.psychedelicraft);
+            witchery = Loader.isModLoaded(Names.Mods.witchery);
 
-            LogHelper.info("Checking for loaded mods:");
-            LogHelper.info(" - NEI loaded: "+nei);
-            LogHelper.info(" - Pam's HarvestCraft loaded: "+harvestcraft);
-            LogHelper.info(" - Natura loaded: "+natura);
-            LogHelper.info(" - Pam's Weee Flowers loaded: "+weeeFlowers);
-            LogHelper.info(" - Forestry loaded: "+forestry);
-            LogHelper.info(" - Thaumic tinkerer loaded: "+thaumicTinkerer);
-            LogHelper.info(" - Hunger Overhaul loaded: "+hungerOverhaul);
-            LogHelper.info(" - Ex Nihilo loaded: "+exNihilo);
-            LogHelper.info(" - Plant Mega Pack loaded: "+plantMegaPack);
-            LogHelper.info(" - Magical Crops loaded: "+magicalCrops);
-            LogHelper.info(" - Railcraft loaded: "+railcraft);
-            LogHelper.info(" - Thaumcraft loaded: "+thaumcraft);
-            LogHelper.info(" - MineFactory Reloaded loaded: "+mfr);
-            LogHelper.info(" - Waila loaded: "+waila);
-            LogHelper.info(" - Chococraft loaded: "+chococraft);
-            LogHelper.info(" - McMultipart loaded: "+mcMultipart);
-            LogHelper.info(" - MineTweaker loaded: "+minetweaker);
-            LogHelper.info(" - ExtraUtilities loaded: "+extraUtilities);
-            LogHelper.info(" - Botania loaded: "+botania);
-            LogHelper.info(" - Tinker's Construct loaded: "+tconstruct);
-            LogHelper.info(" - Garden Stuff loaded: "+gardenStuff);
-            LogHelper.info(" - Psychedelicraft loaded: "+psychedelicraft);
-            LogHelper.info("Done");
+            LogHelper.debug("Checking for loaded mods:");
+            LogHelper.debug(" - NEI loaded: " + nei);
+            LogHelper.debug(" - Pam's HarvestCraft loaded: " + harvestcraft);
+            LogHelper.debug(" - Natura loaded: " + natura);
+            LogHelper.debug(" - Pam's Weee Flowers loaded: " + weeeFlowers);
+            LogHelper.debug(" - Forestry loaded: " + forestry);
+            LogHelper.debug(" - Thaumic tinkerer loaded: " + thaumicTinkerer);
+            LogHelper.debug(" - Hunger Overhaul loaded: " + hungerOverhaul);
+            LogHelper.debug(" - Ex Nihilo loaded: " + exNihilo);
+            LogHelper.debug(" - Plant Mega Pack loaded: " + plantMegaPack);
+            LogHelper.debug(" - Magical Crops loaded: " + magicalCrops);
+            LogHelper.debug(" - Railcraft loaded: " + railcraft);
+            LogHelper.debug(" - Thaumcraft loaded: " + thaumcraft);
+            LogHelper.debug(" - MineFactory Reloaded loaded: " + mfr);
+            LogHelper.debug(" - Waila loaded: " + waila);
+            LogHelper.debug(" - Chococraft loaded: " + chococraft);
+            LogHelper.debug(" - McMultipart loaded: " + mcMultipart);
+            LogHelper.debug(" - MineTweaker loaded: " + minetweaker);
+            LogHelper.debug(" - ExtraUtilities loaded: " + extraUtilities);
+            LogHelper.debug(" - Botania loaded: " + botania);
+            LogHelper.debug(" - Tinker's Construct loaded: " + tconstruct);
+            LogHelper.debug(" - Garden Stuff loaded: " + gardenStuff);
+            LogHelper.debug(" - Psychedelicraft loaded: " + psychedelicraft);
+            LogHelper.debug(" - Witchery loaded: " + witchery);
+            LogHelper.debug("Done");
         }
     }
 

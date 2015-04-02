@@ -1,24 +1,23 @@
 package com.InfinityRaider.AgriCraft.compatibility.natura;
 
 
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import mods.natura.common.NContent;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class NaturaHelper {
-    public static int getTextureIndex(int plantMeta, int seedMeta) {
-        //barley: seedMeta = 0
-        //cotton: seedMeta = 1
-        switch (plantMeta) {
-            case 0: return seedMeta*4;
-            case 1: return seedMeta*4;
-            case 2: return seedMeta*5;
-            case 3: return 1+seedMeta*4;
-            case 4: return 1+seedMeta*5;
-            case 5: return 2+seedMeta*4;
-            case 6: return 2+seedMeta*5;
-            case 7: return 3+seedMeta*5;
+    public static void init() {
+        OreDictionary.registerOre(Names.OreDict.listAllseed, NContent.plantItem);
+    }
+
+    public static void initPlants() {
+        try {
+            CropPlantHandler.registerPlant(new CropPlantNatura(0));
+            CropPlantHandler.registerPlant(new CropPlantNatura(1));
+        } catch(CropPlantHandler.DuplicateCropPlantException e) {
+            e.printStackTrace();
         }
-        LogHelper.info("Invalid Metadata on NaturaCrop");   //this should never happen
-        return 0;
     }
 
 

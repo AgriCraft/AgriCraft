@@ -1,16 +1,12 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import chococraft.common.items.seeds.ItemGysahlSeeds;
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChococraftHelper;
-import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
+
 import com.InfinityRaider.AgriCraft.farming.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.SeedInformation;
-import mods.natura.common.NContent;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -241,21 +237,6 @@ public abstract class SeedHelper {
             LogHelper.debug("Getting fruit for nether wart");
             items.add(new ItemStack(seed, nr, 0));
         }
-        //agricraft crop
-        else if(plant instanceof IAgriCraftPlant) {
-            LogHelper.debug("Getting fruit for agricraft plant");
-            items.addAll(((IAgriCraftPlant) plant).getFruit(nr, world.rand));
-        }
-        //natura crop
-        else if(ModIntegration.LoadedMods.natura && getPlantDomain(seed).equalsIgnoreCase("natura")) {
-            LogHelper.debug("Getting fruit for natura plant");
-            items.add(new ItemStack(NContent.plantItem, nr, meta*3));
-        }
-        //chococraft crop
-        else if(ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
-            LogHelper.debug("Getting fruit for gyshahls");
-            items.add(ChococraftHelper.getFruit(gain, nr));
-        }
         //other crop
         else {
             LogHelper.debug("Getting fruit from ore dictionary");
@@ -264,10 +245,6 @@ public abstract class SeedHelper {
         if(items.size()==0) {
             LogHelper.debug("Getting fruit from plant");
             int harvestMeta = 7;
-            //plant mega pack crop
-            if(ModIntegration.LoadedMods.plantMegaPack && getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
-                harvestMeta=PlantMegaPackHelper.getTextureIndex(seed, harvestMeta);
-            }
             addFruitsFromPlant(items, plant, world, x, y, z, harvestMeta, nr);
         }
         return items;
@@ -296,10 +273,6 @@ public abstract class SeedHelper {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if(plant instanceof IAgriCraftPlant) {
             items.addAll(((IAgriCraftPlant) plant).getAllFruits());
-        }
-        //chococraft crop
-        else if(ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
-            items.addAll(ChococraftHelper.getFruits());
         }
         //other crop
         else {

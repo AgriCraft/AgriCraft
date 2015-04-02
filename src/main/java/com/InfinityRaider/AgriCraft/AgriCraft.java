@@ -17,6 +17,7 @@ package com.InfinityRaider.AgriCraft;
 */
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -71,13 +72,10 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
         LogHelper.debug("Starting Initialization");
-        Crops.initBotaniaCrops();
 
         NetworkRegistry.INSTANCE.registerGuiHandler(instance , new GuiHandler());
         proxy.registerTileEntities();
         proxy.registerRenderers();
-
-        ModIntegration.init();
 
         LogHelper.debug("Initialization Complete");
     }
@@ -85,21 +83,21 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event) {
         LogHelper.debug("Starting Post-Initialization");
-
+        //Have to do this in postInit because some mods don't register their items/blocks until init
         ResourceCrops.init();
+        CustomCrops.initCustomCrops();
         Crops.initBotaniaCrops();
+        ModIntegration.init();
 
         Recipes.init();
-        CustomCrops.initCustomCrops();
         SeedHelper.init();
         MutationHandler.init();
         GrowthRequirements.init();
         CustomCrops.initGrassSeeds();
-
+        CropPlantHandler.init();
         if(!ConfigurationHandler.disableWorldGen) {
             WorldGen.init();
         }
-
         proxy.initNEI();
         proxy.initSeedInfo();
         LogHelper.debug("Post-Initialization Complete");

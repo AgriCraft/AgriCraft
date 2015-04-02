@@ -121,4 +121,13 @@ public abstract class OreDictHelper {
             nuggetMeta.put(oreName, 0);
         }
     }
+
+    public static ArrayList<ItemStack> getFruitsFromOreDict(ItemStack seed) {
+        for(int id:OreDictionary.getOreIDs(seed)) {
+            if(OreDictionary.getOreName(id).substring(0,4).equalsIgnoreCase("seed")) {
+                return OreDictionary.getOres("crop"+OreDictionary.getOreName(id).substring(4));
+            }
+        }
+        return null;
+    }
 }

@@ -37,7 +37,7 @@ public class CropPlantAgriCraft extends CropPlant {
     }
 
     @Override
-    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
+    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, int strength, Random rand) {
         int amount =  (int) (Math.ceil((gain + 0.00) / 3));
         return plant.getFruit(amount, rand);
     }

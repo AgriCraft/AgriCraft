@@ -1,7 +1,5 @@
 package com.InfinityRaider.AgriCraft.init;
 
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.items.ModItem;
@@ -46,12 +44,6 @@ public class Recipes {
         //seeds
         GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedPotato")), new ItemStack(net.minecraft.init.Items.potato));
         GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedCarrot")), new ItemStack(net.minecraft.init.Items.carrot));
-        if(ModIntegration.LoadedMods.exNihilo) {
-            GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedPotato")), new ItemStack(ExNihiloHelper.seedPotato));
-            GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedCarrot")), new ItemStack(ExNihiloHelper.seedCarrot));
-            GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")), new ItemStack(ExNihiloHelper.seedSugarCane));
-            GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedCactus")), new ItemStack(ExNihiloHelper.seedCactus));
-        }
         //journal
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.journal,1), "csc", "sbs", "csc", 'c', Items.crops, 's', Names.OreDict.listAllseed, 'b', net.minecraft.init.Items.writable_book));
         GameRegistry.addRecipe(new RecipeJournal());
@@ -91,10 +83,12 @@ public class Recipes {
             for(String[] data:Data.modResources) {
                 String oreName = data[0];
                 Item nuggetItem = OreDictHelper.getNuggetForName(oreName);
-                if(nuggetItem instanceof ModItem) {
+                if(nuggetItem!=null && nuggetItem instanceof ModItem) {
                     ItemStack nugget = new ItemStack(nuggetItem, 9, OreDictHelper.getNuggetMetaForName(oreName));
                     ItemStack ingot = OreDictHelper.getIngot(oreName);
-                    GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', "nugget"+oreName));
+                    if(ingot!=null) {
+                        GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', "nugget" + oreName));
+                    }
                     GameRegistry.addRecipe(new ShapelessOreRecipe(nugget, "ingot"+oreName));
                 }
             }

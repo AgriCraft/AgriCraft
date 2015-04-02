@@ -17,15 +17,15 @@ public class Data {
             {"Dandelion", Items.dye, 11, null, null, 0, 1, 6} ,
             {"Poppy", Items.dye, 1, null, null, 0, 1, 6},
             {"Orchid", Items.dye, 12, null, null, 0, 1, 6},
-            {"Allium", Items.dye, 13},
+            {"Allium", Items.dye, 13, null, null, 0, 2, 6},
             {"TulipRed", Items.dye, 1, null, null, 0, 2, 6},
             {"TulipOrange", Items.dye, 14,  null, null, 0, 2, 6},
             {"TulipWhite", Items.dye, 7,  null, null, 0, 2, 6},
             {"TulipPink", Items.dye, 9,  null, null, 0, 2, 6},
             {"Daisy", Items.dye, 7,  null, null, 0, 2, 6},
             {"Cactus", ConfigurationHandler.cactusGivesCactus?Item.getItemFromBlock(Blocks.cactus):net.minecraft.init.Items.dye, ConfigurationHandler.cactusGivesCactus?0:2,  Blocks.sand, null, 0, 2, 6},
-            {"ShroomRed", Item.getItemFromBlock(Blocks.red_mushroom),  Blocks.mycelium, null, 0, 2, 6},
-            {"ShroomBrown", Item.getItemFromBlock(Blocks.brown_mushroom),  Blocks.mycelium, null, 0, 2, 6}
+            {"ShroomRed", Item.getItemFromBlock(Blocks.red_mushroom), 0,  Blocks.mycelium, null, 0, 2, 6},
+            {"ShroomBrown", Item.getItemFromBlock(Blocks.brown_mushroom), 0,  Blocks.mycelium, null, 0, 2, 6}
     };
 
     public static final String[] botania = {
@@ -45,16 +45,6 @@ public class Data {
             "BotaniaGreen",
             "BotaniaRed",
             "BotaniaBlack"
-    };
-
-    public static final Object[][] vanillaResources = {
-            {"Aurigold", net.minecraft.init.Items.gold_nugget, 0, null, Blocks.gold_ore, 0, 4, 6},
-            {"Ferranium", OreDictHelper.getNuggetForName("Iron"), OreDictHelper.getNuggetMetaForName("Iron"), null, Blocks.iron_ore, 0, 4, 1},
-            {"Diamahlia", OreDictHelper.getNuggetForName("Diamond"), OreDictHelper.getNuggetMetaForName("Diamond"), null, Blocks.diamond_ore, 0, 5, 6},
-            {"Lapender", net.minecraft.init.Items.dye, 4, null, Blocks.lapis_ore, 0, 3, 6},
-            {"Emeryllis", OreDictHelper.getNuggetForName("Emerald"), OreDictHelper.getNuggetMetaForName("Emerald"), null, Blocks.emerald_ore, 0, 5, 6},
-            {"Redstodendron", Items.redstone, 0, null, Blocks.redstone_ore, 0, 3, 6},
-            {"NitorWart", Items.glowstone_dust, 0, Blocks.soul_sand, Blocks.glowstone, 0, 4, 6}
     };
 
     public static final String[] vanillaNuggets = {

@@ -37,7 +37,7 @@ public abstract class CropPlant {
     public abstract ItemStack getRandomFruit(Random rand);
 
     /** Returns an ArrayList with amount of random fruit stacks for this plant */
-    public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
+    public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, int strength, Random rand);
 
     /** Allow this plant to be bonemealed or not */
     public abstract boolean canBonemeal();

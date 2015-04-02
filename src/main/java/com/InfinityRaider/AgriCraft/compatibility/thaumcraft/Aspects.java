@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.compatibility.thaumcraft;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -29,6 +28,10 @@ public class Aspects {
             for(ItemModSeed seed : Crops.botaniaSeeds) {
                 ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1));
             }
+        }
+        //custom crops
+        for(ItemModSeed seed : CustomCrops.customSeeds) {
+            ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1));
         }
         //seed analyzer
         ThaumcraftApi.registerObjectTag(new ItemStack(Blocks.seedAnalyzer, 1, 0), new AspectList().add(Aspect.MIND, 2).add(Aspect.PLANT, 2).add(Aspect.CROP, 2));

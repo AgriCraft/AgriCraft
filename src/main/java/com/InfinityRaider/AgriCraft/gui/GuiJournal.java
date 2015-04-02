@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.gui;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
@@ -332,7 +333,7 @@ public class GuiJournal extends GuiScreen {
         //get the growth stage icons
         plantIcons = new IIcon[8];
         for(int i=0;i< plantIcons.length;i++) {
-            plantIcons[i] = RenderHelper.getPlantIcon((ItemSeeds) seed.getItem(), seed.getItemDamage(), i);
+            plantIcons[i] = CropPlantHandler.getPlantFromStack(seed).getPlantIcon(i);
         }
         //get the icons for the parents that mutate into this seed
         Mutation[] parents = MutationHandler.getParentMutations(seed);

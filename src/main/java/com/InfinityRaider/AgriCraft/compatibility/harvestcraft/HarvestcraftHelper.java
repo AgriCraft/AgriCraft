@@ -1,34 +1,33 @@
 package com.InfinityRaider.AgriCraft.compatibility.harvestcraft;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.pam.harvestcraft.ItemRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 public class HarvestcraftHelper {
-    public static ItemSeeds getSeedFromName(String name) {
-        String seedItem = Names.seedItem;
-        //get the raw seed name
-        if(name.indexOf(':')>0) {
-            //get rid of 'harvestcraft:' if it's there
-            if(name.substring(0,name.indexOf(':')).equalsIgnoreCase(Names.Mods.harvestcraft)) {
-                name = name.substring(name.indexOf(":")+1);
+    public static void initPlants() {
+        Class hc_ItemRegistry = ItemRegistry.class;
+        Field[] fields = hc_ItemRegistry.getDeclaredFields();
+        for(Field field : fields) {
+            if(Modifier.isStatic(field.getModifiers())) {
+                try {
+                    Object obj = field.get(null);
+                    if(obj instanceof ItemSeeds) {
+                        ItemSeeds seed = (ItemSeeds) obj;
+                        CropPlantHandler.registerPlant(new CropPlantHarvestCraft(seed));
+                    }
+                } catch (Exception e) {
+                    if (ConfigurationHandler.debug) {
+                        e.printStackTrace();
+                    }
+                }
             }
-            //get rid of the metadata if it's there
-            if(name.indexOf(':')>0) {
-                name = name.substring(0,name.indexOf(':'));
-            }
-        }
-        //get rid of 'seedItem' if it's there
-        if(name.length()>Names.seedItem.length() && name.substring(name.length()-Names.seedItem.length()).equalsIgnoreCase(Names.seedItem)) {
-            name = name.substring(0,name.length()-Names.seedItem.length());
-        }
-        name = Names.Mods.harvestcraft+":"+name+Names.seedItem;
-        Object seed = Item.itemRegistry.getObject(name);
-        if(seed instanceof  ItemSeeds) {
-            return (ItemSeeds) seed;
-        }
-        else {
-            return null;
         }
     }
 }

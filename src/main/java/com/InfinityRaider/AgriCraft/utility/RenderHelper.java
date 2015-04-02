@@ -1,18 +1,9 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import chococraft.common.items.seeds.ItemGysahlSeeds;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChococraftHelper;
-import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
-import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
-import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
-import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import ivorius.psychedelicraft.blocks.IvTilledFieldPlant;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
@@ -66,48 +57,6 @@ public abstract class RenderHelper {
             }
         }
         return renderType;
-    }
-
-    public static IIcon getPlantIcon(ItemSeeds seed, int seedMeta, int growthMeta) {
-        if(seed instanceof IAgriCraftSeed) {
-            return ((IAgriCraftSeed) seed).getPlant().getIcon(growthMeta);
-        }
-        else {
-            growthMeta = plantIconIndex(seed, seedMeta, growthMeta);
-            return getIcon(SeedHelper.getPlant(seed), growthMeta);
-        }
-    }
-
-    //this method is used to convert the vanilla 0-7 meta growth stages to natura growth stages or nether wart growth stages
-    public static int plantIconIndex(ItemSeeds seed, int seedMeta, int growthMeta) {
-        Block plant = null;
-        try {
-            plant = seed.getPlant(null, 0, 0, 0);
-        } catch(Exception e) {
-            LogHelper.debug("Couldn't grab plant");
-        }
-
-        if(seed instanceof IAgriCraftSeed) {
-            return growthMeta;
-        }
-        else if(ModIntegration.LoadedMods.natura && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("natura")) {
-            return NaturaHelper.getTextureIndex(growthMeta, seedMeta);
-        }
-        else if(ModIntegration.LoadedMods.plantMegaPack && SeedHelper.getPlantDomain(seed).equalsIgnoreCase("plantmegapack")) {
-            return PlantMegaPackHelper.getTextureIndex(seed, growthMeta);
-        }
-        else if(ModIntegration.LoadedMods.chococraft && seed instanceof ItemGysahlSeeds) {
-            return ChococraftHelper.transformMeta(growthMeta);
-        }
-        else if(ModIntegration.LoadedMods.psychedelicraft && plant!=null && plant instanceof IvTilledFieldPlant) {
-            return PsychedelicraftHelper.transformMeta(growthMeta);
-        }
-        else if(seed== Items.nether_wart) {
-            return (int) Math.ceil(( (float) growthMeta-2)/2);
-        }
-        else {
-            return growthMeta;
-        }
     }
 
     //checks if a lever is facing a block

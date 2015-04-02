@@ -10,6 +10,8 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
+import net.minecraft.init.*;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -41,7 +43,16 @@ public class ResourceCrops {
     private static void initVanillaResources() {
         vanillaCrops = new ArrayList<BlockModPlant>();
         vanillaSeeds = new ArrayList<ItemModSeed>();
-        for(Object[] data: Data.vanillaResources) {
+        Object[][] vanillaResources = {
+                {"Aurigold", net.minecraft.init.Items.gold_nugget, 0, null, net.minecraft.init.Blocks.gold_ore, 0, 4, 6},
+                {"Ferranium", OreDictHelper.getNuggetForName("Iron"), OreDictHelper.getNuggetMetaForName("Iron"), null, net.minecraft.init.Blocks.iron_ore, 0, 4, 1},
+                {"Diamahlia", OreDictHelper.getNuggetForName("Diamond"), OreDictHelper.getNuggetMetaForName("Diamond"), null, net.minecraft.init.Blocks.diamond_ore, 0, 5, 6},
+                {"Lapender", net.minecraft.init.Items.dye, 4, null, net.minecraft.init.Blocks.lapis_ore, 0, 3, 6},
+                {"Emeryllis", OreDictHelper.getNuggetForName("Emerald"), OreDictHelper.getNuggetMetaForName("Emerald"), null, net.minecraft.init.Blocks.emerald_ore, 0, 5, 6},
+                {"Redstodendron", net.minecraft.init.Items.redstone, 0, null, net.minecraft.init.Blocks.redstone_ore, 0, 3, 6},
+                {"NitorWart", net.minecraft.init.Items.glowstone_dust, 0, net.minecraft.init.Blocks.soul_sand, Blocks.glowstone, 0, 4, 6}
+        };
+        for(Object[] data: vanillaResources) {
             String name =(String) data[0];
             //create plant
             BlockModPlant plant = new BlockModPlant(data);
@@ -61,7 +72,7 @@ public class ResourceCrops {
         for(String[] data:Data.modResources) {
             Block base = OreDictHelper.getOreBlockForName(data[0]);
             if(base!=null) {
-                Object[] args = {data[1], OreDictHelper.getNuggetForName(data[0]), OreDictHelper.getNuggetMetaForName(data[0]), OreDictHelper.getOreBlockForName(data[0]), OreDictHelper.getOreMetaForName(data[0]), 0, 4, 6};
+                Object[] args = {data[1], OreDictHelper.getNuggetForName(data[0]), OreDictHelper.getNuggetMetaForName(data[0]), null, OreDictHelper.getOreBlockForName(data[0]), OreDictHelper.getOreMetaForName(data[0]), 0, 4, 6};
                 String name =(String) args[0];
                 //create plant
                 BlockModPlant plant = new BlockModPlant(args);

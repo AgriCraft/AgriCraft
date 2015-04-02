@@ -125,7 +125,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** gets the fruits for this plant */
-    public ArrayList<ItemStack> getFruits() {return plant.getFruitsOnHarvest(gain, worldObj.rand);}
+    public ArrayList<ItemStack> getFruits() {return plant.getFruitsOnHarvest(gain, strength, worldObj.rand);}
 
     public ItemStack getSeedStack() {
         ItemStack seed = plant.getSeed();
