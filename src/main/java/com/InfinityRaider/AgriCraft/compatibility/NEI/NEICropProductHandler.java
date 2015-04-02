@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.NEI;
 
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +30,7 @@ public class NEICropProductHandler extends TemplateRecipeHandler {
     //loads the crop product recipes for a given seed
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if(SeedHelper.isValidSeedStack(ingredient)) {
+        if(CropPlantHandler.isValidSeed(ingredient)) {
             ItemSeeds seed = (ItemSeeds) ingredient.getItem();
             int meta = ingredient.getItemDamage();
         }

@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import net.minecraft.item.ItemSeeds;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import net.minecraft.item.ItemStack;
 
 
@@ -21,7 +20,7 @@ public class Mutation {
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
         this(result, parent1, parent2, 100);
-        this.chance = 1.00/ SeedHelper.getSeedTier((ItemSeeds) result.getItem(), result.getItemDamage());
+        this.chance = 1.00/ CropPlantHandler.getPlantFromStack(result).getTier();
     }
 
     //copy constructor

@@ -20,7 +20,7 @@ public abstract class CropPlantGeneric extends CropPlant{
     public abstract int transformMeta(int growthStage);
 
     @Override
-    public int getTier() {
+    public int tier() {
         return 2;
     }
 
@@ -45,7 +45,7 @@ public abstract class CropPlantGeneric extends CropPlant{
     }
 
     @Override
-    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, int strength, Random rand) {
+    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
         int amount = (int) (Math.ceil((gain + 0.00) / 3));
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         while(amount>0) {
@@ -67,11 +67,6 @@ public abstract class CropPlantGeneric extends CropPlant{
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
         return GrowthRequirements.getGrowthRequirement(seed, 0).canGrow(world, x, y, z);
-    }
-
-    @Override
-    public IIcon getSeedIcon() {
-        return seed.getIconFromDamage(0);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class CropPlantAgriCraft extends CropPlant {
     }
 
     @Override
-    public int getTier() {
+    public int tier() {
         return plant.getSeed().tier();
     }
 
@@ -37,7 +37,7 @@ public class CropPlantAgriCraft extends CropPlant {
     }
 
     @Override
-    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, int strength, Random rand) {
+    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
         int amount =  (int) (Math.ceil((gain + 0.00) / 3));
         return plant.getFruit(amount, rand);
     }
@@ -55,12 +55,6 @@ public class CropPlantAgriCraft extends CropPlant {
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
         return plant.getGrowthRequirement().canGrow(world, x, y, z);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getSeedIcon() {
-        return plant.getSeed().getIcon(getSeed());
     }
 
     @Override

@@ -15,7 +15,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-
 import org.apache.commons.lang3.text.WordUtils;
 
 public class SimpleWikiProvider implements IWikiProvider {

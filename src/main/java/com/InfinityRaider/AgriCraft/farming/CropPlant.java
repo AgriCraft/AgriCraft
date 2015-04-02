@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
@@ -10,9 +11,8 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-/** main class used by TileEntityCrop to perform its functionality, only make one object of this per seed object */
+/** main class used by TileEntityCrop to perform its functionality, only make one object of this per seed object and register it using CropPlantHandler.registerPlant(CropPlant plant) */
 public abstract class CropPlant {
-
     public final int getGrowthRate() {
         switch(getTier()) {
             case 1: return Constants.growthTier1;
@@ -24,8 +24,17 @@ public abstract class CropPlant {
         }
     }
 
-    /** Gets the tier of this plant */
-    public abstract int getTier();
+    /** This is called to get the actual tier of a seed */
+    public final int getTier() {
+        int seedTierOverride = SeedHelper.getSeedTierOverride(getSeed());
+        if(seedTierOverride>0) {
+            return seedTierOverride;
+        }
+        return tier();
+    }
+
+    /** Gets the tier of this plant, can be overridden trough the configs */
+    public abstract int tier();
 
     /** Gets a stack of the seed for this plant */
     public abstract ItemStack getSeed();
@@ -37,7 +46,12 @@ public abstract class CropPlant {
     public abstract ItemStack getRandomFruit(Random rand);
 
     /** Returns an ArrayList with amount of random fruit stacks for this plant */
-    public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, int strength, Random rand);
+    public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
+
+    /** Gets right before a harvest attempt, return false to prevent further processing */
+    public boolean onHarvest(World world, int x, int y, int z) {
+        return true;
+    }
 
     /** Allow this plant to be bonemealed or not */
     public abstract boolean canBonemeal();
@@ -47,10 +61,6 @@ public abstract class CropPlant {
 
     /** Checks if the plant can grow on this position */
     public abstract boolean isFertile(World world, int x, int y, int z);
-
-    /** Gets the seed icon */
-    @SideOnly(Side.CLIENT)
-    public abstract IIcon getSeedIcon();
 
     /** Gets the icon for the plant, growthstage goes from 0 to 7 (both inclusive, 0 is sprout and 7 is mature) */
     @SideOnly(Side.CLIENT)

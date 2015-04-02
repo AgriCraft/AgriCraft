@@ -11,9 +11,9 @@
  */
 package vazkii.botania.api.boss;
 
-import vazkii.botania.api.internal.ShaderCallback;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import vazkii.botania.api.internal.ShaderCallback;
 
 /**
  * A Botania boss whose HP bar makes use of shaders. Shaders

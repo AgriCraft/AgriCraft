@@ -1,12 +1,10 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
@@ -42,21 +40,6 @@ public abstract class RenderHelper {
         String domain = path.substring(0, path.indexOf(":") + 1);
         String file = path.substring(path.indexOf(':')+1);
         return new ResourceLocation(domain+"textures/items/"+file+".png");
-    }
-
-    //gets the render type for a plant
-    //1: diagonals of the block
-    //6: four lines parallel to the block edges
-    public static int getRenderType(ItemSeeds seed, int meta) {
-        Block plant = SeedHelper.getPlant(seed);
-        int renderType = plant.getRenderType();
-        if(ModIntegration.LoadedMods.natura) {
-            String name = Item.itemRegistry.getNameForObject(seed);
-            if (name.indexOf(':') >= 0 && name.substring(0, name.indexOf(':')).equalsIgnoreCase("Natura")) {
-                renderType = meta == 0 ? 6 : 1;
-            }
-        }
-        return renderType;
     }
 
     //checks if a lever is facing a block

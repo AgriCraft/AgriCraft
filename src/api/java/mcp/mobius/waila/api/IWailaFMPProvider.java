@@ -1,8 +1,8 @@
 package mcp.mobius.waila.api;
 
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 /**
  * Callback class interface used to provide FMP tooltip informations to Waila.<br>

@@ -1,20 +1,13 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-
-import com.InfinityRaider.AgriCraft.farming.IAgriCraftPlant;
-import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.reference.SeedInformation;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.*;
@@ -153,13 +146,12 @@ public abstract class SeedHelper {
         if(value!=null && value.length>meta && value[meta]!=null) {
             return ((double) value[meta]) / 100;
         }
-        return 1.00/ SeedHelper.getSeedTier(seed, meta);
+        return 1.00/ CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta)).getTier();
     }
 
-    public static int getSeedTier(ItemSeeds seed, int meta) {
-        if(seed == null) {
-            return 0;
-        }
+    public static int getSeedTierOverride(ItemStack stack) {
+        ItemSeeds seed = (ItemSeeds) stack.getItem();
+        int meta = stack.getItemDamage();
         Integer[] tierArray = seedTiers.get(seed);
         if(tierArray!=null && tierArray.length>meta) {
             Integer tier = seedTiers.get(seed)[meta];
@@ -167,159 +159,22 @@ public abstract class SeedHelper {
                 return tier;
             }
         }
-        if(seed instanceof IAgriCraftSeed) {
-            return ((IAgriCraftSeed) seed).tier();
-        }
-        String domain = Item.itemRegistry.getNameForObject(seed).substring(0, Item.itemRegistry.getNameForObject(seed).indexOf(':'));
-        if(domain.equalsIgnoreCase("harvestcraft")) {
-            return 2;
-        }
-        if(domain.equalsIgnoreCase("natura")) {
-            return 2;
-        }
-        if(domain.equalsIgnoreCase("magicalcrops")) {
-            return 4;
-        }
-        if(domain.equalsIgnoreCase("plantmegapack")) {
-            return 2;
-        }
-        if(domain.equalsIgnoreCase("weeeflowers")) {
-            return 2;
-        }
-        return 1;
-    }
-
-    public static int getBaseGrowth(int tier) {
-        switch(tier) {
-            case 1: return Constants.growthTier1;
-            case 2: return Constants.growthTier2;
-            case 3: return Constants.growthTier3;
-            case 4: return Constants.growthTier4;
-            case 5: return Constants.growthTier5;
-            default: return 0;
-        }
-    }
-
-    //find the crop for a seed
-    public static Block getPlant(ItemSeeds seed) {
-        if(seed == null) {
-            return null;
-        }
-        else if(seed == Items.melon_seeds) {
-            return (Block) Block.blockRegistry.getObject("AgriCraft:cropMelon");
-        }
-        else if(seed == Items.pumpkin_seeds) {
-            return (Block) Block.blockRegistry.getObject("AgriCraft:cropPumpkin");
-        }
-        else {
-            return seed.getPlant(null, 0, 0, 0);
-        }
+        return -1;
     }
 
     public static boolean isAnalyzedSeed(ItemStack seedStack) {
         return (seedStack!=null) && (seedStack.getItem()!=null) && (seedStack.getItem() instanceof ItemSeeds) && (seedStack.hasTagCompound()) && (seedStack.stackTagCompound.hasKey(Names.NBT.analyzed)) && (seedStack.stackTagCompound.getBoolean(Names.NBT.analyzed));
     }
 
-    //gets the seed domain
-    public static String getPlantDomain(ItemSeeds seed) {
-        String name = Item.itemRegistry.getNameForObject(seed);
-        return name.substring(0, name.indexOf(":")).toLowerCase();
-    }
-
-    //gets the fruits
-    public static ArrayList<ItemStack> getPlantFruits(ItemSeeds seed, World world, int x, int y, int z, int gain, int meta) {
-        int nr =  (int) (Math.ceil((gain + 0.00) / 3));
-        Block plant = getPlant(seed);
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        Random rand = world!=null?world.rand:new Random();
-        //nether wart exception
-        if(plant==Blocks.nether_wart) {
-            LogHelper.debug("Getting fruit for nether wart");
-            items.add(new ItemStack(seed, nr, 0));
-        }
-        //other crop
-        else {
-            LogHelper.debug("Getting fruit from ore dictionary");
-            addFruitsFromOreDict(items, seed, meta, rand, nr);
-        }
-        if(items.size()==0) {
-            LogHelper.debug("Getting fruit from plant");
-            int harvestMeta = 7;
-            addFruitsFromPlant(items, plant, world, x, y, z, harvestMeta, nr);
-        }
-        return items;
-    }
-
-    public static void addFruitsFromPlant(List<ItemStack> items, Block plant, World world, int x, int y, int z, int harvestMeta, int nr) {
-        ArrayList<ItemStack> defaultDrops = plant.getDrops(world, x, y, z, harvestMeta, 0);
-        for (ItemStack drop : defaultDrops) {
-            if (!(drop.getItem() instanceof ItemSeeds) && drop.getItem()!=null) {
-                boolean add = true;
-                for(ItemStack item:items) {
-                    if(item.getItem()==drop.getItem() && item.getItemDamage()==drop.getItemDamage()) {
-                        add = false;
-                    }
-                }
-                if(add) {
-                    items.add(new ItemStack(drop.getItem(), nr, drop.getItemDamage()));
-                }
-            }
-        }
-    }
-
-    //get all plant fruits
-    public static ArrayList<ItemStack> getAllPlantFruits(ItemSeeds seed, World world, int x, int y, int z, int gain, int meta) {
-        Block plant = getPlant(seed);
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        if(plant instanceof IAgriCraftPlant) {
-            items.addAll(((IAgriCraftPlant) plant).getAllFruits());
-        }
-        //other crop
-        else {
-            items = (ArrayList<ItemStack>) getFruitsFromOreDict(seed, meta);
-        }
-        if(items==null || items.size()==0) {
-            items = getPlantFruits(seed, world, x, y, z, gain, meta);
-        }
-        return items;
-    }
-
-    public static void addFruitsFromOreDict(List<ItemStack> list, ItemSeeds seed, int meta, Random rand, int nr) {
-        int counter = 0;
-        List<ItemStack> fruits = getFruitsFromOreDict(seed, meta);
-        if(fruits!=null && fruits.size()>0) {
-            while (counter < nr) {
-                ItemStack newFruit = fruits.get(rand.nextInt(fruits.size())).copy();
-                newFruit.stackSize = 1;
-                list.add(newFruit);
-                counter++;
-            }
-        }
-    }
-
-    public static List<ItemStack> getFruitsFromOreDict(ItemSeeds seed, int meta) {
-        for(int id:OreDictionary.getOreIDs(new ItemStack(seed, 1, meta))) {
-            if(OreDictionary.getOreName(id).substring(0,4).equalsIgnoreCase("seed")) {
-                return OreDictionary.getOres("crop"+OreDictionary.getOreName(id).substring(4));
-            }
-        }
-        return null;
-    }
-
-    //check if the seed is valid
-    public static boolean isValidSeed(ItemSeeds seed, int meta) {
-        /*
-        if(ModIntegration.LoadedMods.thaumicTinkerer && getPlantDomain(seed).equalsIgnoreCase(Names.Mods.thaumicTinkerer)) {
-            LogHelper.debug("Thaumic Tinkerer infused seeds are not supported, sorry");
-            return false;
-        }
-        */
+    public static boolean isSeedBlackListed(ItemStack stack) {
+        Item seed = stack.getItem();
+        int meta = stack.getItemDamage();
         for(ItemStack blacklistedSeed:seedBlackList) {
             if(blacklistedSeed.getItem()==seed && blacklistedSeed.getItemDamage()==meta) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     //define NBT tag
@@ -330,19 +185,11 @@ public abstract class SeedHelper {
         tag.setBoolean(Names.NBT.analyzed, analyzed);
     }
 
-    //get a string of information about the seed for the journal
-    public static String getSeedInformation(ItemStack seedStack) {
-        if (!(seedStack.getItem() instanceof ItemSeeds)) {
-            return null;
-        }
-        return SeedInformation.getSeedInformation(seedStack);
-    }
-
     //get a random seed
     public static ItemStack getRandomSeed(boolean setTag) {
         ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
         ItemStack seed = null;
-        while(seed==null || !(seed.getItem() instanceof ItemSeeds) || !isValidSeed((ItemSeeds) seed.getItem(), seed.getItemDamage())) {
+        while(seed==null || !(seed.getItem() instanceof ItemSeeds) || !CropPlantHandler.isValidSeed(seed)) {
             seed = seeds.get((int) Math.floor(Math.random()*seeds.size()));
         }
         if(setTag) {
@@ -374,9 +221,5 @@ public abstract class SeedHelper {
         }
         chances[meta] = chance;
         return oldChance;
-    }
-
-    public static boolean isValidSeedStack(ItemStack stack) {
-        return stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds && isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage());
     }
 }

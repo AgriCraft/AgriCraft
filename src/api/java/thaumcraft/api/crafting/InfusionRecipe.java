@@ -1,13 +1,13 @@
 package thaumcraft.api.crafting;
 
-import java.util.ArrayList;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.AspectList;
+
+import java.util.ArrayList;
 
 public class InfusionRecipe
 {

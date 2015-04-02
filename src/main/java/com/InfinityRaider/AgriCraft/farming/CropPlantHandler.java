@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.init.CustomCrops;
 import com.InfinityRaider.AgriCraft.init.ResourceCrops;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,8 +17,11 @@ import java.util.HashMap;
 public class CropPlantHandler {
     private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, CropPlant>>();
 
-    public static void registerPlant(CropPlant plant) throws DuplicateCropPlantException {
+    public static void registerPlant(CropPlant plant) throws DuplicateCropPlantException, BlacklistedCropPlantException {
         ItemStack stack = plant.getSeed();
+        if(SeedHelper.isSeedBlackListed(stack)) {
+            throw new BlacklistedCropPlantException();
+        }
         LogHelper.debug("Registering plant for "+stack.getUnlocalizedName());
         Item seed = stack.getItem();
         int meta = stack.getItemDamage();
@@ -34,6 +38,14 @@ public class CropPlantHandler {
             entryForSeed = new HashMap<Integer, CropPlant>();
             entryForSeed.put(meta, plant);
             cropPlants.put(seed, entryForSeed);
+        }
+    }
+
+    public static boolean isValidSeed(ItemStack stack) {
+        try {
+            return cropPlants.get(stack.getItem()).get(stack.getItemDamage())!=null;
+        } catch (NullPointerException e) {
+            return false;
         }
     }
 
@@ -55,13 +67,14 @@ public class CropPlantHandler {
         }
     }
 
+    //TODO: fix pumpkins, melons & nether wart
     public static void init() {
         //register vanilla plants
         for(BlockModPlant plant : Crops.defaultCrops) {
             CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
             try {
                 registerPlant(cropPlant);
-            } catch(DuplicateCropPlantException e) {
+            } catch(Exception e) {
                 e.printStackTrace();
             }
         }
@@ -71,7 +84,7 @@ public class CropPlantHandler {
                 CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
                 try {
                     registerPlant(cropPlant);
-                } catch(DuplicateCropPlantException e) {
+                } catch(Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -82,7 +95,7 @@ public class CropPlantHandler {
                 CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
                 try {
                     registerPlant(cropPlant);
-                } catch(DuplicateCropPlantException e) {
+                } catch(Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -90,7 +103,7 @@ public class CropPlantHandler {
                 CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
                 try {
                     registerPlant(cropPlant);
-                } catch(DuplicateCropPlantException e) {
+                } catch(Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -100,7 +113,7 @@ public class CropPlantHandler {
             CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
             try {
                 registerPlant(cropPlant);
-            } catch(DuplicateCropPlantException e) {
+            } catch(Exception e) {
                 e.printStackTrace();
             }
         }
@@ -111,6 +124,12 @@ public class CropPlantHandler {
     public static final class DuplicateCropPlantException extends Exception {
         public DuplicateCropPlantException() {
             super("This plant is already registered");
+        }
+    }
+
+    public static final class BlacklistedCropPlantException extends Exception {
+        public BlacklistedCropPlantException() {
+            super("This plant is blacklisted");
         }
     }
 }

@@ -1,10 +1,10 @@
 package thaumcraft.api.aspects;
 
-import java.lang.reflect.Method;
-
+import cpw.mods.fml.common.FMLLog;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import cpw.mods.fml.common.FMLLog;
+
+import java.lang.reflect.Method;
 
 public class AspectSourceHelper {
 

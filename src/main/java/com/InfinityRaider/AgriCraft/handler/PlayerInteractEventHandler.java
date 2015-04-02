@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.handler;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -24,7 +24,7 @@ public class PlayerInteractEventHandler {
                 if (GrowthRequirements.isSoilValid(event.world, event.x, event.y, event.z) || block == Blocks.farmland) {
                     if (ConfigurationHandler.disableVanillaFarming) {
                         //for now, disable vanilla farming for every IPlantable, if people start to need exceptions I'll add in exceptions
-                        if(!(event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSeeds) || SeedHelper.isValidSeed((ItemSeeds) event.entityPlayer.getCurrentEquippedItem().getItem(), event.entityPlayer.getCurrentEquippedItem().getItemDamage())) {
+                        if(!(event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSeeds) || CropPlantHandler.isValidSeed(event.entityPlayer.getCurrentEquippedItem())) {
                             this.denyEvent(event, false);
                         }
                     } else if (event.entityPlayer.getCurrentEquippedItem().hasTagCompound()) {

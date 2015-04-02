@@ -68,7 +68,11 @@ public abstract class MutationHandler {
                         success =  parent2!=null &&  parent2 instanceof ItemSeeds;
                         errorMsg = "second parent stack is not correct";
                         if(success) {
-                            mutation = new Mutation(resultStack, parentStack1, parentStack2);
+                            try {
+                                mutation = new Mutation(resultStack, parentStack1, parentStack2);
+                            } catch (Exception e) {
+                                LogHelper.debug("Caught exception when trying to add mutation: "+resultStack.getUnlocalizedName()+"="+parentStack1.getUnlocalizedName()+"+"+parentStack2.getUnlocalizedName());
+                            }
                         }
                     }
                 }

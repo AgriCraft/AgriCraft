@@ -15,10 +15,8 @@ public class NaturaHelper {
         try {
             CropPlantHandler.registerPlant(new CropPlantNatura(0));
             CropPlantHandler.registerPlant(new CropPlantNatura(1));
-        } catch(CropPlantHandler.DuplicateCropPlantException e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
-
-
 }

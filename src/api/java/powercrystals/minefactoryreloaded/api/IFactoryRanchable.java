@@ -1,10 +1,10 @@
 package powercrystals.minefactoryreloaded.api;
 
-import java.util.List;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 /**
  * @author PowerCrystals

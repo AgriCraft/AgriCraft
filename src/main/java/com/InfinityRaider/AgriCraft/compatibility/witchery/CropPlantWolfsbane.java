@@ -1,10 +1,11 @@
 package com.InfinityRaider.AgriCraft.compatibility.witchery;
 
+import com.emoniph.witchery.Witchery;
 import net.minecraft.item.ItemSeeds;
 
 public class CropPlantWolfsbane extends CropPlantWitchery {
-    public CropPlantWolfsbane(ItemSeeds seed) {
-        super(seed);
+    public CropPlantWolfsbane() {
+        super((ItemSeeds)Witchery.Items.SEEDS_WOLFSBANE);
     }
 
     @Override

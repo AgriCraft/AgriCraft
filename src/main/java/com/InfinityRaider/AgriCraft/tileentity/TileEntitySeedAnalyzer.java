@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
@@ -73,22 +74,18 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     //calculates the number of ticks it takes to analyze the seed
     public int maxProgress() {
-        return seed==null || !(seed.getItem() instanceof ItemSeeds)?0: SeedHelper.getSeedTier((ItemSeeds) seed.getItem(), seed.getItemDamage())*20;
+        return seed==null || !(seed.getItem() instanceof ItemSeeds)?0: CropPlantHandler.getPlantFromStack(seed).getTier()*20;
     }
 
     public static boolean isValid(ItemStack stack) {
-        if(stack!=null && stack.getItem() instanceof ItemSeeds) {
-            if(!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage())) {
-                return false;
-            }
-            if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey(Names.NBT.analyzed)) {
-                return !stack.stackTagCompound.getBoolean(Names.NBT.analyzed);
-            }
-            else {
-                return true;
-            }
+        if (!CropPlantHandler.isValidSeed(stack)) {
+            return false;
         }
-        return false;
+        if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey(Names.NBT.analyzed)) {
+            return !stack.stackTagCompound.getBoolean(Names.NBT.analyzed);
+        } else {
+            return true;
+        }
     }
 
     //gets called every tick
@@ -195,7 +192,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     public boolean canInsertItem(int slot, ItemStack stack, int side) {
         if(slot==ContainerSeedAnalyzer.seedSlotId) {
             if (stack.getItem() instanceof ItemSeeds) {
-                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage())) {
+                if (!CropPlantHandler.isValidSeed(stack)) {
                     return false;
                 }
                 return (this.seed == null || this.canStack(stack)) && this.isItemValidForSlot(slot, stack);

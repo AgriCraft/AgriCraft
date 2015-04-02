@@ -9,7 +9,6 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import net.minecraft.item.ItemStack;
 
 public class NEIConfig implements IConfigureNEI {

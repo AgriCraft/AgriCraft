@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.reference;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;

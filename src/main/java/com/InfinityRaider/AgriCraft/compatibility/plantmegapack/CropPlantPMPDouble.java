@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class CropPlantPMPDouble extends CropPlantDouble {
     @Override
-    public int getTier() {
+    public int tier() {
         return 0;
     }
 
@@ -30,7 +30,7 @@ public class CropPlantPMPDouble extends CropPlantDouble {
     }
 
     @Override
-    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, int strength, Random rand) {
+    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
         return null;
     }
 
@@ -42,11 +42,6 @@ public class CropPlantPMPDouble extends CropPlantDouble {
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
         return false;
-    }
-
-    @Override
-    public IIcon getSeedIcon() {
-        return null;
     }
 
     @Override

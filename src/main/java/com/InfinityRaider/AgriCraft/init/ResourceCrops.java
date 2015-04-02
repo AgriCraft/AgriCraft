@@ -3,21 +3,14 @@ package com.InfinityRaider.AgriCraft.init;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.items.ModItem;
 import com.InfinityRaider.AgriCraft.reference.Data;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
-import net.minecraft.init.*;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ResourceCrops {
     //Resource crops

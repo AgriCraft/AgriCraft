@@ -14,7 +14,7 @@ public class ChocoCraftHelper {
     public static void initPlants() {
         try {
             CropPlantHandler.registerPlant(new CropPlantGhyshal());
-        } catch (CropPlantHandler.DuplicateCropPlantException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

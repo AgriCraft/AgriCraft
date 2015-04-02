@@ -17,7 +17,7 @@ import java.util.Random;
 public class CropPlantGhyshal extends CropPlant {
 
     @Override
-    public int getTier() {
+    public int tier() {
         return 3;
     }
 
@@ -41,7 +41,7 @@ public class CropPlantGhyshal extends CropPlant {
     }
 
     @Override
-    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, int strength, Random rand) {
+    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
         Block normal = ChocoCraftBlocks.gysahlGreenBlock;
         Item lovely = ChocoCraftItems.gysahlLoverlyItem;
         Item golden = ChocoCraftItems.gysahlGoldenItem;
@@ -79,11 +79,6 @@ public class CropPlantGhyshal extends CropPlant {
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
         return GrowthRequirements.getGrowthRequirement((ItemSeeds) ChocoCraftItems.gysahlSeedsItem, 0).canGrow(world, x, y, z);
-    }
-
-    @Override
-    public IIcon getSeedIcon() {
-        return ChocoCraftItems.gysahlSeedsItem.getIconFromDamage(0);
     }
 
     @Override

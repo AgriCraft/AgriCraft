@@ -1,12 +1,12 @@
 package powercrystals.minefactoryreloaded.api;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * @author PowerCrystals

@@ -8,7 +8,6 @@ import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.SeedInformation;
 import com.InfinityRaider.AgriCraft.renderers.*;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
@@ -128,11 +127,5 @@ public class ClientProxy extends CommonProxy {
                 API.hideItem(stack);
             }
         }
-    }
-
-    //initialize seed information
-    @Override
-    public void initSeedInfo() {
-        SeedInformation.init();
     }
 }

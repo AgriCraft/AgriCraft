@@ -28,7 +28,7 @@ public class CropPlantMagicalCrops extends CropPlantGeneric {
     }
 
     @Override
-    public int getTier() {
+    public int tier() {
         return highTier()?3:4;
     }
 

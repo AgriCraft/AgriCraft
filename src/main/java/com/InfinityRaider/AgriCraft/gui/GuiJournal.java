@@ -10,7 +10,6 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
@@ -321,7 +320,7 @@ public class GuiJournal extends GuiScreen {
         seedIcon = RenderHelper.getIcon(seed.getItem(), seed.getItemDamage());
         //get the fruit icons
         //ArrayList<ItemStack> fruitDrops = SeedHelper.getPlantFruits((ItemSeeds) seed.getItem(), player.getEntityWorld(), player.serverPosX, player.serverPosY, player.serverPosZ, 1, seed.getItemDamage());     //serverPosX, Y, Z are client only, but this gui only gets called client side, so no problem
-        ArrayList<ItemStack> fruitDrops = SeedHelper.getAllPlantFruits((ItemSeeds) seed.getItem(), player.getEntityWorld(), player.serverPosX, player.serverPosY, player.serverPosZ, 1, seed.getItemDamage());
+        ArrayList<ItemStack> fruitDrops = CropPlantHandler.getPlantFromStack(seed).getAllFruits();
         fruitIcons = new IIcon[fruitDrops.size()];
         this.fruits = new ItemStack[fruitDrops.size()];
         for(int i=0;i< fruitIcons.length;i++) {
@@ -403,7 +402,7 @@ public class GuiJournal extends GuiScreen {
         float scale = 0.5F;
         GL11.glScalef(scale, scale, scale);
         this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_journal.information")+": ", (int) (this.textStart/scale), (int) ((this.guiTop+31)/scale), this.black);
-        String seedData = splitInLines(SeedHelper.getSeedInformation(discoveredSeeds[index]), scale);
+        String seedData = splitInLines(CropPlantHandler.getPlantFromStack(discoveredSeeds[index]).getInformation(), scale);
         if(seedData!=null && !seedData.equals("")) {
             String[] write = IOHelper.getLinesArrayFromData(seedData);
             for (int i = 0; i < write.length; i++) {
@@ -417,7 +416,7 @@ public class GuiJournal extends GuiScreen {
 
     //writes the seed tier
     private void writeSeedTier(int index) {
-        int tier = SeedHelper.getSeedTier((ItemSeeds) discoveredSeeds[index].getItem(), discoveredSeeds[index].getItemDamage());
+        int tier = CropPlantHandler.getPlantFromStack(discoveredSeeds[index]).getTier();
         String write = StatCollector.translateToLocal("agricraft_journal.tier")+": "+tier;
         float scale = 0.5F;
         GL11.glScalef(scale, scale, scale);

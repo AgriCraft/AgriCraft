@@ -91,15 +91,14 @@ public class AgriCraft {
 
         Recipes.init();
         SeedHelper.init();
-        MutationHandler.init();
         GrowthRequirements.init();
         CustomCrops.initGrassSeeds();
         CropPlantHandler.init();
+        MutationHandler.init();
         if(!ConfigurationHandler.disableWorldGen) {
             WorldGen.init();
         }
         proxy.initNEI();
-        proxy.initSeedInfo();
         LogHelper.debug("Post-Initialization Complete");
     }
 }

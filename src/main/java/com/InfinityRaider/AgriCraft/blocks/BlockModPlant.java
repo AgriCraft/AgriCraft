@@ -6,17 +6,15 @@ import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.farming.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -118,8 +116,9 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
     public void updateTick(World world, int x, int y, int z, Random rnd) {
         int meta = this.getPlantMetadata(world, x, y, z);
         if (meta < 7 && this.isFertile(world, x, y ,z)) {
+            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             double rate = 1.0 + (1 + 0.00) / 10;
-            float growthRate = (float) SeedHelper.getBaseGrowth(this.tier);
+            float growthRate = (float) crop.getGrowthRate();
             meta = (rnd.nextDouble() > (growthRate * rate)/100) ? meta : meta + 1;
             world.setBlockMetadataWithNotify(x, y, z, meta, 2);
         }

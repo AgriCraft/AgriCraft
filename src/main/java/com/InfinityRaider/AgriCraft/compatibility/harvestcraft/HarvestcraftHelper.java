@@ -2,9 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.harvestcraft;
 
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.pam.harvestcraft.ItemRegistry;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 
 import java.lang.reflect.Field;

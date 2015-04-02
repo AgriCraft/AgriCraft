@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.container;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -88,7 +88,7 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
                 //try to move item from the player's inventory into the analyzer
                 if(itemstack1.getItem()!=null) {
                     if(itemstack1.getItem() instanceof ItemSeeds) {
-                        if (!SeedHelper.isValidSeed((ItemSeeds) itemstack1.getItem(), itemstack1.getItemDamage())) {
+                        if (!CropPlantHandler.isValidSeed(itemstack1)) {
                             return null;
                         }
                         if (!this.mergeItemStack(itemstack1, seedSlotId, seedSlotId+1, false)) {

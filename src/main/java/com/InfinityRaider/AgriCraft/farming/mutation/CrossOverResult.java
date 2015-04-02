@@ -3,6 +3,8 @@ package com.InfinityRaider.AgriCraft.farming.mutation;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Represents the result of a specific <code>INewSeedStrategy</code> containing
@@ -39,6 +41,14 @@ public class CrossOverResult {
         int meta = mutation.result.getItemDamage();
 
         return new CrossOverResult(seed, meta, mutation.chance);
+    }
+
+    public ItemStack toStack() {
+        ItemStack stack = new ItemStack(seed, 1, meta);
+        NBTTagCompound tag = new NBTTagCompound();
+        SeedHelper.setNBT(tag, (short) growth, (short) gain, (short) strength, false);
+        stack.stackTagCompound = tag;
+        return stack;
     }
 
     public ItemSeeds getSeed() {

@@ -2,7 +2,6 @@ package powercrystals.minefactoryreloaded.api.rednet;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import powercrystals.minefactoryreloaded.api.rednet.connectivity.IRedNetConnection;
 
 /**

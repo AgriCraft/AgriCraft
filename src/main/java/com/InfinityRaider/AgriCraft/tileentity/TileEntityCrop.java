@@ -2,7 +2,8 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
-import com.InfinityRaider.AgriCraft.farming.*;
+import com.InfinityRaider.AgriCraft.farming.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -125,7 +126,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** gets the fruits for this plant */
-    public ArrayList<ItemStack> getFruits() {return plant.getFruitsOnHarvest(gain, strength, worldObj.rand);}
+    public ArrayList<ItemStack> getFruits() {return plant.getFruitsOnHarvest(gain, worldObj.rand);}
+
+    /** allow harvesting */
+    public boolean allowHarvest() {
+        return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord);
+    }
 
     public ItemStack getSeedStack() {
         ItemStack seed = plant.getSeed();
@@ -223,8 +229,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     /** Apply a growth increment, if forced is true this will always increase the growth. */
     public void applyGrowthTick() {
+        int flag = 2;
         int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-        int flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta)?2:4;
+        if(hasPlant()) {
+            flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta) ? 2 : 4;
+        }
         if (meta < 7) {
             worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, flag);
             AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);

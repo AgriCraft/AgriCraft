@@ -1,22 +1,14 @@
 package com.InfinityRaider.AgriCraft.compatibility.witchery;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.emoniph.witchery.Witchery;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class WitcheryHelper {
-    private Item[] seeds = {
-            Witchery.Items.SEEDS_BELLADONNA,
-            Witchery.Items.SEEDS_MANDRAKE,
-            Witchery.Items.SEEDS_ARTICHOKE,
-            Witchery.Items.SEEDS_SNOWBELL,
-            Witchery.Items.SEEDS_WOLFSBANE,
-            Witchery.Items.SEEDS_GARLIC,
-            Witchery.Items.SEEDS_WORMWOOD,
-    };
     public static void init() {
         OreDictionary.registerOre("seedBelladonna", Witchery.Items.SEEDS_BELLADONNA);
         OreDictionary.registerOre("seedMandrake", Witchery.Items.SEEDS_MANDRAKE);
@@ -46,6 +38,40 @@ public class WitcheryHelper {
     }
 
     public static void initPlants() {
-
+        try {
+            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_BELLADONNA));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+        CropPlantHandler.registerPlant(new CropPlantMandrake());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+        CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_ARTICHOKE));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+        CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_SNOWBELL));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            CropPlantHandler.registerPlant(new CropPlantWolfsbane());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_GARLIC));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_WORMWOOD));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

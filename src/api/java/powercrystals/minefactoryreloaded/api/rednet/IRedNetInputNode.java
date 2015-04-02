@@ -1,9 +1,8 @@
 package powercrystals.minefactoryreloaded.api.rednet;
 
-import powercrystals.minefactoryreloaded.api.rednet.connectivity.IRedNetConnection;
-
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import powercrystals.minefactoryreloaded.api.rednet.connectivity.IRedNetConnection;
 
 /**
  * Defines a Block that can connect to RedNet cables. This must be implemented on your Block class.

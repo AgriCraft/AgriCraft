@@ -1,13 +1,13 @@
 package mcp.mobius.waila.api.impl;
 
+import mcp.mobius.waila.api.IWailaFMPAccessor;
+import mcp.mobius.waila.utils.NBTUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import mcp.mobius.waila.api.IWailaFMPAccessor;
-import mcp.mobius.waila.utils.NBTUtil;
 
 public class DataAccessorFMP implements IWailaFMPAccessor {
 	

@@ -1,14 +1,14 @@
 package thaumcraft.api.visnet;
 
+import cpw.mods.fml.common.FMLLog;
+import net.minecraft.world.World;
+import thaumcraft.api.WorldCoordinates;
+import thaumcraft.api.aspects.Aspect;
+
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import net.minecraft.world.World;
-import thaumcraft.api.WorldCoordinates;
-import thaumcraft.api.aspects.Aspect;
-import cpw.mods.fml.common.FMLLog;
 
 public class VisNetHandler {
 

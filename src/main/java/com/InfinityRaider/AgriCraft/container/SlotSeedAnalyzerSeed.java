@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.container;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemSeeds;
@@ -16,8 +16,7 @@ public class SlotSeedAnalyzerSeed extends Slot{
     @Override
     public boolean isItemValid(ItemStack stack) {
         if(stack!=null && stack.stackSize>0 && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
-            ItemSeeds seed = (ItemSeeds) stack.getItem();
-            if(!SeedHelper.isValidSeed(seed, stack.getItemDamage())) {
+            if(!CropPlantHandler.isValidSeed(stack)) {
                 return false;
             }
             if(stack.hasTagCompound()) {

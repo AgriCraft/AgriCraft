@@ -1,10 +1,5 @@
 package mcp.mobius.waila.api.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Set;
-
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import mcp.mobius.waila.Waila;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -13,6 +8,11 @@ import mcp.mobius.waila.overlay.OverlayConfig;
 import mcp.mobius.waila.utils.Constants;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 public class ConfigHandler implements IWailaConfigHandler {
 

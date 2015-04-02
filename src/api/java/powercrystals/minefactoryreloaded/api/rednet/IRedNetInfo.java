@@ -1,11 +1,11 @@
 package powercrystals.minefactoryreloaded.api.rednet;
 
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
 
 /**
  * Defines a Block that can print information about itself using the RedNet Meter. This must be implemented on your Block class.
