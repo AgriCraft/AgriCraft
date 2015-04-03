@@ -16,6 +16,7 @@ package com.InfinityRaider.AgriCraft;
         ~ InfinityRaider
 */
 
+import com.InfinityRaider.AgriCraft.apiimpl.APISelector;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
@@ -28,6 +29,7 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderLogger;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -65,6 +67,8 @@ public class AgriCraft {
         Crops.init();
         //initialize items
         Items.init();
+        //initialize API
+        APISelector.init();
         LogHelper.debug("Pre-Initialization Complete");
     }
 
