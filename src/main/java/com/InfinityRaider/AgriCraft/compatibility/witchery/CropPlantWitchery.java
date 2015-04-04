@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility.witchery;
 
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+import com.emoniph.witchery.Witchery;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
@@ -16,8 +17,9 @@ public class CropPlantWitchery extends CropPlantGeneric {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
-        return false;
+        return getSeed().getItem()!= Witchery.Items.SEEDS_BELLADONNA;
     }
 
     @Override

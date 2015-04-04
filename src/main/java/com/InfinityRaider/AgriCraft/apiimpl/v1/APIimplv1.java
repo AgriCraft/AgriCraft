@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
 import net.minecraft.block.Block;
@@ -117,23 +118,13 @@ public class APIimplv1 implements APIv1 {
 	}
 
     @Override
-    public boolean registerCropPlant(CropPlant plant) {
-        try {
-            CropPlantHandler.registerPlant(plant);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void registerCropPlant(CropPlant plant) {
+       CropPlantHandler.addCropToRegister(plant);
     }
 
     @Override
-    public boolean registerCropPlant(IAgriCraftPlant plant) {
-        try {
-            CropPlantHandler.registerPlant(plant);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void registerCropPlant(IAgriCraftPlant plant) {
+        this.registerCropPlant(new CropPlantAgriCraft(plant));
     }
 
     @Override

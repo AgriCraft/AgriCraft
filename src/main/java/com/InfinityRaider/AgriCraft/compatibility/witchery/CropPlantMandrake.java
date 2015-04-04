@@ -7,6 +7,8 @@ import com.emoniph.witchery.network.PacketParticles;
 import com.emoniph.witchery.util.ParticleEffect;
 import com.emoniph.witchery.util.SoundEffect;
 import com.emoniph.witchery.util.TargetPointUtil;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.world.EnumDifficulty;
@@ -48,6 +50,13 @@ public class CropPlantMandrake extends CropPlantWitchery {
             }
             amount--;
         }
+        return false;
+    }
+
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean renderAsFlower() {
         return false;
     }
 }

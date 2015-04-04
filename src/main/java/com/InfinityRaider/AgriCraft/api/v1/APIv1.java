@@ -103,15 +103,13 @@ public interface APIv1 extends APIBase {
 
     /**
      * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
-     * @return true if the plant was successfully registered
      */
-    public boolean registerCropPlant(CropPlant plant);
+    public void registerCropPlant(CropPlant plant);
 
     /**
      * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
-     * @return true if the plant was successfully registered
      */
-    public boolean registerCropPlant(IAgriCraftPlant plant);
+    public void registerCropPlant(IAgriCraftPlant plant);
 
     /**
      * Register a growth requirement for this seed

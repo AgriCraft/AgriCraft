@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -164,7 +165,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             //the seed can be planted here
             else {
                 ItemStack stack = player.getCurrentEquippedItem();
-                if (!CropPlantHandler.isValidSeed(stack) || !GrowthRequirementHandler.getGrowthRequirement((ItemSeeds) stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y-1, z)) {
+                if (!CropPlantHandler.isValidSeed(stack) || !GrowthRequirementHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y-1, z)) {
                     return;
                 }
                 //get NBT data from the seeds
@@ -254,11 +255,15 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
+            CropPlant plant = ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlant();
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
                 this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
             }
             world.setBlockToAir(x,y,z);
             world.removeTileEntity(x, y, z);
+            if(plant!=null) {
+                plant.onPlantRemoved(world, x, y, z);
+            }
         }
     }
 
@@ -297,15 +302,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        if(crop.canBonemeal()) {
-            if (crop.isCrossCrop()) {
-                return ConfigurationHandler.bonemealMutation;
-            }
-            if (crop.hasPlant()) {
-                return true;
-            }
-        }
-        return false;
+        return crop.canBonemeal();
     }
 
     //this gets called when the player uses bonemeal on the crop

@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -53,11 +52,6 @@ public abstract class RegisterHelper {
         OreDictionary.registerOre(name, seed);
         OreDictionary.registerOre(Names.OreDict.listAllseed, seed);
         plant.initializeSeed(seed);
-        try {
-            CropPlantHandler.registerPlant(plant);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static void removeRecipe(ItemStack stack) {

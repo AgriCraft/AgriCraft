@@ -78,6 +78,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
                 this.analyzed = analyzed;
                 this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
                 this.markForUpdate();
+                plant.onSeedPlanted(worldObj, xCoord, yCoord, zCoord);
             }
         }
     }
@@ -88,7 +89,8 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     /** clears the plant in the crop */
     public void clearPlant() {
-        if(!this.crossCrop) {
+        if(hasPlant()) {
+            CropPlant oldPlant = getPlant();
             this.growth = 0;
             this.gain = 0;
             this.strength = 0;
@@ -97,6 +99,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             this.weed = false;
             this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
             this.markForUpdate();
+            oldPlant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord);
         }
     }
 
@@ -106,7 +109,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     /** check if bonemeal can be applied */
     public boolean canBonemeal() {
         if(this.crossCrop) {
-            return true;
+            return ConfigurationHandler.bonemealMutation;
         }
         if(this.hasPlant()) {
             if(this.isMature()) {

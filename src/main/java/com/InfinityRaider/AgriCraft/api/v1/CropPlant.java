@@ -56,6 +56,12 @@ public abstract class CropPlant {
         return true;
     }
 
+    /** This is called right after this plant is planted on a crop, either trough planting, mutation or spreading */
+    public void onSeedPlanted(World world, int x, int y, int z) {}
+
+    /** This is called right after this plant is removed from a crop or a crop holding this plant is broken */
+    public void onPlantRemoved(World world, int x, int y, int z) {}
+
     /** Allow this plant to be bonemealed or not */
     public abstract boolean canBonemeal();
 
@@ -70,7 +76,7 @@ public abstract class CropPlant {
         return world.getBlockMetadata(x, y, z)>=7;
     }
 
-    /** Gets the icon for the plant, growthstage goes from 0 to 7 (both inclusive, 0 is sprout and 7 is mature) */
+    /** Gets the icon for the plant, growth stage goes from 0 to 7 (both inclusive, 0 is sprout and 7 is mature) */
     @SideOnly(Side.CLIENT)
     public abstract IIcon getPlantIcon(int growthStage);
 

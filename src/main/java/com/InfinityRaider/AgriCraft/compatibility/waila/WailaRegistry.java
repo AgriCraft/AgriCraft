@@ -16,7 +16,7 @@ public class WailaRegistry {
         registry.registerBodyProvider(cropProvider, BlockCrop.class);
 
         if(!ConfigurationHandler.disableIrrigation) {
-            // tanks
+            //tanks
             IWailaDataProvider tankProvider = new AgriCraftTankDataProvider();
             registry.registerStackProvider(tankProvider, BlockWaterTank.class);
             registry.registerBodyProvider(tankProvider, BlockWaterTank.class);

@@ -17,10 +17,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CropPlantHandler {
     private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, CropPlant>>();
+    private static ArrayList<CropPlant> plantsToRegister = new ArrayList<CropPlant>();
 
     public static void registerPlant(IAgriCraftPlant plant) throws DuplicateCropPlantException, BlacklistedCropPlantException {
         registerPlant(new CropPlantAgriCraft(plant));
@@ -48,6 +50,10 @@ public class CropPlantHandler {
             entryForSeed.put(meta, plant);
             cropPlants.put(seed, entryForSeed);
         }
+    }
+
+    public static void addCropToRegister(CropPlant plant) {
+        plantsToRegister.add(plant);
     }
 
     public static boolean isValidSeed(ItemStack stack) {
@@ -78,8 +84,65 @@ public class CropPlantHandler {
 
     //TODO: fix pumpkins, melons, wheat & nether wart
     public static void init() {
+        //register vanilla plants
+        for(BlockModPlant plant : Crops.defaultCrops) {
+            CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+            try {
+                registerPlant(cropPlant);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        //register botania plants
+        if(ConfigurationHandler.integration_Botania) {
+            for(BlockModPlant plant : Crops.botaniaCrops) {
+                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+                try {
+                    registerPlant(cropPlant);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        //register resource plants
+        if(ConfigurationHandler.resourcePlants) {
+            for(BlockModPlant plant : ResourceCrops.vanillaCrops) {
+                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+                try {
+                    registerPlant(cropPlant);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            for(BlockModPlant plant : ResourceCrops.modCrops) {
+                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+                try {
+                    registerPlant(cropPlant);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        //register custom crops
+        for(BlockModPlant plant : CustomCrops.customCrops) {
+            CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+            try {
+                registerPlant(cropPlant);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
         //register mod crops
         ModIntegration.initModPlants();
+        //register crops specified trough the API
+        for(CropPlant plant:plantsToRegister) {
+            try {
+                registerPlant(plant);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        plantsToRegister = null;
     }
 
 }
