@@ -1,8 +1,9 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.InfinityRaider.AgriCraft.api.v1;
 
 
 import com.google.common.hash.Hashing;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemWithMeta {
 
@@ -20,6 +21,10 @@ public class ItemWithMeta {
 
     public int getMeta() {
         return meta;
+    }
+
+    public ItemStack toStack() {
+        return new ItemStack(item, 1, meta);
     }
 
     @Override

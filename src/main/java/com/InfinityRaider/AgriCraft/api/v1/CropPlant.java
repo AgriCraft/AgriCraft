@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.farming.cropplant;
+package com.InfinityRaider.AgriCraft.api.v1;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;

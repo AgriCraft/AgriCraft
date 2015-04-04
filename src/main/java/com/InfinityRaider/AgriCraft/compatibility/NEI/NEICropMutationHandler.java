@@ -3,13 +3,13 @@ package com.InfinityRaider.AgriCraft.compatibility.NEI;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.api.v1.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -43,11 +43,11 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y1);
             this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y1);
 
-            GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement((ItemSeeds) result.item.getItem(), result.item.getItemDamage());
+            GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement((ItemSeeds) result.item.getItem(), result.item.getItemDamage());
             if (growthReq.getSoil() != null) {
                 soils.add(new PositionedStack(growthReq.getSoil().toStack(), Constants.nei_X3, Constants.nei_Y2));
             } else {
-                for (BlockWithMeta blockWithMeta : GrowthRequirements.defaultSoils) {
+                for (BlockWithMeta blockWithMeta : GrowthRequirementHandler.defaultSoils) {
                     soils.add(new PositionedStack(blockWithMeta.toStack(), Constants.nei_X3, Constants.nei_Y2));
                 }
             }

@@ -1,6 +1,7 @@
-package com.InfinityRaider.AgriCraft.farming.cropplant;
+package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
-import com.InfinityRaider.AgriCraft.farming.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
@@ -10,6 +11,9 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Implementation of the CropPlant class for an IAgriCraftPlant object
+ */
 public class CropPlantAgriCraft extends CropPlant {
     IAgriCraftPlant plant;
 

@@ -1,15 +1,18 @@
 package com.InfinityRaider.AgriCraft.farming;
 
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAgriCraft;
+import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.init.CustomCrops;
 import com.InfinityRaider.AgriCraft.init.ResourceCrops;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
+import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -75,67 +78,8 @@ public class CropPlantHandler {
 
     //TODO: fix pumpkins, melons, wheat & nether wart
     public static void init() {
-        //register vanilla plants
-        for(BlockModPlant plant : Crops.defaultCrops) {
-            CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-            try {
-                registerPlant(cropPlant);
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        //register botania plants
-        if(ConfigurationHandler.integration_Botania) {
-            for(BlockModPlant plant : Crops.botaniaCrops) {
-                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-                try {
-                    registerPlant(cropPlant);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        //register resource plants
-        if(ConfigurationHandler.resourcePlants) {
-            for(BlockModPlant plant : ResourceCrops.vanillaCrops) {
-                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-                try {
-                    registerPlant(cropPlant);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            for(BlockModPlant plant : ResourceCrops.modCrops) {
-                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-                try {
-                    registerPlant(cropPlant);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        //register custom crops
-        for(BlockModPlant plant : CustomCrops.customCrops) {
-            CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-            try {
-                registerPlant(cropPlant);
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
         //register mod crops
         ModIntegration.initModPlants();
     }
 
-    public static final class DuplicateCropPlantException extends Exception {
-        public DuplicateCropPlantException() {
-            super("This plant is already registered");
-        }
-    }
-
-    public static final class BlacklistedCropPlantException extends Exception {
-        public BlacklistedCropPlantException() {
-            super("This plant is blacklisted");
-        }
-    }
 }

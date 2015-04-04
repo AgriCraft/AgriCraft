@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.farming.cropplant;
+package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -12,11 +12,13 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-/** Generic abstract implementation of the cropPlant, will work for most crops that follow the vanilla item seeds*/
-public abstract class CropPlantGeneric extends CropPlant{
+/**
+ * Generic abstract implementation of CropPlantTall for two-blocks tall plants
+ */
+public abstract class CropPlantTallGeneric extends CropPlantTall {
     private final ItemSeeds seed;
 
-    public CropPlantGeneric(ItemSeeds seed) {
+    public CropPlantTallGeneric(ItemSeeds seed) {
         this.seed = seed;
     }
 
@@ -24,7 +26,7 @@ public abstract class CropPlantGeneric extends CropPlant{
 
     @Override
     public int tier() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -32,10 +34,9 @@ public abstract class CropPlantGeneric extends CropPlant{
         return new ItemStack(seed);
     }
 
-
     @Override
     public ArrayList<ItemStack> getAllFruits() {
-        return(OreDictHelper.getFruitsFromOreDict(getSeed()));
+        return OreDictHelper.getFruitsFromOreDict(getSeed());
     }
 
     @Override
@@ -58,18 +59,23 @@ public abstract class CropPlantGeneric extends CropPlant{
         return list;
     }
 
+    @Override
     public boolean canBonemeal() {
         return true;
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
-        return true;
+    public boolean isFertile(World world, int x, int y, int z) {
+        return GrowthRequirementHandler.getGrowthRequirement(seed, 0).canGrow(world, x, y, z);
     }
 
     @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirements.getGrowthRequirement(seed, 0).canGrow(world, x, y, z);
+    @SideOnly(Side.CLIENT)
+    public IIcon getBottomIcon(int growthStage) {
+        if(growthStage<maxMetaBottomBlock()) {
+            return getPlantIcon(growthStage);
+        }
+        return getPlantIcon(maxMetaBottomBlock());
     }
 
     @Override

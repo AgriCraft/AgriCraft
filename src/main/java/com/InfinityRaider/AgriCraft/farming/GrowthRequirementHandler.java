@@ -1,19 +1,22 @@
 package com.InfinityRaider.AgriCraft.farming;
 
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
+import com.InfinityRaider.AgriCraft.api.v1.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import com.InfinityRaider.AgriCraft.utility.ItemWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.ItemWithMeta;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
 import com.jaquadro.minecraft.gardencontainers.block.BlockLargePot;
 import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -23,13 +26,20 @@ import java.util.*;
  * Holds all the default soils and soil.
  * Also holds all GrowthRequirements.
  */
-public class GrowthRequirements {
+public class GrowthRequirementHandler {
 
-    private static Map<ItemWithMeta, GrowthRequirement> overrides = new HashMap<ItemWithMeta, GrowthRequirement>();
+    private static Map<ItemWithMeta, GrowthRequirement> growthRequirements = new HashMap<ItemWithMeta, GrowthRequirement>();
 
     // Package private so GrowthRequirement can access it
     public static List<BlockWithMeta> defaultSoils = new ArrayList<BlockWithMeta>();
     static List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
+
+    public static void registerGrowthRequirement(ItemWithMeta item, GrowthRequirement req) throws InvalidSeedException {
+        if(CropPlantHandler.isValidSeed(item.toStack())) {
+            throw new InvalidSeedException();
+        }
+        growthRequirements.put(item, req);
+    }
 
     //Methods for fertile soils
     //-------------------------
@@ -64,7 +74,7 @@ public class GrowthRequirements {
     private static void registerOverrides() {
         //adds a growth requirement for nether wart
         GrowthRequirement netherWartReq = new GrowthRequirement.Builder().soil(new BlockWithMeta(Blocks.soul_sand)).brightnessRange(0,8).build();
-        overrides.put(new ItemWithMeta(Items.nether_wart, 0), netherWartReq);
+        growthRequirements.put(new ItemWithMeta(Items.nether_wart, 0), netherWartReq);
     }
 
     private static void registerCustomEntries() {
@@ -85,7 +95,8 @@ public class GrowthRequirements {
         LogHelper.info("Registered soil whitelist:");
         for (BlockWithMeta soil : soils) {
             LogHelper.info(" - " + Block.blockRegistry.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
-        }}
+        }
+    }
 
     public static void addAllToSoilWhitelist(Collection<? extends BlockWithMeta> list) {
         for (BlockWithMeta block : list) {
@@ -100,20 +111,14 @@ public class GrowthRequirements {
     /**
      * @return growthRequirement of the given seed.
      */
-    public static GrowthRequirement getGrowthRequirement(ItemSeeds seed, int meta) {
+    public static GrowthRequirement getGrowthRequirement(Item seed, int meta) {
         if (seed instanceof IAgriCraftSeed) {
             return ((IAgriCraftSeed) seed).getPlant().getGrowthRequirement();
         }
-        else if(seed instanceof ICropOverridingSeed) {
-            ICropOverridingSeed overrider = (ICropOverridingSeed) seed;
-            if(overrider.hasGrowthRequirement()) {
-                return overrider.getGrowthRequirement();
-            }
-        }
-        GrowthRequirement growthRequirement = overrides.get(new ItemWithMeta(seed, meta));
+        GrowthRequirement growthRequirement = growthRequirements.get(new ItemWithMeta(seed, meta));
         if (growthRequirement == null) {
             growthRequirement = new GrowthRequirement.Builder().build();
-            overrides.put(new ItemWithMeta(seed, meta), growthRequirement);
+            growthRequirements.put(new ItemWithMeta(seed, meta), growthRequirement);
         }
         return growthRequirement;
     }
@@ -124,10 +129,12 @@ public class GrowthRequirements {
         }
     }
 
-    public static void addDefaultSoil(BlockWithMeta block) {
+    public static boolean addDefaultSoil(BlockWithMeta block) {
         if (!defaultSoils.contains(block)) {
             defaultSoils.add(block);
+            return true;
         }
+        return false;
     }
 
 }

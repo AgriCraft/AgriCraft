@@ -100,16 +100,40 @@ public interface APIv1 extends APIBase {
 	 *         given item was no seed.
 	 */
 	ISeedStats getSeedStats(ItemStack seed);
+
+    /**
+     * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
+     * @return true if the plant was successfully registered
+     */
+    public boolean registerCropPlant(CropPlant plant);
+
+    /**
+     * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
+     * @return true if the plant was successfully registered
+     */
+    public boolean registerCropPlant(IAgriCraftPlant plant);
+
+    /**
+     * Register a growth requirement for this seed
+     * @return true if the registering was successful
+     */
+    public boolean registerGrowthRequirement(ItemWithMeta seed, GrowthRequirement requirement);
+
+    /**
+     * Register a default soil that any crop that doesn't require a specific soil can grow on
+     * @return true if the soil was successfully regsitered
+     */
+    public boolean registerDefaultSoil(BlockWithMeta soil);
 	
 	/**
 	 * Checks the seeds planting requirements.
 	 * 
 	 * @param seed
 	 *            Any ItemStack that is a seed.
-	 * @return A {@link ISeedRequirements} object or null if the parameter was no
+	 * @return A {@link GrowthRequirement} object or null if the parameter was no
 	 *         seed or has special requirements.
 	 */
-	ISeedRequirements getSeedRequirements(ItemStack seed);
+	GrowthRequirement getGrowthRequirement(ItemStack seed);
 
 	/**
 	 * Checks if the given crops can be placed at the given position.

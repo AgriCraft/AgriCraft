@@ -1,18 +1,17 @@
-package com.InfinityRaider.AgriCraft.farming.cropplant;
+package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
+import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-
+/**
+ * Basic abstract implementation for crops that are 2 blocks tall
+ */
 public abstract class CropPlantTall extends CropPlant {
     /** The metadata value for when the bottom block is "fully grown" and the second block starts growing*/
     public abstract int maxMetaBottomBlock();

@@ -34,5 +34,7 @@ public interface ISeedStats {
 	 * @return The maximum strength value a seed of this kind can have.
 	 */
 	int getMaxStrength();
+
+
 	
 }

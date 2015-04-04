@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
-import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
+import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,13 +1,13 @@
 package com.InfinityRaider.AgriCraft.gui;
 
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -381,7 +381,7 @@ public class GuiJournal extends GuiScreen {
     private void drawSeedTitle(int index) {
         ItemStack seed = discoveredSeeds[index];
         String title = seed.getDisplayName();
-        BlockWithMeta soil = GrowthRequirements.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage()).getSoil();
+        BlockWithMeta soil = GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage()).getSoil();
         Minecraft.getMinecraft().getTextureManager().bindTexture(RenderHelper.getItemResource(seedIcon));
         if (soil != null) {
             this.renderIconInGui(this.guiLeft + 26, this.guiTop + 11, RenderHelper.getBlockResource(soil.getBlock().getIcon(1, soil.getMeta())));

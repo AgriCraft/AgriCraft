@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
+import com.InfinityRaider.AgriCraft.api.v1.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
@@ -42,7 +42,7 @@ public class MutationEngine {
     }
 
     private boolean resultIsValid(CrossOverResult result) {
-        GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(result.getSeed(), result.getMeta());
+        GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(result.getSeed(), result.getMeta());
 
         boolean valid = result.getSeed() != null && CropPlantHandler.isValidSeed(result.toStack());
         return valid && growthReq.canGrow(crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord);

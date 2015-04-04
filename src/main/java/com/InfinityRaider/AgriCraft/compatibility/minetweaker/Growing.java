@@ -1,9 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
-
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
-import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.google.common.base.Joiner;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
@@ -77,7 +76,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                GrowthRequirements.addAllToSoilWhitelist(soils);
+                GrowthRequirementHandler.addAllToSoilWhitelist(soils);
             }
 
             @Override
@@ -87,7 +86,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                GrowthRequirements.removeAllFromSoilWhitelist(soils);
+                GrowthRequirementHandler.removeAllFromSoilWhitelist(soils);
             }
 
             @Override
@@ -120,7 +119,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                GrowthRequirements.removeAllFromSoilWhitelist(soils);
+                GrowthRequirementHandler.removeAllFromSoilWhitelist(soils);
             }
 
             @Override
@@ -130,7 +129,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                GrowthRequirements.addAllToSoilWhitelist(soils);
+                GrowthRequirementHandler.addAllToSoilWhitelist(soils);
             }
 
             @Override
@@ -200,7 +199,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, meta);
+                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
                 oldSoil = growthReq.getSoil();
                 growthReq.setSoil(soil);
             }
@@ -212,7 +211,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, meta);
+                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
                 growthReq.setSoil(oldSoil);
             }
 
@@ -282,7 +281,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, meta);
+                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
                 old = growthReq.getBrightnessRange();
                 growthReq.setBrightnessRange(min, max);
             }
@@ -294,7 +293,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, meta);
+                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
                 growthReq.setBrightnessRange(old[0], old[1]);
             }
 
@@ -379,7 +378,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, seedMeta);
+                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta);
                 oldReqBlock = growthReq.getRequiredBlock();
                 oldRequiredType = growthReq.getRequiredType();
                 oldReqBlockIsOreDict = growthReq.isOreDict();
@@ -393,7 +392,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                GrowthRequirement growthReq = GrowthRequirements.getGrowthRequirement(seed, seedMeta);
+                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta);
                 growthReq.setRequiredBlock(oldReqBlock, oldRequiredType, oldReqBlockIsOreDict);
             }
 

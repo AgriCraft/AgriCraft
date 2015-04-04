@@ -1,20 +1,24 @@
-package com.InfinityRaider.AgriCraft.farming;
+package com.InfinityRaider.AgriCraft.api.v1;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
-import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.jaquadro.minecraft.gardencontainers.block.BlockLargePot;
 import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Encodes all requirements a plant needs to mutate and grow
  * Uses the Builder class inside to construct instances.
  */
-public class GrowthRequirement {
+public class GrowthRequirement{
     //static fields storing other requirements for seeds from other mods
     public static final GrowthRequirement DEFAULT = new GrowthRequirement();
 
@@ -32,6 +36,40 @@ public class GrowthRequirement {
     private BlockWithMeta requiredBlock = null;
     private boolean oreDict = false;
     private RequirementType requiredType = RequirementType.NONE;
+
+    public boolean needsCrops() {
+        return false;
+    }
+
+    public List<BlockWithMeta> getSoilBlocks() {
+        if(this.requiresSpecificSoil()) {
+            List<BlockWithMeta> list = new ArrayList<BlockWithMeta>();
+            list.add(soil);
+            return list;
+        }
+        return GrowthRequirementHandler.defaultSoils;
+    }
+
+    public List<BlockWithMeta> getBelowBlocks() {
+        List<BlockWithMeta> list = new ArrayList<BlockWithMeta>();
+        if(this.requiredType==RequirementType.BELOW) {
+            list.add(requiredBlock);
+        }
+        return list;
+    }
+
+    public List<BlockWithMeta> getNearBlocks() {
+        List<BlockWithMeta> list = new ArrayList<BlockWithMeta>();
+        if(this.requiredType==RequirementType.NEARBY) {
+            list.add(requiredBlock);
+        }
+        return list;
+    }
+
+    public boolean needsTilling() {
+        return this.isValidSoil(new BlockWithMeta(Blocks.farmland));
+    }
+
     public static enum RequirementType {
         NONE, BELOW, NEARBY
     }
@@ -41,6 +79,10 @@ public class GrowthRequirement {
     /** @return true, if all the requirements are met */
     public boolean canGrow(World world, int x, int y, int z) {
         return this.isValidSoil(world, x, y-1, z) && this.isBrightnessGood(world, x, y, z) && this.isBaseBlockPresent(world, x, y, z);
+    }
+
+    public boolean canPlant(World world, int x, int y, int z) {
+        return this.isValidSoil(world, x, y, z);
     }
 
     /** @return true, if the correct base block is present **/
@@ -104,10 +146,14 @@ public class GrowthRequirement {
         if(ModIntegration.LoadedMods.gardenStuff && block instanceof BlockLargePot) {
             soil = GardenStuffHelper.getSoil((TileEntityGarden) world.getTileEntity(x, y, z));
         }
+        return isValidSoil(soil);
+    }
+
+    public boolean isValidSoil(BlockWithMeta soil) {
         if(this.requiresSpecificSoil()) {
-           return this.soil.equals(soil);
+            return this.soil.equals(soil);
         } else {
-           return GrowthRequirements.defaultSoils.contains(soil);
+            return GrowthRequirementHandler.defaultSoils.contains(soil);
         }
     }
 
@@ -136,7 +182,7 @@ public class GrowthRequirement {
 
     public void setSoil(BlockWithMeta soil) {
         this.soil = soil;
-        GrowthRequirements.addSoil(soil);
+        GrowthRequirementHandler.addSoil(soil);
     }
 
     public int[] getBrightnessRange() {return new int[] {minBrightness, maxBrightness};}
@@ -185,7 +231,7 @@ public class GrowthRequirement {
 
         /** Sets the required soil */
         public Builder soil(BlockWithMeta block) {
-            GrowthRequirements.addSoil(block);
+            GrowthRequirementHandler.addSoil(block);
             growthRequirement.soil = block;
             return this;
         }

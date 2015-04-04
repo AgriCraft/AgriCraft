@@ -1,10 +1,11 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
@@ -17,21 +18,14 @@ import net.minecraftforge.common.IPlantable;
 import com.InfinityRaider.AgriCraft.api.API;
 import com.InfinityRaider.AgriCraft.api.APIBase;
 import com.InfinityRaider.AgriCraft.api.APIStatus;
-import com.InfinityRaider.AgriCraft.api.v1.APIv1;
-import com.InfinityRaider.AgriCraft.api.v1.IBlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
-import com.InfinityRaider.AgriCraft.api.v1.SeedRequirementStatus;
-import com.InfinityRaider.AgriCraft.api.v1.ISeedRequirements;
 import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
 import com.google.common.collect.Lists;
 
 public class APIimplv1 implements APIv1 {
@@ -75,7 +69,7 @@ public class APIimplv1 implements APIv1 {
 
 	@Override
 	public List<ItemStack> getRakeItems() {
-		return Lists.newArrayList(new ItemStack(Items.handRake));
+		return Lists.newArrayList(new ItemStack(Items.handRake, 1, 0), new ItemStack(Items.handRake, 1, 1));
 	}
 
 	@Override
@@ -122,56 +116,54 @@ public class APIimplv1 implements APIv1 {
 		}
 	}
 
+    @Override
+    public boolean registerCropPlant(CropPlant plant) {
+        try {
+            CropPlantHandler.registerPlant(plant);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean registerCropPlant(IAgriCraftPlant plant) {
+        try {
+            CropPlantHandler.registerPlant(plant);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean registerGrowthRequirement(ItemWithMeta seed, GrowthRequirement requirement) {
+        try {
+            GrowthRequirementHandler.registerGrowthRequirement(seed, requirement);
+            return true;
+        } catch (InvalidSeedException e) {
+            return false;
+        }
+    }
+
+   @Override
+    public boolean registerDefaultSoil(BlockWithMeta soil) {
+        return GrowthRequirementHandler.addDefaultSoil(soil);
+    }
+
 	@Override
-	public ISeedRequirements getSeedRequirements(ItemStack seed) {
-		if (CropPlantHandler.isValidSeed(seed)) {
-			SeedRequirements result = new SeedRequirements();
-			GrowthRequirement growthRequirement = GrowthRequirements.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage());
-			result.setNeedsCrops(ConfigurationHandler.disableVanillaFarming);
-			if (growthRequirement.requiresSpecificSoil()) {
-				if (growthRequirement.getSoil().getBlock() == net.minecraft.init.Blocks.farmland) {
-					result.setSoilBlock(Lists.newArrayList((IBlockWithMeta)new BlockWithMeta(net.minecraft.init.Blocks.dirt)));
-					result.setNeedsTilling(true);
-				} else {
-					result.setSoilBlock(Lists.newArrayList((IBlockWithMeta)growthRequirement.getSoil()));
-					result.setNeedsTilling(false);
-				}
-			} else {
-				result.setSoilBlock(new ArrayList<IBlockWithMeta>());
-				result.setNeedsTilling(false);
-				for (BlockWithMeta elem : GrowthRequirements.defaultSoils) {
-					if (elem.getBlock() == net.minecraft.init.Blocks.farmland) {
-						result.getSoilBlock().add(new BlockWithMeta(net.minecraft.init.Blocks.dirt));
-						result.setNeedsTilling(true);
-					} else {
-						result.getSoilBlock().add(elem);
-					}
-				}
-			}
-			switch (growthRequirement.getRequiredType()) {
-			case BELOW:
-				result.setBelowBlock(Lists.newArrayList((IBlockWithMeta)growthRequirement.getRequiredBlock()));
-				result.setNearBlocks(null);
-				break;
-			case NEARBY:
-				result.setBelowBlock(null);
-				result.setNearBlocks(Lists.newArrayList((IBlockWithMeta)growthRequirement.getRequiredBlock()));
-				break;
-			default:
-				result.setBelowBlock(null);
-				result.setNearBlocks(null);
-				break;
-			}
-			return result;
-		}
-		return null;
-	}
+    public GrowthRequirement getGrowthRequirement(ItemStack seed) {
+        if(!CropPlantHandler.isValidSeed(seed)) {
+            return null;
+        }
+        return GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage());
+    }
 
 	@Override
 	public boolean canPlaceCrops(World world, int x, int y, int z, ItemStack crops) {
 		if (crops == null || crops.getItem() == null || crops.getItem() != Items.crops) {
 			return false;
-		} else if (GrowthRequirements.isSoilValid(world, x, y - 1, z) && world.isAirBlock(x, y, z)) {
+		} else if (GrowthRequirementHandler.isSoilValid(world, x, y - 1, z) && world.isAirBlock(x, y, z)) {
 			return true;
 		} else {
 			return false;
@@ -344,7 +336,7 @@ public class APIimplv1 implements APIv1 {
 				if (crop.isCrossCrop() || crop.hasPlant()) {
 					return SeedRequirementStatus.BAD_LOCATION;
 				}
-				GrowthRequirement growthRequirement = GrowthRequirements.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage());
+				GrowthRequirement growthRequirement = GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage());
 				if(!growthRequirement.isValidSoil(world, x, y-1, z)) {
 					return SeedRequirementStatus.WRONG_SOIL;
 				}
@@ -370,7 +362,7 @@ public class APIimplv1 implements APIv1 {
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te instanceof TileEntityCrop) {
 					TileEntityCrop crop = (TileEntityCrop) te;
-					if (crop.isCrossCrop() || crop.hasPlant() || !GrowthRequirements.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage()).canGrow(world, x, y, z)) {
+					if (crop.isCrossCrop() || crop.hasPlant() || !GrowthRequirementHandler.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage()).canGrow(world, x, y, z)) {
 						return false;
 					}
 					if (seed.stackTagCompound != null && seed.stackTagCompound.hasKey(Names.NBT.growth)) {
