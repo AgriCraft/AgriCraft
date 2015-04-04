@@ -12,3 +12,10 @@ schematics/
 AgriCraft_Dependencies.rar
 .idea/
 logs/
+/bin/
+
+.classpath
+.project
+.settings/
+dependencies.zip
+*.bak
