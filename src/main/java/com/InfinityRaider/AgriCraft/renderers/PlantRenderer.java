@@ -19,12 +19,12 @@ public abstract class PlantRenderer {
             renderCrossPattern(tessellator, icon, layer);
         }
         else {
-            renderHashtagPattern(tessellator, icon, layer);
+            renderHashTagPattern(tessellator, icon, layer);
         }
         tessellator.addTranslation(-x, -y, -z);
     }
 
-    private static void renderHashtagPattern(Tessellator tessellator, IIcon icon, int layer) {
+    private static void renderHashTagPattern(Tessellator tessellator, IIcon icon, int layer) {
         int minY = 16*layer;
         int maxY = 16*(layer+1);
         //plane 1 front
