@@ -33,6 +33,7 @@ public class RenderValve extends RenderChannel {
             Tessellator tessellator = Tessellator.instance;
             float f = Constants.unit;
             //render the channel
+            tessellator.setBrightness(Blocks.planks.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
             tessellator.setColorRGBA_F(1, 1, 1, 1);
             tessellator.addTranslation(x, y, z);
             this.renderWoodChannel(valve, tessellator);

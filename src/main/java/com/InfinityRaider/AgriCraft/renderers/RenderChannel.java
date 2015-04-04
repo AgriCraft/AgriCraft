@@ -58,6 +58,7 @@ public class RenderChannel extends TileEntitySpecialRenderer implements ISimpleB
         //translate Tessellator to the right position
         tessellator.addTranslation(x, y, z);
         //set colors
+        tessellator.setBrightness(Blocks.planks.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
         tessellator.setColorRGBA_F(1, 1, 1, 1);
         //call correct drawing methods
         if (tileEntity instanceof TileEntityChannel) {
