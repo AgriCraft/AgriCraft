@@ -2,8 +2,6 @@ package com.InfinityRaider.AgriCraft.apiimpl.v1;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
-
 import com.InfinityRaider.AgriCraft.api.v1.IBlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.ISeedRequirements;
 

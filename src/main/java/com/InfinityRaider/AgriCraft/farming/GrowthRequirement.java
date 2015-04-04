@@ -40,7 +40,7 @@ public class GrowthRequirement {
     //-----------------------------------
     /** @return true, if all the requirements are met */
     public boolean canGrow(World world, int x, int y, int z) {
-        return this.isValidSoil(world, x, y-1, z) && this.isBrightnessGood(world.getBlockLightValue(x, y, z)) && this.isBaseBlockPresent(world, x, y, z);
+        return this.isValidSoil(world, x, y-1, z) && this.isBrightnessGood(world, x, y, z) && this.isBaseBlockPresent(world, x, y, z);
     }
 
     /** @return true, if the correct base block is present **/
@@ -91,7 +91,8 @@ public class GrowthRequirement {
     }
 
     /** @return true, if the light level is between the allowed values */
-    public boolean isBrightnessGood(int lvl) {
+    public boolean isBrightnessGood(World world, int x, int y, int z) {
+        int lvl = world.getBlock(x, y, z).getLightValue(world, x, y ,z);
         return lvl<this.maxBrightness && lvl>=this.minBrightness;
     }
 

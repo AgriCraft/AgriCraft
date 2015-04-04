@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -32,7 +32,6 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.google.common.collect.Lists;
 
 public class APIimplv1 implements APIv1 {
@@ -106,7 +105,7 @@ public class APIimplv1 implements APIv1 {
 
 	@Override
 	public boolean isHandledByAgricraft(ItemStack seed) {
-		return SeedHelper.isValidSeedStack(seed);
+		return CropPlantHandler.isValidSeed(seed);
 	}
 
 	@Override
@@ -125,7 +124,7 @@ public class APIimplv1 implements APIv1 {
 
 	@Override
 	public ISeedRequirements getSeedRequirements(ItemStack seed) {
-		if (SeedHelper.isValidSeedStack(seed)) {
+		if (CropPlantHandler.isValidSeed(seed)) {
 			SeedRequirements result = new SeedRequirements();
 			GrowthRequirement growthRequirement = GrowthRequirements.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage());
 			result.setNeedsCrops(ConfigurationHandler.disableVanillaFarming);
@@ -215,7 +214,7 @@ public class APIimplv1 implements APIv1 {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			return crop.weed;
+			return crop.hasWeed();
 		}
 		return false;
 	}
@@ -235,7 +234,7 @@ public class APIimplv1 implements APIv1 {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			return crop.crossCrop;
+			return crop.isCrossCrop();
 		}
 		return false;
 	}
@@ -263,7 +262,7 @@ public class APIimplv1 implements APIv1 {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			if (!crop.weed) {
+			if (!crop.hasWeed()) {
 				return false;
 			}
       if (!world.isRemote) {
@@ -284,7 +283,7 @@ public class APIimplv1 implements APIv1 {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			if (!crop.weed) {
+			if (!crop.hasWeed()) {
 				return false;
 			}
       int weedGrowthStage = world.getBlockMetadata(x, y, z);
@@ -309,8 +308,8 @@ public class APIimplv1 implements APIv1 {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			if(!crop.weed && !crop.crossCrop && !crop.hasPlant()) {
-				crop.crossCrop = true;
+			if(!crop.hasWeed() && !crop.isCrossCrop() && !crop.hasPlant()) {
+				crop.setCrossCrop(true);
 				crops.stackSize--;
 				crop.markForUpdate();
 				return true;
@@ -327,8 +326,8 @@ public class APIimplv1 implements APIv1 {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			if(crop.crossCrop) {
-				crop.crossCrop = false;
+			if(crop.isCrossCrop()) {
+				crop.setCrossCrop(false);
 				crop.markForUpdate();
 				return new ItemStack(Items.crops, 1);
 			}
@@ -338,11 +337,11 @@ public class APIimplv1 implements APIv1 {
 
 	@Override
 	public SeedRequirementStatus canApplySeeds(World world, int x, int y, int z, ItemStack seed) {
-		if (SeedHelper.isValidSeedStack(seed)) {
+		if (CropPlantHandler.isValidSeed(seed)) {
 			TileEntity te = world.getTileEntity(x, y, z);
 			if (te instanceof TileEntityCrop) {
 				TileEntityCrop crop = (TileEntityCrop) te;
-				if (crop.crossCrop || crop.hasPlant()) {
+				if (crop.isCrossCrop() || crop.hasPlant()) {
 					return SeedRequirementStatus.BAD_LOCATION;
 				}
 				GrowthRequirement growthRequirement = GrowthRequirements.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage());
@@ -367,11 +366,11 @@ public class APIimplv1 implements APIv1 {
 	@Override
 	public boolean applySeeds(World world, int x, int y, int z, ItemStack seed) {
 		if(!world.isRemote) {
-			if (SeedHelper.isValidSeedStack(seed)) {
+			if (CropPlantHandler.isValidSeed(seed)) {
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te instanceof TileEntityCrop) {
 					TileEntityCrop crop = (TileEntityCrop) te;
-					if (crop.crossCrop || crop.hasPlant() || !GrowthRequirements.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage()).canGrow(world, x, y, z)) {
+					if (crop.isCrossCrop() || crop.hasPlant() || !GrowthRequirements.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage()).canGrow(world, x, y, z)) {
 						return false;
 					}
 					if (seed.stackTagCompound != null && seed.stackTagCompound.hasKey(Names.NBT.growth)) {
@@ -399,7 +398,7 @@ public class APIimplv1 implements APIv1 {
 			if(crop.isMature()) {
 				crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
 				crop.markForUpdate();
-				return SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
+				return CropPlantHandler.getPlantFromStack(crop.getSeedStack()).getFruitsOnHarvest(crop.getGain(), world.rand);
 			}
 		}
 		return null;
@@ -439,8 +438,8 @@ public class APIimplv1 implements APIv1 {
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
 			if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
-				return (crop.crossCrop && ConfigurationHandler.bonemealMutation) ||
-						(crop.hasPlant() && !crop.isMature() && crop.isFertile() && SeedHelper.getSeedTier(crop.seed, crop.seedMeta) < 4);
+				return (crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) ||
+						(crop.hasPlant() && !crop.isMature() && crop.isFertile() && CropPlantHandler.getPlantFromStack(crop.getSeedStack()).getTier() < 4);
 			} else if (ModIntegration.LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && fertilizer.getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
 				return crop.hasPlant() && !crop.isMature() && crop.isFertile();
 			}
@@ -453,7 +452,6 @@ public class APIimplv1 implements APIv1 {
 		if (world.isRemote || !isValidFertilizer(world, x, y, z, fertilizer)) {
 			return false;
 		}
-		TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
 		if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
 			Blocks.blockCrop.func_149853_b(world, random, x, y, z);
 			fertilizer.stackSize--;

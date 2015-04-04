@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.farming.mutation;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import net.minecraft.item.ItemStack;
 
-
 public class Mutation {
 
     public ItemStack result;
