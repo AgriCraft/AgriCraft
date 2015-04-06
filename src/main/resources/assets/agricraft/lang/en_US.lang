@@ -220,7 +220,7 @@ agricraft_journal.botaniaCyan=This mystical flower has pretty cyan petals, who k
 agricraft_journal.botaniaPurple=This mystical flower has pretty purple petals, who knows what they might be useful for.
 agricraft_journal.botaniaBlue=This mystical flower has pretty blue petals, who knows what they might be useful for.
 agricraft_journal.botaniaBrown=This mystical flower has pretty brown petals, who knows what they might be useful for.
-agricraft_journal. botaniaGreen=This mystical flower has pretty green petals, who knows what they might be useful for.
+agricraft_journal.botaniaGreen=This mystical flower has pretty green petals, who knows what they might be useful for.
 agricraft_journal.botaniaRed=This mystical flower has pretty red petals, who knows what they might be useful for.
 agricraft_journal.botaniaBlack=This mystical flower has pretty black petals, who knows what they might be useful for.
 
@@ -236,23 +236,25 @@ agricraft_journal.cottonNatura=Cotton has a high demand in the textile industry 
 //harvestcraft seeds
 agricraft_journal.hc_Artichoke=The edible portion of the artichoke consists of the flower buds before the flowers come into bloom.
 agricraft_journal.hc_Asparagus=Asparagus has been used as a vegetable and medicine, it has a very delicate flavour.
-agricraft_journal.hc_BambooShoot=Bamboo shoots or bamboo sprouts are the edible shoots which are used in numerous Asian dishes and broths.
+agricraft_journal.hc_Bambooshoot=Bamboo shoots or bamboo sprouts are the edible shoots which are used in numerous Asian dishes and broths.
+agricraft_journal.hc_Barley=Some people prefer the taste of barley bread over regular bread, while others claim it tastes exactly the same.
 agricraft_journal.hc_Bean=Beans are a summer crop that needs warm temperatures to grow.
 agricraft_journal.hc_Beet=The usually deep purple roots of beet are eaten either raw, grilled, boiled, or roasted.
 agricraft_journal.hc_Bellpepper=Most often bell peppers are green, yellow, orange, and red.
 agricraft_journal.hc_Blackberry=The soft fruit is popular for use in desserts, jams, seedless jelly, and sometimes wine.
 agricraft_journal.hc_Blueberry=Blueberries are perennial flowering plants with indigo-colored berries.
 agricraft_journal.hc_Broccoli=Broccoli is an edible green plant in the cabbage family, whose large flowering head is used as a vegetable.
-agricraft_journal.hc_BrusselsSprout=The Brussels sprout has long been popular in Brussels, Belgium, and may have originated there.
+agricraft_journal.hc_Brusselsprout=The Brussels sprout has long been popular in Brussels, Belgium, and may have originated there.
 agricraft_journal.hc_Cabbage=Cabbage is generally grown for its densely leaved heads, produced during the first year of its biennial cycle.
-agricraft_journal.hc_CactusFruit=The fruits typically grow spikes as well, handle with caution.
-agricraft_journal.hc_CandleBerry=The candleberry is a small shrub that produces small fruits.
+agricraft_journal.hc_Cactusfruit=The fruits typically grow spikes as well, handle with caution.
+agricraft_journal.hc_Candleberry=The candleberry is a small shrub that produces small fruits.
 agricraft_journal.hc_Cantaloupe=Cantaloupe is normally eaten as a fresh fruit, as a salad, or as a dessert with ice cream or custard.
 agricraft_journal.hc_Cauliflower=Cauliflower can be roasted, boiled, fried, steamed, or eaten raw.
 agricraft_journal.hc_Celery=Celery is a plant variety commonly used as a vegetable, the stem is the edible part.
-agricraft_journal.hc_ChiliPepper=The spicy chili has many culinary uses, from dips to spicing up your meal.
+agricraft_journal.hc_Chilipepper=The spicy chili has many culinary uses, from dips to spicing up your meal.
 agricraft_journal.hc_Coffee=These beans are the base for a steaming cup of coffee to start your day, so basicly the base of your day.
 agricraft_journal.hc_Corn=Because of its shallow roots, corn is susceptible to droughts, intolerant of nutrient-deficient soils, and prone to be uprooted by severe winds
+agricraft_journal.hc_Cotton=Cotton has a high demand in the textile industry and is therefore a very valuable asset.
 agricraft_journal.hc_Cranberry=Cranberry juice is usually sweetened or blended with other fruit juices to reduce its natural tartness.
 agricraft_journal.hc_Cucumber=The cucumber is a creeping vine that bears cylindrical fruits that are used as culinary vegetables.
 agricraft_journal.hc_Eggplant=The raw fruit can have a somewhat bitter taste, but becomes tender when cooked and develops a rich, complex flavor.
@@ -285,12 +287,35 @@ agricraft_journal.hc_SweetPotato=Although the leaves and shoots are also edible,
 agricraft_journal.hc_Tea=Tea can be prepared by pouring hot or boiling water over cured leaves of the tea plant
 agricraft_journal.hc_Tomato=The tomato is consumed in diverse ways, including raw, as an ingredient in many dishes, sauces, salads, and drinks.
 agricraft_journal.hc_Turnip=The turnip is a root vegetable commonly grown in temperate climates worldwide for its white, bulbous taproot.
-agricraft_journal.hc_WhiteMushroom=If you want to fly higher then a jetplane, these aren't the mushrooms you're looking for.
-agricraft_journal.hc_WinterSquash=Winter squash can be harvested whenever the fruits have turned a deep, solid color and the skin is hard.
+agricraft_journal.hc_Whitemushroom=If you want to fly higher then a jetplane, these aren't the mushrooms you're looking for.
+agricraft_journal.hc_Wintersquash=Winter squash can be harvested whenever the fruits have turned a deep, solid color and the skin is hard.
 agricraft_journal.hc_Zucchini=Zucchini is usually served cooked, it can also be prepared using a variety of cooking techniques, including steamed, boiled, grilled, stuffed and baked, barbecued, fried, or incorporated in other recipes.
 
 //plant mega pack seeds
+agricraft_journal.pmp_Beet=The usually deep purple roots of beet are eaten either raw, grilled, boiled, or roasted.
+agricraft_journal.pmp_Celery=Celery is a plant variety commonly used as a vegetable, the stem is the edible part.
+agricraft_journal.pmp_Corn=Because of its shallow roots, corn is susceptible to droughts, intolerant of nutrient-deficient soils, and prone to be uprooted by severe winds
+agricraft_journal.pmp_Cucumber=The cucumber is a creeping vine that bears cylindrical fruits that are used as culinary vegetables.
+agricraft_journal.pmp_Lettuce=Generally grown as a hardy annual, lettuce is easily cultivated, although it requires relatively low temperatures to prevent it from flowering quickly.
+agricraft_journal.pmp_Onion=The onion plant has a fan of hollow, bluish-green leaves and the bulb at the base of the plant begins to swell when a certain day-length is reached.
 agricraft_journal.pmp_Spinach=The cartoon character Popeye the Sailor Man is portrayed as having a strong affinity for spinach, becoming physically stronger after consuming it.
+agricraft_journal.pmp_Tomato=The tomato is consumed in diverse ways, including raw, as an ingredient in many dishes, sauces, salads, and drinks.
+agricraft_journal.pmp_BellPepperYellow=There are many bellpeppers out there: red, yellow and green, but this one is yellow.
+
+//witchery seeds
+agricraft_journal.wi_Belladonna=Everything about this plant is highly toxic: its leaves, buds and flowers.
+agricraft_journal.wi_Garlic=According to folklore garlic can be used to repel vampires, but who believes in vampires anyway, right?
+agricraft_journal.wi_Mandrake=A mythical plant that when uprooted and woken up will make painful screeching noises.
+agricraft_journal.wi_Snowbell=Snowbells are pretty flowers that seem to freeze all the water they soak up.
+agricraft_journal.wi_Artichoke=The water artichoke is an odd variaty of artichoke, only few know what on earth it is useful for.
+agricraft_journal.wi_Wolfsbane=Tales tell of this flower revealing the true nature of people suffering from lycanthropy.
+agricraft_journal.wi_Wormwood=Wormwood is a rare plant, herbologists praise its fever suppressing capabilities.
 
 //chococraft seeds
-agricraft_journal.cc_Gysahl=The gysahl green is the favorite snack of the fabled Chocobo. Sometimes a gysahl green can produce a lovely gysahl and some say that a well cultivated gysahl plant can produce a golden gysahl.
+agricraft_journal.gyshahl=The gysahl green is the favorite snack of the fabled Chocobo. Sometimes a gysahl green can produce a lovely gysahl and some say that a well cultivated gysahl plant can even produce a golden one.
+
+//psychedelicraft seeds
+agricraft_journal.pc_cannabis=Commonly known as marihuana, it is very popular as a softdrug.
+agricraft_journal.pc_coca=The leaves of this plant form the base material to produce cocaine.
+agricraft_journal.pc_hop=Hops are used to brew all sorts of ales and lagers.
+agricraft_journal.pc_tobacco=Tobacco is smoked all around the world despite its nefarious effects on ones health.

@@ -25,6 +25,10 @@ public class CropPlantHarvestCraft extends CropPlantGeneric {
     @Override
     @SideOnly(Side.CLIENT)
     public String getInformation() {
-        return "agricraft_journal.hc_"+getSeed().getUnlocalizedName();
+        String name = getSeed().getUnlocalizedName();
+        int start = name.indexOf('.')+1;
+        int stop = name.indexOf("seedItem");
+        name = name.substring(start, stop);
+        return "agricraft_journal.hc_"+Character.toUpperCase(name.charAt(0))+name.substring(1);
     }
 }

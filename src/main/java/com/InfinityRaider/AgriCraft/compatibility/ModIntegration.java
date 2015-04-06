@@ -69,6 +69,10 @@ public class ModIntegration {
         if(LoadedMods.waila) {
             FMLInterModComms.sendMessage(Names.Mods.waila, "register", "com.InfinityRaider.AgriCraft.compatibility.waila.WailaRegistry.initWaila");
         }
+        //Witchery
+        if(LoadedMods.witchery) {
+            WitcheryHelper.init();
+        }
         //Minetweaker
         if (LoadedMods.minetweaker) {
             MineTweakerAPI.registerClass(CustomWood.class);
@@ -106,6 +110,7 @@ public class ModIntegration {
         if(LoadedMods.witchery) {
             WitcheryHelper.initPlants();
         }
+        //TODO: IC2 & BluePower flax
     }
 
     public static class LoadedMods {

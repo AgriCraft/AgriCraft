@@ -23,6 +23,8 @@ public class CropPlantPMPSingle extends CropPlantGeneric {
     @Override
     @SideOnly(Side.CLIENT)
     public String getInformation() {
-        return "agricraft_journal.pmp_"+getSeed().getUnlocalizedName();
+        String name = getSeed().getUnlocalizedName();
+        name = name.substring(name.indexOf("seed")+"seed".length());
+        return "agricraft_journal.pmp_"+name;
     }
 }

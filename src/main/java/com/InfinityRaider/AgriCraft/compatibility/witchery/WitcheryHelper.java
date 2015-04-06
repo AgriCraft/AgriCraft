@@ -31,8 +31,8 @@ public class WitcheryHelper {
         OreDictionary.registerOre("cropWaterArtichoke", new ItemStack(Witchery.Items.GENERIC, 1, 69));
         OreDictionary.registerOre("cropSnowbell", new ItemStack(Witchery.Items.GENERIC, 1, 78));
         OreDictionary.registerOre("cropSnowbell", Items.snowball);
-        OreDictionary.registerOre("cropWolfsbane", new ItemStack(Witchery.Items.GENERIC, 1, 22));
-        OreDictionary.registerOre("cropWitchGarlic", new ItemStack(Witchery.Items.GENERIC, 1, 69));
+        OreDictionary.registerOre("cropWolfsbane", new ItemStack(Witchery.Items.GENERIC, 1, 156));
+        OreDictionary.registerOre("cropWitchGarlic", new ItemStack(Witchery.Items.SEEDS_GARLIC));
         OreDictionary.registerOre("cropWormwood", new ItemStack(Witchery.Items.GENERIC, 1, 111));
 
     }

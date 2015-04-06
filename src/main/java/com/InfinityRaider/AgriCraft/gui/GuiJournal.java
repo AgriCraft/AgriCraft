@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.gui;
 
+import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
@@ -14,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -36,7 +36,7 @@ public class GuiJournal extends GuiScreen {
     public static final ResourceLocation textureSeedPage = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalSeedPage.png");
     //needed data
     protected EntityPlayer player;
-    protected ItemStack[] discoveredSeeds;
+    protected ArrayList<CropPlant> discoveredPlants;
     protected ItemStack[][] discoveredParents;
     protected ItemStack[] discoveredCoParents;
     protected ItemStack[] discoveredMutations;
@@ -73,15 +73,15 @@ public class GuiJournal extends GuiScreen {
     private void setDataFromNBT() {
         if (this.player.getCurrentEquippedItem() != null && this.player.getCurrentEquippedItem().stackSize > 0 && this.player.getCurrentEquippedItem().getItem() instanceof ItemJournal && this.player.getCurrentEquippedItem().hasTagCompound()) {
             NBTTagCompound tag = this.player.getCurrentEquippedItem().getTagCompound();
+            this.discoveredPlants = new ArrayList<CropPlant>();
             if (tag.hasKey(Names.NBT.discoveredSeeds)) {
                 NBTTagList tagList = tag.getTagList(Names.NBT.discoveredSeeds, 10);      //10 for tagCompound
-                this.discoveredSeeds = new ItemStack[tagList.tagCount()];
-                for (int i = 0; i < this.discoveredSeeds.length; i++) {
-                    this.discoveredSeeds[i] = ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i));
+                for (int i = 0; i < tagList.tagCount(); i++) {
+                    CropPlant plant = CropPlantHandler.getPlantFromStack(ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i)));
+                    if (plant != null) {
+                        discoveredPlants.add(plant);
+                    }
                 }
-
-            } else {
-                this.discoveredSeeds = new ItemStack[0];
             }
             if (tag.hasKey(Names.NBT.currentPage)) {
                 this.currentPage = tag.getShort(Names.NBT.currentPage);
@@ -99,7 +99,7 @@ public class GuiJournal extends GuiScreen {
                 if (this.currentPage < this.standardPages - 1) {
                     this.currentPage = this.currentPage + 1;
                     flipPage = true;
-                } else if (this.discoveredSeeds != null && this.currentPage < this.discoveredSeeds.length + this.standardPages - 1) {
+                } else if (this.discoveredPlants != null && this.currentPage < this.discoveredPlants.size() + this.standardPages - 1) {
                     this.currentPage = this.currentPage + 1;
                     flipPage = true;
                 }
@@ -110,7 +110,7 @@ public class GuiJournal extends GuiScreen {
             }
         } else if (this.getSeedAtCoordinates(x, y) != null && this.getSeedAtCoordinates(x, y).getItem() != null) {
             ItemStack seed = this.getSeedAtCoordinates(x, y);
-            int page = this.getPage(seed);
+            int page = this.getPage(CropPlantHandler.getPlantFromStack(seed));
             this.currentPage = page >= 0 ? page : this.currentPage;
             flipPage = true;
         }
@@ -204,10 +204,10 @@ public class GuiJournal extends GuiScreen {
     }
 
     //returns the page nr for a given seed
-    private int getPage(ItemStack seed) {
-        if (this.isSeedDiscovered(seed)) {
-            for (int i = 0; i < this.discoveredSeeds.length; i++) {
-                if (this.discoveredSeeds[i].getItem() == seed.getItem() && this.discoveredSeeds[i].getItemDamage() == seed.getItemDamage()) {
+    private int getPage(CropPlant plant) {
+        if (this.isSeedDiscovered(plant)) {
+            for (int i = 0; i < this.discoveredPlants.size(); i++) {
+                if (discoveredPlants.get(i) == plant) {
                     return (i + standardPages);
                 }
             }
@@ -234,11 +234,11 @@ public class GuiJournal extends GuiScreen {
                 int correctedY = (y - 1 - this.guiTop - yOffset);
                 int arrayIndex = (int) Math.floor(((float) correctedY) / 20);
                 if (arrayIndex >= 0 && arrayIndex < discoveredParents.length) {
-                    output = column == 3 ? discoveredSeeds[currentPage - standardPages] : discoveredParents[arrayIndex][column - 1];
+                    output = column == 3 ? discoveredPlants.get(currentPage - standardPages).getSeed() : discoveredParents[arrayIndex][column - 1];
                 } else if (arrayIndex >= discoveredParents.length && arrayIndex < discoveredParents.length + discoveredCoParents.length) {
                     switch (column) {
                         case 1:
-                            output = discoveredSeeds[currentPage - standardPages];
+                            output = discoveredPlants.get(currentPage - standardPages).getSeed();
                             break;
                         case 2:
                             output = discoveredCoParents[arrayIndex - discoveredParents.length];
@@ -293,7 +293,7 @@ public class GuiJournal extends GuiScreen {
 
     //draws the page for a discovered seed
     private void drawSeedPage(int index) {
-        if (this.discoveredSeeds != null && this.discoveredSeeds.length > index) {
+        if (this.discoveredPlants != null && this.discoveredPlants.size() > index) {
             //draw the pages
             GL11.glColor4f(1F, 1F, 1F, 1F);
             Minecraft.getMinecraft().getTextureManager().bindTexture(textureSeedPage);
@@ -315,7 +315,7 @@ public class GuiJournal extends GuiScreen {
 
     //loads seed textures for a seed page
     private void getSeedTextures(int index) {
-        ItemStack seed = discoveredSeeds[index];
+        ItemStack seed = discoveredPlants.get(index).getSeed();
         //get the seed icon
         seedIcon = RenderHelper.getIcon(seed.getItem(), seed.getItemDamage());
         //get the fruit icons
@@ -379,7 +379,7 @@ public class GuiJournal extends GuiScreen {
 
     //draw the seed page title bar
     private void drawSeedTitle(int index) {
-        ItemStack seed = discoveredSeeds[index];
+        ItemStack seed = discoveredPlants.get(index).getSeed();
         String title = seed.getDisplayName();
         BlockWithMeta soil = GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage()).getSoil();
         Minecraft.getMinecraft().getTextureManager().bindTexture(RenderHelper.getItemResource(seedIcon));
@@ -402,7 +402,7 @@ public class GuiJournal extends GuiScreen {
         float scale = 0.5F;
         GL11.glScalef(scale, scale, scale);
         this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_journal.information") + ": ", (int) (this.textStart / scale), (int) ((this.guiTop + 31) / scale), this.black);
-        String seedData = splitInLines(CropPlantHandler.getPlantFromStack(discoveredSeeds[index]).getInformation(), scale);
+        String seedData = splitInLines(StatCollector.translateToLocal(discoveredPlants.get(index).getInformation()), scale);
         if (seedData != null && !seedData.equals("")) {
             String[] write = IOHelper.getLinesArrayFromData(seedData);
             for (int i = 0; i < write.length; i++) {
@@ -416,7 +416,7 @@ public class GuiJournal extends GuiScreen {
 
     //writes the seed tier
     private void writeSeedTier(int index) {
-        int tier = CropPlantHandler.getPlantFromStack(discoveredSeeds[index]).getTier();
+        int tier =discoveredPlants.get(index).getTier();
         String write = StatCollector.translateToLocal("agricraft_journal.tier") + ": " + tier;
         float scale = 0.5F;
         GL11.glScalef(scale, scale, scale);
@@ -552,7 +552,7 @@ public class GuiJournal extends GuiScreen {
                     index = (index + 1) < notProcessed.length() ? index + 1 : index;
                 }
                 //go back to the first space to cut the string in two lines
-                while (notProcessed.charAt(index) != ' ') {
+                while (index>0 && notProcessed.charAt(index) != ' ') {
                     index--;
                 }
                 //update the data for the next iteration
@@ -565,9 +565,14 @@ public class GuiJournal extends GuiScreen {
     }
 
     //utility method: check if a seed has been discovered
-    private boolean isSeedDiscovered(ItemStack seed) {
-        for (ItemStack arrayElement : this.discoveredSeeds) {
-            if (seed.getItem() == arrayElement.getItem() && seed.getItemDamage() == arrayElement.getItemDamage()) {
+    private boolean isSeedDiscovered(ItemStack stack) {
+        return isSeedDiscovered(CropPlantHandler.getPlantFromStack(stack));
+    }
+
+    //utility method: check if a seed has been discovered
+    private boolean isSeedDiscovered(CropPlant plant) {
+        for (CropPlant arrayElement : this.discoveredPlants) {
+            if (arrayElement==plant) {
                 return true;
             }
         }

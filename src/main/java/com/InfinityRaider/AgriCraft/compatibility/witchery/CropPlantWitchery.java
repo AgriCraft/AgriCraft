@@ -25,6 +25,10 @@ public class CropPlantWitchery extends CropPlantGeneric {
     @Override
     @SideOnly(Side.CLIENT)
     public String getInformation() {
-        return "agricraft_journal.wi_"+getSeed().getUnlocalizedName();
+        String name = getSeed().getUnlocalizedName();
+        name = name.substring(name.indexOf(':')+1);
+        int index = name.indexOf("seeds");
+        name = index<0?name:name.substring(index+"seeds".length());
+        return "agricraft_journal.wi_"+Character.toUpperCase(name.charAt(0))+name.substring(1);
     }
 }

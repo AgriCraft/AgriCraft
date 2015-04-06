@@ -1,5 +1,5 @@
 package com.InfinityRaider.AgriCraft.compatibility.plantmegapack;
-;
+
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantTallGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,7 +15,13 @@ public class CropPlantPMPDouble extends CropPlantTallGeneric {
 
     @Override
     public int transformMeta(int growthStage) {
-        return growthStage;
+        if(growthStage<=2 || growthStage==7) {
+            return growthStage;
+        }
+        if(growthStage<5) {
+            return 3;
+        }
+        return 5;
     }
 
     @Override
@@ -38,7 +44,9 @@ public class CropPlantPMPDouble extends CropPlantTallGeneric {
     @Override
     @SideOnly(Side.CLIENT)
     public String getInformation() {
-        return "agricraft_journal.pmp_"+getSeed().getUnlocalizedName();
+        String name = getSeed().getUnlocalizedName();
+        name = name.substring(name.indexOf("seed")+"seed".length());
+        return "agricraft_journal.pmp_"+name;
     }
 
     @Override

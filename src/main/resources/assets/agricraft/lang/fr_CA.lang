@@ -236,23 +236,25 @@ agricraft_journal.cottonNatura=Le coton est beaucoup demandé dans l'industrie d
 //harvestcraft seeds
 agricraft_journal.hc_Artichoke=La portion comestible de l'artichaut consiste à son capitule avant que les fleurs n'éclosent.
 agricraft_journal.hc_Asparagus=L'asperge a été utilisé comme légume et en médecine, il a une saveur très délicate.
-agricraft_journal.hc_BambooShoot=Les pousses de bambou sont des pousses comestibles qui sont utilisées dans d'innombrables plats et bouillons asiatiques.
+agricraft_journal.hc_Bambooshoot=Les pousses de bambou sont des pousses comestibles qui sont utilisées dans d'innombrables plats et bouillons asiatiques.
+agricraft_journal.hc_Barley=Certaines personnes préfèrent le goût du pain d'orge à celui de blé, alors que d'autres affirment que ça goûte exactement pareil.
 agricraft_journal.hc_Bean=Les haricots sont une culture d'été qui ont besoin de chaudes températures pour grandir.
 agricraft_journal.hc_Beet=Les racines généralement mauve foncé des bettes sont mangées crues, grillées, bouillies ou rôties.
 agricraft_journal.hc_Bellpepper=Le plus souvent, les piments sont verts, jaunes, orange et rouges.
 agricraft_journal.hc_Blackberry=Ce fruit mou est populaire pour être utilisé dans les desserts, les confitures et les gelées, mais aussi parfois pour du vin et du vinaigre.
 agricraft_journal.hc_Blueberry=Les bleuets sont des plantes vivaces à fleurs avec des baies de couleur indigo.
 agricraft_journal.hc_Broccoli=Le brocoli est une plante verte comestible de la famille des choux, dont sa large tête fleurissante est utilisée comme un légume.
-agricraft_journal.hc_BrusselsSprout=Le chou de Bruxelles a longtemps été populaire à Bruxelles, en Belgique, et son origine peut provenir de là.
+agricraft_journal.hc_Brusselsprout=Le chou de Bruxelles a longtemps été populaire à Bruxelles, en Belgique, et son origine peut provenir de là.
 agricraft_journal.hc_Cabbage=Le chou est généralement cultivé pour sa tête densément feuillue, qui se produit durant la première année de son cycle bisannuel.
-agricraft_journal.hc_CactusFruit=Typiquement, ses fruits poussent avec des épines, manipulez avec précaution...
-agricraft_journal.hc_CandleBerry=Le cirier est un petit arbuste qui produit des petits fruits.
+agricraft_journal.hc_Cactusfruit=Typiquement, ses fruits poussent avec des épines, manipulez avec précaution...
+agricraft_journal.hc_Candleberry=Le cirier est un petit arbuste qui produit des petits fruits.
 agricraft_journal.hc_Cantaloupe=La cantaloupe est normalement mangée comme fruit frais, en salade, ou comme dessert avec de la crème glacée ou de la costarde.
 agricraft_journal.hc_Cauliflower=Le chou-fleur peut être rôti, boulli, frit, cuit à la vapeur ou mangé cru.
 agricraft_journal.hc_Celery=Le céleri est une variété de plante communément utilisée comme un légume, la tige étant la partie comestible.
-agricraft_journal.hc_ChiliPepper=Le piment fort a plusieurs utilisations culinaires, en trempettes ou simplement pour pimenter vos repas.
+agricraft_journal.hc_Chilipepper=Le piment fort a plusieurs utilisations culinaires, en trempettes ou simplement pour pimenter vos repas.
 agricraft_journal.hc_Coffee=Ces grains sont la base pour une tasse de café fumante pour commencer votre journée, donc la base de votre journée.
 agricraft_journal.hc_Corn=À cause de ses racines peu profondes, le blé d'inde est vulnérable aux sécheresses, intolérant des sols pauvres en nutriments, et est sujet d'être déraciné par de forts vents.
+agricraft_journal.hc_Cotton=Le coton est beaucoup demandé dans l'industrie du textile et cela en fait un atout précieux.
 agricraft_journal.hc_Cranberry=Le jus de canneberge est habituellement sucré ou mélangé avec d'autres jus de fruit pour réduire son aigreur naturel.
 agricraft_journal.hc_Cucumber=Le concombre est une vigne grimpante qui donne des fruits cylindriques qui sont utilisés comme légumes culinaires.
 agricraft_journal.hc_Eggplant=Son fruit cru peut avoir un goût un peu amer, mais devient tendre une fois cuit et développe une saveur riche et complexe.
@@ -285,12 +287,19 @@ agricraft_journal.hc_SweetPotato=Bien que les feuilles et les pousses soient aus
 agricraft_journal.hc_Tea=Le thé peut être préparé en versant de l'eau chaude ou bouillante sur les feuilles séchées de la plante de thé.
 agricraft_journal.hc_Tomato=La tomate est consommée de diverses façons, incluant crue, comme ingrédient dans divers plats, sauces, salades, et boissons.
 agricraft_journal.hc_Turnip=Le navet est un légume racine communément cultivé dans des climats tempérés à travers le monde pour sa racine blanche et bulbeuse.
-agricraft_journal.hc_WhiteMushroom=Si vous voulez planer plus haut qu'un jet privé, alors ces champignons ne sont pas ceux que vous cherchez !
-agricraft_journal.hc_WinterSquash=La courge d'hiver peut être récoltée chaque fois que les fruits ont viré d'une couleur solide et profonde et que la peau est dure.
+agricraft_journal.hc_Whitemushroom=Si vous voulez planer plus haut qu'un jet privé, alors ces champignons ne sont pas ceux que vous cherchez !
+agricraft_journal.hc_Wintersquash=La courge d'hiver peut être récoltée chaque fois que les fruits ont viré d'une couleur solide et profonde et que la peau est dure.
 agricraft_journal.hc_Zucchini=Le zucchini est généralement servi cuit, il peut également être préparé en utilisant une variété de techniques culinaires, comme cuit à la vapeur, bouilli, grillé, farci puis cuit, cuit au barbecue, frit, ou incorporé dams d'autres recettes.
 
 //plant mega pack seeds
+agricraft_journal.pmp_Beet=Les racines généralement mauve foncé des bettes sont mangées crues, grillées, bouillies ou rôties.
+agricraft_journal.pmp_Celery=Le céleri est une variété de plante communément utilisée comme un légume, la tige étant la partie comestible.
+agricraft_journal.pmp_Corn=À cause de ses racines peu profondes, le blé d'inde est vulnérable aux sécheresses, intolérant des sols pauvres en nutriments, et est sujet d'être déraciné par de forts vents.
+agricraft_journal.pmp_Cucumber=Le concombre est une vigne grimpante qui donne des fruits cylindriques qui sont utilisés comme légumes culinaires.
+agricraft_journal.pmp_Lettuce=Généralement cultivée comme plante annuelle, la laitue est facilement cultivée, bien qu'elle requiert des températures relativement basses pour l'empêcher de fleurir rapidement.
+agricraft_journal.pmp_Onion=La plante d'oignon a une touffe de feuilles bleu-vert creuses et la bulbe à la base de la plante commence à grossir lorsqu'une certaine durée du jour est atteinte.
 agricraft_journal.pmp_Spinach=Le personnage de dessin animé "Popeye le marin" était caricaturé d'avoir une grosse affinité pour les épinards, devenant physiquement plus fort après en avoir mangé.
+agricraft_journal.pmp_Tomato=La tomate est consommée de diverses façons, incluant crue, comme ingrédient dans divers plats, sauces, salades, et boissons.
 
 //chococraft seeds
 agricraft_journal.cc_Gysahl=Le gysahl vert est le casse-croûte favori des Chocobos légendaires. Parfois, un gysahl vert peut produire un charment gysahl et certains disent qu'une plante de gysahl bien cultivée peut produire un gysahl doré.

@@ -80,7 +80,7 @@ public class CropPlantGhyshal extends CropPlant {
 
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement((ItemSeeds) ChocoCraftItems.gysahlSeedsItem, 0).canGrow(world, x, y, z);
+        return GrowthRequirementHandler.getGrowthRequirement(ChocoCraftItems.gysahlSeedsItem, 0).canGrow(world, x, y, z);
     }
 
     @Override

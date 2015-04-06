@@ -40,6 +40,9 @@ public class CropPlantPsychedeliCraft extends CropPlantTallGeneric {
     @Override
     @SideOnly(Side.CLIENT)
     public String getInformation() {
-        return "agricraft_journal.pc_"+getSeed().getUnlocalizedName();
+        String name = getSeed().getUnlocalizedName();
+        name = name.substring(name.indexOf('.')+1);
+        name = name.substring(0, name.indexOf("Seeds"));
+        return "agricraft_journal.pc_"+name;
     }
 }

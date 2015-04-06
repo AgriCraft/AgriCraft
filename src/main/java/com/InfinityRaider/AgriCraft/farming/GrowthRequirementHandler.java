@@ -58,6 +58,7 @@ public class GrowthRequirementHandler {
     public static void init() {
         registerSoils();
         registerOverrides();
+        //TODO: pre-configure growth requirements for certain crops
         registerCustomEntries();
     }
 

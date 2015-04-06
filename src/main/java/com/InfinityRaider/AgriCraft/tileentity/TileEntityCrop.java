@@ -104,7 +104,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** check if the crop is fertile */
-    public boolean isFertile() {return plant.isFertile(this.worldObj, this.xCoord, this.yCoord, this.zCoord);}
+    public boolean isFertile() {
+        return worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.isFertile(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+    }
 
     /** check if bonemeal can be applied */
     public boolean canBonemeal() {

@@ -134,7 +134,7 @@ public class GrowthRequirement{
 
     /** @return true, if the light level is between the allowed values */
     public boolean isBrightnessGood(World world, int x, int y, int z) {
-        int lvl = world.getBlock(x, y, z).getLightValue(world, x, y ,z);
+        int lvl = world.getFullBlockLightValue(x, y+1, z);
         return lvl<this.maxBrightness && lvl>=this.minBrightness;
     }
 

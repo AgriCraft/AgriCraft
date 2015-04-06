@@ -306,7 +306,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     }
 
     //this gets called when the player uses bonemeal on the crop
-    @Override
     public void func_149853_b(World world, Random rand, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         if(crop.hasPlant()) {
