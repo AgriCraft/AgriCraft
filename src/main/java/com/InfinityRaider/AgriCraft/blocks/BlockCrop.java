@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
@@ -28,6 +28,7 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -212,7 +213,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     return false;
                 }
                 //magical crops fertiliser
-                else if (ModIntegration.LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && player.getCurrentEquippedItem().getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
+                else if (LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && player.getCurrentEquippedItem().getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
                     return this.applyMagicalFertiliser(world, x, y, z, player);
                 }
                 //allow the debugger to be used
@@ -220,7 +221,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     return false;
                 }
                 //tinker's construct scythe
-                else if (ModIntegration.LoadedMods.tconstruct && player.getCurrentEquippedItem().getItem() instanceof Scythe) {
+                else if (LoadedMods.tconstruct && player.getCurrentEquippedItem().getItem() instanceof Scythe) {
                     NBTTagCompound tag = player.getCurrentEquippedItem().stackTagCompound;
                     if(tag==null || !tag.hasKey("InfiTool")) {
                         //invalid tool
@@ -416,6 +417,13 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @SideOnly(Side.CLIENT)
     public Item getItem(World world, int x, int y, int z) {
         return Items.crops;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+        return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + crop.getCropHeight(), (double)z + this.maxZ);
     }
 
     //rendering stuff

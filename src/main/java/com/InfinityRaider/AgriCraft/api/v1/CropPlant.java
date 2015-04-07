@@ -76,6 +76,10 @@ public abstract class CropPlant {
         return world.getBlockMetadata(x, y, z)>=7;
     }
 
+    /** Gets the height of the crop */
+    @SideOnly(Side.CLIENT)
+    public abstract float getHeight(int meta);
+
     /** Gets the icon for the plant, growth stage goes from 0 to 7 (both inclusive, 0 is sprout and 7 is mature) */
     @SideOnly(Side.CLIENT)
     public abstract IIcon getPlantIcon(int growthStage);

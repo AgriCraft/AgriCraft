@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
@@ -88,32 +88,32 @@ public abstract class IOHelper {
         if(ConfigurationHandler.integration_Botania) {
             data = data + '\n' + botaniaMutations;
         }
-        if(ConfigurationHandler.integration_Nat && ConfigurationHandler.integration_HC && ModIntegration.LoadedMods.harvestcraft && ModIntegration.LoadedMods.natura)  {
+        if(ConfigurationHandler.integration_Nat && ConfigurationHandler.integration_HC && LoadedMods.harvestcraft && LoadedMods.natura)  {
             data = data + '\n' + harvestcraftMutations + '\n' + barleyNaturaMutations;      //harvestcraft with natura barley
         }
         else {
-            if(ConfigurationHandler.integration_HC && ModIntegration.LoadedMods.harvestcraft) {
+            if(ConfigurationHandler.integration_HC && LoadedMods.harvestcraft) {
                 data = data + '\n' + harvestcraftMutations + '\n' + barleyHarvestCraftMutations;
             }
-            if(ConfigurationHandler.integration_Nat && ModIntegration.LoadedMods.natura) {
+            if(ConfigurationHandler.integration_Nat && LoadedMods.natura) {
                 data = data + '\n' + naturaMutations;
             }
         }
-        if(ConfigurationHandler.integration_WeeeFlowers && ModIntegration.LoadedMods.weeeFlowers) {
+        if(ConfigurationHandler.integration_WeeeFlowers && LoadedMods.weeeFlowers) {
             data = data +'\n' + weeeFlowersMutations;
         }
-        if(ConfigurationHandler.integration_PlantMegaPack && ModIntegration.LoadedMods.plantMegaPack) {
+        if(ConfigurationHandler.integration_PlantMegaPack && LoadedMods.plantMegaPack) {
             data = data + '\n' + plantMegaPackMutations;
         }
-        if(ConfigurationHandler.integration_Chococraft && ModIntegration.LoadedMods.chococraft) {
-            if(ConfigurationHandler.integration_HC && ModIntegration.LoadedMods.harvestcraft) {
+        if(ConfigurationHandler.integration_Chococraft && LoadedMods.chococraft) {
+            if(ConfigurationHandler.integration_HC && LoadedMods.harvestcraft) {
                 data = data + '\n' + chococraft_harvestcraftMutations;
             }
             else {
                 data = data + '\n' + chococraftMutations;
             }
         }
-        if(ConfigurationHandler.integration_Psychedelicraft && ModIntegration.LoadedMods.psychedelicraft) {
+        if(ConfigurationHandler.integration_Psychedelicraft && LoadedMods.psychedelicraft) {
             data = data + '\n' + psychedelicraftMutations;
         }
         return data;
@@ -146,7 +146,7 @@ public abstract class IOHelper {
 
     public static String getSoilwhitelistData() {
         String output = soilWhitelistInstructions;
-        if(ModIntegration.LoadedMods.forestry) {
+        if(LoadedMods.forestry) {
             output = output +"\n" + "Forestry:soil:0";
         }
         return soilWhitelistInstructions;

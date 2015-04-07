@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.magicalcrops;
 
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -13,8 +14,9 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class MagicalCropsHelper {
-    public static void init() {
+public final class MagicalCropsHelper extends ModHelper {
+    @Override
+    protected void init() {
         Item[] seeds = {
                 MagicalCrops.SeedsBlackberry,
                 MagicalCrops.SeedsBlueberry,
@@ -50,7 +52,8 @@ public class MagicalCropsHelper {
         }
     }
 
-    public static void initPlants() {
+    @Override
+    protected void initPlants() {
         Class mc_ItemRegistry = MagicalCrops.class;
         Field[] fields = mc_ItemRegistry.getDeclaredFields();
         for(Field field : fields) {
@@ -68,5 +71,10 @@ public class MagicalCropsHelper {
                 }
             }
         }
+    }
+
+    @Override
+    protected String modId() {
+        return Names.Mods.magicalCrops;
     }
 }

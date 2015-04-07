@@ -11,10 +11,7 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
-import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
-import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntities {

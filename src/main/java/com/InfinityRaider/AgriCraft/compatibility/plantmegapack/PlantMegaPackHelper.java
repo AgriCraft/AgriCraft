@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.plantmegapack;
 
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -11,8 +12,9 @@ import plantmegapack.bin.PMPItems;
 
 import java.lang.reflect.Field;
 
-public class PlantMegaPackHelper {
-    public static void init() {
+public final class PlantMegaPackHelper extends ModHelper {
+    @Override
+    protected void init() {
         OreDictionary.registerOre("seedOnion", (Item) Item.itemRegistry.getObject("plantmegapack:seedOnion"));
         OreDictionary.registerOre("seedSpinach", (Item) Item.itemRegistry.getObject("plantmegapack:seedSpinach"));
         OreDictionary.registerOre("seedCelery", (Item) Item.itemRegistry.getObject("plantmegapack:seedCelery"));
@@ -44,7 +46,8 @@ public class PlantMegaPackHelper {
         OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedBeet"));
     }
 
-    public static void initPlants() {
+    @Override
+    protected void initPlants() {
         Class pmp_ItemRegistry = PMPItems.class;
         Field[] fields = pmp_ItemRegistry.getDeclaredFields();
         for (Field field : fields) {
@@ -66,5 +69,10 @@ public class PlantMegaPackHelper {
 
         }
 
+    }
+
+    @Override
+    protected String modId() {
+        return Names.Mods.plantMegaPack;
     }
 }

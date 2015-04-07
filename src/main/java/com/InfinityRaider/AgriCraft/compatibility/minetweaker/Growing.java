@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.google.common.base.Joiner;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;

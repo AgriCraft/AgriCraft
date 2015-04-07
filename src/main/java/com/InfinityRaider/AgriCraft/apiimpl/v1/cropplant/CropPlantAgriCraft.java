@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
@@ -60,6 +61,12 @@ public class CropPlantAgriCraft extends CropPlant {
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
         return plant.getGrowthRequirement().canGrow(world, x, y, z);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public float getHeight(int meta) {
+        return Constants.unit*13;
     }
 
     @Override

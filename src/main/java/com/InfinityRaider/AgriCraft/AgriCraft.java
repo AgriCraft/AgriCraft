@@ -17,7 +17,8 @@ package com.InfinityRaider.AgriCraft;
 */
 
 import com.InfinityRaider.AgriCraft.apiimpl.APISelector;
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
@@ -30,7 +31,6 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderLogger;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -51,7 +51,7 @@ public class AgriCraft {
     public static void preInit(FMLPreInitializationEvent event) {
         LogHelper.debug("Starting Pre-Initialization");
         //find loaded mods
-        ModIntegration.LoadedMods.init();
+        LoadedMods.init();
         //register forge event handlers
         proxy.registerEventHandlers();
         //register packet handler
@@ -91,7 +91,7 @@ public class AgriCraft {
         ResourceCrops.init();
         CustomCrops.initCustomCrops();
         Crops.initBotaniaCrops();
-        ModIntegration.init();
+        ModHelper.initHelpers();
 
         Recipes.init();
         SeedHelper.init();

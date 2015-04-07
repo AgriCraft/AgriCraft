@@ -1,19 +1,19 @@
 package com.InfinityRaider.AgriCraft.compatibility.psychedelicraft;
 
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import ivorius.psychedelicraft.items.PSItems;
 import net.minecraft.item.ItemSeeds;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class PsychedelicraftHelper {
-    public static int transformMeta(int meta) {
-        return meta==6?10:meta*2;
-    }
+public final class PsychedelicraftHelper extends ModHelper {
+    protected void init() {}
 
-    public static void initPlants() {
+    protected void initPlants() {
         Class pc_ItemRegistry = PSItems.class;
         Field[] fields = pc_ItemRegistry.getDeclaredFields();
         for(Field field : fields) {
@@ -31,5 +31,10 @@ public class PsychedelicraftHelper {
                 }
             }
         }
+    }
+
+    @Override
+    protected String modId() {
+        return Names.Mods.psychedelicraft;
     }
 }

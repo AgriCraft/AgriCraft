@@ -1,15 +1,16 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
+import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
-import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -106,6 +107,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     /** check if the crop is fertile */
     public boolean isFertile() {
         return worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.isFertile(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+    }
+
+    /** gets the height of the crop */
+    public float getCropHeight() {
+        return hasPlant()?plant.getHeight(getBlockMetadata()):Constants.unit*13;
     }
 
     /** check if bonemeal can be applied */

@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.natura;
 
 import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mods.natura.common.NContent;
@@ -65,7 +66,13 @@ public class CropPlantNatura extends CropPlant {
 
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement((ItemSeeds) NContent.seeds, seedMeta).canGrow(world, x, y, z);
+        return GrowthRequirementHandler.getGrowthRequirement(NContent.seeds, seedMeta).canGrow(world, x, y, z);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public float getHeight(int meta) {
+        return Constants.unit*13;
     }
 
     @Override

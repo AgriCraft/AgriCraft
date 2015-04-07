@@ -4,11 +4,11 @@ import chococraft.common.config.ChocoCraftBlocks;
 import chococraft.common.config.ChocoCraftItems;
 import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -81,6 +81,12 @@ public class CropPlantGhyshal extends CropPlant {
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
         return GrowthRequirementHandler.getGrowthRequirement(ChocoCraftItems.gysahlSeedsItem, 0).canGrow(world, x, y, z);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public float getHeight(int meta) {
+        return Constants.unit*13;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility.applecore;
 
+
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.Event;
@@ -9,18 +11,29 @@ import squeek.applecore.api.AppleCoreAPI;
 
 import java.util.Random;
 
-public class AppleCoreHelper {
+public final class AppleCoreHelper extends ModHelper {
     public static final String MODID = "AppleCore";
     public static boolean isAppleCoreLoaded;
     public static boolean hasDispatcher;
 
-    public static void init() {
+    @Override
+    protected void init() {
         isAppleCoreLoaded = Loader.isModLoaded(AppleCoreHelper.MODID);
         try {
             hasDispatcher = isAppleCoreLoaded && Class.forName("squeek.applecore.api.IAppleCoreDispatcher") != null;
         } catch(ClassNotFoundException e) {
             hasDispatcher = false;
         }
+    }
+
+    @Override
+    protected void initPlants() {
+
+    }
+
+    @Override
+    protected String modId() {
+        return MODID;
     }
 
     @Optional.Method(modid = AppleCoreHelper.MODID)

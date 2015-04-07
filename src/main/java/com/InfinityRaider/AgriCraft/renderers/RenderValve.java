@@ -5,7 +5,7 @@ import codechicken.multipart.TMultiPart;
 import codechicken.multipart.TileMultipart;
 import codechicken.multipart.minecraft.LeverPart;
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
@@ -167,7 +167,7 @@ public class RenderValve extends RenderChannel {
                 } else {
                     RenderHelper.drawScaledPrism(tessellator, 5, 4, direction > 0 ? 12 : 0, 11, 12, direction > 0 ? 16 : 4, icon);
                 }
-            } else if (ModIntegration.LoadedMods.mcMultipart && (neighbour instanceof BlockMultipart)) {
+            } else if (LoadedMods.mcMultipart && (neighbour instanceof BlockMultipart)) {
                 TileMultipart tile = BlockMultipart.getTile(channel.getWorldObj(), channel.xCoord + (x ? direction : 0), channel.yCoord, channel.zCoord + (x ? 0 : direction));
                 for (TMultiPart multiPart : tile.jPartList()) {
                     if (multiPart instanceof LeverPart) {

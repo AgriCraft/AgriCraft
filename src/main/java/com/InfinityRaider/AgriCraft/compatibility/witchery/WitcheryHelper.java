@@ -1,15 +1,20 @@
 package com.InfinityRaider.AgriCraft.compatibility.witchery;
 
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.emoniph.witchery.Witchery;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class WitcheryHelper {
-    public static void init() {
+public final class WitcheryHelper extends ModHelper {
+    @Override
+    protected void init() {
+        LogHelper.debug("Initializing Witchery Support");
+
         OreDictionary.registerOre("seedBelladonna", Witchery.Items.SEEDS_BELLADONNA);
         OreDictionary.registerOre("seedMandrake", Witchery.Items.SEEDS_MANDRAKE);
         OreDictionary.registerOre("seedWaterArtichoke", Witchery.Items.SEEDS_ARTICHOKE);
@@ -37,7 +42,8 @@ public class WitcheryHelper {
 
     }
 
-    public static void initPlants() {
+    @Override
+    protected void initPlants() {
         try {
             CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_BELLADONNA));
         } catch (Exception e) {
@@ -73,5 +79,10 @@ public class WitcheryHelper {
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected String modId() {
+        return Names.Mods.witchery;
     }
 }

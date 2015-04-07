@@ -1,12 +1,21 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1;
 
-import java.util.List;
-import java.util.Random;
-
+import com.InfinityRaider.AgriCraft.api.API;
+import com.InfinityRaider.AgriCraft.api.APIBase;
+import com.InfinityRaider.AgriCraft.api.APIStatus;
 import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
@@ -16,18 +25,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
-import com.InfinityRaider.AgriCraft.api.API;
-import com.InfinityRaider.AgriCraft.api.APIBase;
-import com.InfinityRaider.AgriCraft.api.APIStatus;
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.Blocks;
-import com.InfinityRaider.AgriCraft.init.Items;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Random;
 
 public class APIimplv1 implements APIv1 {
 
@@ -406,7 +405,7 @@ public class APIimplv1 implements APIv1 {
 		if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
 			return true;
 		}
-		if (ModIntegration.LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && fertilizer.getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
+		if (LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && fertilizer.getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
 			return true;
 		}
 		return false;
@@ -423,7 +422,7 @@ public class APIimplv1 implements APIv1 {
 			if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
 				return (crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) ||
 						(crop.hasPlant() && !crop.isMature() && crop.isFertile() && CropPlantHandler.getPlantFromStack(crop.getSeedStack()).getTier() < 4);
-			} else if (ModIntegration.LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && fertilizer.getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
+			} else if (LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && fertilizer.getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
 				return crop.hasPlant() && !crop.isMature() && crop.isFertile();
 			}
 		}
@@ -440,7 +439,7 @@ public class APIimplv1 implements APIv1 {
 			fertilizer.stackSize--;
 			world.playAuxSFX(2005, x, y, z, 0);
 			return true;
-		} else if (ModIntegration.LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && fertilizer.getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
+		} else if (LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && fertilizer.getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
 			if (ConfigurationHandler.integration_instantMagicFertiliser)  {
 				world.setBlockMetadataWithNotify(x, y, z, 7, 2);
 			} else {

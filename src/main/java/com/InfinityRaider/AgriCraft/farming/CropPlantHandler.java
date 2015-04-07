@@ -1,10 +1,10 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
 import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.init.CustomCrops;
@@ -133,7 +133,7 @@ public class CropPlantHandler {
             }
         }
         //register mod crops
-        ModIntegration.initModPlants();
+        ModHelper.initModPlants();
         //register crops specified trough the API
         for(CropPlant plant:plantsToRegister) {
             try {

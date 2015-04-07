@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
@@ -143,7 +143,7 @@ public class GrowthRequirement{
         Block block = world.getBlock(x, y, z);
         int meta = world.getBlockMetadata(x, y, z);
         BlockWithMeta soil = new BlockWithMeta(block, meta);
-        if(ModIntegration.LoadedMods.gardenStuff && block instanceof BlockLargePot) {
+        if(LoadedMods.gardenStuff && block instanceof BlockLargePot) {
             soil = GardenStuffHelper.getSoil((TileEntityGarden) world.getTileEntity(x, y, z));
         }
         return isValidSoil(soil);

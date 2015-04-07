@@ -43,6 +43,7 @@ public class CropPlantMagicalCrops extends CropPlantGeneric {
                 LogHelper.debug("Found method: "+method.toString());
                 Object result = method.invoke(plant, 7);
                 this.meta = (Integer) result;
+                break;
             }
         } catch (Exception e) {
             e.printStackTrace();
