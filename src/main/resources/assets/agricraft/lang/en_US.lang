@@ -225,9 +225,10 @@ agricraft_journal.botaniaRed=This mystical flower has pretty red petals, who kno
 agricraft_journal.botaniaBlack=This mystical flower has pretty black petals, who knows what they might be useful for.
 
 //minecraft seeds
-agricraft_journal.wheat=Wheat is a very common, but very nutritious crop.
+agricraft_journal.seeds=Wheat is a very common, but very nutritious crop.
 agricraft_journal.pumpkin=Most people consider pumpkins as a decorative vegetable, while others like the taste of pumpkin pies.
 agricraft_journal.melon=Because of it's sweet taste and high moisture content, the melon is a fruit loved by all.
+agricraft_journal.nether_wart=Nether wart seems to have been cultivated in abandoned fortresses in the nether.
 
 //natura seeds
 agricraft_journal.barleyNatura=Some people prefer the taste of barley bread over regular bread, while others claim it tastes exactly the same.
@@ -321,4 +322,4 @@ agricraft_journal.pc_hop=Hops are used to brew all sorts of ales and lagers.
 agricraft_journal.pc_tobacco=Tobacco is smoked all around the world despite its nefarious effects on ones health.
 
 //blue power flax
-agricraft_journal.pb_flax_seeds=Flax is String ~Sjin.
+agricraft_journal.bp_flax_seeds=Flax is String ~Sjin.

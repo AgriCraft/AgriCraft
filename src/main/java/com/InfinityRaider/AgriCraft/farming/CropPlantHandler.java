@@ -3,6 +3,8 @@ package com.InfinityRaider.AgriCraft.farming;
 import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantNetherWart;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantVanilla;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -82,9 +84,22 @@ public class CropPlantHandler {
         }
     }
 
-    //TODO: fix pumpkins, melons, wheat & nether wart
+
     public static void init() {
         //register vanilla plants
+        for(int i=0;i<Crops.vanillaCrops.size();i++) {
+            try {
+                registerPlant(new CropPlantVanilla(Crops.vanillaCrops.get(i), Crops.vanillaSeeds.get(i)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            registerPlant(new CropPlantNetherWart());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //register agricraft plants
         for(BlockModPlant plant : Crops.defaultCrops) {
             CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
             try {

@@ -10,8 +10,6 @@ public class Data {
     public static final Object[][] defaults = {
             {"Potato", Items.potato, 0, null, null, 0, 1, 6},
             {"Carrot", Items.carrot, 0, null, null, 0, 1, 6},
-            {"Melon", Items.melon, 0, null, null, 0, 1, 6},
-            {"Pumpkin", Item.getItemFromBlock(Blocks.pumpkin), 0, null, null, 0, 1, 6},
             {"Sugarcane", Items.reeds, 0, Blocks.sand, null, 0, 1, 6},
             {"Dandelion", Items.dye, 11, null, null, 0, 1, 6} ,
             {"Poppy", Items.dye, 1, null, null, 0, 1, 6},

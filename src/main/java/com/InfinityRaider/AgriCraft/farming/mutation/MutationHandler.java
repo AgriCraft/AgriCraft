@@ -71,7 +71,7 @@ public abstract class MutationHandler {
                             try {
                                 mutation = new Mutation(resultStack, parentStack1, parentStack2);
                             } catch (Exception e) {
-                                LogHelper.debug("Caught exception when trying to add mutation: "+resultStack.getUnlocalizedName()+"="+parentStack1.getUnlocalizedName()+"+"+parentStack2.getUnlocalizedName());
+                                LogHelper.debug("Caught exception when trying to add mutation: "+resultStack.getUnlocalizedName()+"="+parentStack1.getUnlocalizedName()+"+"+parentStack2.getUnlocalizedName()+" this seed is not registered");
                             }
                         }
                     }

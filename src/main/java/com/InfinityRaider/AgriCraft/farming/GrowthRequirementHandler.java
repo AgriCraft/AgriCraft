@@ -57,8 +57,8 @@ public class GrowthRequirementHandler {
 
     public static void init() {
         registerSoils();
+        initGrowthReqs();
         registerOverrides();
-        //TODO: pre-configure growth requirements for certain crops
         registerCustomEntries();
     }
 
@@ -69,6 +69,20 @@ public class GrowthRequirementHandler {
         }
         if (LoadedMods.gardenStuff) {
             addDefaultSoil(new BlockWithMeta((Block) Block.blockRegistry.getObject("GardenCore:garden_farmland"), 0));
+        }
+    }
+
+    private static void initGrowthReqs() {
+        //Set these crops to need darkness instead of light
+        ArrayList<GrowthRequirement> darkCrops = new ArrayList<GrowthRequirement>();
+        darkCrops.add(getGrowthRequirement((Item) Item.itemRegistry.getObject("AgriCraft:seedShroomRed"), 0));
+        darkCrops.add(getGrowthRequirement((Item) Item.itemRegistry.getObject("AgriCraft:seedShroomBrown"), 0));
+        if(ConfigurationHandler.resourcePlants) {
+            darkCrops.add(getGrowthRequirement((Item) Item.itemRegistry.getObject("AgriCraft:seedNitorWart"), 0));
+        }
+        darkCrops.add(getGrowthRequirement(Items.nether_wart, 0));
+        for(GrowthRequirement req:darkCrops) {
+            req.setBrightnessRange(0, 8);
         }
     }
 

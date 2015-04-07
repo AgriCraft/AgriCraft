@@ -64,6 +64,7 @@ public abstract class ModHelper {
     }
 
     private static void findHelpers() {
+        //TODO: register pam's wee flower crops
         Class[] classes = {
                 AppleCoreHelper.class,
                 BluePowerHelper.class,
