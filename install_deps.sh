@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-wget --no-check-certificate -O ./dependencies.zip "https://www.dropbox.com/s/kasdmtxazgg5pth/dependencies.zip?dl=1"
+wget --no-check-certificate -O ./dependencies.zip "https://www.dropbox.com/s/tmv73gcbrxkuwdt/dependencies.zip?dl=1"
 
 cygwin=false
 case "`uname`" in
