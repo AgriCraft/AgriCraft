@@ -69,7 +69,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     //returns the seed currently being processed
     public boolean hasSeed() {
-        return this.seed!=null && this.seed.getItem() instanceof ItemSeeds;
+        return CropPlantHandler.isValidSeed(this.seed);
     }
 
     //calculates the number of ticks it takes to analyze the seed
@@ -170,7 +170,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     //returns the scaled progress percentage
     public int getProgressScaled(int scale) {
-        return (int) Math.round(((float) this.progress*scale)/((float) this.maxProgress()));
+        return Math.round(((float) this.progress*scale)/((float) this.maxProgress()));
     }
 
     @Override

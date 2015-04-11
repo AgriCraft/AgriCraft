@@ -342,6 +342,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             list.add(" - This crop has a plant");
             list.add(" - Seed: " + (this.plant.getSeed().getItem()).getUnlocalizedName());
             list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject((this.plant.getSeed().getItem())) + ":" + this.plant.getSeed().getItemDamage());
+            list.add(" - Tier: "+plant.getTier());
             list.add(" - Meta: " + this.getBlockMetadata());
             list.add(" - Growth: " + this.growth);
             list.add(" - Gain: " + this.gain);

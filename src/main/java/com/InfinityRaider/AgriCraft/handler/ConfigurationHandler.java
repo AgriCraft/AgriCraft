@@ -29,6 +29,7 @@ public class ConfigurationHandler {
     public static boolean debug;
 
     public static boolean enableNEI;
+
     public static boolean generateDefaults;
     public static boolean customCrops;
     public static boolean resourcePlants;
@@ -60,6 +61,7 @@ public class ConfigurationHandler {
     public static int sprinklerGrowthIntervalTicks = 100;
     public static boolean placeWater;
     public static boolean fillFromFlowingWater;
+
     public static int villagerID;
     public static boolean villagerEnabled;
 

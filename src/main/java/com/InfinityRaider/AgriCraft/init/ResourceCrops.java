@@ -65,7 +65,7 @@ public class ResourceCrops {
         for(String[] data:Data.modResources) {
             Block base = OreDictHelper.getOreBlockForName(data[0]);
             if(base!=null) {
-                Object[] args = {data[1], OreDictHelper.getNuggetForName(data[0]), OreDictHelper.getNuggetMetaForName(data[0]), null, OreDictHelper.getOreBlockForName(data[0]), OreDictHelper.getOreMetaForName(data[0]), 0, 4, 6};
+                Object[] args = {data[1], OreDictHelper.getNuggetForName(data[0]), OreDictHelper.getNuggetMetaForName(data[0]), null, OreDictHelper.getOreBlockForName(data[0]), OreDictHelper.getOreMetaForName(data[0]), 4, 6};
                 String name =(String) args[0];
                 //create plant
                 BlockModPlant plant = new BlockModPlant(args);

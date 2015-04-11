@@ -14,6 +14,7 @@ import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHel
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.waila.WailaHelper;
+import com.InfinityRaider.AgriCraft.compatibility.weeeflowers.WeeeFlowersHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.Loader;
@@ -64,7 +65,6 @@ public abstract class ModHelper {
     }
 
     private static void findHelpers() {
-        //TODO: register pam's wee flower crops
         Class[] classes = {
                 AppleCoreHelper.class,
                 BluePowerHelper.class,
@@ -80,6 +80,7 @@ public abstract class ModHelper {
                 PsychedelicraftHelper.class,
                 ThaumcraftHelper.class,
                 WailaHelper.class,
+                WeeeFlowersHelper.class
         };
         for(Class clazz:classes) {
             if(ModHelper.class.isAssignableFrom(clazz)) {

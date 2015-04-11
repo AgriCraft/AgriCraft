@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantNetherWart;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantOreDict;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantVanilla;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
@@ -11,13 +12,17 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Crops;
 import com.InfinityRaider.AgriCraft.init.CustomCrops;
 import com.InfinityRaider.AgriCraft.init.ResourceCrops;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,7 +89,6 @@ public class CropPlantHandler {
         }
     }
 
-
     public static void init() {
         //register vanilla plants
         for(int i=0;i<Crops.vanillaCrops.size();i++) {
@@ -99,6 +103,7 @@ public class CropPlantHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         //register agricraft plants
         for(BlockModPlant plant : Crops.defaultCrops) {
             CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
@@ -108,6 +113,7 @@ public class CropPlantHandler {
                 e.printStackTrace();
             }
         }
+
         //register botania plants
         if(ConfigurationHandler.integration_Botania) {
             for(BlockModPlant plant : Crops.botaniaCrops) {
@@ -119,6 +125,7 @@ public class CropPlantHandler {
                 }
             }
         }
+
         //register resource plants
         if(ConfigurationHandler.resourcePlants) {
             for(BlockModPlant plant : ResourceCrops.vanillaCrops) {
@@ -138,6 +145,7 @@ public class CropPlantHandler {
                 }
             }
         }
+
         //register custom crops
         for(BlockModPlant plant : CustomCrops.customCrops) {
             CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
@@ -147,8 +155,10 @@ public class CropPlantHandler {
                 e.printStackTrace();
             }
         }
+
         //register mod crops
         ModHelper.initModPlants();
+
         //register crops specified trough the API
         for(CropPlant plant:plantsToRegister) {
             try {
@@ -158,6 +168,28 @@ public class CropPlantHandler {
             }
         }
         plantsToRegister = null;
-    }
 
+        //register others from ore dictionary
+        ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
+        for(ItemStack seed:seeds) {
+            if(isValidSeed(seed)) {
+                //seed is already registered
+                continue;
+            }
+            if(!(seed.getItem() instanceof ItemSeeds)) {
+                //seed does not extend ItemSeeds
+                continue;
+            }
+            ArrayList<ItemStack> fruits = OreDictHelper.getFruitsFromOreDict(seed);
+            if(fruits==null || fruits.size()==0) {
+                //seed and/or fruit is not properly registered
+                continue;
+            }
+            try {
+                registerPlant(new CropPlantOreDict((ItemSeeds) seed.getItem()));
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
