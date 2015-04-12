@@ -247,10 +247,10 @@ public class Growing {
                 error = "Invalid second argument: has to be larger than or equal to 0";
                 success = min>=0;
                 if(success) {
-                    error = "Invalid third argument: has to be smaller than 16";
+                    error = "maximum should be higher than the minimum";
                     success = max>min;
                     if(success) {
-                        error = "maximum should be higher than the minimum";
+                        error = "Invalid third argument: has to be smaller than 16";
                         success = max<16;
                         if(success) {
                             MineTweakerAPI.apply(new SetAction(seedStack, min, max));
@@ -259,7 +259,7 @@ public class Growing {
                 }
             }
             if(!success) {
-                MineTweakerAPI.logError("Error when trying to set soil: "+error);
+                MineTweakerAPI.logError("Error when trying to set brightness: "+error);
             }
         }
 
