@@ -36,6 +36,7 @@ item.agricraft:seedDaisy.name=Graines de pâquerette
 item.agricraft:seedCactus.name=Graine de cactus
 item.agricraft:seedShroomRed.name=Spore d'amanite
 item.agricraft:seedShroomBrown.name=Spore de bolet
+item.agricraft:seedNitorWart.name=Spore de verrues de Nitor
 
 item.agricraft:seedBotaniaWhite.name=Graines de fleur mystique blanche
 item.agricraft:seedBotaniaOrange.name=Graines de fleur mystique orange
@@ -97,6 +98,7 @@ tile.agricraft:cropDaisy.name=Pâquerette
 tile.agricraft:cropCactus.name=Cactus
 tile.agricraft:cropShroomRed.name=Amanite
 tile.agricraft:cropShroomBrown.name=Bolet
+tile.agricraft:cropNitorWart.name=Verrues de Nitor
 
 tile.agricraft:cropBotaniaWhite.name=Fleur mystique blanche
 tile.agricraft:cropBotaniaOrange.name=Fleur mystique orange
@@ -188,6 +190,7 @@ agricraft_journal.daisy=Les pâquerettes sont tout à fait communes, mais néanm
 agricraft_journal.cactus=Les cactus peuvent être cultivés pour produire une substance verte souvent utilisée comme la teinture.
 agricraft_journal.shroomRed=Ce goût de champignon rouge est en réalité tout à fait agréables et ferait un bon ingrédient pour le ragoût de champignon.
 agricraft_journal.shroomBrown=Ce goût de champignon brun est en réalité tout à fait agréables et ferait un bon ingrédient pour le ragoût de champignon.
+agricraft_journal.nitorWart=Cette culture du nether semblait être éteinte, eldars parle de son extraction de particules de pierre lumineuse de son environnement pour produire de la poussière lumineuse.
 agricraft_journal.diamahlia=Beaucoup continue de croire que cette fleur n'existe que dans les contes et légendes. Cependant, quelques agronomes disent qu'ils ont réussi à obtenir de cette légendaire plante.
 agricraft_journal.aurigold=L'aurigold est une fleur rare et légendaire qui s'alimente des minuscules fractions d'or dans le sol. Seul un agronome très patient et habile peut cultiver ce bijou.
 agricraft_journal.ferranium=Les racines de cette plante étrange ne craignent pas de l'eau. Elles creusent juste dans le sol en absorbant les particules de fer pour se renforcer.
@@ -217,7 +220,7 @@ agricraft_journal.botaniaCyan=Cette fleur mystique a de jolies pétales cyan, qu
 agricraft_journal.botaniaPurple=Cette fleur mystique a de jolies pétales violettes, qui sait à quoi elles pourraient être utiles.
 agricraft_journal.botaniaBlue=Cette fleur mystique a de jolies pétales bleues, qui sait à quoi elles pourraient être utiles.
 agricraft_journal.botaniaBrown=Cette fleur mystique a de jolies pétales marron, qui sait à quoi elles pourraient être utiles.
-agricraft_journal. botaniaGreen=Cette fleur mystique a de jolies pétales vertes, qui sait à quoi elles pourraient être utiles.
+agricraft_journal.botaniaGreen=Cette fleur mystique a de jolies pétales vertes, qui sait à quoi elles pourraient être utiles.
 agricraft_journal.botaniaRed=Cette fleur mystique a de jolies pétales rouges, qui sait à quoi elles pourraient être utiles.
 agricraft_journal.botaniaBlack=Cette fleur mystique a de jolies pétales noires, qui sait à quoi elles pourraient être utiles.
 
