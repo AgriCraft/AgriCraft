@@ -1,0 +1,298 @@
+//made by Malcanteth for version 1.3.1
+
+//Creative Tabs
+itemGroup.agricraft=Agricraft
+
+//Items
+item.agricraft:cropsItem.name=Жёрдочки
+item.agricraft:journal.name=Журнал агронома
+item.agricraft:trowel.name=Садовый совок
+item.agricraft:magnifyingGlass.name=Лупа
+item.agricraft:sprinklerItem.name=Разбрызгиватель
+item.agricraft:debugger.name=Отладчик
+item.agricraft:handRake.wood.name=Деревянные ручные грабли
+item.agricraft:handRake.iron.name=Железные ручные грабли
+item.agricraft:nuggetDiamond.name=Алмазный самородок
+item.agricraft:nuggetIron.name=Железный самородок
+item.agricraft:nuggetEmerald.name=Изумрудный самородок
+item.agricraft:nuggetTin.name=Оловянный самородок
+item.agricraft:nuggetLead.name=Свинцовый самородок
+item.agricraft:nuggetSilver.name=Серебряный самородок
+item.agricraft:nuggetAluminum.name=Алюминиевый самородок
+item.agricraft:nuggetNickel.name=Никелевый самородок
+item.agricraft:nuggetPlatinum.name=Платиновый самородок
+item.agricraft:nuggetOsmium.name=Осмиевый самородок
+
+item.agricraft:seedPotato.name=Семена картофеля
+item.agricraft:seedCarrot.name=Семена моркови
+item.agricraft:seedSugarcane.name=Семена сахарного тростника
+item.agricraft:seedDandelion.name=Семя одуванчика
+item.agricraft:seedPoppy.name=Семя мака
+item.agricraft:seedOrchid.name=Семя синей орхидеи
+item.agricraft:seedAllium.name=Семя лука
+item.agricraft:seedTulipRed.name=Семя красного тюльпана
+item.agricraft:seedTulipOrange.name=Семя оранжевого тюльпана
+item.agricraft:seedTulipWhite.name=Семя белого тюльпана
+item.agricraft:seedTulipPink.name=Семя розового тюльпана
+item.agricraft:seedDaisy.name=Семя нивяника
+item.agricraft:seedCactus.name=Семена кактуса
+item.agricraft:seedShroomRed.name=Споры красного гриба
+item.agricraft:seedShroomBrown.name=Споры коричневого гриба
+item.agricraft:seedNitorWart.name=Споры ниторного нароста
+
+item.agricraft:seedBotaniaWhite.name=Семя мистического белого цветка
+item.agricraft:seedBotaniaOrange.name=Семя мистического оранжевого цветка
+item.agricraft:seedBotaniaMagenta.name=Семя мистического фиолетового цветка
+item.agricraft:seedBotaniaLightBlue.name=Семя мистического светло-синего цветка
+item.agricraft:seedBotaniaYellow.name=Семя мистического жёлтого цветка
+item.agricraft:seedBotaniaLime.name=Семя мистического светло-зелёного цветка
+item.agricraft:seedBotaniaPink.name=Семя мистического розового цветка
+item.agricraft:seedBotaniaGray.name=Семя мистического серого цветка
+item.agricraft:seedBotaniaLightGray.name=Семя мистического светло-серого цветка
+item.agricraft:seedBotaniaCyan.name=Семя мистического бирюзового цветка
+item.agricraft:seedBotaniaPurple.name=Семя мистического фиолетового цветка
+item.agricraft:seedBotaniaBlue.name=Семя мистического синего цветка
+item.agricraft:seedBotaniaBrown.name=Семя мистического коричневого цветка
+item.agricraft:seedBotaniaGreen.name=Семя мистического зелёного цветка
+item.agricraft:seedBotaniaRed.name=Семя мистического красного цветка
+item.agricraft:seedBotaniaBlack.name=Семя мистического чёрного цветка
+
+item.agricraft:seedFerranium.name=Семена феррани
+item.agricraft:seedAurigold.name=Семена золотков
+item.agricraft:seedDiamahlia.name=Семена алмангины
+item.agricraft:seedLapender.name=Семена лапанды
+item.agricraft:seedEmeryllis.name=Семена изумрилиса
+item.agricraft:seedRedstodendron.name=Семена краснодендрона
+item.agricraft:seedCuprosia.name=Семена купрозии
+item.agricraft:seedPetinia.name=Семена оловунии
+item.agricraft:seedPlombean.name=Семена свинцоли
+item.agricraft:seedSilverweed.name=Семена сребротрава
+item.agricraft:seedJaslumine.name=Семена жаслюмина
+item.agricraft:seedNiccissus.name=Семена никисса
+item.agricraft:seedPlatiolus.name=Семена платиолуса
+item.agricraft:seedOsmonium.name=Семена осмония
+
+
+//blocks
+tile.agricraft:crops.name=Жёрдочки
+tile.agricraft:seedAnalyzer.name=Анализатор семян
+tile.agricraft:waterTank.0.name=Деревянный бак
+tile.agricraft:waterTank.1.name=Железный бак
+tile.agricraft:waterChannel.0.name=Деревянный оросительный канал
+tile.agricraft:waterChannel.1.name=Железный оросительный канал
+tile.agricraft:channelValve.0.name=Деревянный клапан
+tile.agricraft:channelValve.1.name=Железный клапан
+
+tile.agricraft:cropPotato.name=Картофель
+tile.agricraft:cropCarrot.name=Морковь
+tile.agricraft:cropSugarcane.name=Сахарный тростник
+tile.agricraft:cropMelon.name=Арбуз
+tile.agricraft:cropPumpkin.name=Тыква
+tile.agricraft:cropDandelion.name=Одуванчик
+tile.agricraft:cropPoppy.name=Мак
+tile.agricraft:cropOrchid.name=Орхидея
+tile.agricraft:cropAllium.name=Лук
+tile.agricraft:cropTulipRed.name=Красный тюльпан
+tile.agricraft:cropTulipOrange.name=Оранжевый тюльпан
+tile.agricraft:cropTulipWhite.name=Белый тюльпан
+tile.agricraft:cropTulipPink.name=Розовый тюльпан
+tile.agricraft:cropDaisy.name=Нивяник
+tile.agricraft:cropCactus.name=Кактус
+tile.agricraft:cropShroomRed.name=Красный гриб
+tile.agricraft:cropShroomBrown.name=Коричневый гриб
+tile.agricraft:cropNitorWart.name=Ниторный нарост
+
+tile.agricraft:cropBotaniaWhite.name=Мистический белый цветок
+tile.agricraft:cropBotaniaOrange.name=Мистический оранжевый цветок
+tile.agricraft:cropBotaniaMagenta.name=Мистический фиолетовый цветок
+tile.agricraft:cropBotaniaLightBlue.name=Мистический светло-синий цветок
+tile.agricraft:cropBotaniaYellow.name=Мистический жёлтый цветок
+tile.agricraft:cropBotaniaLime.name=Мистический светло-зелёный цветок
+tile.agricraft:cropBotaniaPink.name=Мистический розовый цветок
+tile.agricraft:cropBotaniaGray.name=Мистический серый цветок
+tile.agricraft:cropBotaniaLightGray.name=Мистический светло-серый цветок
+tile.agricraft:cropBotaniaCyan.name=Мистический бирюзовый цветок
+tile.agricraft:cropBotaniaPurple.name=Мистический фиолетовый цветок
+tile.agricraft:cropBotaniaBlue.name=Мистический синий цветок
+tile.agricraft:cropBotaniaBrown.name=Мистический коричневый цветок
+tile.agricraft:cropBotaniaGreen.name=Мистический зелёный цветок
+tile.agricraft:cropBotaniaRed.name=Мистический красный цветок
+tile.agricraft:cropBotaniaBlack.name=Мистический чёрный цветок
+
+tile.agricraft:cropFerranium.name=Феррань
+tile.agricraft:cropAurigold.name=Золотки
+tile.agricraft:cropDiamahlia.name=Алмангина
+tile.agricraft:cropLapender.name=Лапанда
+tile.agricraft:cropEmeryllis.name=Изумрилис
+tile.agricraft:cropRedstodendron.name=Краснодендрон
+tile.agricraft:cropCuprosia.name=Купрозия
+tile.agricraft:cropPetinia.name=Оловуния
+tile.agricraft:cropPlombean.name=Свинцоль
+tile.agricraft:cropSilverweed.name=Сребротрав
+tile.agricraft:cropJaslumine.name=Жаслюмин
+tile.agricraft:cropNiccissus.name=Никисс
+tile.agricraft:cropPlatiolus.name=Платиолус
+tile.agricraft:cropOsmonium.name=Осмоний
+
+//tooltips
+agricraft_tooltip.unidentified=Неопознанный
+agricraft_tooltip.seed=Семя
+agricraft_tooltip.growth=Рост
+agricraft_tooltip.gain=Урожай
+agricraft_tooltip.strength=Сила
+agricraft_tooltip.analyzed=Эти семена ещё не проанализированы
+agricraft_tooltip.fertile=Это растение плодоносно и может вырасти
+agricraft_tooltip.notFertile=Это растение не может расти здесь
+agricraft_tooltip.discoveredSeeds=Обнаруженные семена
+agricraft_tooltip.material=Материал
+agricraft_tooltip.waterLevel=Уровень воды
+agricraft_tooltip.cropWithPlant=На этих жёрдочках есть растение
+agricraft_tooltip.crossCrop=Это скрещенные жёрдочки
+agricraft_tooltip.weeds=Здесь проросли сорняки
+agricraft_tooltip.cropWithoutPlant=На этих жёрдочках нет растений
+agricraft_tooltip.notCrop=Это не жёрдочки
+agricraft_tooltip.trowel=Используется для перемещения растений между жёрдочками
+agricraft_tooltip.magnifyingGlass=Используется для проверки жёрдочек
+agricraft_tooltip.handRake=Используются для удаления сорняков с жёрдочек
+agricraft_tooltip.closed=Закрыто
+agricraft_tooltip.open=Открыто
+agricraft_tooltip.state=Состояние
+agricraft_tooltip.empty=Нет посаженных семян
+
+// nei GUI
+agricraft_nei.mutation.title=Мутации растений
+agricraft_nei.soil=Почва
+agricraft_nei.needs=Требования
+agricraft_nei.below=Ниже
+agricraft_nei.nearby=Рядом
+
+//journal entries
+//---------------
+//headers
+agricraft_journal.introduction=Добро пожаловать в аграрное земледелие, сегодня я научу вас основам огородничества. Для начала вам потребуется положить 4 палочки в сетку крафта для получения жёрдочек. Жёрдочки можно установить на пашню и посадить на них семена. Также можно установить жёрдочки на уже установленные жёрдочки поперёк и получить скрещенные жёрдочки. Если посадить два и более растения вокруг скрещенных жёрдочек, есть вероятность возникновения мутации. В этом журнале вы можете отслеживать найденные мутации растений. Для регистрации обнаруженных семян положите журнал в анализатор семян и проведите анализ семян. Так вы сможете увидеть свойства семян и запишете их в журнал. Если вам захочется скопировать журнал, положите его в сетку крафта с чистой книгой с пером.
+agricraft_journal.information=Информация
+agricraft_journal.tier=Уровень
+agricraft_journal.fruits=Фрукты
+agricraft_journal.growthStages=Стадии роста
+agricraft_journal.mutations=Мутации
+
+//agricraft seeds
+agricraft_journal.potato=Картофель - основа почти любого питания, а некоторые даже нашли способ готовить из него напитки.
+agricraft_journal.carrot=Морковь - овощ, подходящий для любой диеты.
+agricraft_journal.sugarcane=Обычно тростник растёт только у воды, но агроном может вывести сорта, растущие в любом месте.
+agricraft_journal.dandelion=Одуванчики - жёлтые цветы, часто встречаются в солнечных местах.
+agricraft_journal.poppy=Довольно распространённый, но всё равно очень красивый тёмно-красный цветок.
+agricraft_journal.orchid=Цветок, готовый стать украшением любого сада. Фактически, сад выглядит не завешённым без орхидей.
+agricraft_journal.allium=Лук - цветок, который выращивают ради фиолетовых лепестков.
+agricraft_journal.tulipPink=Тюльпаны бывают разных расцветок, но среди истинных агрономов особенно ценятся розовые.
+agricraft_journal.tulipOrange=Оранжевый - один из многих цветов в палитре тюльпанов.
+agricraft_journal.tulipRed=Существует поговорка: "есть 50 оттенков тюльпанов, но самый красивый из них - красный".
+agricraft_journal.tulipWhite=Белых цветов много, но по слухам белый тюльпан - самый белый из всех цветов.
+agricraft_journal.daisy=Ромашки довольно распространены, но это не умаляет красоты этих белых цветов.
+agricraft_journal.cactus=Кактусы можно выращивать для получения зелёного вещества, заменяющего краситель.
+agricraft_journal.shroomRed=Этот красный гриб весьма приятен на вкус, он отлично подходит для готовки тушёных грибов.
+agricraft_journal.shroomBrown=Этот коричневый гриб весьма приятен на вкус, он отлично подходит для готовки тушёных грибов.
+agricraft_journal.nitorWart=Считалось, что это растение из нижнего мира было истреблено. Старейшины говорят, оно впитывает частички светопыли из окружения для придания пыльце яркости.
+agricraft_journal.diamahlia=Многие до сих пор считают, что этот цветок существует только в сказках и преданиях. Однако некоторые агрономы утверждают, что преуспели в получении этого легендарного растения.
+agricraft_journal.aurigold=Золотки - редкий легендарный цветок, который питается крошечными частицами золота в почве. Только очень опытный и терпеливый агроном способен культивировать это сокровище.
+agricraft_journal.ferranium=Корни этого необычного растения не нуждаются в воде. Они просто закапываются в почву и поглощают частицы железа.
+agricraft_journal.lapender=Помимо красивой голубизны, этот цветок ещё производит блестящие камешки.
+agricraft_journal.emeryllis=Поговорив с деревенским агрономом, вы услышите истории об этом растении и сказочном богатстве, которое оно может принести.
+agricraft_journal.redstodendron=Кажется, кусты краснодендрона испускают некую ауру.
+agricraft_journal.cuprosia=Купрозия - необычный цветок, высасывающий медь из почвы для закручивания своих красивых лепестков.
+agricraft_journal.petinia=Этот цветок расцветает только на почвах, богатых оловом.
+agricraft_journal.plombean=Иногда люди принимают это растение за простую фасоль и умирают от отравления свинцом.
+agricraft_journal.silverweed=Иногда неопытные агрономы путают это ценное растение с сорняком и избавляются от него.
+agricraft_journal.jaslumine=Вопреки сомнениям кузнецов, многие считают алюминий полезным и стараются вырастить данный цветок.
+agricraft_journal.niccissus=Когда он цветёт, в его цветках можно найти никелевые самородки. Как это растение может расти - до сих пор загадка.
+agricraft_journal.platiolus=Платина - очень редкий материал. Большинство металлургов станет скорее агрономом, чем шахтёром, чтобы добыть её.
+agricraft_journal.osmonium=Агроном, вырастивший этот цветок, будет пользоваться большим спросом среди инженеров.
+
+//botania seeds
+agricraft_journal.botaniaWhite=У этого растения красивые белые лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaOrange=У этого растения красивые оранжевые лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaMagenta=У этого растения красивые фиолетовые лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaLightBlue=У этого растения красивые светло-синие лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaYellow=У этого растения красивые жёлтые лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaLime=У этого растения красивые светло-зелёные лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaPink=У этого растения красивые розовые лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaGray=У этого растения красивые серые лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaLightGray=У этого растения красивые светло-серые лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaCyan=У этого растения красивые бирюзовые лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaPurple=У этого растения красивые фиолетовые лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaBlue=У этого растения красивые синие лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaBrown=У этого растения красивые коричневые лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal. botaniaGreen=У этого растения красивые зелёные лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaRed=У этого растения красивые красные лепестки. Кто знает, где они могут пригодиться.
+agricraft_journal.botaniaBlack=У этого растения красивые чёрные лепестки. Кто знает, где они могут пригодиться.
+
+//minecraft seeds
+agricraft_journal.wheat=Пшеница - очень распространённый и очень питательный злак.
+agricraft_journal.pumpkin=Для одних тыква - декоративный овощ, для других - вкусная начинка для пирога.
+agricraft_journal.melon=Все любят арбуз за то, что он сладкий и сочный.
+
+//natura seeds
+agricraft_journal.barleyNatura=Некоторые любят ячменный хлеб больше пшеничного, остальные не замечают разницы во вкусе.
+agricraft_journal.cottonNatura=Хлопок пользуется большим спросом в текстильной промышленности и потому представляет большую ценность.
+
+//harvestcraft seeds
+agricraft_journal.hc_Artichoke=Съедобная часть артишока состоит из нераскрывшихся бутонов.
+agricraft_journal.hc_Asparagus=Спаржа - не только овощ, но и лекарство. У неё очень изысканный вкус.
+agricraft_journal.hc_BambooShoot=Побеги бамбука или бамбуковые стебли - съедобные стебли, используемые во многих восточных блюдах.
+agricraft_journal.hc_Bean=Фасоль - летнее растение, ей требуется много тепла.
+agricraft_journal.hc_Beet=Обычные фиолетовые корнеплоды свёклы едят сырыми, жареными, варёными или запечёнными.
+agricraft_journal.hc_Bellpepper=Чаще всего сладкие перцы бывают зелёными, жёлтыми, оранжевыми и красными.
+agricraft_journal.hc_Blackberry=Эти мягкие ягоды популярны в составе десертов, желе, а иногда и вин.
+agricraft_journal.hc_Blueberry=Черника - многолетнее цветущее растение с ягодами цвета индиго.
+agricraft_journal.hc_Broccoli=Брокколи - съедобное зелёное растение семейства крестоцветных, большие соцветия которого используются в пищу.
+agricraft_journal.hc_BrusselsSprout=Брюссельская капуста уже давно пользуется популярностью в Брюсселе, и, возможно, там и возникла.
+agricraft_journal.hc_Cabbage=Капуста, как правило, выращивается ради кочанов, образующихся в первой половине двухгодичного цикла.
+agricraft_journal.hc_CactusFruit=На этих фруктах обычно растут колючки, будьте осторожнее с ними.
+agricraft_journal.hc_CandleBerry=Свечное дерево - мелкий кустарник, и плоды у него мелкие.
+agricraft_journal.hc_Cantaloupe=Дыню обычно едят свежей, или как десерт с мороженым или кремом.
+agricraft_journal.hc_Cauliflower=Цветную капусту можно жарить, варить, запекать, готовить на пару  или есть сырой.
+agricraft_journal.hc_Celery=Стебель сельдерея нередко используется в пищу.
+agricraft_journal.hc_ChiliPepper=У острого чили перца есть много кулинарных применений, от соусов до придания остроты любому блюду.
+agricraft_journal.hc_Coffee=Эти бобы - основа для горячей кружки кофе, с которой вы начинаете день, по сути, основа вашего дня.
+agricraft_journal.hc_Corn=Из-за коротких корней кукуруза очень восприимчива к засухам, нетерпима к бедным почвам и уязвима перед сильными ветрами.
+agricraft_journal.hc_Cranberry=Клюквенный сок, как правило, подслащивают или смешивают с другими соками, чтобы разбавить его кислоту.
+agricraft_journal.hc_Cucumber=Огурец - это ползучая лоза со съедобными плодами цилиндрической формы.
+agricraft_journal.hc_Eggplant=В сыром виде этот овощ сильно горчит, но смягчается от кулинарной обработки и приобретает сложный, насыщенный вкус.
+agricraft_journal.hc_Garlic=Чеснок довольно неприхотлив, в умеренном климате его можно выращивать круглый год.
+agricraft_journal.hc_Ginger=Имбирь образует соцветия из белых и розовых бутонов, которые распускаются жёлтыми цветами.
+agricraft_journal.hc_Grape=Плоды винограда - ягоды, растущие гроздьями на плетях древесной лозы. Их можно есть сырыми, а можно сделать из них вино, варенье, сок, желе, изюм, уксус, а из косточек делаются вытяжка и масло.
+agricraft_journal.hc_Kiwi=Киви можно выращивать в умеренном климате, если летом достаточно жарко.
+agricraft_journal.hc_Leek=Вместо формирования плотной луковицы, как у обычного лука, у порея образуется длинный цилиндр сросшихся оснований листьев, потерявших цвет из-за нахождения под землёй.
+agricraft_journal.hc_Lettuce=Обычно салат растится как холодостойкое однолетнее растение. Его легко культивировать, но он требует сравнительно низких температур, чтобы дольше удерживать его от цветения.
+agricraft_journal.hc_Mustard=Семя горчицы обычно прорастают за срок от трёх до десяти дней, если поместить их в надлежащие условия, включающие в себя прохладную среду и влажную почву.
+agricraft_journal.hc_Oats=Овёс съедобен для человека в виде овсянки или геркулеса, но чаще его выращивают на корм скоту.
+agricraft_journal.hc_Okra=Растения окры ценны своими съедобными зелёными семенными коробочками.
+agricraft_journal.hc_Onion=Луковое растение обладает голубовато-зелёными полыми листьями, называемыми перьями. Луковица у основания начинает набухать с достижением определённой продолжительности светового дня.
+agricraft_journal.hc_Parsnip=Пастернак - корнеплод, неразлучно связанный с морковью и петрушкой.
+agricraft_journal.hc_Peanut=Арахис имеет много применений. Его можно есть сырым и использовать в готовке, делать из него растворители и масла, лекарства и текстиль, арахисовое масло и многое другое.
+agricraft_journal.hc_Peas=С точки зрения ботаники, горох - фрукт, так как его семена развиваются из завязи цветка (стручка).
+agricraft_journal.hc_Pineapple=Ананасы едят как свежими, так и приготовленными, из них отжимают сок, консервируют и используют для приготовления различных блюд европейской кухни.
+agricraft_journal.hc_Radish=Редис чаще всего используется в салатах, но в Европе он входит в состав самых разнообразных блюд.
+agricraft_journal.hc_Raspberry=Кусты малины нельзя сажать там, где выращивались картофель, помидоры, перец, баклажаны или лук, без предварительной фумигации почвы.
+agricraft_journal.hc_Rhubarb=Перед употреблением в пищу черешки нарезают небольшими кусочками и тушат (или варят) с добавлением сахара.
+agricraft_journal.hc_Rice=Традиционный метод выращивания риса - заливание полей во время или сразу после посадки молодой рассады.
+agricraft_journal.hc_Rutabaga=Некоторые вырезают на корнеплодах разные орнаменты, чаще всего лица, и используют их в качестве фонарей против злых духов.
+agricraft_journal.hc_Rye=Рожь выращивается повсеместно, как и пшеница, как зерновая, покровная или даже кормовая культура.
+agricraft_journal.hc_Scallion=Шалот имеет довольно мягкий луковый вкус, его можно есть сырым или использовать в готовке.
+agricraft_journal.hc_Seaweed=Водоросли используются в салатных заправках и соусах, в диабетических блюдах, а также в качестве консерванта в мясных и рыбных продуктах, молочных изделиях и выпечке.
+agricraft_journal.hc_Soybean=Традиционно применение неферментированных соевых бобов включает в себя соевое молоко, а из него, в свою очередь, тофу и соевую спаржу.
+agricraft_journal.hc_SpiceLeaf=Листья пряностей - это не просто травы. Это части зелёных растений, которые добавляют в пищу для придания особого вкуса и аромата или в качестве гарнира.
+agricraft_journal.hc_Strawberry=Клубника пользуется популярностью, и это неспроста: она отлично растёт в домашних условиях, как на ягоды, так и в декоративных целях.
+agricraft_journal.hc_SweetPotato=Хотя листья и побеги съедобны, крахмалистые клубни - самая ценная часть.
+agricraft_journal.hc_Tea=Чай готовится путём заваривания высушенных листьев чайного растения в кипятке.
+agricraft_journal.hc_Tomato=Помидоры можно есть сырыми, а можно добавлять их в различные блюда, соусы, салаты и напитки.
+agricraft_journal.hc_Turnip=Репа - крупный белый корнеплод, выращиваемый в районах с умеренным климатом по всему миру.
+agricraft_journal.hc_WhiteMushroom=Если вы хотите улететь выше облаков, это не те грибы, которые вы ищете.
+agricraft_journal.hc_WinterSquash=Зимнюю тыкву можно срывать, когда её кожица затвердеет и приобретёт насыщенный однородный цвет.
+agricraft_journal.hc_Zucchini=Цукини обычно подаётся в жареном виде, но его можно приготовить и другими способами, например потушить, отварить, нафаршировать и запечь, поджарить на гриле или во фритюре.
+
+//plant mega pack seeds
+agricraft_journal.pmp_Spinach=Персонаж мультфильма Моряк Попай очень любит шпинат и становится многократно сильней, съев его.
+
+//chococraft seeds
+agricraft_journal.cc_Gysahl=Гизальские овощи - любимое лакомство легендарной птицы Чокобо. При правильном уходе гизальский овощ может вырасти золотым.
