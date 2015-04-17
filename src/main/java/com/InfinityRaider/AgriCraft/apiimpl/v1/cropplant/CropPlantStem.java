@@ -18,7 +18,6 @@ public class CropPlantStem extends CropPlantGeneric {
         this.block = block;
     }
 
-
     @Override
     public int transformMeta(int growthStage) {
         return growthStage;
@@ -53,7 +52,8 @@ public class CropPlantStem extends CropPlantGeneric {
     public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
         int meta = world.getBlockMetadata(x, y, z);
         boolean mature = isMature(world, x, y ,z);
-        PlantRenderer.renderStemPlant(x, y, z, renderer, getPlantIcon(meta), meta, block, mature);
+        Block vine = ((ItemSeeds) getSeed().getItem()).getPlant(null, 0, 0, 0);
+        PlantRenderer.renderStemPlant(x, y, z, renderer, getPlantIcon(meta), meta, vine, block, mature);
     }
 
     @Override

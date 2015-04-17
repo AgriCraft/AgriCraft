@@ -156,12 +156,16 @@ public abstract class PlantRenderer {
         RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, minY,-2, 16, 16, icon);
     }
 
-    public static void renderStemPlant(int x, int y, int z, RenderBlocks renderer, IIcon icon, int meta, Block block, boolean mature) {
+    public static void renderStemPlant(int x, int y, int z, RenderBlocks renderer, IIcon icon, int meta, Block vine, Block block, boolean mature) {
         Tessellator tessellator = Tessellator.instance;
         int translation = meta>=6?0:5-meta;
+        tessellator.setBrightness(vine.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
+        int l = vine.getRenderColor(7);
+        float f = (float)(l >> 16 & 255) / 255.0F;
+        float f1 = (float)(l >> 8 & 255) / 255.0F;
+        float f2 = (float)(l & 255) / 255.0F;
+        tessellator.setColorOpaque_F(f, f1, f2);
         tessellator.addTranslation(x, y - Constants.unit * 2 * translation, z);
-        tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
-        tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
         //render the vines
         if(mature) {
             renderStemPattern(tessellator, icon);

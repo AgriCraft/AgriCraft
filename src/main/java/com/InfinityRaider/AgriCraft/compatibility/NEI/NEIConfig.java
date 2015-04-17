@@ -36,7 +36,7 @@ public class NEIConfig implements IConfigureNEI {
             //hide sprinkler
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockSprinkler, 1, i));
             //hide plant blocks
-            for(BlockModPlant plant : Crops.defaultCrops) {
+            for(BlockModPlant plant : Crops.crops) {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
             }
             //hide botania crops

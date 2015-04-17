@@ -65,7 +65,6 @@ public class AgriCraft {
         //initialize blocks
         Blocks.init();
         //initialize crops
-        Crops.initVanillaCrops();
         Crops.initDefaults();
         //initialize items
         Items.init();

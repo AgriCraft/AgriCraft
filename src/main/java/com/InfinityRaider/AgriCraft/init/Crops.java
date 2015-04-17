@@ -7,59 +7,31 @@ import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.init.*;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import vazkii.botania.common.item.ModItems;
 
 import java.util.ArrayList;
 
 public class Crops {
-    //Vanilla crops
-    public static ArrayList<BlockCrops> vanillaCrops;
-    public static ArrayList<ItemSeeds> vanillaSeeds;
     //AgriCraft crops
-    public static ArrayList<BlockModPlant> defaultCrops;
-    public static ArrayList<ItemModSeed> defaultSeeds;
+    public static ArrayList<BlockModPlant> crops;
+    public static ArrayList<ItemModSeed> seeds;
 
     //Botania crops
     public static ArrayList<BlockModPlant> botaniaCrops;
     public static ArrayList<ItemModSeed> botaniaSeeds;
 
-    public static void initVanillaCrops() {
-        vanillaCrops = new ArrayList<BlockCrops>();
-        vanillaSeeds = new ArrayList<ItemSeeds>();
-        //wheat
-        vanillaCrops.add((BlockCrops) net.minecraft.init.Blocks.wheat);
-        vanillaSeeds.add((ItemSeeds) net.minecraft.init.Items.wheat_seeds);
-        //melon
-        Object[] melonArgs = {"Melon", net.minecraft.init.Items.melon, 0, null, null, 0, 1, 6};
-        BlockModPlant melon = new BlockModPlant(melonArgs);
-        RegisterHelper.registerCrop(melon, (String) melonArgs[0]);
-        vanillaCrops.add(melon);
-        vanillaSeeds.add((ItemSeeds) Items.melon_seeds);
-        //pumpkin
-        Object[] pumpkinArgs = {"Pumpkin", Item.getItemFromBlock(net.minecraft.init.Blocks.pumpkin), 0, null, null, 0, 1, 6};
-        BlockModPlant pumpkin = new BlockModPlant(pumpkinArgs);
-        RegisterHelper.registerCrop(pumpkin, (String) pumpkinArgs[0]);
-        vanillaCrops.add(pumpkin);
-        vanillaSeeds.add((ItemSeeds) Items.pumpkin_seeds);
-    }
-
     public static void initDefaults() {
-        defaultCrops = new ArrayList<BlockModPlant>();
-        defaultSeeds = new ArrayList<ItemModSeed>();
+        crops = new ArrayList<BlockModPlant>();
+        seeds = new ArrayList<ItemModSeed>();
         for(Object[] data: Data.defaults) {
             String name =(String) data[0];
             //create plant
             BlockModPlant plant = new BlockModPlant(data);
-            defaultCrops.add(plant);
+            crops.add(plant);
             RegisterHelper.registerCrop(plant, name);
             //create seed
             ItemModSeed seed = new ItemModSeed(plant, "agricraft_journal."+Character.toLowerCase(name.charAt(0))+name.substring(1));
-            defaultSeeds.add(seed);
+            seeds.add(seed);
             RegisterHelper.registerSeed(seed, plant);
         }
         LogHelper.info("Crops registered");

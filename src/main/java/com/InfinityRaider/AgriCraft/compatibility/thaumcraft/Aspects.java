@@ -11,7 +11,7 @@ import thaumcraft.api.aspects.AspectList;
 public class Aspects {
     public static void registerAspects() {
         //seeds
-        for(ItemModSeed seed : Crops.defaultSeeds) {
+        for(ItemModSeed seed : Crops.seeds) {
             ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1));
         }
         //resource crops

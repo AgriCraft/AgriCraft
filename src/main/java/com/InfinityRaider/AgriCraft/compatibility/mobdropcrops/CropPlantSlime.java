@@ -56,7 +56,7 @@ public class CropPlantSlime extends CropPlantGeneric {
         int start = name.indexOf('.')+1;
         int stop = name.indexOf("seedItem");
         name = name.substring(start, stop);
-        return "agricraft_journal.wf_"+Character.toUpperCase(name.charAt(0))+name.substring(1);
+        return "agricraft_journal.pmd_"+Character.toUpperCase(name.charAt(0))+name.substring(1);
     }
 
     @Override
