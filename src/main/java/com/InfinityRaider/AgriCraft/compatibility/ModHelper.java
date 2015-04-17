@@ -36,7 +36,9 @@ public abstract class ModHelper {
                 e.printStackTrace();
             }
         }
-        modHelpers.add(helper);
+        if(helper!=null) {
+            modHelpers.add(helper);
+        }
         return helper;
     }
 
@@ -89,13 +91,7 @@ public abstract class ModHelper {
         };
         for(Class clazz:classes) {
             if(ModHelper.class.isAssignableFrom(clazz)) {
-                try {
-                    createInstance(clazz);
-                } catch(Exception e) {
-                    if(ConfigurationHandler.debug) {
-                        e.printStackTrace();
-                    }
-                }
+                createInstance(clazz);
             }
         }
     }
