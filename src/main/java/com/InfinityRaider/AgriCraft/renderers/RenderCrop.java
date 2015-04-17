@@ -44,12 +44,11 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
                 PlantRenderer.renderPlantLayer(x, y, z, renderer, 6, crop.getPlantIcon(), 0);
             }
         }
-
         return true;
     }
 
     //render four sticks vertical in the ground
-    private void renderBase(RenderBlocks renderer, Block block, int x, int y, int z){
+    private void renderBase(RenderBlocks renderer, Block block, int x, int y, int z) {
         renderer.setRenderBounds(0.125F, -0.125F, 0.125F, 0.1875F, Constants.unit * 13, 0.1875F);
         renderer.renderStandardBlock(block, x, y, z);
         
@@ -61,7 +60,6 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
         
         renderer.setRenderBounds(0.125F, -0.125F, 0.8125F, 0.1875F, Constants.unit * 13, 0.875F);
         renderer.renderStandardBlock(block, x, y, z);
-        
     }
 
     @Override
