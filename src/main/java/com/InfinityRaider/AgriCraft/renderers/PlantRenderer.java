@@ -162,26 +162,34 @@ public abstract class PlantRenderer {
         tessellator.addTranslation(x, y - Constants.unit * 2 * translation, z);
         tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
         tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+        //render the vines
         if(mature) {
             renderStemPattern(tessellator, icon);
-            float u = Constants.unit;
-
-            renderer.setRenderBounds(3*u, 0, 0, 9*u, 6*u, 6*u);
-            renderer.renderBlockAllFaces(block, x, y+1, z);
-
-            renderer.setRenderBounds(3*u, 0, 10*u, 9*u, 6*u, 16*u);
-            renderer.renderBlockAllFaces(block, x, y+1, z);
-
-            renderer.setRenderBounds(0*u, 0, 3*u, 6*u, 6*u, 9*u);
-            renderer.renderBlockAllFaces(block, x, y+1, z);
-
-            renderer.setRenderBounds(10 * u, 0, 3 * u, 16 * u, 6 * u, 9 * u);
-            renderer.renderBlockAllFaces(block, x, y+1, z);
         }
         else {
             renderCrossPattern(tessellator, icon, 0);
         }
         tessellator.addTranslation(-x, -y+Constants.unit*2*translation, -z);
+        //render the block
+        if(mature) {
+            float u = Constants.unit;
+            boolean renderFacesSetting = renderer.renderAllFaces;
+            renderer.renderAllFaces = true;
+
+            renderer.setRenderBounds(7*u, 0, 2*u, 11*u, 4*u, 6*u);
+            renderer.renderStandardBlock(block, x, y, z);
+
+            renderer.setRenderBounds(10*u, 0, 7*u, 14*u, 4*u, 11*u);
+            renderer.renderStandardBlock(block, x, y, z);
+
+            renderer.setRenderBounds(5*u, 0, 10*u, 9*u, 4*u, 14*u);
+            renderer.renderStandardBlock(block, x, y, z);
+
+            renderer.setRenderBounds(2*u, 0, 5*u, 6*u, 4*u, 9*u);
+            renderer.renderStandardBlock(block, x, y, z);
+
+            renderer.renderAllFaces = renderFacesSetting;
+        }
     }
 
     private static void renderStemPattern(Tessellator tessellator, IIcon icon) {

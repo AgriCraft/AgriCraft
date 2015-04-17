@@ -10,7 +10,7 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
-public abstract class CropPlantStem extends CropPlantGeneric {
+public class CropPlantStem extends CropPlantGeneric {
     private final Block block;
 
     public CropPlantStem(ItemSeeds seed, Block block) {
@@ -18,14 +18,28 @@ public abstract class CropPlantStem extends CropPlantGeneric {
         this.block = block;
     }
 
+
+    @Override
+    public int transformMeta(int growthStage) {
+        return growthStage;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getPlantIcon(int growthStage) {
+        if(growthStage<7) {
+            //for the Vanilla SeedItem class the arguments for this method are not used
+            return super.getPlantIcon(growthStage);
+        }
+        else {
+            return getStemIcon();
+        }
+    }
+
     @SideOnly(Side.CLIENT)
     public IIcon getStemIcon() {
-        Block plant = ((ItemSeeds) getSeed().getItem()).getPlant(null, 0, 0, 0);
-        if(plant instanceof BlockStem) {
-            BlockStem stem = (BlockStem) plant;
-            return stem.getStemIcon();
-        }
-        return this.getPlantIcon(7);
+        BlockStem plant = (BlockStem) ((ItemSeeds) getSeed().getItem()).getPlant(null, 0, 0 ,0);
+        return plant.getStemIcon();
     }
 
     @Override
@@ -39,7 +53,11 @@ public abstract class CropPlantStem extends CropPlantGeneric {
     public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
         int meta = world.getBlockMetadata(x, y, z);
         boolean mature = isMature(world, x, y ,z);
-        IIcon icon = mature?getStemIcon():getPlantIcon(meta);
-        PlantRenderer.renderStemPlant(x, y, z, renderer, icon, meta, block, mature);
+        PlantRenderer.renderStemPlant(x, y, z, renderer, getPlantIcon(meta), meta, block, mature);
+    }
+
+    @Override
+    public String getInformation() {
+        return getSeed().getUnlocalizedName();
     }
 }
