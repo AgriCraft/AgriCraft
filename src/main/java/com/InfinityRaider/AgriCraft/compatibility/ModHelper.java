@@ -9,6 +9,7 @@ import com.InfinityRaider.AgriCraft.compatibility.hungeroverhaul.HungerOverhaulH
 import com.InfinityRaider.AgriCraft.compatibility.magicalcrops.MagicalCropsHelper;
 import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.MFRHelper;
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.MinetweakerHelper;
+import com.InfinityRaider.AgriCraft.compatibility.mobdropcrops.MobDropCropsHelper;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
@@ -43,7 +44,6 @@ public abstract class ModHelper {
 
     protected abstract String modId();
 
-    //To force child classes to make a new object
     public static void initHelpers() {
         findHelpers();
         for(ModHelper helper:modHelpers) {
@@ -75,6 +75,7 @@ public abstract class ModHelper {
                 MagicalCropsHelper.class,
                 MFRHelper.class,
                 MinetweakerHelper.class,
+                MobDropCropsHelper.class,
                 NaturaHelper.class,
                 PlantMegaPackHelper.class,
                 PsychedelicraftHelper.class,

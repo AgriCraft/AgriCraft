@@ -1,18 +1,21 @@
-package com.InfinityRaider.AgriCraft.compatibility.weeeflowers;
+package com.InfinityRaider.AgriCraft.compatibility.mobdropcrops;
 
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
-import com.pam.weeeflowers.BlockPamFlowerCrop;
-import com.pam.weeeflowers.weeeflowers;
+import com.pam.mobdropcrops.BlockPamMobCrop;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 import java.util.ArrayList;
 
-public class CropPlantWeeeFlower extends CropPlantGeneric {
-    public CropPlantWeeeFlower(ItemSeeds seed) {
+public class CropPlantMobDropCrop extends CropPlantGeneric {
+    private final BlockPamMobCrop plant;
+    public CropPlantMobDropCrop(ItemSeeds seed, Block plant) {
         super(seed);
+        this.plant = (BlockPamMobCrop) plant;
     }
 
     @Override
@@ -21,11 +24,22 @@ public class CropPlantWeeeFlower extends CropPlantGeneric {
     }
 
     @Override
+    public int tier() {
+        return 4;
+    }
+
+    @Override
     public ArrayList<ItemStack> getAllFruits() {
         ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
-        BlockPamFlowerCrop crop = (BlockPamFlowerCrop) ((ItemSeeds) getSeed().getItem()).getPlant(null, 0, 0, 0);
-        fruits.add(new ItemStack(weeeflowers.pamFlower, 1, crop.func_149692_a(7)));
+        fruits.add(new ItemStack(plant.getItemDropped(7, null, 0)));
         return fruits;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getPlantIcon(int growthStage) {
+        //for the Vanilla SeedItem class the arguments for this method are not used
+        return plant.getIcon(0, transformMeta(growthStage));
     }
 
     @Override

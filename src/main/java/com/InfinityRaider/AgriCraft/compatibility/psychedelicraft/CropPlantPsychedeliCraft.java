@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantTallGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class CropPlantPsychedeliCraft extends CropPlantTallGeneric {
@@ -27,7 +28,7 @@ public class CropPlantPsychedeliCraft extends CropPlantTallGeneric {
     }
 
     @Override
-    public boolean isMature(World world, int x, int y, int z) {
+    public boolean isMature(IBlockAccess world, int x, int y, int z) {
         return world.getBlockMetadata(x, y, z)>=7;
     }
 

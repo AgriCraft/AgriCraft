@@ -17,7 +17,7 @@ public abstract class CropPlantTall extends CropPlant {
     public abstract int maxMetaBottomBlock();
 
     @Override
-    public boolean isMature(World world, int x, int y, int z) {
+    public boolean isMature(IBlockAccess world, int x, int y, int z) {
         return world.getBlockMetadata(x, y, z)>=7;
     }
 

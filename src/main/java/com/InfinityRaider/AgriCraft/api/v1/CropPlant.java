@@ -72,7 +72,7 @@ public abstract class CropPlant {
     public abstract boolean isFertile(World world, int x, int y, int z);
 
     /** Checks if the plant is mature */
-    public boolean isMature(World world, int x, int y, int z) {
+    public boolean isMature(IBlockAccess world, int x, int y, int z) {
         return world.getBlockMetadata(x, y, z)>=7;
     }
 

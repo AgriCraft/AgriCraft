@@ -90,16 +90,16 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     /** clears the plant in the crop */
     public void clearPlant() {
-        if(hasPlant()) {
-            CropPlant oldPlant = getPlant();
-            this.growth = 0;
-            this.gain = 0;
-            this.strength = 0;
-            this.plant = null;
-            this.analyzed = false;
-            this.weed = false;
-            this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
-            this.markForUpdate();
+        CropPlant oldPlant = getPlant();
+        this.growth = 0;
+        this.gain = 0;
+        this.strength = 0;
+        this.plant = null;
+        this.analyzed = false;
+        this.weed = false;
+        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
+        this.markForUpdate();
+        if (oldPlant != null) {
             oldPlant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord);
         }
     }
@@ -235,7 +235,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         String name = tag.getString(Names.NBT.seed);
         Item seed = name.equalsIgnoreCase("none")?null:(ItemSeeds) Item.itemRegistry.getObject(name);
         int meta = tag.getInteger(Names.NBT.meta);
-        this.plant = CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta));
+        CropPlant plant = CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta));
+        if(plant!=null) {
+            this.plant = plant;
+        } else {
+            this.clearPlant();
+        }
     }
 
     /** Apply a growth increment */

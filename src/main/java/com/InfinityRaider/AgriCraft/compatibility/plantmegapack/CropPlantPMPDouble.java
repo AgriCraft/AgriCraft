@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class CropPlantPMPDouble extends CropPlantTallGeneric {
@@ -30,7 +31,7 @@ public class CropPlantPMPDouble extends CropPlantTallGeneric {
     }
 
     @Override
-    public boolean isMature(World world, int x, int y, int z) {
+    public boolean isMature(IBlockAccess world, int x, int y, int z) {
         return world.getBlockMetadata(x, y, z)>=7;
     }
 

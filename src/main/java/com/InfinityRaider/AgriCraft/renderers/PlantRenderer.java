@@ -1,8 +1,10 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
@@ -147,6 +149,79 @@ public abstract class PlantRenderer {
         RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, maxY, 18, 0, 0, icon);
         RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, maxY, 6, 16, 0, icon);
         RenderHelper.addScaledVertexWithUV(tessellator, 11.999F, minY, 6, 16, 16, icon);
+        //plane 4 back left
+        RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, minY, 10, 0, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, maxY, 10, 0, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, maxY, -2, 16, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, minY,-2, 16, 16, icon);
+    }
+
+    public static void renderStemPlant(int x, int y, int z, RenderBlocks renderer, IIcon icon, int meta, Block block, boolean mature) {
+        Tessellator tessellator = Tessellator.instance;
+        int translation = meta>=6?0:5-meta;
+        tessellator.addTranslation(x, y - Constants.unit * 2 * translation, z);
+        tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
+        tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+        if(mature) {
+            renderStemPattern(tessellator, icon);
+            float u = Constants.unit;
+
+            renderer.setRenderBounds(3*u, 0, 0, 9*u, 6*u, 6*u);
+            renderer.renderBlockAllFaces(block, x, y+1, z);
+
+            renderer.setRenderBounds(3*u, 0, 10*u, 9*u, 6*u, 16*u);
+            renderer.renderBlockAllFaces(block, x, y+1, z);
+
+            renderer.setRenderBounds(0*u, 0, 3*u, 6*u, 6*u, 9*u);
+            renderer.renderBlockAllFaces(block, x, y+1, z);
+
+            renderer.setRenderBounds(10 * u, 0, 3 * u, 16 * u, 6 * u, 9 * u);
+            renderer.renderBlockAllFaces(block, x, y+1, z);
+        }
+        else {
+            renderCrossPattern(tessellator, icon, 0);
+        }
+        tessellator.addTranslation(-x, -y+Constants.unit*2*translation, -z);
+    }
+
+    private static void renderStemPattern(Tessellator tessellator, IIcon icon) {
+        int minY = 0;
+        int maxY = 12;
+        //plane 1 front left
+        RenderHelper.addScaledVertexWithUV(tessellator, -2, minY, 3.999F, 16, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, -2, maxY, 3.999F, 16, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 10, maxY, 3.999F, 0, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 10, minY, 3.999F, 0, 16, icon);
+        //plane 1 back left
+        RenderHelper.addScaledVertexWithUV(tessellator, -2, minY, 3.999F, 16, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 10, minY, 3.999F, 0, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 10, maxY, 3.999F, 0, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, -2, maxY, 3.999F, 16, 0, icon);
+        //plane 2 front right
+        RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, minY, 6, 0, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, minY, 18, 16, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, maxY, 18, 16, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, maxY, 6, 0, 0, icon);
+        //plane 2 back right
+        RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, minY, 6, 0, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, maxY, 6, 0, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, maxY, 18, 16, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 3.999F, minY, 18, 16, 16, icon);
+        //plane 3 front right
+        RenderHelper.addScaledVertexWithUV(tessellator, 6, minY, 11.999F, 0, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 18, minY, 11.999F, 16, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 18, maxY, 11.999F, 16, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 6, maxY, 11.999F, 0, 0, icon);
+        //plane 3 back right
+        RenderHelper.addScaledVertexWithUV(tessellator, 6, minY, 11.999F, 0, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 6, maxY, 11.999F, 0, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 18, maxY, 11.999F, 16, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 18, minY, 11.999F, 16, 16, icon);
+        //plane 4 front left
+        RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, minY, 10, 0, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, minY, -2, 16, 16, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, maxY, -2, 16, 0, icon);
+        RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, maxY, 10, 0, 0, icon);
         //plane 4 back left
         RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, minY, 10, 0, 16, icon);
         RenderHelper.addScaledVertexWithUV(tessellator, 12.001F, maxY, 10, 0, 0, icon);
