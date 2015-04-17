@@ -121,19 +121,6 @@ public class CropPlantHandler {
                 e.printStackTrace();
             }
         }
-
-        //register botania plants
-        if (ConfigurationHandler.integration_Botania) {
-            for (BlockModPlant plant : Crops.botaniaCrops) {
-                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-                try {
-                    registerPlant(cropPlant);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
         //register resource plants
         if (ConfigurationHandler.resourcePlants) {
             for (BlockModPlant plant : ResourceCrops.vanillaCrops) {
@@ -153,7 +140,6 @@ public class CropPlantHandler {
                 }
             }
         }
-
         //register custom crops
         for (BlockModPlant plant : CustomCrops.customCrops) {
             CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
@@ -163,10 +149,8 @@ public class CropPlantHandler {
                 e.printStackTrace();
             }
         }
-
         //register mod crops
         ModHelper.initModPlants();
-
         //register crops specified trough the API
         for (CropPlant plant : plantsToRegister) {
             try {
@@ -176,7 +160,6 @@ public class CropPlantHandler {
             }
         }
         plantsToRegister = null;
-
         //register others from ore dictionary
         ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
         for (ItemStack seed : seeds) {

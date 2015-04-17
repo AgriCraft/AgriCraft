@@ -5,6 +5,7 @@ import codechicken.nei.api.IConfigureNEI;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -41,7 +42,7 @@ public class NEIConfig implements IConfigureNEI {
             }
             //hide botania crops
             if(ConfigurationHandler.integration_Botania) {
-                for(BlockModPlant plant : Crops.botaniaCrops) {
+                for(BlockModPlant plant : BotaniaHelper.botaniaCrops) {
                     AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
                 }
             }

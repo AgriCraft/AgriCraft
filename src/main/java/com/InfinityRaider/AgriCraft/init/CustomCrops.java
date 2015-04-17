@@ -19,7 +19,8 @@ import java.util.List;
 public class CustomCrops {
     public static BlockModPlant[] customCrops;
     public static ItemModSeed[] customSeeds;
-    public static void initCustomCrops() {
+
+    public static void init() {
         if(ConfigurationHandler.customCrops) {
             String[] cropsRawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readCustomCrops());
             customCrops = new BlockModPlant[cropsRawData.length];

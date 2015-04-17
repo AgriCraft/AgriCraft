@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility;
 
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.compatibility.bluepower.BluePowerHelper;
+import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChocoCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
 import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
@@ -16,6 +17,7 @@ import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.Psychedelicraf
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.waila.WailaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.weeeflowers.WeeeFlowersHelper;
+import com.InfinityRaider.AgriCraft.compatibility.witchery.WitcheryHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.Loader;
@@ -68,6 +70,7 @@ public abstract class ModHelper {
         Class[] classes = {
                 AppleCoreHelper.class,
                 BluePowerHelper.class,
+                BotaniaHelper.class,
                 ChocoCraftHelper.class,
                 ExNihiloHelper.class,
                 HarvestcraftHelper.class,
@@ -81,11 +84,18 @@ public abstract class ModHelper {
                 PsychedelicraftHelper.class,
                 ThaumcraftHelper.class,
                 WailaHelper.class,
-                WeeeFlowersHelper.class
+                WeeeFlowersHelper.class,
+                WitcheryHelper.class
         };
         for(Class clazz:classes) {
             if(ModHelper.class.isAssignableFrom(clazz)) {
-                createInstance(clazz);
+                try {
+                    createInstance(clazz);
+                } catch(Exception e) {
+                    if(ConfigurationHandler.debug) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }

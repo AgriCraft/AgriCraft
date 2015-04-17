@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.thaumcraft;
 
+import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
@@ -25,7 +26,7 @@ public class Aspects {
         }
         //botania crops
         if(ConfigurationHandler.integration_Botania) {
-            for(ItemModSeed seed : Crops.botaniaSeeds) {
+            for(ItemModSeed seed : BotaniaHelper.botaniaSeeds) {
                 ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1));
             }
         }

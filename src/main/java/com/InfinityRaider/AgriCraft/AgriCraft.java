@@ -50,25 +50,17 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
         LogHelper.debug("Starting Pre-Initialization");
-        //find loaded mods
         LoadedMods.init();
-        //register forge event handlers
         proxy.registerEventHandlers();
-        //register packet handler
         NetworkWrapperAgriCraft.init();
-        //setting up configuration file
         ConfigurationHandler.init(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
         if (ConfigurationHandler.debug) {
             FMLCommonHandler.instance().bus().register(new RenderLogger());
         }
-        //initialize blocks
         Blocks.init();
-        //initialize crops
-        Crops.initDefaults();
-        //initialize items
+        Crops.init();
         Items.init();
-        //initialize API
         APISelector.init();
         LogHelper.debug("Pre-Initialization Complete");
     }
@@ -76,11 +68,9 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
         LogHelper.debug("Starting Initialization");
-
         NetworkRegistry.INSTANCE.registerGuiHandler(instance , new GuiHandler());
         proxy.registerTileEntities();
         proxy.registerRenderers();
-
         LogHelper.debug("Initialization Complete");
     }
 
@@ -89,19 +79,15 @@ public class AgriCraft {
         LogHelper.debug("Starting Post-Initialization");
         //Have to do this in postInit because some mods don't register their items/blocks until init
         ResourceCrops.init();
-        CustomCrops.initCustomCrops();
-        Crops.initBotaniaCrops();
+        CustomCrops.init();
         ModHelper.initHelpers();
-
         Recipes.init();
         SeedHelper.init();
         GrowthRequirementHandler.init();
         CustomCrops.initGrassSeeds();
         CropPlantHandler.init();
         MutationHandler.init();
-        if(!ConfigurationHandler.disableWorldGen) {
-            WorldGen.init();
-        }
+        if(!ConfigurationHandler.disableWorldGen) {WorldGen.init();}
         proxy.initNEI();
         LogHelper.debug("Post-Initialization Complete");
     }

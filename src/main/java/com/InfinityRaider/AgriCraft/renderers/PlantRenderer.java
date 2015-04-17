@@ -160,7 +160,7 @@ public abstract class PlantRenderer {
         Tessellator tessellator = Tessellator.instance;
         int translation = meta>=6?0:5-meta;
         tessellator.setBrightness(vine.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
-        int l = vine.getRenderColor(7);
+        int l = vine.getRenderColor(meta);
         float f = (float)(l >> 16 & 255) / 255.0F;
         float f1 = (float)(l >> 8 & 255) / 255.0F;
         float f2 = (float)(l & 255) / 255.0F;
