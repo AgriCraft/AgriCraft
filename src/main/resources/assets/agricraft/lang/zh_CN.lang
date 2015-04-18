@@ -167,7 +167,7 @@ agricraft_nei.nearby=旁边
 //journal entries
 //---------------
 //headers
-agricraft_journal.introduction=欢迎来到农业耕种的世界,今天我将会教你基础的作物架种植技术. 首先你要用4个木棍合成一个作物架.它可以放置在湿润的耕地上,这样种子就可以直接种植在作物架上.你还可以在作物架上再放一个作物架,而这样会形成一个杂交架.如果你把两个或者更多作物种在了杂交架旁边,杂交架上就有可能出现变异. In this journal you can keep track of all your discovered crop mutations. To register a discovered seed, put the journal in a seed-analyser and then analyse the seed. This will reveal to you the properties of the seed as well as registering it in this journal. If you ever wish to copy the journal, put it in a crafting grid together with a blank book and quill.
+agricraft_journal.introduction=欢迎来到农业耕种的世界, 今天我将会教你基础的作物杂交技术. 首先你要用4个木棍合成一个作物架. 它可以放置在湿润的耕地上, 这样种子就可以直接种植在作物架上. 你还可以在作物架上再放一个作物架, 这样会组成一个杂交架. 如果你把两个或者更多作物种在了杂交架旁边, 杂交架上就有可能出现变异. 你可以用这本笔记持续追踪你发现的杂交可能性. 要记录一个新的杂交路线, 只需在使用分析仪分析种子前把本笔记放入即可. 若如此做,种子的相关信息会被记录并显示在你面前. 如果你需要复制这本笔记, 只需要在工作台里与空的书与笔进行合成即可.
 agricraft_journal.information=信息
 agricraft_journal.tier=级别
 agricraft_journal.fruits=果实
