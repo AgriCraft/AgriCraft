@@ -11,7 +11,7 @@ import java.util.Random;
 
 public interface IAgriCraftPlant extends IGrowable {
     /** Returns the GowthRequirement for this plant */
-    public GrowthRequirement getGrowthRequirement();
+    public IGrowthRequirement getGrowthRequirement();
 
     /** Gets the seed for this plant */
     public IAgriCraftSeed getSeed();

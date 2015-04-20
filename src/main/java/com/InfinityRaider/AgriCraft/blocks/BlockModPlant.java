@@ -2,13 +2,16 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -45,7 +48,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
 
         GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
         if (base != null) {
-            builder.requiredBlock(new BlockWithMeta(base, baseMeta), GrowthRequirement.RequirementType.BELOW, true);
+            builder.requiredBlock(new BlockWithMeta(base, baseMeta), RequirementType.BELOW, true);
         }
         if (soil == null) {
             growthRequirement = builder.build();

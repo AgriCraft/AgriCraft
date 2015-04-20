@@ -1,9 +1,11 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.google.common.base.Joiner;
+
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
@@ -199,7 +201,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
+                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
                 oldSoil = growthReq.getSoil();
                 growthReq.setSoil(soil);
             }
@@ -211,7 +213,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
+                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
                 growthReq.setSoil(oldSoil);
             }
 
@@ -281,7 +283,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
+                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
                 old = growthReq.getBrightnessRange();
                 growthReq.setBrightnessRange(min, max);
             }
@@ -293,7 +295,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
+                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
                 growthReq.setBrightnessRange(old[0], old[1]);
             }
 
@@ -338,8 +340,8 @@ public class Growing {
             }
 
             BlockWithMeta baseWM = new BlockWithMeta(((ItemBlock) baseIS.getItem()).field_150939_a, baseIS.getItemDamage());
-            GrowthRequirement.RequirementType reqType = type == 1 ? GrowthRequirement.RequirementType.BELOW
-                    : GrowthRequirement.RequirementType.NEARBY;
+            RequirementType reqType = type == 1 ? RequirementType.BELOW
+                    : RequirementType.NEARBY;
             MineTweakerAPI.apply(new SetAction(seedIS, baseWM, reqType, oreDict));
         }
 
@@ -351,7 +353,7 @@ public class Growing {
                 return;
             }
 
-            MineTweakerAPI.apply(new SetAction(seedIS, null, GrowthRequirement.RequirementType.NONE, false));
+            MineTweakerAPI.apply(new SetAction(seedIS, null, RequirementType.NONE, false));
         }
 
         private static class SetAction implements IUndoableAction {
@@ -360,14 +362,14 @@ public class Growing {
             private final ItemSeeds seed;
             private final int seedMeta;
             private final BlockWithMeta base;
-            private final GrowthRequirement.RequirementType type;
+            private final RequirementType type;
             private final boolean oreDict;
 
             private BlockWithMeta oldReqBlock;
-            private GrowthRequirement.RequirementType oldRequiredType;
+            private RequirementType oldRequiredType;
             private boolean oldReqBlockIsOreDict;
 
-            public SetAction(ItemStack seed, BlockWithMeta base, GrowthRequirement.RequirementType type, boolean oreDict) {
+            public SetAction(ItemStack seed, BlockWithMeta base, RequirementType type, boolean oreDict) {
                 this.seedStack = seed;
                 this.seed = (ItemSeeds) seed.getItem();
                 this.seedMeta = seed.getItemDamage();
@@ -378,7 +380,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta);
+                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta);
                 oldReqBlock = growthReq.getRequiredBlock();
                 oldRequiredType = growthReq.getRequiredType();
                 oldReqBlockIsOreDict = growthReq.isOreDict();
@@ -392,7 +394,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta);
+                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta);
                 growthReq.setRequiredBlock(oldReqBlock, oldRequiredType, oldReqBlockIsOreDict);
             }
 

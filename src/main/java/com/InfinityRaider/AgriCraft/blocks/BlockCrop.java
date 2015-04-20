@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -12,6 +12,7 @@ import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
@@ -256,7 +257,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
-            CropPlant plant = ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlant();
+            ICropPlant plant = ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlant();
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
                 this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
             }

@@ -2,9 +2,11 @@ package com.InfinityRaider.AgriCraft.compatibility.chococraft;
 
 import chococraft.common.config.ChocoCraftBlocks;
 import chococraft.common.config.ChocoCraftItems;
-import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
+
+import com.InfinityRaider.AgriCraft.apiimpl.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
