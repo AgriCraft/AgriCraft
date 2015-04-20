@@ -16,8 +16,9 @@ public class CropPlantPMPSingle extends CropPlantGeneric {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
-        return false;
+        return true;
     }
 
     @Override

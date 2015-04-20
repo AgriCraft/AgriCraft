@@ -7,72 +7,91 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraftforge.oredict.OreDictionary;
-import plantmegapack.PlantMegaPack;
-import plantmegapack.bin.PMPItems;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public final class PlantMegaPackHelper extends ModHelper {
+    private static final String MOD_ID = "plantmegapack";
+    private ArrayList<String> names;
+
     @Override
     protected void init() {
-        OreDictionary.registerOre("seedOnion", (Item) Item.itemRegistry.getObject("plantmegapack:seedOnion"));
-        OreDictionary.registerOre("seedSpinach", (Item) Item.itemRegistry.getObject("plantmegapack:seedSpinach"));
-        OreDictionary.registerOre("seedCelery", (Item) Item.itemRegistry.getObject("plantmegapack:seedCelery"));
-        OreDictionary.registerOre("seedLettuce", (Item) Item.itemRegistry.getObject("plantmegapack:seedLettuce"));
-        OreDictionary.registerOre("seedYellowBellPepper", (Item) Item.itemRegistry.getObject("plantmegapack:seedBellPepperYellow"));
-        OreDictionary.registerOre("seedCorn", (Item) Item.itemRegistry.getObject("plantmegapack:seedCorn"));
-        OreDictionary.registerOre("seedCucumber", (Item) Item.itemRegistry.getObject("plantmegapack:seedCucumber"));
-        OreDictionary.registerOre("seedTomato", (Item) Item.itemRegistry.getObject("plantmegapack:seedTomato"));
-        OreDictionary.registerOre("seedBeet", (Item) Item.itemRegistry.getObject("plantmegapack:seedBeet"));
+        findNames();
+        registerOres();
+    }
 
-        OreDictionary.registerOre("cropOnion", (Item) Item.itemRegistry.getObject("plantmegapack:foodOnion"));
-        OreDictionary.registerOre("cropSpinach", (Item) Item.itemRegistry.getObject("plantmegapack:foodSpinach"));
-        OreDictionary.registerOre("cropCelery", (Item) Item.itemRegistry.getObject("plantmegapack:foodCelery"));
-        OreDictionary.registerOre("cropLettuce", (Item) Item.itemRegistry.getObject("plantmegapack:foodLettuce"));
-        OreDictionary.registerOre("cropYellowBellPepper", (Item) Item.itemRegistry.getObject("plantmegapack:foodBellPepperYellow"));
-        OreDictionary.registerOre("cropCorn", (Item) Item.itemRegistry.getObject("plantmegapack:foodCorn"));
-        OreDictionary.registerOre("cropCucumber", (Item) Item.itemRegistry.getObject("plantmegapack:foodCucumber"));
-        OreDictionary.registerOre("cropTomato", (Item) Item.itemRegistry.getObject("plantmegapack:foodTomato"));
-        OreDictionary.registerOre("cropBeet", (Item) Item.itemRegistry.getObject("plantmegapack:foodBeet"));
+    private void findNames() {
+        Class seedEnum;
+        try {
+            seedEnum = Class.forName("plantmegapack.common.PMPCropSeed");
+        } catch (ClassNotFoundException e) {
+            return;
+        }
+        if(!seedEnum.isEnum()) {
+            return;
+        }
+        names = new ArrayList<String>();
+        Object[] constants = seedEnum.getEnumConstants();
+        Field nameField = null;
+        for(Field field:seedEnum.getDeclaredFields()) {
+            if(field.getType()==String.class) {
+                nameField = field;
+                break;
+            }
+        }
+        if(nameField==null) {
+            return;
+        }
+        for (Object constant : constants) {
+            try {
+                String name = (String) nameField.get(constant);
+                names.add(name.substring(4));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-        OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedOnion"));
-        OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedSpinach"));
-        OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedCelery"));
-        OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedLettuce"));
-        OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedBellPepperYellow"));
-        OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedCorn"));
-        OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedCucumber"));
-        OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedTomato"));
-        OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("plantmegapack:seedBeet"));
+    private void registerOres() {
+        if(names==null || names.size()==0) {return;}
+        for(String name:names) {
+            Item seed = (Item) Item.itemRegistry.getObject(MOD_ID+":seed"+name);
+            Item food = (Item) Item.itemRegistry.getObject(MOD_ID+":food"+name);
+            if(seed==null || food==null) {
+                continue;
+            }
+            OreDictionary.registerOre(Names.OreDict.listAllseed, seed);
+            OreDictionary.registerOre("seed"+name, seed);
+            OreDictionary.registerOre("crop"+name, food);
+        }
     }
 
     @Override
     protected void initPlants() {
-        Class pmp_ItemRegistry = PMPItems.class;
-        Field[] fields = pmp_ItemRegistry.getDeclaredFields();
-        for (Field field : fields) {
+        if(names==null || names.size()==0) {
+            return;
+        }
+        for(String name:names) {
+            Item seed = (Item) Item.itemRegistry.getObject(MOD_ID+":seed"+name);
+            Item food = (Item) Item.itemRegistry.getObject(MOD_ID+":food"+name);
+            if(seed==null || food==null || !(seed instanceof ItemSeeds)) {continue;}
             try {
-                Object obj = field.get(PlantMegaPack.items);
-                if (obj instanceof ItemSeeds) {
-                    ItemSeeds seed = (ItemSeeds) obj;
-                    if (seed == PlantMegaPack.items.seedCorn) {
-                        CropPlantHandler.registerPlant(new CropPlantPMPDouble(seed));
-                    } else {
-                        CropPlantHandler.registerPlant(new CropPlantPMPSingle(seed));
-                    }
+                if (name.equalsIgnoreCase("Corn")) {
+                    CropPlantHandler.registerPlant(new CropPlantPMPDouble((ItemSeeds) seed));
+                } else {
+                    CropPlantHandler.registerPlant(new CropPlantPMPSingle((ItemSeeds) seed));
                 }
-            } catch (Exception e) {
+            } catch(Exception e) {
                 if (ConfigurationHandler.debug) {
                     e.printStackTrace();
                 }
             }
-
         }
-
     }
 
     @Override
     protected String modId() {
-        return Names.Mods.plantMegaPack;
+        return MOD_ID;
     }
 }
