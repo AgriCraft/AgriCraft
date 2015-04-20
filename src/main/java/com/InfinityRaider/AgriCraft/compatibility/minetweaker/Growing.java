@@ -250,8 +250,8 @@ public class Growing {
                     error = "maximum should be higher than the minimum";
                     success = max>min;
                     if(success) {
-                        error = "Invalid third argument: has to be smaller than 16";
-                        success = max<16;
+                        error = "Invalid third argument: has to be smaller than or equal to 16";
+                        success = max<=16;
                         if(success) {
                             MineTweakerAPI.apply(new SetAction(seedStack, min, max));
                         }
