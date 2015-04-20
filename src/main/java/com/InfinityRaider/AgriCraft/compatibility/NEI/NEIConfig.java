@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.compatibility.NEI;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
@@ -10,7 +11,11 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public class NEIConfig implements IConfigureNEI {
     private static String version = "1.0";
@@ -66,6 +71,25 @@ public class NEIConfig implements IConfigureNEI {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(Items.debugItem, 1, i));
             }
         }
+        LogHelper.debug("Hiding custom wood objects");
+        Field[] blocks = Blocks.class.getDeclaredFields();
+        for(Field field:blocks) {
+            if(BlockCustomWood.class.isAssignableFrom(field.getType())) {
+                try {
+                    Block block = (Block) field.get(null);
+                    if(block==null) {
+                        continue;
+                    }
+                    ItemStack stack = new ItemStack(block);
+                    ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+                    list.add(stack);
+                    API.setItemListEntries(stack.getItem(), list);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     @Override
