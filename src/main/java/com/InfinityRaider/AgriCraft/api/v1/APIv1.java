@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
 import com.InfinityRaider.AgriCraft.api.APIBase;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -103,7 +104,7 @@ public interface APIv1 extends APIBase {
     /**
      * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
      */
-    public void registerCropPlant(CropPlant plant);
+    public void registerCropPlant(ICropPlant plant);
 
     /**
      * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
@@ -114,7 +115,7 @@ public interface APIv1 extends APIBase {
      * Register a growth requirement for this seed
      * @return true if the registering was successful
      */
-    public boolean registerGrowthRequirement(ItemWithMeta seed, GrowthRequirement requirement);
+    public boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement);
 
     /**
      * Register a default soil that any crop that doesn't require a specific soil can grow on
@@ -127,10 +128,10 @@ public interface APIv1 extends APIBase {
 	 * 
 	 * @param seed
 	 *            Any ItemStack that is a seed.
-	 * @return A {@link GrowthRequirement} object or null if the parameter was no
+	 * @return A {@link IGrowthRequirement} object or null if the parameter was no
 	 *         seed or has special requirements.
 	 */
-	GrowthRequirement getGrowthRequirement(ItemStack seed);
+	IGrowthRequirement getGrowthRequirement(ItemStack seed);
 
 	/**
 	 * Checks if the given crops can be placed at the given position.

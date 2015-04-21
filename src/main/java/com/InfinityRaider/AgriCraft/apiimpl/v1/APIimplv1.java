@@ -16,6 +16,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
 import com.google.common.collect.Lists;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
@@ -117,7 +118,7 @@ public class APIimplv1 implements APIv1 {
 	}
 
     @Override
-    public void registerCropPlant(CropPlant plant) {
+    public void registerCropPlant(ICropPlant plant) {
        CropPlantHandler.addCropToRegister(plant);
     }
 
@@ -127,7 +128,7 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public boolean registerGrowthRequirement(ItemWithMeta seed, GrowthRequirement requirement) {
+    public boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement) {
         try {
             GrowthRequirementHandler.registerGrowthRequirement(seed, requirement);
             return true;
@@ -142,7 +143,7 @@ public class APIimplv1 implements APIv1 {
     }
 
 	@Override
-    public GrowthRequirement getGrowthRequirement(ItemStack seed) {
+    public IGrowthRequirement getGrowthRequirement(ItemStack seed) {
         if(!CropPlantHandler.isValidSeed(seed)) {
             return null;
         }
@@ -326,7 +327,7 @@ public class APIimplv1 implements APIv1 {
 				if (crop.isCrossCrop() || crop.hasPlant()) {
 					return SeedRequirementStatus.BAD_LOCATION;
 				}
-				GrowthRequirement growthRequirement = GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage());
+				IGrowthRequirement growthRequirement = GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage());
 				if(!growthRequirement.isValidSoil(world, x, y-1, z)) {
 					return SeedRequirementStatus.WRONG_SOIL;
 				}

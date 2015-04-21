@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
-import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
@@ -11,6 +11,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -33,7 +34,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     private boolean analyzed=false;
     private boolean crossCrop=false;
     private boolean weed=false;
-    private CropPlant plant;
+    private ICropPlant plant;
 
     private final MutationEngine mutationEngine;
 
@@ -41,7 +42,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         this.mutationEngine = new MutationEngine(this);
     }
 
-    public CropPlant getPlant() {return plant;}
+    public ICropPlant getPlant() {return plant;}
 
     public int getGrowth() {return growth;}
 
@@ -69,7 +70,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public boolean hasPlant() {return this.plant!=null;}
 
     /** sets the plant in the crop */
-    public void setPlant(int growth, int gain, int strength, boolean analyzed, CropPlant plant) {
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, ICropPlant plant) {
         if( (!this.crossCrop) && (!this.hasPlant())) {
             if(plant!=null) {
                 this.plant = plant;
@@ -90,7 +91,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     /** clears the plant in the crop */
     public void clearPlant() {
-        CropPlant oldPlant = getPlant();
+        ICropPlant oldPlant = getPlant();
         this.growth = 0;
         this.gain = 0;
         this.strength = 0;
@@ -235,7 +236,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         String name = tag.getString(Names.NBT.seed);
         Item seed = name.equalsIgnoreCase("none")?null:(ItemSeeds) Item.itemRegistry.getObject(name);
         int meta = tag.getInteger(Names.NBT.meta);
-        CropPlant plant = CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta));
+        ICropPlant plant = CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta));
         if(plant!=null) {
             this.plant = plant;
         } else {

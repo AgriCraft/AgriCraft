@@ -3,17 +3,21 @@ package com.InfinityRaider.AgriCraft.compatibility.NEI;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
+
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -35,7 +39,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         PositionedStack result;
         List<PositionedStack> soils = new ArrayList<PositionedStack>();
         PositionedStack requiredBlock;
-        GrowthRequirement.RequirementType requiredType;
+        RequirementType requiredType;
 
         //constructor
         public CachedCropMutationRecipe(Mutation mutation) {
@@ -43,7 +47,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y1);
             this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y1);
 
-            GrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement((ItemSeeds) result.item.getItem(), result.item.getItemDamage());
+            IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement((ItemSeeds) result.item.getItem(), result.item.getItemDamage());
             if (growthReq.getSoil() != null) {
                 soils.add(new PositionedStack(growthReq.getSoil().toStack(), Constants.nei_X3, Constants.nei_Y2));
             } else {
@@ -53,7 +57,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             }
 
             this.requiredType = growthReq.getRequiredType();
-            if (requiredType != GrowthRequirement.RequirementType.NONE) {
+            if (requiredType != RequirementType.NONE) {
                 requiredBlock = new PositionedStack(growthReq.requiredBlockAsItemStack(), Constants.nei_X3, Constants.nei_Y3);
             }
         }
@@ -172,9 +176,9 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         String soil = StatCollector.translateToLocal("agricraft_nei.soil");
         GuiDraw.drawStringR(soil + ":", Constants.nei_X3 - 7, Constants.nei_Y2 + 4, COLOR_BLACK, false);
 
-        if (mutationRecipe.requiredType != GrowthRequirement.RequirementType.NONE) {
+        if (mutationRecipe.requiredType != RequirementType.NONE) {
             String needs = StatCollector.translateToLocal("agricraft_nei.needs");
-            String modifier = mutationRecipe.requiredType == GrowthRequirement.RequirementType.BELOW
+            String modifier = mutationRecipe.requiredType == RequirementType.BELOW
                     ? StatCollector.translateToLocal("agricraft_nei.below")
                     : StatCollector.translateToLocal("agricraft_nei.nearby");
 

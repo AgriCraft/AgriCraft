@@ -1,9 +1,10 @@
 package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.ItemWithMeta;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -12,6 +13,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
 import com.jaquadro.minecraft.gardencontainers.block.BlockLargePot;
 import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -28,17 +30,17 @@ import java.util.*;
  */
 public class GrowthRequirementHandler {
 
-    private static Map<ItemWithMeta, GrowthRequirement> growthRequirements = new HashMap<ItemWithMeta, GrowthRequirement>();
+    private static Map<ItemWithMeta, IGrowthRequirement> growthRequirements = new HashMap<ItemWithMeta, IGrowthRequirement>();
 
     // Package private so GrowthRequirement can access it
     public static List<BlockWithMeta> defaultSoils = new ArrayList<BlockWithMeta>();
     static List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
 
-    public static void registerGrowthRequirement(ItemWithMeta item, GrowthRequirement req) throws InvalidSeedException {
+    public static void registerGrowthRequirement(ItemWithMeta item, IGrowthRequirement requirement) throws InvalidSeedException {
         if(CropPlantHandler.isValidSeed(item.toStack())) {
             throw new InvalidSeedException();
         }
-        growthRequirements.put(item, req);
+        growthRequirements.put(item, requirement);
     }
 
     //Methods for fertile soils
@@ -74,14 +76,14 @@ public class GrowthRequirementHandler {
 
     private static void initGrowthReqs() {
         //Set these crops to need darkness instead of light
-        ArrayList<GrowthRequirement> darkCrops = new ArrayList<GrowthRequirement>();
+        ArrayList<IGrowthRequirement> darkCrops = new ArrayList<IGrowthRequirement>();
         darkCrops.add(getGrowthRequirement((Item) Item.itemRegistry.getObject("AgriCraft:seedShroomRed"), 0));
         darkCrops.add(getGrowthRequirement((Item) Item.itemRegistry.getObject("AgriCraft:seedShroomBrown"), 0));
         if(ConfigurationHandler.resourcePlants) {
             darkCrops.add(getGrowthRequirement((Item) Item.itemRegistry.getObject("AgriCraft:seedNitorWart"), 0));
         }
         darkCrops.add(getGrowthRequirement(Items.nether_wart, 0));
-        for(GrowthRequirement req:darkCrops) {
+        for(IGrowthRequirement req:darkCrops) {
             req.setBrightnessRange(0, 8);
         }
     }
@@ -126,11 +128,11 @@ public class GrowthRequirementHandler {
     /**
      * @return growthRequirement of the given seed.
      */
-    public static GrowthRequirement getGrowthRequirement(Item seed, int meta) {
+    public static IGrowthRequirement getGrowthRequirement(Item seed, int meta) {
         if (seed instanceof IAgriCraftSeed) {
             return ((IAgriCraftSeed) seed).getPlant().getGrowthRequirement();
         }
-        GrowthRequirement growthRequirement = growthRequirements.get(new ItemWithMeta(seed, meta));
+        IGrowthRequirement growthRequirement = growthRequirements.get(new ItemWithMeta(seed, meta));
         if (growthRequirement == null) {
             growthRequirement = new GrowthRequirement.Builder().build();
             growthRequirements.put(new ItemWithMeta(seed, meta), growthRequirement);

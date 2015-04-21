@@ -1,7 +1,8 @@
 package com.InfinityRaider.AgriCraft.gui;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.CropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
@@ -11,6 +12,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
@@ -21,6 +23,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class GuiJournal extends GuiScreen {
     public static final ResourceLocation textureSeedPage = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalSeedPage.png");
     //needed data
     protected EntityPlayer player;
-    protected ArrayList<CropPlant> discoveredPlants;
+    protected ArrayList<ICropPlant> discoveredPlants;
     protected ItemStack[][] discoveredParents;
     protected ItemStack[] discoveredCoParents;
     protected ItemStack[] discoveredMutations;
@@ -73,11 +76,11 @@ public class GuiJournal extends GuiScreen {
     private void setDataFromNBT() {
         if (this.player.getCurrentEquippedItem() != null && this.player.getCurrentEquippedItem().stackSize > 0 && this.player.getCurrentEquippedItem().getItem() instanceof ItemJournal && this.player.getCurrentEquippedItem().hasTagCompound()) {
             NBTTagCompound tag = this.player.getCurrentEquippedItem().getTagCompound();
-            this.discoveredPlants = new ArrayList<CropPlant>();
+            this.discoveredPlants = new ArrayList<ICropPlant>();
             if (tag.hasKey(Names.NBT.discoveredSeeds)) {
                 NBTTagList tagList = tag.getTagList(Names.NBT.discoveredSeeds, 10);      //10 for tagCompound
                 for (int i = 0; i < tagList.tagCount(); i++) {
-                    CropPlant plant = CropPlantHandler.getPlantFromStack(ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i)));
+                    ICropPlant plant = CropPlantHandler.getPlantFromStack(ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i)));
                     if (plant != null) {
                         discoveredPlants.add(plant);
                     }
@@ -204,7 +207,7 @@ public class GuiJournal extends GuiScreen {
     }
 
     //returns the page nr for a given seed
-    private int getPage(CropPlant plant) {
+    private int getPage(ICropPlant plant) {
         if (this.isSeedDiscovered(plant)) {
             for (int i = 0; i < this.discoveredPlants.size(); i++) {
                 if (discoveredPlants.get(i) == plant) {
@@ -570,8 +573,8 @@ public class GuiJournal extends GuiScreen {
     }
 
     //utility method: check if a seed has been discovered
-    private boolean isSeedDiscovered(CropPlant plant) {
-        for (CropPlant arrayElement : this.discoveredPlants) {
+    private boolean isSeedDiscovered(ICropPlant plant) {
+        for (ICropPlant arrayElement : this.discoveredPlants) {
             if (arrayElement==plant) {
                 return true;
             }
