@@ -71,7 +71,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
             LogHelper.debug("Trying to plant seed "+stack.getItem().getUnlocalizedName()+" on crops");
             return true;
         }
-        if(GrowthRequirementHandler.getGrowthRequirement((ItemSeeds) stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y, z)) {
+        if(GrowthRequirementHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y, z)) {
             super.onItemUse(stack,player,world,x,y,z,side,f1,f2,f3);
         }
         return false;

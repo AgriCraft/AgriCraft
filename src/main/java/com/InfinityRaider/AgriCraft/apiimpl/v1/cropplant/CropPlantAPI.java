@@ -1,8 +1,6 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-
+import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
@@ -12,24 +10,21 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Implementation of the CropPlant class for an IAgriCraftPlant object
- */
-public class CropPlantAgriCraft extends CropPlant {
-    IAgriCraftPlant plant;
+public class CropPlantAPI extends CropPlant {
+    private ICropPlant plant;
 
-    public CropPlantAgriCraft(IAgriCraftPlant plant) {
-       this.plant = plant;
+    public CropPlantAPI(ICropPlant plant) {
+        this.plant = plant;
     }
 
     @Override
     public int tier() {
-        return plant.getSeed().tier();
+        return plant.tier();
     }
 
     @Override
     public ItemStack getSeed() {
-        return plant.getSeedStack(1);
+        return plant.getSeed();
     }
 
     @Override
@@ -44,35 +39,33 @@ public class CropPlantAgriCraft extends CropPlant {
 
     @Override
     public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
-        int amount =  (int) (Math.ceil((gain + 0.00) / 3));
-        return plant.getFruit(amount, rand);
+        return plant.getFruitsOnHarvest(gain, rand);
     }
 
     @Override
     public boolean canBonemeal() {
-        return getTier()<4;
+        return plant.canBonemeal();
     }
 
     @Override
     public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
-        return false;
+        return plant.onAllowedGrowthTick(world, x, y, z, oldGrowthStage);
     }
 
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
-        return plant.getGrowthRequirement().canGrow(world, x, y, z);
+        return plant.isFertile(world, x, y, z);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {
-        return Constants.unit*13;
+        return plant.getHeight(meta);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon(int growthStage) {
-        return plant.getIcon(growthStage);
+        return plant.getPlantIcon(growthStage);
     }
 
     @Override
@@ -84,6 +77,6 @@ public class CropPlantAgriCraft extends CropPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public String getInformation() {
-        return plant.getSeed().getInformation();
+        return plant.getInformation();
     }
 }

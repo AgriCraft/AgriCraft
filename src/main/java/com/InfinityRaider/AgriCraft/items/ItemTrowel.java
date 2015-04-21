@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.items;
 
-import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -77,7 +77,7 @@ public class ItemTrowel extends ModItem {
                             int gain = tag.getShort(Names.NBT.gain);
                             int strength = tag.getShort(Names.NBT.strength);
                             boolean analysed = tag.getBoolean(Names.NBT.analyzed);
-                            ICropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
+                            CropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
                             crop.setPlant(growth, gain, strength, analysed, plant);
                             world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.NBT.materialMeta), 3);
                             crop.markForUpdate();

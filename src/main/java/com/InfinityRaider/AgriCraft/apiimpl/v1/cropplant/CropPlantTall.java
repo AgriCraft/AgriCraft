@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 
 import cpw.mods.fml.relauncher.Side;

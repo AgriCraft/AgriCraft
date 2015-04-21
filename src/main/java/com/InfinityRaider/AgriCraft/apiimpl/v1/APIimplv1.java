@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.api.API;
 import com.InfinityRaider.AgriCraft.api.APIBase;
 import com.InfinityRaider.AgriCraft.api.APIStatus;
 import com.InfinityRaider.AgriCraft.api.v1.*;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAPI;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -119,12 +120,12 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public void registerCropPlant(ICropPlant plant) {
-       CropPlantHandler.addCropToRegister(plant);
+       CropPlantHandler.addCropToRegister(new CropPlantAPI(plant));
     }
 
     @Override
     public void registerCropPlant(IAgriCraftPlant plant) {
-        this.registerCropPlant(new CropPlantAgriCraft(plant));
+        CropPlantHandler.addCropToRegister(new CropPlantAgriCraft(plant));
     }
 
     @Override

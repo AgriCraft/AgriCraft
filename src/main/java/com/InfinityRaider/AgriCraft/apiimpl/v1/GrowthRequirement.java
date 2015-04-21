@@ -41,19 +41,7 @@ public class GrowthRequirement implements IGrowthRequirement{
     private boolean oreDict = false;
     private RequirementType requiredType = RequirementType.NONE;
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#needsCrops()
-		 */
-    @Override
-		public boolean needsCrops() {
-        return false;
-    }
-
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#getSoilBlocks()
-		 */
-    @Override
-		public List<BlockWithMeta> getSoilBlocks() {
+    public List<BlockWithMeta> getSoilBlocks() {
         if(this.requiresSpecificSoil()) {
             List<BlockWithMeta> list = new ArrayList<BlockWithMeta>();
             list.add(soil);
@@ -62,11 +50,7 @@ public class GrowthRequirement implements IGrowthRequirement{
         return GrowthRequirementHandler.defaultSoils;
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#getBelowBlocks()
-		 */
-    @Override
-		public List<BlockWithMeta> getBelowBlocks() {
+    public List<BlockWithMeta> getBelowBlocks() {
         List<BlockWithMeta> list = new ArrayList<BlockWithMeta>();
         if(this.requiredType==RequirementType.BELOW) {
             list.add(requiredBlock);
@@ -74,11 +58,7 @@ public class GrowthRequirement implements IGrowthRequirement{
         return list;
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#getNearBlocks()
-		 */
-    @Override
-		public List<BlockWithMeta> getNearBlocks() {
+    public List<BlockWithMeta> getNearBlocks() {
         List<BlockWithMeta> list = new ArrayList<BlockWithMeta>();
         if(this.requiredType==RequirementType.NEARBY) {
             list.add(requiredBlock);
@@ -86,37 +66,14 @@ public class GrowthRequirement implements IGrowthRequirement{
         return list;
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#needsTilling()
-		 */
-    @Override
-		public boolean needsTilling() {
-        return this.isValidSoil(new BlockWithMeta(Blocks.farmland));
-    }
-
     //Methods to check if a seed can grow
     //-----------------------------------
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#canGrow(net.minecraft.world.World, int, int, int)
-		 */
-    @Override
-		public boolean canGrow(World world, int x, int y, int z) {
+	public boolean canGrow(World world, int x, int y, int z) {
         return this.isValidSoil(world, x, y-1, z) && this.isBrightnessGood(world, x, y, z) && this.isBaseBlockPresent(world, x, y, z);
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#canPlant(net.minecraft.world.World, int, int, int)
-		 */
     @Override
-		public boolean canPlant(World world, int x, int y, int z) {
-        return this.isValidSoil(world, x, y, z);
-    }
-
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#isBaseBlockPresent(net.minecraft.world.World, int, int, int)
-		 */
-    @Override
-		public boolean isBaseBlockPresent(World world, int x, int y, int z) {
+    public boolean isBaseBlockPresent(World world, int x, int y, int z) {
         if(this.requiresBaseBlock()) {
             switch(this.requiredType) {
                 case BELOW: return this.isBaseBlockBelow(world, x, y, z);
@@ -162,20 +119,13 @@ public class GrowthRequirement implements IGrowthRequirement{
         }
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#isBrightnessGood(net.minecraft.world.World, int, int, int)
-		 */
-    @Override
-		public boolean isBrightnessGood(World world, int x, int y, int z) {
+    public boolean isBrightnessGood(World world, int x, int y, int z) {
         int lvl = world.getFullBlockLightValue(x, y+1, z);
         return lvl<this.maxBrightness && lvl>=this.minBrightness;
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#isValidSoil(net.minecraft.world.World, int, int, int)
-		 */
     @Override
-		public boolean isValidSoil(World world, int x, int y, int z) {
+    public boolean isValidSoil(World world, int x, int y, int z) {
         Block block = world.getBlock(x, y, z);
         int meta = world.getBlockMetadata(x, y, z);
         BlockWithMeta soil = new BlockWithMeta(block, meta);
@@ -185,11 +135,7 @@ public class GrowthRequirement implements IGrowthRequirement{
         return isValidSoil(soil);
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#isValidSoil(com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta)
-		 */
-    @Override
-		public boolean isValidSoil(BlockWithMeta soil) {
+    public boolean isValidSoil(BlockWithMeta soil) {
         if(this.requiresSpecificSoil()) {
             return this.soil.equals(soil);
         } else {
@@ -197,93 +143,58 @@ public class GrowthRequirement implements IGrowthRequirement{
         }
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#requiresSpecificSoil()
-		 */
-    @Override
-		public boolean requiresSpecificSoil() {
+    public boolean requiresSpecificSoil() {
         return this.soil!=null;
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#requiresBaseBlock()
-		 */
-    @Override
-		public boolean requiresBaseBlock() {
+    public boolean requiresBaseBlock() {
         return requiredType != RequirementType.NONE;
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#requiredBlockAsItemStack()
-		 */
     @Override
-		public ItemStack requiredBlockAsItemStack() {
+    public ItemStack requiredBlockAsItemStack() {
         return new ItemStack(requiredBlock.getBlock(), 1, requiredBlock.getMeta());
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#getRequiredType()
-		 */
     @Override
-		public RequirementType getRequiredType() {
+    public RequirementType getRequiredType() {
         return requiredType;
     }
 
     //Methods to change specific requirements
     //--------------------------------------
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#getSoil()
-		 */
     @Override
-		public BlockWithMeta getSoil() {return this.soil;}
+    public BlockWithMeta getSoil() {return this.soil;}
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#setSoil(com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta)
-		 */
     @Override
-		public void setSoil(BlockWithMeta soil) {
+    public void setSoil(BlockWithMeta soil) {
         this.soil = soil;
         GrowthRequirementHandler.addSoil(soil);
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#getBrightnessRange()
-		 */
     @Override
-		public int[] getBrightnessRange() {return new int[] {minBrightness, maxBrightness};}
+    public int[] getBrightnessRange() {return new int[] {minBrightness, maxBrightness};}
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#setBrightnessRange(int, int)
-		 */
     @Override
-		public void setBrightnessRange(int min, int max) {
+    public void setBrightnessRange(int min, int max) {
         this.minBrightness = min;
         this.maxBrightness = max;
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#setRequiredBlock(com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta, com.InfinityRaider.AgriCraft.api.v1.GrowthRequirement.RequirementType, boolean)
-		 */
     @Override
-		public void setRequiredBlock(BlockWithMeta requiredBlock, RequirementType requirementType, boolean oreDict) {
+    public void setRequiredBlock(BlockWithMeta requiredBlock, RequirementType requirementType, boolean oreDict) {
         this.requiredBlock = requiredBlock;
         this.requiredType = requirementType;
         this.oreDict = oreDict;
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#getRequiredBlock()
-		 */
     @Override
-		public BlockWithMeta getRequiredBlock() {
+    public BlockWithMeta getRequiredBlock() {
         return requiredBlock;
     }
 
-    /* (non-Javadoc)
-		 * @see com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirements#isOreDict()
-		 */
     @Override
-		public boolean isOreDict() {
+    public boolean isOreDict() {
         return oreDict;
     }
 

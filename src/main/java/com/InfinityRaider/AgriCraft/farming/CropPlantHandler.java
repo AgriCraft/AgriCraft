@@ -1,8 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
-import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.CropPlant;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.*;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
@@ -30,14 +28,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CropPlantHandler {
-    private static HashMap<Item, HashMap<Integer, ICropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, ICropPlant>>();
-    private static ArrayList<ICropPlant> plantsToRegister = new ArrayList<ICropPlant>();
+    private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, CropPlant>>();
+    private static ArrayList<CropPlant> plantsToRegister = new ArrayList<CropPlant>();
 
     public static void registerPlant(IAgriCraftPlant plant) throws DuplicateCropPlantException, BlacklistedCropPlantException {
         registerPlant(new CropPlantAgriCraft(plant));
     }
 
-    public static void registerPlant(ICropPlant plant) throws DuplicateCropPlantException, BlacklistedCropPlantException {
+    public static void registerPlant(CropPlant plant) throws DuplicateCropPlantException, BlacklistedCropPlantException {
         ItemStack stack = plant.getSeed();
         if(SeedHelper.isSeedBlackListed(stack)) {
             throw new BlacklistedCropPlantException();
@@ -45,7 +43,7 @@ public class CropPlantHandler {
         LogHelper.debug("Registering plant for "+stack.getUnlocalizedName());
         Item seed = stack.getItem();
         int meta = stack.getItemDamage();
-        HashMap<Integer, ICropPlant> entryForSeed = cropPlants.get(seed);
+        HashMap<Integer, CropPlant> entryForSeed = cropPlants.get(seed);
         if(entryForSeed!=null) {
             if(entryForSeed.get(meta)!=null) {
                 throw new DuplicateCropPlantException();
@@ -55,13 +53,13 @@ public class CropPlantHandler {
             }
         }
         else {
-            entryForSeed = new HashMap<Integer, ICropPlant>();
+            entryForSeed = new HashMap<Integer, CropPlant>();
             entryForSeed.put(meta, plant);
             cropPlants.put(seed, entryForSeed);
         }
     }
 
-    public static void addCropToRegister(ICropPlant plant) {
+    public static void addCropToRegister(CropPlant plant) {
         plantsToRegister.add(plant);
     }
 
@@ -73,17 +71,17 @@ public class CropPlantHandler {
         }
     }
 
-    public static NBTTagCompound writePlantToNBT(ICropPlant plant) {
+    public static NBTTagCompound writePlantToNBT(CropPlant plant) {
         NBTTagCompound tag = new NBTTagCompound();
         plant.getSeed().writeToNBT(tag);
         return tag;
     }
 
-    public static ICropPlant readPlantFromNBT(NBTTagCompound tag) {
+    public static CropPlant readPlantFromNBT(NBTTagCompound tag) {
         return getPlantFromStack(ItemStack.loadItemStackFromNBT(tag));
     }
 
-    public static ICropPlant getPlantFromStack(ItemStack stack) {
+    public static CropPlant getPlantFromStack(ItemStack stack) {
         try {
             return cropPlants.get(stack.getItem()).get(stack.getItemDamage());
         } catch(NullPointerException nullPointerException) {
@@ -154,7 +152,7 @@ public class CropPlantHandler {
         //register mod crops
         ModHelper.initModPlants();
         //register crops specified trough the API
-        for (ICropPlant plant : plantsToRegister) {
+        for (CropPlant plant : plantsToRegister) {
             try {
                 registerPlant(plant);
             } catch (Exception e) {

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.natura;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 
