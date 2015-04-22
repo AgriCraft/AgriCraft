@@ -81,25 +81,21 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         if (!CropPlantHandler.isValidSeed(stack)) {
             return false;
         }
-        if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey(Names.NBT.analyzed)) {
-            return !stack.stackTagCompound.getBoolean(Names.NBT.analyzed);
-        } else {
-            return true;
-        }
+        return true;
     }
 
     //gets called every tick
     @Override
     public void updateEntity() {
         boolean change = false;
-        if(!this.worldObj.isRemote && this.isAnalyzing()) {
+        if(this.isAnalyzing()) {
             //increment progress counter
             this.progress=progress<this.maxProgress()?progress+1:this.maxProgress();
             //if progress is complete analyze the seed
-            if(progress == this.maxProgress()) {
+            if(progress == this.maxProgress() && !worldObj.isRemote) {
                 this.analyze();
+                change = true;
             }
-            change = true;
         }
         if(change) {
             this.markForUpdate();
