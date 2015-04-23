@@ -60,7 +60,7 @@ public enum APIStatus {
 	 * Shortcut to check for one of the 3 "OK" states that allow you to work
 	 * with the API object.
 	 */
-	boolean isOK() {
+	public boolean isOK() {
 		return this == OK || this == BACKLEVEL_OK || this == BACKLEVEL_LIMITED;
 	}
 }
