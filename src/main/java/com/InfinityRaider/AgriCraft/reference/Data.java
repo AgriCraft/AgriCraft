@@ -47,7 +47,8 @@ public class Data {
     public static final String[] vanillaNuggets = {
             "Iron",
             "Emerald",
-            "Diamond"
+            "Diamond",
+            "Quartz",
     };
 
     public static final String[][] modResources = {

@@ -90,7 +90,7 @@ public class ConfigurationHandler {
     //read values from the config
     private static void loadConfiguration() {
         //agricraft settings
-        resourcePlants = config.getBoolean("Resource Crops",CATEGORY_AGRICRAFT,false,"set to true if you wish to enable resource crops");
+        resourcePlants = config.getBoolean("Resource Crops",CATEGORY_AGRICRAFT, true,"set to true if you wish to enable resource crops");
         mutationChance = (double) config.getFloat("Mutation Chance",CATEGORY_AGRICRAFT, (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance");
         singleSpreadsIncrement = config.getBoolean("Single spread stat increase",CATEGORY_AGRICRAFT, false, "Set to true to allow crops that spread from one single crop to increase stats");
         spreadingDifficulty = config.getInt("Farming difficulty",CATEGORY_AGRICRAFT,3,1,3, "Farming difficulty: 1 = Crops can inherit stats from any crop. 2 = Crops only inherit stats from parent and identical crops. 3 = Same as 2, but any other nearby crop will affect stats negatively.");

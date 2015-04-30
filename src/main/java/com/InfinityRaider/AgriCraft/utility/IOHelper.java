@@ -374,8 +374,7 @@ public abstract class IOHelper {
             "AgriCraft:seedTulipPink=AgriCraft:seedAllium+AgriCraft:seedDandelion\n" +
             "AgriCraft:seedDaisy=AgriCraft:seedDandelion+AgriCraft:seedOrchid\n" +
             "AgriCraft:seedShroomRed=minecraft:nether_wart+AgriCraft:seedPoppy\n" +
-            "AgriCraft:seedShroomBrown=minecraft:nether_wart+AgriCraft:seedPotato\n" +
-            "AgriCraft:seedNitorWart=minecraft:nether_wart+AgriCraft:seedTulipOrange";
+            "AgriCraft:seedShroomBrown=minecraft:nether_wart+AgriCraft:seedPotato\n";
 
 
     private static final String agricraftMutations =
@@ -384,7 +383,9 @@ public abstract class IOHelper {
             "AgriCraft:seedFerranium=AgriCraft:seedLapender+AgriCraft:seedTulipWhite\n" +
             "AgriCraft:seedAurigold=AgriCraft:seedRedstodendron+AgriCraft:seedTulipOrange\n" +
             "AgriCraft:seedDiamahlia=AgriCraft:seedAurigold+AgriCraft:seedLapender\n" +
-            "AgriCraft:seedEmeryllis=AgriCraft:seedFerranium+AgriCraft:seedRedstodendron";
+            "AgriCraft:seedEmeryllis=AgriCraft:seedFerranium+AgriCraft:seedRedstodendron\n" +
+            "AgriCraft:seedNitorWart=minecraft:nether_wart+AgriCraft:seedTulipOrange\n" +
+            "AgriCraft:seedQuartzanthemum=AgriCraft:seedNitorWart+AgriCraft:seedLapender";
 
     private static final String barleyHarvestCraftMutations =
             "harvestcraft:barleyseedItem=minecraft:wheat_seeds+AgriCraft:seedSugarcane\n" +

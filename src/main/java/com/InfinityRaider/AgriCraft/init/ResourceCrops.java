@@ -37,13 +37,14 @@ public class ResourceCrops {
         vanillaCrops = new ArrayList<BlockModPlant>();
         vanillaSeeds = new ArrayList<ItemModSeed>();
         Object[][] vanillaResources = {
-                {"Aurigold", net.minecraft.init.Items.gold_nugget, 0, null, net.minecraft.init.Blocks.gold_ore, 0, 4, 6},
-                {"Ferranium", OreDictHelper.getNuggetForName("Iron"), OreDictHelper.getNuggetMetaForName("Iron"), null, net.minecraft.init.Blocks.iron_ore, 0, 4, 1},
-                {"Diamahlia", OreDictHelper.getNuggetForName("Diamond"), OreDictHelper.getNuggetMetaForName("Diamond"), null, net.minecraft.init.Blocks.diamond_ore, 0, 5, 6},
-                {"Lapender", net.minecraft.init.Items.dye, 4, null, net.minecraft.init.Blocks.lapis_ore, 0, 3, 6},
-                {"Emeryllis", OreDictHelper.getNuggetForName("Emerald"), OreDictHelper.getNuggetMetaForName("Emerald"), null, net.minecraft.init.Blocks.emerald_ore, 0, 5, 6},
-                {"Redstodendron", net.minecraft.init.Items.redstone, 0, null, net.minecraft.init.Blocks.redstone_ore, 0, 3, 6},
-                {"NitorWart", net.minecraft.init.Items.glowstone_dust, 0, net.minecraft.init.Blocks.soul_sand, Blocks.glowstone, 0, 4, 6}
+                {"Aurigold", net.minecraft.init.Items.gold_nugget, 0, null, Blocks.gold_ore, 0, 4, 6},
+                {"Ferranium", OreDictHelper.getNuggetForName("Iron"), OreDictHelper.getNuggetMetaForName("Iron"), null, Blocks.iron_ore, 0, 4, 1},
+                {"Diamahlia", OreDictHelper.getNuggetForName("Diamond"), OreDictHelper.getNuggetMetaForName("Diamond"), null, Blocks.diamond_ore, 0, 5, 6},
+                {"Lapender", net.minecraft.init.Items.dye, 4, null, Blocks.lapis_ore, 0, 3, 6},
+                {"Emeryllis", OreDictHelper.getNuggetForName("Emerald"), OreDictHelper.getNuggetMetaForName("Emerald"), null, Blocks.emerald_ore, 0, 5, 6},
+                {"Redstodendron", net.minecraft.init.Items.redstone, 0, null, Blocks.redstone_ore, 0, 3, 6},
+                {"NitorWart", net.minecraft.init.Items.glowstone_dust, 0, Blocks.soul_sand, Blocks.glowstone, 0, 4, 6},
+                {"Quartzanthemum", OreDictHelper.getNuggetForName("Quartz"), 0, Blocks.soul_sand, Blocks.quartz_ore, 0, 4, 6}
         };
         for(Object[] data: vanillaResources) {
             String name =(String) data[0];

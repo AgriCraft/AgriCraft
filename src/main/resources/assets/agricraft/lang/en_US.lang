@@ -2,7 +2,7 @@
 itemGroup.agricraft=Agricraft
 
 //Items
-item.agricraft:cropsItem.name=Crops
+item.agricraft:cropsItem.name=Crop Sticks
 item.agricraft:journal.name=Agricultural Journal
 item.agricraft:trowel.name=Gardening Trowel
 item.agricraft:magnifyingGlass.name=Magnifying Glass
@@ -20,6 +20,7 @@ item.agricraft:nuggetAluminum.name=Aluminum Nugget
 item.agricraft:nuggetNickel.name=Nickel Nugget
 item.agricraft:nuggetPlatinum.name=Platinum Nugget
 item.agricraft:nuggetOsmium.name=Osmium Nugget
+item.agricraft:nuggetQuartz.name=Quartz Shard
 
 item.agricraft:seedPotato.name=Potato Seeds
 item.agricraft:seedCarrot.name=Carrot Seeds
@@ -37,6 +38,7 @@ item.agricraft:seedCactus.name=Cactus Seeds
 item.agricraft:seedShroomRed.name=Red Mushroom Spores
 item.agricraft:seedShroomBrown.name=Brown Mushroom Spores
 item.agricraft:seedNitorWart.name=Nitor Wart Spores
+item.agricraft:seedQuartzanthemum=Quartzanthemum seeds
 
 item.agricraft:seedBotaniaWhite.name=Mystical White Flower Seeds
 item.agricraft:seedBotaniaOrange.name=Mystical Orange Flower Seeds
@@ -72,7 +74,7 @@ item.agricraft:seedOsmonium.name=Osmonium Seeds
 
 
 //blocks
-tile.agricraft:crops.name=Crops
+tile.agricraft:crops.name=Crop Sticks
 tile.agricraft:seedAnalyzer.name=Seed Analyzer
 tile.agricraft:waterTank.0.name=Wooden Water Tank
 tile.agricraft:waterTank.1.name=Iron Water Tank
@@ -99,6 +101,7 @@ tile.agricraft:cropCactus.name=Cactus
 tile.agricraft:cropShroomRed.name=Red Mushroom
 tile.agricraft:cropShroomBrown.name=Brown Mushroom
 tile.agricraft:cropNitorWart.name=Nitor Wart
+tile.agricraft:cropQuartzanthemum.name=Quartzanthemum
 
 tile.agricraft:cropBotaniaWhite.name=Mystical White Flower
 tile.agricraft:cropBotaniaOrange.name=Mystical Orange Flower
@@ -191,6 +194,7 @@ agricraft_journal.cactus=Cacti can be grown to produce a green tinted substance 
 agricraft_journal.shroomRed=This red fungus tastes actually quite nice and would make a fine ingredient for mushroom stew.
 agricraft_journal.shroomBrown=This brown fungus tastes actually quite nice and would make a fine ingredient for mushroom stew.
 agricraft_journal.nitorWart=This nether crop was believed to be extinct, elders speak of it extracting glowstone particles from the environment to produce bright dusts.
+agricraft_journal.quartzanthemum=A nether crop that feeds from fractions of quartz in the soil.
 agricraft_journal.diamahlia=Many still believe this flower only exists in tales and stories. However some agriculturists say they have succeeded in obtaining this legendary plant.
 agricraft_journal.aurigold=Aurigold is a rare and fabled flower that feeds on tiny fractions of gold in the soil, only a very patient and skilled agriculturist is able to cultivate this jewel.
 agricraft_journal.ferranium=This strange plant's roots do not care for water. They just burrow in the soil while absorbing iron particles to strengthen itself.
