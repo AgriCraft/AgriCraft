@@ -286,9 +286,12 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 } else {
                     drops.add(new ItemStack(Items.crops, 1));
                     if (crop.hasPlant()) {
-                        drops.add(crop.getSeedStack());
                         if (this.isMature(world, x, y, z)) {
                             drops.addAll(crop.getFruits());
+                            drops.add(crop.getSeedStack());
+                        }
+                        else if(!ConfigurationHandler.onlyMatureDropSeeds) {
+                            drops.add(crop.getSeedStack());
                         }
                     }
                 }
