@@ -284,7 +284,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 if (crop.isCrossCrop()) {
                     drops.add(new ItemStack(Items.crops, 2));
                 } else {
-                    drops.add(new ItemStack(Items.crops, 1));
+                    if(!(crop.hasWeed() && ConfigurationHandler.weedsDestroyCropSticks)) {
+                        drops.add(new ItemStack(Items.crops, 1));
+                    }
                     if (crop.hasPlant()) {
                         if (this.isMature(world, x, y, z)) {
                             drops.addAll(crop.getFruits());

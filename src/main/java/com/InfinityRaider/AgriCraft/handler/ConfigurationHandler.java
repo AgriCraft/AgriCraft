@@ -49,6 +49,7 @@ public class ConfigurationHandler {
     public static boolean enableHandRake;
     public static boolean bonemealMutation;
     public static boolean onlyMatureDropSeeds;
+    public static boolean weedsDestroyCropSticks;
     //world gen
     public static boolean disableWorldGen;
     public static int villagerID;
@@ -114,6 +115,7 @@ public class ConfigurationHandler {
         enableHandRake = enableWeeds && config.getBoolean("Enable Hand Rake", CATEGORY_FARMING, true, "When enabled, weeds can only be removed by using this Hand Rake tool");
         bonemealMutation = config.getBoolean("Bonemeal Mutations", CATEGORY_FARMING, false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
         onlyMatureDropSeeds = config.getBoolean("Only mature crops drop seeds", CATEGORY_FARMING, false, "set this to true to make only mature crops drop seeds (to encourage trowel usage)");
+        weedsDestroyCropSticks = config.getBoolean("Weeds destroy crop sticks", CATEGORY_FARMING, false, "set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage)");
         //world gen
         disableWorldGen = config.getBoolean("Disable World Gen", CATEGORY_WORLDGEN, false, "set to true to disable world gen, no greenhouses will spawn in villages");
         villagerID = config.getInt("Villager ID", CATEGORY_WORLDGEN, 10, 7, 99, "The profession ID the villager uses");
