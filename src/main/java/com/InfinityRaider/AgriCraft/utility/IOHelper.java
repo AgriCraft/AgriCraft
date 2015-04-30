@@ -406,12 +406,18 @@ public abstract class IOHelper {
     private static final String plantMegaPackMutations =
             "plantmegapack:seedCelery=minecraft:wheat_seeds+AgriCraft:seedTulipWhite\n" +
             "plantmegapack:seedTomato=minecraft:melon_seeds+AgriCraft:seedCarrot\n" +
+            "plantmegapack:seedBroccoli=plantmegapack:seedSpinach+plantmegapack:seedCelery\n" +
             "plantmegapack:seedBeet=plantmegapack:seedTomato+AgriCraft:seedPotato\n" +
+            "plantmegapack:seedCassava=plantmegapack:seedBeet+plantmegapack:seedCorn\n" +
+            "plantmegapack:seedGreenBean=plantmegapack:seedCucumber+plantmegapack:seedCelery\n" +
+            "plantmegapack:seedLeek=plantmegapack:seedGreenBean+plantmegapack:seedCucumber\n" +
             "plantmegapack:seedLettuce=plantmegapack:seedCelery+AgriCraft:seedDaisy\n" +
             "plantmegapack:seedSpinach=plantmegapack:seedLettuce+AgriCraft:seedSugarcane\n" +
             "plantmegapack:seedCorn=minecraft:wheat_seeds+plantmegapack:seedCelery\n" +
             "plantmegapack:seedBellPepperYellow=AgriCraft:seedCarrot+AgriCraft:seedDandelion\n" +
-            "plantmegapack:seedOnion=plantmegapack:seedBellPepperYellow+plantmegapack:seedLettuce\n" +
+            "plantmegapack:seedBellPepperOrange=plantmegapack:seedBellPepperYellow+plantmegapack:seedTomato\n" +
+            "plantmegapack:seedBellPepperRed=plantmegapack:seedBellPepperOrange+plantmegapack:seedTomato\n" +
+            "plantmegapack:seedSorrel=plantmegapack:seedBroccoli+plantmegapack:seedCassava\n" +
             "plantmegapack:seedCucumber=plantmegapack:seedBeet+plantmegapack:seedBellPepperYellow";
 
     private static final String chococraftMutations =

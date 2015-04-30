@@ -298,14 +298,21 @@ agricraft_journal.hc_Zucchini=Zucchini is usually served cooked, it can also be 
 
 //plant mega pack seeds
 agricraft_journal.pmp_Beet=The usually deep purple roots of beet are eaten either raw, grilled, boiled, or roasted.
+agricraft_journal.pmp_Broccoli=Broccoli is an edible green plant in the cabbage family, whose large flowering head is used as a vegetable.
+agricraft_journal.pmp_Cassava=Cassava is a tropical plant commonly known as tapioca or manioc.
 agricraft_journal.pmp_Celery=Celery is a plant variety commonly used as a vegetable, the stem is the edible part.
 agricraft_journal.pmp_Corn=Because of its shallow roots, corn is susceptible to droughts, intolerant of nutrient-deficient soils, and prone to be uprooted by severe winds
 agricraft_journal.pmp_Cucumber=The cucumber is a creeping vine that bears cylindrical fruits that are used as culinary vegetables.
+agricraft_journal.pmp_GreenBean=Green beans can either be grown as a bush plant or a pole plant, the latter requiring supports.
+agricraft_journal.pmp_Leek=Rather than forming a tight bulb like the onion, the leek produces a long cylinder of bundled leaf sheaths that are generally blanched by pushing soil around them.
 agricraft_journal.pmp_Lettuce=Generally grown as a hardy annual, lettuce is easily cultivated, although it requires relatively low temperatures to prevent it from flowering quickly.
 agricraft_journal.pmp_Onion=The onion plant has a fan of hollow, bluish-green leaves and the bulb at the base of the plant begins to swell when a certain day-length is reached.
 agricraft_journal.pmp_Spinach=The cartoon character Popeye the Sailor Man is portrayed as having a strong affinity for spinach, becoming physically stronger after consuming it.
 agricraft_journal.pmp_Tomato=The tomato is consumed in diverse ways, including raw, as an ingredient in many dishes, sauces, salads, and drinks.
 agricraft_journal.pmp_BellPepperYellow=There are many bellpeppers out there: red, yellow and green, but this one is yellow.
+agricraft_journal.pmp_BellPepperOrange=There are many bellpeppers out there: red, yellow and green, but this one is orange.
+agricraft_journal.pmp_BellPepperRed=There are many bellpeppers out there: red, yellow and green, but this one is red.
+agricraft_journal.pmp_Sorrel=Sorrel is a slender herbaceous perennial plant with roots that run deep into the ground.
 
 //witchery seeds
 agricraft_journal.wi_Belladonna=Everything about this plant is highly toxic: its leaves, buds and flowers.
