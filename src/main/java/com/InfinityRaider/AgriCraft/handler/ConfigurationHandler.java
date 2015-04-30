@@ -52,6 +52,10 @@ public class ConfigurationHandler {
     public static boolean weedsDestroyCropSticks;
     //world gen
     public static boolean disableWorldGen;
+    public static int greenhouseWeight;
+    public static int greenhouseLimit;
+    public static int greenhouseIrrigatedWeight;
+    public static int greenhouseIrrigatedLimit;
     public static int villagerID;
     public static boolean villagerEnabled;
     //seed storage
@@ -118,6 +122,10 @@ public class ConfigurationHandler {
         weedsDestroyCropSticks = config.getBoolean("Weeds destroy crop sticks", CATEGORY_FARMING, false, "set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage)");
         //world gen
         disableWorldGen = config.getBoolean("Disable World Gen", CATEGORY_WORLDGEN, false, "set to true to disable world gen, no greenhouses will spawn in villages");
+        greenhouseWeight = config.getInt("Greenhouse weight", CATEGORY_WORLDGEN, 10, 0, 100, "The weight for a greenhouse to be generated in a village");
+        greenhouseLimit = config.getInt("Greenhouse limit", CATEGORY_WORLDGEN, 1, 0, 2, "The maximum number of greenhouses per village");
+        greenhouseIrrigatedWeight = config.getInt("Irrigated greenhouse weight", CATEGORY_WORLDGEN, 2, 0, 100, "The weight for an irrigated greenhouse to be generated in a village");
+        greenhouseIrrigatedLimit = config.getInt("Irrigated greenhouse limit", CATEGORY_WORLDGEN, 1, 0, 2, "The maximum number of irrigated greenhouses per village");
         villagerID = config.getInt("Villager ID", CATEGORY_WORLDGEN, 10, 7, 99, "The profession ID the villager uses");
         villagerEnabled = config.getBoolean("Enable villagers",CATEGORY_WORLDGEN, true, "Set to false if you wish to disable villagers spawning in the ArgiCraft houses");
         //storage
