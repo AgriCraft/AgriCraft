@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
+import com.InfinityRaider.AgriCraft.compatibility.bloodmagic.BloodMagicHelper;
 import com.InfinityRaider.AgriCraft.compatibility.bluepower.BluePowerHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChocoCraftHelper;
@@ -71,6 +72,7 @@ public abstract class ModHelper {
     private static void findHelpers() {
         Class[] classes = {
                 AppleCoreHelper.class,
+                BloodMagicHelper.class,
                 BluePowerHelper.class,
                 BotaniaHelper.class,
                 ChocoCraftHelper.class,
