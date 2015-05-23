@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.ArrayList;
 
@@ -16,15 +17,15 @@ public class Crops {
         crops = new ArrayList<BlockModPlant>();
         seeds = new ArrayList<ItemModSeed>();
         for(Object[] data: Data.defaults) {
-            String name =(String) data[0];
-            //create plant
-            BlockModPlant plant = new BlockModPlant(data);
+            BlockModPlant plant;
+            try {
+                plant = new BlockModPlant(data);
+            } catch(InvalidArgumentException e) {
+                e.printStackTrace();
+                continue;
+            }
             crops.add(plant);
-            RegisterHelper.registerCrop(plant, name);
-            //create seed
-            ItemModSeed seed = new ItemModSeed(plant, "agricraft_journal."+Character.toLowerCase(name.charAt(0))+name.substring(1));
-            seeds.add(seed);
-            RegisterHelper.registerSeed(seed, plant);
+            seeds.add(plant.getSeed());
         }
         LogHelper.info("Crops registered");
     }

@@ -7,10 +7,10 @@ import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSeeds;
@@ -19,30 +19,18 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
-    private String displayName;
     @SideOnly(Side.CLIENT)
     private String information;
 
+    /** This constructor shouldn't be called from anywhere except from the BlockModPlant public constructor, if you create a new BlockModPlant, its contructor will create the seed for you */
     public ItemModSeed(BlockModPlant plant, String information) {
-        this(plant, net.minecraft.init.Blocks.farmland, information);
-    }
-
-    public ItemModSeed(BlockModPlant plant, String name, String information) {
-        this(plant, net.minecraft.init.Blocks.farmland, information);
-        this.displayName = name;
-    }
-
-    public ItemModSeed(BlockModPlant plant, Block soil, String information) {
-        super(plant, soil);
+        super(plant, plant.getGrowthRequirement().getSoil()==null?net.minecraft.init.Blocks.farmland:plant.getGrowthRequirement().getSoil().getBlock());
         if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT) {
             this.information = information;
         }
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
-    }
-
-    public ItemModSeed(BlockModPlant plant, Block soil, String name, String information) {
-        this(plant, soil, information);
-        this.displayName = name;
+        //register seed
+        RegisterHelper.registerSeed(this, plant);
     }
 
     public IAgriCraftPlant getPlant() {
@@ -65,6 +53,10 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
         return getIconFromDamage(stack.getItemDamage());
     }
 
+    public void setInformation(String information) {
+        this.information = information;
+    }
+
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float f1, float f2, float f3) {
         if(world.getBlock(x,y,z)==Blocks.blockCrop) {
@@ -82,10 +74,5 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
     public void registerIcons(IIconRegister reg) {
         LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
         itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
-    }
-
-    @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return (this.displayName==null || this.displayName.equals(""))?super.getItemStackDisplayName(stack):this.displayName;
     }
 }

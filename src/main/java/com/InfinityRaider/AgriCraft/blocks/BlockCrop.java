@@ -48,7 +48,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     private IIcon[] weedIcons;
 
     public BlockCrop() {
-        super(null, 0, Blocks.farmland, null, 0, 0, 6, false);
+        super();
         this.isBlockContainer = true;
         //set the bounding box dimensions
         this.maxX = Constants.unit*14;

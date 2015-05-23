@@ -51,7 +51,6 @@ public abstract class RegisterHelper {
         registerItem(seed, name);
         OreDictionary.registerOre(name, seed);
         OreDictionary.registerOre(Names.OreDict.listAllseed, seed);
-        plant.initializeSeed(seed);
     }
 
     public static void removeRecipe(ItemStack stack) {

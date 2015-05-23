@@ -1,13 +1,14 @@
 package com.InfinityRaider.AgriCraft.compatibility.botania;
 
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import com.sun.javaws.exceptions.InvalidArgumentException;
+import net.minecraft.item.ItemStack;
 import vazkii.botania.common.item.ModItems;
 
 import java.util.ArrayList;
@@ -25,21 +26,16 @@ public class BotaniaHelper extends ModHelper {
     protected void initPlants() {
         if(ConfigurationHandler.integration_Botania) {
             for(int i=0;i<16;i++) {
-                Object[] args = {Data.botania[i], ModItems.petal, i, null, null, 0, 3, 1};
-                String name =(String) args[0];
-                //create plant
-                BlockModPlant plant = new BlockModPlant(args);
-                botaniaCrops.add(plant);
-                RegisterHelper.registerCrop(plant, name);
-                //create seed
-                ItemModSeed seed = new ItemModSeed(plant, "agricraft_journal."+Character.toLowerCase(name.charAt(0))+name.substring(1));
-                botaniaSeeds.add(seed);
-                RegisterHelper.registerSeed(seed, plant);
+                Object[] args = {Data.botania[i], new ItemStack(ModItems.petal, 1, i), 3, RenderMethod.CROSSED};
+                BlockModPlant plant;
                 try {
-                    CropPlantHandler.registerPlant(plant);
-                } catch (Exception e) {
+                    plant = new BlockModPlant(args);
+                } catch (InvalidArgumentException e) {
                     e.printStackTrace();
+                    continue;
                 }
+                botaniaCrops.add(plant);
+                botaniaSeeds.add(plant.getSeed());
             }
             LogHelper.info("Botania crops registered");
         }

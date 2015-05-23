@@ -1,14 +1,17 @@
 package com.InfinityRaider.AgriCraft.init;
 
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 
@@ -37,27 +40,26 @@ public class ResourceCrops {
         vanillaCrops = new ArrayList<BlockModPlant>();
         vanillaSeeds = new ArrayList<ItemModSeed>();
         Object[][] vanillaResources = {
-                {"Aurigold", net.minecraft.init.Items.gold_nugget, 0, null, Blocks.gold_ore, 0, 4, 6},
-                {"Ferranium", OreDictHelper.getNuggetForName("Iron"), OreDictHelper.getNuggetMetaForName("Iron"), null, Blocks.iron_ore, 0, 4, 1},
-                {"Diamahlia", OreDictHelper.getNuggetForName("Diamond"), OreDictHelper.getNuggetMetaForName("Diamond"), null, Blocks.diamond_ore, 0, 5, 6},
-                {"Lapender", net.minecraft.init.Items.dye, 4, null, Blocks.lapis_ore, 0, 3, 6},
-                {"Emeryllis", OreDictHelper.getNuggetForName("Emerald"), OreDictHelper.getNuggetMetaForName("Emerald"), null, Blocks.emerald_ore, 0, 5, 6},
-                {"Redstodendron", net.minecraft.init.Items.redstone, 0, null, Blocks.redstone_ore, 0, 3, 6},
-                {"NitorWart", net.minecraft.init.Items.glowstone_dust, 0, Blocks.soul_sand, Blocks.glowstone, 0, 4, 6},
-                {"Quartzanthemum", OreDictHelper.getNuggetForName("Quartz"), 0, Blocks.soul_sand, Blocks.quartz_ore, 0, 4, 6}
+                {"Aurigold", new ItemStack(net.minecraft.init.Items.gold_nugget), new BlockWithMeta(Blocks.gold_ore, 0), 4, RenderMethod.HASHTAG},
+                {"Ferranium", new ItemStack(OreDictHelper.getNuggetForName("Iron"), 1, OreDictHelper.getNuggetMetaForName("Iron")), new BlockWithMeta(Blocks.iron_ore, 0), 4, RenderMethod.HASHTAG},
+                {"Diamahlia", new ItemStack(OreDictHelper.getNuggetForName("Diamond"), 1, OreDictHelper.getNuggetMetaForName("Diamond")), new BlockWithMeta(Blocks.diamond_ore, 0), 5, RenderMethod.HASHTAG},
+                {"Lapender", new ItemStack(net.minecraft.init.Items.dye, 1, 4), new BlockWithMeta(Blocks.lapis_ore, 0), 3, RenderMethod.HASHTAG},
+                {"Emeryllis", new ItemStack(OreDictHelper.getNuggetForName("Emerald"), 1, OreDictHelper.getNuggetMetaForName("Emerald")), new BlockWithMeta(Blocks.emerald_ore, 0), 5, RenderMethod.HASHTAG},
+                {"Redstodendron", new ItemStack(net.minecraft.init.Items.redstone), new BlockWithMeta(Blocks.redstone_ore, 0), 3, RenderMethod.HASHTAG},
+                {"NitorWart", new ItemStack(net.minecraft.init.Items.glowstone_dust), Blocks.soul_sand, new BlockWithMeta(Blocks.glowstone, 0), 4, RenderMethod.HASHTAG},
+                {"Quartzanthemum", new ItemStack(OreDictHelper.getNuggetForName("Quartz")), Blocks.soul_sand, new BlockWithMeta(Blocks.quartz_ore, 0), 4, RenderMethod.HASHTAG}
         };
         for(Object[] data: vanillaResources) {
-            String name =(String) data[0];
-            //create plant
-            BlockModPlant plant = new BlockModPlant(data);
+            BlockModPlant plant;
+            try {
+                plant = new BlockModPlant(data);
+            } catch (InvalidArgumentException e) {
+                e.printStackTrace();
+                continue;
+            }
             vanillaCrops.add(plant);
-            RegisterHelper.registerCrop(plant, name);
-            //create seed
-            ItemModSeed seed = new ItemModSeed(plant, "agricraft_journal."+Character.toLowerCase(name.charAt(0))+name.substring(1));
-            vanillaSeeds.add(seed);
-            RegisterHelper.registerSeed(seed, plant);
+            vanillaSeeds.add(plant.getSeed());
         }
-        LogHelper.info("Crops registered");
     }
 
     public static void initModdedResources() {
@@ -66,16 +68,16 @@ public class ResourceCrops {
         for(String[] data:Data.modResources) {
             Block base = OreDictHelper.getOreBlockForName(data[0]);
             if(base!=null) {
-                Object[] args = {data[1], OreDictHelper.getNuggetForName(data[0]), OreDictHelper.getNuggetMetaForName(data[0]), null, OreDictHelper.getOreBlockForName(data[0]), OreDictHelper.getOreMetaForName(data[0]), 4, 6};
-                String name =(String) args[0];
-                //create plant
-                BlockModPlant plant = new BlockModPlant(args);
+                Object[] args = {data[1], new ItemStack(OreDictHelper.getNuggetForName(data[0]), 1, OreDictHelper.getNuggetMetaForName(data[0])), new BlockWithMeta(OreDictHelper.getOreBlockForName(data[0]), OreDictHelper.getOreMetaForName(data[0])), 4, RenderMethod.CROSSED};
+                BlockModPlant plant;
+                try {
+                    plant = new BlockModPlant(args);
+                } catch (InvalidArgumentException e) {
+                    e.printStackTrace();
+                    continue;
+                }
                 modCrops.add(plant);
-                RegisterHelper.registerCrop(plant, name);
-                //create seed
-                ItemModSeed seed = new ItemModSeed(plant, "agricraft_journal."+Character.toLowerCase(name.charAt(0))+name.substring(1));
-                modSeeds.add(seed);
-                RegisterHelper.registerSeed(seed, plant);
+                modSeeds.add(plant.getSeed());
             }
         }
     }

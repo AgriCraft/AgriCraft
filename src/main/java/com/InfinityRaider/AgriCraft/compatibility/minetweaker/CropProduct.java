@@ -27,11 +27,7 @@ public class CropProduct {
         boolean success = seedToChange!=null && seedToChange.getItem()!=null && seedToChange.getItem() instanceof ItemModSeed;
         if(success) {
             BlockModPlant crop = (BlockModPlant) ((ItemModSeed) seedToChange.getItem()).getPlant();
-            error = "This crop's fruits can't be changed";
-            success = crop.canEdit();
-            if(success) {
-                MineTweakerAPI.apply(new AddAction(crop, fruitToAdd, weight));
-            }
+            MineTweakerAPI.apply(new AddAction(crop, fruitToAdd, weight));
         }
         if(!success) {
             MineTweakerAPI.logError("Adding fruit: '"+fruitToAdd.getDisplayName()+"' to '"+seedToChange.getDisplayName()+"' failed: "+error);
@@ -46,11 +42,7 @@ public class CropProduct {
         boolean success = seedToChange!=null && seedToChange.getItem()!=null && seedToChange.getItem() instanceof ItemModSeed;
         if(success) {
             BlockModPlant crop = (BlockModPlant) ((ItemModSeed) seedToChange.getItem()).getPlant();
-            error = "This crop's fruits can't be changed";
-            success = crop.canEdit();
-            if(success) {
-                MineTweakerAPI.apply((new RemoveAction(crop, fruitToRemove)));
-            }
+            MineTweakerAPI.apply((new RemoveAction(crop, fruitToRemove)));
         }
         if(!success) {
             MineTweakerAPI.logError("Removing fruit: '"+fruitToRemove.getDisplayName()+"' from '"+seedToChange.getDisplayName()+"' failed: "+error);

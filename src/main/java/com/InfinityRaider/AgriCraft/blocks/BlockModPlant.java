@@ -1,17 +1,16 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
-import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
+import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 
+import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -35,44 +34,89 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
     public int tier;
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
-    private int renderType;
-    private boolean isEditable;
+    private RenderMethod renderType;
 
-    //give data in this order: {String name, Item fruit, int fuitMeta, Block soil, Block base, int baseMeta, int tier, int renderType}
-    public BlockModPlant(Object[] data) {
-        this((Item) data[1], (Integer) data[2], (Block) data[3], (Block) data[4], (Integer) data[5], (Integer) data[6], (Integer) data[7], false);
+    /** Only used for the subclass which is the actual crop sticks */
+    protected BlockModPlant() {
+        super();
     }
 
-    public BlockModPlant(Item fruit, int fruitMeta, Block soil, Block base, int baseMeta, int tier, int renderType, boolean isCustom) {
+    /** Parameters can be given in any order, parameters can be:
+     * String name (needed), ItemStack fruit(needed), Block soil (optional), BlockWithMeta baseBlock (optional), int tier (necessary), RenderMethod renderType (necessary)
+     * Will throw InvalidArgumentException if the needed arguments are not given.
+     * This constructor creates the seed for this plant which can be gotten via blockModPlant.getSeed().
+     * This constructor also registers this block and the item for the seed to the minecraft item/block registry en to the AgriCraft CropPlantHandler.
+     * */
+    public BlockModPlant(Object[] arguments) throws InvalidArgumentException{
         super();
-
+        //get parameters
+        String name = null;
+        ItemStack fruit = null;
+        Block soil = null;
+        BlockWithMeta base = null;
+        int tier = -1;
+        RenderMethod renderType = null;
+        for(Object arg:arguments) {
+            if(arg == null) {
+                continue;
+            }
+            if(arg instanceof String) {
+                name = (String) arg;
+                continue;
+            }
+            if(arg instanceof  ItemStack) {
+                fruit = (ItemStack) arg;
+                continue;
+            }
+            if(arg instanceof Block) {
+                soil = (Block) arg;
+                continue;
+            }
+            if(arg instanceof BlockWithMeta) {
+                base = (BlockWithMeta) arg;
+                continue;
+            }
+            if(arg instanceof RenderMethod) {
+                renderType = (RenderMethod) arg;
+                continue;
+            }
+            if(arg instanceof Integer) {
+                tier = (Integer) arg;
+            }
+        }
+        //check if necessary parameters have been passed
+        if(name==null || fruit==null || tier<0 || renderType==null) {
+            throw new InvalidArgumentException(new String[]{"Not all necessary parameters where given to create a new plant"});
+        }
+        //set fields
         GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
         if (base != null) {
-            builder.requiredBlock(new BlockWithMeta(base, baseMeta), RequirementType.BELOW, true);
+            builder.requiredBlock(base, RequirementType.BELOW, true);
         }
         if (soil == null) {
             growthRequirement = builder.build();
         } else {
             growthRequirement = builder.soil(new BlockWithMeta(soil)).build();
         }
-
-        this.products.addProduce(new ItemStack(fruit, 1, fruitMeta));
+        this.products.addProduce(fruit);
         this.tier = tier;
         this.setTickRandomly(true);
         this.useNeighborBrightness = true;
-        this.renderType = renderType==1?renderType:6;
-        this.isEditable = isCustom;
-    }
-
-    //set seed
-    public void initializeSeed(ItemModSeed seed) {
-        if(this.seed==null) {
-            this.seed = seed;
+        this.renderType = renderType;
+        //register this plant
+        RegisterHelper.registerCrop(this, name);
+        //create seed for this plant
+        this.seed = new ItemModSeed(this, "agricraft_journal."+Character.toLowerCase(name.charAt(0))+name.substring(1));
+        //register this plant to the CropPlantHandler
+        try {
+            CropPlantHandler.registerPlant(this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public IAgriCraftSeed getSeed() {return this.seed;}
+    public ItemModSeed getSeed() {return this.seed;}
 
     @Override
     public ItemStack getSeedStack(int amount) {
@@ -96,11 +140,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
 
     @Override
     public boolean renderAsFlower() {
-        return false;
-    }
-
-    public boolean canEdit() {
-        return this.isEditable;
+        return this.renderType==RenderMethod.CROSSED;
     }
 
     //register icons
@@ -214,15 +254,11 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
 
     @Override
     public int getRenderType() {
-        return this.renderType;
+        return this.renderType.renderId();
     }
 
     @Override
     public GrowthRequirement getGrowthRequirement() {
         return growthRequirement;
-    }
-
-    public void setGrowthRequirement(GrowthRequirement req) {
-        this.growthRequirement = req;
     }
 }
