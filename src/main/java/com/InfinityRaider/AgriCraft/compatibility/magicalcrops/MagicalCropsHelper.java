@@ -4,57 +4,57 @@ import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.mark719.magicalcrops.MagicalCrops;
-import net.minecraft.init.Items;
+import cpw.mods.fml.common.Mod;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 
 public final class MagicalCropsHelper extends ModHelper {
+    private boolean newVersion;
+
     @Override
     protected void init() {
-        Item[] seeds = {
-                MagicalCrops.SeedsBlackberry,
-                MagicalCrops.SeedsBlueberry,
-                MagicalCrops.SeedsChili,
-                MagicalCrops.SeedsCucumber,
-                MagicalCrops.SeedsGrape,
-                MagicalCrops.SeedsRaspberry,
-                MagicalCrops.SeedsStrawberry,
-                MagicalCrops.SeedsSweetcorn,
-                MagicalCrops.SeedsTomato,
-                MagicalCrops.SeedsSugarCane,
-        };
-
-        String[] tags = {
-                "Blackberry",
-                "Blueberry",
-                "Chili",
-                "Cucumber",
-                "Grape",
-                "Raspberry",
-                "Strawberry",
-                "Sweetcorn",
-                "Tomato",
-                "Sugarcane"
-        };
-
-        for(int i=0;i<seeds.length;i++) {
-            Item fruit = i==seeds.length-1? Items.reeds:MagicalCrops.CropProduce;
-            int meta = i==seeds.length-1?0:i;
-            OreDictionary.registerOre(Names.OreDict.listAllseed, seeds[i]);
-            OreDictionary.registerOre("seed"+tags[i], seeds[i]);
-            OreDictionary.registerOre("crop"+tags[i], new ItemStack(fruit, 1, meta));
+        Class magicalCropsClass=null;
+        try {
+           magicalCropsClass = Class.forName("com.mark719.magicalcrops.MagicalCrops");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert magicalCropsClass != null;
+        Annotation[] annotations = magicalCropsClass.getAnnotations();
+        for(Annotation annotation:annotations) {
+            if(annotation instanceof Mod) {
+                String version = ((Mod) annotation).version();
+                newVersion = !version.contains("ALPHA");
+            }
         }
     }
 
     @Override
     protected void initPlants() {
-        Class mc_ItemRegistry = MagicalCrops.class;
+        if(newVersion) {
+            initV4Plants();
+        } else {
+            initBetaPlants();
+        }
+    }
+
+    private void initBetaPlants() {
+        Class mc_ItemRegistry = null;
+        Class blockMagicalCrops = null;
+        try {
+            mc_ItemRegistry = Class.forName("com.mark719.magicalcrops.MagicalCrops");
+            blockMagicalCrops = Class.forName("com.mark719.magicalcrops.crops.BlockMagicalCrops");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert mc_ItemRegistry != null;
         Field[] fields = mc_ItemRegistry.getDeclaredFields();
         for(Field field : fields) {
             if(Modifier.isStatic(field.getModifiers())) {
@@ -62,11 +62,56 @@ public final class MagicalCropsHelper extends ModHelper {
                     Object obj = field.get(null);
                     if(obj instanceof ItemSeeds) {
                         ItemSeeds seed = (ItemSeeds) obj;
-                        CropPlantHandler.registerPlant(new CropPlantMagicalCrops(seed));
+                        Block plant = seed.getPlant(null, 0, 0, 0);
+                        assert blockMagicalCrops != null;
+                        boolean highTier = blockMagicalCrops.isInstance(plant);
+                        CropPlantHandler.registerPlant(new CropPlantMagicalCropsBeta(seed, highTier));
                     }
                 } catch (Exception e) {
                     if (ConfigurationHandler.debug) {
                         e.printStackTrace();
+                    }
+                }            }
+        }
+    }
+
+    private void initV4Plants() {
+        ArrayList<Class> classes = new ArrayList<Class>();
+        Method getDropMethod = null;
+        try {
+            classes.add(Class.forName("com.mark719.magicalcrops.handlers.MSeeds"));
+            classes.add(Class.forName("com.mark719.magicalcrops.handlers.ModCompat"));
+            Method[] methods = Class.forName("com.mark719.magicalcrops.blocks.BlockMagicalCrops").getDeclaredMethods();
+            for(Method method:methods) {
+                if(method.getName().equalsIgnoreCase("func_149865_P")) {
+                    getDropMethod = method;
+                    getDropMethod.setAccessible(true);
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            if (ConfigurationHandler.debug) {
+                e.printStackTrace();
+            }
+        }
+        for(Class clazz:classes) {
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field field : fields) {
+                if (Modifier.isStatic(field.getModifiers())) {
+                    try {
+                        Object obj = field.get(null);
+                        if (obj instanceof ItemSeeds) {
+                            ItemSeeds seed = (ItemSeeds) obj;
+                            Block plant = seed.getPlant(null, 0, 0, 0);
+                            assert getDropMethod != null;
+                            CropPlantHandler.registerPlant(new CropPlantMagicalCropsV4(seed, (Item) getDropMethod.invoke(plant)));
+                        }
+                    } catch (Exception e) {
+                        if (ConfigurationHandler.debug) {
+                            if (ConfigurationHandler.debug) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
             }
