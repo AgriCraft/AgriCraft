@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
@@ -14,8 +13,8 @@ import java.util.*;
 
 public abstract class SeedHelper {
     private static List<ItemStack> seedBlackList;
-    private static HashMap<ItemSeeds, Integer[]> spreadChances;
-    private static HashMap<ItemSeeds, Integer[]> seedTiers;
+    private static HashMap<Item, Integer[]> spreadChances;
+    private static HashMap<Item, Integer[]> seedTiers;
 
     public static void init() {
         initSeedBlackList();
@@ -30,7 +29,7 @@ public abstract class SeedHelper {
             LogHelper.debug(new StringBuffer("parsing ").append(line));
             ItemStack seedStack = IOHelper.getStack(line);
             Item seed = seedStack!=null?seedStack.getItem():null;
-            boolean success = seed!=null && seed instanceof ItemSeeds;
+            boolean success = seed!=null;
             String errorMsg = "Invalid seed";
             if(success) {
                 list.add(seedStack);
@@ -50,7 +49,7 @@ public abstract class SeedHelper {
         //read mutation chance overrides & initialize the arrays
         setMutationChances(IOHelper.getLinesArrayFromData(ConfigurationHandler.readSpreadChances()));
         LogHelper.info("Registered Mutations Chances overrides:");
-        for(Map.Entry<ItemSeeds, Integer[]> entry:spreadChances.entrySet()) {
+        for(Map.Entry<Item, Integer[]> entry:spreadChances.entrySet()) {
             for(int i=0;i<entry.getValue().length;i++) {
                 Integer chance = entry.getValue()[i];
                 if(chance!=null) {
@@ -64,7 +63,7 @@ public abstract class SeedHelper {
     private static void initTiers() {
         setSeedTiers(IOHelper.getLinesArrayFromData(ConfigurationHandler.readSeedTiers()));
         LogHelper.info("Registered seed tiers:");
-        for(Map.Entry<ItemSeeds, Integer[]> entry:seedTiers.entrySet()) {
+        for(Map.Entry<Item, Integer[]> entry:seedTiers.entrySet()) {
             for(int i=0;i<entry.getValue().length;i++) {
                 Integer tier = entry.getValue()[i];
                 if(tier!=null) {
@@ -77,7 +76,7 @@ public abstract class SeedHelper {
 
     //initializes the mutation chances overrides
     private static void setMutationChances(String[] input) {
-        spreadChances = new HashMap<ItemSeeds, Integer[]>();
+        spreadChances = new HashMap<Item, Integer[]>();
         LogHelper.debug("reading mutation chance overrides");
         for(String line:input) {
             String[] data = IOHelper.getData(line);
@@ -87,14 +86,14 @@ public abstract class SeedHelper {
             if(success) {
                 ItemStack seedStack = IOHelper.getStack(data[0]);
                 Item seedItem = seedStack!=null?seedStack.getItem():null;
-                success = seedItem!=null && seedItem instanceof ItemSeeds;
+                success = seedItem!=null;
                 errorMsg = "Invalid seed";
                 if(success) {
                     int chance = Integer.parseInt(data[1]);
                     success = chance>=0 && chance<=100;
                     errorMsg = "Chance should be between 0 and 100";
                     if(success) {
-                        ItemSeeds seed = (ItemSeeds) seedStack.getItem();
+                        Item seed = seedStack.getItem();
                         if(spreadChances.get(seed)==null) {
                             spreadChances.put(seed, new Integer[16]);
                         }
@@ -110,7 +109,7 @@ public abstract class SeedHelper {
 
     //initializes the seed tier overrides
     private static void setSeedTiers(String[] input) {
-        seedTiers = new HashMap<ItemSeeds, Integer[]>();
+        seedTiers = new HashMap<Item, Integer[]>();
         LogHelper.debug("reading seed tier overrides");
         for(String line:input) {
             String[] data = IOHelper.getData(line);
@@ -120,14 +119,14 @@ public abstract class SeedHelper {
             if(success) {
                 ItemStack seedStack = IOHelper.getStack(data[0]);
                 Item seedItem = seedStack!=null?seedStack.getItem():null;
-                success = seedItem!=null && seedItem instanceof ItemSeeds;
+                success = seedItem!=null;
                 errorMsg = "Invalid seed";
                 if(success) {
                     int tier = Integer.parseInt(data[1]);
                     success = tier>=1 && tier<=5;
                     errorMsg = "Chance should be between 1 and 5";
                     if(success) {
-                        ItemSeeds seed = (ItemSeeds) seedStack.getItem();
+                        Item seed = seedStack.getItem();
                         if(seedTiers.get(seed)==null) {
                             seedTiers.put(seed, new Integer[16]);
                         }
@@ -141,7 +140,7 @@ public abstract class SeedHelper {
         }
     }
 
-    public static double getSpreadChance(ItemSeeds seed, int meta) {
+    public static double getSpreadChance(Item seed, int meta) {
         Integer[] value = spreadChances.get(seed);
         if(value!=null && value.length>meta && value[meta]!=null) {
             return ((double) value[meta]) / 100;
@@ -150,7 +149,7 @@ public abstract class SeedHelper {
     }
 
     public static int getSeedTierOverride(ItemStack stack) {
-        ItemSeeds seed = (ItemSeeds) stack.getItem();
+        Item seed = stack.getItem();
         int meta = stack.getItemDamage();
         Integer[] tierArray = seedTiers.get(seed);
         if(tierArray!=null && tierArray.length>meta) {
@@ -163,7 +162,7 @@ public abstract class SeedHelper {
     }
 
     public static boolean isAnalyzedSeed(ItemStack seedStack) {
-        return (seedStack!=null) && (seedStack.getItem()!=null) && (seedStack.getItem() instanceof ItemSeeds) && (seedStack.hasTagCompound()) && (seedStack.stackTagCompound.hasKey(Names.NBT.analyzed)) && (seedStack.stackTagCompound.getBoolean(Names.NBT.analyzed));
+        return CropPlantHandler.isValidSeed(seedStack) && (seedStack.hasTagCompound()) && (seedStack.stackTagCompound.hasKey(Names.NBT.analyzed)) && (seedStack.stackTagCompound.getBoolean(Names.NBT.analyzed));
     }
 
     public static boolean isSeedBlackListed(ItemStack stack) {
@@ -189,7 +188,7 @@ public abstract class SeedHelper {
     public static ItemStack getRandomSeed(boolean setTag) {
         ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
         ItemStack seed = null;
-        while(seed==null || !(seed.getItem() instanceof ItemSeeds) || !CropPlantHandler.isValidSeed(seed)) {
+        while(!CropPlantHandler.isValidSeed(seed)) {
             seed = seeds.get((int) Math.floor(Math.random()*seeds.size()));
         }
         if(setTag) {
@@ -212,7 +211,7 @@ public abstract class SeedHelper {
     }
 
     /** @return The previous spread chance of the given seed */
-    public static int overrideSpreadChance(ItemSeeds seed, int meta, int chance) {
+    public static int overrideSpreadChance(Item seed, int meta, int chance) {
         int oldChance = (int) (getSpreadChance(seed, meta) * 100);
         Integer[] chances = spreadChances.get(seed);
         if (chances == null) {

@@ -16,7 +16,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -85,7 +84,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
     }
     /** sets the plant in the crop */
-    public void setPlant(int growth, int gain, int strength, boolean analyzed, ItemSeeds seed, int seedMeta) {
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, Item seed, int seedMeta) {
         this.setPlant(growth, gain, strength, analyzed, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
     }
 
@@ -234,7 +233,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     @Deprecated
     private void loadPlantFromOldVersion(NBTTagCompound tag) {
         String name = tag.getString(Names.NBT.seed);
-        Item seed = name.equalsIgnoreCase("none")?null:(ItemSeeds) Item.itemRegistry.getObject(name);
+        Item seed = name.equalsIgnoreCase("none")?null: (Item) Item.itemRegistry.getObject(name);
         int meta = tag.getInteger(Names.NBT.meta);
         CropPlant plant = CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta));
         if(plant!=null) {

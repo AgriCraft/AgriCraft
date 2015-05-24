@@ -7,13 +7,13 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -47,7 +47,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y1);
             this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y1);
 
-            IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement((ItemSeeds) result.item.getItem(), result.item.getItemDamage());
+            IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(result.item.getItem(), result.item.getItemDamage());
             if (growthReq.getSoil() != null) {
                 soils.add(new PositionedStack(growthReq.getSoil().toStack(), Constants.nei_X3, Constants.nei_Y2));
             } else {
@@ -111,7 +111,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     //loads the mutation recipes for a given mutation
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if(result.getItem() instanceof ItemSeeds) {
+        if(CropPlantHandler.isValidSeed(result)) {
             Mutation[] mutations = MutationHandler.getParentMutations(result);
             for(Mutation mutation:mutations) {
                 if (mutation.parent1.getItem()!=null && mutation.parent2.getItem()!=null) {
@@ -124,7 +124,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     //loads the mutation recipes for a given parent
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if(ingredient.getItem() instanceof ItemSeeds) {
+        if(CropPlantHandler.isValidSeed(ingredient)) {
             Mutation[] mutations = MutationHandler.getMutations(ingredient);
             for (Mutation mutation:mutations) {
                 if (mutation.result.getItem() != null && mutation.parent1.getItem() != null && mutation.parent2.getItem() != null) {

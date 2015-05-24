@@ -14,7 +14,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -70,7 +69,7 @@ public class ItemTrowel extends ModItem {
                     else if (!crop.hasPlant() && !crop.isCrossCrop() && stack.getItemDamage() == 1) {
                         //set crop
                         NBTTagCompound tag = stack.getTagCompound();
-                        ItemSeeds seed = (ItemSeeds) Item.itemRegistry.getObject(tag.getString(Names.Objects.seed));
+                        Item seed = (Item) Item.itemRegistry.getObject(tag.getString(Names.Objects.seed));
                         int seedMeta = tag.getShort(Names.NBT.meta);
                         if(GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta).isValidSoil(world, x, y - 1, z)) {
                             int growth = tag.getShort(Names.NBT.growth);

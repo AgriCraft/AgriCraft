@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
@@ -202,7 +201,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
                 }
                 else {
                     ItemStack seed = SeedHelper.getRandomSeed(false);
-                    crop.setPlant((int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), false, (ItemSeeds) seed.getItem(), seed.getItemDamage());
+                    crop.setPlant((int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), false, seed.getItem(), seed.getItemDamage());
                 }
             }
             return true;

@@ -8,7 +8,6 @@ import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -74,7 +73,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     //calculates the number of ticks it takes to analyze the seed
     public int maxProgress() {
-        return seed==null || !(seed.getItem() instanceof ItemSeeds)?0: CropPlantHandler.getPlantFromStack(seed).getTier()*20;
+        return seed==null?0: CropPlantHandler.getPlantFromStack(seed).getTier()*20;
     }
 
     public static boolean isValid(ItemStack stack) {
@@ -187,10 +186,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     @Override
     public boolean canInsertItem(int slot, ItemStack stack, int side) {
         if(slot==ContainerSeedAnalyzer.seedSlotId) {
-            if (stack.getItem() instanceof ItemSeeds) {
-                if (!CropPlantHandler.isValidSeed(stack)) {
-                    return false;
-                }
+            if (CropPlantHandler.isValidSeed(stack)) {
                 return (this.seed == null || this.canStack(stack)) && this.isItemValidForSlot(slot, stack);
             }
         }

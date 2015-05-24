@@ -20,12 +20,9 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
 
 import java.util.List;
 import java.util.Random;
@@ -81,17 +78,7 @@ public class APIimplv1 implements APIv1 {
 
 	@Override
 	public boolean isSeed(ItemStack seed) {
-		if (seed != null && seed.getItem() != null && seed.getItem() instanceof IPlantable) {
-			if (seed.getItem() instanceof ItemSeeds) {
-				return true;
-			} else if (seed.hasTagCompound()) {
-				NBTTagCompound tag = (NBTTagCompound) seed.getTagCompound().copy();
-				if (tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return CropPlantHandler.isValidSeed(seed);
 	}
 
 	@Override
@@ -354,13 +341,13 @@ public class APIimplv1 implements APIv1 {
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te instanceof TileEntityCrop) {
 					TileEntityCrop crop = (TileEntityCrop) te;
-					if (crop.isCrossCrop() || crop.hasPlant() || !GrowthRequirementHandler.getGrowthRequirement((ItemSeeds) seed.getItem(), seed.getItemDamage()).canGrow(world, x, y, z)) {
+					if (crop.isCrossCrop() || crop.hasPlant() || !GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage()).canGrow(world, x, y, z)) {
 						return false;
 					}
 					if (seed.stackTagCompound != null && seed.stackTagCompound.hasKey(Names.NBT.growth)) {
-						crop.setPlant(seed.stackTagCompound.getInteger(Names.NBT.growth), seed.stackTagCompound.getInteger(Names.NBT.gain), seed.stackTagCompound.getInteger(Names.NBT.strength), seed.stackTagCompound.getBoolean(Names.NBT.analyzed), (ItemSeeds) seed.getItem(), seed.getItemDamage());
+						crop.setPlant(seed.stackTagCompound.getInteger(Names.NBT.growth), seed.stackTagCompound.getInteger(Names.NBT.gain), seed.stackTagCompound.getInteger(Names.NBT.strength), seed.stackTagCompound.getBoolean(Names.NBT.analyzed), seed.getItem(), seed.getItemDamage());
 					} else {
-						crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, false, (ItemSeeds) seed.getItem(), seed.getItemDamage());
+						crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, false, seed.getItem(), seed.getItemDamage());
 					}
 					crop.markForUpdate();
 					seed.stackSize--;

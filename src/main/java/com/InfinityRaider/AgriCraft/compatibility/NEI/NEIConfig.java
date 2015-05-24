@@ -6,7 +6,9 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
+import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -48,6 +50,18 @@ public class NEIConfig implements IConfigureNEI {
             //hide botania crops
             if(ConfigurationHandler.integration_Botania) {
                 for(BlockModPlant plant : BotaniaHelper.botaniaCrops) {
+                    AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
+                }
+            }
+            //hide thaumcraft crops
+            if(ConfigurationHandler.integration_Thaumcraft) {
+                for(BlockModPlant plant : ThaumcraftHelper.thaumcraftCrops) {
+                    AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
+                }
+            }
+            //hide ars magica crops
+            if(ConfigurationHandler.integration_ArsMagica) {
+                for(BlockModPlant plant : ArsMagicaHelper.arsMagicaCrops) {
                     AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
                 }
             }

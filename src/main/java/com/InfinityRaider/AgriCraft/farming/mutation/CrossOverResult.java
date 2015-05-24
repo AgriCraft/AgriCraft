@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.farming.mutation;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public class CrossOverResult {
 
-    private final ItemSeeds seed;
+    private final Item seed;
     private final int meta;
     private final double chance;
 
@@ -20,7 +20,7 @@ public class CrossOverResult {
     private int gain;
     private int strength;
 
-    public CrossOverResult(ItemSeeds seed, int meta, double chance) {
+    public CrossOverResult(Item seed, int meta, double chance) {
         this.seed = seed;
         this.meta = meta;
         this.chance = chance;
@@ -28,7 +28,7 @@ public class CrossOverResult {
 
     /** Creates a new instance based on the planted seed of the given TE. Does not validate the TE */
     public static CrossOverResult fromTileEntityCrop(TileEntityCrop crop) {
-        ItemSeeds seed = (ItemSeeds) crop.getSeedStack().getItem();
+        Item seed = crop.getSeedStack().getItem();
         int meta = crop.getSeedStack().getItemDamage();
         double chance = SeedHelper.getSpreadChance(seed, meta);
 
@@ -37,7 +37,7 @@ public class CrossOverResult {
 
     /** Creates a new instanced based off the result of the given mutation. Does not validate the mutation object */
     public static CrossOverResult fromMutation(Mutation mutation) {
-        ItemSeeds seed = (ItemSeeds) mutation.result.getItem();
+        Item seed = mutation.result.getItem();
         int meta = mutation.result.getItemDamage();
 
         return new CrossOverResult(seed, meta, mutation.chance);
@@ -51,7 +51,7 @@ public class CrossOverResult {
         return stack;
     }
 
-    public ItemSeeds getSeed() {
+    public Item getSeed() {
         return seed;
     }
 

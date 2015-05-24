@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
     }
 
     @Override
-    public List<SeedStorageSlot> getSlots(ItemSeeds seed, int meta) {
+    public List<SeedStorageSlot> getSlots(Item seed, int meta) {
         return this.getControllable(new ItemStack(seed, 1, meta)).getSlots(seed, meta);
     }
 

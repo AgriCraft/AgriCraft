@@ -9,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 public class ContainerSeedAnalyzer extends ContainerAgricraft {
@@ -87,10 +86,7 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
             else {
                 //try to move item from the player's inventory into the analyzer
                 if(itemstack1.getItem()!=null) {
-                    if(itemstack1.getItem() instanceof ItemSeeds) {
-                        if (!CropPlantHandler.isValidSeed(itemstack1)) {
-                            return null;
-                        }
+                    if(CropPlantHandler.isValidSeed(itemstack1)) {
                         if (!this.mergeItemStack(itemstack1, seedSlotId, seedSlotId+1, false)) {
                             return null;
                         }

@@ -12,7 +12,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -24,7 +24,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     //the container for this gui
     public ContainerSeedStorageDummy container;
     //data for the active buttons
-    ItemSeeds activeSeed;
+    Item activeSeed;
     int activeMeta;
     private int scrollPositionVertical;
     private int scrollPositionHorizontal;
@@ -227,7 +227,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     protected void setActiveSeed(ItemStack stack) {
-        this.activeSeed = (ItemSeeds) stack.getItem();
+        this.activeSeed = stack.getItem();
         this.activeMeta = stack.getItemDamage();
     }
 

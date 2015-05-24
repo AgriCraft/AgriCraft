@@ -82,6 +82,8 @@ public class ConfigurationHandler {
     public static boolean integration_allowMagicFertiliser;
     public static boolean integration_instantMagicFertiliser;
     public static boolean integration_Psychedelicraft;
+    public static boolean integration_Thaumcraft;
+    public static boolean integration_ArsMagica;
 
     public static void init(FMLPreInitializationEvent event) {
         directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
@@ -151,6 +153,8 @@ public class ConfigurationHandler {
         integration_allowMagicFertiliser = LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser",CATEGORY_INTEGRATION,true,"Set to false to disable using magical fertiliser on crops");
         integration_instantMagicFertiliser = LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser Instant Growth", CATEGORY_INTEGRATION, false, "Set to true to insta-grow plants on which the magical fertiliser is used on");
         integration_Psychedelicraft = LoadedMods.psychedelicraft && config.getBoolean("Psychedelicraft",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Psychedelicraft");
+        integration_Thaumcraft = LoadedMods.thaumcraft && config.getBoolean("Thaumcraft",CATEGORY_INTEGRATION, true,"Set to false to disable the crops and automatic mutations for Thaumcraft");
+        integration_ArsMagica = LoadedMods.arsMagica && config.getBoolean("Ars Magica 2",CATEGORY_INTEGRATION, true,"Set to false to disable the crops and automatic mutations for Ars Magica 2");
         enableNEI = config.getBoolean("Enable NEI", CATEGORY_INTEGRATION, true, "set to false if you wish to disable mutation recipes in NEI");
         //debug mode
         debug = config.getBoolean("debug",CATEGORY_DEBUG,false,"Set to true if you wish to enable debug mode");

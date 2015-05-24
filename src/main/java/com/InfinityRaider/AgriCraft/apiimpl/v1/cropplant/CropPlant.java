@@ -27,6 +27,7 @@ public abstract class CropPlant {
             default: return 0;
         }
     }
+
     public final int getTier() {
         int seedTierOverride = SeedHelper.getSeedTierOverride(getSeed());
         if(seedTierOverride>0) {
@@ -34,6 +35,7 @@ public abstract class CropPlant {
         }
         return tier();
     }
+
     public abstract int tier();
 
     public abstract ItemStack getSeed();

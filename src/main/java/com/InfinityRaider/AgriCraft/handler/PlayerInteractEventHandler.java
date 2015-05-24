@@ -9,7 +9,6 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraftforge.common.IPlantable;
@@ -23,8 +22,7 @@ public class PlayerInteractEventHandler {
             if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
                 if (GrowthRequirementHandler.isSoilValid(event.world, event.x, event.y, event.z) || block == Blocks.farmland) {
                     if (ConfigurationHandler.disableVanillaFarming) {
-                        //for now, disable vanilla farming for every IPlantable, if people start to need exception I'll add in exception
-                        if(!(event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSeeds) || CropPlantHandler.isValidSeed(event.entityPlayer.getCurrentEquippedItem())) {
+                        if(CropPlantHandler.isValidSeed(event.entityPlayer.getCurrentEquippedItem())) {
                             this.denyEvent(event, false);
                         }
                     } else if (event.entityPlayer.getCurrentEquippedItem().hasTagCompound()) {

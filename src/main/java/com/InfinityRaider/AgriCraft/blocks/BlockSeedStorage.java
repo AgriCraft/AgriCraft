@@ -1,12 +1,12 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -48,9 +48,9 @@ public class BlockSeedStorage extends BlockCustomWood {
                 return false;
             }
             TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
-            if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemSeeds) {
+            if(CropPlantHandler.isValidSeed(stack)) {
                 LogHelper.debug("Trying to lock seed storage to "+stack.getDisplayName());
-                storage.setLockedSeed((ItemSeeds) stack.getItem(), stack.getItemDamage());
+                storage.setLockedSeed(stack.getItem(), stack.getItemDamage());
             }
             else if(storage.hasLockedSeed()){
                 player.openGui(AgriCraft.instance, GuiHandler.seedStorageID, world, x, y, z);

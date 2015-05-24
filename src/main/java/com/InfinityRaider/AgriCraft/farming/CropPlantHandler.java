@@ -141,12 +141,14 @@ public class CropPlantHandler {
             }
         }
         //register custom crops
-        for (BlockModPlant plant : CustomCrops.customCrops) {
-            CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-            try {
-                registerPlant(cropPlant);
-            } catch (Exception e) {
-                e.printStackTrace();
+        if(ConfigurationHandler.customCrops) {
+            for (BlockModPlant plant : CustomCrops.customCrops) {
+                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
+                try {
+                    registerPlant(cropPlant);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         //register mod crops

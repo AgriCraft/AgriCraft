@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
@@ -37,7 +37,7 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
     /**
      * Gets a list off all the slots corresponding to this seed and meta
      */
-    public abstract List<SeedStorageSlot> getSeedSlots(ItemSeeds seed, int meta);
+    public abstract List<SeedStorageSlot> getSeedSlots(Item seed, int meta);
 
     /**
      * Gets a list off all the slots corresponding to this seed and meta
