@@ -97,11 +97,15 @@ public class CropPlantHandler {
             e.printStackTrace();
         }
         try {
+            OreDictionary.registerOre("seedMelon", Items.melon_seeds);
+            OreDictionary.registerOre("cropMelon", Items.melon);
             registerPlant(new CropPlantStem((ItemSeeds) Items.melon_seeds, Blocks.melon_block));
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
+            OreDictionary.registerOre("seedPumpkin", Items.pumpkin_seeds);
+            OreDictionary.registerOre("cropPumpkin", Blocks.pumpkin);
             registerPlant(new CropPlantStem((ItemSeeds) Items.pumpkin_seeds, Blocks.pumpkin));
         } catch (Exception e) {
             e.printStackTrace();
