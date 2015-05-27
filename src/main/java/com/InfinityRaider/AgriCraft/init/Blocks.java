@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 
 public class Blocks {
     public static BlockCrop blockCrop;
@@ -33,7 +32,6 @@ public class Blocks {
             blockSprinkler = new BlockSprinkler();
             RegisterHelper.registerBlock(blockSprinkler, Names.Objects.sprinkler);
         }
-        /*
         if(!ConfigurationHandler.disableSeedStorage) {
             blockSeedStorage = new BlockSeedStorage();
             RegisterHelper.registerBlock(blockSeedStorage, Names.Objects.seedStorage, ItemBlockCustomWood.class);
@@ -42,7 +40,6 @@ public class Blocks {
                 RegisterHelper.registerBlock(blockSeedStorageController, Names.Objects.seedStorageController, ItemBlockCustomWood.class);
             }
         }
-        */
         LogHelper.debug("Blocks registered");
     }
 }

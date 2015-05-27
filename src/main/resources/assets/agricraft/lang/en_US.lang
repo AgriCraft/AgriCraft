@@ -57,6 +57,17 @@ item.agricraft:seedBotaniaGreen.name=Mystical Green Flower Seeds
 item.agricraft:seedBotaniaRed.name=Mystical Red Flower Seeds
 item.agricraft:seedBotaniaBlack.name=Mystical Black Flower Seeds
 
+item.agricraft:seedCinderpearl.name=Cinderpearl Seeds
+item.agricraft:seedShimmerleaf.name=Shimmerleaf Seeds
+item.agricraft:seedVishroom.name=Vishroom Spores
+item.agricraft:seedTaintedRoot.name=Taint Root Seeds
+
+item.agricraft:seedAum.name=Aum Seeds
+item.agricraft:seedCerublossom.name=Cerublossom Seeds
+item.agricraft:seedDesertNova.name=Desert Nova Seeds
+item.agricraft:seedTarmaRoot.name=Tarma Root Seeds
+item.agricraft:seedWakebloom.name=Wakebloom seeds
+
 item.agricraft:seedFerranium.name=Ferranium Seeds
 item.agricraft:seedAurigold.name=Aurigold Seeds
 item.agricraft:seedDiamahlia.name=Diamahlia Seeds
@@ -119,6 +130,17 @@ tile.agricraft:cropBotaniaBrown.name=Mystical Brown Flower
 tile.agricraft:cropBotaniaGreen.name=Mystical Green Flower
 tile.agricraft:cropBotaniaRed.name=Mystical Red Flower
 tile.agricraft:cropBotaniaBlack.name=Mystical Black Flower
+
+tile.agricraft:cropCinderpearl.name=Cinderpearl
+tile.agricraft:cropShimmerleaf.name=Shimmerleaf
+tile.agricraft:cropVishroom.name=Vishroom
+tile.agricraft:cropTaintedRoot.name=Taint Root
+
+tile.agricraft:cropAum.name=Aum
+tile.agricraft.cropCerublossom.name=Cerublossom
+tile.agricraft.cropDesertNova.name=Desert Nova
+tile.agricraft.cropTarmaRoot.name=Tarma Root
+tile.agricraft.cropWakebloom.name=Wakebloom
 
 tile.agricraft:cropFerranium.name=Ferranium
 tile.agricraft:cropAurigold.name=Aurigold
@@ -227,6 +249,19 @@ agricraft_journal.botaniaBrown=This mystical flower has pretty brown petals, who
 agricraft_journal.botaniaGreen=This mystical flower has pretty green petals, who knows what they might be useful for.
 agricraft_journal.botaniaRed=This mystical flower has pretty red petals, who knows what they might be useful for.
 agricraft_journal.botaniaBlack=This mystical flower has pretty black petals, who knows what they might be useful for.
+
+//thaumcraft seeds
+agricraft_journal.shimmerleaf=The strange, glowing flowers only grow in the shadow of Silverwood Trees. They can be harvested and pulped to produce quicksilver
+agricraft_journal.cinderpearl=Found only in the hottest of climes, these plants burn with elemental fire. They can be harvested and ground to produce a fine powder akin to Blaze powder.
+agricraft_journal.vishroom=Vishrooms grow naturally in Magical Forests, when thouched by the naked hand their poison is known to inflict nausea.
+agricraft_journal.taintedRoot=Tainted Roots can be grown and harvested in Tainted Lands, but who would need the tendrils it produces?
+
+//ars magica seeds
+agricraft_journal.aum=A flower with healing properties, Aum is a component in many spells. It can only be found at the base of witchwood trees.
+agricraft_journal.cerublossom=Cerublossom flowers thrive in lush, green environments. They were one of the first magical plants discovered, being used in potions and salves.
+agricraft_journal.desertNova=Desert Novas grow in dry conditions. They get their name from the small bursts of magic that they periodically emit.
+agricraft_journal.tarmaRoot=Lighter than it looks, Tarma Root grows in caves and other dark places. It is an ingredient in spells and air essences.
+agricraft_journal.wakebloom=Growing on the surface of water in warm climates, wakebloom is used frequently in water-based spells.
 
 //minecraft seeds
 agricraft_journal.seeds=Wheat is a very common, but very nutritious crop.

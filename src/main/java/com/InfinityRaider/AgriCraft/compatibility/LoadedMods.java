@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.Loader;
 
 public class LoadedMods {
+    public static boolean arsMagica;
     public static boolean bluePower;
     public static boolean nei;
     public static boolean harvestcraft;
@@ -31,6 +32,7 @@ public class LoadedMods {
     public static boolean witchery;
 
     public static void init() {
+        arsMagica = Loader.isModLoaded(Names.Mods.arsMagica);
         bluePower = Loader.isModLoaded(Names.Mods.bluePower);
         nei = Loader.isModLoaded(Names.Mods.nei);
         harvestcraft = Loader.isModLoaded(Names.Mods.harvestcraft);
@@ -58,6 +60,7 @@ public class LoadedMods {
 
         LogHelper.debug("Checking for loaded mods:");
         LogHelper.debug(" - NEI loaded: " + nei);
+        LogHelper.debug(" - AM2 loaded: " + arsMagica);
         LogHelper.debug(" - Pam's HarvestCraft loaded: " + harvestcraft);
         LogHelper.debug(" - Natura loaded: " + natura);
         LogHelper.debug(" - Pam's Weee Flowers loaded: " + weeeFlowers);

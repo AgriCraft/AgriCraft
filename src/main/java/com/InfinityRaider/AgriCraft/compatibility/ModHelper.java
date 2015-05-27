@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
+import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.bloodmagic.BloodMagicHelper;
 import com.InfinityRaider.AgriCraft.compatibility.bluepower.BluePowerHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
@@ -14,6 +15,7 @@ import com.InfinityRaider.AgriCraft.compatibility.minetweaker.MinetweakerHelper;
 import com.InfinityRaider.AgriCraft.compatibility.mobdropcrops.MobDropCropsHelper;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
+import com.InfinityRaider.AgriCraft.compatibility.pneumaticcraft.PneumaticCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.waila.WailaHelper;
@@ -72,6 +74,7 @@ public abstract class ModHelper {
     private static void findHelpers() {
         Class[] classes = {
                 AppleCoreHelper.class,
+                ArsMagicaHelper.class,
                 BloodMagicHelper.class,
                 BluePowerHelper.class,
                 BotaniaHelper.class,
@@ -85,6 +88,7 @@ public abstract class ModHelper {
                 MobDropCropsHelper.class,
                 NaturaHelper.class,
                 PlantMegaPackHelper.class,
+                PneumaticCraftHelper.class,
                 PsychedelicraftHelper.class,
                 ThaumcraftHelper.class,
                 WailaHelper.class,

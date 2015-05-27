@@ -90,8 +90,7 @@ public abstract class IOHelper {
         }
         if(ConfigurationHandler.integration_Nat && ConfigurationHandler.integration_HC && LoadedMods.harvestcraft && LoadedMods.natura)  {
             data = data + '\n' + harvestcraftMutations + '\n' + barleyNaturaMutations;      //harvestcraft with natura barley
-        }
-        else {
+        } else {
             if(ConfigurationHandler.integration_HC && LoadedMods.harvestcraft) {
                 data = data + '\n' + harvestcraftMutations + '\n' + barleyHarvestCraftMutations;
             }
@@ -108,13 +107,21 @@ public abstract class IOHelper {
         if(ConfigurationHandler.integration_Chococraft && LoadedMods.chococraft) {
             if(ConfigurationHandler.integration_HC && LoadedMods.harvestcraft) {
                 data = data + '\n' + chococraft_harvestcraftMutations;
-            }
-            else {
+            } else {
                 data = data + '\n' + chococraftMutations;
             }
         }
         if(ConfigurationHandler.integration_Psychedelicraft && LoadedMods.psychedelicraft) {
             data = data + '\n' + psychedelicraftMutations;
+        }
+        if(ConfigurationHandler.integration_ArsMagica && ConfigurationHandler.integration_Thaumcraft) {
+            data = data + '\n' + thaumcraft_ArsMagicaMutations;
+        } else {
+            if(ConfigurationHandler.integration_Thaumcraft) {
+                data = data + '\n' + thaumcraftMutations;
+            } else if(ConfigurationHandler.integration_ArsMagica) {
+                data = data + '\n' + arsMagicaMutations;
+            }
         }
         return data;
     }
@@ -431,6 +438,30 @@ public abstract class IOHelper {
             "psychedelicraft:hop_seeds=psychedelicraft:tobaccoSeeds+minecraft:wheat_seeds\n" +
             "psychedelicraft:cannabisSeeds=psychedelicraft:tobaccoSeeds+psychedelicraft:hop_seeds\n" +
             "psychedelicraft:cocaSeeds=psychedelicraft:cannabisSeeds+psychedelicraft:hop_seeds";
+
+    private static final String thaumcraft_ArsMagicaMutations =
+            "AgriCraft:seedCinderpearl=AgriCraft:seedCactus+AgriCraft:seedTulipRed\n" +
+            "AgriCraft:seedDesertNova=AgriCraft:seedCinderpearl+AgriCraft:seedTulipRed\n" +
+            "AgriCraft:seedCerublossom=AgriCraft:seedDesertNova+AgriCraft:seedCinderpearl\n" +
+            "AgriCraft:seedAum=AgriCraft:seedCerublossom+AgriCraft:seedCinderpearl\n" +
+            "AgriCraft:seedWakebloom=AgriCraft:seedAum+AgriCraft:seedCerublossom\n" +
+            "AgriCraft:seedVishroom=AgriCraft:seedShroomBrown+AgriCraft:seedShimmerleaf\n" +
+            "AgriCraft:seedTarmaRoot=AgriCraft:seedDesertNova+AgriCraft:seedShroomBrown\n" +
+            "AgriCraft:seedShimmerleaf=AgriCraft:seedCerublossom+AgriCraft:seedTulipWhite\n" +
+            "AgriCraft:seedTaintedRoot=AgriCraft:seedVishroom+AgriCraft:seedTarmaRoot";
+
+    private static final String thaumcraftMutations =
+            "AgriCraft:seedCinderpearl=AgriCraft:seedCactus+AgriCraft:seedTulipRed\n" +
+            "AgriCraft:seedShimmerleaf=AgriCraft:seedTulipWhite+AgriCraft:seedCinderpearl\n" +
+            "AgriCraft:seedVishroom=AgriCraft:seedShroomBrown+AgriCraft:seedShimmerleaf\n" +
+            "AgriCraft:seedTaintedRoot=AgriCraft:seedVishroom+minecraft:nether_wart";
+
+    private static final String arsMagicaMutations =
+            "AgriCraft:seedDesertNova=AgriCraft:seedCactus+AgriCraft:seedTulipRed\n" +
+            "AgriCraft:seedCerublossom=AgriCraft:seedDesertNova+AgriCraft:seedOrchid\n" +
+            "AgriCraft:seedAum=AgriCraft:seedCerublossom+AgriCraft:seedTulipWhite\n" +
+            "AgriCraft:seedTarmaRoot=seedDesertNova+AgriCraft:seedShroomBrown\n" +
+            "AgriCraft:seedWakebloom=AgriCraft:seedAum+AgriCraft:seedCerublossom";
 
     private static final String copperMutation =
             "AgriCraft:seedCuprosia=AgriCraft:seedRedstodendron+AgriCraft:seedTulipRed";

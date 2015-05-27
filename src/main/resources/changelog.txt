@@ -1,8 +1,26 @@
 Changelog
 ---------
-1.3.2
+1.4.0
+-CHANGE: Updated to Forge 10.13.3.1373
+-CHANGE: Rewrote the crop system to prevent crashing
+-CHANGE: Rewrote tanks for major performance increase
+-CHANGE: Condense all custom wood entries into one in NEI
+-CHANGE: Seed analyser will now accept analysed seeds
+-CHANGE: Crops will now be displayed as "Crop Sticks"
+-CHANGE: Resource crops are now enabled by default
+-CHANGE: Reordered the configuration options for easier finding of options
 -ADDED:  Missing mutations for Harvestcraft crops (Strawberry, Spinach, White Mushroom)
+-ADDED:  Resource crop for nether quartz
+-ADDED:  Config option to only make mature crops drop seeds to encourage trowel usage (false by default)
+-ADDED:  Config option to make crop sticks get destroyed when they are broken with weeds on them to encourage rake usage (false by default)
+-ADDED:  Config options to change the spawn rates of greenhouses
+-ADDED:  Blood Magic can now auto-harvest crops with the reap of the harvest moon
+-ADDED:  Crops for Thaumcraft: shimmerleaf, cinderpearl, vishroom and taintroot
 -FIXED:  Seeds added as drops from tall grass always having weight 10
+-FIXED:  Not being able to set max brightness in Minetweaker methods
+-FIXED:  Wrong error message in Minetweaker methods
+-FIXED:  Seed analyser sending data to client and causing block updates every tick while updating
+-FIXED:  Poisonous potatoes not dropping from potatoes
 
 1.3.1
 -ADDED:  Nitor Wart: a new crop that produces glowstone dust
