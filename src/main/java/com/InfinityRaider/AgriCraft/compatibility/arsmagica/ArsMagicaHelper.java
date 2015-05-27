@@ -2,12 +2,13 @@ package com.InfinityRaider.AgriCraft.compatibility.arsmagica;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.sun.javaws.exceptions.InvalidArgumentException;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,6 +34,10 @@ public class ArsMagicaHelper extends ModHelper {
             } catch (InvalidArgumentException e) {
                 e.printStackTrace();
                 return;
+            }
+            Block log = (Block) Block.blockRegistry.getObject("arsmagica2:WitchwoodLog");
+            if(log!=null) {
+                cropAum.getGrowthRequirement().setRequiredBlock(new BlockWithMeta(log), RequirementType.NEARBY, false);
             }
             arsMagicaCrops.add(cropAum);
             arsMagicaSeeds.add(cropAum.getSeed());

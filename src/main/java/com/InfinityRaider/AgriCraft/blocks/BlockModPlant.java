@@ -45,7 +45,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
      * String name (needed), ItemStack fruit(needed), Block soil (optional), BlockWithMeta baseBlock (optional), int tier (necessary), RenderMethod renderType (necessary)
      * Will throw InvalidArgumentException if the needed arguments are not given.
      * This constructor creates the seed for this plant which can be gotten via blockModPlant.getSeed().
-     * This constructor also registers this block and the item for the seed to the minecraft item/block registry en to the AgriCraft CropPlantHandler.
+     * This constructor also registers this block and the item for the seed to the minecraft item/block registry and to the AgriCraft CropPlantHandler.
      * */
     public BlockModPlant(Object[] arguments) throws InvalidArgumentException{
         super();

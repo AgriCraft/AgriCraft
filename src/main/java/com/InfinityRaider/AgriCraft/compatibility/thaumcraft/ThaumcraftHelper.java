@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.thaumcraft;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
+import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -54,6 +55,10 @@ public class ThaumcraftHelper extends ModHelper {
             } catch (InvalidArgumentException e) {
                 e.printStackTrace();
                 return;
+            }
+            Block log = (Block) Block.blockRegistry.getObject("Thaumcraft:blockMagicalLog");
+            if(log!=null) {
+                cropShimmerleaf.getGrowthRequirement().setRequiredBlock(new BlockWithMeta(log, 1), RequirementType.NEARBY, false);
             }
             thaumcraftCrops.add(cropShimmerleaf);
             thaumcraftSeeds.add(cropShimmerleaf.getSeed());
