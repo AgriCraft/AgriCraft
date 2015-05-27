@@ -83,6 +83,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             }
         }
     }
+
     /** sets the plant in the crop */
     public void setPlant(int growth, int gain, int strength, boolean analyzed, Item seed, int seedMeta) {
         this.setPlant(growth, gain, strength, analyzed, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
