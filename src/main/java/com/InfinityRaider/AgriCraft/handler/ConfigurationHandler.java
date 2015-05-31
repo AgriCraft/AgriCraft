@@ -37,7 +37,6 @@ public class ConfigurationHandler {
     public static boolean resourcePlants;
     public static boolean wipeTallGrassDrops;
     public static boolean renderBookInAnalyzer;
-    public static boolean cactusGivesCactus;
     //farming
     public static boolean disableVanillaFarming;
     public static double mutationChance;
@@ -109,7 +108,6 @@ public class ConfigurationHandler {
         customCrops = config.getBoolean("Custom crops", CATEGORY_AGRICRAFT, false, "set to true if you wish to create your own crops");
         wipeTallGrassDrops = config.getBoolean("Clear tall grass drops", CATEGORY_AGRICRAFT, false, "set to true to clear the list of items dropping from tall grass (Will run before adding seeds defined in the grass drops config).");
         renderBookInAnalyzer = config.getBoolean("Render journal in analyzer", CATEGORY_AGRICRAFT, true, "set to false to not render the journal on the analyzer");
-        cactusGivesCactus = config.getBoolean("Cactus produces cactus blocks", CATEGORY_AGRICRAFT, false, "set to true to make the cactus crop produce cactus blocks instead of cactus green");
         //farming
         disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", CATEGORY_FARMING, false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
         mutationChance = (double) config.getFloat("Mutation Chance",CATEGORY_FARMING, (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance");

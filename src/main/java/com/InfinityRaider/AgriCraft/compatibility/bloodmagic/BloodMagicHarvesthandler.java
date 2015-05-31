@@ -17,7 +17,7 @@ public class BloodMagicHarvesthandler implements IHarvestHandler{
         if(meta<7) {
             return false;
         }
-        ((BlockCrop) block).harvest(world, x, y, z);
+        ((BlockCrop) block).harvest(world, x, y, z, null);
         return true;
     }
 }

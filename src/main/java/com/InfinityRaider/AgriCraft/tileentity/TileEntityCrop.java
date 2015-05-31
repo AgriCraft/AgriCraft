@@ -15,6 +15,7 @@ import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -141,8 +142,8 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public ArrayList<ItemStack> getFruits() {return plant.getFruitsOnHarvest(gain, worldObj.rand);}
 
     /** allow harvesting */
-    public boolean allowHarvest() {
-        return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord);
+    public boolean allowHarvest(EntityPlayer player) {
+        return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord, player);
     }
 
     public ItemStack getSeedStack() {

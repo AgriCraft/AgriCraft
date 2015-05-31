@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraftShearable;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
@@ -42,7 +43,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
     }
 
     /** Parameters can be given in any order, parameters can be:
-     * String name (needed), ItemStack fruit(needed), Block soil (optional), BlockWithMeta baseBlock (optional), int tier (necessary), RenderMethod renderType (necessary)
+     * String name (needed), ItemStack fruit(needed), Block soil (optional), BlockWithMeta baseBlock (optional), int tier (necessary), RenderMethod renderType (necessary), ItemStack shearDrop (optional)
      * Will throw InvalidArgumentException if the needed arguments are not given.
      * This constructor creates the seed for this plant which can be gotten via blockModPlant.getSeed().
      * This constructor also registers this block and the item for the seed to the minecraft item/block registry and to the AgriCraft CropPlantHandler.
@@ -52,6 +53,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
         //get parameters
         String name = null;
         ItemStack fruit = null;
+        ItemStack shearable = null;
         Block soil = null;
         BlockWithMeta base = null;
         int tier = -1;
@@ -65,7 +67,11 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
                 continue;
             }
             if(arg instanceof  ItemStack) {
-                fruit = (ItemStack) arg;
+                if(fruit==null) {
+                    fruit = (ItemStack) arg;
+                } else {
+                    shearable = (ItemStack) arg;
+                }
                 continue;
             }
             if(arg instanceof Block) {
@@ -109,7 +115,11 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
         this.seed = new ItemModSeed(this, "agricraft_journal."+Character.toLowerCase(name.charAt(0))+name.substring(1));
         //register this plant to the CropPlantHandler
         try {
-            CropPlantHandler.registerPlant(this);
+            if(shearable == null) {
+                CropPlantHandler.registerPlant(this);
+            } else {
+                CropPlantHandler.registerPlant(new CropPlantAgriCraftShearable(this, shearable));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

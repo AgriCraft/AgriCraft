@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -46,7 +47,7 @@ public abstract class CropPlant {
 
     public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
 
-    public boolean onHarvest(World world, int x, int y, int z) {
+    public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
         return true;
     }
 

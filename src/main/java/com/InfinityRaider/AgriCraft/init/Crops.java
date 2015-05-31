@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.ArrayList;

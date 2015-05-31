@@ -2,12 +2,7 @@ package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.*;
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.Crops;
-import com.InfinityRaider.AgriCraft.init.CustomCrops;
-import com.InfinityRaider.AgriCraft.init.ResourceCrops;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
@@ -114,46 +109,6 @@ public class CropPlantHandler {
             registerPlant(new CropPlantNetherWart());
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        //register agricraft plants
-        for (BlockModPlant plant : Crops.crops) {
-            CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-            try {
-                registerPlant(cropPlant);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        //register resource plants
-        if (ConfigurationHandler.resourcePlants) {
-            for (BlockModPlant plant : ResourceCrops.vanillaCrops) {
-                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-                try {
-                    registerPlant(cropPlant);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            for (BlockModPlant plant : ResourceCrops.modCrops) {
-                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-                try {
-                    registerPlant(cropPlant);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        //register custom crops
-        if(ConfigurationHandler.customCrops) {
-            for (BlockModPlant plant : CustomCrops.customCrops) {
-                CropPlantAgriCraft cropPlant = new CropPlantAgriCraft(plant);
-                try {
-                    registerPlant(cropPlant);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
         //register mod crops
         ModHelper.initModPlants();

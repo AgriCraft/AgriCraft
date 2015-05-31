@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.reference;
 
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -13,16 +12,16 @@ public class Data {
             {"Potato", new ItemStack(Items.potato), 1, RenderMethod.HASHTAG},
             {"Carrot", new ItemStack(Items.carrot), 1, RenderMethod.HASHTAG},
             {"Sugarcane", new ItemStack(Items.reeds), 1, RenderMethod.HASHTAG},
-            {"Dandelion", new ItemStack(Items.dye, 1, 11), 1, RenderMethod.HASHTAG} ,
-            {"Poppy", new ItemStack(Items.dye, 1, 1), 1, RenderMethod.HASHTAG},
-            {"Orchid", new ItemStack(Items.dye, 1, 12), 1, RenderMethod.HASHTAG},
-            {"Allium", new ItemStack(Items.dye, 1, 13), 2, RenderMethod.HASHTAG},
-            {"TulipRed", new ItemStack(Items.dye, 1, 1), 2, RenderMethod.HASHTAG},
-            {"TulipOrange", new ItemStack(Items.dye, 1, 14), 2, RenderMethod.HASHTAG},
-            {"TulipWhite", new ItemStack(Items.dye, 1, 7), 2, RenderMethod.HASHTAG},
-            {"TulipPink", new ItemStack(Items.dye, 1, 9), 2, RenderMethod.HASHTAG},
-            {"Daisy", new ItemStack(Items.dye, 1, 7), 2, RenderMethod.HASHTAG},
-            {"Cactus",  new ItemStack(ConfigurationHandler.cactusGivesCactus?Item.getItemFromBlock(Blocks.cactus):net.minecraft.init.Items.dye, 1, ConfigurationHandler.cactusGivesCactus?0:2),  Blocks.sand, 2, RenderMethod.HASHTAG},
+            {"Dandelion", new ItemStack(Items.dye, 1, 11), 1, RenderMethod.HASHTAG, new ItemStack(Blocks.yellow_flower)} ,
+            {"Poppy", new ItemStack(Items.dye, 1, 1), 1, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower)},
+            {"Orchid", new ItemStack(Items.dye, 1, 12), 1, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 1)},
+            {"Allium", new ItemStack(Items.dye, 1, 13), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 2)},
+            {"TulipRed", new ItemStack(Items.dye, 1, 1), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 4)},
+            {"TulipOrange", new ItemStack(Items.dye, 1, 14), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 5)},
+            {"TulipWhite", new ItemStack(Items.dye, 1, 7), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 6)},
+            {"TulipPink", new ItemStack(Items.dye, 1, 9), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 7)},
+            {"Daisy", new ItemStack(Items.dye, 1, 7), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 8)},
+            {"Cactus",  new ItemStack(net.minecraft.init.Items.dye, 1, 2),  Blocks.sand, 2, RenderMethod.HASHTAG, new ItemStack(Blocks.cactus)},
             {"ShroomRed", new ItemStack(Item.getItemFromBlock(Blocks.red_mushroom)), Blocks.mycelium, 2, RenderMethod.HASHTAG},
             {"ShroomBrown", new ItemStack(Item.getItemFromBlock(Blocks.brown_mushroom)), Blocks.mycelium, 2, RenderMethod.HASHTAG}
     };

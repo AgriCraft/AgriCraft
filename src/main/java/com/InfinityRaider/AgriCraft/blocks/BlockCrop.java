@@ -108,8 +108,8 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         }
     }
 
-    //this harvests the crop
-    public boolean harvest(World world, int x, int y, int z) {
+    //this harvests the crop, player may be null if harvested trough automation
+    public boolean harvest(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
             boolean update = false;
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
@@ -118,7 +118,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             }else if(crop.isCrossCrop()) {
                 crop.setCrossCrop(false);
                 this.dropBlockAsItem(world, x, y, z, new ItemStack(Items.crops, 1));
-            } else if(crop.isMature() && crop.allowHarvest()) {
+            } else if(crop.isMature() && crop.allowHarvest(player)) {
                 crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
                 update = true;
                 ArrayList<ItemStack> drops = crop.getFruits();
@@ -147,7 +147,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 update = true;
             }
             else {
-                this.harvest(world, x, y, z);
+                this.harvest(world, x, y, z, player);
             }
             if (update) {
                 crop.markForUpdate();
@@ -196,10 +196,10 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     return false;
                 }
                 if (player.isSneaking()) {
-                    this.harvest(world, x, y, z);
+                    this.harvest(world, x, y, z, player);
                 } else if (player.getCurrentEquippedItem() == null) {
                     //harvest operation
-                    this.harvest(world, x, y, z);
+                    this.harvest(world, x, y, z, player);
                 } else if (player.getCurrentEquippedItem().getItem() == Items.debugItem) {
                     return false;
                 }
@@ -232,14 +232,14 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                             if(toolTag.getBoolean("Broken")) {
                                 break;
                             }
-                            else if (world.getBlock(xPos, y, zPos) instanceof BlockCrop && this.harvest(world, xPos, y, zPos)) {
+                            else if (world.getBlock(xPos, y, zPos) instanceof BlockCrop && this.harvest(world, xPos, y, zPos, player)) {
                                 AbilityHelper.damageTool(player.getCurrentEquippedItem(), 1, player, false);
                             }
                         }
                     }
                 } else {
                     //harvest operation
-                    this.harvest(world, x, y, z);
+                    this.harvest(world, x, y, z, player);
                     //check to see if clicked with seeds
                     if (CropPlantHandler.isValidSeed(player.getCurrentEquippedItem())) {
                         this.plantSeed(world, x, y, z, player);

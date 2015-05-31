@@ -12,7 +12,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.*;
 
 public abstract class SeedHelper {
-    private static List<ItemStack> seedBlackList;
+    private static List<ItemStack> seedBlackList = new ArrayList<ItemStack>();
     private static HashMap<Item, Integer[]> spreadChances;
     private static HashMap<Item, Integer[]> seedTiers;
 

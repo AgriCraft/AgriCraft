@@ -16,6 +16,8 @@ Changelog
 -ADDED:  Config options to change the spawn rates of greenhouses
 -ADDED:  Blood Magic can now auto-harvest crops with the reap of the harvest moon
 -ADDED:  Crops for Thaumcraft: shimmerleaf, cinderpearl, vishroom and taintroot
+-ADDED:  Button in Seed Analyzer GUI to read the journal
+-ADDED:  Some crops (flowers, cactus, ...) can be sheared to get the flower instead of the fruit
 -FIXED:  Seeds added as drops from tall grass always having weight 10
 -FIXED:  Not being able to set max brightness in Minetweaker methods
 -FIXED:  Wrong error message in Minetweaker methods

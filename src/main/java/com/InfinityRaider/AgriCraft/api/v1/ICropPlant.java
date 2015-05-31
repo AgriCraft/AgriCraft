@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -33,8 +34,8 @@ public interface ICropPlant {
 	/** Returns an ArrayList with amount of random fruit stacks for this plant */
 	public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
 
-	/** Gets called right before a harvest attempt, return false to prevent further processing */
-	public boolean onHarvest(World world, int x, int y, int z);
+	/** Gets called right before a harvest attempt, return false to prevent further processing, player may be null if harvested by automation */
+	public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player);
 
 	/** This is called right after this plant is planted on a crop, either trough planting, mutation or spreading */
 	public void onSeedPlanted(World world, int x, int y, int z);

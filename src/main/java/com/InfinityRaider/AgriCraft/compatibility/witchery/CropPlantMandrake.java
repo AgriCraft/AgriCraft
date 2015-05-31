@@ -10,6 +10,7 @@ import com.emoniph.witchery.util.TargetPointUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -20,7 +21,7 @@ public class CropPlantMandrake extends CropPlantWitchery {
     }
 
     @Override
-    public boolean onHarvest(World world, int x, int y, int z) {
+    public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         int amount = (int) (Math.ceil((crop.getGain() + 0.00) / 3));
         int strength = crop.getStrength();
