@@ -188,7 +188,8 @@ public abstract class MutationHandler {
         if(neighbours == 1 && ConfigurationHandler.singleSpreadsIncrement) {
             neighbours = 2;
         }
-        return Math.max(1, (input + (int) Math.round(Math.abs(neighbours-1)*Math.random()))/divisor);
+        int newStat = Math.max(1, (input + (int) Math.round(Math.abs(neighbours-1)*Math.random()))/divisor);
+        return Math.min(newStat, ConfigurationHandler.cropStatCap);
     }
 
     private static boolean canInheritStats(Item child, int childMeta, Item seed, int seedMeta) {
