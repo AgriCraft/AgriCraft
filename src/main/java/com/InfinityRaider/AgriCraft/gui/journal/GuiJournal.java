@@ -83,7 +83,7 @@ public class GuiJournal extends GuiScreen {
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int rightClick) {
+    public void mouseClicked(int x, int y, int rightClick) {
         //find number of pages to browse
         int pageIncrement = 0;
         //clicked for next page or previous page

@@ -1,8 +1,7 @@
 package com.InfinityRaider.AgriCraft.gui;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.handler.GuiHandler;
+import com.InfinityRaider.AgriCraft.gui.journal.GuiJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
@@ -11,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,11 +21,15 @@ public class GuiSeedAnalyzer extends GuiContainer {
     public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedAnalyzer.png");
     public TileEntitySeedAnalyzer seedAnalyzer;
 
+    private boolean journalOpen;
+    private GuiJournal guiJournal;
+
     public GuiSeedAnalyzer(InventoryPlayer inventory, TileEntitySeedAnalyzer seedAnalyzer) {
         super(new ContainerSeedAnalyzer(inventory, seedAnalyzer));
         this.seedAnalyzer = seedAnalyzer;
         this.xSize = 176;
         this.ySize = 176;
+        this.journalOpen = false;
     }
 
     //draw foreground
@@ -54,6 +56,16 @@ public class GuiSeedAnalyzer extends GuiContainer {
     }
 
     @Override
+    public void drawScreen(int x, int y, float opacity) {
+        if(journalOpen) {
+            guiJournal.initGui();
+            guiJournal.drawScreen(x, y, 0);
+        } else {
+            super.drawScreen(x, y, opacity);
+        }
+    }
+
+    @Override
     protected void actionPerformed(GuiButton button) {
         ItemStack journal = seedAnalyzer.journal;
         if(journal != null) {
@@ -65,8 +77,24 @@ public class GuiSeedAnalyzer extends GuiContainer {
                     tag.setTag(Names.NBT.discoveredSeeds, list);
                 }
             }
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            player.openGui(AgriCraft.instance, GuiHandler.journalID, player.worldObj, player.serverPosX, player.serverPosY, player.serverPosZ);
+            journalOpen = true;
+            guiJournal = new GuiJournal(journal);
+            guiJournal.setWorldAndResolution(this.mc, this.width, this.height);
+        }
+    }
+
+    @Override
+    protected void keyTyped(char key, int number)  {
+        if(this.journalOpen) {
+            if (number == 1 || number == this.mc.gameSettings.keyBindInventory.getKeyCode())  {
+                this.journalOpen = false;
+                this.guiJournal = null;
+            }
+            else {
+                super.keyTyped(key, number);
+            }
+        } else {
+            super.keyTyped(key, number);
         }
     }
 
@@ -74,5 +102,14 @@ public class GuiSeedAnalyzer extends GuiContainer {
     @Override
     public boolean doesGuiPauseGame() {
         return false;
+    }
+
+    @Override
+    protected void mouseClicked(int x, int y, int rightClick) {
+        if(journalOpen) {
+            guiJournal.mouseClicked(x, y, rightClick);
+        } else {
+            super.mouseClicked(x, y, rightClick);
+        }
     }
 }
