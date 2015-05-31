@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.handler;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorage;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageController;
-import com.InfinityRaider.AgriCraft.gui.GuiJournal;
+import com.InfinityRaider.AgriCraft.gui.journal.GuiJournal;
 import com.InfinityRaider.AgriCraft.gui.GuiSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.gui.GuiSeedStorage;
 import com.InfinityRaider.AgriCraft.gui.GuiSeedStorageController;
@@ -57,7 +57,7 @@ public class GuiHandler implements IGuiHandler{
                     journal = ((ContainerSeedAnalyzer) player.openContainer).seedAnalyzer.journal;
                     player.closeScreen();
                 }
-                return new GuiJournal(player, journal);
+                return new GuiJournal(journal);
             case (seedStorageID):
                 if (te != null && te instanceof TileEntitySeedStorage) {
                     return new GuiSeedStorage(player.inventory, (TileEntitySeedStorage) te);
