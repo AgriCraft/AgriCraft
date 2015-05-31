@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -40,6 +41,18 @@ public class CropPlantAPI extends CropPlant {
     @Override
     public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
         return plant.getFruitsOnHarvest(gain, rand);
+    }
+
+    public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
+        return plant.onHarvest(world, x, y, z, player);
+    }
+
+    public void onSeedPlanted(World world, int x, int y, int z) {
+        plant.onSeedPlanted(world, x, y, z);
+    }
+
+    public void onPlantRemoved(World world, int x, int y, int z) {
+        plant.onPlantRemoved(world, x, y, z);
     }
 
     @Override
