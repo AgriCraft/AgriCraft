@@ -193,6 +193,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
     }
 
+    //TileEntity is just to store data on the crop
+    @Override
+    public boolean canUpdate() {
+        return false;
+    }
+
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
@@ -259,7 +265,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** the code that makes the crop cross with neighboring crops */
-    public void crossOver() {mutationEngine.executeCrossOver();}
+    public void  crossOver() {mutationEngine.executeCrossOver();}
 
     /** Called by the mutation engine to apply the result of a cross over */
     public void applyCrossOverResult(CrossOverResult result) {

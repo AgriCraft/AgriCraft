@@ -38,6 +38,7 @@ public class GuiJournal extends GuiScreen {
     public static final ResourceLocation textureSeedPage = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalSeedPage.png");
     //needed data
     protected EntityPlayer player;
+    protected ItemStack journal;
     protected ArrayList<CropPlant> discoveredPlants;
     protected ItemStack[][] discoveredParents;
     protected ItemStack[] discoveredCoParents;
@@ -63,9 +64,10 @@ public class GuiJournal extends GuiScreen {
     protected List buttonList = new ArrayList();
 
 
-    public GuiJournal(EntityPlayer player) {
+    public GuiJournal(EntityPlayer player, ItemStack journal) {
         super();
         this.player = player;
+        this.journal = journal;
         int pageWidth = 128;
         this.xSize = pageWidth * 2;
         this.ySize = pageWidth * 3 / 2;
@@ -73,8 +75,11 @@ public class GuiJournal extends GuiScreen {
 
     //gets the array of discovered seeds
     private void setDataFromNBT() {
-        if (this.player.getCurrentEquippedItem() != null && this.player.getCurrentEquippedItem().stackSize > 0 && this.player.getCurrentEquippedItem().getItem() instanceof ItemJournal && this.player.getCurrentEquippedItem().hasTagCompound()) {
-            NBTTagCompound tag = this.player.getCurrentEquippedItem().getTagCompound();
+        NBTTagCompound tag = null;
+        if (journal != null && journal.stackSize > 0 && journal.getItem() instanceof ItemJournal && journal.hasTagCompound()) {
+            tag = journal.getTagCompound();
+        }
+        if(tag != null) {
             this.discoveredPlants = new ArrayList<CropPlant>();
             if (tag.hasKey(Names.NBT.discoveredSeeds)) {
                 NBTTagList tagList = tag.getTagList(Names.NBT.discoveredSeeds, 10);      //10 for tagCompound
@@ -90,6 +95,7 @@ public class GuiJournal extends GuiScreen {
             }
         }
     }
+
 
     @Override
     protected void mouseClicked(int x, int y, int rightClick) {
@@ -161,19 +167,27 @@ public class GuiJournal extends GuiScreen {
                 this.drawSeedPage(currentPage - standardPages);
         }
         //draw the arrows if the mouse is hovering over the flip page area
-        if (y > this.guiTop + 172 && y <= this.guiTop + 172 + 16) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(textureBackground);
-            GL11.glColor3f(1, 1, 1);
-            GL11.glDisable(GL11.GL_LIGHTING);
-            if (x > this.guiLeft + 221 && x <= this.guiLeft + 221 + 16) {
-                drawTexturedModalRect(this.guiLeft + 223, this.guiTop + 178, 224, 239, 32, 17);
-            } else if (x > this.guiLeft + 19 && x <= this.guiLeft + 19 + 16 && this.currentPage > 0) {
-                drawTexturedModalRect(this.guiLeft + 1, this.guiTop + 178, 0, 239, 32, 17);
-            }
-            GL11.glEnable(GL11.GL_LIGHTING);
-        }
+        drawNavigationArrows(x, y);
         //draws a tooltip if the mouse is hovering over an icon
         this.drawTooltip(x, y);
+    }
+
+    private void drawNavigationArrows(int x, int y) {
+        if (y > this.guiTop + 172 && y <= this.guiTop + 172 + 16) {
+            if (x > this.guiLeft + 221 && x <= this.guiLeft + 221 + 16) {
+                Minecraft.getMinecraft().getTextureManager().bindTexture(textureBackground);
+                GL11.glColor3f(1, 1, 1);
+                GL11.glDisable(GL11.GL_LIGHTING);
+                drawTexturedModalRect(this.guiLeft + 223, this.guiTop + 178, 224, 239, 32, 17);
+                GL11.glEnable(GL11.GL_LIGHTING);
+            } else if (x > this.guiLeft + 19 && x <= this.guiLeft + 19 + 16 && this.currentPage > 0) {
+                Minecraft.getMinecraft().getTextureManager().bindTexture(textureBackground);
+                GL11.glColor3f(1, 1, 1);
+                GL11.glDisable(GL11.GL_LIGHTING);
+                drawTexturedModalRect(this.guiLeft + 1, this.guiTop + 178, 0, 239, 32, 17);
+                GL11.glEnable(GL11.GL_LIGHTING);
+            }
+        }
     }
 
     //draws a tooltip
@@ -525,7 +539,7 @@ public class GuiJournal extends GuiScreen {
     }
 
     //utility method: renders an icon in the gui because the superclass method doesn't seem to work
-    private void renderIconInGui(int x, int y, ResourceLocation resource) {
+    public void renderIconInGui(int x, int y, ResourceLocation resource) {
         int xSize = 16;
         int ySize = 16;
         Tessellator tessellator = Tessellator.instance;
