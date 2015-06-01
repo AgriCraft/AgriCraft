@@ -4,8 +4,8 @@ import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.emoniph.witchery.Witchery;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -15,37 +15,46 @@ public final class WitcheryHelper extends ModHelper {
     protected void init() {
         LogHelper.debug("Initializing Witchery Support");
 
-        OreDictionary.registerOre("seedBelladonna", Witchery.Items.SEEDS_BELLADONNA);
-        OreDictionary.registerOre("seedMandrake", Witchery.Items.SEEDS_MANDRAKE);
-        OreDictionary.registerOre("seedWaterArtichoke", Witchery.Items.SEEDS_ARTICHOKE);
-        OreDictionary.registerOre("seedSnowbell", Witchery.Items.SEEDS_SNOWBELL);
-        OreDictionary.registerOre("seedWolfsbane", Witchery.Items.SEEDS_WOLFSBANE);
-        OreDictionary.registerOre("seedWitchGarlic", Witchery.Items.SEEDS_GARLIC);
-        OreDictionary.registerOre("seedWormwood", Witchery.Items.SEEDS_WORMWOOD);
+        Item seedBelladonna = (Item) Item.itemRegistry.getObject("witchery:seedsbelladonna");
+        Item seedMandrake = (Item) Item.itemRegistry.getObject("witchery:seedsmandrake");
+        Item seedArtichoke = (Item) Item.itemRegistry.getObject("witchery:seedsartichoke");
+        Item seedSnowbell = (Item) Item.itemRegistry.getObject("witchery:seedssnowbell");
+        Item seedWolfsbane = (Item) Item.itemRegistry.getObject("witchery:seedswolfsbane");
+        Item seedGarlic = (Item) Item.itemRegistry.getObject("witchery:garlic");
+        Item seedWormwood = (Item) Item.itemRegistry.getObject("witchery:seedswormwood");
 
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Witchery.Items.SEEDS_BELLADONNA);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Witchery.Items.SEEDS_MANDRAKE);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Witchery.Items.SEEDS_ARTICHOKE);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Witchery.Items.SEEDS_SNOWBELL);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Witchery.Items.SEEDS_WOLFSBANE);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Witchery.Items.SEEDS_GARLIC);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, Witchery.Items.SEEDS_WORMWOOD);
+        Item itemGeneric = (Item) Item.itemRegistry.getObject("witchery:ingredient");
 
-        OreDictionary.registerOre("cropBelladonna", new ItemStack(Witchery.Items.GENERIC, 1, 21));
-        OreDictionary.registerOre("cropMandrake", new ItemStack(Witchery.Items.GENERIC, 1, 22));
-        OreDictionary.registerOre("cropWaterArtichoke", new ItemStack(Witchery.Items.GENERIC, 1, 69));
-        OreDictionary.registerOre("cropSnowbell", new ItemStack(Witchery.Items.GENERIC, 1, 78));
+        OreDictionary.registerOre("seedBelladonna", seedBelladonna);
+        OreDictionary.registerOre("seedMandrake", seedMandrake);
+        OreDictionary.registerOre("seedWaterArtichoke", seedArtichoke);
+        OreDictionary.registerOre("seedSnowbell", seedSnowbell);
+        OreDictionary.registerOre("seedWolfsbane", seedWolfsbane);
+        OreDictionary.registerOre("seedWitchGarlic", seedGarlic);
+        OreDictionary.registerOre("seedWormwood", seedWormwood);
+
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedBelladonna);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedMandrake);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedArtichoke);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedSnowbell);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedWolfsbane);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedGarlic);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedWormwood);
+
+        OreDictionary.registerOre("cropBelladonna", new ItemStack(itemGeneric, 1, 21));
+        OreDictionary.registerOre("cropMandrake", new ItemStack(itemGeneric, 1, 22));
+        OreDictionary.registerOre("cropWaterArtichoke", new ItemStack(itemGeneric, 1, 69));
+        OreDictionary.registerOre("cropSnowbell", new ItemStack(itemGeneric, 1, 78));
         OreDictionary.registerOre("cropSnowbell", Items.snowball);
-        OreDictionary.registerOre("cropWolfsbane", new ItemStack(Witchery.Items.GENERIC, 1, 156));
-        OreDictionary.registerOre("cropWitchGarlic", new ItemStack(Witchery.Items.SEEDS_GARLIC));
-        OreDictionary.registerOre("cropWormwood", new ItemStack(Witchery.Items.GENERIC, 1, 111));
-
+        OreDictionary.registerOre("cropWolfsbane", new ItemStack(itemGeneric, 1, 156));
+        OreDictionary.registerOre("cropWitchGarlic", new ItemStack(seedGarlic));
+        OreDictionary.registerOre("cropWormwood", new ItemStack(itemGeneric, 1, 111));
     }
 
     @Override
     protected void initPlants() {
         try {
-            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_BELLADONNA));
+            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedsbelladonna")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,12 +64,12 @@ public final class WitcheryHelper extends ModHelper {
             e.printStackTrace();
         }
         try {
-        CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_ARTICHOKE));
+        CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedsartichoke")));
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-        CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_SNOWBELL));
+        CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedssnowbell")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,12 +79,12 @@ public final class WitcheryHelper extends ModHelper {
             e.printStackTrace();
         }
         try {
-            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_GARLIC));
+            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:garlic")));
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Witchery.Items.SEEDS_WORMWOOD));
+            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedswormwood")));
         } catch(Exception e) {
             e.printStackTrace();
         }
