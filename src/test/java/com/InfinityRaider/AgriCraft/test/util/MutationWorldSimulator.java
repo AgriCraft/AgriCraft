@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,10 +31,10 @@ public class MutationWorldSimulator {
         return targetCrop;
     }
 
-    public void addNeighbour(ForgeDirection direction, ItemSeeds plant, int meta, int growth, int gain, int strength) {
+    public void addNeighbour(ForgeDirection direction, CropPlant plant, int meta, int growth, int gain, int strength) {
         TileEntityCrop crop = new TileEntityCrop();
         crop.setWorldObj(world);
-        crop.seed = plant;
+        crop.plant = plant;
         crop.seedMeta = meta;
         crop.growth = growth;
         crop.gain = gain;
