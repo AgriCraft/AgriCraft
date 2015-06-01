@@ -385,3 +385,6 @@ agricraft.journal_PC.plant11=Because the seeds of this plant are lighter than ai
 agricraft.journal_PC.plant12=When matured these plants spit out 4 seeds which then fly into different directions.
 agricraft.journal_PC.plant14=These plants propel seeds at high velocity over the ground, they only stop when hitting a wall.
 agricraft.journal_PC.plant15=The seeds of these plants ride along the wind to find fertile soil.
+
+//applemilktea
+agricraft.journal_AMT.item.defeatedcrow.seedMint:0=The leafes of this plant can be used to set a good cup of tea.
