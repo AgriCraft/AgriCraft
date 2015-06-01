@@ -70,12 +70,6 @@ dependencies {
     compile "applecore:AppleCore:1.7.10-1.0.2+87.f5270:api"
 
     compile name: 'MineTweaker3', version: "Dev-${config.version.minecraft}-${config.version.minetweaker}", ext: 'jar'
-
-    // Test dependencies
-    testCompile "junit:junit:4.12"
-    testCompile "org.mockito:mockito-core:1.10.8"
-    testCompile "org.powermock:powermock-module-junit4:1.6.1"
-    testCompile "org.powermock:powermock-api-mockito:1.6.1"
 }
 
 allprojects {
