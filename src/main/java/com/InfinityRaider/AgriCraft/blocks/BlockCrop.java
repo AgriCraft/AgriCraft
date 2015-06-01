@@ -296,7 +296,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     }
                 }
                 for (ItemStack drop : drops) {
-                    this.dropBlockAsItem(world, x, y, z, drop);
+                    if(drop!=null && drop.getItem()!=null) {
+                        this.dropBlockAsItem(world, x, y, z, drop);
+                    }
                 }
 
             }
