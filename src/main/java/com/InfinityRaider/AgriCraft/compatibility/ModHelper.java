@@ -18,6 +18,7 @@ import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.compatibility.pneumaticcraft.PneumaticCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
+import com.InfinityRaider.AgriCraft.compatibility.rotarycraft.RotaryCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.waila.WailaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.weeeflowers.WeeeFlowersHelper;
@@ -92,6 +93,7 @@ public abstract class ModHelper {
                 PlantMegaPackHelper.class,
                 PneumaticCraftHelper.class,
                 PsychedelicraftHelper.class,
+                RotaryCraftHelper.class,
                 ThaumcraftHelper.class,
                 WailaHelper.class,
                 WeeeFlowersHelper.class,

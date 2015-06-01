@@ -387,4 +387,7 @@ agricraft.journal_PC.plant14=These plants propel seeds at high velocity over the
 agricraft.journal_PC.plant15=The seeds of these plants ride along the wind to find fertile soil.
 
 //applemilktea
-agricraft.journal_AMT.item.defeatedcrow.seedMint:0=The leafes of this plant can be used to set a good cup of tea.
+agricraft.journal_AMT.item.defeatedcrow.seedMint:0=The leafes of this plant can be used to set a good cup of mint tea or to give some extra taste to a dish.
+
+//rotarycraft
+agricraft.journal_RoC.canola=The husks of the canola seed can be centrifuged into a liquid with excellent lubricating properties.
