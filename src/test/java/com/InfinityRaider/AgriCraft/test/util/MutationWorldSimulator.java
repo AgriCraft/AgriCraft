@@ -31,11 +31,10 @@ public class MutationWorldSimulator {
         return targetCrop;
     }
 
-    public void addNeighbour(ForgeDirection direction, CropPlant plant, int meta, int growth, int gain, int strength) {
+    public void addNeighbour(ForgeDirection direction, CropPlant plant, int growth, int gain, int strength) {
         TileEntityCrop crop = new TileEntityCrop();
         crop.setWorldObj(world);
         crop.plant = plant;
-        crop.seedMeta = meta;
         crop.growth = growth;
         crop.gain = gain;
         crop.strength = strength;
