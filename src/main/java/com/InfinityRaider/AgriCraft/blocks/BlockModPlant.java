@@ -11,7 +11,7 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import com.sun.javaws.exceptions.InvalidArgumentException;
+import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -44,11 +44,11 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
 
     /** Parameters can be given in any order, parameters can be:
      * String name (needed), ItemStack fruit(needed), Block soil (optional), BlockWithMeta baseBlock (optional), int tier (necessary), RenderMethod renderType (necessary), ItemStack shearDrop (optional)
-     * Will throw InvalidArgumentException if the needed arguments are not given.
+     * Will throw MissingArgumentsException if the needed arguments are not given.
      * This constructor creates the seed for this plant which can be gotten via blockModPlant.getSeed().
      * This constructor also registers this block and the item for the seed to the minecraft item/block registry and to the AgriCraft CropPlantHandler.
      * */
-    public BlockModPlant(Object[] arguments) throws InvalidArgumentException{
+    public BlockModPlant(Object[] arguments) throws MissingArgumentsException {
         super();
         //get parameters
         String name = null;
@@ -92,7 +92,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
         }
         //check if necessary parameters have been passed
         if(name==null || fruit==null || tier<0 || renderType==null) {
-            throw new InvalidArgumentException(new String[]{"Not all necessary parameters where given to create a new plant"});
+            throw new MissingArgumentsException();
         }
         //set fields
         GrowthRequirement.Builder builder = new GrowthRequirement.Builder();

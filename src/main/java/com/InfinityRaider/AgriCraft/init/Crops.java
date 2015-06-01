@@ -1,10 +1,10 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.ArrayList;
 
@@ -19,9 +19,11 @@ public class Crops {
             BlockModPlant plant;
             try {
                 plant = new BlockModPlant(data);
-            } catch(InvalidArgumentException e) {
-                e.printStackTrace();
-                continue;
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
+                return;
             }
             crops.add(plant);
             seeds.add(plant.getSeed());

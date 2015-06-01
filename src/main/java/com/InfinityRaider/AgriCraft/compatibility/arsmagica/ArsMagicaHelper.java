@@ -7,7 +7,6 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -31,8 +30,10 @@ public class ArsMagicaHelper extends ModHelper {
             BlockModPlant cropAum;
             try {
                 cropAum = new BlockModPlant(new Object[]{"Aum", new ItemStack(aum), 3, RenderMethod.CROSSED});
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
                 return;
             }
             Block log = (Block) Block.blockRegistry.getObject("arsmagica2:WitchwoodLog");
@@ -47,8 +48,10 @@ public class ArsMagicaHelper extends ModHelper {
             BlockModPlant cropTarmaRoot;
             try {
                 cropTarmaRoot = new BlockModPlant(new Object[]{"TarmaRoot", new ItemStack(tarmaRoot), 3, RenderMethod.CROSSED});
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
                 return;
             }
             cropTarmaRoot.getGrowthRequirement().setBrightnessRange(0, 8);
@@ -60,8 +63,10 @@ public class ArsMagicaHelper extends ModHelper {
             BlockModPlant cropCerublossom;
             try {
                 cropCerublossom = new BlockModPlant(new Object[] {"Cerublossom", new ItemStack(cerublossom), 3, RenderMethod.CROSSED});
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
                 return;
             }
             arsMagicaCrops.add(cropCerublossom);
@@ -72,8 +77,10 @@ public class ArsMagicaHelper extends ModHelper {
             BlockModPlant cropDesertNova;
             try {
                 cropDesertNova = new BlockModPlant(new Object[] {"DesertNova", new ItemStack(desertNova), 3, RenderMethod.CROSSED});
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
                 return;
             }
             cropDesertNova.getGrowthRequirement().setSoil(new BlockWithMeta(Blocks.sand));
@@ -85,8 +92,10 @@ public class ArsMagicaHelper extends ModHelper {
             BlockModPlant cropWakebloom;
             try {
                 cropWakebloom = new BlockModPlant(new Object[] {"Wakebloom", new ItemStack(wakebloom), 3, RenderMethod.CROSSED});
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
                 return;
             }
             arsMagicaCrops.add(cropWakebloom);

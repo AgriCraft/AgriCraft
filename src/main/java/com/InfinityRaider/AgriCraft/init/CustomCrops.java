@@ -7,7 +7,6 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -56,9 +55,11 @@ public class CustomCrops {
                         String info = cropData[6];
                         try {
                             customCrops[i] = new BlockModPlant(new Object[] {name, new ItemStack(fruit, 1, fruitMeta), soil, new BlockWithMeta(baseBlock, baseMeta), tier, renderType});
-                        } catch (InvalidArgumentException e) {
-                            e.printStackTrace();
-                            continue;
+                        } catch (Exception e) {
+                            if(ConfigurationHandler.debug) {
+                                e.printStackTrace();
+                            }
+                            return;
                         }
                         customSeeds[i] = customCrops[i].getSeed();
                         customSeeds[i].setInformation(info);

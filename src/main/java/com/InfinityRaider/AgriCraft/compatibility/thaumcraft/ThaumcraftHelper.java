@@ -9,7 +9,6 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -41,8 +40,10 @@ public class ThaumcraftHelper extends ModHelper {
             BlockModPlant cropCinderpearl;
             try {
                 cropCinderpearl = new BlockModPlant(new Object[]{"Cinderpearl", new ItemStack(thaumcraftPlant, 1, cinderpearlMeta), net.minecraft.init.Blocks.sand, 3, RenderMethod.CROSSED});
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
                 return;
             }
             thaumcraftCrops.add(cropCinderpearl);
@@ -52,8 +53,10 @@ public class ThaumcraftHelper extends ModHelper {
             BlockModPlant cropShimmerleaf;
             try {
                 cropShimmerleaf = new BlockModPlant(new Object[]{"Shimmerleaf", new ItemStack(thaumcraftPlant, 1, shimmerleafMeta), 3, RenderMethod.CROSSED});
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
                 return;
             }
             Block log = (Block) Block.blockRegistry.getObject("Thaumcraft:blockMagicalLog");
@@ -67,8 +70,10 @@ public class ThaumcraftHelper extends ModHelper {
             BlockModPlant cropVishroom ;
             try {
                 cropVishroom = new BlockModPlant(new Object[]{"Vishroom", new ItemStack(thaumcraftPlant, 1, vishroomMeta), net.minecraft.init.Blocks.mycelium, 3, RenderMethod.CROSSED});
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
                 return;
             }
             thaumcraftCrops.add(cropVishroom);
@@ -79,8 +84,10 @@ public class ThaumcraftHelper extends ModHelper {
             BlockModPlant cropTaintedRoot;
             try {
                 cropTaintedRoot = new BlockModPlant(new Object[]{"TaintedRoot", new ItemStack(thaumcraftTaintPlant, 1, taintPlantMeta), blockTaint, new BlockWithMeta(blockTaint, 0), 4, RenderMethod.CROSSED});
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
                 return;
             }
             thaumcraftCrops.add(cropTaintedRoot);

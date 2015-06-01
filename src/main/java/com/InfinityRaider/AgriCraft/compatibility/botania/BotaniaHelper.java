@@ -7,11 +7,9 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import vazkii.botania.common.item.ModItems;
 
 import java.util.ArrayList;
 
@@ -32,9 +30,11 @@ public class BotaniaHelper extends ModHelper {
                 BlockModPlant plant;
                 try {
                     plant = new BlockModPlant(args);
-                } catch (InvalidArgumentException e) {
-                    e.printStackTrace();
-                    continue;
+                } catch (Exception e) {
+                    if(ConfigurationHandler.debug) {
+                        e.printStackTrace();
+                    }
+                    return;
                 }
                 botaniaCrops.add(plant);
                 botaniaSeeds.add(plant.getSeed());

@@ -8,7 +8,6 @@ import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -53,9 +52,11 @@ public class ResourceCrops {
             BlockModPlant plant;
             try {
                 plant = new BlockModPlant(data);
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
-                continue;
+            } catch (Exception e) {
+                if(ConfigurationHandler.debug) {
+                    e.printStackTrace();
+                }
+                return;
             }
             vanillaCrops.add(plant);
             vanillaSeeds.add(plant.getSeed());
@@ -72,9 +73,11 @@ public class ResourceCrops {
                 BlockModPlant plant;
                 try {
                     plant = new BlockModPlant(args);
-                } catch (InvalidArgumentException e) {
-                    e.printStackTrace();
-                    continue;
+                } catch (Exception e) {
+                    if(ConfigurationHandler.debug) {
+                        e.printStackTrace();
+                    }
+                    return;
                 }
                 modCrops.add(plant);
                 modSeeds.add(plant.getSeed());
