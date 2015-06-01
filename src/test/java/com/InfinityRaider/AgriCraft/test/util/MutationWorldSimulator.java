@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.test.util;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
@@ -34,10 +33,7 @@ public class MutationWorldSimulator {
     public void addNeighbour(ForgeDirection direction, CropPlant plant, int growth, int gain, int strength) {
         TileEntityCrop crop = new TileEntityCrop();
         crop.setWorldObj(world);
-        crop.plant = plant;
-        crop.growth = growth;
-        crop.gain = gain;
-        crop.strength = strength;
+        crop.setPlant(growth, gain, strength, false, plant);
 
         crop.xCoord = targetCrop.xCoord + direction.offsetX;
         crop.yCoord = targetCrop.yCoord + direction.offsetY;
@@ -45,6 +41,5 @@ public class MutationWorldSimulator {
 
         when(world.getTileEntity(crop.xCoord, crop.yCoord, crop.zCoord)).thenReturn(crop);
         when(world.getBlock(crop.xCoord, crop.yCoord, crop.zCoord)).thenReturn(new BlockCrop());
-        when(world.getBlockMetadata(crop.xCoord, crop.yCoord, crop.zCoord)).thenReturn(meta);
     }
 }
