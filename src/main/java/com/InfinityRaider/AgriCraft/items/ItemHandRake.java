@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.items;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -48,13 +49,15 @@ public class ItemHandRake extends Item {
         }
 
         TileEntityCrop crop = (TileEntityCrop) te;
-        if (!crop.weed) {
+        if (crop.hasWeed()) {
+            int weedGrowthStage = world.getBlockMetadata(x, y, z);
+            int newWeedGrowthStage = calculateGrowthStage(stack.getItemDamage(), weedGrowthStage);
+            crop.updateWeed(newWeedGrowthStage);
             return true;
         }
-
-        int weedGrowthStage = world.getBlockMetadata(x, y, z);
-        int newWeedGrowthStage = calculateGrowthStage(stack.getItemDamage(), weedGrowthStage);
-        crop.updateWeed(newWeedGrowthStage);
+        else if (crop.hasPlant()) {
+            ((BlockCrop) world.getBlock(x, y, z)).canUproot(world, x, y, z);
+        }
         return true;
     }
 

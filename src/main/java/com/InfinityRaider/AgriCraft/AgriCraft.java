@@ -16,8 +16,11 @@ package com.InfinityRaider.AgriCraft;
         ~ InfinityRaider
 */
 
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.apiimpl.APISelector;
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
@@ -47,61 +50,46 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
         LogHelper.debug("Starting Pre-Initialization");
-        //find loaded mods
-        ModIntegration.LoadedMods.init();
-        //register forge event handlers
+        LoadedMods.init();
         proxy.registerEventHandlers();
-        //register packet handler
         NetworkWrapperAgriCraft.init();
-        //setting up configuration file
         ConfigurationHandler.init(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
         if (ConfigurationHandler.debug) {
             FMLCommonHandler.instance().bus().register(new RenderLogger());
         }
-        //initialize blocks
         Blocks.init();
-        //initialize crops
         Crops.init();
-        //initialize items
         Items.init();
+        APISelector.init();
         LogHelper.debug("Pre-Initialization Complete");
     }
 
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
         LogHelper.debug("Starting Initialization");
-        Seeds.init();
-
         NetworkRegistry.INSTANCE.registerGuiHandler(instance , new GuiHandler());
         proxy.registerTileEntities();
         proxy.registerRenderers();
-
-        ModIntegration.init();
-
         LogHelper.debug("Initialization Complete");
     }
 
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event) {
         LogHelper.debug("Starting Post-Initialization");
-
+        //Have to do this in postInit because some mods don't register their items/blocks until init
         ResourceCrops.init();
-        Crops.initBotaniaCrops();
-
+        CustomCrops.init();
+        ModHelper.initHelpers();
         Recipes.init();
-        CustomCrops.initCustomCrops();
         SeedHelper.init();
-        MutationHandler.init();
-        GrowthRequirements.init();
+        GrowthRequirementHandler.init();
         CustomCrops.initGrassSeeds();
-
-        if(!ConfigurationHandler.disableWorldGen) {
-            WorldGen.init();
-        }
-
+        CropPlantHandler.init();
+        MutationHandler.init();
+        CropProducts.init();
+        if(!ConfigurationHandler.disableWorldGen) {WorldGen.init();}
         proxy.initNEI();
-        proxy.initSeedInfo();
         LogHelper.debug("Post-Initialization Complete");
     }
 }

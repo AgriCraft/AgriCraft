@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public interface ISeedStorageController {
     /**
      * Returns a list of all the slots in the inventory corresponding to that seed
      */
-    public List<SeedStorageSlot> getSlots(ItemSeeds seed, int meta);
+    public List<SeedStorageSlot> getSlots(Item seed, int meta);
 
     /**
      * Adds a controllable to this controller

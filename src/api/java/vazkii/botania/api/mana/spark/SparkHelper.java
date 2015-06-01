@@ -11,10 +11,10 @@
  */
 package vazkii.botania.api.mana.spark;
 
-import java.util.List;
-
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public final class SparkHelper {
 

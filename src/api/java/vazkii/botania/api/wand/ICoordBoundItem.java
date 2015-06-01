@@ -1,9 +1,9 @@
 package vazkii.botania.api.wand;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChunkCoordinates;
 
 /**
  * The item equivalent of ITileBound, renders when the

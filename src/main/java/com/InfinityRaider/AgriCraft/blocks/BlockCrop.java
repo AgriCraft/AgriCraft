@@ -1,16 +1,18 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
@@ -21,12 +23,11 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -45,7 +46,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     private IIcon[] weedIcons;
 
     public BlockCrop() {
-        super(Blocks.farmland, null, null, 0, 0, 6);
+        super();
         this.isBlockContainer = true;
         //set the bounding box dimensions
         this.maxX = Constants.unit*14;
@@ -69,19 +70,16 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         if(crop.hasPlant()) {
             Event.Result allowGrowthResult = AppleCoreHelper.validateGrowthTick(this, world, x, y, z, rnd);
             if (allowGrowthResult != Event.Result.DENY) {
-                int meta = this.getPlantMetadata(world, x, y, z);
-                if (meta < 7 && crop.isFertile()) {
-                    double multiplier = 1.0 + (crop.growth + 0.00) / 10;
-                    float growthRate = (float) SeedHelper.getBaseGrowth(crop.seed, crop.seedMeta);
+                if (!crop.isMature() && crop.isFertile()) {
+                    double multiplier = 1.0 + (crop.getGrowth() + 0.00) / 10;
+                    float growthRate = (float) crop.getGrowthRate();
                     boolean shouldGrow = (rnd.nextDouble()<=(growthRate * multiplier)/100);
                     if (shouldGrow) {
-                        meta++;
-                        world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-                        AppleCoreHelper.announceGrowthTick(this, world, x, y, z);
+                        crop.applyGrowthTick();
                     }
                 }
             }
-        } else if(crop.weed) {
+        } else if(crop.hasWeed()) {
             Event.Result allowGrowthResult = AppleCoreHelper.validateGrowthTick(this, world, x, y, z, rnd);
             if (allowGrowthResult != Event.Result.DENY) {
                 int meta = this.getPlantMetadata(world, x, y, z);
@@ -90,9 +88,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     float growthRate = (float) Constants.growthTier1;
                     boolean shouldGrow = (rnd.nextDouble()<=(growthRate * multiplier)/100);
                     if (shouldGrow) {
-                        meta++;
-                        world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-                        AppleCoreHelper.announceGrowthTick(this, world, x, y, z);
+                        crop.applyGrowthTick();
                     }
                 }
                 else {
@@ -106,27 +102,26 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             if(ConfigurationHandler.enableWeeds && Math.random()<0.10) {
                 crop.spawnWeed();
             }
-            else if(crop.crossCrop) {
+            else if(crop.isCrossCrop()) {
                 crop.crossOver();
             }
         }
     }
 
-    //this harvests the crop
-    public boolean harvest(World world, int x, int y, int z) {
+    //this harvests the crop, player may be null if harvested trough automation
+    public boolean harvest(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
             boolean update = false;
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-            if(crop.weed) {
+            if(crop.hasWeed()) {
                 crop.clearWeed();   //update is not needed because it is called in the clearWeed() method
-            }else if(crop.crossCrop) {
-                crop.crossCrop = false;
+            }else if(crop.isCrossCrop()) {
+                crop.setCrossCrop(false);
                 this.dropBlockAsItem(world, x, y, z, new ItemStack(Items.crops, 1));
-                update = true;
-            } else if(crop.isMature()) {
+            } else if(crop.isMature() && crop.allowHarvest(player)) {
                 crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
                 update = true;
-                ArrayList<ItemStack> drops = SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta);
+                ArrayList<ItemStack> drops = crop.getFruits();
                 for (ItemStack drop : drops) {
                     this.dropBlockAsItem(world, x, y, z, drop);
                 }
@@ -143,17 +138,16 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         if(!world.isRemote) {
             boolean update = false;
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-            if (crop.weed) {
+            if (crop.hasWeed()) {
                 return;
             }
-
-            if(!crop.crossCrop && !crop.hasPlant()) {
-                crop.crossCrop=true;
+            if(!crop.isCrossCrop() && !crop.hasPlant()) {
+                crop.setCrossCrop(true);
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode?player.getCurrentEquippedItem().stackSize:player.getCurrentEquippedItem().stackSize - 1;
                 update = true;
             }
             else {
-                this.harvest(world, x, y, z);
+                this.harvest(world, x, y, z, player);
             }
             if (update) {
                 crop.markForUpdate();
@@ -165,22 +159,22 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         if(!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             //is the cropEmpty a crosscrop or does it already have a plant
-            if (crop.crossCrop || crop.hasPlant() || !(player.getCurrentEquippedItem().getItem() instanceof ItemSeeds)) {
+            if (crop.isCrossCrop() || crop.hasPlant() || !(CropPlantHandler.isValidSeed(player.getCurrentEquippedItem()) ) ) {
                 return;
             }
             //the seed can be planted here
             else {
                 ItemStack stack = player.getCurrentEquippedItem();
-                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage()) || !GrowthRequirements.getGrowthRequirement((ItemSeeds) stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y-1, z)) {
+                if (!CropPlantHandler.isValidSeed(stack) || !GrowthRequirementHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y-1, z)) {
                     return;
                 }
                 //get NBT data from the seeds
                 if (player.getCurrentEquippedItem().stackTagCompound != null && player.getCurrentEquippedItem().stackTagCompound.hasKey(Names.NBT.growth)) {
                     //NBT data was found: copy data to plant
-                    crop.setPlant(stack.stackTagCompound.getInteger(Names.NBT.growth), stack.stackTagCompound.getInteger(Names.NBT.gain), stack.stackTagCompound.getInteger(Names.NBT.strength), stack.stackTagCompound.getBoolean(Names.NBT.analyzed), (ItemSeeds) stack.getItem(), stack.getItemDamage());
+                    crop.setPlant(stack.stackTagCompound.getInteger(Names.NBT.growth), stack.stackTagCompound.getInteger(Names.NBT.gain), stack.stackTagCompound.getInteger(Names.NBT.strength), stack.stackTagCompound.getBoolean(Names.NBT.analyzed), stack.getItem(), stack.getItemDamage());
                 } else {
                     //NBT data was not initialized: set defaults
-                    crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, false, (ItemSeeds) stack.getItem(), stack.getItemDamage());
+                    crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, false, stack.getItem(), stack.getItemDamage());
                 }
                 //take one seed away if the player is not in creative
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
@@ -198,14 +192,14 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             TileEntity te = world.getTileEntity(x, y, z);
             if (te != null && te instanceof TileEntityCrop) {
                 TileEntityCrop crop = (TileEntityCrop) te;
-                if (ConfigurationHandler.enableHandRake && crop.weed) {
+                if (ConfigurationHandler.enableHandRake && crop.hasWeed()) {
                     return false;
                 }
                 if (player.isSneaking()) {
-                    this.harvest(world, x, y, z);
+                    this.harvest(world, x, y, z, player);
                 } else if (player.getCurrentEquippedItem() == null) {
                     //harvest operation
-                    this.harvest(world, x, y, z);
+                    this.harvest(world, x, y, z, player);
                 } else if (player.getCurrentEquippedItem().getItem() == Items.debugItem) {
                     return false;
                 }
@@ -218,7 +212,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     return false;
                 }
                 //magical crops fertiliser
-                else if (ModIntegration.LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && player.getCurrentEquippedItem().getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
+                else if (LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && player.getCurrentEquippedItem().getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
                     return this.applyMagicalFertiliser(world, x, y, z, player);
                 }
                 //allow the debugger to be used
@@ -226,7 +220,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                     return false;
                 }
                 //tinker's construct scythe
-                else if (ModIntegration.LoadedMods.tconstruct && player.getCurrentEquippedItem().getItem() instanceof Scythe) {
+                else if (LoadedMods.tconstruct && player.getCurrentEquippedItem().getItem() instanceof Scythe) {
                     NBTTagCompound tag = player.getCurrentEquippedItem().stackTagCompound;
                     if(tag==null || !tag.hasKey("InfiTool")) {
                         //invalid tool
@@ -238,16 +232,16 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                             if(toolTag.getBoolean("Broken")) {
                                 break;
                             }
-                            else if (world.getBlock(xPos, y, zPos) instanceof BlockCrop && this.harvest(world, xPos, y, zPos)) {
+                            else if (world.getBlock(xPos, y, zPos) instanceof BlockCrop && this.harvest(world, xPos, y, zPos, player)) {
                                 AbilityHelper.damageTool(player.getCurrentEquippedItem(), 1, player, false);
                             }
                         }
                     }
                 } else {
                     //harvest operation
-                    this.harvest(world, x, y, z);
+                    this.harvest(world, x, y, z, player);
                     //check to see if clicked with seeds
-                    if (player.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
+                    if (CropPlantHandler.isValidSeed(player.getCurrentEquippedItem())) {
                         this.plantSeed(world, x, y, z, player);
                     }
                 }
@@ -261,11 +255,15 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
+            CropPlant plant = ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlant();
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
                 this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
             }
             world.setBlockToAir(x,y,z);
             world.removeTileEntity(x, y, z);
+            if(plant!=null) {
+                plant.onPlantRemoved(world, x, y, z);
+            }
         }
     }
 
@@ -281,20 +279,28 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             if (crop != null) {
                 ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-                if (crop.crossCrop) {
+                if (crop.isCrossCrop()) {
                     drops.add(new ItemStack(Items.crops, 2));
                 } else {
-                    drops.add(new ItemStack(Items.crops, 1));
+                    if(!(crop.hasWeed() && ConfigurationHandler.weedsDestroyCropSticks)) {
+                        drops.add(new ItemStack(Items.crops, 1));
+                    }
                     if (crop.hasPlant()) {
-                        drops.add(crop.getSeedStack());
                         if (this.isMature(world, x, y, z)) {
-                            drops.addAll(SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+                            drops.addAll(crop.getFruits());
+                            drops.add(crop.getSeedStack());
+                        }
+                        else if(!ConfigurationHandler.onlyMatureDropSeeds) {
+                            drops.add(crop.getSeedStack());
                         }
                     }
                 }
                 for (ItemStack drop : drops) {
-                    this.dropBlockAsItem(world, x, y, z, drop);
+                    if(drop!=null && drop.getItem()!=null) {
+                        this.dropBlockAsItem(world, x, y, z, drop);
+                    }
                 }
+
             }
         }
     }
@@ -303,26 +309,17 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        if(crop.crossCrop) {
-            return ConfigurationHandler.bonemealMutation;
-        }
-        if(crop.hasPlant()) {
-            if(SeedHelper.getSeedTier(crop.seed, crop.seedMeta)<4) {
-                return !this.isMature(world, x, y , z);
-            }
-        }
-        return false;
+        return crop.canBonemeal();
     }
 
     //this gets called when the player uses bonemeal on the crop
-    @Override
     public void func_149853_b(World world, Random rand, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        if(crop.hasPlant() && this.isFertile(world, x, y ,z)) {
+        if(crop.hasPlant()) {
             super.func_149853_b(world, rand, x, y, z);
             crop.markForUpdate();
         }
-        else if(crop.crossCrop && ConfigurationHandler.bonemealMutation) {
+        else if(crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
             crop.crossOver();
         }
     }
@@ -360,7 +357,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     //see if the block can stay
     @Override
     public boolean canBlockStay(World world, int x, int y, int z) {
-        return GrowthRequirements.isSoilValid(world, x, y-1, z);
+        return GrowthRequirementHandler.isSoilValid(world, x, y - 1, z);
     }
 
     //see if the block can grow
@@ -375,7 +372,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-            if (crop.crossCrop) {
+            if (crop.isCrossCrop()) {
                 items.add(new ItemStack(Items.crops, 2));
             } else {
                 items.add(new ItemStack(Items.crops, 1));
@@ -384,7 +381,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 ItemStack seedStack = crop.getSeedStack().copy();
                 items.add(seedStack);
                 if(crop.isMature()) {
-                    items.addAll(SeedHelper.getPlantFruits(crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
+                    items.addAll(crop.getFruits());
                 }
             }
         }
@@ -408,7 +405,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 if(crop.hasPlant()) {
                     ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
                     if(crop.isMature()) {
-                        drops.addAll(SeedHelper.getPlantFruits(crop.seed, world, x, y, z, crop.gain, crop.seedMeta));
+                        drops.addAll(crop.getFruits());
                     }
                     drops.add(crop.getSeedStack());
                     for (ItemStack drop : drops) {
@@ -428,21 +425,33 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         return Items.crops;
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+        return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + crop.getCropHeight(), (double)z + this.maxZ);
+    }
+
     //rendering stuff
     @Override public int getRenderType() {return AgriCraft.proxy.getRenderId(Constants.cropId);}       //get the correct render type
 
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
+
     @Override
     public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
+
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return true;}
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {return false;}        //no particles when this block gets hit
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer effectRenderer) {return false;}     //no particles when destroyed
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {

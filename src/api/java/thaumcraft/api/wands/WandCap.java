@@ -1,11 +1,11 @@
 package thaumcraft.api.wands;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thaumcraft.api.aspects.Aspect;
+
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * This class is used to keep the material information for the various caps. 

@@ -1,17 +1,19 @@
 package com.InfinityRaider.AgriCraft.items;
 
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -43,19 +45,18 @@ public class ItemTrowel extends ModItem {
                 if (te != null && te instanceof TileEntityCrop) {
                     TileEntityCrop crop = (TileEntityCrop) te;
                     //clear weed
-                    if (crop.weed) {
+                    if (crop.hasWeed()) {
                         crop.clearWeed();
                     }
                     //put plant on trowel
                     else if (crop.hasPlant() && stack.getItemDamage() == 0) {
                         //put plant on trowel
                         NBTTagCompound tag = new NBTTagCompound();
-                        tag.setShort(Names.NBT.growth, (short) crop.growth);
-                        tag.setShort(Names.NBT.gain, (short) crop.gain);
-                        tag.setShort(Names.NBT.strength, (short) crop.strength);
-                        tag.setBoolean(Names.NBT.analyzed, crop.analyzed);
-                        tag.setString(Names.Objects.seed, crop.getSeedString());
-                        tag.setShort(Names.NBT.meta, (short) crop.seedMeta);
+                        tag.setShort(Names.NBT.growth, (short) crop.getGrowth());
+                        tag.setShort(Names.NBT.gain, (short) crop.getGain());
+                        tag.setShort(Names.NBT.strength, (short) crop.getStrength());
+                        tag.setBoolean(Names.NBT.analyzed, crop.isAnalyzed());
+                        tag.setTag(Names.NBT.seed, CropPlantHandler.writePlantToNBT(crop.getPlant()));
                         tag.setShort(Names.NBT.materialMeta, (short) world.getBlockMetadata(x, y, z));
                         stack.setTagCompound(tag);
                         stack.setItemDamage(1);
@@ -65,18 +66,18 @@ public class ItemTrowel extends ModItem {
                         return true;
                     }
                     //plant crop from trowel
-                    else if (!crop.hasPlant() && !crop.crossCrop && stack.getItemDamage() == 1) {
+                    else if (!crop.hasPlant() && !crop.isCrossCrop() && stack.getItemDamage() == 1) {
                         //set crop
                         NBTTagCompound tag = stack.getTagCompound();
-                        ItemSeeds seed = (ItemSeeds) Item.itemRegistry.getObject(tag.getString(Names.Objects.seed));
+                        Item seed = (Item) Item.itemRegistry.getObject(tag.getString(Names.Objects.seed));
                         int seedMeta = tag.getShort(Names.NBT.meta);
-                        if(GrowthRequirements.getGrowthRequirement(seed, seedMeta).isValidSoil(world, x, y - 1, z)) {
-                            crop.growth = tag.getShort(Names.NBT.growth);
-                            crop.gain = tag.getShort(Names.NBT.gain);
-                            crop.strength = tag.getShort(Names.NBT.strength);
-                            crop.analyzed = tag.getBoolean(Names.NBT.analyzed);
-                            crop.seed = seed;
-                            crop.seedMeta = seedMeta;
+                        if(GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta).isValidSoil(world, x, y - 1, z)) {
+                            int growth = tag.getShort(Names.NBT.growth);
+                            int gain = tag.getShort(Names.NBT.gain);
+                            int strength = tag.getShort(Names.NBT.strength);
+                            boolean analysed = tag.getBoolean(Names.NBT.analyzed);
+                            CropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
+                            crop.setPlant(growth, gain, strength, analysed, plant);
                             world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.NBT.materialMeta), 3);
                             crop.markForUpdate();
                             //clear trowel

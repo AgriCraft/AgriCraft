@@ -1,15 +1,14 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraftforge.common.IPlantable;
@@ -21,10 +20,9 @@ public class PlayerInteractEventHandler {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             Block block = event.world.getBlock(event.x, event.y, event.z);
             if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
-                if (GrowthRequirements.isSoilValid(event.world, event.x, event.y, event.z) || block == Blocks.farmland) {
+                if (GrowthRequirementHandler.isSoilValid(event.world, event.x, event.y, event.z) || block == Blocks.farmland) {
                     if (ConfigurationHandler.disableVanillaFarming) {
-                        //for now, disable vanilla farming for every IPlantable, if people start to need exceptions I'll add in exceptions
-                        if(!(event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSeeds) || SeedHelper.isValidSeed((ItemSeeds) event.entityPlayer.getCurrentEquippedItem().getItem(), event.entityPlayer.getCurrentEquippedItem().getItemDamage())) {
+                        if(CropPlantHandler.isValidSeed(event.entityPlayer.getCurrentEquippedItem())) {
                             this.denyEvent(event, false);
                         }
                     } else if (event.entityPlayer.getCurrentEquippedItem().hasTagCompound()) {

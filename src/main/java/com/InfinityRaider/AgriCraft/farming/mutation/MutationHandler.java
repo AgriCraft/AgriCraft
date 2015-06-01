@@ -1,11 +1,11 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -56,19 +56,20 @@ public abstract class MutationHandler {
                 ItemStack resultStack = IOHelper.getStack(mutationData.substring(0,indexEquals));
                 ItemStack parentStack1 = IOHelper.getStack(mutationData.substring(indexEquals + 1, indexPlus));
                 ItemStack parentStack2 = IOHelper.getStack(mutationData.substring(indexPlus+1));
-                Item result = resultStack!=null?resultStack.getItem():null;
-                Item parent1 = parentStack1!=null?parentStack1.getItem():null;
-                Item parent2 = parentStack2!=null?parentStack2.getItem():null;
-                success = result!=null && result instanceof ItemSeeds;
+                success = CropPlantHandler.isValidSeed(resultStack);
                 errorMsg = "resulting stack is not correct";
                 if(success) {
-                    success =  parent1!=null &&  parent1 instanceof ItemSeeds;
+                    success =  CropPlantHandler.isValidSeed(parentStack1);
                     errorMsg = "first parent stack is not correct";
                     if(success) {
-                        success =  parent2!=null &&  parent2 instanceof ItemSeeds;
+                        success =  CropPlantHandler.isValidSeed(parentStack2);
                         errorMsg = "second parent stack is not correct";
                         if(success) {
-                            mutation = new Mutation(resultStack, parentStack1, parentStack2);
+                            try {
+                                mutation = new Mutation(resultStack, parentStack1, parentStack2);
+                            } catch (Exception e) {
+                                LogHelper.debug("Caught exception when trying to add mutation: "+resultStack.getUnlocalizedName()+"="+parentStack1.getUnlocalizedName()+"+"+parentStack2.getUnlocalizedName()+" this seed is not registered");
+                            }
                         }
                     }
                 }
@@ -118,10 +119,10 @@ public abstract class MutationHandler {
 
     //finds the product of two parents
     private static ArrayList<Mutation> getMutations(TileEntityCrop parent1, TileEntityCrop parent2) {
-        ItemSeeds seed1 = (ItemSeeds) parent1.seed;
-        ItemSeeds seed2 = (ItemSeeds) parent2.seed;
-        int meta1 = parent1.seedMeta;
-        int meta2 = parent2.seedMeta;
+        Item seed1 = parent1.getSeedStack().getItem();
+        Item seed2 = parent2.getSeedStack().getItem();
+        int meta1 = parent1.getSeedStack().getItemDamage();
+        int meta2 = parent2.getSeedStack().getItemDamage();
         ArrayList<Mutation> list = new ArrayList<Mutation>();
         for (Mutation mutation:mutations) {
             if ((seed1==mutation.parent1.getItem() && seed2==mutation.parent2.getItem()) && (meta1==mutation.parent1.getItemDamage() && meta2==mutation.parent2.getItemDamage())) {
@@ -148,11 +149,11 @@ public abstract class MutationHandler {
                 //1: this code isn't reached and all surrounding crops affect stat gain positively (multiplier = 1 for incompatible crops)
                 //2: only parent/identical seeds can affect stat gain (multiplier = -1 for incompatible crops)
                 //3: any neighbouring plant that isn't a parent/same seed affects stat gain negatively (multiplier = 0 for incompatible crops)
-                multiplier = canInheritStats(result.getSeed(), result.getMeta(), parents[i].seed, parents[i].seedMeta)?1:(multiplier==3?0:-1);
+                multiplier = canInheritStats(result.getSeed(), result.getMeta(), parents[i].getSeedStack().getItem(), parents[i].getSeedStack().getItemDamage())?1:(multiplier==3?0:-1);
             }
-            growth[i] = multiplier * parents[i].growth;
-            gain[i] = multiplier*parents[i].gain;
-            strength[i] = multiplier*parents[i].strength;
+            growth[i] = multiplier * parents[i].getGrowth();
+            gain[i] = multiplier*parents[i].getGain();
+            strength[i] = multiplier*parents[i].getStrength();
         }
         int meanGrowth = getMean(growth);
         int meanGain = getMean(gain);
@@ -187,10 +188,11 @@ public abstract class MutationHandler {
         if(neighbours == 1 && ConfigurationHandler.singleSpreadsIncrement) {
             neighbours = 2;
         }
-        return Math.max(1, (input + (int) Math.round(Math.abs(neighbours-1)*Math.random()))/divisor);
+        int newStat = Math.max(1, (input + (int) Math.round(Math.abs(neighbours-1)*Math.random()))/divisor);
+        return Math.min(newStat, ConfigurationHandler.cropStatCap);
     }
 
-    private static boolean canInheritStats(ItemSeeds child, int childMeta, ItemSeeds seed, int seedMeta) {
+    private static boolean canInheritStats(Item child, int childMeta, Item seed, int seedMeta) {
         boolean b = child==seed && childMeta==seedMeta;
         if(!b) {
             for(Mutation mutation:getParentMutations(child, childMeta)) {
@@ -231,27 +233,26 @@ public abstract class MutationHandler {
     //gets all the mutations this crop can mutate to
     public static Mutation[] getMutations(ItemStack stack) {
         ArrayList<Mutation> list = new ArrayList<Mutation>();
-        if(stack.getItem() instanceof ItemSeeds) {
-            for (Mutation mutation:mutations) {
-                if (mutation.parent2.getItem() == stack.getItem() && mutation.parent2.getItemDamage() == stack.getItemDamage()) {
-                    list.add(new Mutation(mutation));
-                }
-                if (!(mutation.parent2.getItem() == mutation.parent1.getItem() && mutation.parent2.getItemDamage() == mutation.parent1.getItemDamage()) && (mutation.parent1.getItem() == stack.getItem() && mutation.parent1.getItemDamage() == stack.getItemDamage())) {
-                    list.add(new Mutation(mutation));
-                }
+        for (Mutation mutation : mutations) {
+            if (mutation.parent2.getItem() == stack.getItem() && mutation.parent2.getItemDamage() == stack.getItemDamage()) {
+                list.add(new Mutation(mutation));
+            }
+            if (!(mutation.parent2.getItem() == mutation.parent1.getItem() && mutation.parent2.getItemDamage() == mutation.parent1.getItemDamage()) && (mutation.parent1.getItem() == stack.getItem() && mutation.parent1.getItemDamage() == stack.getItemDamage())) {
+                list.add(new Mutation(mutation));
             }
         }
+
         return list.toArray(new Mutation[list.size()]);
     }
 
-    public static Mutation[] getParentMutations(ItemSeeds seed, int meta) {
+    public static Mutation[] getParentMutations(Item seed, int meta) {
         return getParentMutations(new ItemStack(seed, 1, meta));
     }
 
     //gets the parents this crop mutates from
     public static Mutation[] getParentMutations(ItemStack stack) {
         ArrayList<Mutation> list = new ArrayList<Mutation>();
-        if(stack.getItem() instanceof ItemSeeds) {
+        if(CropPlantHandler.isValidSeed(stack)) {
             for (Mutation mutation:mutations) {
                 if (mutation.result.getItem() == stack.getItem() && mutation.result.getItemDamage() == stack.getItemDamage()) {
                     list.add(new Mutation(mutation));

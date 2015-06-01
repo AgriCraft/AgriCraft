@@ -1,11 +1,13 @@
 package com.InfinityRaider.AgriCraft.init;
 
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -19,7 +21,8 @@ import java.util.List;
 public class CustomCrops {
     public static BlockModPlant[] customCrops;
     public static ItemModSeed[] customSeeds;
-    public static void initCustomCrops() {
+
+    public static void init() {
         if(ConfigurationHandler.customCrops) {
             String[] cropsRawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readCustomCrops());
             customCrops = new BlockModPlant[cropsRawData.length];
@@ -49,12 +52,16 @@ public class CustomCrops {
                         Block baseBlock = base != null ? ((ItemBlock) base.getItem()).field_150939_a : null;
                         int baseMeta = base != null ? base.getItemDamage() : 0;
                         int tier = Integer.parseInt(cropData[4]);
-                        int renderType = Integer.parseInt(cropData[5]);
+                        RenderMethod renderType = RenderMethod.getRenderMethod(Integer.parseInt(cropData[5]));
                         String info = cropData[6];
-                        customCrops[i] = new BlockModPlant(soil, baseBlock, baseMeta, fruit, fruitMeta, tier, renderType, true);
-                        RegisterHelper.registerCrop(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1));
-                        customSeeds[i] = new ItemModSeed(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds", info);
-                        RegisterHelper.registerSeed(customSeeds[i], customCrops[i]);
+                        try {
+                            customCrops[i] = new BlockModPlant(new Object[] {name, new ItemStack(fruit, 1, fruitMeta), soil, new BlockWithMeta(baseBlock, baseMeta), tier, renderType});
+                        } catch (InvalidArgumentException e) {
+                            e.printStackTrace();
+                            continue;
+                        }
+                        customSeeds[i] = customCrops[i].getSeed();
+                        customSeeds[i].setInformation(info);
                     }
                 }
                 if(!success) {

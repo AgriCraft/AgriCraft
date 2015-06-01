@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -48,7 +47,7 @@ public class AgriCraftHarvestable implements IFactoryHarvestable {
         if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             if (crop.hasPlant() && crop.isMature()) {
-                items.addAll(SeedHelper.getPlantFruits(crop.seed, crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord, crop.gain, crop.seedMeta));
+                items.addAll(crop.getFruits());
             }
         }
         return items;

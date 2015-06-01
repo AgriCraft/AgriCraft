@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
+import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.network.MessageTileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -7,9 +8,8 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable{
     public ForgeDirection direction;
-    private ItemSeeds lockedSeed;
+    private Item lockedSeed;
     private int lockedSeedMeta;
     private Map<Integer, SeedStorageSlot> slots = new HashMap<Integer, SeedStorageSlot>();
     private ISeedStorageController controller;
@@ -74,7 +74,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if(tag.hasKey(Names.NBT.seed)) {
             //read the locked seed
             ItemStack seedStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.NBT.seed));
-            this.lockedSeed = (ItemSeeds) seedStack.getItem();
+            this.lockedSeed = seedStack.getItem();
             this.lockedSeedMeta = seedStack.getItemDamage();
             if(tag.hasKey(Names.NBT.inventory)) {
                 //read the slots
@@ -153,7 +153,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public List<SeedStorageSlot> getSlots(ItemSeeds seed, int meta) {
+    public List<SeedStorageSlot> getSlots(Item seed, int meta) {
         ArrayList<SeedStorageSlot> list = new ArrayList<SeedStorageSlot>();
         if(this.lockedSeed!=null && this.lockedSeed==seed && this.lockedSeedMeta==meta) {
             list = new ArrayList<SeedStorageSlot>(slots.values());
@@ -187,7 +187,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public void setLockedSeed(ItemSeeds seed, int meta) {
+    public void setLockedSeed(Item seed, int meta) {
         if(!this.hasLockedSeed()) {
             this.lockedSeed = seed;
             this.lockedSeedMeta = meta;

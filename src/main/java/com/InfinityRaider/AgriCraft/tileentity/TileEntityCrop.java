@@ -1,19 +1,22 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
+import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirements;
+import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import com.InfinityRaider.AgriCraft.utility.interfaces.IDebuggable;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -25,19 +28,176 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
-    public int growth=0;
-    public int gain=0;
-    public int strength=0;
-    public boolean analyzed=false;
-    public boolean crossCrop=false;
-    public boolean weed=false;
-    public ItemSeeds seed = null;
-    public int seedMeta = 0;
+    private int growth=0;
+    private int gain=0;
+    private int strength=0;
+    private boolean analyzed=false;
+    private boolean crossCrop=false;
+    private boolean weed=false;
+    private CropPlant plant;
 
     private final MutationEngine mutationEngine;
 
     public TileEntityCrop() {
         this.mutationEngine = new MutationEngine(this);
+    }
+
+    public CropPlant getPlant() {return plant;}
+
+    public int getGrowth() {return growth;}
+
+    public int getGain() {return gain;}
+
+    public int getStrength() {return strength;}
+
+    public boolean isAnalyzed() {return analyzed;}
+
+    public boolean hasWeed() {return weed;}
+
+    public boolean isCrossCrop() {return crossCrop;}
+
+    public void setCrossCrop(boolean status) {
+        if(status!=this.crossCrop) {
+            this.crossCrop = status;
+            this.markForUpdate();
+        }
+    }
+
+    /** get growthrate */
+    public int getGrowthRate() {return plant.getGrowthRate();}
+
+    /** check to see if there is a plant here */
+    public boolean hasPlant() {return this.plant!=null;}
+
+    /** sets the plant in the crop */
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, CropPlant plant) {
+        if( (!this.crossCrop) && (!this.hasPlant())) {
+            if(plant!=null) {
+                this.plant = plant;
+                this.growth = growth;
+                this.gain = gain;
+                this.strength = strength;
+                this.analyzed = analyzed;
+                this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
+                this.markForUpdate();
+                plant.onSeedPlanted(worldObj, xCoord, yCoord, zCoord);
+            }
+        }
+    }
+
+    /** sets the plant in the crop */
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, Item seed, int seedMeta) {
+        this.setPlant(growth, gain, strength, analyzed, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
+    }
+
+    /** clears the plant in the crop */
+    public void clearPlant() {
+        CropPlant oldPlant = getPlant();
+        this.growth = 0;
+        this.gain = 0;
+        this.strength = 0;
+        this.plant = null;
+        this.analyzed = false;
+        this.weed = false;
+        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
+        this.markForUpdate();
+        if (oldPlant != null) {
+            oldPlant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord);
+        }
+    }
+
+    /** check if the crop is fertile */
+    public boolean isFertile() {
+        return worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.isFertile(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+    }
+
+    /** gets the height of the crop */
+    public float getCropHeight() {
+        return hasPlant()?plant.getHeight(getBlockMetadata()):Constants.unit*13;
+    }
+
+    /** check if bonemeal can be applied */
+    public boolean canBonemeal() {
+        if(this.crossCrop) {
+            return ConfigurationHandler.bonemealMutation;
+        }
+        if(this.hasPlant()) {
+            if(this.isMature()) {
+                return false;
+            }
+            if(!this.isFertile()) {
+                return false;
+            }
+            return plant.canBonemeal();
+        }
+        return false;
+    }
+
+    /** check the block if the plant is mature */
+    public boolean isMature() {
+        return this.hasPlant() && this.plant.isMature(worldObj, xCoord, yCoord, zCoord);
+    }
+
+    /** gets the fruits for this plant */
+    public ArrayList<ItemStack> getFruits() {return plant.getFruitsOnHarvest(gain, worldObj.rand);}
+
+    /** allow harvesting */
+    public boolean allowHarvest(EntityPlayer player) {
+        return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord, player);
+    }
+
+    public ItemStack getSeedStack() {
+        ItemStack seed = plant.getSeed();
+        NBTTagCompound tag = new NBTTagCompound();
+        SeedHelper.setNBT(tag, (short) this.growth, (short) this.gain, (short) this.strength, this.analyzed);
+        seed.setTagCompound(tag);
+        return seed;
+    }
+
+    /** spawns weed in the crop */
+    public void spawnWeed() {
+        this.crossCrop=false;
+        this.clearPlant();
+        this.weed=true;
+        this.markForUpdate();
+    }
+
+    /** spread the weed */
+    public void spreadWeed() {
+        List<TileEntityCrop> neighbours = this.getNeighbours();
+        for(TileEntityCrop crop:neighbours) {
+            if(crop!=null && (!crop.weed) && Math.random()<crop.getWeedSpawnChance()) {
+                crop.spawnWeed();
+                break;
+            }
+        }
+    }
+
+    public void updateWeed(int growthStage) {
+        if (growthStage == 0) {
+            this.weed = false;
+        }
+        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, growthStage, 3);
+        this.markForUpdate();
+    }
+
+    //clear the weed
+    public void clearWeed() {updateWeed(0);}
+
+    //weed spawn chance
+    private double getWeedSpawnChance() {
+        if(this.hasPlant()) {
+            return ConfigurationHandler.weedsWipePlants ? ((double) (10 - this.strength)) / 10 : 0;
+        }
+        else {
+            return this.weed ? 0 : 1;
+        }
+    }
+
+    //TileEntity is just to store data on the crop
+    @Override
+    public boolean canUpdate() {
+        return false;
     }
 
     //this saves the data on the tile entity
@@ -50,9 +210,8 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         tag.setBoolean(Names.NBT.analyzed, analyzed);
         tag.setBoolean(Names.NBT.crossCrop,crossCrop);
         tag.setBoolean(Names.NBT.weed, weed);
-        if(this.seed!=null) {
-            tag.setString(Names.Objects.seed, this.getSeedString());
-            tag.setShort(Names.NBT.meta, (short) seedMeta);
+        if(this.plant!=null) {
+            tag.setTag(Names.NBT.seed, CropPlantHandler.writePlantToNBT(plant));
         }
     }
 
@@ -66,20 +225,48 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         this.analyzed=tag.hasKey(Names.NBT.analyzed) && tag.getBoolean(Names.NBT.analyzed);
         this.crossCrop=tag.getBoolean(Names.NBT.crossCrop);
         this.weed=tag.getBoolean(Names.NBT.weed);
-        if(tag.hasKey(Names.Objects.seed) && tag.hasKey(Names.NBT.meta)) {
-            this.setSeed(tag.getString(Names.Objects.seed));
-            this.seedMeta = tag.getInteger(Names.NBT.meta);
+        if(tag.hasKey(Names.NBT.seed) && !tag.hasKey(Names.NBT.meta)) {
+            this.plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
+        }
+        //This is to load NBT from crops prior to this update
+        else if(tag.hasKey(Names.NBT.seed) && tag.hasKey(Names.NBT.meta)) {
+            this.loadPlantFromOldVersion(tag);
         }
         else {
-            this.seed=null;
-            this.seedMeta=0;
+            this.plant=null;
         }
     }
 
-    //the code that makes the crop cross with neighboring crops
-    public void crossOver() {
-        mutationEngine.executeCrossOver();
+    //This is to load NBT from crops prior to this update
+    @Deprecated
+    private void loadPlantFromOldVersion(NBTTagCompound tag) {
+        String name = tag.getString(Names.NBT.seed);
+        Item seed = name.equalsIgnoreCase("none")?null: (Item) Item.itemRegistry.getObject(name);
+        int meta = tag.getInteger(Names.NBT.meta);
+        CropPlant plant = CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta));
+        if(plant!=null) {
+            this.plant = plant;
+        } else {
+            this.clearPlant();
+        }
     }
+
+    /** Apply a growth increment */
+    public void applyGrowthTick() {
+        int flag = 2;
+        int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+        if(hasPlant()) {
+            flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta) ? 2 : 4;
+        }
+        if (hasWeed() || !plant.isMature(worldObj, xCoord, yCoord, zCoord)) {
+            worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, flag);
+            AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
+        }
+
+    }
+
+    /** the code that makes the crop cross with neighboring crops */
+    public void  crossOver() {mutationEngine.executeCrossOver();}
 
     /** Called by the mutation engine to apply the result of a cross over */
     public void applyCrossOverResult(CrossOverResult result) {
@@ -110,9 +297,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         neighbours.add((TileEntityCrop) te);
     }
 
-    /**
-     * @return a list with only mature neighbours of type <code>TileEntityCrop</code>
-     */
+    /** @return a list with only mature neighbours of type <code>TileEntityCrop</code> */
     public List<TileEntityCrop> getMatureNeighbours() {
         List<TileEntityCrop> neighbours = getNeighbours();
         for (Iterator<TileEntityCrop> iterator = neighbours.iterator(); iterator.hasNext(); ) {
@@ -122,77 +307,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             }
         }
         return neighbours;
-    }
-
-    //spawns weed in the crop
-    public void spawnWeed() {
-        this.crossCrop=false;
-        this.clearPlant();
-        this.weed=true;
-        this.markForUpdate();
-    }
-
-    //spread the weed
-    public void spreadWeed() {
-        List<TileEntityCrop> neighbours = this.getNeighbours();
-        for(TileEntityCrop crop:neighbours) {
-            if(crop!=null && (!crop.weed) && Math.random()<crop.getWeedSpawnChance()) {
-                crop.spawnWeed();
-                break;
-            }
-        }
-    }
-
-    public void updateWeed(int growthStage) {
-        if (growthStage == 0) {
-            this.weed = false;
-        }
-        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, growthStage, 3);
-        this.markForUpdate();
-    }
-
-    //clear the weed
-    public void clearWeed() {
-        updateWeed(0);
-    }
-
-    //weed spawn chance
-    private double getWeedSpawnChance() {
-        if(this.hasPlant()) {
-            return ConfigurationHandler.weedsWipePlants?((double) (10 - this.strength))/10:0;
-        }
-        else {
-            return this.weed ? 0 : 1;
-        }
-    }
-
-    //sets the plant in the crop
-    public void setPlant(int growth, int gain, int strength, boolean analyzed, ItemSeeds seed, int seedMeta) {
-        if( (!this.crossCrop) && (!this.hasPlant())) {
-            this.growth = growth;
-            this.gain = gain;
-            this.strength = strength;
-            this.seed = seed;
-            this.analyzed = analyzed;
-            this.seedMeta = seedMeta;
-            this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
-            this.markForUpdate();
-        }
-    }
-
-    //clears the plant in the crop
-    public void clearPlant() {
-        if(!this.crossCrop) {
-            this.growth = 0;
-            this.gain = 0;
-            this.strength = 0;
-            this.seed = null;
-            this.seedMeta = 0;
-            this.analyzed = false;
-            this.weed = false;
-            this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
-            this.markForUpdate();
-        }
     }
 
     @Override
@@ -205,46 +319,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         return true;
     }
 
-    //check to see if there is a plant here
-    public boolean hasPlant() {
-        return ((this.seed!=null)&&(this.seed.getPlant(this.worldObj, this.xCoord, this.yCoord, this.zCoord)!=null));
-    }
-
-    //check if the crop is fertile
-    public boolean isFertile() {
-        return GrowthRequirements.getGrowthRequirement(this.seed, this.seedMeta).canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-    }
-
-    //check the block if the plant is mature
-    public boolean isMature() {
-        return !this.worldObj.isRemote && this.worldObj.getBlock(xCoord, yCoord, zCoord) != null && this.worldObj.getBlock(xCoord, yCoord, zCoord) instanceof BlockCrop && ((BlockCrop) this.worldObj.getBlock(xCoord, yCoord, zCoord)).isMature(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-    }
-
-    public ItemStack getSeedStack() {
-        ItemStack seed = new ItemStack(this.seed, 1, this.seedMeta);
-        NBTTagCompound tag = new NBTTagCompound();
-        SeedHelper.setNBT(tag, (short) this.growth, (short) this.gain, (short) this.strength, this.analyzed);
-        seed.setTagCompound(tag);
-        return seed;
-    }
-
-    //a helper method for ItemSeed <-> String conversion for storing seed as a string in NBT
-    public String getSeedString() {
-        return this.seed==null?"none":Item.itemRegistry.getNameForObject(this.seed);
-    }
-
-    //a helper method for ItemSeed <-> String conversion for storing seed as a string in NBT
-    public void setSeed(String input) {
-        this.seed = input.equalsIgnoreCase("none")?null:(ItemSeeds) Item.itemRegistry.getObject(input);
-    }
-
     //get the plant icon
     @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon() {
         IIcon icon = null;
         if(this.hasPlant()) {
-            int meta = RenderHelper.plantIconIndex(this.seed, this.seedMeta, this.getBlockMetadata());
-            icon = SeedHelper.getPlant(this.seed).getIcon(0, meta);
+            icon = plant.getPlantIcon(this.getBlockMetadata());
         }
         else if(this.weed) {
             icon = ((BlockCrop) this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)).getWeedIcon(this.getBlockMetadata());
@@ -257,7 +337,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public int getRenderType() {
         int type = -1;
         if(this.hasPlant()) {
-            type = RenderHelper.getRenderType(this.seed, this.seedMeta);
+                type = plant.renderAsFlower()?1:6;
         }
         else if(this.weed) {
             type = 6;
@@ -273,9 +353,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
         else if(this.hasPlant()) {
             list.add(" - This crop has a plant");
-            list.add(" - Seed: " + (this.seed).getUnlocalizedName());
-            list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject(this.seed) + ':' + this.seedMeta);
-            list.add(" - Plant: " + SeedHelper.getPlant(this.seed).getUnlocalizedName());
+            list.add(" - Seed: " + (this.plant.getSeed().getItem()).getUnlocalizedName());
+            list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject((this.plant.getSeed().getItem())) + ":" + this.plant.getSeed().getItemDamage());
+            list.add(" - Tier: "+plant.getTier());
             list.add(" - Meta: " + this.getBlockMetadata());
             list.add(" - Growth: " + this.growth);
             list.add(" - Gain: " + this.gain);

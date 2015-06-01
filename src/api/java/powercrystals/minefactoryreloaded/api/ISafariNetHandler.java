@@ -1,9 +1,9 @@
 package powercrystals.minefactoryreloaded.api;
 
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 /**
  * @author PowerCrystals

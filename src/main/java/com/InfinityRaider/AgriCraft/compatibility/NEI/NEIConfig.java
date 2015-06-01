@@ -3,21 +3,28 @@ package com.InfinityRaider.AgriCraft.compatibility.NEI;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
+import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
+import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public class NEIConfig implements IConfigureNEI {
     private static String version = "1.0";
 
     @Override
     public void loadConfig() {
-        if(ModIntegration.LoadedMods.nei) {
+        if(LoadedMods.nei) {
             //register NEI recipe handler
             if(ConfigurationHandler.enableNEI) {
                 LogHelper.debug("Registering NEI recipe handler");
@@ -37,74 +44,34 @@ public class NEIConfig implements IConfigureNEI {
             //hide sprinkler
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockSprinkler, 1, i));
             //hide plant blocks
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.potato, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.carrot, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.melon, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.pumpkin, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.sugarcane, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.dandelion, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.poppy, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.orchid, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.allium, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.tulipRed, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.tulipOrange, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.tulipWhite, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.tulipPink, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.daisy, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.cactus, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.shroomRed, 1, i));
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.shroomBrown, 1, i));
+            for(BlockModPlant plant : Crops.crops) {
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
+            }
             //hide botania crops
             if(ConfigurationHandler.integration_Botania) {
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaWhite, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaOrange, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaMagenta, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaLightBlue, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaYellow, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaLime, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaPink, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaGray, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaLightGray, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaCyan, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaPurple, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaBlue, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaBrown, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaGreen, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaRed, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Crops.botaniaBlack, 1, i));
+                for(BlockModPlant plant : BotaniaHelper.botaniaCrops) {
+                    AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
+                }
+            }
+            //hide thaumcraft crops
+            if(ConfigurationHandler.integration_Thaumcraft) {
+                for(BlockModPlant plant : ThaumcraftHelper.thaumcraftCrops) {
+                    AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
+                }
+            }
+            //hide ars magica crops
+            if(ConfigurationHandler.integration_ArsMagica) {
+                for(BlockModPlant plant : ArsMagicaHelper.arsMagicaCrops) {
+                    AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
+                }
             }
             //hide resource crops
             if(ConfigurationHandler.resourcePlants) {
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.diamahlia, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.ferranium, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.aurigold, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.lapender, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.emeryllis, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.redstodendron, 1, i));
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.nitorWart, 1, i));
-                if(OreDictHelper.oreCopper!=null) {
-                    AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.cuprosia, 1, i));
+                for(BlockModPlant plant : ResourceCrops.vanillaCrops) {
+                    AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
                 }
-                if(OreDictHelper.oreTin!=null) {
-                    AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.petinia, 1, i));
-                }
-                if(OreDictHelper.oreLead!=null) {
-                    AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.plombean, 1, i));
-                }
-                if(OreDictHelper.oreSilver!=null) {
-                    AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.silverweed, 1, i));
-                }
-                if(OreDictHelper.oreAluminum!=null) {
-                    AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.jaslumine, 1, i));
-                }
-                if(OreDictHelper.oreNickel!=null) {
-                    AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.niccissus, 1, i));
-                }
-                if(OreDictHelper.orePlatinum!=null) {
-                    AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.platiolus, 1, i));
-                }
-                if(OreDictHelper.oreOsmium!=null) {
-                    AgriCraft.proxy.hideItemInNEI(new ItemStack(ResourceCrops.osmonium, 1, i));
+                for(BlockModPlant plant : ResourceCrops.modCrops) {
+                    AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
                 }
             }
             //hide custom crops
@@ -118,6 +85,25 @@ public class NEIConfig implements IConfigureNEI {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(Items.debugItem, 1, i));
             }
         }
+        LogHelper.debug("Hiding custom wood objects");
+        Field[] blocks = Blocks.class.getDeclaredFields();
+        for(Field field:blocks) {
+            if(BlockCustomWood.class.isAssignableFrom(field.getType())) {
+                try {
+                    Block block = (Block) field.get(null);
+                    if(block==null) {
+                        continue;
+                    }
+                    ItemStack stack = new ItemStack(block);
+                    ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+                    list.add(stack);
+                    API.setItemListEntries(stack.getItem(), list);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     @Override

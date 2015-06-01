@@ -15,6 +15,4 @@ public interface IProxy {
     public void registerEventHandlers();
 
     public int getRenderId(int nr);
-
-    public void initSeedInfo();
 }

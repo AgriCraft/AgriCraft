@@ -225,8 +225,13 @@ agricraft_journal.botaniaRed=这神秘的鲜花里有着大量红色花瓣,又�
 agricraft_journal.botaniaBlack=这神秘的鲜花里有着大量黑色花瓣,又有谁知 道它们可能被用作什么呢.
 
 //minecraft seeds
+<<<<<<< HEAD
 agricraft_journal.wheat=小麦是一种非常普遍,营养价值又高的作物.
 agricraft_journal.pumpkin=大多数人认为南瓜是一种装饰性的蔬菜,然而也 有人喜欢南瓜派的味道.
+=======
+agricraft_journal.seeds=小麦是一种非常普遍,营养价值又高的作物.
+agricraft_journal.pumpkin=大多数人认为南瓜是一种装饰性的蔬菜,然而也有人喜欢南瓜派的味道.
+>>>>>>> CropRewrite
 agricraft_journal.melon=人们都喜欢西瓜,因为西瓜的甜和含水量高.
 
 //natura seeds
@@ -235,13 +240,22 @@ agricraft_journal.cottonNatura=棉花在纺织工业的高需求量决定了它�
 
 //harvestcraft seeds
 agricraft_journal.hc_Artichoke=朝鲜蓟的可食用部分含有未开放的花骨朵.
+<<<<<<< HEAD
 agricraft_journal.hc_Asparagus=芦笋已经被人们用作蔬菜或者药材,它有着十 分微妙的味道.
 agricraft_journal.hc_BambooShoot=竹笋是一种可食用的植物的根,经常出现在亚 洲的饭菜之中.
 agricraft_journal.hc_Bean=豆是一种夏季作物,需要较温暖的温度才能生 长.
 agricraft_journal.hc_Beet=地底深处的紫色甜菜根可以生吃,烧烤,水煮 ,或者烘烤.
+=======
+agricraft_journal.hc_Asparagus=芦笋已经被人们用作蔬菜或者药材,它有着十分微妙的味道.
+agricraft_journal.hc_Bambooshoot=竹笋是一种可食用的植物的根,经常出现在亚洲的饭菜之中.
+agricraft_journal.hc_Barley=相比于普通面包,一些人更喜欢大麦面包的味道, 然而也有一些人声称它们的味道是一样的.
+agricraft_journal.hc_Bean=豆是一种夏季作物,需要较温暖的温度才能生长.
+agricraft_journal.hc_Beet=地底深处的紫色甜菜根可以生吃,烧烤,水煮,或者烘烤.
+>>>>>>> CropRewrite
 agricraft_journal.hc_Bellpepper=甜椒通常是绿色,黄色,橙色或者红色的.
 agricraft_journal.hc_Blackberry=软水果经常被用在甜点,果酱,无籽果冻中, 有时用在葡萄酒里.
 agricraft_journal.hc_Blueberry=蓝莓是一种终年开花的植物,结有靛蓝色的莓.
+<<<<<<< HEAD
 agricraft_journal.hc_Broccoli=西兰花是卷心菜科中的一种可食用绿色蔬菜, 其开花的巨大头部被用作蔬菜.
 agricraft_journal.hc_BrusselsSprout=芽甘蓝在比利时的布鲁塞尔一直很受欢迎,也 许有什么起源在那里.
 agricraft_journal.hc_Cabbage=种植卷心菜通常是为了它的被菜叶层层包围的头部,在两年期的生长周期的第一年中会产出成品.
@@ -259,12 +273,33 @@ agricraft_journal.hc_Eggplant=这种新鲜水果有那么一点苦,但烹调过�
 agricraft_journal.hc_Garlic=大蒜很容易生长,可以在温暖的环境里终年种 植.
 agricraft_journal.hc_Ginger=姜会长出白色和粉色的花骨朵丛,并开出黄色 的花.
 agricraft_journal.hc_Grape=葡萄是一种落叶的木本藤的果实状的莓,可以 生吃,或制成葡萄酒,果酱,果汁,果冻,葡 萄种子提取物,葡萄干,醋,或葡萄种子油.
+=======
+agricraft_journal.hc_Broccoli=西兰花是卷心菜科中的一种可食用绿色蔬菜,其开花的巨大头部被用作蔬菜.
+agricraft_journal.hc_Brusselsprout=芽甘蓝在比利时的布鲁塞尔一直很受欢迎,也许有什么起源在那里.
+agricraft_journal.hc_Cabbage=种植卷心菜通常是为了它的被菜叶层层包围的头部,在两年期的生长周期的第一年中会产出成品.
+agricraft_journal.hc_Cactusfruit=通常这种水果也长有刺,时刻保持警惕.
+agricraft_journal.hc_Candleberry=蜡杨梅是一种结有小小的果实的小灌木.
+agricraft_journal.hc_Cantaloupe=哈密瓜一般是一种直接生吃的水果,或者制成沙拉,或者放入冰淇淋或蛋奶糊中用作甜点.
+agricraft_journal.hc_Cauliflower=花椰菜可以烤,煮,炒,蒸,或者干脆直接生吃.
+agricraft_journal.hc_Celery=芹菜是一种非常普遍的蔬菜,可食用部分是它的茎.
+agricraft_journal.hc_Chilipepper=辣椒在烹饪中有很多用处,从直接浸泡到让你的汤更加有味.
+agricraft_journal.hc_Coffee=这些豆子是一杯现磨咖啡的基础,帮你开启新一天,所以根本上来讲这就是你一天的基础.
+agricraft_journal.hc_Corn=因为它浅层的根,玉米很容易受干旱影响,对土壤养分不足非常敏感,狂风之后甚至会被连根拔起.
+agricraft_journal.hc_Cotton=棉花在纺织工业的高需求量决定了它是一种有价值的财产.
+agricraft_journal.hc_Cranberry=蔓越橘汁经常被人为甜化或者和别的果汁混合在一起,以减轻其天然的酸味.
+agricraft_journal.hc_Cucumber=黄瓜是一种匍匐藤的圆柱形果实,在厨房里被用作蔬菜.
+agricraft_journal.hc_Eggplant=这种新鲜水果有那么一点苦,但烹调过后会很嫩,并产生出厚重,复杂的味道.
+agricraft_journal.hc_Garlic=大蒜很容易生长,可以在温暖的环境里终年种植.
+agricraft_journal.hc_Ginger=姜会长出白色和粉色的花骨朵丛,并开出黄色的花.
+agricraft_journal.hc_Grape=葡萄是一种落叶的木本藤的果实状的莓,可以生吃,或制成葡萄酒,果酱,果汁,果冻,葡萄种子提取物,葡萄干,醋,或葡萄种子油.
+>>>>>>> CropRewrite
 agricraft_journal.hc_Kiwi=猕猴桃可以种在夏季热量足够的大多数地方.
 agricraft_journal.hc_Leek=不像洋葱那样紧密的球茎,韭葱有着被紧密的 叶鞘包围的圆柱球茎,因将泥土拉到身边,终 日不见阳光而日渐变白.
 agricraft_journal.hc_Lettuce=通常作为不耐寒的一年生作物,生菜是很容易 培养的,尽管它仍需要较低温度以避免过早开 花.
 agricraft_journal.hc_Mustard=如果是在合适的条件下,芥末种子通常需要三 到十天时间发芽.这些合适的条件包括低温和 相对潮湿的土壤.
 agricraft_journal.hc_Oats=燕麦很适合人类以燕麦粥或燕麦卷的形式食用, 但最普遍的用法却是牲口的饲料.
 agricraft_journal.hc_Okra=秋葵因其可食用的绿色豆荚而变得很有价值.
+<<<<<<< HEAD
 agricraft_journal.hc_Onion=洋葱植物有一个中空,偏蓝的绿叶组成的扇形, 其基础的球茎会在时长足够时膨胀饱满.
 agricraft_journal.hc_Parsnip=防风草是一种和胡萝卜和西芹有很大关系的根 状蔬菜.
 agricraft_journal.hc_Peanut=花生有很多用途.可以直接吃,经常出现在各 种食谱中,制成溶剂,油脂,药物,纺织材料, 哦还有花生酱,还有很多其他用途.
@@ -291,6 +326,43 @@ agricraft_journal.hc_Zucchini=西葫芦通常是炒着吃的, 当然也可用很
 
 //plant mega pack seeds
 agricraft_journal.pmp_Spinach=卡通动漫角色"大力水手"被描绘为一个对菠 菜有强烈喜爱的人,在吃过菠菜后会变得力大 无穷.
+=======
+agricraft_journal.hc_Onion=洋葱植物有一个中空,偏蓝的绿叶组成的扇形,其基础的球茎会在时长足够时膨胀饱满.
+agricraft_journal.hc_Parsnip=防风草是一种和胡萝卜和西芹有很大关系的根状蔬菜.
+agricraft_journal.hc_Peanut=花生有很多用途.可以直接吃,经常出现在各种食谱中,制成溶剂,油脂,药物,纺织材料,哦还有花生酱,还有很多其他用途.
+agricraft_journal.hc_Peas=从植物学角度来讲,豌豆是果实,因为它含有从豌豆花子房发育而来的豌豆种子.
+agricraft_journal.hc_Pineapple=菠萝可生吃,烹调,榨汁,还可以保存并加工,你可以在一长串菜谱中找到它的影子.
+agricraft_journal.hc_Radish=白萝卜大多数时候用在沙拉里,但它也出现在很多欧洲的菜肴中.
+agricraft_journal.hc_Raspberry=树莓不能种在曾经种有土豆,西红柿,胡椒,茄子,或其他有球茎植物种过的地方,除非预先对土壤消毒.
+agricraft_journal.hc_Rhubarb=对于烹饪,茎经常被切成小块并和糖一起炖(水里煮).
+agricraft_journal.hc_Rice=传统的培育水稻的方式是用水淹没耕地,在水淹没时(或之后)种下种子.
+agricraft_journal.hc_Rutabaga=一些人会把萝卜切成各种样式(大多是人脸),然后当成灯笼以驱散恶灵.
+agricraft_journal.hc_Rye=黑麦是一种草本植物,以谷物形式大范围种植,用作覆盖作物或者饲料作物.
+agricraft_journal.hc_Scallion=青葱有着一种相对温柔的洋葱味,用作蔬菜,或生吃或烹调.
+agricraft_journal.hc_Seaweed=海藻被用于点缀沙拉或制成酱汁,营养食物,或是肉鱼类产品,乳制品或焙烤食物的防腐剂.
+agricraft_journal.hc_Soybean=传统的零发酵大豆用法有豆奶,还有老豆腐和豆腐皮.
+agricraft_journal.hc_SpiceLeaf=香料是和草药是分开对待的,因为香料是一种用于调味或装饰的绿色植物的叶.
+agricraft_journal.hc_Strawberry=草莓很受欢迎,适合种植于家庭环境中,可以直接消费掉,或者用作装饰用途.
+agricraft_journal.hc_SweetPotato=虽然它的叶子和芽也可以吃,它那富含淀粉的块根目前还是其最重要的产品.
+agricraft_journal.hc_Tea=通过向洗净茶树叶中倒入热水或沸水可以制成茶水.
+agricraft_journal.hc_Tomato=西红柿有多种食用方式,包括生吃,还有各种菜的原料,酱料,沙拉,或者饮料.
+agricraft_journal.hc_Turnip=萝卜是一种根状蔬菜,在世界范围内通常在温和的气候下种植,因为其白色的块状主根.
+agricraft_journal.hc_Whitemushroom=如果你想比飞机飞得还快,这些蘑菇不是你要找的东西.
+agricraft_journal.hc_Wintersquash=只要笋瓜颜色变深,趋于泥土颜色,并且表皮变硬,就可以收获了.
+agricraft_journal.hc_Zucchini=西葫芦通常是炒着吃的, 当然也可用很多别的烹调手段,包括蒸,煮,烤,填满别的材料并烘烤,烧烤,炸,或者作为原料并入别的菜谱.
+
+//plant mega pack seeds
+agricraft_journal.pmp_Beet=地底深处的紫色甜菜根可以生吃,烧烤,水煮,或者烘烤.
+agricraft_journal.pmp_Broccoli=西兰花是卷心菜科中的一种可食用绿色蔬菜,其开花的巨大头部被用作蔬菜.
+agricraft_journal.pmp_Celery=芹菜是一种非常普遍的蔬菜,可食用部分是它的茎.
+agricraft_journal.pmp_Corn=因为它浅层的根,玉米很容易受干旱影响,对土壤养分不足非常敏感,狂风之后甚至会被连根拔起.
+agricraft_journal.pmp_Cucumber=黄瓜是一种匍匐藤的圆柱形果实,在厨房里被用作蔬菜.
+agricraft_journal.pmp_Leek=不像洋葱那样紧密的球茎,韭葱有着被紧密的叶鞘包围的圆柱球茎,因将泥土拉到身边,终日不见阳光而日渐变白.
+agricraft_journal.pmp_Lettuce=通常作为不耐寒的一年生作物,生菜是很容易培养的,尽管它仍需要较低温度以避免过早开花.
+agricraft_journal.pmp_Onion=洋葱植物有一个中空,偏蓝的绿叶组成的扇形,其基础的球茎会在时长足够时膨胀饱满.
+agricraft_journal.pmp_Spinach=卡通动漫角色"大力水手"被描绘为一个对菠菜有强烈喜爱的人,在吃过菠菜后会变得力大无穷.
+agricraft_journal.pmp_Tomato=西红柿有多种食用方式,包括生吃,还有各种菜的原料,酱料,沙拉,或者饮料.
+>>>>>>> CropRewrite
 
 //chococraft seeds
 agricraft_journal.cc_Gysahl=基沙尔野菜是虚构的生物"陆行鸟"的最爱的 食物.有时一棵基沙尔野菜可以长出可爱的基 沙尔野菜,还有人说细心培育的基沙尔野 菜可以长出金基沙尔野菜.

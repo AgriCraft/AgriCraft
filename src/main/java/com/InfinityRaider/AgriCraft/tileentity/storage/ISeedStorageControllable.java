@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public interface ISeedStorageControllable extends IInventory{
     /**
      * Returns a list of all the slots in the inventory corresponding to that seed
      */
-    public List<SeedStorageSlot> getSlots(ItemSeeds seed, int meta);
+    public List<SeedStorageSlot> getSlots(Item seed, int meta);
 
     /**
      * Returns the coordinates of the controller controlling this controllable
@@ -50,7 +50,7 @@ public interface ISeedStorageControllable extends IInventory{
     /**
      * Sets the locked seed
      */
-    public void setLockedSeed(ItemSeeds seed, int meta);
+    public void setLockedSeed(Item seed, int meta);
 
     /**
      * Returns the type of seed stored in this controllable

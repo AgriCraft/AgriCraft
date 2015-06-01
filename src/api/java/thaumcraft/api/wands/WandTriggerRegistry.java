@@ -1,13 +1,13 @@
 package thaumcraft.api.wands;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class serves a similar function to IWandable in that it allows wands to interact

@@ -7,6 +7,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public abstract class BlockCustomWood extends BlockContainer {
@@ -39,6 +40,12 @@ public abstract class BlockCustomWood extends BlockContainer {
             }
             world.setBlockToAir(x, y, z);
         }
+    }
+
+    //prevent block from being removed by leaves
+    @Override
+    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+        return false;
     }
 
     protected void setTag(World world, int x, int y, int z, ItemStack stack) {

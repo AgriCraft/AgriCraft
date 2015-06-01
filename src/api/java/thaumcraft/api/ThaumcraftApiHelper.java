@@ -1,9 +1,6 @@
 package thaumcraft.api;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Iterator;
-
+import cpw.mods.fml.common.FMLLog;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,7 +12,10 @@ import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IEssentiaTransport;
-import cpw.mods.fml.common.FMLLog;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class ThaumcraftApiHelper {
 	

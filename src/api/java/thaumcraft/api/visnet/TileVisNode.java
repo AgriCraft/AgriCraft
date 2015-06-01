@@ -1,12 +1,12 @@
 package thaumcraft.api.visnet;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import thaumcraft.api.TileThaumcraft;
 import thaumcraft.api.WorldCoordinates;
 import thaumcraft.api.aspects.Aspect;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Azanor

@@ -1,20 +1,24 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 
+import com.InfinityRaider.AgriCraft.api.v1.*;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraftShearable;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirement;
-import com.InfinityRaider.AgriCraft.utility.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+
+import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -22,101 +26,131 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlockModPlant extends BlockCrops implements IGrowable {
+public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPlant {
 
     private GrowthRequirement growthRequirement;
-
     public CropProduce products = new CropProduce();
     public ArrayList<ItemStack> fruits;
-    private ItemSeeds seed;
+    private ItemModSeed seed;
     public int tier;
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
-    private int renderType;
-    private boolean isEditable;
+    private RenderMethod renderType;
 
-    public BlockModPlant(Item fruit) {
-        this(null, null, 0, fruit, 0, 1, 6);
-    }
-
-    public BlockModPlant(Block soil, Item fruit) {
-        this(soil, null, 0, fruit, 0, 1, 6);
-    }
-
-    public BlockModPlant(Item fruit, int fruitMeta) {
-        this(null, null, 0, fruit, fruitMeta, 1, 6);
-    }
-
-    public BlockModPlant(Item fruit, int fruitMeta, int tier) {
-        this(null, null, 0, fruit, fruitMeta, tier, 6);
-    }
-
-    public BlockModPlant(Item fruit, int fruitMeta, int tier, int renderType) {
-        this(null, null, 0, fruit, fruitMeta, tier, renderType);
-    }
-
-    public BlockModPlant(Block soil, Block base, Item fruit, int tier, int renderType) {
-        this(soil, base, 0, fruit, 0, tier, renderType);
-    }
-
-    public BlockModPlant(Block soil, Item fruit, int fruitMeta) {
-        this(soil, null, 0, fruit, fruitMeta, 1, 6);
-    }
-
-    public BlockModPlant(Block base, int baseMeta, Item fruit, int fruitMeta, int tier, int renderType) {
-        this(Blocks.farmland, base, baseMeta, fruit, fruitMeta, tier, renderType);
-    }
-
-    public BlockModPlant(Block soil, Block base, Item fruit, int fruitMeta, int tier, int renderType) {
-        this(soil, base, 0, fruit, fruitMeta, tier, renderType);
-    }
-
-    public BlockModPlant(Block soil, Block base, int baseMeta, Item fruit, int tier, int renderType) {
-        this(soil, base, baseMeta, fruit, 0, tier, renderType);
-    }
-
-    public BlockModPlant(Block soil, Block base, int baseMeta, Item fruit, int fruitMeta, int tier, int renderType) {
-        this(soil, base, baseMeta, fruit, fruitMeta, tier, renderType, false);
-    }
-
-    public BlockModPlant(Block soil, Block base, int baseMeta, Item fruit, int fruitMeta, int tier, int renderType, boolean isCustom) {
+    /** Only used for the subclass which is the actual crop sticks */
+    protected BlockModPlant() {
         super();
+    }
 
+    /** Parameters can be given in any order, parameters can be:
+     * String name (needed), ItemStack fruit(needed), Block soil (optional), BlockWithMeta baseBlock (optional), int tier (necessary), RenderMethod renderType (necessary), ItemStack shearDrop (optional)
+     * Will throw InvalidArgumentException if the needed arguments are not given.
+     * This constructor creates the seed for this plant which can be gotten via blockModPlant.getSeed().
+     * This constructor also registers this block and the item for the seed to the minecraft item/block registry and to the AgriCraft CropPlantHandler.
+     * */
+    public BlockModPlant(Object[] arguments) throws InvalidArgumentException{
+        super();
+        //get parameters
+        String name = null;
+        ItemStack fruit = null;
+        ItemStack shearable = null;
+        Block soil = null;
+        BlockWithMeta base = null;
+        int tier = -1;
+        RenderMethod renderType = null;
+        for(Object arg:arguments) {
+            if(arg == null) {
+                continue;
+            }
+            if(arg instanceof String) {
+                name = (String) arg;
+                continue;
+            }
+            if(arg instanceof  ItemStack) {
+                if(fruit==null) {
+                    fruit = (ItemStack) arg;
+                } else {
+                    shearable = (ItemStack) arg;
+                }
+                continue;
+            }
+            if(arg instanceof Block) {
+                soil = (Block) arg;
+                continue;
+            }
+            if(arg instanceof BlockWithMeta) {
+                base = (BlockWithMeta) arg;
+                continue;
+            }
+            if(arg instanceof RenderMethod) {
+                renderType = (RenderMethod) arg;
+                continue;
+            }
+            if(arg instanceof Integer) {
+                tier = (Integer) arg;
+            }
+        }
+        //check if necessary parameters have been passed
+        if(name==null || fruit==null || tier<0 || renderType==null) {
+            throw new InvalidArgumentException(new String[]{"Not all necessary parameters where given to create a new plant"});
+        }
+        //set fields
         GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
         if (base != null) {
-            builder.requiredBlock(new BlockWithMeta(base, baseMeta), GrowthRequirement.RequirementType.BELOW, true);
+            builder.requiredBlock(base, RequirementType.BELOW, true);
         }
-        if (soil == null || soil == Blocks.farmland) {
+        if (soil == null) {
             growthRequirement = builder.build();
         } else {
             growthRequirement = builder.soil(new BlockWithMeta(soil)).build();
         }
-
-        this.products.addProduce(new ItemStack(fruit, 1, fruitMeta));
+        this.products.addProduce(fruit);
         this.tier = tier;
         this.setTickRandomly(true);
         this.useNeighborBrightness = true;
-        this.renderType = renderType==1?renderType:6;
-        this.isEditable = isCustom;
-    }
-
-    //set seed
-    public void initializeSeed(ItemSeeds seed) {
-        if(this.seed==null) {
-            this.seed = seed;
+        this.renderType = renderType;
+        //register this plant
+        RegisterHelper.registerCrop(this, name);
+        //create seed for this plant
+        this.seed = new ItemModSeed(this, "agricraft_journal."+Character.toLowerCase(name.charAt(0))+name.substring(1));
+        //register this plant to the CropPlantHandler
+        try {
+            if(shearable == null) {
+                CropPlantHandler.registerPlant(this);
+            } else {
+                CropPlantHandler.registerPlant(new CropPlantAgriCraftShearable(this, shearable));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public ItemSeeds getSeed() {return this.seed;}
+    @Override
+    public ItemModSeed getSeed() {return this.seed;}
 
-    public ArrayList<ItemStack> getFruits() {return this.products.getAllProducts();}
+    @Override
+    public ItemStack getSeedStack(int amount) {
+        return new ItemStack(this.seed, amount);
+    }
 
-    public ArrayList<ItemStack> getFruit(Random rand) {return this.getFruit(1, rand);}
+    @Override
+    public ArrayList<ItemStack> getAllFruits() {return this.products.getAllProducts();}
 
+    @Override
+    public ItemStack getRandomFruit(Random rand) {return this.getFruit(1, rand).get(0);}
+
+    @Override
     public ArrayList<ItemStack> getFruit(int nr, Random rand) {return this.products.getProduce(nr, rand);}
 
-    public boolean canEdit() {
-        return this.isEditable;
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int meta) {
+        return this.getIcon(0, meta);
+    }
+
+    @Override
+    public boolean renderAsFlower() {
+        return this.renderType==RenderMethod.CROSSED;
     }
 
     //register icons
@@ -135,8 +169,9 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     public void updateTick(World world, int x, int y, int z, Random rnd) {
         int meta = this.getPlantMetadata(world, x, y, z);
         if (meta < 7 && this.isFertile(world, x, y ,z)) {
+            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             double rate = 1.0 + (1 + 0.00) / 10;
-            float growthRate = (float) SeedHelper.getBaseGrowth(this.tier);
+            float growthRate = (float) crop.getGrowthRate();
             meta = (rnd.nextDouble() > (growthRate * rate)/100) ? meta : meta + 1;
             world.setBlockMetadataWithNotify(x, y, z, meta, 2);
         }
@@ -145,7 +180,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
 
     //check if the plant is mature
     public boolean isMature(World world, int x, int y, int z) {
-        return this.getPlantMetadata(world,x,y,z)==7;
+        return ((TileEntityCrop) world.getTileEntity(x, y, z)).isMature();
     }
 
     //render different stages
@@ -175,7 +210,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         list.add(new ItemStack(this.seed, 1, 0));
         if(metadata==7) {
-            list.addAll(this.getFruit(world.rand));
+            list.add(this.getRandomFruit(world.rand));
         }
         return list;
     }
@@ -224,24 +259,16 @@ public class BlockModPlant extends BlockCrops implements IGrowable {
     //return the fruit
     @Override
     protected Item func_149865_P() {
-        Item item = null;
-        ArrayList<ItemStack> items = this.getFruit(new Random());
-        if(items!=null && items.size()>0 && items.get(0)!=null) {
-            item = items.get(0).getItem();
-        }
-        return item;
+        return this.getRandomFruit(new Random()).getItem();
     }
 
     @Override
     public int getRenderType() {
-        return this.renderType;
+        return this.renderType.renderId();
     }
 
+    @Override
     public GrowthRequirement getGrowthRequirement() {
         return growthRequirement;
-    }
-
-    public void setGrowthRequirement(GrowthRequirement req) {
-        this.growthRequirement = req;
     }
 }

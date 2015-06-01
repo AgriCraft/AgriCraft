@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
@@ -17,6 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 import java.util.Random;
+
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
     //structure dimensions
     private static final int xSize = 17;
@@ -197,11 +197,11 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(xCoord, yCoord, zCoord);
             if (crop!=null) {
                 if(crosscrop && !ConfigurationHandler.enableWeeds) {
-                    crop.crossCrop=true;
+                    crop.setCrossCrop(true);
                 }
                 else {
                     ItemStack seed = SeedHelper.getRandomSeed(false);
-                    crop.setPlant((int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), false, (ItemSeeds) seed.getItem(), seed.getItemDamage());
+                    crop.setPlant((int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), false, seed.getItem(), seed.getItemDamage());
                 }
             }
             return true;

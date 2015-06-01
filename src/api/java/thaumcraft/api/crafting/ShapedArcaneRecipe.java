@@ -1,8 +1,5 @@
 package thaumcraft.api.crafting;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -12,6 +9,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.AspectList;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ShapedArcaneRecipe implements IArcaneRecipe
 {

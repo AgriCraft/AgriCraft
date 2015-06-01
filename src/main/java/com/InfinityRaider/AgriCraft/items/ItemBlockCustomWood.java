@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.items;
 
-import com.InfinityRaider.AgriCraft.compatibility.ModIntegration;
+import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
@@ -60,7 +60,7 @@ public class ItemBlockCustomWood extends ItemBlock {
             if(plank.getItem() instanceof ItemBlock) {
                 // Skip the ExU stuff for now as we don't support its textures yet
                 // TODO: Find out how ExU generates the colored textures and integrate it
-                if (ModIntegration.LoadedMods.extraUtilities && ((ItemBlock) plank.getItem()).field_150939_a.getClass().getSimpleName().equals("BlockColor"))
+                if (LoadedMods.extraUtilities && ((ItemBlock) plank.getItem()).field_150939_a.getClass().getSimpleName().equals("BlockColor"))
                     continue;
 
                 if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {

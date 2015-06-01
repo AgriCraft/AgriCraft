@@ -1,13 +1,13 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -68,41 +68,33 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     //returns the seed currently being processed
     public boolean hasSeed() {
-        return this.seed!=null && this.seed.getItem() instanceof ItemSeeds;
+        return CropPlantHandler.isValidSeed(this.seed);
     }
 
     //calculates the number of ticks it takes to analyze the seed
     public int maxProgress() {
-        return seed==null || !(seed.getItem() instanceof ItemSeeds)?0: SeedHelper.getSeedTier((ItemSeeds) seed.getItem(), seed.getItemDamage())*20;
+        return seed==null?0: CropPlantHandler.getPlantFromStack(seed).getTier()*20;
     }
 
     public static boolean isValid(ItemStack stack) {
-        if(stack!=null && stack.getItem() instanceof ItemSeeds) {
-            if(!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage())) {
-                return false;
-            }
-            if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey(Names.NBT.analyzed)) {
-                return !stack.stackTagCompound.getBoolean(Names.NBT.analyzed);
-            }
-            else {
-                return true;
-            }
+        if (!CropPlantHandler.isValidSeed(stack)) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     //gets called every tick
     @Override
     public void updateEntity() {
         boolean change = false;
-        if(!this.worldObj.isRemote && this.isAnalyzing()) {
+        if(this.isAnalyzing()) {
             //increment progress counter
             this.progress=progress<this.maxProgress()?progress+1:this.maxProgress();
             //if progress is complete analyze the seed
-            if(progress == this.maxProgress()) {
+            if(progress == this.maxProgress() && !worldObj.isRemote) {
                 this.analyze();
+                change = true;
             }
-            change = true;
         }
         if(change) {
             this.markForUpdate();
@@ -173,7 +165,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     //returns the scaled progress percentage
     public int getProgressScaled(int scale) {
-        return (int) Math.round(((float) this.progress*scale)/((float) this.maxProgress()));
+        return Math.round(((float) this.progress*scale)/((float) this.maxProgress()));
     }
 
     @Override
@@ -194,10 +186,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     @Override
     public boolean canInsertItem(int slot, ItemStack stack, int side) {
         if(slot==ContainerSeedAnalyzer.seedSlotId) {
-            if (stack.getItem() instanceof ItemSeeds) {
-                if (!SeedHelper.isValidSeed((ItemSeeds) stack.getItem(), stack.getItemDamage())) {
-                    return false;
-                }
+            if (CropPlantHandler.isValidSeed(stack)) {
                 return (this.seed == null || this.canStack(stack)) && this.isItemValidForSlot(slot, stack);
             }
         }
