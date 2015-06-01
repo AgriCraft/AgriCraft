@@ -4,9 +4,6 @@ import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
-import net.minecraft.item.ItemStack;
-
-import java.util.ArrayList;
 
 public class CropPlantHarvestCraft extends CropPlantGeneric {
 
@@ -17,13 +14,6 @@ public class CropPlantHarvestCraft extends CropPlantGeneric {
     @Override
     public int transformMeta(int growthStage) {
         return growthStage;
-    }
-
-    @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
-
-        return fruits;
     }
 
     @Override
