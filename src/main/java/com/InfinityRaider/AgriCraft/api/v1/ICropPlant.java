@@ -67,7 +67,12 @@ public interface ICropPlant {
 	/** Gets some information about the plant for the journal */
 	public String getInformation();
 
-	/** This gets called to render the plant on the crop, can be overridden if you want to do your own rendering */
+	/** Return true if you want to render the plant yourself, else agricraft will render the plant based on the data returned by the getIcon and renderAsFlower methods */
+	@SideOnly(Side.CLIENT)
+	public abstract boolean overrideRendering();
+
+	/** This is called when the plant is rendered, this is never called if returned false on overrideRendering */
+	@SideOnly(Side.CLIENT)
 	public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer);
 
 }
