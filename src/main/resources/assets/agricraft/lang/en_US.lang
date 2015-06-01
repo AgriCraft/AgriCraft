@@ -369,3 +369,19 @@ agricraft_journal.pc_tobacco=Tobacco is smoked all around the world despite its 
 
 //blue power flax
 agricraft_journal.bp_flax_seeds=Flax is String ~Sjin.
+
+//pneumaticCraft plants
+agricraft.journal_PC.plant0=These plants grow squids inside their bulbs which sometimes carry a seed.
+agricraft.journal_PC.plant1=Mature plants spout fire and somethimes a seed.
+agricraft.journal_PC.plant2=When mature these plants explode themselves leaving behind some seeds.
+agricraft.journal_PC.plant3=These plants grow slimes inside of their bulbs which sometimes carry a seed.
+agricraft.journal_PC.plant4=When mature, these plants can make seeds rain from the sky during a storm.
+agricraft.journal_PC.plant5=Mature plants teleport a seed to a nearby, random location.
+agricraft.journal_PC.plant6=During a storm these plants attract lightning strikes.
+agricraft.journal_PC.plant8=When mature these plants burst out a seed.
+agricraft.journal_PC.plant9=These plants puff out clouds of smoke, who knows what effect these fumes have.
+agricraft.journal_PC.plant10=The seeds of these plants are highly repulsive and will bounce away on the ground.
+agricraft.journal_PC.plant11=Because the seeds of this plant are lighter than air, they fly up into the stratosphere.
+agricraft.journal_PC.plant12=When matured these plants spit out 4 seeds which then fly into different directions.
+agricraft.journal_PC.plant14=These plants propel seeds at high velocity over the ground, they only stop when hitting a wall.
+agricraft.journal_PC.plant15=The seeds of these plants ride along the wind to find fertile soil.

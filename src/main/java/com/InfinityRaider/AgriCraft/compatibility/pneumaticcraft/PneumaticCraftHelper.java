@@ -1,10 +1,13 @@
 package com.InfinityRaider.AgriCraft.compatibility.pneumaticcraft;
 
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -37,7 +40,18 @@ public class PneumaticCraftHelper extends ModHelper {
                 assert getPlantsMethod != null;
                 Block plant = (Block) getPlantsMethod.invoke(null, i);
                 if(plant != null) {
-                    CropPlantHandler.registerPlant(new CropPlantPneumaticCraft(i, plant));
+                    CropPlantPneumaticCraft cropPlant = new CropPlantPneumaticCraft(i, plant);
+                    CropPlantHandler.registerPlant(cropPlant);
+                    Block soil = null;
+                    switch(i) {
+                        case 0: break; //squid plant: water
+                        case 5: soil = Blocks.end_stone; break; //end plant: end stone
+                        case 1: soil = Blocks.netherrack; break; //fire flower: netherrack
+                        case 11: soil = Blocks.netherrack; break; //helium plant: netherrack
+                    }
+                    if(soil != null) {
+                        GrowthRequirementHandler.getGrowthRequirement(cropPlant.getSeed().getItem(), cropPlant.getSeed().getItemDamage()).setSoil(new BlockWithMeta(soil));
+                    }
                 }
             } catch (DuplicateCropPlantException e1) {
                 e1.printStackTrace();
