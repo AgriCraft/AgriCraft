@@ -13,12 +13,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public interface ICropPlant {
-
-	public int getGrowthRate();
-
-	/** This is called to get the actual tier of a seed */
-	public int getTier();
-
 	/** Gets the tier of this plant, can be overridden trough the configs */
 	public int tier();
 
