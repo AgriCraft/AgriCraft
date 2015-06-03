@@ -14,7 +14,6 @@ public abstract class CommonProxy implements IProxy {
     @Override
     public void registerEventHandlers() {
         PlayerInteractEventHandler playerInteractEventHandler = new PlayerInteractEventHandler();
-
         MinecraftForge.EVENT_BUS.register(playerInteractEventHandler);
     }
 }
