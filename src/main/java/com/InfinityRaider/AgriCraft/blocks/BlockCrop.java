@@ -71,9 +71,14 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             Event.Result allowGrowthResult = AppleCoreHelper.validateGrowthTick(this, world, x, y, z, rnd);
             if (allowGrowthResult != Event.Result.DENY) {
                 if (!crop.isMature() && crop.isFertile()) {
-                    double multiplier = 1.0 + (crop.getGrowth() + 0.00) / 10;
+                    //multiplier from growth stat
+                    double growthBonus = 1.0 + (crop.getGrowth() + 0.00) / 10;
+                    //multiplier defined in the config
+                    float global = 2.0F-ConfigurationHandler.growthMultiplier;
+                    //crop dependent base growth rate
                     float growthRate = (float) crop.getGrowthRate();
-                    boolean shouldGrow = (rnd.nextDouble()<=(growthRate * multiplier)/100);
+                    //determine if growth tick should be applied or skipped
+                    boolean shouldGrow = (rnd.nextDouble()<=(growthRate * growthBonus * global)/100);
                     if (shouldGrow) {
                         crop.applyGrowthTick();
                     }

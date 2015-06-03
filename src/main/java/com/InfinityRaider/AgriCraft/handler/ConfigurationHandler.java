@@ -49,6 +49,7 @@ public class ConfigurationHandler {
     public static boolean bonemealMutation;
     public static boolean onlyMatureDropSeeds;
     public static boolean weedsDestroyCropSticks;
+    public static float growthMultiplier;
     //world gen
     public static boolean disableWorldGen;
     public static int greenhouseWeight;
@@ -120,6 +121,7 @@ public class ConfigurationHandler {
         bonemealMutation = config.getBoolean("Bonemeal Mutations", CATEGORY_FARMING, false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
         onlyMatureDropSeeds = config.getBoolean("Only mature crops drop seeds", CATEGORY_FARMING, false, "set this to true to make only mature crops drop seeds (to encourage trowel usage)");
         weedsDestroyCropSticks = config.getBoolean("Weeds destroy crop sticks", CATEGORY_FARMING, false, "set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage)");
+        growthMultiplier = config.getFloat("Growth rate multilplier", CATEGORY_FARMING, 1.0F, 0.0F, 2.0F, "This is a global growth rate multiplier");
         //world gen
         disableWorldGen = config.getBoolean("Disable World Gen", CATEGORY_WORLDGEN, false, "set to true to disable world gen, no greenhouses will spawn in villages");
         greenhouseWeight = config.getInt("Greenhouse weight", CATEGORY_WORLDGEN, 10, 0, 100, "The weight for a greenhouse to be generated in a village");

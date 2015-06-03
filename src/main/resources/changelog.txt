@@ -21,6 +21,8 @@ Changelog
 -ADDED:  Compatibility for PneumaticCraft crops
 -ADDED:  Compatibility for AppleMilkTea (mint)
 -ADDED:  Compatibility for RotaryCraft (canola)
+-ADDED:  Compatibility for Immersive Engineering (hemp)
+-ADDED:  Configuration option for a global growth rate multiplier
 -FIXED:  Seeds added as drops from tall grass always having weight 10
 -FIXED:  Not being able to set max brightness in Minetweaker methods
 -FIXED:  Wrong error message in Minetweaker methods
