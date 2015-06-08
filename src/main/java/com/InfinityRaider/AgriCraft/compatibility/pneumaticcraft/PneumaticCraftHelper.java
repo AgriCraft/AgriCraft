@@ -25,14 +25,10 @@ public class PneumaticCraftHelper extends ModHelper {
         int maxMeta = 16;
         try {
             Class PC_SeedClass = Class.forName("pneumaticCraft.common.item.ItemPlasticPlants");
-            Method[] methods = PC_SeedClass.getDeclaredMethods();
-            for (Method method : methods) {
-                if (Modifier.isStatic(method.getModifiers()) && method.getReturnType() == Block.class) {
-                    getPlantsMethod = method;
-                    break;
-                }
-            }
+            getPlantsMethod = PC_SeedClass.getMethod("getPlantBlockIDFromSeed", int.class);
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
         for (int i = 0; i < maxMeta; i++) {
