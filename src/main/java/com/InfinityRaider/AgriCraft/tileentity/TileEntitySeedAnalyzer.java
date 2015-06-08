@@ -129,6 +129,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
             NBTTagList list;
             if(tag.hasKey(Names.NBT.discoveredSeeds)) {
                 list = tag.getTagList(Names.NBT.discoveredSeeds, 10);
+                NBTHelper.clearEmptyStacksFromNBT(list);
             }
             else {
                 list = new NBTTagList();
