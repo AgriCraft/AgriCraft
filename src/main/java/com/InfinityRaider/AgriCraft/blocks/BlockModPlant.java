@@ -4,8 +4,10 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraftShearable;
+import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -169,23 +171,29 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
         int meta = this.getPlantMetadata(world, x, y, z);
         if (meta < 7 && this.isFertile(world, x, y ,z)) {
             TileEntity te = world.getTileEntity(x, y, z);
+            //base growth rate
             float growthRate;
             if(te==null || !(te instanceof TileEntityCrop)) {
                 switch(tier) {
-                    case 1: growthRate = Constants.growthTier1; break;
                     case 2: growthRate = Constants.growthTier2; break;
                     case 3: growthRate = Constants.growthTier3; break;
                     case 4: growthRate = Constants.growthTier4; break;
                     case 5: growthRate = Constants.growthTier5; break;
-                    default: growthRate = Constants.defaultGrowth;
+                    default: growthRate = Constants.growthTier1;
                 }
             } else {
                 TileEntityCrop crop = (TileEntityCrop) te;
                 growthRate = (float) crop.getGrowthRate();
             }
-            double rate = 1.0 + (1 + 0.00) / 10;
-            meta = (rnd.nextDouble() > (growthRate * rate)/100) ? meta : meta + 1;
-            world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+            //bonus for growth stat (growth is 1 for basic crops)
+            double bonus = 1.0 + (1 + 0.00) / 10;
+            //global multiplier as defined in the config
+            float global = 2.0F - ConfigurationHandler.growthMultiplier;
+            int newMeta = (rnd.nextDouble() > (growthRate * bonus * global)/100) ? meta : meta + 1;
+            if(newMeta != meta) {
+                world.setBlockMetadataWithNotify(x, y, z, newMeta, 2);
+                AppleCoreHelper.announceGrowthTick(this, world, x, y, z);
+            }
         }
     }
 
