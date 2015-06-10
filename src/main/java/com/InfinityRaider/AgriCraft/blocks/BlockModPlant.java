@@ -27,10 +27,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
-
     private GrowthRequirement growthRequirement;
     public CropProduce products = new CropProduce();
-    public ArrayList<ItemStack> fruits;
     private ItemModSeed seed;
     public int tier;
     @SideOnly(Side.CLIENT)
