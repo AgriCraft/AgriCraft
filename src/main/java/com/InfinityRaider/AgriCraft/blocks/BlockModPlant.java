@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraftShear
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 
@@ -167,13 +168,25 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     public void updateTick(World world, int x, int y, int z, Random rnd) {
         int meta = this.getPlantMetadata(world, x, y, z);
         if (meta < 7 && this.isFertile(world, x, y ,z)) {
-            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+            TileEntity te = world.getTileEntity(x, y, z);
+            float growthRate;
+            if(te==null || !(te instanceof TileEntityCrop)) {
+                switch(tier) {
+                    case 1: growthRate = Constants.growthTier1; break;
+                    case 2: growthRate = Constants.growthTier2; break;
+                    case 3: growthRate = Constants.growthTier3; break;
+                    case 4: growthRate = Constants.growthTier4; break;
+                    case 5: growthRate = Constants.growthTier5; break;
+                    default: growthRate = Constants.defaultGrowth;
+                }
+            } else {
+                TileEntityCrop crop = (TileEntityCrop) te;
+                growthRate = (float) crop.getGrowthRate();
+            }
             double rate = 1.0 + (1 + 0.00) / 10;
-            float growthRate = (float) crop.getGrowthRate();
             meta = (rnd.nextDouble() > (growthRate * rate)/100) ? meta : meta + 1;
             world.setBlockMetadataWithNotify(x, y, z, meta, 2);
         }
-
     }
 
     //check if the plant is mature
