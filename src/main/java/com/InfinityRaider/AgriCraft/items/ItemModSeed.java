@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.items;
 
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
@@ -33,13 +32,13 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
         RegisterHelper.registerSeed(this, plant);
     }
 
-    public IAgriCraftPlant getPlant() {
+    public BlockModPlant getPlant() {
         return (BlockModPlant) this.getPlant(null, 0, 0, 0);
     }
 
     @Override
     public int tier() {
-        return ((BlockModPlant) this.getPlant()).tier;
+        return (this.getPlant()).tier;
     }
 
     @Override
@@ -59,12 +58,24 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
 
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float f1, float f2, float f3) {
-        if(world.getBlock(x,y,z)==Blocks.blockCrop) {
-            LogHelper.debug("Trying to plant seed "+stack.getItem().getUnlocalizedName()+" on crops");
+        if (world.getBlock(x, y, z) == Blocks.blockCrop) {
+            LogHelper.debug("Trying to plant seed " + stack.getItem().getUnlocalizedName() + " on crops");
             return true;
         }
-        if(GrowthRequirementHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y, z)) {
-            super.onItemUse(stack,player,world,x,y,z,side,f1,f2,f3);
+        if (GrowthRequirementHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y, z)) {
+            if (side != 1) {
+                return false;
+            } else if (player.canPlayerEdit(x, y, z, side, stack) && player.canPlayerEdit(x, y + 1, z, side, stack)) {
+                if (world.isAirBlock(x, y + 1, z)) {
+                    world.setBlock(x, y + 1, z, this.getPlant());
+                    --stack.stackSize;
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         }
         return false;
     }

@@ -20,6 +20,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -180,6 +181,10 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
 
     //check if the plant is mature
     public boolean isMature(World world, int x, int y, int z) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if(te==null || !(te instanceof TileEntityCrop)) {
+            return world.getBlockMetadata(x, y, z) == 7;
+        }
         return ((TileEntityCrop) world.getTileEntity(x, y, z)).isMature();
     }
 
@@ -240,8 +245,7 @@ public class BlockModPlant extends BlockCrops implements IGrowable, IAgriCraftPl
     //see if the block can stay
     @Override
     public boolean canBlockStay(World world, int x, int y, int z) {
-        Block soil = world.getBlock(x,y-1,z);
-        return (soil instanceof net.minecraft.block.BlockFarmland);
+        return (this.growthRequirement.isValidSoil(world, x, y-1, z));
     }
 
     //check if the plant can grow
