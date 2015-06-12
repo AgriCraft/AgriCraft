@@ -3,11 +3,13 @@ package com.InfinityRaider.AgriCraft.compatibility;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applemilktea.AppleMilkTeaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
+import com.InfinityRaider.AgriCraft.compatibility.biomesoplenty.BiomesOPlentyHelper;
 import com.InfinityRaider.AgriCraft.compatibility.bloodmagic.BloodMagicHelper;
 import com.InfinityRaider.AgriCraft.compatibility.bluepower.BluePowerHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChocoCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
+import com.InfinityRaider.AgriCraft.compatibility.extrabiomesxl.ExtraBiomesXLHelper;
 import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.hungeroverhaul.HungerOverhaulHelper;
 import com.InfinityRaider.AgriCraft.compatibility.immersiveengineering.ImmersiveEngineeringHelper;
@@ -79,11 +81,13 @@ public abstract class ModHelper {
                 AppleCoreHelper.class,
                 AppleMilkTeaHelper.class,
                 ArsMagicaHelper.class,
+                BiomesOPlentyHelper.class,
                 BloodMagicHelper.class,
                 BluePowerHelper.class,
                 BotaniaHelper.class,
                 ChocoCraftHelper.class,
                 ExNihiloHelper.class,
+                ExtraBiomesXLHelper.class,
                 HarvestcraftHelper.class,
                 HungerOverhaulHelper.class,
                 ImmersiveEngineeringHelper.class,
