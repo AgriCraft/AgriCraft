@@ -138,7 +138,10 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     public ArrayList<ItemStack> getAllFruits() {return this.products.getAllProducts();}
 
     @Override
-    public ItemStack getRandomFruit(Random rand) {return this.getFruit(1, rand).get(0);}
+    public ItemStack getRandomFruit(Random rand) {
+        ArrayList<ItemStack> fruits = this.getFruit(1, rand);
+        return fruits.size()>0?fruits.get(0):null;
+    }
 
     @Override
     public ArrayList<ItemStack> getFruit(int nr, Random rand) {return this.products.getProduce(nr, rand);}
