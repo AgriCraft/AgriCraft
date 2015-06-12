@@ -284,7 +284,8 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     //return the fruit
     @Override
     protected Item func_149865_P() {
-        return this.getRandomFruit(new Random()).getItem();
+        Item randomFruit = this.getRandomFruit(new Random()).getItem();
+        return randomFruit==null?null:randomFruit;
     }
 
     @Override
