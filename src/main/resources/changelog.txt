@@ -22,7 +22,10 @@ Changelog
 -ADDED:  Compatibility for AppleMilkTea (mint)
 -ADDED:  Compatibility for RotaryCraft (canola)
 -ADDED:  Compatibility for Immersive Engineering (hemp)
+-ADDED:  Compatibility for Biomes O Plenty (turnip)
+-ADDED:  Compatibility for Extra Biomes XL (strawberries)
 -ADDED:  Configuration option for a global growth rate multiplier
+-ADDED:  Crops will now allow the use of other items on them when not mature (for example the Hoe of Growth from Thaumcraft)
 -FIXED:  Seeds added as drops from tall grass always having weight 10
 -FIXED:  Not being able to set max brightness in Minetweaker methods
 -FIXED:  Wrong error message in Minetweaker methods
@@ -30,6 +33,7 @@ Changelog
 -FIXED:  Poisonous potatoes not dropping from potatoes
 -FIXED:  Stat calculation not obeying the stat cap
 -FIXED:  Standalone crops obey growth requirements
+-FIXED:  A crash on harvesting after someone removed all the fruits of a crop without adding any new ones
 
 1.3.1
 -ADDED:  Nitor Wart: a new crop that produces glowstone dust

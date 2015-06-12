@@ -253,7 +253,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             }
         }
         //Returning true will prevent other things from happening
-        return true;
+        return false;
     }
 
     //This gets called when the block is left clicked (player hits the block)
