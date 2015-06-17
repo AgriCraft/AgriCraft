@@ -8,7 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 @Optional.Interface(modid = Names.Mods.bloodMagic, iface = "WayofTime.alchemicalWizardry.api.harvest.IHarvestHandler")
-public class BloodMagicHarvestHandler implements IHarvestHandler {
+public class HarvestHandler implements IHarvestHandler {
     @Override
     public boolean harvestAndPlant(World world, int x, int y, int z, Block block, int meta) {
         if(!(block instanceof BlockCrop)) {
