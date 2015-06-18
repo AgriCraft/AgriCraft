@@ -5,7 +5,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 public class CropPlantPsychedeliCraft extends CropPlantTallGeneric {
     public CropPlantPsychedeliCraft(ItemSeeds seed) {
