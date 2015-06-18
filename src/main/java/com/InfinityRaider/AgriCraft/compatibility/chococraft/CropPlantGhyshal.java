@@ -1,8 +1,5 @@
 package com.InfinityRaider.AgriCraft.compatibility.chococraft;
 
-import chococraft.common.config.ChocoCraftBlocks;
-import chococraft.common.config.ChocoCraftItems;
-
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -19,6 +16,23 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CropPlantGhyshal extends CropPlant {
+    private Item seed;
+    private Block plant;
+
+    private Block gysahlGreen;
+    private Item gysahlLovely;
+    private Item gysahlGold;
+
+    public CropPlantGhyshal() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+        super();
+        Class chochoCraftBlocks = Class.forName("chococraft.common.config.ChocoCraftBlocks");
+        Class chocoCraftItems = Class.forName("chococraft.common.config.ChocoCraftItems");
+        seed = (Item) chocoCraftItems.getField("gysahlSeedsItem").get(null);
+        plant = (Block) chochoCraftBlocks.getField("gysahlStemBlock").get(null);
+        gysahlGreen = (Block) chochoCraftBlocks.getField("gysahlGreenBlock").get(null);
+        gysahlLovely = (Item) chocoCraftItems.getField("gysahlLoverlyItem").get(null);
+        gysahlGold = (Item) chocoCraftItems.getField("gysahlGoldenItem").get(null);
+    }
 
     @Override
     public int tier() {
@@ -27,15 +41,15 @@ public class CropPlantGhyshal extends CropPlant {
 
     @Override
     public ItemStack getSeed() {
-        return new ItemStack(ChocoCraftItems.gysahlSeedsItem);
+        return new ItemStack(seed);
     }
 
     @Override
     public ArrayList<ItemStack> getAllFruits() {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        list.add(new ItemStack(ChocoCraftBlocks.gysahlGreenBlock));
-        list.add(new ItemStack(ChocoCraftItems.gysahlLoverlyItem));
-        list.add(new ItemStack(ChocoCraftItems.gysahlGoldenItem));
+        list.add(new ItemStack(gysahlGreen));
+        list.add(new ItemStack(gysahlLovely));
+        list.add(new ItemStack(gysahlGold));
         return list;
     }
 
@@ -46,23 +60,20 @@ public class CropPlantGhyshal extends CropPlant {
 
     @Override
     public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
-        Block normal = ChocoCraftBlocks.gysahlGreenBlock;
-        Item lovely = ChocoCraftItems.gysahlLoverlyItem;
-        Item golden = ChocoCraftItems.gysahlGoldenItem;
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         int nr = (int) (Math.ceil((gain + 0.00) / 3));
         while(nr>0) {
             ItemStack fruitStack;
             double random = rand.nextDouble();
             if (gain == 10) {
-                Item fruit = random < 0.2 ? golden : (random < 0.6 ? lovely : null);
+                Item fruit = random < 0.2 ? gysahlGold : (random < 0.6 ? gysahlLovely : null);
                 if (fruit == null) {
-                    fruitStack = new ItemStack(normal);
+                    fruitStack = new ItemStack(gysahlGreen);
                 } else {
                     fruitStack = new ItemStack(fruit, 1);
                 }
             } else {
-                fruitStack = (random < gain * 0.04 ? new ItemStack(lovely, 1) : new ItemStack(normal));
+                fruitStack = (random < gain * 0.04 ? new ItemStack(gysahlLovely, 1) : new ItemStack(gysahlGreen));
             }
             list.add(fruitStack);
             nr--;
@@ -82,7 +93,7 @@ public class CropPlantGhyshal extends CropPlant {
 
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement(ChocoCraftItems.gysahlSeedsItem, 0).canGrow(world, x, y, z);
+        return GrowthRequirementHandler.getGrowthRequirement(seed, 0).canGrow(world, x, y, z);
     }
 
     @Override
@@ -95,7 +106,7 @@ public class CropPlantGhyshal extends CropPlant {
     @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon(int growthStage) {
         int meta = (int) Math.ceil(( (float) growthStage ) / 2.0F );
-        return ChocoCraftBlocks.gysahlStemBlock.getIcon(0, meta);
+        return plant.getIcon(0, meta);
     }
 
     @Override
