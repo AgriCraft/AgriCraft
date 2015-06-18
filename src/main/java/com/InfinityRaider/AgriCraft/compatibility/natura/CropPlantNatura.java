@@ -6,7 +6,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import mods.natura.common.NContent;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -16,10 +16,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CropPlantNatura extends CropPlant {
+    private Item seed;
+    private Item fruit;
     private final int seedMeta;
 
-    public CropPlantNatura(int seedMeta) {
+    public CropPlantNatura(int seedMeta) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
         this.seedMeta = seedMeta;
+        Class naturaContent = Class.forName("mods.natura.common.NContent");
+        seed = (Item) naturaContent.getField("seeds").get(null);
+        fruit = (Item) naturaContent.getField("plantItem").get(null);
     }
 
     @Override
@@ -29,19 +34,19 @@ public class CropPlantNatura extends CropPlant {
 
     @Override
     public ItemStack getSeed() {
-        return new ItemStack(NContent.seeds, 1 , seedMeta);
+        return new ItemStack(seed, 1 , seedMeta);
     }
 
     @Override
     public ArrayList<ItemStack> getAllFruits() {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        list.add(new ItemStack(NContent.plantItem, 1, seedMeta*3));
+        list.add(new ItemStack(fruit, 1, seedMeta*3));
         return list;
     }
 
     @Override
     public ItemStack getRandomFruit(Random rand) {
-        return new ItemStack(NContent.plantItem, 1, seedMeta*3);
+        return new ItemStack(fruit, 1, seedMeta*3);
     }
 
     @Override
@@ -67,7 +72,7 @@ public class CropPlantNatura extends CropPlant {
 
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement(NContent.seeds, seedMeta).canGrow(world, x, y, z);
+        return GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta).canGrow(world, x, y, z);
     }
 
     @Override
@@ -92,7 +97,7 @@ public class CropPlantNatura extends CropPlant {
             case 6: meta = 2+seedMeta*5;break;
             case 7: meta = 3+seedMeta*5;break;
         }
-        return ((ItemSeeds) NContent.seeds).getPlant(null, 0, 0, 0).getIcon(0, meta);
+        return ((ItemSeeds) seed).getPlant(null, 0, 0, 0).getIcon(0, meta);
     }
 
     @Override
