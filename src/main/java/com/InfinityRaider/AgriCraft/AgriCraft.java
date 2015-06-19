@@ -8,6 +8,8 @@ package com.InfinityRaider.AgriCraft;
         - Pahimar for making his code open source and for creating his Let's Mod Reboot Youtube series, I've learned a lot from this (also used some code, credits due where credits due)
         - VSWE for his "Forging a Minecraft Mod" summer courses
         - NealeGaming for his Minecraft modding tutorials on youtube
+        - Imasius (aka Nimo) for learning me to better code in java
+        - HenryLoenwind for the api
 
     I've annotated my code heavily, for myself and for possible others who might learn from it.
 
