@@ -8,6 +8,8 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -20,6 +22,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SideOnly(Side.CLIENT)
 public class RenderChannel extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler {
 
     public static AtomicInteger renderCallCounter = new AtomicInteger(0);
@@ -98,7 +101,7 @@ public class RenderChannel extends TileEntitySpecialRenderer implements ISimpleB
         this.renderSide(channel, tessellator, 'z', 1);
     }
 
-    private void renderBottom(TileEntityChannel channel, Tessellator tessellator) {
+    protected void renderBottom(TileEntityChannel channel, Tessellator tessellator) {
         //the texture
         IIcon icon = channel.getIcon();
         //draw first plane front

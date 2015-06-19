@@ -26,6 +26,8 @@ Changelog
 -ADDED:  Compatibility for Extra Biomes XL (strawberries)
 -ADDED:  Configuration option for a global growth rate multiplier
 -ADDED:  Crops will now allow the use of other items on them when not mature (for example the Hoe of Growth from Thaumcraft)
+-ADDED:  AgriCraft seeds can now be squeezed into seed oil with forestry
+-ADDED:  A water channel that is a full block, for decoration purposes
 -FIXED:  Seeds added as drops from tall grass always having weight 10
 -FIXED:  Not being able to set max brightness in Minetweaker methods
 -FIXED:  Wrong error message in Minetweaker methods
