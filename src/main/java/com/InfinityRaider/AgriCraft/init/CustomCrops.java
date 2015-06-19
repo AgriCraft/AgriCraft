@@ -35,8 +35,9 @@ public class CustomCrops {
                 //cropData[4]: tier
                 //cropData[5]: render type
                 //cropData[6]: information
-                boolean success = cropData.length==7;
-                String errorMsg = "Incorrect amount of arguments, arguments should be: (name, fruit:fruitMeta, soil, baseBlock:baseBlockMeta, tier, renderType, information)";
+                //cropData[7]: shearable drop (optional)
+                boolean success = cropData.length==7 || cropData.length==8;
+                String errorMsg = "Incorrect amount of arguments, arguments should be: (name, fruit:fruitMeta, soil, baseBlock:baseBlockMeta, tier, renderType, information, shearable (optional) )";
                 LogHelper.debug(new StringBuffer("parsing ").append(cropsRawData[i]));
                 if(success) {
                     ItemStack fruitStack = IOHelper.getStack(cropData[1]);
@@ -52,9 +53,11 @@ public class CustomCrops {
                         int baseMeta = base != null ? base.getItemDamage() : 0;
                         int tier = Integer.parseInt(cropData[4]);
                         RenderMethod renderType = RenderMethod.getRenderMethod(Integer.parseInt(cropData[5]));
+                        ItemStack shearable = IOHelper.getStack(cropData[7]);
+                        shearable = (shearable!=null && shearable.getItem()!=null)?shearable:null;
                         String info = cropData[6];
                         try {
-                            customCrops[i] = new BlockModPlant(new Object[] {name, new ItemStack(fruit, 1, fruitMeta), soil, new BlockWithMeta(baseBlock, baseMeta), tier, renderType});
+                            customCrops[i] = new BlockModPlant(new Object[] {name, new ItemStack(fruit, 1, fruitMeta), soil, new BlockWithMeta(baseBlock, baseMeta), tier, renderType, shearable});
                         } catch (Exception e) {
                             if(ConfigurationHandler.debug) {
                                 e.printStackTrace();

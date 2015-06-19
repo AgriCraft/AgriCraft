@@ -229,14 +229,15 @@ public abstract class IOHelper {
             "#Only define one seed per line, meta is optional. Example: minecraft:melon_seeds,10";
 
     private static final String customCropInstructions =
-            "#Define custom crops here: <name>,<fruit:fruitmeta>,<soil>,<baseblock:baseblockmeta>,<tier>,<rendermethod>,<information>\n" +
+            "#Define custom crops here: <name>,<fruit:fruitmeta>,<soil>,<baseblock:baseblockmeta>,<tier>,<rendermethod>,<information>,<shearable>\n" +
             "# - name:         is the name of the crop you want, for example: claysanthemum\n" +
             "# - fruit:        the fruit you want the crop to produce, for example: minecraft:clay:0 (metadata is optional, you can get this from NEI). Type \"null\" if you want the crop to have no fruit.\n" +
             "# - soil:         the soil you want the crop to be planted on, if you specify null, it will grow on farmland and any soil you whitelisted. Other possible soils are soulsand, sand or mycelium.\n" +
             "# - baseblock:    this is the block that has to be underneath for the plant to grow, for example: (this can also be gotten from NEI, if you don't want to specify, type null)\n" +
             "# - tier:         from 1 to 5, the higher, the slower the crop will grow\n" +
             "# - rendermethod: put 1 to render like a flower (in an X-pattern), put 6 to render like wheat (hashtag-pattern)\n" +
-            "# - information:  put a short description (in the same line) of the crop. This will appear in the journal<n" +
+            "# - information:  put a short description (in the same line) of the crop. This will appear in the journal\n" +
+            "# - shearable:    (optional) the item this plant drops when sheared\n" +
             "#you will need to make a texture pack and add textures for the crops in agricraft/blocks with the name cropName1, cropName2, cropName3, cropName4\n" +
             "#where name is the name you specified here, there have to be 4 textures, texture 4 is the mature one\n" +
             "#for the seed texture, put a texture named seedName in the agricraft/items of your resourcepack\n" +
