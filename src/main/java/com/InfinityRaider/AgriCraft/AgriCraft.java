@@ -89,6 +89,7 @@ public class AgriCraft {
         MutationHandler.init();
         CropProducts.init();
         if(!ConfigurationHandler.disableWorldGen) {WorldGen.init();}
+        ModHelper.performPostTasks();
         proxy.initNEI();
         LogHelper.debug("Post-Initialization Complete");
     }

@@ -94,6 +94,10 @@ public class ThaumcraftHelper extends ModHelper {
             thaumcraftSeeds.add(cropTaintedRoot.getSeed());
             cropTaintedRoot.getGrowthRequirement().setSoil(new BlockWithMeta(blockTaint, 1));
         }
+    }
+
+    @Override
+    protected void postTasks() {
         Aspects.registerAspects();
     }
 

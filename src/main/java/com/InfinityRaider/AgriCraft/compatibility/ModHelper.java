@@ -10,6 +10,7 @@ import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChocoCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
 import com.InfinityRaider.AgriCraft.compatibility.extrabiomesxl.ExtraBiomesXLHelper;
+import com.InfinityRaider.AgriCraft.compatibility.forestry.ForestryHelper;
 import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.hungeroverhaul.HungerOverhaulHelper;
 import com.InfinityRaider.AgriCraft.compatibility.immersiveengineering.ImmersiveEngineeringHelper;
@@ -54,6 +55,8 @@ public abstract class ModHelper {
 
     protected abstract void initPlants();
 
+    protected void postTasks() {}
+
     protected abstract String modId();
 
     public static void initHelpers() {
@@ -76,6 +79,14 @@ public abstract class ModHelper {
         }
     }
 
+    public static void performPostTasks() {
+        for (ModHelper helper : modHelpers) {
+            if (Loader.isModLoaded(helper.modId())) {
+                helper.postTasks();
+            }
+        }
+    }
+
     private static void findHelpers() {
         Class[] classes = {
                 AppleCoreHelper.class,
@@ -88,6 +99,7 @@ public abstract class ModHelper {
                 ChocoCraftHelper.class,
                 ExNihiloHelper.class,
                 ExtraBiomesXLHelper.class,
+                ForestryHelper.class,
                 HarvestcraftHelper.class,
                 HungerOverhaulHelper.class,
                 ImmersiveEngineeringHelper.class,
