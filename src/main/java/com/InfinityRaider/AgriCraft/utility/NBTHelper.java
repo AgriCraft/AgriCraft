@@ -28,6 +28,9 @@ public abstract class NBTHelper {
         for(int i=0;i<list.tagCount();i++) {
             NBTTagCompound tagAtIndex = list.getCompoundTagAt(i);
             ItemStack stackAtIndex = ItemStack.loadItemStackFromNBT(tagAtIndex);
+            if(stackAtIndex==null || stackAtIndex.getItem()==null) {
+                continue;
+            }
             if(stack.getItem()==stackAtIndex.getItem() && stack.getItemDamage()==stackAtIndex.getItemDamage()) {
                 return true;
             }
