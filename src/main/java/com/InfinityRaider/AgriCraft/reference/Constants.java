@@ -43,4 +43,5 @@ public final class Constants {
     public static final int channelId = 2;
     public static final int valveId = 3;
     public static final int channelFullId = 4;
+    public static final int waterPadId = 5;
 }

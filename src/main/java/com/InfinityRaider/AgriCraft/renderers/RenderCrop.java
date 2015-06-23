@@ -49,16 +49,16 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
 
     //render four sticks vertical in the ground
     private void renderBase(RenderBlocks renderer, Block block, int x, int y, int z) {
-        renderer.setRenderBounds(0.125F, -0.125F, 0.125F, 0.1875F, Constants.unit * 13, 0.1875F);
+        renderer.setRenderBounds(0.125F, -0.125F*8, 0.125F, 0.1875F, Constants.unit * 13, 0.1875F);
         renderer.renderStandardBlock(block, x, y, z);
         
-        renderer.setRenderBounds(0.875F, -0.125F, 0.875F, 0.8125F, Constants.unit * 13, 0.8125F);
+        renderer.setRenderBounds(0.875F, -0.125F*8, 0.875F, 0.8125F, Constants.unit * 13, 0.8125F);
         renderer.renderStandardBlock(block, x, y, z);
         
-        renderer.setRenderBounds(0.8125F, -0.125F, 0.125F, 0.875F, Constants.unit * 13, 0.1875F);
+        renderer.setRenderBounds(0.8125F, -0.125F*8, 0.125F, 0.875F, Constants.unit * 13, 0.1875F);
         renderer.renderStandardBlock(block, x, y, z);
         
-        renderer.setRenderBounds(0.125F, -0.125F, 0.8125F, 0.1875F, Constants.unit * 13, 0.875F);
+        renderer.setRenderBounds(0.125F, -0.125F*8, 0.8125F, 0.1875F, Constants.unit * 13, 0.875F);
         renderer.renderStandardBlock(block, x, y, z);
     }
 

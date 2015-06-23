@@ -98,6 +98,7 @@ public class ArsMagicaHelper extends ModHelper {
                 }
                 return;
             }
+            cropWakebloom.getGrowthRequirement().setSoil(new BlockWithMeta(com.InfinityRaider.AgriCraft.init.Blocks.waterPad, 1));
             arsMagicaCrops.add(cropWakebloom);
             arsMagicaSeeds.add(cropWakebloom.getSeed());
         }

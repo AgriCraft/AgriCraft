@@ -1,7 +1,7 @@
 Changelog
 ---------
 1.4.0
--CHANGE: Updated to Forge 10.13.3.1373
+-CHANGE: Updated to Forge 10.13.4.1448
 -CHANGE: Rewrote the crop system to prevent crashing
 -CHANGE: Rewrote tanks for major performance increase
 -CHANGE: Condense all custom wood entries into one in NEI
@@ -16,6 +16,7 @@ Changelog
 -ADDED:  Config options to change the spawn rates of greenhouses
 -ADDED:  Blood Magic can now auto-harvest crops with the reap of the harvest moon
 -ADDED:  Crops for Thaumcraft: shimmerleaf, cinderpearl, vishroom and taintroot
+-ADDED:  Crops for Ars Magica 2: cerublossom, desert nova, tarma root, aum, wakebloom
 -ADDED:  Button in Seed Analyzer GUI to read the journal
 -ADDED:  Some crops (flowers, cactus, ...) can be sheared to get the flower instead of the fruit
 -ADDED:  Compatibility for PneumaticCraft crops
@@ -28,6 +29,8 @@ Changelog
 -ADDED:  Crops will now allow the use of other items on them when not mature (for example the Hoe of Growth from Thaumcraft)
 -ADDED:  AgriCraft seeds can now be squeezed into seed oil with forestry
 -ADDED:  A water channel that is a full block, for decoration purposes
+-ADDED:  NEI handler for crop products
+-ADDED:  A water pad block for aquatic crops (water artichoke, wakebloom, squid plant)
 -FIXED:  Seeds added as drops from tall grass always having weight 10
 -FIXED:  Not being able to set max brightness in Minetweaker methods
 -FIXED:  Wrong error message in Minetweaker methods

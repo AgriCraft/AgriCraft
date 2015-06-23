@@ -1,7 +1,10 @@
 package com.InfinityRaider.AgriCraft.compatibility.witchery;
 
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.init.Items;
@@ -59,17 +62,18 @@ public final class WitcheryHelper extends ModHelper {
             e.printStackTrace();
         }
         try {
-        CropPlantHandler.registerPlant(new CropPlantMandrake());
+            CropPlantHandler.registerPlant(new CropPlantMandrake());
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-        CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedsartichoke")));
+            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedsartichoke")));
+            GrowthRequirementHandler.getGrowthRequirement((Item) Item.itemRegistry.getObject("witchery:seedsartichoke"), 0).setSoil(new BlockWithMeta(Blocks.waterPad, 1));
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-        CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedssnowbell")));
+            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedssnowbell")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,7 +89,7 @@ public final class WitcheryHelper extends ModHelper {
         }
         try {
             CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedswormwood")));
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -38,15 +38,15 @@ public class PneumaticCraftHelper extends ModHelper {
                 if(plant != null) {
                     CropPlantPneumaticCraft cropPlant = new CropPlantPneumaticCraft(i, plant);
                     CropPlantHandler.registerPlant(cropPlant);
-                    Block soil = null;
+                    BlockWithMeta soil = null;
                     switch(i) {
-                        case 0: break; //squid plant: water
-                        case 5: soil = Blocks.end_stone; break; //end plant: end stone
-                        case 1: soil = Blocks.netherrack; break; //fire flower: netherrack
-                        case 11: soil = Blocks.netherrack; break; //helium plant: netherrack
+                        case 0: soil = new BlockWithMeta(com.InfinityRaider.AgriCraft.init.Blocks.waterPad, 1); break; //squid plant: water
+                        case 5: soil = new BlockWithMeta(Blocks.end_stone); break; //end plant: end stone
+                        case 1: soil = new BlockWithMeta(Blocks.netherrack); break; //fire flower: netherrack
+                        case 11: soil = new BlockWithMeta(Blocks.netherrack); break; //helium plant: netherrack
                     }
                     if(soil != null) {
-                        GrowthRequirementHandler.getGrowthRequirement(cropPlant.getSeed().getItem(), cropPlant.getSeed().getItemDamage()).setSoil(new BlockWithMeta(soil));
+                        GrowthRequirementHandler.getGrowthRequirement(cropPlant.getSeed().getItem(), cropPlant.getSeed().getItemDamage()).setSoil(soil);
                     }
                 }
             } catch (DuplicateCropPlantException e1) {

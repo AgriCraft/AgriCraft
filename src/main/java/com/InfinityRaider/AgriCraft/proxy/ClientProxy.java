@@ -36,6 +36,7 @@ public class ClientProxy extends CommonProxy {
     public static int channelRenderId = -1;
     public static int channelFullRenderId = -1;
     public static int valveRenderId = -1;
+    public static int waterPadRenderId = -1;
 
     @Override
     public int getRenderId(int nr) {
@@ -45,6 +46,7 @@ public class ClientProxy extends CommonProxy {
             case Constants.channelId: return channelRenderId;
             case Constants.valveId: return valveRenderId;
             case Constants.channelFullId: return channelFullRenderId;
+            case Constants.waterPadId: return waterPadRenderId;
         }
         return -1;
     }
@@ -61,6 +63,11 @@ public class ClientProxy extends CommonProxy {
         TileEntitySpecialRenderer  renderAnalyzer = new RenderSeedAnalyzer();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySeedAnalyzer.class, renderAnalyzer);
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.seedAnalyzer), new RenderItemSeedAnalyzer(renderAnalyzer, new TileEntitySeedAnalyzer()));
+
+        //water pad
+        waterPadRenderId = RenderingRegistry.getNextAvailableRenderId();
+        RenderWaterPad renderWaterPad = new RenderWaterPad();
+        RenderingRegistry.registerBlockHandler(waterPadRenderId, renderWaterPad);
 
         //water tank
         tankRenderId = RenderingRegistry.getNextAvailableRenderId();

@@ -10,6 +10,7 @@ import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 public class Blocks {
     public static BlockCrop blockCrop;
     public static BlockSeedAnalyzer seedAnalyzer;
+    public static BlockWaterPad waterPad;
     public static BlockWaterTank blockWaterTank;
     public static BlockWaterChannel blockWaterChannel;
     public static BlockWaterChannelFull blockWaterChannelFull;
@@ -23,6 +24,8 @@ public class Blocks {
         RegisterHelper.registerBlock(blockCrop, Names.Objects.crops);
         seedAnalyzer = new BlockSeedAnalyzer();
         RegisterHelper.registerBlock(seedAnalyzer, Names.Objects.seedAnalyzer);
+        waterPad = new BlockWaterPad();
+        RegisterHelper.registerBlock(waterPad, Names.Objects.waterPad, BlockWaterPad.ItemBlock.class);
         if(!ConfigurationHandler.disableIrrigation) {
             blockWaterTank = new BlockWaterTank();
             RegisterHelper.registerBlock(blockWaterTank, Names.Objects.tank, ItemBlockCustomWood.class);
