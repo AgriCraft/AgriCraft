@@ -13,7 +13,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -30,33 +29,6 @@ public class BlockWaterTank extends BlockCustomWood{
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntityTank();
-    }
-
-    @Override
-    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
-        if(!world.isRemote) {
-            ItemStack drop = new ItemStack(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, 1);
-            this.setTag(world, x, y, z, drop);
-            this.dropBlockAsItem(world, x, y, z, drop);
-        }
-    }
-/*
-    //when the block is harvested
-    @Override
-    public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
-        if((!world.isRemote)) {
-            if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
-                this.dropBlockAsItem(world, x, y, z, meta, 0);
-            }
-        }
-    }
-*/
-    //creative item picking
-    @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-        ItemStack stack = new ItemStack(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, 1, world.getBlockMetadata(x, y, z));
-        this.setTag(world, x, y, z, stack);
-        return stack;
     }
 
     //This gets called when the block is right clicked

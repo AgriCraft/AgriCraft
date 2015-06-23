@@ -6,10 +6,8 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -30,23 +28,6 @@ public class BlockChannelValve extends BlockCustomWood {
                 world.markBlockForUpdate(x, y, z);
             }
         }
-    }
-
-    @Override
-    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
-        if(!world.isRemote) {
-            ItemStack drop = new ItemStack(com.InfinityRaider.AgriCraft.init.Blocks.blockChannelValve, 1);
-            this.setTag(world, x, y, z, drop);
-            this.dropBlockAsItem(world, x, y, z, drop);
-        }
-    }
-
-    //creative item picking
-    @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-        ItemStack stack = new ItemStack(com.InfinityRaider.AgriCraft.init.Blocks.blockChannelValve, 1, world.getBlockMetadata(x, y, z));
-        this.setTag(world, x, y, z, stack);
-        return stack;
     }
 
     @Override
