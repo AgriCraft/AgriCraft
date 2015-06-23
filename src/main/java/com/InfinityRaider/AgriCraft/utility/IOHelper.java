@@ -190,6 +190,9 @@ public abstract class IOHelper {
         int start = 0;
         for(int i=0;i<input.length();i++) {
             if(input.charAt(i)==',') {
+                if(input.charAt(i+1)==' ') {
+                    continue;
+                }
                 String element = (input.substring(start, i)).trim();
                 if(element.length()>0) {
                     output.add(element);
