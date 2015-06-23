@@ -134,6 +134,7 @@ public class GrowthRequirement implements IGrowthRequirement{
         return isValidSoil(soil);
     }
 
+    @Override
     public boolean isValidSoil(BlockWithMeta soil) {
         if(this.requiresSpecificSoil()) {
             return this.soil.equals(soil);

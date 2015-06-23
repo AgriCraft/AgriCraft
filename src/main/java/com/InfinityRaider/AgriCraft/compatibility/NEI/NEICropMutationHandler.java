@@ -14,6 +14,7 @@ import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -124,10 +125,27 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     //loads the mutation recipes for a given parent
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
+        if(ingredient == null || ingredient.getItem() == null) {
+            return;
+        }
         if(CropPlantHandler.isValidSeed(ingredient)) {
             Mutation[] mutations = MutationHandler.getMutations(ingredient);
             for (Mutation mutation:mutations) {
                 if (mutation.result.getItem() != null && mutation.parent1.getItem() != null && mutation.parent2.getItem() != null) {
+                    arecipes.add(new CachedCropMutationRecipe(mutation));
+                }
+            }
+        }
+        else if(ingredient.getItem() instanceof ItemBlock) {
+            BlockWithMeta block = new BlockWithMeta(((ItemBlock) ingredient.getItem()).field_150939_a, ingredient.getItemDamage());
+            Mutation[] mutations = MutationHandler.getMutations();
+            for(Mutation mutation:mutations) {
+                IGrowthRequirement req = GrowthRequirementHandler.getGrowthRequirement(mutation.result.getItem(), mutation.result.getItemDamage());
+                if(req.isValidSoil(block)) {
+                    arecipes.add(new CachedCropMutationRecipe(mutation));
+                    continue;
+                }
+                if(block.equals(req.getRequiredBlock())) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));
                 }
             }

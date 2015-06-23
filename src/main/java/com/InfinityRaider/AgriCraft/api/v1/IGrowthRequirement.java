@@ -19,6 +19,9 @@ public interface IGrowthRequirement {
 	/** @return true, if the given block is a valid soil */
 	public boolean isValidSoil(World world, int x, int y, int z);
 
+	/** @return true, if the given block is a valid soil */
+	public boolean isValidSoil(BlockWithMeta soil);
+
 	/** @return the required block as ItemStack of size 1 */
 	public ItemStack requiredBlockAsItemStack();
 
