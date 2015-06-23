@@ -84,6 +84,14 @@ public class CropPlantHandler {
         }
     }
 
+    public static ArrayList<CropPlant> getPlants() {
+        ArrayList<CropPlant> plants = new ArrayList<CropPlant>();
+        for(HashMap<Integer, CropPlant> subMap:cropPlants.values()) {
+            plants.addAll(subMap.values());
+        }
+        return plants;
+    }
+
     public static void init() {
         //register vanilla plants
         try {

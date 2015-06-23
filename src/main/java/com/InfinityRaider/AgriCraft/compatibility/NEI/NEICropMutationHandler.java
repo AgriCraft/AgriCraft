@@ -44,22 +44,22 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
 
         //constructor
         public CachedCropMutationRecipe(Mutation mutation) {
-            this.parent1 = new PositionedStack(mutation.parent1.copy(), Constants.nei_X1, Constants.nei_Y1);
-            this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X2, Constants.nei_Y1);
-            this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X3, Constants.nei_Y1);
+            this.parent1 = new PositionedStack(mutation.parent1.copy(), Constants.nei_X_parent1, Constants.nei_Y_seeds);
+            this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X_parent2, Constants.nei_Y_seeds);
+            this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X_result, Constants.nei_Y_seeds);
 
             IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(result.item.getItem(), result.item.getItemDamage());
             if (growthReq.getSoil() != null) {
-                soils.add(new PositionedStack(growthReq.getSoil().toStack(), Constants.nei_X3, Constants.nei_Y2));
+                soils.add(new PositionedStack(growthReq.getSoil().toStack(), Constants.nei_X_result, Constants.nei_Y_soil));
             } else {
                 for (BlockWithMeta blockWithMeta : GrowthRequirementHandler.defaultSoils) {
-                    soils.add(new PositionedStack(blockWithMeta.toStack(), Constants.nei_X3, Constants.nei_Y2));
+                    soils.add(new PositionedStack(blockWithMeta.toStack(), Constants.nei_X_result, Constants.nei_Y_soil));
                 }
             }
 
             this.requiredType = growthReq.getRequiredType();
             if (requiredType != RequirementType.NONE) {
-                requiredBlock = new PositionedStack(growthReq.requiredBlockAsItemStack(), Constants.nei_X3, Constants.nei_Y3);
+                requiredBlock = new PositionedStack(growthReq.requiredBlockAsItemStack(), Constants.nei_X_result, Constants.nei_Y_base);
             }
         }
 
@@ -192,7 +192,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         GuiDraw.drawTexturedModalRect(0, 0, 5, 11, 166, 85);
 
         String soil = StatCollector.translateToLocal("agricraft_nei.soil");
-        GuiDraw.drawStringR(soil + ":", Constants.nei_X3 - 7, Constants.nei_Y2 + 4, COLOR_BLACK, false);
+        GuiDraw.drawStringR(soil + ":", Constants.nei_X_result - 7, Constants.nei_Y_soil + 4, COLOR_BLACK, false);
 
         if (mutationRecipe.requiredType != RequirementType.NONE) {
             String needs = StatCollector.translateToLocal("agricraft_nei.needs");
@@ -200,8 +200,8 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
                     ? StatCollector.translateToLocal("agricraft_nei.below")
                     : StatCollector.translateToLocal("agricraft_nei.nearby");
 
-            GuiDraw.drawStringR(needs + ":", Constants.nei_X3 - 7, Constants.nei_Y3 + 4, COLOR_BLACK, false);
-            GuiDraw.drawString(modifier, Constants.nei_X2 - 8, Constants.nei_Y3 + 4, COLOR_BLACK, false);
+            GuiDraw.drawStringR(needs + ":", Constants.nei_X_result - 7, Constants.nei_Y_base + 4, COLOR_BLACK, false);
+            GuiDraw.drawString(modifier, Constants.nei_X_parent2 - 8, Constants.nei_Y_base + 4, COLOR_BLACK, false);
         }
     }
 }

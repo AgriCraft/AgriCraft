@@ -185,6 +185,7 @@ agricraft_tooltip.empty=No seed planted
 
 // nei GUI
 agricraft_nei.mutation.title=Crop Mutation
+agricraft_nei.cropProduct.title=Crop Produce
 agricraft_nei.soil=Soil
 agricraft_nei.needs=Needs
 agricraft_nei.below=Below

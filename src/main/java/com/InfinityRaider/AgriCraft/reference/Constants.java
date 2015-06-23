@@ -30,12 +30,12 @@ public final class Constants {
     public static final double defaultMutationChance = 0.2;
 
     //constants for positioning item textures on the NEI recipe
-    public static final int nei_X1 = 44;
-    public static final int nei_X2 = 106;
-    public static final int nei_X3 = 75;
-    public static final int nei_Y1 = 21;
-    public static final int nei_Y2 = 47;
-    public static final int nei_Y3 = 68;
+    public static final int nei_X_parent1 = 44;
+    public static final int nei_X_parent2 = 106;
+    public static final int nei_X_result = 75;
+    public static final int nei_Y_seeds = 21;
+    public static final int nei_Y_soil = 47;
+    public static final int nei_Y_base = 68;
 
     //id's
     public static final int cropId = 0;

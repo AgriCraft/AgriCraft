@@ -27,9 +27,13 @@ public class NEIConfig implements IConfigureNEI {
         if(LoadedMods.nei) {
             //register NEI recipe handler
             if(ConfigurationHandler.enableNEI) {
-                LogHelper.debug("Registering NEI recipe handler");
+                LogHelper.debug("Registering NEI recipe handlers");
+                //mutation handler
                 API.registerRecipeHandler(new NEICropMutationHandler());
                 API.registerUsageHandler(new NEICropMutationHandler());
+                //crop product handler
+                API.registerRecipeHandler(new NEICropProductHandler());
+                API.registerUsageHandler(new NEICropProductHandler());
             }
             //hide crop blocks in NEI
             hideItems();
