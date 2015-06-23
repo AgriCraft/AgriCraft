@@ -106,9 +106,12 @@ public class Recipes {
 
     private static void registerCustomWoodRecipes() {
         ItemStack channel = new ItemStack(Blocks.blockWaterChannel, 1);
+        ItemStack channelFull = new ItemStack(Blocks.blockWaterChannelFull, 1);
 
-        registerCustomWoodRecipe(Blocks.blockWaterTank, 1, true, new Object[] {"w w", "w w", "www", 'w', REFERENCE});
-        registerCustomWoodRecipe(Blocks.blockWaterChannel, 6, true, new Object[] {"w w", " w ", 'w', REFERENCE});
+        registerCustomWoodRecipe(Blocks.blockWaterTank, 1, true, "w w", "w w", "www", 'w', REFERENCE);
+        registerCustomWoodRecipe(Blocks.blockWaterChannel, 6, true, "w w", " w ", 'w', REFERENCE);
+        registerCustomWoodRecipe(Blocks.blockWaterChannelFull, 1, false, channel, channel, channel, channel);
+        registerCustomWoodRecipe(Blocks.blockWaterChannel, 4, false, channelFull);
         registerCustomWoodRecipe(Blocks.blockChannelValve, 1, false, new ItemStack(net.minecraft.init.Items.iron_ingot, 1), new ItemStack(net.minecraft.init.Blocks.lever, 1), channel);
     }
 
