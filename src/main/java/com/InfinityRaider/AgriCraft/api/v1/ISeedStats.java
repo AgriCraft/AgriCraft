@@ -8,32 +8,32 @@ public interface ISeedStats {
 	/**
 	 * @return The growth value of the seed. Will be -1 if the seed is not analyzed.
 	 */
-	int getGrowth();
+	short getGrowth();
 	
 	/**
 	 * @return The gain value of the seed. Will be -1 if the seed is not analyzed.
 	 */
-	int getGain();
+	short getGain();
 	
 	/**
 	 * @return The strength value of the seed. Will be -1 if the seed is not analyzed.
 	 */
-	int getStrength();
+	short getStrength();
 	
 	/**
 	 * @return The maximum growth value a seed of this kind can have.
 	 */
-	int getMaxGrowth();
+	short getMaxGrowth();
 	
 	/**
 	 * @return The maximum gain value a seed of this kind can have.
 	 */
-	int getMaxGain();
+	short getMaxGain();
 	
 	/**
 	 * @return The maximum strength value a seed of this kind can have.
 	 */
-	int getMaxStrength();
+	short getMaxStrength();
 
 
 	

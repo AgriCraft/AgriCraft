@@ -73,7 +73,7 @@ public class APIimplv1 implements APIv1 {
 
 	@Override
 	public List<Block> getCropsBlocks() {
-		return Lists.newArrayList((Block)Blocks.blockCrop);
+		return Lists.newArrayList((Block) Blocks.blockCrop);
 	}
 
 	@Override
@@ -91,12 +91,10 @@ public class APIimplv1 implements APIv1 {
 		if (!isHandledByAgricraft(seed)) {
 			return null;
 		}
-		if (seed.stackTagCompound != null && seed.stackTagCompound.hasKey(Names.NBT.growth)
-				&& seed.stackTagCompound.getBoolean(Names.NBT.analyzed)) {
-			return new SeedStats(seed.stackTagCompound.getInteger(Names.NBT.growth), seed.stackTagCompound.getInteger(Names.NBT.gain),
-					seed.stackTagCompound.getInteger(Names.NBT.strength));
+		if (seed.stackTagCompound != null && seed.stackTagCompound.hasKey(Names.NBT.growth) && seed.stackTagCompound.getBoolean(Names.NBT.analyzed)) {
+			return PlantStats.readFromNBT(seed.stackTagCompound);
 		} else {
-			return new SeedStats(-1, -1, -1);
+			return new PlantStats(-1, -1, -1);
 		}
 	}
 
