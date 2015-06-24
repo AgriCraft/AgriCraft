@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -7,7 +8,6 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.*;
 
@@ -185,21 +185,16 @@ public abstract class SeedHelper {
     }
 
     //get a random seed
-    public static ItemStack getRandomSeed(boolean setTag) {
-        ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
-        ItemStack seed = null;
-        while(!CropPlantHandler.isValidSeed(seed)) {
-            seed = seeds.get((int) Math.floor(Math.random()*seeds.size()));
-        }
+    public static ItemStack getRandomSeed(Random rand, boolean setTag) {
+        ArrayList<CropPlant> plants = CropPlantHandler.getPlants();
+        ItemStack seed = plants.get(rand.nextInt(plants.size())).getSeed().copy();
         if(setTag) {
-            int gain = (int) Math.ceil(Math.random()*7);
-            int growth = (int) Math.ceil(Math.random()*7);
-            int strength = (int) Math.ceil(Math.random()*7);
             NBTTagCompound tag = new NBTTagCompound();
-            setNBT(tag, (short) growth, (short) gain, (short) strength, false);
+            setNBT(tag, (short) (rand.nextInt(ConfigurationHandler.cropStatCap)/2 + 1), (short) (rand.nextInt(ConfigurationHandler.cropStatCap)/2 + 1), (short) (rand.nextInt(ConfigurationHandler.cropStatCap)/2 + 1), false);
             seed.stackTagCompound = tag;
         }
         return seed;
+
     }
 
     public static void addAllToSeedBlacklist(Collection<? extends ItemStack> seeds) {

@@ -17,21 +17,15 @@ public class WorldGen {
             VillagerRegistry.instance().registerVillagerId(ConfigurationHandler.villagerID);
             VillagerRegistry.instance().registerVillageTradeHandler(ConfigurationHandler.villagerID, new VillagerTradeHandler());
         }
+
         //add greenhouses to villages
+        MapGenStructureIO.func_143031_a(StructureGreenhouse.class, Reference.MOD_ID + ":Greenhouse");
         VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseHandler());
-        try {
-            MapGenStructureIO.func_143031_a(StructureGreenhouse.class, Reference.MOD_ID + ":Greenhouse");
-        } catch (Exception exception) {
-            LogHelper.info("Failed to load greenhouse to villages");
-        }
+
         //add irrigated greenhouses to villages
-        VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseIrrigatedHandler());
         if(!ConfigurationHandler.disableIrrigation) {
-            try {
-                MapGenStructureIO.func_143031_a(StructureGreenhouseIrrigated.class, Reference.MOD_ID + ":GreenhouseIrrigated");
-            } catch (Exception exception) {
-                LogHelper.info("Failed to load greenhouse to villages");
-            }
+            MapGenStructureIO.func_143031_a(StructureGreenhouseIrrigated.class, Reference.MOD_ID + ":GreenhouseIrrigated");
+            VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseIrrigatedHandler());
         }
     }
 }

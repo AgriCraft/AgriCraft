@@ -180,7 +180,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         int size = (int) Math.ceil(Math.random()*10);
         WeightedRandomChestContent[] loot = new WeightedRandomChestContent[size];
         for(int i=0;i<size;i++) {
-            ItemStack seed = SeedHelper.getRandomSeed(true);
+            ItemStack seed = SeedHelper.getRandomSeed(new Random(), true);
             loot[i] = new WeightedRandomChestContent(seed.getItem(), seed.getItemDamage(), 1, 3, 85);
         }
         return loot;
@@ -200,7 +200,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
                     crop.setCrossCrop(true);
                 }
                 else {
-                    ItemStack seed = SeedHelper.getRandomSeed(false);
+                    ItemStack seed = SeedHelper.getRandomSeed(new Random(), false);
                     crop.setPlant((int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), (int) Math.ceil(Math.random()*7), false, seed.getItem(), seed.getItemDamage());
                 }
             }
