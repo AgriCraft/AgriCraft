@@ -60,17 +60,6 @@ public interface APIv1 extends APIBase {
 	List<Block> getCropsBlocks();
 
 	/**
-	 * Checks if the given item as some kind of seed that AgriCraft knows about.
-	 * Please note that this does NOT mean that it can be planted in crops, as
-	 * it may be disabled by aconfig setting.
-	 * 
-	 * @param seed
-	 *            Any ItemStack.
-	 * @return True if the given item is a seed item.
-	 */
-	boolean isSeed(ItemStack seed);
-
-	/**
 	 * Checks if AgriCraft is configured to prevent the given seed to be used in
 	 * its normal way. Note: This method may ignore its parameter if AgriCraft
 	 * is configured to prevent all native planting it can prevent.

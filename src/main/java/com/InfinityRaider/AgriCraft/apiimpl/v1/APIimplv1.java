@@ -77,11 +77,6 @@ public class APIimplv1 implements APIv1 {
 	}
 
 	@Override
-	public boolean isSeed(ItemStack seed) {
-		return CropPlantHandler.isValidSeed(seed);
-	}
-
-	@Override
 	public boolean isNativePlantingDisabled(ItemStack seed) {
 		return ConfigurationHandler.disableVanillaFarming;
 	}
