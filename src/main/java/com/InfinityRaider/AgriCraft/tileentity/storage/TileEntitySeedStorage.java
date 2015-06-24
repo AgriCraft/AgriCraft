@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.network.MessageTileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -311,7 +312,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if (this.hasLockedSeed() && stack.getItem() == this.lockedSeed && stack.getItemDamage() == this.lockedSeedMeta && SeedHelper.isAnalyzedSeed(stack)) {
+        if (CropPlantHandler.isValidSeed(stack) && this.hasLockedSeed() && stack.getItem() == this.lockedSeed && stack.getItemDamage() == this.lockedSeedMeta && SeedHelper.isAnalyzedSeed(stack)) {
             SeedStorageSlot slotAt = this.slots.get(slot);
             return slotAt == null || ItemStack.areItemStackTagsEqual(stack, this.getStackInSlot(slot));
         }

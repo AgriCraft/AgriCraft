@@ -32,7 +32,8 @@ public class GuiSeedStorage extends GuiSeedStorageDummy {
     public void drawGuiContainerForegroundLayer(int x, int y) {
         this.loadButtons();
         if(this.activeSeed!=null) {
-            this.drawActiveEntries(this.texture, 6, 35);
+            this.drawActiveEntries(x, y, this.texture, 6, 35);
         }
     }
+
 }

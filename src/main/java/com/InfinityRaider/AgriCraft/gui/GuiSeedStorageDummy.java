@@ -1,22 +1,17 @@
 package com.InfinityRaider.AgriCraft.gui;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
-import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import java.util.*;
 
@@ -46,13 +41,12 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     private final int maxHorSlots;
     private final int sortButtonX;
     private final int sortButtonY;
-    private int lastButtonId = buttonIdRightEnd;
     private final int setActiveSeedButtonOffset_X;
     private final int setActiveSeedButtonOffset_Y;
-    protected List<ButtonSeedStorage.SetActiveSeed> setActiveSeedButtons;
     private final int seedSlotButtonOffset_X;
     private final int seedSlotButtonOffset_Y;
-    protected List<ButtonSeedStorage.SeedSlot> seedSlotButtons;
+    protected List<Component<PlantStatsStorage>> activeSeeds;
+    protected List<Component<ItemStack>> setActiveSeedButtons;
 
     public GuiSeedStorageDummy(ContainerSeedStorageDummy container, int maxVertSlots, int maxHorSlots, int sortButtonX, int sortButtonY, int setActiveSeedButtonsX, int setActiveSeedButtonsY, int seedSlotsX, int seedSlotsY) {
         super(container);
@@ -75,54 +69,44 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         this.buttonList.add(new GuiButton(buttonIdGain, this.guiLeft + sortButtonX, this.guiTop + sortButtonY+buttonHeight+1, buttonWidth, buttonHeight, "Gain"));
         this.buttonList.add(new GuiButton(buttonIdStrength, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + 2 * (buttonHeight + 1), buttonWidth, buttonHeight, "Strength"));
         this.initSetActiveSeedButtons();
-        this.initSeedSlotButtons();
+        this.initSeedSlots();
     }
 
     private void initSetActiveSeedButtons() {
         if(this.setActiveSeedButtonOffset_X<0 || this.setActiveSeedButtonOffset_Y<0) {
             return;
         }
-        this.setActiveSeedButtons = new ArrayList<ButtonSeedStorage.SetActiveSeed>();
+        this.setActiveSeedButtons = new ArrayList<Component<ItemStack>>();
         List<ItemStack> list = container.getSeedEntries();
         if(list!=null) {
             for (int i = 0; i < list.size(); i++) {
-                int xOffset = this.guiLeft + this.setActiveSeedButtonOffset_X + (16*i)%64;
-                int yOffset = this.guiTop + this.setActiveSeedButtonOffset_Y + 16*(i/4);
-                this.lastButtonId++;
-                this.setActiveSeedButtons.add(new ButtonSeedStorage.SetActiveSeed(this, this.lastButtonId, xOffset, yOffset, list.get(i)));
+                int xOffset = this.setActiveSeedButtonOffset_X + (16*i)%64;
+                int yOffset = this.setActiveSeedButtonOffset_Y + 16*(i/4);
+                this.setActiveSeedButtons.add(new Component<ItemStack>(list.get(i), xOffset, yOffset, 16, 16));
             }
-            this.buttonList.addAll(this.setActiveSeedButtons);
         }
     }
 
-    private void initSeedSlotButtons() {
+    private void initSeedSlots() {
         if(this.activeSeed==null) {
             return;
         }
-        this.seedSlotButtons = new ArrayList<ButtonSeedStorage.SeedSlot>();
+        this.activeSeeds = new ArrayList<Component<PlantStatsStorage>>();
         List<SeedStorageSlot> list = this.container.getSeedSlots(this.activeSeed, this.activeMeta);
         if(list!=null) {
             this.sortByStat(list);
             for (int i = scrollPositionHorizontal; i < Math.min(list.size(), scrollPositionHorizontal + maxHorSlots); i++) {
                 SeedStorageSlot slot = list.get(i);
-                this.lastButtonId++;
-                seedSlotButtons.add(new ButtonSeedStorage.SeedSlot(this, this.lastButtonId, this.guiLeft + seedSlotButtonOffset_X + i * 16, this.guiTop + seedSlotButtonOffset_Y, slot.getStack(this.activeSeed, this.activeMeta), slot.getId()));
+                PlantStatsStorage stats = new PlantStatsStorage(slot.getId(), slot.getStack(this.activeSeed, this.activeMeta));
+                activeSeeds.add(new Component<PlantStatsStorage>(stats, seedSlotButtonOffset_X + i * 16, seedSlotButtonOffset_Y, 16, 16));
             }
         }
-        this.buttonList.addAll(this.seedSlotButtons);
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if(button instanceof ButtonSeedStorage.SetActiveSeed) {
-            this.setActiveSeed((ButtonSeedStorage.SetActiveSeed) button);
-        }
-        else if(button instanceof ButtonSeedStorage.SeedSlot) {
-            this.container.moveStackFromTileEntityToPlayer(((ButtonSeedStorage.SeedSlot) button).slotId, new ItemStack(this.activeSeed, 1, this.activeMeta));
-        }
-        else if (button.id <= buttonIdStrength && this.activeSeed != null) {
+        if (button.id <= buttonIdStrength && this.activeSeed != null) {
             this.sortStatId = button.id;
-
         } else {
             switch (button.id) {
                 case buttonIdScrollDown:
@@ -152,6 +136,30 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
             }
         }
         this.updateScreen();
+    }
+
+    @Override
+    protected void mouseClicked(int x, int y, int rightClick) {
+        //set active seed button clicked
+        if(this.setActiveSeedButtons != null) {
+            for (Component<ItemStack> component : setActiveSeedButtons) {
+                if (component.isOverComponent(guiLeft + x, guiTop + y)) {
+                    this.setActiveSeed(component.getComponent());
+                    return;
+                }
+            }
+        }
+        //click to get seed out of the storage
+        if(this.activeSeeds != null) {
+            for(Component<PlantStatsStorage> component : activeSeeds) {
+                if(component.isOverComponent(guiLeft + x, guiTop + y)) {
+                    PlantStatsStorage stats = component.getComponent();
+                    this.container.moveStackFromTileEntityToPlayer(stats.id, new ItemStack(activeSeed, 1, activeMeta));
+                    return;
+                }
+            }
+        }
+        super.mouseClicked(x, y, rightClick);
     }
 
     private void sortByStat(List<SeedStorageSlot> list) {
@@ -196,7 +204,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     private int getMaxHorizontalScroll() {
-        int nrSlots = this.seedSlotButtons.size();
+        int nrSlots = this.activeSeeds.size();
         if(nrSlots<=maxHorSlots) {
             return 0;
         }
@@ -205,25 +213,31 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         }
     }
 
-    protected void drawActiveEntries(ResourceLocation texture, int xOffset, int yOffset) {
+    protected void drawActiveEntries(int x, int y, ResourceLocation texture, int xOffset, int yOffset) {
         int textureSize = 256;
         GL11.glColor4f(1F, 1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-        for(int i=0;i<this.seedSlotButtons.size();i++) {
-            ButtonSeedStorage.SeedSlot slot = seedSlotButtons.get(i);
-            if(slot!=null && slot.stack!=null) {
-                int growth = slot.stack.stackTagCompound.getInteger(Names.NBT.growth);
-                int gain = slot.stack.stackTagCompound.getInteger(Names.NBT.gain);
-                int strength = slot.stack.stackTagCompound.getInteger(Names.NBT.strength);
-                this.drawTexturedModalRect(xOffset+i*16+1,  yOffset-growth,   0, textureSize-growth,   3, growth);
-                this.drawTexturedModalRect(xOffset+i*16+6,  yOffset-gain,     0, textureSize-gain,     3, gain);
-                this.drawTexturedModalRect(xOffset+i*16+11, yOffset-strength, 0, textureSize-strength, 3, strength);
+        for(int i=0;i<this.activeSeeds.size();i++) {
+            Component<PlantStatsStorage> component = activeSeeds.get(i);
+            if(component!=null && component.getComponent()!=null) {
+                PlantStatsStorage stats = component.getComponent();
+                //draw the seed icon
+                ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
+                itemRender.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, this.guiLeft + component.xOffset(), this.guiTop + component.yOffset());
+                itemRender.renderItemOverlayIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, this.guiLeft + component.xOffset(), this.guiTop + component.yOffset());
+                if(component.isOverComponent(this.guiLeft + x, this.guiTop + y)) {
+                    List toolTip = stack.getTooltip(Minecraft.getMinecraft().thePlayer, true);
+                    drawHoveringText(toolTip, x, y, fontRendererObj);
+                }
+                //draw the stat bars
+                int growth = stats.getGrowth();
+                int gain = stats.getGain();
+                int strength = stats.getStrength();
+                this.drawTexturedModalRect(xOffset+i*16+1,  yOffset-growth,   0, textureSize-growth, 3, growth);
+                this.drawTexturedModalRect(xOffset + i *16+6,  yOffset-gain,     0, textureSize-gain, 3, gain);
+                this.drawTexturedModalRect(xOffset + i * 16 + 11, yOffset-strength, 0, textureSize-strength, 3, strength);
             }
         }
-    }
-
-    protected void setActiveSeed(ButtonSeedStorage.SetActiveSeed button) {
-        this.setActiveSeed(button.stack);
     }
 
     protected void setActiveSeed(ItemStack stack) {
@@ -237,166 +251,23 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         return false;
     }
 
-    //set active seed button class
-    private static abstract class ButtonSeedStorage extends GuiButton {
-        public ItemStack stack;
-        private GuiSeedStorageDummy gui;
+    protected static class PlantStatsStorage extends PlantStats {
+        private int id;
+        private int amount;
 
-        public ButtonSeedStorage(GuiSeedStorageDummy gui, int id, int xPos, int yPos, ItemStack stack) {
-            super(id, xPos, yPos, 16, 16, "");
-            this.stack = stack;
-            this.visible=true;
-            this.gui = gui;
-        }
-
-        protected ResourceLocation getTexture() {
-            return RenderHelper.getItemResource(stack.getItem().getIconFromDamage(stack.getItemDamage()));
-        }
-
-        protected String getTooltip() {
-            return stack.getDisplayName();
-        }
-
-
-        /**
-         * Draws a tooltip (copied from Vanilla).
-         */
-        protected void drawHoveringText(List list, int x, int y, FontRenderer font) {
-            if (!list.isEmpty()) {
-                GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-                net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
-                GL11.glDisable(GL11.GL_LIGHTING);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-                int k = 0;
-                Iterator iterator = list.iterator();
-                while (iterator.hasNext()) {
-                    String s = (String)iterator.next();
-                    int l = font.getStringWidth(s);
-                    if (l > k) {
-                        k = l;
-                    }
-                }
-                int j2 = x + 12;
-                int k2 = y - 12;
-                int i1 = 8;
-                if (list.size() > 1) {
-                    i1 += 2 + (list.size() - 1) * 10;
-                }
-                if (j2 + k > this.width) {
-                    j2 -= 28 + k;
-                }
-                if (k2 + i1 + 6 > this.height) {
-                    k2 = this.height - i1 - 6;
-                }
-                this.zLevel = 300.0F;
-                itemRender.zLevel = 300.0F;
-                int j1 = -267386864;
-                this.drawGradientRect(j2 - 3, k2 - 4, j2 + k + 3, k2 - 3, j1, j1);
-                this.drawGradientRect(j2 - 3, k2 + i1 + 3, j2 + k + 3, k2 + i1 + 4, j1, j1);
-                this.drawGradientRect(j2 - 3, k2 - 3, j2 + k + 3, k2 + i1 + 3, j1, j1);
-                this.drawGradientRect(j2 - 4, k2 - 3, j2 - 3, k2 + i1 + 3, j1, j1);
-                this.drawGradientRect(j2 + k + 3, k2 - 3, j2 + k + 4, k2 + i1 + 3, j1, j1);
-                int k1 = 1347420415;
-                int l1 = (k1 & 16711422) >> 1 | k1 & -16777216;
-                this.drawGradientRect(j2 - 3, k2 - 3 + 1, j2 - 3 + 1, k2 + i1 + 3 - 1, k1, l1);
-                this.drawGradientRect(j2 + k + 2, k2 - 3 + 1, j2 + k + 3, k2 + i1 + 3 - 1, k1, l1);
-                this.drawGradientRect(j2 - 3, k2 - 3, j2 + k + 3, k2 - 3 + 1, k1, k1);
-                this.drawGradientRect(j2 - 3, k2 + i1 + 2, j2 + k + 3, k2 + i1 + 3, l1, l1);
-                for (int i2 = 0; i2 < list.size(); ++i2) {
-                    String s1 = (String)list.get(i2);
-                    font.drawStringWithShadow(s1, j2, k2, -1);
-                    if (i2 == 0) {
-                        k2 += 2;
-                    }
-                    k2 += 10;
-                }
-                this.zLevel = 0.0F;
-                itemRender.zLevel = 0.0F;
-                GL11.glEnable(GL11.GL_LIGHTING);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
-                net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
-                GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        public PlantStatsStorage(int id, ItemStack stack) {
+            super();
+            NBTTagCompound tag = stack.getTagCompound();
+            if(tag != null) {
+                PlantStats temp = PlantStats.readFromNBT(tag);
+                this.setStats(temp.getGrowth(), temp.getGain(), temp.getStrength());
             }
+            this.amount = stack.stackSize;
+            this.id = id;
         }
 
-        /**
-         * Overridden to correctly render icons
-         */
-        @Override
-        public void drawTexturedModalRect(int xPos, int yPos, int u, int v, int width, int height) {
-            float f = Constants.unit;
-            Tessellator tessellator = Tessellator.instance;
-            tessellator.startDrawingQuads();
-            tessellator.addVertexWithUV(xPos, yPos + height, this.zLevel, (double) u*f, (double) (v+height)*f);
-            tessellator.addVertexWithUV(xPos + width, yPos + height, this.zLevel, (double) (u+width)*f, (double) (v+height)*f);
-            tessellator.addVertexWithUV(xPos + width, yPos, this.zLevel, (double) (u+width)*f, (double) v*f);
-            tessellator.addVertexWithUV(xPos, yPos, this.zLevel, (double) u*f, (double) v*f);
-            tessellator.draw();
-        }
+        public int id() {return id;}
 
-        protected static final class SetActiveSeed extends ButtonSeedStorage {
-            public SetActiveSeed(GuiSeedStorageDummy gui, int id, int xPos, int yPos, ItemStack seedStack) {
-                super(gui, id, xPos, yPos, seedStack);
-            }
-
-            /**
-             * Draws this button to the screen.
-             */
-            public void drawButton(Minecraft minecraft, int x, int y) {
-                if (this.visible) {
-                    //render the button
-                    FontRenderer fontrenderer = minecraft.fontRenderer;
-                    minecraft.getTextureManager().bindTexture(this.getTexture());
-                    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                    this.field_146123_n = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
-                    int k = this.getHoverState(this.field_146123_n);
-                    GL11.glEnable(GL11.GL_BLEND);
-                    OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-                    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                    GuiScreen.itemRender.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stack, this.xPosition, this.yPosition);
-                    //this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 16, 16, 16);
-                    this.mouseDragged(minecraft, x, y);
-                    //render the tooltip if the mouse is over the button
-                    if(this.getHoverState(true)==2) {
-                        String[] tooltip = new String[1];
-                        tooltip[0] = this.getTooltip();
-                        this.drawHoveringText(Arrays.asList(tooltip), this.xPosition, this.yPosition, Minecraft.getMinecraft().fontRenderer);
-                    }
-                }
-            }
-        }
-
-        protected static final class SeedSlot extends ButtonSeedStorage {
-            public int slotId;
-            public SeedSlot(GuiSeedStorageDummy gui, int ButtonId, int xPos, int yPos, ItemStack seedStack, int slotId) {
-                super(gui, ButtonId, xPos, yPos, seedStack);
-                this.slotId = slotId;
-            }
-
-            /**
-             * Draws this button to the screen.
-             */
-            public void drawButton(Minecraft minecraft, int x, int y) {
-                if (this.visible) {
-                    //render the button
-                    FontRenderer fontrenderer = minecraft.fontRenderer;
-                    minecraft.getTextureManager().bindTexture(this.getTexture());
-                    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                    this.field_146123_n = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
-                    int k = this.getHoverState(this.field_146123_n);
-                    GL11.glEnable(GL11.GL_BLEND);
-                    OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-                    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                    this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 16, 16, 16);
-                    this.mouseDragged(minecraft, x, y);
-                    //render the tooltip if the mouse is over the button
-                    if(this.getHoverState(true)==2) {
-                        String[] tooltip = new String[1];
-                        tooltip[0] = this.getTooltip();
-                        this.drawHoveringText(Arrays.asList(tooltip), this.xPosition, this.yPosition, Minecraft.getMinecraft().fontRenderer);
-                    }
-                }
-            }
-        }
+        public int amount() {return amount;}
     }
 }
