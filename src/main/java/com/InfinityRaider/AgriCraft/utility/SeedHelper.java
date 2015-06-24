@@ -145,7 +145,11 @@ public abstract class SeedHelper {
         if(value!=null && value.length>meta && value[meta]!=null) {
             return ((double) value[meta]) / 100;
         }
-        return 1.00/ CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta)).getTier();
+        CropPlant plant = CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta));
+        if(plant==null) {
+            return 0;
+        }
+        return 1.00/plant.getTier();
     }
 
     public static int getSeedTierOverride(ItemStack stack) {
