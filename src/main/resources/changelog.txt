@@ -10,6 +10,7 @@ Changelog
 -CHANGE: Resource crops are now enabled by default
 -CHANGE: Reordered the configuration options for easier finding of options
 -CHANGE: Clients will now use mutation configs from the server
+-ADDED:  API (many thanks to HenryLoenwind)
 -ADDED:  Missing mutations for Harvestcraft crops (Strawberry, Spinach, White Mushroom)
 -ADDED:  Resource crop for nether quartz
 -ADDED:  Config option to only make mature crops drop seeds to encourage trowel usage (false by default)
