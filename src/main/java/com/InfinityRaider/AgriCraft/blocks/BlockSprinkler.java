@@ -8,6 +8,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -68,7 +69,7 @@ public class BlockSprinkler extends BlockContainer {
             //the crop will be destroyed
             this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
             world.setBlockToAir(x,y,z);
-            world.removeTileEntity(x,y,z);
+            world.removeTileEntity(x, y, z);
         }
     }
 
@@ -100,5 +101,12 @@ public class BlockSprinkler extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
         return Blocks.planks.getIcon(0, 0);
+    }
+
+    //register icons
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister reg) {
+        //NOOP
     }
 }
