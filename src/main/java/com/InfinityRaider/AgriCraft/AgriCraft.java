@@ -39,6 +39,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 @Mod(modid = Reference.MOD_ID,name = Reference.MOD_NAME,version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
@@ -70,7 +71,7 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
         LogHelper.debug("Starting Initialization");
-        NetworkRegistry.INSTANCE.registerGuiHandler(instance , new GuiHandler());
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         proxy.registerTileEntities();
         proxy.registerRenderers();
         LogHelper.debug("Initialization Complete");
@@ -88,11 +89,15 @@ public class AgriCraft {
         GrowthRequirementHandler.init();
         CustomCrops.initGrassSeeds();
         CropPlantHandler.init();
-        MutationHandler.init();
         CropProducts.init();
         if(!ConfigurationHandler.disableWorldGen) {WorldGen.init();}
         ModHelper.performPostTasks();
         proxy.initNEI();
         LogHelper.debug("Post-Initialization Complete");
+    }
+
+    @Mod.EventHandler
+    public static void onServerStart(FMLServerStartingEvent event) {
+        MutationHandler.init();
     }
 }

@@ -5,6 +5,8 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public abstract class MutationHandler {
 
     private static List<Mutation> mutations;
+    private static boolean isSyncing = false;
 
     public static void init() {
         //Read mutations & initialize the mutation arrays
@@ -37,6 +40,20 @@ public abstract class MutationHandler {
             String parent2 = mutation.parent2.getItem() != null ? (Item.itemRegistry.getNameForObject(mutation.parent2.getItem())) + ':' + mutation.parent2.getItemDamage() : "null";
             String info = " - " + result + " = " + parent1 + " + " + parent2;
             LogHelper.info(info);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void syncFromServer(Mutation mutation, boolean finished) {
+        if(!isSyncing) {
+            LogHelper.info("Receiving mutations from server");
+            mutations = new ArrayList<Mutation>();
+            isSyncing = true;
+        }
+        mutations.add(mutation);
+        if(finished) {
+            isSyncing = false;
+            LogHelper.info("Successfully received mutations from server");
         }
     }
 

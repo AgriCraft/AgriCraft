@@ -9,6 +9,7 @@ Changelog
 -CHANGE: Crops will now be displayed as "Crop Sticks"
 -CHANGE: Resource crops are now enabled by default
 -CHANGE: Reordered the configuration options for easier finding of options
+-CHANGE: Clients will now use mutation configs from the server
 -ADDED:  Missing mutations for Harvestcraft crops (Strawberry, Spinach, White Mushroom)
 -ADDED:  Resource crop for nether quartz
 -ADDED:  Config option to only make mature crops drop seeds to encourage trowel usage (false by default)
@@ -40,6 +41,7 @@ Changelog
 -FIXED:  Standalone crops obey growth requirements
 -FIXED:  A crash on harvesting after someone removed all the fruits of a crop without adding any new ones
 -FIXED:  NEI reverse lookup not working for soils and base blocks
+-FIXED:  No more missing texture spam in the console
 
 1.3.1
 -ADDED:  Nitor Wart: a new crop that produces glowstone dust
