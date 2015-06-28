@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public final class PlantMegaPackHelper extends ModHelper {
-    private static final String MOD_ID = "plantmegapack";
+    private static final String MOD_ID = Names.Mods.plantMegaPack;
     private ArrayList<String> names;
 
     @Override

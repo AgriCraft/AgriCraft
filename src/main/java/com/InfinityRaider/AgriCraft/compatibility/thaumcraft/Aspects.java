@@ -1,10 +1,12 @@
 package com.InfinityRaider.AgriCraft.compatibility.thaumcraft;
 
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -26,19 +28,19 @@ public class Aspects {
             }
         }
         //botania crops
-        if(ConfigurationHandler.integration_Botania) {
+        if(ModHelper.allowIntegration(Names.Mods.botania)) {
             for(ItemModSeed seed : BotaniaHelper.botaniaSeeds) {
                 ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1));
             }
         }
         //ars magica crops
-        if(ConfigurationHandler.integration_ArsMagica) {
+        if(ModHelper.allowIntegration(Names.Mods.arsMagica)) {
             for(ItemModSeed seed : ArsMagicaHelper.arsMagicaSeeds) {
                 ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1));
             }
         }
         //thaumcraft crops
-        if(ConfigurationHandler.integration_Thaumcraft) {
+        if(ModHelper.allowIntegration(Names.Mods.thaumcraft)) {
             for(ItemModSeed seed : ThaumcraftHelper.thaumcraftSeeds) {
                 if(seed.getUnlocalizedName().equals("agricraft:seedTaintedRoot")) {
                     ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1).add(Aspect.TAINT, 1));

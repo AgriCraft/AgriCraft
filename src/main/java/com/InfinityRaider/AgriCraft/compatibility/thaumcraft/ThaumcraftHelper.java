@@ -27,74 +27,73 @@ public class ThaumcraftHelper extends ModHelper {
 
     @Override
     protected void initPlants() {
-        if(ConfigurationHandler.integration_Thaumcraft) {
-            Item thaumcraftPlant = (Item) Item.itemRegistry.getObject("Thaumcraft:blockCustomPlant");
-            Item thaumcraftTaintPlant = (Item) Item.itemRegistry.getObject("Thaumcraft:ItemResource");
-            Block blockTaint = (Block) Block.blockRegistry.getObject("Thaumcraft:blockTaint");
-            int cinderpearlMeta = 3;
-            int shimmerleafMeta = 2;
-            int vishroomMeta = 5;
-            int taintPlantMeta = 12;
+        Item thaumcraftPlant = (Item) Item.itemRegistry.getObject("Thaumcraft:blockCustomPlant");
+        Item thaumcraftTaintPlant = (Item) Item.itemRegistry.getObject("Thaumcraft:ItemResource");
+        Block blockTaint = (Block) Block.blockRegistry.getObject("Thaumcraft:blockTaint");
+        int cinderpearlMeta = 3;
+        int shimmerleafMeta = 2;
+        int vishroomMeta = 5;
+        int taintPlantMeta = 12;
 
-            //cinderpearl
-            BlockModPlant cropCinderpearl;
-            try {
-                cropCinderpearl = new BlockModPlant(new Object[]{"Cinderpearl", new ItemStack(thaumcraftPlant, 1, cinderpearlMeta), net.minecraft.init.Blocks.sand, 3, RenderMethod.CROSSED});
-            } catch (Exception e) {
-                if(ConfigurationHandler.debug) {
-                    e.printStackTrace();
-                }
-                return;
+        //cinderpearl
+        BlockModPlant cropCinderpearl;
+        try {
+            cropCinderpearl = new BlockModPlant(new Object[]{"Cinderpearl", new ItemStack(thaumcraftPlant, 1, cinderpearlMeta), net.minecraft.init.Blocks.sand, 3, RenderMethod.CROSSED});
+        } catch (Exception e) {
+            if (ConfigurationHandler.debug) {
+                e.printStackTrace();
             }
-            thaumcraftCrops.add(cropCinderpearl);
-            thaumcraftSeeds.add(cropCinderpearl.getSeed());
-
-            //shimmerleaf
-            BlockModPlant cropShimmerleaf;
-            try {
-                cropShimmerleaf = new BlockModPlant(new Object[]{"Shimmerleaf", new ItemStack(thaumcraftPlant, 1, shimmerleafMeta), 3, RenderMethod.CROSSED});
-            } catch (Exception e) {
-                if(ConfigurationHandler.debug) {
-                    e.printStackTrace();
-                }
-                return;
-            }
-            Block log = (Block) Block.blockRegistry.getObject("Thaumcraft:blockMagicalLog");
-            if(log!=null) {
-                cropShimmerleaf.getGrowthRequirement().setRequiredBlock(new BlockWithMeta(log, 1), RequirementType.NEARBY, false);
-            }
-            thaumcraftCrops.add(cropShimmerleaf);
-            thaumcraftSeeds.add(cropShimmerleaf.getSeed());
-
-            //vishroom
-            BlockModPlant cropVishroom ;
-            try {
-                cropVishroom = new BlockModPlant(new Object[]{"Vishroom", new ItemStack(thaumcraftPlant, 1, vishroomMeta), net.minecraft.init.Blocks.mycelium, 3, RenderMethod.CROSSED});
-            } catch (Exception e) {
-                if(ConfigurationHandler.debug) {
-                    e.printStackTrace();
-                }
-                return;
-            }
-            thaumcraftCrops.add(cropVishroom);
-            thaumcraftSeeds.add(cropVishroom.getSeed());
-            cropVishroom.getGrowthRequirement().setBrightnessRange(0, 8);
-
-            //tainted root
-            BlockModPlant cropTaintedRoot;
-            try {
-                cropTaintedRoot = new BlockModPlant(new Object[]{"TaintedRoot", new ItemStack(thaumcraftTaintPlant, 1, taintPlantMeta), blockTaint, new BlockWithMeta(blockTaint, 0), 4, RenderMethod.CROSSED});
-            } catch (Exception e) {
-                if(ConfigurationHandler.debug) {
-                    e.printStackTrace();
-                }
-                return;
-            }
-            thaumcraftCrops.add(cropTaintedRoot);
-            thaumcraftSeeds.add(cropTaintedRoot.getSeed());
-            cropTaintedRoot.getGrowthRequirement().setSoil(new BlockWithMeta(blockTaint, 1));
+            return;
         }
+        thaumcraftCrops.add(cropCinderpearl);
+        thaumcraftSeeds.add(cropCinderpearl.getSeed());
+
+        //shimmerleaf
+        BlockModPlant cropShimmerleaf;
+        try {
+            cropShimmerleaf = new BlockModPlant(new Object[]{"Shimmerleaf", new ItemStack(thaumcraftPlant, 1, shimmerleafMeta), 3, RenderMethod.CROSSED});
+        } catch (Exception e) {
+            if (ConfigurationHandler.debug) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        Block log = (Block) Block.blockRegistry.getObject("Thaumcraft:blockMagicalLog");
+        if (log != null) {
+            cropShimmerleaf.getGrowthRequirement().setRequiredBlock(new BlockWithMeta(log, 1), RequirementType.NEARBY, false);
+        }
+        thaumcraftCrops.add(cropShimmerleaf);
+        thaumcraftSeeds.add(cropShimmerleaf.getSeed());
+
+        //vishroom
+        BlockModPlant cropVishroom;
+        try {
+            cropVishroom = new BlockModPlant(new Object[]{"Vishroom", new ItemStack(thaumcraftPlant, 1, vishroomMeta), net.minecraft.init.Blocks.mycelium, 3, RenderMethod.CROSSED});
+        } catch (Exception e) {
+            if (ConfigurationHandler.debug) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        thaumcraftCrops.add(cropVishroom);
+        thaumcraftSeeds.add(cropVishroom.getSeed());
+        cropVishroom.getGrowthRequirement().setBrightnessRange(0, 8);
+
+        //tainted root
+        BlockModPlant cropTaintedRoot;
+        try {
+            cropTaintedRoot = new BlockModPlant(new Object[]{"TaintedRoot", new ItemStack(thaumcraftTaintPlant, 1, taintPlantMeta), blockTaint, new BlockWithMeta(blockTaint, 0), 4, RenderMethod.CROSSED});
+        } catch (Exception e) {
+            if (ConfigurationHandler.debug) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        thaumcraftCrops.add(cropTaintedRoot);
+        thaumcraftSeeds.add(cropTaintedRoot.getSeed());
+        cropTaintedRoot.getGrowthRequirement().setSoil(new BlockWithMeta(blockTaint, 1));
     }
+
 
     @Override
     protected void postTasks() {

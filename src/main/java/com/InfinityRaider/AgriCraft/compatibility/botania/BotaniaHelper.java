@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -24,27 +25,26 @@ public class BotaniaHelper extends ModHelper {
 
     @Override
     protected void initPlants() {
-        if(ConfigurationHandler.integration_Botania) {
-            for(int i=0;i<16;i++) {
-                Object[] args = {Data.botania[i], new ItemStack((Item) Item.itemRegistry.getObject("Botania:petal"), 1, i), 3, RenderMethod.CROSSED, new ItemStack((Block) Block.blockRegistry.getObject("Botania:flower"), 1, i)};
-                BlockModPlant plant;
-                try {
-                    plant = new BlockModPlant(args);
-                } catch (Exception e) {
-                    if(ConfigurationHandler.debug) {
-                        e.printStackTrace();
-                    }
-                    return;
+        for (int i = 0; i < 16; i++) {
+            Object[] args = {Data.botania[i], new ItemStack((Item) Item.itemRegistry.getObject("Botania:petal"), 1, i), 3, RenderMethod.CROSSED, new ItemStack((Block) Block.blockRegistry.getObject("Botania:flower"), 1, i)};
+            BlockModPlant plant;
+            try {
+                plant = new BlockModPlant(args);
+            } catch (Exception e) {
+                if (ConfigurationHandler.debug) {
+                    e.printStackTrace();
                 }
-                botaniaCrops.add(plant);
-                botaniaSeeds.add(plant.getSeed());
+                return;
             }
-            LogHelper.info("Botania crops registered");
+            botaniaCrops.add(plant);
+            botaniaSeeds.add(plant.getSeed());
         }
+        LogHelper.info("Botania crops registered");
+
     }
 
     @Override
     protected String modId() {
-        return "Botania";
+        return Names.Mods.botania;
     }
 }

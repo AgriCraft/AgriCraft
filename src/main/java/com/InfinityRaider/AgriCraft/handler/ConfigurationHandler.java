@@ -22,6 +22,7 @@ public class ConfigurationHandler {
     public static final String CATEGORY_INTEGRATION = "integration";
     public static final String CATEGORY_IRRIGATION = "irrigation";
     public static final String CATEGORY_STORAGE = "storage";
+    public static final String CATEGORY_COMPATIBILITY = "compatibility";
 
     public static Configuration config;
     private static String directory;
@@ -73,17 +74,8 @@ public class ConfigurationHandler {
     public static boolean placeWater;
     public static boolean fillFromFlowingWater;
     //integration
-    public static boolean integration_HC;
-    public static boolean integration_Nat;
-    public static boolean integration_WeeeFlowers;
-    public static boolean integration_PlantMegaPack;
-    public static boolean integration_Chococraft;
-    public static boolean integration_Botania;
     public static boolean integration_allowMagicFertiliser;
     public static boolean integration_instantMagicFertiliser;
-    public static boolean integration_Psychedelicraft;
-    public static boolean integration_Thaumcraft;
-    public static boolean integration_ArsMagica;
 
     public static void init(FMLPreInitializationEvent event) {
         directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
@@ -117,7 +109,7 @@ public class ConfigurationHandler {
         cropStatDivisor = config.getInt("Crop stat divisor", CATEGORY_FARMING, 2, 1, 3, "On a mutation the stats on the crop will be divided by this number");
         enableWeeds = config.getBoolean("Enable weeds", CATEGORY_FARMING, true, "set to false if you wish to disable weeds");
         weedsWipePlants = enableWeeds && config.getBoolean("Weeds can overtake plants",CATEGORY_FARMING,true,"set to false if you don't want weeds to be able to overgrow other plants");
-        enableHandRake = enableWeeds && config.getBoolean("Enable Hand Rake", CATEGORY_FARMING, true, "When enabled, weeds can only be removed by using this Hand Rake tool");
+        enableHandRake = config.getBoolean("Enable Hand Rake", CATEGORY_FARMING, true, "When enabled, weeds can only be removed by using this Hand Rake tool");
         bonemealMutation = config.getBoolean("Bonemeal Mutations", CATEGORY_FARMING, false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
         onlyMatureDropSeeds = config.getBoolean("Only mature crops drop seeds", CATEGORY_FARMING, false, "set this to true to make only mature crops drop seeds (to encourage trowel usage)");
         weedsDestroyCropSticks = config.getBoolean("Weeds destroy crop sticks", CATEGORY_FARMING, false, "set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage)");
@@ -129,7 +121,7 @@ public class ConfigurationHandler {
         greenhouseIrrigatedWeight = config.getInt("Irrigated greenhouse weight", CATEGORY_WORLDGEN, 2, 0, 100, "The weight for an irrigated greenhouse to be generated in a village");
         greenhouseIrrigatedLimit = config.getInt("Irrigated greenhouse limit", CATEGORY_WORLDGEN, 1, 0, 2, "The maximum number of irrigated greenhouses per village");
         villagerID = config.getInt("Villager ID", CATEGORY_WORLDGEN, 10, 7, 99, "The profession ID the villager uses");
-        villagerEnabled = config.getBoolean("Enable villagers",CATEGORY_WORLDGEN, true, "Set to false if you wish to disable villagers spawning in the ArgiCraft houses");
+        villagerEnabled = config.getBoolean("Enable villagers", CATEGORY_WORLDGEN, true, "Set to false if you wish to disable villagers spawning in the ArgiCraft houses");
         //storage
         disableSeedStorage = config.getBoolean("Disable seed storage system", CATEGORY_STORAGE, false, "set to true to disable the seed storage systems");
         disableSeedWarehouse = config.getBoolean("Disable seed storage warehouses", CATEGORY_STORAGE, false, "set to true to disable the seed storage warehouse blocks");
@@ -144,22 +136,21 @@ public class ConfigurationHandler {
         placeWater = config.getBoolean("Spawn water after breaking tank", CATEGORY_IRRIGATION, true, "set to false to disable placing a source block when breaking non-empty tanks");
         fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", CATEGORY_IRRIGATION, false, "set to true to let tanks fill up when water flows above them");
         //mod integration
-        integration_HC = LoadedMods.harvestcraft && config.getBoolean("HarvestCraft",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Pam's HarvestCraft");
-        integration_Nat = LoadedMods.natura && config.getBoolean("Natura",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Natura");
-        integration_WeeeFlowers = LoadedMods.weeeFlowers && config.getBoolean("Weee Flowers",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Pam's Weee Flowers");
-        integration_PlantMegaPack = LoadedMods.plantMegaPack && config.getBoolean("Plant Mega Pack",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Plant Mega Pack");
-        integration_Chococraft = LoadedMods.chococraft && config.getBoolean("ChocoCraft",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Chococraft");
-        integration_Botania = LoadedMods.botania && config.getBoolean("Botania", CATEGORY_INTEGRATION, true, "Set to false to disable Botania Mystical Flower Seeds");
         integration_allowMagicFertiliser = LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser",CATEGORY_INTEGRATION,true,"Set to false to disable using magical fertiliser on crops");
         integration_instantMagicFertiliser = LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser Instant Growth", CATEGORY_INTEGRATION, false, "Set to true to insta-grow plants on which the magical fertiliser is used on");
-        integration_Psychedelicraft = LoadedMods.psychedelicraft && config.getBoolean("Psychedelicraft",CATEGORY_INTEGRATION, true,"Set to false to disable automatic mutations for Psychedelicraft");
-        integration_Thaumcraft = LoadedMods.thaumcraft && config.getBoolean("Thaumcraft",CATEGORY_INTEGRATION, true,"Set to false to disable the crops and automatic mutations for Thaumcraft");
-        integration_ArsMagica = LoadedMods.arsMagica && config.getBoolean("Ars Magica 2",CATEGORY_INTEGRATION, true,"Set to false to disable the crops and automatic mutations for Ars Magica 2");
         enableNEI = config.getBoolean("Enable NEI", CATEGORY_INTEGRATION, true, "set to false if you wish to disable mutation recipes in NEI");
         //debug mode
         debug = config.getBoolean("debug",CATEGORY_DEBUG,false,"Set to true if you wish to enable debug mode");
 
         if(config.hasChanged()) {config.save();}
+    }
+
+    public static boolean enableModCompatibility(String modId) {
+        boolean flag = config.getBoolean(modId, CATEGORY_COMPATIBILITY, true, "set to false to disable compatibility for "+modId);
+        if(config.hasChanged()) {
+            config.save();
+        }
+        return flag;
     }
 
     public static String readGrassDrops() {
@@ -195,7 +186,7 @@ public class ConfigurationHandler {
     }
 
     @SubscribeEvent
-    public void onCOnfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+    public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.modID.equals(Reference.MOD_ID)) {
             loadConfiguration();
             LogHelper.debug("Configuration reloaded.");

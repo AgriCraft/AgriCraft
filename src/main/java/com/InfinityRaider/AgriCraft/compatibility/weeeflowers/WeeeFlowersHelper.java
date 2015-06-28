@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.compatibility.weeeflowers;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.pam.weeeflowers.weeeflowers;
 import net.minecraft.item.ItemSeeds;
 
@@ -36,6 +37,6 @@ public class WeeeFlowersHelper extends ModHelper {
 
     @Override
     protected String modId() {
-        return "weeeflowers";
+        return Names.Mods.weeeFlowers;
     }
 }

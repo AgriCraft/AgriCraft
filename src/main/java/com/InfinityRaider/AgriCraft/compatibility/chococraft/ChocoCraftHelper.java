@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.compatibility.chococraft;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.reference.Names;
 
 public class ChocoCraftHelper extends ModHelper {
     @Override
@@ -23,6 +24,6 @@ public class ChocoCraftHelper extends ModHelper {
 
     @Override
     protected String modId() {
-        return "chococraft";
+        return Names.Mods.chococraft;
     }
 }

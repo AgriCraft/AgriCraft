@@ -1,7 +1,9 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -85,41 +87,41 @@ public abstract class IOHelper {
                 data = data + '\n' + osmiumMutation;
             }
         }
-        if(ConfigurationHandler.integration_Botania) {
+        if(ModHelper.allowIntegration(Names.Mods.botania)) {
             data = data + '\n' + botaniaMutations;
         }
-        if(ConfigurationHandler.integration_Nat && ConfigurationHandler.integration_HC && LoadedMods.harvestcraft && LoadedMods.natura)  {
+        if(ModHelper.allowIntegration(Names.Mods.harvestcraft) && ModHelper.allowIntegration(Names.Mods.natura)) {
             data = data + '\n' + harvestcraftMutations + '\n' + barleyNaturaMutations;      //harvestcraft with natura barley
         } else {
-            if(ConfigurationHandler.integration_HC && LoadedMods.harvestcraft) {
+            if(ModHelper.allowIntegration(Names.Mods.harvestcraft)) {
                 data = data + '\n' + harvestcraftMutations + '\n' + barleyHarvestCraftMutations;
             }
-            if(ConfigurationHandler.integration_Nat && LoadedMods.natura) {
+            if(ModHelper.allowIntegration(Names.Mods.natura)) {
                 data = data + '\n' + naturaMutations;
             }
         }
-        if(ConfigurationHandler.integration_WeeeFlowers && LoadedMods.weeeFlowers) {
+        if(ModHelper.allowIntegration(Names.Mods.weeeFlowers)) {
             data = data +'\n' + weeeFlowersMutations;
         }
-        if(ConfigurationHandler.integration_PlantMegaPack && LoadedMods.plantMegaPack) {
+        if(ModHelper.allowIntegration(Names.Mods.plantMegaPack)) {
             data = data + '\n' + plantMegaPackMutations;
         }
-        if(ConfigurationHandler.integration_Chococraft && LoadedMods.chococraft) {
-            if(ConfigurationHandler.integration_HC && LoadedMods.harvestcraft) {
+        if(ModHelper.allowIntegration(Names.Mods.chococraft)) {
+            if(ModHelper.allowIntegration(Names.Mods.harvestcraft)) {
                 data = data + '\n' + chococraft_harvestcraftMutations;
             } else {
                 data = data + '\n' + chococraftMutations;
             }
         }
-        if(ConfigurationHandler.integration_Psychedelicraft && LoadedMods.psychedelicraft) {
+        if(ModHelper.allowIntegration(Names.Mods.psychedelicraft)) {
             data = data + '\n' + psychedelicraftMutations;
         }
-        if(ConfigurationHandler.integration_ArsMagica && ConfigurationHandler.integration_Thaumcraft) {
+        if(ModHelper.allowIntegration(Names.Mods.thaumcraft) && ModHelper.allowIntegration(Names.Mods.arsMagica)) {
             data = data + '\n' + thaumcraft_ArsMagicaMutations;
         } else {
-            if(ConfigurationHandler.integration_Thaumcraft) {
+            if(ModHelper.allowIntegration(Names.Mods.thaumcraft)) {
                 data = data + '\n' + thaumcraftMutations;
-            } else if(ConfigurationHandler.integration_ArsMagica) {
+            } else if(ModHelper.allowIntegration(Names.Mods.arsMagica)) {
                 data = data + '\n' + arsMagicaMutations;
             }
         }
@@ -156,7 +158,7 @@ public abstract class IOHelper {
         if(LoadedMods.forestry) {
             output = output +"\n" + "Forestry:soil:0";
         }
-        return soilWhitelistInstructions;
+        return output;
     }
 
     //turns the raw data string into an array (each array element is a line from the string)

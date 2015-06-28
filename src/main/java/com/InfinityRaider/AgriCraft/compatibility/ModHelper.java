@@ -28,13 +28,12 @@ import com.InfinityRaider.AgriCraft.compatibility.waila.WailaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.weeeflowers.WeeeFlowersHelper;
 import com.InfinityRaider.AgriCraft.compatibility.witchery.WitcheryHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.Loader;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class ModHelper {
-    private static final ArrayList<ModHelper> modHelpers = new ArrayList<ModHelper>();
+    private static final HashMap<String, ModHelper> modHelpers = new HashMap<String, ModHelper>();
 
     public static ModHelper createInstance(Class<? extends ModHelper> clazz) {
         ModHelper helper = null;
@@ -46,9 +45,19 @@ public abstract class ModHelper {
             }
         }
         if(helper!=null) {
-            modHelpers.add(helper);
+            modHelpers.put(helper.modId(), helper);
         }
         return helper;
+    }
+
+    public static boolean allowIntegration(String modId) {
+        ModHelper helper = modHelpers.get(modId);
+        return helper != null && helper.allowIntegration();
+    }
+
+    public final boolean allowIntegration() {
+        String id =this.modId();
+        return Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
     }
 
     protected abstract void init();
@@ -61,27 +70,30 @@ public abstract class ModHelper {
 
     public static void initHelpers() {
         findHelpers();
-        for(ModHelper helper:modHelpers) {
+        for(ModHelper helper:modHelpers.values()) {
             String id = helper.modId();
-            boolean flag = Loader.isModLoaded(id);
+            boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
             if(flag) {
-                LogHelper.debug("Initializing mod support for " + helper.modId());
                 helper.init();
             }
         }
     }
 
     public static void initModPlants() {
-        for(ModHelper helper:modHelpers) {
-            if(Loader.isModLoaded(helper.modId())) {
+        for(ModHelper helper:modHelpers.values()) {
+            String id = helper.modId();
+            boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
+            if(flag) {
                 helper.initPlants();
             }
         }
     }
 
     public static void performPostTasks() {
-        for (ModHelper helper : modHelpers) {
-            if (Loader.isModLoaded(helper.modId())) {
+        for (ModHelper helper : modHelpers.values()) {
+            String id = helper.modId();
+            boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
+            if(flag) {
                 helper.postTasks();
             }
         }

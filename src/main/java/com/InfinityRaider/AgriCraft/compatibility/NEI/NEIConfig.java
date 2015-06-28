@@ -6,11 +6,13 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
@@ -54,19 +56,19 @@ public class NEIConfig implements IConfigureNEI {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
             }
             //hide botania crops
-            if(ConfigurationHandler.integration_Botania) {
+            if(ModHelper.allowIntegration(Names.Mods.botania)) {
                 for(BlockModPlant plant : BotaniaHelper.botaniaCrops) {
                     AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
                 }
             }
             //hide thaumcraft crops
-            if(ConfigurationHandler.integration_Thaumcraft) {
+            if(ModHelper.allowIntegration(Names.Mods.thaumcraft)) {
                 for(BlockModPlant plant : ThaumcraftHelper.thaumcraftCrops) {
                     AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
                 }
             }
             //hide ars magica crops
-            if(ConfigurationHandler.integration_ArsMagica) {
+            if(ModHelper.allowIntegration(Names.Mods.arsMagica)) {
                 for(BlockModPlant plant : ArsMagicaHelper.arsMagicaCrops) {
                     AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
                 }
