@@ -23,7 +23,7 @@ public class SeedStorageSlot {
 
     public ItemStack getStack(Item item, int meta) {
         ItemStack stack = new ItemStack(item, count, meta);
-        stack.stackTagCompound = tag;
+        stack.stackTagCompound = (NBTTagCompound) tag.copy();
         return stack;
     }
 

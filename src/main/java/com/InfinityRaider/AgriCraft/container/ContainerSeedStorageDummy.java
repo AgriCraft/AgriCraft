@@ -72,13 +72,9 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
                     //this method is only called form the gui client side, so we need to manually tell the server to execute it there
                     NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(stack, Minecraft.getMinecraft().thePlayer, slotId));
                 }
-                else {
-                    LogHelper.debug("Command received");
-                    //on the server decrease the size of the stack, where it is synced to the client
-                    controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
-                }
-            } else {
-                return;
+                LogHelper.debug("Command received");
+                //on the server decrease the size of the stack, where it is synced to the client
+                controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
             }
         }
     }

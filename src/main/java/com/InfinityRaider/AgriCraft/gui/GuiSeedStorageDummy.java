@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -157,7 +158,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         //click to get seed out of the storage
         if(this.activeSeeds != null) {
             for(Component<PlantStatsStorage> component : activeSeeds) {
-                if(component.isOverComponent(guiLeft + x, guiTop + y)) {
+                if(component.isOverComponent(x-this.guiLeft, y-this.guiTop)) {
                     PlantStatsStorage stats = component.getComponent();
                     this.container.moveStackFromTileEntityToPlayer(stats.id, new ItemStack(activeSeed, 1, activeMeta));
                     return;
@@ -221,26 +222,28 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     protected void drawActiveEntries(int x, int y, ResourceLocation texture, int xOffset, int yOffset) {
         int textureSize = 256;
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         for(int i=0;i<this.activeSeeds.size();i++) {
             Component<PlantStatsStorage> component = activeSeeds.get(i);
             if(component!=null && component.getComponent()!=null) {
                 PlantStatsStorage stats = component.getComponent();
+                short growth = stats.getGrowth();
+                short gain = stats.getGain();
+                short strength = stats.getStrength();
                 //draw the seed icon
                 ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
-                itemRender.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, this.guiLeft + component.xOffset(), this.guiTop + component.yOffset());
-                itemRender.renderItemOverlayIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, this.guiLeft + component.xOffset(), this.guiTop + component.yOffset());
-                if(component.isOverComponent(this.guiLeft + x, this.guiTop + y)) {
-                    List toolTip = stack.getTooltip(Minecraft.getMinecraft().thePlayer, true);
-                    drawHoveringText(toolTip, x, y, fontRendererObj);
-                }
+                stack.stackTagCompound = SeedHelper.setNBT(new NBTTagCompound(), growth, gain, strength, true);
+                itemRender.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, component.xOffset(), component.yOffset());
+                itemRender.renderItemOverlayIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, component.xOffset(), component.yOffset());
                 //draw the stat bars
-                int growth = stats.getGrowth();
-                int gain = stats.getGain();
-                int strength = stats.getStrength();
-                this.drawTexturedModalRect(xOffset+i*16+1,  yOffset-growth,   0, textureSize-growth, 3, growth);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+                this.drawTexturedModalRect(xOffset+(i*16)+1,  yOffset-growth,   0, textureSize-growth, 3, growth);
                 this.drawTexturedModalRect(xOffset + i *16+6,  yOffset-gain,     0, textureSize-gain, 3, gain);
                 this.drawTexturedModalRect(xOffset + i * 16 + 11, yOffset-strength, 0, textureSize-strength, 3, strength);
+                //tooltip
+                if(component.isOverComponent(x - this.guiLeft, y - this.guiTop)) {
+                    List toolTip = stack.getTooltip(Minecraft.getMinecraft().thePlayer, true);
+                    drawHoveringText(toolTip, x - this.guiLeft, y - this.guiTop, fontRendererObj);
+                }
             }
         }
     }

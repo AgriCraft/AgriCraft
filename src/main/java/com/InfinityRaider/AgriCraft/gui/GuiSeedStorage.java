@@ -17,7 +17,7 @@ public class GuiSeedStorage extends GuiSeedStorageDummy {
     private static final int sizeY = 131;
 
     public GuiSeedStorage(InventoryPlayer inventory, TileEntitySeedStorage te) {
-        super(new ContainerSeedStorage(inventory, te), 0, 14, 170, 48, -1, -1, 6, 8);
+        super(new ContainerSeedStorage(inventory, te), 0, 14, 170, 48, -1, -1, 6, 7);
         this.xSize = sizeX;
         this.ySize = sizeY;
         this.activeSeed = te.getLockedSeed().getItem();
