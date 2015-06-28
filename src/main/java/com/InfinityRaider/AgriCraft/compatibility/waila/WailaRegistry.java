@@ -1,9 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.waila;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockChannelValve;
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
-import com.InfinityRaider.AgriCraft.blocks.BlockWaterTank;
+import com.InfinityRaider.AgriCraft.blocks.*;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
@@ -27,6 +24,10 @@ public class WailaRegistry {
             registry.registerStackProvider(channelProvider, BlockWaterChannel.class);
             registry.registerBodyProvider(channelProvider, BlockWaterChannel.class);
             registry.registerNBTProvider(channelProvider, BlockWaterChannel.class);
+
+            registry.registerStackProvider(channelProvider, BlockWaterChannelFull.class);
+            registry.registerBodyProvider(channelProvider, BlockWaterChannelFull.class);
+            registry.registerNBTProvider(channelProvider, BlockWaterChannelFull.class);
 
             //valves
             IWailaDataProvider valveProvider = new AgriCraftValveDataProvider();

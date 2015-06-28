@@ -74,6 +74,7 @@ public class AgriCraft {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         proxy.registerTileEntities();
         proxy.registerRenderers();
+        ModHelper.initHelpers();
         LogHelper.debug("Initialization Complete");
     }
 
@@ -83,7 +84,6 @@ public class AgriCraft {
         //Have to do this in postInit because some mods don't register their items/blocks until init
         ResourceCrops.init();
         CustomCrops.init();
-        ModHelper.initHelpers();
         Recipes.init();
         SeedHelper.init();
         GrowthRequirementHandler.init();
