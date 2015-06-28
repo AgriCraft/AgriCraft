@@ -1,7 +1,10 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 
-import com.InfinityRaider.AgriCraft.api.v1.*;
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
+import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraftShearable;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
@@ -12,7 +15,6 @@ import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
 import cpw.mods.fml.relauncher.Side;

@@ -11,20 +11,22 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 
 public class WorldGen {
     public static void init() {
-        //register villagers
-        if (ConfigurationHandler.villagerEnabled) {
-            VillagerRegistry.instance().registerVillagerId(ConfigurationHandler.villagerID);
-            VillagerRegistry.instance().registerVillageTradeHandler(ConfigurationHandler.villagerID, new VillagerTradeHandler());
-        }
+        if (!ConfigurationHandler.disableWorldGen) {
+            //register villagers
+            if (ConfigurationHandler.villagerEnabled) {
+                VillagerRegistry.instance().registerVillagerId(ConfigurationHandler.villagerID);
+                VillagerRegistry.instance().registerVillageTradeHandler(ConfigurationHandler.villagerID, new VillagerTradeHandler());
+            }
 
-        //add greenhouses to villages
-        MapGenStructureIO.func_143031_a(StructureGreenhouse.class, Reference.MOD_ID + ":Greenhouse");
-        VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseHandler());
+            //add greenhouses to villages
+            MapGenStructureIO.func_143031_a(StructureGreenhouse.class, Reference.MOD_ID + ":Greenhouse");
+            VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseHandler());
 
-        //add irrigated greenhouses to villages
-        if(!ConfigurationHandler.disableIrrigation) {
-            MapGenStructureIO.func_143031_a(StructureGreenhouseIrrigated.class, Reference.MOD_ID + ":GreenhouseIrrigated");
-            VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseIrrigatedHandler());
+            //add irrigated greenhouses to villages
+            if (!ConfigurationHandler.disableIrrigation) {
+                MapGenStructureIO.func_143031_a(StructureGreenhouseIrrigated.class, Reference.MOD_ID + ":GreenhouseIrrigated");
+                VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseIrrigatedHandler());
+            }
         }
     }
 }

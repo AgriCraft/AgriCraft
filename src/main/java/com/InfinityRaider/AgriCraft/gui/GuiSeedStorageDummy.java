@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.gui;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
+import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
 import net.minecraft.client.Minecraft;
@@ -13,7 +13,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class GuiSeedStorageDummy extends GuiContainer {
     //the container for this gui

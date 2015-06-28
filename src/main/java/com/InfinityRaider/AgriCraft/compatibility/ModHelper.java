@@ -89,7 +89,7 @@ public abstract class ModHelper {
         }
     }
 
-    public static void performPostTasks() {
+    public static void postInit() {
         for (ModHelper helper : modHelpers.values()) {
             String id = helper.modId();
             boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);

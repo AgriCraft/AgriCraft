@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;

@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import com.pam.mobdropcrops.mobdropcrops;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockStem;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.init.Items;

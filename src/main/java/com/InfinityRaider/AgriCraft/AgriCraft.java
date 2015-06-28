@@ -90,8 +90,8 @@ public class AgriCraft {
         CustomCrops.initGrassSeeds();
         CropPlantHandler.init();
         CropProducts.init();
-        if(!ConfigurationHandler.disableWorldGen) {WorldGen.init();}
-        ModHelper.performPostTasks();
+        WorldGen.init();
+        ModHelper.postInit();
         proxy.initNEI();
         LogHelper.debug("Post-Initialization Complete");
     }

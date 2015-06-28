@@ -11,7 +11,6 @@ import net.minecraft.init.Blocks;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 public class PneumaticCraftHelper extends ModHelper {
     @Override

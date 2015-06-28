@@ -1,18 +1,14 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStem;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemSeeds;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-
-import java.util.ArrayList;
 
 public class CropPlantStem extends CropPlantGeneric {
     private final Block block;
