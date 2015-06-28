@@ -181,6 +181,10 @@ public class ConfigurationHandler {
         return IOHelper.readOrWrite(directory, "SeedBlackList", IOHelper.getSeedBlackListInstructions());
     }
 
+    public static String readVanillaOverrides() {
+        return IOHelper.readOrWrite(directory, "VanillaPlantingExceptions", IOHelper.getPlantingExceptionsInstructions());
+    }
+
     public static String readSoils() {
         return IOHelper.readOrWrite(directory, "SoilWhitelist", IOHelper.getSoilwhitelistData());
     }

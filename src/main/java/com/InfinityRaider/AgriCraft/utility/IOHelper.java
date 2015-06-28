@@ -153,6 +153,11 @@ public abstract class IOHelper {
         return seedBlackListInstructions;
     }
 
+    //vanilla planting overrides
+    public static String getPlantingExceptionsInstructions() {
+        return plantingExceptionsInstructions;
+    }
+
     public static String getSoilwhitelistData() {
         String output = soilWhitelistInstructions;
         if(LoadedMods.forestry) {
@@ -254,6 +259,12 @@ public abstract class IOHelper {
             "#Define blacklisted seeds here: <mod>:<seedname>:<seedmeta>\n" +
             "#You can get these values from NEI\n" +
             "#Blacklisted seeds will not be able to planted on crops\n" +
+            "#For example: AgriCraft:seedDandelion";
+
+    private static final String plantingExceptionsInstructions =
+            "#Define seeds that will ignore the vanilla planting rule here: <mod>:<seedname>:<seedmeta>\n" +
+            "#You can get these values from NEI\n" +
+            "#All seeds defined here will still be able to be planted outside of crops when vanilla farming is disabled\n" +
             "#For example: AgriCraft:seedDandelion";
 
     private static final String soilWhitelistInstructions =

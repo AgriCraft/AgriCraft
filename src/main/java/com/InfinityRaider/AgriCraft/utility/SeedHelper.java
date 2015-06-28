@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,11 +16,13 @@ public abstract class SeedHelper {
     private static List<ItemStack> seedBlackList = new ArrayList<ItemStack>();
     private static HashMap<Item, Integer[]> spreadChances;
     private static HashMap<Item, Integer[]> seedTiers;
+    private static List<ItemStack> vanillaPlantingOverrides = new ArrayList<ItemStack>();
 
     public static void init() {
         initSeedBlackList();
         initSpreadChancesOverrides();
         initTiers();
+        initVannilaPlantingOverrides();
     }
 
     private static void initSeedBlackList() {
@@ -72,6 +75,30 @@ public abstract class SeedHelper {
                 }
             }
         }
+    }
+
+    private static void initVannilaPlantingOverrides() {
+        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readVanillaOverrides());
+        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+        for(String line:data) {
+            LogHelper.debug(new StringBuffer("parsing ").append(line));
+            ItemStack seedStack = IOHelper.getStack(line);
+            Item seed = seedStack!=null?seedStack.getItem():null;
+            boolean success = seed!=null;
+            String errorMsg = "Invalid seed";
+            if(success) {
+                list.add(seedStack);
+            }
+            else {
+                LogHelper.info(new StringBuffer("Error when adding seed to vanilla overrides: ").append(errorMsg).append(" (line: ").append(line).append(")"));
+            }
+        }
+        vanillaPlantingOverrides = list;
+        LogHelper.info("Registered seeds ignoring vanilla planting rule:");
+        for(ItemStack seed:seedBlackList) {
+            LogHelper.info(new StringBuffer(" - ").append(Item.itemRegistry.getNameForObject(seed.getItem())).append(":").append(seed.getItemDamage()));
+        }
+
     }
 
     //initializes the mutation chances overrides
@@ -178,6 +205,39 @@ public abstract class SeedHelper {
             }
         }
         return false;
+    }
+
+    private static boolean ignoresVanillaPlantingSetting(ItemStack seed) {
+        for(ItemStack stack:vanillaPlantingOverrides) {
+            if(stack.getItem() == seed.getItem() && stack.getItemDamage() == seed.getItemDamage()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean allowVanillaPlanting(ItemStack seed) {
+        if(seed == null || seed.getItem() == null) {
+            return false;
+        }
+        if(ConfigurationHandler.disableVanillaFarming) {
+            if(ignoresVanillaPlantingSetting(seed)) {
+                return true;
+            }
+            if(CropPlantHandler.isValidSeed(seed)) {
+                return false;
+            }
+            if(seed.getItem() == Items.potato) {
+                return false;
+            }
+            if(seed.getItem() == Items.carrot) {
+                return false;
+            }
+            if(seed.getItem() == Items.reeds) {
+                return false;
+            }
+        }
+        return true;
     }
 
     //define NBT tag

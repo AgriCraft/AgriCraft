@@ -33,6 +33,8 @@ Changelog
 -ADDED:  A water channel that is a full block, for decoration purposes
 -ADDED:  NEI handler for crop products
 -ADDED:  A water pad block for aquatic crops (water artichoke, wakebloom, squid plant)
+-ADDED:  Config options to disable compatibility per mod
+-ADDED:  A config to specify seeds that will ingore the disable vanilla farming rule
 -FIXED:  Seeds added as drops from tall grass always having weight 10
 -FIXED:  Not being able to set max brightness in Minetweaker methods
 -FIXED:  Wrong error message in Minetweaker methods
@@ -44,6 +46,7 @@ Changelog
 -FIXED:  NEI reverse lookup not working for soils and base blocks
 -FIXED:  No more missing texture spam in the console
 -FIXED:  Village generation not working
+-FIXED:  Recipes being added for non initialized items
 
 1.3.1
 -ADDED:  Nitor Wart: a new crop that produces glowstone dust

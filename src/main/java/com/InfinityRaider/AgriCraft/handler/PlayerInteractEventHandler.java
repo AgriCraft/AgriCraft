@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -17,44 +17,42 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 public class PlayerInteractEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onPlayerUseItemEvent(PlayerInteractEvent event) {
+    public void vanillaSeedPlanting(PlayerInteractEvent event) {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             Block block = event.world.getBlock(event.x, event.y, event.z);
             if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
                 if (GrowthRequirementHandler.isSoilValid(event.world, event.x, event.y, event.z) || block == Blocks.farmland) {
                     if (ConfigurationHandler.disableVanillaFarming) {
-                        if(CropPlantHandler.isValidSeed(event.entityPlayer.getCurrentEquippedItem())) {
+                        if(!SeedHelper.allowVanillaPlanting(event.entityPlayer.getCurrentEquippedItem())) {
                             this.denyEvent(event, false);
-                            return;
                         }
                     } else if (event.entityPlayer.getCurrentEquippedItem().hasTagCompound()) {
                         NBTTagCompound tag = (NBTTagCompound) event.entityPlayer.getCurrentEquippedItem().getTagCompound().copy();
                         if (tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
                             //WIP: place a tile entity storing the seeds data
                             this.denyEvent(event, false);
-                            return;
                         }
                     }
                 }
-                /*
-                else if (block== Blocks.blockSeedStorage && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSeeds) {
-                    Blocks.blockSeedStorage.onBlockActivated(event.world, event.x, event.y, event.z, event.entityPlayer, event.face, 0, 0, 0);
-                }
-                */
             }
-            if(event.entityPlayer.getCurrentEquippedItem()!=null && event.entityPlayer.getCurrentEquippedItem().getItem()!=null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSpade) {
-                if(event.world.isRemote) {
+        }
+    }
+
+    @SubscribeEvent
+    public void waterPadCreation(PlayerInteractEvent event) {
+        if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            Block block = event.world.getBlock(event.x, event.y, event.z);
+            if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSpade) {
+                if (event.world.isRemote) {
                     return;
                 }
-                if(block == Blocks.farmland) {
+                if (block == Blocks.farmland) {
                     event.world.setBlock(event.x, event.y, event.z, com.InfinityRaider.AgriCraft.init.Blocks.waterPad, 0, 3);
-                    if(!event.entityPlayer.capabilities.isCreativeMode) {
+                    if (!event.entityPlayer.capabilities.isCreativeMode) {
                         event.entityPlayer.getCurrentEquippedItem().damageItem(1, event.entityPlayer);
                         event.setResult(Event.Result.ALLOW);
                     }
-                    event.world.playSoundEffect((double)((float) event.x + 0.5F), (double)((float) event.y + 0.5F), (double)((float) event.z + 0.5F), block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
-
-
+                    event.world.playSoundEffect((double) ((float) event.x + 0.5F), (double) ((float) event.y + 0.5F), (double) ((float) event.z + 0.5F), block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
                 }
             }
         }
