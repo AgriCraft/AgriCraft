@@ -238,8 +238,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     }
 
     //breaks up the multiblock and divides the fluid among the tanks
-    public void breakMultiBlock(boolean sync) {
-        int lvl = this.getFluidLevel();
+    public void breakMultiBlock(boolean sync, int lvl) {
         int[] levels = new int[ySize];
         int area = xSize*zSize;
         for(int i=0;i<levels.length;i++) {
@@ -454,8 +453,10 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         if(lvl!=this.getFluidLevel()) {
             lvl = lvl > this.getTotalCapacity() ? this.getTotalCapacity() : lvl;
             TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(xCoord - xPosition, yCoord - yPosition, zCoord - zPosition);
-            tank.fluidLevel = lvl;
-            tank.syncToClient(true);
+            if(tank != null) {
+                tank.fluidLevel = lvl;
+                tank.syncToClient(true);
+            }
         }
     }
 

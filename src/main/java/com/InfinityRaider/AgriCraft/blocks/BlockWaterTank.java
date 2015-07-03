@@ -118,7 +118,7 @@ public class BlockWaterTank extends BlockCustomWood{
             if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityTank) {
                 TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
                 if(tank!=null) {
-                    tank.breakMultiBlock(true);
+                    tank.breakMultiBlock(true, tank.getFluidLevel());
                     placeWater = tank.getFluidLevel() >= Constants.mB;
                 }
             }
@@ -144,7 +144,7 @@ public class BlockWaterTank extends BlockCustomWood{
             if (te != null && te instanceof TileEntityTank) {
                 TileEntityTank tank = (TileEntityTank) te;
                 if(block instanceof BlockWaterTank) {
-                    tank.breakMultiBlock(true);
+                    tank.breakMultiBlock(true, tank.getFluidLevel());
                 }
                 tank.updateMultiBlock();
             }
