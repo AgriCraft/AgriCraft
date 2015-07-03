@@ -47,7 +47,7 @@ public class CropPlantBiomesOPlenty extends CropPlant {
     public ItemStack getRandomFruit(Random rand) {
         ArrayList<ItemStack> list = getAllFruits();
         if(list!=null && list.size()>0) {
-            return list.get(rand.nextInt(list.size()));
+            return list.get(rand.nextInt(list.size())).copy();
         }
         return null;
     }

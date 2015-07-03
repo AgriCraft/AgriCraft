@@ -47,6 +47,7 @@ Changelog
 -FIXED:  No more missing texture spam in the console
 -FIXED:  Village generation not working
 -FIXED:  Recipes being added for non initialized items
+-FIXED:  Bug where plants would only drop fruits on the first harvest
 
 1.3.1
 -ADDED:  Nitor Wart: a new crop that produces glowstone dust
