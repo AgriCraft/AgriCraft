@@ -9,6 +9,8 @@ import com.InfinityRaider.AgriCraft.world.StructureGreenhouseIrrigated;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 
+import java.util.Collection;
+
 public class WorldGen {
     private static int villagerId;
 
@@ -16,17 +18,12 @@ public class WorldGen {
         if (!ConfigurationHandler.disableWorldGen) {
             //register villagers
             if (ConfigurationHandler.villagerEnabled) {
+                Collection<Integer> usedIds = VillagerRegistry.getRegisteredVillagers();
                 int id = 0;
-                boolean flag = false;
-                while (!flag) {
-                    try {
-                        registerVillager(id);
-                        flag = true;
-                        villagerId = id;
-                    } catch (Exception e) {
-                        id++;
-                    }
+                while (usedIds.contains(id)) {
+                    id++;
                 }
+                registerVillager(id);
             }
 
             //add greenhouses to villages
