@@ -52,6 +52,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
         return getIconFromDamage(stack.getItemDamage());
     }
 
+    @SideOnly(Side.CLIENT)
     public void setInformation(String information) {
         this.information = information;
     }

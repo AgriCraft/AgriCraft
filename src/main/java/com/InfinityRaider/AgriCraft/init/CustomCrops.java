@@ -7,6 +7,8 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -65,7 +67,9 @@ public class CustomCrops {
                             return;
                         }
                         customSeeds[i] = customCrops[i].getSeed();
-                        customSeeds[i].setInformation(info);
+                        if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                            customSeeds[i].setInformation(info);
+                        }
                     }
                 }
                 if(!success) {
