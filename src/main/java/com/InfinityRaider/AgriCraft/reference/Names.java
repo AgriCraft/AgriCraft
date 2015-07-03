@@ -54,6 +54,7 @@ public final class Names {
         public static final String seedStorage = "seedStorage";
         public static final String seedStorageController = "seedStorageController";
         public static final String handRake = "handRake";
+        public static final String villager = "villagerFarmer";
     }
 
     //tile entities
