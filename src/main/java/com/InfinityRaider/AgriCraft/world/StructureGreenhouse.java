@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.world;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -233,6 +234,6 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 
     @Override
     protected int getVillagerType (int par1) {
-        return ConfigurationHandler.villagerEnabled ? ConfigurationHandler.villagerID : 0;
+        return ConfigurationHandler.villagerEnabled ? WorldGen.getVillagerId() : 0;
     }
 }

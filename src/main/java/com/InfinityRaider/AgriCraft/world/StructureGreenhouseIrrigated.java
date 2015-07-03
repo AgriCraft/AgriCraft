@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.world;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import net.minecraft.init.Blocks;
@@ -330,6 +331,6 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
 
     @Override
     protected int getVillagerType (int par1) {
-        return ConfigurationHandler.villagerEnabled ? ConfigurationHandler.villagerID : 0;
+        return ConfigurationHandler.villagerEnabled ? WorldGen.getVillagerId() : 0;
     }
 }

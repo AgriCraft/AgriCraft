@@ -10,12 +10,23 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 
 public class WorldGen {
+    private static int villagerId;
+
     public static void init() {
         if (!ConfigurationHandler.disableWorldGen) {
             //register villagers
             if (ConfigurationHandler.villagerEnabled) {
-                VillagerRegistry.instance().registerVillagerId(ConfigurationHandler.villagerID);
-                VillagerRegistry.instance().registerVillageTradeHandler(ConfigurationHandler.villagerID, new VillagerTradeHandler());
+                int id = 0;
+                boolean flag = false;
+                while (!flag) {
+                    try {
+                        registerVillager(id);
+                        flag = true;
+                        villagerId = id;
+                    } catch (Exception e) {
+                        id++;
+                    }
+                }
             }
 
             //add greenhouses to villages
@@ -28,5 +39,14 @@ public class WorldGen {
                 VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseIrrigatedHandler());
             }
         }
+    }
+
+    public static int getVillagerId() {
+        return villagerId;
+    }
+
+    private static void registerVillager(int id) {
+        VillagerRegistry.instance().registerVillagerId(id);
+        VillagerRegistry.instance().registerVillageTradeHandler(id, new VillagerTradeHandler());
     }
 }

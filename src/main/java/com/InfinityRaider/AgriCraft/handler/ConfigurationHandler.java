@@ -57,7 +57,6 @@ public class ConfigurationHandler {
     public static int greenhouseLimit;
     public static int greenhouseIrrigatedWeight;
     public static int greenhouseIrrigatedLimit;
-    public static int villagerID;
     public static boolean villagerEnabled;
     //seed storage
     public static boolean disableSeedStorage;
@@ -120,7 +119,6 @@ public class ConfigurationHandler {
         greenhouseLimit = config.getInt("Greenhouse limit", CATEGORY_WORLDGEN, 1, 0, 2, "The maximum number of greenhouses per village");
         greenhouseIrrigatedWeight = config.getInt("Irrigated greenhouse weight", CATEGORY_WORLDGEN, 2, 0, 100, "The weight for an irrigated greenhouse to be generated in a village");
         greenhouseIrrigatedLimit = config.getInt("Irrigated greenhouse limit", CATEGORY_WORLDGEN, 1, 0, 2, "The maximum number of irrigated greenhouses per village");
-        villagerID = config.getInt("Villager ID", CATEGORY_WORLDGEN, 10, 7, 99, "The profession ID the villager uses");
         villagerEnabled = config.getBoolean("Enable villagers", CATEGORY_WORLDGEN, true, "Set to false if you wish to disable villagers spawning in the ArgiCraft houses");
         //storage
         disableSeedStorage = config.getBoolean("Disable seed storage system", CATEGORY_STORAGE, false, "set to true to disable the seed storage systems");
