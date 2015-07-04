@@ -242,23 +242,25 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 
     @Override
     protected void spawnVillagers(World world, StructureBoundingBox boundingBox, int x, int y, int z, int limit) {
-        int nrVillagersSpawned = getNumberOfSpawnedVillagers();
-        if (nrVillagersSpawned < limit) {
-            for (int i1 = nrVillagersSpawned; i1 < limit; ++i1) {
-                int j1 = this.getXWithOffset(x + i1, z);
-                int k1 = this.getYWithOffset(y);
-                int l1 = this.getZWithOffset(x + i1, z);
+        if(ConfigurationHandler.villagerEnabled) {
+            int nrVillagersSpawned = getNumberOfSpawnedVillagers();
+            if (nrVillagersSpawned < limit) {
+                for (int i1 = nrVillagersSpawned; i1 < limit; ++i1) {
+                    int j1 = this.getXWithOffset(x + i1, z);
+                    int k1 = this.getYWithOffset(y);
+                    int l1 = this.getZWithOffset(x + i1, z);
 
-                if (!boundingBox.isVecInside(j1, k1, l1)) {
-                    break;
+                    if (!boundingBox.isVecInside(j1, k1, l1)) {
+                        break;
+                    }
+                    ++nrVillagersSpawned;
+                    EntityVillager entityvillager = new EntityVillagerFarmer(world, this.getVillagerType(i1));
+                    entityvillager.setLocationAndAngles((double) j1 + 0.5D, (double) k1, (double) l1 + 0.5D, 0.0F, 0.0F);
+                    world.spawnEntityInWorld(entityvillager);
                 }
-                ++nrVillagersSpawned;
-                EntityVillager entityvillager = new EntityVillagerFarmer(world, this.getVillagerType(i1));
-                entityvillager.setLocationAndAngles((double)j1 + 0.5D, (double)k1, (double)l1 + 0.5D, 0.0F, 0.0F);
-                world.spawnEntityInWorld(entityvillager);
             }
+            setNumberOfSpawnedVillagers(nrVillagersSpawned);
         }
-        setNumberOfSpawnedVillagers(nrVillagersSpawned);
     }
 
     //hacky method to find out how many villagers have been spawned

@@ -10,11 +10,11 @@ public class EntityVillagerFarmer extends EntityVillager {
 
     public EntityVillagerFarmer(World world, int profession) {
         super(world, profession);
+        this.tasks.addTask(5, new EntityAIClearWeeds(this));
     }
 
     @Override
-    protected void updateAITick() {
-        super.updateAITick();
-        //TODO: Make villager find crops with weeds and make him remove the weeds
+    public boolean isAIEnabled() {
+        return true;
     }
 }
