@@ -9,12 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 
-import java.util.Iterator;
-import java.util.List;
-
-public class MessageContainerSeedStorage implements IMessage {
+public class MessageContainerSeedStorage extends MessageAgriCraft {
     private Item item;
     private int meta;
     private int amount;
@@ -33,40 +29,19 @@ public class MessageContainerSeedStorage implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        int itemNameLength = buf.readInt();
-        String itemName = new String(buf.readBytes(itemNameLength).array());
-        this.item = (Item) Item.itemRegistry.getObject(itemName);
+        this.item = this.readItemFromByteBuf(buf);
         this.meta = buf.readInt();
         this.amount = buf.readInt();
-        int playerNameLength = buf.readInt();
-        String playerName = new String(buf.readBytes(playerNameLength).array());
-        this.player = this.getPlayer(playerName);
+        this.player = this.getPlayerFromByteBuf(buf);
         this.slotId = buf.readInt();
-    }
-
-    private EntityPlayer getPlayer(String name) {
-        List list = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
-        EntityPlayer player = null;
-        Iterator iterator = list.iterator();
-        while (iterator.hasNext() && player==null) {
-            EntityPlayer nextPlayer = (EntityPlayer)iterator.next();
-            if(nextPlayer.getDisplayName().equals(name)) {
-                player = nextPlayer;
-            }
-        }
-        return player;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        String itemName = this.item==null?"null":Item.itemRegistry.getNameForObject(this.item);
-        buf.writeInt(itemName.length());
-        buf.writeBytes(itemName.getBytes());
+        this.writeItemToByteBuf(this.item, buf);
         buf.writeInt(this.meta);
         buf.writeInt(this.amount);
-        String playerName = this.player.getDisplayName();
-        buf.writeInt(playerName.length());
-        buf.writeBytes(playerName.getBytes());
+        this.writePlayerToByteBuf(this.player, buf);
         buf.writeInt(this.slotId);
     }
 

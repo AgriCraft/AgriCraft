@@ -6,10 +6,9 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class MessageSyncMutation implements IMessage {
+public class MessageSyncMutation extends MessageAgriCraft {
     private ItemStack parent1;
     private ItemStack parent2;
     private ItemStack result;
@@ -33,35 +32,20 @@ public class MessageSyncMutation implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.parent1 = readItemStack(buf);
-        this.parent2 = readItemStack(buf);
-        this.result = readItemStack(buf);
+        this.parent1 = readItemStackToByteBuf(buf);
+        this.parent2 = readItemStackToByteBuf(buf);
+        this.result = readItemStackToByteBuf(buf);
         this.chance = buf.readDouble();
         this.last = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        writeItemStack(buf, parent1);
-        writeItemStack(buf, parent2);
-        writeItemStack(buf, result);
+        writeItemStackFromByteBuf(buf, parent1);
+        writeItemStackFromByteBuf(buf, parent2);
+        writeItemStackFromByteBuf(buf, result);
         buf.writeDouble(this.chance);
         buf.writeBoolean(this.last);
-    }
-
-    private ItemStack readItemStack(ByteBuf buf) {
-        int itemNameLength = buf.readInt();
-        String itemName = new String(buf.readBytes(itemNameLength).array());
-        Item item = (Item) Item.itemRegistry.getObject(itemName);
-        int meta = buf.readInt();
-        return item==null?null:new ItemStack(item, 1, meta);
-    }
-
-    private void writeItemStack(ByteBuf buf, ItemStack stack) {
-        String itemName = stack.getItem()==null?"null":Item.itemRegistry.getNameForObject(stack.getItem());
-        buf.writeInt(itemName.length());
-        buf.writeBytes(itemName.getBytes());
-        buf.writeInt(stack.getItemDamage());
     }
 
     public static class MessageHandler implements IMessageHandler<MessageSyncMutation, IMessage> {

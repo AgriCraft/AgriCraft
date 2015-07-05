@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class MessageTileEntitySeedStorage implements IMessage {
+public class MessageTileEntitySeedStorage extends MessageAgriCraft {
     private int x;
     private int y;
     private int z;
