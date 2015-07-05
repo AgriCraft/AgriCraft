@@ -5,7 +5,6 @@ import codechicken.nei.api.IConfigureNEI;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
@@ -22,24 +21,20 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class NEIConfig implements IConfigureNEI {
-    private static String version = "1.0";
-
     @Override
     public void loadConfig() {
-        if(LoadedMods.nei) {
-            //register NEI recipe handler
-            if(ConfigurationHandler.enableNEI) {
-                LogHelper.debug("Registering NEI recipe handlers");
-                //mutation handler
-                API.registerRecipeHandler(new NEICropMutationHandler());
-                API.registerUsageHandler(new NEICropMutationHandler());
-                //crop product handler
-                API.registerRecipeHandler(new NEICropProductHandler());
-                API.registerUsageHandler(new NEICropProductHandler());
-            }
-            //hide crop blocks in NEI
-            hideItems();
+        //register NEI recipe handler
+        if (ConfigurationHandler.enableNEI) {
+            LogHelper.debug("Registering NEI recipe handlers");
+            //mutation handler
+            API.registerRecipeHandler(new NEICropMutationHandler());
+            API.registerUsageHandler(new NEICropMutationHandler());
+            //crop product handler
+            API.registerRecipeHandler(new NEICropProductHandler());
+            API.registerUsageHandler(new NEICropProductHandler());
         }
+        //hide crop blocks in NEI
+        hideItems();
     }
 
     private static void hideItems() {
@@ -51,6 +46,10 @@ public class NEIConfig implements IConfigureNEI {
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.waterPad, 1, i));
             //hide sprinkler
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockSprinkler, 1, i));
+            //hide debugger
+            if(!ConfigurationHandler.debug) {
+                AgriCraft.proxy.hideItemInNEI(new ItemStack(Items.debugItem, 1, i));
+            }
             //hide plant blocks
             for(BlockModPlant plant : Crops.crops) {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(plant, 1, i));
@@ -121,7 +120,7 @@ public class NEIConfig implements IConfigureNEI {
 
     @Override
     public String getVersion() {
-        return version;
+        return  "1.0";
     }
 
 }

@@ -93,7 +93,6 @@ public class AgriCraft {
         CropProducts.init();
         WorldGen.init();
         ModHelper.postInit();
-        proxy.initNEI();
         LogHelper.debug("Post-Initialization Complete");
     }
 

@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
+import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applemilktea.AppleMilkTeaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
@@ -120,6 +121,7 @@ public abstract class ModHelper {
                 MinetweakerHelper.class,
                 MobDropCropsHelper.class,
                 NaturaHelper.class,
+                NEIHelper.class,
                 PlantMegaPackHelper.class,
                 PneumaticCraftHelper.class,
                 PsychedelicraftHelper.class,

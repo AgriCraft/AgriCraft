@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
 import codechicken.nei.api.API;
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
@@ -131,10 +130,8 @@ public class ClientProxy extends CommonProxy {
     //initialize NEI
     @Override
     public void initNEI() {
-        if (LoadedMods.nei) {
-            NEIConfig configNEI = new NEIConfig();
-            configNEI.loadConfig();
-        }
+        NEIConfig configNEI = new NEIConfig();
+        configNEI.loadConfig();
     }
 
     //hide items in NEI
