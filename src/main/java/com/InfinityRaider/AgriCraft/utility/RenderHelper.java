@@ -29,6 +29,9 @@ public abstract class RenderHelper {
     }
 
     public static ResourceLocation getBlockResource(IIcon icon) {
+        if(icon==null) {
+            return null;
+        }
         String path = icon.getIconName();
         String domain = path.substring(0, path.indexOf(":") + 1);
         String file = path.substring(path.indexOf(':') + 1);
@@ -36,6 +39,9 @@ public abstract class RenderHelper {
     }
 
     public static ResourceLocation getItemResource(IIcon icon) {
+        if(icon==null) {
+            return null;
+        }
         String path = icon.getIconName();
         String domain = path.substring(0, path.indexOf(":") + 1);
         String file = path.substring(path.indexOf(':')+1);
