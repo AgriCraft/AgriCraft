@@ -1,9 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
-import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
-import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -42,9 +39,6 @@ public abstract class DebugHelper {
         TileEntity tile = world.getTileEntity(x, y, z);
         if(tile!=null && tile instanceof IDebuggable) {
             ((IDebuggable) tile).addDebugInfo(list);
-        }
-        else if(LoadedMods.gardenStuff && tile instanceof TileEntityGarden) {
-            GardenStuffHelper.addDebugInfo(list, (TileEntityGarden) tile);
         }
         else {
             list.add("Block: "+ Block.blockRegistry.getNameForObject(world.getBlock(x, y, z)));

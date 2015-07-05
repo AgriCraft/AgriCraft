@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.apiimpl.v1;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.ISoilContainer;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
@@ -127,8 +128,8 @@ public class GrowthRequirement implements IGrowthRequirement{
         Block block = world.getBlock(x, y, z);
         int meta = world.getBlockMetadata(x, y, z);
         BlockWithMeta soil = new BlockWithMeta(block, meta);
-        if(LoadedMods.gardenStuff && block instanceof BlockLargePot) {
-            soil = GardenStuffHelper.getSoil((TileEntityGarden) world.getTileEntity(x, y, z));
+        if (block instanceof ISoilContainer) {
+            soil = new BlockWithMeta(((ISoilContainer) block).getSoil(world, x, y, z), ((ISoilContainer) block).getSoilMeta(world, x, y, z));
         }
         return isValidSoil(soil);
     }

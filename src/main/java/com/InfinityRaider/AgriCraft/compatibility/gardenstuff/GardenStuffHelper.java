@@ -1,13 +1,14 @@
 package com.InfinityRaider.AgriCraft.compatibility.gardenstuff;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-import java.util.List;
-
-public class GardenStuffHelper {
+public class GardenStuffHelper extends ModHelper {
     public static BlockWithMeta getSoil(TileEntityGarden garden) {
         ItemStack substrate = garden.getSubstrate();
         BlockWithMeta block = null;
@@ -17,13 +18,28 @@ public class GardenStuffHelper {
         return block;
     }
 
-    public static void addDebugInfo(List<String> list, TileEntityGarden garden) {
-        list.add("Substrate: "+ garden.getSubstrate().getDisplayName());
-        list.add("Reachable contents: ");
-        List<ItemStack> contents = garden.getReachableContents();
-        for(ItemStack content:contents) {
-            list.add(" - "+content.getDisplayName());
-        }
+    @Override
+    protected void init() {
+
+    }
+
+    @Override
+    protected void initPlants() {
+
+    }
+
+    @Override
+    protected void postTasks() {
+        registerSoils();
+    }
+
+    private void registerSoils() {
+        GrowthRequirementHandler.addDefaultSoil(new BlockWithMeta((Block) Block.blockRegistry.getObject("GardenCore:garden_farmland"), 0));
+    }
+
+    @Override
+    protected String modId() {
+        return null;
     }
 }
 

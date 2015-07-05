@@ -1,18 +1,11 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
-import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v1.ItemWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
-import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
-import com.jaquadro.minecraft.gardencontainers.block.BlockLargePot;
-import com.jaquadro.minecraft.gardencore.block.tile.TileEntityGarden;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -48,8 +41,8 @@ public class GrowthRequirementHandler {
         Block block = world.getBlock(x, y, z);
         int meta = world.getBlockMetadata(x, y, z);
         BlockWithMeta soil;
-        if (LoadedMods.gardenStuff && block instanceof BlockLargePot) {
-            soil = GardenStuffHelper.getSoil((TileEntityGarden) world.getTileEntity(x, y, z));
+        if (block instanceof ISoilContainer) {
+            soil = new BlockWithMeta(((ISoilContainer) block).getSoil(world, x, y, z), ((ISoilContainer) block).getSoilMeta(world, x, y, z));
         } else {
             soil = new BlockWithMeta(block, meta);
         }
@@ -65,9 +58,6 @@ public class GrowthRequirementHandler {
 
     private static void registerSoils() {
         addDefaultSoil(new BlockWithMeta(Blocks.farmland));
-        if (LoadedMods.gardenStuff) {
-            addDefaultSoil(new BlockWithMeta((Block) Block.blockRegistry.getObject("GardenCore:garden_farmland"), 0));
-        }
     }
 
     private static void initGrowthReqs() {
