@@ -65,9 +65,6 @@ public class GrowthRequirementHandler {
 
     private static void registerSoils() {
         addDefaultSoil(new BlockWithMeta(Blocks.farmland));
-        if (LoadedMods.forestry) {
-            addDefaultSoil(new BlockWithMeta((Block) Block.blockRegistry.getObject("Forestry:soil"), 0));
-        }
         if (LoadedMods.gardenStuff) {
             addDefaultSoil(new BlockWithMeta((Block) Block.blockRegistry.getObject("GardenCore:garden_farmland"), 0));
         }

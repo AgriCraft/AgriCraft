@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -159,11 +158,7 @@ public abstract class IOHelper {
     }
 
     public static String getSoilwhitelistData() {
-        String output = soilWhitelistInstructions;
-        if(LoadedMods.forestry) {
-            output = output +"\n" + "Forestry:soil:0";
-        }
-        return output;
+        return soilWhitelistInstructions;
     }
 
     //turns the raw data string into an array (each array element is a line from the string)

@@ -18,7 +18,6 @@ public class ConfigurationHandler {
     public static final String CATEGORY_FARMING = "farming";
     public static final String CATEGORY_DEBUG = "debug";
     public static final String CATEGORY_WORLDGEN = "world gen";
-    public static final String CATEGORY_INTEGRATION = "integration";
     public static final String CATEGORY_IRRIGATION = "irrigation";
     public static final String CATEGORY_STORAGE = "storage";
     public static final String CATEGORY_COMPATIBILITY = "compatibility";
@@ -61,7 +60,6 @@ public class ConfigurationHandler {
     public static boolean disableSeedStorage;
     public static boolean disableSeedWarehouse;
     //irrigation
-    public static boolean enableNEI;
     public static boolean disableIrrigation;
     public static int sprinklerRatePerSecond;
     public static int sprinklerRatePerHalfSecond;
@@ -129,8 +127,6 @@ public class ConfigurationHandler {
         sprinklerGrowthIntervalTicks = sprinklerGrowthInterval * 20;
         placeWater = config.getBoolean("Spawn water after breaking tank", CATEGORY_IRRIGATION, true, "set to false to disable placing a source block when breaking non-empty tanks");
         fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", CATEGORY_IRRIGATION, false, "set to true to let tanks fill up when water flows above them");
-        //NEI
-        enableNEI = config.getBoolean("Enable NEI", CATEGORY_INTEGRATION, true, "set to false if you wish to disable mutation recipes in NEI");
         //debug mode
         debug = config.getBoolean("debug",CATEGORY_DEBUG,false,"Set to true if you wish to enable debug mode");
 
