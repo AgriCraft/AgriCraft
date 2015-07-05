@@ -8,6 +8,7 @@ import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.*;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
@@ -49,6 +50,11 @@ public class ClientProxy extends CommonProxy {
             case Constants.waterPadId: return waterPadRenderId;
         }
         return -1;
+    }
+
+    @Override
+    public void registerVillagerSkin(int id, String resource) {
+        VillagerRegistry.instance().registerVillagerSkin(id, new ResourceLocation(Reference.MOD_ID.toLowerCase(), resource));
     }
 
     //register custom renderers

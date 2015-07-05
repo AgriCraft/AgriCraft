@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.init;
 
+import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.VillageCreationHandler;
 import com.InfinityRaider.AgriCraft.handler.VillagerTradeHandler;
@@ -19,7 +20,7 @@ public class WorldGen {
             //register villagers
             if (ConfigurationHandler.villagerEnabled) {
                 Collection<Integer> usedIds = VillagerRegistry.getRegisteredVillagers();
-                int id = 0;
+                int id = 5;
                 while (usedIds.contains(id)) {
                     id++;
                 }
@@ -45,5 +46,7 @@ public class WorldGen {
     private static void registerVillager(int id) {
         VillagerRegistry.instance().registerVillagerId(id);
         VillagerRegistry.instance().registerVillageTradeHandler(id, new VillagerTradeHandler());
+        AgriCraft.proxy.registerVillagerSkin(id, "textures/entities/villager.png");
+        villagerId = id;
     }
 }

@@ -19,4 +19,8 @@ public class ServerProxy extends CommonProxy {
     public int getRenderId(int nr) {
         return 0;
     }
+
+    @Override
+    public void registerVillagerSkin(int id, String resource) {
+    }
 }

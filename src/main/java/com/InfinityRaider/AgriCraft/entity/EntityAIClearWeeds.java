@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class EntityAIClearWeeds extends EntityAIBase {
-    private static final int range = 16;
+    private static final int range = 8;
     private EntityVillagerFarmer villager;
     private ArrayList<TileEntityCrop> weedsToClear;
     private TileEntityCrop nextCrop;
@@ -47,6 +47,7 @@ public class EntityAIClearWeeds extends EntityAIBase {
     @Override
     public void startExecuting() {
         this.findWeeds();
+        this.getNextCrop();
     }
 
     /**
@@ -62,17 +63,23 @@ public class EntityAIClearWeeds extends EntityAIBase {
      */
     @Override
     public void updateTask() {
-        if(nextCrop==null) {
-            getNextCrop();
-            while (!isTaskFinished() && !villager.getNavigator().tryMoveToXYZ(nextCrop.xCoord, nextCrop.yCoord, nextCrop.zCoord, this.villager.getAIMoveSpeed())) {
+        if(isTaskFinished()) {
+            this.resetTask();
+        }
+        if(nextCrop!=null) {
+            double dist = this.getDistanceFromCrop();
+            if(dist<0) {
                 getNextCrop();
             }
-        }
-        if(!isTaskFinished()) {
-            if(this.getDistanceFromCrop()<=1) {
+            else if (dist <= 1) {
                 nextCrop.clearWeed();
-                nextCrop = null;
+                getNextCrop();
             }
+            else if(!villager.getNavigator().tryMoveToXYZ(nextCrop.xCoord+0.5D, nextCrop.yCoord, nextCrop.zCoord+0.5D, 1)) {
+                getNextCrop();
+            }
+        } else {
+            getNextCrop();
         }
     }
 
@@ -82,6 +89,9 @@ public class EntityAIClearWeeds extends EntityAIBase {
         while(it.hasNext() && nextCrop==null) {
             nextCrop = it.next();
             it.remove();
+            if(!villager.getNavigator().tryMoveToXYZ(nextCrop.xCoord+0.5D, nextCrop.yCoord, nextCrop.zCoord+0.5D, 1)) {
+                nextCrop = null;
+            }
         }
     }
 
@@ -89,9 +99,9 @@ public class EntityAIClearWeeds extends EntityAIBase {
         if(this.nextCrop==null) {
             return -1;
         }
-        double dx = (villager.posX-nextCrop.xCoord);
+        double dx = (villager.posX-(nextCrop.xCoord+0.5D));
         double dy = (villager.posY-nextCrop.yCoord);
-        double dz = (villager.posZ-nextCrop.zCoord);
+        double dz = (villager.posZ-(nextCrop.zCoord+0.5D));
         return  dx*dx + dy*dy + dz*dz;
     }
 

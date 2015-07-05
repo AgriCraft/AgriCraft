@@ -200,7 +200,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
             world.setBlock(xCoord, yCoord, zCoord, com.InfinityRaider.AgriCraft.init.Blocks.blockCrop, 0, 2);
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(xCoord, yCoord, zCoord);
             if (crop!=null) {
-                if(crosscrop && !ConfigurationHandler.enableWeeds) {
+                if(crosscrop) {
                     crop.setCrossCrop(true);
                 }
                 else {

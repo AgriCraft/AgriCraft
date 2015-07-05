@@ -159,6 +159,9 @@ tile.agricraft:cropNiccissus.name=Niccissus
 tile.agricraft:cropPlatiolus.name=Platiolus
 tile.agricraft:cropOsmonium.name=Osmonium
 
+//entities
+entity.AgriCraft.villagerFarmer.name=Villager
+
 //tooltips
 agricraft_tooltip.unidentified=Unidentified
 agricraft_tooltip.seed=Seed
