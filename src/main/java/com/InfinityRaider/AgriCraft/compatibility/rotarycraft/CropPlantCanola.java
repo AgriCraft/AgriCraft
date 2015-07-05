@@ -28,13 +28,13 @@ public class CropPlantCanola extends CropPlant{
     @Override
     public ArrayList<ItemStack> getAllFruits() {
         ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
-        fruits.add(new ItemStack((Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola"), 1, 2));
+        fruits.add(new ItemStack((Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola"), 1, 0));
         return fruits;
     }
 
     @Override
     public ItemStack getRandomFruit(Random rand) {
-        return new ItemStack((Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola"), 1, 2);
+        return new ItemStack((Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola"), 1, 0);
     }
 
     @Override
