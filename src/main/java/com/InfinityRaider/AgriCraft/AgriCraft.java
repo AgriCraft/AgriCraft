@@ -19,7 +19,6 @@ package com.InfinityRaider.AgriCraft;
 */
 
 import com.InfinityRaider.AgriCraft.apiimpl.APISelector;
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
@@ -53,7 +52,6 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
         LogHelper.debug("Starting Pre-Initialization");
-        LoadedMods.init();
         proxy.registerEventHandlers();
         NetworkWrapperAgriCraft.init();
         ConfigurationHandler.init(event);
