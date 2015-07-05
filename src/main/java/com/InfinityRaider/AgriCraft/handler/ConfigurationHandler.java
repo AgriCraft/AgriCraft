@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
@@ -72,9 +71,6 @@ public class ConfigurationHandler {
     public static int sprinklerGrowthIntervalTicks = 100;
     public static boolean placeWater;
     public static boolean fillFromFlowingWater;
-    //integration
-    public static boolean integration_allowMagicFertiliser;
-    public static boolean integration_instantMagicFertiliser;
 
     public static void init(FMLPreInitializationEvent event) {
         directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
@@ -133,9 +129,7 @@ public class ConfigurationHandler {
         sprinklerGrowthIntervalTicks = sprinklerGrowthInterval * 20;
         placeWater = config.getBoolean("Spawn water after breaking tank", CATEGORY_IRRIGATION, true, "set to false to disable placing a source block when breaking non-empty tanks");
         fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", CATEGORY_IRRIGATION, false, "set to true to let tanks fill up when water flows above them");
-        //mod integration
-        integration_allowMagicFertiliser = LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser",CATEGORY_INTEGRATION,true,"Set to false to disable using magical fertiliser on crops");
-        integration_instantMagicFertiliser = LoadedMods.magicalCrops && config.getBoolean("Magical Crops Fertiliser Instant Growth", CATEGORY_INTEGRATION, false, "Set to true to insta-grow plants on which the magical fertiliser is used on");
+        //NEI
         enableNEI = config.getBoolean("Enable NEI", CATEGORY_INTEGRATION, true, "set to false if you wish to disable mutation recipes in NEI");
         //debug mode
         debug = config.getBoolean("debug",CATEGORY_DEBUG,false,"Set to true if you wish to enable debug mode");

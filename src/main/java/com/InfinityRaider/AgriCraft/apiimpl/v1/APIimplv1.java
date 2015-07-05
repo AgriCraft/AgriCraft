@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.api.APIStatus;
 import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAPI;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -18,7 +17,6 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -386,7 +384,7 @@ public class APIimplv1 implements APIv1 {
 		if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
 			return true;
 		}
-		if (LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && fertilizer.getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
+		if (fertilizer.getItem() instanceof IFertiliser) {
 			return true;
 		}
 		return false;
@@ -401,10 +399,9 @@ public class APIimplv1 implements APIv1 {
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
 			if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
-				return (crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) ||
-						(crop.hasPlant() && !crop.isMature() && crop.isFertile() && CropPlantHandler.getPlantFromStack(crop.getSeedStack()).getTier() < 4);
-			} else if (LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && fertilizer.getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
-				return crop.hasPlant() && !crop.isMature() && crop.isFertile();
+				return crop.canBonemeal();
+			} else if (fertilizer.getItem() instanceof IFertiliser) {
+				return crop.allowFertiliser((IFertiliser) fertilizer.getItem());
 			}
 		}
 		return false;
@@ -420,17 +417,12 @@ public class APIimplv1 implements APIv1 {
 			fertilizer.stackSize--;
 			world.playAuxSFX(2005, x, y, z, 0);
 			return true;
-		} else if (LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && fertilizer.getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
-			if (ConfigurationHandler.integration_instantMagicFertiliser)  {
-				world.setBlockMetadataWithNotify(x, y, z, 7, 2);
-			} else {
-				Blocks.blockCrop.func_149853_b(world, random, x, y, z);
-			}
+		} else if (fertilizer.getItem() instanceof IFertiliser) {
+			((TileEntityCrop) world.getTileEntity(x, y, z)).applyFertiliser((IFertiliser) fertilizer.getItem(), world.rand);
 			fertilizer.stackSize--;
 			world.playAuxSFX(2005, x, y, z, 0);
 			return true;
 		}
 		return false;
 	}
-
 }

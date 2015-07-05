@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
+import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
@@ -9,6 +10,7 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -26,6 +28,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     private PlantStats stats = new PlantStats();
@@ -187,6 +190,34 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
         else {
             return this.weed ? 0 : 1;
+        }
+    }
+
+    //is fertiliser allowed
+    public boolean allowFertiliser(IFertiliser fertiliser) {
+        if(this.crossCrop) {
+            return ConfigurationHandler.bonemealMutation && fertiliser.canTriggerMutation();
+        }
+        if(this.hasWeed()) {
+            return true;
+        }
+        if(this.hasPlant()) {
+            return fertiliser.isFertiliserAllowed(plant.getTier());
+        }
+        return false;
+    }
+
+    //when fertiliser is applied
+    public void applyFertiliser(IFertiliser fertiliser, Random rand) {
+        if(fertiliser.hasSpecialBehaviour()) {
+            fertiliser.onFertiliserApplied(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord, rand);
+        }
+        if(this.hasPlant()) {
+            Blocks.blockCrop.func_149853_b(this.worldObj, rand, this.xCoord, this.yCoord, this.zCoord);
+            this.markForUpdate();
+        }
+        else if(this.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
+            this.crossOver();
         }
     }
 

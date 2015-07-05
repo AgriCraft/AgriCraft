@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
@@ -9,11 +10,14 @@ import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
+import com.InfinityRaider.AgriCraft.network.MessageFertiliserApplied;
+import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -201,7 +205,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 }
                 if (player.isSneaking()) {
                     this.harvest(world, x, y, z, player);
-                } else if (player.getCurrentEquippedItem() == null) {
+                } else if (player.getCurrentEquippedItem()==null || player.getCurrentEquippedItem().getItem()==null) {
                     //harvest operation
                     this.harvest(world, x, y, z, player);
                 } else if (player.getCurrentEquippedItem().getItem() == Items.debugItem) {
@@ -215,9 +219,17 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 else if (player.getCurrentEquippedItem().getItem() == net.minecraft.init.Items.dye && player.getCurrentEquippedItem().getItemDamage() == 15) {
                     return false;
                 }
-                //magical crops fertiliser
-                else if (LoadedMods.magicalCrops && ConfigurationHandler.integration_allowMagicFertiliser && player.getCurrentEquippedItem().getItem() == Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer")) {
-                    return this.applyMagicalFertiliser(world, x, y, z, player);
+                //fertiliser
+                else if (player.getCurrentEquippedItem().getItem() instanceof IFertiliser) {
+                    IFertiliser fertiliser = (IFertiliser) player.getCurrentEquippedItem().getItem();
+                    if(crop.allowFertiliser(fertiliser)) {
+                        crop.applyFertiliser(fertiliser, world.rand);
+                        NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertiliserApplied(player.getCurrentEquippedItem(), x, y, z), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 32));
+                        if(!player.capabilities.isCreativeMode) {
+                            player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
+                        }
+                    }
+                    return false;
                 }
                 //allow the debugger to be used
                 else if (player.getCurrentEquippedItem().getItem() instanceof ItemDebugger) {
@@ -265,7 +277,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
             }
             world.setBlockToAir(x,y,z);
             world.removeTileEntity(x, y, z);
-            if(plant!=null) {
+            if(plant!= null) {
                 plant.onPlantRemoved(world, x, y, z);
             }
         }
@@ -304,7 +316,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                         this.dropBlockAsItem(world, x, y, z, drop);
                     }
                 }
-
             }
         }
     }
@@ -326,24 +337,6 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         else if(crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
             crop.crossOver();
         }
-    }
-
-    //magical fertiliser
-    private boolean applyMagicalFertiliser(World world, int x, int y, int z, EntityPlayer player) {
-        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        boolean allow = crop.hasPlant() && !crop.isMature() && crop.isFertile();
-        if (allow) {
-            if (ConfigurationHandler.integration_instantMagicFertiliser)  {
-                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
-            } else {
-                this.func_149853_b(world, world.rand, x, y, z);
-            }
-
-            if(!player.capabilities.isCreativeMode) {
-                player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
-            }
-        }
-        return allow;
     }
 
     //neighboring blocks get updated
