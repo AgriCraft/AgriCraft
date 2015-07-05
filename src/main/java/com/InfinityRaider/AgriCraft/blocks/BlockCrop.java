@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.compatibility.LoadedMods;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
@@ -28,15 +28,12 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import tconstruct.items.tools.Scythe;
-import tconstruct.library.tools.AbilityHelper;
 import vazkii.botania.api.item.IGrassHornExcempt;
 
 import java.util.ArrayList;
@@ -235,24 +232,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 else if (player.getCurrentEquippedItem().getItem() instanceof ItemDebugger) {
                     return false;
                 }
-                //tinker's construct scythe
-                else if (LoadedMods.tconstruct && player.getCurrentEquippedItem().getItem() instanceof Scythe) {
-                    NBTTagCompound tag = player.getCurrentEquippedItem().stackTagCompound;
-                    if(tag==null || !tag.hasKey("InfiTool")) {
-                        //invalid tool
-                        return true;
-                    }
-                    NBTTagCompound toolTag = tag.getCompoundTag("InfiTool");
-                    for (int xPos = x - 1; xPos <= x + 1; xPos++) {
-                        for (int zPos = z - 1; zPos <= z + 1; zPos++) {
-                            if(toolTag.getBoolean("Broken")) {
-                                break;
-                            }
-                            else if (world.getBlock(xPos, y, zPos) instanceof BlockCrop && this.harvest(world, xPos, y, zPos, player)) {
-                                AbilityHelper.damageTool(player.getCurrentEquippedItem(), 1, player, false);
-                            }
-                        }
-                    }
+                //mod interaction
+                else if (ModHelper.isRightClickHandled(player.getCurrentEquippedItem().getItem())) {
+                    return ModHelper.handleRightClickOnCrop(world, x, y, z, player, player.getCurrentEquippedItem(), this, crop);
                 } else {
                     //harvest operation
                     this.harvest(world, x, y, z, player);

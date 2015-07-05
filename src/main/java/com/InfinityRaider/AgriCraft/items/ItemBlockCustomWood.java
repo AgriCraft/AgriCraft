@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -60,7 +61,7 @@ public class ItemBlockCustomWood extends ItemBlock {
             if(plank.getItem() instanceof ItemBlock) {
                 // Skip the ExU stuff for now as we don't support its textures yet
                 // TODO: Find out how ExU generates the colored textures and integrate it
-                if (LoadedMods.extraUtilities && ((ItemBlock) plank.getItem()).field_150939_a.getClass().getSimpleName().equals("BlockColor"))
+                if (Loader.isModLoaded(Names.Mods.extraUtilities) && ((ItemBlock) plank.getItem()).field_150939_a.getClass().getSimpleName().equals("BlockColor"))
                     continue;
 
                 if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {

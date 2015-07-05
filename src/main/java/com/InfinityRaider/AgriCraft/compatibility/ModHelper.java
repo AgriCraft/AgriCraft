@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applemilktea.AppleMilkTeaHelper;
@@ -24,19 +25,27 @@ import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHel
 import com.InfinityRaider.AgriCraft.compatibility.pneumaticcraft.PneumaticCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.rotarycraft.RotaryCraftHelper;
+import com.InfinityRaider.AgriCraft.compatibility.tconstruct.TinkersConstructHelper;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.waila.WailaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.weeeflowers.WeeeFlowersHelper;
 import com.InfinityRaider.AgriCraft.compatibility.witchery.WitcheryHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import cpw.mods.fml.common.Loader;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class ModHelper {
     private static final HashMap<String, ModHelper> modHelpers = new HashMap<String, ModHelper>();
+    private static final HashMap<Item, ModHelper> modTools = new HashMap<Item, ModHelper>();
 
-    public static ModHelper createInstance(Class<? extends ModHelper> clazz) {
+    private static ModHelper createInstance(Class<? extends ModHelper> clazz) {
         ModHelper helper = null;
         try {
             helper = clazz.newInstance();
@@ -61,6 +70,25 @@ public abstract class ModHelper {
         return Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
     }
 
+    public static boolean isRightClickHandled(Item tool) {
+        return modTools.containsKey(tool);
+    }
+
+    public static boolean handleRightClickOnCrop(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
+        if(isRightClickHandled(stack.getItem())) {
+            return modTools.get(stack.getItem()).useTool(world, x, y, z, player, stack, block, crop);
+        }
+        return false;
+    }
+
+    protected boolean useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
+        return false;
+    }
+
+    protected List<Item> getTools() {
+        return null;
+    }
+
     protected abstract void init();
 
     protected abstract void initPlants();
@@ -76,6 +104,14 @@ public abstract class ModHelper {
             boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
             if(flag) {
                 helper.init();
+                List<Item> tools = helper.getTools();
+                if(tools != null) {
+                    for(Item tool:tools) {
+                        if(tool!=null) {
+                            modTools.put(tool, helper);
+                        }
+                    }
+                }
             }
         }
     }
@@ -127,6 +163,7 @@ public abstract class ModHelper {
                 PsychedelicraftHelper.class,
                 RotaryCraftHelper.class,
                 ThaumcraftHelper.class,
+                TinkersConstructHelper.class,
                 WailaHelper.class,
                 WeeeFlowersHelper.class,
                 WitcheryHelper.class
