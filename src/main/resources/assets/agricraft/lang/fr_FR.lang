@@ -20,6 +20,7 @@ item.agricraft:nuggetAluminum.name=Pépite d'aluminium
 item.agricraft:nuggetNickel.name=Pépite de nickel
 item.agricraft:nuggetPlatinum.name=Pépite de platine
 item.agricraft:nuggetOsmium.name=Pépite d'osmium 
+item.agricraft:nuggetQuartz.name=Éclat de quartz
 
 item.agricraft:seedPotato.name=Semence de pomme de terre
 item.agricraft:seedCarrot.name=Graine de carotte
@@ -33,10 +34,11 @@ item.agricraft:seedTulipOrange.name=Bulbe de tulipe orange
 item.agricraft:seedTulipWhite.name=Bulbe de tulipe blanche
 item.agricraft:seedTulipPink.name=Bulbe de tulipe rose
 item.agricraft:seedDaisy.name=Graines de pâquerette
-item.agricraft:seedCactus.name=Graine de cactus
+item.agricraft:seedCactus.name=Graines de cactus
 item.agricraft:seedShroomRed.name=Spore d'amanite
 item.agricraft:seedShroomBrown.name=Spore de bolet
 item.agricraft:seedNitorWart.name=Spore de verrues de Nitor
+item.agricraft:seedQuartzanthemum=Graine de quartzanthème
 
 item.agricraft:seedBotaniaWhite.name=Graines de fleur mystique blanche
 item.agricraft:seedBotaniaOrange.name=Graines de fleur mystique orange
@@ -54,6 +56,17 @@ item.agricraft:seedBotaniaBrown.name=Graines de fleur mystique marron
 item.agricraft:seedBotaniaGreen.name=Graines de fleur mystique verte
 item.agricraft:seedBotaniaRed.name=Graines de fleur mystique rouge
 item.agricraft:seedBotaniaBlack.name=Graines de fleur mystique noire
+// Thaumcraft
+item.agricraft:seedCinderpearl.name=Graines de perlecendre
+item.agricraft:seedShimmerleaf.name=Graines de brillefeuille
+item.agricraft:seedVishroom.name=Spores de chamvisgnon
+item.agricraft:seedTaintedRoot.name=Graines de racine corrompue
+// Ars magica
+item.agricraft:seedAum.name=Aum Seeds
+item.agricraft:seedCerublossom.name=Cerublossom Seeds
+item.agricraft:seedDesertNova.name=Desert Nova Seeds
+item.agricraft:seedTarmaRoot.name=Tarma Root Seeds
+item.agricraft:seedWakebloom.name=Wakebloom seeds
 
 item.agricraft:seedFerranium.name=Graines de ferranium
 item.agricraft:seedAurigold.name=Graines de aurigold 
@@ -74,10 +87,12 @@ item.agricraft:seedOsmonium.name=Graines d'osmonium
 //blocks
 tile.agricraft:crops.name=Tuteurs
 tile.agricraft:seedAnalyzer.name=Analyseur de graines
+tile.agricraft:waterPad.name=Protection d'eau
 tile.agricraft:waterTank.0.name=Réservoire d'eau en bois
 tile.agricraft:waterTank.1.name=Réservoire d'eau en fer
 tile.agricraft:waterChannel.0.name=Cannal d'irrigation en bois
 tile.agricraft:waterChannel.1.name=Cannal d'irrigation en fer
+tile.agricraft:waterChannel.1.name=Tuyau d'irrigation en fer
 tile.agricraft:channelValve.0.name=Vanne de cannal en bois
 tile.agricraft:channelValve.1.name=Vanne de cannal en fer
 
@@ -99,6 +114,7 @@ tile.agricraft:cropCactus.name=Cactus
 tile.agricraft:cropShroomRed.name=Amanite
 tile.agricraft:cropShroomBrown.name=Bolet
 tile.agricraft:cropNitorWart.name=Verrues de Nitor
+tile.agricraft:cropQuartzanthemum.name=Quartzanthème
 
 tile.agricraft:cropBotaniaWhite.name=Fleur mystique blanche
 tile.agricraft:cropBotaniaOrange.name=Fleur mystique orange
@@ -116,6 +132,17 @@ tile.agricraft:cropBotaniaBrown.name=Fleur mystique marron
 tile.agricraft:cropBotaniaGreen.name=Fleur mystique verte
 tile.agricraft:cropBotaniaRed.name=Fleur mystique rouge
 tile.agricraft:cropBotaniaBlack.name=Fleur mystique noire
+// Thaumcraft
+tile.agricraft:cropCinderpearl.name=Perlecendre
+tile.agricraft:cropShimmerleaf.name=Brillefeuille
+tile.agricraft:cropVishroom.name=Chamvisgnon
+tile.agricraft:cropTaintedRoot.name=Racine corrompue
+// Ars magica
+tile.agricraft:cropAum.name=Aum
+tile.agricraft.cropCerublossom.name=Cerublossom
+tile.agricraft.cropDesertNova.name=Desert Nova
+tile.agricraft.cropTarmaRoot.name=Tarma Root
+tile.agricraft.cropWakebloom.name=Wakebloom
 
 tile.agricraft:cropFerranium.name=Ferranium
 tile.agricraft:cropAurigold.name=Aurigold
@@ -131,6 +158,9 @@ tile.agricraft:cropJaslumine.name=Jaslumine
 tile.agricraft:cropNiccissus.name=Niccissus
 tile.agricraft:cropPlatiolus.name=Platiolus
 tile.agricraft:cropOsmonium.name=Osmonium
+
+//entities
+entity.AgriCraft.villagerFarmer.name=Villageois
 
 //tooltips
 agricraft_tooltip.unidentified=Inconnue
@@ -156,9 +186,12 @@ agricraft_tooltip.closed=Fermé
 agricraft_tooltip.open=Ouvert
 agricraft_tooltip.state=Etat
 agricraft_tooltip.empty=Pas de semis
+agricraft_tooltip.waterPadDry=Creusez avec une pelle dans des terres agricoles pour créer une petite fosse
+agricraft_tooltip.waterPadWet=ensuite utilisez un seau d'eau pour le remplir
 
 // nei GUI
-agricraft_nei.mutation.title=Tuteur de mutation
+agricraft_nei.mutation.title=Mutation des tuteurs
+agricraft_nei.cropProduct.title=Production des tuteurs
 agricraft_nei.soil=Sol
 agricraft_nei.needs=Demande
 agricraft_nei.below=Dessous
@@ -191,6 +224,7 @@ agricraft_journal.cactus=Les cactus peuvent être cultivés pour produire une su
 agricraft_journal.shroomRed=Ce goût de champignon rouge est en réalité tout à fait agréables et ferait un bon ingrédient pour le ragoût de champignon.
 agricraft_journal.shroomBrown=Ce goût de champignon brun est en réalité tout à fait agréables et ferait un bon ingrédient pour le ragoût de champignon.
 agricraft_journal.nitorWart=Cette culture du nether semblait être éteinte, eldars parle de son extraction de particules de pierre lumineuse de son environnement pour produire de la poussière lumineuse.
+agricraft_journal.quartzanthemum=Une culture du nether qui remplie des fractions de quartz dans le sol.
 agricraft_journal.diamahlia=Beaucoup continue de croire que cette fleur n'existe que dans les contes et légendes. Cependant, quelques agronomes disent qu'ils ont réussi à obtenir de cette légendaire plante.
 agricraft_journal.aurigold=L'aurigold est une fleur rare et légendaire qui s'alimente des minuscules fractions d'or dans le sol. Seul un agronome très patient et habile peut cultiver ce bijou.
 agricraft_journal.ferranium=Les racines de cette plante étrange ne craignent pas de l'eau. Elles creusent juste dans le sol en absorbant les particules de fer pour se renforcer.
@@ -224,10 +258,24 @@ agricraft_journal.botaniaGreen=Cette fleur mystique a de jolies pétales vertes,
 agricraft_journal.botaniaRed=Cette fleur mystique a de jolies pétales rouges, qui sait à quoi elles pourraient être utiles.
 agricraft_journal.botaniaBlack=Cette fleur mystique a de jolies pétales noires, qui sait à quoi elles pourraient être utiles.
 
+//thaumcraft seeds
+agricraft_journal.shimmerleaf=Les fleurs étranges, rayonnantes grandissent seulement dans l'ombre d'arbres en bois d'argent. Elles peuvent être récoltées et broyées pour produire du vif-argent
+agricraft_journal.cinderpearl=Visible seulement dans les climats chauds, cette plante brûle d'un feu élémentaire. Elles peuvent êtres récoltées et broyées pour produire une poudre fine semblable à la poudre d'incendiaire.
+agricraft_journal.vishroom=Le chamvisgnon pousse naturellement dans les fôrets magiques, lorqu'ils sont touchés à main nu, leur poison est connu pour provoquer la nausée.
+agricraft_journal.taintedRoot=Les racines corrompues peuvent être cultivées et récoltées dans les terres corrompues, mais qui pourrait avoir besoin des tentacules qu'ils produisent ?
+
+//ars magica seeds
+agricraft_journal.aum=Une fleur avec des propriétés de soin, Aum est un composant dans beaucoup de charmes. It can only be found at the base of witchwood trees.
+agricraft_journal.cerublossom=Cerublossom flowers thrive in lush, green environments. They were one of the first magical plants discovered, being used in potions and salves.
+agricraft_journal.desertNova=Desert Novas grow in dry conditions. They get their name from the small bursts of magic that they periodically emit.
+agricraft_journal.tarmaRoot=Lighter than it looks, Tarma Root grows in caves and other dark places. It is an ingredient in spells and air essences.
+agricraft_journal.wakebloom=Growing on the surface of water in warm climates, wakebloom is used frequently in water-based spells.
+
 //minecraft seeds
 agricraft_journal.seeds=Le blé est une culture très commune, mais très nutritive.
 agricraft_journal.pumpkin=La plupart des gens considèrent des potirons comme un légume décoratif, tandis que d'autres aiment le goût des tartes à la citrouille.
 agricraft_journal.melon=À cause de son gout sucré et son haut taux d'humidité, le melon est un fruit aimé de tous.
+agricraft_journal.nether_wart=Les verrues du Nether semblent avoir été cultivés dans les forteresses abandonnées du Nether.
 
 //natura seeds
 agricraft_journal.barleyNatura=Quelques personnes préfèrent le goût de pain d'orge au pain normal, tandis que d'autres prétendent que cela a exactement le même goût.
@@ -303,5 +351,54 @@ agricraft_journal.pmp_Onion=L'oignon est un fan de cavité, a des feuilles vert-
 agricraft_journal.pmp_Spinach=Le personnage de dessin animé Popeye le marin est dépeint comme ayant une grosse affinité aux épinards, Le rendant plus fort dès qu'il les consomment.
 agricraft_journal.pmp_Tomato=La tomate est consommée de façons diverses, y compris crue, comme un ingrédient dans beaucoup de plats, sauces, en salades et en boissons.
 
+//witchery seeds
+agricraft_journal.wi_Belladonna=Tout sur cette plante est hautement toxique : Ces feuilles, ces bulbes et ses fleurs.
+agricraft_journal.wi_Garlic=According to folklore garlic can be used to repel vampires, but who believes in vampires anyway, right?
+agricraft_journal.wi_Mandrake=A mythical plant that when uprooted and woken up will make painful screeching noises.
+agricraft_journal.wi_Snowbell=Snowbells are pretty flowers that seem to freeze all the water they soak up.
+agricraft_journal.wi_Artichoke=The water artichoke is an odd variaty of artichoke, only few know what on earth it is useful for.
+agricraft_journal.wi_Wolfsbane=Tales tell of this flower revealing the true nature of people suffering from lycanthropy.
+agricraft_journal.wi_Wormwood=Wormwood is a rare plant, herbologists praise its fever suppressing capabilities.
+
 //chococraft seeds
 agricraft_journal.cc_Gysahl=Le gysahl vert est l'en-cas préféré de Chocobo légendaire. Parfois un gysahl vert peut produire un gysahl charmant et certains disent qu'une plante bien cultivée peut produire gysahl d'or.
+
+//psychedelicraft seeds
+agricraft_journal.pc_cannabis=Aussi communément appelé marihuana,  elle est très populaire comme un drogue douce.
+agricraft_journal.pc_coca=Les feuilles de cette plante forme le matériel de base pour produire la cocaïne.
+agricraft_journal.pc_hop=Le houblon est utilisé pour distiller toutes sortes de bières.
+agricraft_journal.pc_tobacco=Le tabac est fumé dans le monde entier malgrès ses effets néfastes sur notre santé.
+
+//blue power flax
+agricraft_journal.bp_flax_seeds=Flax is String ~Sjin.
+
+//pneumaticCraft plants
+agricraft.journal_PC.plant0=These plants grow squids inside their bulbs which sometimes carry a seed.
+agricraft.journal_PC.plant1=Mature plants spout fire and somethimes a seed.
+agricraft.journal_PC.plant2=When mature these plants explode themselves leaving behind some seeds.
+agricraft.journal_PC.plant3=These plants grow slimes inside of their bulbs which sometimes carry a seed.
+agricraft.journal_PC.plant4=When mature, these plants can make seeds rain from the sky during a storm.
+agricraft.journal_PC.plant5=Mature plants teleport a seed to a nearby, random location.
+agricraft.journal_PC.plant6=During a storm these plants attract lightning strikes.
+agricraft.journal_PC.plant8=When mature these plants burst out a seed.
+agricraft.journal_PC.plant9=These plants puff out clouds of smoke, who knows what effect these fumes have.
+agricraft.journal_PC.plant10=The seeds of these plants are highly repulsive and will bounce away on the ground.
+agricraft.journal_PC.plant11=Because the seeds of this plant are lighter than air, they fly up into the stratosphere.
+agricraft.journal_PC.plant12=When matured these plants spit out 4 seeds which then fly into different directions.
+agricraft.journal_PC.plant14=These plants propel seeds at high velocity over the ground, they only stop when hitting a wall.
+agricraft.journal_PC.plant15=The seeds of these plants ride along the wind to find fertile soil.
+
+//applemilktea
+agricraft.journal_AMT.item.defeatedcrow.seedMint:0=The leafes of this plant can be used to set a good cup of mint tea or to give some extra taste to a dish.
+
+//rotarycraft
+agricraft.journal_RoC.canola=The husks of the canola seed can be centrifuged into a liquid with excellent lubricating properties.
+
+//immersive engineering
+agricraft_journal.ie_hemp=Hemp fibers are a key resource in quite a few industrial applications.
+
+//extra biomes xl
+agricraft_journal.EBXL_strawberry=Strawberries are popular and rewarding plants to grow in the domestic environment, be it for consumption or exhibition purposes.
+
+//biomes o plenty
+agricraft_journal.BoP_turnip=The turnip is a root vegetable commonly grown in temperate climates worldwide for its white, bulbous taproot.
