@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerSeedStorage extends ContainerSeedStorageDummy {
@@ -25,7 +26,8 @@ public class ContainerSeedStorage extends ContainerSeedStorageDummy {
 
     @Override
     public List<ItemStack> getSeedEntries() {
-        return null;
+        ArrayList<ItemStack> list = this.te.getInventory();
+        return list;
     }
 
     @Override

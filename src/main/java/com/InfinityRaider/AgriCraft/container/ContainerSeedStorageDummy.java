@@ -58,12 +58,27 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
     }
 
     /**
+     * returns a list if itemStacks, for each slot.
+     */
+    @Override
+    public List getInventory() {
+        List list = super.getInventory();
+        for(ItemStack stack:this.getSeedEntries()) {
+            //list.add(stack);
+        }
+        return list;
+    }
+
+    /**
      * Tries to move an item stack form the correct tile entity to the player's inventory
      */
     public void moveStackFromTileEntityToPlayer(int slotId, ItemStack stack) {
         ISeedStorageControllable controllable = this.getControllable(stack);
         if(controllable!=null) {
             ItemStack stackToMove = controllable.getStackInSlot(slotId);
+            if(stack==null) {
+                return;
+            }
             stackToMove.stackSize = stack.stackSize;
             stackToMove.stackTagCompound = controllable.getStackInSlot(slotId).stackTagCompound;
             if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
@@ -71,10 +86,11 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
                     LogHelper.debug("Sending command to server");
                     //this method is only called form the gui client side, so we need to manually tell the server to execute it there
                     NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(stack, Minecraft.getMinecraft().thePlayer, slotId));
+                } else {
+                    LogHelper.debug("Command received");
+                    //on the server decrease the size of the stack, where it is synced to the client
+                    controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
                 }
-                LogHelper.debug("Command received");
-                //on the server decrease the size of the stack, where it is synced to the client
-                controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
             }
         }
     }
@@ -84,33 +100,33 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int clickedSlot) {
-        ItemStack itemstack = null;
+        ItemStack originalStackInSlot = null;
         Slot slot = (Slot)this.inventorySlots.get(clickedSlot);
         if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
+            ItemStack notMergedStack = slot.getStack();
+            originalStackInSlot = notMergedStack.copy();
             if(slot!=null) {
                 //try to move item from the player's inventory into the container
-                if(SeedHelper.isAnalyzedSeed(itemstack1)) {
-                    if (this.addSeedToStorage(itemstack1)) {
-                        itemstack1.stackSize = 0;
+                if(SeedHelper.isAnalyzedSeed(notMergedStack)) {
+                    if (this.addSeedToStorage(notMergedStack)) {
+                        notMergedStack.stackSize = 0;
                     } else {
                         return null;
                     }
                 }
             }
-            if (itemstack1.stackSize == 0) {
+            if (notMergedStack.stackSize == 0) {
                 slot.putStack(null);
             }
             else {
                 slot.onSlotChanged();
             }
-            if (itemstack1.stackSize == itemstack.stackSize) {
+            if (notMergedStack.stackSize == originalStackInSlot.stackSize) {
                 return null;
             }
-            slot.onPickupFromSlot(player, itemstack1);
+            slot.onPickupFromSlot(player, notMergedStack);
         }
-        return itemstack;
+        return originalStackInSlot;
     }
 
     /**
