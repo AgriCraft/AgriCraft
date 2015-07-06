@@ -50,7 +50,7 @@ public class MessageFertiliserApplied extends MessageAgriCraft {
         @Override
         public IMessage onMessage(MessageFertiliserApplied message, MessageContext ctx) {
             if(message!=null && message.fertiliser!=null && message.fertiliser instanceof IFertiliser) {
-                ((IFertiliser) message.fertiliser).performClientAnimations(message.meta, Minecraft.getMinecraft().theWorld, message.x, message.y, message.z);
+                ((IFertiliser) message.fertiliser).performClientAnimations(message.meta, Minecraft.getMinecraft().thePlayer.worldObj, message.x, message.y, message.z);
             }
             return null;
         }
