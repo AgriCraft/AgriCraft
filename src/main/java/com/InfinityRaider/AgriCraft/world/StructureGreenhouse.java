@@ -255,7 +255,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
                     }
                     ++nrVillagersSpawned;
                     EntityVillager entityvillager = new EntityVillagerFarmer(world, this.getVillagerType(i1));
-                    entityvillager.setLocationAndAngles((double) j1 + 0.5D, (double) k1, (double) l1 + 0.5D, 0.0F, 0.0F);
+                    entityvillager.setLocationAndAngles((double) j1 + 0.5D, (double) k1+1, (double) l1 + 0.5D, 0.0F, 0.0F);
                     world.spawnEntityInWorld(entityvillager);
                 }
             }
