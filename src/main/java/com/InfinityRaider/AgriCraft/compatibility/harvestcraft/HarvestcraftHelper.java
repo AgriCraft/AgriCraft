@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 
 import java.lang.reflect.Field;
@@ -34,6 +35,10 @@ public final class HarvestcraftHelper extends ModHelper {
                     Object obj = field.get(null);
                     if(obj instanceof ItemSeeds) {
                         ItemSeeds seed = (ItemSeeds) obj;
+                        if(seed== Item.itemRegistry.getObject("harvestcraft:cottonItem")) {
+                            //cotton, the produce of cotton seeds is also instance of ItemSeeds, but we want to ignore it
+                            continue;
+                        }
                         CropPlantHandler.registerPlant(new CropPlantHarvestCraft(seed));
                     }
                 } catch (Exception e) {
