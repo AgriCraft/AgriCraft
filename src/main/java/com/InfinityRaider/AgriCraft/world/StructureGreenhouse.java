@@ -204,7 +204,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
                     crop.setCrossCrop(true);
                 }
                 else {
-                    ItemStack seed = SeedHelper.getRandomSeed(new Random(), false);
+                    ItemStack seed = SeedHelper.getRandomSeed(new Random(), false, 3);
                     crop.setPlant((int) Math.ceil(Math.random() * 7), (int) Math.ceil(Math.random() * 7), (int) Math.ceil(Math.random() * 7), false, seed.getItem(), seed.getItemDamage());
                 }
             }

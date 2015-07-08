@@ -251,15 +251,24 @@ public abstract class SeedHelper {
 
     //get a random seed
     public static ItemStack getRandomSeed(Random rand, boolean setTag) {
+        return getRandomSeed(rand, setTag, 5);
+    }
+
+    public static ItemStack getRandomSeed(Random rand, boolean setTag, int maxTier) {
         ArrayList<CropPlant> plants = CropPlantHandler.getPlants();
-        ItemStack seed = plants.get(rand.nextInt(plants.size())).getSeed().copy();
+        boolean flag = false;
+        ItemStack seed = null;
+        while(!flag) {
+            CropPlant plant = plants.get(rand.nextInt(plants.size()));
+            seed = plant.getSeed().copy();
+            flag = (seed.getItem()!=null) && plant.getTier()<=maxTier;
+        }
         if(setTag) {
             NBTTagCompound tag = new NBTTagCompound();
             setNBT(tag, (short) (rand.nextInt(ConfigurationHandler.cropStatCap)/2 + 1), (short) (rand.nextInt(ConfigurationHandler.cropStatCap)/2 + 1), (short) (rand.nextInt(ConfigurationHandler.cropStatCap)/2 + 1), false);
             seed.stackTagCompound = tag;
         }
         return seed;
-
     }
 
     public static void addAllToSeedBlacklist(Collection<? extends ItemStack> seeds) {
