@@ -248,6 +248,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         for(int x=0;x<xSize;x++) {
             for(int y=0;y<ySize;y++) {
                 for(int z=0;z<zSize;z++) {
+                    if(!(this.worldObj.getTileEntity(this.xCoord-xPosition+x, this.yCoord-yPosition+y, this.zCoord-zPosition+z) instanceof TileEntityTank)){
+                        continue;
+                    } 
                     TileEntityTank tank = (TileEntityTank) this.worldObj.getTileEntity(this.xCoord-xPosition+x, this.yCoord-yPosition+y, this.zCoord-zPosition+z);
                     if(tank==null) {
                         continue;
@@ -452,6 +455,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public void setFluidLevel(int lvl) {
         if(lvl!=this.getFluidLevel()) {
             lvl = lvl > this.getTotalCapacity() ? this.getTotalCapacity() : lvl;
+            if(!((TileEntityTank) worldObj.getTileEntity(xCoord - xPosition, yCoord - yPosition, zCoord - zPosition) instanceof TileEntityTank)){
+                return; 
+            }
             TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(xCoord - xPosition, yCoord - yPosition, zCoord - zPosition);
             if(tank != null) {
                 tank.fluidLevel = lvl;
