@@ -9,6 +9,7 @@ import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.*;
+import com.InfinityRaider.AgriCraft.renderers.player.RenderPlayerHooks;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
@@ -125,6 +126,7 @@ public class ClientProxy extends CommonProxy {
         super.registerEventHandlers();
         FMLCommonHandler.instance().bus().register(new ItemToolTipHandler());
         MinecraftForge.EVENT_BUS.register(new ItemToolTipHandler());
+        MinecraftForge.EVENT_BUS.register(new RenderPlayerHooks());
     }
 
     //initialize NEI
