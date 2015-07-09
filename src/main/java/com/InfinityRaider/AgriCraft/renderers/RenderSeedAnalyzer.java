@@ -68,7 +68,9 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
             //rotate the renderer
             GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
             //bind texture
-            Minecraft.getMinecraft().renderEngine.bindTexture(resource);
+            if(resource != null) {
+                Minecraft.getMinecraft().renderEngine.bindTexture(resource);
+            }
             //start drawing
             tessellator.startDrawingQuads();
                 //front
