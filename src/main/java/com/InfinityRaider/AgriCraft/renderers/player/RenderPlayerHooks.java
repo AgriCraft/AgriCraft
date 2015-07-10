@@ -24,6 +24,9 @@ public final class RenderPlayerHooks {
     }
 
     private void registerPlayerEffectRenderer(PlayerEffectRenderer renderer) {
+        if(effectRenderers == null) {
+            effectRenderers = new HashMap<String, PlayerEffectRenderer>();
+        }
         this.effectRenderers.put(renderer.getUUID(), renderer);
     }
 
