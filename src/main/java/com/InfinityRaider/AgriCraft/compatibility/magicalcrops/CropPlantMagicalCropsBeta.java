@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class CropPlantMagicalCropsBeta extends CropPlantGeneric {
     private Item drop;
@@ -57,22 +56,17 @@ public class CropPlantMagicalCropsBeta extends CropPlantGeneric {
     private void getDrop() {
         Block plant = getPlant();
         try {
-            if (highTier()) {
-                Method method = Class.forName("com.mark719.magicalcrops.crops.BlockMagicalCrops").getMethod("getItemDropped", new Class[]{int.class, Random.class, int.class});
-                this.drop = (Item) method.invoke(plant, new Object[]{7, null, 0});
-            } else {
-                Class clazz = plant.getClass();
-                Method[] methods = clazz.getDeclaredMethods();
-                for(Method method:methods) {
-                    String name = method.getName();
-                    if(name.equals("func_149865_P")) {
-                        method.setAccessible(true);
-                        this.drop = (Item) method.invoke(plant);
-                        if(clazz.getName().equals("com.mark719.magicalcrops.crops.BlockModMagicCropIridium")) {
-                            this.highTier = true;
-                        }
-                        break;
+            Class clazz = plant.getClass();
+            Method[] methods = clazz.getDeclaredMethods();
+            for (Method method : methods) {
+                String name = method.getName();
+                if (name.equals("func_149865_P")) {
+                    method.setAccessible(true);
+                    this.drop = (Item) method.invoke(plant);
+                    if (clazz.getName().equals("com.mark719.magicalcrops.crops.BlockModMagicCropIridium")) {
+                        this.highTier = true;
                     }
+                    break;
                 }
             }
         } catch (Exception e) {
