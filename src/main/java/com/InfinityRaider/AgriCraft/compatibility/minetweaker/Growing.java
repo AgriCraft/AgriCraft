@@ -406,7 +406,7 @@ public class Growing {
 
             @Override
             public String describeUndo() {
-                String blockString = oldReqBlock != null ? oldReqBlock.getBlock().getLocalizedName() : "DEFAULT";
+                String blockString = (oldReqBlock!=null && oldReqBlock.getBlock()!=null) ? oldReqBlock.getBlock().getLocalizedName() : "DEFAULT";
                 return "Resetting base block requirement for seed " + seedStack.getDisplayName() + " to "
                         + blockString + " (" + oldRequiredType.toString() + ")";
             }
