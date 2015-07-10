@@ -1,22 +1,30 @@
 package com.InfinityRaider.AgriCraft.compatibility.magicalcrops;
 
+import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import cpw.mods.fml.common.Mod;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.List;
 
 public final class MagicalCropsHelper extends ModHelper {
     private boolean newVersion;
+    private IFertiliser fertiliser;
 
     @Override
     protected void init() {
@@ -116,6 +124,29 @@ public final class MagicalCropsHelper extends ModHelper {
                 }
             }
         }
+    }
+
+    @Override
+    protected boolean useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
+        if(fertiliser!=null) {
+            crop.applyFertiliser(fertiliser, world.rand);
+            if(!player.capabilities.isCreativeMode) {
+                player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected List<Item> getTools() {
+        if(newVersion) {
+            return null;
+        }
+        fertiliser = new MagicalCropsFertiliser();
+        ArrayList<Item> list = new ArrayList<Item>();
+        list.add((Item) Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer"));
+        return list;
     }
 
     @Override

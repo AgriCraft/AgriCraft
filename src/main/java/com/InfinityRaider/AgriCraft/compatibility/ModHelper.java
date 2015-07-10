@@ -105,14 +105,6 @@ public abstract class ModHelper {
             boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
             if(flag) {
                 helper.init();
-                List<Item> tools = helper.getTools();
-                if(tools != null) {
-                    for(Item tool:tools) {
-                        if(tool!=null) {
-                            modTools.put(tool, helper);
-                        }
-                    }
-                }
             }
         }
     }
@@ -133,6 +125,14 @@ public abstract class ModHelper {
             boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
             if(flag) {
                 helper.postTasks();
+                List<Item> tools = helper.getTools();
+                if(tools != null) {
+                    for(Item tool:tools) {
+                        if(tool!=null) {
+                            modTools.put(tool, helper);
+                        }
+                    }
+                }
             }
         }
     }
