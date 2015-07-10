@@ -211,6 +211,9 @@ public abstract class IOHelper {
 
     //gets an itemstack from a string: name:meta
     public static ItemStack getStack(String input) {
+        if(input.equalsIgnoreCase("null")) {
+            return null;
+        }
         String[] data = input.split(":");
         int meta = 0;
 

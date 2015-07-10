@@ -83,6 +83,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
             }
             if(arg instanceof BlockWithMeta) {
                 base = (BlockWithMeta) arg;
+                base = base.getBlock()==null?null:base;
                 continue;
             }
             if(arg instanceof RenderMethod) {
