@@ -107,20 +107,20 @@ public abstract class MutationHandler {
         ArrayList<Mutation> list = new ArrayList<Mutation>();
         switch (parents.length) {
             case 2:
-                list.addAll(MutationHandler.getMutations(parents[0], parents[1]));
+                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[1]));
                 break;
             case 3:
-                list.addAll(MutationHandler.getMutations(parents[0], parents[1]));
-                list.addAll(MutationHandler.getMutations(parents[0], parents[2]));
-                list.addAll(MutationHandler.getMutations(parents[1], parents[2]));
+                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[1]));
+                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[2]));
+                list.addAll(MutationHandler.getMutationsFromParent(parents[1], parents[2]));
                 break;
             case 4:
-                list.addAll(MutationHandler.getMutations(parents[0], parents[1]));
-                list.addAll(MutationHandler.getMutations(parents[0], parents[2]));
-                list.addAll(MutationHandler.getMutations(parents[0], parents[3]));
-                list.addAll(MutationHandler.getMutations(parents[1], parents[2]));
-                list.addAll(MutationHandler.getMutations(parents[1], parents[3]));
-                list.addAll(MutationHandler.getMutations(parents[2], parents[3]));
+                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[1]));
+                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[2]));
+                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[3]));
+                list.addAll(MutationHandler.getMutationsFromParent(parents[1], parents[2]));
+                list.addAll(MutationHandler.getMutationsFromParent(parents[1], parents[3]));
+                list.addAll(MutationHandler.getMutationsFromParent(parents[2], parents[3]));
                 break;
         }
         return cleanMutationArray(list.toArray(new Mutation[list.size()]));
@@ -138,7 +138,7 @@ public abstract class MutationHandler {
     }
 
     //finds the product of two parents
-    private static ArrayList<Mutation> getMutations(TileEntityCrop parent1, TileEntityCrop parent2) {
+    private static ArrayList<Mutation> getMutationsFromParent(TileEntityCrop parent1, TileEntityCrop parent2) {
         Item seed1 = parent1.getSeedStack().getItem();
         Item seed2 = parent2.getSeedStack().getItem();
         int meta1 = parent1.getSeedStack().getItemDamage();
@@ -217,7 +217,7 @@ public abstract class MutationHandler {
     private static boolean canInheritStats(Item child, int childMeta, Item seed, int seedMeta) {
         boolean b = child==seed && childMeta==seedMeta;
         if(!b) {
-            for(Mutation mutation:getParentMutations(child, childMeta)) {
+            for(Mutation mutation: getMutationsFromChild(child, childMeta)) {
                 if(mutation!=null) {
                     ItemStack parent1Stack = mutation.getParents()[0];
                     ItemStack parent2Stack = mutation.getParents()[1];
@@ -255,7 +255,7 @@ public abstract class MutationHandler {
     }
 
     //gets all the mutations this crop can mutate to
-    public static Mutation[] getMutations(ItemStack stack) {
+    public static Mutation[] getMutationsFromParent(ItemStack stack) {
         ArrayList<Mutation> list = new ArrayList<Mutation>();
         for (Mutation mutation : mutations) {
             ItemStack parent1Stack = mutation.getParents()[0];
@@ -271,12 +271,12 @@ public abstract class MutationHandler {
         return list.toArray(new Mutation[list.size()]);
     }
 
-    public static Mutation[] getParentMutations(Item seed, int meta) {
-        return getParentMutations(new ItemStack(seed, 1, meta));
+    public static Mutation[] getMutationsFromChild(Item seed, int meta) {
+        return getMutationsFromChild(new ItemStack(seed, 1, meta));
     }
 
     //gets the parents this crop mutates from
-    public static Mutation[] getParentMutations(ItemStack stack) {
+    public static Mutation[] getMutationsFromChild(ItemStack stack) {
         ArrayList<Mutation> list = new ArrayList<Mutation>();
         if(CropPlantHandler.isValidSeed(stack)) {
             for (Mutation mutation:mutations) {

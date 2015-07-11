@@ -8,6 +8,8 @@ import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAPI;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
+import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
@@ -424,5 +426,38 @@ public class APIimplv1 implements APIv1 {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public IMutation[] getRegisteredMutations() {
+		return MutationHandler.getMutations();
+	}
+
+	@Override
+	public IMutation[] getRegisteredMutationsForParent(ItemStack parent) {
+		return MutationHandler.getMutationsFromParent(parent);
+	}
+
+	@Override
+	public IMutation[] getRegisteredMutationsForChild(ItemStack child) {
+		return MutationHandler.getMutationsFromChild(child);
+	}
+
+	@Override
+	public boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
+		MutationHandler.add(new Mutation(result, parent1, parent2));
+		return false;
+	}
+
+	@Override
+	public boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2, double d) {
+		MutationHandler.add(new Mutation(result, parent1, parent2, d));
+		return true;
+	}
+
+	@Override
+	public boolean removeMutation(ItemStack result) {
+		MutationHandler.removeMutationsByResult(result);
+		return true;
 	}
 }

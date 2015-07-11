@@ -446,4 +446,48 @@ public interface APIv1 extends APIBase {
 	boolean applyFertilizer(World world, int x, int y, int z,
 			ItemStack fertilizer);
 
+	/**
+	 * Gets a list of all mutations currently registered
+	 * Mutations are populated onServerAboutToStartEvent, so any calls before that will return null
+	 */
+	IMutation[] getRegisteredMutations();
+
+	/**
+	 * Gets a list of all mutations that have this stack as a parent
+	 * Mutations are populated onServerAboutToStartEvent, so any calls before that will return null
+	 */
+	IMutation[] getRegisteredMutationsForParent(ItemStack parent);
+
+	/**
+	 * Gets a list of all mutations that have this stack as a child
+	 * Mutations are populated onServerAboutToStartEvent, so any calls before that will return null
+	 */
+	IMutation[] getRegisteredMutationsForChild(ItemStack child);
+
+
+	/**
+	 * Registers a new mutation
+	 * @param result
+	 * @param parent1
+	 * @param parent2
+	 * @return True if successful
+	 */
+	boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2);
+
+	/**
+	 * Registers a new mutation
+	 * @param result
+	 * @param parent1
+	 * @param parent2
+	 * @return True if successful
+	 */
+	boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2, double chance);
+
+	/**
+	 * Removes all mutations that give this stack as a result
+	 * @param result
+	 * @return True if successful
+	 */
+	boolean removeMutation(ItemStack result);
+
 }

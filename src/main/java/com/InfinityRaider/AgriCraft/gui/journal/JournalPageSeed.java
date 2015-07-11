@@ -219,8 +219,8 @@ public class JournalPageSeed extends JournalPage {
     private ArrayList<Mutation> getDiscoveredMutations() {
         ArrayList<Mutation> allMutations = new ArrayList<Mutation>();
         ArrayList<Mutation> mutations = new ArrayList<Mutation>();
-        allMutations.addAll(Arrays.asList(MutationHandler.getMutations(discoveredSeeds.get(page))));
-        allMutations.addAll(Arrays.asList(MutationHandler.getParentMutations(discoveredSeeds.get(page))));
+        allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromParent(discoveredSeeds.get(page))));
+        allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromChild(discoveredSeeds.get(page))));
         for(Mutation mutation:allMutations) {
             if(isMutationDiscovered(mutation)) {
                 mutations.add(mutation);

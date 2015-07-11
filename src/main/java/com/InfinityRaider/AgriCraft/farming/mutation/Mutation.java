@@ -30,10 +30,14 @@ public class Mutation implements IMutation {
     }
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int chance) {
+        this(result, parent1, parent2, ((double) chance)/100);
+    }
+
+    public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, double chance) {
         this.result = result;
         this.parent1 = parent1;
         this.parent2 = parent2;
-        this.chance = ((double) chance)/100;
+        this.chance = chance;
     }
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2) {

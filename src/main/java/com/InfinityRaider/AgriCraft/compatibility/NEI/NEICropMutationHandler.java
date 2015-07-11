@@ -116,7 +116,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
     @Override
     public void loadCraftingRecipes(ItemStack result) {
         if(CropPlantHandler.isValidSeed(result)) {
-            Mutation[] mutations = MutationHandler.getParentMutations(result);
+            Mutation[] mutations = MutationHandler.getMutationsFromChild(result);
             for(Mutation mutation:mutations) {
                 ItemStack parent1Stack = mutation.getParents()[0];
                 ItemStack parent2Stack = mutation.getParents()[1];
@@ -134,7 +134,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             return;
         }
         if(CropPlantHandler.isValidSeed(ingredient)) {
-            Mutation[] mutations = MutationHandler.getMutations(ingredient);
+            Mutation[] mutations = MutationHandler.getMutationsFromParent(ingredient);
             for (Mutation mutation:mutations) {
                 ItemStack resultStack = mutation.getResult();
                 ItemStack parent1Stack = mutation.getParents()[0];
