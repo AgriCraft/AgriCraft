@@ -1,14 +1,33 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import net.minecraft.item.ItemStack;
 
-public class Mutation {
+public class Mutation implements IMutation {
+    private ItemStack result;
+    private ItemStack parent1;
+    private ItemStack parent2;
+    private double chance;
 
-    public ItemStack result;
-    public ItemStack parent1;
-    public ItemStack parent2;
-    public double chance;
+    public ItemStack getResult() {
+        return result.copy();
+    }
+
+    public ItemStack[] getParents() {
+        ItemStack[] parents = new ItemStack[2];
+        parents[0] = parent1.copy();
+        parents[1] = parent2.copy();
+        return parents;
+    }
+
+    public double getChance() {
+        return chance;
+    }
+
+    public void setChance(double d) {
+        this.chance = d;
+    }
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int chance) {
         this.result = result;
@@ -27,10 +46,6 @@ public class Mutation {
         this.result = mutation.result;
         this.parent1 = mutation.parent1;
         this.parent2 = mutation.parent2;
-    }
-
-    public void setChanceOverride(int chance) {
-        this.chance = chance;
     }
 
     @Override

@@ -19,10 +19,10 @@ public class MessageSyncMutation extends MessageAgriCraft {
     }
 
     public MessageSyncMutation(Mutation mutation, boolean last) {
-        this.parent1 = mutation.parent1;
-        this.parent2 = mutation.parent2;
-        this.result = mutation.result;
-        this.chance = mutation.chance;
+        this.parent1 = mutation.getParents()[0];
+        this.parent2 = mutation.getParents()[1];
+        this.result = mutation.getResult();
+        this.chance = mutation.getChance();
         this.last = last;
     }
 

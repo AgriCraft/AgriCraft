@@ -37,10 +37,10 @@ public class CrossOverResult {
 
     /** Creates a new instanced based off the result of the given mutation. Does not validate the mutation object */
     public static CrossOverResult fromMutation(Mutation mutation) {
-        Item seed = mutation.result.getItem();
-        int meta = mutation.result.getItemDamage();
+        Item seed = mutation.getResult().getItem();
+        int meta = mutation.getResult().getItemDamage();
 
-        return new CrossOverResult(seed, meta, mutation.chance);
+        return new CrossOverResult(seed, meta, mutation.getChance());
     }
 
     public ItemStack toStack() {

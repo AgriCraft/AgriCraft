@@ -206,9 +206,12 @@ public class JournalPageSeed extends JournalPage {
             Mutation mutation = mutations.get(i);
             int y = 21 + i*20;
             int x = 132;
-            seeds.add(new Component<ItemStack>(mutation.parent1, x, y, 16, 16));
-            seeds.add(new Component<ItemStack>(mutation.parent2, x + 35, y, 16, 16));
-            seeds.add(new Component<ItemStack>(mutation.result, x + 69, y, 16, 16));
+            ItemStack resultStack = mutation.getResult();
+            ItemStack parent1Stack = mutation.getParents()[0];
+            ItemStack parent2Stack = mutation.getParents()[1];
+            seeds.add(new Component<ItemStack>(parent1Stack, x, y, 16, 16));
+            seeds.add(new Component<ItemStack>(parent2Stack, x + 35, y, 16, 16));
+            seeds.add(new Component<ItemStack>(resultStack, x + 69, y, 16, 16));
         }
         return seeds;
     }
@@ -227,7 +230,10 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private boolean isMutationDiscovered(Mutation mutation) {
-        return isSeedDiscovered(mutation.parent1) && isSeedDiscovered(mutation.parent2) && isSeedDiscovered(mutation.result);
+        ItemStack resultStack = mutation.getResult();
+        ItemStack parent1Stack = mutation.getParents()[0];
+        ItemStack parent2Stack = mutation.getParents()[1];
+        return isSeedDiscovered(parent1Stack) && isSeedDiscovered(parent2Stack) && isSeedDiscovered(resultStack);
     }
 
     private boolean isSeedDiscovered(ItemStack seed) {

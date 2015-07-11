@@ -41,9 +41,12 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
 
         //constructor
         public CachedCropMutationRecipe(Mutation mutation) {
-            this.parent1 = new PositionedStack(mutation.parent1.copy(), Constants.nei_X_parent1, Constants.nei_Y_seeds);
-            this.parent2 = new PositionedStack(mutation.parent2.copy(), Constants.nei_X_parent2, Constants.nei_Y_seeds);
-            this.result = new PositionedStack(mutation.result.copy(), Constants.nei_X_result, Constants.nei_Y_seeds);
+            ItemStack resultStack = mutation.getResult();
+            ItemStack parent1Stack = mutation.getParents()[0];
+            ItemStack parent2Stack = mutation.getParents()[1];
+            this.parent1 = new PositionedStack(parent1Stack, Constants.nei_X_parent1, Constants.nei_Y_seeds);
+            this.parent2 = new PositionedStack(parent2Stack, Constants.nei_X_parent2, Constants.nei_Y_seeds);
+            this.result = new PositionedStack(resultStack, Constants.nei_X_result, Constants.nei_Y_seeds);
 
             IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(result.item.getItem(), result.item.getItemDamage());
             if (growthReq.getSoil() != null) {
@@ -92,7 +95,10 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         if(id.equalsIgnoreCase(NEICropMutationHandler.id)) {
             Mutation[] mutations = MutationHandler.getMutations();
             for (Mutation mutation:mutations) {
-                if (mutation.result.getItem() != null && mutation.parent1.getItem() != null && mutation.parent2.getItem() != null) {
+                ItemStack resultStack = mutation.getResult();
+                ItemStack parent1Stack = mutation.getParents()[0];
+                ItemStack parent2Stack = mutation.getParents()[1];
+                if (resultStack.getItem() != null &&parent1Stack.getItem() != null && parent2Stack.getItem() != null) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));
                 }
             }
@@ -112,7 +118,9 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         if(CropPlantHandler.isValidSeed(result)) {
             Mutation[] mutations = MutationHandler.getParentMutations(result);
             for(Mutation mutation:mutations) {
-                if (mutation.parent1.getItem()!=null && mutation.parent2.getItem()!=null) {
+                ItemStack parent1Stack = mutation.getParents()[0];
+                ItemStack parent2Stack = mutation.getParents()[1];
+                if (parent1Stack.getItem()!=null && parent2Stack.getItem()!=null) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));
                 }
             }
@@ -128,7 +136,10 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
         if(CropPlantHandler.isValidSeed(ingredient)) {
             Mutation[] mutations = MutationHandler.getMutations(ingredient);
             for (Mutation mutation:mutations) {
-                if (mutation.result.getItem() != null && mutation.parent1.getItem() != null && mutation.parent2.getItem() != null) {
+                ItemStack resultStack = mutation.getResult();
+                ItemStack parent1Stack = mutation.getParents()[0];
+                ItemStack parent2Stack = mutation.getParents()[1];
+                if (resultStack.getItem() != null && parent1Stack.getItem() != null && parent2Stack.getItem() != null) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));
                 }
             }
@@ -137,7 +148,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
             BlockWithMeta block = new BlockWithMeta(((ItemBlock) ingredient.getItem()).field_150939_a, ingredient.getItemDamage());
             Mutation[] mutations = MutationHandler.getMutations();
             for(Mutation mutation:mutations) {
-                IGrowthRequirement req = GrowthRequirementHandler.getGrowthRequirement(mutation.result.getItem(), mutation.result.getItemDamage());
+                IGrowthRequirement req = GrowthRequirementHandler.getGrowthRequirement(mutation.getResult().getItem(), mutation.getResult().getItemDamage());
                 if(req.isValidSoil(block)) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));
                     continue;

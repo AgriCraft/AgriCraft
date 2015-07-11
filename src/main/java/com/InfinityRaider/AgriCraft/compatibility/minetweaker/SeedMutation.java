@@ -83,7 +83,9 @@ public class SeedMutation {
         }
 
         private String getEquationString() {
-            return mutation.result.getDisplayName() + " = " + mutation.parent1.getDisplayName() + " + " + mutation.parent2.getDisplayName();
+            ItemStack result = mutation.getResult();
+            ItemStack[] parents = mutation.getParents();
+            return result.getDisplayName() + " = " + parents[0].getDisplayName() + " + " + parents[1].getDisplayName();
         }
     }
 

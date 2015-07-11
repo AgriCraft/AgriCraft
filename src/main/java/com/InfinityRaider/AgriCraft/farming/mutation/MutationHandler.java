@@ -35,9 +35,12 @@ public abstract class MutationHandler {
         //print registered mutations to the log
         LogHelper.info("Registered Mutations:");
         for (Mutation mutation:mutations) {
-            String result = mutation.result.getItem() != null ? (Item.itemRegistry.getNameForObject(mutation.result.getItem()) + ':' + mutation.result.getItemDamage()) : "null";
-            String parent1 = mutation.parent1.getItem() != null ? (Item.itemRegistry.getNameForObject(mutation.parent1.getItem())) + ':' + mutation.parent1.getItemDamage() : "null";
-            String parent2 = mutation.parent2.getItem() != null ? (Item.itemRegistry.getNameForObject(mutation.parent2.getItem())) + ':' + mutation.parent2.getItemDamage() : "null";
+            ItemStack resultStack = mutation.getResult();
+            ItemStack parent1Stack = mutation.getParents()[0];
+            ItemStack parent2Stack = mutation.getParents()[1];
+            String result = resultStack.getItem() != null ? (Item.itemRegistry.getNameForObject(resultStack.getItem()) + ':' + resultStack.getItemDamage()) : "null";
+            String parent1 = parent1Stack.getItem() != null ? (Item.itemRegistry.getNameForObject(parent1Stack.getItem())) + ':' + parent1Stack.getItemDamage() : "null";
+            String parent2 = parent2Stack.getItem() != null ? (Item.itemRegistry.getNameForObject(parent2Stack.getItem())) + ':' + parent2Stack.getItemDamage() : "null";
             String info = " - " + result + " = " + parent1 + " + " + parent2;
             LogHelper.info(info);
         }
@@ -142,10 +145,12 @@ public abstract class MutationHandler {
         int meta2 = parent2.getSeedStack().getItemDamage();
         ArrayList<Mutation> list = new ArrayList<Mutation>();
         for (Mutation mutation:mutations) {
-            if ((seed1==mutation.parent1.getItem() && seed2==mutation.parent2.getItem()) && (meta1==mutation.parent1.getItemDamage() && meta2==mutation.parent2.getItemDamage())) {
+            ItemStack parent1Stack = mutation.getParents()[0];
+            ItemStack parent2Stack = mutation.getParents()[1];
+            if ((seed1==parent1Stack.getItem() && seed2==parent2Stack.getItem()) && (meta1==parent1Stack.getItemDamage() && meta2==parent2Stack.getItemDamage())) {
                 list.add(mutation);
             }
-            if ((seed1==mutation.parent2.getItem() && seed2==mutation.parent1.getItem()) && (meta1==mutation.parent2.getItemDamage() && meta2==mutation.parent1.getItemDamage())) {
+            if ((seed1==parent2Stack.getItem() && seed2==parent1Stack.getItem()) && (meta1==parent2Stack.getItemDamage() && meta2==parent1Stack.getItemDamage())) {
                 list.add(mutation);
             }
         }
@@ -214,11 +219,13 @@ public abstract class MutationHandler {
         if(!b) {
             for(Mutation mutation:getParentMutations(child, childMeta)) {
                 if(mutation!=null) {
-                    if(mutation.parent1.getItem()==seed && mutation.parent1.getItemDamage()==seedMeta) {
+                    ItemStack parent1Stack = mutation.getParents()[0];
+                    ItemStack parent2Stack = mutation.getParents()[1];
+                    if(parent1Stack.getItem()==seed && parent1Stack.getItemDamage()==seedMeta) {
                         b = true;
                         break;
                     }
-                    else if(mutation.parent2.getItem()==seed && mutation.parent2.getItemDamage()==seedMeta) {
+                    else if(parent2Stack.getItem()==seed && parent2Stack.getItemDamage()==seedMeta) {
                         b = true;
                         break;
                     }
@@ -232,7 +239,7 @@ public abstract class MutationHandler {
     private static Mutation[] cleanMutationArray(Mutation[] input) {
         ArrayList<Mutation> list = new ArrayList<Mutation>();
         for(Mutation mutation:input) {
-            if (mutation.result != null) {
+            if (mutation.getResult() != null) {
                 list.add(mutation);
             }
         }
@@ -251,10 +258,12 @@ public abstract class MutationHandler {
     public static Mutation[] getMutations(ItemStack stack) {
         ArrayList<Mutation> list = new ArrayList<Mutation>();
         for (Mutation mutation : mutations) {
-            if (mutation.parent2.getItem() == stack.getItem() && mutation.parent2.getItemDamage() == stack.getItemDamage()) {
+            ItemStack parent1Stack = mutation.getParents()[0];
+            ItemStack parent2Stack = mutation.getParents()[1];
+            if (parent1Stack.getItem() == stack.getItem() && parent2Stack.getItemDamage() == stack.getItemDamage()) {
                 list.add(new Mutation(mutation));
             }
-            if (!(mutation.parent2.getItem() == mutation.parent1.getItem() && mutation.parent2.getItemDamage() == mutation.parent1.getItemDamage()) && (mutation.parent1.getItem() == stack.getItem() && mutation.parent1.getItemDamage() == stack.getItemDamage())) {
+            if (!(parent2Stack.getItem() == parent1Stack.getItem() && parent2Stack.getItemDamage() == parent1Stack.getItemDamage()) && (parent1Stack.getItem() == stack.getItem() && parent1Stack.getItemDamage() == stack.getItemDamage())) {
                 list.add(new Mutation(mutation));
             }
         }
@@ -271,7 +280,7 @@ public abstract class MutationHandler {
         ArrayList<Mutation> list = new ArrayList<Mutation>();
         if(CropPlantHandler.isValidSeed(stack)) {
             for (Mutation mutation:mutations) {
-                if (mutation.result.getItem() == stack.getItem() && mutation.result.getItemDamage() == stack.getItemDamage()) {
+                if (mutation.getResult().getItem() == stack.getItem() && mutation.getResult().getItemDamage() == stack.getItemDamage()) {
                     list.add(new Mutation(mutation));
                 }
             }
@@ -287,7 +296,7 @@ public abstract class MutationHandler {
         List<Mutation> removedMutations = new ArrayList<Mutation>();
         for (Iterator<Mutation> iter = mutations.iterator(); iter.hasNext();) {
             Mutation mutation = iter.next();
-            if (mutation.result.isItemEqual(result)) {
+            if (mutation.getResult().isItemEqual(result)) {
                 iter.remove();
                 removedMutations.add(mutation);
             }
