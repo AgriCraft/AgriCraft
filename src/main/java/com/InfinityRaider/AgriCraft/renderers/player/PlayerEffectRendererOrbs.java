@@ -31,16 +31,17 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
     }
 
     @Override
-    void renderEffects(EntityPlayer player, RenderPlayer renderer, float tick) {
-        //make sure the texture always renders parallel to the player's screen
-        float r = 180.0F - RenderManager.instance.playerViewY;
-        GL11.glRotatef(r, 0.0F, 1.0F, 0.0F);
+    void renderEffects(EntityPlayer player, RenderPlayer renderer, float partialTick) {
+        Tessellator tessellator = Tessellator.instance;
+        rotateToGeneralCoordinates(player, partialTick);
+
+        float dy = player.getEyeHeight()-(player!=Minecraft.getMinecraft().thePlayer?1.62F:0F)-0.25F;
+        tessellator.addTranslation(0, -dy, 0);
 
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.05F);
 
-        Tessellator tessellator = Tessellator.instance;
         float newAngle = (float) (360 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
         double tilt = Math.toRadians(45);
 
@@ -48,9 +49,9 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
             GL11.glColor4f(1F, 1F, 1F, 0.7F*(1.0F - (i+0.0F)/MAX_BLURS));
 
             float angle = (10*(newAngle+360-(2.5F*i)/MAX_BLURS))%360;
-            double a = Math.toRadians(angle);
-            double b = Math.toRadians(angle+90);
-            double c = Math.toRadians(angle);
+            double a = Math.toRadians(-angle);
+            double b = Math.toRadians(angle+120);
+            double c = Math.toRadians(angle-120);
 
             float orb1X = (float) (R * Math.cos(a));
             float orb1Y = 0;
@@ -64,11 +65,6 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
             float orb3Y = (float) (R * Math.sin(c) * Math.cos(-tilt));
             float orb3Z = (float) (R * Math.cos(c));
 
-            float dy = -(player!=Minecraft.getMinecraft().thePlayer?1.62F:0F)+player.getEyeHeight();
-
-            tessellator.addTranslation(0, -dy, 0);
-            GL11.glRotatef(RenderManager.instance.playerViewX, 1F, 0F, 0F);
-
             Minecraft.getMinecraft().renderEngine.bindTexture(exort);
             renderOrb(tessellator, orb1X, orb1Y, orb1Z, i);
             Minecraft.getMinecraft().renderEngine.bindTexture(wex);
@@ -76,19 +72,20 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
             Minecraft.getMinecraft().renderEngine.bindTexture(quas);
             renderOrb(tessellator, orb3X, orb3Y, orb3Z, i);
 
-            GL11.glRotatef(-RenderManager.instance.playerViewX, 1F, 0F, 0F);
-            tessellator.addTranslation(0, dy, 0);
         }
-
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        GL11.glRotatef(-r, 0.0F, 1.0F, 0.0F);
+        tessellator.addTranslation(0, dy, 0);
     }
 
     private void renderOrb(Tessellator tessellator, float x, float y, float z, int index) {
         float scale = 0.375F*(1.0F - 0.25F*(index+0.0F)/MAX_BLURS);
-        tessellator.addTranslation(x, y, z);
+        GL11.glTranslatef(x, y, z);
+
+        //make sure the texture always renders parallel to the player's screen
+        GL11.glRotatef(RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(RenderManager.instance.playerViewX, 1F, 0F, 0F);
 
         tessellator.startDrawingQuads();
             //front
@@ -103,6 +100,9 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
             RenderHelper.addScaledVertexWithUV(tessellator, scale * (8), 0, 0, 0, 16);
         tessellator.draw();
 
-        tessellator.addTranslation(-x, -y, -z);
+        GL11.glRotatef(-RenderManager.instance.playerViewX, 1F, 0F, 0F);
+        GL11.glRotatef(-RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
+
+        GL11.glTranslatef(-x, -y, -z);
     }
 }
