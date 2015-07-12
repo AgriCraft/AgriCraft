@@ -279,7 +279,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         int flag = 2;
         int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
         if(hasPlant()) {
-            flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta) ? 2 : 4;
+            flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta) ? 2 : 6;
         }
         if (hasWeed() || !plant.isMature(worldObj, xCoord, yCoord, zCoord)) {
             worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, flag);
