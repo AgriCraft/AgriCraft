@@ -38,6 +38,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
         float dy = player.getEyeHeight()-(player!=Minecraft.getMinecraft().thePlayer?1.62F:0F)-0.25F;
         tessellator.addTranslation(0, -dy, 0);
 
+        GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.05F);
@@ -49,7 +50,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
             GL11.glColor4f(1F, 1F, 1F, 0.7F*(1.0F - (i+0.0F)/MAX_BLURS));
 
             float angle = (10*(newAngle+360-(2.5F*i)/MAX_BLURS))%360;
-            double a = Math.toRadians(-angle);
+            double a = Math.toRadians(-angle+120);
             double b = Math.toRadians(angle+120);
             double c = Math.toRadians(angle-120);
 
@@ -71,9 +72,10 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
             renderOrb(tessellator, orb2X, orb2Y, orb2Z, i);
             Minecraft.getMinecraft().renderEngine.bindTexture(quas);
             renderOrb(tessellator, orb3X, orb3Y, orb3Z, i);
-
         }
+
         GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
         tessellator.addTranslation(0, dy, 0);
