@@ -64,14 +64,20 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
             float orb3Y = (float) (R * Math.sin(c) * Math.cos(-tilt));
             float orb3Z = (float) (R * Math.cos(c));
 
-            tessellator.addTranslation(0, -0.5F, 0);
+            float dy = -(player!=Minecraft.getMinecraft().thePlayer?1.62F:0F)+player.getEyeHeight();
+
+            tessellator.addTranslation(0, -dy, 0);
+            GL11.glRotatef(RenderManager.instance.playerViewX, 1F, 0F, 0F);
+
             Minecraft.getMinecraft().renderEngine.bindTexture(exort);
             renderOrb(tessellator, orb1X, orb1Y, orb1Z, i);
             Minecraft.getMinecraft().renderEngine.bindTexture(wex);
             renderOrb(tessellator, orb2X, orb2Y, orb2Z, i);
             Minecraft.getMinecraft().renderEngine.bindTexture(quas);
             renderOrb(tessellator, orb3X, orb3Y, orb3Z, i);
-            tessellator.addTranslation(0, 0.5F, 0);
+
+            GL11.glRotatef(-RenderManager.instance.playerViewX, 1F, 0F, 0F);
+            tessellator.addTranslation(0, dy, 0);
         }
 
         GL11.glDisable(GL11.GL_BLEND);
@@ -83,7 +89,6 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
     private void renderOrb(Tessellator tessellator, float x, float y, float z, int index) {
         float scale = 0.375F*(1.0F - 0.25F*(index+0.0F)/MAX_BLURS);
         tessellator.addTranslation(x, y, z);
-        GL11.glRotatef(RenderManager.instance.playerViewX, 1F, 0F, 0F);
 
         tessellator.startDrawingQuads();
             //front
@@ -98,7 +103,6 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
             RenderHelper.addScaledVertexWithUV(tessellator, scale * (8), 0, 0, 0, 16);
         tessellator.draw();
 
-        GL11.glRotatef(-RenderManager.instance.playerViewX, 1F, 0F, 0F);
         tessellator.addTranslation(-x, -y, -z);
     }
 }

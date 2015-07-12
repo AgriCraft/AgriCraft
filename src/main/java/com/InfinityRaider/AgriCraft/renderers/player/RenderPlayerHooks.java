@@ -3,8 +3,10 @@ package com.InfinityRaider.AgriCraft.renderers.player;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 
@@ -34,10 +36,12 @@ public final class RenderPlayerHooks {
     }
 
     @SubscribeEvent
-    public void RenderPlayerEffects(RenderPlayerEvent.Post event) {
+    public void RenderPlayerEffects(RenderPlayerEvent.Specials.Post event) {
         if(effectRenderers.containsKey(event.entityPlayer.getDisplayName())) {
-            if(!event.entityPlayer.isPotionActive(Potion.invisibility)) {
+            if(!event.entityPlayer.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer)) {
+                GL11.glPushMatrix();
                 effectRenderers.get(event.entityPlayer.getDisplayName()).renderEffects(event.entityPlayer, event.renderer, event.partialRenderTick);
+                GL11.glPopMatrix();
             }
         }
     }
