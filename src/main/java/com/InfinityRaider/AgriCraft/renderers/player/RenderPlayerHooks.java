@@ -4,7 +4,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.potion.Potion;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import org.lwjgl.opengl.GL11;
 
@@ -24,6 +23,9 @@ public final class RenderPlayerHooks {
 
     private void init() {
         this.registerPlayerEffectRenderer(new PlayerEffectRendererOrbs());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererNavi());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererWolf());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererParticlesEnchanted());
     }
 
     private void registerPlayerEffectRenderer(PlayerEffectRenderer renderer) {
