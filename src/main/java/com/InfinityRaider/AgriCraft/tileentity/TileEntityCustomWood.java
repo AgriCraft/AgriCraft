@@ -96,7 +96,8 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
     public IIcon getIcon() {
         if(this.materialName !=null && !this.materialName.equals("")) {
             Block material = (Block) Block.blockRegistry.getObject(this.materialName);
-            return material.getIcon(0, this.materialMeta);
+            IIcon icon = material.getIcon(0, this.materialMeta);
+            return icon==null?Blocks.planks.getIcon(0, 0):icon;
         }
         else {
             return Blocks.planks.getIcon(0, 0);
