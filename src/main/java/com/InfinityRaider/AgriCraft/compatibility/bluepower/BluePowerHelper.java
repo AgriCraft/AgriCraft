@@ -5,8 +5,8 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
-import com.bluepowermod.init.BPItems;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -18,15 +18,16 @@ public final class BluePowerHelper extends ModHelper {
 
     @Override
     protected void init() {
-        OreDictionary.registerOre(Names.OreDict.listAllseed, BPItems.flax_seeds);
-        OreDictionary.registerOre("seedFlax", BPItems.flax_seeds);
-        OreDictionary.registerOre("cropFlax", Items.string);
     }
 
     @Override
     protected void initPlants() {
+        OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("bluepower:flax_seeds"));
+        OreDictionary.registerOre("seedFlax", (Item) Item.itemRegistry.getObject("bluepower:flax_seeds"));
+        OreDictionary.registerOre("cropFlax", Items.string);
+        
         try {
-            CropPlantHandler.registerPlant(new CropPlantBluePower((ItemSeeds) BPItems.flax_seeds));
+            CropPlantHandler.registerPlant(new CropPlantBluePower((ItemSeeds) (Item) Item.itemRegistry.getObject("bluepower:flax_seeds")));
         } catch (DuplicateCropPlantException e) {
             e.printStackTrace();
         } catch (BlacklistedCropPlantException e) {
