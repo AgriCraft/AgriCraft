@@ -197,6 +197,9 @@ public abstract class SeedHelper {
     }
 
     public static boolean isSeedBlackListed(ItemStack stack) {
+        if(stack==null || stack.getItem()==null) {
+            return true;
+        }
         Item seed = stack.getItem();
         int meta = stack.getItemDamage();
         for(ItemStack blacklistedSeed:seedBlackList) {
