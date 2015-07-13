@@ -27,9 +27,9 @@ public class Blocks {
         blockSeedAnalyzer = new BlockSeedAnalyzer();
         RegisterHelper.registerBlock(blockSeedAnalyzer, Names.Objects.seedAnalyzer);
         blockWaterPad = new BlockWaterPad();
-        RegisterHelper.registerBlock(blockWaterPad, Names.Objects.waterPad, BlockWaterPad.ItemBlock.class);
+        RegisterHelper.registerBlock(blockWaterPad, Names.Objects.waterPad, BlockWaterPad.ItemBlockWaterPad.class);
         blockWaterPadFull = new BlockWaterPadFull();
-        RegisterHelper.registerBlock(blockWaterPadFull, Names.Objects.waterPadFull, BlockWaterPadFull.ItemBlock.class);
+        RegisterHelper.registerBlock(blockWaterPadFull, Names.Objects.waterPadFull, BlockWaterPadFull.ItemBlockWaterPadFull.class);
         if(!ConfigurationHandler.disableIrrigation) {
             blockWaterTank = new BlockWaterTank();
             RegisterHelper.registerBlock(blockWaterTank, Names.Objects.tank, ItemBlockCustomWood.class);

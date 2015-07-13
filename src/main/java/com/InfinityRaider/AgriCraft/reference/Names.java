@@ -40,6 +40,7 @@ public final class Names {
         public static final String seed = "seed";
         public static final String seedAnalyzer = seed+analyzer;
         public static final String waterPad = "waterPad";
+        public static final String waterPadFull = waterPad+"Full";
         public static final String journal = "journal";
         public static final String trowel = "trowel";
         public static final String magnifyingGlass = "magnifyingGlass";

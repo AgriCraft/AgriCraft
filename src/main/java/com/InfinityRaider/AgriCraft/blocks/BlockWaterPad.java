@@ -23,7 +23,11 @@ import java.util.List;
 
 public class BlockWaterPad extends Block {
     public BlockWaterPad() {
-        super(Material.ground);
+        this(Material.ground);
+    }
+
+    protected BlockWaterPad(Material mat) {
+        super(mat);
         this.setHardness(0.5F);
         this.setStepSound(soundTypeGravel);
         this.maxY = Constants.unit*8;
@@ -32,37 +36,23 @@ public class BlockWaterPad extends Block {
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
         ItemStack stack = player.getCurrentEquippedItem();
-        if(stack == null || stack.getItem() == null) {
+        if (stack == null || stack.getItem() == null) {
             return false;
         }
-        if(FluidContainerRegistry.isContainer(stack)) {
-            FluidStack waterBucket =  new FluidStack(FluidRegistry.WATER, 1000);
-            if(world.getBlockMetadata(x, y, z) == 0) {
-                if(!FluidContainerRegistry.containsFluid(stack, waterBucket)) {
-                    return false;
-                }
-                if(!player.capabilities.isCreativeMode) {
-                    player.inventory.addItemStackToInventory(FluidContainerRegistry.drainFluidContainer(stack));
-                    player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
-                }
-                if(!world.isRemote) {
-                    world.setBlockMetadataWithNotify(x, y, z, 1, 3);
-                }
-                return true;
+        if (FluidContainerRegistry.isContainer(stack)) {
+            FluidStack waterBucket = new FluidStack(FluidRegistry.WATER, 1000);
+            if (!FluidContainerRegistry.containsFluid(stack, waterBucket)) {
+                return false;
             }
-            else if(world.getBlockMetadata(x, y, z) == 1) {
-                if(!FluidContainerRegistry.isEmptyContainer(stack)) {
-                    return false;
-                }
-                if(!player.capabilities.isCreativeMode) {
-                    player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, stack));
-                    player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
-                }
-                if(!world.isRemote) {
-                    world.setBlockMetadataWithNotify(x, y, z, 0, 3);
-                }
-                return true;
+            if (!player.capabilities.isCreativeMode) {
+                player.inventory.addItemStackToInventory(FluidContainerRegistry.drainFluidContainer(stack));
+                player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
             }
+            if (!world.isRemote) {
+                world.setBlock(x, y, z, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPadFull, 7, 3);
+            }
+            return true;
+
         }
         return false;
     }
@@ -113,8 +103,8 @@ public class BlockWaterPad extends Block {
         //NOOP
     }
 
-    public static class ItemBlock extends net.minecraft.item.ItemBlock {
-        public ItemBlock(Block block) {
+    public static class ItemBlockWaterPad extends net.minecraft.item.ItemBlock {
+        public ItemBlockWaterPad(Block block) {
             super(block);
         }
 
@@ -122,11 +112,6 @@ public class BlockWaterPad extends Block {
         @SideOnly(Side.CLIENT)
         public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
             list.add(StatCollector.translateToLocal("agricraft_tooltip.waterPadDry"));
-            if(stack.getItemDamage()==1) {
-                list.add(StatCollector.translateToLocal("agricraft_tooltip.waterPadWet"));
-            }
         }
     }
-
-
 }
