@@ -209,13 +209,17 @@ public class GuiJournal extends GuiScreen {
                 Minecraft.getMinecraft().getTextureManager().bindTexture(JournalPage.getBackground());
                 GL11.glColor3f(1, 1, 1);
                 GL11.glDisable(GL11.GL_LIGHTING);
+                GL11.glEnable(GL11.GL_ALPHA_TEST);
                 drawTexturedModalRect(this.guiLeft + 223, this.guiTop + 178, 224, 239, 32, 17);
+                GL11.glDisable(GL11.GL_ALPHA_TEST);
                 GL11.glEnable(GL11.GL_LIGHTING);
             } else if (x > this.guiLeft + 19 && x <= this.guiLeft + 19 + 16 && this.currentPage > 0) {
                 Minecraft.getMinecraft().getTextureManager().bindTexture(JournalPage.getBackground());
                 GL11.glColor3f(1, 1, 1);
                 GL11.glDisable(GL11.GL_LIGHTING);
+                GL11.glEnable(GL11.GL_ALPHA_TEST);
                 drawTexturedModalRect(this.guiLeft + 1, this.guiTop + 178, 0, 239, 32, 17);
+                GL11.glDisable(GL11.GL_ALPHA_TEST);
                 GL11.glEnable(GL11.GL_LIGHTING);
             }
         }
