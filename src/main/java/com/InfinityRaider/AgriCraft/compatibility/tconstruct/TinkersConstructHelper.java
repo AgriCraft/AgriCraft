@@ -16,6 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TinkersConstructHelper extends ModHelper {
+    public static boolean isShovel(ItemStack stack) {
+        if(ModHelper.allowIntegration(Names.Mods.tconstruct)) {
+            if(stack==null || stack.getItem()==null) {
+                return false;
+            }
+            try {
+                return stack.getItem() == TinkerTools.shovel || stack.getItem() == TinkerTools.mattock || stack.getItem() == TinkerTools.excavator;
+            } catch(Exception e) {
+                return false;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected boolean useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
         if (stack.getItem() == TinkerTools.scythe) {
