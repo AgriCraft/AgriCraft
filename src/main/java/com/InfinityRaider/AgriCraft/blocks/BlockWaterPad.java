@@ -22,6 +22,7 @@ import java.util.List;
 public class BlockWaterPad extends Block {
     public BlockWaterPad() {
         super(Material.ground);
+        this.setHardness(0.5F);
         this.setStepSound(soundTypeGravel);
         this.maxY = Constants.unit*8;
     }
