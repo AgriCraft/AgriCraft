@@ -39,7 +39,7 @@ public class PneumaticCraftHelper extends ModHelper {
                     CropPlantHandler.registerPlant(cropPlant);
                     BlockWithMeta soil = null;
                     switch(i) {
-                        case 0: soil = new BlockWithMeta(com.InfinityRaider.AgriCraft.init.Blocks.waterPad, 1); break; //squid plant: water
+                        case 0: soil = new BlockWithMeta(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPadFull); break; //squid plant: water
                         case 5: soil = new BlockWithMeta(Blocks.end_stone); break; //end plant: end stone
                         case 1: soil = new BlockWithMeta(Blocks.netherrack); break; //fire flower: netherrack
                         case 11: soil = new BlockWithMeta(Blocks.netherrack); break; //helium plant: netherrack

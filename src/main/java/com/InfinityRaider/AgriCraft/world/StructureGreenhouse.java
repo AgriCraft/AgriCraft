@@ -221,7 +221,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         int yCoord = this.getYWithOffset(y);
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(xCoord, yCoord, zCoord)) {
-            world.setBlock(xCoord, yCoord, zCoord, com.InfinityRaider.AgriCraft.init.Blocks.seedAnalyzer, 0, 2);
+            world.setBlock(xCoord, yCoord, zCoord, com.InfinityRaider.AgriCraft.init.Blocks.blockSeedAnalyzer, 0, 2);
             TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(xCoord, yCoord, zCoord);
             if (analyzer!=null) {
                 if(direction!=null) {

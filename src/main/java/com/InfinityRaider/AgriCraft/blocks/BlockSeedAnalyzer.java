@@ -97,7 +97,7 @@ public class BlockSeedAnalyzer extends Block implements ITileEntityProvider {
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(new ItemStack(Item.getItemFromBlock(Blocks.seedAnalyzer), 1, 0));
+        items.add(new ItemStack(Item.getItemFromBlock(Blocks.blockSeedAnalyzer), 1, 0));
         if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntitySeedAnalyzer) {
             TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(x, y, z);
             if(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId)!=null) {

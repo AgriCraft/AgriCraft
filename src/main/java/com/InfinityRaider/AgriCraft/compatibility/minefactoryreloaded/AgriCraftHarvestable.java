@@ -18,7 +18,7 @@ import java.util.Random;
 public class AgriCraftHarvestable implements IFactoryHarvestable {
     private BlockCrop crop;
     public AgriCraftHarvestable() {
-        this.crop = Blocks.blockCrop;
+        this.crop = (BlockCrop) Blocks.blockCrop;
     }
 
     @Override

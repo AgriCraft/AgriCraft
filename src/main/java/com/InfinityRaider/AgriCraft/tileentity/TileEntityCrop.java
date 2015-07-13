@@ -213,7 +213,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             fertiliser.onFertiliserApplied(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord, rand);
         }
         if(this.hasPlant()) {
-            Blocks.blockCrop.func_149853_b(this.worldObj, rand, this.xCoord, this.yCoord, this.zCoord);
+            ((BlockCrop) Blocks.blockCrop).func_149853_b(this.worldObj, rand, this.xCoord, this.yCoord, this.zCoord);
             this.markForUpdate();
         }
         else if(this.isCrossCrop() && ConfigurationHandler.bonemealMutation) {

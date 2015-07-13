@@ -68,7 +68,7 @@ public class ClientProxy extends CommonProxy {
         //seed analyzer
         TileEntitySpecialRenderer  renderAnalyzer = new RenderSeedAnalyzer();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySeedAnalyzer.class, renderAnalyzer);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.seedAnalyzer), new RenderItemSeedAnalyzer(renderAnalyzer, new TileEntitySeedAnalyzer()));
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockSeedAnalyzer), new RenderItemSeedAnalyzer(renderAnalyzer, new TileEntitySeedAnalyzer()));
 
         //water pad
         waterPadRenderId = RenderingRegistry.getNextAvailableRenderId();

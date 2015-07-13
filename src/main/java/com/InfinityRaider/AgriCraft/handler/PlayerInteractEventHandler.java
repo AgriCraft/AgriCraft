@@ -55,7 +55,7 @@ public class PlayerInteractEventHandler {
                 }
                 Block block = event.world.getBlock(event.x, event.y, event.z);
                 if (block == Blocks.farmland) {
-                    event.world.setBlock(event.x, event.y, event.z, com.InfinityRaider.AgriCraft.init.Blocks.waterPad, 0, 3);
+                    event.world.setBlock(event.x, event.y, event.z, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPad, 0, 3);
                     if (!event.entityPlayer.capabilities.isCreativeMode) {
                         event.entityPlayer.getCurrentEquippedItem().damageItem(1, event.entityPlayer);
                         event.setResult(Event.Result.ALLOW);

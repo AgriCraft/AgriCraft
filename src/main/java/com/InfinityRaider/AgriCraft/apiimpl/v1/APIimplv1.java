@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.api.APIStatus;
 import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAPI;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
@@ -417,7 +418,7 @@ public class APIimplv1 implements APIv1 {
 			return false;
 		}
 		if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
-			Blocks.blockCrop.func_149853_b(world, random, x, y, z);
+			((BlockCrop) Blocks.blockCrop).func_149853_b(world, random, x, y, z);
 			fertilizer.stackSize--;
 			world.playAuxSFX(2005, x, y, z, 0);
 			return true;

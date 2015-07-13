@@ -68,7 +68,7 @@ public final class WitcheryHelper extends ModHelper {
         }
         try {
             CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedsartichoke")));
-            GrowthRequirementHandler.getGrowthRequirement((Item) Item.itemRegistry.getObject("witchery:seedsartichoke"), 0).setSoil(new BlockWithMeta(Blocks.waterPad, 1));
+            GrowthRequirementHandler.getGrowthRequirement((Item) Item.itemRegistry.getObject("witchery:seedsartichoke"), 0).setSoil(new BlockWithMeta(Blocks.blockWaterPadFull));
         } catch (Exception e) {
             e.printStackTrace();
         }

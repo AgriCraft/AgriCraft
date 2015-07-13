@@ -56,7 +56,7 @@ public class Aspects {
             }
         }
         //seed analyzer
-        ThaumcraftApi.registerObjectTag(new ItemStack(Blocks.seedAnalyzer, 1, 0), new AspectList().add(Aspect.MIND, 2).add(Aspect.PLANT, 2).add(Aspect.CROP, 2));
+        ThaumcraftApi.registerObjectTag(new ItemStack(Blocks.blockSeedAnalyzer, 1, 0), new AspectList().add(Aspect.MIND, 2).add(Aspect.PLANT, 2).add(Aspect.CROP, 2));
         //journal
         ThaumcraftApi.registerObjectTag(new ItemStack(Items.journal, 1, 0), new AspectList().add(Aspect.MIND, 2).add(Aspect.PLANT, 2).add(Aspect.CROP, 2));
         //irrigation systems
