@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.api.APIStatus;
 import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAPI;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
@@ -17,6 +18,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
+import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -459,5 +461,15 @@ public class APIimplv1 implements APIv1 {
 	public boolean removeMutation(ItemStack result) {
 		MutationHandler.removeMutationsByResult(result);
 		return true;
+	}
+
+	@Override
+	public IAgriCraftPlant createNewCrop(Object... args) {
+		try {
+			return new BlockModPlant(args);
+		} catch (MissingArgumentsException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

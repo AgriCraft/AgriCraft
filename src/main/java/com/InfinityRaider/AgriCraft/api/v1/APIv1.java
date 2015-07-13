@@ -490,4 +490,22 @@ public interface APIv1 extends APIBase {
 	 */
 	boolean removeMutation(ItemStack result);
 
+	/**
+	 * This method creates the block and the seed for a new plant that is fully compatible with agricraft.
+	 * This method also registers this block and the item for the seed to the minecraft item/block registry and to the AgriCraft CropPlantHandler.
+	 * @param args: Arguments can be given in any order, parameters can be:
+	 *               String name (needed)
+	 *               ItemStack fruit(needed)
+	 *               Block soil (optional)
+	 *               BlockWithMeta baseBlock (optional)
+	 *               int tier (necessary)
+	 *               RenderMethod renderType (necessary)
+	 *               ItemStack shearDrop (optional, first ItemStack argument will be the regular fruit, second ItemStack argument is the shear drop)
+	 * @return
+	 * The Block corresponding with the plant, return type will always be instance of Block as well IAgriCraftPlant.
+	 * The seed is instance of Item and implements IAgriCraftSeed. It can be obtained by calling getSeed() on the returned object.
+	 * This method will return null when not all necessary arguments are given.
+	 */
+	IAgriCraftPlant createNewCrop(Object... args);
+
 }
