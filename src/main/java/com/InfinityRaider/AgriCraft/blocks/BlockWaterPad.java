@@ -9,13 +9,15 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
 
@@ -33,30 +35,34 @@ public class BlockWaterPad extends Block {
         if(stack == null || stack.getItem() == null) {
             return false;
         }
-        if(stack.getItem() == Items.water_bucket) {
+        if(FluidContainerRegistry.isContainer(stack)) {
+            FluidStack waterBucket =  new FluidStack(FluidRegistry.WATER, 1000);
             if(world.getBlockMetadata(x, y, z) == 0) {
+                if(!FluidContainerRegistry.containsFluid(stack, waterBucket)) {
+                    return false;
+                }
+                if(!player.capabilities.isCreativeMode) {
+                    player.inventory.addItemStackToInventory(FluidContainerRegistry.drainFluidContainer(stack));
+                    player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
+                }
                 if(!world.isRemote) {
                     world.setBlockMetadataWithNotify(x, y, z, 1, 3);
                 }
-                if(!player.capabilities.isCreativeMode) {
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-                    player.inventory.addItemStackToInventory(new ItemStack(Items.bucket));
-                }
+                return true;
             }
-            return true;
-        }
-        else if(stack.getItem() == Items.bucket) {
-            if(world.getBlockMetadata(x, y, z) == 1) {
+            else if(world.getBlockMetadata(x, y, z) == 1) {
+                if(!FluidContainerRegistry.isEmptyContainer(stack)) {
+                    return false;
+                }
+                if(!player.capabilities.isCreativeMode) {
+                    player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, stack));
+                    player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
+                }
                 if(!world.isRemote) {
                     world.setBlockMetadataWithNotify(x, y, z, 0, 3);
                 }
-                if(!player.capabilities.isCreativeMode) {
-                    int newSize = stack.stackSize -1;
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, newSize == 0 ? null : new ItemStack(Items.bucket, newSize));
-                    player.inventory.addItemStackToInventory(new ItemStack(Items.water_bucket));
-                }
+                return true;
             }
-            return true;
         }
         return false;
     }
