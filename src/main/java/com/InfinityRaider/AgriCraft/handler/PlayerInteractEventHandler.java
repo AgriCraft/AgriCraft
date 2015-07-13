@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.handler;
 
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.compatibility.tconstruct.TinkersConstructHelper;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -41,11 +43,17 @@ public class PlayerInteractEventHandler {
     @SubscribeEvent
     public void waterPadCreation(PlayerInteractEvent event) {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            Block block = event.world.getBlock(event.x, event.y, event.z);
+            boolean flag = false;
             if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSpade) {
+                flag = true;
+            } else if(ModHelper.allowIntegration(Names.Mods.tconstruct) && TinkersConstructHelper.isShovel(event.entityPlayer.getCurrentEquippedItem())) {
+                flag = true;
+            }
+            if(flag) {
                 if (event.world.isRemote) {
                     return;
                 }
+                Block block = event.world.getBlock(event.x, event.y, event.z);
                 if (block == Blocks.farmland) {
                     event.world.setBlock(event.x, event.y, event.z, com.InfinityRaider.AgriCraft.init.Blocks.waterPad, 0, 3);
                     if (!event.entityPlayer.capabilities.isCreativeMode) {

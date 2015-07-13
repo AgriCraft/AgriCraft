@@ -260,10 +260,13 @@ public abstract class MutationHandler {
         for (Mutation mutation : mutations) {
             ItemStack parent1Stack = mutation.getParents()[0];
             ItemStack parent2Stack = mutation.getParents()[1];
-            if (parent1Stack.getItem() == stack.getItem() && parent2Stack.getItemDamage() == stack.getItemDamage()) {
+            if (parent1Stack.getItem() == stack.getItem() && parent1Stack.getItemDamage() == stack.getItemDamage()) {
                 list.add(new Mutation(mutation));
             }
-            if (!(parent2Stack.getItem() == parent1Stack.getItem() && parent2Stack.getItemDamage() == parent1Stack.getItemDamage()) && (parent1Stack.getItem() == stack.getItem() && parent1Stack.getItemDamage() == stack.getItemDamage())) {
+            if (parent2Stack.getItem() == stack.getItem() && parent2Stack.getItemDamage() == stack.getItemDamage()) {
+                if(parent2Stack.getItem() == parent1Stack.getItem() && parent2Stack.getItemDamage() == parent1Stack.getItemDamage()) {
+                    continue;
+                }
                 list.add(new Mutation(mutation));
             }
         }

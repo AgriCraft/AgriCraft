@@ -139,7 +139,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
                 ItemStack resultStack = mutation.getResult();
                 ItemStack parent1Stack = mutation.getParents()[0];
                 ItemStack parent2Stack = mutation.getParents()[1];
-                if (resultStack.getItem() != null && parent1Stack.getItem() != null && parent2Stack.getItem() != null) {
+                if (resultStack.getItem() != null && parent1Stack.getItem() != null && parent2Stack!= null && parent2Stack.getItem() != null) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));
                 }
             }
