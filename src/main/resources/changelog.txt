@@ -39,6 +39,7 @@ Changelog
 -ADDED:  A config to specify seeds that will ingore the disable vanilla farming rule
 -ADDED:  The AgriCraft villager will now search and remove weeds from nearby crops
 -ADDED:  A recipe to convert wheat to seeds
+-ADDED:  Alternate textures for the botania crops (thanks WolfieWaffle for the textures)
 -FIXED:  Seeds added as drops from tall grass always having weight 10
 -FIXED:  Not being able to set max brightness in Minetweaker methods
 -FIXED:  Wrong error message in Minetweaker methods

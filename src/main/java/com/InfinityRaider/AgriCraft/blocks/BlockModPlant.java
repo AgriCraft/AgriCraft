@@ -51,7 +51,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
      * This constructor creates the seed for this plant which can be gotten via blockModPlant.getSeed().
      * This constructor also registers this block and the item for the seed to the minecraft item/block registry and to the AgriCraft CropPlantHandler.
      * */
-    public BlockModPlant(Object[] arguments) throws MissingArgumentsException {
+    public BlockModPlant(Object... arguments) throws MissingArgumentsException {
         super();
         //get parameters
         String name = null;
@@ -214,6 +214,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     //render different stages
     @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
         switch(meta) {
             case 0: return this.icons[0];

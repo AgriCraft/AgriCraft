@@ -18,6 +18,7 @@ public class BotaniaHelper extends ModHelper {
     public static ArrayList<BlockModPlant> botaniaCrops = new ArrayList<BlockModPlant>();
     public static ArrayList<ItemModSeed> botaniaSeeds = new ArrayList<ItemModSeed>();
 
+
     @Override
     protected void init() {
 
@@ -29,7 +30,7 @@ public class BotaniaHelper extends ModHelper {
             Object[] args = {Data.botania[i], new ItemStack((Item) Item.itemRegistry.getObject("Botania:petal"), 1, i), 3, RenderMethod.CROSSED, new ItemStack((Block) Block.blockRegistry.getObject("Botania:flower"), 1, i)};
             BlockModPlant plant;
             try {
-                plant = new BlockModPlant(args);
+                plant = new BlockModPlantBotania(args);
             } catch (Exception e) {
                 if (ConfigurationHandler.debug) {
                     e.printStackTrace();
@@ -46,5 +47,13 @@ public class BotaniaHelper extends ModHelper {
     @Override
     protected String modId() {
         return Names.Mods.botania;
+    }
+
+    static boolean useAlternateTextures() {
+        try {
+            return vazkii.botania.common.core.handler.ConfigHandler.altFlowerTextures;
+        } catch(Exception e) {
+            return false;
+        }
     }
 }
