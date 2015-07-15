@@ -21,6 +21,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
@@ -127,6 +128,12 @@ public class ClientProxy extends CommonProxy {
         FMLCommonHandler.instance().bus().register(new ItemToolTipHandler());
         MinecraftForge.EVENT_BUS.register(new ItemToolTipHandler());
         MinecraftForge.EVENT_BUS.register(new RenderPlayerHooks());
+    }
+
+    @Override
+    public void initConfiguration(FMLPreInitializationEvent event) {
+        super.initConfiguration(event);
+        ConfigurationHandler.initClientConfigs(event);
     }
 
     //initialize NEI

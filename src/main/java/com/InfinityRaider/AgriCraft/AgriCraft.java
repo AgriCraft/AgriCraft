@@ -49,9 +49,8 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
         LogHelper.debug("Starting Pre-Initialization");
-        proxy.registerEventHandlers();
         NetworkWrapperAgriCraft.init();
-        ConfigurationHandler.init(event);
+        proxy.initConfiguration(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
         if (ConfigurationHandler.debug) {
             FMLCommonHandler.instance().bus().register(new RenderLogger());
@@ -66,6 +65,7 @@ public class AgriCraft {
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
         LogHelper.debug("Starting Initialization");
+        proxy.registerEventHandlers();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         proxy.registerTileEntities();
         proxy.registerRenderers();
