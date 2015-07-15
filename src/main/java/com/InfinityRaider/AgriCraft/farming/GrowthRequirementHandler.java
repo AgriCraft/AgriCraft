@@ -115,6 +115,9 @@ public class GrowthRequirementHandler {
      * @return growthRequirement of the given seed.
      */
     public static IGrowthRequirement getGrowthRequirement(Item seed, int meta) {
+        if(seed == null) {
+            return null;
+        }
         if (seed instanceof IAgriCraftSeed) {
             return ((IAgriCraftSeed) seed).getPlant().getGrowthRequirement();
         }

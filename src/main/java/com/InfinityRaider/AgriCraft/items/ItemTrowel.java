@@ -51,9 +51,9 @@ public class ItemTrowel extends ModItem {
                     else if (crop.hasPlant() && stack.getItemDamage() == 0) {
                         //put plant on trowel
                         NBTTagCompound tag = new NBTTagCompound();
-                        tag.setShort(Names.NBT.growth, (short) crop.getGrowth());
-                        tag.setShort(Names.NBT.gain, (short) crop.getGain());
-                        tag.setShort(Names.NBT.strength, (short) crop.getStrength());
+                        tag.setShort(Names.NBT.growth, crop.getGrowth());
+                        tag.setShort(Names.NBT.gain, crop.getGain());
+                        tag.setShort(Names.NBT.strength, crop.getStrength());
                         tag.setBoolean(Names.NBT.analyzed, crop.isAnalyzed());
                         tag.setTag(Names.NBT.seed, CropPlantHandler.writePlantToNBT(crop.getPlant()));
                         tag.setShort(Names.NBT.materialMeta, (short) world.getBlockMetadata(x, y, z));
@@ -68,14 +68,14 @@ public class ItemTrowel extends ModItem {
                     else if (!crop.hasPlant() && !crop.isCrossCrop() && stack.getItemDamage() == 1) {
                         //set crop
                         NBTTagCompound tag = stack.getTagCompound();
-                        Item seed = (Item) Item.itemRegistry.getObject(tag.getString(Names.Objects.seed));
+                        CropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
+                        Item seed = plant.getSeed().getItem();
                         int seedMeta = tag.getShort(Names.NBT.meta);
                         if(GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta).isValidSoil(world, x, y - 1, z)) {
                             int growth = tag.getShort(Names.NBT.growth);
                             int gain = tag.getShort(Names.NBT.gain);
                             int strength = tag.getShort(Names.NBT.strength);
                             boolean analysed = tag.getBoolean(Names.NBT.analyzed);
-                            CropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
                             crop.setPlant(growth, gain, strength, analysed, plant);
                             world.setBlockMetadataWithNotify(x, y, z, tag.getShort(Names.NBT.materialMeta), 3);
                             crop.markForUpdate();
