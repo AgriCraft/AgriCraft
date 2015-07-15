@@ -16,12 +16,21 @@ import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
-    private static final double R = 1;
-    private static final int MAX_BLURS = 5;
+    private final double R;
+    private final int MAX_BLURS;
 
-    private static final ResourceLocation quas = new ResourceLocation("agricraft", "textures/entities/player/quas.png");
-    private static final ResourceLocation wex = new ResourceLocation("agricraft", "textures/entities/player/wex.png");
-    private static final ResourceLocation exort = new ResourceLocation("agricraft", "textures/entities/player/exort.png");
+    private final ResourceLocation quas;
+    private final ResourceLocation wex;
+    private final ResourceLocation exort;
+
+    PlayerEffectRendererOrbs() {
+        super();
+        R = 1;
+        MAX_BLURS = 5;
+        quas = new ResourceLocation("agricraft", "textures/entities/player/quas.png");
+        wex  = new ResourceLocation("agricraft", "textures/entities/player/wex.png");
+        exort = new ResourceLocation("agricraft", "textures/entities/player/exort.png");
+    }
 
     @Override
     ArrayList<String> getDisplayNames() {

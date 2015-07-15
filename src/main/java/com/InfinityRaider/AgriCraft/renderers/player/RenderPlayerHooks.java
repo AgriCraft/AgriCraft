@@ -11,7 +11,9 @@ import java.util.HashMap;
 
 @SideOnly(Side.CLIENT)
 public final class RenderPlayerHooks {
-    private HashMap<String, PlayerEffectRenderer> effectRenderers;
+    private static HashMap<String, Class<? extends PlayerEffectRenderer>>  effectRenderers;
+
+    private HashMap<String, PlayerEffectRenderer> activeEffectRenderers;
     private static boolean hasInit = false;
 
     public RenderPlayerHooks() {
@@ -24,25 +26,24 @@ public final class RenderPlayerHooks {
     private void init() {
         this.registerPlayerEffectRenderer(new PlayerEffectRendererOrbs());
         this.registerPlayerEffectRenderer(new PlayerEffectRendererNavi());
-        this.registerPlayerEffectRenderer(new PlayerEffectRendererWolf());
         this.registerPlayerEffectRenderer(new PlayerEffectRendererParticlesEnchanted());
     }
 
     private void registerPlayerEffectRenderer(PlayerEffectRenderer renderer) {
-        if(effectRenderers == null) {
-            effectRenderers = new HashMap<String, PlayerEffectRenderer>();
+        if(activeEffectRenderers == null) {
+            activeEffectRenderers = new HashMap<String, PlayerEffectRenderer>();
         }
         for(String name:renderer.getDisplayNames()) {
-            this.effectRenderers.put(name, renderer);
+            this.activeEffectRenderers.put(name, renderer);
         }
     }
 
     @SubscribeEvent
     public void RenderPlayerEffects(RenderPlayerEvent.Specials.Post event) {
-        if(effectRenderers.containsKey(event.entityPlayer.getDisplayName())) {
+        if(activeEffectRenderers.containsKey(event.entityPlayer.getDisplayName())) {
             if(!event.entityPlayer.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer)) {
                 GL11.glPushMatrix();
-                effectRenderers.get(event.entityPlayer.getDisplayName()).renderEffects(event.entityPlayer, event.renderer, event.partialRenderTick);
+                activeEffectRenderers.get(event.entityPlayer.getDisplayName()).renderEffects(event.entityPlayer, event.renderer, event.partialRenderTick);
                 GL11.glPopMatrix();
             }
         }

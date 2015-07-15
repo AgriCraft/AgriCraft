@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 abstract class PlayerEffectRenderer {
+    PlayerEffectRenderer() {
+
+    }
+
     abstract ArrayList<String> getDisplayNames();
 
     abstract void renderEffects(EntityPlayer player, RenderPlayer renderer, float tick);
