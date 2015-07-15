@@ -58,6 +58,13 @@ public class CropPlantStem extends CropPlantGeneric {
 
     @Override
     public String getInformation() {
-        return getSeed().getUnlocalizedName();
+        String name = getSeed().getUnlocalizedName();
+        if(name.indexOf('_')>=0) {
+            name = name.substring(name.indexOf('_')+1);
+        }
+        if(name.indexOf('.')>=0) {
+            name = name.substring(name.indexOf('.')+1);
+        }
+        return "agricraft_journal."+name;
     }
 }
