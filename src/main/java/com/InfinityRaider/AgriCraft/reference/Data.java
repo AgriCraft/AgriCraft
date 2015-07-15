@@ -11,7 +11,7 @@ public class Data {
     public static final Object[][] defaults = {
             {"Potato", new ItemStack(Items.potato), 1, RenderMethod.HASHTAG},
             {"Carrot", new ItemStack(Items.carrot), 1, RenderMethod.HASHTAG},
-            {"Sugarcane", new ItemStack(Items.reeds), 1, RenderMethod.HASHTAG},
+            {"Sugarcane", new ItemStack(Items.reeds), Blocks.sand, 1, RenderMethod.HASHTAG},
             {"Dandelion", new ItemStack(Items.dye, 1, 11), 1, RenderMethod.HASHTAG, new ItemStack(Blocks.yellow_flower)} ,
             {"Poppy", new ItemStack(Items.dye, 1, 1), 1, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower)},
             {"Orchid", new ItemStack(Items.dye, 1, 12), 1, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 1)},
