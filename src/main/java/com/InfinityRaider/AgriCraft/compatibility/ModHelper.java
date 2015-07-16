@@ -14,6 +14,7 @@ import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
 import com.InfinityRaider.AgriCraft.compatibility.extrabiomesxl.ExtraBiomesXLHelper;
 import com.InfinityRaider.AgriCraft.compatibility.forestry.ForestryHelper;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
+import com.InfinityRaider.AgriCraft.compatibility.growthcraft.GrowthCraftRiceHelper;
 import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.hungeroverhaul.HungerOverhaulHelper;
 import com.InfinityRaider.AgriCraft.compatibility.immersiveengineering.ImmersiveEngineeringHelper;
@@ -151,6 +152,7 @@ public abstract class ModHelper {
                 ExtraBiomesXLHelper.class,
                 ForestryHelper.class,
                 GardenStuffHelper.class,
+                GrowthCraftRiceHelper.class,
                 HarvestcraftHelper.class,
                 HungerOverhaulHelper.class,
                 ImmersiveEngineeringHelper.class,
