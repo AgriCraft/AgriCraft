@@ -27,9 +27,9 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
         super();
         R = 1;
         MAX_BLURS = 5;
-        quas = new ResourceLocation("agricraft", "textures/entities/player/quas.png");
-        wex  = new ResourceLocation("agricraft", "textures/entities/player/wex.png");
-        exort = new ResourceLocation("agricraft", "textures/entities/player/exort.png");
+        quas = new ResourceLocation("agricraft", "textures/entities/player/invoker/quas.png");
+        wex  = new ResourceLocation("agricraft", "textures/entities/player/invoker/wex.png");
+        exort = new ResourceLocation("agricraft", "textures/entities/player/invoker/exort.png");
     }
 
     @Override
