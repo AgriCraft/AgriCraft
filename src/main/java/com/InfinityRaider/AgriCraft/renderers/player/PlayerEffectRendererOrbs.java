@@ -23,7 +23,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
     private final ResourceLocation wex;
     private final ResourceLocation exort;
 
-    PlayerEffectRendererOrbs() {
+    protected PlayerEffectRendererOrbs() {
         super();
         R = 1;
         MAX_BLURS = 5;

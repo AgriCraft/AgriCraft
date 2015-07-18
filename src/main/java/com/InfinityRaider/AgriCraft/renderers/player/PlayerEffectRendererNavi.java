@@ -27,7 +27,7 @@ public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
     private final ResourceLocation largeWing;
     private final ResourceLocation smallWing;
 
-    PlayerEffectRendererNavi() {
+    protected PlayerEffectRendererNavi() {
         super();
 
         largeWing = new ResourceLocation("agricraft", "textures/entities/player/navi/wingLarge.png");

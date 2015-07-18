@@ -37,4 +37,10 @@ public abstract class LogHelper {
     public static void warn(Object object) {
         log(Level.WARN, object);
     }
+
+    public static void printStackTrace(Exception e) {
+        if(ConfigurationHandler.debug) {
+            e.printStackTrace();
+        }
+    }
 }

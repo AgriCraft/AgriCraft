@@ -18,7 +18,6 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -125,9 +124,12 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerEventHandlers() {
         super.registerEventHandlers();
-        FMLCommonHandler.instance().bus().register(new ItemToolTipHandler());
-        MinecraftForge.EVENT_BUS.register(new ItemToolTipHandler());
-        MinecraftForge.EVENT_BUS.register(new RenderPlayerHooks());
+
+        ItemToolTipHandler itemToolTipHandler = new ItemToolTipHandler();
+        MinecraftForge.EVENT_BUS.register(itemToolTipHandler);
+
+        RenderPlayerHooks renderPlayerHooks = new RenderPlayerHooks();
+        MinecraftForge.EVENT_BUS.register(renderPlayerHooks);
     }
 
     @Override

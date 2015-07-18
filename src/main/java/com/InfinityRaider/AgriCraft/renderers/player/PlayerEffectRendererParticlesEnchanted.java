@@ -13,6 +13,9 @@ import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public class PlayerEffectRendererParticlesEnchanted extends PlayerEffectRendererParticles {
+    protected PlayerEffectRendererParticlesEnchanted() {
+        super();
+    }
 
     @Override
     protected ResourceLocation getParticleTexture() {

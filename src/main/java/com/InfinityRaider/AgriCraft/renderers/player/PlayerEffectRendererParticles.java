@@ -13,7 +13,7 @@ public abstract class PlayerEffectRendererParticles extends PlayerEffectRenderer
     protected final ResourceLocation texture;
     private int counter = 0;
 
-    public PlayerEffectRendererParticles() {
+    protected PlayerEffectRendererParticles() {
         this.texture = getParticleTexture();
     }
 

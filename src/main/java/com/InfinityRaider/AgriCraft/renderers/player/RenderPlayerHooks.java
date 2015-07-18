@@ -27,6 +27,7 @@ public final class RenderPlayerHooks {
         this.registerPlayerEffectRenderer(new PlayerEffectRendererOrbs());
         this.registerPlayerEffectRenderer(new PlayerEffectRendererNavi());
         this.registerPlayerEffectRenderer(new PlayerEffectRendererParticlesEnchanted());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererEntityDragon());
     }
 
     private void registerPlayerEffectRenderer(PlayerEffectRenderer renderer) {
