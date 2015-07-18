@@ -1,9 +1,12 @@
 package com.InfinityRaider.AgriCraft.renderers.player;
 
+import com.InfinityRaider.AgriCraft.reference.Reference;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import org.lwjgl.opengl.GL11;
 
@@ -12,6 +15,12 @@ import java.util.HashMap;
 @SideOnly(Side.CLIENT)
 public final class RenderPlayerHooks {
     private static HashMap<String, Class<? extends PlayerEffectRenderer>>  effectRenderers;
+    private static final String[] modIds = {
+            "3DManeuverGear",
+            "AgriCraft",
+            "Elemancy",
+            "ModularArmour"
+    };
 
     private HashMap<String, PlayerEffectRenderer> activeEffectRenderers;
     private static boolean hasInit = false;
@@ -20,6 +29,30 @@ public final class RenderPlayerHooks {
         if(!hasInit) {
             hasInit = true;
             this.init();
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setBoolean("hasInit", true);
+            for(String modid:modIds) {
+                if(!modid.equals(Reference.MOD_ID)) {
+                    FMLInterModComms.sendMessage(modid, "renderHooks", tag);
+                }
+            }
+        }
+    }
+
+    public static void onIMCMessage(FMLInterModComms.IMCMessage message) {
+        if(hasInit) {
+            return;
+        }
+        if(!message.isNBTMessage()) {
+            return;
+        }
+        if(message.key.equals("renderHooks")) {
+            for(String id:modIds) {
+                if(id.equals(message.getSender())) {
+                    hasInit = true;
+                    return;
+                }
+            }
         }
     }
 

@@ -3,12 +3,17 @@ package com.InfinityRaider.AgriCraft.handler;
 import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAPI;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.renderers.player.RenderPlayerHooks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class InterModComsHandler {
+
     @Mod.EventHandler
     public void receiveMessage(FMLInterModComms.IMCEvent event) {
         for(FMLInterModComms.IMCMessage message:event.getMessages()) {
@@ -34,6 +39,11 @@ public class InterModComsHandler {
                     }
                 } catch (ClassNotFoundException e) {
                     LogHelper.error("[IMC] CropPlant registering errored: No class found for "+message.key);
+                }
+            }
+            else if (message.key.equals("renderHooks")) {
+                if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+                    RenderPlayerHooks.onIMCMessage(message);
                 }
             }
         }
