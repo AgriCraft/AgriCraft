@@ -3,8 +3,6 @@ package com.InfinityRaider.AgriCraft.renderers.player;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelDragon;
-import net.minecraft.entity.boss.EntityDragonPart;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;

@@ -10,7 +10,6 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class InterModComsHandler {
 
