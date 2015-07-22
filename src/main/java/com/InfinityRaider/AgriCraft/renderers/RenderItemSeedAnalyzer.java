@@ -28,7 +28,7 @@ public class RenderItemSeedAnalyzer implements IItemRenderer {
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        seedAnalyzer.direction = ForgeDirection.SOUTH;
+        seedAnalyzer.setDirection(ForgeDirection.SOUTH.ordinal());
         this.renderer.renderTileEntityAt(seedAnalyzer, 0.0, 0.0, 0.0, 0.0F);
     }
 }

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.container;
 
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -12,6 +12,6 @@ public class SlotSeedAnalyzerSeed extends Slot{
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return CropPlantHandler.isValidSeed(stack);
+        return TileEntitySeedAnalyzer.isValid(stack);
     }
 }

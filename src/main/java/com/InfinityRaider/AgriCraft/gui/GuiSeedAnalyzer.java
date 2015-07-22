@@ -52,7 +52,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-        if(this.seedAnalyzer.progress > 0) {
+        if(this.seedAnalyzer.getProgress() > 0) {
             int state = this.seedAnalyzer.getProgressScaled(40);
             drawTexturedModalRect(this.guiLeft + 68, this.guiTop + 79, this.xSize, 0, state, 5);
         }
@@ -70,7 +70,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        ItemStack journal = seedAnalyzer.journal;
+        ItemStack journal = seedAnalyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId);
         if(journal != null) {
             if (journal.hasTagCompound()) {
                 NBTTagCompound tag = journal.stackTagCompound;

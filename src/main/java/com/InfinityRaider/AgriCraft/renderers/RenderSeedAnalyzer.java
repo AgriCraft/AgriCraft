@@ -9,6 +9,7 @@ import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzerBook;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -36,7 +37,7 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
         GL11.glPushMatrix();                                                            //initiate first gl renderer
             GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);    //sets the rendering origin to the right spot
             Minecraft.getMinecraft().renderEngine.bindTexture(this.texture);            //loads texture for the model
-            GL11.glRotatef(getAngle(analyzer.direction), 0.0F, 1.0F, 0.0F);             //rotates the renderer to render the model in the right orientation
+            GL11.glRotatef(getAngle(analyzer.getDirection()), 0.0F, 1.0F, 0.0F);             //rotates the renderer to render the model in the right orientation
             GL11.glPushMatrix();                                                        //initiate second gl renderer
                 GL11.glRotatef(180, 0F, 0F, 1F);                                        //rotate the renderer so the model doesn't render upside down
                 this.modelSeedAnalyzer.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);        //actually renders the model
@@ -46,7 +47,7 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
                 }
             GL11.glPopMatrix();                                                         //close second gl renderer
         GL11.glPopMatrix();                                                             //close first gl renderer
-        if(analyzer.seed!=null) {
+        if(analyzer.hasSeed() || analyzer.hasTrowel()) {
             renderSeed(analyzer, x, y, z);                                              //if the analyzer has a seed, render the seed slowly spinning
         }
 
@@ -62,11 +63,13 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
         float angle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);   //credits to Pahimar
         GL11.glPushMatrix();
             //translate to the desired position
-            GL11.glTranslatef((float) x + Constants.unit*8, (float) y + Constants.unit*4, (float) z + Constants.unit*8);
+            GL11.glTranslatef((float) x + Constants.unit * 8, (float) y + Constants.unit * 4, (float) z + Constants.unit * 8);
             //resize the texture to half the size
             GL11.glScalef(0.5F, 0.5F, 0.5F);
             //rotate the renderer
             GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
+            ItemRenderer.renderItemIn2D(tessellator, 0, 0, 1, 1, 1, 1, Constants.unit);
+        /*
             //bind texture
             if(resource != null) {
                 Minecraft.getMinecraft().renderEngine.bindTexture(resource);
@@ -86,6 +89,7 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
                 //note the texture is rotating around the (0,1,0) axis, which goes through the centre of the surface, in order to rotate the texture around its centre axis
                 //this axis has to be coincident with the rotation axis, this is why I am shifting all the vertices in the x direction over half a block
             tessellator.draw();
+            */
         GL11.glPopMatrix();
     }
 

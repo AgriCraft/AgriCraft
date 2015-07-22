@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
@@ -200,46 +201,51 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 if (ConfigurationHandler.enableHandRake && crop.hasWeed()) {
                     return false;
                 }
+                ItemStack heldItem = player.getCurrentEquippedItem();
                 if (player.isSneaking()) {
                     this.harvest(world, x, y, z, player);
-                } else if (player.getCurrentEquippedItem()==null || player.getCurrentEquippedItem().getItem()==null) {
+                } else if (heldItem==null || heldItem.getItem()==null) {
                     //harvest operation
                     this.harvest(world, x, y, z, player);
-                } else if (player.getCurrentEquippedItem().getItem() == Items.debugItem) {
+                } else if (heldItem.getItem() == Items.debugItem) {
                     return false;
                 }
                 //check to see if the player clicked with crops (crosscrop attempt)
-                else if (player.getCurrentEquippedItem().getItem() == Items.crops) {
+                else if (heldItem.getItem() == Items.crops) {
                     this.setCrossCrop(world, x, y, z, player);
                 }
+                //trowel usage
+                else if(heldItem.getItem() instanceof ITrowel) {
+                    crop.onTrowelUsed((ITrowel) heldItem.getItem(), heldItem);
+                }
                 //check to see if the player wants to use bonemeal
-                else if (player.getCurrentEquippedItem().getItem() == net.minecraft.init.Items.dye && player.getCurrentEquippedItem().getItemDamage() == 15) {
+                else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
                     return false;
                 }
                 //fertiliser
-                else if (player.getCurrentEquippedItem().getItem() instanceof IFertiliser) {
-                    IFertiliser fertiliser = (IFertiliser) player.getCurrentEquippedItem().getItem();
+                else if (heldItem.getItem() instanceof IFertiliser) {
+                    IFertiliser fertiliser = (IFertiliser) heldItem.getItem();
                     if(crop.allowFertiliser(fertiliser)) {
                         crop.applyFertiliser(fertiliser, world.rand);
-                        NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertiliserApplied(player.getCurrentEquippedItem(), x, y, z), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 32));
+                        NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertiliserApplied(heldItem, x, y, z), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 32));
                         if(!player.capabilities.isCreativeMode) {
-                            player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
+                            heldItem.stackSize = heldItem.stackSize-1;
                         }
                     }
                     return false;
                 }
                 //allow the debugger to be used
-                else if (player.getCurrentEquippedItem().getItem() instanceof ItemDebugger) {
+                else if (heldItem.getItem() instanceof ItemDebugger) {
                     return false;
                 }
                 //mod interaction
-                else if (ModHelper.isRightClickHandled(player.getCurrentEquippedItem().getItem())) {
-                    return ModHelper.handleRightClickOnCrop(world, x, y, z, player, player.getCurrentEquippedItem(), this, crop);
+                else if (ModHelper.isRightClickHandled(heldItem.getItem())) {
+                    return ModHelper.handleRightClickOnCrop(world, x, y, z, player, heldItem, this, crop);
                 } else {
                     //harvest operation
                     this.harvest(world, x, y, z, player);
                     //check to see if clicked with seeds
-                    if (CropPlantHandler.isValidSeed(player.getCurrentEquippedItem())) {
+                    if (CropPlantHandler.isValidSeed(heldItem)) {
                         this.plantSeed(world, x, y, z, player);
                     }
                 }

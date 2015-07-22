@@ -245,9 +245,10 @@ public abstract class SeedHelper {
 
     //define NBT tag
     public static NBTTagCompound setNBT(NBTTagCompound tag, short growth, short gain, short strength, boolean analyzed) {
-        tag.setShort(Names.NBT.growth, growth==0?Constants.defaultGrowth:growth>10?10:growth);
-        tag.setShort(Names.NBT.gain, gain==0?Constants.defaultGain:gain>10?10:gain);
-        tag.setShort(Names.NBT.strength, strength==0?Constants.defaultGain:strength>10?10:strength);
+        short cap = (short) ConfigurationHandler.cropStatCap;
+        tag.setShort(Names.NBT.growth, growth==0?Constants.defaultGrowth:growth>cap?cap:growth);
+        tag.setShort(Names.NBT.gain, gain==0?Constants.defaultGain:gain>cap?cap:gain);
+        tag.setShort(Names.NBT.strength, strength==0?Constants.defaultGain:strength>cap?cap:strength);
         tag.setBoolean(Names.NBT.analyzed, analyzed);
         return tag;
     }

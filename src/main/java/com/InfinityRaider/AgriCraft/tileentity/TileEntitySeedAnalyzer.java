@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
+import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
@@ -14,17 +15,17 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISidedInventory {
-    public ItemStack seed = null;
-    public ItemStack journal = null;
-    public int progress = 0;
-    public ForgeDirection direction;
+    private ItemStack specimen = null;
+    private ItemStack journal = null;
+    private int progress = 0;
+    private ForgeDirection direction;
 
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        if(this.seed!=null && this.seed.getItem()!=null) {
+        if(this.specimen !=null && this.specimen.getItem()!=null) {
             NBTTagCompound seedTag = new NBTTagCompound();
-            this.seed.writeToNBT(seedTag);
+            this.specimen.writeToNBT(seedTag);
             tag.setTag(Names.Objects.seed, seedTag);
         }
         if(this.journal!=null && this.journal.getItem()!=null) {
@@ -43,10 +44,10 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         if(tag.hasKey(Names.Objects.seed)) {
-            this.seed = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.Objects.seed));
+            this.specimen = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.Objects.seed));
         }
         else {
-            this.seed = null;
+            this.specimen = null;
         }
         if(tag.hasKey(Names.Objects.journal)) {
             this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.Objects.journal));
@@ -66,21 +67,64 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         this.direction = ForgeDirection.getOrientation(direction);
     }
 
-    //returns the seed currently being processed
+    public ForgeDirection getDirection() {
+        return this.direction;
+    }
+
+    //returns true if a seed currently being processed
     public boolean hasSeed() {
-        return CropPlantHandler.isValidSeed(this.seed);
+        return CropPlantHandler.isValidSeed(this.specimen);
+    }
+
+    //returns true if a trowel with a plant is currently being processed
+    public boolean hasTrowel() {
+        if(this.specimen==null || this.specimen.getItem()==null) {
+            return false;
+        }
+        if(this.specimen.getItem() instanceof ITrowel) {
+            return ((ITrowel) specimen.getItem()).hasSeed(this.specimen);
+        }
+        return false;
+    }
+
+    public void setProgress(int value) {
+        this.progress = value;
+    }
+
+    public int getProgress() {
+        return this.progress;
     }
 
     //calculates the number of ticks it takes to analyze the seed
     public int maxProgress() {
-        return seed==null?0: CropPlantHandler.getPlantFromStack(seed).getTier()*20;
+        ItemStack seed = this.specimen;
+        if(this.hasTrowel()) {
+            seed = ((ITrowel) specimen.getItem()).getSeed(specimen);
+        }
+        return seed==null?0:CropPlantHandler.getPlantFromStack(seed).getTier()*20;
     }
 
     public static boolean isValid(ItemStack stack) {
+        if(stack==null || stack.getItem()==null) {
+            return false;
+        }
+        if(stack.getItem() instanceof ITrowel) {
+            return ((ITrowel) stack.getItem()).hasSeed(stack);
+        }
         if (!CropPlantHandler.isValidSeed(stack)) {
             return false;
         }
         return true;
+    }
+
+    public boolean isSpecimenAnalysed() {
+        if(this.hasTrowel()) {
+            return ((ITrowel) this.specimen.getItem()).isSeedAnalysed(this.specimen);
+        }
+        if(this.hasSeed()) {
+            return this.specimen.hasTagCompound() && this.specimen.stackTagCompound.getBoolean(Names.NBT.analyzed);
+        }
+        return false;
     }
 
     //gets called every tick
@@ -106,17 +150,21 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //analyzes the current seed
     public void analyze() {
         //analyze the seed
-        if(this.seed.hasTagCompound()) {
-            NBTTagCompound tag = this.seed.getTagCompound();
-            if(tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
-                tag.setBoolean(Names.NBT.analyzed, true);
+        if(this.hasSeed()) {
+            if (this.specimen.hasTagCompound()) {
+                NBTTagCompound tag = this.specimen.getTagCompound();
+                if (tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
+                    tag.setBoolean(Names.NBT.analyzed, true);
+                } else {
+                    SeedHelper.setNBT(tag, (short) 0, (short) 0, (short) 0, true);
+                }
             } else {
-                SeedHelper.setNBT(tag, (short) 0, (short) 0, (short) 0, true);
+                this.specimen.setTagCompound(new NBTTagCompound());
+                SeedHelper.setNBT(this.specimen.stackTagCompound, (short) 0, (short) 0, (short) 0, true);
             }
         }
-        else {
-            this.seed.setTagCompound(new NBTTagCompound());
-            SeedHelper.setNBT(this.seed.stackTagCompound, (short) 0, (short) 0, (short) 0, true);
+        else if(this.hasTrowel()) {
+            ((ITrowel) this.specimen.getItem()).analyze(this.specimen);
         }
         //register the seed in the journal if there is a journal present
         if(this.hasJournal()) {
@@ -135,9 +183,10 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
                 list = new NBTTagList();
             }
             //add the analyzed seed to the NBT tag list if it doesn't already have it
-            if(!NBTHelper.listContainsStack(list, this.seed)) {
+            ItemStack newEntry = this.hasSeed()?this.specimen:((ITrowel) this.specimen.getItem()).getSeed(this.specimen);
+            if(!NBTHelper.listContainsStack(list, newEntry)) {
                 NBTTagCompound seedTag = new NBTTagCompound();
-                ItemStack write = this.seed.copy();
+                ItemStack write = newEntry.copy();
                 write.stackSize = 1;
                 write.stackTagCompound = null;
                 write.writeToNBT(seedTag);
@@ -151,12 +200,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     //checks if the analyzer is analyzing
     public boolean isAnalyzing() {
-        if(this.hasSeed() && this.seed.hasTagCompound() && this.seed.stackTagCompound.hasKey(Names.NBT.analyzed)) {
-            return (this.progress<this.maxProgress()) && !this.seed.stackTagCompound.getBoolean(Names.NBT.analyzed);
-        }
-        else {
-            return this.hasSeed() && progress < maxProgress();
-        }
+        return this.specimen!=null && !this.isSpecimenAnalysed() && progress < maxProgress();
     }
 
     //checks if there is a journal in the analyzer
@@ -187,9 +231,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     @Override
     public boolean canInsertItem(int slot, ItemStack stack, int side) {
         if(slot==ContainerSeedAnalyzer.seedSlotId) {
-            if (CropPlantHandler.isValidSeed(stack)) {
-                return (this.seed == null || this.canStack(stack)) && this.isItemValidForSlot(slot, stack);
-            }
+            return isValid(stack);
         }
         else if(slot==ContainerSeedAnalyzer.journalSlotId) {
             return (this.journal==null && this.isItemValidForSlot(slot, stack));
@@ -200,9 +242,8 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //check if an item can be extracted
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        if(slot==ContainerSeedAnalyzer.seedSlotId &&this.seed !=null && this.seed.hasTagCompound()) {
-            NBTTagCompound tag = this.seed.getTagCompound();
-            return tag.hasKey("analyzed") && tag.getBoolean("analyzed");
+        if(slot==ContainerSeedAnalyzer.seedSlotId &&this.specimen !=null && this.specimen.hasTagCompound()) {
+            return this.isSpecimenAnalysed();
         }
         return false;
     }
@@ -217,7 +258,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     @Override
     public ItemStack getStackInSlot(int slot) {
         switch(slot) {
-            case ContainerSeedAnalyzer.seedSlotId: return this.seed;
+            case ContainerSeedAnalyzer.seedSlotId: return this.specimen;
             case ContainerSeedAnalyzer.journalSlotId: return this.journal;
             default: return null;
         }
@@ -227,12 +268,12 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
         ItemStack output = null;
-        if(slot==ContainerSeedAnalyzer.seedSlotId && this.seed!=null) {
-            if(amount<this.seed.stackSize) {
-                output = this.seed.splitStack(amount);
+        if(slot==ContainerSeedAnalyzer.seedSlotId && this.specimen !=null) {
+            if(amount<this.specimen.stackSize) {
+                output = this.specimen.splitStack(amount);
             } else {
-                output = this.seed.copy();
-                this.seed = null;
+                output = this.specimen.copy();
+                this.specimen = null;
             }
         }
         else if(slot==ContainerSeedAnalyzer.journalSlotId && this.journal!=null) {
@@ -248,7 +289,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     public ItemStack getStackInSlotOnClosing(int slot) {
         ItemStack stackInSlot;
         switch(slot) {
-            case ContainerSeedAnalyzer.seedSlotId: stackInSlot = this.seed; break;
+            case ContainerSeedAnalyzer.seedSlotId: stackInSlot = this.specimen; break;
             case ContainerSeedAnalyzer.journalSlotId: stackInSlot = this.journal; break;
             default: return null;
         }
@@ -262,7 +303,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
         if(slot==ContainerSeedAnalyzer.seedSlotId) {
-            this.seed = stack;
+            this.specimen = stack;
             if(stack!=null && stack.stackSize>getInventoryStackLimit()) {
                 stack.stackSize = getInventoryStackLimit();
             }
@@ -321,6 +362,6 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     //check if a stack can stack with the current seed stack
     public boolean canStack(ItemStack stack) {
-        return this.seed.getItem()==stack.getItem()&&this.seed.getItemDamage()==stack.getItemDamage()&&this.seed.stackTagCompound==stack.stackTagCompound&&(this.seed.stackSize+stack.stackSize<=64);
+        return this.specimen.getItem()==stack.getItem()&&this.specimen.getItemDamage()==stack.getItemDamage()&&this.specimen.stackTagCompound==stack.stackTagCompound&&(this.specimen.stackSize+stack.stackSize<=64);
     }
 }

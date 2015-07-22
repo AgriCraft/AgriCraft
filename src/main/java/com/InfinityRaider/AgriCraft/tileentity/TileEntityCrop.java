@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
@@ -190,6 +191,31 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
         else {
             return this.weed ? 0 : 1;
+        }
+    }
+
+    //trowel usage
+    public void onTrowelUsed(ITrowel trowel, ItemStack trowelStack) {
+        if(this.hasPlant()) {
+            if(!trowel.hasSeed(trowelStack)) {
+                trowel.setSeed(trowelStack, this.getSeedStack(), worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
+                this.clearPlant();
+                this.markForUpdate();
+            }
+        } else if(!this.hasWeed() && !this.crossCrop){
+            if(trowel.hasSeed(trowelStack)) {
+                ItemStack seed = trowel.getSeed(trowelStack);
+                int growthStage = trowel.getGrowthStage(trowelStack);
+                NBTTagCompound tag = seed.getTagCompound();
+                short growth = tag.getShort(Names.NBT.growth);
+                short gain = tag.getShort(Names.NBT.gain);
+                short strength = tag.getShort(Names.NBT.strength);
+                boolean analysed = tag.getBoolean(Names.NBT.analyzed);
+                this.setPlant(growth, gain, strength, analysed, seed.getItem(), seed.getItemDamage());
+                this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, growthStage, 3);
+                this.markForUpdate();
+                trowel.clearSeed(trowelStack);
+            }
         }
     }
 
