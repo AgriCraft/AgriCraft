@@ -57,5 +57,15 @@ public class PlayerEffectRendererEntityDragon extends PlayerEffectRendererEntity
             this.prevAnimTime = this.animTime;
             this.animTime = (float) (test/360);
         }
+
+        @Override
+        public float[] getModelParameters() {
+            return new float[] {0, 0, 0, 0, 0, 1};
+        }
+
+        @Override
+        public int getFloatingVelocity() {
+            return 10;
+        }
     }
 }

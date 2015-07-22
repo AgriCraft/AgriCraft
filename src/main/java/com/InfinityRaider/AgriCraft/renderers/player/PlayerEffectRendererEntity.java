@@ -15,6 +15,7 @@ public abstract class PlayerEffectRendererEntity extends PlayerEffectRenderer {
     private ResourceLocation texture;
 
     protected PlayerEffectRendererEntity() {
+        super();
         this.entityWrapper = getEntityWrapper();
         this.entity = entityWrapper.getEntity();
         this.model = getModel();
@@ -36,7 +37,7 @@ public abstract class PlayerEffectRendererEntity extends PlayerEffectRenderer {
 
         entityWrapper.performAnimationUpdates();
         double arg = Math.toRadians(360 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
-        double vY = 10;
+        double vY = entityWrapper.getFloatingVelocity();
         double aY = 0.2F;
 
         double dx = 0.5;
@@ -49,10 +50,10 @@ public abstract class PlayerEffectRendererEntity extends PlayerEffectRenderer {
 
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 
-        model.render(entity, 0, 0, 0, 0, 0, 1);
+        float[] pars = entityWrapper.getModelParameters();
+        model.render(entity, pars[0], pars[1], pars[2], pars[3], pars[4], pars[5]);
         GL11.glScalef(1.0F / scale, 1.0F / scale, 1.0F / scale);
         GL11.glTranslated(-dx, -dy, -dz);
-
     }
 
     protected abstract IWrappedEntity getEntityWrapper();
@@ -67,5 +68,9 @@ public abstract class PlayerEffectRendererEntity extends PlayerEffectRenderer {
         T getEntity();
 
         void performAnimationUpdates();
+
+        float[] getModelParameters();
+
+        int getFloatingVelocity();
     }
 }

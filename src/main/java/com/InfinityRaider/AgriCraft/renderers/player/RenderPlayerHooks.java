@@ -14,7 +14,6 @@ import java.util.HashMap;
 
 @SideOnly(Side.CLIENT)
 public final class RenderPlayerHooks {
-    private static HashMap<String, Class<? extends PlayerEffectRenderer>>  effectRenderers;
     private static final String[] modIds = {
             "3DManeuverGear",
             "AgriCraft",
@@ -61,6 +60,7 @@ public final class RenderPlayerHooks {
         this.registerPlayerEffectRenderer(new PlayerEffectRendererNavi());
         this.registerPlayerEffectRenderer(new PlayerEffectRendererParticlesEnchanted());
         this.registerPlayerEffectRenderer(new PlayerEffectRendererEntityDragon());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererEntityBat());
     }
 
     private void registerPlayerEffectRenderer(PlayerEffectRenderer renderer) {
