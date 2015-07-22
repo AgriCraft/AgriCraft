@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers.player;
+package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
 import com.InfinityRaider.AgriCraft.renderers.particles.RuneFX;
 import cpw.mods.fml.relauncher.Side;

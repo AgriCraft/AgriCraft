@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers.player;
+package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

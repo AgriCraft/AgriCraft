@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers.player;
+package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import cpw.mods.fml.common.event.FMLInterModComms;
