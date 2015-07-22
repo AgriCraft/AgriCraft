@@ -7,12 +7,14 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzerBook;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
@@ -58,7 +60,8 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
         //set up the tessellator
         Tessellator tessellator = Tessellator.instance;
         //grab the texture
-        ResourceLocation resource = RenderHelper.getResource(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId).getItem(),analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId).getItemDamage());
+        ItemStack stack = analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId);
+        IIcon icon = stack.getItem().getIconFromDamage(stack.getItemDamage());
         //define rotation angle in function of system time
         float angle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);   //credits to Pahimar
         GL11.glPushMatrix();
@@ -68,28 +71,12 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
             GL11.glScalef(0.5F, 0.5F, 0.5F);
             //rotate the renderer
             GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
-            ItemRenderer.renderItemIn2D(tessellator, 0, 0, 1, 1, 1, 1, Constants.unit);
-        /*
-            //bind texture
-            if(resource != null) {
-                Minecraft.getMinecraft().renderEngine.bindTexture(resource);
-            }
-            //start drawing
-            tessellator.startDrawingQuads();
-                //front
-                RenderHelper.addScaledVertexWithUV(tessellator, 0-8, 0, 0, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0-8, 16, 0, 16, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16-8, 16, 0, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16-8, 0, 0, 0, 16);
-                //back
-                RenderHelper.addScaledVertexWithUV(tessellator, 0-8, 0, 0, 16, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16-8, 0, 0, 0, 16);
-                RenderHelper.addScaledVertexWithUV(tessellator, 16-8, 16, 0, 0, 0);
-                RenderHelper.addScaledVertexWithUV(tessellator, 0-8, 16, 0, 16, 0);
-                //note the texture is rotating around the (0,1,0) axis, which goes through the centre of the surface, in order to rotate the texture around its centre axis
-                //this axis has to be coincident with the rotation axis, this is why I am shifting all the vertices in the x direction over half a block
-            tessellator.draw();
-            */
+            GL11.glTranslatef(-8 * Constants.unit, 0, 0);
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
+            ItemRenderer.renderItemIn2D(tessellator, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), Constants.unit);
+            GL11.glTranslatef(8 * Constants.unit, 0, 0);
+            GL11.glRotatef(-angle, 0.0F, 1.0F, 0.0F);
+            GL11.glScalef(2, 2, 2);
         GL11.glPopMatrix();
     }
 
