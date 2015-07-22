@@ -12,6 +12,8 @@ Changelog
 -CHANGE: Clients will now use mutation configs from the server
 -CHANGE: Villager ID is now assigned to the first free id
 -CHANGE: The AgriCraft villager now has a good looking skin (thanks SkeletonPunk)
+-CHANGE: Botania crops now require podzol as soil
+-CHANGE: Changed default number of crops per craft to 4
 -ADDED:  API (many thanks to HenryLoenwind)
 -ADDED:  Missing mutations for Harvestcraft crops (Strawberry, Spinach, White Mushroom)
 -ADDED:  Resource crop for nether quartz

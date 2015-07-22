@@ -1,14 +1,17 @@
 package com.InfinityRaider.AgriCraft.compatibility.botania;
 
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -17,7 +20,6 @@ import java.util.ArrayList;
 public class BotaniaHelper extends ModHelper {
     public static ArrayList<BlockModPlant> botaniaCrops = new ArrayList<BlockModPlant>();
     public static ArrayList<ItemModSeed> botaniaSeeds = new ArrayList<ItemModSeed>();
-
 
     @Override
     protected void init() {
@@ -39,9 +41,9 @@ public class BotaniaHelper extends ModHelper {
             }
             botaniaCrops.add(plant);
             botaniaSeeds.add(plant.getSeed());
+            GrowthRequirementHandler.getGrowthRequirement(plant.getSeed(), 0).setSoil(new BlockWithMeta(Blocks.dirt, 2));
         }
         LogHelper.info("Botania crops registered");
-
     }
 
     @Override
