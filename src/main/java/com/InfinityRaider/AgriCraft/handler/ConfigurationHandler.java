@@ -93,7 +93,7 @@ public class ConfigurationHandler {
     private static void loadConfiguration() {
         //agricraft
         resourcePlants = config.getBoolean("Resource Crops", CATEGORY_AGRICRAFT, true, "set to true if you wish to enable resource crops");
-        cropsPerCraft = config.getInt("Crops per craft", CATEGORY_AGRICRAFT, 1, 1, 4, "The number of crops you get per crafting operation");
+        cropsPerCraft = config.getInt("Crops per craft", CATEGORY_AGRICRAFT, 4, 1, 4, "The number of crops you get per crafting operation");
         cropStatCap = config.getInt("Crop stat cap", CATEGORY_AGRICRAFT, 10, 1, 10, "The maximum attainable value of the stats on a crop");
         propGenerateDefaults = config.get(CATEGORY_AGRICRAFT, "GenerateDefaults", false, "set to true to regenerate a default mutations file (will turn back to false afterwards)");
         generateDefaults = propGenerateDefaults.getBoolean();
