@@ -18,7 +18,6 @@ import java.util.ArrayList;
 @SideOnly(Side.CLIENT)
 public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
     private short counter = 0;
-    private final int sphereId;
     private final Sphere sphere;
     private final float f;
     private final int detail;
@@ -40,12 +39,6 @@ public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
         sphere.setDrawStyle(GLU.GLU_FILL);
         sphere.setNormals(GLU.GLU_SMOOTH);
         sphere.setOrientation(GLU.GLU_OUTSIDE);
-        sphereId = GL11.glGenLists(1);
-
-        GL11.glNewList(sphereId, GL11.GL_COMPILE);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-        sphere.draw(f, detail, detail);
-        GL11.glEndList();
     }
 
     @Override
@@ -82,7 +75,8 @@ public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glScalef(scale, scale, scale);
-        GL11.glCallList(sphereId);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+        sphere.draw(f, detail, detail);
     }
 
     private void renderWings() {
