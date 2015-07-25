@@ -32,6 +32,7 @@ Changelog
 -ADDED:  Compatibility for Biomes O Plenty (turnip)
 -ADDED:  Compatibility for Extra Biomes XL (strawberries)
 -ADDED:  Compatibility for GrowthCraft Rice
+-ADDED:  Compatibility for The Lord of the Rings Mod's crops
 -ADDED:  Configuration option for a global growth rate multiplier
 -ADDED:  Crops will now allow the use of other items on them when not mature (for example the Hoe of Growth from Thaumcraft)
 -ADDED:  AgriCraft seeds can now be squeezed into seed oil with forestry

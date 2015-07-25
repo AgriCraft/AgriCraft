@@ -18,6 +18,7 @@ import com.InfinityRaider.AgriCraft.compatibility.growthcraft.GrowthCraftRiceHel
 import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.hungeroverhaul.HungerOverhaulHelper;
 import com.InfinityRaider.AgriCraft.compatibility.immersiveengineering.ImmersiveEngineeringHelper;
+import com.InfinityRaider.AgriCraft.compatibility.lordoftherings.LordOfTheRingsHelper;
 import com.InfinityRaider.AgriCraft.compatibility.magicalcrops.MagicalCropsHelper;
 import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.MFRHelper;
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.MinetweakerHelper;
@@ -156,6 +157,7 @@ public abstract class ModHelper {
                 HarvestcraftHelper.class,
                 HungerOverhaulHelper.class,
                 ImmersiveEngineeringHelper.class,
+                LordOfTheRingsHelper.class,
                 MagicalCropsHelper.class,
                 MFRHelper.class,
                 MinetweakerHelper.class,
