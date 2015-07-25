@@ -61,6 +61,7 @@ public final class RenderPlayerHooks {
         this.registerPlayerEffectRenderer(new PlayerEffectRendererParticlesEnchanted());
         this.registerPlayerEffectRenderer(new PlayerEffectRendererEntityDragon());
         this.registerPlayerEffectRenderer(new PlayerEffectRendererEntityBat());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererButterfly());
     }
 
     private void registerPlayerEffectRenderer(PlayerEffectRenderer renderer) {

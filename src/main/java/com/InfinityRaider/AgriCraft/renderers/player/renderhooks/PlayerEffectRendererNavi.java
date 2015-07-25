@@ -64,7 +64,6 @@ public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
         double aY = 0.1F;
         double dy = aY*Math.cos((vY*arg)%360);
         return new double[] {0.5F, -1+dy, 1};
-
     }
 
     private void renderSphere() {
@@ -109,19 +108,8 @@ public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
     }
 
     private void draw(Tessellator tessellator, float scale) {
-
-        //x- and y-axis
-        /*
-        tessellator.addVertexWithUV(-0.005F, 2, 0, 1, 0);
-        tessellator.addVertexWithUV(0.005F, 2, 0, 0, 0);
-        tessellator.addVertexWithUV(0.005F, -1, 0, 0, 1);
-        tessellator.addVertexWithUV(-0.005F, -1, 0, 1, 1);
-
-        tessellator.addVertexWithUV(2, -0.005F, 0, 1, 0);
-        tessellator.addVertexWithUV(2, 0.005F, 0, 0, 0);
-        tessellator.addVertexWithUV(-1, 0.005F, 0, 0, 1);
-        tessellator.addVertexWithUV(-1, -0.005F, 0, 1, 1);
-        */
+        //x-, y & z-axis
+        //this.drawAxisSystem();
 
         GL11.glRotatef(-0, 1, 0, 1);
         tessellator.startDrawingQuads();

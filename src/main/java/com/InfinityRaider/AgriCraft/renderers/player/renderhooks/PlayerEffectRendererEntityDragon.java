@@ -8,6 +8,9 @@ import net.minecraft.util.ResourceLocation;
 import java.util.ArrayList;
 
 public class PlayerEffectRendererEntityDragon extends PlayerEffectRendererEntity {
+    protected PlayerEffectRendererEntityDragon() {
+        super();
+    }
 
     @Override
     ArrayList<String> getDisplayNames() {
