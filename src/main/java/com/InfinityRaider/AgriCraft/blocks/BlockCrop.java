@@ -310,7 +310,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
 
     //bonemeal can be applied to this plant
     @Override
-    public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
+    public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         return crop.canBonemeal();
     }
