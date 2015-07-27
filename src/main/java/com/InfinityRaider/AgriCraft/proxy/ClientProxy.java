@@ -38,6 +38,7 @@ public class ClientProxy extends CommonProxy {
     public static int channelFullRenderId = -1;
     public static int valveRenderId = -1;
     public static int waterPadRenderId = -1;
+    public static int seedStorageId = -1;
 
     @Override
     public int getRenderId(int nr) {
@@ -48,6 +49,7 @@ public class ClientProxy extends CommonProxy {
             case Constants.valveId: return valveRenderId;
             case Constants.channelFullId: return channelFullRenderId;
             case Constants.waterPadId: return waterPadRenderId;
+            case Constants.seedStorageId: return seedStorageId;
         }
         return -1;
     }
@@ -111,6 +113,11 @@ public class ClientProxy extends CommonProxy {
         TileEntitySpecialRenderer renderSprinkler = new RenderSprinkler();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, renderSprinkler);
         MinecraftForgeClient.registerItemRenderer(Items.sprinkler, new RenderItemSprinkler());
+
+        //seed storage
+        seedStorageId = RenderingRegistry.getNextAvailableRenderId();
+        RenderSeedStorage renderSeedStorage = new RenderSeedStorage();
+        RenderingRegistry.registerBlockHandler(seedStorageId, renderSeedStorage);
 
         //villager
         if (!ConfigurationHandler.disableWorldGen && ConfigurationHandler.villagerEnabled) {

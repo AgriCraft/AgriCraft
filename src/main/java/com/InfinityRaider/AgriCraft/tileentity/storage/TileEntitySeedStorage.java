@@ -198,6 +198,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if(!this.hasLockedSeed()) {
             this.lockedSeed = seed;
             this.lockedSeedMeta = meta;
+            this.markForUpdate();
         }
     }
 
