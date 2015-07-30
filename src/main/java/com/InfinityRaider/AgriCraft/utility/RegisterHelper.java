@@ -32,7 +32,7 @@ public abstract class RegisterHelper {
     }
 
     public static void registerCrop(BlockModPlant plant, String name) {
-        registerBlock(plant, Names.Objects.crop+name);
+        registerBlock(plant, Names.Objects.crop + name);
         for(ItemStack fruit:plant.products.getAllProducts()) {
             if(fruit!=null && fruit.getItem()!=null && !OreDictHelper.hasOreId(fruit, Names.Objects.crop + name)) {
                 OreDictionary.registerOre(Names.Objects.crop + name, fruit);

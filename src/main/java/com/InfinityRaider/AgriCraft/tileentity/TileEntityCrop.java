@@ -44,6 +44,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         this.mutationEngine = new MutationEngine(this);
     }
 
+    @Override
+    public boolean isRotatable() {
+        return false;
+    }
+
     public CropPlant getPlant() {return plant;}
 
     public short getGrowth() {return stats.getGrowth();}

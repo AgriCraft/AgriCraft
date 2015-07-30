@@ -39,7 +39,7 @@ public class RenderSeedAnalyzer extends TileEntitySpecialRenderer {
         GL11.glPushMatrix();                                                            //initiate first gl renderer
             GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);    //sets the rendering origin to the right spot
             Minecraft.getMinecraft().renderEngine.bindTexture(this.texture);            //loads texture for the model
-            GL11.glRotatef(getAngle(analyzer.getDirection()), 0.0F, 1.0F, 0.0F);             //rotates the renderer to render the model in the right orientation
+            GL11.glRotatef(getAngle(analyzer.getOrientation()), 0.0F, 1.0F, 0.0F);             //rotates the renderer to render the model in the right orientation
             GL11.glPushMatrix();                                                        //initiate second gl renderer
                 GL11.glRotatef(180, 0F, 0F, 1F);                                        //rotate the renderer so the model doesn't render upside down
                 this.modelSeedAnalyzer.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);        //actually renders the model

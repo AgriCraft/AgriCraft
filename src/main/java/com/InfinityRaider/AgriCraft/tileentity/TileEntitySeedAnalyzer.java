@@ -18,11 +18,11 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     private ItemStack specimen = null;
     private ItemStack journal = null;
     private int progress = 0;
-    private ForgeDirection direction;
 
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
         if(this.specimen !=null && this.specimen.getItem()!=null) {
             NBTTagCompound seedTag = new NBTTagCompound();
             this.specimen.writeToNBT(seedTag);
@@ -33,16 +33,13 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
             this.journal.writeToNBT(journalTag);
             tag.setTag(Names.Objects.journal, journalTag);
         }
-        if(this.direction!=null) {
-            tag.setByte("direction", (byte) this.direction.ordinal());
-        }
         tag.setInteger("progress", this.progress);
-        super.writeToNBT(tag);
     }
 
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
         if(tag.hasKey(Names.Objects.seed)) {
             this.specimen = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.Objects.seed));
         }
@@ -56,19 +53,9 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
             this.journal = null;
         }
         if(tag.hasKey("direction")) {
-            this.setDirection(tag.getByte("direction"));
+            this.setOrientation(tag.getByte("direction"));
         }
         this.progress = tag.getInteger("progress");
-        super.readFromNBT(tag);
-    }
-
-    //sets the direction based on an int
-    public void setDirection(int direction) {
-        this.direction = ForgeDirection.getOrientation(direction);
-    }
-
-    public ForgeDirection getDirection() {
-        return this.direction;
     }
 
     //returns true if a seed currently being processed
@@ -363,5 +350,10 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //check if a stack can stack with the current seed stack
     public boolean canStack(ItemStack stack) {
         return this.specimen.getItem()==stack.getItem()&&this.specimen.getItemDamage()==stack.getItemDamage()&&this.specimen.stackTagCompound==stack.stackTagCompound&&(this.specimen.stackSize+stack.stackSize<=64);
+    }
+
+    @Override
+    public boolean isRotatable() {
+        return true;
     }
 }

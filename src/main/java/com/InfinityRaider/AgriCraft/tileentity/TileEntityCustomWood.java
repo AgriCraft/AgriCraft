@@ -108,4 +108,9 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
     public void addDebugInfo(List<String> list) {
         list.add("this material is: " + Item.itemRegistry.getNameForObject(this.getMaterial().getItem()) + ":" + this.getMaterial().getItemDamage());
     }
+
+    @Override
+    public boolean isRotatable() {
+        return false;
+    }
 }

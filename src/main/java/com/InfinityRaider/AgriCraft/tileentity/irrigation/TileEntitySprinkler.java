@@ -153,4 +153,8 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
         Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
     }
 
+    @Override
+    public boolean isRotatable() {
+        return false;
+    }
 }

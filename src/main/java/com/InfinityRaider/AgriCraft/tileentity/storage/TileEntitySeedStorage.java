@@ -346,4 +346,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         list.add("Number of seeds: "+size);
     }
 
+    @Override
+    public boolean isRotatable() {
+        return true;
+    }
 }

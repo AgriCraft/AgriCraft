@@ -59,10 +59,10 @@ public class BlockSeedAnalyzer extends Block implements ITileEntityProvider {
             TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(x, y, z);
             int direction = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
             switch(direction) {
-                case 0: analyzer.setDirection(ForgeDirection.NORTH.ordinal()); break;
-                case 1: analyzer.setDirection(ForgeDirection.EAST.ordinal()); break;
-                case 2: analyzer.setDirection(ForgeDirection.SOUTH.ordinal()); break;
-                case 3: analyzer.setDirection(ForgeDirection.WEST.ordinal()); break;
+                case 0: analyzer.setOrientation(ForgeDirection.NORTH.ordinal()); break;
+                case 1: analyzer.setOrientation(ForgeDirection.EAST.ordinal()); break;
+                case 2: analyzer.setOrientation(ForgeDirection.SOUTH.ordinal()); break;
+                case 3: analyzer.setOrientation(ForgeDirection.WEST.ordinal()); break;
             }
         }
     }

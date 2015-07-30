@@ -116,7 +116,7 @@ public class ClientProxy extends CommonProxy {
 
         //seed storage
         seedStorageId = RenderingRegistry.getNextAvailableRenderId();
-        RenderSeedStorage renderSeedStorage = new RenderSeedStorage();
+        RenderSeedStorage renderSeedStorage = new RenderSeedStorage(Blocks.blockSeedStorage, seedStorageId);
         RenderingRegistry.registerBlockHandler(seedStorageId, renderSeedStorage);
 
         //villager
@@ -125,6 +125,11 @@ public class ClientProxy extends CommonProxy {
         }
 
         LogHelper.debug("Renderers registered");
+    }
+
+    public static void registerRenderer(RenderBlockBase renderer) {
+        int id = RenderingRegistry.getNextAvailableRenderId();
+        RenderingRegistry.registerBlockHandler(id, renderer);
     }
 
     //register forge event handlers
