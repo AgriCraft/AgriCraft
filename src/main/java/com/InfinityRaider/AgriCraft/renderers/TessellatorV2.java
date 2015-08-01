@@ -6,6 +6,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.shader.TesselatorVertexState;
 
+/**
+ * Note that this class isn't used by vanilla minecraft, the matrix operations done by this class will be ignored by the calls made by vanilla to the Tessellator
+ * I chose not to replace the vanilla Tessellator.instance field with this one for obvious reasons.
+ */
 @SideOnly(Side.CLIENT)
 public class TessellatorV2 extends Tessellator {
     public static final TessellatorV2 instance = new TessellatorV2(2097152);
