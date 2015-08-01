@@ -45,6 +45,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Sets the translation relative to the absolute coordinates
      */
+    @Override
     public void setTranslation(double x, double y, double z) {
         this.matrix.setTranslation(x, y, z);
     }
@@ -52,6 +53,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Adds a translation to the current coordinate system
      */
+    @Override
     public void addTranslation(float x, float y, float z) {
         this.matrix.multiplyLeftWith(new TransformationMatrix(x, y, z));
     }
@@ -73,14 +75,17 @@ public class TessellatorV2 extends Tessellator {
     //---------------
     //other overrides
     //---------------
+    @Override
     public int draw() {
         return tessellator.draw();
     }
 
+    @Override
     public TesselatorVertexState getVertexState(float x, float y, float z) {
         return tessellator.getVertexState(x, y, z);
     }
 
+    @Override
     public void setVertexState(TesselatorVertexState state) {
         tessellator.setVertexState(state);
     }
@@ -88,6 +93,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Sets draw mode in the tessellator to draw quads.
      */
+    @Override
     public void startDrawingQuads() {
         tessellator.startDrawing(7);
     }
@@ -95,6 +101,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Resets tessellator state and prepares for drawing (with the specified draw mode).
      */
+    @Override
     public void startDrawing(int drawMode) {
         tessellator.startDrawing(drawMode);
     }
@@ -102,10 +109,12 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Sets the texture coordinates.
      */
+    @Override
     public void setTextureUV(double u, double v) {
         tessellator.setTextureUV(u, v);
     }
 
+    @Override
     public void setBrightness(int value) {
         tessellator.setBrightness(value);
     }
@@ -113,6 +122,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Sets the RGB values as specified, converting from floats between 0 and 1 to integers from 0-255.
      */
+    @Override
     public void setColorOpaque_F(float red, float green, float blue) {
         tessellator.setColorOpaque_F(red, green, blue);
     }
@@ -120,6 +130,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Sets the RGBA values for the color, converting from floats between 0 and 1 to integers from 0-255.
      */
+    @Override
     public void setColorRGBA_F(float red, float green, float blue, float alpha) {
         tessellator.setColorRGBA_F(red, green, blue, alpha);
     }
@@ -127,6 +138,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Sets the RGB values as specified, and sets alpha to opaque.
      */
+    @Override
     public void setColorOpaque(int red, int green, int blue) {
         tessellator.setColorOpaque(red, green, blue);
     }
@@ -134,10 +146,12 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Sets the RGBA values for the color. Also clamps them to 0-255.
      */
+    @Override
     public void setColorRGBA(int red, int green, int blue, int alpha) {
         tessellator.setColorRGBA(red, green, blue, alpha);
     }
 
+    @Override
     public void func_154352_a(byte red, byte green, byte blue) {
         tessellator.func_154352_a(red, green, blue);
     }
@@ -145,6 +159,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Sets the color to the given opaque value (stored as byte values packed in an integer).
      */
+    @Override
     public void setColorOpaque_I(int value) {
         tessellator.setColorOpaque_I(value);
     }
@@ -152,6 +167,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Sets the color to the given color (packed as bytes in integer) and alpha values.
      */
+    @Override
     public void setColorRGBA_I(int value, int alpha) {
         tessellator.setColorRGBA_I(value, alpha);
     }
@@ -159,6 +175,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Disables colors for the current draw call.
      */
+    @Override
     public void disableColor() {
         tessellator.disableColor();
     }
@@ -166,6 +183,7 @@ public class TessellatorV2 extends Tessellator {
     /**
      * Sets the normal for the current draw call.
      */
+    @Override
     public void setNormal(float x, float y, float z) {
         tessellator.setNormal(x, y, z);
     }
