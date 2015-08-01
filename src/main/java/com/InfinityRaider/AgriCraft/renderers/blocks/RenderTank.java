@@ -3,6 +3,8 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -14,6 +16,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class RenderTank extends RenderBlockCustomWood {
     public RenderTank() {
         super(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, new TileEntityTank(), true);
@@ -166,87 +169,87 @@ public class RenderTank extends RenderBlockCustomWood {
             boolean x = axis=='x';
             if(tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction))instanceof TileEntityChannel && ((TileEntityChannel) tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction))).isSameMaterial(tank)) {
                 //draw plane front top
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(9+7*direction), 0, 0, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 11, x?0:(9+7*direction), 0, 5, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 11, x?16:(9+7*direction), 16, 5, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 16, x?16:(9+7*direction), 16, 0, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 0 : (9 + 7 * direction), 0, 0, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 11, x ? 0 : (9 + 7 * direction), 0, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 11, x ? 16 : (9 + 7 * direction), 16, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 16, x ? 16 : (9 + 7 * direction), 16, 0, icon);
                 //draw plane front left
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 11, x?0:(9+7*direction), 0, 5, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 5, x?0:(9+7*direction), 0, 11, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?5:(9+7*direction), 5, 11, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?5:(9+7*direction), 5, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 11, x ? 0 : (9 + 7 * direction), 0, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 5, x ? 0 : (9 + 7 * direction), 0, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 5, x ? 5 : (9 + 7 * direction), 5, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 11, x ? 5 : (9 + 7 * direction), 5, 5, icon);
                 //draw plane front bottom
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 5, x?0:(9+7*direction), 0, 11, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 0, x?0:(9+7*direction), 0, 16, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 0, x?16:(9+7*direction), 16, 16, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 5, x?16:(9+7*direction), 16, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 5, x ? 0 : (9 + 7 * direction), 0, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 0, x ? 0 : (9 + 7 * direction), 0, 16, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 0, x ? 16 : (9 + 7 * direction), 16, 16, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 5, x ? 16 : (9 + 7 * direction), 16, 11, icon);
                 //draw plane front right
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 11, x?11:(9+7*direction), 11, 5, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 5, x?11:(9+7*direction), 11, 11, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 5, x?16:(9+7*direction), 16, 11, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 11, x?16:(9+7*direction), 16, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 11, 11, x ? 11 : (9 + 7 * direction), 11, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 11, 5, x ? 11 : (9 + 7 * direction), 11, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 5, x ? 16 : (9 + 7 * direction), 16, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 11, x ? 16 : (9 + 7 * direction), 16, 5, icon);
                 //draw plane back top
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 16, x?0:(7+7*direction), 0, 0, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(7+7*direction), 16, 0, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 11, x?16:(7+7*direction), 16, 5, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 11, x?0:(7+7*direction), 0, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 16, x ? 0 : (7 + 7 * direction), 0, 0, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 16 : (7 + 7 * direction), 16, 0, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 11, x ? 16 : (7 + 7 * direction), 16, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 11, x ? 0 : (7 + 7 * direction), 0, 5, icon);
                 //draw plane back left
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 11, x?0:(7+7*direction), 0, 5, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 11, x?5:(7+7*direction), 5, 5, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 5, x?5:(7+7*direction), 5, 11, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 5, x?0:(7+7*direction), 0, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 11, x ? 0 : (7 + 7 * direction), 0, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 5, 11, x ? 5 : (7 + 7 * direction), 5, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 5, 5, x ? 5 : (7 + 7 * direction), 5, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 5, x ? 0 : (7 + 7 * direction), 0, 11, icon);
                 //draw plane back bottom
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 5, x?0:(7+7*direction), 0, 11, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 5, x?16:(7+7*direction), 16, 11, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 0, x?16:(7+7*direction), 16, 16, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 0, x?0:(7+7*direction), 0, 16, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 5, x ? 0 : (7 + 7 * direction), 0, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 5, x ? 16 : (7 + 7 * direction), 16, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 0, x ? 16 : (7 + 7 * direction), 16, 16, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 0, x ? 0 : (7 + 7 * direction), 0, 16, icon);
                 //draw plane back right
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?11:(7+7*direction), 11, 5, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 11, x?16:(7+7*direction), 16, 5, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 5, x?16:(7+7*direction), 16, 11, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?11:(7+7*direction), 11, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 11, x ? 11 : (7 + 7 * direction), 11, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 11, x ? 16 : (7 + 7 * direction), 16, 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 5, x ? 16 : (7 + 7 * direction), 16, 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 5, x ? 11 : (7 + 7 * direction), 11, 11, icon);
                 //draw hole bottom plane
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?5:(7+7*direction), x?(7+7*direction):5, x?5:(7+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?11:(9+7*direction), x?(7+7*direction):5, x?11:(9+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?11:(9+7*direction), x?(9+7*direction):11, x?11:(9+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?5:(7+7*direction), x?(9+7*direction):11, x?5:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 5, x ? 5 : (7 + 7 * direction), x ? (7 + 7 * direction) : 5, x ? 5 : (7 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 5, x ? 11 : (9 + 7 * direction), x ? (7 + 7 * direction) : 5, x ? 11 : (9 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 5, x ? 11 : (9 + 7 * direction), x ? (9 + 7 * direction) : 11, x ? 11 : (9 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 5, x ? 5 : (7 + 7 * direction), x ? (9 + 7 * direction) : 11, x ? 5 : (7 + 7 * direction), icon);
                 //draw hole right plane
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 11, x?5:(7+7*direction), (7+7*direction), 5, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 5, x?5:(7+7*direction), (7+7*direction), 11, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?5:(9+7*direction), (9+7*direction), 11, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?5:(9+7*direction), (9+7*direction), 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 11, 11, x ? 5 : (7 + 7 * direction), (7 + 7 * direction), 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 11, 5, x ? 5 : (7 + 7 * direction), (7 + 7 * direction), 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 5, x ? 5 : (9 + 7 * direction), (9 + 7 * direction), 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 11, x ? 5 : (9 + 7 * direction), (9 + 7 * direction), 5, icon);
                 //draw hole top plane
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?5:(7+7*direction), x?(7+7*direction):5, x?5:(7+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?5:(7+7*direction), x?(9+7*direction):11, x?5:(7+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?11:(9+7*direction), x?(9+7*direction):11, x?11:(9+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?11:(9+7*direction), x?(7+7*direction):5, x?11:(9+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 11, x ? 5 : (7 + 7 * direction), x ? (7 + 7 * direction) : 5, x ? 5 : (7 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 11, x ? 5 : (7 + 7 * direction), x ? (9 + 7 * direction) : 11, x ? 5 : (7 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 11, x ? 11 : (9 + 7 * direction), x ? (9 + 7 * direction) : 11, x ? 11 : (9 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 11, x ? 11 : (9 + 7 * direction), x ? (7 + 7 * direction) : 5, x ? 11 : (9 + 7 * direction), icon);
                 //draw hole left plane
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?11:(7+7*direction), (7+7*direction), 5, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 11, x?11:(9+7*direction), (9+7*direction), 5, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 5, x?11:(9+7*direction), (9+7*direction), 11, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?11:(7+7*direction), (7+7*direction), 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 11, x ? 11 : (7 + 7 * direction), (7 + 7 * direction), 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 5, 11, x ? 11 : (9 + 7 * direction), (9 + 7 * direction), 5, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 5, 5, x ? 11 : (9 + 7 * direction), (9 + 7 * direction), 11, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 5, x ? 11 : (7 + 7 * direction), (7 + 7 * direction), 11, icon);
                 //draw plane top
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(7+7*direction), x?(7+7*direction):0, x?0:(7+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(9+7*direction), x?(7+7*direction):0, x?16:(9+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(9+7*direction), x?(9+7*direction):16, x?16:(9+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(7+7*direction), x?(9+7*direction):16, x?0:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 0 : (7 + 7 * direction), x ? (7 + 7 * direction) : 0, x ? 0 : (7 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 16 : (9 + 7 * direction), x ? (7 + 7 * direction) : 0, x ? 16 : (9 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 16 : (9 + 7 * direction), x ? (9 + 7 * direction) : 16, x ? 16 : (9 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 0 : (7 + 7 * direction), x ? (9 + 7 * direction) : 16, x ? 0 : (7 + 7 * direction), icon);
             }
             else if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction)))) {
                 //draw front plane
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 16, x?16:(9+7*direction), 0, 0, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 0, x?16:(9+7*direction), 0, 16, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 0, x?0:(9+7*direction), 16, 16, icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(9+7*direction), 16, 0, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 16, x ? 16 : (9 + 7 * direction), 0, 0, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 0, x ? 16 : (9 + 7 * direction), 0, 16, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 0, x ? 0 : (9 + 7 * direction), 16, 16, icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 0 : (9 + 7 * direction), 16, 0, icon);
                 //draw back plane
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(7+7*direction), 0, 0, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 16, x?0:(7+7*direction), 16, 0, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 0, x?0:(7+7*direction), 16, 16, icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 0, x?16:(7+7*direction), 0, 16, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 16 : (7 + 7 * direction), 0, 0, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 16, x ? 0 : (7 + 7 * direction), 16, 0, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 0, x ? 0 : (7 + 7 * direction), 16, 16, icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 0, x ? 16 : (7 + 7 * direction), 0, 16, icon);
                 //draw top plane
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(7+7*direction), x?(7+7*direction):0, x?0:(7+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(9+7*direction), x?(7+7*direction):0, x?16:(9+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(9+7*direction), x?(9+7*direction):16, x?16:(9+7*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(7+7*direction), x?(9+7*direction):16, x?0:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 0 : (7 + 7 * direction), x ? (7 + 7 * direction) : 0, x ? 0 : (7 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 16 : (9 + 7 * direction), x ? (7 + 7 * direction) : 0, x ? 16 : (9 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 16 : (9 + 7 * direction), x ? (9 + 7 * direction) : 16, x ? 16 : (9 + 7 * direction), icon);
+                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 0 : (7 + 7 * direction), x ? (9 + 7 * direction) : 16, x ? 0 : (7 + 7 * direction), icon);
             }
         }
     }

@@ -10,6 +10,8 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -21,7 +23,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
-
+@SideOnly(Side.CLIENT)
 public class RenderValve extends RenderChannel {
     public RenderValve() {
         super(com.InfinityRaider.AgriCraft.init.Blocks.blockChannelValve, new TileEntityValve());

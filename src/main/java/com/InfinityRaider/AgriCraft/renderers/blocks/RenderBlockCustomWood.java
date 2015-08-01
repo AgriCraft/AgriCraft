@@ -1,10 +1,13 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public abstract class RenderBlockCustomWood extends RenderBlockBase {
     protected TileEntityCustomWood teDummy;
 
