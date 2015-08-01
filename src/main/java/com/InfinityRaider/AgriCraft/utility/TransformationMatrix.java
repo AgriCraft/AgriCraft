@@ -77,7 +77,7 @@ public class TransformationMatrix {
         this.matrix[2][3] = z;
     }
 
-    public void multiplyLeftWith(TransformationMatrix m) {
+    public TransformationMatrix multiplyLeftWith(TransformationMatrix m) {
         double[][] newValues = new double[SIZE][SIZE];
         for(int i=0;i<SIZE;i++) {
             for(int j=0;j<SIZE;j++) {
@@ -89,9 +89,10 @@ public class TransformationMatrix {
             }
         }
         this.matrix = newValues;
+        return this;
     }
 
-    public void multiplyRightWith(TransformationMatrix m) {
+    public TransformationMatrix multiplyRightWith(TransformationMatrix m) {
         double[][] newValues = new double[SIZE][SIZE];
         for(int i=0;i<SIZE;i++) {
             for(int j=0;j<SIZE;j++) {
@@ -103,6 +104,7 @@ public class TransformationMatrix {
             }
         }
         this.matrix = newValues;
+        return this;
     }
 
     public double[] transform(double x, double y, double z) {
