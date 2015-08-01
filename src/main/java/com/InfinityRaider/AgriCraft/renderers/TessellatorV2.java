@@ -55,7 +55,7 @@ public class TessellatorV2 extends Tessellator {
      */
     @Override
     public void addTranslation(float x, float y, float z) {
-        this.matrix.multiplyLeftWith(new TransformationMatrix(x, y, z));
+        this.matrix.multiplyRightWith(new TransformationMatrix(x, y, z));
     }
 
     /**
@@ -69,7 +69,7 @@ public class TessellatorV2 extends Tessellator {
      *  Rotates around the current coordinate system
      */
     public void addRotation(double angle, double x, double y, double z) {
-        this.matrix.multiplyLeftWith(new TransformationMatrix(angle, x, y, z));
+        this.matrix.multiplyRightWith(new TransformationMatrix(angle, x, y, z));
     }
 
     //---------------

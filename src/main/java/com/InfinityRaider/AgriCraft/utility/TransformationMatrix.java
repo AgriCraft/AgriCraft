@@ -65,7 +65,6 @@ public class TransformationMatrix {
         matrix[2][0] = x*z*(1-cos) - y*sin;
         matrix[2][1] = y*z*(1-cos) + x*sin;
         matrix[2][2] = z*z*(1-cos) + cos;
-
     }
 
     public void setTranslation(Vector v) {
