@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -12,23 +13,38 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class RenderSeedStorage extends RenderBlockBase {
+public class RenderSeedStorage extends RenderBlockCustomWood {
     public RenderSeedStorage() {
         super(Blocks.blockSeedStorage, true);
     }
 
     @Override
-    protected void doInventoryRender(ItemRenderType type, ItemStack item, Object... data) {
+    protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
+        TessellatorV2 tessellator = TessellatorV2.instance;
+        if(data.length>1) {
+            this.teDummy.setOrientation(ForgeDirection.WEST);
+        } else {
+            this.teDummy.setOrientation(ForgeDirection.EAST);
+        }
+        this.rotateMatrix(teDummy, tessellator, false);
+        tessellator.startDrawingQuads();
+        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, teDummy, Blocks.blockSeedStorage, 0, 0, RenderBlocks.getInstance(), false);
+        tessellator.draw();
+        this.rotateMatrix(teDummy, tessellator, true);
+    }
 
+    @Override
+    protected Class<? extends TileEntityCustomWood> getTileEntityClass() {
+        return TileEntitySeedStorage.class;
     }
 
     @Override
     protected boolean doWorldRender(Tessellator tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
-        TileEntity tileEntity = world.getTileEntity((int) x, (int) y, (int) z);
         //call correct drawing methods
-        if (tileEntity instanceof TileEntitySeedStorage) {
-            TileEntitySeedStorage storage = (TileEntitySeedStorage) tileEntity;
+        if (tile instanceof TileEntitySeedStorage) {
+            TileEntitySeedStorage storage = (TileEntitySeedStorage) tile;
             IIcon icon = storage.getIcon();
             //casing
             drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, icon);
@@ -84,14 +100,10 @@ public class RenderSeedStorage extends RenderBlockBase {
         tessellator.draw();
         tessellator.startDrawingQuads();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-        //GL11.glPushMatrix();
-        //GL11.glDisable(GL11.GL_LIGHTING);
-        //GL11.glColor3f(1, 1, 1);
 
         IIcon icon = seed.getItem().getIconFromDamage(seed.getItemDamage());
         drawScaledFaceXY(tessellator, 4, 3, 11, 10, icon, Constants.unit - 0.001F);
 
-        //GL11.glPopMatrix();
         tessellator.draw();
         tessellator.startDrawingQuads();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);

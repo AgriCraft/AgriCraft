@@ -128,7 +128,9 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
     @Override
     public final void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        GL11.glPushMatrix();
         doInventoryRender(type, item, data);
+        GL11.glPopMatrix();
     }
 
     protected abstract void doInventoryRender(ItemRenderType type, ItemStack item, Object... data);
@@ -156,7 +158,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
     //UTILITY METHODS
     //---------------
-    private void rotateMatrix(TileEntityAgricraft tileEntityAgricraft, Tessellator tessellator, boolean inverse) {
+    protected void rotateMatrix(TileEntityAgricraft tileEntityAgricraft, Tessellator tessellator, boolean inverse) {
         //+x = EAST
         //+z = SOUTH
         //-x = WEST
@@ -181,7 +183,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
                 tessellatorV2.addRotation(-angle, 0, 1, 0);
             } else {
                 tessellatorV2.addRotation(angle, 0, 1, 0);
-                tessellatorV2.addTranslation(dx , 0, dz);
+                tessellatorV2.addTranslation(dx, 0, dz);
             }
         } else {
             if (inverse) {

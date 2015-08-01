@@ -19,7 +19,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
 
     private int lvl;
     protected int lastDiscreteLevel = 0;
-    
+
+    public TileEntityChannel() {
+        super();
+    }
+
     //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {

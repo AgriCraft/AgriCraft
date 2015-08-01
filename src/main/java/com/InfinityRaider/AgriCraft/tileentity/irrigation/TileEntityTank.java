@@ -33,6 +33,10 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     //boolean to convert pre-1.4 tanks
     private boolean oldVersion = false;
+
+    public TileEntityTank() {
+        super();
+    }
     
     //OVERRIDES
     //---------

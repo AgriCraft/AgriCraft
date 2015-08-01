@@ -28,6 +28,10 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     private Map<Integer, SeedStorageSlot> slots = new HashMap<Integer, SeedStorageSlot>();
     private ISeedStorageController controller;
 
+    public TileEntitySeedStorage() {
+        super();
+    }
+
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);

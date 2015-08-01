@@ -15,6 +15,7 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
     protected String materialName;
     protected int materialMeta;
 
+    protected TileEntityCustomWood() {}
 
     //this saves the data on the tile entity
     @Override

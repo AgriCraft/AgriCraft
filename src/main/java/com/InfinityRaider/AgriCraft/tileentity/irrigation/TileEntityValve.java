@@ -12,6 +12,10 @@ import java.util.List;
 public class TileEntityValve extends TileEntityChannel implements IDebuggable{
     private boolean powered = false;
 
+    public TileEntityValve() {
+        super();
+    }
+
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
