@@ -75,6 +75,9 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
         //grab the texture
         ItemStack stack = analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId);
         IIcon icon = stack.getItem().getIconFromDamage(stack.getItemDamage());
+        if(icon==null) {
+            return;
+        }
         //define rotation angle in function of system time
         float angle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);   //credits to Pahimar
         GL11.glPushMatrix();
