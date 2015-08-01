@@ -7,6 +7,7 @@ public class TransformationMatrix {
 
     private double [][] matrix;
 
+    /** TransformationMatrix for doing nothing (unity matrix) */
     public TransformationMatrix() {
         matrix = new double[SIZE][SIZE];
         for(int i=0;i<SIZE;i++) {
@@ -14,12 +15,14 @@ public class TransformationMatrix {
         }
     }
 
+    /** TransformationMatrix for a rotation */
     public TransformationMatrix(double angle, double x, double y, double z) {
         matrix = new double[SIZE][SIZE];
         setRotation(angle, x, y, z);
         matrix[3][3] = 1;
     }
 
+    /** TransformationMatrix for a translation */
     public TransformationMatrix(double x, double y, double z) {
         matrix = new double[SIZE][SIZE];
         setTranslation(x, y, z);
@@ -28,14 +31,17 @@ public class TransformationMatrix {
         }
     }
 
+    /** TransformationMatrix for a translation */
     public TransformationMatrix(Vec3 translation) {
         this(translation.xCoord, translation.yCoord, translation.zCoord);
     }
 
+    /** TransformationMatrix for a translation */
     public TransformationMatrix(Vector translation) {
         this(translation.getX(), translation.getY(), translation.getZ());
     }
 
+    /** TransformationMatrix for a rotation and translation */
     public TransformationMatrix(double angle, double x, double y, double z, Vector translation) {
         matrix = new double[SIZE][SIZE];
         setRotation(angle, x, y, z);
@@ -44,6 +50,19 @@ public class TransformationMatrix {
         matrix[3][3] = 1;
     }
 
+    /** Custom transformation */
+    public TransformationMatrix(double[][] data) {
+        this();
+        int m = SIZE-1>=data.length?data.length:SIZE-1;
+        for(int i=0;i<m;i++) {
+            int n = SIZE-1>=data[i].length?data[i].length:SIZE-1;
+            for(int j=0;j<n;j++) {
+                this.matrix[i][j] = data[i][j];
+            }
+        }
+    }
+
+    /** sets the rotation compared to the absolute coordinates while keeping the translation */
     public void setRotation(double angle, double x, double y, double z) {
         Vector axis = new Vector(x, y, z).normalize();
         angle = Math.toRadians(angle);
@@ -67,16 +86,20 @@ public class TransformationMatrix {
         matrix[2][2] = z*z*(1-cos) + cos;
     }
 
+    /** sets the translation compared to the absolute coordinates while keeping the rotation */
     public void setTranslation(Vector v) {
         this.setTranslation(v.getX(), v.getY(), v.getZ());
     }
 
+    /** sets the translation compared to the absolute coordinates while keeping the rotation */
     public void setTranslation(double x, double y, double z) {
         this.matrix[0][3] = x;
         this.matrix[1][3] = y;
         this.matrix[2][3] = z;
     }
 
+
+    /** Left multiplies this transformation matrix with the argument, for inverse transformations */
     public TransformationMatrix multiplyLeftWith(TransformationMatrix m) {
         double[][] newValues = new double[SIZE][SIZE];
         for(int i=0;i<SIZE;i++) {
@@ -92,6 +115,7 @@ public class TransformationMatrix {
         return this;
     }
 
+    /** Right multiplies this transformation matrix with the argument, for chaining transformations */
     public TransformationMatrix multiplyRightWith(TransformationMatrix m) {
         double[][] newValues = new double[SIZE][SIZE];
         for(int i=0;i<SIZE;i++) {
