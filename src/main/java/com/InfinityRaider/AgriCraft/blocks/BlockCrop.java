@@ -51,7 +51,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
 
     public BlockCrop() {
         super(Material.plants);
+        this.setTickRandomly(true);
         this.isBlockContainer = true;
+        this.setStepSound(soundTypeGrass);
+        this.setHardness(0.0F);
+        this.disableStats();
         //set the bounding box dimensions
         this.maxX = Constants.unit*14;
         this.minX = Constants.unit*2;
@@ -433,6 +437,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     @SideOnly(Side.CLIENT)
     public Item getItem(World world, int x, int y, int z) {
         return Items.crops;
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+        return null;
     }
 
     @Override
