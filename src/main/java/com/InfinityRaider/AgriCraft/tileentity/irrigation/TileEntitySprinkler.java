@@ -72,10 +72,10 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
                 counter = ++counter % ConfigurationHandler.sprinklerGrowthIntervalTicks;
                 drainWaterFromChannel();
 
-                for (int yOffset = 1; yOffset < 5; yOffset++) {
+                for (int yOffset = 1; yOffset < 6; yOffset++) {
                     for (int xOffset = -3; xOffset <= 3; xOffset++) {
                         for (int zOffset = -3; zOffset <= 3; zOffset++) {
-                            this.irrigate(this.xCoord + xOffset, this.yCoord - yOffset, this.zCoord + zOffset);
+                            this.irrigate(this.xCoord + xOffset, this.yCoord - yOffset, this.zCoord + zOffset, yOffset>=5);
                         }
                     }
                 }
@@ -103,14 +103,14 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
     }
 
     /** Depending on the block type either irrigates farmland or forces plant growth (based on chance) */
-    private void irrigate(int x, int y, int z) {
+    private void irrigate(int x, int y, int z, boolean farmlandOnly) {
         Block block = this.worldObj.getBlock(x, y, z);
         if (block != null) {
             if (block instanceof BlockFarmland && this.worldObj.getBlockMetadata(x, y, z) < 7) {
                 // irrigate farmland
                 int flag = counter==0?2:6;
                 this.worldObj.setBlockMetadataWithNotify(x, y, z, 7, flag);
-            } else if (block instanceof BlockBush) {
+            } else if (block instanceof BlockBush && !farmlandOnly) {
                 // x chance to force growth tick on plant every y ticks
                 if (counter == 0 && Constants.rand.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
                     block.updateTick(this.worldObj, x, y, z, Constants.rand);
