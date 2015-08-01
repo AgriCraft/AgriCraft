@@ -23,7 +23,9 @@ public class TransformationMatrix {
     public TransformationMatrix(double x, double y, double z) {
         matrix = new double[SIZE][SIZE];
         setTranslation(x, y, z);
-        matrix[3][3] = 1;
+        for(int i=0;i<SIZE;i++) {
+            matrix[i][i]=1;
+        }
     }
 
     public TransformationMatrix(Vec3 translation) {
