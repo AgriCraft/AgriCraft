@@ -43,8 +43,6 @@ public class NEIConfig implements IConfigureNEI {
             //hide water pad
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockWaterPad, 1, i));
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockWaterPadFull, 1, i));
-            //hide sprinkler
-            AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockSprinkler, 1, i));
             //hide debugger
             if(!ConfigurationHandler.debug) {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(Items.debugItem, 1, i));

@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.init;
 import com.InfinityRaider.AgriCraft.blocks.*;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.items.ItemSprinkler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
@@ -40,7 +41,7 @@ public class Blocks {
             blockChannelValve = new BlockChannelValve();
             RegisterHelper.registerBlock(blockChannelValve, Names.Objects.valve, ItemBlockCustomWood.class);
             blockSprinkler = new BlockSprinkler();
-            RegisterHelper.registerBlock(blockSprinkler, Names.Objects.sprinkler);
+            RegisterHelper.registerBlock(blockSprinkler, Names.Objects.sprinkler, ItemSprinkler.class);
         }
         if(!ConfigurationHandler.disableSeedStorage) {
             blockSeedStorage = new BlockSeedStorage();

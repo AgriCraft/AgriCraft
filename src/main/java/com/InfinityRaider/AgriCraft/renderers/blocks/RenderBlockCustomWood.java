@@ -1,26 +1,16 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 public abstract class RenderBlockCustomWood extends RenderBlockBase {
     protected TileEntityCustomWood teDummy;
 
-    protected RenderBlockCustomWood(Block block, boolean inventory) {
-        super(block, inventory);
-        try {
-            this.teDummy = getTileEntityClass().getConstructor().newInstance();
-        } catch (Exception e) {
-            LogHelper.printStackTrace(e);
-        }
-    }
-
-    protected RenderBlockCustomWood(Block block, TileEntity te, boolean inventory) {
+    protected RenderBlockCustomWood(Block block, TileEntityCustomWood te, boolean inventory) {
         super(block, te, inventory);
+        this.teDummy = te;
     }
 
     @Override
@@ -32,6 +22,4 @@ public abstract class RenderBlockCustomWood extends RenderBlockBase {
     }
 
     protected abstract void renderInInventory(ItemRenderType type, ItemStack item, Object... data);
-
-    protected abstract Class<? extends TileEntityCustomWood> getTileEntityClass();
 }

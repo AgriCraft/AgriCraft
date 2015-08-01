@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderValve;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
@@ -58,11 +58,6 @@ public class BlockChannelValve extends BlockCustomWood {
     }
 
     @Override
-    public int getRenderType() {
-        return AgriCraft.proxy.getRenderId(Constants.valveId);
-    }
-
-    @Override
     public boolean renderAsNormalBlock() {
         return false;
     }
@@ -84,6 +79,6 @@ public class BlockChannelValve extends BlockCustomWood {
 
     @Override
     public RenderBlockBase getRenderer() {
-        return null;
+        return new RenderValve();
     }
 }

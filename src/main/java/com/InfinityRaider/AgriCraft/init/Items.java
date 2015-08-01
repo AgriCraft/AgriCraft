@@ -24,10 +24,6 @@ public class Items {
         RegisterHelper.registerItem(trowel, Names.Objects.trowel);
         magnifyingGlass = new ItemMagnifyingGlass();
         RegisterHelper.registerItem(magnifyingGlass, Names.Objects.magnifyingGlass);
-        if(!ConfigurationHandler.disableIrrigation) {
-            sprinkler = new ItemSprinkler();
-            RegisterHelper.registerItem(sprinkler, Names.Objects.sprinkler + "Item");
-        }
         debugItem = new ItemDebugger();
         RegisterHelper.registerItem(debugItem, "debugger");
         if (ConfigurationHandler.enableHandRake) {

@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -86,9 +87,6 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
         return Items.sprinkler;
     }
 
-    //rendering stuff
-    @Override
-    public int getRenderType() {return -1;}                 //get default render type: net.minecraft.client.renderer
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
     @Override
@@ -112,6 +110,6 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
 
     @Override
     public RenderBlockBase getRenderer() {
-        return null;
+        return new RenderSprinkler();
     }
 }

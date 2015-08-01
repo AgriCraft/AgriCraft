@@ -1,11 +1,12 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannelFull;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannelFull;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
@@ -15,6 +16,11 @@ public class BlockWaterChannelFull extends BlockWaterChannel {
     public BlockWaterChannelFull() {
         super();
         this.setBlockBounds(0, 0, 0, 1, 1, 1);
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World world, int meta) {
+        return new TileEntityChannelFull();
     }
 
     @Override
@@ -32,10 +38,7 @@ public class BlockWaterChannelFull extends BlockWaterChannel {
     }
 
     @Override
-    public int getRenderType() {return AgriCraft.proxy.getRenderId(Constants.channelFullId);}
-
-    @Override
     public RenderBlockBase getRenderer() {
-        return null;
+        return new RenderChannelFull();
     }
 }

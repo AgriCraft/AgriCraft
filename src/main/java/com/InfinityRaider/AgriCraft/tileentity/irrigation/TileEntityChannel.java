@@ -67,13 +67,16 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     }
 
     public boolean hasNeighbour(char axis, int direction) {
+        if(this.worldObj==null) {
+            return false;
+        }
         TileEntity tileEntityAt;
         switch(axis) {
             case 'x': tileEntityAt = this.worldObj.getTileEntity(this.xCoord+direction, this.yCoord, this.zCoord);break;
             case 'z': tileEntityAt = this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord+direction);break;
             default: return false;
         }
-        return (tileEntityAt!=null) && (tileEntityAt instanceof TileEntityCustomWood) && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
+        return (tileEntityAt!=null) && ((tileEntityAt instanceof TileEntityTank) || tileEntityAt instanceof TileEntityChannel) && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
     }
 
     //updates the tile entity every tick

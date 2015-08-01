@@ -1,28 +1,33 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterPad;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterPadFull;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
-public class RenderWaterPad implements ISimpleBlockRenderingHandler {
+public class RenderWaterPad extends RenderBlockBase {
+    public RenderWaterPad(Block block) {
+        super(block, true);
+    }
+
     @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+    protected void doInventoryRender(ItemRenderType type, ItemStack item, Object... data) {
         Tessellator tessellator = Tessellator.instance;
         GL11.glColor3f(1, 1, 1);
         GL11.glDisable(GL11.GL_LIGHTING);
         tessellator.startDrawingQuads();
-        boolean full = block instanceof BlockWaterPadFull;
+        boolean full = ((ItemBlock) item.getItem()).field_150939_a instanceof BlockWaterPadFull;
         RenderHelper.drawScaledPrism(tessellator, 0, 0, 0, 16, 8, 16, Blocks.dirt.getIcon(0, 0));
         RenderHelper.drawScaledPrism(tessellator, 1, 8, 0, 1, 15, 16, Blocks.dirt.getIcon(0, 0));
         RenderHelper.drawScaledPrism(tessellator, 15, 8, 1, 16, 15, 16, Blocks.dirt.getIcon(0, 0));
@@ -33,11 +38,15 @@ public class RenderWaterPad implements ISimpleBlockRenderingHandler {
         }
         tessellator.draw();
         GL11.glEnable(GL11.GL_LIGHTING);
+
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+    protected boolean doWorldRender(Tessellator tessellator2, IBlockAccess world, double xCoord, double yCoord, double zCoord, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
         Tessellator tessellator = Tessellator.instance;
+        int x = (int) xCoord;
+        int y = (int) yCoord;
+        int z = (int) zCoord;
         boolean full = block instanceof BlockWaterPadFull;
         this.renderBase(tessellator, world, x, y, z, full, renderer);
         this.renderSide(tessellator, world, x, y, z, full, renderer, ForgeDirection.NORTH);
@@ -174,12 +183,12 @@ public class RenderWaterPad implements ISimpleBlockRenderingHandler {
     }
 
     @Override
-    public boolean shouldRender3DInInventory(int modelId) {
-        return true;
+    public boolean shouldBehaveAsTESR() {
+        return false;
     }
 
     @Override
-    public int getRenderId() {
-        return AgriCraft.proxy.getRenderId(Constants.waterPadId);
+    public boolean shouldBehaveAsISBRH() {
+        return true;
     }
 }

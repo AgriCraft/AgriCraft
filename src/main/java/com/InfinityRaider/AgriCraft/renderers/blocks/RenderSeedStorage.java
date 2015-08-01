@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -18,7 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class RenderSeedStorage extends RenderBlockCustomWood {
     public RenderSeedStorage() {
-        super(Blocks.blockSeedStorage, true);
+        super(Blocks.blockSeedStorage, new TileEntitySeedStorage(), true);
     }
 
     @Override
@@ -34,11 +33,6 @@ public class RenderSeedStorage extends RenderBlockCustomWood {
         this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, teDummy, Blocks.blockSeedStorage, 0, 0, RenderBlocks.getInstance(), false);
         tessellator.draw();
         this.rotateMatrix(teDummy, tessellator, true);
-    }
-
-    @Override
-    protected Class<? extends TileEntityCustomWood> getTileEntityClass() {
-        return TileEntitySeedStorage.class;
     }
 
     @Override

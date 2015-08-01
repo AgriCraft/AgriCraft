@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannelFull;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -12,11 +12,8 @@ import net.minecraft.util.IIcon;
 @SideOnly(Side.CLIENT)
 public class RenderChannelFull extends RenderChannel {
 
-    public RenderChannelFull() {}
-
-    @Override
-    public int getRenderId() {
-        return AgriCraft.proxy.getRenderId(Constants.channelFullId);
+    public RenderChannelFull() {
+        super(Blocks.blockWaterChannelFull, new TileEntityChannelFull());
     }
 
     @Override

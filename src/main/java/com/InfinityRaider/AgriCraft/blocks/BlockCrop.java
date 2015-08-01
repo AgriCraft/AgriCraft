@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
@@ -16,6 +15,7 @@ import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.Event;
@@ -442,9 +442,6 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + crop.getCropHeight(), (double)z + this.maxZ);
     }
 
-    //rendering stuff
-    @Override public int getRenderType() {return AgriCraft.proxy.getRenderId(Constants.cropId);}       //get the correct render type
-
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
 
@@ -502,6 +499,6 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
 
     @Override
     public RenderBlockBase getRenderer() {
-        return null;
+        return new RenderCrop();
     }
 }

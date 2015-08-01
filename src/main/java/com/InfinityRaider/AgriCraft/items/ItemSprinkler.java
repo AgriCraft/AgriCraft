@@ -3,15 +3,20 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.Reference;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemSprinkler extends ModItem {
-    public ItemSprinkler() {
-        super();
+public class ItemSprinkler extends ItemBlock {
+    public ItemSprinkler(Block block) {
+        super(block);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
+        this.setUnlocalizedName(Reference.MOD_ID.toLowerCase() + ':' + Names.Objects.sprinkler + "Item");
     }
 
     //I'm overriding this just to be sure
@@ -29,5 +34,10 @@ public class ItemSprinkler extends ModItem {
             }
         }
         return false;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
+    }
+
+    @Override
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+        return false;
     }
 }

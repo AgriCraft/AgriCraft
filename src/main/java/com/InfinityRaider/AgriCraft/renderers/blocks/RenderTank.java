@@ -1,37 +1,113 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import org.lwjgl.opengl.GL11;
 
-public class RenderTank implements ISimpleBlockRenderingHandler {
-    @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
-
+public class RenderTank extends RenderBlockCustomWood {
+    public RenderTank() {
+        super(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, new TileEntityTank(), true);
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+    protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
         Tessellator tessellator = Tessellator.instance;
-        //translate Tesselator to the right position
-        tessellator.addTranslation(x, y, z);
-        //set colors
-        tessellator.setBrightness(Blocks.planks.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
-        tessellator.setColorRGBA_F(1, 1, 1, 1);
+        TileEntityTank tank = (TileEntityTank) teDummy;
+        Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(tank.getIcon()));
+        //disable lighting
+        GL11.glDisable(GL11.GL_LIGHTING);
+        //tell the tessellator to start drawing
+        tessellator.startDrawingQuads();
+        //draw first plane front
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 0, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 0);
+        //draw first plane back
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 14, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 14, 0, 16);
+        //draw first plane top
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 14);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 14);
+        //draw second plane front
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 0, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
+        //draw second plane back
+        RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 16, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 0, 16, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 14, 0, 0, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 14, 0, 16, 0, 16);
+        //draw second plane top
+        RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 0, 14, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 16, 14, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
+        //draw third plane front
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 16, 0);
+        //draw third plane back
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 2, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 2, 16, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 2, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 2, 0, 16);
+        //draw third plane top
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 2, 0, 2);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 2, 16, 2);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
+        //draw fourth plane front
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 16, 0);
+        //draw fourth plane back
+        RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 0, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 16, 16, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 2, 0, 16, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 2, 0, 0, 0, 16);
+        //draw fourth plane top
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 16, 2, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 0, 2, 0);
+        //draw bottom plane front
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 0);
+        //draw bottom plane back
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 0, 0, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 16, 16, 0);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 16, 16, 16);
+        RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 0, 0, 16);
+        tessellator.draw();
+        //enable lighting
+        GL11.glEnable(GL11.GL_LIGHTING);
+    }
+
+    @Override
+    protected boolean doWorldRender(Tessellator tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
         //call correct drawing methods
-        if (tileEntity instanceof TileEntityTank) {
-            TileEntityTank tank = (TileEntityTank) tileEntity;
+        if (tile instanceof TileEntityTank) {
+            TileEntityTank tank = (TileEntityTank) tile;
             if(tank.getBlockMetadata()==0) {
                 this.drawWoodTank(tank, tessellator);
                 //draw the waterTexture
@@ -45,19 +121,17 @@ public class RenderTank implements ISimpleBlockRenderingHandler {
         }
         //clear texture overrides
         renderer.clearOverrideBlockTexture();
-        //translate tessellator back
-        tessellator.addTranslation(-x, -y, -z);
         return true;
     }
 
     @Override
-    public boolean shouldRender3DInInventory(int modelId) {
+    public boolean shouldBehaveAsTESR() {
         return false;
     }
 
     @Override
-    public int getRenderId() {
-        return AgriCraft.proxy.getRenderId(Constants.tankId);
+    public boolean shouldBehaveAsISBRH() {
+        return true;
     }
 
     private void drawWoodTank(TileEntityTank tank, Tessellator tessellator) {

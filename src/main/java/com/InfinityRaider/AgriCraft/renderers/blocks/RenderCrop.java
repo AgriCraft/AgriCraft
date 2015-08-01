@@ -1,23 +1,26 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
-public class RenderCrop implements ISimpleBlockRenderingHandler {
-
-    @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+public class RenderCrop extends RenderBlockBase {
+    public RenderCrop() {
+        super(Blocks.blockCrop, false);
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+    protected boolean doWorldRender(Tessellator tessellator, IBlockAccess world, double xCoord, double yCoord, double zCoord, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
+        int x = (int) xCoord;
+        int y = (int) yCoord;
+        int z = (int) zCoord;
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (tileEntity instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) tileEntity;
@@ -64,12 +67,16 @@ public class RenderCrop implements ISimpleBlockRenderingHandler {
     }
 
     @Override
-    public boolean shouldRender3DInInventory(int modelId) {
+    protected void doInventoryRender(ItemRenderType type, ItemStack item, Object... data) {
+    }
+
+    @Override
+    public boolean shouldBehaveAsTESR() {
         return false;
     }
 
     @Override
-    public int getRenderId() {
-        return AgriCraft.proxy.getRenderId(Constants.cropId);
+    public boolean shouldBehaveAsISBRH() {
+        return true;
     }
 }

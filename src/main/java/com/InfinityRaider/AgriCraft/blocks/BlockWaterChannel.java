@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -105,8 +105,6 @@ public class BlockWaterChannel extends BlockCustomWood {
     //render methods
     //--------------
     @Override
-    public int getRenderType() {return AgriCraft.proxy.getRenderId(Constants.channelId);}
-    @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
     @Override
     public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
@@ -125,6 +123,6 @@ public class BlockWaterChannel extends BlockCustomWood {
 
     @Override
     public RenderBlockBase getRenderer() {
-        return null;
+        return new RenderChannel();
     }
 }

@@ -54,7 +54,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
 
     //checks if the sprinkler is connected to an irrigation channel
     public boolean isConnected() {
-        return this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord) instanceof BlockWaterChannel;
+        return this.worldObj!=null && this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord) instanceof BlockWaterChannel;
     }
 
     public IIcon getChannelIcon() {

@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderWaterPad;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -34,9 +34,10 @@ public class BlockWaterPad extends BlockAgriCraft {
         this.maxY = Constants.unit*8;
     }
 
+
     @Override
     public RenderBlockBase getRenderer() {
-        return null;
+        return new RenderWaterPad(this);
     }
 
     @Override
@@ -84,9 +85,6 @@ public class BlockWaterPad extends BlockAgriCraft {
 
     //render methods
     //--------------
-    @Override
-    public int getRenderType() {return AgriCraft.proxy.getRenderId(Constants.waterPadId);}                 //get the correct renderId
-
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
 
