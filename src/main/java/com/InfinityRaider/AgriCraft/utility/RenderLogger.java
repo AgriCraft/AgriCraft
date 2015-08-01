@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.utility;
 
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.RenderChannel;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannel;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 

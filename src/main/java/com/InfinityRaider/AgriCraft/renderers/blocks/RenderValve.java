@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers;
+package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import codechicken.multipart.BlockMultipart;
 import codechicken.multipart.TMultiPart;
