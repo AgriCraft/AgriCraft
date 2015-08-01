@@ -8,10 +8,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public abstract class OreDictHelper {
@@ -126,11 +123,29 @@ public abstract class OreDictHelper {
     }
 
     public static ArrayList<ItemStack> getFruitsFromOreDict(ItemStack seed) {
+        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
         for(int id:OreDictionary.getOreIDs(seed)) {
             if(OreDictionary.getOreName(id).substring(0,4).equalsIgnoreCase("seed")) {
-                return OreDictionary.getOres("crop"+OreDictionary.getOreName(id).substring(4));
+                String name = OreDictionary.getOreName(id).substring(4);
+                ArrayList<ItemStack> fromOredict = OreDictionary.getOres("crop"+name);
+                //Cull duplicate fruits from the list (e.g.: pmp and hc crops)
+                boolean flag = false;
+                for(ItemStack stack:fromOredict) {
+                    String stackName = stack.getUnlocalizedName();
+                    if(stack==null || stack.getItem()==null) {
+                        continue;
+                    }
+                    if(stackName.contains(name) || stackName.contains(name.toLowerCase())) {
+                        if(!flag) {
+                            fruits.add(stack);
+                            flag = true;
+                        }
+                    } else {
+                        fruits.add(stack);
+                    }
+                }
             }
         }
-        return null;
+        return fruits;
     }
 }
