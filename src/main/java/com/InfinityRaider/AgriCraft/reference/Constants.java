@@ -36,13 +36,4 @@ public final class Constants {
     public static final int nei_Y_seeds = 21;
     public static final int nei_Y_soil = 47;
     public static final int nei_Y_base = 68;
-
-    //id's
-    public static final int cropId = 0;
-    public static final int tankId = 1;
-    public static final int channelId = 2;
-    public static final int valveId = 3;
-    public static final int channelFullId = 4;
-    public static final int waterPadId = 5;
-    public static final int seedStorageId = 6;
 }

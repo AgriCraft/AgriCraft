@@ -16,8 +16,6 @@ public interface IProxy {
 
     public void registerEventHandlers();
 
-    public int getRenderId(int nr);
-
     public int getRenderId(Block block);
 
     public void registerVillagerSkin(int id, String resource);

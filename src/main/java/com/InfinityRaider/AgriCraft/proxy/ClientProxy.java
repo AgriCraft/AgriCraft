@@ -24,27 +24,6 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 
 public class ClientProxy extends CommonProxy {
-    public static int cropRenderId = -1;
-    public static int tankRenderId = -1;
-    public static int channelRenderId = -1;
-    public static int channelFullRenderId = -1;
-    public static int valveRenderId = -1;
-    public static int waterPadRenderId = -1;
-    public static int seedStorageId = -1;
-
-    @Override
-    public int getRenderId(int nr) {
-        switch(nr) {
-            case Constants.cropId: return cropRenderId;
-            case Constants.tankId: return tankRenderId;
-            case Constants.channelId: return channelRenderId;
-            case Constants.valveId: return valveRenderId;
-            case Constants.channelFullId: return channelFullRenderId;
-            case Constants.waterPadId: return waterPadRenderId;
-            case Constants.seedStorageId: return seedStorageId;
-        }
-        return -1;
-    }
 
     @Override
     public int getRenderId(Block block) {

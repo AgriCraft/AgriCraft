@@ -17,11 +17,6 @@ public class ServerProxy extends CommonProxy {
     public void registerEventHandlers() {super.registerEventHandlers();}
 
     @Override
-    public int getRenderId(int nr) {
-        return -1;
-    }
-
-    @Override
     public int getRenderId(Block block) {
         return -1;
     }
