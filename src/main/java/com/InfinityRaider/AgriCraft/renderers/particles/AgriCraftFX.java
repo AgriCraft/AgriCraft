@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.renderers.particles;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+@SideOnly(Side.CLIENT)
 public abstract  class AgriCraftFX extends EntityFX {
     protected final ResourceLocation texture;
 

@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
 import com.InfinityRaider.AgriCraft.renderers.particles.DustFX;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -11,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
+@SideOnly(Side.CLIENT)
 public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
     private short counter = 0;
     private final ResourceLocation texture;

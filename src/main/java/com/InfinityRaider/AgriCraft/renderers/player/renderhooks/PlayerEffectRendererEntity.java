@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -8,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public abstract class PlayerEffectRendererEntity extends PlayerEffectRenderer {
     private IWrappedEntity entityWrapper;
     private EntityLiving entity;

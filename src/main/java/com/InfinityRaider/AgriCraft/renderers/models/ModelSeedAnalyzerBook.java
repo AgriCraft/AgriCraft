@@ -1,9 +1,12 @@
 package com.InfinityRaider.AgriCraft.renderers.models;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
+@SideOnly(Side.CLIENT)
 public class ModelSeedAnalyzerBook extends ModelBase {
 	public ModelSeedAnalyzerBook() {
 		Book = new ModelRenderer(this, 0, 0);

@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBat;
@@ -7,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 
+@SideOnly(Side.CLIENT)
 public class PlayerEffectRendererEntityBat extends PlayerEffectRendererEntity {
     protected PlayerEffectRendererEntityBat() {
         super();
