@@ -56,14 +56,14 @@ public class RenderSeedStorage extends RenderBlockCustomWood {
             drawScaledPrism(tessellator, 4, 3, 0, 5, 10, 1, icon);
             drawScaledPrism(tessellator, 11, 3, 0, 12, 10, 1, icon);
             drawScaledPrism(tessellator, 4, 10, 0, 12, 11, 1, icon);
-            drawScaledPrism(tessellator, 4, 2, 0, 12, 4, 1, icon);
+            drawScaledPrism(tessellator, 4, 3, 0, 12, 4, 1, icon);
+            //trace
+            renderSides(tessellator, storage);
             //seed
             if(storage.hasLockedSeed()) {
                 ItemStack seed = storage.getLockedSeed();
                 drawSeed(tessellator, seed);
             }
-            //trace
-            renderSides(tessellator, storage);
         }
         //clear texture overrides
         renderer.clearOverrideBlockTexture();
@@ -92,6 +92,33 @@ public class RenderSeedStorage extends RenderBlockCustomWood {
         addScaledVertexWithUV(tessellator, 1, 1, 0.99F, 3, 3, icon);
         addScaledVertexWithUV(tessellator, 1, 1.5F, 0.99F, 3, 4, icon);
         addScaledVertexWithUV(tessellator, 15, 1.5F, 0.99F, 2, 4, icon);
+
+        addScaledVertexWithUV(tessellator, 3.5F, 2.5F, 0.99F, 2, 3, icon);
+        addScaledVertexWithUV(tessellator, 3.5F, 11.5F, 0.99F, 2, 4, icon);
+        addScaledVertexWithUV(tessellator, 5.5F, 11.5F, 0.99F, 3, 4, icon);
+        addScaledVertexWithUV(tessellator, 5.5F, 2.5F, 0.99F, 3, 3, icon);
+
+        addScaledVertexWithUV(tessellator, 10.5F, 2.5F, 0.99F, 2, 3, icon);
+        addScaledVertexWithUV(tessellator, 10.5F, 11.5F, 0.99F, 2, 4, icon);
+        addScaledVertexWithUV(tessellator, 12.5F, 11.5F, 0.99F, 3, 4, icon);
+        addScaledVertexWithUV(tessellator, 12.5F, 2.5F, 0.99F, 3, 3, icon);
+
+        addScaledVertexWithUV(tessellator, 3.5F, 2.5F, 0.99F, 2, 3, icon);
+        addScaledVertexWithUV(tessellator, 3.5F, 4.5F, 0.99F, 2, 4, icon);
+        addScaledVertexWithUV(tessellator, 12.5F, 4.5F, 0.99F, 3, 4, icon);
+        addScaledVertexWithUV(tessellator, 12.5F, 2.5F, 0.99F, 3, 3, icon);
+
+        addScaledVertexWithUV(tessellator, 3.5F, 9.5F, 0.99F, 2, 3, icon);
+        addScaledVertexWithUV(tessellator, 3.5F, 11.5F, 0.99F, 2, 4, icon);
+        addScaledVertexWithUV(tessellator, 12.5F, 11.5F, 0.99F, 3, 4, icon);
+        addScaledVertexWithUV(tessellator, 12.5F, 9.5F, 0.99F, 3, 3, icon);
+
+        /*
+        addScaledVertexWithUV(tessellator, 4.5F, 2.5F, 0.99F, 3, 0, icon);
+        addScaledVertexWithUV(tessellator, 4.5F, 10.5F, 0.99F, 3, 1, icon);
+        addScaledVertexWithUV(tessellator, 11.5F, 10.5F, 0.99F, 4, 1, icon);
+        addScaledVertexWithUV(tessellator, 11.5F, 2.5F, 0.99F, 4, 0, icon);
+        */
     }
 
     private void drawSeed(Tessellator tessellator, ItemStack seed) {
@@ -100,7 +127,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood {
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
 
         IIcon icon = seed.getItem().getIconFromDamage(seed.getItemDamage());
-        drawScaledFaceXY(tessellator, 4, 3, 11, 10, icon, Constants.unit - 0.001F);
+        drawScaledFaceXY(tessellator, 5, 4, 11, 10, icon, Constants.unit - 0.001F);
 
         tessellator.draw();
         tessellator.startDrawingQuads();
