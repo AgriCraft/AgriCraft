@@ -62,11 +62,14 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         if (callFromTESR) {
             GL11.glPushMatrix();
             GL11.glTranslated(x, y, z);
-            if (tile != null && tile instanceof TileEntityAgricraft) {
-                rotateMatrix((TileEntityAgricraft) tile, false);
-            }
         } else {
+            if(tessellator instanceof TessellatorV2) {
+                ((TessellatorV2) tessellator).setRotation(0, 0, 0, 0);
+            }
             tessellator.addTranslation((float) x, (float) y, (float) z);
+        }
+        if (tile != null && tile instanceof TileEntityAgricraft) {
+            rotateMatrix((TileEntityAgricraft) tile, tessellator, false);
         }
 
         tessellator.setColorRGBA_F(1, 1, 1, 1);
@@ -74,13 +77,16 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
         boolean result = doWorldRender(tessellator, world, x, y, z, tile, block, 0, modelId, renderer, callFromTESR);
 
+        if (tile != null && tile instanceof TileEntityAgricraft) {
+            rotateMatrix((TileEntityAgricraft) tile, tessellator, true);
+        }
         if (callFromTESR) {
-            if (tile != null && tile instanceof TileEntityAgricraft) {
-                rotateMatrix((TileEntityAgricraft) tile, true);
-            }
             GL11.glTranslated(-x, -y, -z);
             GL11.glPopMatrix();
         } else {
+            if(tessellator instanceof TessellatorV2) {
+                ((TessellatorV2) tessellator).setRotation(0, 0, 0, 0);
+            }
             tessellator.addTranslation((float) -x, (float) -y, (float) -z);
         }
 
@@ -94,7 +100,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
     @Override
     public final boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        return renderBlock(Tessellator.instance, world, x, y, z, block, world.getTileEntity(x, y, z), 0, modelId, renderer, false);
+        return renderBlock(TessellatorV2.instance, world, x, y, z, block, world.getTileEntity(x, y, z), 0, modelId, renderer, false);
     }
 
     protected abstract boolean doWorldRender(Tessellator tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR);
@@ -150,7 +156,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
     //UTILITY METHODS
     //---------------
-    private void rotateMatrix(TileEntityAgricraft tileEntityAgricraft, boolean inverse) {
+    private void rotateMatrix(TileEntityAgricraft tileEntityAgricraft, Tessellator tessellator, boolean inverse) {
         //+x = EAST
         //+z = SOUTH
         //-x = WEST
@@ -168,12 +174,23 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         }
         float dx = angle%270==0?0:-1;
         float dz = angle>90?-1:0;
-        if(inverse) {
-            GL11.glTranslatef(-dx, 0, -dz);
-            GL11.glRotatef(-angle, 0, 1, 0);
+        if(tessellator instanceof TessellatorV2) {
+            TessellatorV2 tessellatorV2 = (TessellatorV2) tessellator;
+            if(inverse) {
+                tessellatorV2.addTranslation(-dx , 0, -dz);
+                tessellatorV2.addRotation(-angle, 0, 1, 0);
+            } else {
+                tessellatorV2.addRotation(angle, 0, 1, 0);
+                tessellatorV2.addTranslation(dx , 0, dz);
+            }
         } else {
-            GL11.glRotatef(angle, 0, 1, 0);
-            GL11.glTranslatef(dx, 0, dz);
+            if (inverse) {
+                GL11.glTranslatef(-dx, 0, -dz);
+                GL11.glRotatef(-angle, 0, 1, 0);
+            } else {
+                GL11.glRotatef(angle, 0, 1, 0);
+                GL11.glTranslatef(dx, 0, dz);
+            }
         }
     }
 
