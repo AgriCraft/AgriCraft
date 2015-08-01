@@ -77,35 +77,35 @@ public class RenderSprinkler extends RenderBlockBase {
             Minecraft.getMinecraft().renderEngine.bindTexture(resource);
             tessellator.startDrawingQuads();
                 //first face
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 20, 12, 4, -4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, 12, 4, 4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, 12, 12, 4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 20, 12, 12, -4);
+                addScaledVertexWithUV(tessellator, 4, 20, 12, 4, -4);
+                addScaledVertexWithUV(tessellator, 4, 12, 12, 4, 4);
+                addScaledVertexWithUV(tessellator, 12, 12, 12, 12, 4);
+                addScaledVertexWithUV(tessellator, 12, 20, 12, 12, -4);
                 //second face
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 20, 4, 4, -4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, 4, 4, 4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, 12, 12, 4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 20, 12, 12, -4);
+                addScaledVertexWithUV(tessellator, 4, 20, 4, 4, -4);
+                addScaledVertexWithUV(tessellator, 4, 12, 4, 4, 4);
+                addScaledVertexWithUV(tessellator, 4, 12, 12, 12, 4);
+                addScaledVertexWithUV(tessellator, 4, 20, 12, 12, -4);
                 //third face
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 20, 4, 4, -4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 20, 4, 12, -4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, 4, 12, 4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, 4, 4, 4);
+                addScaledVertexWithUV(tessellator, 4, 20, 4, 4, -4);
+                addScaledVertexWithUV(tessellator, 12, 20, 4, 12, -4);
+                addScaledVertexWithUV(tessellator, 12, 12, 4, 12, 4);
+                addScaledVertexWithUV(tessellator, 4, 12, 4, 4, 4);
                 //fourth face
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 20, 4, 4, -4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 20, 12, 12, -4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, 12, 12, 4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, 4, 4, 4);
+                addScaledVertexWithUV(tessellator, 12, 20, 4, 4, -4);
+                addScaledVertexWithUV(tessellator, 12, 20, 12, 12, -4);
+                addScaledVertexWithUV(tessellator, 12, 12, 12, 12, 4);
+                addScaledVertexWithUV(tessellator, 12, 12, 4, 4, 4);
                 //bottom face
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, 4, 4, 4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, 4, 12, 4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 12, 12, 12, 12);
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 12, 12, 4, 12);
+                addScaledVertexWithUV(tessellator, 4, 12, 4, 4, 4);
+                addScaledVertexWithUV(tessellator, 12, 12, 4, 12, 4);
+                addScaledVertexWithUV(tessellator, 12, 12, 12, 12, 12);
+                addScaledVertexWithUV(tessellator, 4, 12, 12, 4, 12);
                 //top face
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 20, 4, 4, 4);
-                RenderHelper.addScaledVertexWithUV(tessellator, 4, 20, 12, 4, 12);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 20, 12, 12, 12);
-                RenderHelper.addScaledVertexWithUV(tessellator, 12, 20, 4, 12, 4);
+                addScaledVertexWithUV(tessellator, 4, 20, 4, 4, 4);
+                addScaledVertexWithUV(tessellator, 4, 20, 12, 4, 12);
+                addScaledVertexWithUV(tessellator, 12, 20, 12, 12, 12);
+                addScaledVertexWithUV(tessellator, 12, 20, 4, 12, 4);
             tessellator.draw();
             //don't forget to enable lighting again
             GL11.glEnable(GL11.GL_LIGHTING);

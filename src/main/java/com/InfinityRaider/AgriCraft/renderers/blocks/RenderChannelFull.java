@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannelFull;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;
@@ -21,14 +20,14 @@ public class RenderChannelFull extends RenderChannel {
         //the texture
         IIcon icon = channel.getIcon();
         //draw bottom
-        RenderHelper.drawScaledPrism(tessellator, 0, 0, 0, 16, 5, 16, icon);
+        drawScaledPrism(tessellator, 0, 0, 0, 16, 5, 16, icon);
         //draw top
-        RenderHelper.drawScaledPrism(tessellator, 0, 12, 0, 16, 16, 16, icon);
+        drawScaledPrism(tessellator, 0, 12, 0, 16, 16, 16, icon);
         //draw four corners
-        RenderHelper.drawScaledPrism(tessellator, 0, 5, 0, 5, 12, 5, icon);
-        RenderHelper.drawScaledPrism(tessellator, 11, 5, 0, 16, 12, 5, icon);
-        RenderHelper.drawScaledPrism(tessellator, 11, 5, 11, 16, 12, 16, icon);
-        RenderHelper.drawScaledPrism(tessellator, 0, 5, 11, 5, 12, 16, icon);
+        drawScaledPrism(tessellator, 0, 5, 0, 5, 12, 5, icon);
+        drawScaledPrism(tessellator, 11, 5, 0, 16, 12, 5, icon);
+        drawScaledPrism(tessellator, 11, 5, 11, 16, 12, 16, icon);
+        drawScaledPrism(tessellator, 0, 5, 11, 5, 12, 16, icon);
 
     }
 
@@ -43,9 +42,9 @@ public class RenderChannelFull extends RenderChannel {
             IIcon icon = channel.getIcon();
             if(!neighbour) {
                 if(x) {
-                    RenderHelper.drawScaledPrism(tessellator, direction == 1 ? 11 : 0, 5, 5, direction == 1 ? 16 : 5, 12, 11, icon);
+                    drawScaledPrism(tessellator, direction == 1 ? 11 : 0, 5, 5, direction == 1 ? 16 : 5, 12, 11, icon);
                 } else {
-                    RenderHelper.drawScaledPrism(tessellator, 5, 5, direction==1?11:0, 12, 11, direction==1?16:5, icon);
+                    drawScaledPrism(tessellator, 5, 5, direction==1?11:0, 12, 11, direction==1?16:5, icon);
                 }
             }
         }

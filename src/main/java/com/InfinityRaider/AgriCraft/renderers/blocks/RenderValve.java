@@ -6,7 +6,6 @@ import codechicken.multipart.TileMultipart;
 import codechicken.multipart.minecraft.LeverPart;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
@@ -40,33 +39,33 @@ public class RenderValve extends RenderChannel {
         GL11.glDisable(GL11.GL_LIGHTING);
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
-        RenderHelper.drawScaledPrism(tessellator, 5, 11.5f, 0.001f, 11, 15.001f, 1.999f, ironIcon);
-        RenderHelper.drawScaledPrism(tessellator, 5, 0.999f, 0.001f, 11, 5.5f, 1.999f, ironIcon);
-        RenderHelper.drawScaledPrism(tessellator, 5, 11.5f, 14.001f, 11, 15.001f, 15.999f, ironIcon);
-        RenderHelper.drawScaledPrism(tessellator, 5, 0.999f, 14.001f, 11, 5.5f, 15.999f, ironIcon);
-        RenderHelper.drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, ironIcon);
-        RenderHelper.drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, ironIcon);
-        RenderHelper.drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, ironIcon);
-        RenderHelper.drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.999f, 5.5f, 11, ironIcon);
+        drawScaledPrism(tessellator, 5, 11.5f, 0.001f, 11, 15.001f, 1.999f, ironIcon);
+        drawScaledPrism(tessellator, 5, 0.999f, 0.001f, 11, 5.5f, 1.999f, ironIcon);
+        drawScaledPrism(tessellator, 5, 11.5f, 14.001f, 11, 15.001f, 15.999f, ironIcon);
+        drawScaledPrism(tessellator, 5, 0.999f, 14.001f, 11, 5.5f, 15.999f, ironIcon);
+        drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, ironIcon);
+        drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, ironIcon);
+        drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, ironIcon);
+        drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.999f, 5.5f, 11, ironIcon);
 
         //render the wooden guide rails along x-axis
-        RenderHelper.drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon);
+        drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon);
         tessellator.addTranslation(6*f, 0, 0);
-        RenderHelper.drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon);
+        drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon);
         tessellator.addTranslation(0, 0, 14*f);
-        RenderHelper.drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon);
+        drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon);
         tessellator.addTranslation(-6*f, 0, 0);
-        RenderHelper.drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon);
+        drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon);
         tessellator.addTranslation(0, 0, -14 * f);
 
         //render the wooden guide rails along z-axis
-        RenderHelper.drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon);
+        drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon);
         tessellator.addTranslation(0, 0, 6*f);
-        RenderHelper.drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon);
+        drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon);
         tessellator.addTranslation(14*f, 0, 0);
-        RenderHelper.drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon);
+        drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon);
         tessellator.addTranslation(0, 0, -6*f);
-        RenderHelper.drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon);
+        drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon);
         tessellator.addTranslation(-14*f, 0, 0);
 
         tessellator.draw();
@@ -200,9 +199,9 @@ public class RenderValve extends RenderChannel {
             if (neighbour instanceof BlockLever && RenderHelper.isLeverFacingBlock(channel.getWorldObj().getBlockMetadata(channel.xCoord + (x ? direction : 0), channel.yCoord, channel.zCoord + (x ? 0 : direction)), axis, direction)) {
                 IIcon icon = channel.getIcon();
                 if (x) {
-                    RenderHelper.drawScaledPrism(tessellator, direction > 0 ? 12 : 0, 4, 5, direction > 0 ? 16 : 4, 12, 11, icon);
+                    drawScaledPrism(tessellator, direction > 0 ? 12 : 0, 4, 5, direction > 0 ? 16 : 4, 12, 11, icon);
                 } else {
-                    RenderHelper.drawScaledPrism(tessellator, 5, 4, direction > 0 ? 12 : 0, 11, 12, direction > 0 ? 16 : 4, icon);
+                    drawScaledPrism(tessellator, 5, 4, direction > 0 ? 12 : 0, 11, 12, direction > 0 ? 16 : 4, icon);
                 }
             } else if (Loader.isModLoaded(Names.Mods.mcMultipart) && (neighbour instanceof BlockMultipart)) {
                 TileMultipart tile = BlockMultipart.getTile(channel.getWorldObj(), channel.xCoord + (x ? direction : 0), channel.yCoord, channel.zCoord + (x ? 0 : direction));
@@ -212,9 +211,9 @@ public class RenderValve extends RenderChannel {
                         if (RenderHelper.isLeverFacingBlock(leverPart.getMetadata(), axis, direction)) {
                             IIcon icon = channel.getIcon();
                             if (x) {
-                                RenderHelper.drawScaledPrism(tessellator, direction > 0 ? 12 : 0, 4, 5, direction > 0 ? 16 : 4, 12, 11, icon);
+                                drawScaledPrism(tessellator, direction > 0 ? 12 : 0, 4, 5, direction > 0 ? 16 : 4, 12, 11, icon);
                             } else {
-                                RenderHelper.drawScaledPrism(tessellator, 5, 4, direction > 0 ? 12 : 0, 11, 12, direction > 0 ? 16 : 4, icon);
+                                drawScaledPrism(tessellator, 5, 4, direction > 0 ? 12 : 0, 11, 12, direction > 0 ? 16 : 4, icon);
                             }
                             break;
                         }

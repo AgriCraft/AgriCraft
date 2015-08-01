@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterPad;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterPadFull;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -28,13 +27,13 @@ public class RenderWaterPad extends RenderBlockBase {
         GL11.glDisable(GL11.GL_LIGHTING);
         tessellator.startDrawingQuads();
         boolean full = ((ItemBlock) item.getItem()).field_150939_a instanceof BlockWaterPadFull;
-        RenderHelper.drawScaledPrism(tessellator, 0, 0, 0, 16, 8, 16, Blocks.dirt.getIcon(0, 0));
-        RenderHelper.drawScaledPrism(tessellator, 1, 8, 0, 1, 15, 16, Blocks.dirt.getIcon(0, 0));
-        RenderHelper.drawScaledPrism(tessellator, 15, 8, 1, 16, 15, 16, Blocks.dirt.getIcon(0, 0));
-        RenderHelper.drawScaledPrism(tessellator, 0, 8, 15, 15, 15, 16, Blocks.dirt.getIcon(0, 0));
-        RenderHelper.drawScaledPrism(tessellator, 0, 8, 0, 15, 1, 15, Blocks.dirt.getIcon(0, 0));
+        drawScaledPrism(tessellator, 0, 0, 0, 16, 8, 16, Blocks.dirt.getIcon(0, 0));
+        drawScaledPrism(tessellator, 1, 8, 0, 1, 15, 16, Blocks.dirt.getIcon(0, 0));
+        drawScaledPrism(tessellator, 15, 8, 1, 16, 15, 16, Blocks.dirt.getIcon(0, 0));
+        drawScaledPrism(tessellator, 0, 8, 15, 15, 15, 16, Blocks.dirt.getIcon(0, 0));
+        drawScaledPrism(tessellator, 0, 8, 0, 15, 1, 15, Blocks.dirt.getIcon(0, 0));
         if(full) {
-            RenderHelper.drawScaledPrism(tessellator, 1, 14, 1, 15, 15, 15, Blocks.water.getIcon(0, 0));
+            drawScaledPrism(tessellator, 1, 14, 1, 15, 15, 15, Blocks.water.getIcon(0, 0));
         }
         tessellator.draw();
         GL11.glEnable(GL11.GL_LIGHTING);
@@ -73,10 +72,10 @@ public class RenderWaterPad extends RenderBlockBase {
         } else if(full) {
             IIcon icon = Blocks.water.getIcon(0, 0);
             tessellator.addTranslation(x, y, z);
-            RenderHelper.addScaledVertexWithUV(tessellator, 0, 14, 0, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 0, 14, 1, 0, 1, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 1, 14, 1, 1, 1, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 1, 14, 0, 1, 0, icon);
+            addScaledVertexWithUV(tessellator, 0, 14, 0, 0, 0, icon);
+            addScaledVertexWithUV(tessellator, 0, 14, 1, 0, 1, icon);
+            addScaledVertexWithUV(tessellator, 1, 14, 1, 1, 1, icon);
+            addScaledVertexWithUV(tessellator, 1, 14, 0, 1, 0, icon);
             tessellator.addTranslation(-x, -y, -z);
         }
 
@@ -86,10 +85,10 @@ public class RenderWaterPad extends RenderBlockBase {
         } else if(full) {
             IIcon icon = Blocks.water.getIcon(0, 0);
             tessellator.addTranslation(x, y, z);
-            RenderHelper.addScaledVertexWithUV(tessellator, 15, 14, 0, 15, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 15, 14, 1, 15, 1, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16, 14, 1, 16, 1, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16, 14, 0, 16, 0, icon);
+            addScaledVertexWithUV(tessellator, 15, 14, 0, 15, 0, icon);
+            addScaledVertexWithUV(tessellator, 15, 14, 1, 15, 1, icon);
+            addScaledVertexWithUV(tessellator, 16, 14, 1, 16, 1, icon);
+            addScaledVertexWithUV(tessellator, 16, 14, 0, 16, 0, icon);
             tessellator.addTranslation(-x, -y, -z);
         }
 
@@ -99,10 +98,10 @@ public class RenderWaterPad extends RenderBlockBase {
         } else if(full) {
             IIcon icon = Blocks.water.getIcon(0, 0);
             tessellator.addTranslation(x, y, z);
-            RenderHelper.addScaledVertexWithUV(tessellator, 15, 14, 15, 15, 15, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 15, 14, 16, 15, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16, 14, 16, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16, 14, 15, 16, 15, icon);
+            addScaledVertexWithUV(tessellator, 15, 14, 15, 15, 15, icon);
+            addScaledVertexWithUV(tessellator, 15, 14, 16, 15, 16, icon);
+            addScaledVertexWithUV(tessellator, 16, 14, 16, 16, 16, icon);
+            addScaledVertexWithUV(tessellator, 16, 14, 15, 16, 15, icon);
             tessellator.addTranslation(-x, -y, -z);
         }
 
@@ -112,10 +111,10 @@ public class RenderWaterPad extends RenderBlockBase {
         } else if(full) {
             IIcon icon = Blocks.water.getIcon(0, 0);
             tessellator.addTranslation(x, y, z);
-            RenderHelper.addScaledVertexWithUV(tessellator, 0, 14, 15, 0, 15, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 0, 14, 16, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 1, 14, 16, 1, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 1, 14, 15, 1, 15, icon);
+            addScaledVertexWithUV(tessellator, 0, 14, 15, 0, 15, icon);
+            addScaledVertexWithUV(tessellator, 0, 14, 16, 0, 16, icon);
+            addScaledVertexWithUV(tessellator, 1, 14, 16, 1, 16, icon);
+            addScaledVertexWithUV(tessellator, 1, 14, 15, 1, 15, icon);
             tessellator.addTranslation(-x, -y, -z);
         }
 
@@ -124,10 +123,10 @@ public class RenderWaterPad extends RenderBlockBase {
         if(full) {
             IIcon icon = Blocks.water.getIcon(0, 0);
             tessellator.addTranslation(x, y, z);
-            RenderHelper.addScaledVertexWithUV(tessellator, 1, 14, 1, 1, 1, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 1, 14, 15, 1, 15, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 15, 14, 15, 15, 15, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 15, 14, 1, 15, 1, icon);
+            addScaledVertexWithUV(tessellator, 1, 14, 1, 1, 1, icon);
+            addScaledVertexWithUV(tessellator, 1, 14, 15, 1, 15, icon);
+            addScaledVertexWithUV(tessellator, 15, 14, 15, 15, 15, icon);
+            addScaledVertexWithUV(tessellator, 15, 14, 1, 15, 1, icon);
             tessellator.addTranslation(-x, -y, -z);
         }
     }
@@ -163,10 +162,10 @@ public class RenderWaterPad extends RenderBlockBase {
             if (full) {
                 IIcon icon = Blocks.water.getIcon(0, 0);
                 tessellator.addTranslation(x, y, z);
-                RenderHelper.addScaledVertexWithUV(tessellator, xLower, 14, zLower, xLower, zLower, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, xLower, 14, zUpper, xLower, zUpper, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, xUpper, 14, zUpper, xUpper, zUpper, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, xUpper, 14, zLower, xUpper, zLower, icon);
+                addScaledVertexWithUV(tessellator, xLower, 14, zLower, xLower, zLower, icon);
+                addScaledVertexWithUV(tessellator, xLower, 14, zUpper, xLower, zUpper, icon);
+                addScaledVertexWithUV(tessellator, xUpper, 14, zUpper, xUpper, zUpper, icon);
+                addScaledVertexWithUV(tessellator, xUpper, 14, zLower, xUpper, zLower, icon);
                 tessellator.addTranslation(-x, -y, -z);
             }
             if (flag == full) {

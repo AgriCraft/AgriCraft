@@ -29,75 +29,75 @@ public class RenderTank extends RenderBlockCustomWood {
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
         //draw first plane front
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 0, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 0);
+        addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 0);
+        addScaledVertexWithUV(tessellator, 0, 0, 16, 0, 16);
+        addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
+        addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 0);
         //draw first plane back
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 14, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 14, 0, 16);
+        addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 0);
+        addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 0);
+        addScaledVertexWithUV(tessellator, 16, 0, 14, 16, 16);
+        addScaledVertexWithUV(tessellator, 0, 0, 14, 0, 16);
         //draw first plane top
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 14);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 14);
+        addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 14);
+        addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
+        addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
+        addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 14);
         //draw second plane front
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 0, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
+        addScaledVertexWithUV(tessellator, 16, 16, 16, 0, 0);
+        addScaledVertexWithUV(tessellator, 16, 0, 16, 0, 16);
+        addScaledVertexWithUV(tessellator, 16, 0, 0, 16, 16);
+        addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
         //draw second plane back
-        RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 16, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 0, 16, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 14, 0, 0, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 14, 0, 16, 0, 16);
+        addScaledVertexWithUV(tessellator, 14, 16, 16, 0, 0);
+        addScaledVertexWithUV(tessellator, 14, 16, 0, 16, 0);
+        addScaledVertexWithUV(tessellator, 14, 0, 0, 16, 16);
+        addScaledVertexWithUV(tessellator, 14, 0, 16, 0, 16);
         //draw second plane top
-        RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 0, 14, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 14, 16, 16, 14, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
+        addScaledVertexWithUV(tessellator, 14, 16, 0, 14, 0);
+        addScaledVertexWithUV(tessellator, 14, 16, 16, 14, 16);
+        addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
+        addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
         //draw third plane front
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 16, 0);
+        addScaledVertexWithUV(tessellator, 16, 16, 0, 0, 0);
+        addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
+        addScaledVertexWithUV(tessellator, 0, 0, 0, 16, 16);
+        addScaledVertexWithUV(tessellator, 0, 16, 0, 16, 0);
         //draw third plane back
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 2, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 2, 16, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 2, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 2, 0, 16);
+        addScaledVertexWithUV(tessellator, 16, 16, 2, 0, 0);
+        addScaledVertexWithUV(tessellator, 0, 16, 2, 16, 0);
+        addScaledVertexWithUV(tessellator, 0, 0, 2, 16, 16);
+        addScaledVertexWithUV(tessellator, 16, 0, 2, 0, 16);
         //draw third plane top
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 2, 0, 2);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 2, 16, 2);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
+        addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
+        addScaledVertexWithUV(tessellator, 0, 16, 2, 0, 2);
+        addScaledVertexWithUV(tessellator, 16, 16, 2, 16, 2);
+        addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
         //draw fourth plane front
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 16, 0);
+        addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
+        addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 16);
+        addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 16);
+        addScaledVertexWithUV(tessellator, 0, 16, 16, 16, 0);
         //draw fourth plane back
-        RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 0, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 16, 16, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 2, 0, 16, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 2, 0, 0, 0, 16);
+        addScaledVertexWithUV(tessellator, 2, 16, 0, 0, 0);
+        addScaledVertexWithUV(tessellator, 2, 16, 16, 16, 0);
+        addScaledVertexWithUV(tessellator, 2, 0, 16, 16, 16);
+        addScaledVertexWithUV(tessellator, 2, 0, 0, 0, 16);
         //draw fourth plane top
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 16, 2, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 2, 16, 0, 2, 0);
+        addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
+        addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
+        addScaledVertexWithUV(tessellator, 2, 16, 16, 2, 16);
+        addScaledVertexWithUV(tessellator, 2, 16, 0, 2, 0);
         //draw bottom plane front
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 0);
+        addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 0);
+        addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
+        addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
+        addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 0);
         //draw bottom plane back
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 0, 0, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 16, 16, 0);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 16, 16, 16);
-        RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 0, 0, 16);
+        addScaledVertexWithUV(tessellator, 0, 1, 0, 0, 0);
+        addScaledVertexWithUV(tessellator, 0, 1, 16, 16, 0);
+        addScaledVertexWithUV(tessellator, 16, 1, 16, 16, 16);
+        addScaledVertexWithUV(tessellator, 16, 1, 0, 0, 16);
         tessellator.draw();
         //enable lighting
         GL11.glEnable(GL11.GL_LIGHTING);
@@ -147,15 +147,15 @@ public class RenderTank extends RenderBlockCustomWood {
             //the texture
             IIcon icon = tank.getIcon();
             //draw bottom plane front
-            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 0, icon);
+            addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 0, icon);
+            addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16, icon);
+            addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16, icon);
+            addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 0, icon);
             //draw bottom plane back
-            RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 0, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 0, 1, 16, 16, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 16, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16, 1, 0, 0, 16, icon);
+            addScaledVertexWithUV(tessellator, 0, 1, 0, 0, 0, icon);
+            addScaledVertexWithUV(tessellator, 0, 1, 16, 16, 0, icon);
+            addScaledVertexWithUV(tessellator, 16, 1, 16, 16, 16, icon);
+            addScaledVertexWithUV(tessellator, 16, 1, 0, 0, 16, icon);
         }
     }
 
@@ -166,87 +166,87 @@ public class RenderTank extends RenderBlockCustomWood {
             boolean x = axis=='x';
             if(tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction))instanceof TileEntityChannel && ((TileEntityChannel) tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction))).isSameMaterial(tank)) {
                 //draw plane front top
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(9+7*direction), 0, 0, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 11, x?0:(9+7*direction), 0, 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 11, x?16:(9+7*direction), 16, 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 16, x?16:(9+7*direction), 16, 0, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(9+7*direction), 0, 0, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 11, x?0:(9+7*direction), 0, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 11, x?16:(9+7*direction), 16, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 16, x?16:(9+7*direction), 16, 0, icon);
                 //draw plane front left
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 11, x?0:(9+7*direction), 0, 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 5, x?0:(9+7*direction), 0, 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?5:(9+7*direction), 5, 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?5:(9+7*direction), 5, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 11, x?0:(9+7*direction), 0, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 5, x?0:(9+7*direction), 0, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?5:(9+7*direction), 5, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?5:(9+7*direction), 5, 5, icon);
                 //draw plane front bottom
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 5, x?0:(9+7*direction), 0, 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 0, x?0:(9+7*direction), 0, 16, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 0, x?16:(9+7*direction), 16, 16, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 5, x?16:(9+7*direction), 16, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 5, x?0:(9+7*direction), 0, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 0, x?0:(9+7*direction), 0, 16, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 0, x?16:(9+7*direction), 16, 16, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 5, x?16:(9+7*direction), 16, 11, icon);
                 //draw plane front right
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 11, x?11:(9+7*direction), 11, 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 5, x?11:(9+7*direction), 11, 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 5, x?16:(9+7*direction), 16, 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 11, x?16:(9+7*direction), 16, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 11, x?11:(9+7*direction), 11, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 5, x?11:(9+7*direction), 11, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 5, x?16:(9+7*direction), 16, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 11, x?16:(9+7*direction), 16, 5, icon);
                 //draw plane back top
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 16, x?0:(7+7*direction), 0, 0, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(7+7*direction), 16, 0, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 11, x?16:(7+7*direction), 16, 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 11, x?0:(7+7*direction), 0, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 16, x?0:(7+7*direction), 0, 0, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(7+7*direction), 16, 0, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 11, x?16:(7+7*direction), 16, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 11, x?0:(7+7*direction), 0, 5, icon);
                 //draw plane back left
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 11, x?0:(7+7*direction), 0, 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 11, x?5:(7+7*direction), 5, 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 5, x?5:(7+7*direction), 5, 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 5, x?0:(7+7*direction), 0, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 11, x?0:(7+7*direction), 0, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 11, x?5:(7+7*direction), 5, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 5, x?5:(7+7*direction), 5, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 5, x?0:(7+7*direction), 0, 11, icon);
                 //draw plane back bottom
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 5, x?0:(7+7*direction), 0, 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 5, x?16:(7+7*direction), 16, 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 0, x?16:(7+7*direction), 16, 16, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 0, x?0:(7+7*direction), 0, 16, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 5, x?0:(7+7*direction), 0, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 5, x?16:(7+7*direction), 16, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 0, x?16:(7+7*direction), 16, 16, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 0, x?0:(7+7*direction), 0, 16, icon);
                 //draw plane back right
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?11:(7+7*direction), 11, 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 11, x?16:(7+7*direction), 16, 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 5, x?16:(7+7*direction), 16, 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?11:(7+7*direction), 11, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?11:(7+7*direction), 11, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 11, x?16:(7+7*direction), 16, 5, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 5, x?16:(7+7*direction), 16, 11, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?11:(7+7*direction), 11, 11, icon);
                 //draw hole bottom plane
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?5:(7+7*direction), x?(7+7*direction):5, x?5:(7+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?11:(9+7*direction), x?(7+7*direction):5, x?11:(9+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?11:(9+7*direction), x?(9+7*direction):11, x?11:(9+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?5:(7+7*direction), x?(9+7*direction):11, x?5:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?5:(7+7*direction), x?(7+7*direction):5, x?5:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?11:(9+7*direction), x?(7+7*direction):5, x?11:(9+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?11:(9+7*direction), x?(9+7*direction):11, x?11:(9+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?5:(7+7*direction), x?(9+7*direction):11, x?5:(7+7*direction), icon);
                 //draw hole right plane
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 11, x?5:(7+7*direction), (7+7*direction), 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 5, x?5:(7+7*direction), (7+7*direction), 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?5:(9+7*direction), (9+7*direction), 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?5:(9+7*direction), (9+7*direction), 5, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 11, x?5:(7+7*direction), (7+7*direction), 5, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):11, 5, x?5:(7+7*direction), (7+7*direction), 11, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 5, x?5:(9+7*direction), (9+7*direction), 11, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?5:(9+7*direction), (9+7*direction), 5, icon);
                 //draw hole top plane
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?5:(7+7*direction), x?(7+7*direction):5, x?5:(7+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?5:(7+7*direction), x?(9+7*direction):11, x?5:(7+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?11:(9+7*direction), x?(9+7*direction):11, x?11:(9+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?11:(9+7*direction), x?(7+7*direction):5, x?11:(9+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?5:(7+7*direction), x?(7+7*direction):5, x?5:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?5:(7+7*direction), x?(9+7*direction):11, x?5:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):11, 11, x?11:(9+7*direction), x?(9+7*direction):11, x?11:(9+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?11:(9+7*direction), x?(7+7*direction):5, x?11:(9+7*direction), icon);
                 //draw hole left plane
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?11:(7+7*direction), (7+7*direction), 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 11, x?11:(9+7*direction), (9+7*direction), 5, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 5, x?11:(9+7*direction), (9+7*direction), 11, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?11:(7+7*direction), (7+7*direction), 11, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 11, x?11:(7+7*direction), (7+7*direction), 5, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 11, x?11:(9+7*direction), (9+7*direction), 5, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):5, 5, x?11:(9+7*direction), (9+7*direction), 11, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):5, 5, x?11:(7+7*direction), (7+7*direction), 11, icon);
                 //draw plane top
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(7+7*direction), x?(7+7*direction):0, x?0:(7+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(9+7*direction), x?(7+7*direction):0, x?16:(9+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(9+7*direction), x?(9+7*direction):16, x?16:(9+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(7+7*direction), x?(9+7*direction):16, x?0:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(7+7*direction), x?(7+7*direction):0, x?0:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(9+7*direction), x?(7+7*direction):0, x?16:(9+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(9+7*direction), x?(9+7*direction):16, x?16:(9+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(7+7*direction), x?(9+7*direction):16, x?0:(7+7*direction), icon);
             }
             else if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction)))) {
                 //draw front plane
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 16, x?16:(9+7*direction), 0, 0, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 0, x?16:(9+7*direction), 0, 16, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 0, x?0:(9+7*direction), 16, 16, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(9+7*direction), 16, 0, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 16, x?16:(9+7*direction), 0, 0, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):0, 0, x?16:(9+7*direction), 0, 16, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 0, x?0:(9+7*direction), 16, 16, icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(9+7*direction), 16, 0, icon);
                 //draw back plane
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(7+7*direction), 0, 0, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 16, x?0:(7+7*direction), 16, 0, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 0, x?0:(7+7*direction), 16, 16, icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 0, x?16:(7+7*direction), 0, 16, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(7+7*direction), 0, 0, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 16, x?0:(7+7*direction), 16, 0, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):16, 0, x?0:(7+7*direction), 16, 16, icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 0, x?16:(7+7*direction), 0, 16, icon);
                 //draw top plane
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(7+7*direction), x?(7+7*direction):0, x?0:(7+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(9+7*direction), x?(7+7*direction):0, x?16:(9+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(9+7*direction), x?(9+7*direction):16, x?16:(9+7*direction), icon);
-                RenderHelper.addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(7+7*direction), x?(9+7*direction):16, x?0:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?0:(7+7*direction), x?(7+7*direction):0, x?0:(7+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(7+7*direction):0, 16, x?16:(9+7*direction), x?(7+7*direction):0, x?16:(9+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?16:(9+7*direction), x?(9+7*direction):16, x?16:(9+7*direction), icon);
+                addScaledVertexWithUV(tessellator, x?(9+7*direction):16, 16, x?0:(7+7*direction), x?(9+7*direction):16, x?0:(7+7*direction), icon);
             }
         }
     }
@@ -270,10 +270,10 @@ public class RenderTank extends RenderBlockCustomWood {
             tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(tank.getWorldObj(), tank.xCoord, tank.yCoord, tank.zCoord));
             tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
             //draw surface
-            RenderHelper.addScaledVertexWithUV(tessellator, 0, y, 0, 0, 0, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 0, y, 16, 0, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16, y, 16, 16, 16, icon);
-            RenderHelper.addScaledVertexWithUV(tessellator, 16, y, 0, 16, 0, icon);
+            addScaledVertexWithUV(tessellator, 0, y, 0, 0, 0, icon);
+            addScaledVertexWithUV(tessellator, 0, y, 16, 0, 16, icon);
+            addScaledVertexWithUV(tessellator, 16, y, 16, 16, 16, icon);
+            addScaledVertexWithUV(tessellator, 16, y, 0, 16, 0, icon);
         }
     }
 }
