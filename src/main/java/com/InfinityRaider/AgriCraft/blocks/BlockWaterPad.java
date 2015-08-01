@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.RenderBlockBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -21,7 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
 
-public class BlockWaterPad extends Block {
+public class BlockWaterPad extends BlockAgriCraft {
     public BlockWaterPad() {
         this(Material.ground);
     }
@@ -31,6 +32,11 @@ public class BlockWaterPad extends Block {
         this.setHardness(0.5F);
         this.setStepSound(soundTypeGravel);
         this.maxY = Constants.unit*8;
+    }
+
+    @Override
+    public RenderBlockBase getRenderer() {
+        return null;
     }
 
     @Override

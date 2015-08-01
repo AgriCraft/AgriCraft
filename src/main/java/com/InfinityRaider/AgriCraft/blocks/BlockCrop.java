@@ -15,6 +15,7 @@ import com.InfinityRaider.AgriCraft.network.MessageFertiliserApplied;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.Event;
@@ -24,6 +25,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,6 +34,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -41,13 +44,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 @Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IGrassHornExcempt")
-public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGrowable, IGrassHornExcempt {
+public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityProvider, IGrowable, IGrassHornExcempt {
 
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
 
     public BlockCrop() {
-        super();
+        super(Material.plants);
         this.isBlockContainer = true;
         //set the bounding box dimensions
         this.maxX = Constants.unit*14;
@@ -88,7 +91,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         } else if(crop.hasWeed()) {
             Event.Result allowGrowthResult = AppleCoreHelper.validateGrowthTick(this, world, x, y, z, rnd);
             if (allowGrowthResult != Event.Result.DENY) {
-                int meta = this.getPlantMetadata(world, x, y, z);
+                int meta = world.getBlockMetadata(x, y, z);
                 if (meta<7) {
                     double multiplier = 1.0 + (10 + 0.00) / 10;
                     float growthRate = (float) Constants.growthTier1;
@@ -129,6 +132,9 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                 update = true;
                 ArrayList<ItemStack> drops = crop.getFruits();
                 for (ItemStack drop : drops) {
+                    if(drop==null || drop.getItem()==null) {
+                        continue;
+                    }
                     this.dropBlockAsItem(world, x, y, z, drop);
                 }
             }
@@ -290,7 +296,7 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
                         drops.add(new ItemStack(Items.crops, 1));
                     }
                     if (crop.hasPlant()) {
-                        if (this.isMature(world, x, y, z)) {
+                        if (crop.isMature()) {
                             drops.addAll(crop.getFruits());
                             drops.add(crop.getSeedStack());
                         }
@@ -315,11 +321,21 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         return crop.canBonemeal();
     }
 
+    //some weird function for bonemeal
+    @Override
+    public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
+        return true;
+    }
+
     //this gets called when the player uses bonemeal on the crop
     public void func_149853_b(World world, Random rand, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         if(crop.hasPlant()) {
-            super.func_149853_b(world, rand, x, y, z);
+            int l = world.getBlockMetadata(x, y, z) + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
+            if (l > 7) {
+                l = 7;
+            }
+            world.setBlockMetadataWithNotify(x, y, z, l, 2);
             crop.markForUpdate();
         }
         else if(crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
@@ -349,6 +365,15 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
         return world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityCrop && ((TileEntityCrop) world.getTileEntity(x, y, z)).isFertile();
+    }
+
+    public boolean isMature(World world, int x, int y, int z) {
+        return world.getBlockMetadata(x, y, z) >= 7;
+    }
+
+    @Override
+    public Item getItemDropped(int meta, Random rand, int side) {
+        return Items.crops;
     }
 
     //get a list with items dropped by the the crop
@@ -475,4 +500,8 @@ public class BlockCrop extends BlockModPlant implements ITileEntityProvider, IGr
         return (tileEntity!=null)&&(tileEntity.receiveClientEvent(id,data));
     }
 
+    @Override
+    public RenderBlockBase getRenderer() {
+        return null;
+    }
 }

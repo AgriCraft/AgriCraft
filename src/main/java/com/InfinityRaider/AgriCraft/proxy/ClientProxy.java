@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
 import codechicken.nei.api.API;
+import com.InfinityRaider.AgriCraft.blocks.BlockAgriCraft;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
@@ -10,7 +11,6 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.*;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
@@ -22,6 +22,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
 
 public class ClientProxy extends CommonProxy {
@@ -55,6 +57,11 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
+    public int getRenderId(Block block) {
+        return RenderBlockBase.getRenderId(block);
+    }
+
+    @Override
     public void registerVillagerSkin(int id, String resource) {
         VillagerRegistry.instance().registerVillagerSkin(id, new ResourceLocation(Reference.MOD_ID.toLowerCase(), resource));
     }
@@ -62,15 +69,26 @@ public class ClientProxy extends CommonProxy {
     //register custom renderers
     @Override
     public void registerRenderers() {
+        //BLOCKS
+        //------
+        for(Field field:Blocks.class.getDeclaredFields()) {
+            if(field.getType().isAssignableFrom(BlockAgriCraft.class)) {
+                try {
+                    ((BlockAgriCraft) field.get(null)).getRenderer();
+                } catch (IllegalAccessException e) {
+                    LogHelper.printStackTrace(e);
+                }
+            }
+        }
+
         //crops
         cropRenderId = RenderingRegistry.getNextAvailableRenderId();
         RenderCrop renderCrops = new RenderCrop();
         RenderingRegistry.registerBlockHandler(cropRenderId, renderCrops);
 
         //seed analyzer
-        TileEntitySpecialRenderer  renderAnalyzer = new RenderSeedAnalyzer();
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySeedAnalyzer.class, renderAnalyzer);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockSeedAnalyzer), new RenderItemSeedAnalyzer(renderAnalyzer, new TileEntitySeedAnalyzer()));
+        //TileEntitySpecialRenderer renderAnalyzer = new RenderSeedAnalyzer();
+        //MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.blockSeedAnalyzer), new RenderItemSeedAnalyzer(renderAnalyzer, new TileEntitySeedAnalyzer()));
 
         //water pad
         waterPadRenderId = RenderingRegistry.getNextAvailableRenderId();
@@ -113,11 +131,6 @@ public class ClientProxy extends CommonProxy {
         TileEntitySpecialRenderer renderSprinkler = new RenderSprinkler();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, renderSprinkler);
         MinecraftForgeClient.registerItemRenderer(Items.sprinkler, new RenderItemSprinkler());
-
-        //seed storage
-        seedStorageId = RenderingRegistry.getNextAvailableRenderId();
-        RenderSeedStorage renderSeedStorage = new RenderSeedStorage(Blocks.blockSeedStorage, seedStorageId);
-        RenderingRegistry.registerBlockHandler(seedStorageId, renderSeedStorage);
 
         //villager
         if (!ConfigurationHandler.disableWorldGen && ConfigurationHandler.villagerEnabled) {

@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public class ServerProxy extends CommonProxy {
@@ -17,7 +18,12 @@ public class ServerProxy extends CommonProxy {
 
     @Override
     public int getRenderId(int nr) {
-        return 0;
+        return -1;
+    }
+
+    @Override
+    public int getRenderId(Block block) {
+        return -1;
     }
 
     @Override

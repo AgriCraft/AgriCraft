@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.renderers.RenderBlockBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -47,6 +48,11 @@ public class BlockWaterPadFull extends BlockWaterPad {
     @Override
     public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
         return false;
+    }
+
+    @Override
+    public RenderBlockBase getRenderer() {
+        return null;
     }
 
     public static class ItemBlockWaterPadFull extends ItemBlockWaterPad {

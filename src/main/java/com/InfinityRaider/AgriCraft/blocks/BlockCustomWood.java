@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +15,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public abstract class BlockCustomWood extends BlockContainer {
+public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     public BlockCustomWood() {
         super(Material.wood);
         this.setHardness(2.0F);
@@ -26,8 +25,8 @@ public abstract class BlockCustomWood extends BlockContainer {
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-        super.breakBlock(world,x,y,z,block,meta);
+    public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
+        super.breakBlock(world,x,y,z, b,meta);
         world.removeTileEntity(x,y,z);
     }
 

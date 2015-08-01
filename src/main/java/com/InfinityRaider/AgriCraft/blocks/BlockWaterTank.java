@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -110,7 +111,7 @@ public class BlockWaterTank extends BlockCustomWood{
 
     //when the block is broken
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+    public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
         if(!world.isRemote) {
             LogHelper.debug("breaking tank");
             boolean placeWater = false;
@@ -172,6 +173,11 @@ public class BlockWaterTank extends BlockCustomWood{
         else if(meta==1) {
             return Blocks.iron_block.getIcon(0, 0);
         }
+        return null;
+    }
+
+    @Override
+    public RenderBlockBase getRenderer() {
         return null;
     }
 }

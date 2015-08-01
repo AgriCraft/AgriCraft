@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.RenderBlockBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
@@ -32,4 +33,9 @@ public class BlockWaterChannelFull extends BlockWaterChannel {
 
     @Override
     public int getRenderType() {return AgriCraft.proxy.getRenderId(Constants.channelFullId);}
+
+    @Override
+    public RenderBlockBase getRenderer() {
+        return null;
+    }
 }

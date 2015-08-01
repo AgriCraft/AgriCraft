@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -119,6 +120,11 @@ public class BlockWaterChannel extends BlockCustomWood {
         else if(meta==1) {
             return Blocks.iron_block.getIcon(0, 0);
         }
+        return null;
+    }
+
+    @Override
+    public RenderBlockBase getRenderer() {
         return null;
     }
 }

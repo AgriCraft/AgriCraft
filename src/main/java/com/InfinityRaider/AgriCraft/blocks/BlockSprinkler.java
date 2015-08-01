@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -18,7 +19,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockSprinkler extends BlockContainer {
+public class BlockSprinkler extends BlockContainerAgriCraft {
     public BlockSprinkler() {
         super(Material.iron);
         this.setHardness(2.0F);
@@ -108,5 +109,10 @@ public class BlockSprinkler extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
         //NOOP
+    }
+
+    @Override
+    public RenderBlockBase getRenderer() {
+        return null;
     }
 }

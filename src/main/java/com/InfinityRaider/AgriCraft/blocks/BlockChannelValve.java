@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
@@ -79,5 +80,10 @@ public class BlockChannelValve extends BlockCustomWood {
     @Override
     public IIcon getIcon(int side, int meta) {
         return Blocks.planks.getIcon(0, 0);
+    }
+
+    @Override
+    public RenderBlockBase getRenderer() {
+        return null;
     }
 }

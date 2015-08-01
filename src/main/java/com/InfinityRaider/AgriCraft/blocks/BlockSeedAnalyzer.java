@@ -6,29 +6,27 @@ import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.RenderSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 
-public class BlockSeedAnalyzer extends Block implements ITileEntityProvider {
+public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
     public BlockSeedAnalyzer() {
         super(Material.ground);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
@@ -52,24 +50,9 @@ public class BlockSeedAnalyzer extends Block implements ITileEntityProvider {
         return new TileEntitySeedAnalyzer();
     }
 
-    //this sets the block's orientation based upon the direction the player is looking when the block is placed
-    @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-        if(world.getTileEntity(x, y, z) instanceof TileEntitySeedAnalyzer) {
-            TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(x, y, z);
-            int direction = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-            switch(direction) {
-                case 0: analyzer.setOrientation(ForgeDirection.NORTH.ordinal()); break;
-                case 1: analyzer.setOrientation(ForgeDirection.EAST.ordinal()); break;
-                case 2: analyzer.setOrientation(ForgeDirection.SOUTH.ordinal()); break;
-                case 3: analyzer.setOrientation(ForgeDirection.WEST.ordinal()); break;
-            }
-        }
-    }
-
     //called when the block is broken
      @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+    public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
          if(!world.isRemote) {
              world.removeTileEntity(x, y, z);
              world.setBlockToAir(x, y, z);
@@ -124,8 +107,6 @@ public class BlockSeedAnalyzer extends Block implements ITileEntityProvider {
 
     //rendering stuff
     @Override
-    public int getRenderType() {return -1;}                 //get default render type: net.minecraft.client.renderer
-    @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
     @Override
     public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
@@ -153,5 +134,10 @@ public class BlockSeedAnalyzer extends Block implements ITileEntityProvider {
         super.onBlockEventReceived(world, x, y, z, id, data);
         TileEntity tileEntity = world.getTileEntity(x,y,z);
         return (tileEntity!=null)&&(tileEntity.receiveClientEvent(id,data));
+    }
+
+    @Override
+    public RenderBlockBase getRenderer() {
+        return new RenderSeedAnalyzer();
     }
 }

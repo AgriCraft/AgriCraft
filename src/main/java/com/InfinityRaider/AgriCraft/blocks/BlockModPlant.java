@@ -40,11 +40,6 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     private IIcon[] icons;
     private RenderMethod renderType;
 
-    /** Only used for the subclass which is the actual crop sticks */
-    protected BlockModPlant() {
-        super();
-    }
-
     /** Parameters can be given in any order, parameters can be:
      * String name (needed), ItemStack fruit(needed), Block soil (optional), BlockWithMeta baseBlock (optional), int tier (necessary), RenderMethod renderType (necessary), ItemStack shearDrop (optional)
      * Will throw MissingArgumentsException if the needed arguments are not given.
@@ -160,6 +155,11 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
         return this.renderType==RenderMethod.CROSSED;
     }
 
+    @Override
+    public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
+        return this.tier<=3 && super.func_149851_a(world, x, y, z, isRemote);
+    }
+
     //register icons
     @Override
     @SideOnly(Side.CLIENT)
@@ -205,11 +205,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     //check if the plant is mature
     public boolean isMature(World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
-        if(te==null || !(te instanceof TileEntityCrop)) {
-            return world.getBlockMetadata(x, y, z) == 7;
-        }
-        return ((TileEntityCrop) world.getTileEntity(x, y, z)).isMature();
+        return world.getBlockMetadata(x, y, z) == 7;
     }
 
     //render different stages
