@@ -9,7 +9,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import com.InfinityRaider.AgriCraft.utility.ShapelessCustomWoodRecipe;
+import com.InfinityRaider.AgriCraft.items.crafting.RecipeShapelessCustomWood;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -172,7 +172,7 @@ public class Recipes {
                 recipeItemsCopy.add(new ItemStack((Block) recipeItem));
             }
         }
-        ShapelessCustomWoodRecipe recipe = new ShapelessCustomWoodRecipe(output, recipeItemsCopy);
+        RecipeShapelessCustomWood recipe = new RecipeShapelessCustomWood(output, recipeItemsCopy);
         GameRegistry.addRecipe(recipe);
     }
 }

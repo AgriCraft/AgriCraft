@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.InfinityRaider.AgriCraft.items.crafting;
 
 
 import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ShapelessCustomWoodRecipe extends ShapelessRecipes {
+public class RecipeShapelessCustomWood extends ShapelessRecipes {
 
-    public ShapelessCustomWoodRecipe(ItemStack recipeOutput, List recipeItems) {
+    public RecipeShapelessCustomWood(ItemStack recipeOutput, List recipeItems) {
         super(recipeOutput, recipeItems);
     }
 
