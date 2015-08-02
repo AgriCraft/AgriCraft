@@ -36,6 +36,7 @@ public class BlockWaterPad extends BlockAgriCraft {
 
 
     @Override
+    @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderWaterPad(this);
     }

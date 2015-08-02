@@ -71,6 +71,7 @@ public class BlockSeedStorage extends BlockCustomWood {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderSeedStorage();
     }

@@ -5,6 +5,8 @@ import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -57,6 +59,7 @@ public class BlockSeedStorageController extends BlockCustomWood {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return null;
     }

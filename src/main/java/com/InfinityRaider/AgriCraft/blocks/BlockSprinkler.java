@@ -108,6 +108,7 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderSprinkler();
     }

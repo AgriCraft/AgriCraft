@@ -38,6 +38,7 @@ public class BlockWaterChannelFull extends BlockWaterChannel {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderChannelFull();
     }

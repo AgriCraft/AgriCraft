@@ -137,6 +137,7 @@ public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderSeedAnalyzer();
     }

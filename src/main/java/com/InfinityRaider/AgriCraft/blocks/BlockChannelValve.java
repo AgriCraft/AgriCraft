@@ -4,6 +4,8 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderValve;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.init.Blocks;
@@ -78,6 +80,7 @@ public class BlockChannelValve extends BlockCustomWood {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderValve();
     }

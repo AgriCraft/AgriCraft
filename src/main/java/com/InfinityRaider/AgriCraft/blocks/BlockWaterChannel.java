@@ -122,6 +122,7 @@ public class BlockWaterChannel extends BlockCustomWood {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderChannel();
     }

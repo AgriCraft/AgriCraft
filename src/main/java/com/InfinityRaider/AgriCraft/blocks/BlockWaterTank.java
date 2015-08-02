@@ -175,6 +175,7 @@ public class BlockWaterTank extends BlockCustomWood{
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderTank();
     }
