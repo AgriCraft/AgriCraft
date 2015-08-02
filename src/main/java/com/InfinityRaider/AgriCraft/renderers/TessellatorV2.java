@@ -76,6 +76,10 @@ public class TessellatorV2 extends Tessellator {
         this.matrix.multiplyRightWith(new TransformationMatrix(angle, x, y, z));
     }
 
+    public void scale(double x, double y, double z) {
+        this.matrix.scale(x, y, z);
+    }
+
     /** Applies a coordinate transformation */
     public void applyTranformation(TransformationMatrix transformationMatrix) {
         this.matrix.multiplyRightWith(transformationMatrix);

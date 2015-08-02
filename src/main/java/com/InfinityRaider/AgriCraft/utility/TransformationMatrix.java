@@ -55,7 +55,7 @@ public class TransformationMatrix {
         this();
         int m = SIZE-1>=data.length?data.length:SIZE-1;
         for(int i=0;i<m;i++) {
-            int n = SIZE-1>=data[i].length?data[i].length:SIZE-1;
+            int n = SIZE>=data[i].length?data[i].length:SIZE;
             for(int j=0;j<n;j++) {
                 this.matrix[i][j] = data[i][j];
             }
@@ -98,6 +98,16 @@ public class TransformationMatrix {
         this.matrix[2][3] = z;
     }
 
+    /** scales the matrix */
+    public TransformationMatrix scale(double x, double y, double z) {
+        TransformationMatrix m = new TransformationMatrix();
+        m.matrix[0][0] = x;
+        m.matrix[1][1] = y;
+        m.matrix[2][2] = z;
+        this.multiplyRightWith(m);
+        return this;
+    }
+
 
     /** Left multiplies this transformation matrix with the argument, for inverse transformations */
     public TransformationMatrix multiplyLeftWith(TransformationMatrix m) {
@@ -131,6 +141,7 @@ public class TransformationMatrix {
         return this;
     }
 
+    /** Transforms the given coordinates */
     public double[] transform(double x, double y, double z) {
         double[] coords = new double[] {x, y, z, 1};
         double[] result = new double[3];
