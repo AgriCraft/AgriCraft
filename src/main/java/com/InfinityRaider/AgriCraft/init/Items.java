@@ -8,7 +8,6 @@ import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 
 public class Items {
     public static ItemCrop crops;
-    public static ItemSprinkler sprinkler;
     public static ItemJournal journal;
     public static ItemTrowel trowel;
     public static ItemMagnifyingGlass magnifyingGlass;

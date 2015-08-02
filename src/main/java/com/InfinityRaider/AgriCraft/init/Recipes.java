@@ -67,7 +67,7 @@ public class Recipes {
             RegisterHelper.removeRecipe(new ItemStack(net.minecraft.init.Items.bowl));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.bowl, 4), "w w", " w ", 'w', Names.OreDict.slabWood));
             //sprinkler
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.sprinkler, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', net.minecraft.init.Blocks.iron_bars, 'c', net.minecraft.init.Items.bucket));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.blockSprinkler, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', net.minecraft.init.Blocks.iron_bars, 'c', net.minecraft.init.Items.bucket));
         }
         //fruits
         if (ConfigurationHandler.resourcePlants) {

@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSprinkler;
@@ -58,7 +57,7 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
     @Override
     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
         if(!world.isRemote) {
-            ItemStack drop = new ItemStack(Items.sprinkler, 1);
+            ItemStack drop = new ItemStack(this, 1);
             this.dropBlockAsItem(world, x, y, z, drop);
         }
     }
@@ -84,7 +83,7 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
     @Override
     @SideOnly(Side.CLIENT)
     public Item getItem(World world, int x, int y, int z) {
-        return Items.sprinkler;
+        return Item.getItemFromBlock(this);
     }
 
     @Override
