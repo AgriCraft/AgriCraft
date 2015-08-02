@@ -42,7 +42,10 @@ public class ClientProxy extends CommonProxy {
         for(Field field:Blocks.class.getDeclaredFields()) {
             if(field.getType().isAssignableFrom(BlockAgriCraft.class)) {
                 try {
-                    ((BlockAgriCraft) field.get(null)).getRenderer();
+                    Object obj = field.get(null);
+                    if(obj!=null) {
+                        ((BlockAgriCraft) obj).getRenderer();
+                    }
                 } catch (IllegalAccessException e) {
                     LogHelper.printStackTrace(e);
                 }
