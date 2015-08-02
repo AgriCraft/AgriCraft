@@ -183,6 +183,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
                     PlantStatsStorage stats = component.getComponent();
                     int stackSize = isShiftKeyDown()?64:1;
                     this.container.moveStackFromTileEntityToPlayer(stats.id, new ItemStack(activeSeed, stackSize, activeMeta));
+                    this.updateScreen();
                     return;
                 }
             }

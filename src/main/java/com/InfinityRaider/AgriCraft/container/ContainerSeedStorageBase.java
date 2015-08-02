@@ -78,6 +78,9 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
         if (stack == null) {
             return;
         }
+        if(stackToMove==null || stackToMove.getItem()==null) {
+            return;
+        }
         stackToMove.stackSize = stack.stackSize > stackToMove.stackSize ? stackToMove.stackSize : stack.stackSize;
         stackToMove.stackTagCompound = controllable.getStackInSlot(slotId).stackTagCompound;
         if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {

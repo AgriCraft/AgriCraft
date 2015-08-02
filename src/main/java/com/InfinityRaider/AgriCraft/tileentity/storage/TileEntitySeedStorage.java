@@ -56,6 +56,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                         slotTag.setShort(Names.NBT.growth, stackTag.getShort(Names.NBT.growth));
                         slotTag.setShort(Names.NBT.gain, stackTag.getShort(Names.NBT.gain));
                         slotTag.setShort(Names.NBT.strength, stackTag.getShort(Names.NBT.strength));
+                        slotTag.setInteger(Names.NBT.id, slot.getId());
                         //add the tag to the list
                         tagList.appendTag(slotTag);
                     }
@@ -88,7 +89,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                     NBTTagCompound slotTag = tagList.getCompoundTagAt(i);
                     NBTTagCompound stackTag = new NBTTagCompound();
                     SeedHelper.setNBT(stackTag, slotTag.getShort(Names.NBT.growth), slotTag.getShort(Names.NBT.gain), slotTag.getShort(Names.NBT.strength), true);
-                    slots.put(i, new SeedStorageSlot(stackTag, slotTag.getInteger(Names.NBT.count), i, invId));
+                    int id = slotTag.getInteger(Names.NBT.id);
+                    slots.put(id, new SeedStorageSlot(stackTag, slotTag.getInteger(Names.NBT.count), id, invId));
                 }
             }
         } else {
@@ -130,9 +132,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         }
         if(!this.worldObj.isRemote) {
             if (this.hasLockedSeed() && this.lockedSeed == stack.getItem() && this.lockedSeedMeta == stack.getItemDamage()) {
-                int lastId = 0;
                 for (Map.Entry<Integer, SeedStorageSlot> entry : this.slots.entrySet()) {
-                    lastId = entry.getKey() > lastId ? entry.getKey() : lastId;
                     if (entry.getValue() != null) {
                         if (ItemStack.areItemStackTagsEqual(entry.getValue().getStack(this.lockedSeed, this.lockedSeedMeta), stack)) {
                             ItemStack newStack = stack.copy();
@@ -146,10 +146,14 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                 if (!success) {
                     if (this.slots.size() == 0) {
                         this.setInventorySlotContents(0, stack);
+                        success = true;
                     } else {
-                        this.setInventorySlotContents(lastId + 1, stack);
+                        int slotId = getFirstFreeSlot();
+                        if(slotId>=0) {
+                            this.setInventorySlotContents(slotId, stack);
+                            success = true;
+                        }
                     }
-                    success = true;
                 }
             }
             else {
@@ -159,6 +163,15 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             }
         }
         return success;
+    }
+
+    public int getFirstFreeSlot() {
+        for(int i=0;i<1000;i++) {
+            if(!slots.containsKey(i)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
