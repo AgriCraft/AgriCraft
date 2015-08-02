@@ -6,6 +6,12 @@ CurseForge: [CurseForge](http://minecraft.curseforge.com/mc-mods/225635-agricraf
 
 FTB Thread: [FTB Thread](http://forum.feed-the-beast.com/threads/1-7-10-agricraft.50964/)
 
+## Bug reports
+
+Please report any and all bugs you might encounter while playing with this mod. Suggestions are also welcome.
+However before reporting a bug please update to the latest version of the mod to see if it still persists.
+If you want to post bug reports for older versions, make sure to tell me what version you are using and the version of Forge you are using.
+
 
 ## Technical Documentation
 
