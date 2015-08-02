@@ -10,6 +10,7 @@ public abstract class NetworkWrapperAgriCraft {
     public static final int messageTileEntitySeedStorage_ID = 1;
     public static final int messageSyncMutation_ID = 2;
     public static final int messageFertiliserApplied_ID = 3;
+    public static final int messageGuiSeedStorageClearSeed_ID = 4;
 
     public static SimpleNetworkWrapper wrapper;
 
@@ -20,6 +21,7 @@ public abstract class NetworkWrapperAgriCraft {
 
     private static void initMessages() {
         wrapper.registerMessage(MessageContainerSeedStorage.MessageHandler.class, MessageContainerSeedStorage.class, messageContainerSeedStorage_ID, Side.SERVER);
+        wrapper.registerMessage(MessageGuiSeedStorageClearSeed.MessageHandler.class, MessageGuiSeedStorageClearSeed.class, messageGuiSeedStorageClearSeed_ID, Side.SERVER);
         wrapper.registerMessage(MessageTileEntitySeedStorage.MessageHandler.class, MessageTileEntitySeedStorage.class, messageTileEntitySeedStorage_ID, Side.CLIENT);
         wrapper.registerMessage(MessageSyncMutation.MessageHandler.class, MessageSyncMutation.class, messageSyncMutation_ID, Side.CLIENT);
         wrapper.registerMessage(MessageFertiliserApplied.MessageHandler.class, MessageFertiliserApplied.class, messageFertiliserApplied_ID, Side.CLIENT);

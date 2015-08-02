@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.network.MessageTileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -92,6 +91,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                     slots.put(i, new SeedStorageSlot(stackTag, slotTag.getInteger(Names.NBT.count), i, invId));
                 }
             }
+        } else {
+            this.lockedSeed = null;
+            this.lockedSeedMeta = 0;
         }
         int[] coords = NBTHelper.getCoordsFromNBT(tag);
         if(coords!=null && coords.length==3) {
@@ -123,14 +125,19 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     @Override
     public boolean addStackToInventory(ItemStack stack) {
         boolean success = false;
+        if(!SeedHelper.isAnalyzedSeed(stack)) {
+            return false;
+        }
         if(!this.worldObj.isRemote) {
-            if (this.hasLockedSeed() && SeedHelper.isAnalyzedSeed(stack) && this.lockedSeed == stack.getItem() && this.lockedSeedMeta == stack.getItemDamage()) {
+            if (this.hasLockedSeed() && this.lockedSeed == stack.getItem() && this.lockedSeedMeta == stack.getItemDamage()) {
                 int lastId = 0;
                 for (Map.Entry<Integer, SeedStorageSlot> entry : this.slots.entrySet()) {
                     lastId = entry.getKey() > lastId ? entry.getKey() : lastId;
                     if (entry.getValue() != null) {
                         if (ItemStack.areItemStackTagsEqual(entry.getValue().getStack(this.lockedSeed, this.lockedSeedMeta), stack)) {
-                            this.setInventorySlotContents(entry.getKey(), stack);
+                            ItemStack newStack = stack.copy();
+                            newStack.stackSize = newStack.stackSize + entry.getValue().count;
+                            this.setInventorySlotContents(entry.getKey(), newStack);
                             success = true;
                             break;
                         }
@@ -144,6 +151,11 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                     }
                     success = true;
                 }
+            }
+            else {
+                this.setLockedSeed(stack.getItem(), stack.getItemDamage());
+                this.setInventorySlotContents(0, stack);
+                success = true;
             }
         }
         return success;
@@ -207,6 +219,15 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
+    public void clearLockedSeed() {
+        if(this.slots.size()==0) {
+            this.lockedSeed = null;
+            this.lockedSeedMeta = 0;
+            this.markForUpdate();
+        }
+    }
+
+    @Override
     public ItemStack getLockedSeed() {
         return new ItemStack(this.lockedSeed, 1, this.lockedSeedMeta);
     }
@@ -227,7 +248,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     // so the maximum amount of different slots in the inventory is 1000
     @Override
     public int getSizeInventory() {
-        return 1000;
+        return this.slots.size()+1;
     }
 
     @Override
@@ -334,9 +355,16 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if (CropPlantHandler.isValidSeed(stack) && this.hasLockedSeed() && stack.getItem() == this.lockedSeed && stack.getItemDamage() == this.lockedSeedMeta && SeedHelper.isAnalyzedSeed(stack)) {
-            SeedStorageSlot slotAt = this.slots.get(slot);
-            return slotAt == null || ItemStack.areItemStackTagsEqual(stack, this.getStackInSlot(slot));
+        if(!SeedHelper.isAnalyzedSeed(stack)) {
+            return false;
+        }
+        if(this.hasLockedSeed()) {
+            if (stack.getItem() == this.lockedSeed && stack.getItemDamage() == this.lockedSeedMeta && SeedHelper.isAnalyzedSeed(stack)) {
+                SeedStorageSlot slotAt = this.slots.get(slot);
+                return slotAt == null || ItemStack.areItemStackTagsEqual(stack, this.getStackInSlot(slot));
+            }
+        } else {
+            return true;
         }
         return false;
     }

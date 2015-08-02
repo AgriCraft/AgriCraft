@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerSeedStorage extends ContainerSeedStorageDummy {
+public class ContainerSeedStorage extends ContainerSeedStorageBase {
     private static final int invOffsetX = 6;
     private static final int invOffsetY = 49;
     private TileEntitySeedStorage te;

@@ -1,9 +1,11 @@
 package com.InfinityRaider.AgriCraft.gui;
 
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageDummy;
+import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
+import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -13,7 +15,9 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -21,9 +25,9 @@ import java.util.Collections;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public abstract class GuiSeedStorageDummy extends GuiContainer {
+public abstract class GuiSeedStorageBase extends GuiContainer {
     //the container for this gui
-    public ContainerSeedStorageDummy container;
+    public ContainerSeedStorageBase container;
     //data for the active buttons
     Item activeSeed;
     int activeMeta;
@@ -54,7 +58,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     protected List<Component<PlantStatsStorage>> activeSeeds;
     protected List<Component<ItemStack>> setActiveSeedButtons;
 
-    public GuiSeedStorageDummy(ContainerSeedStorageDummy container, int maxVertSlots, int maxHorSlots, int sortButtonX, int sortButtonY, int setActiveSeedButtonsX, int setActiveSeedButtonsY, int seedSlotsX, int seedSlotsY) {
+    public GuiSeedStorageBase(ContainerSeedStorageBase container, int maxVertSlots, int maxHorSlots, int sortButtonX, int sortButtonY, int setActiveSeedButtonsX, int setActiveSeedButtonsY, int seedSlotsX, int seedSlotsY) {
         super(container);
         this.container = container;
         this.maxVertSlots = maxVertSlots;
@@ -67,13 +71,32 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         this.seedSlotButtonOffset_Y =seedSlotsY;
     }
 
+    protected boolean hasActiveSeed() {
+        return this.activeSeed!=null;
+    }
+
+    protected void getActiveSeed() {
+        TileEntity tile = this.container.getTileEntity();
+        if(tile==null || !(tile instanceof ISeedStorageControllable)) {
+            return;
+        }
+        ISeedStorageControllable storage = (ISeedStorageControllable) tile;
+        ItemStack stack = storage.getLockedSeed();
+        if(stack != null && stack.getItem()!= null) {
+            activeSeed = stack.getItem();
+            activeMeta = stack.getItemDamage();
+        }
+    }
+
     protected void loadButtons() {
         this.buttonList.clear();
         int buttonWidth = 60;
         int buttonHeight = 12;
-        this.buttonList.add(new GuiButton(buttonIdGrowth, this.guiLeft + sortButtonX, this.guiTop + sortButtonY, buttonWidth, buttonHeight, "Growth"));
-        this.buttonList.add(new GuiButton(buttonIdGain, this.guiLeft + sortButtonX, this.guiTop + sortButtonY+buttonHeight+1, buttonWidth, buttonHeight, "Gain"));
-        this.buttonList.add(new GuiButton(buttonIdStrength, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + 2 * (buttonHeight + 1), buttonWidth, buttonHeight, "Strength"));
+        this.buttonList.add(new GuiButton(buttonIdGrowth, this.guiLeft + sortButtonX, this.guiTop + sortButtonY, buttonWidth, buttonHeight, StatCollector.translateToLocal("agricraft_tooltip.growth")));
+        this.buttonList.add(new GuiButton(buttonIdGain, this.guiLeft + sortButtonX, this.guiTop + sortButtonY+buttonHeight+1, buttonWidth, buttonHeight, StatCollector.translateToLocal("agricraft_tooltip.gain")));
+        this.buttonList.add(new GuiButton(buttonIdStrength, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + 2 * (buttonHeight + 1), buttonWidth, buttonHeight, StatCollector.translateToLocal("agricraft_tooltip.strength")));
+        this.buttonList.add(new GuiButton(buttonIdScrollLeft, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + 3* (buttonHeight+1), (buttonWidth-1)/2, buttonHeight, "<"));
+        this.buttonList.add(new GuiButton(buttonIdScrollRight, this.guiLeft + sortButtonX + 2 + (buttonWidth)/2, this.guiTop + sortButtonY + 3* (buttonHeight+1), -1 + (buttonWidth)/2, buttonHeight, ">"));
         this.initSetActiveSeedButtons();
         this.initSeedSlots();
     }
@@ -94,9 +117,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     private void initSeedSlots() {
-        if(this.activeSeed==null) {
-            return;
-        }
+        getActiveSeed();
         this.activeSeeds = new ArrayList<Component<PlantStatsStorage>>();
         List<SeedStorageSlot> list = this.container.getSeedSlots(this.activeSeed, this.activeMeta);
         if(list!=null) {
@@ -104,7 +125,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
             for (int i = scrollPositionHorizontal; i < Math.min(list.size(), scrollPositionHorizontal + maxHorSlots); i++) {
                 SeedStorageSlot slot = list.get(i);
                 PlantStatsStorage stats = new PlantStatsStorage(slot.getId(), slot.getStack(this.activeSeed, this.activeMeta));
-                activeSeeds.add(new Component<PlantStatsStorage>(stats, seedSlotButtonOffset_X + i * 16, seedSlotButtonOffset_Y, 16, 16));
+                activeSeeds.add(new Component<PlantStatsStorage>(stats, this.guiLeft + seedSlotButtonOffset_X + (i-scrollPositionHorizontal) * 16, this.guiTop + seedSlotButtonOffset_Y, 16, 16));
             }
         }
     }
@@ -156,11 +177,12 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
             }
         }
         //click to get seed out of the storage
-        if(this.activeSeeds != null) {
+        if(this.hasActiveSeed()) {
             for(Component<PlantStatsStorage> component : activeSeeds) {
-                if(component.isOverComponent(x-this.guiLeft, y-this.guiTop)) {
+                if(component.isOverComponent(x, y)) {
                     PlantStatsStorage stats = component.getComponent();
-                    this.container.moveStackFromTileEntityToPlayer(stats.id, new ItemStack(activeSeed, 1, activeMeta));
+                    int stackSize = isShiftKeyDown()?64:1;
+                    this.container.moveStackFromTileEntityToPlayer(stats.id, new ItemStack(activeSeed, stackSize, activeMeta));
                     return;
                 }
             }
@@ -200,7 +222,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     private void scrollHorizontal(int amount) {
-        if(this.activeSeed!=null) {
+        if(this.hasActiveSeed()) {
             int newPos = this.scrollPositionHorizontal + amount;
             newPos = newPos < 0 ? 0 : newPos;
             int maxScrollX = this.getMaxHorizontalScroll();
@@ -210,7 +232,7 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
     }
 
     private int getMaxHorizontalScroll() {
-        int nrSlots = this.activeSeeds.size();
+        int nrSlots = seedSlotAmount();
         if(nrSlots<=maxHorSlots) {
             return 0;
         }
@@ -219,7 +241,14 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
         }
     }
 
+    private int seedSlotAmount() {
+        return this.hasActiveSeed()?this.container.getSeedSlots(activeSeed, activeMeta).size():0;
+    }
+
     protected void drawActiveEntries(int x, int y, ResourceLocation texture, int xOffset, int yOffset) {
+        if(!this.hasActiveSeed()) {
+            return;
+        }
         int textureSize = 256;
         GL11.glColor4f(1F, 1F, 1F, 1F);
         for(int i=0;i<this.activeSeeds.size();i++) {
@@ -236,13 +265,54 @@ public abstract class GuiSeedStorageDummy extends GuiContainer {
                 itemRender.renderItemOverlayIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, component.xOffset(), component.yOffset());
                 //draw the stat bars
                 Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-                this.drawTexturedModalRect(xOffset+(i*16)+1,  yOffset-growth,   0, textureSize-growth, 3, growth);
-                this.drawTexturedModalRect(xOffset + i *16+6,  yOffset-gain,     0, textureSize-gain, 3, gain);
-                this.drawTexturedModalRect(xOffset + i * 16 + 11, yOffset-strength, 0, textureSize-strength, 3, strength);
+                GL11.glDisable(GL11.GL_LIGHTING);
+                this.drawTexturedModalRect(this.guiLeft + xOffset + (i * 16) + 1, this.guiTop + yOffset - growth, 0, textureSize - growth, 3, growth);
+                this.drawTexturedModalRect(this.guiLeft+xOffset+i*16+6, this.guiTop+yOffset-gain, 0, textureSize-gain, 3, gain);
+                this.drawTexturedModalRect(this.guiLeft+xOffset+i*16+11, this.guiTop+yOffset-strength, 0, textureSize-strength, 3, strength);
+                GL11.glEnable(GL11.GL_LIGHTING);
+            }
+        }
+    }
+
+    protected void drawScrollBarHorizontal(ResourceLocation texture) {
+        int nrSlots = seedSlotAmount();
+        int total = 224;
+        int slotWidth = 16;
+        int fullLength = nrSlots<=maxHorSlots?total:slotWidth*nrSlots;
+        float unit = ((float) slotWidth)/((float) fullLength)*total;
+        int offset = (int) (scrollPositionHorizontal*unit);
+        int length = (int) (maxHorSlots*unit);
+        length = length<=2?0:length>=total?total-2:length;
+        offset = offset==0?offset:offset-1;
+
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+        int xOffset = this.guiLeft + 6;
+        int yOffset = this.guiTop + 39;
+        this.drawTexturedModalRect(xOffset + offset, yOffset, 0, 135, 1, 5);
+        this.drawTexturedModalRect(xOffset + offset + 1, yOffset, 1, 135, length, 4);
+        this.drawTexturedModalRect(xOffset + offset + 1 + length, yOffset, total-1, 135, 1, 5);
+        GL11.glEnable(GL11.GL_LIGHTING);
+    }
+
+    protected void drawTooltip(int x, int y) {
+        if(!this.hasActiveSeed()) {
+            return;
+        }
+        for(int i=0;i<this.activeSeeds.size();i++) {
+            Component<PlantStatsStorage> component = activeSeeds.get(i);
+            if (component != null && component.getComponent() != null) {
                 //tooltip
-                if(component.isOverComponent(x - this.guiLeft, y - this.guiTop)) {
+                if (component.isOverComponent(x, y)) {
+                    PlantStatsStorage stats = component.getComponent();
+                    short growth = stats.getGrowth();
+                    short gain = stats.getGain();
+                    short strength = stats.getStrength();
+                    ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
+                    stack.stackTagCompound = SeedHelper.setNBT(new NBTTagCompound(), growth, gain, strength, true);
                     List toolTip = stack.getTooltip(Minecraft.getMinecraft().thePlayer, true);
-                    drawHoveringText(toolTip, x - this.guiLeft, y - this.guiTop, fontRendererObj);
+                    drawHoveringText(toolTip, x-this.guiLeft, y-this.guiTop, fontRendererObj);
                 }
             }
         }

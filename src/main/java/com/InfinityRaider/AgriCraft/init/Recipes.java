@@ -60,11 +60,9 @@ public class Recipes {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.handRake, 1, 0), "fs", 'f', net.minecraft.init.Blocks.fence, 's', "stickWood"));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.handRake, 1, 1), "fs", 'f', net.minecraft.init.Blocks.iron_bars, 's', "stickWood"));
         }
-        //irrigation systems
+        //CustomWood recipes
+        registerCustomWoodRecipes();
         if (!ConfigurationHandler.disableIrrigation) {
-            ((ItemBlockCustomWood) Item.getItemFromBlock(Blocks.blockWaterTank)).getSubItems(woodList);
-            //tank & channel
-            registerCustomWoodRecipes();
             //change wooden bowl recipe
             RegisterHelper.removeRecipe(new ItemStack(net.minecraft.init.Items.bowl));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.bowl, 4), "w w", " w ", 'w', Names.OreDict.slabWood));
@@ -106,14 +104,20 @@ public class Recipes {
     }
 
     private static void registerCustomWoodRecipes() {
-        ItemStack channel = new ItemStack(Blocks.blockWaterChannel, 1);
-        ItemStack channelFull = new ItemStack(Blocks.blockWaterChannelFull, 1);
+        ((ItemBlockCustomWood) Item.getItemFromBlock(Blocks.blockWaterTank)).getSubItems(woodList);
+        if(!ConfigurationHandler.disableIrrigation) {
+            ItemStack channel = new ItemStack(Blocks.blockWaterChannel, 1);
+            ItemStack channelFull = new ItemStack(Blocks.blockWaterChannelFull, 1);
 
-        registerCustomWoodRecipe(Blocks.blockWaterTank, 1, true, "w w", "w w", "www", 'w', REFERENCE);
-        registerCustomWoodRecipe(Blocks.blockWaterChannel, 6, true, "w w", " w ", 'w', REFERENCE);
-        registerCustomWoodRecipe(Blocks.blockWaterChannelFull, 1, false, channel, channel, channel, channel);
-        registerCustomWoodRecipe(Blocks.blockWaterChannel, 4, false, channelFull);
-        registerCustomWoodRecipe(Blocks.blockChannelValve, 1, false, new ItemStack(net.minecraft.init.Items.iron_ingot, 1), new ItemStack(net.minecraft.init.Blocks.lever, 1), channel);
+            registerCustomWoodRecipe(Blocks.blockWaterTank, 1, true, "w w", "w w", "www", 'w', REFERENCE);
+            registerCustomWoodRecipe(Blocks.blockWaterChannel, 6, true, "w w", " w ", 'w', REFERENCE);
+            registerCustomWoodRecipe(Blocks.blockWaterChannelFull, 1, false, channel, channel, channel, channel);
+            registerCustomWoodRecipe(Blocks.blockWaterChannel, 4, false, channelFull);
+            registerCustomWoodRecipe(Blocks.blockChannelValve, 1, false, new ItemStack(net.minecraft.init.Items.iron_ingot, 1), new ItemStack(net.minecraft.init.Blocks.lever, 1), channel);
+        }
+        if(!ConfigurationHandler.disableSeedStorage) {
+            registerCustomWoodRecipe(Blocks.blockSeedStorage, 1, true, "wiw", "wcw", "wcw", 'w', REFERENCE, 'i', net.minecraft.init.Items.iron_ingot, 'c', net.minecraft.init.Blocks.chest);
+        }
     }
 
     /**
@@ -127,8 +131,8 @@ public class Recipes {
                 NBTTagCompound materialTag = stack.getTagCompound();
                 ItemStack plank = new ItemStack((Block) Block.blockRegistry.getObject(materialTag.getString(Names.NBT.material)), 1, materialTag.getInteger(Names.NBT.materialMeta));
                 Object[] ingredients = Arrays.copyOf(params, params.length);
-                // replace all planks with the custom ones
                 for (int i = 0; i < ingredients.length; i++) {
+                    // replace all planks with the custom ones
                     if (ingredients[i] instanceof ItemStack && ((ItemStack) ingredients[i]).isItemEqual(REFERENCE)) {
                         ingredients[i] = plank;
                     }

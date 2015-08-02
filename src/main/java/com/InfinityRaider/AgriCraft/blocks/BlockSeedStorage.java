@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedStorage;
@@ -11,7 +10,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -33,19 +31,7 @@ public class BlockSeedStorage extends BlockCustomWood {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
         LogHelper.debug("Right clicked block");
         if(!world.isRemote) {
-            ItemStack stack = player.getCurrentEquippedItem();
-            TileEntity te = world.getTileEntity(x, y, z);
-            if(te==null || !(te instanceof TileEntitySeedStorage)) {
-                return false;
-            }
-            TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
-            if(CropPlantHandler.isValidSeed(stack)) {
-                LogHelper.debug("Trying to lock seed storage to "+stack.getDisplayName());
-                storage.setLockedSeed(stack.getItem(), stack.getItemDamage());
-            }
-            else if(storage.hasLockedSeed()){
-                player.openGui(AgriCraft.instance, GuiHandler.seedStorageID, world, x, y, z);
-            }
+            player.openGui(AgriCraft.instance, GuiHandler.seedStorageID, world, x, y, z);
         }
         return true;
     }

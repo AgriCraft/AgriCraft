@@ -19,8 +19,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import java.util.List;
 
-public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
-    public ContainerSeedStorageDummy(InventoryPlayer inventory, int xOffset, int yOffset) {
+public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
+    public ContainerSeedStorageBase(InventoryPlayer inventory, int xOffset, int yOffset) {
         super(inventory, xOffset, yOffset);
     }
 
@@ -63,9 +63,6 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
     @Override
     public List getInventory() {
         List list = super.getInventory();
-        for(ItemStack stack:this.getSeedEntries()) {
-            //list.add(stack);
-        }
         return list;
     }
 
@@ -74,23 +71,24 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
      */
     public void moveStackFromTileEntityToPlayer(int slotId, ItemStack stack) {
         ISeedStorageControllable controllable = this.getControllable(stack);
-        if(controllable!=null) {
-            ItemStack stackToMove = controllable.getStackInSlot(slotId);
-            if(stack==null) {
-                return;
-            }
-            stackToMove.stackSize = stack.stackSize;
-            stackToMove.stackTagCompound = controllable.getStackInSlot(slotId).stackTagCompound;
-            if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
-                if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-                    LogHelper.debug("Sending command to server");
-                    //this method is only called form the gui client side, so we need to manually tell the server to execute it there
-                    NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(stack, Minecraft.getMinecraft().thePlayer, slotId));
-                } else {
-                    LogHelper.debug("Command received");
-                    //on the server decrease the size of the stack, where it is synced to the client
-                    controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
-                }
+        if (controllable == null) {
+            return;
+        }
+        ItemStack stackToMove = controllable.getStackInSlot(slotId);
+        if (stack == null) {
+            return;
+        }
+        stackToMove.stackSize = stack.stackSize > stackToMove.stackSize ? stackToMove.stackSize : stack.stackSize;
+        stackToMove.stackTagCompound = controllable.getStackInSlot(slotId).stackTagCompound;
+        if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
+            if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                LogHelper.debug("Sending command to server");
+                //this method is only called form the gui client side, so we need to manually tell the server to execute it there
+                NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(stack, Minecraft.getMinecraft().thePlayer, slotId));
+            } else {
+                LogHelper.debug("Command received");
+                //on the server decrease the size of the stack, where it is synced to the client
+                controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
             }
         }
     }
@@ -108,6 +106,13 @@ public abstract class ContainerSeedStorageDummy extends ContainerAgricraft {
             if(slot!=null) {
                 //try to move item from the player's inventory into the container
                 if(SeedHelper.isAnalyzedSeed(notMergedStack)) {
+                    ISeedStorageControllable controllable = this.getControllable(notMergedStack);
+                    if(controllable!=null && controllable.hasLockedSeed()) {
+                        ItemStack locked = controllable.getLockedSeed();
+                        if(notMergedStack.getItem()!=locked.getItem() || notMergedStack.getItemDamage()!=locked.getItemDamage()) {
+                            return null;
+                        }
+                    }
                     if (this.addSeedToStorage(notMergedStack)) {
                         notMergedStack.stackSize = 0;
                     } else {

@@ -53,6 +53,11 @@ public interface ISeedStorageControllable extends IInventory{
     public void setLockedSeed(Item seed, int meta);
 
     /**
+     * Clears the locked seed
+     */
+    public void clearLockedSeed();
+
+    /**
      * Returns the type of seed stored in this controllable
      */
     public ItemStack getLockedSeed();
