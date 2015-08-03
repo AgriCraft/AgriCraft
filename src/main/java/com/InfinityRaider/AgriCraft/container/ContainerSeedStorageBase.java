@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageController;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -85,11 +84,9 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
         stackToMove.stackTagCompound = controllable.getStackInSlot(slotId).stackTagCompound;
         if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
             if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-                LogHelper.debug("Sending command to server");
                 //this method is only called form the gui client side, so we need to manually tell the server to execute it there
                 NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(stack, Minecraft.getMinecraft().thePlayer, slotId));
             } else {
-                LogHelper.debug("Command received");
                 //on the server decrease the size of the stack, where it is synced to the client
                 controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
             }
@@ -193,7 +190,6 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
     //par3: 1 = shift, 3 = MMB
     @Override
     public ItemStack slotClick(int slotIndex, int mouseButton, int shiftHeld, EntityPlayer player) {
-        LogHelper.debug("Slot CLicked: par1 = " + slotIndex + ", par2 = " + mouseButton + ", par3 = " + shiftHeld);
         return super.slotClick(slotIndex, mouseButton, shiftHeld, player);
     }
 }
