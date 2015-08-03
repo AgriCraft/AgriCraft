@@ -30,6 +30,7 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -217,8 +218,9 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
                 } else if (heldItem==null || heldItem.getItem()==null) {
                     //harvest operation
                     this.harvest(world, x, y, z, player);
-                } else if (heldItem.getItem() == Items.debugItem) {
-                    return false;
+                }
+                else if(heldItem.getItem()==net.minecraft.init.Items.reeds) {
+                    crop.setPlant(1, 1, 1, false, (ItemSeeds) Item.itemRegistry.getObject("AgriCraft:seedSugarcane"), 0);
                 }
                 //check to see if the player clicked with crops (crosscrop attempt)
                 else if (heldItem.getItem() == Items.crops) {
@@ -477,6 +479,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
             this.weedIcons[i] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1) + "WeedTexture" + (i + 1));
         }
     }
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {

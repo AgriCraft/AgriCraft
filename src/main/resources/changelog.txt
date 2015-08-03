@@ -45,6 +45,7 @@ Changelog
 -ADDED:  A recipe to convert wheat to seeds
 -ADDED:  Alternate textures for the botania crops (thanks WolfieWaffle for the textures)
 -ADDED:  Seed storage block they will hold infinite seeds of the same type, as long as they are analyzed
+-ADDED:  sugarcane can now be planted directly on crop sticks
 -FIXED:  Seeds added as drops from tall grass always having weight 10
 -FIXED:  Not being able to set max brightness in Minetweaker methods
 -FIXED:  Wrong error message in Minetweaker methods
