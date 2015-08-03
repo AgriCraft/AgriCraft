@@ -43,8 +43,11 @@ public class AgriCraftCropDataProvider implements IWailaDataProvider {
                 int gain = crop.getGain();
                 int strength = crop.getStrength();
                 boolean analyzed = crop.isAnalyzed();
+                int meta = dataAccessor.getMetadata();
                 String seedName = crop.getSeedStack().getDisplayName();
                 list.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + seedName);
+                String growthStage = meta==7?StatCollector.translateToLocal("agricraft_tooltip.mature"):((int) ( (100*(meta+0.00F))/7.00F)+"%" );
+                list.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage")+": "+growthStage);
                 if(analyzed) {
                     list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + growth);
                     list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + gain);
