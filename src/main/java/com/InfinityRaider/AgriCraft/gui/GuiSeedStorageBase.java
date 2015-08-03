@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
-import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -95,8 +94,10 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
         this.buttonList.add(new GuiButton(buttonIdGrowth, this.guiLeft + sortButtonX, this.guiTop + sortButtonY, buttonWidth, buttonHeight, StatCollector.translateToLocal("agricraft_tooltip.growth")));
         this.buttonList.add(new GuiButton(buttonIdGain, this.guiLeft + sortButtonX, this.guiTop + sortButtonY+buttonHeight+1, buttonWidth, buttonHeight, StatCollector.translateToLocal("agricraft_tooltip.gain")));
         this.buttonList.add(new GuiButton(buttonIdStrength, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + 2 * (buttonHeight + 1), buttonWidth, buttonHeight, StatCollector.translateToLocal("agricraft_tooltip.strength")));
-        this.buttonList.add(new GuiButton(buttonIdScrollLeft, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + 3* (buttonHeight+1), (buttonWidth-1)/2, buttonHeight, "<"));
-        this.buttonList.add(new GuiButton(buttonIdScrollRight, this.guiLeft + sortButtonX + 2 + (buttonWidth)/2, this.guiTop + sortButtonY + 3* (buttonHeight+1), -1 + (buttonWidth)/2, buttonHeight, ">"));
+        this.buttonList.add(new GuiButton(buttonIdLeftEnd, this. guiLeft + sortButtonX, this.guiTop + sortButtonY + 3* (buttonHeight+1), -1+(buttonWidth)/4, buttonHeight, "<<"));
+        this.buttonList.add(new GuiButton(buttonIdScrollLeft, this.guiLeft + sortButtonX + (buttonWidth)/4, this.guiTop + sortButtonY + 3* (buttonHeight+1), -1+(buttonWidth)/4, buttonHeight, "<"));
+        this.buttonList.add(new GuiButton(buttonIdScrollRight, this.guiLeft + sortButtonX + 1 + 2*(buttonWidth)/4, this.guiTop + sortButtonY + 3* (buttonHeight+1), -1 + (buttonWidth)/4, buttonHeight, ">"));
+        this.buttonList.add(new GuiButton(buttonIdRightEnd, this.guiLeft + sortButtonX + 1 + 3*(buttonWidth)/4, this.guiTop + sortButtonY + 3* (buttonHeight+1), -1 + (buttonWidth)/4, buttonHeight, ">>"));
         this.initSetActiveSeedButtons();
         this.initSeedSlots();
     }
