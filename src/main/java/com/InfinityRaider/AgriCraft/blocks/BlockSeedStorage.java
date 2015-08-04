@@ -19,8 +19,6 @@ public class BlockSeedStorage extends BlockCustomWood {
     public BlockSeedStorage() {
         super();
     }
-    private IIcon frontIcon;
-    private IIcon sideIcon;
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
@@ -53,22 +51,6 @@ public class BlockSeedStorage extends BlockCustomWood {
 
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return true;}
-
-    //register icons
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister reg) {
-        this.frontIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1)+"Front");
-        this.sideIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1)+"Side");
-    }
-
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconForSide(int side) {
-        if(side==0) {
-            return this.frontIcon;
-        }
-        return this.sideIcon;
-    }
 
     @Override
     @SideOnly(Side.CLIENT)
