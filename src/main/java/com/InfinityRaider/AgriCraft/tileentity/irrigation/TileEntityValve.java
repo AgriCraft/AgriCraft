@@ -4,7 +4,6 @@ package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.List;
@@ -54,6 +53,6 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
         list.add("  - State: "+(this.isPowered()?"closed":"open"));
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + Constants.mB / 2);
         list.add("  - FluidHeight: " + this.getFluidHeight());
-        list.add("this material is: " + Item.itemRegistry.getNameForObject(this.getMaterial().getItem()) + ":" + this.getMaterial().getItemDamage());
+        list.add("this material is: " + this.getMaterialName() + ":" + this.getMaterialStack().getItemDamage());
     }
 }
