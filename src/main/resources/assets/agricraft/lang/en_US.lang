@@ -6,7 +6,6 @@ item.agricraft:cropsItem.name=Crop Sticks
 item.agricraft:journal.name=Agricultural Journal
 item.agricraft:trowel.name=Gardening Trowel
 item.agricraft:magnifyingGlass.name=Magnifying Glass
-item.agricraft:sprinkler.name=Sprinkler
 item.agricraft:debugger.name=Debugger
 item.agricraft:handRake.wood.name=Wooden Hand Rake
 item.agricraft:handRake.iron.name=Iron Hand Rake
@@ -96,6 +95,8 @@ tile.agricraft:waterChannelFull.0.name=Wooden Irrigation Channel
 tile.agricraft:waterChannel.1.name=Iron Irrigation Pipe
 tile.agricraft:channelValve.0.name=Wooden Channel Valve
 tile.agricraft:channelValve.1.name=Iron Pipe Valve
+tile.agricraft:sprinkler.name=Sprinkler
+tile.agricraft:seedStorage.0.name=Seed Storage
 
 tile.agricraft:cropPotato.name=Potato
 tile.agricraft:cropCarrot.name=Carrot

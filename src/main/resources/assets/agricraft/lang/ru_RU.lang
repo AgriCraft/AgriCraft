@@ -8,7 +8,6 @@ item.agricraft:cropsItem.name=Жёрдочки
 item.agricraft:journal.name=Журнал агронома
 item.agricraft:trowel.name=Садовый совок
 item.agricraft:magnifyingGlass.name=Лупа
-item.agricraft:sprinkler.name=Разбрызгиватель
 item.agricraft:debugger.name=Отладчик
 item.agricraft:handRake.wood.name=Деревянные ручные грабли
 item.agricraft:handRake.iron.name=Железные ручные грабли
@@ -82,6 +81,7 @@ tile.agricraft:waterChannel.0.name=Деревянный оросительный
 tile.agricraft:waterChannel.1.name=Железный оросительный канал
 tile.agricraft:channelValve.0.name=Деревянный клапан
 tile.agricraft:channelValve.1.name=Железный клапан
+tile.agricraft:sprinkler.name=Разбрызгиватель
 
 tile.agricraft:cropPotato.name=Картофель
 tile.agricraft:cropCarrot.name=Морковь

@@ -6,7 +6,6 @@ item.agricraft:cropsItem.name=Ställning
 item.agricraft:journal.name=Agricraft-journal
 item.agricraft:trowel.name=Trädgårdsspade
 item.agricraft:magnifyingGlass.name=Förstorningsglas
-item.agricraft:sprinkler.name=Vattenspridare
 item.agricraft:debugger.name=Felsökare
 item.agricraft:handRake.wood.name=Träkratta
 item.agricraft:handRake.iron.name=Järnkratta
@@ -80,6 +79,7 @@ tile.agricraft:waterChannel.0.name=Wooden Irrigation Channel
 tile.agricraft:waterChannel.1.name=Iron Irrigation Pipe
 tile.agricraft:channelValve.0.name=Wooden Channel Valve
 tile.agricraft:channelValve.1.name=Iron Pipe Valve
+tile.agricraft:sprinkler.name=Vattenspridare
 
 tile.agricraft:cropPotato.name=Potato
 tile.agricraft:cropCarrot.name=Carrot

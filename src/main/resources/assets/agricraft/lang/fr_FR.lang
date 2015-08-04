@@ -6,7 +6,6 @@ item.agricraft:cropsItem.name=Tuteurs
 item.agricraft:journal.name=Journal agricole
 item.agricraft:trowel.name=Transplantoir
 item.agricraft:magnifyingGlass.name=Loupe
-item.agricraft:sprinkler.name=Arroseur
 item.agricraft:debugger.name=Débogueur
 item.agricraft:handRake.wood.name=Râteau en bois
 item.agricraft:handRake.iron.name=Râteau en fer
@@ -96,6 +95,7 @@ tile.agricraft:waterChannel.1.name=Cannal d'irrigation en fer
 tile.agricraft:waterChannel.1.name=Tuyau d'irrigation en fer
 tile.agricraft:channelValve.0.name=Vanne de cannal en bois
 tile.agricraft:channelValve.1.name=Vanne de cannal en fer
+tile.agricraft:sprinkler.name=Arroseur
 
 tile.agricraft:cropPotato.name=Pomme de terre
 tile.agricraft:cropCarrot.name=Carotte

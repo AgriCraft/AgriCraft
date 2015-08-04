@@ -6,7 +6,6 @@ item.agricraft:cropsItem.name=作物
 item.agricraft:journal.name=农学研究随笔
 item.agricraft:trowel.name=园丁铲
 item.agricraft:magnifyingGlass.name=放大镜
-item.agricraft:sprinkler.name=洒水壶
 item.agricraft:debugger.name=调试器
 item.agricraft:handRake.wood.name=木耙
 item.agricraft:handRake.iron.name=铁耙
@@ -80,6 +79,7 @@ tile.agricraft:waterChannel.0.name=木质浇灌水道
 tile.agricraft:waterChannel.1.name=铁质浇灌水道
 tile.agricraft:channelValve.0.name=木质水道阀门
 tile.agricraft:channelValve.1.name=铁质水道阀门
+tile.agricraft:sprinkler.name=洒水壶
 
 tile.agricraft:cropPotato.name=马铃薯
 tile.agricraft:cropCarrot.name=胡萝卜
