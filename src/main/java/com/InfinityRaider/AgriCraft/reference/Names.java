@@ -75,6 +75,7 @@ public final class Names {
         public static final String arsMagica = "arsmagica2";
         public static final String bloodMagic = "AWWayofTime";
         public static final String bluePower = "bluepower";
+        public static final String computerCraft = "ComputerCraft";
         public static final String harvestcraft = "harvestcraft";
         public static final String natura = "Natura";
         public static final String weeeFlowers = "weeeflowers";
