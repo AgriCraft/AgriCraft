@@ -5,13 +5,11 @@ import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISidedInventory {
     private ItemStack specimen = null;
@@ -154,33 +152,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         }
         //register the seed in the journal if there is a journal present
         if(this.hasJournal()) {
-            //check if the journal has NBT and if it doesn't, create a new one
-            if(!this.journal.hasTagCompound()) {
-                this.journal.setTagCompound(new NBTTagCompound());
-            }
-            NBTTagCompound tag = this.journal.stackTagCompound;
-            //check if the NBT tag has a list of discovered seeds and if it doesn't, create a new one
-            NBTTagList list;
-            if(tag.hasKey(Names.NBT.discoveredSeeds)) {
-                list = tag.getTagList(Names.NBT.discoveredSeeds, 10);
-                NBTHelper.clearEmptyStacksFromNBT(list);
-            }
-            else {
-                list = new NBTTagList();
-            }
-            //add the analyzed seed to the NBT tag list if it doesn't already have it
-            ItemStack newEntry = this.hasSeed()?this.specimen:((ITrowel) this.specimen.getItem()).getSeed(this.specimen);
-            if(!NBTHelper.listContainsStack(list, newEntry)) {
-                NBTTagCompound seedTag = new NBTTagCompound();
-                ItemStack write = newEntry.copy();
-                write.stackSize = 1;
-                write.stackTagCompound = null;
-                write.writeToNBT(seedTag);
-                list.appendTag(seedTag);
-            }
-            NBTHelper.sortStacks(list);
-            //add the NBT tag to the journal
-            tag.setTag(Names.NBT.discoveredSeeds, list);
+            ((ItemJournal) journal.getItem()).addEntry(journal, this.hasSeed() ? this.specimen : ((ITrowel) this.specimen.getItem()).getSeed(this.specimen));
         }
     }
 
@@ -192,6 +164,10 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //checks if there is a journal in the analyzer
     public boolean hasJournal() {
         return (this.journal!=null && this.journal.getItem()!=null);
+    }
+
+    public ItemStack getJournal() {
+        return this.journal;
     }
 
     //returns the scaled progress percentage

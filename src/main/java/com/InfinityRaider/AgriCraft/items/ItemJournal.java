@@ -1,7 +1,9 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -16,6 +18,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemJournal extends ModItem {
@@ -75,5 +78,70 @@ public class ItemJournal extends ModItem {
     public void registerIcons(IIconRegister reg) {
         LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
         itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
+    }
+
+    private NBTTagList getDiscoveredSeedsTaglist(ItemStack journal) {
+        //check if the journal has NBT and if it doesn't, create a new one
+        if(!journal.hasTagCompound()) {
+            journal.setTagCompound(new NBTTagCompound());
+        }
+        NBTTagCompound tag = journal.stackTagCompound;
+        //check if the NBT tag has a list of discovered seeds and if it doesn't, create a new one
+        NBTTagList list;
+        if(tag.hasKey(Names.NBT.discoveredSeeds)) {
+            list = tag.getTagList(Names.NBT.discoveredSeeds, 10);
+            NBTHelper.clearEmptyStacksFromNBT(list);
+        }
+        else {
+            list = new NBTTagList();
+        }
+        return list;
+    }
+
+    public void addEntry(ItemStack journal, ItemStack newEntry) {
+        if(journal==null || journal.getItem()==null || !CropPlantHandler.isValidSeed(newEntry)) {
+            return;
+        }
+        NBTTagList list = getDiscoveredSeedsTaglist(journal);
+        NBTTagCompound tag = journal.stackTagCompound;
+        //add the analyzed seed to the NBT tag list if it doesn't already have it
+        if(!isSeedDiscovered(journal, newEntry)) {
+            NBTTagCompound seedTag = new NBTTagCompound();
+            ItemStack write = newEntry.copy();
+            write.stackSize = 1;
+            write.stackTagCompound = null;
+            write.writeToNBT(seedTag);
+            list.appendTag(seedTag);
+        }
+        NBTHelper.sortStacks(list);
+        //add the NBT tag to the journal
+        tag.setTag(Names.NBT.discoveredSeeds, list);
+    }
+
+    public boolean isSeedDiscovered(ItemStack journal, ItemStack seed) {
+        if(journal==null || journal.getItem()==null || !CropPlantHandler.isValidSeed(seed)) {
+            return false;
+        }
+        return NBTHelper.listContainsStack(getDiscoveredSeedsTaglist(journal), seed);
+    }
+
+    public ArrayList<ItemStack> getDiscoveredSeeds(ItemStack journal) {
+        ArrayList<ItemStack> seeds = new ArrayList<ItemStack>();
+        NBTTagCompound tag = null;
+        if (journal != null && journal.stackSize > 0 && journal.getItem() instanceof ItemJournal && journal.hasTagCompound()) {
+            tag = journal.getTagCompound();
+        }
+        if(tag != null) {
+            if (tag.hasKey(Names.NBT.discoveredSeeds)) {
+                NBTTagList tagList = tag.getTagList(Names.NBT.discoveredSeeds, 10);      //10 for tagCompound
+                for (int i = 0; i < tagList.tagCount(); i++) {
+                    ItemStack seed = ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i));
+                    if(CropPlantHandler.isValidSeed(seed)) {
+                        seeds.add(seed);
+                    }
+                }
+            }
+        }
+        return seeds;
     }
 }

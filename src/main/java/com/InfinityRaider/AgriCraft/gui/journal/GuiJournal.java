@@ -118,23 +118,7 @@ public class GuiJournal extends GuiScreen {
     }
 
     private ArrayList<ItemStack> getDiscoveredSeeds() {
-        ArrayList<ItemStack> seeds = new ArrayList<ItemStack>();
-        NBTTagCompound tag = null;
-        if (journal != null && journal.stackSize > 0 && journal.getItem() instanceof ItemJournal && journal.hasTagCompound()) {
-            tag = journal.getTagCompound();
-        }
-        if(tag != null) {
-            if (tag.hasKey(Names.NBT.discoveredSeeds)) {
-                NBTTagList tagList = tag.getTagList(Names.NBT.discoveredSeeds, 10);      //10 for tagCompound
-                for (int i = 0; i < tagList.tagCount(); i++) {
-                    ItemStack seed = ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i));
-                    if(CropPlantHandler.isValidSeed(seed)) {
-                        seeds.add(seed);
-                    }
-                }
-            }
-        }
-        return seeds;
+        return ((ItemJournal) journal.getItem()).getDiscoveredSeeds(journal);
     }
 
     private int getNumberOfPages() {
