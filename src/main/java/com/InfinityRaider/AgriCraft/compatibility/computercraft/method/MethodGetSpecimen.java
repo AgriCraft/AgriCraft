@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class MethodGetSeedInAnalyzer implements IMethod {
+public class MethodGetSpecimen implements IMethod {
     @Override
     public String getName() {
         return "getSeedInAnalyzer";

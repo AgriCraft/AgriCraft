@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -12,25 +12,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 public abstract class MethodCropBase implements IMethod {
     private final String name;
 
-    protected MethodCropBase(String name) {
+    public MethodCropBase(String name) {
         this.name = name;
-    }
-
-    public static IMethod[] getMethods() {
-        return new IMethod[] {
-                new MethodGetBrightnessRange(),
-                new MethodGetCurrentSoil(),
-                new MethodGetGrowthStage(),
-                new MethodGetNeededSoil(),
-                new MethodGetPlant(),
-                new MethodGetSeedInAnalyzer(),
-                new MethodHasJournal(),
-                new MethodHasPlant(),
-                new MethodHasWeeds(),
-                new MethodIsCrossCrop(),
-                new MethodIsFertile(),
-                new MethodIsMature()
-        };
     }
 
     public final String getName() {
@@ -62,11 +45,18 @@ public abstract class MethodCropBase implements IMethod {
 
     private ForgeDirection getDirection(Object... args) {
         for (Object obj : args) {
-            if (obj != null && obj instanceof String) {
-                ForgeDirection dir = ForgeDirection.valueOf((String) obj);
-                if (dir!=null && dir!=ForgeDirection.UNKNOWN) {
-                    return dir;
-                }
+            ForgeDirection dir = ForgeDirection.UNKNOWN;
+            if(obj==null) {
+                continue;
+            }
+            if(obj instanceof Object[]) {
+                dir = getDirection((Object[]) obj);
+            }
+            else if (obj instanceof String) {
+                dir = ForgeDirection.valueOf((String) obj);
+            }
+            if (dir!=null && dir!=ForgeDirection.UNKNOWN) {
+                return dir;
             }
         }
         return ForgeDirection.UNKNOWN;
@@ -82,7 +72,7 @@ public abstract class MethodCropBase implements IMethod {
         return ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, crop.getSeedStack());
     }
 
-    protected abstract Object[] onMethodCalled(TileEntityCrop crop);
+    protected abstract Object[] onMethodCalled(TileEntityCrop crop) throws MethodException;
 
     protected abstract boolean requiresJournal();
 }

@@ -55,6 +55,14 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         this.progress = tag.getInteger("progress");
     }
 
+    public boolean hasSpecimen() {
+        return this.hasSeed() || this.hasTrowel();
+    }
+
+    public ItemStack getSpecimen() {
+        return this.specimen;
+    }
+
     //returns true if a seed currently being processed
     public boolean hasSeed() {
         return CropPlantHandler.isValidSeed(this.specimen);
@@ -101,7 +109,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         return true;
     }
 
-    public boolean isSpecimenAnalysed() {
+    public boolean isSpecimenAnalyzed() {
         if(this.hasTrowel()) {
             return ((ITrowel) this.specimen.getItem()).isSeedAnalysed(this.specimen);
         }
@@ -158,7 +166,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
 
     //checks if the analyzer is analyzing
     public boolean isAnalyzing() {
-        return this.specimen!=null && !this.isSpecimenAnalysed() && progress < maxProgress();
+        return this.specimen!=null && !this.isSpecimenAnalyzed() && progress < maxProgress();
     }
 
     //checks if there is a journal in the analyzer
@@ -205,7 +213,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, int side) {
         if(slot==ContainerSeedAnalyzer.seedSlotId &&this.specimen !=null && this.specimen.hasTagCompound()) {
-            return this.isSpecimenAnalysed();
+            return this.isSpecimenAnalyzed();
         }
         return false;
     }

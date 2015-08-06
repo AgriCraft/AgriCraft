@@ -65,7 +65,11 @@ public abstract class ModHelper {
 
     public static boolean allowIntegration(String modId) {
         ModHelper helper = modHelpers.get(modId);
-        return helper != null && helper.allowIntegration();
+        if(helper != null ) {
+            return helper.allowIntegration();
+        } else {
+            return Loader.isModLoaded(modId) && ConfigurationHandler.enableModCompatibility(modId);
+        }
     }
 
     public final boolean allowIntegration() {
@@ -101,7 +105,6 @@ public abstract class ModHelper {
     protected abstract String modId();
 
     public static void initHelpers() {
-        findHelpers();
         for(ModHelper helper:modHelpers.values()) {
             String id = helper.modId();
             boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
@@ -139,7 +142,7 @@ public abstract class ModHelper {
         }
     }
 
-    private static void findHelpers() {
+    public static void findHelpers() {
         Class[] classes = {
                 AppleCoreHelper.class,
                 AppleMilkTeaHelper.class,

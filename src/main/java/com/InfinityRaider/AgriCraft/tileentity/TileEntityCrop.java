@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
@@ -50,6 +51,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     public CropPlant getPlant() {return plant;}
+
+    public ISeedStats getStats() {
+        return this.hasPlant()?stats.copy():null;
+    }
 
     public short getGrowth() {return stats.getGrowth();}
 

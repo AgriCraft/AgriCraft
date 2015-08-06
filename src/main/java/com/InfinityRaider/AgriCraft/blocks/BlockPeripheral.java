@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
@@ -14,8 +15,9 @@ import net.minecraft.world.World;
 
 @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockContainerAgriCraft implements IPeripheralProvider {
-    protected BlockPeripheral() {
+    public BlockPeripheral() {
         super(Material.iron);
+        ComputerCraftHelper.registerPeripheralProvider(this);
     }
 
     @Override

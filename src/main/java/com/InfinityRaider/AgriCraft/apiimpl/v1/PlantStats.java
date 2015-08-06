@@ -1,8 +1,10 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1;
 
 import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
+import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PlantStats implements ISeedStats {
@@ -71,12 +73,29 @@ public class PlantStats implements ISeedStats {
         return (short) Math.min(MAX, lowerLimit);
     }
 
+    public PlantStats copy() {
+        return new PlantStats(getGrowth(), getGain(), getStrength());
+    }
+
+    public static PlantStats getStatsFromStack(ItemStack stack) {
+        if(stack==null || stack.getItem()==null) {
+            return null;
+        }
+        if(stack.getItem() instanceof ITrowel) {
+            ((ITrowel) stack.getItem()).getStats(stack);
+        }
+        return readFromNBT(stack.getTagCompound());
+    }
+
     public static PlantStats readFromNBT(NBTTagCompound tag) {
-        PlantStats stats = new PlantStats();
-        stats.setGrowth(tag.getShort(Names.NBT.growth));
-        stats.setGain(tag.getShort(Names.NBT.gain));
-        stats.setStrength(tag.getShort(Names.NBT.strength));
-        return stats;
+        if(tag !=null && tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
+            PlantStats stats = new PlantStats();
+            stats.setGrowth(tag.getShort(Names.NBT.growth));
+            stats.setGain(tag.getShort(Names.NBT.gain));
+            stats.setStrength(tag.getShort(Names.NBT.strength));
+            return stats;
+        }
+        return null;
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {

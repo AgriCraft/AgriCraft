@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.blocks.*;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.items.ItemSprinkler;
@@ -21,6 +22,7 @@ public class Blocks {
     public static Block blockSprinkler;
     public static Block blockSeedStorage;
     public static Block blockSeedStorageController;
+    public static Block blockPeripheral;
 
     public static void init() {
         blockCrop = new BlockCrop();
@@ -50,6 +52,10 @@ public class Blocks {
                 blockSeedStorageController = new BlockSeedStorageController();
                 RegisterHelper.registerBlock(blockSeedStorageController, Names.Objects.seedStorageController, ItemBlockCustomWood.class);
             }
+        }
+        if(ModHelper.allowIntegration(Names.Mods.computerCraft)) {
+            blockPeripheral = new BlockPeripheral();
+            RegisterHelper.registerBlock(blockPeripheral, Names.Objects.peripheral);
         }
         LogHelper.debug("Blocks registered");
     }

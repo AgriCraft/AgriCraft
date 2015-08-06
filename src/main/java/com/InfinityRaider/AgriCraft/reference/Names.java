@@ -29,6 +29,7 @@ public final class Names {
         public static final String y = "agricraftY";
         public static final String z = "agricraftZ";
         public static final String override = "override";
+        public static final String flag = "ac_Flag";
     }
 
     //mod objects
@@ -56,6 +57,7 @@ public final class Names {
         public static final String seedStorageController = "seedStorageController";
         public static final String handRake = "handRake";
         public static final String villager = "villagerFarmer";
+        public static final String peripheral = "peripheral";
     }
 
     //tile entities

@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 public class MethodException extends Exception {
     private MethodCropBase method;

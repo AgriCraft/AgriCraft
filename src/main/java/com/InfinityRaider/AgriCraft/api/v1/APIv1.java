@@ -234,6 +234,27 @@ public interface APIv1 extends APIBase {
 	boolean canGrow(World world, int x, int y, int z);
 
 	/**
+	 *
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return true if the crop at the location is analyzed, false if not, or if there is no crop with a plant at the location
+	 */
+	boolean isAnalyzed(World world, int x, int y, int z);
+
+	/**
+	 * Returns the stats of the crop at the given location.	 *
+	 *
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return ISeedStats object holding the stats or null if there is no crop there, or the crop doesn't have a plant
+	 */
+	ISeedStats getStats(World world, int x, int y, int z);
+
+	/**
 	 * Checks if AgriCraft is configured to require rakes to remove weeds.
 	 * 
 	 * @return True if weeds cannot be removed by hand.

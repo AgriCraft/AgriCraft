@@ -216,6 +216,26 @@ public class APIimplv1 implements APIv1 {
 	}
 
 	@Override
+	public boolean isAnalyzed(World world, int x, int y, int z) {
+		TileEntity te = world.getTileEntity(x, y, z);
+		if(te==null || !(te instanceof TileEntityCrop)) {
+			return false;
+		}
+		TileEntityCrop crop = (TileEntityCrop) te;
+		return crop.hasPlant() && crop.isAnalyzed();
+	}
+
+	@Override
+	public ISeedStats getStats(World world, int x, int y, int z) {
+		TileEntity te = world.getTileEntity(x, y, z);
+		if(te==null || !(te instanceof TileEntityCrop)) {
+			return null;
+		}
+		TileEntityCrop crop = (TileEntityCrop) te;
+		return crop.getStats();
+	}
+
+	@Override
 	public boolean isRakeRequiredForWeeding() {
 		return ConfigurationHandler.enableHandRake;
 	}

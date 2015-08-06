@@ -24,4 +24,7 @@ public interface ITrowel {
 
     /** Clears the seed from the trowel */
     void clearSeed(ItemStack trowel);
+
+    /** Gets the stats from the seed */
+    ISeedStats getStats(ItemStack trowel) ;
 }

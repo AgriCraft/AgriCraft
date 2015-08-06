@@ -1,15 +1,15 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
-public class MethodIsMature extends MethodCropBase {
-    protected MethodIsMature() {
-        super("isMature");
+public class MethodHasWeeds extends MethodCropBase {
+    public MethodHasWeeds() {
+        super("hasWeeds");
     }
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) {
-        return new Object[] {crop.isMature()};
+        return new Object[] {crop.hasWeed()};
     }
 
     @Override

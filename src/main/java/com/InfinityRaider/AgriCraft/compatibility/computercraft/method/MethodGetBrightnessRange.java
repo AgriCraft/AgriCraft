@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 public class MethodGetBrightnessRange extends MethodCropBase {
-    protected MethodGetBrightnessRange() {
+    public MethodGetBrightnessRange() {
         super("getBrightnessRange");
     }
 

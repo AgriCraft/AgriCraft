@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.items;
 
+import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -126,6 +128,11 @@ public class ItemTrowel extends ModItem implements ITrowel {
     public void clearSeed(ItemStack trowel) {
         trowel.setTagCompound(null);
         trowel.setItemDamage(0);
+    }
+
+    @Override
+    public ISeedStats getStats(ItemStack trowel) {
+        return PlantStats.getStatsFromStack(getSeed(trowel));
     }
 
     @SideOnly(Side.CLIENT)

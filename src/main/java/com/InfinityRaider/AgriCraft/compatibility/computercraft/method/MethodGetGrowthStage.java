@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 public class MethodGetGrowthStage extends MethodCropBase {
-    protected MethodGetGrowthStage() {
+    public MethodGetGrowthStage() {
         super("getGrowthStage");
     }
 
