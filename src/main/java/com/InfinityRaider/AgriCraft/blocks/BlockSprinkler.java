@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
@@ -111,5 +112,10 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderSprinkler();
+    }
+
+    @Override
+    protected String getTileEntityName() {
+        return Names.Objects.sprinkler;
     }
 }

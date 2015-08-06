@@ -68,7 +68,6 @@ public class AgriCraft {
         LogHelper.debug("Starting Initialization");
         proxy.registerEventHandlers();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-        proxy.registerTileEntities();
         proxy.registerRenderers();
         Entities.init();
         ModHelper.initHelpers();

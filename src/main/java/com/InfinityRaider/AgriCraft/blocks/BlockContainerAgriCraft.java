@@ -1,6 +1,10 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -14,6 +18,25 @@ import net.minecraftforge.common.util.ForgeDirection;
 public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements ITileEntityProvider {
     protected BlockContainerAgriCraft(Material material) {
         super(material);
+        registerTileEntity();
+    }
+
+    private void registerTileEntity() {
+        try {
+            TileEntity tile = this.createNewTileEntity(null, 0);
+            if(tile != null) {
+                Class<? extends TileEntity> tileClass = tile.getClass();
+                GameRegistry.registerTileEntity(tileClass, wrapName(getTileEntityName()));
+            }
+        } catch(Exception e) {
+            LogHelper.printStackTrace(e);
+        }
+    }
+
+    protected abstract String getTileEntityName();
+
+    private static String wrapName(String name) {
+        return Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + name;
     }
 
     //this sets the block's orientation based upon the direction the player is looking when the block is placed

@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
@@ -23,6 +24,11 @@ public class BlockSeedStorageController extends BlockCustomWood {
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntitySeedStorageController();
+    }
+
+    @Override
+    protected String getTileEntityName() {
+        return Names.Objects.seedStorageController;
     }
 
     //this sets the block's orientation based upon the direction the player is looking when the block is placed

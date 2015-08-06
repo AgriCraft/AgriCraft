@@ -72,6 +72,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return new TileEntityCrop();
     }
 
+    @Override
+    protected String getTileEntityName() {
+        return Names.Objects.crop;
+    }
+
     //this makes the plant grow
     @Override
     public void updateTick(World world, int x, int y, int z, Random rnd) {

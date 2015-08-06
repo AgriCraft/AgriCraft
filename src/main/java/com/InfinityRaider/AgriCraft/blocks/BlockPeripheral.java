@@ -39,4 +39,9 @@ public class BlockPeripheral extends BlockContainerAgriCraft implements IPeriphe
         }
         return (TileEntityPeripheral) te;
     }
+
+    @Override
+    protected String getTileEntityName() {
+        return Names.Objects.peripheral;
+    }
 }

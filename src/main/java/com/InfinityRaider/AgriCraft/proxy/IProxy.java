@@ -5,20 +5,17 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public interface IProxy {
+    void registerRenderers();
 
-    public void registerTileEntities();
+    void initNEI();
 
-    public void registerRenderers();
+    void hideItemInNEI(ItemStack stack);
 
-    public void initNEI();
+    void registerEventHandlers();
 
-    public void hideItemInNEI(ItemStack stack);
+    int getRenderId(Block block);
 
-    public void registerEventHandlers();
+    void registerVillagerSkin(int id, String resource);
 
-    public int getRenderId(Block block);
-
-    public void registerVillagerSkin(int id, String resource);
-
-    public void initConfiguration(FMLPreInitializationEvent event);
+    void initConfiguration(FMLPreInitializationEvent event);
 }

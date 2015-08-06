@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannelFull;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannelFull;
@@ -41,5 +42,10 @@ public class BlockWaterChannelFull extends BlockWaterChannel {
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderChannelFull();
+    }
+
+    @Override
+    protected String getTileEntityName() {
+        return Names.Objects.channelFull;
     }
 }

@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
@@ -48,6 +49,11 @@ public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntitySeedAnalyzer();
+    }
+
+    @Override
+    protected String getTileEntityName() {
+        return Names.Objects.seedAnalyzer;
     }
 
     //called when the block is broken

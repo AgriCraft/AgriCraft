@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
@@ -27,6 +28,11 @@ public class BlockWaterChannel extends BlockCustomWood {
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntityChannel();
+    }
+
+    @Override
+    protected String getTileEntityName() {
+        return Names.Objects.channel;
     }
 
     @Override

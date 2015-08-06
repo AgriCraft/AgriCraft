@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderTank;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
@@ -107,6 +108,11 @@ public class BlockWaterTank extends BlockCustomWood{
             }
         }
         return true;
+    }
+
+    @Override
+    protected String getTileEntityName() {
+        return Names.Objects.tank;
     }
 
     //when the block is broken
