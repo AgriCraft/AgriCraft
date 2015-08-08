@@ -1,9 +1,8 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral;
+package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.IMethod;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.MethodException;
 import cpw.mods.fml.common.Optional;
