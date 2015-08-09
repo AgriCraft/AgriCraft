@@ -18,7 +18,6 @@ public class ModItem extends Item {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister reg) {
         LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
-        String test = this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1);
         itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
     }
 }
