@@ -15,6 +15,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+
 public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     public BlockCustomWood() {
         super(Material.wood);
@@ -48,12 +50,24 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     }
 
     @Override
-     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
+     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int fortune) {
+        if(!world.isRemote) {
+            ArrayList<ItemStack> drops = this.getDrops(world, x, y, z, meta, fortune);
+            for(ItemStack drop:drops) {
+                this.dropBlockAsItem(world, x, y, z, drop);
+            }
+        }
+    }
+
+    @Override
+    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
         if(!world.isRemote) {
             ItemStack drop = new ItemStack(this, 1);
             this.setTag(world, x, y, z, drop);
-            this.dropBlockAsItem(world, x, y, z, drop);
+            drops.add(drop);
         }
+        return drops;
     }
 
     //creative item picking

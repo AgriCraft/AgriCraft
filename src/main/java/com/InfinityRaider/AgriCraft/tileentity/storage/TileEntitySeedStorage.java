@@ -176,9 +176,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public ArrayList<ItemStack> getInventory() {
-        ArrayList<ItemStack> stacks = null;
+        ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
         if(this.hasLockedSeed()) {
-            stacks = new ArrayList<ItemStack>();
             for(Map.Entry<Integer, SeedStorageSlot> entries:slots.entrySet()) {
                 if(entries!=null && entries.getValue()!=null) {
                     stacks.add(entries.getValue().getStack(this.lockedSeed, this.lockedSeedMeta));
