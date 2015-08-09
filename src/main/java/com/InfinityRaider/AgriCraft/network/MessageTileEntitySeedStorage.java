@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.network;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -81,7 +80,6 @@ public class MessageTileEntitySeedStorage extends MessageAgriCraft {
         @Override
         public IMessage onMessage(MessageTileEntitySeedStorage message, MessageContext context) {
             TileEntity te = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
-            LogHelper.debug("Received message for "+(te==null?"null":te.toString()));
             if(te!=null && te instanceof TileEntitySeedStorage) {
                 TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
                 ItemStack stack = storage.getLockedSeed();
