@@ -27,7 +27,7 @@ public abstract class MessageAgriCraft implements IMessage {
     }
 
     protected void writePlayerToByteBuf(EntityPlayer player, ByteBuf buf) {
-        String playerName = player.getDisplayName();
+        String playerName = player==null?"null":player.getDisplayName();
         buf.writeInt(playerName.length());
         buf.writeBytes(playerName.getBytes());
     }

@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.network;
 
+import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -19,11 +20,11 @@ public class MessageContainerSeedStorage extends MessageAgriCraft {
 
     public MessageContainerSeedStorage() {}
 
-    public MessageContainerSeedStorage(ItemStack stack, EntityPlayer player, int slotId) {
+    public MessageContainerSeedStorage(ItemStack stack, int slotId) {
         this.item = stack.getItem();
         this.meta = stack.getItemDamage();
         this.amount = stack.stackSize;
-        this.player = player;
+        this.player = AgriCraft.proxy.getClientPlayer();
         this.slotId = slotId;
     }
 

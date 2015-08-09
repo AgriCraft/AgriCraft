@@ -66,6 +66,7 @@ Changelog
 -FIXED:  Magical Crops beta crops giving null as fruit
 -FIXED:  NPE with trowel
 -FIXED:  Some localisation issues with journal seed information
+-FIXED:  Seed Storage Container crashing on servers
 
 1.3.1
 -ADDED:  Nitor Wart: a new crop that produces glowstone dust
