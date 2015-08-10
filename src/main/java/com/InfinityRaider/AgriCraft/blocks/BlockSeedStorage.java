@@ -95,4 +95,9 @@ public class BlockSeedStorage extends BlockCustomWood {
     public RenderBlockBase getRenderer() {
         return new RenderSeedStorage();
     }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.seedStorage;
+    }
 }

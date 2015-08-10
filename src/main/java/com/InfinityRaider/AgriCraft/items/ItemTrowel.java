@@ -22,13 +22,18 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemTrowel extends ModItem implements ITrowel {
+public class ItemTrowel extends ItemAgricraft implements ITrowel {
     private IIcon[] icons = new IIcon[2];
 
     public ItemTrowel() {
         super();
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.maxStackSize=1;
+    }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.trowel;
     }
 
     //I'm overriding this just to be sure

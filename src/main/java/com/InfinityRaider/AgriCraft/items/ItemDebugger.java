@@ -12,10 +12,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemDebugger extends ModItem {
+public class ItemDebugger extends ItemAgricraft {
     public ItemDebugger() {
         super();
         this.setCreativeTab(null);
+    }
+
+    @Override
+    protected String getInternalName() {
+        return "debugger";
     }
 
     @Override

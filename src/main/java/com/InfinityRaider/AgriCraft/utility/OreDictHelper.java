@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.items.ModItem;
+import com.InfinityRaider.AgriCraft.items.ItemAgricraft;
+import com.InfinityRaider.AgriCraft.items.ItemNugget;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -117,8 +118,7 @@ public abstract class OreDictHelper {
             OreDictHelper.nuggets.put(oreName, nugget);
             nuggetMeta.put(oreName, nuggets.get(0).getItemDamage());
         } else {
-            ModItem nugget = new ModItem();
-            RegisterHelper.registerItem(nugget, "nugget"+oreName);
+            ItemAgricraft nugget = new ItemNugget(oreName);
             OreDictionary.registerOre("nugget"+oreName, nugget);
             OreDictHelper.nuggets.put(oreName, nugget);
             nuggetMeta.put(oreName, 0);
@@ -135,7 +135,7 @@ public abstract class OreDictHelper {
                 boolean flag = false;
                 for(ItemStack stack:fromOredict) {
                     String stackName = stack.getUnlocalizedName();
-                    if(stack==null || stack.getItem()==null) {
+                    if(stack.getItem()==null) {
                         continue;
                     }
                     if(stackName.contains(name) || stackName.contains(name.toLowerCase())) {

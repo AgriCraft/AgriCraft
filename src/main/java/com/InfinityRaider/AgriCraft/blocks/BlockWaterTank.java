@@ -185,4 +185,9 @@ public class BlockWaterTank extends BlockCustomWood{
     public RenderBlockBase getRenderer() {
         return new RenderTank();
     }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.tank;
+    }
 }

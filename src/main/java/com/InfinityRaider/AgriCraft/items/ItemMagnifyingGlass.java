@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -16,11 +17,16 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemMagnifyingGlass extends ModItem {
+public class ItemMagnifyingGlass extends ItemAgricraft {
     public ItemMagnifyingGlass() {
         super();
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.maxStackSize=1;
+    }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.magnifyingGlass;
     }
 
     //I'm overriding this just to be sure

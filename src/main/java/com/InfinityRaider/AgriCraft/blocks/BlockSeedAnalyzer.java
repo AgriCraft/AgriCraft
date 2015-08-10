@@ -18,6 +18,7 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -114,21 +115,28 @@ public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
     //rendering stuff
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
+
     @Override
     public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
+
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return false;}
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {return false;}        //no particles when this block gets hit
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer effectRenderer) {return false;}     //no particles when destroyed
+
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
         this.blockIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1));
     }
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
@@ -146,5 +154,15 @@ public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderSeedAnalyzer();
+    }
+
+    @Override
+    protected Class<? extends ItemBlock> getItemBlockClass() {
+        return null;
+    }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.seedAnalyzer;
     }
 }

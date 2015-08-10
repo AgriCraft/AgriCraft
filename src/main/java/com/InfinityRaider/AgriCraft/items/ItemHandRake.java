@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -23,7 +24,7 @@ import java.util.Random;
  * Tool to uproot weeds.
  * Comes in a wooden and iron variant.
  */
-public class ItemHandRake extends Item {
+public class ItemHandRake extends ItemAgricraft {
 
     private static final int WOOD_VARIANT_META = 0;
     private static final int IRON_VARIANT_META = 1;
@@ -35,6 +36,11 @@ public class ItemHandRake extends Item {
         setCreativeTab(AgriCraftTab.agriCraftTab);
         maxStackSize = 1;
         hasSubtypes = true;
+    }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.handRake;
     }
 
     @Override

@@ -45,6 +45,11 @@ public class BlockWaterChannelFull extends BlockWaterChannel {
     }
 
     @Override
+    protected String getInternalName() {
+        return Names.Objects.channelFull;
+    }
+
+    @Override
     protected String getTileEntityName() {
         return Names.Objects.channelFull;
     }

@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
@@ -21,11 +20,16 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemJournal extends ModItem {
+public class ItemJournal extends ItemAgricraft {
     public ItemJournal() {
         super();
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setMaxStackSize(1);
+    }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.journal;
     }
 
     //this has to return true to make it so the getContainerItem method gets called when this item is used in a recipe

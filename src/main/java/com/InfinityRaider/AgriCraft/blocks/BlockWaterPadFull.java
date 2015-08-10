@@ -1,11 +1,13 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
@@ -47,6 +49,16 @@ public class BlockWaterPadFull extends BlockWaterPad {
     @Override
     public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
         return false;
+    }
+
+    @Override
+    protected Class<? extends ItemBlock> getItemBlockClass() {
+        return ItemBlockWaterPadFull.class;
+    }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.waterPadFull;
     }
 
     public static class ItemBlockWaterPadFull extends ItemBlockWaterPad {

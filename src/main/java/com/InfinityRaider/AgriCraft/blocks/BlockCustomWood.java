@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
+import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -9,6 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -102,5 +104,11 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
         //NOOP
+    }
+
+
+    @Override
+    protected Class<? extends ItemBlock> getItemBlockClass() {
+        return ItemBlockCustomWood.class;
     }
 }

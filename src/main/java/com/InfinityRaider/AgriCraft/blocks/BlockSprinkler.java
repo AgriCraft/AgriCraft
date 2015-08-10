@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import com.InfinityRaider.AgriCraft.items.ItemSprinkler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -112,6 +114,16 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderSprinkler();
+    }
+
+    @Override
+    protected Class<? extends ItemBlock> getItemBlockClass() {
+        return ItemSprinkler.class;
+    }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.sprinkler;
     }
 
     @Override

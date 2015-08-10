@@ -3,15 +3,21 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemCrop extends ModItem {
+public class ItemCrop extends ItemAgricraft {
     public ItemCrop() {
         super();
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
+    }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.crops+"Item";
     }
 
     //I'm overriding this just to be sure

@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
-import com.InfinityRaider.AgriCraft.items.ModItem;
+import com.InfinityRaider.AgriCraft.items.ItemAgricraft;
 import com.InfinityRaider.AgriCraft.items.crafting.RecipeJournal;
 import com.InfinityRaider.AgriCraft.items.crafting.RecipeShapelessCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Data;
@@ -71,26 +71,26 @@ public class Recipes {
         }
         //fruits
         if (ConfigurationHandler.resourcePlants) {
-            if (OreDictHelper.getNuggetForName("Diamond") instanceof ModItem) {
+            if (OreDictHelper.getNuggetForName("Diamond") instanceof ItemAgricraft) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.diamond, 1), "nnn", "nnn", "nnn", 'n', "nuggetDiamond"));
                 GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(OreDictHelper.getNuggetForName("Diamond"), 9), "gemDiamond"));
             }
-            if (OreDictHelper.getNuggetForName("Emerald") instanceof ModItem) {
+            if (OreDictHelper.getNuggetForName("Emerald") instanceof ItemAgricraft) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.emerald, 1), "nnn", "nnn", "nnn", 'n', "nuggetEmerald"));
                 GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(OreDictHelper.getNuggetForName("Emerald"), 9), "gemEmerald"));
             }
-            if (OreDictHelper.getNuggetForName("Iron") instanceof ModItem) {
+            if (OreDictHelper.getNuggetForName("Iron") instanceof ItemAgricraft) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.iron_ingot, 1), "nnn", "nnn", "nnn", 'n', "nuggetIron"));
                 GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(OreDictHelper.getNuggetForName("Iron"), 9), "ingotIron"));
             }
-            if (OreDictHelper.getNuggetForName("Quartz") instanceof ModItem) {
+            if (OreDictHelper.getNuggetForName("Quartz") instanceof ItemAgricraft) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.quartz, 1), "nnn", "nnn", "nnn", 'n', "nuggetQuartz"));
                 GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(OreDictHelper.getNuggetForName("Quartz"), 9), new ItemStack(net.minecraft.init.Items.quartz, 1)));
             }
             for (String[] data : Data.modResources) {
                 String oreName = data[0];
                 Item nuggetItem = OreDictHelper.getNuggetForName(oreName);
-                if (nuggetItem != null && nuggetItem instanceof ModItem) {
+                if (nuggetItem != null && nuggetItem instanceof ItemAgricraft) {
                     ItemStack nugget = new ItemStack(nuggetItem, 9, OreDictHelper.getNuggetMetaForName(oreName));
                     ItemStack ingot = OreDictHelper.getIngot(oreName);
                     if (ingot != null) {

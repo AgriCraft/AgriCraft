@@ -30,6 +30,7 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -524,5 +525,15 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderCrop();
+    }
+
+    @Override
+    protected Class<? extends ItemBlock> getItemBlockClass() {
+        return null;
+    }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.crops;
     }
 }

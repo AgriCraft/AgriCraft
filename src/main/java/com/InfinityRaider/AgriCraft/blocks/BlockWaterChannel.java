@@ -132,4 +132,9 @@ public class BlockWaterChannel extends BlockCustomWood {
     public RenderBlockBase getRenderer() {
         return new RenderChannel();
     }
+
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.channel;
+    }
 }
