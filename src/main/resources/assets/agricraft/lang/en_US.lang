@@ -192,6 +192,7 @@ agricraft_tooltip.waterPadDry=Dig with a shovel in farmland to create a little p
 agricraft_tooltip.waterPadWet=then use a bucket of water to fill it up
 agricraft_tooltip.growthStage=Growthstage
 agricraft_tooltip.mature=Mature
+agricraft_tooltip.valve=Toggled with a redstone signal
 
 // nei GUI
 agricraft_nei.mutation.title=Crop Mutation
