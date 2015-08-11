@@ -5,11 +5,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.IGrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.common.IPlantable;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public interface IAgriCraftPlant extends IGrowable {
+public interface IAgriCraftPlant extends IGrowable, IPlantable {
     /** Returns the GowthRequirement for this plant */
     public IGrowthRequirement getGrowthRequirement();
 

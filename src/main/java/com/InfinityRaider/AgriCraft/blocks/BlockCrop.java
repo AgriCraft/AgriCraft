@@ -40,13 +40,15 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import vazkii.botania.api.item.IGrassHornExcempt;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 @Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IGrassHornExcempt")
-public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityProvider, IGrowable, IGrassHornExcempt {
+public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityProvider, IGrowable, IPlantable, IGrassHornExcempt {
 
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
@@ -535,5 +537,28 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     @Override
     protected String getInternalName() {
         return Names.Objects.crops;
+    }
+
+    @Override
+    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z) {
+        return EnumPlantType.Crop;
+    }
+
+    @Override
+    public Block getPlant(IBlockAccess world, int x, int y, int z) {
+        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        if(tileEntity==null || !(tileEntity instanceof TileEntityCrop)) {
+            return this;
+        }
+        TileEntityCrop crop = (TileEntityCrop) tileEntity;
+        if(crop.hasPlant()) {
+            //TODO: make it return the Block instance of the planted crop
+        }
+        return this;
+    }
+
+    @Override
+    public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
+        return 0;
     }
 }

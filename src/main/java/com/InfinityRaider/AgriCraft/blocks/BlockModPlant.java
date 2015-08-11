@@ -26,7 +26,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -153,6 +155,11 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     @Override
     public boolean renderAsFlower() {
         return this.renderType==RenderMethod.CROSSED;
+    }
+
+    @Override
+    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z) {
+        return EnumPlantType.Crop;
     }
 
     @Override
