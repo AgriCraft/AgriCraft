@@ -108,7 +108,7 @@ public class TessellatorV2 extends Tessellator {
      */
     @Override
     public void startDrawingQuads() {
-        tessellator.startDrawing(7);
+        tessellator.startDrawingQuads();
     }
 
     /**
