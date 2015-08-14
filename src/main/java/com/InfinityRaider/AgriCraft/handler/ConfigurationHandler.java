@@ -24,11 +24,14 @@ public class ConfigurationHandler {
     public static final String CATEGORY_STORAGE = "storage";
     public static final String CATEGORY_DECORATION = "decoration";
     public static final String CATEGORY_COMPATIBILITY = "compatibility";
+    public static final String CATEGORY_CLIENT = "clientside config";
 
     public static Configuration config;
     private static String directory;
     private static Property propGenerateDefaults = new Property("RegenDefaults","false", Property.Type.BOOLEAN);
 
+    //COMMON
+    //------
     //debug
     public static boolean debug;
     //agricraft
@@ -77,6 +80,10 @@ public class ConfigurationHandler {
     public static boolean disableDoors;
     public static boolean disableGrates;
 
+    //CLIENT
+    //------
+    public static boolean condenseCustomWoodInNei;
+
     public static void init(FMLPreInitializationEvent event) {
         directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
 
@@ -90,7 +97,7 @@ public class ConfigurationHandler {
 
     @SideOnly(Side.CLIENT)
     public static void initClientConfigs(FMLPreInitializationEvent event) {
-
+        condenseCustomWoodInNei = config.getBoolean("condense custom wood blocks in NEI", CATEGORY_CLIENT, true, "set to true to condense all entries for custom wood blocks into one entry in NEI");
     }
 
 

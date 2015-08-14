@@ -89,25 +89,26 @@ public class NEIConfig implements IConfigureNEI {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(Items.debugItem, 1, i));
             }
         }
-        LogHelper.debug("Hiding custom wood objects");
-        Field[] blocks = Blocks.class.getDeclaredFields();
-        for(Field field:blocks) {
-            if(BlockCustomWood.class.isAssignableFrom(field.getType())) {
+        if(ConfigurationHandler.condenseCustomWoodInNei) {
+            LogHelper.debug("Hiding custom wood objects");
+            Field[] blocks = Blocks.class.getDeclaredFields();
+            for (Field field : blocks) {
                 try {
-                    Block block = (Block) field.get(null);
-                    if(block==null) {
-                        continue;
+                    if (BlockCustomWood.class.isAssignableFrom(field.get(null).getClass())) {
+                        Block block = (Block) field.get(null);
+                        if (block == null) {
+                            continue;
+                        }
+                        ItemStack stack = new ItemStack(block);
+                        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+                        list.add(stack);
+                        API.setItemListEntries(stack.getItem(), list);
                     }
-                    ItemStack stack = new ItemStack(block);
-                    ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-                    list.add(stack);
-                    API.setItemListEntries(stack.getItem(), list);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-
     }
 
     @Override
