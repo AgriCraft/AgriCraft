@@ -22,6 +22,7 @@ public class ConfigurationHandler {
     public static final String CATEGORY_WORLDGEN = "world gen";
     public static final String CATEGORY_IRRIGATION = "irrigation";
     public static final String CATEGORY_STORAGE = "storage";
+    public static final String CATEGORY_DECORATION = "decoration";
     public static final String CATEGORY_COMPATIBILITY = "compatibility";
 
     public static Configuration config;
@@ -71,6 +72,10 @@ public class ConfigurationHandler {
     public static int sprinklerGrowthIntervalTicks = 100;
     public static boolean placeWater;
     public static boolean fillFromFlowingWater;
+    //decorative
+    public static boolean disableFences;
+    public static boolean disableDoors;
+    public static boolean disableGrates;
 
     public static void init(FMLPreInitializationEvent event) {
         directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
@@ -134,6 +139,10 @@ public class ConfigurationHandler {
         sprinklerGrowthIntervalTicks = sprinklerGrowthInterval * 20;
         placeWater = config.getBoolean("Spawn water after breaking tank", CATEGORY_IRRIGATION, true, "set to false to disable placing a source block when breaking non-empty tanks");
         fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", CATEGORY_IRRIGATION, false, "set to true to let tanks fill up when water flows above them");
+        //decoration
+        disableFences = config.getBoolean("Disable fences", CATEGORY_DECORATION, false, "Set to true to disable the decorative custom wood fences");
+        disableDoors = config.getBoolean("Disable doors", CATEGORY_DECORATION, false, "Set to true to disable the decorative custom wood doors");
+        disableGrates = config.getBoolean("Disable grates", CATEGORY_DECORATION, false, "Set to true to disable the decorative custom wood grates");
         //debug mode
         debug = config.getBoolean("debug",CATEGORY_DEBUG,false,"Set to true if you wish to enable debug mode");
 

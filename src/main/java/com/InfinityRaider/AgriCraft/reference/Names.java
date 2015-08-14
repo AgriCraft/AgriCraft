@@ -58,6 +58,10 @@ public final class Names {
         public static final String handRake = "handRake";
         public static final String villager = "villagerFarmer";
         public static final String peripheral = "peripheral";
+        public static final String fence = "fence";
+        public static final String fenceGate = "fenceGate";
+        public static final String door = "door";
+        public static final String grate = "grate";
     }
 
     //tile entities

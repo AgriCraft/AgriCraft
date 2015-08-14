@@ -20,6 +20,10 @@ public class Blocks {
     public static Block blockSeedStorage;
     public static Block blockSeedStorageController;
     public static Block blockPeripheral;
+    public static Block blockFence;
+    public static Block blockFenceGate;
+    public static Block blockGrate;
+    public static Block blockDoor;
 
     public static void init() {
         blockCrop = new BlockCrop();
@@ -41,6 +45,16 @@ public class Blocks {
         }
         if(ModHelper.allowIntegration(Names.Mods.computerCraft)) {
             blockPeripheral = new BlockPeripheral();
+        }
+        if(!ConfigurationHandler.disableFences) {
+            blockFence = new BlockFence();
+            blockFenceGate = new BlockFenceGate();
+        }
+        if(!ConfigurationHandler.disableGrates) {
+            blockGrate = new BlockGrate();
+        }
+        if(!ConfigurationHandler.disableDoors) {
+            blockDoor = new BlockDoor();
         }
         LogHelper.debug("Blocks registered");
     }
