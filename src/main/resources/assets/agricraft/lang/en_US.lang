@@ -194,6 +194,7 @@ agricraft_tooltip.waterPadWet=then use a bucket of water to fill it up
 agricraft_tooltip.growthStage=Growthstage
 agricraft_tooltip.mature=Mature
 agricraft_tooltip.valve=Toggled with a redstone signal
+agricraft_tooltip.grate=Right click with vines to apply vines
 
 // nei GUI
 agricraft_nei.mutation.title=Crop Mutation

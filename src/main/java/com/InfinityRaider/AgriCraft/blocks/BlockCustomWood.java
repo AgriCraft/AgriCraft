@@ -114,7 +114,6 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return false;}
 
-
     @Override
     protected Class<? extends ItemBlock> getItemBlockClass() {
         return ItemBlockCustomWood.class;

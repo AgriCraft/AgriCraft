@@ -38,7 +38,6 @@ public class RenderBlockFence extends RenderBlockCustomWood {
         tessellator.draw();
         //enable lighting
         GL11.glEnable(GL11.GL_LIGHTING);
-
     }
 
     @Override

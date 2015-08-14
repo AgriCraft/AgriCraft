@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.handler;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockGrate;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.tconstruct.TinkersConstructHelper;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
@@ -11,7 +12,9 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraftforge.common.IPlantable;
@@ -31,7 +34,7 @@ public class PlayerInteractEventHandler {
                     } else if (event.entityPlayer.getCurrentEquippedItem().hasTagCompound()) {
                         NBTTagCompound tag = (NBTTagCompound) event.entityPlayer.getCurrentEquippedItem().getTagCompound().copy();
                         if (tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
-                            //WIP: place a tile entity storing the seeds data
+                            //TODO: place a tile entity storing the seeds data
                             this.denyEvent(event, false);
                         }
                     }
@@ -62,6 +65,25 @@ public class PlayerInteractEventHandler {
                     }
                     event.world.playSoundEffect((double) ((float) event.x + 0.5F), (double) ((float) event.y + 0.5F), (double) ((float) event.z + 0.5F), block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void applyVinesToGrate(PlayerInteractEvent event) {
+        if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
+            if(stack==null || stack.getItem()==null || stack.getItem()!= Item.getItemFromBlock(Blocks.vine)) {
+                return;
+            }
+            Block block = event.world.getBlock(event.x, event.y, event.z);
+            if(!(block instanceof BlockGrate)) {
+                return;
+            }
+            if(event.world.isRemote) {
+                denyEvent(event, true);
+            } else {
+                block.onBlockActivated(event.world, event.x, event.y, event.z, event.entityPlayer, event.face, 0, 0, 0);
             }
         }
     }
