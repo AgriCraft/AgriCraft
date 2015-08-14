@@ -57,11 +57,11 @@ public final class RenderPlayerHooks {
 
     private void init() {
         this.registerPlayerEffectRenderer(new PlayerEffectRendererOrbs());
-        //this.registerPlayerEffectRenderer(new PlayerEffectRendererNavi());
-        //this.registerPlayerEffectRenderer(new PlayerEffectRendererParticlesEnchanted());
-        //this.registerPlayerEffectRenderer(new PlayerEffectRendererEntityDragon());
-        //this.registerPlayerEffectRenderer(new PlayerEffectRendererEntityBat());
-        //this.registerPlayerEffectRenderer(new PlayerEffectRendererButterfly());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererNavi());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererParticlesEnchanted());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererEntityDragon());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererEntityBat());
+        this.registerPlayerEffectRenderer(new PlayerEffectRendererButterfly());
     }
 
     private void registerPlayerEffectRenderer(PlayerEffectRenderer renderer) {
