@@ -8,6 +8,7 @@ import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
 import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import javafx.geometry.BoundingBox;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -91,8 +92,19 @@ public class BlockGrate extends BlockCustomWood {
         return items;
     }
 
+    public void setBounds(AxisAlignedBB box, int x, int y, int z) {
+        this.minX = box.minX-x;
+        this.minY = box.minY-y;
+        this.minZ = box.minZ-z;
+        this.maxX = box.maxX-x;
+        this.maxY = box.maxY-y;
+        this.maxZ = box.maxZ-z;
+    }
+
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        return getBoundingBox(world, x, y, z);
+        AxisAlignedBB box = getBoundingBox(world, x, y, z);
+        setBounds(box, x, y, z);
+        return box;
     }
 
     @SideOnly(Side.CLIENT)

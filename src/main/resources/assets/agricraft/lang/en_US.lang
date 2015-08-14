@@ -97,6 +97,9 @@ tile.agricraft:channelValve.0.name=Wooden Channel Valve
 tile.agricraft:channelValve.1.name=Iron Pipe Valve
 tile.agricraft:sprinkler.name=Sprinkler
 tile.agricraft:seedStorage.0.name=Seed Storage
+tile.agricraft:fence.0.name=Fence
+tile.agricraft:fenceGate.0.name=Fence Gate
+tile.agricraft:grate.0.name=Wooden Grate
 
 tile.agricraft:cropPotato.name=Potato
 tile.agricraft:cropCarrot.name=Carrot

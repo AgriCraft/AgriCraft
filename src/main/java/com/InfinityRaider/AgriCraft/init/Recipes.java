@@ -118,6 +118,14 @@ public class Recipes {
         if(!ConfigurationHandler.disableSeedStorage) {
             registerCustomWoodRecipe(Blocks.blockSeedStorage, 1, true, "wiw", "wcw", "wcw", 'w', REFERENCE, 'i', net.minecraft.init.Items.iron_ingot, 'c', net.minecraft.init.Blocks.chest);
         }
+        if(!ConfigurationHandler.disableFences) {
+            ItemStack fence = new ItemStack(Blocks.blockFence, 1);
+            registerCustomWoodRecipe(Blocks.blockFence, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', net.minecraft.init.Blocks.fence);
+            registerCustomWoodRecipe(Blocks.blockFenceGate, 1, true, "fwf", 'w', REFERENCE, 'f', fence);
+        }
+        if(!ConfigurationHandler.disableGrates) {
+            registerCustomWoodRecipe(Blocks.blockGrate, 8, true, "w w", " w ", "w w", 'w', REFERENCE);
+        }
     }
 
     /**
