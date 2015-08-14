@@ -80,7 +80,7 @@ public abstract class OreDictHelper {
     //finds the ingot for a nugget ore dictionary entry
     public static ItemStack getIngot(String ore) {
         ItemStack ingot = null;
-        ArrayList<ItemStack> entries = OreDictionary.getOres("ingot." + ore);
+        ArrayList<ItemStack> entries = OreDictionary.getOres("ingot" + ore);
         if (entries.size() > 0 && entries.get(0).getItem() != null) {
             ingot = entries.get(0);
         }
