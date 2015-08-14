@@ -228,11 +228,13 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
                     this.harvest(world, x, y, z, player);
                 }
                 else if(heldItem.getItem()==net.minecraft.init.Items.reeds) {
-                    CropPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack((ItemSeeds) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")));
-                    if(sugarcane!=null && sugarcane.isFertile(world, x, y, z)) {
-                        crop.setPlant(1, 1, 1, false, sugarcane);
-                        if(!player.capabilities.isCreativeMode) {
-                            heldItem.stackSize = heldItem.stackSize-1;
+                    if(!crop.hasPlant() && !crop.isCrossCrop() && !crop.hasWeed()) {
+                        CropPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack((ItemSeeds) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")));
+                        if (sugarcane != null && sugarcane.isFertile(world, x, y, z)) {
+                            crop.setPlant(1, 1, 1, false, sugarcane);
+                            if (!player.capabilities.isCreativeMode) {
+                                heldItem.stackSize = heldItem.stackSize - 1;
+                            }
                         }
                     }
                 }
