@@ -77,7 +77,6 @@ public class ConfigurationHandler {
     public static boolean fillFromFlowingWater;
     //decorative
     public static boolean disableFences;
-    public static boolean disableDoors;
     public static boolean disableGrates;
 
     //CLIENT
@@ -148,7 +147,6 @@ public class ConfigurationHandler {
         fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", CATEGORY_IRRIGATION, false, "set to true to let tanks fill up when water flows above them");
         //decoration
         disableFences = config.getBoolean("Disable fences", CATEGORY_DECORATION, false, "Set to true to disable the decorative custom wood fences");
-        disableDoors = config.getBoolean("Disable doors", CATEGORY_DECORATION, false, "Set to true to disable the decorative custom wood doors");
         disableGrates = config.getBoolean("Disable grates", CATEGORY_DECORATION, false, "Set to true to disable the decorative custom wood grates");
         //debug mode
         debug = config.getBoolean("debug",CATEGORY_DEBUG,false,"Set to true if you wish to enable debug mode");
