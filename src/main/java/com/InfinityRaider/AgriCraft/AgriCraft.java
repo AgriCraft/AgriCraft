@@ -38,6 +38,8 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
+import java.util.ArrayList;
+
 @Mod(modid = Reference.MOD_ID,name = Reference.MOD_NAME,version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class AgriCraft {
     @Mod.Instance(Reference.MOD_ID)
@@ -99,5 +101,18 @@ public class AgriCraft {
 
     @Mod.EventHandler
     public void onServerStart(FMLServerStartingEvent event) {
+    }
+
+    @Mod.EventHandler
+    public void onMissingMappings(FMLMissingMappingsEvent event) {
+        ArrayList<String> removedIds = new ArrayList<String>();
+        removedIds.add("AgriCraft:cropMelon");
+        removedIds.add("AgriCraft:cropPumpkin");
+        removedIds.add("AgriCraft:sprinklerItem");
+        for(FMLMissingMappingsEvent.MissingMapping missingMapping: event.get()) {
+            if(removedIds.contains(missingMapping.name)) {
+                missingMapping.ignore();
+            }
+        }
     }
 }
