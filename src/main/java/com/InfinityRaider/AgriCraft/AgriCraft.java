@@ -96,7 +96,6 @@ public class AgriCraft {
     @Mod.EventHandler
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
         MutationHandler.init();
-
     }
 
     @Mod.EventHandler
