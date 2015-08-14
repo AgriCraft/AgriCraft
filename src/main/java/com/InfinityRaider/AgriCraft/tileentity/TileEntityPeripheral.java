@@ -2,9 +2,9 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.IMethod;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.MethodException;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.common.Optional;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;

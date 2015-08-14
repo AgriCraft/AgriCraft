@@ -8,7 +8,6 @@ import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
 import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import javafx.geometry.BoundingBox;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;

@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.computercraft;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.*;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
 
 public class ComputerCraftHelper extends ModHelper {
