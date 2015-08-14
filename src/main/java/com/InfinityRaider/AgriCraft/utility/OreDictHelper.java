@@ -41,6 +41,9 @@ public abstract class OreDictHelper {
 
     //checks if an itemstack has this ore dictionary entry
     public static boolean hasOreId(ItemStack stack, String tag) {
+        if(stack==null || stack.getItem()==null) {
+            return false;
+        }
         int[] ids = OreDictionary.getOreIDs(stack);
         for(int id:ids) {
             if(OreDictionary.getOreName(id).equals(tag)) {
@@ -48,6 +51,10 @@ public abstract class OreDictHelper {
             }
         }
         return false;
+    }
+
+    public static boolean hasOreId(Block block, String tag) {
+        return block != null && hasOreId(new ItemStack(block), tag);
     }
 
     //checks if two blocks have the same ore dictionary entry

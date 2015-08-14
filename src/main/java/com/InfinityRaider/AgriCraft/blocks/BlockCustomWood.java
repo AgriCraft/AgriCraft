@@ -102,9 +102,17 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     //register icons
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister reg) {
-        //NOOP
-    }
+    public void registerBlockIcons(IIconRegister reg) {}
+
+    @Override
+    public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
+
+    @Override
+    public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return false;}
 
 
     @Override
