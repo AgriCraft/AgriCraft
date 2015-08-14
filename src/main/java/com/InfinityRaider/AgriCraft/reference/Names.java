@@ -62,6 +62,7 @@ public final class Names {
         public static final String fenceGate = "fenceGate";
         public static final String door = "door";
         public static final String grate = "grate";
+        public static final String leash = "leash";
     }
 
     //tile entities

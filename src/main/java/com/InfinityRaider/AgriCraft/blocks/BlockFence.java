@@ -1,13 +1,14 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import com.InfinityRaider.AgriCraft.entity.EntityLeashKnotAgricraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFence;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFence;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemLead;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
@@ -39,8 +40,28 @@ public class BlockFence extends BlockCustomWood {
 
     //Allow leads to be connected to these fences
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer p, int meta, float hitX, float hitY, float hitZ) {
-        return world.isRemote || ItemLead.func_150909_a(p, world, x, y, z);
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float hitX, float hitY, float hitZ) {
+        return world.isRemote || applyLead(player, world, x, y, z);
+    }
+
+    public boolean applyLead(EntityPlayer player, World world, int x, int y, int z) {
+        EntityLeashKnotAgricraft entityleashknot = EntityLeashKnotAgricraft.getKnotForBlock(world, x, y, z);
+        boolean flag = false;
+        double d0 = 7.0D;
+        List list = world.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox((double)x - d0, (double) y - d0, (double) z - d0, (double)x + d0, (double)y + d0, (double)z + d0));
+        if (list != null) {
+            for (Object obj : list) {
+                EntityLiving entityliving = (EntityLiving) obj;
+                if (entityliving.getLeashed() && entityliving.getLeashedToEntity() == player) {
+                    if (entityleashknot == null) {
+                        entityleashknot = EntityLeashKnotAgricraft.func_110129_a(world, x, y, z);
+                    }
+                    entityliving.setLeashedToEntity(entityleashknot, true);
+                    flag = true;
+                }
+            }
+        }
+        return flag;
     }
 
     /**
