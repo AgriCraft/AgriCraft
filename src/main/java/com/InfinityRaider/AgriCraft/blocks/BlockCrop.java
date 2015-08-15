@@ -412,7 +412,6 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         if (crop.hasWeed()) {
             crop.clearWeed();   //update is not needed because it is called in the clearWeed() method
-            update = true;
         } else if (crop.isCrossCrop()) {
             crop.setCrossCrop(false);
             drops.add(new ItemStack(Items.crops, 1));
