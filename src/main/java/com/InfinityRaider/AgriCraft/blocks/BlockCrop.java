@@ -42,13 +42,18 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+import net.shadowmage.ancientwarfare.api.v1.IAncientWarfareFarmable;
 import vazkii.botania.api.item.IGrassHornExcempt;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-@Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IGrassHornExcempt")
-public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityProvider, IGrowable, IPlantable, IGrassHornExcempt {
+@Optional.InterfaceList(value = {
+        @Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IGrassHornExcempt"),
+        @Optional.Interface(modid = Names.Mods.ancientWarfare, iface = "net.shadowmage.ancientwarfare.api.v1.IAncientWarfareFarmable"
+        )})
+public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityProvider, IGrowable, IPlantable, IGrassHornExcempt, IAncientWarfareFarmable {
 
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
@@ -212,75 +217,77 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
         //only make things happen serverside
-        if(!world.isRemote) {
-            // When hand rake is enabled and the block has weeds, abandon all hope
-            TileEntity te = world.getTileEntity(x, y, z);
-            if (te != null && te instanceof TileEntityCrop) {
-                TileEntityCrop crop = (TileEntityCrop) te;
-                if (ConfigurationHandler.enableHandRake && crop.hasWeed()) {
-                    return false;
-                }
-                ItemStack heldItem = player.getCurrentEquippedItem();
-                if (player.isSneaking()) {
+        if (world.isRemote) {
+            return true;
+        }
+        // When hand rake is enabled and the block has weeds, abandon all hope
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te != null && te instanceof TileEntityCrop) {
+            TileEntityCrop crop = (TileEntityCrop) te;
+            if (ConfigurationHandler.enableHandRake && crop.hasWeed()) {
+                return false;
+            }
+            ItemStack heldItem = player.getCurrentEquippedItem();
+            if (player.isSneaking()) {
+                this.harvest(world, x, y, z, player);
+            } else if (heldItem == null || heldItem.getItem() == null) {
+                //harvest operation
+                this.harvest(world, x, y, z, player);
+            } else if (heldItem.getItem() == net.minecraft.init.Items.reeds) {
+                if(crop.hasPlant()) {
                     this.harvest(world, x, y, z, player);
-                } else if (heldItem==null || heldItem.getItem()==null) {
-                    //harvest operation
-                    this.harvest(world, x, y, z, player);
-                }
-                else if(heldItem.getItem()==net.minecraft.init.Items.reeds) {
-                    if(!crop.hasPlant() && !crop.isCrossCrop() && !crop.hasWeed()) {
-                        CropPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack((ItemSeeds) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")));
-                        if (sugarcane != null && sugarcane.isFertile(world, x, y, z)) {
-                            crop.setPlant(1, 1, 1, false, sugarcane);
-                            if (!player.capabilities.isCreativeMode) {
-                                heldItem.stackSize = heldItem.stackSize - 1;
-                            }
+                } else if (!crop.isCrossCrop() && !crop.hasWeed()) {
+                    CropPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack((ItemSeeds) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")));
+                    if (sugarcane != null && sugarcane.isFertile(world, x, y, z)) {
+                        crop.setPlant(1, 1, 1, false, sugarcane);
+                        if (!player.capabilities.isCreativeMode) {
+                            heldItem.stackSize = heldItem.stackSize - 1;
                         }
                     }
                 }
-                //check to see if the player clicked with crops (crosscrop attempt)
-                else if (heldItem.getItem() == Items.crops) {
-                    this.setCrossCrop(world, x, y, z, player);
-                }
-                //trowel usage
-                else if(heldItem.getItem() instanceof ITrowel) {
-                    crop.onTrowelUsed((ITrowel) heldItem.getItem(), heldItem);
-                }
-                //check to see if the player wants to use bonemeal
-                else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
-                    return false;
-                }
-                //fertiliser
-                else if (heldItem.getItem() instanceof IFertiliser) {
-                    IFertiliser fertiliser = (IFertiliser) heldItem.getItem();
-                    if(crop.allowFertiliser(fertiliser)) {
-                        crop.applyFertiliser(fertiliser, world.rand);
-                        NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertiliserApplied(heldItem, x, y, z), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 32));
-                        if(!player.capabilities.isCreativeMode) {
-                            heldItem.stackSize = heldItem.stackSize-1;
-                        }
+            }
+            //check to see if the player clicked with crops (crosscrop attempt)
+            else if (heldItem.getItem() == Items.crops) {
+                this.setCrossCrop(world, x, y, z, player);
+            }
+            //trowel usage
+            else if (heldItem.getItem() instanceof ITrowel) {
+                crop.onTrowelUsed((ITrowel) heldItem.getItem(), heldItem);
+            }
+            //check to see if the player wants to use bonemeal
+            else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
+                return false;
+            }
+            //fertiliser
+            else if (heldItem.getItem() instanceof IFertiliser) {
+                IFertiliser fertiliser = (IFertiliser) heldItem.getItem();
+                if (crop.allowFertiliser(fertiliser)) {
+                    crop.applyFertiliser(fertiliser, world.rand);
+                    NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertiliserApplied(heldItem, x, y, z), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 32));
+                    if (!player.capabilities.isCreativeMode) {
+                        heldItem.stackSize = heldItem.stackSize - 1;
                     }
-                    return false;
                 }
-                //allow the debugger to be used
-                else if (heldItem.getItem() instanceof ItemDebugger) {
-                    return false;
-                }
-                //mod interaction
-                else if (ModHelper.isRightClickHandled(heldItem.getItem())) {
-                    return ModHelper.handleRightClickOnCrop(world, x, y, z, player, heldItem, this, crop);
-                } else {
-                    //harvest operation
-                    this.harvest(world, x, y, z, player);
-                    //check to see if clicked with seeds
-                    if (CropPlantHandler.isValidSeed(heldItem)) {
-                        this.plantSeed(world, x, y, z, player);
-                    }
+                return false;
+            }
+            //allow the debugger to be used
+            else if (heldItem.getItem() instanceof ItemDebugger) {
+                return false;
+            }
+            //mod interaction
+            else if (ModHelper.isRightClickHandled(heldItem.getItem())) {
+                return ModHelper.handleRightClickOnCrop(world, x, y, z, player, heldItem, this, crop);
+            } else {
+                //harvest operation
+                this.harvest(world, x, y, z, player);
+                //check to see if clicked with seeds
+                if (CropPlantHandler.isValidSeed(heldItem)) {
+                    this.plantSeed(world, x, y, z, player);
                 }
             }
         }
         //Returning true will prevent other things from happening
-        return false;
+        return true;
     }
 
     //This gets called when the block is left clicked (player hits the block)
@@ -391,6 +398,38 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
 
     public boolean isMature(World world, int x, int y, int z) {
         return world.getBlockMetadata(x, y, z) >= 7;
+    }
+
+    @Override
+    public boolean canFertilize(World world, int x, int y, int z) {
+        return this.func_149851_a(world, x, y, z, world.isRemote);
+    }
+
+    @Override
+    public List<ItemStack> doHarvest(World world, int x, int y, int z, int fortune) {
+        boolean update = false;
+        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+        if (crop.hasWeed()) {
+            crop.clearWeed();   //update is not needed because it is called in the clearWeed() method
+            update = true;
+        } else if (crop.isCrossCrop()) {
+            crop.setCrossCrop(false);
+            drops.add(new ItemStack(Items.crops, 1));
+        } else if (crop.isMature() && crop.allowHarvest(null)) {
+            crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
+            update = true;
+            for(ItemStack stack:crop.getFruits()) {
+                if(stack==null || stack.getItem()==null) {
+                    continue;
+                }
+                drops.add(stack);
+            }
+        }
+        if(update) {
+            crop.markForUpdate();
+        }
+        return drops;
     }
 
     @Override
