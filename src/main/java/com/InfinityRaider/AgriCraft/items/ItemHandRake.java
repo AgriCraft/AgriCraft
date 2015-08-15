@@ -48,12 +48,10 @@ public class ItemHandRake extends ItemAgricraft {
         if (world.isRemote) {
             return false;
         }
-
         TileEntity te = world.getTileEntity(x, y, z);
         if (te == null || !(te instanceof TileEntityCrop)) {
-            return true;
+            return false;
         }
-
         TileEntityCrop crop = (TileEntityCrop) te;
         if (crop.hasWeed()) {
             int weedGrowthStage = world.getBlockMetadata(x, y, z);
