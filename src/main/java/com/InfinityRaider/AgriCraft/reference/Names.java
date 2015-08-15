@@ -78,6 +78,7 @@ public final class Names {
 
     //mod ids
     public static class Mods {
+        public static final String ancientWarfare = "AncientWarfare";
         public static final String arsMagica = "arsmagica2";
         public static final String bloodMagic = "AWWayofTime";
         public static final String bluePower = "bluepower";
