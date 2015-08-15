@@ -15,6 +15,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -302,10 +303,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         String name = tag.getString(Names.NBT.seed);
         Item seed = name.equalsIgnoreCase("none")?null: (Item) Item.itemRegistry.getObject(name);
         int meta = tag.getInteger(Names.NBT.meta);
-        CropPlant plant = CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, meta));
+        ItemStack stack = new ItemStack(seed, 1, meta);
+        CropPlant plant = CropPlantHandler.getPlantFromStack(stack);
         if(plant!=null) {
             this.plant = plant;
         } else {
+            LogHelper.info("Couldn't find plant for "+stack.getUnlocalizedName() +" at ("+xCoord+","+yCoord+","+zCoord+"), plant has been removed");
             this.clearPlant();
         }
     }
