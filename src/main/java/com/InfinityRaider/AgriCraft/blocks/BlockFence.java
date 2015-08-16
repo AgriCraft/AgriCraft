@@ -123,17 +123,22 @@ public class BlockFence extends BlockCustomWood {
     }
 
     public boolean canConnect(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if(tile==null || !(tile instanceof TileEntityFence)) {
-            Block block = world.getBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
-            if (block == null) {
-                return false;
-            }
-            if (block.isAir(world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)) {
-                return false;
-            }
+        Block block = world.getBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
+        if (block == null) {
+            return false;
+        }
+        if (block.isAir(world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)) {
+            return false;
+        }
+        if (block.isOpaqueCube()) {
             return true;
         }
-        return ((TileEntityFence) tile).canConnect(dir);
+        if ((block instanceof BlockFence) || (block instanceof BlockFenceGate) || (block instanceof BlockWaterTank)) {
+            return true;
+        }
+        if ((block instanceof net.minecraft.block.BlockFence) || (block instanceof net.minecraft.block.BlockFenceGate)) {
+            return true;
+        }
+        return false;
     }
 }
