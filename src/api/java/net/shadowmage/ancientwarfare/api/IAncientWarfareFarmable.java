@@ -1,4 +1,4 @@
-package net.shadowmage.ancientwarfare.api.v1;
+package net.shadowmage.ancientwarfare.api;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;

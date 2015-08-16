@@ -42,7 +42,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.shadowmage.ancientwarfare.api.v1.IAncientWarfareFarmable;
+import net.shadowmage.ancientwarfare.api.IAncientWarfareFarmable;
 import vazkii.botania.api.item.IGrassHornExcempt;
 
 import java.util.ArrayList;
