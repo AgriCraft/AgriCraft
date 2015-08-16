@@ -30,6 +30,7 @@ public class ItemCrop extends ItemAgricraft {
         if (!world.isRemote) {
             if (GrowthRequirementHandler.isSoilValid(world, x, y, z) && world.getBlock(x, y + 1, z).getMaterial()== Material.air && side == 1) {
                 world.setBlock(x, y + 1, z, Blocks.blockCrop);
+                world.playSoundEffect((double)((float) x + 0.5F), (double)((float) y + 0.5F), (double)((float) z + 0.5F), net.minecraft.init.Blocks.leaves.stepSound.func_150496_b(), (net.minecraft.init.Blocks.leaves.stepSound.getVolume() + 1.0F) / 2.0F, net.minecraft.init.Blocks.leaves.stepSound.getPitch() * 0.8F);
                 stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
                 return false;
             }
