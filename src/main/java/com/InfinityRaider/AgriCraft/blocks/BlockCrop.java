@@ -401,11 +401,6 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     }
 
     @Override
-    public boolean canFertilize(World world, int x, int y, int z) {
-        return this.func_149851_a(world, x, y, z, world.isRemote);
-    }
-
-    @Override
     public List<ItemStack> doHarvest(World world, int x, int y, int z, int fortune) {
         boolean update = false;
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
