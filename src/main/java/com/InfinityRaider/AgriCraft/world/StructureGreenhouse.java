@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.world;
 
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.entity.EntityVillagerFarmer;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -18,6 +20,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -165,14 +168,15 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 15, 4, 10, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 8, 4, 2, boundingBox);
         //place crops
+        ArrayList<CropPlant> plants = CropPlantHandler.getPlantsUpToTier(ConfigurationHandler.greenHouseMaxTier);
         for(int x=3;x<=7;x++) {
             for(int z=3;z<=7;z++) {
-                this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==0 && x%2==0) || (x==5 &&z==5));
+                this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==0 && x%2==0) || (x==5 &&z==5), plants);
             }
         }
         for(int x=9;x<=13;x++) {
             for(int z=3;z<=7;z++) {
-                this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==0 && x%2==0) || (x==11 &&z==5));
+                this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==0 && x%2==0) || (x==11 &&z==5), plants);
             }
         }
         this.spawnVillagers(world, boundingBox, 3, 1, 3, 1);
@@ -191,7 +195,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
     }
 
     //place a crop
-    protected boolean generateStructureCrop(World world, StructureBoundingBox boundingBox, int x, int y, int z, boolean crosscrop) {
+    protected boolean generateStructureCrop(World world, StructureBoundingBox boundingBox, int x, int y, int z, boolean crosscrop, ArrayList<CropPlant> plants) {
         int xCoord = this.getXWithOffset(x, z);
         int yCoord = this.getYWithOffset(y);
         int zCoord = this.getZWithOffset(x, z);
@@ -204,7 +208,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
                     crop.setCrossCrop(true);
                 }
                 else {
-                    ItemStack seed = SeedHelper.getRandomSeed(new Random(), false, 3);
+                    ItemStack seed = SeedHelper.getRandomSeed(world.rand, false, plants);
                     crop.setPlant((int) Math.ceil(Math.random() * 7), (int) Math.ceil(Math.random() * 7), (int) Math.ceil(Math.random() * 7), false, seed.getItem(), seed.getItemDamage());
                 }
             }

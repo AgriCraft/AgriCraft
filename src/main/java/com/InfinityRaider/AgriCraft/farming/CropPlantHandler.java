@@ -91,6 +91,18 @@ public class CropPlantHandler {
         return plants;
     }
 
+    public static ArrayList<CropPlant> getPlantsUpToTier(int tier) {
+        ArrayList<CropPlant> list = new ArrayList<CropPlant>();
+        for(HashMap<Integer, CropPlant> subMap:cropPlants.values()) {
+            for(CropPlant plant:subMap.values()) {
+                if(plant.getTier()<=tier) {
+                    list.add(plant);
+                }
+            }
+        }
+        return list;
+    }
+
     public static void init() {
         //register vanilla plants
         try {

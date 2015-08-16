@@ -62,6 +62,7 @@ public class ConfigurationHandler {
     public static int greenhouseIrrigatedWeight;
     public static int greenhouseIrrigatedLimit;
     public static boolean villagerEnabled;
+    public static int greenHouseMaxTier;
     //seed storage
     public static boolean disableSeedStorage;
     public static boolean disableSeedWarehouse;
@@ -132,6 +133,7 @@ public class ConfigurationHandler {
         greenhouseIrrigatedWeight = config.getInt("Irrigated greenhouse weight", CATEGORY_WORLDGEN, 2, 0, 100, "The weight for an irrigated greenhouse to be generated in a village");
         greenhouseIrrigatedLimit = config.getInt("Irrigated greenhouse limit", CATEGORY_WORLDGEN, 1, 0, 2, "The maximum number of irrigated greenhouses per village");
         villagerEnabled = config.getBoolean("Enable villagers", CATEGORY_WORLDGEN, true, "Set to false if you wish to disable villagers spawning in the AgriCraft greenhouses");
+        greenHouseMaxTier = config.getInt("Maximum crop tier", CATEGORY_WORLDGEN, 3, 1, 5, "The maximum tier of plants that will spawn in greenhouses");
         //storage
         disableSeedStorage = config.getBoolean("Disable seed storage system", CATEGORY_STORAGE, false, "set to true to disable the seed storage systems");
         disableSeedWarehouse = config.getBoolean("Disable seed storage warehouses", CATEGORY_STORAGE, false, "set to true to disable the seed storage warehouse blocks");

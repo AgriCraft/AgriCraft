@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.world;
 
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
@@ -12,6 +14,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 public class StructureGreenhouseIrrigated extends StructureGreenhouse {
@@ -248,14 +251,15 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 10, 4, 7, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 13, 4, 7, boundingBox);
         //place crops
+        ArrayList<CropPlant> plants = CropPlantHandler.getPlantsUpToTier(ConfigurationHandler.greenHouseMaxTier);
         for(int x=3;x<=7;x++) {
             for(int z=8;z<=12;z++) {
-                this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==5 &&z==10));
+                this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==5 &&z==10), plants);
             }
         }
         for(int x=9;x<=13;x++) {
             for(int z=8;z<=12;z++) {
-                this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==11 &&z==10));
+                this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==11 &&z==10), plants);
             }
         }
         //place water tank
