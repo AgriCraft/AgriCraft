@@ -215,7 +215,8 @@ agricraft_journal.information=Information
 agricraft_journal.tier=Tier
 agricraft_journal.fruits=Fruits
 agricraft_journal.growthStages=Growth Stages
-agricraft_journal.mutations=Mutations
+agricraft_journal.parentMutations=Discovered Parent Mutations
+agricraft_journal.childMutations=Discovered Child Mutations
 
 //agricraft seeds
 agricraft_journal.potato=The potato is the base of almost every meal. Some have even found ways to turn it into a beverage.

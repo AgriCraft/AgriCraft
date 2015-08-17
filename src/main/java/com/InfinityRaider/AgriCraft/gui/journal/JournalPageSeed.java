@@ -96,7 +96,7 @@ public class JournalPageSeed extends JournalPage {
         textComponents.add(getTier());
         textComponents.add(getFruitTitle());
         textComponents.add(getGrowthTitle());
-        textComponents.add(getMutationTitle());
+        textComponents.addAll(getMutationTitles());
         return textComponents;
     }
 
@@ -151,12 +151,23 @@ public class JournalPageSeed extends JournalPage {
         return new Component<String>(text, x, y, scale);
     }
 
-    private Component<String> getMutationTitle() {
-        String text = StatCollector.translateToLocal("agricraft_journal.mutations") + ": ";
+    private ArrayList<Component<String>> getMutationTitles() {
+        String parentText = StatCollector.translateToLocal("agricraft_journal.parentMutations") + ": ";
+        String childText = StatCollector.translateToLocal("agricraft_journal.childMutations") + ": ";
         int x = 132;
         int y = 13;
+        int n = getDiscoveredParentMutations().size();
+        int m = getDiscoveredChildMutations().size();
+        int offset = n==0?0:n*20+10;
         float scale = 0.5F;
-        return new Component<String>(text, x, y, scale);
+        ArrayList<Component<String>> list = new ArrayList<Component<String>>();
+        if(n>0) {
+            list.add(new Component<String>(parentText, x, y, scale));
+        }
+        if(m>0) {
+            list.add(new Component<String>(childText, x, y + offset, scale));
+        }
+        return list;
     }
 
 
@@ -200,10 +211,12 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private ArrayList<Component<ItemStack>> getSeeds() {
-        ArrayList<Mutation> mutations = getDiscoveredMutations();
+        ArrayList<Mutation> parentMutations = getDiscoveredParentMutations();
+        ArrayList<Mutation> childMutations = getDiscoveredChildMutations();
         ArrayList<Component<ItemStack>> seeds = new ArrayList<Component<ItemStack>>();
-        for(int i = 0;i<mutations.size();i++) {
-            Mutation mutation = mutations.get(i);
+        int n = parentMutations.size();
+        for(int i = 0;i<n;i++) {
+            Mutation mutation = parentMutations.get(i);
             int y = 21 + i*20;
             int x = 132;
             ItemStack resultStack = mutation.getResult();
@@ -213,13 +226,36 @@ public class JournalPageSeed extends JournalPage {
             seeds.add(new Component<ItemStack>(parent2Stack, x + 35, y, 16, 16));
             seeds.add(new Component<ItemStack>(resultStack, x + 69, y, 16, 16));
         }
+        for(int i = 0;i<childMutations.size();i++) {
+            Mutation mutation = childMutations.get(i);
+            int y = (n==0?21:31) + (n+i)*20;
+            int x = 132;
+            ItemStack resultStack = mutation.getResult();
+            ItemStack parent1Stack = mutation.getParents()[0];
+            ItemStack parent2Stack = mutation.getParents()[1];
+            seeds.add(new Component<ItemStack>(parent1Stack, x, y, 16, 16));
+            seeds.add(new Component<ItemStack>(parent2Stack, x + 35, y, 16, 16));
+            seeds.add(new Component<ItemStack>(resultStack, x + 69, y, 16, 16));
+
+        }
         return seeds;
     }
 
-    private ArrayList<Mutation> getDiscoveredMutations() {
+    private ArrayList<Mutation> getDiscoveredParentMutations() {
         ArrayList<Mutation> allMutations = new ArrayList<Mutation>();
         ArrayList<Mutation> mutations = new ArrayList<Mutation>();
         allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromParent(discoveredSeeds.get(page))));
+        for(Mutation mutation:allMutations) {
+            if(isMutationDiscovered(mutation)) {
+                mutations.add(mutation);
+            }
+        }
+        return mutations;
+    }
+
+    private ArrayList<Mutation> getDiscoveredChildMutations() {
+        ArrayList<Mutation> allMutations = new ArrayList<Mutation>();
+        ArrayList<Mutation> mutations = new ArrayList<Mutation>();
         allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromChild(discoveredSeeds.get(page))));
         for(Mutation mutation:allMutations) {
             if(isMutationDiscovered(mutation)) {
@@ -297,12 +333,14 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private ArrayList<Component<ResourceLocation>> getMutationTemplates() {
-        if(this.seeds == null) {
-            this.seeds = getSeeds();
-        }
+        int n = getDiscoveredParentMutations().size();
+        int m = getDiscoveredChildMutations().size();
         ArrayList<Component<ResourceLocation>> components = new ArrayList<Component<ResourceLocation>>();
-        for(int i=0;i<seeds.size()/3;i++) {
+        for(int i=0;i<n;i++) {
             components.add(new Component<ResourceLocation>(MUTATION_TEMPLATE, 132, 20+20*i, 86, 18));
+        }
+        for(int i=0;i<m;i++) {
+            components.add(new Component<ResourceLocation>(MUTATION_TEMPLATE, 132, (n==0?20:30)+20*(i+n), 86, 18));
         }
         return components;
     }
