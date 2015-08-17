@@ -29,7 +29,9 @@ public class ItemDebugger extends ItemAgricraft {
             DebugHelper.debug(player, world, x, y, z);
         }
         else if(world.getBlock(x, y, z) instanceof BlockBush) {
-            world.getBlock(x, y, z).updateTick(world, x, y, z, world.rand);
+            if(player.isSneaking()) {
+                world.getBlock(x, y, z).updateTick(world, x, y, z, world.rand);
+            }
         }
         else {
             if(!world.isRemote) {
