@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
+import com.InfinityRaider.AgriCraft.compatibility.adventofascension.AdventOfAscensionHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applemilktea.AppleMilkTeaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
@@ -144,6 +145,7 @@ public abstract class ModHelper {
 
     public static void findHelpers() {
         Class[] classes = {
+                AdventOfAscensionHelper.class,
                 AppleCoreHelper.class,
                 AppleMilkTeaHelper.class,
                 ArsMagicaHelper.class,
