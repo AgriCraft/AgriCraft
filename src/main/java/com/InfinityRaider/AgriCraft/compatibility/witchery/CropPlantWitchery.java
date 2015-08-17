@@ -7,8 +7,20 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
 
 public class CropPlantWitchery extends CropPlantGeneric {
+    private final int tier;
+
     public CropPlantWitchery(ItemSeeds seed) {
+        this(seed, 3);
+    }
+
+    public CropPlantWitchery(ItemSeeds seed, int tier) {
         super(seed);
+        this.tier = tier;
+    }
+
+    @Override
+    public int tier() {
+        return tier;
     }
 
     @Override

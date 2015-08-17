@@ -88,7 +88,7 @@ public final class WitcheryHelper extends ModHelper {
             e.printStackTrace();
         }
         try {
-            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedswormwood")));
+            CropPlantHandler.registerPlant(new CropPlantWitchery((ItemSeeds) Item.itemRegistry.getObject("witchery:seedswormwood"), 4));
         } catch (Exception e) {
             e.printStackTrace();
         }
