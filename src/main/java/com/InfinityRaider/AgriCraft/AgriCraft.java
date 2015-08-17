@@ -85,10 +85,10 @@ public class AgriCraft {
         Recipes.init();
         SeedHelper.init();
         GrowthRequirementHandler.init();
-        CustomCrops.initGrassSeeds();
         CropPlantHandler.init();
         CropProducts.init();
         WorldGen.init();
+        CustomCrops.initGrassSeeds();
         ModHelper.postInit();
         LogHelper.debug("Post-Initialization Complete");
     }
