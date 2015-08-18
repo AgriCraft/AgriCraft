@@ -26,7 +26,7 @@ public class CropProduct {
         String error = "Invalid Seed";
         boolean success = seedToChange!=null && seedToChange.getItem()!=null && seedToChange.getItem() instanceof ItemModSeed;
         if(success) {
-            BlockModPlant crop = (BlockModPlant) ((ItemModSeed) seedToChange.getItem()).getPlant();
+            BlockModPlant crop = ((ItemModSeed) seedToChange.getItem()).getPlant();
             MineTweakerAPI.apply(new AddAction(crop, fruitToAdd, weight));
         }
         if(!success) {
@@ -41,7 +41,7 @@ public class CropProduct {
         String error = "Invalid Seed";
         boolean success = seedToChange!=null && seedToChange.getItem()!=null && seedToChange.getItem() instanceof ItemModSeed;
         if(success) {
-            BlockModPlant crop = (BlockModPlant) ((ItemModSeed) seedToChange.getItem()).getPlant();
+            BlockModPlant crop = ((ItemModSeed) seedToChange.getItem()).getPlant();
             MineTweakerAPI.apply((new RemoveAction(crop, fruitToRemove)));
         }
         if(!success) {
