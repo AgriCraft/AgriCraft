@@ -70,6 +70,9 @@ public class GuiSeedAnalyzer extends GuiContainer {
 
     @Override
     protected void actionPerformed(GuiButton button) {
+        if(journalOpen) {
+            return;
+        }
         ItemStack journal = seedAnalyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId);
         if(journal != null) {
             if (journal.hasTagCompound()) {
@@ -111,7 +114,13 @@ public class GuiSeedAnalyzer extends GuiContainer {
     protected void mouseClicked(int x, int y, int rightClick) {
         if(journalOpen) {
             guiJournal.mouseClicked(x, y, rightClick);
-        } else {
+        } else if(x>=this.guiLeft+131 && x<this.guiLeft+149 && y>=this.guiTop+67 && y<this.guiTop+85) {
+            //do this manually or else minecraft plays the click sound 1000 times ><
+            GuiButton button = (GuiButton) this.buttonList.get(0);
+            button.func_146113_a(this.mc.getSoundHandler());
+            this.actionPerformed(button);
+        }
+        else {
             super.mouseClicked(x, y, rightClick);
         }
     }

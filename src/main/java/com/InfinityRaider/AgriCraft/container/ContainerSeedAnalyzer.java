@@ -50,14 +50,14 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
                 if (TileEntitySeedAnalyzer.isValid(stack) && this.getSlot(slot).isItemValid(stack)) {
                     this.getSlot(slot).putStack(stack);
                 }
-                break;
+                return;
             case journalSlotId:
                 if (this.getSlot(slot).isItemValid(stack)) {
                     this.getSlot(slot).putStack(stack);
                 }
-                break;
+                return;
         }
-
+        super.putStackInSlot(slot, stack);
     }
 
     @Override

@@ -53,12 +53,6 @@ public class GuiHandler implements IGuiHandler{
                 }
             case (journalID):
                 ItemStack journal = player.getCurrentEquippedItem();
-                /*
-                if (player.openContainer instanceof ContainerSeedAnalyzer) {
-                    journal = ((ContainerSeedAnalyzer) player.openContainer).seedAnalyzer.journal;
-                    player.closeScreen();
-                }
-                */
                 return new GuiJournal(journal);
             case (seedStorageID):
                 if (te != null && te instanceof TileEntitySeedStorage) {
