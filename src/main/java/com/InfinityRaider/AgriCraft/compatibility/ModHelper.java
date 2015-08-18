@@ -26,7 +26,6 @@ import com.InfinityRaider.AgriCraft.compatibility.minetweaker.MinetweakerHelper;
 import com.InfinityRaider.AgriCraft.compatibility.mobdropcrops.MobDropCropsHelper;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
-import com.InfinityRaider.AgriCraft.compatibility.pneumaticcraft.PneumaticCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.rotarycraft.RotaryCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.tconstruct.TinkersConstructHelper;
@@ -83,10 +82,7 @@ public abstract class ModHelper {
     }
 
     public static boolean handleRightClickOnCrop(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
-        if(isRightClickHandled(stack.getItem())) {
-            return modTools.get(stack.getItem()).useTool(world, x, y, z, player, stack, block, crop);
-        }
-        return false;
+        return isRightClickHandled(stack.getItem()) && modTools.get(stack.getItem()).useTool(world, x, y, z, player, stack, block, crop);
     }
 
     protected boolean useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
@@ -170,7 +166,7 @@ public abstract class ModHelper {
                 NaturaHelper.class,
                 NEIHelper.class,
                 PlantMegaPackHelper.class,
-                PneumaticCraftHelper.class,
+                //PneumaticCraftHelper.class,
                 PsychedelicraftHelper.class,
                 RotaryCraftHelper.class,
                 ThaumcraftHelper.class,

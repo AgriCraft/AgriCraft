@@ -26,7 +26,6 @@ Changelog
 -ADDED:  Crops for Ars Magica 2: cerublossom, desert nova, tarma root, aum, wakebloom
 -ADDED:  Button in Seed Analyzer GUI to read the journal
 -ADDED:  Some crops (flowers, cactus, ...) can be sheared to get the flower instead of the fruit
--ADDED:  Compatibility for PneumaticCraft crops
 -ADDED:  Compatibility for AppleMilkTea (mint)
 -ADDED:  Compatibility for RotaryCraft (canola)
 -ADDED:  Compatibility for Immersive Engineering (hemp)
