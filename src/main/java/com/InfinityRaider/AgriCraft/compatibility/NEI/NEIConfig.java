@@ -94,11 +94,12 @@ public class NEIConfig implements IConfigureNEI {
             Field[] blocks = Blocks.class.getDeclaredFields();
             for (Field field : blocks) {
                 try {
-                    if (BlockCustomWood.class.isAssignableFrom(field.get(null).getClass())) {
-                        Block block = (Block) field.get(null);
-                        if (block == null) {
-                            continue;
-                        }
+                    Object obj = field.get(null);
+                    if(obj == null) {
+                        continue;
+                    }
+                    if (BlockCustomWood.class.isAssignableFrom(obj.getClass())) {
+                        Block block = (Block) obj;
                         ItemStack stack = new ItemStack(block);
                         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
                         list.add(stack);
