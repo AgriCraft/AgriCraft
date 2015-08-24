@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,7 +24,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood {
 
     @Override
     protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
-        TessellatorV2 tessellator = TessellatorV2.instance;
+        Tessellator tessellator = Tessellator.instance;
         if(data.length>1) {
             this.teDummy.setOrientation(ForgeDirection.WEST);
         } else {
