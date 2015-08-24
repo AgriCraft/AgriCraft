@@ -443,7 +443,7 @@ public abstract class IOHelper {
             "plantmegapack:seedCucumber=plantmegapack:seedBeet+plantmegapack:seedBellPepperYellow";
 
     private static final String chococraftMutations =
-            "chococraft:Gysahl_Seeds=Agricraft:seedPotato+AgriCraft:seedTulipRed";
+            "chococraft:Gysahl_Seeds=AgriCraft:seedPotato+AgriCraft:seedTulipRed";
 
     private static final String chococraft_harvestcraftMutations =
             "chococraft:Gysahl_Seeds=harvestcraft:rutabagaseedItem+harvestcraft:beetseedItem";
