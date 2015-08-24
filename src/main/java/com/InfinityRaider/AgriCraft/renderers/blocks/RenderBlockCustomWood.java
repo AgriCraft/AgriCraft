@@ -8,10 +8,10 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public abstract class RenderBlockCustomWood extends RenderBlockBase {
-    protected TileEntityCustomWood teDummy;
+public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> extends RenderBlockBase {
+    protected T teDummy;
 
-    protected RenderBlockCustomWood(Block block, TileEntityCustomWood te, boolean inventory) {
+    protected RenderBlockCustomWood(Block block, T te, boolean inventory) {
         super(block, te, inventory);
         this.teDummy = te;
     }

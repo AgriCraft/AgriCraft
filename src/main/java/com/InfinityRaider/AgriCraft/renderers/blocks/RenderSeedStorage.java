@@ -17,7 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
 @SideOnly(Side.CLIENT)
-public class RenderSeedStorage extends RenderBlockCustomWood {
+public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStorage> {
     public RenderSeedStorage() {
         super(Blocks.blockSeedStorage, new TileEntitySeedStorage(), true);
     }

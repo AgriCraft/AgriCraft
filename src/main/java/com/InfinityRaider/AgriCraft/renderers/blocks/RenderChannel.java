@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SideOnly(Side.CLIENT)
-public class RenderChannel extends RenderBlockCustomWood {
+public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     public static AtomicInteger renderCallCounter = new AtomicInteger(0);
 
     public RenderChannel() {
@@ -32,14 +32,13 @@ public class RenderChannel extends RenderBlockCustomWood {
 
     @Override
     protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
-        TileEntityChannel channel = (TileEntityChannel) teDummy;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        this.renderBottom(channel, tessellator);
-        this.renderSide(channel, tessellator, 'x', -1);
-        this.renderSide(channel, tessellator, 'x', 1);
-        this.renderSide(channel, tessellator, 'z', -1);
-        this.renderSide(channel, tessellator, 'z', 1);
+        this.renderBottom(teDummy, tessellator);
+        this.renderSide(teDummy, tessellator, 'x', -1);
+        this.renderSide(teDummy, tessellator, 'x', 1);
+        this.renderSide(teDummy, tessellator, 'z', -1);
+        this.renderSide(teDummy, tessellator, 'z', 1);
         tessellator.draw();
     }
 

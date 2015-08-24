@@ -17,7 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class RenderTank extends RenderBlockCustomWood {
+public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
     public RenderTank() {
         super(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, new TileEntityTank(), true);
     }
@@ -25,8 +25,7 @@ public class RenderTank extends RenderBlockCustomWood {
     @Override
     protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
         Tessellator tessellator = Tessellator.instance;
-        TileEntityTank tank = (TileEntityTank) teDummy;
-        Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(tank.getIcon()));
+        Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(teDummy.getIcon()));
         //disable lighting
         GL11.glDisable(GL11.GL_LIGHTING);
         //tell the tessellator to start drawing

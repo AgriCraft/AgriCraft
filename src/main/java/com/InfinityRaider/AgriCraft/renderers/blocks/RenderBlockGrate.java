@@ -14,7 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
-public class RenderBlockGrate extends RenderBlockCustomWood {
+public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
     public RenderBlockGrate() {
         super(Blocks.blockGrate, new TileEntityGrate(), true);
     }
@@ -22,8 +22,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood {
     @Override
     protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
         Tessellator tessellator = Tessellator.instance;
-        TileEntityGrate grate = (TileEntityGrate) teDummy;
-        IIcon icon = grate.getIcon();
+        IIcon icon = teDummy.getIcon();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         //disable lighting
         GL11.glDisable(GL11.GL_LIGHTING);

@@ -13,7 +13,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
-public class RenderBlockFenceGate extends RenderBlockCustomWood {
+public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceGate> {
     public RenderBlockFenceGate() {
         super(Blocks.blockFenceGate, new TileEntityFenceGate(), true);
     }
@@ -21,8 +21,7 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood {
     @Override
     protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
         Tessellator tessellator = Tessellator.instance;
-        TileEntityFenceGate gate = (TileEntityFenceGate) teDummy;
-        IIcon icon = gate.getIcon();
+        IIcon icon = teDummy.getIcon();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         //disable lighting
         GL11.glDisable(GL11.GL_LIGHTING);

@@ -14,7 +14,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
-public class RenderBlockFence extends RenderBlockCustomWood {
+public class RenderBlockFence extends RenderBlockCustomWood<TileEntityFence> {
     public RenderBlockFence() {
         super(Blocks.blockFence, new TileEntityFence(), true);
     }
@@ -22,8 +22,7 @@ public class RenderBlockFence extends RenderBlockCustomWood {
     @Override
     protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
         Tessellator tessellator = Tessellator.instance;
-        TileEntityFence fence = (TileEntityFence) teDummy;
-        IIcon icon = fence.getIcon();
+        IIcon icon = teDummy.getIcon();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         //disable lighting
         GL11.glDisable(GL11.GL_LIGHTING);
