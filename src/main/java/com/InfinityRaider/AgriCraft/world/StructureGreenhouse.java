@@ -280,6 +280,5 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         this.func_143012_a(villageTag);
         villageTag.setInteger("VCount", nr);
         this.func_143011_b(villageTag);
-
     }
 }

@@ -1,12 +1,15 @@
 package com.InfinityRaider.AgriCraft.handler;
 
+import com.InfinityRaider.AgriCraft.container.ContainerPeripheral;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorage;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageController;
+import com.InfinityRaider.AgriCraft.gui.GuiPeripheral;
 import com.InfinityRaider.AgriCraft.gui.GuiSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.gui.GuiSeedStorage;
 import com.InfinityRaider.AgriCraft.gui.GuiSeedStorageController;
 import com.InfinityRaider.AgriCraft.gui.journal.GuiJournal;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
@@ -21,6 +24,7 @@ public class GuiHandler implements IGuiHandler{
     public static final int journalID = 2;
     public static final int seedStorageID = 3;
     public static final int seedStorageControllerID = 4;
+    public static final int peripheralID = 5;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -38,6 +42,10 @@ public class GuiHandler implements IGuiHandler{
             case(seedStorageControllerID):
                 if(te != null && te instanceof TileEntitySeedStorageController) {
                     return new ContainerSeedStorageController(player.inventory, (TileEntitySeedStorageController) te);
+                }
+            case(peripheralID):
+                if(te!= null && te instanceof TileEntityPeripheral) {
+                    return new ContainerPeripheral(player.inventory, (TileEntityPeripheral) te);
                 }
         }
         return null;
@@ -61,6 +69,10 @@ public class GuiHandler implements IGuiHandler{
             case (seedStorageControllerID):
                 if (te != null && te instanceof TileEntitySeedStorageController) {
                     return new GuiSeedStorageController(player.inventory, (TileEntitySeedStorageController) te);
+                }
+            case (peripheralID)   :
+                if(te!= null && te instanceof TileEntityPeripheral) {
+                    return new GuiPeripheral(player.inventory, (TileEntityPeripheral) te);
                 }
             default:
                 return null;

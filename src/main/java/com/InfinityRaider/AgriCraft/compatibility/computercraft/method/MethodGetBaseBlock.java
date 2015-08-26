@@ -18,7 +18,8 @@ public class MethodGetBaseBlock extends MethodCropBase {
             return null;
         }
         BlockWithMeta block = GrowthRequirementHandler.getGrowthRequirement(plant).getRequiredBlock();
-        return new Object[] {(new ItemStack(block.getBlock(), 1, block.getMeta())).getDisplayName()};
+        String msg = block==null?"null":(new ItemStack(block.getBlock(), 1, block.getMeta())).getDisplayName();
+        return new Object[] {msg};
     }
 
     @Override

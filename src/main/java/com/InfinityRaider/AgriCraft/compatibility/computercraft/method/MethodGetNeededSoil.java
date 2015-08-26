@@ -13,7 +13,8 @@ public class MethodGetNeededSoil extends MethodCropBase {
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) {
         BlockWithMeta block = GrowthRequirementHandler.getGrowthRequirement(crop.getPlant()).getSoil();
-        return new Object[] {(new ItemStack(block.getBlock(), 1, block.getMeta())).getDisplayName()};
+        String msg = block==null?"null":(new ItemStack(block.getBlock(), 1, block.getMeta())).getDisplayName();
+        return new Object[] {msg};
     }
 
     @Override
