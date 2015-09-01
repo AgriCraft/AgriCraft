@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.api.v1.IFertilizer;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
@@ -10,7 +10,7 @@ import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
-import com.InfinityRaider.AgriCraft.network.MessageFertiliserApplied;
+import com.InfinityRaider.AgriCraft.network.MessageFertilizerApplied;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -111,7 +111,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
             }
         } else {
             //15% chance to spawn weeds
-            if(ConfigurationHandler.enableWeeds && (Math.random() < Constants.WEED_SPAWN_CHANCE)) {
+            if(ConfigurationHandler.enableWeeds && (Math.random() < ConfigurationHandler.weedSpawnChance)) {
                 crop.spawnWeed();
             }
             else if(crop.isCrossCrop()) {
@@ -235,11 +235,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
                 return false;
             }
             //fertiliser
-            else if (heldItem.getItem() instanceof IFertiliser) {
-                IFertiliser fertiliser = (IFertiliser) heldItem.getItem();
-                if (crop.allowFertilizer(fertiliser)) {
-                    crop.applyFertilizer(fertiliser, world.rand);
-                    NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertiliserApplied(heldItem, x, y, z), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 32));
+            else if (heldItem.getItem() instanceof IFertilizer) {
+                IFertilizer fertilizer = (IFertilizer) heldItem.getItem();
+                if (crop.allowFertilizer(fertilizer)) {
+                    crop.applyFertilizer(fertilizer, world.rand);
+                    NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertilizerApplied(heldItem, x, y, z), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 32));
                     if (!player.capabilities.isCreativeMode) {
                         heldItem.stackSize = heldItem.stackSize - 1;
                     }

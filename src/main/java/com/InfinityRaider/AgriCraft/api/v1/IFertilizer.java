@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public interface IFertiliser {
+public interface IFertilizer {
     /** return true if this fertilizer is allowed to speed up growth of a crop of this tier */
     public boolean isFertilizerAllowed(int tier);
 

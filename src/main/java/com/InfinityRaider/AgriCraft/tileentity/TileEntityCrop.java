@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
-import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.api.v1.IFertilizer;
 import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
@@ -57,7 +57,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         return this.hasPlant()?stats.copy():null;
     }
 
-    public short getGrowth() {return this.weed ? Constants.WEED_MULTIPLIER : stats.getGrowth();}
+    public short getGrowth() {return this.weed ? (short)ConfigurationHandler.weedGrowthMultiplier : stats.getGrowth();} //Pardon the cast.
 
     public short getGain() {return stats.getGain();}
 
@@ -77,7 +77,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** get growthrate */
-    public int getGrowthRate() {return this.weed ? Constants.WEED_GROWTH_RATE : plant.getGrowthRate();}
+    public int getGrowthRate() {return this.weed ? ConfigurationHandler.weedGrowthRate : plant.getGrowthRate();}
 
     /** check to see if there is a plant here */
     public boolean hasPlant() {return this.plant!=null;}
@@ -231,21 +231,21 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     //is fertilizer allowed
-    public boolean allowFertilizer(IFertiliser fertiliser) {
+    public boolean allowFertilizer(IFertilizer fertilizer) {
         if(this.crossCrop) {
-            return ConfigurationHandler.bonemealMutation && fertiliser.canTriggerMutation();
+            return ConfigurationHandler.bonemealMutation && fertilizer.canTriggerMutation();
         }
         if(this.hasWeed()) {
             return true;
         }
         if(this.hasPlant()) {
-            return fertiliser.isFertilizerAllowed(plant.getTier());
+            return fertilizer.isFertilizerAllowed(plant.getTier());
         }
         return false;
     }
 
     //when fertiliser is applied
-    public void applyFertilizer(IFertiliser fertilizer, Random rand) {
+    public void applyFertilizer(IFertilizer fertilizer, Random rand) {
         if(fertilizer.hasSpecialBehaviour()) {
             fertilizer.onFertilizerApplied(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord, rand);
         }

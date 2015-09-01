@@ -409,7 +409,7 @@ public class APIimplv1 implements APIv1 {
 		if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
 			return true;
 		}
-		if (fertilizer.getItem() instanceof IFertiliser) {
+		if (fertilizer.getItem() instanceof IFertilizer) {
 			return true;
 		}
 		return false;
@@ -425,8 +425,8 @@ public class APIimplv1 implements APIv1 {
 			TileEntityCrop crop = (TileEntityCrop) te;
 			if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
 				return crop.canBonemeal();
-			} else if (fertilizer.getItem() instanceof IFertiliser) {
-				return crop.allowFertilizer((IFertiliser) fertilizer.getItem());
+			} else if (fertilizer.getItem() instanceof IFertilizer) {
+				return crop.allowFertilizer((IFertilizer) fertilizer.getItem());
 			}
 		}
 		return false;
@@ -442,8 +442,8 @@ public class APIimplv1 implements APIv1 {
 			fertilizer.stackSize--;
 			world.playAuxSFX(2005, x, y, z, 0);
 			return true;
-		} else if (fertilizer.getItem() instanceof IFertiliser) {
-			((TileEntityCrop) world.getTileEntity(x, y, z)).applyFertilizer((IFertiliser) fertilizer.getItem(), world.rand);
+		} else if (fertilizer.getItem() instanceof IFertilizer) {
+			((TileEntityCrop) world.getTileEntity(x, y, z)).applyFertilizer((IFertilizer) fertilizer.getItem(), world.rand);
 			fertilizer.stackSize--;
 			world.playAuxSFX(2005, x, y, z, 0);
 			return true;

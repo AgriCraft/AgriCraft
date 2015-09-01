@@ -1,11 +1,11 @@
 package com.InfinityRaider.AgriCraft.compatibility.magicalcrops;
 
-import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.api.v1.IFertilizer;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
-public final class MagicalCropsFertiliser implements IFertiliser {
+public final class MagicalCropsFertilizer implements IFertilizer {
     @Override
     public boolean isFertilizerAllowed(int tier) {
         return true;

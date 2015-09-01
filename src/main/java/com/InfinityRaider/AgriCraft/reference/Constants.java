@@ -16,11 +16,6 @@ public final class Constants {
     // Mature meta-data value.
     public static final int MATURE = 7; //As per java standards, constants are to be in all-caps.
     
-    // Weed Growth
-    public static final int WEED_MULTIPLIER = 2;
-    public static final int WEED_GROWTH_RATE = 50;
-    public static final double WEED_SPAWN_CHANCE = 0.15;
-    
     // Growth Rates, as per Tier.
     public static final int[] GROWTH_TIER = { //This provides for faster tier lookup based off of a numeric. Also allows for easier addition of tier.
     		50, //Tier 0, a placeholder and default value.
