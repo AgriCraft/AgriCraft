@@ -35,7 +35,7 @@ public class RenderValve extends RenderChannel {
         IIcon icon = teDummy.getIcon();
         Tessellator tessellator = Tessellator.instance;
         //render the iron valves
-        float f = Constants.unit;
+        float f = Constants.UNIT;
         IIcon ironIcon = Blocks.iron_block.getIcon(0, 0);
         //disable lighting
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -80,7 +80,7 @@ public class RenderValve extends RenderChannel {
         Tessellator tessellator1 = Tessellator.instance;
         TileEntityValve valve = (TileEntityValve) tile;
         if (valve != null) {
-            float unit = Constants.unit;
+            float unit = Constants.UNIT;
             this.renderWoodChannel(valve, tessellator2);
             this.drawWater(valve, tessellator2);
 

@@ -80,7 +80,7 @@ public class CropPlantHemp extends CropPlantTall {
     @SideOnly(Side.CLIENT)
     @Override
     public float getHeight(int meta) {
-        return meta<=maxMetaBottomBlock()? Constants.unit*13:Constants.unit*32;
+        return meta<=maxMetaBottomBlock()? Constants.UNIT*13:Constants.UNIT*32;
     }
 
     @SideOnly(Side.CLIENT)

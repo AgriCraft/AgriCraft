@@ -116,9 +116,9 @@ public class ItemTrowel extends ItemAgricraft implements ITrowel {
         }
         NBTTagCompound seedTag = seed.getTagCompound();
         boolean initialised = seedTag!=null;
-        short growth = (initialised && seedTag.hasKey(Names.NBT.growth))?seedTag.getShort(Names.NBT.growth): Constants.defaultGrowth;
-        short gain = (initialised && seedTag.hasKey(Names.NBT.gain))?seedTag.getShort(Names.NBT.gain): Constants.defaultGain;
-        short strength = (initialised && seedTag.hasKey(Names.NBT.strength))?seedTag.getShort(Names.NBT.strength): Constants.defaultStrength;
+        short growth = (initialised && seedTag.hasKey(Names.NBT.growth))?seedTag.getShort(Names.NBT.growth): Constants.DEFAULT_GROWTH;
+        short gain = (initialised && seedTag.hasKey(Names.NBT.gain))?seedTag.getShort(Names.NBT.gain): Constants.DEFAULT_GAIN;
+        short strength = (initialised && seedTag.hasKey(Names.NBT.strength))?seedTag.getShort(Names.NBT.strength): Constants.DEFAULT_STRENGTH;
         boolean analysed = (initialised && seedTag.hasKey(Names.NBT.analyzed)) && seedTag.getBoolean(Names.NBT.analyzed);
         NBTTagCompound tag = new NBTTagCompound();
         SeedHelper.setNBT(tag, growth, gain, strength, analysed);

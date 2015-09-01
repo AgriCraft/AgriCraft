@@ -50,6 +50,9 @@ public class ConfigurationHandler {
     public static int cropStatDivisor;
     public static boolean enableWeeds;
     public static boolean weedsWipePlants;
+    public static int weedGrowthMultiplier;
+    public static int weedGrowthRate;
+    public static float weedSpawnChance;
     public static boolean enableHandRake;
     public static boolean bonemealMutation;
     public static boolean onlyMatureDropSeeds;
@@ -115,11 +118,14 @@ public class ConfigurationHandler {
         renderBookInAnalyzer = config.getBoolean("Render journal in analyzer", CATEGORY_AGRICRAFT, true, "set to false to not render the journal on the analyzer");
         //farming
         disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", CATEGORY_FARMING, false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
-        mutationChance = (double) config.getFloat("Mutation Chance",CATEGORY_FARMING, (float) Constants.defaultMutationChance, 0, 1 , "Define mutation chance (0.0 means no mutations, only spreading and 1.0 means only mutations no spreading");
+        mutationChance = (double) config.getFloat("Mutation Chance",CATEGORY_FARMING, (float) Constants.DEFAULT_MUTATION_CHANCE, 0, 1 , "Define mutation chance (0.0 means no mutations, only spreading and 1.0 means only mutations no spreading");
         singleSpreadsIncrement = config.getBoolean("Single spread stat increase", CATEGORY_FARMING, false, "Set to true to allow crops that spread from one single crop to increase stats");
         spreadingDifficulty = config.getInt("Farming difficulty", CATEGORY_FARMING, 3, 1, 3, "Farming difficulty: 1 = Crops can inherit stats from any crop. 2 = Crops only inherit stats from parent and identical crops. 3 = Same as 2, but any other nearby crop will affect stats negatively.");
         cropStatDivisor = config.getInt("Crop stat divisor", CATEGORY_FARMING, 2, 1, 3, "On a mutation the stats on the crop will be divided by this number");
         enableWeeds = config.getBoolean("Enable weeds", CATEGORY_FARMING, true, "set to false if you wish to disable weeds");
+        weedGrowthMultiplier = config.getInt("Weed Growth Multiplier", CATEGORY_FARMING, 2, 1, 2, "Ranges from 1-2 inclusive.");
+        weedGrowthRate = config.getInt("Weed Growth Rate", CATEGORY_FARMING, 50, 10, 50, "The average number of growth ticks for the weed to grow.");
+        weedSpawnChance = config.getFloat("Weed Spawn Chance", CATEGORY_FARMING, 0.15f, 0.05f, 0.95f, "The percent chance of weeds to spawn or spread. At 95% abandon all hope of farming. Range 0.05-0.95.");
         weedsWipePlants = enableWeeds && config.getBoolean("Weeds can overtake plants",CATEGORY_FARMING,true,"set to false if you don't want weeds to be able to overgrow other plants");
         enableHandRake = config.getBoolean("Enable Hand Rake", CATEGORY_FARMING, true, "When enabled, weeds can only be removed by using this Hand Rake tool");
         bonemealMutation = config.getBoolean("Bonemeal Mutations", CATEGORY_FARMING, false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");

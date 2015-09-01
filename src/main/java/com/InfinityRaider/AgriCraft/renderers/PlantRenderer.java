@@ -166,7 +166,7 @@ public abstract class PlantRenderer {
         float f1 = (float)(l >> 8 & 255) / 255.0F;
         float f2 = (float)(l & 255) / 255.0F;
         tessellator.setColorOpaque_F(f, f1, f2);
-        tessellator.addTranslation(x, y - Constants.unit * 2 * translation, z);
+        tessellator.addTranslation(x, y - Constants.UNIT * 2 * translation, z);
         //render the vines
         if(mature) {
             renderStemPattern(tessellator, icon);
@@ -174,10 +174,10 @@ public abstract class PlantRenderer {
         else {
             renderCrossPattern(tessellator, icon, 0);
         }
-        tessellator.addTranslation(-x, -y+Constants.unit*2*translation, -z);
+        tessellator.addTranslation(-x, -y+Constants.UNIT*2*translation, -z);
         //render the block
         if(mature) {
-            float u = Constants.unit;
+            float u = Constants.UNIT;
             boolean renderFacesSetting = renderer.renderAllFaces;
             renderer.renderAllFaces = true;
 

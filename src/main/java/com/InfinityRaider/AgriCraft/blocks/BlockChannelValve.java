@@ -27,7 +27,7 @@ import java.util.List;
 public class BlockChannelValve extends BlockCustomWood {
     public BlockChannelValve() {
         super();
-        this.setBlockBounds(4*Constants.unit, 0, 4*Constants.unit, 12*Constants.unit, 1, 12*Constants.unit);
+        this.setBlockBounds(4*Constants.UNIT, 0, 4*Constants.UNIT, 12*Constants.UNIT, 1, 12*Constants.UNIT);
     }
 
     @Override

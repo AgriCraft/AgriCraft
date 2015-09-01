@@ -80,7 +80,7 @@ public class CropPlantBiomesOPlenty extends CropPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {
-        return Constants.unit*13;
+        return Constants.UNIT*13;
     }
 
     @Override

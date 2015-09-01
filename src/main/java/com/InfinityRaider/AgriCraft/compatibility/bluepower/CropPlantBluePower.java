@@ -37,7 +37,7 @@ public class CropPlantBluePower extends CropPlantTallGeneric {
     @Override
     @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {
-        return (meta>maxMetaBottomBlock()?2:1)* Constants.unit*16;
+        return (meta>maxMetaBottomBlock()?2:1)* Constants.UNIT*16;
     }
 
     @Override

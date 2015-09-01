@@ -73,7 +73,7 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
     @Override
     @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {
-        return (meta>maxMetaBottomBlock()?2:1)*Constants.unit*13;
+        return (meta>maxMetaBottomBlock()?2:1)*Constants.UNIT*13;
     }
 
 

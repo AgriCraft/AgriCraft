@@ -64,13 +64,13 @@ public class TileEntityGrate extends TileEntityCustomWood {
     public boolean isPlayerInFront(EntityPlayer player) {
         double offset = (this.offset*7.000D)/16.000D;
         if(this.orientation == 0) {
-            return player.posZ < this.zCoord + offset + Constants.unit;
+            return player.posZ < this.zCoord + offset + Constants.UNIT;
         }
         else if(this.orientation == 1) {
-            return player.posX < this.xCoord + offset + Constants.unit;
+            return player.posX < this.xCoord + offset + Constants.UNIT;
         }
         else {
-            return player.posY < this.yCoord + offset + Constants.unit;
+            return player.posY < this.yCoord + offset + Constants.UNIT;
         }
     }
 
@@ -100,13 +100,13 @@ public class TileEntityGrate extends TileEntityCustomWood {
     public AxisAlignedBB getBoundingBox() {
         double offset = (this.offset*7.000D)/16.000D;
         if(this.orientation == 0) {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord+offset, xCoord+1, yCoord+1, zCoord+offset+2*Constants.unit);
+            return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord+offset, xCoord+1, yCoord+1, zCoord+offset+2*Constants.UNIT);
         }
         else if(this.orientation == 1) {
-            return AxisAlignedBB.getBoundingBox(xCoord+offset, yCoord, zCoord, xCoord+offset+2*Constants.unit, yCoord+1, zCoord+1);
+            return AxisAlignedBB.getBoundingBox(xCoord+offset, yCoord, zCoord, xCoord+offset+2*Constants.UNIT, yCoord+1, zCoord+1);
         }
         else {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord+offset, zCoord, xCoord+1, yCoord+offset+2*Constants.unit, zCoord+1);
+            return AxisAlignedBB.getBoundingBox(xCoord, yCoord+offset, zCoord, xCoord+1, yCoord+offset+2*Constants.UNIT, zCoord+1);
         }
     }
 

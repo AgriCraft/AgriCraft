@@ -18,14 +18,13 @@ import java.util.Random;
 /** main class used by TileEntityCrop to perform its functionality, only make one object of this per seed object and register it using CropPlantHandler.registerPlant(CropPlant plant) */
 public abstract class CropPlant {
     public final int getGrowthRate() {
-        switch(getTier()) {
-            case 1: return Constants.growthTier1;
-            case 2: return Constants.growthTier2;
-            case 3: return Constants.growthTier3;
-            case 4: return Constants.growthTier4;
-            case 5: return Constants.growthTier5;
-            default: return 0;
-        }
+    	int tier = getTier();
+    	
+    	if (tier > 0 && tier <= Constants.GROWTH_TIER.length) { //Worst-case two comparisons instead of five.
+    		return Constants.GROWTH_TIER[tier];
+    	} else {
+    		return Constants.GROWTH_TIER[0];
+    	}
     }
 
     /** This is called to get the actual tier of a seed */
@@ -74,7 +73,7 @@ public abstract class CropPlant {
 
     /** Checks if the plant is mature */
     public boolean isMature(IBlockAccess world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z)>=7;
+        return world.getBlockMetadata(x, y, z) >= Constants.MATURE; //Seven was a magic number.
     }
 
     /** Gets the height of the crop */
