@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.network;
 
-import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.api.v1.IFertilizer;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -9,18 +9,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class MessageFertiliserApplied extends MessageAgriCraft {
+public class MessageFertilizerApplied extends MessageAgriCraft {
     private int x;
     private int y;
     private int z;
     private Item fertiliser;
     private int meta;
 
-    public MessageFertiliserApplied() {
+    public MessageFertilizerApplied() {
 
     }
 
-    public MessageFertiliserApplied(ItemStack fertiliser, int x, int y, int z) {
+    public MessageFertilizerApplied(ItemStack fertiliser, int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -46,11 +46,11 @@ public class MessageFertiliserApplied extends MessageAgriCraft {
         buf.writeInt(this.meta);
     }
 
-    public static class MessageHandler implements IMessageHandler<MessageFertiliserApplied, IMessage> {
+    public static class MessageHandler implements IMessageHandler<MessageFertilizerApplied, IMessage> {
         @Override
-        public IMessage onMessage(MessageFertiliserApplied message, MessageContext ctx) {
-            if(message!=null && message.fertiliser!=null && message.fertiliser instanceof IFertiliser) {
-                ((IFertiliser) message.fertiliser).performClientAnimations(message.meta, Minecraft.getMinecraft().thePlayer.worldObj, message.x, message.y, message.z);
+        public IMessage onMessage(MessageFertilizerApplied message, MessageContext ctx) {
+            if(message!=null && message.fertiliser!=null && message.fertiliser instanceof IFertilizer) {
+                ((IFertilizer) message.fertiliser).performClientAnimations(message.meta, Minecraft.getMinecraft().thePlayer.worldObj, message.x, message.y, message.z);
             }
             return null;
         }

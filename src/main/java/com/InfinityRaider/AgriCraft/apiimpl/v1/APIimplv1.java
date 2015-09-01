@@ -362,7 +362,7 @@ public class APIimplv1 implements APIv1 {
 					if (seed.stackTagCompound != null && seed.stackTagCompound.hasKey(Names.NBT.growth)) {
 						crop.setPlant(seed.stackTagCompound.getInteger(Names.NBT.growth), seed.stackTagCompound.getInteger(Names.NBT.gain), seed.stackTagCompound.getInteger(Names.NBT.strength), seed.stackTagCompound.getBoolean(Names.NBT.analyzed), seed.getItem(), seed.getItemDamage());
 					} else {
-						crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, false, seed.getItem(), seed.getItemDamage());
+						crop.setPlant(Constants.DEFAULT_GROWTH, Constants.DEFAULT_GAIN, Constants.DEFAULT_STRENGTH, false, seed.getItem(), seed.getItemDamage());
 					}
 					crop.markForUpdate();
 					seed.stackSize--;
@@ -409,7 +409,7 @@ public class APIimplv1 implements APIv1 {
 		if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
 			return true;
 		}
-		if (fertilizer.getItem() instanceof IFertiliser) {
+		if (fertilizer.getItem() instanceof IFertilizer) {
 			return true;
 		}
 		return false;
@@ -425,8 +425,8 @@ public class APIimplv1 implements APIv1 {
 			TileEntityCrop crop = (TileEntityCrop) te;
 			if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
 				return crop.canBonemeal();
-			} else if (fertilizer.getItem() instanceof IFertiliser) {
-				return crop.allowFertiliser((IFertiliser) fertilizer.getItem());
+			} else if (fertilizer.getItem() instanceof IFertilizer) {
+				return crop.allowFertilizer((IFertilizer) fertilizer.getItem());
 			}
 		}
 		return false;
@@ -442,8 +442,8 @@ public class APIimplv1 implements APIv1 {
 			fertilizer.stackSize--;
 			world.playAuxSFX(2005, x, y, z, 0);
 			return true;
-		} else if (fertilizer.getItem() instanceof IFertiliser) {
-			((TileEntityCrop) world.getTileEntity(x, y, z)).applyFertiliser((IFertiliser) fertilizer.getItem(), world.rand);
+		} else if (fertilizer.getItem() instanceof IFertilizer) {
+			((TileEntityCrop) world.getTileEntity(x, y, z)).applyFertilizer((IFertilizer) fertilizer.getItem(), world.rand);
 			fertilizer.stackSize--;
 			world.playAuxSFX(2005, x, y, z, 0);
 			return true;

@@ -24,6 +24,6 @@ public abstract class NetworkWrapperAgriCraft {
         wrapper.registerMessage(MessageGuiSeedStorageClearSeed.MessageHandler.class, MessageGuiSeedStorageClearSeed.class, messageGuiSeedStorageClearSeed_ID, Side.SERVER);
         wrapper.registerMessage(MessageTileEntitySeedStorage.MessageHandler.class, MessageTileEntitySeedStorage.class, messageTileEntitySeedStorage_ID, Side.CLIENT);
         wrapper.registerMessage(MessageSyncMutation.MessageHandler.class, MessageSyncMutation.class, messageSyncMutation_ID, Side.CLIENT);
-        wrapper.registerMessage(MessageFertiliserApplied.MessageHandler.class, MessageFertiliserApplied.class, messageFertiliserApplied_ID, Side.CLIENT);
+        wrapper.registerMessage(MessageFertilizerApplied.MessageHandler.class, MessageFertilizerApplied.class, messageFertiliserApplied_ID, Side.CLIENT);
     }
 }

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.magicalcrops;
 
-import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.api.v1.IFertilizer;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public final class MagicalCropsHelper extends ModHelper {
     private boolean newVersion;
-    private IFertiliser fertiliser;
+    private IFertilizer fertilizer;
 
     @Override
     protected void init() {
@@ -128,8 +128,8 @@ public final class MagicalCropsHelper extends ModHelper {
 
     @Override
     protected boolean useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
-        if(fertiliser!=null) {
-            crop.applyFertiliser(fertiliser, world.rand);
+        if(fertilizer!=null) {
+            crop.applyFertilizer(fertilizer, world.rand);
             if(!player.capabilities.isCreativeMode) {
                 player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
             }
@@ -143,7 +143,7 @@ public final class MagicalCropsHelper extends ModHelper {
         if(newVersion) {
             return null;
         }
-        fertiliser = new MagicalCropsFertiliser();
+        fertilizer = new MagicalCropsFertilizer();
         ArrayList<Item> list = new ArrayList<Item>();
         list.add((Item) Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer"));
         return list;

@@ -6,25 +6,31 @@ public final class Constants {
 
     public static final boolean LOG_RENDER_CALLS = false;
 
-    public static final Random rand = new Random();
+    public static final Random rand = new Random(); //This is an odd choice.
     // 1/16th
     public static final float unit = 0.06250F;
 
     // 1 bucket in millibuckets
     public static final int mB = 1000;
 
-    //growth tiers
-    public static final int growthTier1 = 50;
-    public static final int growthTier2 = 45;
-    public static final int growthTier3 = 30;
-    public static final int growthTier4 = 25;
-    public static final int growthTier5 = 20;
+    // Mature meta-data value.
+    public static final int MATURE = 7; //As per java standards, constants are to be in all-caps.
+    
+    // Growth Rates, as per Tier.
+    public static final int[] GROWTH_TIER = { //This provides for faster tier lookup based off of a numeric. Also allows for easier addition of tier.
+    		50, //Tier 0, a placeholder and default value.
+    		50, //Tier I
+    		45, //Tier II
+    		35, //Tier III, By changing this from 30 to 35 a more normalized s-curve is achieved.
+    		25, //Tier VI
+    		20  //Tier V
+    	};
 
     //default plant stats
-    public static final short defaultGrowth = 1;
-    public static final short defaultGain = 1;
-    public static final short defaultStrength = 1;
-    public static final int defaultTier = 1;
+    public static final short DEFAULT_GROWTH = 1;
+    public static final short DEFAULT_GAIN = 1;
+    public static final short DEFAULT_STRENGTH = 1;
+    public static final int DEFAULT_TIER = 1;
 
     //default mutation chance
     public static final double defaultMutationChance = 0.2;
