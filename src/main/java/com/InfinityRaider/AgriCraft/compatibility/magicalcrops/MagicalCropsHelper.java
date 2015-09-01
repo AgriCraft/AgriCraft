@@ -129,7 +129,7 @@ public final class MagicalCropsHelper extends ModHelper {
     @Override
     protected boolean useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
         if(fertiliser!=null) {
-            crop.applyFertiliser(fertiliser, world.rand);
+            crop.applyFertilizer(fertiliser, world.rand);
             if(!player.capabilities.isCreativeMode) {
                 player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
             }

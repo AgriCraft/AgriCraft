@@ -89,12 +89,15 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     @Override
     public void updateTick(World world, int x, int y, int z, Random rnd) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        if(crop.hasPlant()) {
+        if(crop.hasPlant() || crop.hasWeed()) {
             Event.Result allowGrowthResult = AppleCoreHelper.validateGrowthTick(this, world, x, y, z, rnd);
             if (allowGrowthResult != Event.Result.DENY) {
-                if (!crop.isMature() && crop.isFertile()) {
+            	if (crop.isMature() && crop.hasWeed() && ConfigurationHandler.enableWeeds){
+                	crop.spreadWeed();
+                }
+            	else if (crop.isFertile()) {
                     //multiplier from growth stat
-                    double growthBonus = 1.0 + (crop.getGrowth() + 0.00) / 10;
+                    double growthBonus = 1.0 + crop.getGrowth() / 10.0;
                     //multiplier defined in the config
                     float global = 2.0F-ConfigurationHandler.growthMultiplier;
                     //crop dependent base growth rate
@@ -106,27 +109,9 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
                     }
                 }
             }
-        } else if(crop.hasWeed()) {
-            Event.Result allowGrowthResult = AppleCoreHelper.validateGrowthTick(this, world, x, y, z, rnd);
-            if (allowGrowthResult != Event.Result.DENY) {
-                int meta = world.getBlockMetadata(x, y, z);
-                if (meta<7) {
-                    double multiplier = 1.0 + (10 + 0.00) / 10;
-                    float growthRate = (float) Constants.growthTier1;
-                    boolean shouldGrow = (rnd.nextDouble()<=(growthRate * multiplier)/100);
-                    if (shouldGrow) {
-                        crop.applyGrowthTick();
-                    }
-                }
-                else {
-                    if(ConfigurationHandler.enableWeeds) {
-                        crop.spreadWeed();
-                    }
-                }
-            }
         } else {
-            //10%chance to spawn weeds
-            if(ConfigurationHandler.enableWeeds && Math.random()<0.10) {
+            //15% chance to spawn weeds
+            if(ConfigurationHandler.enableWeeds && (Math.random() < Constants.WEED_SPAWN_CHANCE)) {
                 crop.spawnWeed();
             }
             else if(crop.isCrossCrop()) {
@@ -138,16 +123,16 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     //this harvests the crop, player may be null if harvested trough automation
     public boolean harvest(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
-            boolean update = false;
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             if(crop.hasWeed()) {
                 crop.clearWeed();   //update is not needed because it is called in the clearWeed() method
-            }else if(crop.isCrossCrop()) {
+                return false;
+            } else if(crop.isCrossCrop()) {
                 crop.setCrossCrop(false);
                 this.dropBlockAsItem(world, x, y, z, new ItemStack(Items.crops, 1));
+                return false;
             } else if(crop.isMature() && crop.allowHarvest(player)) {
                 crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
-                update = true;
                 ArrayList<ItemStack> drops = crop.getFruits();
                 for (ItemStack drop : drops) {
                     if(drop==null || drop.getItem()==null) {
@@ -155,37 +140,28 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
                     }
                     this.dropBlockAsItem(world, x, y, z, drop);
                 }
-            }
-            if (update) {
                 crop.markForUpdate();
+                return true;
             }
-            return update;
         }
         return false;
     }
 
     public void setCrossCrop(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
-            boolean update = false;
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-            if (crop.hasWeed()) {
-                return;
-            }
-            if(!crop.isCrossCrop() && !crop.hasPlant()) {
+            if(!crop.hasWeed() && !crop.isCrossCrop() && !crop.hasPlant()) {
                 crop.setCrossCrop(true);
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode?player.getCurrentEquippedItem().stackSize:player.getCurrentEquippedItem().stackSize - 1;
-                update = true;
+                crop.markForUpdate();
             }
             else {
                 this.harvest(world, x, y, z, player);
             }
-            if (update) {
-                crop.markForUpdate();
-            }
         }
     }
 
-    public void plantSeed(World world, int x, int y, int z, EntityPlayer player) {
+    public void plantSeed(World world, int x, int y, int z, EntityPlayer player) { // I don't even...
         if(!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             //is the cropEmpty a crosscrop or does it already have a plant
@@ -204,7 +180,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
                     crop.setPlant(stack.stackTagCompound.getInteger(Names.NBT.growth), stack.stackTagCompound.getInteger(Names.NBT.gain), stack.stackTagCompound.getInteger(Names.NBT.strength), stack.stackTagCompound.getBoolean(Names.NBT.analyzed), stack.getItem(), stack.getItemDamage());
                 } else {
                     //NBT data was not initialized: set defaults
-                    crop.setPlant(Constants.defaultGrowth, Constants.defaultGain, Constants.defaultStrength, false, stack.getItem(), stack.getItemDamage());
+                    crop.setPlant(Constants.DEFAULT_GROWTH, Constants.DEFAULT_GAIN, Constants.DEFAULT_STRENGTH, false, stack.getItem(), stack.getItemDamage());
                 }
                 //take one seed away if the player is not in creative
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
@@ -225,7 +201,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         if (te != null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             if (ConfigurationHandler.enableHandRake && crop.hasWeed()) {
-                return false;
+                return false; // But what does this do?
             }
             ItemStack heldItem = player.getCurrentEquippedItem();
             if (player.isSneaking()) {
@@ -233,7 +209,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
             } else if (heldItem == null || heldItem.getItem() == null) {
                 //harvest operation
                 this.harvest(world, x, y, z, player);
-            } else if (heldItem.getItem() == net.minecraft.init.Items.reeds) {
+            } else if (heldItem.getItem() == net.minecraft.init.Items.reeds) { //Enables reed planting... Perhaps a seed conversion recipe would be better???
                 if(crop.hasPlant()) {
                     this.harvest(world, x, y, z, player);
                 } else if (!crop.isCrossCrop() && !crop.hasWeed()) {
@@ -261,8 +237,8 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
             //fertiliser
             else if (heldItem.getItem() instanceof IFertiliser) {
                 IFertiliser fertiliser = (IFertiliser) heldItem.getItem();
-                if (crop.allowFertiliser(fertiliser)) {
-                    crop.applyFertiliser(fertiliser, world.rand);
+                if (crop.allowFertilizer(fertiliser)) {
+                    crop.applyFertilizer(fertiliser, world.rand);
                     NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertiliserApplied(heldItem, x, y, z), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 32));
                     if (!player.capabilities.isCreativeMode) {
                         heldItem.stackSize = heldItem.stackSize - 1;
@@ -295,7 +271,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
             CropPlant plant = ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlant();
-            if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
+            if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative... Why not creative?
                 this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
             }
             world.setBlockToAir(x,y,z);
@@ -359,10 +335,10 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     //this gets called when the player uses bonemeal on the crop
     public void func_149853_b(World world, Random rand, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        if(crop.hasPlant()) {
+        if(crop.hasPlant() || crop.hasWeed()) {
             int l = world.getBlockMetadata(x, y, z) + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
-            if (l > 7) {
-                l = 7;
+            if (l > Constants.MATURE) {
+                l = Constants.MATURE;
             }
             world.setBlockMetadataWithNotify(x, y, z, l, 2);
             crop.markForUpdate();
@@ -397,12 +373,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     }
 
     public boolean isMature(World world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z) >= 7;
+        return world.getBlockMetadata(x, y, z) >= Constants.MATURE;
     }
 
     @Override
     public List<ItemStack> doHarvest(World world, int x, int y, int z, int fortune) {
-        boolean update = false;
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         if (crop.hasWeed()) {
@@ -412,15 +387,12 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
             drops.add(new ItemStack(Items.crops, 1));
         } else if (crop.isMature() && crop.allowHarvest(null)) {
             crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
-            update = true;
             for(ItemStack stack:crop.getFruits()) {
                 if(stack==null || stack.getItem()==null) {
                     continue;
                 }
                 drops.add(stack);
             }
-        }
-        if(update) {
             crop.markForUpdate();
         }
         return drops;

@@ -7,7 +7,7 @@ import java.util.Random;
 
 public final class MagicalCropsFertiliser implements IFertiliser {
     @Override
-    public boolean isFertiliserAllowed(int tier) {
+    public boolean isFertilizerAllowed(int tier) {
         return true;
     }
 
@@ -22,7 +22,7 @@ public final class MagicalCropsFertiliser implements IFertiliser {
     }
 
     @Override
-    public void onFertiliserApplied(World world, int x, int y, int z, Random random) {
+    public void onFertilizerApplied(World world, int x, int y, int z, Random random) {
 
     }
 

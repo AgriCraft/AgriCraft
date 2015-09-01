@@ -83,20 +83,22 @@ public class GrowthRequirementHandler {
 
     private static void registerCustomEntries() {
         //reads custom entries
+    	LogHelper.info("Registering soils to whitelist:");
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
+        String total = " of " + data.length + ".";
         for (String line : data) {
-            LogHelper.debug("parsing " + line);
+            LogHelper.debug("  Parsing " + line + total);
             ItemStack stack = IOHelper.getStack(line);
             Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).field_150939_a : null;
-            boolean success = block != null;
-            String errorMsg = "Invalid block";
-            if (success) {
+            
+            if (block != null) {
                 addDefaultSoil(new BlockWithMeta(block, stack.getItemDamage()));
             } else {
-                LogHelper.info("Error when adding block to soil whitelist: " + errorMsg + " (line: " + line + ")");
+                LogHelper.info(" Error when adding block to soil whitelist: Invalid block (line: " + line + ")");
             }
         }
-        LogHelper.info("Registered soil whitelist:");
+        
+        LogHelper.info("Completed soil whitelist:");
         for (BlockWithMeta soil : soils) {
             LogHelper.info(" - " + Block.blockRegistry.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
         }
@@ -116,17 +118,22 @@ public class GrowthRequirementHandler {
      * @return growthRequirement of the given seed.
      */
     public static IGrowthRequirement getGrowthRequirement(Item seed, int meta) {
-        if(seed == null) {
+        
+    	if(seed == null) {
             return null;
         }
+        
         if (seed instanceof IAgriCraftSeed) {
             return ((IAgriCraftSeed) seed).getPlant().getGrowthRequirement();
         }
+        
         IGrowthRequirement growthRequirement = growthRequirements.get(new ItemWithMeta(seed, meta));
+        
         if (growthRequirement == null) {
             growthRequirement = new GrowthRequirement.Builder().build();
             growthRequirements.put(new ItemWithMeta(seed, meta), growthRequirement);
         }
+        
         return growthRequirement;
     }
 

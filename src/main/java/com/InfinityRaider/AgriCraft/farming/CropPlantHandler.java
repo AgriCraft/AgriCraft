@@ -9,6 +9,8 @@ import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
+import com.sun.istack.internal.logging.Logger;
+
 import net.minecraft.block.BlockCrops;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -20,6 +22,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class CropPlantHandler {
     private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, CropPlant>>();
@@ -28,19 +31,19 @@ public class CropPlantHandler {
     public static void registerPlant(IAgriCraftPlant plant) throws DuplicateCropPlantException, BlacklistedCropPlantException {
         registerPlant(new CropPlantAgriCraft(plant));
     }
-
-    public static void registerPlant(CropPlant plant) throws DuplicateCropPlantException, BlacklistedCropPlantException {
+    
+    public static void registerPlant(CropPlant plant) throws DuplicateCropPlantException, BlacklistedCropPlantException { // Not sure why exceptions are thrown only to be caught in the same class.
         ItemStack stack = plant.getSeed();
         if(SeedHelper.isSeedBlackListed(stack)) {
             throw new BlacklistedCropPlantException();
         }
-        LogHelper.debug("Registering plant for "+stack.getUnlocalizedName());
+        LogHelper.debug("Registering plant for " + stack.getUnlocalizedName());
         Item seed = stack.getItem();
         int meta = stack.getItemDamage();
         HashMap<Integer, CropPlant> entryForSeed = cropPlants.get(seed);
         if(entryForSeed!=null) {
             if(entryForSeed.get(meta)!=null) {
-                throw new DuplicateCropPlantException();
+                throw new DuplicateCropPlantException(); //Interesting...
             }
             else {
                 entryForSeed.put(meta, plant);
@@ -52,23 +55,37 @@ public class CropPlantHandler {
             cropPlants.put(seed, entryForSeed);
         }
     }
+    
+    private static void suppressedRegisterPlant(CropPlant plant) {
+    	try {
+    		registerPlant(plant);
+    	} catch (DuplicateCropPlantException e) {
+    		Logger.getLogger(CropPlantHandler.class).log(Level.SEVERE, "Unable to register plant.", e);
+    	} catch (BlacklistedCropPlantException e) {
+    		Logger.getLogger(CropPlantHandler.class).log(Level.WARNING, "Blacklisted plant was not registered.", e);
+    	}
+    }
 
     public static void addCropToRegister(CropPlant plant) {
         plantsToRegister.add(plant);
     }
 
-    public static boolean isValidSeed(ItemStack stack) {
-        try {
-            return cropPlants.get(stack.getItem()).get(stack.getItemDamage())!=null;
-        } catch (NullPointerException e) {
-            return false;
-        }
+    public static boolean isValidSeed(ItemStack stack) { //The method name should match the rest of the class.
+    	if (stack != null && cropPlants.containsKey(stack.getItem())) { //Is the plant/seed in the registry? If the plant/seed is in the registry it is o.k. to get.
+    		return cropPlants.get(stack.getItem()).containsKey(stack.getItemDamage()); // Is the damage value in the registry? If so, this is a valid seed. 
+    	}
+        return false; // Exceptions are very costly and should generally be avoided.
+    }
+    
+    public static boolean isValidPlant(ItemStack stack) { //The method name should match the rest of the class.
+    	if (cropPlants.containsKey(stack.getItem())) { //Is the plant/seed in the registry? If the plant/seed is in the registry it is o.k. to get.
+    		return cropPlants.get(stack.getItem()).containsKey(stack.getItemDamage()); // Is the damage value in the registry? If so, this is a valid seed. 
+    	}
+        return false; // Exceptions are very costly and should generally be avoided.
     }
 
     public static NBTTagCompound writePlantToNBT(CropPlant plant) {
-        NBTTagCompound tag = new NBTTagCompound();
-        plant.getSeed().writeToNBT(tag);
-        return tag;
+        return plant.getSeed().writeToNBT(new NBTTagCompound());
     }
 
     public static CropPlant readPlantFromNBT(NBTTagCompound tag) {
@@ -76,10 +93,11 @@ public class CropPlantHandler {
     }
 
     public static CropPlant getPlantFromStack(ItemStack stack) {
-        try {
+        if (isValidPlant(stack)) { //Is this a valid plant? If so it is safe to lookup.
             return cropPlants.get(stack.getItem()).get(stack.getItemDamage());
-        } catch(NullPointerException nullPointerException) {
-            return null;
+        }
+        else {
+        	return null; //The plant was invalid.
         }
     }
 
@@ -104,33 +122,21 @@ public class CropPlantHandler {
     }
 
     public static void init() {
-        //register vanilla plants
-        try {
-            registerPlant(new CropPlantVanilla((BlockCrops) net.minecraft.init.Blocks.wheat, (ItemSeeds) net.minecraft.init.Items.wheat_seeds));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            OreDictionary.registerOre("seedMelon", Items.melon_seeds);
-            OreDictionary.registerOre("cropMelon", Items.melon);
-            registerPlant(new CropPlantStem((ItemSeeds) Items.melon_seeds, Blocks.melon_block));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            OreDictionary.registerOre("seedPumpkin", Items.pumpkin_seeds);
-            OreDictionary.registerOre("cropPumpkin", Blocks.pumpkin);
-            registerPlant(new CropPlantStem((ItemSeeds) Items.pumpkin_seeds, Blocks.pumpkin));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            registerPlant(new CropPlantNetherWart());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //register mod crops
+    	
+        //Register vanilla plants. Now with less duplication.
+        OreDictionary.registerOre("seedMelon", Items.melon_seeds);
+        OreDictionary.registerOre("cropMelon", Items.melon);
+        OreDictionary.registerOre("seedPumpkin", Items.pumpkin_seeds);
+        OreDictionary.registerOre("cropPumpkin", Blocks.pumpkin);
+        
+        suppressedRegisterPlant(new CropPlantVanilla((BlockCrops) net.minecraft.init.Blocks.wheat, (ItemSeeds) net.minecraft.init.Items.wheat_seeds));
+        suppressedRegisterPlant(new CropPlantStem((ItemSeeds) Items.melon_seeds, Blocks.melon_block));
+        suppressedRegisterPlant(new CropPlantStem((ItemSeeds) Items.pumpkin_seeds, Blocks.pumpkin));
+        suppressedRegisterPlant(new CropPlantNetherWart());
+
+        //Register mod crops
         ModHelper.initModPlants();
+        
         //register crops specified trough the API
         for (CropPlant plant : plantsToRegister) {
             try {
@@ -140,26 +146,15 @@ public class CropPlantHandler {
             }
         }
         plantsToRegister = null;
+        
         //register others from ore dictionary
         ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
         for (ItemStack seed : seeds) {
-            if (isValidSeed(seed)) {
-                //seed is already registered
-                continue;
-            }
-            if (!(seed.getItem() instanceof ItemSeeds)) {
-                //seed does not extend ItemSeeds
-                continue;
-            }
-            ArrayList<ItemStack> fruits = OreDictHelper.getFruitsFromOreDict(seed);
-            if (fruits == null || fruits.size() == 0) {
-                //seed and/or fruit is not properly registered
-                continue;
-            }
-            try {
-                registerPlant(new CropPlantOreDict((ItemSeeds) seed.getItem()));
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (!isValidSeed(seed) && (seed.getItem() instanceof ItemSeeds)) {
+            	ArrayList<ItemStack> fruits = OreDictHelper.getFruitsFromOreDict(seed);
+                if (fruits != null && fruits.size() > 0) {
+                	suppressedRegisterPlant(new CropPlantOreDict((ItemSeeds)seed.getItem()));
+                }
             }
         }
     }
