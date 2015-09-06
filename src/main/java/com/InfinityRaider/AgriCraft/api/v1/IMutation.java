@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.api.v1;
 
 import net.minecraft.item.ItemStack;
 
-/** Make sure object.equals(Object object) is implemented correctly if you decide to create your own Mutation class */
+/** This interface is for you to read data about a mutation and shouldn't be used to be implemented in your classes */
 public interface IMutation {
     /** returns the result */
     public ItemStack getResult();
