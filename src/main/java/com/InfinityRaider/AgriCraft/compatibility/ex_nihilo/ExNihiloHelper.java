@@ -8,28 +8,33 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public final class ExNihiloHelper extends ModHelper {
-    public static final Item seedPotato = (Item) Item.itemRegistry.getObject("exnihilo:seed_potato");
-    public static final Item seedCarrot = (Item) Item.itemRegistry.getObject("exnihilo:seed_carrot");
-    public static final Item seedSugarCane = (Item) Item.itemRegistry.getObject("exnihilo:seed_sugar_cane");
-    public static final Item seedCactus = (Item) Item.itemRegistry.getObject("exnihilo:seed_cactus");
 
     @Override
     protected void init() {
+        Item seedPotato = (Item) Item.itemRegistry.getObject("exnihilo:seed_potato");
+        Item seedCarrot = (Item) Item.itemRegistry.getObject("exnihilo:seed_carrot");
+        Item seedSugarCane = (Item) Item.itemRegistry.getObject("exnihilo:seed_sugar_cane");
+        Item seedCactus = (Item) Item.itemRegistry.getObject("exnihilo:seed_cactus");
         //OreDict tags
-        OreDictionary.registerOre(Names.OreDict.listAllseed, ExNihiloHelper.seedCarrot);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, ExNihiloHelper.seedPotato);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, ExNihiloHelper.seedSugarCane);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, ExNihiloHelper.seedCactus);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedCarrot);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedPotato);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedSugarCane);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, seedCactus);
 
         //seed converting recipes
-        GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedPotato")), new ItemStack(ExNihiloHelper.seedPotato));
-        GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedCarrot")), new ItemStack(ExNihiloHelper.seedCarrot));
-        GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")), new ItemStack(ExNihiloHelper.seedSugarCane));
-        GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedCactus")), new ItemStack(ExNihiloHelper.seedCactus));
+        GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedPotato")), new ItemStack(seedPotato));
+        GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedCarrot")), new ItemStack(seedCarrot));
+        GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")), new ItemStack(seedSugarCane));
+        GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedCactus")), new ItemStack(seedCactus));
     }
 
     @Override
     protected void initPlants() {
+
+    }
+
+    @Override
+    protected void postTasks() {
 
     }
 
