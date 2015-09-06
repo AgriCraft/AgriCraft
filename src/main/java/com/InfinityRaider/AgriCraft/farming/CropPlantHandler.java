@@ -9,8 +9,8 @@ import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
-import com.sun.istack.internal.logging.Logger;
 
+import cpw.mods.fml.common.FMLLog;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -22,7 +22,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
+
+import org.apache.logging.log4j.Level;
 
 public class CropPlantHandler {
     private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, CropPlant>>();
@@ -60,9 +61,9 @@ public class CropPlantHandler {
     	try {
     		registerPlant(plant);
     	} catch (DuplicateCropPlantException e) {
-    		Logger.getLogger(CropPlantHandler.class).log(Level.SEVERE, "Unable to register plant.", e);
+    		FMLLog.getLogger().log(Level.ERROR, "Unable to register duplicate plant.", e);
     	} catch (BlacklistedCropPlantException e) {
-    		Logger.getLogger(CropPlantHandler.class).log(Level.WARNING, "Blacklisted plant was not registered.", e);
+    		FMLLog.getLogger().log(Level.WARN, "Blacklisted plant was not registered.", e);
     	}
     }
 
