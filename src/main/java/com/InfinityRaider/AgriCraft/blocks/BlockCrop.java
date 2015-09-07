@@ -231,9 +231,9 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
             else if (heldItem.getItem() instanceof ITrowel) {
                 crop.onTrowelUsed((ITrowel) heldItem.getItem(), heldItem);
             }
-            //check to see if the player wants to use bonemeal
+            //check to see if the player wants and is allowed to use bonemeal
             else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
-                return false;
+                return !crop.canBonemeal();
             }
             //fertiliser
             else if (heldItem.getItem() instanceof IFertiliser) {
@@ -327,8 +327,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     //bonemeal can be applied to this plant
     @Override
     public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
-        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        return crop.canBonemeal();
+        return world.getBlockMetadata(x, y, z) < Constants.MATURE;
     }
 
     //some weird function for bonemeal
