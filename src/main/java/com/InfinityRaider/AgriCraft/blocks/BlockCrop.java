@@ -161,32 +161,30 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         }
     }
 
-    public void plantSeed(World world, int x, int y, int z, EntityPlayer player) { // I don't even...
-        if(!world.isRemote) {
+    //Tries to plant the seed contained within the ItemStack, returns true on success.
+    public boolean plantSeed(ItemStack stack, World world, int x, int y, int z) {
+        if (!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             //is the cropEmpty a crosscrop or does it already have a plant
-            if (crop.isCrossCrop() || crop.hasPlant() || !(CropPlantHandler.isValidSeed(player.getCurrentEquippedItem()) ) ) {
-                return;
+            if (crop.isCrossCrop() || crop.hasPlant() || !(CropPlantHandler.isValidSeed(stack))) {
+                return false;
             }
             //the seed can be planted here
-            else {
-                ItemStack stack = player.getCurrentEquippedItem();
-                if (!CropPlantHandler.isValidSeed(stack) || !GrowthRequirementHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y-1, z)) {
-                    return;
-                }
-                //get NBT data from the seeds
-                if (player.getCurrentEquippedItem().stackTagCompound != null && player.getCurrentEquippedItem().stackTagCompound.hasKey(Names.NBT.growth)) {
-                    //NBT data was found: copy data to plant
-                    crop.setPlant(stack.stackTagCompound.getInteger(Names.NBT.growth), stack.stackTagCompound.getInteger(Names.NBT.gain), stack.stackTagCompound.getInteger(Names.NBT.strength), stack.stackTagCompound.getBoolean(Names.NBT.analyzed), stack.getItem(), stack.getItemDamage());
-                } else {
-                    //NBT data was not initialized: set defaults
-                    crop.setPlant(Constants.DEFAULT_GROWTH, Constants.DEFAULT_GAIN, Constants.DEFAULT_STRENGTH, false, stack.getItem(), stack.getItemDamage());
-                }
-                //take one seed away if the player is not in creative
-                player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
+            if (!GrowthRequirementHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y - 1, z)) {
+                return false;
+            }
+            //get NBT data from the seeds
+            if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey(Names.NBT.growth)) {
+                //NBT data was found: copy data to plant
+                crop.setPlant(stack.stackTagCompound.getInteger(Names.NBT.growth), stack.stackTagCompound.getInteger(Names.NBT.gain), stack.stackTagCompound.getInteger(Names.NBT.strength), stack.stackTagCompound.getBoolean(Names.NBT.analyzed), stack.getItem(), stack.getItemDamage());
+            } else {
+                //NBT data was not initialized: set defaults
+                crop.setPlant(Constants.DEFAULT_GROWTH, Constants.DEFAULT_GAIN, Constants.DEFAULT_STRENGTH, false, stack.getItem(), stack.getItemDamage());
             }
             crop.markForUpdate();
+            return true;
         }
+        return false;
     }
 
     //This gets called when the block is right clicked (player uses the block)
@@ -201,7 +199,8 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         if (te != null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             if (ConfigurationHandler.enableHandRake && crop.hasWeed()) {
-                return false; // But what does this do?
+                //if weeds can only be removed by using a hand rake, nothing should happen
+                return false;
             }
             ItemStack heldItem = player.getCurrentEquippedItem();
             if (player.isSneaking()) {
@@ -209,7 +208,9 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
             } else if (heldItem == null || heldItem.getItem() == null) {
                 //harvest operation
                 this.harvest(world, x, y, z, player);
-            } else if (heldItem.getItem() == net.minecraft.init.Items.reeds) { //Enables reed planting... Perhaps a seed conversion recipe would be better???
+            } else if (heldItem.getItem() == net.minecraft.init.Items.reeds) {
+                //Enables reed planting, temporary code until I code in seed proxy's
+                //TODO: create seed proxy handler to plant other things directly onto crops (for example the Ex Nihilo seeds)
                 if(crop.hasPlant()) {
                     this.harvest(world, x, y, z, player);
                 } else if (!crop.isCrossCrop() && !crop.hasWeed()) {
@@ -258,7 +259,10 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
                 this.harvest(world, x, y, z, player);
                 //check to see if clicked with seeds
                 if (CropPlantHandler.isValidSeed(heldItem)) {
-                    this.plantSeed(world, x, y, z, player);
+                    if(this.plantSeed(player.getCurrentEquippedItem(), world, x, y, z)) {
+                        //take one seed away if the player is not in creative
+                        player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
+                    }
                 }
             }
         }
@@ -271,7 +275,8 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
             CropPlant plant = ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlant();
-            if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative... Why not creative?
+            if(!player.capabilities.isCreativeMode) {
+                //drop items if the player is not in creative
                 this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
             }
             world.setBlockToAir(x,y,z);

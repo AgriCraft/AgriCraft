@@ -20,7 +20,7 @@ public abstract class CropPlant {
     public final int getGrowthRate() {
     	int tier = getTier();
     	
-    	if (tier > 0 && tier <= Constants.GROWTH_TIER.length) { //Worst-case two comparisons instead of five.
+    	if (tier > 0 && tier <= Constants.GROWTH_TIER.length) {
     		return Constants.GROWTH_TIER[tier];
     	} else {
     		return Constants.GROWTH_TIER[0];
@@ -73,7 +73,7 @@ public abstract class CropPlant {
 
     /** Checks if the plant is mature */
     public boolean isMature(IBlockAccess world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z) >= Constants.MATURE; //Seven was a magic number.
+        return world.getBlockMetadata(x, y, z) >= Constants.MATURE;
     }
 
     /** Gets the height of the crop */

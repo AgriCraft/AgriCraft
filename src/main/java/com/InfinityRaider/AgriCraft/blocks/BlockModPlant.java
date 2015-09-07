@@ -183,25 +183,14 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     public void updateTick(World world, int x, int y, int z, Random rnd) {
         int meta = this.getPlantMetadata(world, x, y, z);
         if (meta < 7 && this.isFertile(world, x, y ,z)) {
-            TileEntity te = world.getTileEntity(x, y, z);
-            //base growth rate
-            int growthRate; //This does not need to be a float. The casting is best left off to be done automatically.
-            if(te==null || !(te instanceof TileEntityCrop)) {
-            	if (tier > 0 && tier <= Constants.GROWTH_TIER.length) { //Worst-case two comparisons instead of five.
-            		growthRate = Constants.GROWTH_TIER[tier];
-            	} else {
-            		growthRate = Constants.GROWTH_TIER[0];
-            	}
-            } else {
-                TileEntityCrop crop = (TileEntityCrop) te;
-                growthRate = crop.getGrowthRate();
-            }
-            //Bonus for growth stat (growth is 1 for basic crops)
+            //Base growth rate
+            int growthRate = (tier > 0 && tier <= Constants.GROWTH_TIER.length)?Constants.GROWTH_TIER[tier]:Constants.GROWTH_TIER[0];
+            //Bonus for growth stat (because these crops are not planted on crop sticks, growth of 1 is applied)
             double bonus = 1.0 + (1 + 0.00) / 10;
-            //global multiplier as defined in the config
+            //Global multiplier as defined in the config
             float global = 2.0F - ConfigurationHandler.growthMultiplier;
-            int newMeta = (rnd.nextDouble() > (growthRate * bonus * global)/100) ? meta : meta + 1;
-            if(newMeta != meta) {
+            int newMeta = (rnd.nextDouble() > (growthRate * bonus * global) / 100) ? meta : meta + 1;
+            if (newMeta != meta) {
                 world.setBlockMetadataWithNotify(x, y, z, newMeta, 2);
                 AppleCoreHelper.announceGrowthTick(this, world, x, y, z);
             }
@@ -217,7 +206,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-        switch(meta) { //Cleaner switch without duplicated code.
+        switch(meta) {
             case 0:
             case 1: return this.icons[0];
             case 2: 
@@ -227,8 +216,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
             case 6: return this.icons[2];
             case 7: return this.icons[3];
         }
-        return this.icons[meta/5];	//The / operator always produces a whole as a result, so no rounding is needed. E.g. 8/3 = 2.
-        							//This removal significantly improves the number of operations and therefore the speed of this method.
+        return this.icons[meta/5];
     }
 
     //item drops
@@ -249,7 +237,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     public Item getItemDropped(int meta, Random rand, int side) {
-        return meta == 7 ? this.func_149865_P() : this.func_149866_i(); //While I like in-line if statements, keep in mind that they often degrade the readability of the code.
+        return meta == 7 ? this.func_149865_P() : this.func_149866_i();
     }
 
     //fruit gain
