@@ -26,15 +26,16 @@ public class PlayerInteractEventHandler {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             Block block = event.world.getBlock(event.x, event.y, event.z);
             if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
-                if (GrowthRequirementHandler.isSoilValid(event.world, event.x, event.y, event.z) || block == Blocks.farmland) {
+                if (GrowthRequirementHandler.isSoilValid(event.world, event.x, event.y, event.z)) {
                     if (ConfigurationHandler.disableVanillaFarming) {
                         if(!SeedHelper.allowVanillaPlanting(event.entityPlayer.getCurrentEquippedItem())) {
                             this.denyEvent(event, false);
+                            return;
                         }
-                    } else if (event.entityPlayer.getCurrentEquippedItem().hasTagCompound()) {
+                    } if (event.entityPlayer.getCurrentEquippedItem().hasTagCompound()) {
                         NBTTagCompound tag = (NBTTagCompound) event.entityPlayer.getCurrentEquippedItem().getTagCompound().copy();
                         if (tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
-                            //TODO: place a tile entity storing the seeds data
+                            //TODO: place a tile entity storing the seed's data
                             this.denyEvent(event, false);
                         }
                     }
