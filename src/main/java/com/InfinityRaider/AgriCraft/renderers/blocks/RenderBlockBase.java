@@ -74,7 +74,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         }
 
         tessellator.setColorRGBA_F(1, 1, 1, 1);
-        tessellator.setBrightness(block.getMixedBrightnessForBlock(world, (int) x, (int) y, (int) z));
 
         boolean result = doWorldRender(tessellator, world, x, y, z, tile, block, f, modelId, renderer, callFromTESR);
 

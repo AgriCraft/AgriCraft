@@ -75,6 +75,13 @@ public class RenderWaterPad extends RenderBlockBase {
             renderer.renderStandardBlock(Blocks.farmland, x, y, z);
         } else if(full) {
             IIcon icon = Blocks.water.getIcon(0, 0);
+            int l = Blocks.water.colorMultiplier(world, x, y, z);
+            float f = (float)(l >> 16 & 255) / 255.0F;
+            float f1 = (float)(l >> 8 & 255) / 255.0F;
+            float f2 = (float)(l & 255) / 255.0F;
+            float f4 = 1.0F;
+            tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, x, y, z));
+            tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
             tessellator.addTranslation(x, y, z);
             addScaledVertexWithUV(tessellator, 0, 14, 0, 0, 0, icon);
             addScaledVertexWithUV(tessellator, 0, 14, 1, 0, 1, icon);
@@ -88,6 +95,13 @@ public class RenderWaterPad extends RenderBlockBase {
             renderer.renderStandardBlock(Blocks.farmland, x, y, z);
         } else if(full) {
             IIcon icon = Blocks.water.getIcon(0, 0);
+            int l = Blocks.water.colorMultiplier(world, x, y, z);
+            float f = (float)(l >> 16 & 255) / 255.0F;
+            float f1 = (float)(l >> 8 & 255) / 255.0F;
+            float f2 = (float)(l & 255) / 255.0F;
+            float f4 = 1.0F;
+            tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, x, y, z));
+            tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
             tessellator.addTranslation(x, y, z);
             addScaledVertexWithUV(tessellator, 15, 14, 0, 15, 0, icon);
             addScaledVertexWithUV(tessellator, 15, 14, 1, 15, 1, icon);
@@ -101,6 +115,13 @@ public class RenderWaterPad extends RenderBlockBase {
             renderer.renderStandardBlock(Blocks.farmland, x, y, z);
         } else if(full) {
             IIcon icon = Blocks.water.getIcon(0, 0);
+            int l = Blocks.water.colorMultiplier(world, x, y, z);
+            float f = (float)(l >> 16 & 255) / 255.0F;
+            float f1 = (float)(l >> 8 & 255) / 255.0F;
+            float f2 = (float)(l & 255) / 255.0F;
+            float f4 = 1.0F;
+            tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, x, y, z));
+            tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
             tessellator.addTranslation(x, y, z);
             addScaledVertexWithUV(tessellator, 15, 14, 15, 15, 15, icon);
             addScaledVertexWithUV(tessellator, 15, 14, 16, 15, 16, icon);
@@ -114,6 +135,13 @@ public class RenderWaterPad extends RenderBlockBase {
             renderer.renderStandardBlock(Blocks.farmland, x, y, z);
         } else if(full) {
             IIcon icon = Blocks.water.getIcon(0, 0);
+            int l = Blocks.water.colorMultiplier(world, x, y, z);
+            float f = (float)(l >> 16 & 255) / 255.0F;
+            float f1 = (float)(l >> 8 & 255) / 255.0F;
+            float f2 = (float)(l & 255) / 255.0F;
+            float f4 = 1.0F;
+            tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, x, y, z));
+            tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
             tessellator.addTranslation(x, y, z);
             addScaledVertexWithUV(tessellator, 0, 14, 15, 0, 15, icon);
             addScaledVertexWithUV(tessellator, 0, 14, 16, 0, 16, icon);
@@ -126,6 +154,13 @@ public class RenderWaterPad extends RenderBlockBase {
 
         if(full) {
             IIcon icon = Blocks.water.getIcon(0, 0);
+            int l = Blocks.water.colorMultiplier(world, x, y, z);
+            float f = (float)(l >> 16 & 255) / 255.0F;
+            float f1 = (float)(l >> 8 & 255) / 255.0F;
+            float f2 = (float)(l & 255) / 255.0F;
+            float f4 = 1.0F;
+            tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, x, y, z));
+            tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
             tessellator.addTranslation(x, y, z);
             addScaledVertexWithUV(tessellator, 1, 14, 1, 1, 1, icon);
             addScaledVertexWithUV(tessellator, 1, 14, 15, 1, 15, icon);
