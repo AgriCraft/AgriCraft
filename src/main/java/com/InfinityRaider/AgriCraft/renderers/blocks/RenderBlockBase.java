@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -58,7 +57,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         }
     }
 
-
     //WORLD
     //-----
     private boolean renderBlock(Tessellator tessellator, IBlockAccess world, double x, double y, double z, Block block, TileEntity tile, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
@@ -78,7 +76,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         tessellator.setColorRGBA_F(1, 1, 1, 1);
         tessellator.setBrightness(block.getMixedBrightnessForBlock(world, (int) x, (int) y, (int) z));
 
-        boolean result = doWorldRender(tessellator, world, x, y, z, tile, block, 0, modelId, renderer, callFromTESR);
+        boolean result = doWorldRender(tessellator, world, x, y, z, tile, block, f, modelId, renderer, callFromTESR);
 
         if (tile != null && tile instanceof TileEntityAgricraft) {
             rotateMatrix((TileEntityAgricraft) tile, tessellator, true);
@@ -169,7 +167,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         if(!tileEntityAgricraft.isRotatable()) {
             return;
         }
-        float angle=0;
+        float angle;
         switch(tileEntityAgricraft.getOrientation()) {
             case SOUTH: angle = 180; break;
             case WEST: angle = 90; break;
@@ -229,10 +227,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         addScaledVertexWithUV(tessellator, maxX, minY, z, maxU, maxV, icon);
     }
 
-    protected void drawFaceDoubleXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z) {
-        drawScaledFaceDoubleXY(tessellator, minX * 16, minY * 16, maxX * 16, maxY * 16, icon, z);
-    }
-
     protected void drawScaledFaceDoubleXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y) {
         y = y*16.0F;
         float minU = 0;
@@ -251,9 +245,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         addScaledVertexWithUV(tessellator, maxX, y, minZ, maxU, minV, icon);
     }
 
-    protected void drawFaceDoubleXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y) {
-        drawScaledFaceDoubleXY(tessellator, minX * 16, minZ * 16, maxX * 16, maxZ * 16, icon, y);
-    }
 
     protected void drawScaledFaceDoubleYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x) {
         x = x*16.0F;
@@ -273,44 +264,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         addScaledVertexWithUV(tessellator, x, minY, maxZ, maxU, maxV, icon);
     }
 
-    protected void drawFaceDoubleYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x) {
-        drawScaledFaceDoubleYZ(tessellator, minY * 16, minZ * 16, maxY * 16, maxZ * 16, icon, x);
-    }
-
-    //draws a rectangular prism
-    protected void drawScaledPrismOld(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier) {
-        //front plane
-        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, 16 - maxY, icon);
-        addScaledVertexWithUV(tessellator, maxX, minY, minZ, maxX, 16-minY, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, minZ, minX, 16-minY, icon);
-        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, 16-maxY, icon);
-        //back plane
-        addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxX, 16-maxY, icon);
-        addScaledVertexWithUV(tessellator, minX, maxY, maxZ, minX, 16-maxY, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, 16-minY, icon);
-        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, 16-minY, icon);
-        //right plane
-        addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxZ, 16-maxY, icon);
-        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxZ, 16-minY, icon);
-        addScaledVertexWithUV(tessellator, maxX, minY, minZ, minZ, 16-minY, icon);
-        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, minZ, 16-maxY, icon);
-        //left plane
-        addScaledVertexWithUV(tessellator, minX, maxY, maxZ, maxZ, 16-maxY, icon);
-        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minZ, 16-maxY, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, minZ, minZ, 16-minY, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, maxZ, maxZ, 16-minY, icon);
-        //top plane
-        addScaledVertexWithUV(tessellator, maxX, maxY, maxZ, maxX, maxZ, icon);
-        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, minZ, icon);
-        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, minZ, icon);
-        addScaledVertexWithUV(tessellator, minX, maxY, maxZ, minX, maxZ, icon);
-        //bottom plane
-        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, maxZ, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, maxZ, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, minZ, minX, minZ, icon);
-        addScaledVertexWithUV(tessellator, maxX, minY, minZ, maxX, minZ, icon);
-    }
-
     //draws a rectangular prism
     protected void drawScaledPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier) {
         //bottom
@@ -326,11 +279,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         //right
         drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, icon, maxX/16.0F, colorMultiplier);
 
-    }
-
-    //draws a rectangular prism
-    protected void drawPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier) {
-        drawScaledPrism(tessellator, minX*16, minY*16, minZ*16, maxX*16, maxY*16, maxZ*16, icon, colorMultiplier);
     }
 
     protected void drawScaledFaceFrontXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z, int colorMultiplier) {
