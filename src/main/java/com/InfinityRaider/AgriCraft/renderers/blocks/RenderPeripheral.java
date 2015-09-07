@@ -22,37 +22,37 @@ public class RenderPeripheral extends RenderBlockBase {
         if(callFromTESR) {
 
         } else {
-            renderISBRHstuff(tessellator, (BlockPeripheral) block);
+            renderISBRHstuff(tessellator, (BlockPeripheral) block, block.colorMultiplier(world, (int) x, (int) y, (int) z));
         }
         return false;
     }
 
-    private void renderISBRHstuff(Tessellator tessellator2, BlockPeripheral blockPeripheral) {
+    private void renderISBRHstuff(Tessellator tessellator2, BlockPeripheral blockPeripheral, int colorMultiplier) {
         IIcon iconFull = blockPeripheral.getIcon(0, 0);
         IIcon iconHollow = blockPeripheral.getIcon(1, 0);
         IIcon iconHalf = blockPeripheral.getIcon(2, 0);
-        drawBase(tessellator2, iconFull, iconHollow);
-        drawTop(tessellator2, iconFull);
+        drawBase(tessellator2, iconFull, iconHollow, colorMultiplier);
+        drawTop(tessellator2, iconFull, colorMultiplier);
         drawDiagonals(tessellator2, iconHalf);
     }
 
-    private void drawBase(Tessellator tessellator, IIcon iconFull, IIcon iconHollow) {
-        drawScaledFaceXZ(tessellator, 0, 0, 16, 16, iconFull, 0);
-        drawScaledFaceXY(tessellator, 0, 0, 16, 14, iconHollow, 0);
-        drawScaledFaceXY(tessellator, 0, 0, 16, 14, iconHollow, 1);
-        drawScaledFaceYZ(tessellator, 0, 0, 14, 16, iconHollow, 0);
-        drawScaledFaceYZ(tessellator, 0, 0, 14, 16, iconHollow, 1);
+    private void drawBase(Tessellator tessellator, IIcon iconFull, IIcon iconHollow, int colorMultiplier) {
+        drawScaledFaceDoubleXZ(tessellator, 0, 0, 16, 16, iconFull, 0);
+        drawScaledFaceDoubleXY(tessellator, 0, 0, 16, 14, iconHollow, 0);
+        drawScaledFaceDoubleXY(tessellator, 0, 0, 16, 14, iconHollow, 1);
+        drawScaledFaceDoubleYZ(tessellator, 0, 0, 14, 16, iconHollow, 0);
+        drawScaledFaceDoubleYZ(tessellator, 0, 0, 14, 16, iconHollow, 1);
         /*
-        drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, icon);
-        drawScaledPrism(tessellator, 0, 1, 0, 2, 14, 2, icon);
-        drawScaledPrism(tessellator, 14, 2, 0, 16, 14, 2, icon);
-        drawScaledPrism(tessellator, 14, 2, 14, 16, 14, 16, icon);
-        drawScaledPrism(tessellator, 0, 2, 14, 2, 14, 16, icon);
+        drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, icon, colorMultiplier);
+        drawScaledPrism(tessellator, 0, 1, 0, 2, 14, 2, icon, colorMultiplier);
+        drawScaledPrism(tessellator, 14, 2, 0, 16, 14, 2, icon, colorMultiplier);
+        drawScaledPrism(tessellator, 14, 2, 14, 16, 14, 16, icon, colorMultiplier);
+        drawScaledPrism(tessellator, 0, 2, 14, 2, 14, 16, icon, colorMultiplier);
         */
     }
 
-    private void drawTop(Tessellator tessellator, IIcon icon) {
-        drawScaledPrism(tessellator, 4, 14, 4, 12, 16, 12, icon);
+    private void drawTop(Tessellator tessellator, IIcon icon, int colorMultiplier) {
+        drawScaledPrism(tessellator, 4, 14, 4, 12, 16, 12, icon, colorMultiplier);
 
         addScaledVertexWithUV(tessellator, 0, 14, 0, 0, 16, icon);
         addScaledVertexWithUV(tessellator, 16, 14, 0, 16, 16, icon);
@@ -126,7 +126,7 @@ public class RenderPeripheral extends RenderBlockBase {
         GL11.glDisable(GL11.GL_LIGHTING);
         tessellator.startDrawingQuads();
 
-        renderISBRHstuff(tessellator, (BlockPeripheral) Blocks.blockPeripheral);
+        renderISBRHstuff(tessellator, (BlockPeripheral) Blocks.blockPeripheral, COLOR_MULTIPLIER_STANDARD);
 
         tessellator.draw();
         GL11.glEnable(GL11.GL_LIGHTING);

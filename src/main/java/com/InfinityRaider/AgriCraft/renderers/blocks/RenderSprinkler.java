@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
@@ -11,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -70,45 +72,16 @@ public class RenderSprinkler extends RenderBlockBase {
     private void renderConnection(TileEntitySprinkler sprinkler, double x, double y, double z) {
         //set up tessellator
         Tessellator tessellator = Tessellator.instance;
-        //grab the texture
-        ResourceLocation resource = RenderHelper.getBlockResource(sprinkler.getChannelIcon());
         //start GL
         GL11.glPushMatrix();
             //disable lighting so the plants render bright
             GL11.glDisable(GL11.GL_LIGHTING);
             //bind the texture
-            Minecraft.getMinecraft().renderEngine.bindTexture(resource);
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
             tessellator.startDrawingQuads();
-                //first face
-                addScaledVertexWithUV(tessellator, 4, 20, 12, 4, -4);
-                addScaledVertexWithUV(tessellator, 4, 12, 12, 4, 4);
-                addScaledVertexWithUV(tessellator, 12, 12, 12, 12, 4);
-                addScaledVertexWithUV(tessellator, 12, 20, 12, 12, -4);
-                //second face
-                addScaledVertexWithUV(tessellator, 4, 20, 4, 4, -4);
-                addScaledVertexWithUV(tessellator, 4, 12, 4, 4, 4);
-                addScaledVertexWithUV(tessellator, 4, 12, 12, 12, 4);
-                addScaledVertexWithUV(tessellator, 4, 20, 12, 12, -4);
-                //third face
-                addScaledVertexWithUV(tessellator, 4, 20, 4, 4, -4);
-                addScaledVertexWithUV(tessellator, 12, 20, 4, 12, -4);
-                addScaledVertexWithUV(tessellator, 12, 12, 4, 12, 4);
-                addScaledVertexWithUV(tessellator, 4, 12, 4, 4, 4);
-                //fourth face
-                addScaledVertexWithUV(tessellator, 12, 20, 4, 4, -4);
-                addScaledVertexWithUV(tessellator, 12, 20, 12, 12, -4);
-                addScaledVertexWithUV(tessellator, 12, 12, 12, 12, 4);
-                addScaledVertexWithUV(tessellator, 12, 12, 4, 4, 4);
-                //bottom face
-                addScaledVertexWithUV(tessellator, 4, 12, 4, 4, 4);
-                addScaledVertexWithUV(tessellator, 12, 12, 4, 12, 4);
-                addScaledVertexWithUV(tessellator, 12, 12, 12, 12, 12);
-                addScaledVertexWithUV(tessellator, 4, 12, 12, 4, 12);
-                //top face
-                addScaledVertexWithUV(tessellator, 4, 20, 4, 4, 4);
-                addScaledVertexWithUV(tessellator, 4, 20, 12, 4, 12);
-                addScaledVertexWithUV(tessellator, 12, 20, 12, 12, 12);
-                addScaledVertexWithUV(tessellator, 12, 20, 4, 12, 4);
+            tessellator.addTranslation(0, 4 * Constants.UNIT, 0);
+            drawScaledPrism(tessellator, 4, 8, 4, 12, 16, 12, sprinkler.getChannelIcon(), net.minecraft.init.Blocks.planks.colorMultiplier(sprinkler.getWorldObj(), sprinkler.xCoord, sprinkler.yCoord, sprinkler.zCoord));
+            tessellator.addTranslation(0, -4 * Constants.UNIT, 0);
             tessellator.draw();
             //don't forget to enable lighting again
             GL11.glEnable(GL11.GL_LIGHTING);

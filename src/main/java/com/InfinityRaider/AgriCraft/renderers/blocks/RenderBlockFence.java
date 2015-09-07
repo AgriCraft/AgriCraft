@@ -29,10 +29,10 @@ public class RenderBlockFence extends RenderBlockCustomWood<TileEntityFence> {
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
 
-        drawScaledPrism(tessellator, 6, 0, 0, 10, 16, 4, icon);
-        drawScaledPrism(tessellator, 6, 0, 12, 10, 16, 16, icon);
-        drawScaledPrism(tessellator, 7, 12, 4, 9, 15, 12, icon);
-        drawScaledPrism(tessellator, 7, 5, 4, 9, 8, 12, icon);
+        drawScaledPrism(tessellator, 6, 0, 0, 10, 16, 4, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 6, 0, 12, 10, 16, 16, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 12, 4, 9, 15, 12, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 5, 4, 9, 8, 12, icon, COLOR_MULTIPLIER_STANDARD);
 
         tessellator.draw();
         //enable lighting
@@ -46,22 +46,23 @@ public class RenderBlockFence extends RenderBlockCustomWood<TileEntityFence> {
         }
         TileEntityFence fence = (TileEntityFence) tile;
         IIcon icon = fence.getIcon();
-        drawScaledPrism(tessellator, 6, 0, 6, 10, 16, 10, icon);
+        int cm = block.colorMultiplier(world, (int) x, (int) y, (int) z);
+        drawScaledPrism(tessellator, 6, 0, 6, 10, 16, 10, icon, cm);
         if(fence.canConnect(ForgeDirection.EAST)) {
-            drawScaledPrism(tessellator, 10, 12, 7, 16, 15, 9, icon);
-            drawScaledPrism(tessellator, 10, 6, 7, 16, 9, 9, icon);
+            drawScaledPrism(tessellator, 10, 12, 7, 16, 15, 9, icon, cm);
+            drawScaledPrism(tessellator, 10, 6, 7, 16, 9, 9, icon, cm);
         }
         if(fence.canConnect(ForgeDirection.WEST)) {
-            drawScaledPrism(tessellator, 0, 12, 7, 6, 15, 9, icon);
-            drawScaledPrism(tessellator, 0, 6, 7, 6, 9, 9, icon);
+            drawScaledPrism(tessellator, 0, 12, 7, 6, 15, 9, icon, cm);
+            drawScaledPrism(tessellator, 0, 6, 7, 6, 9, 9, icon, cm);
         }
         if(fence.canConnect(ForgeDirection.SOUTH)) {
-            drawScaledPrism(tessellator, 7, 12, 10, 9, 15, 16, icon);
-            drawScaledPrism(tessellator, 7, 6, 10, 9, 9, 16, icon);
+            drawScaledPrism(tessellator, 7, 12, 10, 9, 15, 16, icon, cm);
+            drawScaledPrism(tessellator, 7, 6, 10, 9, 9, 16, icon, cm);
         }
         if(fence.canConnect(ForgeDirection.NORTH)) {
-            drawScaledPrism(tessellator, 7, 12, 0, 9, 15, 6, icon);
-            drawScaledPrism(tessellator, 7, 6, 0, 9, 9, 6, icon);
+            drawScaledPrism(tessellator, 7, 12, 0, 9, 15, 6, icon, cm);
+            drawScaledPrism(tessellator, 7, 6, 0, 9, 9, 6, icon, cm);
         }
         return true;
     }

@@ -102,16 +102,14 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     protected void renderBottom(TileEntityChannel channel, Tessellator tessellator) {
         //the texture
         IIcon icon = channel.getIcon();
-        //draw first plane front
-        addScaledVertexWithUV(tessellator, 4, 5, 4, 4, 4, icon);
-        addScaledVertexWithUV(tessellator, 4, 5, 12, 4, 12, icon);
-        addScaledVertexWithUV(tessellator, 12, 5, 12, 12, 12, icon);
-        addScaledVertexWithUV(tessellator, 12, 5, 4, 12, 4, icon);
-        //draw first plane back
-        addScaledVertexWithUV(tessellator, 4, 4, 4, 4, 4, icon);
-        addScaledVertexWithUV(tessellator, 12, 4,4, 12, 4, icon);
-        addScaledVertexWithUV(tessellator, 12, 4, 12, 12, 12, icon);
-        addScaledVertexWithUV(tessellator, 4, 4, 12, 4, 12, icon);
+        int cm = channel.colorMultiplier();
+        //bottom
+        drawScaledPrism(tessellator, 4, 4, 4, 12, 5, 12, icon, cm);
+        //corners
+        drawScaledPrism(tessellator, 4, 5, 4, 5, 12, 5, icon, cm);
+        drawScaledPrism(tessellator, 11, 5, 4, 12, 12, 5, icon, cm);
+        drawScaledPrism(tessellator, 4, 5, 11, 5, 12, 12, icon, cm);
+        drawScaledPrism(tessellator, 11, 5, 11, 12, 12, 12, icon, cm);
     }
 
     //renders one of the four sides of a channel
@@ -122,67 +120,16 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
             boolean x = axis == 'x';
             //the texture
             IIcon icon = channel.getIcon();
+            int cm = channel.colorMultiplier();
             if(neighbour) {
-                //extend bottom plane
-                //draw bottom plane front
-                addScaledVertexWithUV(tessellator, x?6*(direction+1):4, 5, x?4:(6+6*direction), x?6*(direction+1):4, x?4:(6+6*direction), icon);
-                addScaledVertexWithUV(tessellator, x?6*(direction+1):4, 5, x?12:(10+6*direction), x?6*(direction+1):4, x?12:(10+6*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):12, 5, x?12:(10+6*direction), x?(10.5F+direction*5.5F):12, x?12:(10+6*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):12, 5, x?4:(6+6*direction), x?(10.5F+direction*5.5F):12, x?4:(6+6*direction), icon);
-                //draw bottom plane back
-                addScaledVertexWithUV(tessellator, x?6*(direction+1):4, 4, x?4:(6+6*direction), x?6*(direction+1):4, x?4:(6+6*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):12, 4, x?4:(6+6*direction), x?(10.5F+direction*5.5F):12, x?4:(6+6*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):12, 4, x?12:(10+6*direction), x?(10.5F+direction*5.5F):12, x?12:(10+6*direction), icon);
-                addScaledVertexWithUV(tessellator, x?6*(direction+1):4, 4, x?12:(10+6*direction), x?6*(direction+1):4, x?12:(10+6*direction), icon);
-                //draw side edges
-                //draw first edge front
-                addScaledVertexWithUV(tessellator, x?5.5F*(1+direction):4, 12, x?12:5.5F*(1+direction), 5.5F*(direction+1), 4, icon);
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):4, 4, x?12:5.5F*(1+direction), 5.5F*(direction+1), 12, icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):4, 4, x?12:(10.5F+5.5F*direction), (10.5F+direction*5.5F), 12, icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):4, 12, x?12:(10.5F+5.5F*direction), (10.5F+direction*5.5F), 4, icon);
-                //draw first edge back
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):5, 12, x?11:(10.5F+5.5F*direction), x?5.5F*(direction+1):(16-(10.5F+5.5F*direction)), 4, icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):5, x?12:4, x?11:(10.5F+5.5F*direction), x?(10.5F+direction*5.5F):(16-(10.5F+5.5F*direction)), x?4:12, icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):5, 4, x?11:5.5F*(1+direction), x?(10.5F+direction*5.5F):(16-5.5F*(1+direction)), 12, icon);
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):5, x?4:12, x?11:5.5F*(1+direction), x?5.5F*(direction+1):(16-5.5F*(1+direction)), x?12:4, icon);
-                //draw first edge top
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):5, 12, x?11:(5.5F*(1+direction)), x?5.5F*(direction+1):5, x?11:(5.5F*(1+direction)), icon);
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):4, 12, x?12:(5.5F*(1+direction)), x?5.5F*(direction+1):4, x?12:(5.5F*(1+direction)), icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):4, 12, x?12:(10.5F+5.5F*direction), x?(10.5F+direction*5.5F):4, x?12:(10.5F+5.5F*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):5, 12, x?11:(10.5F+5.5F*direction), x?(10.5F+direction*5.5F):5, x?11:(10.5F+5.5F*direction), icon);
-                //draw second edge front
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):11, 12, x?5:(5.5F*(1+direction)), 5.5F*(direction+1), 4, icon);
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):11, 4, x?5:(5.5F*(1+direction)), 5.5F*(direction+1), 12, icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):11, 4, x?5:(10.5F+5.5F*direction), (10.5F+direction*5.5F), 12, icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):11, 12, x?5:(10.5F+5.5F*direction), (10.5F+direction*5.5F), 4, icon);
-                //draw second edge back
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):12, 12, x?4:(10.5F+5.5F*direction), x?5.5F*(direction+1):(16-(10.5F+5.5F*direction)), 4, icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):12, x?12:4, x?4:(10.5F+5.5F*direction), x?(10.5F+direction*5.5F):(16-(10.5F+5.5F*direction)), x?4:12, icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):12, 4, x?4:(5.5F*(1+direction)), x?(10.5F+direction*5.5F):(16-5.5F*(1+direction)), 12, icon);
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):12, x?4:12, x?4:(5.5F*(1+direction)), x?5.5F*(direction+1):(16-5.5F*(1+direction)), x?12:4, icon);
-                //draw second edge top
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):12, 12, x?4:(5.5F*(1+direction)), x?5.5F*(direction+1):12, x?4:(5.5F*(1+direction)), icon);
-                addScaledVertexWithUV(tessellator, x?5.5F*(direction+1):11, 12, x?5:(5.5F*(1+direction)), x?5.5F*(direction+1):11, x?5:(5.5F*(1+direction)), icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):11, 12, x?5:(10.5F+5.5F*direction), x?(10.5F+direction*5.5F):11, x?5:(10.5F+5.5F*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(10.5F+direction*5.5F):12, 12, x?4:(10.5F+5.5F*direction), x?(10.5F+direction*5.5F):12, x?4:(10.5F+5.5F*direction), icon);
+                //extend bottom plane and side edges
+                drawScaledPrism(tessellator, x?6*(direction+1):4, 4, x?4:(6+6*direction), x?(10.5F+direction*5.5F):12, 5, x?12:(10+6*direction), icon, cm);
+                drawScaledPrism(tessellator, x?5.5F*(1+direction):4, 5, x?11:(5.5F*(1+direction)), x?(10.5F+direction*5.5F):5, 12, x?12:(10.5F+5.5F*direction), icon, cm);
+                drawScaledPrism(tessellator, x?5.5F*(direction+1):11, 5, x?4:(5.5F*(1+direction)), x?(10.5F+direction*5.5F):12, 12, x?5:(10.5F+5.5F*direction), icon, cm);
             }
             else {
                 //draw an edge
-                //draw edge front
-                addScaledVertexWithUV(tessellator, x?(8.5F+3.5F*direction):4, 12, x?12:(8.5F+3.5F*direction), 4, 4, icon);
-                addScaledVertexWithUV(tessellator, x?(8.5F+3.5F*direction):4, 4, x?12:(8.5F+3.5F*direction), 4, 12, icon);
-                addScaledVertexWithUV(tessellator, x?(8.5F+3.5F*direction):12, 4, x?4:(8.5F+3.5F*direction), 12, 12, icon);
-                addScaledVertexWithUV(tessellator, x?(8.5F+3.5F*direction):12, 12, x?4:(8.5F+3.5F*direction), 12, 4, icon);
-                //draw edge back
-                addScaledVertexWithUV(tessellator, x?(7.5F+3.5F*direction):4, 12, x?4:(7.5F+3.5F*direction), 4, 4, icon);
-                addScaledVertexWithUV(tessellator, x?(7.5F+3.5F*direction):12, x?4:12, x?4:(7.5F+3.5F*direction), x?4:12, x?12:4, icon);
-                addScaledVertexWithUV(tessellator, x?(7.5F+3.5F*direction):12, 4, x?12:(7.5F+3.5F*direction), 12, 12, icon);
-                addScaledVertexWithUV(tessellator, x?(7.5F+3.5F*direction):4, x?12:4, x?12:(7.5F+3.5F*direction), x?12:4, x?4:12, icon);
-                //draw edge top
-                addScaledVertexWithUV(tessellator, x?(7.5F+3.5F*direction):4, 12, x?4:(7.5F+3.5F*direction), x?(7.5F+3.5F*direction):4, x?4:(7.5F+3.5F*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(7.5F+3.5F*direction):4, 12, x?12:(8.5F+3.5F*direction), x?(7.5F+3.5F*direction):4, x?12:(8.5F+3.5F*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(8.5F+3.5F*direction):12, 12, x?12:(8.5F+3.5F*direction), x?(8.5F+3.5F*direction):12, x?12:(8.5F+3.5F*direction), icon);
-                addScaledVertexWithUV(tessellator, x?(8.5F+3.5F*direction):12, 12, x?4:(7.5F+3.5F*direction), x?(8.5F+3.5F*direction):12, x?4:(7.5F+3.5F*direction), icon);
+                drawScaledPrism(tessellator, x?(7.5F+3.5F*direction):4, 4, x?4:(7.5F+3.5F*direction), x?(8.5F+3.5F*direction):12, 12, x?12:(8.5F+3.5F*direction), icon, cm);
             }
         }
     }

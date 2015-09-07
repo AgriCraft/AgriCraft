@@ -28,11 +28,11 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceG
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
 
-        drawScaledPrism(tessellator, 7, 5, 0, 9, 16, 2, icon);
-        drawScaledPrism(tessellator, 7, 5, 14, 9, 16, 16, icon);
-        drawScaledPrism(tessellator, 7, 12, 2, 9, 15, 14, icon);
-        drawScaledPrism(tessellator, 7, 6, 2, 9, 9, 14, icon);
-        drawScaledPrism(tessellator, 7, 9, 6, 9, 12, 10, icon);
+        drawScaledPrism(tessellator, 7, 5, 0, 9, 16, 2, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 5, 14, 9, 16, 16, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 12, 2, 9, 15, 14, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 6, 2, 9, 9, 14, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 9, 6, 9, 12, 10, icon, COLOR_MULTIPLIER_STANDARD);
 
         tessellator.draw();
         //enable lighting
@@ -45,53 +45,54 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceG
             return false;
         }
         TileEntityFenceGate gate = (TileEntityFenceGate) tile;
+        int cm = block.colorMultiplier(world, (int) x, (int) y, (int) z);
         IIcon icon = gate.getIcon();
         if(gate.isZAxis()) {
-            drawScaledPrism(tessellator, 0, 5, 7, 2, 16, 9, icon);
-            drawScaledPrism(tessellator, 14, 5, 7, 16, 16, 9, icon);
+            drawScaledPrism(tessellator, 0, 5, 7, 2, 16, 9, icon, cm);
+            drawScaledPrism(tessellator, 14, 5, 7, 16, 16, 9, icon, cm);
             if(!gate.isOpen()) {
-                drawScaledPrism(tessellator, 2, 12, 7, 14, 15, 9, icon);
-                drawScaledPrism(tessellator, 2, 6, 7, 14, 9, 9, icon);
-                drawScaledPrism(tessellator, 6, 9, 7, 10, 12, 9, icon);
+                drawScaledPrism(tessellator, 2, 12, 7, 14, 15, 9, icon, cm);
+                drawScaledPrism(tessellator, 2, 6, 7, 14, 9, 9, icon, cm);
+                drawScaledPrism(tessellator, 6, 9, 7, 10, 12, 9, icon, cm);
             } else {
                 if(gate.getOpenDirection()>0) {
-                    drawScaledPrism(tessellator, 0, 12, 1, 2, 15, 7, icon);
-                    drawScaledPrism(tessellator, 14, 12, 1, 16, 15, 7, icon);
-                    drawScaledPrism(tessellator, 0, 6, 1, 2, 9, 7, icon);
-                    drawScaledPrism(tessellator, 14, 6, 1, 16, 9, 7, icon);
-                    drawScaledPrism(tessellator, 0, 9, 1, 2, 12, 3, icon);
-                    drawScaledPrism(tessellator, 14, 9, 1, 16, 12, 3, icon);
+                    drawScaledPrism(tessellator, 0, 12, 1, 2, 15, 7, icon, cm);
+                    drawScaledPrism(tessellator, 14, 12, 1, 16, 15, 7, icon, cm);
+                    drawScaledPrism(tessellator, 0, 6, 1, 2, 9, 7, icon, cm);
+                    drawScaledPrism(tessellator, 14, 6, 1, 16, 9, 7, icon, cm);
+                    drawScaledPrism(tessellator, 0, 9, 1, 2, 12, 3, icon, cm);
+                    drawScaledPrism(tessellator, 14, 9, 1, 16, 12, 3, icon, cm);
                 } else {
-                    drawScaledPrism(tessellator, 0, 12, 9, 2, 15, 15, icon);
-                    drawScaledPrism(tessellator, 14, 12, 9, 16, 15, 15, icon);
-                    drawScaledPrism(tessellator, 0, 6, 9, 2, 9, 15, icon);
-                    drawScaledPrism(tessellator, 14, 6, 9, 16, 9, 15, icon);
-                    drawScaledPrism(tessellator, 0, 9, 13, 2, 12, 15, icon);
-                    drawScaledPrism(tessellator, 14, 9, 13, 16, 12, 15, icon);
+                    drawScaledPrism(tessellator, 0, 12, 9, 2, 15, 15, icon, cm);
+                    drawScaledPrism(tessellator, 14, 12, 9, 16, 15, 15, icon, cm);
+                    drawScaledPrism(tessellator, 0, 6, 9, 2, 9, 15, icon, cm);
+                    drawScaledPrism(tessellator, 14, 6, 9, 16, 9, 15, icon, cm);
+                    drawScaledPrism(tessellator, 0, 9, 13, 2, 12, 15, icon, cm);
+                    drawScaledPrism(tessellator, 14, 9, 13, 16, 12, 15, icon, cm);
                 }
             }
         } else {
-            drawScaledPrism(tessellator, 7, 5, 0, 9, 16, 2, icon);
-            drawScaledPrism(tessellator, 7, 5, 14, 9, 16, 16, icon);
+            drawScaledPrism(tessellator, 7, 5, 0, 9, 16, 2, icon, cm);
+            drawScaledPrism(tessellator, 7, 5, 14, 9, 16, 16, icon, cm);
             if(!gate.isOpen()) {
-                drawScaledPrism(tessellator, 7, 12, 2, 9, 15, 14, icon);
-                drawScaledPrism(tessellator, 7, 6, 2, 9, 9, 14, icon);
-                drawScaledPrism(tessellator, 7, 9, 6, 9, 12, 10, icon);
+                drawScaledPrism(tessellator, 7, 12, 2, 9, 15, 14, icon, cm);
+                drawScaledPrism(tessellator, 7, 6, 2, 9, 9, 14, icon, cm);
+                drawScaledPrism(tessellator, 7, 9, 6, 9, 12, 10, icon, cm);
             } else {
                 if(gate.getOpenDirection()>0) {
-                    drawScaledPrism(tessellator, 1, 12, 0, 7, 15, 2, icon);
-                    drawScaledPrism(tessellator, 1, 12, 14, 7, 15, 16, icon);
-                    drawScaledPrism(tessellator, 1, 6, 0, 7, 9, 2, icon);
-                    drawScaledPrism(tessellator, 1, 6, 14, 7, 9, 16, icon);
-                    drawScaledPrism(tessellator, 1, 9, 0, 3, 12, 2, icon);
-                    drawScaledPrism(tessellator, 1, 9, 14, 3, 12, 16, icon);
+                    drawScaledPrism(tessellator, 1, 12, 0, 7, 15, 2, icon, cm);
+                    drawScaledPrism(tessellator, 1, 12, 14, 7, 15, 16, icon, cm);
+                    drawScaledPrism(tessellator, 1, 6, 0, 7, 9, 2, icon, cm);
+                    drawScaledPrism(tessellator, 1, 6, 14, 7, 9, 16, icon, cm);
+                    drawScaledPrism(tessellator, 1, 9, 0, 3, 12, 2, icon, cm);
+                    drawScaledPrism(tessellator, 1, 9, 14, 3, 12, 16, icon, cm);
                 } else {
-                    drawScaledPrism(tessellator, 9, 12, 0, 15, 15, 2, icon);
-                    drawScaledPrism(tessellator, 9, 12, 14, 15, 15, 16, icon);
-                    drawScaledPrism(tessellator, 9, 6, 0, 15, 9, 2, icon);
-                    drawScaledPrism(tessellator, 9, 6, 14, 15, 9, 16, icon);
-                    drawScaledPrism(tessellator, 13, 9, 0, 15, 12, 2, icon);
-                    drawScaledPrism(tessellator, 13, 9, 14, 15, 12, 16, icon);
+                    drawScaledPrism(tessellator, 9, 12, 0, 15, 15, 2, icon, cm);
+                    drawScaledPrism(tessellator, 9, 12, 14, 15, 15, 16, icon, cm);
+                    drawScaledPrism(tessellator, 9, 6, 0, 15, 9, 2, icon, cm);
+                    drawScaledPrism(tessellator, 9, 6, 14, 15, 9, 16, icon, cm);
+                    drawScaledPrism(tessellator, 13, 9, 0, 15, 12, 2, icon, cm);
+                    drawScaledPrism(tessellator, 13, 9, 14, 15, 12, 16, icon, cm);
                 }
             }
         }

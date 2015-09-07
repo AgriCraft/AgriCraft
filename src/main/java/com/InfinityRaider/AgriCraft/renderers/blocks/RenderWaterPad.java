@@ -30,13 +30,14 @@ public class RenderWaterPad extends RenderBlockBase {
         GL11.glDisable(GL11.GL_LIGHTING);
         tessellator.startDrawingQuads();
         boolean full = ((ItemBlock) item.getItem()).field_150939_a instanceof BlockWaterPadFull;
-        drawScaledPrism(tessellator, 0, 0, 0, 16, 8, 16, Blocks.dirt.getIcon(0, 0));
-        drawScaledPrism(tessellator, 1, 8, 0, 1, 15, 16, Blocks.dirt.getIcon(0, 0));
-        drawScaledPrism(tessellator, 15, 8, 1, 16, 15, 16, Blocks.dirt.getIcon(0, 0));
-        drawScaledPrism(tessellator, 0, 8, 15, 15, 15, 16, Blocks.dirt.getIcon(0, 0));
-        drawScaledPrism(tessellator, 0, 8, 0, 15, 1, 15, Blocks.dirt.getIcon(0, 0));
+        int cm = COLOR_MULTIPLIER_STANDARD;
+        drawScaledPrism(tessellator, 0, 0, 0, 16, 8, 16, Blocks.dirt.getIcon(0, 0), cm);
+        drawScaledPrism(tessellator, 1, 8, 0, 1, 15, 16, Blocks.dirt.getIcon(0, 0), cm);
+        drawScaledPrism(tessellator, 15, 8, 1, 16, 15, 16, Blocks.dirt.getIcon(0, 0), cm);
+        drawScaledPrism(tessellator, 0, 8, 15, 15, 15, 16, Blocks.dirt.getIcon(0, 0), cm);
+        drawScaledPrism(tessellator, 0, 8, 0, 15, 1, 15, Blocks.dirt.getIcon(0, 0), cm);
         if(full) {
-            drawScaledPrism(tessellator, 1, 14, 1, 15, 15, 15, Blocks.water.getIcon(0, 0));
+            drawScaledPrism(tessellator, 1, 14, 1, 15, 15, 15, Blocks.water.getIcon(0, 0), cm);
         }
         tessellator.draw();
         GL11.glEnable(GL11.GL_LIGHTING);

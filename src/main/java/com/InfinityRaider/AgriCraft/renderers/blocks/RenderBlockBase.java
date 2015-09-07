@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockBase extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler, IItemRenderer {
     private static HashMap<Block, Integer> renderIds = new HashMap<Block, Integer>();
+    public static final int COLOR_MULTIPLIER_STANDARD = 16777215;
 
     private final Block block;
 
@@ -209,7 +211,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         tessellator.addVertexWithUV(x * unit, y * unit, z * unit, icon.getInterpolatedU(u), icon.getInterpolatedV(v));
     }
 
-    protected void drawScaledFaceXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z) {
+    protected void drawScaledFaceDoubleXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z) {
         z = z*16.0F;
         float minU = 0;
         float maxU = icon.getIconWidth();
@@ -227,11 +229,11 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         addScaledVertexWithUV(tessellator, maxX, minY, z, maxU, maxV, icon);
     }
 
-    protected void drawFaceXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z) {
-        drawScaledFaceXY(tessellator, minX * 16, minY * 16, maxX * 16, maxY * 16, icon, z);
+    protected void drawFaceDoubleXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z) {
+        drawScaledFaceDoubleXY(tessellator, minX * 16, minY * 16, maxX * 16, maxY * 16, icon, z);
     }
 
-    protected void drawScaledFaceXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y) {
+    protected void drawScaledFaceDoubleXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y) {
         y = y*16.0F;
         float minU = 0;
         float maxU = icon.getIconWidth();
@@ -249,11 +251,11 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         addScaledVertexWithUV(tessellator, maxX, y, minZ, maxU, minV, icon);
     }
 
-    protected void drawFaceXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y) {
-        drawScaledFaceXY(tessellator, minX * 16, minZ * 16, maxX * 16, maxZ * 16, icon, y);
+    protected void drawFaceDoubleXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y) {
+        drawScaledFaceDoubleXY(tessellator, minX * 16, minZ * 16, maxX * 16, maxZ * 16, icon, y);
     }
 
-    protected void drawScaledFaceYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x) {
+    protected void drawScaledFaceDoubleYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x) {
         x = x*16.0F;
         float minU = 0;
         float maxU = icon.getIconWidth();
@@ -271,12 +273,12 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         addScaledVertexWithUV(tessellator, x, minY, maxZ, maxU, maxV, icon);
     }
 
-    protected void drawFaceYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x) {
-        drawScaledFaceYZ(tessellator, minY * 16, minZ * 16, maxY * 16, maxZ * 16, icon, x);
+    protected void drawFaceDoubleYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x) {
+        drawScaledFaceDoubleYZ(tessellator, minY * 16, minZ * 16, maxY * 16, maxZ * 16, icon, x);
     }
 
     //draws a rectangular prism
-    protected void drawScaledPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon) {
+    protected void drawScaledPrismOld(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier) {
         //front plane
         addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, 16 - maxY, icon);
         addScaledVertexWithUV(tessellator, maxX, minY, minZ, maxX, 16-minY, icon);
@@ -310,7 +312,116 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     }
 
     //draws a rectangular prism
-    protected void drawPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon) {
-        drawScaledPrism(tessellator, minX*16, minY*16, minZ*16, maxX*16, maxY*16, maxZ*16, icon);
+    protected void drawScaledPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier) {
+        //bottom
+        drawScaledFaceBackXZ(tessellator, minX, minZ, maxX, maxZ, icon, minY/16.0F, colorMultiplier);
+        //top
+        drawScaledFaceFrontXZ(tessellator, minX, minZ, maxX, maxZ, icon, maxY/16.0F, colorMultiplier);
+        //back
+        drawScaledFaceBackXY(tessellator, minX, minY, maxX, maxY, icon, minZ/16.0F, colorMultiplier);
+        //front
+        drawScaledFaceFrontXY(tessellator, minX, minY, maxX, maxY, icon, maxZ/16.0F, colorMultiplier);
+        //left
+        drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, icon, minX/16.0F, colorMultiplier);
+        //right
+        drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, icon, maxX/16.0F, colorMultiplier);
+
+    }
+
+    //draws a rectangular prism
+    protected void drawPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier) {
+        drawScaledPrism(tessellator, minX*16, minY*16, minZ*16, maxX*16, maxY*16, maxZ*16, icon, colorMultiplier);
+    }
+
+    protected void drawScaledFaceFrontXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z, int colorMultiplier) {
+        //z positive
+        float r = 0.8F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
+        float g = 0.8F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
+        float b = 0.8F * ((float)(colorMultiplier & 255) / 255.0F);
+        tessellator.setColorOpaque_F(r, g, b);
+        z = z*16.0F;
+        float minV = 16-maxY;
+        float maxV = 16-minY;
+        //front
+        addScaledVertexWithUV(tessellator, maxX, maxY, z, maxX, minV, icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, z, minX, minV, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, z, minX, maxV, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, z, maxX, maxV, icon);
+    }
+
+    protected void drawScaledFaceFrontXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y, int colorMultiplier) {
+        //y positive
+        float r = ((float)(colorMultiplier >> 16 & 255) / 255.0F);
+        float g = ((float)(colorMultiplier >> 8 & 255) / 255.0F);
+        float b = ((float)(colorMultiplier & 255) / 255.0F);
+        tessellator.setColorOpaque_F(r, g, b);
+        y = y*16.0F;
+        //front
+        addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ, icon);
+        addScaledVertexWithUV(tessellator, maxX, y, minZ, maxX, minZ, icon);
+        addScaledVertexWithUV(tessellator, minX, y, minZ, minX, minZ, icon);
+        addScaledVertexWithUV(tessellator, minX, y, maxZ, minX, maxZ, icon);
+    }
+
+    protected void drawScaledFaceFrontYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x, int colorMultiplier) {
+        //x positive
+        float r = 0.6F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
+        float g = 0.6F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
+        float b = 0.6F * ((float)(colorMultiplier & 255) / 255.0F);
+        tessellator.setColorOpaque_F(r, g, b);
+        x = x*16.0F;
+        float minV = 16-maxY;
+        float maxV = 16-minY;
+        //front
+        addScaledVertexWithUV(tessellator, x, maxY, maxZ, maxZ, minV, icon);
+        addScaledVertexWithUV(tessellator, x, minY, maxZ, maxZ, maxV, icon);
+        addScaledVertexWithUV(tessellator, x, minY, minZ, minZ, maxV, icon);
+        addScaledVertexWithUV(tessellator, x, maxY, minZ, minZ, minV, icon);
+    }
+
+    protected void drawScaledFaceBackXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z, int colorMultiplier) {
+        //z negative
+        float r = 0.8F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
+        float g = 0.8F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
+        float b = 0.8F * ((float)(colorMultiplier & 255) / 255.0F);
+        tessellator.setColorOpaque_F(r, g, b);
+        z = z*16.0F;
+        float minV = 16 - maxY;
+        float maxV = 16 - minY;
+        //back
+        addScaledVertexWithUV(tessellator, maxX, maxY, z, maxX, minV, icon);
+        addScaledVertexWithUV(tessellator, maxX, minY, z, maxX, maxV, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, z, minX, maxV, icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, z, minX, minV, icon);
+    }
+
+    protected void drawScaledFaceBackXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y, int colorMultiplier) {
+        float f10 = 0.5F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
+        float f13 = 0.5F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
+        float f16 = 0.5F * ((float)(colorMultiplier & 255) / 255.0F);
+        //y negative
+        tessellator.setColorOpaque_F(f10, f13, f16);
+        y = y*16.0F;
+        //back
+        addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ, icon);
+        addScaledVertexWithUV(tessellator, minX, y, maxZ, minX, maxZ, icon);
+        addScaledVertexWithUV(tessellator, minX, y, minZ, minX, minZ, icon);
+        addScaledVertexWithUV(tessellator, maxX, y, minZ, maxX, minZ, icon);
+    }
+
+    protected void drawScaledFaceBackYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x, int colorMultiplier) {
+        //x negative
+        float r = 0.6F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
+        float g = 0.6F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
+        float b = 0.6F * ((float)(colorMultiplier & 255) / 255.0F);
+        tessellator.setColorOpaque_F(r, g, b);
+        x = x*16.0F;
+        float minV = 16 - maxY;
+        float maxV = 16 - minY;
+        //back
+        addScaledVertexWithUV(tessellator, x, maxY, maxZ, maxZ, minV, icon);
+        addScaledVertexWithUV(tessellator, x, maxY, minZ, minZ, minV, icon);
+        addScaledVertexWithUV(tessellator, x, minY, minZ, minZ, maxV, icon);
+        addScaledVertexWithUV(tessellator, x, minY, maxZ, maxZ, maxV, icon);
     }
 }

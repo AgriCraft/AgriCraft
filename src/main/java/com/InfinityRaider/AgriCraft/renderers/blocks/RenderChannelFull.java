@@ -19,15 +19,16 @@ public class RenderChannelFull extends RenderChannel {
     protected void renderBottom(TileEntityChannel channel, Tessellator tessellator) {
         //the texture
         IIcon icon = channel.getIcon();
+        int cm = channel.colorMultiplier();
         //draw bottom
-        drawScaledPrism(tessellator, 0, 0, 0, 16, 5, 16, icon);
+        drawScaledPrism(tessellator, 0, 0, 0, 16, 5, 16, icon, cm);
         //draw top
-        drawScaledPrism(tessellator, 0, 12, 0, 16, 16, 16, icon);
+        drawScaledPrism(tessellator, 0, 12, 0, 16, 16, 16, icon, cm);
         //draw four corners
-        drawScaledPrism(tessellator, 0, 5, 0, 5, 12, 5, icon);
-        drawScaledPrism(tessellator, 11, 5, 0, 16, 12, 5, icon);
-        drawScaledPrism(tessellator, 11, 5, 11, 16, 12, 16, icon);
-        drawScaledPrism(tessellator, 0, 5, 11, 5, 12, 16, icon);
+        drawScaledPrism(tessellator, 0, 5, 0, 5, 12, 5, icon, cm);
+        drawScaledPrism(tessellator, 11, 5, 0, 16, 12, 5, icon, cm);
+        drawScaledPrism(tessellator, 11, 5, 11, 16, 12, 16, icon, cm);
+        drawScaledPrism(tessellator, 0, 5, 11, 5, 12, 16, icon, cm);
 
     }
 
@@ -40,11 +41,12 @@ public class RenderChannelFull extends RenderChannel {
             boolean x = axis == 'x';
             //the texture
             IIcon icon = channel.getIcon();
+            int cm = channel.colorMultiplier();
             if(!neighbour) {
                 if(x) {
-                    drawScaledPrism(tessellator, direction == 1 ? 11 : 0, 5, 5, direction == 1 ? 16 : 5, 12, 11, icon);
+                    drawScaledPrism(tessellator, direction==1?11:0, 5, 5, direction==1?16:5, 12, 11, icon, cm);
                 } else {
-                    drawScaledPrism(tessellator, 5, 5, direction==1?11:0, 12, 11, direction==1?16:5, icon);
+                    drawScaledPrism(tessellator, 5, 5, direction==1?11:0, 11, 12, direction==1?16:5, icon, cm);
                 }
             }
         }

@@ -2,6 +2,8 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -122,5 +124,14 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
     @Override
     public boolean isRotatable() {
         return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int colorMultiplier() {
+        if(this.worldObj==null) {
+            return 16777215;
+        } else {
+            return getBlockType().colorMultiplier(worldObj, xCoord, yCoord, zCoord);
+        }
     }
 }

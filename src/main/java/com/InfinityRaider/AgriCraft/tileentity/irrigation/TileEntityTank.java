@@ -152,6 +152,33 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         }
         return false;
     }
+
+    public boolean isConnectedToChannel(char axis, int direction) {
+        if(this.worldObj == null) {
+            return false;
+        }
+        boolean x = axis=='x';
+        TileEntity tile = this.getWorldObj().getTileEntity(this.xCoord+(x?direction:0), this.yCoord, this.zCoord+(x?0:direction));
+        if(tile == null) {
+            return false;
+        }
+        if(tile instanceof TileEntityChannel) {
+            return ((TileEntityChannel) tile).isSameMaterial(this);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean hasNeighbour(char axis, int direction) {
+        if(this.worldObj == null) {
+            return false;
+        }
+        boolean x = axis == 'x';
+        boolean y = axis == 'y';
+        boolean z = axis == 'z';
+        return this.isMultiBlockPartner(this.getWorldObj().getTileEntity(this.xCoord + (x?direction:0), this.yCoord + (y?direction:0), this.zCoord+(z?direction:0)));
+    }
+
     //check if a tile entity is part of this multiblock
     public boolean isMultiBlockPartner(TileEntity tileEntity) {
         return this.getConnectedTanks()>1 && (this.isSameTank(tileEntity)) && (this.getConnectedTanks() == ((TileEntityTank) tileEntity).getConnectedTanks());
@@ -434,6 +461,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     }
 
     public int getScaledDiscreteFluidLevel() {
+        if(this.worldObj == null) {
+            return 0;
+        }
         float scaleFactor = (float) getSingleCapacity() / (float) DISCRETE_MAX;
         int discreteFluidLevel = getDiscreteFluidLevel();
         return Math.round(scaleFactor * discreteFluidLevel);

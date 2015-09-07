@@ -1,14 +1,13 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -25,81 +24,12 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
     @Override
     protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
         Tessellator tessellator = Tessellator.instance;
-        Minecraft.getMinecraft().renderEngine.bindTexture(RenderHelper.getBlockResource(teDummy.getIcon()));
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         //disable lighting
         GL11.glDisable(GL11.GL_LIGHTING);
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
-        //draw first plane front
-        addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 0);
-        addScaledVertexWithUV(tessellator, 0, 0, 16, 0, 16);
-        addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
-        addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 0);
-        //draw first plane back
-        addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 0);
-        addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 0);
-        addScaledVertexWithUV(tessellator, 16, 0, 14, 16, 16);
-        addScaledVertexWithUV(tessellator, 0, 0, 14, 0, 16);
-        //draw first plane top
-        addScaledVertexWithUV(tessellator, 0, 16, 14, 0, 14);
-        addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
-        addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
-        addScaledVertexWithUV(tessellator, 16, 16, 14, 16, 14);
-        //draw second plane front
-        addScaledVertexWithUV(tessellator, 16, 16, 16, 0, 0);
-        addScaledVertexWithUV(tessellator, 16, 0, 16, 0, 16);
-        addScaledVertexWithUV(tessellator, 16, 0, 0, 16, 16);
-        addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
-        //draw second plane back
-        addScaledVertexWithUV(tessellator, 14, 16, 16, 0, 0);
-        addScaledVertexWithUV(tessellator, 14, 16, 0, 16, 0);
-        addScaledVertexWithUV(tessellator, 14, 0, 0, 16, 16);
-        addScaledVertexWithUV(tessellator, 14, 0, 16, 0, 16);
-        //draw second plane top
-        addScaledVertexWithUV(tessellator, 14, 16, 0, 14, 0);
-        addScaledVertexWithUV(tessellator, 14, 16, 16, 14, 16);
-        addScaledVertexWithUV(tessellator, 16, 16, 16, 16, 16);
-        addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
-        //draw third plane front
-        addScaledVertexWithUV(tessellator, 16, 16, 0, 0, 0);
-        addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
-        addScaledVertexWithUV(tessellator, 0, 0, 0, 16, 16);
-        addScaledVertexWithUV(tessellator, 0, 16, 0, 16, 0);
-        //draw third plane back
-        addScaledVertexWithUV(tessellator, 16, 16, 2, 0, 0);
-        addScaledVertexWithUV(tessellator, 0, 16, 2, 16, 0);
-        addScaledVertexWithUV(tessellator, 0, 0, 2, 16, 16);
-        addScaledVertexWithUV(tessellator, 16, 0, 2, 0, 16);
-        //draw third plane top
-        addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
-        addScaledVertexWithUV(tessellator, 0, 16, 2, 0, 2);
-        addScaledVertexWithUV(tessellator, 16, 16, 2, 16, 2);
-        addScaledVertexWithUV(tessellator, 16, 16, 0, 16, 0);
-        //draw fourth plane front
-        addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
-        addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 16);
-        addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 16);
-        addScaledVertexWithUV(tessellator, 0, 16, 16, 16, 0);
-        //draw fourth plane back
-        addScaledVertexWithUV(tessellator, 2, 16, 0, 0, 0);
-        addScaledVertexWithUV(tessellator, 2, 16, 16, 16, 0);
-        addScaledVertexWithUV(tessellator, 2, 0, 16, 16, 16);
-        addScaledVertexWithUV(tessellator, 2, 0, 0, 0, 16);
-        //draw fourth plane top
-        addScaledVertexWithUV(tessellator, 0, 16, 0, 0, 0);
-        addScaledVertexWithUV(tessellator, 0, 16, 16, 0, 16);
-        addScaledVertexWithUV(tessellator, 2, 16, 16, 2, 16);
-        addScaledVertexWithUV(tessellator, 2, 16, 0, 2, 0);
-        //draw bottom plane front
-        addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 0);
-        addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16);
-        addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16);
-        addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 0);
-        //draw bottom plane back
-        addScaledVertexWithUV(tessellator, 0, 1, 0, 0, 0);
-        addScaledVertexWithUV(tessellator, 0, 1, 16, 16, 0);
-        addScaledVertexWithUV(tessellator, 16, 1, 16, 16, 16);
-        addScaledVertexWithUV(tessellator, 16, 1, 0, 0, 16);
+        this.renderTank(teDummy, tessellator, item.getItemDamage());
         tessellator.draw();
         //enable lighting
         GL11.glEnable(GL11.GL_LIGHTING);
@@ -108,21 +38,27 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
     @Override
     protected boolean doWorldRender(Tessellator tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
         //call correct drawing methods
+        boolean success = false;
         if (tile instanceof TileEntityTank) {
             TileEntityTank tank = (TileEntityTank) tile;
-            if(tank.getBlockMetadata()==0) {
-                this.drawWoodTank(tank, tessellator);
-                //draw the waterTexture
-                if(tank.getScaledDiscreteFluidLevel()>0) {
-                    this.drawWater(tank, tessellator);
-                }
-            }
-            else if(tank.getBlockMetadata()==1) {
-                this.drawIronTank(tank, tessellator);
-            }
+            success = renderTank(tank, tessellator, tank.getBlockMetadata());
         }
         //clear texture overrides
         renderer.clearOverrideBlockTexture();
+        return success;
+    }
+
+    private boolean renderTank(TileEntityTank tank, Tessellator tessellator, int meta) {
+        if(meta==0) {
+            this.drawWoodTank(tank, tessellator);
+            //draw the waterTexture
+            if(tank.getScaledDiscreteFluidLevel()>0) {
+                this.drawWater(tank, tessellator);
+            }
+        }
+        else if(meta==1) {
+            this.drawIronTank(tank, tessellator);
+        }
         return true;
     }
 
@@ -145,110 +81,47 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
     }
 
     private void renderBottom(TileEntityTank tank, Tessellator tessellator) {
-        if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord, tank.yCoord-1, tank.zCoord))) {
-            //the texture
-            IIcon icon = tank.getIcon();
-            //draw bottom plane front
-            addScaledVertexWithUV(tessellator, 0, 0, 0, 0, 0, icon);
-            addScaledVertexWithUV(tessellator, 16, 0, 0, 0, 16, icon);
-            addScaledVertexWithUV(tessellator, 16, 0, 16, 16, 16, icon);
-            addScaledVertexWithUV(tessellator, 0, 0, 16, 16, 0, icon);
-            //draw bottom plane back
-            addScaledVertexWithUV(tessellator, 0, 1, 0, 0, 0, icon);
-            addScaledVertexWithUV(tessellator, 0, 1, 16, 16, 0, icon);
-            addScaledVertexWithUV(tessellator, 16, 1, 16, 16, 16, icon);
-            addScaledVertexWithUV(tessellator, 16, 1, 0, 0, 16, icon);
+        //the texture
+        IIcon icon = tank.getIcon();
+        int cm = tank.colorMultiplier();
+        //bottom
+        boolean bottom = !tank.hasNeighbour('y', -1);
+        if (bottom) {
+            drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, icon, cm);
+        }
+        //corners
+        int yMin = bottom?1:0;
+        if (!tank.hasNeighbour('x', -1) || !tank.hasNeighbour('z', -1)) {
+            drawScaledPrism(tessellator, 0, yMin, 0, 2, 16, 2, icon, cm);
+        }
+        if (!tank.hasNeighbour('x', 1) || !tank.hasNeighbour('z', -1)) {
+            drawScaledPrism(tessellator, 14, yMin, 0, 16, 16, 2, icon, cm);
+        }
+        if (!tank.hasNeighbour('x', -1) || !tank.hasNeighbour('z', 1)) {
+            drawScaledPrism(tessellator, 0, yMin, 14, 2, 16, 16, icon, cm);
+        }
+        if (!tank.hasNeighbour('x', 1) || !tank.hasNeighbour('z', 1)) {
+            drawScaledPrism(tessellator, 14, yMin, 14, 16, 16, 16, icon, cm);
         }
     }
 
     private void renderSide(TileEntityTank tank, Tessellator tessellator, char axis, int direction) {
         //the texture
         IIcon icon = tank.getIcon();
+        int cm = tank.colorMultiplier();
+        int yMin = tank.hasNeighbour('y', -1)?0:1;
         if ((axis == 'x' || axis == 'z') && (direction == 1 || direction == -1)) {
             boolean x = axis=='x';
-            if(tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction))instanceof TileEntityChannel && ((TileEntityChannel) tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction))).isSameMaterial(tank)) {
-                //draw plane front top
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 0 : (9 + 7 * direction), 0, 0, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 11, x ? 0 : (9 + 7 * direction), 0, 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 11, x ? 16 : (9 + 7 * direction), 16, 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 16, x ? 16 : (9 + 7 * direction), 16, 0, icon);
-                //draw plane front left
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 11, x ? 0 : (9 + 7 * direction), 0, 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 5, x ? 0 : (9 + 7 * direction), 0, 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 5, x ? 5 : (9 + 7 * direction), 5, 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 11, x ? 5 : (9 + 7 * direction), 5, 5, icon);
-                //draw plane front bottom
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 5, x ? 0 : (9 + 7 * direction), 0, 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 0, x ? 0 : (9 + 7 * direction), 0, 16, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 0, x ? 16 : (9 + 7 * direction), 16, 16, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 5, x ? 16 : (9 + 7 * direction), 16, 11, icon);
-                //draw plane front right
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 11, 11, x ? 11 : (9 + 7 * direction), 11, 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 11, 5, x ? 11 : (9 + 7 * direction), 11, 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 5, x ? 16 : (9 + 7 * direction), 16, 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 11, x ? 16 : (9 + 7 * direction), 16, 5, icon);
-                //draw plane back top
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 16, x ? 0 : (7 + 7 * direction), 0, 0, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 16 : (7 + 7 * direction), 16, 0, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 11, x ? 16 : (7 + 7 * direction), 16, 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 11, x ? 0 : (7 + 7 * direction), 0, 5, icon);
-                //draw plane back left
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 11, x ? 0 : (7 + 7 * direction), 0, 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 5, 11, x ? 5 : (7 + 7 * direction), 5, 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 5, 5, x ? 5 : (7 + 7 * direction), 5, 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 5, x ? 0 : (7 + 7 * direction), 0, 11, icon);
-                //draw plane back bottom
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 5, x ? 0 : (7 + 7 * direction), 0, 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 5, x ? 16 : (7 + 7 * direction), 16, 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 0, x ? 16 : (7 + 7 * direction), 16, 16, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 0, x ? 0 : (7 + 7 * direction), 0, 16, icon);
-                //draw plane back right
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 11, x ? 11 : (7 + 7 * direction), 11, 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 11, x ? 16 : (7 + 7 * direction), 16, 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 5, x ? 16 : (7 + 7 * direction), 16, 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 5, x ? 11 : (7 + 7 * direction), 11, 11, icon);
-                //draw hole bottom plane
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 5, x ? 5 : (7 + 7 * direction), x ? (7 + 7 * direction) : 5, x ? 5 : (7 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 5, x ? 11 : (9 + 7 * direction), x ? (7 + 7 * direction) : 5, x ? 11 : (9 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 5, x ? 11 : (9 + 7 * direction), x ? (9 + 7 * direction) : 11, x ? 11 : (9 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 5, x ? 5 : (7 + 7 * direction), x ? (9 + 7 * direction) : 11, x ? 5 : (7 + 7 * direction), icon);
-                //draw hole right plane
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 11, 11, x ? 5 : (7 + 7 * direction), (7 + 7 * direction), 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 11, 5, x ? 5 : (7 + 7 * direction), (7 + 7 * direction), 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 5, x ? 5 : (9 + 7 * direction), (9 + 7 * direction), 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 11, x ? 5 : (9 + 7 * direction), (9 + 7 * direction), 5, icon);
-                //draw hole top plane
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 11, x ? 5 : (7 + 7 * direction), x ? (7 + 7 * direction) : 5, x ? 5 : (7 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 11, x ? 5 : (7 + 7 * direction), x ? (9 + 7 * direction) : 11, x ? 5 : (7 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 11, 11, x ? 11 : (9 + 7 * direction), x ? (9 + 7 * direction) : 11, x ? 11 : (9 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 11, x ? 11 : (9 + 7 * direction), x ? (7 + 7 * direction) : 5, x ? 11 : (9 + 7 * direction), icon);
-                //draw hole left plane
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 11, x ? 11 : (7 + 7 * direction), (7 + 7 * direction), 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 5, 11, x ? 11 : (9 + 7 * direction), (9 + 7 * direction), 5, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 5, 5, x ? 11 : (9 + 7 * direction), (9 + 7 * direction), 11, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 5, 5, x ? 11 : (7 + 7 * direction), (7 + 7 * direction), 11, icon);
-                //draw plane top
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 0 : (7 + 7 * direction), x ? (7 + 7 * direction) : 0, x ? 0 : (7 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 16 : (9 + 7 * direction), x ? (7 + 7 * direction) : 0, x ? 16 : (9 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 16 : (9 + 7 * direction), x ? (9 + 7 * direction) : 16, x ? 16 : (9 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 0 : (7 + 7 * direction), x ? (9 + 7 * direction) : 16, x ? 0 : (7 + 7 * direction), icon);
+            //connected to a channel
+            if(tank.isConnectedToChannel(axis, direction)) {
+                drawScaledPrism(tessellator, x?(7+7*direction):2, yMin, x?2:(7+7*direction), x?(9+7*direction):14, 5, x?14:(9+7*direction), icon, cm);
+                drawScaledPrism(tessellator, x?(7+7*direction):2, 5, x?2:(7+7*direction), x?(9+7*direction):5, 12, x?5:(9+7*direction), icon, cm);
+                drawScaledPrism(tessellator, x?(7+7*direction):11, 5, x?11:(7+7*direction), x?(9+7*direction):14, 12, x?14:(9+7*direction), icon, cm);
+                drawScaledPrism(tessellator, x?(7+7*direction):2, 12, x?2:(7+7*direction), x?(9+7*direction):14, 16, x?14:(9+7*direction), icon, cm);
             }
-            else if(!tank.isMultiBlockPartner(tank.getWorldObj().getTileEntity(tank.xCoord+(x?direction:0), tank.yCoord, tank.zCoord+(x?0:direction)))) {
-                //draw front plane
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 16, x ? 16 : (9 + 7 * direction), 0, 0, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 0, 0, x ? 16 : (9 + 7 * direction), 0, 16, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 0, x ? 0 : (9 + 7 * direction), 16, 16, icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 0 : (9 + 7 * direction), 16, 0, icon);
-                //draw back plane
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 16 : (7 + 7 * direction), 0, 0, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 16, x ? 0 : (7 + 7 * direction), 16, 0, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 16, 0, x ? 0 : (7 + 7 * direction), 16, 16, icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 0, x ? 16 : (7 + 7 * direction), 0, 16, icon);
-                //draw top plane
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 0 : (7 + 7 * direction), x ? (7 + 7 * direction) : 0, x ? 0 : (7 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (7 + 7 * direction) : 0, 16, x ? 16 : (9 + 7 * direction), x ? (7 + 7 * direction) : 0, x ? 16 : (9 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 16 : (9 + 7 * direction), x ? (9 + 7 * direction) : 16, x ? 16 : (9 + 7 * direction), icon);
-                addScaledVertexWithUV(tessellator, x ? (9 + 7 * direction) : 16, 16, x ? 0 : (7 + 7 * direction), x ? (9 + 7 * direction) : 16, x ? 0 : (7 + 7 * direction), icon);
+            //not connected to anything
+            else if(!tank.hasNeighbour(axis, direction)) {
+                drawScaledPrism(tessellator, x?(7+7*direction):2, yMin, x?2:(7+7* direction),  x?(9+7*direction):14, 16, x?14:(9+7*direction), icon, cm);
             }
         }
     }

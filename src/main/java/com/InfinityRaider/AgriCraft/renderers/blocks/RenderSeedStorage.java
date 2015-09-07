@@ -43,19 +43,20 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
         if (tile instanceof TileEntitySeedStorage) {
             TileEntitySeedStorage storage = (TileEntitySeedStorage) tile;
             IIcon icon = storage.getIcon();
+            int cm = storage.colorMultiplier();
             //casing
-            drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, icon);
-            drawScaledPrism(tessellator, 0, 15, 0, 16, 16, 16, icon);
-            drawScaledPrism(tessellator, 0, 1, 0, 1, 15, 16, icon);
-            drawScaledPrism(tessellator, 15, 1, 0, 16, 15, 16, icon);
-            drawScaledPrism(tessellator, 1, 1, 15, 15, 15, 16, icon);
+            drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, icon, cm);
+            drawScaledPrism(tessellator, 0, 15, 0, 16, 16, 16, icon, cm);
+            drawScaledPrism(tessellator, 0, 1, 0, 1, 15, 16, icon, cm);
+            drawScaledPrism(tessellator, 15, 1, 0, 16, 15, 16, icon, cm);
+            drawScaledPrism(tessellator, 1, 1, 15, 15, 15, 16, icon, cm);
             //drawer
-            drawScaledPrism(tessellator, 1.1F, 1.1F, 1, 14.9F, 14.9F, 2, icon);
-            drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, net.minecraft.init.Blocks.iron_block.getIcon(0, 0));
-            drawScaledPrism(tessellator, 4, 3, 0, 5, 10, 1, icon);
-            drawScaledPrism(tessellator, 11, 3, 0, 12, 10, 1, icon);
-            drawScaledPrism(tessellator, 4, 10, 0, 12, 11, 1, icon);
-            drawScaledPrism(tessellator, 4, 3, 0, 12, 4, 1, icon);
+            drawScaledPrism(tessellator, 1.1F, 1.1F, 1, 14.9F, 14.9F, 2, icon, cm);
+            drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, net.minecraft.init.Blocks.iron_block.getIcon(0, 0), cm);
+            drawScaledPrism(tessellator, 4, 3, 0, 5, 10, 1, icon, cm);
+            drawScaledPrism(tessellator, 11, 3, 0, 12, 10, 1, icon, cm);
+            drawScaledPrism(tessellator, 4, 10, 0, 12, 11, 1, icon, cm);
+            drawScaledPrism(tessellator, 4, 3, 0, 12, 4, 1, icon, cm);
             //trace
             renderSides(tessellator, storage);
             //seed
@@ -126,7 +127,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
 
         IIcon icon = seed.getItem().getIconFromDamage(seed.getItemDamage());
-        drawScaledFaceXY(tessellator, 5, 4, 11, 10, icon, Constants.UNIT - 0.001F);
+        drawScaledFaceDoubleXY(tessellator, 5, 4, 11, 10, icon, Constants.UNIT - 0.001F);
 
         tessellator.draw();
         tessellator.startDrawingQuads();

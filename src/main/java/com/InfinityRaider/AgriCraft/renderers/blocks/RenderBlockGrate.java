@@ -29,14 +29,14 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
 
-        drawScaledPrism(tessellator, 7, 0, 1, 9, 16, 3, icon);
-        drawScaledPrism(tessellator, 7, 0, 5, 9, 16, 7, icon);
-        drawScaledPrism(tessellator, 7, 0, 9, 9, 16, 11, icon);
-        drawScaledPrism(tessellator, 7, 0, 13, 9, 16, 15, icon);
-        drawScaledPrism(tessellator, 7, 1, 0, 9, 3, 16, icon);
-        drawScaledPrism(tessellator, 7, 5, 0, 9, 7, 16, icon);
-        drawScaledPrism(tessellator, 7, 9, 0, 9, 11, 16, icon);
-        drawScaledPrism(tessellator, 7, 13, 0, 9, 15, 16, icon);
+        drawScaledPrism(tessellator, 7, 0, 1, 9, 16, 3, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 0, 5, 9, 16, 7, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 0, 9, 9, 16, 11, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 0, 13, 9, 16, 15, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 1, 0, 9, 3, 16, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 5, 0, 9, 7, 16, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 9, 0, 9, 11, 16, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 13, 0, 9, 15, 16, icon, COLOR_MULTIPLIER_STANDARD);
 
         tessellator.draw();
         //enable lighting
@@ -49,6 +49,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
             return false;
         }
         TileEntityGrate grate = (TileEntityGrate) tile;
+        int cm = block.colorMultiplier(world, (int) x, (int) y, (int) z);
         IIcon icon = grate.getIcon();
         Block vines = net.minecraft.init.Blocks.vine;
         IIcon vinesIcon = vines.getBlockTextureFromSide(0);
@@ -58,41 +59,41 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
         if(orientation == 0) {
             tessellator.addTranslation(0, 0, offset);
 
-            drawScaledPrism(tessellator, 1, 0, 0, 3, 16, 2, icon);
-            drawScaledPrism(tessellator, 5, 0, 0, 7, 16, 2, icon);
-            drawScaledPrism(tessellator, 9, 0, 0, 11, 16, 2, icon);
-            drawScaledPrism(tessellator, 13, 0, 0, 15, 16, 2, icon);
-            drawScaledPrism(tessellator, 0, 1, 0, 16, 3, 2, icon);
-            drawScaledPrism(tessellator, 0, 5, 0, 16, 7, 2, icon);
-            drawScaledPrism(tessellator, 0, 9, 0, 16, 11, 2, icon);
-            drawScaledPrism(tessellator, 0, 13, 0, 16, 15, 2, icon);
+            drawScaledPrism(tessellator, 1, 0, 0, 3, 16, 2, icon, cm);
+            drawScaledPrism(tessellator, 5, 0, 0, 7, 16, 2, icon, cm);
+            drawScaledPrism(tessellator, 9, 0, 0, 11, 16, 2, icon, cm);
+            drawScaledPrism(tessellator, 13, 0, 0, 15, 16, 2, icon, cm);
+            drawScaledPrism(tessellator, 0, 1, 0, 16, 3, 2, icon, cm);
+            drawScaledPrism(tessellator, 0, 5, 0, 16, 7, 2, icon, cm);
+            drawScaledPrism(tessellator, 0, 9, 0, 16, 11, 2, icon, cm);
+            drawScaledPrism(tessellator, 0, 13, 0, 16, 15, 2, icon, cm);
 
             tessellator.addTranslation(0, 0, -offset);
         }
         else if(orientation == 1) {
             tessellator.addTranslation(offset, 0, 0);
 
-            drawScaledPrism(tessellator, 0, 0, 1, 2, 16, 3, icon);
-            drawScaledPrism(tessellator, 0, 0, 5, 2, 16, 7, icon);
-            drawScaledPrism(tessellator, 0, 0, 9, 2, 16, 11, icon);
-            drawScaledPrism(tessellator, 0, 0, 13, 2, 16, 15, icon);
-            drawScaledPrism(tessellator, 0, 1, 0, 2, 3, 16, icon);
-            drawScaledPrism(tessellator, 0, 5, 0, 2, 7, 16, icon);
-            drawScaledPrism(tessellator, 0, 9, 0, 2, 11, 16, icon);
-            drawScaledPrism(tessellator, 0, 13, 0, 2, 15, 16, icon);
+            drawScaledPrism(tessellator, 0, 0, 1, 2, 16, 3, icon, cm);
+            drawScaledPrism(tessellator, 0, 0, 5, 2, 16, 7, icon, cm);
+            drawScaledPrism(tessellator, 0, 0, 9, 2, 16, 11, icon, cm);
+            drawScaledPrism(tessellator, 0, 0, 13, 2, 16, 15, icon, cm);
+            drawScaledPrism(tessellator, 0, 1, 0, 2, 3, 16, icon, cm);
+            drawScaledPrism(tessellator, 0, 5, 0, 2, 7, 16, icon, cm);
+            drawScaledPrism(tessellator, 0, 9, 0, 2, 11, 16, icon, cm);
+            drawScaledPrism(tessellator, 0, 13, 0, 2, 15, 16, icon, cm);
 
             tessellator.addTranslation(-offset, 0, 0);
         } else {
             tessellator.addTranslation(0, offset, 0);
 
-            drawScaledPrism(tessellator, 0, 0, 1, 16, 2, 3, icon);
-            drawScaledPrism(tessellator, 0, 0, 5, 16, 2, 7, icon);
-            drawScaledPrism(tessellator, 0, 0, 9, 16, 2, 11, icon);
-            drawScaledPrism(tessellator, 0, 0, 13, 16, 2, 15, icon);
-            drawScaledPrism(tessellator, 1, 0, 0, 3, 2, 16, icon);
-            drawScaledPrism(tessellator, 5, 0, 0, 7, 2, 16, icon);
-            drawScaledPrism(tessellator, 9, 0, 0, 11, 2, 16, icon);
-            drawScaledPrism(tessellator, 13, 0, 0, 15, 2, 16, icon);
+            drawScaledPrism(tessellator, 0, 0, 1, 16, 2, 3, icon, cm);
+            drawScaledPrism(tessellator, 0, 0, 5, 16, 2, 7, icon, cm);
+            drawScaledPrism(tessellator, 0, 0, 9, 16, 2, 11, icon, cm);
+            drawScaledPrism(tessellator, 0, 0, 13, 16, 2, 15, icon, cm);
+            drawScaledPrism(tessellator, 1, 0, 0, 3, 2, 16, icon, cm);
+            drawScaledPrism(tessellator, 5, 0, 0, 7, 2, 16, icon, cm);
+            drawScaledPrism(tessellator, 9, 0, 0, 11, 2, 16, icon, cm);
+            drawScaledPrism(tessellator, 13, 0, 0, 15, 2, 16, icon, cm);
 
             tessellator.addTranslation(0, -offset, 0);
         }
@@ -118,13 +119,13 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
     private void drawVines(Tessellator tessellator, boolean front, float offset, short orientation, IIcon icon) {
         float pos = offset + (front?-0.001F:2* Constants.UNIT+0.001F);
         if(orientation == 0) {
-            drawScaledFaceXY(tessellator, 0, 0, 16, 16, icon, pos);
+            drawScaledFaceDoubleXY(tessellator, 0, 0, 16, 16, icon, pos);
         }
         else if(orientation == 1) {
-            drawScaledFaceYZ(tessellator, 0, 0, 16, 16, icon, pos);
+            drawScaledFaceDoubleYZ(tessellator, 0, 0, 16, 16, icon, pos);
         }
         else {
-            drawScaledFaceXZ(tessellator, 0, 0, 16, 16, icon, pos);
+            drawScaledFaceDoubleXZ(tessellator, 0, 0, 16, 16, icon, pos);
         }
     }
 
