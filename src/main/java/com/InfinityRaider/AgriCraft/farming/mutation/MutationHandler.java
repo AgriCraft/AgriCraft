@@ -23,26 +23,18 @@ public abstract class MutationHandler {
     public static void init() {
         //Read mutations & initialize the mutation arrays
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationData());
-        List<Mutation> list = new ArrayList<Mutation>();
+        
+        mutations = new ArrayList<Mutation>();
+        
+      //print registered mutations to the log
+        LogHelper.info("Registered Mutations:");
+        
         for(String line:data) {
             Mutation mutation = readMutation(line);
-            if(mutation!=null && !list.contains(mutation)) {
-                list.add(mutation);
-            }
-        }
-        mutations = list;
-
-        //print registered mutations to the log
-        LogHelper.info("Registered Mutations:");
-        for (Mutation mutation:mutations) {
-            ItemStack resultStack = mutation.getResult();
-            ItemStack parent1Stack = mutation.getParents()[0];
-            ItemStack parent2Stack = mutation.getParents()[1];
-            String result = resultStack.getItem() != null ? (Item.itemRegistry.getNameForObject(resultStack.getItem()) + ':' + resultStack.getItemDamage()) : "null";
-            String parent1 = parent1Stack.getItem() != null ? (Item.itemRegistry.getNameForObject(parent1Stack.getItem())) + ':' + parent1Stack.getItemDamage() : "null";
-            String parent2 = parent2Stack.getItem() != null ? (Item.itemRegistry.getNameForObject(parent2Stack.getItem())) + ':' + parent2Stack.getItemDamage() : "null";
-            String info = " - " + result + " = " + parent1 + " + " + parent2;
-            LogHelper.info(info);
+            if(mutation!=null && !mutations.contains(mutation)) {	// The latter requires us to look through the mutation table before adding... meaning O(n) likely is exponential...
+                mutations.add(mutation);
+                LogHelper.info(" - " + mutation.getFormula());		// A hashset might alleviate this at the cost of not being expandable once created, sans operation time.
+            }														// If the mutations have a predictable, fixed size it might work.
         }
     }
 
@@ -60,46 +52,52 @@ public abstract class MutationHandler {
         }
     }
 
-    private static Mutation readMutation(String input) {
-        Mutation mutation = null;
-        String[] data = IOHelper.getData(input);
-        boolean success = data.length==1 || data.length==3;
-        String errorMsg = "invalid number of arguments";
-        if(success) {
-            String mutationData = data[0];
-            int indexEquals = mutationData.indexOf('=');
-            int indexPlus = mutationData.indexOf('+');
-            success = (indexEquals>0 && indexPlus>indexEquals);
-            errorMsg = "Mutation is not defined correctly";
-            if(success) {
-                //read the stacks
-                ItemStack resultStack = IOHelper.getStack(mutationData.substring(0,indexEquals));
-                ItemStack parentStack1 = IOHelper.getStack(mutationData.substring(indexEquals + 1, indexPlus));
-                ItemStack parentStack2 = IOHelper.getStack(mutationData.substring(indexPlus+1));
-                success = CropPlantHandler.isValidSeed(resultStack);
-                errorMsg = "resulting stack is not correct";
-                if(success) {
-                    success =  CropPlantHandler.isValidSeed(parentStack1);
-                    errorMsg = "first parent stack is not correct";
-                    if(success) {
-                        success =  CropPlantHandler.isValidSeed(parentStack2);
-                        errorMsg = "second parent stack is not correct";
-                        if(success) {
-                            try {
-                                mutation = new Mutation(resultStack, parentStack1, parentStack2);
-                            } catch (Exception e) {
-                                LogHelper.debug("Caught exception when trying to add mutation: "+resultStack.getUnlocalizedName()+"="+parentStack1.getUnlocalizedName()+"+"+parentStack2.getUnlocalizedName()+" this seed is not registered");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if(!success) {
-            LogHelper.info(new StringBuffer("Error when reading mutation: ").append(errorMsg).append(" (line: ").append(input).append(")"));
-        }
-        return mutation;
-    }
+	private static Mutation readMutation(String input) { //Removed some string concatenation, and de-nested the if statements.
+		
+		Mutation mutation = null;
+		String[] data = IOHelper.getData(input);
+
+		if (data.length != 1 && data.length != 3) {
+			LogHelper.info("Error when reading mutation: invalid number of arguments. (line: " + input + ")");
+			return mutation;
+		}
+
+		String mutationData = data[0];
+		int indexEquals = mutationData.indexOf('=');
+		int indexPlus = mutationData.indexOf('+');
+
+		if (!(indexEquals > 0 && indexPlus > indexEquals)) {
+			LogHelper.info("Error when reading mutation: mutation is not defined correctly. (line: " + input + ")");
+			return mutation;
+		}
+
+		// read the stacks
+		ItemStack resultStack = IOHelper.getStack(mutationData.substring(0,indexEquals));
+		ItemStack parentStack1 = IOHelper.getStack(mutationData.substring(indexEquals + 1, indexPlus));
+		ItemStack parentStack2 = IOHelper.getStack(mutationData.substring(indexPlus + 1));
+
+		if (!CropPlantHandler.isValidSeed(resultStack)) {
+			LogHelper.info("Error when reading mutation: resulting stack is not correct. (line: " + input + ")");
+			return mutation;
+		} else if (!CropPlantHandler.isValidSeed(parentStack1)) {
+			LogHelper .info("Error when reading mutation: first parent stack is not correct. (line: " + input + ")");
+			return mutation;
+		} else if (!CropPlantHandler.isValidSeed(parentStack2)) {
+			LogHelper.info("Error when reading mutation: second parent stack is not correct. (line: " + input + ")");
+			return mutation;
+		}
+		try {
+			mutation = new Mutation(resultStack, parentStack1, parentStack2);
+		} catch (Exception e) {
+			LogHelper.debug("Caught exception when trying to add mutation: "
+					+ resultStack.getUnlocalizedName() + "="
+					+ parentStack1.getUnlocalizedName() + "+"
+					+ parentStack2.getUnlocalizedName()
+					+ ", this seed is not registered");
+		}
+
+		return mutation;
+	}
 
     //gets all the possible crossovers
     public static Mutation[] getCrossOvers(List<TileEntityCrop> crops) {
