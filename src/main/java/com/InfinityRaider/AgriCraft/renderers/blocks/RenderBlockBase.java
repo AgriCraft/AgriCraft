@@ -199,13 +199,13 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
     //adds a vertex to the tessellator scaled with 1/16th of a block
     protected void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v) {
-        float unit = Constants.unit;
+        float unit = Constants.UNIT;
         tessellator.addVertexWithUV(x*unit, y*unit, z*unit, u*unit, v*unit);
     }
 
     //same as above method, but does not require the correct texture to be bound
     protected void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v, IIcon icon) {
-        float unit = Constants.unit;
+        float unit = Constants.UNIT;
         tessellator.addVertexWithUV(x * unit, y * unit, z * unit, icon.getInterpolatedU(u), icon.getInterpolatedV(v));
     }
 

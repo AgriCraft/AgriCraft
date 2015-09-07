@@ -63,7 +63,7 @@ public class CropPlantSlime extends CropPlantGeneric {
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
         int meta = world.getBlockMetadata(x, y, z);
-        renderer.setRenderBounds(0, 0, 0, 1, Constants.unit*(1+meta), 1);
+        renderer.setRenderBounds(0, 0, 0, 1, Constants.UNIT*(1+meta), 1);
         renderer.renderStandardBlock(mobdropcrops.pamslimepadCrop, x, y, z);
     }
 }

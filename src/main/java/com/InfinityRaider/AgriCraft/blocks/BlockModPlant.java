@@ -185,20 +185,18 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
         if (meta < 7 && this.isFertile(world, x, y ,z)) {
             TileEntity te = world.getTileEntity(x, y, z);
             //base growth rate
-            float growthRate;
+            int growthRate; //This does not need to be a float. The casting is best left off to be done automatically.
             if(te==null || !(te instanceof TileEntityCrop)) {
-                switch(tier) {
-                    case 2: growthRate = Constants.growthTier2; break;
-                    case 3: growthRate = Constants.growthTier3; break;
-                    case 4: growthRate = Constants.growthTier4; break;
-                    case 5: growthRate = Constants.growthTier5; break;
-                    default: growthRate = Constants.growthTier1;
-                }
+            	if (tier > 0 && tier <= Constants.GROWTH_TIER.length) { //Worst-case two comparisons instead of five.
+            		growthRate = Constants.GROWTH_TIER[tier];
+            	} else {
+            		growthRate = Constants.GROWTH_TIER[0];
+            	}
             } else {
                 TileEntityCrop crop = (TileEntityCrop) te;
-                growthRate = (float) crop.getGrowthRate();
+                growthRate = crop.getGrowthRate();
             }
-            //bonus for growth stat (growth is 1 for basic crops)
+            //Bonus for growth stat (growth is 1 for basic crops)
             double bonus = 1.0 + (1 + 0.00) / 10;
             //global multiplier as defined in the config
             float global = 2.0F - ConfigurationHandler.growthMultiplier;
@@ -219,17 +217,18 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-        switch(meta) {
-            case 0: return this.icons[0];
+        switch(meta) { //Cleaner switch without duplicated code.
+            case 0:
             case 1: return this.icons[0];
-            case 2: return this.icons[1];
-            case 3: return this.icons[1];
+            case 2: 
+            case 3: 
             case 4: return this.icons[1];
-            case 5: return this.icons[2];
+            case 5: 
             case 6: return this.icons[2];
             case 7: return this.icons[3];
         }
-        return this.icons[(int)Math.floor(meta/5)];
+        return this.icons[meta/5];	//The / operator always produces a whole as a result, so no rounding is needed. E.g. 8/3 = 2.
+        							//This removal significantly improves the number of operations and therefore the speed of this method.
     }
 
     //item drops
@@ -250,7 +249,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     public Item getItemDropped(int meta, Random rand, int side) {
-        return meta == 7 ? this.func_149865_P() : this.func_149866_i();
+        return meta == 7 ? this.func_149865_P() : this.func_149866_i(); //While I like in-line if statements, keep in mind that they often degrade the readability of the code.
     }
 
     //fruit gain

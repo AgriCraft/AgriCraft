@@ -59,7 +59,7 @@ public class RenderWaterPad extends RenderBlockBase {
     }
 
     private void renderBase(Tessellator tessellator, IBlockAccess world, int x, int y, int z, boolean full, RenderBlocks renderer) {
-        float u = Constants.unit;
+        float u = Constants.UNIT;
         tessellator.setBrightness(Blocks.farmland.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
         tessellator.setColorRGBA_F(1, 1, 1, 1);
 
@@ -154,7 +154,7 @@ public class RenderWaterPad extends RenderBlockBase {
     }
 
     private void renderSide(Tessellator tessellator, IBlockAccess world, int x, int y, int z, boolean full, RenderBlocks renderer, ForgeDirection side) {
-        float u = Constants.unit;
+        float u = Constants.UNIT;
         int xLower = Math.max(0, 1 + 14 * side.offsetX);
         int xUpper = Math.min(16, 15 + 14 * side.offsetX);
         int zLower = Math.max(0, 1 + 14 * side.offsetZ);

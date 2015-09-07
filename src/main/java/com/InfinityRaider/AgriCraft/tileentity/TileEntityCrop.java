@@ -57,7 +57,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         return this.hasPlant()?stats.copy():null;
     }
 
-    public short getGrowth() {return stats.getGrowth();}
+    public short getGrowth() {return this.weed ? (short)ConfigurationHandler.weedGrowthMultiplier : stats.getGrowth();} //Pardon the cast.
 
     public short getGain() {return stats.getGain();}
 
@@ -77,7 +77,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** get growthrate */
-    public int getGrowthRate() {return plant.getGrowthRate();}
+    public int getGrowthRate() {return this.weed ? ConfigurationHandler.weedGrowthRate : plant.getGrowthRate();}
 
     /** check to see if there is a plant here */
     public boolean hasPlant() {return this.plant!=null;}
@@ -117,12 +117,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     /** check if the crop is fertile */
     public boolean isFertile() {
-        return worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.isFertile(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        return this.weed || worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.isFertile(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
     }
 
     /** gets the height of the crop */
     public float getCropHeight() {
-        return hasPlant()?plant.getHeight(getBlockMetadata()):Constants.unit*13;
+        return hasPlant()?plant.getHeight(getBlockMetadata()):Constants.UNIT*13;
     }
 
     /** check if bonemeal can be applied */
@@ -130,21 +130,21 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         if(this.crossCrop) {
             return ConfigurationHandler.bonemealMutation;
         }
-        if(this.hasPlant()) {
-            if(this.isMature()) {
-                return false;
-            }
+        if(this.hasPlant() && !this.isMature()) {
             if(!this.isFertile()) {
                 return false;
             }
             return plant.canBonemeal();
+        }
+        if(this.hasWeed() && !this.isMature()) {
+        	return true;
         }
         return false;
     }
 
     /** check the block if the plant is mature */
     public boolean isMature() {
-        return this.hasPlant() && worldObj.getBlockMetadata(xCoord, yCoord, zCoord)== 7;
+        return worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == Constants.MATURE;
     }
 
     /** gets the fruits for this plant */
@@ -230,7 +230,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
     }
 
-    //is fertiliser allowed
+    //is fertilizer allowed
     public boolean allowFertiliser(IFertiliser fertiliser) {
         if(this.crossCrop) {
             return ConfigurationHandler.bonemealMutation && fertiliser.canTriggerMutation();
@@ -249,7 +249,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         if(fertiliser.hasSpecialBehaviour()) {
             fertiliser.onFertiliserApplied(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord, rand);
         }
-        if(this.hasPlant()) {
+        if(this.hasPlant() || this.hasWeed()) {
             ((BlockCrop) Blocks.blockCrop).func_149853_b(this.worldObj, rand, this.xCoord, this.yCoord, this.zCoord);
             this.markForUpdate();
         }

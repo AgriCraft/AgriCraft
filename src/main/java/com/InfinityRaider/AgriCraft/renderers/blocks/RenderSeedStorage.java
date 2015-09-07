@@ -126,7 +126,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
 
         IIcon icon = seed.getItem().getIconFromDamage(seed.getItemDamage());
-        drawScaledFaceXY(tessellator, 5, 4, 11, 10, icon, Constants.unit - 0.001F);
+        drawScaledFaceXY(tessellator, 5, 4, 11, 10, icon, Constants.UNIT - 0.001F);
 
         tessellator.draw();
         tessellator.startDrawingQuads();

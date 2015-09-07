@@ -116,7 +116,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
     }
 
     private void drawVines(Tessellator tessellator, boolean front, float offset, short orientation, IIcon icon) {
-        float pos = offset + (front?-0.001F:2* Constants.unit+0.001F);
+        float pos = offset + (front?-0.001F:2* Constants.UNIT+0.001F);
         if(orientation == 0) {
             drawScaledFaceXY(tessellator, 0, 0, 16, 16, icon, pos);
         }

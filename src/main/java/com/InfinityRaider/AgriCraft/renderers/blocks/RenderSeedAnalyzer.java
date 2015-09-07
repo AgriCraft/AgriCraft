@@ -85,15 +85,15 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
         float angle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);   //credits to Pahimar
         GL11.glPushMatrix();
         //translate to the desired position
-        GL11.glTranslated(Constants.unit * 8,Constants.unit * 4, Constants.unit * 8);
+        GL11.glTranslated(Constants.UNIT * 8,Constants.UNIT * 4, Constants.UNIT * 8);
         //resize the texture to half the size
         GL11.glScalef(0.5F, 0.5F, 0.5F);
         //rotate the renderer
         GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
-        GL11.glTranslatef(-8 * Constants.unit, 0, 0);
+        GL11.glTranslatef(-8 * Constants.UNIT, 0, 0);
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-        ItemRenderer.renderItemIn2D(tessellator, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), Constants.unit);
-        GL11.glTranslatef(8 * Constants.unit, 0, 0);
+        ItemRenderer.renderItemIn2D(tessellator, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), Constants.UNIT);
+        GL11.glTranslatef(8 * Constants.UNIT, 0, 0);
         GL11.glRotatef(-angle, 0.0F, 1.0F, 0.0F);
         GL11.glScalef(2, 2, 2);
         GL11.glPopMatrix();

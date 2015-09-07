@@ -22,7 +22,7 @@ import java.util.List;
 public class BlockWaterChannel extends BlockCustomWood {
     public BlockWaterChannel() {
         super();
-        this.setBlockBounds(4*Constants.unit, 4*Constants.unit, 4*Constants.unit, 12*Constants.unit, 12*Constants.unit, 12*Constants.unit);
+        this.setBlockBounds(4*Constants.UNIT, 4*Constants.UNIT, 4*Constants.UNIT, 12*Constants.UNIT, 12*Constants.UNIT, 12*Constants.UNIT);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BlockWaterChannel extends BlockCustomWood {
         TileEntity te = world.getTileEntity(x, y, z);
         if (te != null && te instanceof TileEntityChannel) {
             TileEntityChannel channel = (TileEntityChannel) te;
-            float f = Constants.unit;   //one 16th of a block
+            float f = Constants.UNIT;   //one 16th of a block
             float min = 4 * f;
             float max = 12 * f;
             if (channel.hasNeighbour('x', 1)) {
@@ -78,7 +78,7 @@ public class BlockWaterChannel extends BlockCustomWood {
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
         TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
-        float f = Constants.unit;
+        float f = Constants.UNIT;
         AxisAlignedBB minBB = AxisAlignedBB.getBoundingBox(4 * f, 4 * f, 4 * f, 12 * f, 12 * f, 12 * f);
         float min = 4 * f;
         float max = 12 * f;

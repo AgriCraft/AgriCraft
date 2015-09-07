@@ -75,7 +75,7 @@ public class CropPlantLotR extends CropPlant {
 
     @Override
     public float getHeight(int meta) {
-        return Constants.unit * 13;
+        return Constants.UNIT * 13;
     }
 
     @Override

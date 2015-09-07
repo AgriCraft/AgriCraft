@@ -170,18 +170,21 @@ public abstract class IOHelper {
                 count++;
             }
         }
-        ArrayList<String> data = new ArrayList<String>();
+        ArrayList<String> data = new ArrayList<String>(count + 1); // There will be no more than count plus + lines, thereby preventing resizing.
         if (unprocessed.length()>0) {
             for (int i=0;i<count;i++) {
                 String line = (unprocessed.substring(0,unprocessed.indexOf('\n'))).trim();
-                if ((line.trim()).length() > 0 && line.charAt(0) != '#') {
-                    data.add(line.trim());
+                if (line.length() > 0 && line.charAt(0) != '#') {
+                    data.add(line); // The string line was already trimmed in its declaration.
                 }
                 unprocessed = unprocessed.substring(unprocessed.indexOf('\n')+1);
             }
         }
-        if ((unprocessed.trim()).length()>0 && unprocessed.charAt(0)!='#') {
-            data.add(unprocessed.trim());
+        
+        unprocessed = unprocessed.trim();
+        
+        if (unprocessed.length()>0 && unprocessed.charAt(0)!='#') {
+            data.add(unprocessed);
         }
         return data.toArray(new String[data.size()]);
     }

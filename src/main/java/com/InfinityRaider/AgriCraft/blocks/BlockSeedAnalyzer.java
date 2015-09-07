@@ -38,11 +38,11 @@ public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
         this.setHardness(1);
         this.setResistance(1);
         //set the bounding box dimensions
-        this.maxX = 15* Constants.unit;
-        this.minX = 1*Constants.unit;
+        this.maxX = 15* Constants.UNIT;
+        this.minX = 1*Constants.UNIT;
         this.maxZ = this.maxX;
         this.minZ = this.minX;
-        this.maxY = 4*Constants.unit;
+        this.maxY = 4*Constants.UNIT;
         this.minY = 0;
     }
 

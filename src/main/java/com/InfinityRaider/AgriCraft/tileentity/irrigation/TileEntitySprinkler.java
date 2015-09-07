@@ -112,8 +112,8 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
                 this.worldObj.setBlockMetadataWithNotify(x, y, z, 7, flag);
             } else if (block instanceof BlockBush && !farmlandOnly) {
                 // x chance to force growth tick on plant every y ticks
-                if (counter == 0 && Constants.rand.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
-                    block.updateTick(this.worldObj, x, y, z, Constants.rand);
+                if (counter == 0 && Constants.RAND.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
+                    block.updateTick(this.worldObj, x, y, z, Constants.RAND);
                 }
             }
         }
@@ -135,8 +135,8 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
         if(counter==0) {
             for (int i = 0; i < 4; i++) {
                 float alpha = (this.angle + 90 * i) * ((float) Math.PI) / 180;
-                double xOffset = (4 * Constants.unit) * Math.cos(alpha);
-                double zOffset = (4 * Constants.unit) * Math.sin(alpha);
+                double xOffset = (4 * Constants.UNIT) * Math.cos(alpha);
+                double zOffset = (4 * Constants.UNIT) * Math.sin(alpha);
                 float radius = 0.3F;
                 for (int j = 0; j <= 4; j++) {
                     float beta = -j * ((float) Math.PI) / (8.0F);
@@ -149,7 +149,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
 
     @SideOnly(Side.CLIENT)
     private void spawnLiquidSpray(double xOffset, double zOffset, Vec3 vector) {
-        LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord+0.5F+xOffset, this.yCoord+5* Constants.unit, this.zCoord+0.5F+zOffset, 0.3F, 0.7F, vector);
+        LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord+0.5F+xOffset, this.yCoord+5* Constants.UNIT, this.zCoord+0.5F+zOffset, 0.3F, 0.7F, vector);
         Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
     }
 
