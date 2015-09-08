@@ -8,9 +8,22 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
 public class TileEntityGrate extends TileEntityCustomWood {
-    private short orientation;  //0: xy, 1: zy, 2: xz
-    private short offset;
-    private short vines; //0: no, 1: front, 2: back, 3: both
+	
+	//Short is pointless here as java pretty much always upconverts to int during operations. Only good in arrays and serialization.
+    private int orientation;  //0: xy, 1: zy, 2: xz
+    private int offset;
+    private int vines; //0: no, 1: front, 2: back, 3: both
+    
+    // This does not change. Why calculate every time?
+    private static final double[] OFFSETS = new double[]{ // The compiler does these calculations at compile time so no need to worry.
+    	0 * 7 * Constants.UNIT, //offset 0
+    	1 * 7 * Constants.UNIT, //offset 1
+    	2 * 7 * Constants.UNIT, //offset 2
+    };
+    
+    private static final double WIDTH = 2 * Constants.UNIT;
+    private static final double HEIGHT = 1;
+    private static final double LENGTH = 1;
 
     public TileEntityGrate() {
         super();
@@ -19,9 +32,9 @@ public class TileEntityGrate extends TileEntityCustomWood {
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setShort(Names.NBT.flag, orientation);
-        tag.setShort(Names.NBT.meta, offset);
-        tag.setShort(Names.NBT.weed, vines);
+        tag.setShort(Names.NBT.flag, (short)orientation);
+        tag.setShort(Names.NBT.meta, (short)offset);
+        tag.setShort(Names.NBT.weed, (short)vines);
     }
 
     //this loads the saved data for the tile entity
@@ -33,7 +46,7 @@ public class TileEntityGrate extends TileEntityCustomWood {
         this.vines = tag.getShort(Names.NBT.weed);
     }
 
-    public void setOrientationValue(short value) {
+    public void setOrientationValue(int value) {
         value = value>2?2:value;
         value = value<0?0:value;
         if(this.orientation==value) {
@@ -43,11 +56,11 @@ public class TileEntityGrate extends TileEntityCustomWood {
         this.markForUpdate();
     }
 
-    public short getOrientationValue() {
+    public int getOrientationValue() {
         return orientation;
     }
 
-    public void setOffSet(short value) {
+    public void setOffSet(int value) {
         value = value>2?2:value;
         value = value<0?0:value;
         if(this.offset==value) {
@@ -57,20 +70,19 @@ public class TileEntityGrate extends TileEntityCustomWood {
         this.markForUpdate();
     }
 
-    public short getOffset() {
+    public int getOffset() {
         return offset;
     }
 
     public boolean isPlayerInFront(EntityPlayer player) {
-        double offset = (this.offset*7.000D)/16.000D;
         if(this.orientation == 0) {
-            return player.posZ < this.zCoord + offset + Constants.UNIT;
+            return player.posZ < this.zCoord + OFFSETS[offset] + Constants.UNIT;
         }
         else if(this.orientation == 1) {
-            return player.posX < this.xCoord + offset + Constants.UNIT;
+            return player.posX < this.xCoord + OFFSETS[offset] + Constants.UNIT;
         }
         else {
-            return player.posY < this.yCoord + offset + Constants.UNIT;
+            return player.posY < this.yCoord + OFFSETS[offset] + Constants.UNIT;
         }
     }
 
@@ -98,15 +110,14 @@ public class TileEntityGrate extends TileEntityCustomWood {
     }
 
     public AxisAlignedBB getBoundingBox() {
-        double offset = (this.offset*7.000D)/16.000D;
-        if(this.orientation == 0) {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord+offset, xCoord+1, yCoord+1, zCoord+offset+2*Constants.UNIT);
-        }
-        else if(this.orientation == 1) {
-            return AxisAlignedBB.getBoundingBox(xCoord+offset, yCoord, zCoord, xCoord+offset+2*Constants.UNIT, yCoord+1, zCoord+1);
-        }
-        else {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord+offset, zCoord, xCoord+1, yCoord+offset+2*Constants.UNIT, zCoord+1);
+        switch(this.orientation) {
+        	case 0: //x
+        		return AxisAlignedBB.getBoundingBox(this.xCoord + OFFSETS[offset], this.yCoord, this.zCoord, this.xCoord + OFFSETS[offset] + WIDTH, this.yCoord + LENGTH, this.zCoord + HEIGHT);
+        	case 1: //z
+        		return AxisAlignedBB.getBoundingBox(this.xCoord, this.yCoord, this.zCoord + OFFSETS[offset], this.xCoord + LENGTH, this.yCoord + HEIGHT, this.zCoord + OFFSETS[offset] + WIDTH);
+        	case 2: //y
+        	default: //or something is wrong.
+        		return AxisAlignedBB.getBoundingBox(this.xCoord, this.yCoord + OFFSETS[offset], this.zCoord, this.xCoord + LENGTH, this.yCoord + OFFSETS[offset] + WIDTH, this.zCoord + HEIGHT);
         }
     }
 

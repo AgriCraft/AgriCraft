@@ -54,24 +54,10 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
         Block vines = net.minecraft.init.Blocks.vine;
         IIcon vinesIcon = vines.getBlockTextureFromSide(0);
         float offset = ((float) grate.getOffset()*7)/16.0F;
-        short orientation = grate.getOrientationValue();
+        int orientation = grate.getOrientationValue();
 
         if(orientation == 0) {
-            tessellator.addTranslation(0, 0, offset);
-
-            drawScaledPrism(tessellator, 1, 0, 0, 3, 16, 2, icon, cm);
-            drawScaledPrism(tessellator, 5, 0, 0, 7, 16, 2, icon, cm);
-            drawScaledPrism(tessellator, 9, 0, 0, 11, 16, 2, icon, cm);
-            drawScaledPrism(tessellator, 13, 0, 0, 15, 16, 2, icon, cm);
-            drawScaledPrism(tessellator, 0, 1, 0, 16, 3, 2, icon, cm);
-            drawScaledPrism(tessellator, 0, 5, 0, 16, 7, 2, icon, cm);
-            drawScaledPrism(tessellator, 0, 9, 0, 16, 11, 2, icon, cm);
-            drawScaledPrism(tessellator, 0, 13, 0, 16, 15, 2, icon, cm);
-
-            tessellator.addTranslation(0, 0, -offset);
-        }
-        else if(orientation == 1) {
-            tessellator.addTranslation(offset, 0, 0);
+        	tessellator.addTranslation(offset, 0, 0);
 
             drawScaledPrism(tessellator, 0, 0, 1, 2, 16, 3, icon, cm);
             drawScaledPrism(tessellator, 0, 0, 5, 2, 16, 7, icon, cm);
@@ -83,8 +69,22 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
             drawScaledPrism(tessellator, 0, 13, 0, 2, 15, 16, icon, cm);
 
             tessellator.addTranslation(-offset, 0, 0);
+        }
+        else if(orientation == 1) {
+        	tessellator.addTranslation(0, 0, offset);
+
+            drawScaledPrism(tessellator, 1, 0, 0, 3, 16, 2, icon, cm);
+            drawScaledPrism(tessellator, 5, 0, 0, 7, 16, 2, icon, cm);
+            drawScaledPrism(tessellator, 9, 0, 0, 11, 16, 2, icon, cm);
+            drawScaledPrism(tessellator, 13, 0, 0, 15, 16, 2, icon, cm);
+            drawScaledPrism(tessellator, 0, 1, 0, 16, 3, 2, icon, cm);
+            drawScaledPrism(tessellator, 0, 5, 0, 16, 7, 2, icon, cm);
+            drawScaledPrism(tessellator, 0, 9, 0, 16, 11, 2, icon, cm);
+            drawScaledPrism(tessellator, 0, 13, 0, 16, 15, 2, icon, cm);
+
+            tessellator.addTranslation(0, 0, -offset);
         } else {
-            tessellator.addTranslation(0, offset, 0);
+        	tessellator.addTranslation(0, offset, 0);
 
             drawScaledPrism(tessellator, 0, 0, 1, 16, 2, 3, icon, cm);
             drawScaledPrism(tessellator, 0, 0, 5, 16, 2, 7, icon, cm);
@@ -116,7 +116,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
         return true;
     }
 
-    private void drawVines(Tessellator tessellator, boolean front, float offset, short orientation, IIcon icon) {
+    private void drawVines(Tessellator tessellator, boolean front, float offset, int orientation, IIcon icon) {
         float pos = offset + (front?-0.001F:2* Constants.UNIT+0.001F);
         if(orientation == 0) {
             drawScaledFaceDoubleXY(tessellator, 0, 0, 16, 16, icon, pos);

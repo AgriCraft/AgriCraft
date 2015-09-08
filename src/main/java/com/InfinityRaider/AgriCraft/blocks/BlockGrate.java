@@ -1,14 +1,13 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.items.ItemBlockGrate;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockGrate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
-import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -16,14 +15,12 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BlockGrate extends BlockCustomWood {
+    
     @Override
     protected String getTileEntityName() {
         return Names.Objects.grate;
@@ -52,26 +49,25 @@ public class BlockGrate extends BlockCustomWood {
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
-        if (world.isRemote) {
-            return false;
-        }
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile == null || !(tile instanceof TileEntityGrate)) {
-            return true;
+            return false; //In this case something wonky is going on and we don't care.
         }
         TileEntityGrate grate = (TileEntityGrate) tile;
         boolean front = grate.isPlayerInFront(player);
         if(player.isSneaking()) {
             if(grate.removeVines(front)) {
                 this.dropBlockAsItem(world, x, y, z, new ItemStack(Blocks.vine, 1));
+                return true; //The vines were taken off, so consume the right click.
             }
         }
         else if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem()== Item.getItemFromBlock(Blocks.vine)) {
             if(grate.addVines(front) && !player.capabilities.isCreativeMode) {
                 player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
+                return true; //The vines were placed, so consume the right click.
             }
         }
-        return true;
+        return false; //We didn't consume the click, so let it move on down the line.
     }
 
     @Override
@@ -91,77 +87,34 @@ public class BlockGrate extends BlockCustomWood {
         }
         return items;
     }
-
-    public void setBounds(AxisAlignedBB box, int x, int y, int z) {
-        this.minX = box.minX-x;
-        this.minY = box.minY-y;
-        this.minZ = box.minZ-z;
-        this.maxX = box.maxX-x;
-        this.maxY = box.maxY-y;
-        this.maxZ = box.maxZ-z;
-    }
-
+    
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        AxisAlignedBB box = getBoundingBox(world, x, y, z);
-        setBounds(box, x, y, z);
-        return box;
+    	return getBounds(world, x, y, z);
     }
 
+    // Seems like the returned box is ever so slightly wider than it should be.
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-        return getBoundingBox(world, x, y, z);
+    	return getBounds(world, x, y, z);
     }
-
-    public AxisAlignedBB getBoundingBox(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile == null || !(tile instanceof TileEntityGrate)) {
-            return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+    
+	private void setBounds(AxisAlignedBB box, int x, int y, int z) {
+		this.minX = box.minX - x;
+		this.minY = box.minY - y;
+		this.minZ = box.minZ - z;
+		this.maxX = box.maxX - x;
+		this.maxY = box.maxY - y;
+		this.maxZ = box.maxZ - z;
+	}
+	
+	private AxisAlignedBB getBounds(World world, int x, int y, int z) {
+		TileEntity te = world.getTileEntity(x, y, z);
+        if (te == null || !(te instanceof TileEntityGrate)) {
+        	return null;
         }
-        return ((TileEntityGrate) tile).getBoundingBox();
-    }
+        AxisAlignedBB bounds = ((TileEntityGrate) te).getBoundingBox();
+        setBounds(bounds, x, y, z);
+        return bounds;
+	}
 
-    public static class ItemBlockGrate extends ItemBlockCustomWood {
-        public ItemBlockGrate(Block block) {
-            super(block);
-        }
-
-        @SideOnly(Side.CLIENT)
-        public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-            super.addInformation(stack, player, list, flag);
-            list.add(StatCollector.translateToLocal("agricraft_tooltip.grate"));
-        }
-
-        @Override
-        public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-            if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
-                TileEntityGrate grate = (TileEntityGrate) world.getTileEntity(x, y, z);
-                if (side == 0 || side == 1) {
-                    ForgeDirection dir = PlayerHelper.getPlayerFacing(player);
-                    if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
-                        grate.setOrientationValue((short) 0);
-                        setOffset(grate, hitZ);
-                    } else {
-                        grate.setOrientationValue((short) 1);
-                        setOffset(grate, hitX);
-                    }
-                } else {
-                    grate.setOrientationValue((short) 2);
-                    setOffset(grate, hitY);
-                }
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        private void setOffset(TileEntityGrate grate, float hit) {
-            if (hit <= 0.3333F) {
-                grate.setOffSet((short) 0);
-            } else if (hit <= 0.6666F) {
-                grate.setOffSet((short) 1);
-            } else {
-                grate.setOffSet((short) 2);
-            }
-        }
-    }
 }
