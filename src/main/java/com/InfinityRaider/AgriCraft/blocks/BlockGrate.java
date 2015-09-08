@@ -52,9 +52,6 @@ public class BlockGrate extends BlockCustomWood {
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
-        if (world.isRemote) {
-            return false;
-        }
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile == null || !(tile instanceof TileEntityGrate)) {
             return true;
@@ -64,14 +61,16 @@ public class BlockGrate extends BlockCustomWood {
         if(player.isSneaking()) {
             if(grate.removeVines(front)) {
                 this.dropBlockAsItem(world, x, y, z, new ItemStack(Blocks.vine, 1));
+                return true;
             }
         }
         else if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem()== Item.getItemFromBlock(Blocks.vine)) {
             if(grate.addVines(front) && !player.capabilities.isCreativeMode) {
                 player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize-1;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -102,22 +101,26 @@ public class BlockGrate extends BlockCustomWood {
     }
 
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+        return getBoundingBox(world, x, y, z);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
         AxisAlignedBB box = getBoundingBox(world, x, y, z);
         setBounds(box, x, y, z);
         return box;
     }
 
-    @SideOnly(Side.CLIENT)
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-        return getBoundingBox(world, x, y, z);
-    }
-
     public AxisAlignedBB getBoundingBox(World world, int x, int y, int z) {
         TileEntity tile = world.getTileEntity(x, y, z);
+        AxisAlignedBB box;
         if (tile == null || !(tile instanceof TileEntityGrate)) {
-            return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+            box = super.getCollisionBoundingBoxFromPool(world, x, y, z);
+        } else {
+            box = ((TileEntityGrate) tile).getBoundingBox();
         }
-        return ((TileEntityGrate) tile).getBoundingBox();
+        //setBounds(box, x, y, z);
+        return box;
     }
 
     public static class ItemBlockGrate extends ItemBlockCustomWood {
