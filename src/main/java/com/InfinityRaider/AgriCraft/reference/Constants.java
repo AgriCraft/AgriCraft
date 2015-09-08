@@ -2,21 +2,43 @@ package com.InfinityRaider.AgriCraft.reference;
 
 import java.util.Random;
 
+/**
+ *	A class containing the constants and default values used in the coding of the AgriCraft mod.
+ */
 public final class Constants {
 
+    /**
+     * Whether or not the mod should log render calls.
+     */
     public static final boolean LOG_RENDER_CALLS = false;
 
-    public static final Random RAND = new Random(); //This is an odd choice.
-    // 1/16th
+    /**
+     * A pre-instantiated Random to minimize excess instantiations.
+     */
+    public static final Random RAND = new Random();
+    
+    /**
+     * The value of 1/16 as represented in float form.
+     * Pre-calculated as to cut back on calculations.
+     */
     public static final float UNIT = 0.06250F;
 
-    // 1 bucket in millibuckets
-    public static final int mB = 1000;
+    /**
+     * The representation of 1 bucket(b) in millibuckets(mB).
+     */
+    public static final int BUCKET_mB = 1000;
 
-    // Mature meta-data value.
+    /**
+     * The meta-data value representing a mature crop.
+     * 
+     * Mature = {@value}
+     */
     public static final int MATURE = 7;
     
-    // Growth Rates, as per Tier.
+    /**
+     * An array of the possible growth tiers.
+     * Ranges from 0-5, with 0 containing the default value.
+     */
     public static final int[] GROWTH_TIER = {
     		50, //Tier 0, a placeholder and default value.
     		50, //Tier I
@@ -26,13 +48,40 @@ public final class Constants {
     		20  //Tier V
     	};
 
-    //default plant stats
+    /*
+     * Default Plant Stats.
+     */
+    /**
+     * The default growth of the crop.
+     * Possibly unneeded, should be a GROWTH_TIER?
+     * 
+     * Growth = {@value}
+     */
     public static final short DEFAULT_GROWTH = 1;
+    /**
+     * The default gain of the crop.
+     * 
+     * Represents the base number of drops from harvest.
+     * 
+     * Gain = {@value}
+     */
     public static final short DEFAULT_GAIN = 1;
+    /**
+     * The default strength of the crop.
+     * 
+     * Represents the base resistance to weed propagation.
+     * 
+     * Strength = {@value}
+     */
     public static final short DEFAULT_STRENGTH = 1;
-    public static final int DEFAULT_TIER = 1;
 
-    //default mutation chance
+    /**
+     * The default mutation chance of the crop.
+     * 
+     * Represents the percent chance to mutate on any given tick.
+     * 
+     * Chance = {@value}
+     */
     public static final double DEFAULT_MUTATION_CHANCE = 0.2;
 
     //constants for positioning item textures on the NEI recipe

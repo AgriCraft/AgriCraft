@@ -84,6 +84,7 @@ public class CropProduce {
     }
 
 
+    // Something funny is going on here.
     private static class Product {
         protected ItemStack product;
         protected int weight;

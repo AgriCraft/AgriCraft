@@ -49,15 +49,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The most important block in the mod.
+ * 
+ * Probably could be static... Maybe.
+ */
 @Optional.InterfaceList(value = {
         @Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IGrassHornExcempt"),
         @Optional.Interface(modid = Names.Mods.ancientWarfare, iface = "net.shadowmage.ancientwarfare.api.IAncientWarfareFarmable"
         )})
 public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityProvider, IGrowable, IPlantable, IGrassHornExcempt, IAncientWarfareFarmable {
 
+    /**
+     * The set of icons used to render weeds.
+     */
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
 
+    /**
+     * The default constructor for the block.
+     */
     public BlockCrop() {
         super(Material.plants);
         this.setTickRandomly(true);
@@ -74,7 +85,9 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         this.minY = 0;
     }
 
-    //this makes a new tile entity every time you place the block
+    /**
+     * Creates a new tile entity every time the block is placed.
+     */
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntityCrop();
@@ -85,7 +98,9 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return Names.Objects.crop;
     }
 
-    //this makes the plant grow
+    /**
+     * Updates the block's TileEntities (instances), thus making the plants grow.
+     */
     @Override
     public void updateTick(World world, int x, int y, int z, Random rnd) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
@@ -99,7 +114,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
                     //multiplier from growth stat
                     double growthBonus = 1.0 + crop.getGrowth() / 10.0;
                     //multiplier defined in the config
-                    float global = 2.0F-ConfigurationHandler.growthMultiplier;
+                    float global = 2.0F - ConfigurationHandler.growthMultiplier;
                     //crop dependent base growth rate
                     float growthRate = (float) crop.getGrowthRate();
                     //determine if growth tick should be applied or skipped
@@ -120,7 +135,16 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         }
     }
 
-    //this harvests the crop, player may be null if harvested trough automation
+    /**
+     * Harvests the crop from a TileEntity (instance).
+     * 
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @param player the player harvesting the crop. May be null if harvested through automation.
+     * @return
+     */
     public boolean harvest(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
@@ -147,6 +171,15 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return false;
     }
 
+    /**
+     * Changes the crop from normal operation, to cross-crop operation.
+     * 
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @param player
+     */
     public void setCrossCrop(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
@@ -161,7 +194,16 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         }
     }
 
-    //Tries to plant the seed contained within the ItemStack, returns true on success.
+    /**
+     * Attempts to plant a seed contained in the provided ItemStack.
+     * 
+     * @param stack the seed(s) to plant.
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @return if the planting operation was successful.
+     */
     public boolean plantSeed(ItemStack stack, World world, int x, int y, int z) {
         if (!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
@@ -187,7 +229,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return false;
     }
 
-    //This gets called when the block is right clicked (player uses the block)
+    /**
+     * Handles right-clicks from the player. Allows the player to 'use' the block.
+     * 
+     * @return if the right-click was consumed.
+     */
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
         //only make things happen serverside
@@ -270,7 +316,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return true;
     }
 
-    //This gets called when the block is left clicked (player hits the block)
+    /**
+     * Handles left-clicks from the player (a.k.a hits).
+     * <br>
+     * When the block is left clicked, it breaks.
+     */
     @Override
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
@@ -287,12 +337,17 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         }
     }
 
+    /**
+     * Handles the block being harvested by calling {@link #onBlockClicked(World, int, int, int, EntityPlayer)}.
+     */
     @Override
     public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
         this.onBlockClicked(world, x, y, z, player);
     }
 
-    //item drops
+    /**
+     * Handles the block drops. Called when the block is left-clicked or otherwise breaks.
+     */
     @Override
     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
         if(!world.isRemote) {
@@ -324,19 +379,30 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         }
     }
 
-    //bonemeal can be applied to this plant
+    /**
+     * Determines if bonemeal may be applied to the plant contained in the crops.
+     * 
+     * @return if bonemeal may be applied.
+     */
     @Override
     public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
         return world.getBlockMetadata(x, y, z) < Constants.MATURE;
     }
 
-    //some weird function for bonemeal
+    /**
+     * Determines if bonemeal speeds up the growth of the contained plant.
+     * 
+     * @return true, bonemeal may speed up any contained plant.
+     */
     @Override
     public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
         return true;
     }
 
-    //this gets called when the player uses bonemeal on the crop
+    /**
+     * Increments the contained plant's growth stage.
+     * Called when bonemeal is applied to the block.
+     */
     public void func_149853_b(World world, Random rand, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         if(crop.hasPlant() || crop.hasWeed()) {
@@ -352,7 +418,9 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         }
     }
 
-    //neighboring blocks get updated
+    /**
+     * Handles changes in the crops neighbors. Used to detect if the crops had the soil stolen from under them and they should now break.
+     */
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
         //check if crops can stay
@@ -364,22 +432,40 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         }
     }
 
-    //see if the block can stay
+    /**
+     * Tests to see if the crop is still on valid soil.
+     * 
+     * @return if the crop is placed in a valid location.
+     */
     @Override
     public boolean canBlockStay(World world, int x, int y, int z) {
         return GrowthRequirementHandler.isSoilValid(world, x, y - 1, z);
     }
 
-    //see if the block can grow
+    /**
+     * Determines if the the plant is fertile, and can grow.
+     * 
+     * @return if the plant can grow.
+     */
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
         return world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityCrop && ((TileEntityCrop) world.getTileEntity(x, y, z)).isFertile();
     }
 
+    /**
+     * Determines if the crops contain a mature plant by checking if the metadata matches {@link Constants#MATURE}.
+     * 
+     * @return if the crop is done growing.
+     */
     public boolean isMature(World world, int x, int y, int z) {
         return world.getBlockMetadata(x, y, z) >= Constants.MATURE;
     }
 
+    /**
+     * Handles the plant being harvested from the crops. This is a separate method from {@link #onBlockHarvested(World, int, int, int, int, EntityPlayer)} which handles the crops breaking.
+     * 
+     * @return a list of drops from the harvested plant.
+     */
     @Override
     public List<ItemStack> doHarvest(World world, int x, int y, int z, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
@@ -402,12 +488,21 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return drops;
     }
 
+    /**
+     * Retrieves the block's item form to be dropped when the block is broken.
+     * 
+     * @return the item form of the crop.
+     */
     @Override
     public Item getItemDropped(int meta, Random rand, int side) {
         return Items.crops;
     }
 
-    //get a list with items dropped by the the crop
+    /**
+     * Determines a list of what is dropped when the crops are broken.
+     * 
+     * @return a list of the items to drop.
+     */
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
@@ -429,14 +524,21 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return items;
     }
 
-    //when the block is broken
+    /**
+     * Handles the block being broken.
+     */
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
         super.breakBlock(world,x,y,z,block,meta);
         world.removeTileEntity(x,y,z);
     }
 
-    //Botania horn of the wild support
+    /**
+     * Determines if block can be harvested by the Botania Horn of the Wild.
+     * <p>
+     * Since the block cannot be harvested normally, by breaking, this function handles the harvesting for the horn in the process.
+     * @return false, since the crops can't uproot normally.
+     */
     @Override
     public boolean canUproot(World world, int x, int y, int z) {
         if(!world.isRemote) {
@@ -459,18 +561,33 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return false;
     }
 
-    //return the crops item if this block is called
+    /**
+     * Retrieves the item form of the block.
+     * 
+     * @return the block's item form.
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public Item getItem(World world, int x, int y, int z) {
         return Items.crops;
     }
 
+    /**
+     * Retrieves the block's collision bounding box. Since we want to be able to walk through the crops,
+     * they should not collide anywhere, and their bounding box is therefore null.
+     * 
+     * @return null - the crops cannot be collided with.
+     */
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
         return null;
     }
 
+    /**
+     * Retrieves the block's outline box for selections.
+     * 
+     * @return a bounding box representing the area occupied by the crops.
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
@@ -478,23 +595,53 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + crop.getCropHeight(), (double)z + this.maxZ);
     }
 
+    /**
+     * Determines if the block is a normal block, such as cobblestone.
+     * This tells Minecraft if crops are not a normal block (meaning no levers can be placed on it, it's transparent, ...).
+     * 
+     * @return false - the block is not a normal block.
+     */
     @Override
-    public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
+    public boolean isOpaqueCube() {return false;}
 
+    /**
+     * Determines if the crops should render as any normal block.
+     * This tells Minecraft whether or not to call the custom renderer.
+     * 
+     * @return false - the block has custom rendering.
+     */
     @Override
-    public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
+    public boolean renderAsNormalBlock() {return false;}
 
+    /**
+     * Determines if a side of the block should be rendered, such as one flush with a wall that wouldn't need rendering.
+     * 
+     * @return false - all of the crop's sides need to be rendered.
+     */
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return true;}
 
+    /**
+     * Renders the hit effects, such as the flying particles when the block is hit.
+     * 
+     * @return false - the block is one-shot and needs no hit particles.
+     */
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {return false;}        //no particles when this block gets hit
+    public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {return false;}
 
+    /**
+     * Tells Minecraft if there should be destroy effects, such as particles.
+     * 
+     * @return false - there are no destroy particles.
+     */
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer effectRenderer) {return false;}     //no particles when destroyed
+    public boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer effectRenderer) {return false;}
 
+    /**
+     * Registers the block's icons.
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
@@ -505,28 +652,46 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         }
     }
 
+    /**
+     * Retrieve the icon for a side of the block.
+     * 
+     * @param side the side to get the icon for.
+     * @param meta the metadata of the block.
+     * @return the icon representing the side of the block.
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
         return this.blockIcon;
     }
 
+    /**
+     * Retrieve the icon for the weeds at a certain growth level represented by the metadata.
+     * 
+     * @param meta the growth level of the weeds.
+     * @return the icon representing the current weed growth.
+     */
     @SideOnly(Side.CLIENT)
     public IIcon getWeedIcon(int meta) {
         int index = 0;
         switch(meta) {
-            case 0:index = 0;break;
+            case 0:
             case 1:index = 0;break;
-            case 2:index = 1;break;
-            case 3:index = 1;break;
+            case 2:
+            case 3:
             case 4:index = 1;break;
-            case 5:index = 2;break;
+            case 5:
             case 6:index = 2;break;
             case 7:index = 3;break;
         }
         return this.weedIcons[index];
     }
 
+    /**
+     * Handles the block receiving events.
+     * 
+     * @return if the event was received properly.
+     */
     @Override
     public boolean onBlockEventReceived(World world, int x, int y, int z, int id, int data) {
         super.onBlockEventReceived(world,x,y,z,id,data);
@@ -534,6 +699,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return (tileEntity!=null)&&(tileEntity.receiveClientEvent(id,data));
     }
 
+    /**
+     * Retrieves the custom renderer for the crops.
+     * 
+     * @return the block's renderer.
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
@@ -550,11 +720,21 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return Names.Objects.crops;
     }
 
+    /**
+     * Retrieves the type of plant growing within the crops.
+     * 
+     * @return the plant type in the crops.
+     */
     @Override
     public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z) {
         return EnumPlantType.Crop;
     }
 
+    /**
+     * Retrieves the block form of the contained plant. WIP.
+     * 
+     * @return this - WIP.
+     */
     @Override
     public Block getPlant(IBlockAccess world, int x, int y, int z) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
@@ -568,6 +748,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return this;
     }
 
+    /**
+     * Retrieves the metadata of the plant... May change.
+     * 
+     * @return 0
+     */
     @Override
     public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
         return 0;

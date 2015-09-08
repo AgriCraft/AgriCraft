@@ -75,7 +75,7 @@ public class ResourceCrops {
                     plant = new BlockModPlant(args);
                 } catch (Exception e) {
                     if(ConfigurationHandler.debug) {
-                        e.printStackTrace();
+                    	LogHelper.printStackTrace(e);
                     }
                     return;
                 }

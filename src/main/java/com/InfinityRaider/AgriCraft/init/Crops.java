@@ -21,7 +21,7 @@ public class Crops {
                 plant = new BlockModPlant(data);
             } catch (Exception e) {
                 if(ConfigurationHandler.debug) {
-                    e.printStackTrace();
+                    LogHelper.printStackTrace(e);
                 }
                 return;
             }

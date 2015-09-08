@@ -48,7 +48,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     public int getFluidLevel() {return this.lvl;}
 
     public void setFluidLevel(int lvl) {
-        if(lvl>=0 && lvl<=Constants.mB/2 && lvl!=this.lvl) {
+        if(lvl>=0 && lvl<=Constants.BUCKET_mB/2 && lvl!=this.lvl) {
             this.lvl = lvl;
             syncToClient(false);
         }
@@ -63,7 +63,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     }
 
     public float getFluidHeight(int lvl) {
-        return 5+7*((float) lvl)/((float) Constants.mB/2);
+        return 5+7*((float) lvl)/((float) Constants.BUCKET_mB/2);
     }
 
     public boolean hasNeighbour(char axis, int direction) {
@@ -207,7 +207,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     public void addDebugInfo(List<String> list) {
         list.add("CHANNEL:");
         super.addDebugInfo(list);
-        list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + Constants.mB / 2);
+        list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + Constants.BUCKET_mB / 2);
         list.add("  - FluidHeight: " + this.getFluidHeight());
     }
 }

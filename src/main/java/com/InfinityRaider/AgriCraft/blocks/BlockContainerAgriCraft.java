@@ -15,12 +15,24 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+/**
+ * The base class for all AgriCraft container blocks.
+ */
 public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements ITileEntityProvider {
+	
+    /**
+     * The default constructor.
+     * 
+     * @param material the material the block is composed of.
+     */
     protected BlockContainerAgriCraft(Material material) {
         super(material);
         registerTileEntity();
     }
 
+    /**
+     * Attempts to create the TileEntity companion for this block. If the process fails, an error is printed to the log via {@link LogHelper#printStackTrace(Exception)}.
+     */
     private void registerTileEntity() {
         try {
             TileEntity tile = this.createNewTileEntity(null, 0);
@@ -33,13 +45,20 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
         }
     }
 
+    /**
+     * Retrieves the name of the TileEntity companion to this container block.
+     * 
+     * @return the name of the block's TileEntity.
+     */
     protected abstract String getTileEntityName();
 
     private static String wrapName(String name) {
         return Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + name;
     }
 
-    //this sets the block's orientation based upon the direction the player is looking when the block is placed
+    /**
+     * Sets the block's orientation based upon the direction the player is looking when the block is placed.
+     */
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
         TileEntity te = world.getTileEntity(x, y, z);
