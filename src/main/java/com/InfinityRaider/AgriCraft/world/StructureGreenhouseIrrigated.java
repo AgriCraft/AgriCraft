@@ -299,6 +299,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
             if (tank!=null) {
                 tank.setMaterial(new ItemStack(Blocks.planks, 1, 0));
             }
+            world.getBlock(xCoord, yCoord, zCoord).onNeighborBlockChange(world, xCoord, yCoord, zCoord, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank);
             return true;
         }
         else {
