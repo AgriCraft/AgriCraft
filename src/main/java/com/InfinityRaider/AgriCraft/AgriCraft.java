@@ -1,23 +1,5 @@
 package com.InfinityRaider.AgriCraft;
 
-/*
-    This is my first "real" mod, I've made this while learning to use Minecraft Forge to Mod Minecraft. The code might not be optimal but that wasn't the point of this project.
-
-    Cheers to:
-        - Pam for trusting me with her source code and support
-        - Pahimar for making his code open source and for creating his Let's Mod Reboot Youtube series, I've learned a lot from this (also used some code, credits due where credits due)
-        - VSWE for his "Forging a Minecraft Mod" summer courses
-        - NealeGaming for his Minecraft modding tutorials on youtube
-        - Imasius (aka Nimo) for learning me to better code in java
-        - HenryLoenwind for the api
-
-    I've annotated my code heavily, for myself and for possible others who might learn from it.
-
-    Oh and keep on modding in the free world
-
-        ~ InfinityRaider
-*/
-
 import com.InfinityRaider.AgriCraft.apiimpl.APISelector;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -40,6 +22,30 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 
 import java.util.ArrayList;
 
+/**
+ * <p>
+ * This is my first "real" mod, I've made this while learning to use Minecraft Forge to Mod Minecraft.
+ * The code might not be optimal but that wasn't the point of this project.
+ * </p>
+ * Cheers to:
+ * <ul>
+ * 	<li> Pam for trusting me with her source code and support. </li>
+ * 	<li> Pahimar for making his code open source and for creating his Let's Mod Reboot Youtube series,
+ * 		 I've learned a lot from this (also used some code, credit's due where credit's due). </li>
+ * 	<li> VSWE for his "Forging a Minecraft Mod" summer courses. </li>
+ * 	<li> NealeGaming for his Minecraft modding tutorials on youtube. </li>
+ * 	<li> Imasius (a.k.a. Nimo) for learning me to better code in java. </li>
+ * 	<li> HenryLoenwind for the API
+ * </ul>
+ * 
+ * I've annotated my code heavily, for myself and for possible others who might learn from it.
+ * <br>
+ * Oh and keep on modding in the free world
+ * <p>
+ * ~ InfinityRaider
+ * </p>
+ * @author InfinityRaider
+ */
 @Mod(modid = Reference.MOD_ID,name = Reference.MOD_NAME,version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class AgriCraft {
     @Mod.Instance(Reference.MOD_ID)

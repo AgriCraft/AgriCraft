@@ -63,7 +63,7 @@ public class CustomCrops {
                             customCrops[i] = new BlockModPlant(new Object[] {name, new ItemStack(fruit, 1, fruitMeta), soil, new BlockWithMeta(baseBlock, baseMeta), tier, renderType, shearable});
                         } catch (Exception e) {
                             if(ConfigurationHandler.debug) {
-                                e.printStackTrace();
+                            	LogHelper.printStackTrace(e);
                             }
                             return;
                         }

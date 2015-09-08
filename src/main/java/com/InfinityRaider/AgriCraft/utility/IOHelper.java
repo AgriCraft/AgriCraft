@@ -321,7 +321,7 @@ public abstract class IOHelper {
             "harvestcraft:kiwiseedItem=harvestcraft:cantaloupeseedItem+harvestcraft:strawberryseedItem\n" +
             "harvestcraft:leekseedItem=harvestcraft:scallionseedItem+harvestcraft:celeryseedItem\n" +
             "harvestcraft:lettuceseedItem=AgriCraft:seedDaisy+harvestcraft:celeryseedItem\n" +
-            "harvestcraft:spinachseedItem=harvestcraft:lettuceseedItem+AgriCraft:seedCactus\n" +
+            "harvestcraft:spinachseedItem=harvestcraft:lettuceseedItem+AgriCraft:seedCactus\n" + // This line seems not to be valid, in my testing.
             "harvestcraft:mustardseedItem=harvestcraft:chilipepperseedItem+harvestcraft:beanseedItem\n" +
             "harvestcraft:oatsseedItem=harvestcraft:cornseedItem+harvestcraft:riceseedItem\n" +
             "harvestcraft:okraseedItem=harvestcraft:beanseedItem+harvestcraft:leekseedItem\n" +

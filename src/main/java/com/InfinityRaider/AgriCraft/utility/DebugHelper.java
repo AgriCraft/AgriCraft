@@ -10,40 +10,74 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class to aid in the management of debug data.
+ */
 public abstract class DebugHelper {
+	
+    /**
+     * Retrieves the debug data for a location, and displays it in a chat message to the specified player in conjunction with the log.
+     * 
+     * @param player the player requesting the debug data.
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     */
     public static void debug(EntityPlayer player, World world, int x, int y, int z) {
-        ArrayList<String> list = new ArrayList<String>();
-        getDebugData(world, x, y,z, list);
-        for(String data:list) {
-            LogHelper.debug(data);
-            player.addChatComponentMessage(new ChatComponentText(data));
+        for(String dataLine:getDebugData(world, x, y,z)) {
+            LogHelper.debug(dataLine);
+            player.addChatComponentMessage(new ChatComponentText(dataLine));
         }
     }
 
+    /**
+     * Retrieves the debug data for a location, and enters it into the log.
+     * 
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     */
     public static void debug(World world, int x, int y, int z) {
-        ArrayList<String> list = new ArrayList<String>();
-        getDebugData(world, x, y,z, list);
-        for(String data:list) {
-            LogHelper.debug(data);
+        for(String dataLine:getDebugData(world, x, y,z)) {
+            LogHelper.debug(dataLine);
         }
     }
 
-    private static void getDebugData(World world, int x, int y, int z, List<String> list) {
+    /**
+     * Constructs a list of strings representing the debug information for the provided location.
+     * 
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @return a list of strings representing the requested debug data.
+     */
+    private static List<String> getDebugData(World world, int x, int y, int z) {
+    	
+    	List<String> debugData = new ArrayList<String>();
+    	
         if (!world.isRemote) {
-            list.add("Server debug info:");
-            list.add("------------------");
+            debugData.add("Server debug info:");
+            debugData.add("------------------");
         } else {
-            list.add("Client debug info:");
-            list.add("------------------");
+            debugData.add("Client debug info:");
+            debugData.add("------------------");
         }
+        
         TileEntity tile = world.getTileEntity(x, y, z);
+        
         if(tile!=null && tile instanceof IDebuggable) {
-            ((IDebuggable) tile).addDebugInfo(list);
+            ((IDebuggable) tile).addDebugInfo(debugData);
         }
         else {
-            list.add("Block: "+ Block.blockRegistry.getNameForObject(world.getBlock(x, y, z)));
-            list.add("Meta: "+world.getBlockMetadata(x, y, z));
+            debugData.add("Block: "+ Block.blockRegistry.getNameForObject(world.getBlock(x, y, z)));
+            debugData.add("Meta: "+world.getBlockMetadata(x, y, z));
         }
-        list.add(" ");
+        
+        debugData.add(" ");
+        
+        return debugData;
     }
 }

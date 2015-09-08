@@ -122,7 +122,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
                 CropPlantHandler.registerPlant(new CropPlantAgriCraftShearable(this, shearable));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.printStackTrace(e);
         }
     }
 

@@ -501,7 +501,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     }
 
     public int getSingleCapacity() {
-        return (this.getBlockMetadata()+1)*8*Constants.mB;
+        return (this.getBlockMetadata()+1)*8*Constants.BUCKET_mB;
     }
 
     public int getTotalCapacity() {

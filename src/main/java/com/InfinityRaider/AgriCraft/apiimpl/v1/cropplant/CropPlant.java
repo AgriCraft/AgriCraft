@@ -15,7 +15,11 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-/** main class used by TileEntityCrop to perform its functionality, only make one object of this per seed object and register it using CropPlantHandler.registerPlant(CropPlant plant) */
+/**
+ * The main class used by TileEntityCrop.
+ * Only make one object of this per seed object, and register using 
+ * {@link CropPlantHandler#registerPlant(CropPlant plant)}
+ */
 public abstract class CropPlant {
     public final int getGrowthRate() {
     	int tier = getTier();
@@ -27,7 +31,16 @@ public abstract class CropPlant {
     	}
     }
 
-    /** This is called to get the actual tier of a seed */
+    /**
+     * Returns the tier of the seed as represented as an integer value, or the overriding value.
+     * The overriding value may be set in the configuration files.
+     * 
+     * Does not always have same output as {@link #getTier()}.
+     * 
+     * Should fall within the range of {@link Constants#GROWTH_TIER}.
+     * 
+     * @return the tier of the seed.
+     */
     public final int getTier() {
         int seedTierOverride = SeedHelper.getSeedTierOverride(getSeed());
         if(seedTierOverride>0) {
@@ -36,63 +49,175 @@ public abstract class CropPlant {
         return tier();
     }
 
-    /** Gets the tier of this plant, can be overridden trough the configs */
+    /**
+     * Returns the tier of this plant, called by {@link #getTier()}.
+     * 
+     * Does not always have same output as {@link #getTier()}.
+     * 
+     * Should fall within the range of {@link Constants#GROWTH_TIER}.
+     * 
+     * @return the tier of the seed.
+     */
     public abstract int tier();
 
-    /** Gets a stack of the seed for this plant */
+    /**
+     * Gets a stack of the seed for this plant.
+     * 
+     * @return a stack of the plant's seeds.
+     */
     public abstract ItemStack getSeed();
 
-    /** Gets an arraylist of all possible fruit drops from this plant */
+    /**
+     * Gets a list of all possible fruit drops from this plant.
+     * 
+     * @return a list containing of all possible fruit drops.
+     */
     public abstract ArrayList<ItemStack> getAllFruits();
 
-    /** Returns a random fruit for this plant */
+    /**
+     * Returns a random fruit for this plant.
+     * 
+     * @param rand a random for choosing the drop. Should eventually be replaced by {@link Constants#RAND}.
+     * @return a random fruit dropped by the plant.
+     */
     public abstract ItemStack getRandomFruit(Random rand);
 
-    /** Returns an ArrayList with amount of random fruit stacks for this plant */
+    /**
+     * Returns an ArrayList with amount of random fruit stacks for this plant.
+     * 
+     * @param gain the gain, as in number of drops. Should eventually be removed as the plant should already know this.
+     * @param rand a random for choosing the drop. Should eventually be replaced by {@link Constants#RAND}.
+     * @return a list containing random fruit drops from this plant.
+     */
     public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
 
-    /** Gets called right before a harvest attempt, return false to prevent further processing, player may be null if harvested by automation */
+    /**
+     * Gets called right before a harvest attempt, player may be null if harvested by automation.
+     * 
+     * Should return false to prevent further processing.
+     * 
+     * Shouldn't the plant already know where it is?
+     * 
+     * @param world the current world of the plant being harvested.
+     * @param x the x-coordinate of the plant being harvested.
+     * @param y the y-coordinate of the plant being harvested.
+     * @param z the z-coordinate of the plant being harvested.
+     * @param player the player attempting to harvest the plant.
+     * @return true, by default.
+     */
     public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
         return true;
     }
 
-    /** This is called right after this plant is planted on a crop, either trough planting, mutation or spreading */
+    /**
+     * Called right after the plant is added to a crop through planting, mutation, or spreading.
+     * 
+     * @param world the world the plant is in.
+     * @param x the x-coordinate of the plant.
+     * @param y the y-coordinate of the plant.
+     * @param z the z-coordinate of the plant.
+     */
     public void onSeedPlanted(World world, int x, int y, int z) {}
 
-    /** This is called right after this plant is removed from a crop or a crop holding this plant is broken */
+    /**
+     * Called right after the plant is removed from a crop, or a crop holding the plant is broken.
+     * 
+     * @param world the world the plant is in.
+     * @param x the x-coordinate of the plant.
+     * @param y the y-coordinate of the plant.
+     * @param z the z-coordinate of the plant.
+     */
     public void onPlantRemoved(World world, int x, int y, int z) {}
 
-    /** Allow this plant to be bonemealed or not */
+    /**
+     * Determines if the plant may be grown with Bonemeal.
+     * 
+     * @return if the plant may be bonemealed.
+     */
     public abstract boolean canBonemeal();
 
-    /** When a growth thick is allowed for this plant, return true to re-render the crop clientside */
+    /**
+     * Attempts to apply a growth tick to the plant, if allowed.
+     * Should return true to re-render the crop clientside.
+     * 
+     * @param world the world the plant is in.
+     * @param x the x-coordinate of the plant.
+     * @param y the y-coordinate of the plant.
+     * @param z the z-coordinate of the plant.
+     * @param oldGrowthStage the current/old growth stage of the plant.
+     * @return if the growth tick was sucessful for the plant.
+     */
     public abstract boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage);
 
-    /** Checks if the plant can grow on this position */
+    /**
+     * Determines if the plant can grow at a location. Method is recommended to store previous result and only recalculate on chunk update.
+     * 
+     * @param world the world the plant is in.
+     * @param x the x-coordinate of the plant.
+     * @param y the y-coordinate of the plant.
+     * @param z the z-coordinate of the plant.
+     * @return if the growth location for the plant is fertile.
+     */
     public abstract boolean isFertile(World world, int x, int y, int z);
 
-    /** Checks if the plant is mature */
+    /**
+     * Determines if the plant is mature. That is, the plant's metadata matches {@link Constants#MATURE}.
+     * 
+     * @param world the world the plant is in.
+     * @param x the x-coordinate of the plant.
+     * @param y the y-coordinate of the plant.
+     * @param z the z-coordinate of the plant.
+     * @return if the plant is mature.
+     */
     public boolean isMature(IBlockAccess world, int x, int y, int z) {
         return world.getBlockMetadata(x, y, z) >= Constants.MATURE;
     }
 
-    /** Gets the height of the crop */
+    /**
+     * Determines the height of the crop in float precision, as a function of the plant's metadata(growth stage).
+     * 
+     * Growth stage may range from 0 to {@link Constants#MATURE}.
+     * 
+     * @return the current height of the plant.
+     */
     @SideOnly(Side.CLIENT)
     public abstract float getHeight(int meta);
 
-    /** Gets the icon for the plant, growth stage goes from 0 to 7 (both inclusive, 0 is sprout and 7 is mature) */
+    /**
+     * Gets the icon for the plant, as a function of the plant's growth stage.
+     * 
+     * Growth stage may range from 0 to {@link Constants#MATURE}.
+     * 
+     * @return the current icon for the plant.
+     */
     @SideOnly(Side.CLIENT)
     public abstract IIcon getPlantIcon(int growthStage);
 
-    /** Determines how the plant is rendered, return false to render as wheat (#), true to render as a flower (X) */
+    /**
+     * Determines how the plant is rendered.
+     * 
+     * @return false to render the plant as wheat (#), true to render as a flower (X).
+     */
     @SideOnly(Side.CLIENT)
     public abstract boolean renderAsFlower();
 
-    /** Gets some information about the plant for the journal */
+    /**
+     * Retrieves information about the plant for the seed journal.
+     * 
+     * @return a string describing the plant for use by the seed journal.
+     */
     @SideOnly(Side.CLIENT)
     public abstract String getInformation();
 
-    /** This is called when the plant is rendered */
+    /**
+     * A function to render the crop. Called when the plant is rendered.
+     * 
+     * @param world the world the plant is in.
+     * @param x the x-coordinate of the plant.
+     * @param y the y-coordinate of the plant.
+     * @param z the z-coordinate of the plant.
+     * @param renderer the renderer to use in the rendering of the plant.
+     */
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
         PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(world.getBlockMetadata(x, y, z)), 0);
