@@ -1,7 +1,5 @@
 package com.InfinityRaider.AgriCraft.reference;
 
-import java.util.Random;
-
 /**
  *	A class containing the constants and default values used in the coding of the AgriCraft mod.
  */
@@ -11,11 +9,6 @@ public final class Constants {
      * Whether or not the mod should log render calls.
      */
     public static final boolean LOG_RENDER_CALLS = false;
-
-    /**
-     * A pre-instantiated Random to minimize excess instantiations.
-     */
-    public static final Random RAND = new Random();
     
     /**
      * The value of 1/16 as represented in float form.

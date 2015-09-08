@@ -31,7 +31,7 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
     }
 
     /**
-     * Attempts to create the TileEntity companion for this block. If the process fails, an error is printed to the log via {@link LogHelper#printStackTrace(Exception)}.
+     * Attempts to register the TileEntity for this block. If the process fails, an error is printed to the log via {@link LogHelper#printStackTrace(Exception)}.
      */
     private void registerTileEntity() {
         try {
@@ -46,7 +46,7 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
     }
 
     /**
-     * Retrieves the name of the TileEntity companion to this container block.
+     * Retrieves the name of the TileEntity to this container block.
      * 
      * @return the name of the block's TileEntity.
      */
@@ -68,7 +68,7 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
                 int direction = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
                 switch (direction) {
                     case 0:
-                        tile.setOrientation(ForgeDirection.NORTH.ordinal());
+                        tile.setOrientation(ForgeDirection.NORTH);
                         break;
                     case 1:
                         tile.setOrientation(ForgeDirection.EAST);

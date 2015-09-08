@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -35,7 +36,7 @@ public abstract class CropPlant {
      * Returns the tier of the seed as represented as an integer value, or the overriding value.
      * The overriding value may be set in the configuration files.
      * 
-     * Does not always have same output as {@link #getTier()}.
+     * Does not always have same output as {@link #tier()}.
      * 
      * Should fall within the range of {@link Constants#GROWTH_TIER}.
      * 
@@ -58,7 +59,7 @@ public abstract class CropPlant {
      * 
      * @return the tier of the seed.
      */
-    public abstract int tier();
+    protected abstract int tier();
 
     /**
      * Gets a stack of the seed for this plant.
@@ -77,26 +78,25 @@ public abstract class CropPlant {
     /**
      * Returns a random fruit for this plant.
      * 
-     * @param rand a random for choosing the drop. Should eventually be replaced by {@link Constants#RAND}.
+     * @param rand a random for choosing the drop.
      * @return a random fruit dropped by the plant.
      */
     public abstract ItemStack getRandomFruit(Random rand);
 
     /**
      * Returns an ArrayList with amount of random fruit stacks for this plant.
-     * 
-     * @param gain the gain, as in number of drops. Should eventually be removed as the plant should already know this.
-     * @param rand a random for choosing the drop. Should eventually be replaced by {@link Constants#RAND}.
+     * Gain is passed to allow for different fruits for higher gain levels
+     *
+     * @param gain the gain, as in number of drops.
+     * @param rand a random for choosing the drop.
      * @return a list containing random fruit drops from this plant.
      */
     public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
 
     /**
      * Gets called right before a harvest attempt, player may be null if harvested by automation.
-     * 
      * Should return false to prevent further processing.
-     * 
-     * Shouldn't the plant already know where it is?
+     * World object and coordinates are passed in the case you would want to keep track of all planted crops and their status
      * 
      * @param world the current world of the plant being harvested.
      * @param x the x-coordinate of the plant being harvested.
@@ -145,12 +145,12 @@ public abstract class CropPlant {
      * @param y the y-coordinate of the plant.
      * @param z the z-coordinate of the plant.
      * @param oldGrowthStage the current/old growth stage of the plant.
-     * @return if the growth tick was sucessful for the plant.
+     * @return if the plant should be rendered again client side (e.g. if the next growth stage has a different icon)
      */
     public abstract boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage);
 
     /**
-     * Determines if the plant can grow at a location. Method is recommended to store previous result and only recalculate on chunk update.
+     * Determines if the plant can grow at a location.
      * 
      * @param world the world the plant is in.
      * @param x the x-coordinate of the plant.
@@ -175,9 +175,9 @@ public abstract class CropPlant {
 
     /**
      * Determines the height of the crop in float precision, as a function of the plant's metadata(growth stage).
+     * Used to render and define the height of the selection bounding box
      * 
-     * Growth stage may range from 0 to {@link Constants#MATURE}.
-     * 
+     * @param meta the growth stage of the plant (may range from 0 to {@link Constants#MATURE}).
      * @return the current height of the plant.
      */
     @SideOnly(Side.CLIENT)
@@ -185,9 +185,8 @@ public abstract class CropPlant {
 
     /**
      * Gets the icon for the plant, as a function of the plant's growth stage.
-     * 
-     * Growth stage may range from 0 to {@link Constants#MATURE}.
-     * 
+     *
+     * @param growthStage the growthstage of the plant may range from 0 to {@link Constants#MATURE}.
      * @return the current icon for the plant.
      */
     @SideOnly(Side.CLIENT)
@@ -203,6 +202,7 @@ public abstract class CropPlant {
 
     /**
      * Retrieves information about the plant for the seed journal.
+     * It's possible to pass an unlocalized String, the returned value will be localized if possible.
      * 
      * @return a string describing the plant for use by the seed journal.
      */

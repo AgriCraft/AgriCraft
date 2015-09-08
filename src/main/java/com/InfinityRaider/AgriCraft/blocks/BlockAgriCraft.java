@@ -44,9 +44,9 @@ public abstract class BlockAgriCraft extends Block {
     }
 
     /**
-     * Retrieves the block's class, as a generic class bounded by the ItemBlock class.
+     * Retrieves the block's ItemBlock class, as a generic class bounded by the ItemBlock class.
      * 
-     * @return the block's class.
+     * @return the block's class, may be null if no specific ItemBlock class is desired.
      */
     protected abstract Class<? extends ItemBlock> getItemBlockClass();
 

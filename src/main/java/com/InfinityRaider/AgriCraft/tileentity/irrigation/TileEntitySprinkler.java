@@ -112,8 +112,8 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
                 this.worldObj.setBlockMetadataWithNotify(x, y, z, 7, flag);
             } else if (block instanceof BlockBush && !farmlandOnly) {
                 // x chance to force growth tick on plant every y ticks
-                if (counter == 0 && Constants.RAND.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
-                    block.updateTick(this.worldObj, x, y, z, Constants.RAND);
+                if (counter == 0 && worldObj.rand.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
+                    block.updateTick(this.worldObj, x, y, z, worldObj.rand);
                 }
             }
         }

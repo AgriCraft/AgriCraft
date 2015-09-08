@@ -51,24 +51,17 @@ import java.util.Random;
 
 /**
  * The most important block in the mod.
- * 
- * Probably could be static... Maybe.
  */
 @Optional.InterfaceList(value = {
         @Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IGrassHornExcempt"),
         @Optional.Interface(modid = Names.Mods.ancientWarfare, iface = "net.shadowmage.ancientwarfare.api.IAncientWarfareFarmable"
         )})
 public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityProvider, IGrowable, IPlantable, IGrassHornExcempt, IAncientWarfareFarmable {
-
-    /**
-     * The set of icons used to render weeds.
-     */
+    /** The set of icons used to render weeds. */
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
 
-    /**
-     * The default constructor for the block.
-     */
+    /** The default constructor for the block. */
     public BlockCrop() {
         super(Material.plants);
         this.setTickRandomly(true);
@@ -85,9 +78,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         this.minY = 0;
     }
 
-    /**
-     * Creates a new tile entity every time the block is placed.
-     */
+    /** Creates a new tile entity every time the block is placed. */
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntityCrop();
@@ -98,9 +89,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         return Names.Objects.crop;
     }
 
-    /**
-     * Updates the block's TileEntities (instances), thus making the plants grow.
-     */
+    /** Randomly called to apply growth ticks */
     @Override
     public void updateTick(World world, int x, int y, int z, Random rnd) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
@@ -138,12 +127,12 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     /**
      * Harvests the crop from a TileEntity (instance).
      * 
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world the World object for this block
+     * @param x the x coordinate for this block
+     * @param y the y coordinate for this block
+     * @param z the z coordinate for this block
      * @param player the player harvesting the crop. May be null if harvested through automation.
-     * @return
+     * @return if the block was harvested
      */
     public boolean harvest(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
@@ -174,11 +163,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     /**
      * Changes the crop from normal operation, to cross-crop operation.
      * 
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param player
+     * @param world the World object for this block
+     * @param x the x coordinate for this block
+     * @param y the y coordinate for this block
+     * @param z the z coordinate for this block
+     * @param player the player applying the cross crop
      */
     public void setCrossCrop(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
@@ -198,10 +187,10 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
      * Attempts to plant a seed contained in the provided ItemStack.
      * 
      * @param stack the seed(s) to plant.
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world the World object for this block
+     * @param x the x coordinate for this block
+     * @param y the y coordinate for this block
+     * @param z the z coordinate for this block
      * @return if the planting operation was successful.
      */
     public boolean plantSeed(ItemStack stack, World world, int x, int y, int z) {
@@ -462,7 +451,8 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     }
 
     /**
-     * Handles the plant being harvested from the crops. This is a separate method from {@link #onBlockHarvested(World, int, int, int, int, EntityPlayer)} which handles the crops breaking.
+     * Handles the plant being harvested from Ancient Warfare crop farms.
+     * This is a separate method from {@link #onBlockHarvested(World, int, int, int, int, EntityPlayer)} which handles the crops breaking.
      * 
      * @return a list of drops from the harvested plant.
      */
