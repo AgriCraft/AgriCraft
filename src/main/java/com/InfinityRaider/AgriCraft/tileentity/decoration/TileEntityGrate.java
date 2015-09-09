@@ -110,6 +110,21 @@ public class TileEntityGrate extends TileEntityCustomWood {
         }
     }
 
+    public double[] getBlockBounds() {
+        //TODO: store the bounds on the tile entity instead of calculating them every time
+        double offset = (this.offset*7.000D)/16.000D;
+        if(this.orientation == 0) {
+            return new double[] {0, 0, offset, 1, 1, offset+2*Constants.UNIT};
+        }
+        else if(this.orientation == 1) {
+            return new double[] {offset, 0, 0, offset+2*Constants.UNIT, 1, 1};
+        }
+        else {
+            return new double[] {0, offset, 0, 1, offset+2*Constants.UNIT, 1};
+        }
+
+    }
+
     @Override
     public boolean canUpdate() {
         return false;

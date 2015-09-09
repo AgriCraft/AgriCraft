@@ -16,7 +16,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -111,6 +113,116 @@ public class BlockGrate extends BlockCustomWood {
         }
         return box;
     }
+
+    /** Copied from the Block class, but changed the calls to isVecInside**Bounds methods */
+    public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 vec0, Vec3 vec1) {
+        this.setBlockBoundsBasedOnState(world, x, y, z);
+        vec0 = vec0.addVector((double)(-x), (double)(-y), (double)(-z));
+        vec1 = vec1.addVector((double) (-x), (double) (-y), (double) (-z));
+        Vec3 vec2 = vec0.getIntermediateWithXValue(vec1, this.minX);
+        Vec3 vec3 = vec0.getIntermediateWithXValue(vec1, this.maxX);
+        Vec3 vec4 = vec0.getIntermediateWithYValue(vec1, this.minY);
+        Vec3 vec5 = vec0.getIntermediateWithYValue(vec1, this.maxY);
+        Vec3 vec6 = vec0.getIntermediateWithZValue(vec1, this.minZ);
+        Vec3 vec7 = vec0.getIntermediateWithZValue(vec1, this.maxZ);
+        Vec3 vec8 = null;
+        if (!this.isVecInsideYZBounds(world, x, y, z, vec2)) {
+            vec2 = null;
+        }
+        if (!this.isVecInsideYZBounds(world, x, y, z, vec3)) {
+            vec3 = null;
+        }
+        if (!this.isVecInsideXZBounds(world, x, y, z, vec4)) {
+            vec4 = null;
+        }
+        if (!this.isVecInsideXZBounds(world, x, y, z, vec5)) {
+            vec5 = null;
+        }
+        if (!this.isVecInsideXYBounds(world, x, y, z, vec6)) {
+            vec6 = null;
+        }
+        if (!this.isVecInsideXYBounds(world, x, y, z, vec7)) {
+            vec7 = null;
+        }
+        if (vec2 != null && (vec8 == null || vec0.squareDistanceTo(vec2) < vec0.squareDistanceTo(vec8))) {
+            vec8 = vec2;
+        }
+        if (vec3 != null && (vec8 == null || vec0.squareDistanceTo(vec3) < vec0.squareDistanceTo(vec8))) {
+            vec8 = vec3;
+        }
+        if (vec4 != null && (vec8 == null || vec0.squareDistanceTo(vec4) < vec0.squareDistanceTo(vec8))) {
+            vec8 = vec4;
+        }
+        if (vec5 != null && (vec8 == null || vec0.squareDistanceTo(vec5) < vec0.squareDistanceTo(vec8))) {
+            vec8 = vec5;
+        }
+        if (vec6 != null && (vec8 == null || vec0.squareDistanceTo(vec6) < vec0.squareDistanceTo(vec8))) {
+            vec8 = vec6;
+        }
+        if (vec7 != null && (vec8 == null || vec0.squareDistanceTo(vec7) < vec0.squareDistanceTo(vec8))) {
+            vec8 = vec7;
+        }
+        if (vec8 == null) {
+            return null;
+        }
+        else {
+            byte b0 = -1;
+            if (vec8 == vec2)  {
+                b0 = 4;
+            }
+            if (vec8 == vec3) {
+                b0 = 5;
+            }
+            if (vec8 == vec4) {
+                b0 = 0;
+            }
+            if (vec8 == vec5) {
+                b0 = 1;
+            }
+            if (vec8 == vec6) {
+                b0 = 2;
+            }
+            if (vec8 == vec7) {
+                b0 = 3;
+            }
+            return new MovingObjectPosition(x, y, z, b0, vec8.addVector((double)x, (double)y, (double) z));
+        }
+    }
+
+    /**
+     * Checks if a vector is within the Y and Z bounds of the block.
+     */
+    private boolean isVecInsideYZBounds(World world, int x, int y, int z, Vec3 vec) {
+        double[] bounds = getBlockBounds(world, x, y, z);
+        return bounds!=null && vec!=null && vec.yCoord>=bounds[1]&& vec.yCoord<=bounds[4] &&vec.zCoord>=bounds[2] && vec.zCoord<=bounds[5];
+    }
+
+    /**
+     * Checks if a vector is within the X and Z bounds of the block.
+     */
+    private boolean isVecInsideXZBounds(World world, int x, int y, int z, Vec3 vec) {
+        double[] bounds = getBlockBounds(world, x, y, z);
+        return bounds!=null && vec!=null && vec.xCoord>=bounds[0] && vec.xCoord<=bounds[3] && vec.zCoord>=bounds[2] && vec.zCoord<=bounds[5];
+    }
+
+    /**
+     * Checks if a vector is within the X and Y bounds of the block.
+     */
+    private boolean isVecInsideXYBounds(World world, int x, int y, int z, Vec3 vec) {
+        double[] bounds = getBlockBounds(world, x, y, z);
+        return bounds!=null && vec!=null && vec.xCoord>=bounds[0] && vec.xCoord<=bounds[3] && vec.yCoord>=bounds[1] && vec.yCoord<=bounds[4];
+    }
+
+    private double[] getBlockBounds(World world, int x, int y, int z) {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if(tile==null || !(tile instanceof TileEntityGrate)) {
+            //something is wrong
+            return null;
+        }
+        TileEntityGrate grate = (TileEntityGrate) tile;
+        return grate.getBlockBounds();
+    }
+
 
     public static class ItemBlockGrate extends ItemBlockCustomWood {
         public ItemBlockGrate(Block block) {
