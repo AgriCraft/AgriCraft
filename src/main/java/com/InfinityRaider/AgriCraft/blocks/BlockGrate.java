@@ -99,8 +99,7 @@ public class BlockGrate extends BlockCustomWood {
 
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-        AxisAlignedBB box = getBoundingBox(world, x, y, z);
-        return box;
+        return getBoundingBox(world, x, y, z);
     }
 
     public AxisAlignedBB getBoundingBox(World world, int x, int y, int z) {
@@ -115,6 +114,7 @@ public class BlockGrate extends BlockCustomWood {
     }
 
     /** Copied from the Block class, but changed the calls to isVecInside**Bounds methods */
+    @Override
     public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 vec0, Vec3 vec1) {
         this.setBlockBoundsBasedOnState(world, x, y, z);
         vec0 = vec0.addVector((double)(-x), (double)(-y), (double)(-z));
@@ -164,8 +164,7 @@ public class BlockGrate extends BlockCustomWood {
         }
         if (vec8 == null) {
             return null;
-        }
-        else {
+        } else {
             byte b0 = -1;
             if (vec8 == vec2)  {
                 b0 = 4;
@@ -242,15 +241,12 @@ public class BlockGrate extends BlockCustomWood {
                 if (side == 0 || side == 1) {
                     ForgeDirection dir = PlayerHelper.getPlayerFacing(player);
                     if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
-                        grate.setOrientationValue((short) 0);
-                        setOffset(grate, hitZ);
+                        setOffsetAndOrientation(grate, hitZ, (short) 0);
                     } else {
-                        grate.setOrientationValue((short) 1);
-                        setOffset(grate, hitX);
+                        setOffsetAndOrientation(grate, hitX, (short) 1);
                     }
                 } else {
-                    grate.setOrientationValue((short) 2);
-                    setOffset(grate, hitY);
+                    setOffsetAndOrientation(grate, hitY, (short) 2);
                 }
                 return true;
             } else {
@@ -258,7 +254,8 @@ public class BlockGrate extends BlockCustomWood {
             }
         }
 
-        private void setOffset(TileEntityGrate grate, float hit) {
+        private void setOffsetAndOrientation(TileEntityGrate grate, float hit, short orientation) {
+            grate.setOrientationValue(orientation);
             if (hit <= 0.3333F) {
                 grate.setOffSet((short) 0);
             } else if (hit <= 0.6666F) {
@@ -266,6 +263,7 @@ public class BlockGrate extends BlockCustomWood {
             } else {
                 grate.setOffSet((short) 2);
             }
+            grate.calculateBounds();
         }
     }
 }

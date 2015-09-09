@@ -54,7 +54,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
         Block vines = net.minecraft.init.Blocks.vine;
         IIcon vinesIcon = vines.getBlockTextureFromSide(0);
         float offset = ((float) grate.getOffset()*7)/16.0F;
-        short orientation = grate.getOrientationValue();
+        int orientation = grate.getOrientationValue();
 
         if(orientation == 0) {
             tessellator.addTranslation(0, 0, offset);
@@ -116,7 +116,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
         return true;
     }
 
-    private void drawVines(Tessellator tessellator, boolean front, float offset, short orientation, IIcon icon) {
+    private void drawVines(Tessellator tessellator, boolean front, float offset, int orientation, IIcon icon) {
         float pos = offset + (front?-0.001F:2* Constants.UNIT+0.001F);
         if(orientation == 0) {
             drawScaledFaceDoubleXY(tessellator, 0, 0, 16, 16, icon, pos);
