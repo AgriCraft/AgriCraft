@@ -40,7 +40,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
         this.modelSeedAnalyzer = new ModelSeedAnalyzer();
         this.modelBook = new ModelSeedAnalyzerBook();
         seedAnalyzerDummy = new TileEntitySeedAnalyzer();
-        seedAnalyzerDummy.setOrientation(ForgeDirection.SOUTH.ordinal());
+        seedAnalyzerDummy.setOrientation(ForgeDirection.SOUTH);
     }
 
     @Override

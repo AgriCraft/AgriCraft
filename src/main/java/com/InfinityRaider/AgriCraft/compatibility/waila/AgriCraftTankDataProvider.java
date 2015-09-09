@@ -44,7 +44,7 @@ public class AgriCraftTankDataProvider implements IWailaDataProvider {
         if(block!=null && block instanceof BlockWaterTank  && te!=null && te instanceof TileEntityTank) {
             TileEntityTank tank = (TileEntityTank) te;
             //define material
-            ItemStack materialStack =tank.getMaterialStack();
+            ItemStack materialStack = tank.getMaterialStack();
             String material = materialStack.getItem().getItemStackDisplayName(materialStack);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+material);
             //show contents

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemBlockCustomWood extends ItemBlock {
+	
     public ItemBlockCustomWood(Block block) {
         super(block);
         this.setHasSubtypes(true);
@@ -31,7 +32,6 @@ public class ItemBlockCustomWood extends ItemBlock {
 
     @Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-        NBTTagCompound tag = stack.stackTagCompound;
         if (!world.setBlock(x, y, z, field_150939_a, metadata, 3)) {
             return false;
         }
@@ -40,7 +40,7 @@ public class ItemBlockCustomWood extends ItemBlock {
             field_150939_a.onPostBlockPlaced(world, x, y, z, metadata);
             if(world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityCustomWood) {
                 TileEntityCustomWood tileEntity = (TileEntityCustomWood) world.getTileEntity(x, y, z);
-                tileEntity.setMaterial(tag);
+                tileEntity.setMaterial(stack);
             }
         }
         return true;

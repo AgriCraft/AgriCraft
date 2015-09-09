@@ -45,7 +45,7 @@ public class AgriCraftValveDataProvider implements IWailaDataProvider {
         if(block!=null && block instanceof BlockChannelValve && te!=null && te instanceof TileEntityValve) {
             TileEntityValve valve = (TileEntityValve) te;
             //define material
-            ItemStack materialStack =valve.getMaterialStack();
+            ItemStack materialStack = valve.getMaterialStack();
             String material = materialStack.getItem().getItemStackDisplayName(materialStack);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+material);
             //show status

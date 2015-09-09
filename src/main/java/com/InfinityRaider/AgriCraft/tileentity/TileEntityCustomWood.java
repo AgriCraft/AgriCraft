@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Names;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -13,112 +14,183 @@ import net.minecraft.util.IIcon;
 
 import java.util.List;
 
+/**
+ * This class represents the root tile entity for all AgriCraft custom wood blocks.
+ * Through this class, the custom woods are remembered for the blocks.
+ * 
+ * Todo:
+ *  - Track material name.
+ *
+ */
 public class TileEntityCustomWood extends TileEntityAgricraft implements IDebuggable {
-    protected Block material;
-    protected int materialMeta;
+	
+	/**
+     * The default material to use. Currently is wood planks.
+     */
+    private static final Block DEFAULT_MATERIAL = Blocks.planks;
+    
+    /**
+     * The default metadata to use. Currently is set to Oak(0) for Planks.
+     */
+    private static final int DEFAULT_META = 0;
+	
+	/**
+     * A pointer to the the block the CustomWoodBlock is imitating.
+     * 
+     * Defaults to {@link #DEFAULT_MATERIAL}.
+     */
+    private Block material = Blocks.planks;
+    
+    /**
+     * The metadata of the block the CustomWoodBlock is imitating.
+     * 
+     * Defaults to {@link #DEFAULT_META}.
+     */
+    private int materialMeta = 0;
 
-    protected TileEntityCustomWood() {}
-
-    //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        if(this.material != null) {
-            tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(this.material));
-            tag.setInteger(Names.NBT.materialMeta, this.materialMeta);
-        }
+    	//Can never be null. (Has to be made out of something... lol).
+    	tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(this.material));
+        tag.setInteger(Names.NBT.materialMeta, this.materialMeta);
+        //Required call to super.
         super.writeToNBT(tag);
     }
 
-    //this loads the saved data for the tile entity
+    /**
+     * Loads the CustomWood entity from a NBTTag, as to load from a savefile.
+     * 
+     * @param tag the tag to load the entity data from.
+     */
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         this.setMaterial(tag);
     }
 
-    public boolean isSameMaterial(TileEntityCustomWood tileEntity) {
+    /**
+     * Tests to see if another CustomWood entity is of the same material.
+     * 
+     * @param tileEntity the CustomWood entity to test.
+     * @return if the construction materials for both entities are the same.
+     */
+    public final boolean isSameMaterial(TileEntityCustomWood tileEntity) {
         return tileEntity!=null && this.getBlockMetadata()==tileEntity.getBlockMetadata() && this.getMaterial()==tileEntity.getMaterial() && this.getMaterialMeta()==tileEntity.getMaterialMeta();
     }
 
-    //set material from tag
-    public void setMaterial(NBTTagCompound tag) {
+    
+    /**
+     * Sets the CustomWood block's material, the material to mimic, from an NBTTag.
+     * This function is intended for use internally, for serialization.
+     * 
+     * @param tag the tag to set the block's material from.
+     */
+    private final void setMaterial(NBTTagCompound tag) {
         if(tag!=null && tag.hasKey(Names.NBT.material) && tag.hasKey(Names.NBT.materialMeta)) {
             this.setMaterial(tag.getString(Names.NBT.material), tag.getInteger(Names.NBT.materialMeta));
         }
     }
 
-    //set material from stack
-    public void setMaterial(ItemStack stack) {
-        if(stack==null || stack.getItem()==null) {
-            return;
+    /**
+     * Sets the CustomWood block's material, the material to mimic, from an ItemStack.
+     * Hackish -> Don't like.
+     * 
+     * @param stack the ItemStack to set the block's material from.
+     */
+    public final void setMaterial(ItemStack stack) {
+        if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemBlock) {
+        	this.setMaterial(stack.stackTagCompound);
         }
-        if(!(stack.getItem() instanceof ItemBlock)) {
-            return;
-        }
-        this.material = ((ItemBlock) stack.getItem()).field_150939_a;
-        this.materialMeta = stack.getItemDamage();
     }
 
-    //set material from string and int
-    public void setMaterial(String name, int meta) {
-        Block block = (Block) Block.blockRegistry.getObject(name);
+    /**
+     * Sets the CustomWood block's material, the material to mimic, from the name of the material (block) and its metadata value.
+     * 
+     * @param name the name of the material (block).
+     * @param meta the metadata value of the material (block).
+     */
+    public final void setMaterial(String name, int meta) {
+        this.setMaterial((Block) Block.blockRegistry.getObject(name), meta);
+    }
+    
+    /**
+     * Sets the CustomWood block's material, the material to mimic, from the name of the material (block) and its metadata value.
+     * 
+     * @param name the name of the material (block).
+     * @param meta the metadata value of the material (block).
+     */
+    public final void setMaterial(Block block, int meta) {
         if(block!=null) {
             this.material = block;
             this.materialMeta = meta;
-        } else {
-            this.material = Blocks.planks;
-            this.materialMeta = 0;
         }
     }
 
-    public Block getMaterial() {
+    /**
+     * Retrieves the material the CustomWood is mimicking.
+     * 
+     * @return the material, in Block form.
+     */
+    public final Block getMaterial() {
         return this.material;
     }
 
-    public int getMaterialMeta() {
+    /**
+     * Retrieves the metadata of the material the CustomWood is mimicking.
+     * 
+     * @return the metadata of the material.
+     */
+    public final int getMaterialMeta() {
         return this.materialMeta;
     }
-
-    public ItemStack getMaterialStack() {
-        ItemStack stack = new ItemStack(Blocks.planks, 1, 0);
-        if(this.material !=null) {
-            stack = new ItemStack(material, 1, this.materialMeta);
-        }
-        return stack;
+    
+    /**
+     * Retrieves a stack of the material the CustomWood is mimicking.
+     * I do not like this method. Solely for waila.
+     * 
+     * @return a stack of the mimicked material.
+     */
+    public final ItemStack getMaterialStack() {
+        return new ItemStack(this.material, this.materialMeta);
     }
 
-    //get material information
-    public String getMaterialName() {
+    /**
+     * Retrieves the name of the material the CustomWood is mimicking.
+     * 
+     * @return the name of the material.
+     */
+    public final String getMaterialName() {
         return Block.blockRegistry.getNameForObject(this.material);
     }
-
-    public NBTTagCompound getMaterialTag() {
+    
+    /**
+     * Generates an NBTTag for the material the CustomWood is mimicking.
+     * I do not like this method. Solely for waila.
+     * 
+     * @return an NBTTag for the CustomWood material.
+     */
+    public final NBTTagCompound getMaterialTag() {
         NBTTagCompound tag = new NBTTagCompound();
-        if(this.material !=null) {
-            tag.setString(Names.NBT.material, this.getMaterialName());
-            tag.setInteger(Names.NBT.materialMeta, this.materialMeta);
-        }
-        else {
-            //default to oak planks
-            tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(Blocks.planks));
-            tag.setInteger(Names.NBT.materialMeta, 0);
-        }
+        tag.setString(Names.NBT.material, this.getMaterialName());
+        tag.setInteger(Names.NBT.materialMeta, this.materialMeta);
         return tag;
     }
 
+    /**
+     * Retrieves the CustomWood icon.
+     * 
+     * @return the icon, or texture, of the CustomWood.
+     */
     public IIcon getIcon() {
-        if(this.material!=null) {
-            IIcon icon = material.getIcon(0, this.materialMeta);
-            return icon==null?Blocks.planks.getIcon(0, 0):icon;
-        }
-        else {
-            return Blocks.planks.getIcon(0, 0);
-        }
+    	//Look ma! Two line!
+    	IIcon icon = this.material.getIcon(0, this.materialMeta);
+        return icon==null?DEFAULT_MATERIAL.getIcon(0, DEFAULT_META):icon; //I guess the Icon could come out null.
     }
 
     @Override
     public void addDebugInfo(List<String> list) {
-        list.add("this material is: " + this.getMaterialName() + ":" + this.getMaterialStack().getItemDamage());
+    	// The old method was kinda dumb.
+        list.add("this material is: " + this.getMaterialName() + ":" + this.getMaterialMeta());
     }
 
     @Override

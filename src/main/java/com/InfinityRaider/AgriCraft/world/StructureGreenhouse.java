@@ -229,7 +229,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
             TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(xCoord, yCoord, zCoord);
             if (analyzer!=null) {
                 if(direction!=null) {
-                    analyzer.setOrientation(direction.ordinal());
+                    analyzer.setOrientation(direction);
                 }
             }
             return true;
