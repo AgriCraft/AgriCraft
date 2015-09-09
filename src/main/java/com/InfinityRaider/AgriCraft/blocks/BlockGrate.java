@@ -91,15 +91,6 @@ public class BlockGrate extends BlockCustomWood {
         return items;
     }
 
-    public void setBounds(AxisAlignedBB box, int x, int y, int z) {
-        this.minX = box.minX-x;
-        this.minY = box.minY-y;
-        this.minZ = box.minZ-z;
-        this.maxX = box.maxX-x;
-        this.maxY = box.maxY-y;
-        this.maxZ = box.maxZ-z;
-    }
-
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
         return getBoundingBox(world, x, y, z);
     }
@@ -107,7 +98,6 @@ public class BlockGrate extends BlockCustomWood {
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
         AxisAlignedBB box = getBoundingBox(world, x, y, z);
-        setBounds(box, x, y, z);
         return box;
     }
 
@@ -119,7 +109,6 @@ public class BlockGrate extends BlockCustomWood {
         } else {
             box = ((TileEntityGrate) tile).getBoundingBox();
         }
-        //setBounds(box, x, y, z);
         return box;
     }
 
