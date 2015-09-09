@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.init;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemAgricraft;
 import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
@@ -22,6 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +34,7 @@ public class Recipes {
     public static final ItemStack REFERENCE = new ItemStack(net.minecraft.init.Blocks.planks, 1);
 
     /** Holds all the custom woods for CustomWood items, will get filled on init() */
-    private static final List<ItemStack> woodList = new ArrayList<ItemStack>();
+    private static List<ItemStack> woodList;
 
     public static void init() {
         //crop item
@@ -104,28 +106,52 @@ public class Recipes {
     }
 
     private static void registerCustomWoodRecipes() {
-        ((ItemBlockCustomWood) Item.getItemFromBlock(Blocks.blockWaterTank)).getSubItems(woodList);
-        if(!ConfigurationHandler.disableIrrigation) {
-            ItemStack channel = new ItemStack(Blocks.blockWaterChannel, 1);
-            ItemStack channelFull = new ItemStack(Blocks.blockWaterChannelFull, 1);
+        if(initWoodList()) {
+            if (!ConfigurationHandler.disableIrrigation) {
+                ItemStack channel = new ItemStack(Blocks.blockWaterChannel, 1);
+                ItemStack channelFull = new ItemStack(Blocks.blockWaterChannelFull, 1);
 
-            registerCustomWoodRecipe(Blocks.blockWaterTank, 1, true, "w w", "w w", "www", 'w', REFERENCE);
-            registerCustomWoodRecipe(Blocks.blockWaterChannel, 6, true, "w w", " w ", 'w', REFERENCE);
-            registerCustomWoodRecipe(Blocks.blockWaterChannelFull, 1, false, channel, channel, channel, channel);
-            registerCustomWoodRecipe(Blocks.blockWaterChannel, 4, false, channelFull);
-            registerCustomWoodRecipe(Blocks.blockChannelValve, 1, false, new ItemStack(net.minecraft.init.Items.iron_ingot, 1), new ItemStack(net.minecraft.init.Blocks.lever, 1), channel);
+                registerCustomWoodRecipe(Blocks.blockWaterTank, 1, true, "w w", "w w", "www", 'w', REFERENCE);
+                registerCustomWoodRecipe(Blocks.blockWaterChannel, 6, true, "w w", " w ", 'w', REFERENCE);
+                registerCustomWoodRecipe(Blocks.blockWaterChannelFull, 1, false, channel, channel, channel, channel);
+                registerCustomWoodRecipe(Blocks.blockWaterChannel, 4, false, channelFull);
+                registerCustomWoodRecipe(Blocks.blockChannelValve, 1, false, new ItemStack(net.minecraft.init.Items.iron_ingot, 1), new ItemStack(net.minecraft.init.Blocks.lever, 1), channel);
+            }
+            if (!ConfigurationHandler.disableSeedStorage) {
+                registerCustomWoodRecipe(Blocks.blockSeedStorage, 1, true, "wiw", "wcw", "wcw", 'w', REFERENCE, 'i', net.minecraft.init.Items.iron_ingot, 'c', net.minecraft.init.Blocks.chest);
+            }
+            if (!ConfigurationHandler.disableFences) {
+                ItemStack fence = new ItemStack(Blocks.blockFence, 1);
+                registerCustomWoodRecipe(Blocks.blockFence, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', net.minecraft.init.Blocks.fence);
+                registerCustomWoodRecipe(Blocks.blockFenceGate, 1, true, "fwf", 'w', REFERENCE, 'f', fence);
+            }
+            if (!ConfigurationHandler.disableGrates) {
+                registerCustomWoodRecipe(Blocks.blockGrate, 8, true, "w w", " w ", "w w", 'w', REFERENCE);
+            }
         }
-        if(!ConfigurationHandler.disableSeedStorage) {
-            registerCustomWoodRecipe(Blocks.blockSeedStorage, 1, true, "wiw", "wcw", "wcw", 'w', REFERENCE, 'i', net.minecraft.init.Items.iron_ingot, 'c', net.minecraft.init.Blocks.chest);
+    }
+
+    private static boolean initWoodList() {
+        if(woodList != null && woodList.size()>0) {
+            return true;
         }
-        if(!ConfigurationHandler.disableFences) {
-            ItemStack fence = new ItemStack(Blocks.blockFence, 1);
-            registerCustomWoodRecipe(Blocks.blockFence, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', net.minecraft.init.Blocks.fence);
-            registerCustomWoodRecipe(Blocks.blockFenceGate, 1, true, "fwf", 'w', REFERENCE, 'f', fence);
+        for(Field field:Blocks.class.getDeclaredFields()) {
+            try {
+                if (field.get(null) == null) {
+                    continue;
+                }
+                Object obj = field.get(null);
+                if (!(obj instanceof BlockCustomWood)) {
+                    continue;
+                }
+                woodList = new ArrayList<ItemStack>();
+                (((ItemBlockCustomWood) Item.getItemFromBlock((BlockCustomWood) obj))).getSubItems(woodList);
+                return true;
+            } catch(Exception e) {
+                LogHelper.printStackTrace(e);
+            }
         }
-        if(!ConfigurationHandler.disableGrates) {
-            registerCustomWoodRecipe(Blocks.blockGrate, 8, true, "w w", " w ", "w w", 'w', REFERENCE);
-        }
+        return false;
     }
 
     /**
