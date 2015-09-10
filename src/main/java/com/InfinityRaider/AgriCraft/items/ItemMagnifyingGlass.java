@@ -18,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemMagnifyingGlass extends ItemAgricraft {
+	
     public ItemMagnifyingGlass() {
         super();
-        this.setCreativeTab(AgriCraftTab.agriCraftTab);
-        this.maxStackSize=1;
+        this.setMaxStackSize(1);
     }
 
     @Override

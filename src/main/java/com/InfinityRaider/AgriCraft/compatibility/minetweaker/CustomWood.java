@@ -3,7 +3,8 @@ package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Recipes;
-import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
+
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;

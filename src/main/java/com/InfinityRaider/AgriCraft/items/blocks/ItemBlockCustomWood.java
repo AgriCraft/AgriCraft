@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.items;
+package com.InfinityRaider.AgriCraft.items.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -109,7 +109,7 @@ public class ItemBlockCustomWood extends ItemBlock {
     }
 
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+    public final void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
         if(stack.getItemDamage()==0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(Names.NBT.material) && stack.getTagCompound().hasKey(Names.NBT.materialMeta)) {
             NBTTagCompound tag = stack.getTagCompound();
             String name = tag.getString(Names.NBT.material);

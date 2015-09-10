@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -93,6 +94,10 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
         }
         return controllable;
     }
-
+    
+    @Override
+    public boolean isRotatable() {
+        return true;
+    }
 
 }

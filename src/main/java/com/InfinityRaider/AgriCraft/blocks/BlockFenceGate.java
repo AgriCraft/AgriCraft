@@ -1,16 +1,16 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFenceGate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFenceGate;
 import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -64,7 +64,7 @@ public class BlockFenceGate extends BlockCustomWood {
     }
 
     @Override
-    protected Class<? extends ItemBlock> getItemBlockClass() {
+    protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
         return ItemBlockFenceGate.class;
     }
 

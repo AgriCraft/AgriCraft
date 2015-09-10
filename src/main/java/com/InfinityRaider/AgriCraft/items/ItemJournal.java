@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemJournal extends ItemAgricraft {
+	
     public ItemJournal() {
         super();
-        this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setMaxStackSize(1);
     }
 

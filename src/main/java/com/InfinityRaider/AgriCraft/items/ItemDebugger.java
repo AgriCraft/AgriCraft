@@ -13,10 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemDebugger extends ItemAgricraft {
-    public ItemDebugger() {
-        super();
-        this.setCreativeTab(null);
-    }
 
     @Override
     protected String getInternalName() {
