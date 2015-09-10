@@ -81,8 +81,7 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
     //see if the block can stay
     @Override
     public boolean canBlockStay(World world, int x, int y, int z) {
-        Block channel = world.getBlock(x,y+1,z);
-        return (channel==com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel);
+        return (world.getBlock(x,y+1,z) instanceof BlockWaterChannel);
     }
 
     @Override
