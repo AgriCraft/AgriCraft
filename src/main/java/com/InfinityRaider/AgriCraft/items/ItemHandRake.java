@@ -33,9 +33,9 @@ public class ItemHandRake extends ItemAgricraft {
     private final IIcon[] icons = new IIcon[2];
 
     public ItemHandRake() {
-        setCreativeTab(AgriCraftTab.agriCraftTab);
-        maxStackSize = 1;
-        hasSubtypes = true;
+        super();
+        this.setMaxStackSize(1);
+        this.setHasSubtypes(true);
     }
 
     @Override

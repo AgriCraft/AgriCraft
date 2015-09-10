@@ -1,29 +1,27 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockGrate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
 import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BlockGrate extends BlockCustomWood {
     @Override
@@ -45,11 +43,6 @@ public class BlockGrate extends BlockCustomWood {
     @Override
     public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
         return new TileEntityGrate();
-    }
-
-    @Override
-    protected Class<? extends ItemBlock> getItemBlockClass() {
-        return ItemBlockGrate.class;
     }
 
     @Override
@@ -221,17 +214,15 @@ public class BlockGrate extends BlockCustomWood {
         TileEntityGrate grate = (TileEntityGrate) tile;
         return grate.getBlockBounds();
     }
-
+    
+    @Override
+    protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+        return ItemBlockGrate.class;
+    }
 
     public static class ItemBlockGrate extends ItemBlockCustomWood {
         public ItemBlockGrate(Block block) {
             super(block);
-        }
-
-        @SideOnly(Side.CLIENT)
-        public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-            super.addInformation(stack, player, list, flag);
-            list.add(StatCollector.translateToLocal("agricraft_tooltip.grate"));
         }
 
         @Override

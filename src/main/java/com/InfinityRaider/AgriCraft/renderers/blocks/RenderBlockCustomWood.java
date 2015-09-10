@@ -18,7 +18,7 @@ public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> exte
 
     @Override
     protected final void doInventoryRender(ItemRenderType type, ItemStack item, Object... data) {
-        teDummy.setMaterial(item.getTagCompound());
+        teDummy.setMaterial(item);
         GL11.glDisable(GL11.GL_LIGHTING);
         renderInInventory(type, item, data);
         GL11.glEnable(GL11.GL_LIGHTING);

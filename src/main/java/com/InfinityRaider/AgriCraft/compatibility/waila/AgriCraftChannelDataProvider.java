@@ -46,7 +46,7 @@ public class AgriCraftChannelDataProvider implements IWailaDataProvider {
         if(block!=null && block instanceof BlockWaterChannel && te!=null && te instanceof TileEntityChannel) {
             TileEntityChannel channel = (TileEntityChannel) te;
             //define material
-            ItemStack materialStack =channel.getMaterialStack();
+            ItemStack materialStack = channel.getMaterialStack();
             String material = materialStack.getItem().getItemStackDisplayName(materialStack);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+material);
             //show contents
