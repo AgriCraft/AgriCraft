@@ -23,6 +23,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockSprinkler extends BlockContainerAgriCraft {
+	
     public BlockSprinkler() {
     	super(Material.iron);
     	this.setCreativeTab(AgriCraftTab.agriCraftTab);

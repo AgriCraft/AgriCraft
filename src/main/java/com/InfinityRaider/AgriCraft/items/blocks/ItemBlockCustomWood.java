@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
@@ -22,14 +23,28 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The root item for all CustomWood blocks.
+ */
 public class ItemBlockCustomWood extends ItemBlock {
 	
+    /**
+     * The default constructor.
+     * A super call to this is generally all that is needed in subclasses.
+     * 
+     * @param block the block associated with this item.
+     */
     public ItemBlockCustomWood(Block block) {
         super(block);
         this.setHasSubtypes(true);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
     }
 
+    /**
+     * Places the associated block at a location in the world.
+     * There is generally no need for overriding this method in subclasses.
+     * If the block can only be placed in certain spots, override the canPlaceBlockAt() method in the block class.
+     */
     @Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
         if (!world.setBlock(x, y, z, field_150939_a, metadata, 3)) {
@@ -46,13 +61,22 @@ public class ItemBlockCustomWood extends ItemBlock {
         return true;
     }
 
+    /**
+     * Populates the sub-item list.
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list) {
         this.getSubItems(list);
     }
 
-    //create this method to allow getting sub blocks server side as well
+    /**
+     * Populates the sub-item list.
+     * This method allows getting sub blocks server side as well (no @side, like {@link #getSubItems(Item, CreativeTabs, List)}). 
+     * This method is marked for cleaning.
+     * 
+     * @param list the list to populate.
+     */
     public void getSubItems(List list) {
         ArrayList<ItemStack> registeredMaterials = new ArrayList<ItemStack>();
         ArrayList<ItemStack> planks = OreDictionary.getOres(Names.OreDict.plankWood);
@@ -85,8 +109,14 @@ public class ItemBlockCustomWood extends ItemBlock {
         }
     }
 
-    //checks if a list of materials (item stacks) has this material
-    private boolean hasMaterial(ArrayList<ItemStack> registeredMaterials, ItemStack material) {
+    /**
+     * Determines if a list of materials (item stacks) has a material.
+     * 
+     * @param registeredMaterials The list of materials to check in.
+     * @param material the material to check for.
+     * @return if the list has the material.
+     */
+    private static boolean hasMaterial(List<ItemStack> registeredMaterials, ItemStack material) {
         for(ItemStack stack:registeredMaterials) {
             if(material.getItem()==stack.getItem() && material.getItemDamage()==stack.getItemDamage()) {
                 return true;
@@ -95,7 +125,14 @@ public class ItemBlockCustomWood extends ItemBlock {
         return false;
     }
 
-    //adds a material (item stack) to a list if it's not registered in a list already
+    /**
+     * Adds a material (item stack) to a list if it's not registered in a list already.
+     * 
+     * @param stack the material to add.
+     * @param list the list to add to.
+     * @param objectMeta the material's meta value.
+     * @param registeredMaterials the list of materials to check against.
+     */
     private void addMaterialToList(ItemStack stack, List list, int objectMeta, ArrayList<ItemStack> registeredMaterials) {
         if(!this.hasMaterial(registeredMaterials, stack)) {
             ItemStack entry = new ItemStack(this.field_150939_a, 1, objectMeta);
@@ -108,6 +145,18 @@ public class ItemBlockCustomWood extends ItemBlock {
         }
     }
 
+    /**
+     * Retrieves the block's displayable information.
+     * This method does not need to be overridden by most CustomWood blocks.
+     * <p>
+     * If the block name is not displaying correctly, check the lang files and Names.Objects.[blockname].
+     * If that does not correct the issue, ensure that the block overrides both getInternalName() and getTileEntityName() and returns Names.Objects.[blockname].
+     * </p>
+     * <p>
+     * All custom wood blocks have a material that we want shown, so we make this method final.
+     * Some however, has more information they want to add, so we add a addMore() method to override in that event.
+     * </p>
+     */
     @SideOnly(Side.CLIENT)
     public final void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
         if(stack.getItemDamage()==0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(Names.NBT.material) && stack.getTagCompound().hasKey(Names.NBT.materialMeta)) {
@@ -117,13 +166,37 @@ public class ItemBlockCustomWood extends ItemBlock {
             ItemStack material = new ItemStack((Block) Block.blockRegistry.getObject(name), 1, meta);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+ material.getItem().getItemStackDisplayName(material));
         }
+        //Get any additional information that we may want to add.
+        addMoreInformation(stack, list);
+    }
+    
+    /**
+     * Override this method if you wish to add additional information to the tooltip.
+     * 
+     * @param stack the item in question.
+     * @param list the list to add the tooltip info to.
+     */
+    @SideOnly(Side.CLIENT)
+    public void addMoreInformation(ItemStack stack, List list) {
+    	//Do nothing, as we have nothing to do here.
     }
 
+    /**
+     * Retrieves the item's unlocalized name.
+     * This is the key used in the language files.
+     * Should return something like tile.agricraft:[internalname].[meta].name
+     * Final as to prevent being messed up.
+     * 
+     * @param the item in question.
+     */
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public final String getUnlocalizedName(ItemStack stack) {
         return this.getUnlocalizedName()+"."+stack.getItemDamage();
     }
 
+    /**
+     * Retrieves metadata, returns what is passed.
+     */
     @Override
     public int getMetadata(int meta) {
         return meta;

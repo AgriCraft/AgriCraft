@@ -1,5 +1,8 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import java.util.List;
+
+import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
@@ -10,7 +13,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -87,6 +93,24 @@ public class BlockChannelValve extends BlockCustomWood {
     @Override
     protected String getTileEntityName() {
         return Names.Objects.valve;
+    }
+    
+    @Override
+    protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+    	return ItemBlockValve.class;
+    }
+    
+    public static class ItemBlockValve extends ItemBlockCustomWood {
+        public ItemBlockValve(Block block) {
+            super(block);
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void addMoreInformation(ItemStack stack, List list) {
+        	//All this just to add a single line...
+            list.add(StatCollector.translateToLocal("agricraft_tooltip.valve"));
+        }
     }
 
 }

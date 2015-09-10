@@ -19,9 +19,6 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 public class BlockSeedStorage extends BlockCustomWood {
-    public BlockSeedStorage() {
-        super();
-    }
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
@@ -39,6 +36,11 @@ public class BlockSeedStorage extends BlockCustomWood {
 
     @Override
     protected String getTileEntityName() {
+        return Names.Objects.seedStorage;
+    }
+    
+    @Override
+    protected String getInternalName() {
         return Names.Objects.seedStorage;
     }
 
@@ -92,10 +94,5 @@ public class BlockSeedStorage extends BlockCustomWood {
     public RenderBlockBase getRenderer() {
         return new RenderSeedStorage();
     }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.seedStorage;
-    }
-
+    
 }

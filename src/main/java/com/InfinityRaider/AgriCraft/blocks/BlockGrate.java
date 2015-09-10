@@ -1,15 +1,14 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockGrate;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockGrate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
-import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -19,25 +18,30 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 
 public class BlockGrate extends BlockCustomWood {
+	
+    @Override
+    protected String getInternalName() {
+        return Names.Objects.grate;
+    }
+	
     @Override
     protected String getTileEntityName() {
         return Names.Objects.grate;
+    }
+    
+    @Override
+    protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+        return ItemBlockGrate.class;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderBlockGrate();
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.grate;
     }
 
     @Override
@@ -215,46 +219,4 @@ public class BlockGrate extends BlockCustomWood {
         return grate.getBlockBounds();
     }
     
-    @Override
-    protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
-        return ItemBlockGrate.class;
-    }
-
-    public static class ItemBlockGrate extends ItemBlockCustomWood {
-        public ItemBlockGrate(Block block) {
-            super(block);
-        }
-
-        @Override
-        public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-            if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
-                TileEntityGrate grate = (TileEntityGrate) world.getTileEntity(x, y, z);
-                if (side == 0 || side == 1) {
-                    ForgeDirection dir = PlayerHelper.getPlayerFacing(player);
-                    if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
-                        setOffsetAndOrientation(grate, hitZ, (short) 0);
-                    } else {
-                        setOffsetAndOrientation(grate, hitX, (short) 1);
-                    }
-                } else {
-                    setOffsetAndOrientation(grate, hitY, (short) 2);
-                }
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        private void setOffsetAndOrientation(TileEntityGrate grate, float hit, short orientation) {
-            grate.setOrientationValue(orientation);
-            if (hit <= 0.3333F) {
-                grate.setOffSet((short) 0);
-            } else if (hit <= 0.6666F) {
-                grate.setOffSet((short) 1);
-            } else {
-                grate.setOffSet((short) 2);
-            }
-            grate.calculateBounds();
-        }
-    }
 }

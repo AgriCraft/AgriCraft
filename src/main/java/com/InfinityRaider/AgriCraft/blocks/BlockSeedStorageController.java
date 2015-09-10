@@ -19,9 +19,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockSeedStorageController extends BlockCustomWood {
-    public BlockSeedStorageController() {
-        super();
-    }
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
@@ -30,6 +27,11 @@ public class BlockSeedStorageController extends BlockCustomWood {
 
     @Override
     protected String getTileEntityName() {
+        return Names.Objects.seedStorageController;
+    }
+    
+    @Override
+    protected String getInternalName() {
         return Names.Objects.seedStorageController;
     }
 
@@ -57,8 +59,4 @@ public class BlockSeedStorageController extends BlockCustomWood {
         return new RenderSeedStorageController();
     }
 
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.seedStorageController;
-    }
 }
