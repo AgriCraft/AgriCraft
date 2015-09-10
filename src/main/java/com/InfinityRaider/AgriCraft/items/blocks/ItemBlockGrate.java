@@ -15,8 +15,18 @@ import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * The item form of the Grate block.
+ */
 public class ItemBlockGrate extends ItemBlockCustomWood {
+	
+    /**
+     * The default constructor for the Grate Item.
+     * 
+     * @param block the block that the item is associated with.
+     */
     public ItemBlockGrate(Block block) {
+    	//Reccomended super call.
         super(block);
     }
     
@@ -47,7 +57,14 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
         }
     }
 
-    private void setOffsetAndOrientation(TileEntityGrate grate, float hit, short orientation) {
+    /**
+     * Sets the freshly placed TileEntityGrate's orientation.
+     * 
+     * @param grate the grate in question.
+     * @param hit the hit location, on the axis matching the orientation.
+     * @param orientation the orientation.
+     */
+    private static void setOffsetAndOrientation(TileEntityGrate grate, float hit, short orientation) {
         grate.setOrientationValue(orientation);
         if (hit <= 0.3333F) {
             grate.setOffSet((short) 0);

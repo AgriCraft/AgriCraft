@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.items.blocks;
 
-import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
@@ -26,7 +25,7 @@ import java.util.List;
 /**
  * The root item for all CustomWood blocks.
  */
-public class ItemBlockCustomWood extends ItemBlock {
+public class ItemBlockCustomWood extends ItemBlockAgricraft {
 	
     /**
      * The default constructor.
@@ -37,7 +36,6 @@ public class ItemBlockCustomWood extends ItemBlock {
     public ItemBlockCustomWood(Block block) {
         super(block);
         this.setHasSubtypes(true);
-        this.setCreativeTab(AgriCraftTab.agriCraftTab);
     }
 
     /**
@@ -134,7 +132,7 @@ public class ItemBlockCustomWood extends ItemBlock {
      * @param registeredMaterials the list of materials to check against.
      */
     private void addMaterialToList(ItemStack stack, List list, int objectMeta, ArrayList<ItemStack> registeredMaterials) {
-        if(!this.hasMaterial(registeredMaterials, stack)) {
+        if(!hasMaterial(registeredMaterials, stack)) {
             ItemStack entry = new ItemStack(this.field_150939_a, 1, objectMeta);
             NBTTagCompound tag = NBTHelper.getMaterialTag(stack);
             if (tag != null) {
@@ -149,7 +147,7 @@ public class ItemBlockCustomWood extends ItemBlock {
      * Retrieves the block's displayable information.
      * This method does not need to be overridden by most CustomWood blocks.
      * <p>
-     * If the block name is not displaying correctly, check the lang files and Names.Objects.[blockname].
+     * If the block name is not displaying correctly, check the language files and Names.Objects.[blockname].
      * If that does not correct the issue, ensure that the block overrides both getInternalName() and getTileEntityName() and returns Names.Objects.[blockname].
      * </p>
      * <p>

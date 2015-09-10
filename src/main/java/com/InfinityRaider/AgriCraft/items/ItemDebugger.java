@@ -13,6 +13,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemDebugger extends ItemAgricraft {
+	
+	public ItemDebugger() {
+		super();
+		this.setMaxStackSize(1);
+	}
 
     @Override
     protected String getInternalName() {
@@ -38,8 +43,6 @@ public class ItemDebugger extends ItemAgricraft {
         }
         return false;
     }
-
-
 
     @Override
     @SideOnly(Side.CLIENT)
