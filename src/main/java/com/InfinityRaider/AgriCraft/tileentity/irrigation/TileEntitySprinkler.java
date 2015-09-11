@@ -1,11 +1,14 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
+import java.util.List;
+
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.particles.LiquidSprayFX;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -156,5 +159,10 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
     @Override
     public boolean isRotatable() {
         return false;
+    }
+    
+    @Override
+    public void addWailaInformation(List information) {
+    	//Nothing to add here. Move along!
     }
 }

@@ -4,8 +4,10 @@ import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -209,5 +211,13 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
         super.addDebugInfo(list);
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + Constants.BUCKET_mB / 2);
         list.add("  - FluidHeight: " + this.getFluidHeight());
+    }
+    
+    @Override
+    public void addWailaInformation(List information) {
+    	//Required call to super.
+    	super.addWailaInformation(information);
+        //show contents --> magic number...
+        information.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel")+": "+this.getFluidLevel()+"/500");
     }
 }

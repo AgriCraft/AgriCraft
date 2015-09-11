@@ -16,7 +16,9 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderCrop;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -746,5 +748,10 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     @Override
     public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
         return 0;
+    }
+    
+    @Override
+    public ItemStack getWailaStack(BlockAgriCraft block, TileEntityAgricraft tea) {
+    	return new ItemStack(Items.crops, 1, 0);
     }
 }

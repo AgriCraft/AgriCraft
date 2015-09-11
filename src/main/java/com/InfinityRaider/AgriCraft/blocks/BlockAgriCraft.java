@@ -2,12 +2,15 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 
 /**
  * The base class for all AgriCraft blocks.
@@ -56,4 +59,13 @@ public abstract class BlockAgriCraft extends Block {
      * @return the internal name of the block.
      */
     protected abstract String getInternalName();
+    
+    /**
+     * Retrieves the stack to show in waila.
+     * 
+     * @param the tile entity associated with the block, possibly null.
+     */
+    public ItemStack getWailaStack(BlockAgriCraft block, TileEntityAgricraft tea) {
+    	return null;
+    }
 }

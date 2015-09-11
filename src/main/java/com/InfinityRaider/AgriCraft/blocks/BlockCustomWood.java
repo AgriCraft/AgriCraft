@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
 import cpw.mods.fml.relauncher.Side;
@@ -119,5 +120,16 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     @Override
     protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
     	return ItemBlockCustomWood.class;
+    }
+    
+    @Override
+    public ItemStack getWailaStack(BlockAgriCraft block, TileEntityAgricraft te) {
+    	if(te != null && te instanceof TileEntityCustomWood) {
+    		ItemStack stack = new ItemStack(block, 1, 0);
+    		stack.setTagCompound(((TileEntityCustomWood) te).getMaterialTag());
+    		return stack;
+    	} else {
+    		return null;
+    	}
     }
 }

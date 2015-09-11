@@ -11,6 +11,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 
 import java.util.List;
 
@@ -143,16 +144,6 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
     public final int getMaterialMeta() {
         return this.materialMeta;
     }
-    
-    /**
-     * Retrieves a stack of the material the CustomWood is mimicking.
-     * I do not like this method. Solely for waila.
-     * 
-     * @return a stack of the mimicked material.
-     */
-    public final ItemStack getMaterialStack() {
-        return new ItemStack(this.material, this.materialMeta);
-    }
 
     /**
      * Retrieves the name of the material the CustomWood is mimicking.
@@ -205,5 +196,11 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
         } else {
             return getBlockType().colorMultiplier(worldObj, xCoord, yCoord, zCoord);
         }
+    }
+    
+    @Override
+    public void addWailaInformation(List information) {
+    	ItemStack mat = new ItemStack(this.material, 1, this.materialMeta);
+    	information.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+ mat.getItem().getItemStackDisplayName(mat));
     }
 }

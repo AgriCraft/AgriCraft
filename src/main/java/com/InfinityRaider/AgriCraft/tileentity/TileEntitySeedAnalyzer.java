@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
+import java.util.List;
+
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -435,5 +437,11 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     @Override
     public boolean isRotatable() {
         return true;
+    }
+    
+    @Override
+    public void addWailaInformation(List information) {
+    	// TODO Auto-generated method stub
+    	
     }
 }

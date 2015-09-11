@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -106,4 +108,12 @@ public abstract class TileEntityAgricraft extends TileEntity {
     public final void markForUpdate() {
         this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
+    
+    /**
+     * Add the waila information to a list.
+     * I reccomend a call to the super method where applicable.
+     * 
+     * @param information the list to add to.
+     */
+    public abstract void addWailaInformation(List information);
 }
