@@ -17,8 +17,10 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -26,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
@@ -432,6 +435,37 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         }
         else {
             list.add(" - This crop has no plant");
+        }
+    }
+    
+    @Override
+    public void addWailaInformation(List information) {
+    	if(this.hasPlant()) {
+    		//Add the seed name.
+    		information.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + this.getSeedStack().getDisplayName());
+    		//Add the growth.
+    		if(this.isMature()) {
+    			information.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage")+": "+StatCollector.translateToLocal("agricraft_tooltip.mature"));
+    		} else {
+    			information.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage")+": "+((int) ( (100*(this.getBlockMetadata()+0.00F))/7.00F)+"%" ));
+    		}
+    		//Add the analyzed data.
+    		if(this.isAnalyzed()) {
+    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + this.getGrowth());
+    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + this.getGain());
+    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + this.getStrength());
+    		}
+    		else {
+    			information.add(StatCollector.translateToLocal("agricraft_tooltip.analyzed"));
+    		}
+    		//Add the fertility information.
+    		information.add(StatCollector.translateToLocal(this.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
+    	}
+    	else if(this.hasWeed()) {
+    		information.add(StatCollector.translateToLocal("agricraft_tooltip.weeds"));
+    	}
+    	else {
+    		information.add(StatCollector.translateToLocal("agricraft_tooltip.empty"));
         }
     }
 }

@@ -1,8 +1,10 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
-import com.InfinityRaider.AgriCraft.items.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -10,7 +12,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -96,6 +97,8 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
+    	//This is what shows up in the inventory, without a renderer set.
+    	//Is there no way to get it to match the tile entity?
         return Blocks.planks.getIcon(side, meta);
     }
 
@@ -115,7 +118,18 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return false;}
 
     @Override
-    protected Class<? extends ItemBlock> getItemBlockClass() {
-        return ItemBlockCustomWood.class;
+    protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+    	return ItemBlockCustomWood.class;
+    }
+    
+    @Override
+    public ItemStack getWailaStack(BlockAgriCraft block, TileEntityAgricraft te) {
+    	if(te != null && te instanceof TileEntityCustomWood) {
+    		ItemStack stack = new ItemStack(block, 1, 0);
+    		stack.setTagCompound(((TileEntityCustomWood) te).getMaterialTag());
+    		return stack;
+    	} else {
+    		return null;
+    	}
     }
 }

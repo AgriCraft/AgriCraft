@@ -4,7 +4,9 @@ package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 
 import java.util.List;
 
@@ -53,6 +55,15 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
         list.add("  - State: "+(this.isPowered()?"closed":"open"));
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + Constants.BUCKET_mB / 2);
         list.add("  - FluidHeight: " + this.getFluidHeight());
-        list.add("this material is: " + this.getMaterialName() + ":" + this.getMaterialStack().getItemDamage());
+        list.add("this material is: " + this.getMaterialName() + ":" + this.getMaterialMeta()); //Much Nicer.
+    }
+    
+    @Override
+    public void addWailaInformation(List information) {
+    	//Required super call
+    	super.addWailaInformation(information);
+    	//show status
+        String status = StatCollector.translateToLocal(powered?"agricraft_tooltip.closed":"agricraft_tooltip.open");
+        information.add(StatCollector.translateToLocal("agricraft_tooltip.state")+": "+status);
     }
 }

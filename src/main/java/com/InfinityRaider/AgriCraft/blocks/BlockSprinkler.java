@@ -1,11 +1,12 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.items.ItemSprinkler;
+import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -22,8 +23,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockSprinkler extends BlockContainerAgriCraft {
+	
     public BlockSprinkler() {
-        super(Material.iron);
+    	super(Material.iron);
+    	this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setHardness(2.0F);
         this.setResistance(5.0F);
         setHarvestLevel("axe", 0);
@@ -33,7 +36,6 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
         this.minZ = this.minX;
         this.maxY = Constants.UNIT*20;
         this.minY = Constants.UNIT*12;
-
     }
 
     @Override
@@ -79,8 +81,7 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
     //see if the block can stay
     @Override
     public boolean canBlockStay(World world, int x, int y, int z) {
-        Block channel = world.getBlock(x,y+1,z);
-        return (channel==com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel);
+        return (world.getBlock(x,y+1,z) instanceof BlockWaterChannel);
     }
 
     @Override
@@ -119,11 +120,6 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
     }
 
     @Override
-    protected Class<? extends ItemBlock> getItemBlockClass() {
-        return ItemSprinkler.class;
-    }
-
-    @Override
     protected String getInternalName() {
         return Names.Objects.sprinkler;
     }
@@ -132,4 +128,15 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
     protected String getTileEntityName() {
         return Names.Objects.sprinkler;
     }
+    
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+    	return world.getBlock(x, y + 1, z) instanceof BlockWaterChannel && world.getBlock(x, y, z).getMaterial()== Material.air;
+    }
+    
+    @Override
+    protected Class<? extends ItemBlock> getItemBlockClass() {
+    	return null;
+    }
+    
 }

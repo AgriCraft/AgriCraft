@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,9 +19,6 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 public class BlockSeedStorage extends BlockCustomWood {
-    public BlockSeedStorage() {
-        super();
-    }
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
@@ -38,6 +36,11 @@ public class BlockSeedStorage extends BlockCustomWood {
 
     @Override
     protected String getTileEntityName() {
+        return Names.Objects.seedStorage;
+    }
+    
+    @Override
+    protected String getInternalName() {
         return Names.Objects.seedStorage;
     }
 
@@ -91,9 +94,5 @@ public class BlockSeedStorage extends BlockCustomWood {
     public RenderBlockBase getRenderer() {
         return new RenderSeedStorage();
     }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.seedStorage;
-    }
+    
 }

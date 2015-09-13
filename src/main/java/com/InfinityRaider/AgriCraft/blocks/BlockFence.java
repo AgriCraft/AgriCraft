@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFence;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFence;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -141,4 +142,5 @@ public class BlockFence extends BlockCustomWood {
         }
         return false;
     }
+    
 }

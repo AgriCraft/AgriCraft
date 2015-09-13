@@ -4,8 +4,10 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedStorageController;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,9 +19,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockSeedStorageController extends BlockCustomWood {
-    public BlockSeedStorageController() {
-        super();
-    }
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
@@ -30,20 +29,10 @@ public class BlockSeedStorageController extends BlockCustomWood {
     protected String getTileEntityName() {
         return Names.Objects.seedStorageController;
     }
-
-    //this sets the block's orientation based upon the direction the player is looking when the block is placed
+    
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-        if(world.getTileEntity(x, y, z) instanceof TileEntitySeedStorage) {
-            TileEntitySeedStorage te = (TileEntitySeedStorage) world.getTileEntity(x, y, z);
-            int direction = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-            switch(direction) {
-                case 0: te.setDirection(ForgeDirection.NORTH.ordinal()); break;
-                case 1: te.setDirection(ForgeDirection.EAST.ordinal()); break;
-                case 2: te.setDirection(ForgeDirection.SOUTH.ordinal()); break;
-                case 3: te.setDirection(ForgeDirection.WEST.ordinal()); break;
-            }
-        }
+    protected String getInternalName() {
+        return Names.Objects.seedStorageController;
     }
 
     @Override
@@ -67,11 +56,7 @@ public class BlockSeedStorageController extends BlockCustomWood {
     @Override
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
-        return null;
+        return new RenderSeedStorageController();
     }
 
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.seedStorageController;
-    }
 }
