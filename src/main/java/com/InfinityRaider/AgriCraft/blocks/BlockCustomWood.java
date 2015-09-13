@@ -97,9 +97,7 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-    	//This is what shows up in the inventory, without a renderer set.
-    	//Is there no way to get it to match the tile entity?
-        return Blocks.planks.getIcon(side, meta);
+        return Blocks.planks.getIcon(side, 0);
     }
 
     //register icons

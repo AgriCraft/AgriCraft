@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 import java.util.List;
 
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
@@ -139,7 +140,8 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         }
         
         if (seed != null) {
-        	return CropPlantHandler.getPlantFromStack(seed).getTier()*20;
+            CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
+        	return plant==null?0:plant.getTier()*20;
         } else {
         	return 0;
         }
@@ -151,7 +153,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
      * @param stack the stack to check.
      * @return if the stack is valid.
      */
-    public static final boolean isValid(ItemStack stack) {
+    public static boolean isValid(ItemStack stack) {
         if(stack==null || stack.getItem()==null) {
             return false;
         }
@@ -424,16 +426,6 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         }
     }
 
-    /**
-     * Check if a stack can stack with the current seed stack.
-     * 
-     * @param stack the stack to add.
-     * @return if the stack can be added.
-     */
-    public final boolean canStack(ItemStack stack) {
-        return this.specimen.getItem()==stack.getItem()&&this.specimen.getItemDamage()==stack.getItemDamage()&&this.specimen.stackTagCompound==stack.stackTagCompound&&(this.specimen.stackSize+stack.stackSize<=64);
-    }
-
     @Override
     public boolean isRotatable() {
         return true;
@@ -441,7 +433,6 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     
     @Override
     public void addWailaInformation(List information) {
-    	// TODO Auto-generated method stub
-    	
+    	//NO OP
     }
 }

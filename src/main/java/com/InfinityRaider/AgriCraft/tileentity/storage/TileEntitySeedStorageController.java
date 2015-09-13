@@ -94,10 +94,4 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
         }
         return controllable;
     }
-    
-    @Override
-    public boolean isRotatable() {
-        return true;
-    }
-
 }

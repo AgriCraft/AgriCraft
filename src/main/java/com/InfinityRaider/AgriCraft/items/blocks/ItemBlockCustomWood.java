@@ -11,6 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -156,27 +157,17 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
      * </p>
      */
     @SideOnly(Side.CLIENT)
-    public final void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+        ItemStack material;
         if(stack.getItemDamage()==0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(Names.NBT.material) && stack.getTagCompound().hasKey(Names.NBT.materialMeta)) {
             NBTTagCompound tag = stack.getTagCompound();
             String name = tag.getString(Names.NBT.material);
             int meta = tag.getInteger(Names.NBT.materialMeta);
-            ItemStack material = new ItemStack((Block) Block.blockRegistry.getObject(name), 1, meta);
-            list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+ material.getItem().getItemStackDisplayName(material));
+            material = new ItemStack((Block) Block.blockRegistry.getObject(name), 1, meta);
+        } else {
+            material = new ItemStack(Blocks.planks);
         }
-        //Get any additional information that we may want to add.
-        addMoreInformation(stack, list);
-    }
-    
-    /**
-     * Override this method if you wish to add additional information to the tooltip.
-     * 
-     * @param stack the item in question.
-     * @param list the list to add the tooltip info to.
-     */
-    @SideOnly(Side.CLIENT)
-    public void addMoreInformation(ItemStack stack, List list) {
-    	//Do nothing, as we have nothing to do here.
+        list.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+ material.getItem().getItemStackDisplayName(material));
     }
 
     /**
@@ -185,7 +176,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
      * Should return something like tile.agricraft:[internalname].[meta].name
      * Final as to prevent being messed up.
      * 
-     * @param the item in question.
+     * @param stack the item in question.
      */
     @Override
     public final String getUnlocalizedName(ItemStack stack) {

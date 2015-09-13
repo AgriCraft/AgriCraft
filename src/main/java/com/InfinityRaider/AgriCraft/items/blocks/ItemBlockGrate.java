@@ -26,14 +26,13 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
      * @param block the block that the item is associated with.
      */
     public ItemBlockGrate(Block block) {
-    	//Reccomended super call.
         super(block);
     }
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void addMoreInformation(ItemStack stack, List list) {
-    	//All this just to add a single line...
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+        super.addInformation(stack, player, list, flag);
         list.add(StatCollector.translateToLocal("agricraft_tooltip.grate"));
     }
 

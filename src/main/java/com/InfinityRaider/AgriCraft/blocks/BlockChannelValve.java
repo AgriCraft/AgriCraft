@@ -107,8 +107,8 @@ public class BlockChannelValve extends BlockCustomWood {
 
         @Override
         @SideOnly(Side.CLIENT)
-        public void addMoreInformation(ItemStack stack, List list) {
-        	//All this just to add a single line...
+        public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+            super.addInformation(stack, player, list, flag);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.valve"));
         }
     }

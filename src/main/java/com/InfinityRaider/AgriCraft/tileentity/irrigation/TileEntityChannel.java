@@ -217,7 +217,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     public void addWailaInformation(List information) {
     	//Required call to super.
     	super.addWailaInformation(information);
-        //show contents --> magic number...
         information.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel")+": "+this.getFluidLevel()+"/500");
     }
 }
