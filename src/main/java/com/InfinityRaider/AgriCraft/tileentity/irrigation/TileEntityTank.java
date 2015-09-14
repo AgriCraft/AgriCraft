@@ -2,10 +2,14 @@ package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.network.MessageSyncFluidLevel;
+import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -16,7 +20,7 @@ import net.minecraftforge.fluids.*;
 
 import java.util.List;
 
-public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler, IDebuggable {
+public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler, IIrrigationComponent, IDebuggable {
 
     protected static final int DISCRETE_MAX = 32;
     /**
@@ -24,7 +28,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
      * in the multiblock holds the liquid
      */
     private int fluidLevel=0;
-    protected int lastDiscreteFluidLevel = 0;
 
     private int xPosition=0;
     private int yPosition=0;
@@ -102,12 +105,20 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         }
     }
 
+    /*
     public void syncToClient(boolean forceUpdate) {
         boolean change = forceUpdate || this.getDiscreteFluidLevel()!=lastDiscreteFluidLevel;
         if(change) {
             this.lastDiscreteFluidLevel = this.getDiscreteFluidLevel();
             this.markForUpdate();
         }
+    }
+    */
+
+    public void syncFluidLevel() {
+        IMessage msg = new MessageSyncFluidLevel(this.fluidLevel, this.xCoord, this.yCoord, this.zCoord);
+        NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 64);
+        NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
     }
 
 
@@ -238,7 +249,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                     for (int z = this.zCoord - zPos; z < this.zCoord - zPos + zSizeNew; z++) {
                         TileEntityTank tank = ((TileEntityTank) this.worldObj.getTileEntity(x, y, z));
                         tank.setDimensions(xSizeNew, ySizeNew, zSizeNew);
-                        tank.syncToClient(true);
+                        tank.markForUpdate();
                     }
                 }
             }
@@ -271,7 +282,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     }
 
     //breaks up the multiblock and divides the fluid among the tanks
-    public void breakMultiBlock(boolean sync, int lvl) {
+    public void breakMultiBlock(int lvl) {
         int[] levels = new int[ySize];
         int area = xSize*zSize;
         for(int i=0;i<levels.length;i++) {
@@ -281,19 +292,17 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         for(int x=0;x<xSize;x++) {
             for(int y=0;y<ySize;y++) {
                 for(int z=0;z<zSize;z++) {
-                    if(!(this.worldObj.getTileEntity(this.xCoord-xPosition+x, this.yCoord-yPosition+y, this.zCoord-zPosition+z) instanceof TileEntityTank)){
+                    if (!(this.worldObj.getTileEntity(this.xCoord - xPosition + x, this.yCoord - yPosition + y, this.zCoord - zPosition + z) instanceof TileEntityTank)) {
                         continue;
-                    } 
-                    TileEntityTank tank = (TileEntityTank) this.worldObj.getTileEntity(this.xCoord-xPosition+x, this.yCoord-yPosition+y, this.zCoord-zPosition+z);
-                    if(tank==null) {
+                    }
+                    TileEntityTank tank = (TileEntityTank) this.worldObj.getTileEntity(this.xCoord - xPosition + x, this.yCoord - yPosition + y, this.zCoord - zPosition + z);
+                    if (tank == null) {
                         continue;
                     }
                     tank.resetTank();
                     tank.fluidLevel = levels[y];
                     oldVersion = false;
-                    if(sync) {
-                        tank.syncToClient(true);
-                    }
+                    tank.markForUpdate();
                 }
             }
         }
@@ -488,6 +497,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         return totalHeight*((float) volume)/((float) capacity)+2;
     }
 
+    @Override
     public void setFluidLevel(int lvl) {
         if(lvl!=this.getFluidLevel()) {
             lvl = lvl > this.getTotalCapacity() ? this.getTotalCapacity() : lvl;
@@ -497,7 +507,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
             TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(xCoord - xPosition, yCoord - yPosition, zCoord - zPosition);
             if(tank != null) {
                 tank.fluidLevel = lvl;
-                tank.syncToClient(true);
+                if(!tank.worldObj.isRemote) {
+                    tank.syncFluidLevel();
+                }
             }
         }
     }
@@ -530,7 +542,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
             return 0;
         }
         int filled = Math.min(resource.amount, this.getTotalCapacity() - this.getFluidLevel());
-        if(doFill) {
+        if(doFill && !worldObj.isRemote) {
             this.setFluidLevel(this.getFluidLevel()+filled);
         }
         return filled;
@@ -543,7 +555,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
            return null;
         }
         int drained = Math.min(resource.amount, this.getFluidLevel());
-        if(doDrain) {
+        if(doDrain && !worldObj.isRemote) {
             this.setFluidLevel(this.getFluidLevel()-drained);
         }
         return new FluidStack(FluidRegistry.WATER, drained);

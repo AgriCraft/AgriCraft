@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderTank;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 
@@ -101,8 +100,7 @@ public class BlockWaterTank extends BlockCustomWood{
                 }
             }
             if(update) {
-                tank.syncToClient(false);
-                world.markBlockForUpdate(x, y, z);
+                tank.markForUpdate();
                 return true;
             }
             else {
@@ -127,7 +125,7 @@ public class BlockWaterTank extends BlockCustomWood{
             if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityTank) {
                 TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
                 if(tank!=null) {
-                    tank.breakMultiBlock(true, tank.getFluidLevel());
+                    tank.breakMultiBlock(tank.getFluidLevel());
                     placeWater = tank.getFluidLevel() >= Constants.BUCKET_mB;
                 }
             }
@@ -153,7 +151,7 @@ public class BlockWaterTank extends BlockCustomWood{
             if (te != null && te instanceof TileEntityTank) {
                 TileEntityTank tank = (TileEntityTank) te;
                 if(block instanceof BlockWaterTank) {
-                    tank.breakMultiBlock(true, tank.getFluidLevel());
+                    tank.breakMultiBlock(tank.getFluidLevel());
                 }
                 tank.updateMultiBlock();
             }

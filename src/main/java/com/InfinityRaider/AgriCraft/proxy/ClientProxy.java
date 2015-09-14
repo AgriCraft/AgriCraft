@@ -10,15 +10,18 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.lang.reflect.Field;
@@ -39,6 +42,21 @@ public class ClientProxy extends CommonProxy {
     @Override
     public EntityPlayer getClientPlayer() {
         return Minecraft.getMinecraft().thePlayer;
+    }
+
+    @Override
+    public World getClientWorld() {
+        return Minecraft.getMinecraft().theWorld;
+    }
+
+    @Override
+    public World getWorldByDimensionId(int dimension) {
+        return FMLClientHandler.instance().getServer().worldServerForDimension(dimension);
+    }
+
+    @Override
+    public Entity getEntityById(World world, int id) {
+        return world.getEntityByID(id);
     }
 
     //register custom renderers

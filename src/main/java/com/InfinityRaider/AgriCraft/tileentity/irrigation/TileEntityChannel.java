@@ -1,10 +1,14 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
+import com.InfinityRaider.AgriCraft.network.MessageSyncFluidLevel;
+import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
@@ -13,7 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityChannel extends TileEntityCustomWood implements IDebuggable{
+public class TileEntityChannel extends TileEntityCustomWood implements IIrrigationComponent, IDebuggable{
     
     public static final ForgeDirection[] validDirections = new ForgeDirection[] {
 	ForgeDirection.NORTH,
@@ -34,7 +38,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
 
     private int lvl;
     private boolean multiConnect = false;
-    protected int lastDiscreteLevel = 0;
 
     public TileEntityChannel() {
         super();
@@ -66,7 +69,9 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     public void setFluidLevel(int lvl) {
         if(lvl>=0 && lvl<=ABSOLUTE_MAX && lvl!=this.lvl) {
             this.lvl = lvl;
-            syncToClient(false);
+            if(!worldObj.isRemote) {
+                syncFluidLevel();
+            }
         }
     }
 
@@ -185,11 +190,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
         }
     }
 
-    public void syncToClient(boolean forceUpdate) {
-        boolean change = forceUpdate || this.getDiscreteFluidLevel()!=lastDiscreteLevel;
-        if(change) {
-            this.lastDiscreteLevel = this.getDiscreteFluidLevel();
-            this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), SYNC_WATER_ID, this.lvl);
+    public void syncFluidLevel() {
+        if(!this.worldObj.isRemote) {
+            IMessage msg = new MessageSyncFluidLevel(this.lvl, this.xCoord, this.yCoord, this.zCoord);
+            NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 64);
+            NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
         }
     }
 
