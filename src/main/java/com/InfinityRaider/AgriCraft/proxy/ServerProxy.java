@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.proxy;
 
 import cpw.mods.fml.server.FMLServerHandler;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -21,16 +20,6 @@ public class ServerProxy extends CommonProxy {
     @Override
     public World getWorldByDimensionId(int dimension) {
         return FMLServerHandler.instance().getServer().worldServerForDimension(dimension);
-    }
-
-    @Override
-    public Entity getEntityById(int dimension, int id) {
-        return null;
-    }
-
-    @Override
-    public Entity getEntityById(World world, int id) {
-        return null;
     }
 
     @Override

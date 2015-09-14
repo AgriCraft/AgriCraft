@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public interface IProxy {
-    /** Returns the instnace of the Singleplayer EntityPlayer on the client, null on the server */
+    /** Returns the instance of the EntityPlayer on the client, null on the server */
     EntityPlayer getClientPlayer();
 
     /** Returns the client World object on the client, null on the server */

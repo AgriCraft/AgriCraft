@@ -30,16 +30,6 @@ import java.util.Iterator;
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public int getRenderId(Block block) {
-        return RenderBlockBase.getRenderId(block);
-    }
-
-    @Override
-    public void registerVillagerSkin(int id, String resource) {
-        VillagerRegistry.instance().registerVillagerSkin(id, new ResourceLocation(Reference.MOD_ID.toLowerCase(), resource));
-    }
-
-    @Override
     public EntityPlayer getClientPlayer() {
         return Minecraft.getMinecraft().thePlayer;
     }
@@ -59,7 +49,6 @@ public class ClientProxy extends CommonProxy {
         return world.getEntityByID(id);
     }
 
-    //register custom renderers
     @Override
     public void registerRenderers() {
         //BLOCKS
@@ -85,7 +74,6 @@ public class ClientProxy extends CommonProxy {
         LogHelper.debug("Renderers registered");
     }
 
-    //register forge event handlers
     @Override
     public void registerEventHandlers() {
         super.registerEventHandlers();
@@ -98,19 +86,11 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void initConfiguration(FMLPreInitializationEvent event) {
-        super.initConfiguration(event);
-        ConfigurationHandler.initClientConfigs(event);
-    }
-
-    //initialize NEI
-    @Override
     public void initNEI() {
         NEIConfig configNEI = new NEIConfig();
         configNEI.loadConfig();
     }
 
-    //hide items in NEI
     @Override
     public void hideItemInNEI(ItemStack stack) {
         Iterator mods = Loader.instance().getActiveModList().iterator();
@@ -121,5 +101,21 @@ public class ClientProxy extends CommonProxy {
                 API.hideItem(stack);
             }
         }
+    }
+
+    @Override
+    public int getRenderId(Block block) {
+        return RenderBlockBase.getRenderId(block);
+    }
+
+    @Override
+    public void registerVillagerSkin(int id, String resource) {
+        VillagerRegistry.instance().registerVillagerSkin(id, new ResourceLocation(Reference.MOD_ID.toLowerCase(), resource));
+    }
+
+    @Override
+    public void initConfiguration(FMLPreInitializationEvent event) {
+        super.initConfiguration(event);
+        ConfigurationHandler.initClientConfigs(event);
     }
 }
