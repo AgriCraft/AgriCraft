@@ -11,10 +11,30 @@ public final class Constants {
     public static final boolean LOG_RENDER_CALLS = false;
     
     /**
+     * The number of units in a block.
+     */
+    public static final int WHOLE = 16;
+    
+    /**
+     * The number of units in a quarter block.
+     */
+    public static final int QUARTER = WHOLE / 4;
+    
+    /**
+     * The number of units in a half block.
+     */
+    public static final int HALF = WHOLE / 2;
+    
+    /**
+     * The number of units in a 3/4 block.
+     */
+    public static final int THREE_QUARTER = QUARTER * 3;
+    
+    /**
      * The value of 1/16 as represented in float form.
      * Pre-calculated as to cut back on calculations.
      */
-    public static final float UNIT = 0.06250F;
+    public static final float UNIT = 1 / (float)WHOLE;
 
     /**
      * The representation of 1 bucket(b) in millibuckets(mB).
@@ -75,7 +95,7 @@ public final class Constants {
      * 
      * Chance = {@value}
      */
-    public static final double DEFAULT_MUTATION_CHANCE = 0.2;
+    public static final float DEFAULT_MUTATION_CHANCE = 0.2F;
 
     //constants for positioning item textures on the NEI recipe
     public static final int nei_X_parent1 = 44;

@@ -30,12 +30,12 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
         this.setHardness(2.0F);
         this.setResistance(5.0F);
         setHarvestLevel("axe", 0);
-        this.maxX = Constants.UNIT*12;
-        this.minX = Constants.UNIT*4;
+        this.maxX = Constants.UNIT * Constants.THREE_QUARTER;
+        this.minX = Constants.UNIT * Constants.QUARTER;
         this.maxZ = this.maxX;
         this.minZ = this.minX;
-        this.maxY = Constants.UNIT*20;
-        this.minY = Constants.UNIT*12;
+        this.maxY = Constants.UNIT * (Constants.WHOLE + Constants.QUARTER);
+        this.minY = Constants.UNIT * Constants.THREE_QUARTER;
     }
 
     @Override

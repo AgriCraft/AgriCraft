@@ -72,11 +72,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         this.setHardness(0.0F);
         this.disableStats();
         //set the bounding box dimensions
-        this.maxX = Constants.UNIT*14;
+        this.maxX = Constants.UNIT*(Constants.WHOLE - 2);
         this.minX = Constants.UNIT*2;
         this.maxZ = this.maxX;
         this.minZ = this.minX;
-        this.maxY = Constants.UNIT*13;
+        this.maxY = Constants.UNIT*(Constants.WHOLE - 3);
         this.minY = 0;
     }
 

@@ -8,18 +8,32 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityChannel extends TileEntityCustomWood implements IDebuggable{
+    
+    public static ForgeDirection[] validDirections = new ForgeDirection[] {
+	ForgeDirection.NORTH,
+	ForgeDirection.EAST,
+	ForgeDirection.SOUTH,
+	ForgeDirection.WEST
+    };
+    
     private static final int SYNC_WATER_ID = 0;
 
+    protected static final int MIN = 5;
+    protected static final int MAX = 12;
+    protected static final int HEIGHT = MAX - MIN;
     protected static final int DISCRETE_MAX = 16;
-    protected static final float DISCRETE_FACTOR = (float) DISCRETE_MAX / 500.0F;
-    protected static final float SCALE_FACTOR = 500.0F / (float) DISCRETE_MAX;
+    protected static final int ABSOLUTE_MAX = Constants.BUCKET_mB / 2;
+    protected static final float DISCRETE_FACTOR = (float) DISCRETE_MAX / (float)ABSOLUTE_MAX;
+    protected static final float SCALE_FACTOR = (float)ABSOLUTE_MAX / (float) DISCRETE_MAX;
 
     private int lvl;
+    private boolean multiConnect = false;
     protected int lastDiscreteLevel = 0;
 
     public TileEntityChannel() {
@@ -50,7 +64,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     public int getFluidLevel() {return this.lvl;}
 
     public void setFluidLevel(int lvl) {
-        if(lvl>=0 && lvl<=Constants.BUCKET_mB/2 && lvl!=this.lvl) {
+        if(lvl>=0 && lvl<=ABSOLUTE_MAX && lvl!=this.lvl) {
             this.lvl = lvl;
             syncToClient(false);
         }
@@ -65,7 +79,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     }
 
     public float getFluidHeight(int lvl) {
-        return 5+7*((float) lvl)/((float) Constants.BUCKET_mB/2);
+        return MIN+HEIGHT*((float) lvl)/((float) ABSOLUTE_MAX);
     }
 
     public boolean hasNeighbour(char axis, int direction) {
@@ -78,7 +92,15 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
             case 'z': tileEntityAt = this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord+direction);break;
             default: return false;
         }
-        return (tileEntityAt!=null) && ((tileEntityAt instanceof TileEntityTank) || tileEntityAt instanceof TileEntityChannel) && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
+        return (tileEntityAt!=null) && ((tileEntityAt instanceof TileEntityTank) || tileEntityAt instanceof TileEntityChannel) && (multiConnect || this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
+    }
+    
+    public boolean hasNeighbour(ForgeDirection direction) {
+        if(this.worldObj==null || direction.equals(ForgeDirection.UNKNOWN) || direction.offsetY != 0) {
+            return false;
+        }
+        TileEntity tileEntityAt = this.worldObj.getTileEntity(this.xCoord+direction.offsetX, this.yCoord, this.zCoord+direction.offsetZ);
+        return (tileEntityAt!=null) && ((tileEntityAt instanceof TileEntityTank) || tileEntityAt instanceof TileEntityChannel) && (multiConnect || this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
     }
 
     //updates the tile entity every tick
@@ -87,17 +109,10 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
         if (!this.worldObj.isRemote) {
             //find neighbours
             ArrayList<TileEntityCustomWood> neighbours = new ArrayList<TileEntityCustomWood>();
-            if (this.hasNeighbour('x', 1)) {
-                neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord));
-            }
-            if (this.hasNeighbour('x', -1)) {
-                neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord));
-            }
-            if (this.hasNeighbour('z', 1)) {
-                neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1));
-            }
-            if (this.hasNeighbour('z', -1)) {
-                neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1));
+            for (ForgeDirection direction : validDirections) {
+        	if (this.hasNeighbour(direction)) {
+        	    neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord + direction.offsetX, this.yCoord, this.zCoord + direction.offsetZ));
+        	}
             }
             //calculate total fluid lvl and capacity
             int totalLvl = 0;
@@ -115,11 +130,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
                 else {
                     TileEntityTank tank = (TileEntityTank) te;
                     int Y = tank.getYPosition();
-                    // float y_c= 16*Y+this.getFluidHeight();  //initial channel water y
-                    float y_c = 16 * Y + getDiscreteScaledFluidHeight();
+                    // float y_c= Constants.WHOLE*Y+this.getFluidHeight();  //initial channel water y
+                    float y_c = Constants.WHOLE * Y + getDiscreteScaledFluidHeight();
                     float y_t = tank.getFluidY();           //initial tank water y
-                    float y1 = (float) 5 + 16 * Y;   //minimum y of the channel
-                    float y2 = (float) 12 + 16 * Y;  //maximum y of the channel
+                    float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum y of the channel
+                    float y2 = (float) MAX + Constants.WHOLE * Y;  //maximum y of the channel
                     int V_tot = tank.getFluidLevel() + this.lvl;
                     if (y_c != y_t) {
                         //total volume is below the channel connection
@@ -128,9 +143,9 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
                             tank.setFluidLevel(V_tot);
                         }
                         //total volume is above the channel connection
-                        else if (tank.getFluidY(V_tot - 500) >= y2) {
-                            updatedLevel = 500;
-                            tank.setFluidLevel(V_tot - 500);
+                        else if (tank.getFluidY(V_tot - ABSOLUTE_MAX) >= y2) {
+                            updatedLevel = ABSOLUTE_MAX;
+                            tank.setFluidLevel(V_tot - ABSOLUTE_MAX);
                         }
                         //total volume is between channel connection top and bottom
                         else {
@@ -138,12 +153,12 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
                             int tankYSize = tank.getYSize();
                             int C = tank.getTotalCapacity();
                             //calculate the y corresponding to the total volume: y = f(V_tot), V_tank = f(y), V_channel = f(y)
-                            float enumerator = ((float) V_tot) + ((500 * y1) / (y2 - y1) + ((float) 2 * C) / ((float) (16 * tankYSize - 2)));
-                            float denominator = (((float) 500) / (y2 - y1) + ((float) C) / ((float) (16 * tankYSize - 2)));
+                            float enumerator = ((float) V_tot) + ((ABSOLUTE_MAX * y1) / (y2 - y1) + ((float) 2 * C) / ((float) (Constants.WHOLE * tankYSize - 2)));
+                            float denominator = (((float) ABSOLUTE_MAX) / (y2 - y1) + ((float) C) / ((float) (Constants.WHOLE * tankYSize - 2)));
                             float y = enumerator / denominator;
                             //convert the y to volumes
-                            int channelVolume = (int) Math.floor(500 * (y - y1) / (y2 - y1));
-                            int tankVolume = (int) Math.ceil(C * (y - 2) / (16 * tankYSize - 2));
+                            int channelVolume = (int) Math.floor(ABSOLUTE_MAX * (y - y1) / (y2 - y1));
+                            int tankVolume = (int) Math.ceil(C * (y - 2) / (Constants.WHOLE * tankYSize - 2));
                             updatedLevel = channelVolume;
                             tank.setFluidLevel(tankVolume);
                         }
@@ -209,7 +224,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     public void addDebugInfo(List<String> list) {
         list.add("CHANNEL:");
         super.addDebugInfo(list);
-        list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + Constants.BUCKET_mB / 2);
+        list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + ABSOLUTE_MAX);
         list.add("  - FluidHeight: " + this.getFluidHeight());
     }
     
@@ -217,6 +232,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements IDebuggab
     public void addWailaInformation(List information) {
     	//Required call to super.
     	super.addWailaInformation(information);
-        information.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel")+": "+this.getFluidLevel()+"/500");
+        information.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel")+": "+this.getFluidLevel()+"/"+ABSOLUTE_MAX);
     }
 }
