@@ -7,8 +7,10 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -44,46 +46,40 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 
     @Override
     protected boolean doWorldRender(Tessellator tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
-        if(callFromTESR) {
-            renderTileEntitySpecialRendererStuff(tile, x, y, z, f, renderer);
-            return true;
-        } else {
-            renderCallCounter.incrementAndGet();
-            //call correct drawing methods
-            if (tile instanceof TileEntityChannel) {
-                TileEntityChannel channel = (TileEntityChannel) tile;
-                if (channel.getBlockMetadata() == 0) {
+        //call correct drawing methods
+        if (tile instanceof TileEntityChannel) {
+            TileEntityChannel channel = (TileEntityChannel) tile;
+            if (channel.getBlockMetadata() == 0) {
+                if (callFromTESR) {
+                    if(channel.getDiscreteScaledFluidLevel()>0) {
+                        renderCallCounter.incrementAndGet();
+                        GL11.glPushMatrix();
+                        GL11.glDisable(GL11.GL_LIGHTING);
+                        tessellator.startDrawingQuads();
+                        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                        this.drawWater(channel, tessellator);
+                        tessellator.draw();
+                        GL11.glEnable(GL11.GL_LIGHTING);
+                        GL11.glPopMatrix();
+                    }
+                } else {
                     this.renderWoodChannel(channel, tessellator);
-                    if (channel.getDiscreteScaledFluidLevel() > 0) {
+                    if ((!this.shouldBehaveAsTESR()) && channel.getDiscreteScaledFluidLevel() > 0) {
                         this.drawWater(channel, tessellator);
                     }
-                } else if (channel.getBlockMetadata() == 1) {
-                    this.renderIronChannel(channel, tessellator);
                 }
+            } else if (channel.getBlockMetadata() == 1) {
+                this.renderIronChannel(channel, tessellator);
             }
-            //clear texture overrides
-            renderer.clearOverrideBlockTexture();
-            return true;
         }
-    }
-
-    private void renderTileEntitySpecialRendererStuff(TileEntity te, double x, double y, double z, float f, RenderBlocks renderer) {
-        TileEntityChannel channel = (TileEntityChannel) te;
-        if (channel.getDiscreteScaledFluidLevel() > 0) {
-            GL11.glPushMatrix();
-            //draw the waterTexture
-            Tessellator tessellator = Tessellator.instance;
-            tessellator.startDrawingQuads();
-            GL11.glColor3f(1, 1, 1);
-            this.drawWater(channel, tessellator);
-            tessellator.draw();
-            GL11.glPopMatrix();
-        }
+        //clear texture overrides
+        renderer.clearOverrideBlockTexture();
+        return true;
     }
 
     @Override
     public boolean shouldBehaveAsTESR() {
-        return false;
+        return true;
     }
 
     @Override

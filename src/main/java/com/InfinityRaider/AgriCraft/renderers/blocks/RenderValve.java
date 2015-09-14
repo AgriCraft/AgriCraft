@@ -14,8 +14,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -81,115 +83,146 @@ public class RenderValve extends RenderChannel {
         Tessellator tessellator1 = Tessellator.instance;
         TileEntityValve valve = (TileEntityValve) tile;
         if (valve != null) {
-            float unit = Constants.UNIT;
-            this.renderWoodChannel(valve, tessellator2);
-            this.drawWater(valve, tessellator2);
+            if (callFromTESR) {
+                if(valve.getDiscreteScaledFluidLevel() > 0) {
+                    renderCallCounter.incrementAndGet();
+                    GL11.glPushMatrix();
+                    GL11.glDisable(GL11.GL_LIGHTING);
+                    tessellator1.startDrawingQuads();
+                    Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                    this.drawWater(valve, tessellator1);
+                    tessellator1.draw();
+                    GL11.glEnable(GL11.GL_LIGHTING);
+                    GL11.glPopMatrix();
+                }
+            } else {
+                float unit = Constants.UNIT;
+                this.renderWoodChannel(valve, tessellator2);
+                if ((!this.shouldBehaveAsTESR()) && (valve.getDiscreteScaledFluidLevel() > 0)) {
+                    this.drawWater(valve, tessellator2);
+                }
+                boolean xPos = valve.hasNeighbour('x', 1);
+                boolean xNeg = valve.hasNeighbour('x', -1);
+                boolean zPos = valve.hasNeighbour('z', 1);
+                boolean zNeg = valve.hasNeighbour('z', -1);
 
-            boolean xPos = valve.hasNeighbour('x', 1);
-            boolean xNeg = valve.hasNeighbour('x', -1);
-            boolean zPos = valve.hasNeighbour('z', 1);
-            boolean zNeg = valve.hasNeighbour('z', -1);
+                //render the iron valves
+                renderer.setOverrideBlockTexture(Blocks.iron_block.getIcon(0, 0));
+                if (zNeg) {
+                    renderer.setRenderBounds(5 * unit, 11.5f * unit, 0.001 * unit, 11 * unit, 15.001 * unit, 1.999 * unit);
+                    if (valve.isPowered()) {
+                        tessellator1.addTranslation(0, -3 * unit, 0);
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                        tessellator1.addTranslation(0, 3 * unit, 0);
+                    } else {
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                    }
+                    renderer.setRenderBounds(5 * unit, 0.999f * unit, 0.001 * unit, 11 * unit, 5.5f * unit, 1.999 * unit);
+                    if (valve.isPowered()) {
+                        tessellator1.addTranslation(0, 3 * unit, 0);
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                        tessellator1.addTranslation(0, -3 * unit, 0);
+                    } else {
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                    }
+                }
+                if (zPos) {
+                    renderer.setRenderBounds(5 * unit, 11.5f * unit, 14.001 * unit, 11 * unit, 15.001 * unit, 15.999 * unit);
+                    if (valve.isPowered()) {
+                        tessellator1.addTranslation(0, -3 * unit, 0);
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                        tessellator1.addTranslation(0, 3 * unit, 0);
+                    } else {
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                    }
+                    renderer.setRenderBounds(5 * unit, 0.999f * unit, 14.001 * unit, 11 * unit, 5.5f * unit, 15.999 * unit);
+                    if (valve.isPowered()) {
+                        tessellator1.addTranslation(0, 3 * unit, 0);
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                        tessellator1.addTranslation(0, -3 * unit, 0);
+                    } else {
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                    }
+                }
+                if (xNeg) {
+                    renderer.setRenderBounds(0.001 * unit, 11.5f * unit, 5 * unit, 1.999 * unit, 15.001 * unit, 11 * unit);
+                    if (valve.isPowered()) {
+                        tessellator1.addTranslation(0, -3 * unit, 0);
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                        tessellator1.addTranslation(0, 3 * unit, 0);
+                    } else {
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                    }
 
-            //render the iron valves
-            renderer.setOverrideBlockTexture(Blocks.iron_block.getIcon(0, 0));
-            if(zNeg) {
-                renderer.setRenderBounds(5 * unit, 11.5f * unit, 0.001 * unit, 11 * unit, 15.001 * unit, 1.999 * unit);
-                if (valve.isPowered()) {
-                    tessellator1.addTranslation(0, -3 * unit, 0);
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                    tessellator1.addTranslation(0, 3 * unit, 0);
-                } else {
+                    renderer.setRenderBounds(0.001 * unit, 0.999f * unit, 5 * unit, 1.999 * unit, 5.5f * unit, 11 * unit);
+                    if (valve.isPowered()) {
+                        tessellator1.addTranslation(0, 3 * unit, 0);
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                        tessellator1.addTranslation(0, -3 * unit, 0);
+                    } else {
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                    }
+                }
+                if (xPos) {
+                    renderer.setRenderBounds(14.001 * unit, 11.5f * unit, 5 * unit, 15.999 * unit, 15.001 * unit, 11 * unit);
+                    if (valve.isPowered()) {
+                        tessellator1.addTranslation(0, -3 * unit, 0);
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                        tessellator1.addTranslation(0, 3 * unit, 0);
+                    } else {
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                    }
+
+                    renderer.setRenderBounds(14.001 * unit, 0.999f * unit, 5 * unit, 15.999 * unit, 5.5f * unit, 11 * unit);
+                    if (valve.isPowered()) {
+                        tessellator1.addTranslation(0, 3 * unit, 0);
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                        tessellator1.addTranslation(0, -3 * unit, 0);
+                    } else {
+                        renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                    }
+                }
+
+                //render the wooden guide rails along x-axis
+                renderer.setOverrideBlockTexture(valve.getIcon());
+                renderer.setRenderBounds(3.999F * unit, 0, 0, 5.999F * unit, 1, 2 * unit);
+                if (zNeg) {
                     renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
                 }
-                renderer.setRenderBounds(5 * unit, 0.999f * unit, 0.001 * unit, 11 * unit, 5.5f * unit, 1.999 * unit);
-                if (valve.isPowered()) {
-                    tessellator1.addTranslation(0, 3 * unit, 0);
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                    tessellator1.addTranslation(0, -3 * unit, 0);
-                } else {
+                tessellator1.addTranslation(6 * unit, 0, 0);
+                if (zNeg) {
                     renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
                 }
+                tessellator1.addTranslation(0, 0, 14 * unit);
+                if (zPos) {
+                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                }
+                tessellator1.addTranslation(-6 * unit, 0, 0);
+                if (zPos) {
+                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                }
+                tessellator1.addTranslation(0, 0, -14 * unit);
+
+                //render the wooden guide rails along z-axis
+                renderer.setRenderBounds(0, 0, 3.999F * unit, 2 * unit, 1, 5.999F * unit);
+                if (xNeg) {
+                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                }
+                tessellator1.addTranslation(0, 0, 6 * unit);
+                if (xNeg) {
+                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                }
+                tessellator1.addTranslation(14 * unit, 0, 0);
+                if (xPos) {
+                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                }
+                tessellator1.addTranslation(0, 0, -6 * unit);
+                if (xPos) {
+                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
+                }
+                tessellator1.addTranslation(-14 * unit, 0, 0);
+                renderer.clearOverrideBlockTexture();
             }
-            if(zPos) {
-                renderer.setRenderBounds(5 * unit, 11.5f * unit, 14.001 * unit, 11 * unit, 15.001 * unit, 15.999 * unit);
-                if (valve.isPowered()) {
-                    tessellator1.addTranslation(0, -3 * unit, 0);
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                    tessellator1.addTranslation(0, 3 * unit, 0);
-                } else {
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                }
-                renderer.setRenderBounds(5 * unit, 0.999f * unit, 14.001 * unit, 11 * unit, 5.5f * unit, 15.999 * unit);
-                if (valve.isPowered()) {
-                    tessellator1.addTranslation(0, 3 * unit, 0);
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                    tessellator1.addTranslation(0, -3 * unit, 0);
-                } else {
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                }
-            }
-            if(xNeg) {
-                renderer.setRenderBounds(0.001 * unit, 11.5f * unit, 5 * unit, 1.999 * unit, 15.001 * unit, 11 * unit);
-                if (valve.isPowered()) {
-                    tessellator1.addTranslation(0, -3 * unit, 0);
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                    tessellator1.addTranslation(0, 3 * unit, 0);
-                } else {
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                }
-
-                renderer.setRenderBounds(0.001 * unit, 0.999f * unit, 5 * unit, 1.999 * unit, 5.5f * unit, 11 * unit);
-                if (valve.isPowered()) {
-                    tessellator1.addTranslation(0, 3 * unit, 0);
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                    tessellator1.addTranslation(0, -3 * unit, 0);
-                } else {
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                }
-            }
-            if(xPos) {
-                renderer.setRenderBounds(14.001 * unit, 11.5f * unit, 5 * unit, 15.999 * unit, 15.001 * unit, 11 * unit);
-                if (valve.isPowered()) {
-                    tessellator1.addTranslation(0, -3 * unit, 0);
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                    tessellator1.addTranslation(0, 3 * unit, 0);
-                } else {
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                }
-
-                renderer.setRenderBounds(14.001 * unit, 0.999f * unit, 5 * unit, 15.999 * unit, 5.5f * unit, 11 * unit);
-                if (valve.isPowered()) {
-                    tessellator1.addTranslation(0, 3 * unit, 0);
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                    tessellator1.addTranslation(0, -3 * unit, 0);
-                } else {
-                    renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);
-                }
-            }
-
-            //render the wooden guide rails along x-axis
-            renderer.setOverrideBlockTexture(valve.getIcon());
-            renderer.setRenderBounds(3.999F * unit, 0, 0, 5.999F * unit, 1, 2 * unit);
-            if(zNeg) {renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);}
-            tessellator1.addTranslation(6*unit, 0, 0);
-            if(zNeg) {renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);}
-            tessellator1.addTranslation(0, 0, 14*unit);
-            if(zPos) {renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);}
-            tessellator1.addTranslation(-6*unit, 0, 0);
-            if(zPos) {renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);}
-            tessellator1.addTranslation(0, 0, -14 * unit);
-
-            //render the wooden guide rails along z-axis
-            renderer.setRenderBounds(0, 0, 3.999F*unit, 2*unit, 1, 5.999F*unit);
-            if(xNeg) {renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);}
-            tessellator1.addTranslation(0, 0, 6*unit);
-            if(xNeg) {renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);}
-            tessellator1.addTranslation(14*unit, 0, 0);
-            if(xPos) {renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);}
-            tessellator1.addTranslation(0, 0, -6*unit);
-            if(xPos) {renderer.renderStandardBlock(block, (int) x, (int) y, (int) z);}
-            tessellator1.addTranslation(-14*unit, 0, 0);
-            renderer.clearOverrideBlockTexture();
         }
         return true;
     }

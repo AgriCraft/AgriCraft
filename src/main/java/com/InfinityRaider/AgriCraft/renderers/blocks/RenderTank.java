@@ -41,7 +41,21 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         boolean success = false;
         if (tile instanceof TileEntityTank) {
             TileEntityTank tank = (TileEntityTank) tile;
-            success = renderTank(tank, tessellator, tank.getBlockMetadata());
+            if(callFromTESR) {
+                if(tank.getScaledDiscreteFluidLevel()>0) {
+                    GL11.glPushMatrix();
+                    GL11.glDisable(GL11.GL_LIGHTING);
+                    tessellator.startDrawingQuads();
+                    Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                    drawWater(tank, tessellator);
+                    tessellator.draw();
+                    GL11.glEnable(GL11.GL_LIGHTING);
+                    GL11.glPopMatrix();
+                    success = true;
+                }
+            } else {
+                success = renderTank(tank, tessellator, tank.getBlockMetadata());
+            }
         }
         //clear texture overrides
         renderer.clearOverrideBlockTexture();
@@ -52,7 +66,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         if(meta==0) {
             this.drawWoodTank(tank, tessellator);
             //draw the waterTexture
-            if(tank.getScaledDiscreteFluidLevel()>0) {
+            if((!shouldBehaveAsTESR()) && (tank.getScaledDiscreteFluidLevel()>0)) {
                 this.drawWater(tank, tessellator);
             }
         }
@@ -64,7 +78,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 
     @Override
     public boolean shouldBehaveAsTESR() {
-        return false;
+        return true;
     }
 
     @Override

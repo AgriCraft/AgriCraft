@@ -197,7 +197,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     //check if the plant is mature
     public boolean isMature(World world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z) == Constants.MATURE;
+        return world.getBlockMetadata(x, y, z) >= Constants.MATURE;
     }
 
     //render different stages
@@ -235,7 +235,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     public Item getItemDropped(int meta, Random rand, int side) {
-        return meta == Constants.MATURE ? this.func_149865_P() : this.func_149866_i();
+        return meta >= Constants.MATURE ? this.func_149865_P() : this.func_149866_i();
     }
 
     //fruit gain

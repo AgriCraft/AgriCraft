@@ -15,7 +15,7 @@ import java.util.List;
 
 public class TileEntityChannel extends TileEntityCustomWood implements IDebuggable{
     
-    public static ForgeDirection[] validDirections = new ForgeDirection[] {
+    public static final ForgeDirection[] validDirections = new ForgeDirection[] {
 	ForgeDirection.NORTH,
 	ForgeDirection.EAST,
 	ForgeDirection.SOUTH,
