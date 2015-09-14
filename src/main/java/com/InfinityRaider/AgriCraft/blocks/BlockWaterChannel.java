@@ -20,9 +20,13 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class BlockWaterChannel extends BlockCustomWood {
+    
+    protected static final float MIN = Constants.UNIT * Constants.QUARTER;
+    protected static final float MAX = Constants.UNIT * Constants.THREE_QUARTER;
+    
     public BlockWaterChannel() {
         super();
-        this.setBlockBounds(4*Constants.UNIT, 4*Constants.UNIT, 4*Constants.UNIT, 12*Constants.UNIT, 12*Constants.UNIT, 12*Constants.UNIT);
+        this.setBlockBounds(MIN, MIN, MIN, MAX, MAX, MAX);
     }
 
     @Override
@@ -50,27 +54,24 @@ public class BlockWaterChannel extends BlockCustomWood {
         TileEntity te = world.getTileEntity(x, y, z);
         if (te != null && te instanceof TileEntityChannel) {
             TileEntityChannel channel = (TileEntityChannel) te;
-            float f = Constants.UNIT;   //one 16th of a block
-            float min = 4 * f;
-            float max = 12 * f;
             if (channel.hasNeighbour('x', 1)) {
-                this.setBlockBounds(max - f, min, min, f * 16, max, max);
+                this.setBlockBounds(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
             if (channel.hasNeighbour('x', -1)) {
-                this.setBlockBounds(0, min, min, min + f, max, max);
+                this.setBlockBounds(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
             if (channel.hasNeighbour('z', 1)) {
-                this.setBlockBounds(min, min, max - f, max, max, f * 16);
+                this.setBlockBounds(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
             if (channel.hasNeighbour('z', -1)) {
-                this.setBlockBounds(min, min, 0, max, max, min + f);
+                this.setBlockBounds(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
             //central box
-            this.setBlockBounds(min, min, min, max, max, max);
+            this.setBlockBounds(MIN, MIN, MIN, MAX, MAX, MAX);
             super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
         }
     }
@@ -79,20 +80,18 @@ public class BlockWaterChannel extends BlockCustomWood {
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
         TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
         float f = Constants.UNIT;
-        AxisAlignedBB minBB = AxisAlignedBB.getBoundingBox(4 * f, 4 * f, 4 * f, 12 * f, 12 * f, 12 * f);
-        float min = 4 * f;
-        float max = 12 * f;
+        AxisAlignedBB minBB = AxisAlignedBB.getBoundingBox(MIN, MIN, MIN, MAX, MAX, MAX);
         if (channel.hasNeighbour('x', 1)) {
-            minBB.setBounds(minBB.minX, min, minBB.minZ, 1, max, minBB.maxZ);
+            minBB.setBounds(minBB.minX, MIN, minBB.minZ, 1, MAX, minBB.maxZ);
         }
         if (channel.hasNeighbour('x', -1)) {
-            minBB.setBounds(0, min, minBB.minZ, minBB.maxX, max, minBB.maxZ);
+            minBB.setBounds(0, MIN, minBB.minZ, minBB.maxX, MAX, minBB.maxZ);
         }
         if (channel.hasNeighbour('z', 1)) {
-            minBB.setBounds(minBB.minX, min, minBB.minZ, minBB.maxX, max, 1);
+            minBB.setBounds(minBB.minX, MIN, minBB.minZ, minBB.maxX, MAX, 1);
         }
         if (channel.hasNeighbour('z', -1)) {
-            minBB.setBounds(minBB.minX, min, 0, minBB.maxX, max, minBB.maxZ);
+            minBB.setBounds(minBB.minX, MIN, 0, minBB.maxX, MAX, minBB.maxZ);
         }
         return minBB.getOffsetBoundingBox(x, y, z);
     }

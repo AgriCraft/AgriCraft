@@ -180,7 +180,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     @Override
     public void updateTick(World world, int x, int y, int z, Random rnd) {
         int meta = this.getPlantMetadata(world, x, y, z);
-        if (meta < 7 && this.isFertile(world, x, y ,z)) {
+        if (meta < Constants.MATURE && this.isFertile(world, x, y ,z)) {
             //Base growth rate
             int growthRate = (tier > 0 && tier <= Constants.GROWTH_TIER.length)?Constants.GROWTH_TIER[tier]:Constants.GROWTH_TIER[0];
             //Bonus for growth stat (because these crops are not planted on crop sticks, growth of 1 is applied)
@@ -197,7 +197,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     //check if the plant is mature
     public boolean isMature(World world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z) == 7;
+        return world.getBlockMetadata(x, y, z) == Constants.MATURE;
     }
 
     //render different stages
@@ -235,7 +235,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     public Item getItemDropped(int meta, Random rand, int side) {
-        return meta == 7 ? this.func_149865_P() : this.func_149866_i();
+        return meta == Constants.MATURE ? this.func_149865_P() : this.func_149866_i();
     }
 
     //fruit gain
