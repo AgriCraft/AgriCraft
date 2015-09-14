@@ -45,9 +45,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class ModHelper {
+    /** HashMap holding all ModHelpers, with the respective mod id as key */
     private static final HashMap<String, ModHelper> modHelpers = new HashMap<String, ModHelper>();
+    /** HashMap holding all custom tools, with the correct mod helper as value */
     private static final HashMap<Item, ModHelper> modTools = new HashMap<Item, ModHelper>();
 
+    /** Method to create only one instance for each mod helper */
     private static ModHelper createInstance(Class<? extends ModHelper> clazz) {
         ModHelper helper = null;
         try {
@@ -63,6 +66,7 @@ public abstract class ModHelper {
         return helper;
     }
 
+    /** Checks if integration for this mod id is allowed, meaning the mod is present, and integration is allowed in the config */
     public static boolean allowIntegration(String modId) {
         ModHelper helper = modHelpers.get(modId);
         if(helper != null ) {
@@ -72,35 +76,73 @@ public abstract class ModHelper {
         }
     }
 
+    /** Checks if integration for this mod id is allowed, meaning the mod is present, and integration is allowed in the config */
     public final boolean allowIntegration() {
         String id =this.modId();
         return Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
     }
 
+    /** Checks if this item has custom behaviour when used on crops */
     public static boolean isRightClickHandled(Item tool) {
         return modTools.containsKey(tool);
     }
 
+    /**
+     * static method, called when the item contained in the ItemStack has custom behaviour when used on crops.
+     * delegates the call to useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) on the correct ModHelper.
+     *
+     * @param world the World object for the crop
+     * @param x the x-coordinate for the crop
+     * @param y the y-coordinate for the crop
+     * @param z the z-coordinate for the crop
+     * @param player the EntityPlayer object interacting with the crop, might be null if done trough automation
+     * @param stack the ItemStack holding the Item
+     * @param block the BlockCrop instance
+     * @param crop the TileEntity being interacted with
+     *
+     * @return true to consume the right click
+     */
     public static boolean handleRightClickOnCrop(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
         return isRightClickHandled(stack.getItem()) && modTools.get(stack.getItem()).useTool(world, x, y, z, player, stack, block, crop);
     }
 
+    /**
+     * called when the item contained in the ItemStack has custom behaviour when used on crops
+     *
+     * @param world the World object for the crop
+     * @param x the x-coordinate for the crop
+     * @param y the y-coordinate for the crop
+     * @param z the z-coordinate for the crop
+     * @param player the EntityPlayer object interacting with the crop, might be null if done trough automation
+     * @param stack the ItemStack holding the Item
+     * @param block the BlockCrop instance
+     * @param crop the TileEntity being interacted with
+     *
+     * @return true to consume the right click
+     */
     protected boolean useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
         return false;
     }
 
+    /** returns a List containing every Item that should have custom behaviour when used on crops */
     protected List<Item> getTools() {
         return null;
     }
 
-    protected abstract void init();
+    /** called during the initialization phase of FML's mod loading cycle */
+    protected void init() {}
 
-    protected abstract void initPlants();
 
+    /** called during the post-initialization phase of FML's mod loading cycle to register all CropPlants for this mod*/
+    protected  void initPlants() {};
+
+    /** called during the post-initialization phase of FML's mod loading cycle */
     protected void postTasks() {}
 
+    /** returns the mod id for this mod */
     protected abstract String modId();
 
+    /** calls the init() method for all mod helpers which have their mod loaded and compatibility enabled */
     public static void initHelpers() {
         for(ModHelper helper:modHelpers.values()) {
             String id = helper.modId();
@@ -111,6 +153,7 @@ public abstract class ModHelper {
         }
     }
 
+    /** calls the initPlants() method for all mod helpers which have their mod loaded and compatibility enabled */
     public static void initModPlants() {
         for(ModHelper helper:modHelpers.values()) {
             String id = helper.modId();
@@ -121,6 +164,7 @@ public abstract class ModHelper {
         }
     }
 
+    /** calls the postInit() method for all mod helpers which have their mod loaded and compatibility enabled */
     public static void postInit() {
         for (ModHelper helper : modHelpers.values()) {
             String id = helper.modId();
@@ -139,6 +183,7 @@ public abstract class ModHelper {
         }
     }
 
+    /** method holding all ModHelper classes */
     public static void findHelpers() {
         Class[] classes = {
                 AdventOfAscensionHelper.class,

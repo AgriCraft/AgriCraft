@@ -11,11 +11,6 @@ public class MFRHelper extends ModHelper {
     }
 
     @Override
-    protected void initPlants() {
-
-    }
-
-    @Override
     protected String modId() {
         return Names.Mods.mfr;
     }

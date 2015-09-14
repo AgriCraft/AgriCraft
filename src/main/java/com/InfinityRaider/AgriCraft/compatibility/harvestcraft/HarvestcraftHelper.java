@@ -20,9 +20,6 @@ public final class HarvestcraftHelper extends ModHelper {
     }
 
     @Override
-    protected void init() {}
-
-    @Override
     protected void initPlants() {
         Class hc_ItemRegistry = null;
         try {

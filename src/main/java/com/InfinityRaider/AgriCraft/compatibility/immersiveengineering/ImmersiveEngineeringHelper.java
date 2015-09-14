@@ -6,11 +6,6 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 
 public class ImmersiveEngineeringHelper extends ModHelper {
     @Override
-    protected void init() {
-
-    }
-
-    @Override
     protected void initPlants() {
         try {
             CropPlantHandler.registerPlant(new CropPlantHemp());

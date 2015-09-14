@@ -7,11 +7,6 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 
 public class ChocoCraftHelper extends ModHelper {
     @Override
-    protected void init() {
-
-    }
-
-    @Override
     protected void initPlants() {
         try {
             CropPlantHandler.registerPlant(new CropPlantGhyshal());

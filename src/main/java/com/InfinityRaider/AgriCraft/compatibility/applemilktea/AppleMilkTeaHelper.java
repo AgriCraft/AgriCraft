@@ -9,11 +9,6 @@ import net.minecraft.item.ItemStack;
 
 public class AppleMilkTeaHelper extends ModHelper {
     @Override
-    protected void init() {
-
-    }
-
-    @Override
     protected void initPlants() {
         //mint
         Item seed = (Item) Item.itemRegistry.getObject("DCsAppleMilk:defeatedcrow.seedMint");

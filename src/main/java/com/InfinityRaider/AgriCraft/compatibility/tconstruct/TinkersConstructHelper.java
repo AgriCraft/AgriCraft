@@ -61,16 +61,6 @@ public class TinkersConstructHelper extends ModHelper {
     }
 
     @Override
-    protected void init() {
-
-    }
-
-    @Override
-    protected void initPlants() {
-
-    }
-
-    @Override
     protected String modId() {
         return Names.Mods.tconstruct;
     }

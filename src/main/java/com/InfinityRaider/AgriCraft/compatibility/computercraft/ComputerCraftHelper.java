@@ -7,7 +7,6 @@ import dan200.computercraft.api.peripheral.IPeripheralProvider;
 
 public class ComputerCraftHelper extends ModHelper {
     public static IMethod[] getMethods() {
-
         return new IMethod[] {
                 new MethodAnalyze(),
                 new MethodGetBaseBlock(),
@@ -35,16 +34,6 @@ public class ComputerCraftHelper extends ModHelper {
 
     public static void registerPeripheralProvider(IPeripheralProvider provider) {
         dan200.computercraft.api.ComputerCraftAPI.registerPeripheralProvider(provider);
-    }
-
-    @Override
-    protected void init() {
-
-    }
-
-    @Override
-    protected void initPlants() {
-
     }
 
     @Override

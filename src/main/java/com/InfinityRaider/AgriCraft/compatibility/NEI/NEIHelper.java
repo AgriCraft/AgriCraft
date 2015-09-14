@@ -6,16 +6,6 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 
 public class NEIHelper extends ModHelper {
     @Override
-    protected void init() {
-
-    }
-
-    @Override
-    protected void initPlants() {
-
-    }
-
-    @Override
     protected String modId() {
         return Names.Mods.nei;
     }

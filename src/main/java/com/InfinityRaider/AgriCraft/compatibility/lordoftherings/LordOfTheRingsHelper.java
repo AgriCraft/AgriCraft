@@ -10,11 +10,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class LordOfTheRingsHelper extends ModHelper {
     @Override
-    protected void init() {
-
-    }
-
-    @Override
     protected void initPlants() {
         Item lettuce = (Item) Item.itemRegistry.getObject("lotr:item.lotr:lettuce");
         Block lettucePlant = (Block) Block.blockRegistry.getObject("lotr:tile.lotr:lettuce");

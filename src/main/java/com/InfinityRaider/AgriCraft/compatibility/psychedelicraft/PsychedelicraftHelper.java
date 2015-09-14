@@ -10,8 +10,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 public final class PsychedelicraftHelper extends ModHelper {
-    protected void init() {}
-
     protected void initPlants() {
         Class pc_ItemRegistry = null;
         try {

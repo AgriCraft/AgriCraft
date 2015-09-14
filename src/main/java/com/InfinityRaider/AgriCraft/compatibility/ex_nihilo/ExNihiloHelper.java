@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public final class ExNihiloHelper extends ModHelper {
-
     @Override
     protected void init() {
         Item seedPotato = (Item) Item.itemRegistry.getObject("exnihilo:seed_potato");
@@ -26,16 +25,6 @@ public final class ExNihiloHelper extends ModHelper {
         GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedCarrot")), new ItemStack(seedCarrot));
         GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")), new ItemStack(seedSugarCane));
         GameRegistry.addShapelessRecipe(new ItemStack((Item) Item.itemRegistry.getObject("AgriCraft:seedCactus")), new ItemStack(seedCactus));
-    }
-
-    @Override
-    protected void initPlants() {
-
-    }
-
-    @Override
-    protected void postTasks() {
-
     }
 
     @Override

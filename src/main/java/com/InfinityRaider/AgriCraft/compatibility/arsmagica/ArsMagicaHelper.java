@@ -20,10 +20,6 @@ public class ArsMagicaHelper extends ModHelper {
     public static ArrayList<ItemModSeed> arsMagicaSeeds = new ArrayList<ItemModSeed>();
 
     @Override
-    protected void init() {
-    }
-
-    @Override
     protected void initPlants() {
         //aum
         Item aum = (Item) Item.itemRegistry.getObject("arsmagica2:Aum");

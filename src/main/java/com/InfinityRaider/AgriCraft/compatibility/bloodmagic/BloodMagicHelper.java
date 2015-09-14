@@ -22,9 +22,6 @@ public class BloodMagicHelper extends ModHelper {
     }
 
     @Override
-    protected void initPlants() {}
-
-    @Override
     protected String modId() {
         return Names.Mods.bloodMagic;
     }

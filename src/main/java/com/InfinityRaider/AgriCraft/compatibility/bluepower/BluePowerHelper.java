@@ -17,10 +17,6 @@ public final class BluePowerHelper extends ModHelper {
     }
 
     @Override
-    protected void init() {
-    }
-
-    @Override
     protected void initPlants() {
         OreDictionary.registerOre(Names.OreDict.listAllseed, (Item) Item.itemRegistry.getObject("bluepower:flax_seeds"));
         OreDictionary.registerOre("seedFlax", (Item) Item.itemRegistry.getObject("bluepower:flax_seeds"));

@@ -12,11 +12,6 @@ import net.minecraft.item.ItemStack;
 
 public class BiomesOPlentyHelper extends ModHelper {
     @Override
-    protected void init() {
-
-    }
-
-    @Override
     protected void initPlants() {
         //turnip
         Block plant = (Block) Block.blockRegistry.getObject("BiomesOPlenty:turnip");

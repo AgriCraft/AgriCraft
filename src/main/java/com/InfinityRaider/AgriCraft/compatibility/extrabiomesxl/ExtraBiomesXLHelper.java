@@ -11,11 +11,6 @@ import net.minecraft.item.Item;
 
 public class ExtraBiomesXLHelper extends ModHelper {
     @Override
-    protected void init() {
-
-    }
-
-    @Override
     protected void initPlants() {
         //strawberry
         Block plant = (Block) Block.blockRegistry.getObject("ExtrabiomesXL:tile.extrabiomes.crop.strawberry");

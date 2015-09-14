@@ -22,11 +22,6 @@ public class BotaniaHelper extends ModHelper {
     public static ArrayList<ItemModSeed> botaniaSeeds = new ArrayList<ItemModSeed>();
 
     @Override
-    protected void init() {
-
-    }
-
-    @Override
     protected void initPlants() {
         for (int i = 0; i < 16; i++) {
             Object[] args = {Data.botania[i], new ItemStack((Item) Item.itemRegistry.getObject("Botania:petal"), 1, i), 3, RenderMethod.CROSSED, new ItemStack((Block) Block.blockRegistry.getObject("Botania:flower"), 1, i)};

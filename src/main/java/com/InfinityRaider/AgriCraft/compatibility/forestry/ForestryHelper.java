@@ -18,15 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class ForestryHelper extends ModHelper {
-
-    @Override
-    protected void init() {
-    }
-
-    @Override
-    protected void initPlants() {
-    }
-
     @Override
     protected void postTasks() {
         registerSeedOilRecipes();

@@ -40,6 +40,7 @@ public final class MagicalCropsHelper extends ModHelper {
             if(annotation instanceof Mod) {
                 String version = ((Mod) annotation).version();
                 newVersion = !version.contains("ALPHA");
+                break;
             }
         }
     }

@@ -12,11 +12,6 @@ import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantExceptio
 
 public class GrowthCraftRiceHelper extends ModHelper {
     @Override
-    protected void init() {
-
-    }
-
-    @Override
     protected void initPlants() {
         try {
             CropPlant ricePlant = new CropPlantGrowthCraftRice();

@@ -12,9 +12,6 @@ import java.lang.reflect.Modifier;
 
 public class WeeeFlowersHelper extends ModHelper {
     @Override
-    protected void init() {}
-
-    @Override
     protected void initPlants() {
         Class wf_ItemRegistry = weeeflowers.class;
         Field[] fields = wf_ItemRegistry.getDeclaredFields();
