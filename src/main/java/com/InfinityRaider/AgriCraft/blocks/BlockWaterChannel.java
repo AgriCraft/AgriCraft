@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -16,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 
@@ -40,6 +42,14 @@ public class BlockWaterChannel extends BlockCustomWood {
     }
 
     @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te != null && te instanceof TileEntityChannel) {
+            ((TileEntityChannel) te).findNeighbours();
+        }
+    }
+
+    @Override
     public boolean onBlockEventReceived(World world, int x, int y, int z, int id, int data) {
         return world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z).receiveClientEvent(id, data);
     }
@@ -54,19 +64,19 @@ public class BlockWaterChannel extends BlockCustomWood {
         TileEntity te = world.getTileEntity(x, y, z);
         if (te != null && te instanceof TileEntityChannel) {
             TileEntityChannel channel = (TileEntityChannel) te;
-            if (channel.hasNeighbour('x', 1)) {
+            if (channel.hasNeighbour(ForgeDirection.EAST)) {
                 this.setBlockBounds(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
-            if (channel.hasNeighbour('x', -1)) {
+            if (channel.hasNeighbour(ForgeDirection.WEST)) {
                 this.setBlockBounds(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
-            if (channel.hasNeighbour('z', 1)) {
+            if (channel.hasNeighbour(ForgeDirection.SOUTH)) {
                 this.setBlockBounds(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
-            if (channel.hasNeighbour('z', -1)) {
+            if (channel.hasNeighbour(ForgeDirection.NORTH)) {
                 this.setBlockBounds(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
@@ -76,6 +86,7 @@ public class BlockWaterChannel extends BlockCustomWood {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
         TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);

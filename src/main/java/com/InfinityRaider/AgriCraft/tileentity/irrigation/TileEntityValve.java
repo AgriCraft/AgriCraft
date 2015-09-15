@@ -35,6 +35,8 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
         if(!this.worldObj.isRemote) {
             if(!this.powered) {
                 super.updateEntity();
+            } else {
+                updateNeighbours();
             }
         }
     }

@@ -28,6 +28,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
      * in the multiblock holds the liquid
      */
     private int fluidLevel=0;
+    private int lastDiscreteLvl=0;
 
     private int xPosition=0;
     private int yPosition=0;
@@ -105,20 +106,14 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         }
     }
 
-    /*
-    public void syncToClient(boolean forceUpdate) {
-        boolean change = forceUpdate || this.getDiscreteFluidLevel()!=lastDiscreteFluidLevel;
-        if(change) {
-            this.lastDiscreteFluidLevel = this.getDiscreteFluidLevel();
-            this.markForUpdate();
-        }
-    }
-    */
-
     public void syncFluidLevel() {
-        IMessage msg = new MessageSyncFluidLevel(this.fluidLevel, this.xCoord, this.yCoord, this.zCoord);
-        NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 64);
-        NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
+        int newDiscreteLvl = getDiscreteFluidLevel();
+        if(newDiscreteLvl != lastDiscreteLvl) {
+            lastDiscreteLvl = newDiscreteLvl;
+            IMessage msg = new MessageSyncFluidLevel(this.fluidLevel, this.xCoord, this.yCoord, this.zCoord);
+            NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 64);
+            NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
+        }
     }
 
 
@@ -512,6 +507,11 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                 }
             }
         }
+    }
+
+    @Override
+    public boolean canConnectTo(IIrrigationComponent component) {
+        return false;
     }
 
     public int getSingleCapacity() {

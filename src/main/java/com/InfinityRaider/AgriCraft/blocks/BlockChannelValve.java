@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderValve;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 
 import cpw.mods.fml.relauncher.Side;
@@ -22,7 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 
-public class BlockChannelValve extends BlockCustomWood {
+public class BlockChannelValve extends BlockWaterChannel {
     public BlockChannelValve() {
         super();
         this.setBlockBounds(4*Constants.UNIT, 0, 4*Constants.UNIT, 12*Constants.UNIT, 1, 12*Constants.UNIT);
@@ -31,6 +32,7 @@ public class BlockChannelValve extends BlockCustomWood {
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
         if (!world.isRemote) {
+            super.onNeighborBlockChange(world, x, y, z, block);
             updatePowerStatus(world, x, y, z);
             if(block instanceof BlockLever) {
                 world.markBlockForUpdate(x, y, z);

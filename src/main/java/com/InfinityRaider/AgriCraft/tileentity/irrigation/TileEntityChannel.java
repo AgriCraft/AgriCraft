@@ -9,22 +9,27 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityChannel extends TileEntityCustomWood implements IIrrigationComponent, IDebuggable{
-    
+    public static final int FORGE_DIRECTION_OFFSET = 2;
     public static final ForgeDirection[] validDirections = new ForgeDirection[] {
-	ForgeDirection.NORTH,
-	ForgeDirection.EAST,
-	ForgeDirection.SOUTH,
-	ForgeDirection.WEST
+	    ForgeDirection.NORTH,
+	    ForgeDirection.SOUTH,
+	    ForgeDirection.WEST,
+	    ForgeDirection.EAST
     };
+
+    private IIrrigationComponent[] neighbours = new IIrrigationComponent[4];
+    protected int ticksSinceNeighbourCheck = 0;
+    protected static final int NEIGHBOUR_CHECK_DELAY = 1024;
     
     private static final int SYNC_WATER_ID = 0;
 
@@ -37,7 +42,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
     protected static final float SCALE_FACTOR = (float)ABSOLUTE_MAX / (float) DISCRETE_MAX;
 
     private int lvl;
-    private boolean multiConnect = false;
+    private int lastDiscreteLvl=0;
 
     public TileEntityChannel() {
         super();
@@ -75,6 +80,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
         }
     }
 
+    @Override
+    public boolean canConnectTo(IIrrigationComponent component) {
+        return (component instanceof TileEntityTank || component instanceof TileEntityChannel) && this.isSameMaterial((TileEntityCustomWood) component);
+    }
+
     public float getFluidHeight() {
         return this.getFluidHeight(this.lvl);
     }
@@ -87,6 +97,29 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
         return MIN+HEIGHT*((float) lvl)/((float) ABSOLUTE_MAX);
     }
 
+    public final void updateNeighbours() {
+        if(ticksSinceNeighbourCheck==0) {
+            findNeighbours();
+        }
+        ticksSinceNeighbourCheck = (ticksSinceNeighbourCheck+1)%NEIGHBOUR_CHECK_DELAY;
+    }
+
+    public final void findNeighbours() {
+        for(int i=0;i<validDirections.length;i++) {
+            ForgeDirection dir = validDirections[i];
+            TileEntity te = worldObj.getTileEntity(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ);
+            if(!(te instanceof IIrrigationComponent)) {
+                neighbours[i] = null;
+            } else {
+                IIrrigationComponent neighbour = (IIrrigationComponent) te;
+                neighbours[i] = (neighbour.canConnectTo(this) || this.canConnectTo(neighbour)) ? neighbour : null;
+            }
+        }
+        ticksSinceNeighbourCheck = 0;
+    }
+
+    /** Only used for rendering */
+    @SideOnly(Side.CLIENT)
     public boolean hasNeighbour(char axis, int direction) {
         if(this.worldObj==null) {
             return false;
@@ -97,43 +130,37 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
             case 'z': tileEntityAt = this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord+direction);break;
             default: return false;
         }
-        return (tileEntityAt!=null) && ((tileEntityAt instanceof TileEntityTank) || tileEntityAt instanceof TileEntityChannel) && (multiConnect || this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
+        return (tileEntityAt!=null) && (tileEntityAt instanceof IIrrigationComponent)  && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
     }
     
     public boolean hasNeighbour(ForgeDirection direction) {
-        if(this.worldObj==null || direction.equals(ForgeDirection.UNKNOWN) || direction.offsetY != 0) {
-            return false;
-        }
-        TileEntity tileEntityAt = this.worldObj.getTileEntity(this.xCoord+direction.offsetX, this.yCoord, this.zCoord+direction.offsetZ);
-        return (tileEntityAt!=null) && ((tileEntityAt instanceof TileEntityTank) || tileEntityAt instanceof TileEntityChannel) && (multiConnect || this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
+        int ordinal = direction.ordinal() - FORGE_DIRECTION_OFFSET;
+        return ordinal>=0 & ordinal<neighbours.length && neighbours[ordinal]!=null;
     }
 
     //updates the tile entity every tick
     @Override
     public void updateEntity() {
         if (!this.worldObj.isRemote) {
-            //find neighbours
-            ArrayList<TileEntityCustomWood> neighbours = new ArrayList<TileEntityCustomWood>();
-            for (ForgeDirection direction : validDirections) {
-        	if (this.hasNeighbour(direction)) {
-        	    neighbours.add((TileEntityCustomWood) this.worldObj.getTileEntity(this.xCoord + direction.offsetX, this.yCoord, this.zCoord + direction.offsetZ));
-        	}
-            }
+            updateNeighbours();
             //calculate total fluid lvl and capacity
             int totalLvl = 0;
             int nr = 1;
             int updatedLevel = this.getFluidLevel();
-            for (TileEntityCustomWood te : neighbours) {
+            for (IIrrigationComponent component : neighbours) {
+                if(component == null) {
+                    continue;
+                }
                 //neighbour is a channel: add its volume to the total and increase the count
-                if (te instanceof TileEntityChannel) {
-                    if (!(te instanceof TileEntityValve && ((TileEntityValve) te).isPowered())) {
-                        totalLvl = totalLvl + ((TileEntityChannel) te).lvl;
+                if (component instanceof TileEntityChannel) {
+                    if (!(component instanceof TileEntityValve && ((TileEntityValve) component).isPowered())) {
+                        totalLvl = totalLvl + ((TileEntityChannel) component).lvl;
                         nr++;
                     }
                 }
                 //neighbour is a tank: calculate the fluid levels of the tank and the channel
                 else {
-                    TileEntityTank tank = (TileEntityTank) te;
+                    TileEntityTank tank = (TileEntityTank) component;
                     int Y = tank.getYPosition();
                     // float y_c= Constants.WHOLE*Y+this.getFluidHeight();  //initial channel water y
                     float y_c = Constants.WHOLE * Y + getDiscreteScaledFluidHeight();
@@ -176,12 +203,13 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
             int newLvl = totalLvl / nr;
             if (nr > 1) {
                 //set fluid levels
-                for (TileEntityCustomWood te : neighbours) {
-                    if (te instanceof TileEntityChannel) {
-                        if (!(te instanceof TileEntityValve && ((TileEntityValve) te).isPowered())) {
+                for (IIrrigationComponent component : neighbours) {
+                    //TODO: cleanup
+                    if (component instanceof TileEntityChannel) {
+                        if (!(component instanceof TileEntityValve && ((TileEntityValve) component).isPowered())) {
                             int lvl = rest == 0 ? newLvl : newLvl + 1;
                             rest = rest == 0 ? 0 : rest - 1;
-                            ((TileEntityChannel) te).setFluidLevel(lvl);
+                            component.setFluidLevel(lvl);
                         }
                     }
                 }
@@ -192,9 +220,13 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
 
     public void syncFluidLevel() {
         if(!this.worldObj.isRemote) {
-            IMessage msg = new MessageSyncFluidLevel(this.lvl, this.xCoord, this.yCoord, this.zCoord);
-            NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 64);
-            NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
+            int newDiscreteLvl = getDiscreteFluidLevel();
+            if(newDiscreteLvl != lastDiscreteLvl) {
+                lastDiscreteLvl = newDiscreteLvl;
+                IMessage msg = new MessageSyncFluidLevel(this.lvl, this.xCoord, this.yCoord, this.zCoord);
+                NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 64);
+                NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
+            }
         }
     }
 
