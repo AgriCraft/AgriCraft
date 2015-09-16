@@ -37,7 +37,7 @@ item.agricraft:seedCactus.name=Cactus Seeds
 item.agricraft:seedShroomRed.name=Red Mushroom Spores
 item.agricraft:seedShroomBrown.name=Brown Mushroom Spores
 item.agricraft:seedNitorWart.name=Nitor Wart Spores
-item.agricraft:seedQuartzanthemum=Quartzanthemum seeds
+item.agricraft:seedQuartzanthemum.name=Quartzanthemum Seeds
 
 item.agricraft:seedBotaniaWhite.name=Mystical White Flower Seeds
 item.agricraft:seedBotaniaOrange.name=Mystical Orange Flower Seeds
