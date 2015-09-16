@@ -27,6 +27,7 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
         this.setResistance(5.0F);
         setHarvestLevel("axe", 0);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
+        this.setStepSound(soundTypeWood);
     }
 
     @Override
