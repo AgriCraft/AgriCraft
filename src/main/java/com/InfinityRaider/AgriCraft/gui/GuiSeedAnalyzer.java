@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -30,20 +31,25 @@ public class GuiSeedAnalyzer extends GuiContainer {
     public GuiSeedAnalyzer(InventoryPlayer inventory, TileEntitySeedAnalyzer seedAnalyzer) {
         super(new ContainerSeedAnalyzer(inventory, seedAnalyzer));
         this.seedAnalyzer = seedAnalyzer;
-        this.xSize = 176;
+        this.xSize = 181;
         this.ySize = 176;
         this.journalOpen = false;
+    }
+
+    @Override
+    public void initGui() {
+        super.initGui();
+        this.buttonList.add(new GuiButton(0, this.guiLeft + 131, this.guiTop + 67, 18, 18, ""));
     }
 
     //draw foreground
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
-        String name = "Seed Analyzer";
+        String name = StatCollector.translateToLocal("agricraft_gui.seedAnalyzer");
         int white = 4210752;        //the number for white
         //write name: x coordinate is in the middle, 6 down from the top, and setting color to white
         this.fontRendererObj.drawString(name, this.xSize/2 - this.fontRendererObj.getStringWidth(name)/2, 6, white);
-        this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 96 + 2, white);
-        this.buttonList.add(new GuiButton(0, this.guiLeft + 131, this.guiTop + 67, 18, 18, ""));
+        this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 9, this.ySize - 96 + 2, white);
     }
 
     //draw background
@@ -114,11 +120,6 @@ public class GuiSeedAnalyzer extends GuiContainer {
     protected void mouseClicked(int x, int y, int rightClick) {
         if(journalOpen) {
             guiJournal.mouseClicked(x, y, rightClick);
-        } else if(x>=this.guiLeft+131 && x<this.guiLeft+149 && y>=this.guiTop+67 && y<this.guiTop+85) {
-            //do this manually or else minecraft plays the click sound 1000 times ><
-            GuiButton button = (GuiButton) this.buttonList.get(0);
-            button.func_146113_a(this.mc.getSoundHandler());
-            this.actionPerformed(button);
         }
         else {
             super.mouseClicked(x, y, rightClick);

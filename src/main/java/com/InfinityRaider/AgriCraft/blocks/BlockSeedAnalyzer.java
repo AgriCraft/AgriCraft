@@ -133,9 +133,7 @@ public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister reg) {
-        this.blockIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1));
-    }
+    public void registerBlockIcons(IIconRegister reg) {}
 
     @Override
     @SideOnly(Side.CLIENT)
