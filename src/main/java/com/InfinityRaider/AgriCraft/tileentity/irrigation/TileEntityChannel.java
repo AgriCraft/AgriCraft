@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncFluidLevel;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -37,7 +38,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
     protected static final int MAX = 12;
     protected static final int HEIGHT = MAX - MIN;
     protected static final int DISCRETE_MAX = 16;
-    protected static final int ABSOLUTE_MAX = Constants.BUCKET_mB / 2;
+    protected static final int ABSOLUTE_MAX = ConfigurationHandler.channelCapacity;
     protected static final float DISCRETE_FACTOR = (float) DISCRETE_MAX / (float)ABSOLUTE_MAX;
     protected static final float SCALE_FACTOR = (float)ABSOLUTE_MAX / (float) DISCRETE_MAX;
 
@@ -251,7 +252,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
         return discreteFluidLevel;
     }
 
-    /** Scales the discrete fluid level back to the interval [0, 500] */
+    /** Scales the discrete fluid level back to the interval [0, ABSOLUTE_MAX] */
     public int getDiscreteScaledFluidLevel() {
         int discreteFluidLevel = getDiscreteFluidLevel();
         return Math.round(SCALE_FACTOR * discreteFluidLevel);

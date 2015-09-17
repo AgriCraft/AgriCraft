@@ -51,6 +51,7 @@ Changelog
 -ADDED:  Decorative blocks for every type of planks: fences, fence gates and grates
 -ADDED:  Compatibility for Advent of Ascension crops
 -ADDED:  Compatibility for crops with Ancient Warfare crop farms
+-ADDED:  Config option for irrigation channel capacity
 -FIXED:  Seeds added as drops from tall grass always having weight 10
 -FIXED:  Not being able to set max brightness in Minetweaker methods
 -FIXED:  Wrong error message in Minetweaker methods
@@ -74,6 +75,7 @@ Changelog
 -FIXED:  Seed Storage blocks will now drop their inventory when broken
 -FIXED:  Villager "teleporting"
 -FIXED:  Weird behaviour with thaumcraft golems
+-FIXED:  Tanks and channels not having lighting
 
 1.3.1
 -ADDED:  Nitor Wart: a new crop that produces glowstone dust

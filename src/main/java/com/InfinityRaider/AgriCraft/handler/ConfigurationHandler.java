@@ -79,6 +79,7 @@ public class ConfigurationHandler {
     public static int sprinklerGrowthIntervalTicks = 100;
     public static boolean placeWater;
     public static boolean fillFromFlowingWater;
+    public static int channelCapacity;
     //decorative
     public static boolean disableFences;
     public static boolean disableGrates;
@@ -153,6 +154,7 @@ public class ConfigurationHandler {
         sprinklerGrowthIntervalTicks = sprinklerGrowthInterval * 20;
         placeWater = config.getBoolean("Spawn water after breaking tank", CATEGORY_IRRIGATION, true, "set to false to disable placing a source block when breaking non-empty tanks");
         fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", CATEGORY_IRRIGATION, false, "set to true to let tanks fill up when water flows above them");
+        channelCapacity = config.getInt("Channel capacity", CATEGORY_IRRIGATION, 500, 100, 2000, "The amount of water in mb that an irrigation channel can hold");
         //decoration
         disableFences = config.getBoolean("Disable fences", CATEGORY_DECORATION, false, "Set to true to disable the decorative custom wood fences");
         disableGrates = config.getBoolean("Disable grates", CATEGORY_DECORATION, false, "Set to true to disable the decorative custom wood grates");
