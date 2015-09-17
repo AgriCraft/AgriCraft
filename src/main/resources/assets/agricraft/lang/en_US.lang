@@ -169,6 +169,10 @@ tile.agricraft:cropOsmonium.name=Osmonium
 entity.AgriCraft.villagerFarmer.name=Villager
 entity.AgriCraft.leash.name=Leash Knot
 
+//gui
+agricraft_gui.seedAnalyzer=Seed Analyzer
+agricraft_gui.peripheral=Computer Controlled Seed Analyzer
+
 //tooltips
 agricraft_tooltip.unidentified=Unidentified
 agricraft_tooltip.seed=Seed

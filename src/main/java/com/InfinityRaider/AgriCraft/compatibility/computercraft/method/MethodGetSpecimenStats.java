@@ -6,7 +6,9 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class MethodGetSpecimenStats implements IMethod {
+import java.util.ArrayList;
+
+public class MethodGetSpecimenStats extends MethodBase {
     @Override
     public String getName() {
         return "getSpecimenStats";
@@ -22,5 +24,10 @@ public class MethodGetSpecimenStats implements IMethod {
             return null;
         }
         return new Object[] {stats.getGrowth(), stats.getGain(), stats.getStrength()};
+    }
+
+    @Override
+    protected ArrayList<MethodParameter> getParameters() {
+        return new ArrayList<MethodParameter>();
     }
 }

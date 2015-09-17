@@ -19,6 +19,10 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
     public ContainerSeedAnalyzer(InventoryPlayer inventory, TileEntitySeedAnalyzer seedAnalyzer, int x, int y) {
         super(inventory, x, y);
         this.seedAnalyzer = seedAnalyzer;
+        this.addSlots();
+    }
+
+    protected void addSlots() {
         //add seed slot to the container
         this.addSlotToContainer(new SlotSeedAnalyzerSeed(seedAnalyzer, seedSlotId, 80, 40));
         //add journal slot to the container

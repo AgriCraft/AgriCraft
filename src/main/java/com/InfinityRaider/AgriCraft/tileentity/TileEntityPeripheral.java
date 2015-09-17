@@ -20,7 +20,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
 
     public TileEntityPeripheral() {
         super();
-        getMethods();
+        initMethods();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
         mayAnalyze = tag.hasKey(Names.NBT.flag) && tag.getBoolean(Names.NBT.flag);
     }
 
-    private void getMethods() {
+    private void initMethods() {
         if(methods ==null) {
             if(ModHelper.allowIntegration(Names.Mods.computerCraft)) {
                 methods = ComputerCraftHelper.getMethods();
@@ -43,6 +43,10 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
         }
     }
 
+    public IMethod[] getMethods() {
+        initMethods();
+        return methods;
+    }
 
     @Override
     public void updateEntity() {

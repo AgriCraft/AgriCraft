@@ -9,7 +9,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public abstract class MethodCropBase implements IMethod {
+import java.util.ArrayList;
+
+public abstract class MethodCropBase extends MethodBase {
     private final String name;
 
     public MethodCropBase(String name) {
@@ -75,4 +77,11 @@ public abstract class MethodCropBase implements IMethod {
     protected abstract Object[] onMethodCalled(TileEntityCrop crop) throws MethodException;
 
     protected abstract boolean requiresJournal();
+
+    @Override
+    protected ArrayList<MethodParameter> getParameters() {
+        ArrayList<MethodParameter> list = new ArrayList<MethodParameter>();
+        list.add(MethodParameter.DIRECTION);
+        return list;
+    }
 }
