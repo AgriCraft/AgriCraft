@@ -1,9 +1,10 @@
 package com.InfinityRaider.AgriCraft.tileentity.decoration;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockFence;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.InfinityRaider.AgriCraft.blocks.BlockFence;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
 public class TileEntityFence extends TileEntityCustomWood {
     public TileEntityFence() {

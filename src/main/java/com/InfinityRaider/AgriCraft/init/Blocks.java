@@ -1,11 +1,26 @@
 package com.InfinityRaider.AgriCraft.init;
 
-import com.InfinityRaider.AgriCraft.blocks.*;
+import net.minecraft.block.Block;
+
+import com.InfinityRaider.AgriCraft.blocks.BlockChannelValve;
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
+import com.InfinityRaider.AgriCraft.blocks.BlockFence;
+import com.InfinityRaider.AgriCraft.blocks.BlockFenceGate;
+import com.InfinityRaider.AgriCraft.blocks.BlockGrate;
+import com.InfinityRaider.AgriCraft.blocks.BlockPeripheral;
+import com.InfinityRaider.AgriCraft.blocks.BlockSeedAnalyzer;
+import com.InfinityRaider.AgriCraft.blocks.BlockSeedStorage;
+import com.InfinityRaider.AgriCraft.blocks.BlockSeedStorageController;
+import com.InfinityRaider.AgriCraft.blocks.BlockSprinkler;
+import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
+import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannelFull;
+import com.InfinityRaider.AgriCraft.blocks.BlockWaterPad;
+import com.InfinityRaider.AgriCraft.blocks.BlockWaterPadFull;
+import com.InfinityRaider.AgriCraft.blocks.BlockWaterTank;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import net.minecraft.block.Block;
 
 public class Blocks {
     public static Block blockCrop;

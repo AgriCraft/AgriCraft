@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import net.minecraft.item.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Random;
+
+import net.minecraft.item.ItemStack;
 
 public class CropProduce {
     public static final int DEFAULT_WEIGHT = 100;

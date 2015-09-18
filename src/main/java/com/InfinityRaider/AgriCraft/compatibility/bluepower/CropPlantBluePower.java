@@ -1,10 +1,12 @@
 package com.InfinityRaider.AgriCraft.compatibility.bluepower;
 
+import net.minecraft.item.ItemSeeds;
+
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantTallGeneric;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.ItemSeeds;
 
 public class CropPlantBluePower extends CropPlantTallGeneric {
     public CropPlantBluePower(ItemSeeds seed) {

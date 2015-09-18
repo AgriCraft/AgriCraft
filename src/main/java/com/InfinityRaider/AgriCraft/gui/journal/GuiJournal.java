@@ -1,18 +1,21 @@
 package com.InfinityRaider.AgriCraft.gui.journal;
 
-import com.InfinityRaider.AgriCraft.gui.Component;
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
-import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
+import com.InfinityRaider.AgriCraft.gui.Component;
+import com.InfinityRaider.AgriCraft.items.ItemJournal;
+import com.InfinityRaider.AgriCraft.utility.IOHelper;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiJournal extends GuiScreen {

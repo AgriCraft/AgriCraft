@@ -1,15 +1,8 @@
 package com.InfinityRaider.AgriCraft.init;
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
+import java.lang.reflect.Field;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -17,8 +10,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.utility.IOHelper;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class CustomCrops {
     public static BlockModPlant[] customCrops;

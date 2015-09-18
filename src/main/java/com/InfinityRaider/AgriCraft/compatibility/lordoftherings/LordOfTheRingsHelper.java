@@ -1,12 +1,13 @@
 package com.InfinityRaider.AgriCraft.compatibility.lordoftherings;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraftforge.oredict.OreDictionary;
+
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class LordOfTheRingsHelper extends ModHelper {
     @Override

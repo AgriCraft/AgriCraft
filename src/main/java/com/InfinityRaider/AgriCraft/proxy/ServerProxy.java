@@ -1,10 +1,10 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
-import cpw.mods.fml.server.FMLServerHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import cpw.mods.fml.server.FMLServerHandler;
 
 public class ServerProxy extends CommonProxy {
     @Override

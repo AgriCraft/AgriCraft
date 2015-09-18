@@ -1,14 +1,14 @@
 package com.InfinityRaider.AgriCraft.items;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
+
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 
 /**
  * The root Item class for all AgriCraft Items (excluding blockItems).

@@ -1,11 +1,12 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class PlantStats implements ISeedStats {
     private static final short MAX = (short) ConfigurationHandler.cropStatCap;

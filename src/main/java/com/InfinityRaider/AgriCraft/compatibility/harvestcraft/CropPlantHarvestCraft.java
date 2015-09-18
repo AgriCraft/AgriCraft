@@ -1,9 +1,11 @@
 package com.InfinityRaider.AgriCraft.compatibility.harvestcraft;
 
+import net.minecraft.item.ItemSeeds;
+
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.ItemSeeds;
 
 public class CropPlantHarvestCraft extends CropPlantGeneric {
 

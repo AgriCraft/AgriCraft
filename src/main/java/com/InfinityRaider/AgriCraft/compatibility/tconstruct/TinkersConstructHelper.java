@@ -1,9 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.tconstruct;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,8 +11,10 @@ import net.minecraft.world.World;
 import tconstruct.library.tools.AbilityHelper;
 import tconstruct.tools.TinkerTools;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 public class TinkersConstructHelper extends ModHelper {
     public static boolean isShovel(ItemStack stack) {

@@ -1,12 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannel;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -19,7 +14,14 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.List;
+import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannel;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockWaterChannel extends BlockCustomWood {
     
@@ -92,16 +94,16 @@ public class BlockWaterChannel extends BlockCustomWood {
         TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
         float f = Constants.UNIT;
         AxisAlignedBB minBB = AxisAlignedBB.getBoundingBox(MIN, MIN, MIN, MAX, MAX, MAX);
-        if (channel.hasNeighbour('x', 1)) {
+        if (channel.hasNeighbour(ForgeDirection.EAST)) {
             minBB.setBounds(minBB.minX, MIN, minBB.minZ, 1, MAX, minBB.maxZ);
         }
-        if (channel.hasNeighbour('x', -1)) {
+        if (channel.hasNeighbour(ForgeDirection.WEST)) {
             minBB.setBounds(0, MIN, minBB.minZ, minBB.maxX, MAX, minBB.maxZ);
         }
-        if (channel.hasNeighbour('z', 1)) {
+        if (channel.hasNeighbour(ForgeDirection.SOUTH)) {
             minBB.setBounds(minBB.minX, MIN, minBB.minZ, minBB.maxX, MAX, 1);
         }
-        if (channel.hasNeighbour('z', -1)) {
+        if (channel.hasNeighbour(ForgeDirection.NORTH)) {
             minBB.setBounds(minBB.minX, MIN, 0, minBB.maxX, MAX, minBB.maxZ);
         }
         return minBB.getOffsetBoundingBox(x, y, z);

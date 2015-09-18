@@ -1,9 +1,10 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
 
-import com.google.common.hash.Hashing;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.google.common.hash.Hashing;
 
 public class ItemWithMeta {
 

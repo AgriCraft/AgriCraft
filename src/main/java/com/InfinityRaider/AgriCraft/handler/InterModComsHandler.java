@@ -1,15 +1,17 @@
 package com.InfinityRaider.AgriCraft.handler;
 
+import net.minecraft.item.ItemStack;
+
 import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAPI;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.item.ItemStack;
 
 public class InterModComsHandler {
 

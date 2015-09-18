@@ -1,16 +1,18 @@
 package com.InfinityRaider.AgriCraft.items;
 
-import com.InfinityRaider.AgriCraft.entity.EntityVillagerFarmer;
-import com.InfinityRaider.AgriCraft.init.WorldGen;
-import com.InfinityRaider.AgriCraft.utility.DebugHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockBush;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import com.InfinityRaider.AgriCraft.entity.EntityVillagerFarmer;
+import com.InfinityRaider.AgriCraft.init.WorldGen;
+import com.InfinityRaider.AgriCraft.utility.DebugHelper;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemDebugger extends ItemAgricraft {
 	

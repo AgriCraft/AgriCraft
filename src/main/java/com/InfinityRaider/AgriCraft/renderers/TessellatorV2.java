@@ -1,10 +1,12 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
-import com.InfinityRaider.AgriCraft.utility.TransformationMatrix;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.shader.TesselatorVertexState;
+
+import com.InfinityRaider.AgriCraft.utility.TransformationMatrix;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Note that this class isn't used by vanilla minecraft, the matrix operations done by this class will be ignored by the calls made by vanilla to the Tessellator

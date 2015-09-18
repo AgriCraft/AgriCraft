@@ -1,8 +1,9 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import com.google.common.base.Joiner;
+import java.util.Arrays;
+import java.util.List;
+
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
@@ -12,8 +13,8 @@ import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import java.util.Arrays;
-import java.util.List;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import com.google.common.base.Joiner;
 
 @ZenClass("mods.agricraft.SeedBlacklist")
 public class SeedBlacklist {

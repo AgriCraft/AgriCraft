@@ -1,9 +1,5 @@
 package com.InfinityRaider.AgriCraft.gui;
 
-import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.IMethod;
-import com.InfinityRaider.AgriCraft.container.ContainerPeripheral;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -14,7 +10,13 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
 import org.lwjgl.opengl.GL11;
+
+import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.IMethod;
+import com.InfinityRaider.AgriCraft.container.ContainerPeripheral;
+import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 
 public class GuiPeripheral extends GuiContainer {
     public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiPeripheral.png");

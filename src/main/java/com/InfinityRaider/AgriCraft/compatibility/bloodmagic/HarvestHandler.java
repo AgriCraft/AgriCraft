@@ -1,11 +1,13 @@
 package com.InfinityRaider.AgriCraft.compatibility.bloodmagic;
 
-import WayofTime.alchemicalWizardry.api.harvest.IHarvestHandler;
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import cpw.mods.fml.common.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import WayofTime.alchemicalWizardry.api.harvest.IHarvestHandler;
+
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
+import com.InfinityRaider.AgriCraft.reference.Names;
+
+import cpw.mods.fml.common.Optional;
 
 @Optional.Interface(modid = Names.Mods.bloodMagic, iface = "WayofTime.alchemicalWizardry.api.harvest.IHarvestHandler")
 public class HarvestHandler implements IHarvestHandler {

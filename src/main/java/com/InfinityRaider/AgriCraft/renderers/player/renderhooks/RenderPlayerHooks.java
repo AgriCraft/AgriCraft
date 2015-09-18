@@ -1,16 +1,19 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
+import java.util.HashMap;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+
+import org.lwjgl.opengl.GL11;
+
 import com.InfinityRaider.AgriCraft.reference.Reference;
+
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import org.lwjgl.opengl.GL11;
-
-import java.util.HashMap;
 
 @SideOnly(Side.CLIENT)
 public final class RenderPlayerHooks {

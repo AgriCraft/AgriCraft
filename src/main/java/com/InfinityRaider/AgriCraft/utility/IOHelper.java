@@ -1,61 +1,77 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
+import net.minecraft.item.ItemStack;
+
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
-import java.io.*;
-import java.util.ArrayList;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 //class containing the default mutations for each supported mod
 public abstract class IOHelper {
-    //reads and writes text files
+	
+	/**
+	 * <p>
+	 * Attempts to read or write data from or to a file.
+	 * </p><p>
+	 * If the file is found to be missing,
+	 * the file will be written with the default data, and the default data will be returned.
+	 * </p><p>
+	 * If the file is found to be a regular, readable file, the file is read in, and its contents returned.
+	 * </p><p>
+	 * If the method runs into an error while attempting any of this, a message is printed to the log,
+	 * and the default data is returned.
+	 * </p>
+	 * @param directory the directory the file is in.
+	 * @param fileName the name of the file, without the .txt ending.
+	 * @param defaultData the data to write to the file, or default to.
+	 * @return the data contained in the file, or the default data.
+	 */
     public static String readOrWrite(String directory, String fileName, String defaultData) {
         return readOrWrite(directory, fileName, defaultData, false);
     }
 
-    //reads and writes text files
-    public static String readOrWrite(String directory, String fileName, String defaultData, boolean reset) {
-        File file = new File(directory, fileName+".txt");
-        if(file.exists() && !file.isDirectory() && !reset) {
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                byte[] input = new byte[(int) file.length()];
-                try {
-                    inputStream.read(input);
-                    inputStream.close();
-                    return new String(input, "UTF-8");
-                } catch (IOException e) {
-                    LogHelper.info("Caught IOException when reading "+fileName+".txt");
-                }
-            } catch(FileNotFoundException e) {
-                LogHelper.info("Caught IOException when reading "+fileName+".txt");
-            }
-        }
-        else {
-            BufferedWriter writer;
-            try {
-                writer = new BufferedWriter(new FileWriter(file));
-                try {
-                    writer.write(defaultData);
-                    writer.close();
-                    return defaultData;
-                }
-                catch(IOException e) {
-                    LogHelper.info("Caught IOException when writing "+fileName+".txt");
-                }
-            }
-            catch(IOException e) {
-                LogHelper.info("Caught IOException when writing "+fileName+".txt");
-            }
-        }
-        return null;
-    }
+	/**
+	 * <p>
+	 * Attempts to read or write data from or to a file.
+	 * </p><p>
+	 * If the file is found to be missing or the reset parameter is set to true,
+	 * the file will be written with the default data, and the default data will be returned.
+	 * </p><p>
+	 * If the file is found to be a regular, readable file, the file is read in, and its contents returned.
+	 * </p><p>
+	 * If the method runs into an error while attempting any of this, a message is printed to the log,
+	 * and the default data is returned.
+	 * </p>
+	 * @param directory the directory the file is in.
+	 * @param fileName the name of the file, without the .txt ending.
+	 * @param defaultData the data to write to the file, or default to.
+	 * @param reset if the file should be overwritten with the default data.
+	 * @return the data contained in the file, or the default data.
+	 */
+	public static String readOrWrite(String directory, String fileName, String defaultData, boolean reset) {
+		Path path = Paths.get(directory, fileName + ".txt");
+		try {
+			if (Files.isRegularFile(path) && !reset) {
+				return new String(Files.readAllBytes(path));
+			} else {
+				Files.write(path, defaultData.getBytes());
+			}
+		} catch (IOException e) {
+			LogHelper.info("Caught IOException when reading " + path.getFileName());
+		}
+		return defaultData;
+	}
 
     //get the mutations file contents
+	//This should probably be a loop...
     public static String getDefaultMutations() {
         String data = mutationInstructions;                                     //mutationInstructions
         data = data + '\n' + minecraftMutations;                                 //minecraft mutations
@@ -134,7 +150,8 @@ public abstract class IOHelper {
 
     //get the grass drops file contents
     public static String getGrassDrops() {
-        return grassDropInstructions + "\n" + "AgriCraft:seedCarrot,10" + "\n" + "AgriCraft:seedPotato,10";
+    	//This is bad...
+        return grassDropInstructions;
     }
 
     //mutation chances overrides file contents
@@ -212,32 +229,42 @@ public abstract class IOHelper {
         return output.toArray(new String[output.size()]);
     }
 
-    //gets an itemstack from a string: name:meta
+    /**
+     * Retrieves an itemstack from a string representation.
+     * The string must be formatted as "modid:name:meta".
+     * The meta is not required in all cases.
+     * 
+     * @param input the string representation of the item to get.
+     * @return the item as an itemstack, or null.
+     */
     public static ItemStack getStack(String input) {
-        if(input.equalsIgnoreCase("null")) {
-            return null;
-        }
-        String[] data = input.split(":");
-        int meta = 0;
+    	
+		String[] data = input.split(":");
+		
+		if (data.length <= 1) {
+			return null;
+		}
+		
+		int meta;
+		
+		if (data.length == 3) {
+			meta = Integer.parseInt(data[2]);
+		} else {
+			meta = 0;
+		}
 
-        if (data.length <= 1) {
-            return null;
-        }
-        if (data.length == 3) {
-            meta = Integer.parseInt(data[2]);
-        }
+        return GameRegistry.findItemStack(data[0], data[1], meta);
 
-        Item item = GameRegistry.findItem(data[0], data[1]);
-        if (item != null) {
-            return new ItemStack(item, 1, meta);
-        }
-        return null;
     }
+    
+    //This almost seems like it shouldn't be here. The instructions seem like they should almost be in the locale files...
 
     private static final String grassDropInstructions =
             "#Put a list of seeds here that will drop from tall grass with the following schematic: <seedname:seedmeta>,<weight>\n" +
             "#The seedname should be the name NEI gives you, the weight is the weighted chance for this seed to drop (for reference, minecraft wheat seeds have weight 10)\n" +
-            "#Only define one seed per line, meta is optional. Example: minecraft:melon_seeds,10";
+            "#Only define one seed per line, meta is optional. Example: minecraft:melon_seeds,10\n" + 
+            "AgriCraft:seedCarrot,10\n" +
+            "AgriCraft:seedPotato,10\n";
 
     private static final String customCropInstructions =
             "#Define custom crops here: <name>,<fruit:fruitmeta>,<soil>,<baseblock:baseblockmeta>,<tier>,<rendermethod>,<information>,<shearable>\n" +

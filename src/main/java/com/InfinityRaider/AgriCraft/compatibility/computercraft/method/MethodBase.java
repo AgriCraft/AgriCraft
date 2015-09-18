@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
-import net.minecraft.util.StatCollector;
-
 import java.util.ArrayList;
+
+import net.minecraft.util.StatCollector;
 
 public abstract class MethodBase implements IMethod {
     @Override

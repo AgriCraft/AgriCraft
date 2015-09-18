@@ -1,8 +1,9 @@
 package com.InfinityRaider.AgriCraft.items.blocks;
 
-import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
+
+import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 
 /**
  * The root item for all AgriCraft ItemBlocks.

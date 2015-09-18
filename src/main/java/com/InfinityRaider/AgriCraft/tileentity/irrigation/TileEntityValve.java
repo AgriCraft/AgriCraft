@@ -1,14 +1,14 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
 
-import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
-import java.util.List;
+import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
+import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
 
 public class TileEntityValve extends TileEntityChannel implements IDebuggable{
     private boolean powered = false;

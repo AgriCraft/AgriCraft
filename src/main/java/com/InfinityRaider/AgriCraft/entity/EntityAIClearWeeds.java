@@ -1,11 +1,12 @@
 package com.InfinityRaider.AgriCraft.entity;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.tileentity.TileEntity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 public class EntityAIClearWeeds extends EntityAIBase {
     private static final int range = 8;

@@ -1,14 +1,14 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Random;
+
 import net.minecraft.block.IGrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.IPlantable;
-
-import java.util.ArrayList;
-import java.util.Random;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public interface IAgriCraftPlant extends IGrowable, IPlantable {
     /** Returns the GowthRequirement for this plant */

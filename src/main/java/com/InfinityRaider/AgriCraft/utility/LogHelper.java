@@ -1,9 +1,11 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import org.apache.logging.log4j.Level;
+
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Reference;
+
 import cpw.mods.fml.common.FMLLog;
-import org.apache.logging.log4j.Level;
 
 /**
  * A class to assist in the logging of the mod.

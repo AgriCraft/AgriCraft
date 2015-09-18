@@ -1,8 +1,9 @@
 package com.InfinityRaider.AgriCraft.tileentity.decoration;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityFenceGate extends TileEntityCustomWood {
     private boolean zAxis;

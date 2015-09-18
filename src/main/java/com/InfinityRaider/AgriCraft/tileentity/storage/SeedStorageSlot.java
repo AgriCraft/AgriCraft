@@ -1,11 +1,12 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
+import java.util.Comparator;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.util.Comparator;
+import com.InfinityRaider.AgriCraft.reference.Names;
 
 public class SeedStorageSlot {
     private NBTTagCompound tag;

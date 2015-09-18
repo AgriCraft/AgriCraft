@@ -1,16 +1,21 @@
 package com.InfinityRaider.AgriCraft.compatibility.thaumcraft;
 
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
-import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.*;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
+import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.Crops;
+import com.InfinityRaider.AgriCraft.init.CustomCrops;
+import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.init.ResourceCrops;
+import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.reference.Names;
 
 public class Aspects {
     public static void registerAspects() {

@@ -1,10 +1,10 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
+import java.util.Random;
+
+import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.world.World;
-
-import java.util.Random;
 
 public interface IFertiliser {
     /** return true if this fertiliser is allowed to speed up growth of a crop of this tier */

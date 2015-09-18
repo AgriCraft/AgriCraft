@@ -1,5 +1,9 @@
 package com.InfinityRaider.AgriCraft.init;
 
+import java.util.Collection;
+
+import net.minecraft.world.gen.structure.MapGenStructureIO;
+
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.VillageCreationHandler;
@@ -7,10 +11,8 @@ import com.InfinityRaider.AgriCraft.handler.VillagerTradeHandler;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouse;
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouseIrrigated;
-import cpw.mods.fml.common.registry.VillagerRegistry;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
 
-import java.util.Collection;
+import cpw.mods.fml.common.registry.VillagerRegistry;
 
 public class WorldGen {
     private static int villagerId;

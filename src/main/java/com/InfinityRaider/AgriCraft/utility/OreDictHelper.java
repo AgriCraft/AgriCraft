@@ -1,18 +1,19 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.items.ItemAgricraft;
-import com.InfinityRaider.AgriCraft.items.ItemNugget;
-import com.InfinityRaider.AgriCraft.reference.Data;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.InfinityRaider.AgriCraft.items.ItemAgricraft;
+import com.InfinityRaider.AgriCraft.items.ItemNugget;
+import com.InfinityRaider.AgriCraft.reference.Data;
 
 
 public abstract class OreDictHelper {

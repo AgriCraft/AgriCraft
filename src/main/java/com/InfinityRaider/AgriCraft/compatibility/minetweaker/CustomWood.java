@@ -1,9 +1,10 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.Recipes;
-import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
@@ -17,10 +18,9 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.init.Recipes;
+import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 
 @ZenClass("mods.agricraft.CustomWood")
 public class CustomWood {

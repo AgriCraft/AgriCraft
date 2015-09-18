@@ -1,13 +1,14 @@
 package com.InfinityRaider.AgriCraft.compatibility.psychedelicraft;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import net.minecraft.item.ItemSeeds;
+
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import net.minecraft.item.ItemSeeds;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 public final class PsychedelicraftHelper extends ModHelper {
     protected void initPlants() {

@@ -1,14 +1,16 @@
 package com.InfinityRaider.AgriCraft.compatibility.weeeflowers;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
-import com.pam.weeeflowers.BlockPamFlowerCrop;
-import com.pam.weeeflowers.weeeflowers;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+import com.pam.weeeflowers.BlockPamFlowerCrop;
+import com.pam.weeeflowers.weeeflowers;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CropPlantWeeeFlower extends CropPlantGeneric {
     public CropPlantWeeeFlower(ItemSeeds seed) {

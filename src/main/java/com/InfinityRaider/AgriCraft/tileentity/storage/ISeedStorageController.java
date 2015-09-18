@@ -1,10 +1,10 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public interface ISeedStorageController {
     /**

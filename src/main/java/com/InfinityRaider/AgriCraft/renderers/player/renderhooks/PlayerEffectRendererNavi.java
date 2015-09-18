@@ -1,19 +1,22 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
-import com.InfinityRaider.AgriCraft.renderers.particles.DustFX;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
-import java.util.ArrayList;
+import com.InfinityRaider.AgriCraft.renderers.particles.DustFX;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class PlayerEffectRendererNavi extends PlayerEffectRenderer {

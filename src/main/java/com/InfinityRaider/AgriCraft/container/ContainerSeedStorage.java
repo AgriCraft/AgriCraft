@@ -1,14 +1,15 @@
 package com.InfinityRaider.AgriCraft.container;
 
-import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
-import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
+import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 
 public class ContainerSeedStorage extends ContainerSeedStorageBase {
     private static final int invOffsetX = 6;

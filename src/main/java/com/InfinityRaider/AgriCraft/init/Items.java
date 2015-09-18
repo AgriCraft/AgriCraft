@@ -1,7 +1,12 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.*;
+import com.InfinityRaider.AgriCraft.items.ItemCrop;
+import com.InfinityRaider.AgriCraft.items.ItemDebugger;
+import com.InfinityRaider.AgriCraft.items.ItemHandRake;
+import com.InfinityRaider.AgriCraft.items.ItemJournal;
+import com.InfinityRaider.AgriCraft.items.ItemMagnifyingGlass;
+import com.InfinityRaider.AgriCraft.items.ItemTrowel;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 
 public class Items {

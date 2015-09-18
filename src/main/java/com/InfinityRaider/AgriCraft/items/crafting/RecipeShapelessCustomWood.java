@@ -1,16 +1,16 @@
 package com.InfinityRaider.AgriCraft.items.crafting;
 
 
-import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 
 public class RecipeShapelessCustomWood extends ShapelessRecipes {
 

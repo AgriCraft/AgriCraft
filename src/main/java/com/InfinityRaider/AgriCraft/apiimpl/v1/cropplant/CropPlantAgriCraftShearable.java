@@ -1,13 +1,14 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
     private Item item;

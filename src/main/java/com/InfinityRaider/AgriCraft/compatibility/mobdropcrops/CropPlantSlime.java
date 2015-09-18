@@ -1,10 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility.mobdropcrops;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.pam.mobdropcrops.mobdropcrops;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemSeeds;
@@ -12,7 +9,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
-import java.util.ArrayList;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.pam.mobdropcrops.mobdropcrops;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CropPlantSlime extends CropPlantGeneric {
     public CropPlantSlime() {

@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-
 import java.util.List;
+
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 public class SpreadStrategy extends BaseStrategy {
 

@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.waila;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockAgriCraft;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
+import java.util.List;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -12,7 +11,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import java.util.List;
+import com.InfinityRaider.AgriCraft.blocks.BlockAgriCraft;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
 
 public class AgriCraftDataProvider implements IWailaDataProvider {
 

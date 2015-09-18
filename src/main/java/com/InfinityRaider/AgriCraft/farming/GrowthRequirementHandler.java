@@ -1,12 +1,11 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import com.InfinityRaider.AgriCraft.api.v1.*;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -15,7 +14,17 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.*;
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.ISoilContainer;
+import com.InfinityRaider.AgriCraft.api.v1.ItemWithMeta;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.utility.IOHelper;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
 
 /**
  * Holds all the default soils and soil.

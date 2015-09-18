@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
+import net.minecraft.item.ItemSeeds;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.ItemSeeds;
 
 public class CropPlantOreDict extends CropPlantGeneric {
     public CropPlantOreDict(ItemSeeds seed) {

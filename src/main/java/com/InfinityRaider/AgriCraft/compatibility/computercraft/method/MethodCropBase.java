@@ -1,15 +1,16 @@
 package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+import java.util.ArrayList;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.ArrayList;
+import com.InfinityRaider.AgriCraft.items.ItemJournal;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 
 public abstract class MethodCropBase extends MethodBase {
     private final String name;

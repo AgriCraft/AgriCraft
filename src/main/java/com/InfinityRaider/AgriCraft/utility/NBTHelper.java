@@ -1,11 +1,12 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import com.InfinityRaider.AgriCraft.reference.Names;
 
 public abstract class NBTHelper {
     public static NBTTagCompound getMaterialTag(ItemStack stack) {
