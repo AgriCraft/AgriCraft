@@ -1,5 +1,11 @@
 package com.InfinityRaider.AgriCraft.init;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
@@ -8,11 +14,6 @@ import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-
-import java.util.ArrayList;
 
 public class ResourceCrops {
     //Resource crops

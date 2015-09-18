@@ -1,8 +1,9 @@
 package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 public class MethodGetCurrentSoil extends MethodCropBase {
     public MethodGetCurrentSoil() {

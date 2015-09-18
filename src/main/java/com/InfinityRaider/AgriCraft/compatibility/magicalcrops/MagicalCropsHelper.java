@@ -1,13 +1,12 @@
 package com.InfinityRaider.AgriCraft.compatibility.magicalcrops;
 
-import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import cpw.mods.fml.common.Mod;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -15,12 +14,15 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
+import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+
+import cpw.mods.fml.common.Mod;
 
 public final class MagicalCropsHelper extends ModHelper {
     private boolean newVersion;

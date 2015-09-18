@@ -1,10 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
-import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -13,7 +10,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
-import java.util.List;
+import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
+import com.InfinityRaider.AgriCraft.reference.Names;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class represents the root tile entity for all AgriCraft custom wood blocks.

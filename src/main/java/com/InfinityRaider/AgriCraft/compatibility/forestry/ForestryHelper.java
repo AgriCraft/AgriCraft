@@ -1,5 +1,9 @@
 package com.InfinityRaider.AgriCraft.compatibility.forestry;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
+
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
@@ -12,10 +16,8 @@ import com.InfinityRaider.AgriCraft.init.CustomCrops;
 import com.InfinityRaider.AgriCraft.init.ResourceCrops;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
+
 import forestry.api.recipes.RecipeManagers;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidRegistry;
 
 public class ForestryHelper extends ModHelper {
     @Override

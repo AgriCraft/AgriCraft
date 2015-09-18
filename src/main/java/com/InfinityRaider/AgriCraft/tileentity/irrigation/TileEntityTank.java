@@ -1,5 +1,19 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
+import java.util.List;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncFluidLevel;
@@ -10,15 +24,6 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.*;
-
-import java.util.List;
 
 public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler, IIrrigationComponent, IDebuggable {
 

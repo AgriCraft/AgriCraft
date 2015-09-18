@@ -1,17 +1,5 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import codechicken.multipart.BlockMultipart;
-import codechicken.multipart.TMultiPart;
-import codechicken.multipart.TileMultipart;
-import codechicken.multipart.minecraft.LeverPart;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.client.Minecraft;
@@ -23,7 +11,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
+
+import codechicken.multipart.BlockMultipart;
+import codechicken.multipart.TMultiPart;
+import codechicken.multipart.TileMultipart;
+import codechicken.multipart.minecraft.LeverPart;
+
+import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
+import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderValve extends RenderChannel {
@@ -78,6 +83,9 @@ public class RenderValve extends RenderChannel {
         GL11.glEnable(GL11.GL_LIGHTING);
     }
 
+    /**
+     * TODO: Use rotation to eliminate duplicate code.
+     */
     @Override
     protected boolean doWorldRender(Tessellator tessellator2, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
         Tessellator tessellator1 = Tessellator.instance;
@@ -101,10 +109,10 @@ public class RenderValve extends RenderChannel {
                 if ((!this.shouldBehaveAsTESR()) && (valve.getDiscreteScaledFluidLevel() > 0)) {
                     this.drawWater(valve, tessellator2);
                 }
-                boolean xPos = valve.hasNeighbour('x', 1);
-                boolean xNeg = valve.hasNeighbour('x', -1);
-                boolean zPos = valve.hasNeighbour('z', 1);
-                boolean zNeg = valve.hasNeighbour('z', -1);
+                boolean xPos = valve.hasNeighbour(ForgeDirection.EAST); //East
+                boolean xNeg = valve.hasNeighbour(ForgeDirection.WEST); //West
+                boolean zPos = valve.hasNeighbour(ForgeDirection.SOUTH); //South
+                boolean zNeg = valve.hasNeighbour(ForgeDirection.NORTH); //North
 
                 //render the iron valves
                 renderer.setOverrideBlockTexture(Blocks.iron_block.getIcon(0, 0));
@@ -227,54 +235,48 @@ public class RenderValve extends RenderChannel {
         return true;
     }
 
-    @Override
-    protected void renderSide(TileEntityChannel channel, Tessellator tessellator, char axis, int direction) {
-        boolean x = axis=='x';
-        Block neighbour = channel.getWorldObj()==null?null:channel.getWorldObj().getBlock(channel.xCoord+(x?direction:0), channel.yCoord, channel.zCoord+(x?0:direction));
-        if(neighbour!=null) {
-            int cm = channel.colorMultiplier();
-            if (neighbour instanceof BlockLever && RenderHelper.isLeverFacingBlock(channel.getWorldObj().getBlockMetadata(channel.xCoord + (x ? direction : 0), channel.yCoord, channel.zCoord + (x ? 0 : direction)), axis, direction)) {
-                IIcon icon = channel.getIcon();
-                if (x) {
-                    drawScaledPrism(tessellator, direction > 0 ? 12 : 0, 4, 5, direction > 0 ? 16 : 4, 12, 11, icon, cm);
-                } else {
-                    drawScaledPrism(tessellator, 5, 4, direction > 0 ? 12 : 0, 11, 12, direction > 0 ? 16 : 4, icon, cm);
-                }
-            } else if (Loader.isModLoaded(Names.Mods.mcMultipart) && (neighbour instanceof BlockMultipart)) {
-                TileMultipart tile = BlockMultipart.getTile(channel.getWorldObj(), channel.xCoord + (x ? direction : 0), channel.yCoord, channel.zCoord + (x ? 0 : direction));
-                for (TMultiPart multiPart : tile.jPartList()) {
-                    if (multiPart instanceof LeverPart) {
-                        LeverPart leverPart = (LeverPart) multiPart;
-                        if (RenderHelper.isLeverFacingBlock(leverPart.getMetadata(), axis, direction)) {
-                            IIcon icon = channel.getIcon();
-                            if (x) {
-                                drawScaledPrism(tessellator, direction > 0 ? 12 : 0, 4, 5, direction > 0 ? 16 : 4, 12, 11, icon, cm);
-                            } else {
-                                drawScaledPrism(tessellator, 5, 4, direction > 0 ? 12 : 0, 11, 12, direction > 0 ? 16 : 4, icon, cm);
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        super.renderSide(channel, tessellator, axis, direction);
-    }
+	@Override
+	protected void renderSide(TileEntityChannel channel, Tessellator tessellator, ForgeDirection dir) {
+		Block neighbour;
+		if (channel.getWorldObj() == null) {
+			neighbour = null;
+		} else {
+			neighbour = channel.getWorldObj().getBlock(channel.xCoord + dir.offsetX, channel.yCoord, channel.zCoord + dir.offsetZ);
+		}
+		if (neighbour != null) {
+			int cm = channel.colorMultiplier();
+			if (neighbour instanceof BlockLever && RenderHelper.isLeverFacingBlock(channel.getWorldObj().getBlockMetadata(channel.xCoord + dir.offsetX, channel.yCoord, channel.zCoord + dir.offsetZ), dir)) {
+				IIcon icon = channel.getIcon();
+				drawScaledPrism(tessellator, 5, 4, 0, 11, 12, 4, icon, cm, dir);
+			} else if (Loader.isModLoaded(Names.Mods.mcMultipart) && (neighbour instanceof BlockMultipart)) {
+				TileMultipart tile = BlockMultipart.getTile(channel.getWorldObj(), channel.xCoord + dir.offsetX, channel.yCoord, channel.zCoord + dir.offsetZ);
+				for (TMultiPart multiPart : tile.jPartList()) {
+					if (multiPart instanceof LeverPart) {
+						LeverPart leverPart = (LeverPart) multiPart;
+						if (RenderHelper.isLeverFacingBlock(leverPart.getMetadata(), dir)) {
+							IIcon icon = channel.getIcon();
+							drawScaledPrism(tessellator, 5, 4, 0, 11, 12, 4, icon, cm, dir);
+							break;
+						}
+					}
+				}
+			}
+		}
+		super.renderSide(channel, tessellator, dir);
+	}
 
-    @Override
-    protected void connectWater(TileEntityChannel channel, Tessellator tessellator, char axis, int direction, float y, IIcon icon) {
-        TileEntityValve valve = (TileEntityValve) channel;
-        if(axis=='x' || axis=='z') {
-            //checks if there is a neighbouring block that this block can connect to
-            if(channel.hasNeighbour(axis, direction)) {
-                if (valve.isPowered()) {
-                    boolean x = axis == 'x';
-                    float y2 = valve.getDiscreteScaledFluidHeight();
-                    this.drawWaterEdge(tessellator, x, direction, y2, y2, icon);
-                } else {
-                    super.connectWater(channel, tessellator, axis, direction, y, icon);
-                }
-            }
-        }
-    }
+	@Override
+	protected void connectWater(TileEntityChannel channel, Tessellator tessellator, float y, IIcon icon, ForgeDirection dir) {
+		TileEntityValve valve = (TileEntityValve) channel;
+		// checks if there is a neighboring block that this block can connect to
+		if (channel.hasNeighbour(dir)) {
+			if (valve.isPowered()) {
+				float y2 = valve.getDiscreteScaledFluidHeight();
+				this.drawWaterEdge(tessellator, y2, y2, icon, dir);
+			} else {
+				super.connectWater(channel, tessellator, y, icon, dir);
+			}
+		}
+
+	}
 }

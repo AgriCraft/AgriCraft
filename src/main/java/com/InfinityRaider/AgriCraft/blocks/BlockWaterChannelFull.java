@@ -1,17 +1,19 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannelFull;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannelFull;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
-import java.util.List;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannelFull;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannelFull;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockWaterChannelFull extends BlockWaterChannel {
     public BlockWaterChannelFull() {

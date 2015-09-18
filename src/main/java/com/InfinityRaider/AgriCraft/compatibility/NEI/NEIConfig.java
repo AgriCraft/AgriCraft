@@ -1,7 +1,13 @@
 package com.InfinityRaider.AgriCraft.compatibility.NEI;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
+
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
@@ -10,15 +16,14 @@ import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.*;
+import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.Crops;
+import com.InfinityRaider.AgriCraft.init.CustomCrops;
+import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.init.ResourceCrops;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 public class NEIConfig implements IConfigureNEI {
     @Override

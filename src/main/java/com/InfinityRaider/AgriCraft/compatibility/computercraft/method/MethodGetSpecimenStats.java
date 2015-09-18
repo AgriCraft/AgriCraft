@@ -1,12 +1,13 @@
 package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
+import java.util.ArrayList;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
+import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 
 public class MethodGetSpecimenStats extends MethodBase {
     @Override

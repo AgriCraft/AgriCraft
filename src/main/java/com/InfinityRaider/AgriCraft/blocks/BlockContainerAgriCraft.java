@@ -1,10 +1,5 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -14,6 +9,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
  * The base class for all AgriCraft container blocks.

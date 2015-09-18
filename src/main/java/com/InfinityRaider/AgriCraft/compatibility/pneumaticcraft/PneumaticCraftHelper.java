@@ -1,16 +1,17 @@
 package com.InfinityRaider.AgriCraft.compatibility.pneumaticcraft;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class PneumaticCraftHelper extends ModHelper {
     @Override

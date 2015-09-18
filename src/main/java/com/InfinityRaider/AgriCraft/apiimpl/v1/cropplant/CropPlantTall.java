@@ -1,12 +1,14 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
-import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Basic abstract implementation for crops that are 2 blocks tall

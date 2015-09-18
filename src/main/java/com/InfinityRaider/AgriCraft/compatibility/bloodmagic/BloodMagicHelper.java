@@ -1,10 +1,10 @@
 package com.InfinityRaider.AgriCraft.compatibility.bloodmagic;
 
+import java.lang.reflect.Method;
+
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-
-import java.lang.reflect.Method;
 
 public class BloodMagicHelper extends ModHelper {
     @Override

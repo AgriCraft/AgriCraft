@@ -1,13 +1,9 @@
 package com.InfinityRaider.AgriCraft.compatibility.pneumaticcraft;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -19,9 +15,15 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Random;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CropPlantPneumaticCraft extends CropPlant {
     private int meta;

@@ -1,10 +1,11 @@
 package com.InfinityRaider.AgriCraft.reference;
 
-import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 
 public class Data {
     //give data in this order: {String name, Item fruit, int fuitMeta, Block soil, Block base, int baseMeta, int tier, int renderType}

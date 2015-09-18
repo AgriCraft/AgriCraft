@@ -2,6 +2,11 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
@@ -9,11 +14,6 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISidedInventory {
 	

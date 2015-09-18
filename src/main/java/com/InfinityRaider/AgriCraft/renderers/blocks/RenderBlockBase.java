@@ -1,14 +1,7 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -20,9 +13,21 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
 
-import java.util.HashMap;
+import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
+import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockBase extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler, IItemRenderer {
@@ -166,35 +171,47 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         if(!tileEntityAgricraft.isRotatable()) {
             return;
         }
-        float angle;
-        switch(tileEntityAgricraft.getOrientation()) {
-            case SOUTH: angle = 180; break;
-            case WEST: angle = 90; break;
-            case NORTH: angle = 0; break;
-            case EAST: angle = 270; break;
-            default: return;
-        }
-        float dx = angle%270==0?0:-1;
-        float dz = angle>90?-1:0;
-        if(tessellator instanceof TessellatorV2) {
-            TessellatorV2 tessellatorV2 = (TessellatorV2) tessellator;
-            if(inverse) {
-                tessellatorV2.addTranslation(-dx , 0, -dz);
-                tessellatorV2.addRotation(-angle, 0, 1, 0);
-            } else {
-                tessellatorV2.addRotation(angle, 0, 1, 0);
-                tessellatorV2.addTranslation(dx, 0, dz);
-            }
-        } else {
-            if (inverse) {
-                GL11.glTranslatef(-dx, 0, -dz);
-                GL11.glRotatef(-angle, 0, 1, 0);
-            } else {
-                GL11.glRotatef(angle, 0, 1, 0);
-                GL11.glTranslatef(dx, 0, dz);
-            }
-        }
+        rotateMatrix(tileEntityAgricraft.getOrientation(), tessellator, inverse);
     }
+    
+	protected void rotateMatrix(ForgeDirection dir, Tessellator tessellator, boolean inverse) {
+		float angle;
+		switch (dir) {
+			default:
+			case NORTH:
+				angle = 0;
+				break;
+			case WEST:
+				angle = 90;
+				break;
+			case SOUTH:
+				angle = 180;
+				break;
+			case EAST:
+				angle = 270;
+				break;
+		}
+		float dx = angle % 270 == 0 ? 0 : -1;
+		float dz = angle > 90 ? -1 : 0;
+		if (tessellator instanceof TessellatorV2) {
+			TessellatorV2 tessellatorV2 = (TessellatorV2) tessellator;
+			if (inverse) {
+				tessellatorV2.addTranslation(-dx, 0, -dz);
+				tessellatorV2.addRotation(-angle, 0, 1, 0);
+			} else {
+				tessellatorV2.addRotation(angle, 0, 1, 0);
+				tessellatorV2.addTranslation(dx, 0, dz);
+			}
+		} else {
+			if (inverse) {
+				GL11.glTranslatef(-dx, 0, -dz);
+				GL11.glRotatef(-angle, 0, 1, 0);
+			} else {
+				GL11.glRotatef(angle, 0, 1, 0);
+				GL11.glTranslatef(dx, 0, dz);
+			}
+		}
+	}
 
     //adds a vertex to the tessellator scaled with 1/16th of a block
     protected void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v) {
@@ -279,13 +296,32 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, icon, maxX/16.0F, colorMultiplier);
 
     }
+    
+    /**
+     * Draws a prism.
+     * <p>
+     * The prism coordinates range from 0 to {@link Constants#WHOLE}.
+     * </p><p>
+     * The prism is relative to the bottom left corner of the block.
+     * </p>
+     * @param tessellator
+     * @param minX
+     * @param minY
+     * @param minZ
+     * @param maxX
+     * @param maxY
+     * @param maxZ
+     * @param icon
+     * @param colorMultiplier
+     * @param direction
+     */
+    protected void drawScaledPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier, ForgeDirection direction) {
+        float adj[] = RenderHelper.rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
+        drawScaledPrism(tessellator, adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], icon, colorMultiplier);
+    }
 
     protected void drawScaledFaceFrontXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z, int colorMultiplier) {
         //z positive
-        float r = 0.8F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float g = 0.8F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float b = 0.8F * ((float)(colorMultiplier & 255) / 255.0F);
-        tessellator.setColorOpaque_F(r, g, b);
         z = z*16.0F;
         float minV = 16-maxY;
         float maxV = 16-minY;
@@ -298,10 +334,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
     protected void drawScaledFaceFrontXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y, int colorMultiplier) {
         //y positive
-        float r = ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float g = ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float b = ((float)(colorMultiplier & 255) / 255.0F);
-        tessellator.setColorOpaque_F(r, g, b);
         y = y*16.0F;
         //front
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ, icon);
@@ -312,10 +344,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
     protected void drawScaledFaceFrontYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x, int colorMultiplier) {
         //x positive
-        float r = 0.6F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float g = 0.6F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float b = 0.6F * ((float)(colorMultiplier & 255) / 255.0F);
-        tessellator.setColorOpaque_F(r, g, b);
         x = x*16.0F;
         float minV = 16-maxY;
         float maxV = 16-minY;
@@ -328,10 +356,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
     protected void drawScaledFaceBackXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z, int colorMultiplier) {
         //z negative
-        float r = 0.8F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float g = 0.8F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float b = 0.8F * ((float)(colorMultiplier & 255) / 255.0F);
-        tessellator.setColorOpaque_F(r, g, b);
         z = z*16.0F;
         float minV = 16 - maxY;
         float maxV = 16 - minY;
@@ -343,11 +367,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     }
 
     protected void drawScaledFaceBackXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y, int colorMultiplier) {
-        float f10 = 0.5F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float f13 = 0.5F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float f16 = 0.5F * ((float)(colorMultiplier & 255) / 255.0F);
         //y negative
-        tessellator.setColorOpaque_F(f10, f13, f16);
         y = y*16.0F;
         //back
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ, icon);
@@ -358,10 +378,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
     protected void drawScaledFaceBackYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x, int colorMultiplier) {
         //x negative
-        float r = 0.6F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float g = 0.6F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float b = 0.6F * ((float)(colorMultiplier & 255) / 255.0F);
-        tessellator.setColorOpaque_F(r, g, b);
         x = x*16.0F;
         float minV = 16 - maxY;
         float maxV = 16 - minY;
@@ -370,5 +386,17 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         addScaledVertexWithUV(tessellator, x, maxY, minZ, minZ, minV, icon);
         addScaledVertexWithUV(tessellator, x, minY, minZ, minZ, maxV, icon);
         addScaledVertexWithUV(tessellator, x, minY, maxZ, maxZ, maxV, icon);
+    }
+    
+    protected void drawPlane(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, ForgeDirection direction) {
+    	float[] rot = RenderHelper.rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
+        drawPlane(tessellator, rot[0], rot[1], rot[2], rot[3], rot[4], rot[5], icon);
+    }
+    
+    private void drawPlane(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon) {
+    	addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, maxZ, icon);
+        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, minZ, icon);
+        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, minZ, icon);
+        addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, maxZ, icon);
     }
 }

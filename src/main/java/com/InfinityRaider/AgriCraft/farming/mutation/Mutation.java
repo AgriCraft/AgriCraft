@@ -1,10 +1,10 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
-import com.InfinityRaider.AgriCraft.api.v1.IMutation;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 
 public class Mutation implements IMutation {
     private ItemStack result;

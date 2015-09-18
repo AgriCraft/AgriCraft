@@ -1,5 +1,12 @@
 package com.InfinityRaider.AgriCraft.compatibility.botania;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
@@ -10,12 +17,6 @@ import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import java.util.ArrayList;
 
 public class BotaniaHelper extends ModHelper {
     public static ArrayList<BlockModPlant> botaniaCrops = new ArrayList<BlockModPlant>();

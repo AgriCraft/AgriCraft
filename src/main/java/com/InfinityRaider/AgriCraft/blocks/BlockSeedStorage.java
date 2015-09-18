@@ -1,5 +1,13 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import java.util.ArrayList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -10,13 +18,6 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import java.util.ArrayList;
 
 public class BlockSeedStorage extends BlockCustomWood {
 

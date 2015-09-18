@@ -1,10 +1,11 @@
 package com.InfinityRaider.AgriCraft.init;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.farming.CropProduce;
 
 public class CropProducts {
     //Add special cases for plants here

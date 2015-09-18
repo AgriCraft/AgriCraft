@@ -1,6 +1,19 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockCrops;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
+
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
@@ -16,20 +29,9 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.EnumPlantType;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     private GrowthRequirement growthRequirement;

@@ -1,13 +1,15 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.handler.PlayerInteractEventHandler;
-import com.InfinityRaider.AgriCraft.handler.SyncMutationsHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.handler.PlayerInteractEventHandler;
+import com.InfinityRaider.AgriCraft.handler.SyncMutationsHandler;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public abstract class CommonProxy implements IProxy {
     @Override

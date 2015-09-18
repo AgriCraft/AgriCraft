@@ -2,16 +2,6 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import java.util.List;
 
-import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderValve;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +11,16 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.blocks.RenderValve;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class BlockChannelValve extends BlockWaterChannel {

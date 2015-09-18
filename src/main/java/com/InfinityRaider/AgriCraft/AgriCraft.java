@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft;
 
+import java.util.ArrayList;
+
 import com.InfinityRaider.AgriCraft.apiimpl.APISelector;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -7,20 +9,32 @@ import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
-import com.InfinityRaider.AgriCraft.init.*;
+import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.CropProducts;
+import com.InfinityRaider.AgriCraft.init.Crops;
+import com.InfinityRaider.AgriCraft.init.CustomCrops;
+import com.InfinityRaider.AgriCraft.init.Entities;
+import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.init.Recipes;
+import com.InfinityRaider.AgriCraft.init.ResourceCrops;
+import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderLogger;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-
-import java.util.ArrayList;
 
 /**
  * <p>

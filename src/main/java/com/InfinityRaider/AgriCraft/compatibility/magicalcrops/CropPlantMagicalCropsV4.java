@@ -1,14 +1,16 @@
 package com.InfinityRaider.AgriCraft.compatibility.magicalcrops;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CropPlantMagicalCropsV4 extends CropPlantGeneric {
     private int meta = 0;

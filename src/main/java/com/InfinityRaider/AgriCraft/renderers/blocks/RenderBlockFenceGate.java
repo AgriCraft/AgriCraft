@@ -1,7 +1,5 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.init.Blocks;
-import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFenceGate;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -11,7 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+
 import org.lwjgl.opengl.GL11;
+
+import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFenceGate;
 
 public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceGate> {
     public RenderBlockFenceGate() {

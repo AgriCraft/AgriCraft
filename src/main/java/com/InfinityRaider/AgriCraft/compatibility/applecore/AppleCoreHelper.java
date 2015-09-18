@@ -1,15 +1,17 @@
 package com.InfinityRaider.AgriCraft.compatibility.applecore;
 
 
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.eventhandler.Event;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import squeek.applecore.api.AppleCoreAPI;
 
-import java.util.Random;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.eventhandler.Event;
 
 public final class AppleCoreHelper extends ModHelper {
     public static final String MODID = "AppleCore";

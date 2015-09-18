@@ -1,5 +1,10 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
@@ -7,10 +12,6 @@ import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 
 /**
  * The base class for all AgriCraft blocks.

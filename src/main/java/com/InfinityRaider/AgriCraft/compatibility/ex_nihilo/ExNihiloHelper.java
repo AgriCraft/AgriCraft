@@ -1,11 +1,13 @@
 package com.InfinityRaider.AgriCraft.compatibility.ex_nihilo;
 
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.reference.Names;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public final class ExNihiloHelper extends ModHelper {
     @Override

@@ -1,12 +1,5 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.init.Blocks;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.renderers.models.ModelSprinkler;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -16,7 +9,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
+
 import org.lwjgl.opengl.GL11;
+
+import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.renderers.models.ModelSprinkler;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderSprinkler extends RenderBlockBase {

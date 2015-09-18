@@ -1,5 +1,13 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
+import java.util.HashMap;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
 import com.InfinityRaider.AgriCraft.compatibility.adventofascension.AdventOfAscensionHelper;
@@ -35,14 +43,8 @@ import com.InfinityRaider.AgriCraft.compatibility.weeeflowers.WeeeFlowersHelper;
 import com.InfinityRaider.AgriCraft.compatibility.witchery.WitcheryHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import cpw.mods.fml.common.Loader;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
-import java.util.HashMap;
-import java.util.List;
+import cpw.mods.fml.common.Loader;
 
 public abstract class ModHelper {
     /** HashMap holding all ModHelpers, with the respective mod id as key */

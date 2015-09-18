@@ -1,18 +1,20 @@
 package com.InfinityRaider.AgriCraft.handler;
 
+import java.io.File;
+
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-
-import java.io.File;
 
 public class ConfigurationHandler {
 

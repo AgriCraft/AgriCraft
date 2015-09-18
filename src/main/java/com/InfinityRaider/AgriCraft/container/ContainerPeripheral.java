@@ -1,7 +1,8 @@
 package com.InfinityRaider.AgriCraft.container;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 import net.minecraft.entity.player.InventoryPlayer;
+
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 
 public class ContainerPeripheral extends ContainerSeedAnalyzer {
     private static final int xOffset = 5;

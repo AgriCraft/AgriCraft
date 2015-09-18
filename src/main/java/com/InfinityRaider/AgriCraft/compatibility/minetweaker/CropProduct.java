@@ -1,10 +1,5 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.farming.CropProduce;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
@@ -15,6 +10,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.farming.CropProduce;
+import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 
 @ZenClass("mods.agricraft.CropProduct")
 public class CropProduct {

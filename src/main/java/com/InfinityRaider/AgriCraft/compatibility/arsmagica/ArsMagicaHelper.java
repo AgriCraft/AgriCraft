@@ -1,5 +1,12 @@
 package com.InfinityRaider.AgriCraft.compatibility.arsmagica;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
@@ -8,12 +15,6 @@ import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import java.util.ArrayList;
 
 public class ArsMagicaHelper extends ModHelper {
     public static ArrayList<BlockModPlant> arsMagicaCrops = new ArrayList<BlockModPlant>();

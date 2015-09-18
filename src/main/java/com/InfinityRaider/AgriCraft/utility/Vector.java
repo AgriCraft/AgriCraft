@@ -1,8 +1,9 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
+
+import com.InfinityRaider.AgriCraft.reference.Names;
 
 public class Vector {
     private double x;

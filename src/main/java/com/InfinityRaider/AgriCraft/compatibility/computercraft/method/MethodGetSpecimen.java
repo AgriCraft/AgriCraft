@@ -1,11 +1,12 @@
 package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
+import java.util.ArrayList;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
+import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 
 public class MethodGetSpecimen extends MethodBase {
     @Override

@@ -1,16 +1,17 @@
 package com.InfinityRaider.AgriCraft.compatibility.adventofascension;
 
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import net.minecraft.block.BlockCrops;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 
 public class AdventOfAscensionHelper extends ModHelper {
     @Override

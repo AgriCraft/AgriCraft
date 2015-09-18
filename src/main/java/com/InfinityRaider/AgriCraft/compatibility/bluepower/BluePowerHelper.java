@@ -1,14 +1,15 @@
 package com.InfinityRaider.AgriCraft.compatibility.bluepower;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemSeeds;
+import net.minecraftforge.oredict.OreDictionary;
+
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
-import net.minecraftforge.oredict.OreDictionary;
 
 public final class BluePowerHelper extends ModHelper {
     @Override

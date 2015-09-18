@@ -1,14 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.*;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
-import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.block.BlockCrops;
 import net.minecraft.init.Blocks;
@@ -19,8 +12,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAgriCraft;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantNetherWart;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantOreDict;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantStem;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantVanilla;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
+import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
 
 public class CropPlantHandler {
     private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, CropPlant>>();

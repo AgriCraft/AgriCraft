@@ -1,16 +1,18 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.IMethod;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.MethodException;
 import com.InfinityRaider.AgriCraft.reference.Names;
+
 import cpw.mods.fml.common.Optional;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import net.minecraft.nbt.NBTTagCompound;
 
 
 @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheral")

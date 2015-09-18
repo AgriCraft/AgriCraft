@@ -1,8 +1,9 @@
 package com.InfinityRaider.AgriCraft.entity;
 
-import com.InfinityRaider.AgriCraft.init.WorldGen;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.world.World;
+
+import com.InfinityRaider.AgriCraft.init.WorldGen;
 
 public class EntityVillagerFarmer extends EntityVillager {
     public EntityVillagerFarmer(World world) {

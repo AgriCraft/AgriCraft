@@ -1,10 +1,11 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 
 /**
  * Represents the result of a specific <code>INewSeedStrategy</code> containing

@@ -1,8 +1,9 @@
 package com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded;
 
+import powercrystals.minefactoryreloaded.api.FactoryRegistry;
+
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import powercrystals.minefactoryreloaded.api.FactoryRegistry;
 
 public class MFRHelper extends ModHelper {
     @Override

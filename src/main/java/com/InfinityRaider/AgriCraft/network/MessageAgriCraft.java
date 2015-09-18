@@ -1,16 +1,19 @@
 package com.InfinityRaider.AgriCraft.network;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
+
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 
-import java.util.Iterator;
-import java.util.List;
+import com.InfinityRaider.AgriCraft.AgriCraft;
+
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 
 public abstract class MessageAgriCraft implements IMessage {
     protected EntityPlayer getPlayerFromByteBuf(ByteBuf buf) {

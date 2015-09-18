@@ -1,7 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.adventofascension;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
 import net.minecraft.item.ItemSeeds;
+
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
 
 public class CropPlantAoA extends CropPlantGeneric {
     private final String name;

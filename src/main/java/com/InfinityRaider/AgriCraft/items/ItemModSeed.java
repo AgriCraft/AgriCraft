@@ -1,5 +1,12 @@
 package com.InfinityRaider.AgriCraft.items;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
@@ -7,15 +14,10 @@ import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSeeds;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 
 public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
     @SideOnly(Side.CLIENT)

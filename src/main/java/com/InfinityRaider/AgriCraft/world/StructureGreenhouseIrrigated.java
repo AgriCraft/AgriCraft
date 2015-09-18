@@ -1,11 +1,9 @@
 package com.InfinityRaider.AgriCraft.world;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.WorldGen;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -14,9 +12,12 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.init.WorldGen;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 public class StructureGreenhouseIrrigated extends StructureGreenhouse {
     //structure dimensions
     private static final int xSize = 17;

@@ -1,14 +1,16 @@
 package com.InfinityRaider.AgriCraft.gui.journal;
 
-import com.InfinityRaider.AgriCraft.gui.Component;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
-import java.util.ArrayList;
+import com.InfinityRaider.AgriCraft.gui.Component;
+import com.InfinityRaider.AgriCraft.reference.Reference;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class JournalPageIntroduction extends JournalPage {

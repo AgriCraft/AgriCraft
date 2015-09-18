@@ -1,13 +1,15 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
+
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 abstract class PlayerEffectRenderer {

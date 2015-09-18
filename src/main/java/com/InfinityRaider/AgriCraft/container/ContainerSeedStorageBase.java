@@ -1,13 +1,7 @@
 package com.InfinityRaider.AgriCraft.container;
 
-import com.InfinityRaider.AgriCraft.network.MessageContainerSeedStorage;
-import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
-import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
-import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageController;
-import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -15,7 +9,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import java.util.List;
+import com.InfinityRaider.AgriCraft.network.MessageContainerSeedStorage;
+import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
+import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
+import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageController;
+import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
     public ContainerSeedStorageBase(InventoryPlayer inventory, int xOffset, int yOffset) {

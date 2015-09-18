@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
@@ -10,6 +9,8 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 
 @ZenClass("mods.agricraft.SpreadChance")
 public class SpreadChance {

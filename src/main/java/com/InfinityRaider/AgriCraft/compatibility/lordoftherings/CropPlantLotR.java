@@ -1,16 +1,17 @@
 package com.InfinityRaider.AgriCraft.compatibility.lordoftherings;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.reference.Constants;
+import java.util.ArrayList;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Random;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 
 public class CropPlantLotR extends CropPlant {
     private final Item seed;

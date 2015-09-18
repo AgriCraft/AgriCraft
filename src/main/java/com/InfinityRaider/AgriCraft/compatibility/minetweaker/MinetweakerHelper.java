@@ -1,8 +1,9 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
+import minetweaker.MineTweakerAPI;
+
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import minetweaker.MineTweakerAPI;
 
 public class MinetweakerHelper extends ModHelper {
     @Override

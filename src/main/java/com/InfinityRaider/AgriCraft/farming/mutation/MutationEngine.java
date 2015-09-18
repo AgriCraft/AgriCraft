@@ -1,12 +1,12 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
+import java.util.Random;
+
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-
-import java.util.Random;
 
 /**
  * This class decides whether a plant is spreading or mutating and also

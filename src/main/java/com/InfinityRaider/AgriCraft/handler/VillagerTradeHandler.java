@@ -1,15 +1,17 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.init.WorldGen;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import cpw.mods.fml.common.registry.VillagerRegistry;
+import java.util.Random;
+
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 
-import java.util.Random;
+import com.InfinityRaider.AgriCraft.init.WorldGen;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+
+import cpw.mods.fml.common.registry.VillagerRegistry;
 
 public class VillagerTradeHandler implements VillagerRegistry.IVillageTradeHandler{
 

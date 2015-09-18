@@ -1,10 +1,7 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import cpw.mods.fml.common.registry.GameRegistry;
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -13,7 +10,12 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
+import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.Reference;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public abstract class RegisterHelper {
     public static void registerBlock(Block block,String name) {

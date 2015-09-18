@@ -1,14 +1,16 @@
 package com.InfinityRaider.AgriCraft.container;
 
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import com.InfinityRaider.AgriCraft.items.ItemJournal;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerSeedAnalyzer extends ContainerAgricraft {
     public TileEntitySeedAnalyzer seedAnalyzer;

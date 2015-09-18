@@ -1,5 +1,12 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
+import java.util.List;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncFluidLevel;
@@ -10,14 +17,6 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.List;
 
 public class TileEntityChannel extends TileEntityCustomWood implements IIrrigationComponent, IDebuggable{
     public static final int FORGE_DIRECTION_OFFSET = 2;
@@ -118,25 +117,27 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
         }
         ticksSinceNeighbourCheck = 0;
     }
-
-    /** Only used for rendering */
-    @SideOnly(Side.CLIENT)
-    public boolean hasNeighbour(char axis, int direction) {
-        if(this.worldObj==null) {
-            return false;
-        }
-        TileEntity tileEntityAt;
-        switch(axis) {
-            case 'x': tileEntityAt = this.worldObj.getTileEntity(this.xCoord+direction, this.yCoord, this.zCoord);break;
-            case 'z': tileEntityAt = this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord+direction);break;
-            default: return false;
-        }
-        return (tileEntityAt!=null) && (tileEntityAt instanceof IIrrigationComponent)  && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
-    }
     
     public boolean hasNeighbour(ForgeDirection direction) {
-        int ordinal = direction.ordinal() - FORGE_DIRECTION_OFFSET;
-        return ordinal>=0 & ordinal<neighbours.length && neighbours[ordinal]!=null;
+    	if (this.worldObj == null) {
+    		return false;
+    	}
+    	else if(direction.offsetY == 0 && direction.offsetX + direction.offsetZ != 0) {
+        	TileEntity tileEntityAt = this.worldObj.getTileEntity(this.xCoord + direction.offsetX, this.yCoord, this.zCoord + direction.offsetZ);
+        	return (tileEntityAt instanceof IIrrigationComponent) && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
+        }
+        return false;
+    }
+    
+    public IIrrigationComponent getNeighbor(ForgeDirection direction) {
+    	if (this.worldObj == null) {
+    		return null;
+    	}
+    	else if(direction.offsetY == 0 && direction.offsetX + direction.offsetZ != 0) {
+        	TileEntity tileEntityAt = this.worldObj.getTileEntity(this.xCoord + direction.offsetX, this.yCoord, this.zCoord + direction.offsetZ);
+        	return tileEntityAt instanceof IIrrigationComponent ? (IIrrigationComponent)tileEntityAt : null;
+        }
+        return null;
     }
 
     //updates the tile entity every tick

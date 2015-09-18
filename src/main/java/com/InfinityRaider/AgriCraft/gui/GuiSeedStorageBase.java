@@ -1,13 +1,9 @@
 package com.InfinityRaider.AgriCraft.gui;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
-import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -17,11 +13,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
+import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
+import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class GuiSeedStorageBase extends GuiContainer {
