@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.waila;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockAgriCraft;
-
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 

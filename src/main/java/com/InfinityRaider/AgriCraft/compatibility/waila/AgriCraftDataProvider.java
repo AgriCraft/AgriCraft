@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.compatibility.waila;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockAgriCraft;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
-
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;

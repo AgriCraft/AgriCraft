@@ -1,14 +1,11 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
-import java.util.List;
-
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.particles.LiquidSprayFX;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -19,6 +16,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
+
+import java.util.List;
 
 public class TileEntitySprinkler extends TileEntityAgricraft {
 

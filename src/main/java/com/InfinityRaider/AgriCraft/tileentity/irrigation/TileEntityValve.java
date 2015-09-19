@@ -4,7 +4,6 @@ package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 

@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.network;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.IIrrigationComponent;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;

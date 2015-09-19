@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFenceGate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFenceGate;
 import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
