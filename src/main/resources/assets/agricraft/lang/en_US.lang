@@ -223,12 +223,14 @@ agricraft_description.method.hasJournal=Returns if the analyzer has a journal
 agricraft_description.method.hasPlant=Returns if there is a plant on the crop sticks at the specified direction
 agricraft_description.method.hasWeeds=Returns if there are weeds on the crop at the specified direction
 agricraft_description.method.isAnalyzed=Returns if the crop at the specified direction is analyzed
-agricraft_description.method.isCrossCrop=Returns if the crop crop at the specified direction is a cross crop
-agricraft_description.method.isFertile=Returns if the crop crop at the specified direction is fertile and can grow
+agricraft_description.method.isCrossCrop=Returns if the crop at the specified direction is a cross crop
+agricraft_description.method.isFertile=Returns if the crop at the specified direction is fertile and can grow
 agricraft_description.method.isMature=Returns if the crop crop at the specified direction is mature
 agricraft_description.method.isSpecimenAnalyzed=Returns if the specimen in the analyzer is analyzed
 agricraft_description.method.needsBaseBlock=Returns if the crop crop at the specified direction needs a base block
 
+//misc
+agricraft_arg.direction=direction
 
 // nei GUI
 agricraft_nei.mutation.title=Crop Mutation
