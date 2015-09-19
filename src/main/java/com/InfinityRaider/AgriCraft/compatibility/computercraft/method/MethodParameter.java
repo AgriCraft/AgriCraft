@@ -12,10 +12,10 @@ public class MethodParameter {
     }
 
     public String getName() {
-        return name;
+        return StatCollector.translateToLocal("agricraft_arg."+name);
     }
 
     public String getDescription() {
-        return StatCollector.translateToLocal("agricraft_parameter."+getName());
+        return StatCollector.translateToLocal("agricraft_description.parameter."+name);
     }
 }
