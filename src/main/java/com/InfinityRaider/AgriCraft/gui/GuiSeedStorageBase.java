@@ -87,6 +87,12 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
         }
     }
 
+    @Override
+    public void initGui() {
+        super.initGui();
+        loadButtons();
+    }
+
     protected void loadButtons() {
         this.buttonList.clear();
         int buttonWidth = 60;
@@ -96,10 +102,8 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
         this.buttonList.add(new GuiButton(buttonIdStrength, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + 2 * (buttonHeight + 1), buttonWidth, buttonHeight, StatCollector.translateToLocal("agricraft_tooltip.strength")));
         this.buttonList.add(new GuiButton(buttonIdLeftEnd, this. guiLeft + sortButtonX, this.guiTop + sortButtonY + 3* (buttonHeight+1), -1+(buttonWidth)/4, buttonHeight, "<<"));
         this.buttonList.add(new GuiButton(buttonIdScrollLeft, this.guiLeft + sortButtonX + (buttonWidth)/4, this.guiTop + sortButtonY + 3* (buttonHeight+1), -1+(buttonWidth)/4, buttonHeight, "<"));
-        this.buttonList.add(new GuiButton(buttonIdScrollRight, this.guiLeft + sortButtonX + 1 + 2*(buttonWidth)/4, this.guiTop + sortButtonY + 3* (buttonHeight+1), -1 + (buttonWidth)/4, buttonHeight, ">"));
-        this.buttonList.add(new GuiButton(buttonIdRightEnd, this.guiLeft + sortButtonX + 1 + 3*(buttonWidth)/4, this.guiTop + sortButtonY + 3* (buttonHeight+1), -1 + (buttonWidth)/4, buttonHeight, ">>"));
-        this.initSetActiveSeedButtons();
-        this.initSeedSlots();
+        this.buttonList.add(new GuiButton(buttonIdScrollRight, this.guiLeft + sortButtonX + 1 + 2 * (buttonWidth) / 4, this.guiTop + sortButtonY + 3 * (buttonHeight + 1), -1 + (buttonWidth) / 4, buttonHeight, ">"));
+        this.buttonList.add(new GuiButton(buttonIdRightEnd, this.guiLeft + sortButtonX + 1 + 3 * (buttonWidth) / 4, this.guiTop + sortButtonY + 3 * (buttonHeight + 1), -1 + (buttonWidth) / 4, buttonHeight, ">>"));
     }
 
     private void initSetActiveSeedButtons() {
@@ -164,6 +168,13 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
             }
         }
         this.updateScreen();
+    }
+
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        this.initSetActiveSeedButtons();
+        this.initSeedSlots();
     }
 
     @Override

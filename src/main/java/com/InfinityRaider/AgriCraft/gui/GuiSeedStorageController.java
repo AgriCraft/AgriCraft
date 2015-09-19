@@ -32,7 +32,6 @@ public class GuiSeedStorageController extends GuiSeedStorageBase {
     //draw foreground
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
-        this.loadButtons();
         if(this.activeSeed!=null) {
             this.drawActiveEntries(x, y,  this.texture, 82, 35);
         }

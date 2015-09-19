@@ -34,7 +34,6 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(this.texture);
         drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-        this.loadButtons();
         this.buttonList.add(new GuiButton(buttonIdScrollRight+1, this.guiLeft + 211, this.guiTop + 105, 18, 18, "X"));
         if(this.activeSeed!=null) {
             this.drawActiveEntries(x, y, this.texture, 6, 35);
