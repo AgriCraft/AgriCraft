@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.gui.journal;
 import com.InfinityRaider.AgriCraft.gui.Component;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
+import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -140,7 +141,7 @@ public class GuiJournal extends GuiScreen {
             String text[] = IOHelper.getLinesArrayFromData(component.getComponent());
             GL11.glScalef(scale, scale, scale);
             for (String paragraph : text) {
-                String[] write = IOHelper.getLinesArrayFromData(this.splitInLines(paragraph, scale));
+                String[] write = IOHelper.getLinesArrayFromData(RenderHelper.splitInLines(this.fontRendererObj, paragraph, 95, scale));
                 for (int i = 0; i < write.length; i++) {
                     String line = write[i];
                     int xOffset = component.centered() ? -fontRendererObj.getStringWidth(line) / 2 : 0;
@@ -209,30 +210,6 @@ public class GuiJournal extends GuiScreen {
         drawHoveringText(toolTip, x, y, fontRendererObj);
     }
 
-    //utility method: splits the string in different lines so it will fit on the page
-    private String splitInLines(String input, float scale) {
-        float maxWidth = 95 / scale;
-        String notProcessed = input;
-        String output = "";
-        while (this.fontRendererObj.getStringWidth(notProcessed) > maxWidth) {
-            int index = 0;
-            if (notProcessed != null && !notProcessed.equals("")) {
-                //find the first index at which the string exceeds the size limit
-                while (notProcessed.length() - 1 > index && this.fontRendererObj.getStringWidth(notProcessed.substring(0, index)) < maxWidth) {
-                    index = (index + 1) < notProcessed.length() ? index + 1 : index;
-                }
-                //go back to the first space to cut the string in two lines
-                while (index>0 && notProcessed.charAt(index) != ' ') {
-                    index--;
-                }
-                //update the data for the next iteration
-                output = output.equals("") ? output : output + '\n';
-                output = output + notProcessed.substring(0, index);
-                notProcessed = notProcessed.length() > index + 1 ? notProcessed.substring(index + 1) : notProcessed;
-            }
-        }
-        return output + '\n' + notProcessed;
-    }
 
     @Override
     public boolean doesGuiPauseGame() {

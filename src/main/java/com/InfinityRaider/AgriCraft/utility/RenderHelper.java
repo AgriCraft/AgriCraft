@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -79,5 +80,30 @@ public abstract class RenderHelper {
     public static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v, IIcon icon) {
         float unit = Constants.UNIT;
         tessellator.addVertexWithUV(x * unit, y * unit, z * unit, icon.getInterpolatedU(u), icon.getInterpolatedV(v));
+    }
+
+    //utility method: splits the string in different lines so it will fit on the page
+    public static String splitInLines(FontRenderer fontRendererObj, String input, float maxWidth, float scale) {
+        maxWidth = maxWidth / scale;
+        String notProcessed = input;
+        String output = "";
+        while (fontRendererObj.getStringWidth(notProcessed) > maxWidth) {
+            int index = 0;
+            if (notProcessed != null && !notProcessed.equals("")) {
+                //find the first index at which the string exceeds the size limit
+                while (notProcessed.length() - 1 > index && fontRendererObj.getStringWidth(notProcessed.substring(0, index)) < maxWidth) {
+                    index = (index + 1) < notProcessed.length() ? index + 1 : index;
+                }
+                //go back to the first space to cut the string in two lines
+                while (index>0 && notProcessed.charAt(index) != ' ') {
+                    index--;
+                }
+                //update the data for the next iteration
+                output = output.equals("") ? output : output + '\n';
+                output = output + notProcessed.substring(0, index);
+                notProcessed = notProcessed.length() > index + 1 ? notProcessed.substring(index + 1) : notProcessed;
+            }
+        }
+        return output + '\n' + notProcessed;
     }
 }
