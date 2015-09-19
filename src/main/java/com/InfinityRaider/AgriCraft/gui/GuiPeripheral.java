@@ -4,6 +4,8 @@ import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.IMethod;
 import com.InfinityRaider.AgriCraft.container.ContainerPeripheral;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
+import com.InfinityRaider.AgriCraft.utility.IOHelper;
+import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -22,6 +24,8 @@ import org.lwjgl.opengl.GL11;
 public class GuiPeripheral extends GuiContainer {
     public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiPeripheral.png");
 
+    public static final int WHITE = 4210752;
+
     private final TileEntityPeripheral peripheral;
     private final IMethod[] methods;
 
@@ -31,6 +35,7 @@ public class GuiPeripheral extends GuiContainer {
     private static final int BUTTON_ID_SCROLL_BOTTOM = 3;
     private static final int BUTTON_ID_SCROLL_TOP = 4;
 
+    private static final int BUTTON_METHOD_OFFSET = 5;
     private static final int BUTTON_AMOUNT = 10;
 
     private int scrollPosition = 0;
@@ -56,13 +61,12 @@ public class GuiPeripheral extends GuiContainer {
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
         String name = StatCollector.translateToLocal("agricraft_gui.peripheral");
-        int white = 4210752;        //the number for white
         //write name: x coordinate is in the middle, 6 down from the top, and setting color to white
         float scale = 0.8F;
         GL11.glScalef(scale, scale, scale);
-        this.fontRendererObj.drawString(name, (int) ((9 + this.xSize / 2 - this.fontRendererObj.getStringWidth(name) / 2) / scale), (int) (6 / scale), white);
+        this.fontRendererObj.drawString(name, (int) ((9 + this.xSize / 2 - this.fontRendererObj.getStringWidth(name) / 2) / scale), (int) (6 / scale), WHITE);
         GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
-        this.fontRendererObj.drawString(I18n.format("container.inventory"), 4, this.ySize - 94 + 2, white);
+        this.fontRendererObj.drawString(I18n.format("container.inventory"), 4, this.ySize - 94 + 2, WHITE);
     }
 
     @Override
@@ -72,13 +76,13 @@ public class GuiPeripheral extends GuiContainer {
         drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
         if(this.peripheral.getProgress() > 0) {
             int state = this.peripheral.getProgressScaled(40);
-            drawTexturedModalRect(this.guiLeft + 65, this.guiTop + 79, 0, this.ySize, state, 5);
+            drawTexturedModalRect(this.guiLeft + 65, this.guiTop + 78, 0, this.ySize+71, state, 6);
         }
         if(guideActive) {
             drawTexturedModalRect(this.guiLeft + guideOffset, this.guiTop, 172, 0, 83, this.ySize);
             drawScrollBar();
+            drawMethodHelp(getActiveMethod());
         }
-        drawMethodHelp();
     }
 
     protected void drawScrollBar() {
@@ -87,11 +91,11 @@ public class GuiPeripheral extends GuiContainer {
         int fullLength = slotWidth*methods.length;
         float unit = ((float) slotWidth)/((float) fullLength)*total;
         int offset = (int) (scrollPosition*unit);
-        int length = (int) (BUTTON_AMOUNT*unit)+1;
+        int length = (int) (BUTTON_AMOUNT*unit);
         int xOffset = this.guiLeft + 242;
         int yOffset = this.guiTop + 8;
         //top part
-        this.drawTexturedModalRect(xOffset, yOffset + offset, 0, 181, 5, 1);
+        this.drawTexturedModalRect(xOffset, yOffset + offset, 0, 253, 5, 1);
         //middle part
         float f = 0.00390625F;
         Tessellator tessellator = Tessellator.instance;
@@ -99,22 +103,37 @@ public class GuiPeripheral extends GuiContainer {
         int xMin = xOffset;
         int xMax = xOffset + 5;
         int yMin = yOffset + offset + 1;
-        int yMax = yOffset + length + offset + 6;
+        int yMax = yOffset + length + offset;
         float uMin = 0*f;
         float uMax = 5*f;
-        float vMin = 182*f;
-        float vMax = 182*f;
+        float vMin = 254*f;
+        float vMax = 254*f;
         tessellator.addVertexWithUV(xMin, yMax, this.zLevel, uMin, vMax);
         tessellator.addVertexWithUV(xMax, yMax, this.zLevel, uMax, vMax);
         tessellator.addVertexWithUV(xMax, yMin, this.zLevel, uMax, vMin);
         tessellator.addVertexWithUV(xMin, yMin, this.zLevel, uMin, vMin);
         tessellator.draw();
         //bottom part
-        this.drawTexturedModalRect(xOffset, yOffset + offset + 6 + length, 0, 183, 5, 1);
+        this.drawTexturedModalRect(xOffset, yOffset + offset + length, 0, 255, 5, 1);
     }
 
-    private void drawMethodHelp() {
-        //TODO: render information about the selected method
+    private void drawMethodHelp(IMethod method) {
+        if(method != null) {
+            drawTexturedModalRect(this.guiLeft, this.guiTop + this.ySize - 4, 0, this.ySize, 252, 70);
+            int height = fontRendererObj.FONT_HEIGHT;
+            this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_description.peripheralHelp") + ": " + method.signature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
+            float scale = 0.9F;
+            GL11.glScalef(scale, scale, scale);
+            String[] write = IOHelper.getLinesArrayFromData(RenderHelper.splitInLines(this.fontRendererObj, method.getDescription(), 230, scale));
+            int x = 4+this.guiLeft+7;
+            int y = this.guiTop+175+height;
+            for (int i = 0; i < write.length; i++) {
+                String line = write[i];
+                int yOffset = i * height;
+                this.fontRendererObj.drawString(line, (int) (x / scale), (int) (y / scale) + yOffset, WHITE);    //1644054 means black
+            }
+            GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
+        }
     }
 
     private void loadButtonList() {
@@ -124,7 +143,7 @@ public class GuiPeripheral extends GuiContainer {
         this.buttonList.add(new GuiButton(BUTTON_ID_SCROLL_DOWN, this.guiLeft + 154, this.guiTop + 42, 10, 10, "\u2193"));
         this.buttonList.add(new GuiButton(BUTTON_ID_SCROLL_BOTTOM, this.guiLeft + 154, this.guiTop + 53, 10, 10, "\u21A1"));
         for (int i = 0; i < methods.length; i++) {
-            this.buttonList.add(new GuiButtonMethod(5 + i, this.guiLeft + guideOffset + 3, this.guiTop + 8 + 16 * i, 68, 16, methods[i].getName()));
+            this.buttonList.add(new GuiButtonMethod(BUTTON_METHOD_OFFSET + i, this.guiLeft + guideOffset + 3, this.guiTop + 8 + 16 * i, 68, 16, methods[i].getName()));
         }
         updateButtons();
     }
@@ -189,13 +208,27 @@ public class GuiPeripheral extends GuiContainer {
     }
 
     private int maxScrollPosition() {
-        return methods.length-BUTTON_AMOUNT-1;
+        return methods.length-BUTTON_AMOUNT;
+    }
+
+    private IMethod getActiveMethod() {
+        GuiButtonMethod button = GuiButtonMethod.activeButton;
+        if(button == null) {
+            return null;
+        }
+        return methods[button.id-BUTTON_METHOD_OFFSET];
     }
 
     //opening the gui doesn't pause the game
     @Override
     public boolean doesGuiPauseGame() {
         return false;
+    }
+
+    @Override
+    public void onGuiClosed() {
+        GuiButtonMethod.activeButton = null;
+        super.onGuiClosed();
     }
 
     private static class GuiButtonMethod extends GuiButton {
@@ -206,7 +239,7 @@ public class GuiPeripheral extends GuiContainer {
         }
 
         public void onMouseClicked() {
-            activeButton = this;
+            activeButton = activeButton==this?null:this;
         }
 
         public boolean isActive() {
@@ -247,9 +280,9 @@ public class GuiPeripheral extends GuiContainer {
                 else if (this.field_146123_n) {
                     l = 16777120;
                 }
-                float scale = 0.70F;
+                float scale = 0.6F;
                 GL11.glScalef(scale, scale, scale);
-                this.drawCenteredString(fontrenderer, this.displayString, (int) ((this.xPosition+this.width/2)/scale), (int) ((this.yPosition+(this.height-8)/2)/ scale), l);
+                this.drawCenteredString(fontrenderer, this.displayString, (int) ((this.xPosition+this.width/2)/scale), (int) ((this.yPosition+(this.height-4)/2)/ scale), l);
                 GL11.glScalef(1/scale, 1/scale, 1/scale);
             }
         }

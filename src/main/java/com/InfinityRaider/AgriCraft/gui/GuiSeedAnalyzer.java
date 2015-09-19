@@ -31,7 +31,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
     public GuiSeedAnalyzer(InventoryPlayer inventory, TileEntitySeedAnalyzer seedAnalyzer) {
         super(new ContainerSeedAnalyzer(inventory, seedAnalyzer));
         this.seedAnalyzer = seedAnalyzer;
-        this.xSize = 181;
+        this.xSize = 176;
         this.ySize = 176;
         this.journalOpen = false;
     }

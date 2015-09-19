@@ -101,6 +101,7 @@ tile.agricraft:seedStorageController.0.name=Seed Storage Controller
 tile.agricraft:fence.0.name=Fence
 tile.agricraft:fenceGate.0.name=Fence Gate
 tile.agricraft:grate.0.name=Wooden Grate
+tile.agricraft:peripheral.name=Computer Controlled Seed Analyzer
 
 tile.agricraft:cropPotato.name=Potato
 tile.agricraft:cropCarrot.name=Carrot
@@ -203,6 +204,31 @@ agricraft_tooltip.growthStage=Growthstage
 agricraft_tooltip.mature=Mature
 agricraft_tooltip.valve=Toggled with a redstone signal
 agricraft_tooltip.grate=Right click with vines to apply vines
+
+//descriptions
+agricraft_description.peripheralHelp=Method Help
+agricraft_description.method.analyze=Orders the analyzer to analyze the current specimen
+agricraft_description.method.getBaseBlock=Returns the necessary base block for the crop at the specified direction
+agricraft_description.method.getBaseBlockType=Returns the base block type (NONE, BELOW, NEAR) for the crop at the specified direction
+agricraft_description.method.getBrightness=Returns the current light level for the crop at the specified direction
+agricraft_description.method.getBrightnessRange=Returns the required light level range for the crop at the specified direction
+agricraft_description.method.getCurrentSoil=Returns the current soil below the crop at the specified direction
+agricraft_description.method.getGrowthStage=Returns the growth percentage of the crop at the specified direction
+agricraft_description.method.getNeededSoil=Returns the required soil for the crop at the specified direction
+agricraft_description.method.getPlant=Returns the seed currently planted on the crop at the specified direction
+agricraft_description.method.getSpecimen=Returns the specimen currently in the analyzer
+agricraft_description.method.getSpecimenStats=Returns the stats [growth, gain, strength] of the specimen currently in the analyzer
+agricraft_description.method.getStatsFromCrop=Returns the stats [growth, gain, strength] of crop at the specified direction
+agricraft_description.method.hasJournal=Returns if the analyzer has a journal
+agricraft_description.method.hasPlant=Returns if there is a plant on the crop sticks at the specified direction
+agricraft_description.method.hasWeeds=Returns if there are weeds on the crop at the specified direction
+agricraft_description.method.isAnalyzed=Returns if the crop at the specified direction is analyzed
+agricraft_description.method.isCrossCrop=Returns if the crop crop at the specified direction is a cross crop
+agricraft_description.method.isFertile=Returns if the crop crop at the specified direction is fertile and can grow
+agricraft_description.method.isMature=Returns if the crop crop at the specified direction is mature
+agricraft_description.method.isSpecimenAnalyzed=Returns if the specimen in the analyzer is analyzed
+agricraft_description.method.needsBaseBlock=Returns if the crop crop at the specified direction needs a base block
+
 
 // nei GUI
 agricraft_nei.mutation.title=Crop Mutation

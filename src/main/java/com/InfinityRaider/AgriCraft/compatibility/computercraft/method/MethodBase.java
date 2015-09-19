@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public abstract class MethodBase implements IMethod {
     @Override
     public String getDescription() {
-        return StatCollector.translateToLocal("agricraft_method."+this.getName());
+        return StatCollector.translateToLocal("agricraft_description.method."+this.getName());
     }
 
     @Override

@@ -11,7 +11,7 @@ public class ComputerCraftHelper extends ModHelper {
                 new MethodAnalyze(),
                 new MethodGetBaseBlock(),
                 new MethodGetBaseBlockType(),
-                new MethodGetBaseBlockType(),
+                new MethodGetBrightness(),
                 new MethodGetBrightnessRange(),
                 new MethodGetCurrentSoil(),
                 new MethodGetGrowthStage(),

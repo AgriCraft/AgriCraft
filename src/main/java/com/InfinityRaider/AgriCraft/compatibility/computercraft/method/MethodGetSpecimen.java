@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class MethodGetSpecimen extends MethodBase {
     @Override
     public String getName() {
-        return "getSeedInAnalyzer";
+        return "getSpecimen";
     }
 
     @Override
