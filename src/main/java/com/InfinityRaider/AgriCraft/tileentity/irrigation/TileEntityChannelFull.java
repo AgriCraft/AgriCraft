@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -9,12 +11,13 @@ public class TileEntityChannelFull extends TileEntityChannel {
         super();
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public boolean hasNeighbourCheck(ForgeDirection direction) {
         if (this.worldObj == null) {
             return true;
         } else {
-            return super.hasNeighbour(direction);
+            return super.hasNeighbourCheck(direction);
         }
     }
 
