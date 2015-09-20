@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -8,6 +7,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import com.InfinityRaider.AgriCraft.reference.Constants;
 
 public abstract class RenderHelper {
     public static ResourceLocation getResource(Block block, int meta) {
@@ -48,38 +50,169 @@ public abstract class RenderHelper {
         String file = path.substring(path.indexOf(':')+1);
         return new ResourceLocation(domain+"textures/items/"+file+".png");
     }
-
-    //checks if a lever is facing a block
+    
+    /**
+     * Determines if a lever is facing a block, based off of the lever's metadata.
+     * 
+     * @param leverMeta the metadata value of the lever.
+     * @param direction the direction of the block from the lever.
+     * @return if the lever is facing the block.
+     */
     public static boolean isLeverFacingBlock(int leverMeta, char axis, int direction) {
-        if(axis=='x') {
+    	return isLeverFacingBlock(leverMeta, convertDirection(axis, direction));
+    }
+    
+    /**
+     * Determines if a lever is facing a block, based off of the lever's metadata.
+     * 
+     * @param leverMeta the metadata value of the lever.
+     * @param direction the direction of the block from the lever.
+     * @return if the lever is facing the block.
+     */
+    public static boolean isLeverFacingBlock(int leverMeta, ForgeDirection direction) {
+    	switch(direction) {
+    		case EAST:
+    			return leverMeta % 8 == 1;
+    		case WEST:
+    			return leverMeta % 8 == 2;
+    		case SOUTH:
+    			return leverMeta % 8 == 3;
+    		case NORTH:
+    			return leverMeta % 8 == 4;
+    		default:
+    			return false;
+    	}
+    }
+    
+    /**
+     * Converts an axis-position direction to a ForgeDirection.
+     * This is a temporary method to facilitate the conversion to ForgeDirection.
+     * 
+     * @param axis the axis of the direction. (x,y,z).
+     * @param direction the magnitude of the direction. (+1,-1).
+     * @return the associated ForgeDirection.
+     */
+    public static ForgeDirection convertDirection(char axis, int direction) {
+    	if(axis=='x') {
             if(direction>0) {
-                return leverMeta % 8 == 1;
+                return ForgeDirection.EAST;
             }
             else {
-                return leverMeta %8 == 2;
+                return ForgeDirection.WEST;
+            }
+        }
+        else if(axis=='y') {
+        	if(direction>0) {
+                return ForgeDirection.UP;
+            }
+            else {
+                return ForgeDirection.DOWN;
             }
         }
         else if(axis=='z') {
             if(direction>0) {
-                return leverMeta %8 == 3;
+                return ForgeDirection.SOUTH;
             }
             else {
-                return leverMeta %8 == 4;
+                return ForgeDirection.NORTH;
             }
         }
-        return false;
+        return ForgeDirection.UNKNOWN;
+    }
+    
+    /**
+     * Retrieves the axis char for the old direction system.
+     * 
+     * @param direction the direction to lookup.
+     * @return the char for the direction's axis.
+     */
+    public static char getAxis(ForgeDirection direction) {
+    	switch(direction) {
+    		case EAST:
+    		case WEST:
+    			return 'x';
+    		case UP:
+    		case DOWN:
+    			return 'y';
+    		case NORTH:
+    		case SOUTH:
+    			return 'z';
+    		default:
+    			return '?'; //Umm... Ignore this.
+    	}
+    }
+    
+    /**
+     * Retrieves the axis length for the old direction system.
+     * 
+     * @param direction the direction to lookup.
+     * @return how far the direction extends on the axis.
+     */
+    public static int getMagnitude(ForgeDirection direction) {
+    	return direction.offsetX + direction.offsetY + direction.offsetZ; // Should always be in the -1 to 1 range.
+    }
+    
+    /**
+     * Rotates a plane. This is impressively useful, but may not be impressively efficient.
+     * Always returns a 6-element array. Defaults to the north direction (the base direction).
+     * <p>
+     * This is for use up to the point that a way to rotate lower down is found. (IE. OpenGL).
+     * </p>
+     * 
+     * TODO: add up/down support.
+     */
+    public static float[] rotatePrism(float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ForgeDirection direction) {
+        
+        float adj[] = new float[6];
+        
+        switch (direction) {
+        	default:
+			case NORTH:
+				adj[0] = minX; //-x
+				adj[1] = minY; //-y
+				adj[2] = minZ; //-z
+				adj[3] = maxX; //+x
+				adj[4] = maxY; //+y
+				adj[5] = maxZ; //+z
+				break;
+			case EAST:
+				adj[0] = Constants.WHOLE - maxZ; //-x
+				adj[1] = minY; //-y
+				adj[2] = minX; //-z
+				adj[3] = Constants.WHOLE - minZ; //+x
+				adj[4] = maxY; //+y
+				adj[5] = maxX; //+z
+				break;
+			case SOUTH:
+				adj[0] = minX; //-x
+				adj[1] = minY; //-y
+				adj[2] = Constants.WHOLE - maxZ; //-z
+				adj[3] = maxX; //+x
+				adj[4] = maxY; //+y
+				adj[5] = Constants.WHOLE - minZ; //+z
+				break;
+			case WEST:
+				adj[0] = minZ; //-x
+				adj[1] = minY; //-y
+				adj[2] = minX; //-z
+				adj[3] = maxZ; //+x
+				adj[4] = maxY; //+y
+				adj[5] = maxX; //+z
+				break;
+		}
+        
+        return adj;
+        
     }
 
     //adds a vertex to the tessellator scaled with 1/16th of a block
     public static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v) {
-        float unit = Constants.UNIT;
-        tessellator.addVertexWithUV(x*unit, y*unit, z*unit, u*unit, v*unit);
+        tessellator.addVertexWithUV(x*Constants.UNIT, y*Constants.UNIT, z*Constants.UNIT, u*Constants.UNIT, v*Constants.UNIT);
     }
 
     //same as above method, but does not require the correct texture to be bound
     public static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v, IIcon icon) {
-        float unit = Constants.UNIT;
-        tessellator.addVertexWithUV(x * unit, y * unit, z * unit, icon.getInterpolatedU(u), icon.getInterpolatedV(v));
+        tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, icon.getInterpolatedU(u), icon.getInterpolatedV(v));
     }
 
     //utility method: splits the string in different lines so it will fit on the page

@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityChannelFull extends TileEntityChannel {
     /** this is just so client side it'll render like a connected channel while held in hand */
@@ -9,11 +10,11 @@ public class TileEntityChannelFull extends TileEntityChannel {
     }
 
     @Override
-    public boolean hasNeighbour(char axis, int direction) {
+    public boolean hasNeighbourCheck(ForgeDirection direction) {
         if (this.worldObj == null) {
             return true;
         } else {
-            return super.hasNeighbour(axis, direction);
+            return super.hasNeighbour(direction);
         }
     }
 
