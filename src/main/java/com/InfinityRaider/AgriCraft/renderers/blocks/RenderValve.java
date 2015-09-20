@@ -37,7 +37,6 @@ public class RenderValve extends RenderChannel {
 
     @Override
     protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
-        super.renderInInventory(type, item, data);
         IIcon icon = teDummy.getIcon();
         int cm = teDummy.colorMultiplier();
         Tessellator tessellator = Tessellator.instance;
@@ -48,24 +47,17 @@ public class RenderValve extends RenderChannel {
         GL11.glDisable(GL11.GL_LIGHTING);
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
-        drawScaledPrism(tessellator, 5, 11.5f, 0.001f, 11, 15.001f, 1.999f, ironIcon, cm);
-        drawScaledPrism(tessellator, 5, 0.999f, 0.001f, 11, 5.5f, 1.999f, ironIcon, cm);
-        drawScaledPrism(tessellator, 5, 11.5f, 14.001f, 11, 15.001f, 15.999f, ironIcon, cm);
-        drawScaledPrism(tessellator, 5, 0.999f, 14.001f, 11, 5.5f, 15.999f, ironIcon, cm);
+        
+        //Render channel.
+        drawScaledPrism(tessellator, 2, 4, 4, 14, 12, 5, icon, cm);
+        drawScaledPrism(tessellator, 2, 4, 11, 14, 12, 12, icon, cm);
+        drawScaledPrism(tessellator, 2, 4, 5, 14, 5, 11, icon, cm);
+        
+        //Render separators.
         drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, ironIcon, cm);
         drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, ironIcon, cm);
         drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, ironIcon, cm);
         drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.999f, 5.5f, 11, ironIcon, cm);
-
-        //render the wooden guide rails along x-axis
-        drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon, cm);
-        tessellator.addTranslation(6*f, 0, 0);
-        drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon, cm);
-        tessellator.addTranslation(0, 0, 14*f);
-        drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon, cm);
-        tessellator.addTranslation(-6*f, 0, 0);
-        drawScaledPrism(tessellator, 3.999F, 0, 0, 5.999F, 16, 2, icon, cm);
-        tessellator.addTranslation(0, 0, -14 * f);
 
         //render the wooden guide rails along z-axis
         drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon, cm);
@@ -120,7 +112,7 @@ public class RenderValve extends RenderChannel {
 							drawScaledPrism(tessellator2, 6, 5, 0, 10, 12, 2, icon, cm, dir);
 						} else {
 							//Draw open separator.
-							drawScaledPrism(tessellator2, 6, 1, 0, 10, 4, 2, icon, cm, dir);
+							drawScaledPrism(tessellator2, 6, 1, 0, 10, 5.001F, 2, icon, cm, dir);
 							drawScaledPrism(tessellator2, 6, 12, 0, 10, 15, 2, icon, cm, dir);
 						}
 						//Draw rails.
