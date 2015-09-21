@@ -64,19 +64,19 @@ public class BlockWaterChannel extends BlockCustomWood {
         TileEntity te = world.getTileEntity(x, y, z);
         if (te != null && te instanceof TileEntityChannel) {
             TileEntityChannel channel = (TileEntityChannel) te;
-            if (channel.hasNeighbour(ForgeDirection.EAST)) {
+            if (channel.hasNeighbourCheck(ForgeDirection.EAST)) {
                 this.setBlockBounds(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
-            if (channel.hasNeighbour(ForgeDirection.WEST)) {
+            if (channel.hasNeighbourCheck(ForgeDirection.WEST)) {
                 this.setBlockBounds(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
-            if (channel.hasNeighbour(ForgeDirection.SOUTH)) {
+            if (channel.hasNeighbourCheck(ForgeDirection.SOUTH)) {
                 this.setBlockBounds(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
-            if (channel.hasNeighbour(ForgeDirection.NORTH)) {
+            if (channel.hasNeighbourCheck(ForgeDirection.NORTH)) {
                 this.setBlockBounds(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT);
                 super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
             }
@@ -90,18 +90,17 @@ public class BlockWaterChannel extends BlockCustomWood {
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
         TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(x, y, z);
-        float f = Constants.UNIT;
         AxisAlignedBB minBB = AxisAlignedBB.getBoundingBox(MIN, MIN, MIN, MAX, MAX, MAX);
-        if (channel.hasNeighbour('x', 1)) {
+        if (channel.hasNeighbourCheck(ForgeDirection.EAST)) {
             minBB.setBounds(minBB.minX, MIN, minBB.minZ, 1, MAX, minBB.maxZ);
         }
-        if (channel.hasNeighbour('x', -1)) {
+        if (channel.hasNeighbourCheck(ForgeDirection.WEST)) {
             minBB.setBounds(0, MIN, minBB.minZ, minBB.maxX, MAX, minBB.maxZ);
         }
-        if (channel.hasNeighbour('z', 1)) {
+        if (channel.hasNeighbourCheck(ForgeDirection.SOUTH)) {
             minBB.setBounds(minBB.minX, MIN, minBB.minZ, minBB.maxX, MAX, 1);
         }
-        if (channel.hasNeighbour('z', -1)) {
+        if (channel.hasNeighbourCheck(ForgeDirection.NORTH)) {
             minBB.setBounds(minBB.minX, MIN, 0, minBB.maxX, MAX, minBB.maxZ);
         }
         return minBB.getOffsetBoundingBox(x, y, z);

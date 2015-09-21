@@ -19,7 +19,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.List;
 
 public class TileEntityChannel extends TileEntityCustomWood implements IIrrigationComponent, IDebuggable{
+	
     public static final int FORGE_DIRECTION_OFFSET = 2;
+    
     public static final ForgeDirection[] validDirections = new ForgeDirection[] {
 	    ForgeDirection.NORTH,
 	    ForgeDirection.SOUTH,
@@ -33,6 +35,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
     
     private static final int SYNC_WATER_ID = 0;
 
+    // Might want to move this to a static import class...
     protected static final int MIN = 5;
     protected static final int MAX = 12;
     protected static final int HEIGHT = MAX - MIN;
@@ -69,7 +72,14 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
         super.readFromNBT(tag);
     }
 
-    public int getFluidLevel() {return this.lvl;}
+    public int getFluidLevel() {
+    	return this.lvl;
+    }
+    
+    @Override
+    public int getCapacity() {
+    	return ABSOLUTE_MAX;
+    }
 
     public void setFluidLevel(int lvl) {
         if(lvl>=0 && lvl<=ABSOLUTE_MAX && lvl!=this.lvl) {
@@ -87,10 +97,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
 
     public float getFluidHeight() {
         return this.getFluidHeight(this.lvl);
-    }
-
-    public float getDiscreteScaledFluidHeight() {
-        return getFluidHeight(getDiscreteScaledFluidLevel());
     }
 
     public float getFluidHeight(int lvl) {
@@ -120,22 +126,28 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
 
     /** Only used for rendering */
     @SideOnly(Side.CLIENT)
-    public boolean hasNeighbour(char axis, int direction) {
+    public boolean hasNeighbourCheck(ForgeDirection direction) {
         if(this.worldObj==null) {
             return false;
         }
-        TileEntity tileEntityAt;
-        switch(axis) {
-            case 'x': tileEntityAt = this.worldObj.getTileEntity(this.xCoord+direction, this.yCoord, this.zCoord);break;
-            case 'z': tileEntityAt = this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord+direction);break;
-            default: return false;
-        }
+        TileEntity tileEntityAt = this.worldObj.getTileEntity(this.xCoord+direction.offsetX, this.yCoord+direction.offsetY, this.zCoord+direction.offsetZ);
         return (tileEntityAt!=null) && (tileEntityAt instanceof IIrrigationComponent)  && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
     }
     
     public boolean hasNeighbour(ForgeDirection direction) {
         int ordinal = direction.ordinal() - FORGE_DIRECTION_OFFSET;
-        return ordinal>=0 & ordinal<neighbours.length && neighbours[ordinal]!=null;
+        return ordinal>=0 && ordinal<neighbours.length && neighbours[ordinal]!=null;
+    }
+    
+    public IIrrigationComponent getNeighbor(ForgeDirection direction) {
+    	if (this.worldObj == null) {
+    		return null;
+    	}
+    	else if(direction.offsetY == 0 && direction.offsetX + direction.offsetZ != 0) {
+        	TileEntity tileEntityAt = this.worldObj.getTileEntity(this.xCoord + direction.offsetX, this.yCoord, this.zCoord + direction.offsetZ);
+        	return tileEntityAt instanceof IIrrigationComponent ? (IIrrigationComponent)tileEntityAt : null;
+        }
+        return null;
     }
 
     //updates the tile entity every tick
@@ -162,8 +174,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
                 else {
                     TileEntityTank tank = (TileEntityTank) component;
                     int Y = tank.getYPosition();
-                    // float y_c= Constants.WHOLE*Y+this.getFluidHeight();  //initial channel water y
-                    float y_c = Constants.WHOLE * Y + getDiscreteScaledFluidHeight();
+                    float y_c = Constants.WHOLE * Y + this.getFluidHeight();  //initial channel water y
                     float y_t = tank.getFluidY();           //initial tank water y
                     float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum y of the channel
                     float y2 = (float) MAX + Constants.WHOLE * Y;  //maximum y of the channel
@@ -251,18 +262,18 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
         return discreteFluidLevel;
     }
 
-    /** Scales the discrete fluid level back to the interval [0, ABSOLUTE_MAX] */
-    public int getDiscreteScaledFluidLevel() {
-        int discreteFluidLevel = getDiscreteFluidLevel();
-        return Math.round(SCALE_FACTOR * discreteFluidLevel);
-    }
-
     @Override
     public void addDebugInfo(List<String> list) {
         list.add("CHANNEL:");
         super.addDebugInfo(list);
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + ABSOLUTE_MAX);
         list.add("  - FluidHeight: " + this.getFluidHeight());
+        list.add("  - Connections: ");
+        for (ForgeDirection dir : validDirections) {
+        	if (this.hasNeighbour(dir)) {
+        		list.add("      - " + dir.name());
+        	}
+        }
     }
     
     @Override

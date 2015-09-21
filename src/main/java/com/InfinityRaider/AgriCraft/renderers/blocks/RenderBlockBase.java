@@ -4,6 +4,8 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
+import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -20,6 +22,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -263,6 +267,19 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         addScaledVertexWithUV(tessellator, x, minY, maxZ, maxU, maxV, icon);
     }
 
+    /**
+     * Draws a prism.
+     * <p>
+     * The prism coordinates range from 0 to {@link Constants#WHOLE}.
+     * </p><p>
+     * The prism is relative to the bottom left corner of the block.
+     * </p>
+     */
+    protected void drawScaledPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier, ForgeDirection direction) {
+        float adj[] = RenderHelper.rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
+        drawScaledPrism(tessellator, adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], icon, colorMultiplier);
+    }
+    
     //draws a rectangular prism
     protected void drawScaledPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier) {
         //bottom
@@ -371,4 +388,16 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         addScaledVertexWithUV(tessellator, x, minY, minZ, minZ, maxV, icon);
         addScaledVertexWithUV(tessellator, x, minY, maxZ, maxZ, maxV, icon);
     }
+    
+	protected void drawPlane(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, ForgeDirection direction) {
+		float[] rot = RenderHelper.rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
+		drawPlane(tessellator, rot[0], rot[1], rot[2], rot[3], rot[4], rot[5], icon);
+	}
+
+	private void drawPlane(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon) {
+		addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, maxZ, icon);
+		addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, minZ, icon);
+		addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, minZ, icon);
+		addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, maxZ, icon);
+	}
 }

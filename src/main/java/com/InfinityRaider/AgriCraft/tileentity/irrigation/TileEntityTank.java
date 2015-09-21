@@ -37,6 +37,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     private int zSize=1;
 
     //boolean to convert pre-1.4 tanks
+    //Lets remove this... it has been quite some time...
     private boolean oldVersion = false;
 
     public TileEntityTank() {
@@ -519,6 +520,11 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     public int getTotalCapacity() {
         return this.getSingleCapacity()*this.getConnectedTanks();
+    }
+    
+    @Override
+    public int getCapacity() {
+    	return getTotalCapacity();
     }
 
     public boolean isFull() {
