@@ -222,17 +222,27 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		if (!this.isMultiBlock()) {
 			return;
 		}
+		int visited = 0;
+		// Store these, so they won't get reset and break things.
+		final int anchorx = xCoord - xPosition;
+		final int anchory = yCoord - yPosition;
+		final int anchorz = zCoord - zPosition;
+		final int shouldVisit = size;
 		for (int x = 0; x < xSize; x++) {
 			for (int y = 0; y < ySize; y++) {
 				for (int z = 0; z < zSize; z++) {
-					if (this.worldObj.getTileEntity(this.xCoord - xPosition + x, this.yCoord - yPosition + y, this.zCoord - zPosition + z) instanceof TileEntityMultiBlock) {
-						TileEntityMultiBlock block = (TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord - xPosition + x, this.yCoord - yPosition + y, this.zCoord - zPosition + z);
+					if (this.worldObj.getTileEntity(anchorx + x, anchory + y, anchorz + z) instanceof TileEntityMultiBlock) {
+						TileEntityMultiBlock block = (TileEntityMultiBlock) this.worldObj.getTileEntity(anchorx + x, anchory + y, anchorz + z);
 						block.resetMultiBlock();
 						block.markForUpdate();
+						visited++;
+					} else {
+						LogHelper.debug("Ooops! Went out of the multiblock when breaking it.");
 					}
 				}
 			}
 		}
+		LogHelper.debug("Visited " + visited + " of " + shouldVisit +" blocks while breaking multiblock.");
 	}
 	
 	/**

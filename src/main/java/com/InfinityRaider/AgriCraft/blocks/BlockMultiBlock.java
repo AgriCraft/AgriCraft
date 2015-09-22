@@ -1,8 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -20,6 +18,8 @@ public abstract class BlockMultiBlock extends BlockCustomWood{
 				LogHelper.debug("Deconstructing multiblock.");
 				TileEntityMultiBlock block = (TileEntityMultiBlock) world.getTileEntity(x, y, z);
 				block.breakMultiBlock();
+			} else {
+				LogHelper.debug("Where did the TileEntity go? Now the multiblock can't be broken!");
 			}
             world.removeTileEntity(x, y, z);
         }
@@ -31,12 +31,12 @@ public abstract class BlockMultiBlock extends BlockCustomWood{
     }
     
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-    	super.onBlockPlacedBy(world, x, y, z, entity, stack);
+    public void onPostBlockPlaced(World world, int x, int y, int z, int meta) {
+    	super.onPostBlockPlaced(world, x, y, z, meta);
     	TileEntity te = world.getTileEntity(x, y, z);
     	if (te instanceof TileEntityMultiBlock) {
-    		LogHelper.debug("Checking for completed multiblock.");
-    		((TileEntityMultiBlock) te).checkForMultiBlock();
+    		LogHelper.debug("Checking if block completed multiblock.");
+    		((TileEntityMultiBlock)te).checkForMultiBlock();
     	} else {
     		LogHelper.debug("Multiblock place failure.");
     	}
