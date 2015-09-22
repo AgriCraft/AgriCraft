@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
+import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -13,6 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -42,7 +46,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         if (tile instanceof TileEntityTank) {
             TileEntityTank tank = (TileEntityTank) tile;
             if(callFromTESR) {
-                if(tank.getScaledDiscreteFluidLevel()>0) {
+                if(tank.getFluidHeight()>0) {
                     GL11.glPushMatrix();
                     GL11.glDisable(GL11.GL_LIGHTING);
                     tessellator.startDrawingQuads();
@@ -66,7 +70,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         if(meta==0) {
             this.drawWoodTank(tank, tessellator);
             //draw the waterTexture
-            if((!shouldBehaveAsTESR()) && (tank.getScaledDiscreteFluidLevel()>0)) {
+            if((!shouldBehaveAsTESR()) && (tank.getFluidHeight()>0)) {
                 this.drawWater(tank, tessellator);
             }
         }
@@ -88,10 +92,10 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 
     private void drawWoodTank(TileEntityTank tank, Tessellator tessellator) {
         this.renderBottom(tank, tessellator);
-        this.renderSide(tank, tessellator, 'x', -1);
-        this.renderSide(tank, tessellator, 'x', 1);
-        this.renderSide(tank, tessellator, 'z', -1);
-        this.renderSide(tank, tessellator, 'z', 1);
+        this.renderSide(tank, tessellator, ForgeDirection.NORTH);
+        this.renderSide(tank, tessellator, ForgeDirection.EAST);
+        this.renderSide(tank, tessellator, ForgeDirection.SOUTH);
+        this.renderSide(tank, tessellator, ForgeDirection.WEST);
     }
 
     private void renderBottom(TileEntityTank tank, Tessellator tessellator) {
@@ -99,43 +103,42 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         IIcon icon = tank.getIcon();
         int cm = tank.colorMultiplier();
         //bottom
-        boolean bottom = !tank.hasNeighbour('y', -1);
+        boolean bottom = !tank.hasNeighbour(ForgeDirection.DOWN);
         if (bottom) {
             drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, icon, cm);
         }
         //corners
         int yMin = bottom?1:0;
-        if (!tank.hasNeighbour('x', -1) || !tank.hasNeighbour('z', -1)) {
+        if (!tank.hasNeighbour(ForgeDirection.WEST) || !tank.hasNeighbour(ForgeDirection.NORTH)) {
             drawScaledPrism(tessellator, 0, yMin, 0, 2, 16, 2, icon, cm);
         }
-        if (!tank.hasNeighbour('x', 1) || !tank.hasNeighbour('z', -1)) {
+        if (!tank.hasNeighbour(ForgeDirection.EAST) || !tank.hasNeighbour(ForgeDirection.NORTH)) {
             drawScaledPrism(tessellator, 14, yMin, 0, 16, 16, 2, icon, cm);
         }
-        if (!tank.hasNeighbour('x', -1) || !tank.hasNeighbour('z', 1)) {
+        if (!tank.hasNeighbour(ForgeDirection.WEST) || !tank.hasNeighbour(ForgeDirection.SOUTH)) {
             drawScaledPrism(tessellator, 0, yMin, 14, 2, 16, 16, icon, cm);
         }
-        if (!tank.hasNeighbour('x', 1) || !tank.hasNeighbour('z', 1)) {
+        if (!tank.hasNeighbour(ForgeDirection.EAST) || !tank.hasNeighbour(ForgeDirection.SOUTH)) {
             drawScaledPrism(tessellator, 14, yMin, 14, 16, 16, 16, icon, cm);
         }
     }
 
-    private void renderSide(TileEntityTank tank, Tessellator tessellator, char axis, int direction) {
+    private void renderSide(TileEntityTank tank, Tessellator tessellator, ForgeDirection dir) {
         //the texture
         IIcon icon = tank.getIcon();
         int cm = tank.colorMultiplier();
-        int yMin = tank.hasNeighbour('y', -1)?0:1;
-        if ((axis == 'x' || axis == 'z') && (direction == 1 || direction == -1)) {
-            boolean x = axis=='x';
+        int yMin = tank.hasNeighbour(ForgeDirection.DOWN)?0:1;
+        if (dir != null && dir != ForgeDirection.UNKNOWN) {
             //connected to a channel
-            if(tank.isConnectedToChannel(axis, direction)) {
-                drawScaledPrism(tessellator, x?(7+7*direction):2, yMin, x?2:(7+7*direction), x?(9+7*direction):14, 5, x?14:(9+7*direction), icon, cm);
-                drawScaledPrism(tessellator, x?(7+7*direction):2, 5, x?2:(7+7*direction), x?(9+7*direction):5, 12, x?5:(9+7*direction), icon, cm);
-                drawScaledPrism(tessellator, x?(7+7*direction):11, 5, x?11:(7+7*direction), x?(9+7*direction):14, 12, x?14:(9+7*direction), icon, cm);
-                drawScaledPrism(tessellator, x?(7+7*direction):2, 12, x?2:(7+7*direction), x?(9+7*direction):14, 16, x?14:(9+7*direction), icon, cm);
+            if(tank.isConnectedToChannel(dir)) {
+                drawScaledPrism(tessellator, 2, yMin, 0, 14, 5, 2, icon, cm, dir);
+                drawScaledPrism(tessellator, 2, 5, 0, 5, 12, 2, icon, cm, dir);
+                drawScaledPrism(tessellator, 11, 5, 0, 14, 12, 2, icon, cm, dir);
+                drawScaledPrism(tessellator, 2, 12, 0, 14, 16, 2, icon, cm, dir);
             }
             //not connected to anything
-            else if(!tank.hasNeighbour(axis, direction)) {
-                drawScaledPrism(tessellator, x?(7+7*direction):2, yMin, x?2:(7+7* direction),  x?(9+7*direction):14, 16, x?14:(9+7*direction), icon, cm);
+            if(!tank.hasNeighbour(dir)) {
+                drawScaledPrism(tessellator, 2, yMin, 0, 14, 16, 2, icon, cm, dir);
             }
         }
     }
@@ -147,7 +150,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
     private void drawWater(TileEntityTank tank, Tessellator tessellator) {
         //only render water on the bottom layer
         if(tank.getYPosition()==0) {
-            float y = tank.getScaledDiscreteFluidY()-0.01F; //-0.0001F to avoid Z-fighting on maximum filled tanks
+            float y = tank.getFluidHeight()-0.01F; //-0.0001F to avoid Z-fighting on maximum filled tanks
             //the texture
             IIcon icon = Blocks.water.getIcon(1,0);
             //stolen from Vanilla code

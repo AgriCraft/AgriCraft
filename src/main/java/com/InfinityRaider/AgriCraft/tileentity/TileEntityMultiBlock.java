@@ -5,11 +5,18 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 
 public abstract class TileEntityMultiBlock extends TileEntityCustomWood implements IDebuggable {
+
+	/**
+	 * Represents if the multiblock is pre-1.4
+	 */
+	private boolean oldVersion = false;
 
 	private int xPosition = 0;
 	private int yPosition = 0;
@@ -17,10 +24,7 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 	private int xSize = 1;
 	private int ySize = 1;
 	private int zSize = 1;
-
-	// boolean to convert pre-1.4 multiblocks
-	// Lets remove this... it has been quite some time...
-	private boolean oldVersion = false;
+	private int size = 1;
 
 	public TileEntityMultiBlock() {
 		super();
@@ -53,6 +57,7 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 			xSize = tag.getInteger("xSize");
 			ySize = tag.getInteger("ySize");
 			zSize = tag.getInteger("zSize");
+			size = xSize * ySize * zSize;
 		}
 	}
 
@@ -68,6 +73,7 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 
 	// MULTIBLOCK METHODS
 	// ------------------
+
 	public int getXPosition() {
 		return xPosition;
 	}
@@ -92,11 +98,6 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		return zSize;
 	}
 
-	// checks if this is made of wood
-	public boolean isWood() {
-		return this.getBlockMetadata() == 0;
-	}
-
 	// checks if this is part of a multiblock
 	public boolean isMultiBlock() {
 		return this.getConnectedBlocks() > 1;
@@ -104,7 +105,7 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 
 	// returns the number of blocks in the multiblock
 	public int getConnectedBlocks() {
-		return xSize * ySize * zSize;
+		return size;
 	}
 
 	/**
@@ -115,250 +116,149 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 	 */
 	public abstract boolean canJoinMultiBlock(TileEntity tileEntity);
 
-	public boolean hasNeighbour(char axis, int direction) {
-		if (this.worldObj == null) {
+	public boolean hasNeighbour(ForgeDirection direction) {
+		if (this.worldObj == null || direction == null || direction == ForgeDirection.UNKNOWN) {
 			return false;
 		}
-		boolean x = axis == 'x';
-		boolean y = axis == 'y';
-		boolean z = axis == 'z';
-		return this.isMultiBlockPartner(this.getWorldObj().getTileEntity(this.xCoord + (x ? direction : 0), this.yCoord + (y ? direction : 0), this.zCoord + (z ? direction : 0)));
+		return ((xPosition + direction.offsetX > -1) && (xPosition + direction.offsetX < xSize)) &&
+				((yPosition + direction.offsetY > -1) && (yPosition + direction.offsetY < ySize)) &&
+				((zPosition + direction.offsetZ > -1) && (zPosition + direction.offsetZ < zSize));
 	}
 
-	// check if a tile entity is part of this multiblock
+	/**
+	 * Check if a tile entity is part of this multiblock.
+	 * TODO: fix bad method.
+	 * 
+	 * @param tileEntity
+	 * @return
+	 */
 	public boolean isMultiBlockPartner(TileEntity tileEntity) {
 		return this.getConnectedBlocks() > 1 && (this.canJoinMultiBlock(tileEntity)) && (this.getConnectedBlocks() == ((TileEntityMultiBlock) tileEntity).getConnectedBlocks());
 	}
 
-	// updates the multiblock, returns true if something has changed
-	public boolean updateMultiBlock() {
-		return this.checkForMultiBlock();
-	}
-
 	// multiblockify
-	public boolean checkForMultiBlock() {
-		if (!this.worldObj.isRemote) {
-			// find dimensions
-			int xPos = this.findArrayXPosition();
-			int yPos = this.findArrayYPosition();
-			int zPos = this.findArrayZPosition();
-			int xSizeNew = this.findArrayXSize();
-			int ySizeNew = this.findArrayYSize();
-			int zSizeNew = this.findArrayZSize();
-			if (xSizeNew == 1 && ySizeNew == 1 && zSizeNew == 1) {
-				return false;
-			}
-			// iterate through the x-, y- and z-directions if all blocks are tanks
-			for (int x = this.xCoord - xPos; x < this.xCoord - xPos + xSizeNew; x++) {
-				for (int y = this.yCoord - yPos; y < this.yCoord - yPos + ySizeNew; y++) {
-					for (int z = this.zCoord - zPos; z < this.zCoord - zPos + zSizeNew; z++) {
-						if (this.canJoinMultiBlock(this.worldObj.getTileEntity(x, y, z))) {
-							TileEntityMultiBlock tank = (TileEntityMultiBlock) this.worldObj.getTileEntity(x, y, z);
-							int[] tankSize = tank.findArrayDimensions();
-							if (!(xSizeNew == tankSize[0] && ySizeNew == tankSize[1] && zSizeNew == tankSize[2])) {
-								return false;
-							}
-						} else {
-							return false;
-						}
-					}
-				}
-			}
-			// turn all the blocks into one multiblock
-			this.setDimensions(xSizeNew, ySizeNew, zSizeNew);
-			for (int x = this.xCoord - xPos; x < this.xCoord - xPos + xSizeNew; x++) {
-				for (int y = this.yCoord - yPos; y < this.yCoord - yPos + ySizeNew; y++) {
-					for (int z = this.zCoord - zPos; z < this.zCoord - zPos + zSizeNew; z++) {
-						TileEntityMultiBlock tank = ((TileEntityMultiBlock) this.worldObj.getTileEntity(x, y, z));
-						tank.setDimensions(xSizeNew, ySizeNew, zSizeNew);
-						tank.markForUpdate();
-					}
-				}
-			}
-			// this.setFluidLevel(lvl);
-			return true;
+	public final boolean checkForMultiBlock() {		
+		if (this.worldObj.isRemote) {
+			return false;
 		}
-		return false;
+		// find dimensions
+		int xPosNew = findEnd(ForgeDirection.WEST); //-x
+		int yPosNew = findEnd(ForgeDirection.DOWN); //-y
+		int zPosNew = findEnd(ForgeDirection.NORTH); //-z
+		int xSizeNew = xPosNew + findEnd(ForgeDirection.EAST) + 1; //+x
+		int ySizeNew = yPosNew + findEnd(ForgeDirection.UP) + 1; //+y
+		int zSizeNew = zPosNew + findEnd(ForgeDirection.SOUTH) + 1; //+z
+		if (xSizeNew == 1 && ySizeNew == 1 && zSizeNew == 1) {
+			LogHelper.debug("No multiblock structure here...");
+			LogHelper.debug("xpos:" + xPosNew + " ypos:" + yPosNew + " zpos:" + zPosNew);
+			LogHelper.debug("xsize:" + xSizeNew + " ysize:" + ySizeNew + " zsize:" + zSizeNew);
+			return false;
+		}
+		LogHelper.debug("Checking if all objects are multiblock parts.");
+		//Check if all the blocks in the defined area are connectable multiblocks.
+		for (int x = this.xCoord - xPosNew; x < this.xCoord - xPosNew + xSizeNew; x++) {
+			for (int y = this.yCoord - yPosNew; y < this.yCoord - yPosNew + ySizeNew; y++) {
+				for (int z = this.zCoord - zPosNew; z < this.zCoord - zPosNew + zSizeNew; z++) {
+					if (!this.canJoinMultiBlock(this.worldObj.getTileEntity(x, y, z))) {
+						return false;
+					}
+				}
+			}
+		}
+		LogHelper.debug("Forming Multiblock.");
+		LogHelper.debug("xpos:" + xPosNew + " ypos:" + yPosNew + " zpos:" + zPosNew);
+		LogHelper.debug("xsize:" + xSizeNew + " ysize:" + ySizeNew + " zsize:" + zSizeNew);
+		//Turn all the blocks into one multiblock
+		for (int x = 0; x < xSizeNew; x++) {
+			for (int y = 0; y < ySizeNew; y++) {
+				for (int z = 0; z < zSizeNew; z++) {
+					TileEntity te = this.worldObj.getTileEntity(this.xCoord - xPosNew + x, this.yCoord - yPosNew + y, this.zCoord - zPosNew + z);
+					if (te instanceof TileEntityMultiBlock) {
+						TileEntityMultiBlock block = ((TileEntityMultiBlock) te);
+						block.breakMultiBlock();
+						block.setMultiblock(x, y, z, xSizeNew, ySizeNew, zSizeNew);
+						addBlock(block);
+						block.markForUpdate();
+					} else {
+						LogHelper.debug("This is odd... a tile entity in the structure isn't the right type...");
+					}
+				}
+			}
+		}
+		return true;
 	}
+	
+	/**
+	 * Implement this method to patch into the multiblock formation loop.
+	 * 
+	 * @param te the block currently being added to the structure.
+	 */
+	public abstract void addBlock(TileEntityMultiBlock te);
 
-	private void setDimensions(int xSize, int ySize, int zSize) {
+	private void setMultiblock(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize) {
+		this.xPosition = xPos;
+		this.yPosition = yPos;
+		this.zPosition = zPos;
 		this.xSize = xSize;
 		this.ySize = ySize;
 		this.zSize = zSize;
-		this.findPositionInMultiBlock();
+		this.size = xSize * ySize * zSize;
+		this.oldVersion = false;
 	}
 
-	private void findPositionInMultiBlock() {
-		this.xPosition = findArrayXPosition();
-		this.yPosition = findArrayYPosition();
-		this.zPosition = findArrayZPosition();
-	}
-
-	private void resetMultiBlock() {
-		this.xSize = 1;
-		this.ySize = 1;
-		this.zSize = 1;
+	public void resetMultiBlock() {
 		this.xPosition = 0;
 		this.yPosition = 0;
 		this.zPosition = 0;
+		this.xSize = 1;
+		this.ySize = 1;
+		this.zSize = 1;
+		this.size = 1;
+		this.oldVersion = false;
 	}
 
-	// breaks up the multiblock and divides the fluid among the tanks
-	public void breakMultiBlock(int lvl) {
+	// breaks up the multiblock.
+	public void breakMultiBlock() {
+		if (!this.isMultiBlock()) {
+			return;
+		}
 		for (int x = 0; x < xSize; x++) {
 			for (int y = 0; y < ySize; y++) {
 				for (int z = 0; z < zSize; z++) {
-					if (!(this.worldObj.getTileEntity(this.xCoord - xPosition + x, this.yCoord - yPosition + y, this.zCoord - zPosition + z) instanceof TileEntityMultiBlock)) {
-						continue;
+					if (this.worldObj.getTileEntity(this.xCoord - xPosition + x, this.yCoord - yPosition + y, this.zCoord - zPosition + z) instanceof TileEntityMultiBlock) {
+						TileEntityMultiBlock block = (TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord - xPosition + x, this.yCoord - yPosition + y, this.zCoord - zPosition + z);
+						block.resetMultiBlock();
+						block.markForUpdate();
 					}
-					TileEntityMultiBlock block = (TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord - xPosition + x, this.yCoord - yPosition + y, this.zCoord - zPosition + z);
-					if (block == null) {
-						continue;
-					}
-					oldVersion = false;
-					block.markForUpdate();
-					block.resetMultiBlock();
 				}
 			}
 		}
 	}
-
-	// returns the xPosition of this block in along a row of these blocks along the X-axis
-	protected int findArrayXPosition() {
-		if (this.canJoinMultiBlock(this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord))) {
-			return (((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord)).findArrayXPosition() + 1);
+	
+	/**
+	 * Find the distance to the end of the multiblock in a certain direction.
+	 * 
+	 * @param dir
+	 * @return
+	 */
+	private int findEnd(ForgeDirection dir) {
+		if (this.canJoinMultiBlock(this.worldObj.getTileEntity(this.xCoord + dir.offsetX, this.yCoord + dir.offsetY, this.zCoord + dir.offsetZ))) {
+			return ((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord + dir.offsetX, this.yCoord + dir.offsetY, this.zCoord + dir.offsetZ)).findEnd(dir) + 1;
 		} else {
 			return 0;
 		}
-	}
-
-	// returns the yPosition of this block in along a row of these blocks along the Y-axis
-	protected int findArrayYPosition() {
-		if (this.canJoinMultiBlock(this.worldObj.getTileEntity(this.xCoord, this.yCoord - 1, this.zCoord))) {
-			return (((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord, this.yCoord - 1, this.zCoord)).findArrayYPosition() + 1);
-		} else {
-			return 0;
-		}
-	}
-
-	// returns the zPosition of this block in along a row of these blocks along the Z-axis
-	protected int findArrayZPosition() {
-		if (this.canJoinMultiBlock(this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1))) {
-			return (((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1)).findArrayZPosition() + 1);
-		} else {
-			return 0;
-		}
-	}
-
-	// returns the x size of an array of these blocks this block is in along the X-axis
-	protected int findArrayXSize() {
-		if (this.canJoinMultiBlock(this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord))) {
-			return ((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord)).findArrayXSize();
-		} else {
-			return this.findArrayXPosition() + 1;
-		}
-	}
-
-	// returns the y size of an array of these blocks this block is in along the Y-axis
-	protected int findArrayYSize() {
-		if (this.canJoinMultiBlock(this.worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord))) {
-			return ((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord)).findArrayYSize();
-		} else {
-			return this.findArrayYPosition() + 1;
-		}
-	}
-
-	// returns the z size of an array of these blocks this block is in along the Z-axis
-	protected int findArrayZSize() {
-		if (this.canJoinMultiBlock(this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1))) {
-			return ((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1)).findArrayZSize();
-		} else {
-			return this.findArrayZPosition() + 1;
-		}
-	}
-
-	// returns the x, y and z sizes of 3 arrays of these blocks along the cardinal directions
-	protected int[] findArrayDimensions() {
-		int[] size = new int[3];
-		size[0] = this.findArrayXSize();
-		size[1] = this.findArrayYSize();
-		size[2] = this.findArrayZSize();
-		return size;
-	}
-
-	// returns the xPosition of this block in the multiblock
-	private int calculateXPosition() {
-		if (this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord))) {
-			return (((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord)).calculateXPosition() + 1);
-		} else {
-			return 0;
-		}
-	}
-
-	// returns the yPosition of this block in the multiblock
-	private int calculateYPosition() {
-		if (this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord - 1, this.zCoord))) {
-			return (((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord, this.yCoord - 1, this.zCoord)).calculateYPosition() + 1);
-		} else {
-			return 0;
-		}
-	}
-
-	// returns the zPosition of this block in the multiblock
-	private int calculateZPosition() {
-		if (this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1))) {
-			return (((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1)).calculateZPosition() + 1);
-		} else {
-			return 0;
-		}
-	}
-
-	// returns the x size of the multiblock
-	private int calculateXSize() {
-		if (this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord))) {
-			return ((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord)).calculateXSize();
-		} else {
-			return this.calculateXPosition() + 1;
-		}
-	}
-
-	// returns the y size of an array of these blocks this block is in along the Y-axis
-	private int calculateYSize() {
-		if (this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord))) {
-			return ((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord)).calculateYSize();
-		} else {
-			return this.calculateYPosition() + 1;
-		}
-	}
-
-	// returns the z size of an array of these blocks this block is in along the Z-axis
-	private int calculateZSize() {
-		if (this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1))) {
-			return ((TileEntityMultiBlock) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1)).calculateZSize();
-		} else {
-			return this.calculateZPosition() + 1;
-		}
-	}
-
-	// returns the x, y and z sizes of the multiblock
-	public int[] calculateDimensions() {
-		int[] size = new int[3];
-		size[0] = this.calculateXSize();
-		size[1] = this.calculateYSize();
-		size[2] = this.calculateZSize();
-		return size;
 	}
 
 	// debug info
 	@Override
 	public void addDebugInfo(List<String> list) {
+		checkForMultiBlock();
 		list.add("MULTIBLOCK:");
-		list.add("Multiblock: " + (this.isWood() ? "wood" : "iron"));
+		list.add("Multiblock:");
 		super.addDebugInfo(list);
 		list.add("  - MultiBlock: " + this.isMultiBlock());
 		list.add("  - Connected: " + this.getConnectedBlocks());
-		int[] size = this.calculateDimensions();
-		list.add("  - MultiBlock Size: " + size[0] + "x" + size[1] + "x" + size[2]);
+		list.add("  - MultiBlock Size: " + xSize + "x" + ySize + "x" + zSize);
 		boolean left = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord));
 		boolean right = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord));
 		boolean back = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1));
@@ -367,6 +267,7 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		boolean below = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord - 1, this.zCoord));
 		list.add("  - Found multiblock partners on: " + (left ? "left, " : "") + (right ? "right, " : "") + (back ? "back, " : "") + (front ? "front, " : "") + (top ? "top, " : "") + (below ? "below" : ""));
 		list.add("this clicked is on  layer " + this.getYPosition() + ".");
+		list.add("Is controller? " + (xPosition + yPosition + zPosition == 0));
 	}
 
 	/*

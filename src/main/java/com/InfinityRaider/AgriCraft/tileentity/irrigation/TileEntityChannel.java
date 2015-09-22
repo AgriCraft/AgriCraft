@@ -181,12 +181,12 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
                     int V_tot = tank.getFluidLevel() + this.lvl;
                     if (y_c != y_t) {
                         //total volume is below the channel connection
-                        if (tank.getFluidY(V_tot) <= y1) {
+                        if (tank.getFluidY() <= y1) {
                             updatedLevel = 0;
                             tank.setFluidLevel(V_tot);
                         }
                         //total volume is above the channel connection
-                        else if (tank.getFluidY(V_tot - ABSOLUTE_MAX) >= y2) {
+                        else if (tank.getFluidY() >= y2) {
                             updatedLevel = ABSOLUTE_MAX;
                             tank.setFluidLevel(V_tot - ABSOLUTE_MAX);
                         }
@@ -194,7 +194,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
                         else {
                             //some parameters
                             int tankYSize = tank.getYSize();
-                            int C = tank.getTotalCapacity();
+                            int C = tank.getCapacity();
                             //calculate the y corresponding to the total volume: y = f(V_tot), V_tank = f(y), V_channel = f(y)
                             float enumerator = ((float) V_tot) + ((ABSOLUTE_MAX * y1) / (y2 - y1) + ((float) 2 * C) / ((float) (Constants.WHOLE * tankYSize - 2)));
                             float denominator = (((float) ABSOLUTE_MAX) / (y2 - y1) + ((float) C) / ((float) (Constants.WHOLE * tankYSize - 2)));
