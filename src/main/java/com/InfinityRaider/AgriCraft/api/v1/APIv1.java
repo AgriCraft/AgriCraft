@@ -92,24 +92,24 @@ public interface APIv1 extends APIBase {
     /**
      * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
      */
-    public void registerCropPlant(ICropPlant plant);
+    void registerCropPlant(ICropPlant plant);
 
     /**
      * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
      */
-    public void registerCropPlant(IAgriCraftPlant plant);
+    void registerCropPlant(IAgriCraftPlant plant);
 
     /**
      * Register a growth requirement for this seed
      * @return true if the registering was successful
      */
-    public boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement);
+    boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement);
 
     /**
      * Register a default soil that any crop that doesn't require a specific soil can grow on
      * @return true if the soil was successfully regsitered
      */
-    public boolean registerDefaultSoil(BlockWithMeta soil);
+    boolean registerDefaultSoil(BlockWithMeta soil);
 
 	/**
 	 * Checks the seeds planting requirements.
