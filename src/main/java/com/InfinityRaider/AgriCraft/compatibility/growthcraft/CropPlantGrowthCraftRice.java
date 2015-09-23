@@ -43,6 +43,11 @@ public class CropPlantGrowthCraftRice extends CropPlant {
     }
 
     @Override
+    public Block getBlock() {
+        return plant;
+    }
+
+    @Override
     public ArrayList<ItemStack> getAllFruits() {
         ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
         fruits.add(new ItemStack(rice));

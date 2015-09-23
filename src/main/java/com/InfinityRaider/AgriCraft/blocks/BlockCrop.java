@@ -734,7 +734,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         }
         TileEntityCrop crop = (TileEntityCrop) tileEntity;
         if(crop.hasPlant()) {
-            //TODO: make it return the Block instance of the planted crop
+            return crop.getPlantBlock();
         }
         return this;
     }

@@ -18,7 +18,6 @@ import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
 import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
 import com.google.common.collect.Lists;
@@ -212,6 +211,14 @@ public class APIimplv1 implements APIv1 {
 			return null;
 		}
 		return ((TileEntityCrop) world.getTileEntity(x, y, z)).getSeedStack();
+	}
+
+	@Override
+	public Block getPlantedBlock(World world, int x, int y, int z) {
+		if(!isCrops(world, x, y, z)) {
+			return null;
+		}
+		return ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlantBlock();
 	}
 
 	@Override

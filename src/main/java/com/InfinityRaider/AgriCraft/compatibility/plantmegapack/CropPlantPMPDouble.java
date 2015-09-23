@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.compatibility.plantmegapack;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantTallGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;

@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -33,6 +34,11 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
     @Override
     public ItemStack getSeed() {
         return new ItemStack(seed);
+    }
+
+    @Override
+    public Block getBlock() {
+        return seed.getPlant(null, 0, 0, 0);
     }
 
     @Override
@@ -90,6 +96,6 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
     @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon(int growthStage) {
         //for the Vanilla SeedItem class the arguments for this method are not used
-        return seed.getPlant(null, 0, 0 ,0).getIcon(0, transformMeta(growthStage));
+        return getBlock().getIcon(0, transformMeta(growthStage));
     }
 }

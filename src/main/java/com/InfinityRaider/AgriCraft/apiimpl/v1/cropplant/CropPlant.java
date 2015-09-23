@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -67,6 +68,13 @@ public abstract class CropPlant {
      * @return a stack of the plant's seeds.
      */
     public abstract ItemStack getSeed();
+
+    /**
+     * Gets the block instance for this plant.
+     *
+     * @return the Block object for this plant.
+     */
+    public abstract Block getBlock();
 
     /**
      * Gets a list of all possible fruit drops from this plant.

@@ -36,6 +36,11 @@ public class CropPlantLotR extends CropPlant {
     }
 
     @Override
+    public Block getBlock() {
+        return plant;
+    }
+
+    @Override
     public ArrayList<ItemStack> getAllFruits() {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         list.add(new ItemStack(fruit));

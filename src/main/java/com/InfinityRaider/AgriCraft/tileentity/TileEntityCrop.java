@@ -19,6 +19,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -156,6 +157,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord, player);
     }
 
+    /** returns an ItemStack holding the seed currently planted, initialized with an NBT tag holding the stats */
     public ItemStack getSeedStack() {
         if(plant == null) {
             return null;
@@ -165,6 +167,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         SeedHelper.setNBT(tag, getGrowth(), getGain(), getStrength(), this.analyzed);
         seed.setTagCompound(tag);
         return seed;
+    }
+
+    /** returns the Block instance of the plant currently planted on the crop */
+    public Block getPlantBlock() {
+        return plant==null?null:plant.getBlock();
     }
 
     /** spawns weed in the crop */
@@ -312,7 +319,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         if(plant!=null) {
             this.plant = plant;
         } else {
-            LogHelper.info("Couldn't find plant for "+stack.getUnlocalizedName() +" at ("+xCoord+","+yCoord+","+zCoord+"), plant has been removed");
+            LogHelper.info("Couldn't find plant for " + stack.getUnlocalizedName() + " at (" + xCoord + "," + yCoord + "," + zCoord + "), plant has been removed");
             this.clearPlant();
         }
     }

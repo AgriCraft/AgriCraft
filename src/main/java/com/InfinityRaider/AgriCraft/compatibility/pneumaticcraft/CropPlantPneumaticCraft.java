@@ -44,6 +44,11 @@ public class CropPlantPneumaticCraft extends CropPlant {
     }
 
     @Override
+    public Block getBlock() {
+        return plant;
+    }
+
+    @Override
     public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
         int gain = ((TileEntityCrop) world.getTileEntity(x, y, z)).getGain();
         try {

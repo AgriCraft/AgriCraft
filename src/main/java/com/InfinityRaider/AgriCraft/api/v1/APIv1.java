@@ -225,6 +225,16 @@ public interface APIv1 extends APIBase {
 	ItemStack getPlantedSeed(World world, int x, int y, int z);
 
 	/**
+	 * Gets the Block instance of the block currently planted on the crop sticks at this location
+	 *
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @return an ItemStack with the seed currently planted on this crop, returns null if there is no crop there, or there is no seed planted
+	 */
+	Block getPlantedBlock(World world, int x, int y, int z);
+
+	/**
 	 * Checks if the plant that is in crops at the given position can grow. A
 	 * plant cannot grow if:
 	 * <ul>

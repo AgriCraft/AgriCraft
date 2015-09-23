@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.api.v1;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,9 @@ public interface ICropPlant {
 
 	/** Gets a stack of the seed for this plant */
 	public ItemStack getSeed();
+
+	/** Gets a block instance of the crop */
+	public Block getBlock();
 
 	/** Gets an arraylist of all possible fruit drops from this plant */
 	public ArrayList<ItemStack> getAllFruits();
