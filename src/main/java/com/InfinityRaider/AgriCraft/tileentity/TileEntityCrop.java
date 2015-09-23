@@ -157,7 +157,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     public ItemStack getSeedStack() {
-        ItemStack seed = plant.getSeed();
+        if(plant == null) {
+            return null;
+        }
+        ItemStack seed = plant.getSeed().copy();
         NBTTagCompound tag = new NBTTagCompound();
         SeedHelper.setNBT(tag, getGrowth(), getGain(), getStrength(), this.analyzed);
         seed.setTagCompound(tag);
@@ -393,19 +396,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             icon = ((BlockCrop) this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)).getWeedIcon(this.getBlockMetadata());
         }
         return icon;
-    }
-
-    //get the rendertype
-    @SideOnly(Side.CLIENT)
-    public int getRenderType() {
-        int type = -1;
-        if(this.hasPlant()) {
-                type = plant.renderAsFlower()?1:6;
-        }
-        else if(this.weed) {
-            type = 6;
-        }
-        return type;
     }
 
     @Override
