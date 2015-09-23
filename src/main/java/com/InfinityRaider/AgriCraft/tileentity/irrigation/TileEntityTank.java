@@ -32,10 +32,6 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
      */
     private int fluidLevel=0;
     private int lastDiscreteLvl=0;
-
-    public TileEntityTank() {
-        super();
-    }
     
     //OVERRIDES
     //---------
@@ -92,8 +88,8 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
     }
 
     public boolean isConnectedToChannel(ForgeDirection direction) {
-        if(direction != ForgeDirection.UNKNOWN && direction.offsetY != 0) {
-        	TileEntity tile = this.getWorldObj().getTileEntity(this.xCoord+direction.offsetX, this.yCoord, this.zCoord+direction.offsetZ);
+        if((this.worldObj != null) && (direction != ForgeDirection.UNKNOWN) && (direction.offsetY == 0)) {
+        	TileEntity tile = this.getWorldObj().getTileEntity(this.xCoord+direction.offsetX, this.yCoord+direction.offsetY, this.zCoord+direction.offsetZ);
             if(tile instanceof TileEntityChannel) {
                 return ((TileEntityChannel) tile).isSameMaterial(this);
             }
@@ -103,47 +99,28 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
     
     @Override
     public boolean canJoinMultiBlock(TileEntity tileEntity) {
-    	return tileEntity instanceof TileEntityTank && ((TileEntityTank)tileEntity).isSameMaterial(this);
+    	return (tileEntity instanceof TileEntityTank) && ((TileEntityTank)tileEntity).isSameMaterial(this);
     }
 
     //multiblockify
-    @Override
-	public void addBlock(TileEntityMultiBlock te) {
-		if (te instanceof TileEntityTank) {
-			TileEntityTank tank = ((TileEntityTank) te);
-			int newLevel = this.getFluidLevel() + tank.fluidLevel;
-			tank.fluidLevel = 0;
-			this.setFluidLevel(newLevel);
+	@Override
+	public void addBlock() {
+		if (!this.isController()) {
+			this.setFluidLevel(this.getFluidLevel() + this.fluidLevel);
+			this.fluidLevel = 0;
 		}
 	}
-
-    //breaks up the multiblock and divides the fluid among the tanks
-    //Seems to be called twice, due to the on neighbor change thing...
+    
     @Override
-    public void breakMultiBlock() {
-    	if(!isMultiBlock()) {
+    public void breakMultiPart(TileEntityMultiBlock controller) {
+    	if(!(controller instanceof TileEntityTank)) {
+    		LogHelper.error("The tank controller isn't the right type of multiblock! How is this possible?");
     		return;
     	}
+    	TileEntityTank tank = (TileEntityTank)controller;
     	//The loss is a new feature of breaking tanks.
-        int amount = this.getFluidLevel() / this.getConnectedBlocks();
-        LogHelper.debug("Amount to distribute per tank: " + amount);
-        TileEntity te;
-        for(int x=0;x<getXSize();x++) {
-            for(int y=0;y<getYSize();y++) {
-                for(int z=0;z<getZSize();z++) {
-                	te = this.worldObj.getTileEntity(this.xCoord - getXPosition() + x, this.yCoord - getYPosition() + y, this.zCoord - getZPosition() + z);
-                    if (te instanceof TileEntityTank) {
-                    	TileEntityTank tank = (TileEntityTank) te;
-                    	tank.resetMultiBlock();
-                    	tank.fluidLevel = amount;
-                    	tank.markForUpdate();
-                    } else {
-                    	LogHelper.debug("Multiblock hole issue detected.");
-                    }
-                    
-                }
-            }
-        }
+    	//TODO: Find way to calculate this only once.
+        this.fluidLevel = tank.getFluidLevel() / tank.getSize();
     }
 
     //TANK METHODS
@@ -152,17 +129,16 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
         return new FluidStack(FluidRegistry.WATER, this.getFluidLevel());
     }
 
-    public int getFluidLevel() {
-    	if(!this.isMultiBlock()) {
-    		return this.fluidLevel;
-    	}
-        TileEntity te = worldObj.getTileEntity(xCoord - getXPosition(), yCoord - getYPosition(), zCoord - getZPosition());
-        if(te==null || !(te instanceof TileEntityTank)) {
-            return this.fluidLevel;
-        }
-        TileEntityTank tank = (TileEntityTank) te;
-        return tank.fluidLevel;
-    }
+	public int getFluidLevel() {
+		if (!this.isController()) {
+			TileEntity te = worldObj.getTileEntity(xCoord - getXPosition(), yCoord - getYPosition(), zCoord - getZPosition());
+			if (te instanceof TileEntityTank) {
+				TileEntityTank tank = (TileEntityTank) te;
+				return tank.fluidLevel;
+			}
+		}
+		return this.fluidLevel;
+	}
 
     /**
      * Maps the current fluid level into the interval [0, {@value (Constants#WHOLE)}]
@@ -241,7 +217,7 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
     
     @Override
     public int getCapacity() {
-    	return SINGLE_CAPACITY*this.getConnectedBlocks();
+    	return SINGLE_CAPACITY*this.getSize();
     }
 
     public boolean isFull() {

@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -17,9 +19,9 @@ public abstract class BlockMultiBlock extends BlockCustomWood{
 			if (world.getTileEntity(x, y, z) instanceof TileEntityMultiBlock) {
 				LogHelper.debug("Deconstructing multiblock.");
 				TileEntityMultiBlock block = (TileEntityMultiBlock) world.getTileEntity(x, y, z);
-				block.breakMultiBlock();
+				block.breakupMultiBlock(true);
 			} else {
-				LogHelper.debug("Where did the TileEntity go? Now the multiblock can't be broken!");
+				LogHelper.error("The tile entity at: (" + x + "," + y + "," + z + ") is not a multiblock, like it should be." );
 			}
             world.removeTileEntity(x, y, z);
         }
@@ -31,14 +33,14 @@ public abstract class BlockMultiBlock extends BlockCustomWood{
     }
     
     @Override
-    public void onPostBlockPlaced(World world, int x, int y, int z, int meta) {
-    	super.onPostBlockPlaced(world, x, y, z, meta);
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
+    	super.onBlockPlacedBy(world, x, y, z, entity, stack);
     	TileEntity te = world.getTileEntity(x, y, z);
     	if (te instanceof TileEntityMultiBlock) {
     		LogHelper.debug("Checking if block completed multiblock.");
-    		((TileEntityMultiBlock)te).checkForMultiBlock();
+    		((TileEntityMultiBlock)te).formMultiBlock();
     	} else {
-    		LogHelper.debug("Multiblock place failure.");
+    		LogHelper.debug("Multiblock place failure. Unformed? " + (te == null) + " At: (" + x + "," + y + "," + z + ").");
     	}
     }
     

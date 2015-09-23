@@ -65,19 +65,14 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         return success;
     }
 
-    private boolean renderTank(TileEntityTank tank, Tessellator tessellator, int meta) {
-        if(meta==0) {
-            this.drawWoodTank(tank, tessellator);
-            //draw the waterTexture
-            if((!shouldBehaveAsTESR()) && (tank.getFluidHeight()>0)) {
-                this.drawWater(tank, tessellator);
-            }
-        }
-        else if(meta==1) {
-            this.drawIronTank(tank, tessellator);
-        }
-        return true;
-    }
+	private boolean renderTank(TileEntityTank tank, Tessellator tessellator, int meta) {
+		this.drawWoodTank(tank, tessellator);
+		// draw the waterTexture
+		if ((!shouldBehaveAsTESR()) && (tank.getFluidHeight() > 0)) {
+			this.drawWater(tank, tessellator);
+		}
+		return true;
+	}
 
     @Override
     public boolean shouldBehaveAsTESR() {
@@ -136,14 +131,10 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
                 drawScaledPrism(tessellator, 2, 12, 0, 14, 16, 2, icon, cm, dir);
             }
             //not connected to anything
-            if(!tank.hasNeighbour(dir)) {
+            else if(!tank.hasNeighbour(dir)) {
                 drawScaledPrism(tessellator, 2, yMin, 0, 14, 16, 2, icon, cm, dir);
             }
         }
-    }
-
-    private void drawIronTank(TileEntityTank tank, Tessellator tessellator) {
-        IIcon icon = tank.getIcon();
     }
 
     private void drawWater(TileEntityTank tank, Tessellator tessellator) {

@@ -13,11 +13,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 
 public abstract class TileEntityMultiBlock extends TileEntityCustomWood implements IDebuggable {
 
-	/**
-	 * Represents if the multiblock is pre-1.4
-	 */
-	private boolean oldVersion = false;
-
+	private boolean reform = false;
 	private int xPosition = 0;
 	private int yPosition = 0;
 	private int zPosition = 0;
@@ -25,10 +21,6 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 	private int ySize = 1;
 	private int zSize = 1;
 	private int size = 1;
-
-	public TileEntityMultiBlock() {
-		super();
-	}
 
 	// OVERRIDES
 	// ---------
@@ -49,7 +41,7 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		if (tag.hasKey(Names.NBT.connected)) {
-			oldVersion = true;
+			reform = true;
 		} else {
 			xPosition = tag.getInteger("xPosition");
 			yPosition = tag.getInteger("yPosition");
@@ -65,8 +57,8 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 	@Override
 	public void updateEntity() {
 		if (!this.worldObj.isRemote) {
-			if (oldVersion) {
-				this.checkForMultiBlock();
+			if (reform) {
+				this.formMultiBlock();
 			}
 		}
 	}
@@ -86,6 +78,18 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		return zPosition;
 	}
 
+	public int getControllerX() {
+		return this.xCoord - this.xPosition;
+	}
+
+	public int getControllerY() {
+		return this.yCoord - this.yPosition;
+	}
+
+	public int getControllerZ() {
+		return this.zCoord - this.zPosition;
+	}
+
 	public int getXSize() {
 		return xSize;
 	}
@@ -98,64 +102,65 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		return zSize;
 	}
 
-	// checks if this is part of a multiblock
-	public boolean isMultiBlock() {
-		return this.getConnectedBlocks() > 1;
-	}
-
 	// returns the number of blocks in the multiblock
-	public int getConnectedBlocks() {
+	public int getSize() {
 		return size;
 	}
-
-	/**
-	 * Determines if a tile entity may join to the multiblock.
-	 * 
-	 * @param tileEntity
-	 * @return
-	 */
-	public abstract boolean canJoinMultiBlock(TileEntity tileEntity);
+	
+	// checks if this is part of a multiblock
+	public boolean isMultiBlock() {
+		return size > 1;
+	}
+	
+	public boolean isController() {
+		return (xPosition + yPosition + zPosition == 0);
+	}
 
 	public boolean hasNeighbour(ForgeDirection direction) {
 		if (this.worldObj == null || direction == null || direction == ForgeDirection.UNKNOWN) {
 			return false;
 		}
-		return ((xPosition + direction.offsetX > -1) && (xPosition + direction.offsetX < xSize)) &&
-				((yPosition + direction.offsetY > -1) && (yPosition + direction.offsetY < ySize)) &&
-				((zPosition + direction.offsetZ > -1) && (zPosition + direction.offsetZ < zSize));
+		return ((xPosition + direction.offsetX > -1) && (xPosition + direction.offsetX < xSize)) && ((yPosition + direction.offsetY > -1) && (yPosition + direction.offsetY < ySize)) && ((zPosition + direction.offsetZ > -1) && (zPosition + direction.offsetZ < zSize));
 	}
 
 	/**
-	 * Check if a tile entity is part of this multiblock.
-	 * TODO: fix bad method.
+	 * Check if a tile entity is part of this multiblock. TODO: fix bad method.
 	 * 
 	 * @param tileEntity
 	 * @return
 	 */
 	public boolean isMultiBlockPartner(TileEntity tileEntity) {
-		return this.getConnectedBlocks() > 1 && (this.canJoinMultiBlock(tileEntity)) && (this.getConnectedBlocks() == ((TileEntityMultiBlock) tileEntity).getConnectedBlocks());
+		if (this.getSize() > 1 && tileEntity instanceof TileEntityMultiBlock) {
+			TileEntityMultiBlock block = (TileEntityMultiBlock) tileEntity;
+			return (this.getControllerX() == block.getControllerX()) && (this.getControllerY() == block.getControllerY()) && (this.getControllerZ() == block.getControllerZ());
+		}
+		return false;
 	}
 
-	// multiblockify
-	public final boolean checkForMultiBlock() {		
+	/**
+	 * Checks if a multiblock may be formed, and forms it if possible.
+	 * 
+	 * @return If a multiblock was formed.
+	 */
+	public final boolean formMultiBlock() {
 		if (this.worldObj.isRemote) {
 			return false;
 		}
 		// find dimensions
-		int xPosNew = findEnd(ForgeDirection.WEST); //-x
-		int yPosNew = findEnd(ForgeDirection.DOWN); //-y
-		int zPosNew = findEnd(ForgeDirection.NORTH); //-z
-		int xSizeNew = xPosNew + findEnd(ForgeDirection.EAST) + 1; //+x
-		int ySizeNew = yPosNew + findEnd(ForgeDirection.UP) + 1; //+y
-		int zSizeNew = zPosNew + findEnd(ForgeDirection.SOUTH) + 1; //+z
+		int xPosNew = findEnd(ForgeDirection.WEST); // -x
+		int yPosNew = findEnd(ForgeDirection.DOWN); // -y
+		int zPosNew = findEnd(ForgeDirection.NORTH); // -z
+		int xSizeNew = xPosNew + findEnd(ForgeDirection.EAST) + 1; // +x
+		int ySizeNew = yPosNew + findEnd(ForgeDirection.UP) + 1; // +y
+		int zSizeNew = zPosNew + findEnd(ForgeDirection.SOUTH) + 1; // +z
 		if (xSizeNew == 1 && ySizeNew == 1 && zSizeNew == 1) {
 			LogHelper.debug("No multiblock structure here...");
-			LogHelper.debug("xpos:" + xPosNew + " ypos:" + yPosNew + " zpos:" + zPosNew);
-			LogHelper.debug("xsize:" + xSizeNew + " ysize:" + ySizeNew + " zsize:" + zSizeNew);
+			LogHelper.debug("	xpos:" + xPosNew + " ypos:" + yPosNew + " zpos:" + zPosNew);
+			LogHelper.debug("	xsize:" + xSizeNew + " ysize:" + ySizeNew + " zsize:" + zSizeNew);
 			return false;
 		}
 		LogHelper.debug("Checking if all objects are multiblock parts.");
-		//Check if all the blocks in the defined area are connectable multiblocks.
+		// Check if all the blocks in the defined area are connectable multiblocks.
 		for (int x = this.xCoord - xPosNew; x < this.xCoord - xPosNew + xSizeNew; x++) {
 			for (int y = this.yCoord - yPosNew; y < this.yCoord - yPosNew + ySizeNew; y++) {
 				for (int z = this.zCoord - zPosNew; z < this.zCoord - zPosNew + zSizeNew; z++) {
@@ -168,16 +173,16 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		LogHelper.debug("Forming Multiblock.");
 		LogHelper.debug("xpos:" + xPosNew + " ypos:" + yPosNew + " zpos:" + zPosNew);
 		LogHelper.debug("xsize:" + xSizeNew + " ysize:" + ySizeNew + " zsize:" + zSizeNew);
-		//Turn all the blocks into one multiblock
+		// Turn all the blocks into one multiblock
 		for (int x = 0; x < xSizeNew; x++) {
 			for (int y = 0; y < ySizeNew; y++) {
 				for (int z = 0; z < zSizeNew; z++) {
 					TileEntity te = this.worldObj.getTileEntity(this.xCoord - xPosNew + x, this.yCoord - yPosNew + y, this.zCoord - zPosNew + z);
 					if (te instanceof TileEntityMultiBlock) {
 						TileEntityMultiBlock block = ((TileEntityMultiBlock) te);
-						block.breakMultiBlock();
-						block.setMultiblock(x, y, z, xSizeNew, ySizeNew, zSizeNew);
-						addBlock(block);
+						block.breakupMultiBlock();
+						block.joinMultiblock(x, y, z, xSizeNew, ySizeNew, zSizeNew);
+						block.addBlock();
 						block.markForUpdate();
 					} else {
 						LogHelper.debug("This is odd... a tile entity in the structure isn't the right type...");
@@ -187,15 +192,16 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		}
 		return true;
 	}
-	
-	/**
-	 * Implement this method to patch into the multiblock formation loop.
-	 * 
-	 * @param te the block currently being added to the structure.
-	 */
-	public abstract void addBlock(TileEntityMultiBlock te);
 
-	private void setMultiblock(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize) {
+	/**
+	 * @param xPos
+	 * @param yPos
+	 * @param zPos
+	 * @param xSize
+	 * @param ySize
+	 * @param zSize
+	 */
+	private void joinMultiblock(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize) {
 		this.xPosition = xPos;
 		this.yPosition = yPos;
 		this.zPosition = zPos;
@@ -203,10 +209,10 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		this.ySize = ySize;
 		this.zSize = zSize;
 		this.size = xSize * ySize * zSize;
-		this.oldVersion = false;
+		this.reform = false;
 	}
 
-	public void resetMultiBlock() {
+	public void resetPart() {
 		this.xPosition = 0;
 		this.yPosition = 0;
 		this.zPosition = 0;
@@ -214,37 +220,59 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		this.ySize = 1;
 		this.zSize = 1;
 		this.size = 1;
-		this.oldVersion = false;
+		this.reform = false;
+	}
+	
+	/**
+	 * Hackity-Hack reform makes it come back!
+	 */
+	public final void breakupMultiBlock() {
+		this.breakupMultiBlock(false);
 	}
 
 	// breaks up the multiblock.
-	public void breakMultiBlock() {
-		if (!this.isMultiBlock()) {
+	public final void breakupMultiBlock(boolean shouldReform) {
+		if (this.worldObj.isRemote || !this.isMultiBlock()) {
+			//LogHelper.debug("I hope this is a single tank...");
 			return;
 		}
-		int visited = 0;
+		//int visited = 0;
 		// Store these, so they won't get reset and break things.
-		final int anchorx = xCoord - xPosition;
-		final int anchory = yCoord - yPosition;
-		final int anchorz = zCoord - zPosition;
-		final int shouldVisit = size;
-		for (int x = 0; x < xSize; x++) {
-			for (int y = 0; y < ySize; y++) {
-				for (int z = 0; z < zSize; z++) {
-					if (this.worldObj.getTileEntity(anchorx + x, anchory + y, anchorz + z) instanceof TileEntityMultiBlock) {
-						TileEntityMultiBlock block = (TileEntityMultiBlock) this.worldObj.getTileEntity(anchorx + x, anchory + y, anchorz + z);
-						block.resetMultiBlock();
+		// Plus no need to keep calling them.
+		final int anchorX = this.getControllerX();
+		final int anchorY = this.getControllerY();
+		final int anchorZ = this.getControllerZ();
+		final int sizeX = this.getXSize();
+		final int sizeY = this.getYSize();
+		final int sizeZ = this.getZSize();
+		//final int shouldVisit = size;
+		final TileEntityMultiBlock controller;
+		if (!(this.worldObj.getTileEntity(anchorX, anchorY, anchorZ) instanceof TileEntityMultiBlock)) {
+			LogHelper.error("This is bad! The multiblock controller at (" + anchorX + "," + anchorY + "," + anchorZ + ") is missing! Aborting!");
+			return;
+		}
+		controller = (TileEntityMultiBlock) this.worldObj.getTileEntity(anchorX, anchorY, anchorZ);
+		//LogHelper.debug("Entering multiblock breaking loop.");
+		// Break the multiblock one by one, with the controller being the last block broken.
+		for (int x = sizeX - 1; x > -1; x--) {
+			for (int y = sizeY - 1; y > -1; y--) {
+				for (int z = sizeZ - 1; z > -1; z--) {
+					if (this.worldObj.getTileEntity(anchorX + x, anchorY + y, anchorZ + z) instanceof TileEntityMultiBlock) {
+						TileEntityMultiBlock block = (TileEntityMultiBlock) this.worldObj.getTileEntity(anchorX + x, anchorY + y, anchorZ + z);
+						block.breakMultiPart(controller);
+						block.resetPart();
+						block.reform = shouldReform;
 						block.markForUpdate();
-						visited++;
+						//visited++;
 					} else {
 						LogHelper.debug("Ooops! Went out of the multiblock when breaking it.");
 					}
 				}
 			}
 		}
-		LogHelper.debug("Visited " + visited + " of " + shouldVisit +" blocks while breaking multiblock.");
+		//LogHelper.debug("Visited " + visited + " of " + shouldVisit + " blocks while breaking multiblock.");
 	}
-	
+
 	/**
 	 * Find the distance to the end of the multiblock in a certain direction.
 	 * 
@@ -262,12 +290,12 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 	// debug info
 	@Override
 	public void addDebugInfo(List<String> list) {
-		checkForMultiBlock();
+		formMultiBlock();
 		list.add("MULTIBLOCK:");
 		list.add("Multiblock:");
 		super.addDebugInfo(list);
 		list.add("  - MultiBlock: " + this.isMultiBlock());
-		list.add("  - Connected: " + this.getConnectedBlocks());
+		list.add("  - Connected: " + this.getSize());
 		list.add("  - MultiBlock Size: " + xSize + "x" + ySize + "x" + zSize);
 		boolean left = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord));
 		boolean right = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord));
@@ -277,10 +305,32 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		boolean below = this.isMultiBlockPartner(this.worldObj.getTileEntity(this.xCoord, this.yCoord - 1, this.zCoord));
 		list.add("  - Found multiblock partners on: " + (left ? "left, " : "") + (right ? "right, " : "") + (back ? "back, " : "") + (front ? "front, " : "") + (top ? "top, " : "") + (below ? "below" : ""));
 		list.add("this clicked is on  layer " + this.getYPosition() + ".");
-		list.add("Is controller? " + (xPosition + yPosition + zPosition == 0));
+		list.add("Is controller? " + this.isController());
 	}
 
 	/*
 	 * @Override public void addWailaInformation(List information) { super.addWailaInformation(information); }
 	 */
+
+	/**
+	 * Determines if a tile entity may join to the multiblock.
+	 * 
+	 * @param tileEntity
+	 * @return
+	 */
+	public abstract boolean canJoinMultiBlock(TileEntity tileEntity);
+	
+	/**
+	 * Implement this method to patch into the multiblock formation loop.
+	 * 
+	 * @param te the block currently being added to the structure.
+	 */
+	public abstract void addBlock();
+
+	/**
+	 * Called when the multiblock structure is being broken. Used to patch into the break loop.
+	 * 
+	 * @param controller The multiblock controller. Keep in mind this could be a self-pointer.
+	 */
+	public abstract void breakMultiPart(TileEntityMultiBlock controller);
 }

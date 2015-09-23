@@ -31,7 +31,6 @@ public class BlockWaterTank extends BlockMultiBlock{
     //This gets called when the block is right clicked
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
-        boolean update=false;
         if(!world.isRemote) {
             TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
             ItemStack stack = player.getCurrentEquippedItem();
@@ -42,7 +41,6 @@ public class BlockWaterTank extends BlockMultiBlock{
                     int quantity = tank.fill(ForgeDirection.UNKNOWN, liquid, false);
                     if(quantity==liquid.amount) {
                         tank.fill(ForgeDirection.UNKNOWN, liquid, true);
-                        update = true;
                         //change the inventory if player is not in creative mode
                         if(!player.capabilities.isCreativeMode) {
                             if(stack.stackSize==1) {
@@ -58,6 +56,7 @@ public class BlockWaterTank extends BlockMultiBlock{
                                 player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
                             }
                         }
+                        tank.markForUpdate();
                     }
                 }
                 //put water from tank in empty liquid container
@@ -88,19 +87,13 @@ public class BlockWaterTank extends BlockMultiBlock{
                                 }
                             }
                             tank.drain(ForgeDirection.UNKNOWN, filledLiquid.amount, true);
-                            update = true;
+                            tank.markForUpdate();
                         }
                     }
                 }
             }
-            if(update) {
-                tank.markForUpdate();
-                return true;
-            }
-            else {
-                return false;
-            }
         }
+        // We don't want fluid spilling everywhere...
         return true;
     }
 
