@@ -173,7 +173,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
                 //neighbour is a tank: calculate the fluid levels of the tank and the channel
                 else {
                     TileEntityTank tank = (TileEntityTank) component;
-                    int Y = tank.getYPosition();
+                    int Y = tank.getComponent().posY;
                     float y_c = Constants.WHOLE * Y + this.getFluidHeight();  //initial channel water y
                     float y_t = tank.getFluidY();           //initial tank water y
                     float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum y of the channel
@@ -193,7 +193,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
                         //total volume is between channel connection top and bottom
                         else {
                             //some parameters
-                            int tankYSize = tank.getYSize();
+                            int tankYSize = tank.getComponent().sizeY;
                             int C = tank.getCapacity();
                             //calculate the y corresponding to the total volume: y = f(V_tot), V_tank = f(y), V_channel = f(y)
                             float enumerator = ((float) V_tot) + ((ABSOLUTE_MAX * y1) / (y2 - y1) + ((float) 2 * C) / ((float) (Constants.WHOLE * tankYSize - 2)));

@@ -26,16 +26,17 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
     protected static final int DISCRETE_MAX = Constants.WHOLE;
     
     protected static final int SINGLE_CAPACITY = 8 * Constants.BUCKET_mB;
+    
     /**
      * Don't call this directly, use getFluidLevel() and setFluidLevel(int amount) because only the tank at position (0, 0, 0)
-     * in the multiblock holds the liquid
+     * in the multiblock holds the liquid.
+     * <p>
+     * Represents the amount of fluid the tank is holding.
+     * </p>
      */
     private int fluidLevel=0;
     private int lastDiscreteLvl=0;
     
-    //OVERRIDES
-    //---------
-    //this saves the data on the tile entity
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
@@ -44,16 +45,12 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
         }
     }
 
-    //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if(tag.hasKey(Names.NBT.level)) {
-            if(getXPosition()==0 && getYPosition()==0 && getZPosition()==0) {
-                this.fluidLevel = tag.getInteger(Names.NBT.level);
-            }
-        }
-        else {
+        if(this.getComponent().isController && tag.hasKey(Names.NBT.level)) {
+        	this.fluidLevel = tag.getInteger(Names.NBT.level);
+        } else {
             this.fluidLevel=0;
         }
     }
@@ -64,7 +61,7 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
     	super.updateEntity();
         if(!this.worldObj.isRemote) {
             if(this.worldObj.canBlockSeeTheSky(this.xCoord, this.yCoord, this.zCoord) && this.worldObj.isRaining()) {
-                if(getYPosition()+1==getYSize()) {
+                if(!this.getComponent().hasNeighbour(ForgeDirection.UP)) {
                     BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(this.xCoord, this.zCoord);
                     if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
                        this.setFluidLevel(this.getFluidLevel() + 1);
@@ -105,7 +102,7 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
     //multiblockify
 	@Override
 	public void addBlock() {
-		if (!this.isController()) {
+		if (!this.getComponent().isController) {
 			this.setFluidLevel(this.getFluidLevel() + this.fluidLevel);
 			this.fluidLevel = 0;
 		}
@@ -120,7 +117,7 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
     	TileEntityTank tank = (TileEntityTank)controller;
     	//The loss is a new feature of breaking tanks.
     	//TODO: Find way to calculate this only once.
-        this.fluidLevel = tank.getFluidLevel() / tank.getSize();
+        this.fluidLevel = tank.getFluidLevel() / tank.getComponent().size;
     }
 
     //TANK METHODS
@@ -130,21 +127,20 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
     }
 
 	public int getFluidLevel() {
-		if (!this.isController()) {
-			TileEntity te = worldObj.getTileEntity(xCoord - getXPosition(), yCoord - getYPosition(), zCoord - getZPosition());
+		if (!this.getComponent().isController) {
+			TileEntity te = worldObj.getTileEntity(this.getComponent().anchorX, this.getComponent().anchorY, this.getComponent().anchorZ);
 			if (te instanceof TileEntityTank) {
-				TileEntityTank tank = (TileEntityTank) te;
-				return tank.fluidLevel;
+				return ((TileEntityTank) te).fluidLevel;
 			}
 		}
 		return this.fluidLevel;
 	}
 
     /**
-     * Maps the current fluid level into the interval [0, {@value (Constants#WHOLE)}]
+     * Maps the current fluid level into the interval [0, {@value #DISCRETE_MAX}]
      */
     public int getDiscreteFluidLevel() {
-        float discreteFactor = (float) DISCRETE_MAX / ((float) SINGLE_CAPACITY * this.getXSize() * this.getZSize());
+        float discreteFactor = (float) DISCRETE_MAX / ((float) SINGLE_CAPACITY * this.getComponent().sizeX * this.getComponent().sizeZ);
         int discreteFluidLevel = Math.round(discreteFactor * getFluidLevel());
         // This is so the fluid shows up over the bottom...
         // TODO: Find less hackish way.
@@ -161,7 +157,7 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
 
     public float getFluidY() {
     	//total height in 1/16th's of a block
-        int totalHeight = Constants.WHOLE*this.getYSize()-2;
+        int totalHeight = Constants.WHOLE*this.getComponent().sizeY-2;
         return totalHeight*((float) this.getFluidLevel())/((float) this.getCapacity())+2;
     }
     
@@ -197,10 +193,10 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
     public void setFluidLevel(int lvl) {
         if(lvl!=this.getFluidLevel()) {
             lvl = lvl > this.getCapacity() ? this.getCapacity() : lvl;
-            if(!(worldObj.getTileEntity(xCoord - getXPosition(), yCoord - getYPosition(), zCoord - getZPosition()) instanceof TileEntityTank)){
+            if(!(worldObj.getTileEntity(this.getComponent().anchorX, this.getComponent().anchorY, this.getComponent().anchorZ) instanceof TileEntityTank)){
                 return; 
             }
-            TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(xCoord - getXPosition(), yCoord - getYPosition(), zCoord - getZPosition());
+            TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(this.getComponent().anchorX, this.getComponent().anchorY, this.getComponent().anchorZ);
             if(tank != null) {
                 tank.fluidLevel = lvl;
                 if(!tank.worldObj.isRemote) {
@@ -217,7 +213,7 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
     
     @Override
     public int getCapacity() {
-    	return SINGLE_CAPACITY*this.getSize();
+    	return SINGLE_CAPACITY*this.getComponent().size;
     }
 
     public boolean isFull() {
@@ -292,9 +288,8 @@ public class TileEntityTank extends TileEntityMultiBlock implements IFluidHandle
         list.add("Tank: (single capacity: " + SINGLE_CAPACITY + ")");
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + this.getCapacity());
         list.add("  - FluidHeight: " + this.getFluidY());
-        list.add("Water level is on layer " + (int) Math.floor(((float) this.getFluidLevel() - 0.1F) / ((float) (this.getCapacity() * this.getXSize() * this.getZSize()))) + ".");
-        list.add("this clicked is on  layer " + this.getYPosition() + ".");
-        list.add("Water height is " + this.getFluidY());
+        list.add("  - Water level is on layer " + (int) Math.floor(((float) this.getFluidLevel() - 0.1F) / ((float) (this.getCapacity() * this.getComponent().sizeX * this.getComponent().sizeZ))) + ".");
+        list.add("  - Water height is " + this.getFluidY());
     }
     
     @Override
