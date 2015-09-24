@@ -4,11 +4,13 @@ import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 public abstract class BlockCustomWood extends BlockContainerAgriCraft {
+	
     public BlockCustomWood() {
         super(Material.wood);
         this.setHardness(2.0F);
@@ -27,6 +30,15 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
         setHarvestLevel("axe", 0);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setStepSound(soundTypeWood);
+    }
+    
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
+    	super.onBlockPlacedBy(world, x, y, z, entity, stack);
+    	if(world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityCustomWood) {
+            TileEntityCustomWood tileEntity = (TileEntityCustomWood) world.getTileEntity(x, y, z);
+            tileEntity.setMaterial(stack);
+        }
     }
 
     @Override
