@@ -58,13 +58,12 @@ public class MobDropCropsHelper extends ModHelper {
                         continue;
                     }
                     ItemSeeds seed = (ItemSeeds) obj;
-                    if((checkAndPrintWarningMessage(seed))) {
-                        continue;
+                    if(checkAndPrintWarningMessage(seed)) {
+                        CropPlant plant = new CropPlantMobDropCrop(seed);
+                        CropPlantHandler.registerPlant(plant);
+                        OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
+                        GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));
                     }
-                    CropPlant plant = new CropPlantMobDropCrop(seed);
-                    CropPlantHandler.registerPlant(plant);
-                    OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
-                    GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));
                 }
             } catch(Exception e) {
                 LogHelper.printStackTrace(e);
