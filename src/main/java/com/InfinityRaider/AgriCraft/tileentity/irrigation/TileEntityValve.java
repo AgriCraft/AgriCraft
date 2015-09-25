@@ -10,6 +10,7 @@ import net.minecraft.util.StatCollector;
 import java.util.List;
 
 public class TileEntityValve extends TileEntityChannel implements IDebuggable{
+	
     private boolean powered = false;
 
     public TileEntityValve() {
@@ -48,7 +49,13 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
         }
     }
 
-    public boolean isPowered() {return powered;}
+    public boolean isPowered() {
+    	return powered;
+    }
+    
+    public boolean canAccept() {
+    	return super.canAccept() && !powered;
+    }
 
     @Override
     public void addDebugInfo(List<String> list) {
@@ -56,7 +63,7 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
         list.add("  - State: "+(this.isPowered()?"closed":"open"));
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + Constants.BUCKET_mB / 2);
         list.add("  - FluidHeight: " + this.getFluidHeight());
-        list.add("this material is: " + this.getMaterialName() + ":" + this.getMaterialMeta()); //Much Nicer.
+        list.add("  - Material: " + this.getMaterialName() + ":" + this.getMaterialMeta()); //Much Nicer.
     }
     
     @Override

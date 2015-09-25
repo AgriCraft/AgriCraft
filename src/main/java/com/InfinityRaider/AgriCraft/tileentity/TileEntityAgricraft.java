@@ -39,7 +39,7 @@ public abstract class TileEntityAgricraft extends TileEntity {
      * Overriding subclasses should <em>always</em> make a call to Super().
      */
     @Override
-      public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         if(tag.hasKey("direction")) {
             this.setOrientation(tag.getByte("direction"));
