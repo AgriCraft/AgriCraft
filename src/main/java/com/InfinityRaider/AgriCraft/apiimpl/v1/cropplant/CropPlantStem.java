@@ -18,6 +18,10 @@ public class CropPlantStem extends CropPlantGeneric {
         this.block = block;
     }
 
+    public Block getFruitBlock() {
+        return block;
+    }
+
     @Override
     public int transformMeta(int growthStage) {
         return growthStage;

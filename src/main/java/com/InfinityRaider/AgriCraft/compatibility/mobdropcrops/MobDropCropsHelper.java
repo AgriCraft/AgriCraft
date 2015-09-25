@@ -6,66 +6,78 @@ import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.pam.mobdropcrops.mobdropcrops;
-import net.minecraft.block.Block;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 public class MobDropCropsHelper extends ModHelper {
     @Override
-    protected void init() {
-        OreDictionary.registerOre(Names.OreDict.listAllseed, mobdropcrops.blazeseedItem);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, mobdropcrops.boneseedItem);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, mobdropcrops.creeperseedItem);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, mobdropcrops.enderseedItem);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, mobdropcrops.eyeseedItem);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, mobdropcrops.rottenseedItem);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, mobdropcrops.slimeseedItem);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, mobdropcrops.tearseedItem);
-    }
-
-    @Override
     protected void initPlants() {
-        ItemSeeds[] seeds = {
-                (ItemSeeds) mobdropcrops.blazeseedItem,
-                (ItemSeeds) mobdropcrops.boneseedItem,
-                (ItemSeeds) mobdropcrops.enderseedItem,
-                (ItemSeeds) mobdropcrops.eyeseedItem,
-                (ItemSeeds) mobdropcrops.rottenseedItem,
-                (ItemSeeds) mobdropcrops.tearseedItem
-        };
-        Block[] plants = {
-                mobdropcrops.pamblazeCrop,
-                mobdropcrops.pamboneCrop,
-                mobdropcrops.pamenderCrop,
-                mobdropcrops.pameyeCrop,
-                mobdropcrops.pamrottenCrop,
-                mobdropcrops.pamtearCrop
-        };
-        //normal crops
-        for(int i=0;i<seeds.length;i++) {
-            try {
-                CropPlant plant = new CropPlantMobDropCrop(seeds[i], plants[i]);
-                CropPlantHandler.registerPlant(plant);
-                GrowthRequirementHandler.getGrowthRequirement(seeds[i], 0).setSoil(new BlockWithMeta(Blocks.soul_sand));
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
         //creeper crop
         try {
-            CropPlantHandler.registerPlant(new CropPlantCreeper());
-            GrowthRequirementHandler.getGrowthRequirement(mobdropcrops.creeperseedItem, 0).setSoil(new BlockWithMeta(Blocks.soul_sand));
+            ItemSeeds seed = (ItemSeeds) Item.itemRegistry.getObject("mobdropcrops:Creeper Seed");
+            if(checkAndPrintWarningMessage(seed)) {
+                CropPlant plant = new CropPlantCreeper();
+                CropPlantHandler.registerPlant(plant);
+                OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
+                GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));
+            }
         } catch(Exception e) {
             e.printStackTrace();
         }
         //slime crop
         try {
-            CropPlantHandler.registerPlant(new CropPlantSlime());
-            GrowthRequirementHandler.getGrowthRequirement(mobdropcrops.slimeseedItem, 0).setSoil(new BlockWithMeta(Blocks.soul_sand));
+            ItemSeeds seed = (ItemSeeds) Item.itemRegistry.getObject("mobdropcrops:slimeseedItem");
+            if(checkAndPrintWarningMessage(seed)) {
+                CropPlant plant = new CropPlantSlime();
+                CropPlantHandler.registerPlant(plant);
+                OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
+                GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));
+            }
         } catch(Exception e) {
             e.printStackTrace();
+        }
+        //normal crops
+        Class registry;
+        try {
+            registry = Class.forName("com.pam.mobdropcrops.mobdropcrops");
+        } catch(Exception e) {
+            LogHelper.printStackTrace(e);
+            return;
+        }
+        for(Field field: registry.getDeclaredFields()) {
+            try {
+                if(Modifier.isStatic(field.getModifiers())) {
+                    Object obj = field.get(null);
+                    if(!(obj instanceof ItemSeeds)) {
+                        continue;
+                    }
+                    ItemSeeds seed = (ItemSeeds) obj;
+                    if((checkAndPrintWarningMessage(seed))) {
+                        continue;
+                    }
+                    CropPlant plant = new CropPlantMobDropCrop(seed);
+                    CropPlantHandler.registerPlant(plant);
+                    OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
+                    GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));
+                }
+            } catch(Exception e) {
+                LogHelper.printStackTrace(e);
+            }
+        }
+    }
+
+    private boolean checkAndPrintWarningMessage(ItemSeeds seed) {
+        if(seed.getPlant(null, 0, 0, 0) == null) {
+            LogHelper.info("NOT REGISTERING CROPPLANT FOR " + Item.itemRegistry.getNameForObject(seed) + " BECAUSE INVALID IMPLEMENTATION OF REQUIRED METHODS");
+            return false;
+        } else {
+            return true;
         }
     }
 
