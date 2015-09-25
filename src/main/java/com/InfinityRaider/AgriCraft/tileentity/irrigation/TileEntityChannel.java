@@ -32,8 +32,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
     private IIrrigationComponent[] neighbours = new IIrrigationComponent[4];
     protected int ticksSinceNeighbourCheck = 0;
     protected static final int NEIGHBOUR_CHECK_DELAY = 1024;
-    
-    private static final int SYNC_WATER_ID = 0;
 
     // Might want to move this to a static import class...
     protected static final int MIN = 5;
@@ -72,7 +70,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
         super.readFromNBT(tag);
     }
 
-    public int getFluidLevel() {
+    @Override
+	public int getFluidLevel() {
     	return this.lvl;
     }
     
@@ -81,26 +80,60 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
     	return ABSOLUTE_MAX;
     }
 
-    public void setFluidLevel(int lvl) {
+    @Override
+	public void setFluidLevel(int lvl) {
         if(lvl>=0 && lvl<=ABSOLUTE_MAX && lvl!=this.lvl) {
             this.lvl = lvl;
-            if(!worldObj.isRemote) {
-                syncFluidLevel();
-            }
+            syncFluidLevel();
         }
+    }
+    
+    @Override
+	public int pushFluid(int amount) {
+        if(!worldObj.isRemote && amount >= 0 && this.canAccept()) {
+        	int room = this.getCapacity() - this.getFluidLevel();
+        	if (room >= amount) {
+        		this.setFluidLevel(this.getFluidLevel()+amount);
+        		amount = 0;
+        	} else if (room > 0) {
+        		this.setFluidLevel(this.getCapacity());
+        		amount = amount - room;
+        	}
+        }
+        return amount;
+    }
+    
+    @Override
+	public int pullFluid(int amount) {
+    	if(!worldObj.isRemote && amount >= 0 && this.canProvide()) {
+        	if (amount <= this.getFluidLevel()) {
+        		this.setFluidLevel(this.getFluidLevel()-amount);
+        	} else {
+        		amount = this.getFluidLevel();
+        		this.setFluidLevel(0);
+        	}
+        }
+        return amount;
     }
 
     @Override
-    public boolean canConnectTo(IIrrigationComponent component) {
+	public boolean canConnectTo(IIrrigationComponent component) {
         return (component instanceof TileEntityTank || component instanceof TileEntityChannel) && this.isSameMaterial((TileEntityCustomWood) component);
     }
-
-    public float getFluidHeight() {
-        return this.getFluidHeight(this.lvl);
+    
+    @Override
+	public boolean canAccept() {
+    	return this.lvl < ABSOLUTE_MAX;
+    }
+    
+    @Override
+	public boolean canProvide() {
+    	return this.lvl > 0;
     }
 
-    public float getFluidHeight(int lvl) {
-        return MIN+HEIGHT*((float) lvl)/((float) ABSOLUTE_MAX);
+    @Override
+	public float getFluidHeight() {
+        return MIN+HEIGHT*((float) this.lvl)/(ABSOLUTE_MAX);
     }
 
     public final void updateNeighbours() {
@@ -134,6 +167,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
         return (tileEntityAt!=null) && (tileEntityAt instanceof IIrrigationComponent)  && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
     }
     
+    @SideOnly(Side.SERVER)
     public boolean hasNeighbour(ForgeDirection direction) {
         int ordinal = direction.ordinal() - FORGE_DIRECTION_OFFSET;
         return ordinal>=0 && ordinal<neighbours.length && neighbours[ordinal]!=null;
@@ -175,18 +209,18 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
                     TileEntityTank tank = (TileEntityTank) component;
                     int Y = tank.getComponent().posY;
                     float y_c = Constants.WHOLE * Y + this.getFluidHeight();  //initial channel water y
-                    float y_t = tank.getFluidY();           //initial tank water y
+                    float y_t = tank.getFluidHeight();           //initial tank water y
                     float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum y of the channel
                     float y2 = (float) MAX + Constants.WHOLE * Y;  //maximum y of the channel
                     int V_tot = tank.getFluidLevel() + this.lvl;
                     if (y_c != y_t) {
                         //total volume is below the channel connection
-                        if (tank.getFluidY() <= y1) {
+                        if (y_t <= y1) {
                             updatedLevel = 0;
                             tank.setFluidLevel(V_tot);
                         }
                         //total volume is above the channel connection
-                        else if (tank.getFluidY() >= y2) {
+                        else if (y_t >= y2) {
                             updatedLevel = ABSOLUTE_MAX;
                             tank.setFluidLevel(V_tot - ABSOLUTE_MAX);
                         }
@@ -196,8 +230,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
                             int tankYSize = tank.getComponent().sizeY;
                             int C = tank.getCapacity();
                             //calculate the y corresponding to the total volume: y = f(V_tot), V_tank = f(y), V_channel = f(y)
-                            float enumerator = ((float) V_tot) + ((ABSOLUTE_MAX * y1) / (y2 - y1) + ((float) 2 * C) / ((float) (Constants.WHOLE * tankYSize - 2)));
-                            float denominator = (((float) ABSOLUTE_MAX) / (y2 - y1) + ((float) C) / ((float) (Constants.WHOLE * tankYSize - 2)));
+                            float enumerator = (V_tot) + ((ABSOLUTE_MAX * y1) / (y2 - y1) + ((float) 2 * C) / (Constants.WHOLE * tankYSize - 2));
+                            float denominator = ((ABSOLUTE_MAX) / (y2 - y1) + ((float) C) / ((float) (Constants.WHOLE * tankYSize - 2)));
                             float y = enumerator / denominator;
                             //convert the y to volumes
                             int channelVolume = (int) Math.floor(ABSOLUTE_MAX * (y - y1) / (y2 - y1));
@@ -229,7 +263,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
         }
     }
 
-    public void syncFluidLevel() {
+    @Override
+	public void syncFluidLevel() {
         if(!this.worldObj.isRemote) {
             int newDiscreteLvl = getDiscreteFluidLevel();
             if(newDiscreteLvl != lastDiscreteLvl) {
@@ -239,19 +274,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
                 NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
             }
         }
-    }
-
-    @Override
-    public boolean receiveClientEvent(int id, int data) {
-        if(id==SYNC_WATER_ID) {
-            this.lvl = data;
-            return true;
-        }
-        return false;
-    }
-
-    public void drainFluid(int amount) {
-        setFluidLevel(lvl - amount);
     }
 
     /** Maps the current fluid level into the integer interval [0, 16] */
