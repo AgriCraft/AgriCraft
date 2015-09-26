@@ -58,7 +58,7 @@ public class ForgeMultiPartHelper extends ModHelper {
             Object tileMultiPart = getTileMethod.invoke(null, world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
             List multiPartList = (List) getMultiPartsMethod.invoke(tileMultiPart);
             for(Object obj:multiPartList) {
-                if(!leverPartClass.isInstance(obj)) {
+                if(!isLeverPart(obj)) {
                     continue;
                 }
                 try {
