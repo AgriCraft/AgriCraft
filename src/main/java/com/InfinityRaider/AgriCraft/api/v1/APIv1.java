@@ -94,6 +94,13 @@ public interface APIv1 extends APIBase {
      */
     void registerCropPlant(ICropPlant plant);
 
+	/**
+	 * Gets the ICropPlant object containing all the data AgriCraft knows about this seed
+	 * @param seed Stack holding the seed
+	 * @return an ICropPlant object if the seed is considered a seed for AgriCraft, or null if not
+	 */
+	ICropPlant getCropPlant(ItemStack seed);
+
     /**
      * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
      */
@@ -233,6 +240,17 @@ public interface APIv1 extends APIBase {
 	 * @return an ItemStack with the seed currently planted on this crop, returns null if there is no crop there, or there is no seed planted
 	 */
 	Block getPlantedBlock(World world, int x, int y, int z);
+
+	/**
+	 * Gets the ICropPlant object containing all the data AgriCraft knows about the seed planted on this crop
+	 *
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return an ICropPlant object if there is a seed planted here, or null if not
+	 */
+	ICropPlant getCropPlant(World world, int x, int y, int z);
 
 	/**
 	 * Checks if the plant that is in crops at the given position can grow. A

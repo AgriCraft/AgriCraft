@@ -52,14 +52,17 @@ public class CropPlantAPI extends CropPlant {
         return plant.getFruitsOnHarvest(gain, rand);
     }
 
+    @Override
     public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
         return plant.onHarvest(world, x, y, z, player);
     }
 
+    @Override
     public void onSeedPlanted(World world, int x, int y, int z) {
         plant.onSeedPlanted(world, x, y, z);
     }
 
+    @Override
     public void onPlantRemoved(World world, int x, int y, int z) {
         plant.onPlantRemoved(world, x, y, z);
     }

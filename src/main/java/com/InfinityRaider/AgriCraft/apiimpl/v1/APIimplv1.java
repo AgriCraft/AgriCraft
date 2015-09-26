@@ -105,7 +105,12 @@ public class APIimplv1 implements APIv1 {
        CropPlantHandler.addCropToRegister(new CropPlantAPI(plant));
     }
 
-    @Override
+	@Override
+	public ICropPlant getCropPlant(ItemStack seed) {
+		return CropPlantHandler.getPlantFromStack(seed);
+	}
+
+	@Override
     public void registerCropPlant(IAgriCraftPlant plant) {
         CropPlantHandler.addCropToRegister(new CropPlantAgriCraft(plant));
     }
@@ -219,6 +224,15 @@ public class APIimplv1 implements APIv1 {
 			return null;
 		}
 		return ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlantBlock();
+	}
+
+	@Override
+	public ICropPlant getCropPlant(World world, int x, int y, int z) {
+		TileEntity te = world.getTileEntity(x, y, z);
+		if(te==null || !(te instanceof TileEntityCrop)) {
+			return null;
+		}
+		return ((TileEntityCrop) te).getPlant();
 	}
 
 	@Override
