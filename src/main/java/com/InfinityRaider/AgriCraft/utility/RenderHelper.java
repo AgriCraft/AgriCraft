@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -8,8 +9,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.InfinityRaider.AgriCraft.reference.Constants;
 
 public abstract class RenderHelper {
     public static ResourceLocation getResource(Block block, int meta) {
