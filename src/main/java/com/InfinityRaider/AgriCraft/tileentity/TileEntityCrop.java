@@ -56,7 +56,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public CropPlant getPlant() {return plant;}
 
     public ISeedStats getStats() {
-        return this.hasPlant()?stats.copy():null;
+        return this.hasPlant()?stats.copy():new PlantStats(-1, -1, -1);
     }
 
     public short getGrowth() {return this.weed ? (short)ConfigurationHandler.weedGrowthMultiplier : stats.getGrowth();} //Pardon the cast.
