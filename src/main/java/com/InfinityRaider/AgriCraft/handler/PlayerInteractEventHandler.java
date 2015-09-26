@@ -55,7 +55,7 @@ public class PlayerInteractEventHandler {
             }
             if(flag) {
                 if (event.world.isRemote) {
-                    return;
+                    denyEvent(event, true);
                 }
                 Block block = event.world.getBlock(event.x, event.y, event.z);
                 if (block == Blocks.farmland) {
@@ -65,6 +65,7 @@ public class PlayerInteractEventHandler {
                         event.setResult(Event.Result.ALLOW);
                     }
                     event.world.playSoundEffect((double) ((float) event.x + 0.5F), (double) ((float) event.y + 0.5F), (double) ((float) event.z + 0.5F), block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+                    denyEvent(event, false);
                 }
             }
         }
@@ -94,7 +95,7 @@ public class PlayerInteractEventHandler {
         event.setResult(Event.Result.DENY);
         event.useItem = Event.Result.DENY;
         event.useBlock = Event.Result.DENY;
-        if (sendToServer) {
+        if (sendToServer && event.world.isRemote) {
             //send the right click to the server manually (cancelling the event will prevent the client from telling the server a right click happened, and nothing will happen, but we still want stuff to happen)
             FMLClientHandler.instance().getClientPlayerEntity().sendQueue.addToSendQueue(new C08PacketPlayerBlockPlacement(event.x, event.y, event.z, event.face, event.entityPlayer.inventory.getCurrentItem(), 0f, 0f, 0f));
         }
