@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemAgricraft;
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
@@ -61,6 +63,10 @@ public class Recipes {
         if (ConfigurationHandler.enableHandRake && Items.handRake != null) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.handRake, 1, 0), "fs", 'f', net.minecraft.init.Blocks.fence, 's', "stickWood"));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.handRake, 1, 1), "fs", 'f', net.minecraft.init.Blocks.iron_bars, 's', "stickWood"));
+        }
+        //peripheral
+        if(ModHelper.allowIntegration(Names.Mods.computerCraft) && Blocks.blockPeripheral!=null) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', Blocks.blockSeedAnalyzer, 'r', net.minecraft.init.Items.comparator, 'c', ComputerCraftHelper.getComputerBlock()));
         }
         //CustomWood recipes
         registerCustomWoodRecipes();
