@@ -15,8 +15,6 @@ install:
 # Build the Project.
 script:
   - ./gradlew build -S
-  # What does this do?
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 
 # Push success to CurseForge for release.
 after_success:
@@ -27,8 +25,14 @@ env:
   global:
     TERM=dumb
 
+# So the cache doesn't get rebuilt every time.
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
 # Cache libs, as to improve speed.
 cache:
   directories:
     - ./libs
     - $HOME/.gradle/caches
+    # So gradle isn't downloaded every time.
+    - $HOME/.gradle/wrapper
