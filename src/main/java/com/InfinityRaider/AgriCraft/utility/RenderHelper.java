@@ -57,17 +57,6 @@ public abstract class RenderHelper {
      * @param direction the direction of the block from the lever.
      * @return if the lever is facing the block.
      */
-    public static boolean isLeverFacingBlock(int leverMeta, char axis, int direction) {
-    	return isLeverFacingBlock(leverMeta, convertDirection(axis, direction));
-    }
-    
-    /**
-     * Determines if a lever is facing a block, based off of the lever's metadata.
-     * 
-     * @param leverMeta the metadata value of the lever.
-     * @param direction the direction of the block from the lever.
-     * @return if the lever is facing the block.
-     */
     public static boolean isLeverFacingBlock(int leverMeta, ForgeDirection direction) {
     	switch(direction) {
     		case EAST:

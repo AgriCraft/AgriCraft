@@ -4,6 +4,9 @@ import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -29,6 +32,9 @@ public class ForgeMultiPartHelper extends ModHelper {
 
     @Override
     protected void postTasks() {
+        if(FMLCommonHandler.instance().getSide() == Side.SERVER) {
+            return;
+        }
         try {
             multiBlockClass = Class.forName("codechicken.multipart.BlockMultipart");
             getTileMethod = multiBlockClass.getMethod("getTile", IBlockAccess.class, int.class, int.class, int.class);
@@ -53,6 +59,7 @@ public class ForgeMultiPartHelper extends ModHelper {
         return multiBlockClass!=null && multiBlockClass.isInstance(block);
     }
 
+    @SideOnly(Side.CLIENT)
     public static boolean isLeverFacingThis(World world, int x, int y, int z, ForgeDirection dir) {
         try {
             Object tileMultiPart = getTileMethod.invoke(null, world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
@@ -76,6 +83,7 @@ public class ForgeMultiPartHelper extends ModHelper {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public static boolean isLeverPart(Object obj) {
         return leverPartClass!=null && leverPartClass.isInstance(obj);
     }
