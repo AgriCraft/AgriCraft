@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -29,6 +30,11 @@ public class CropPlantVanilla extends CropPlant {
     @Override
     public ItemStack getSeed() {
         return new ItemStack(seed);
+    }
+
+    @Override
+    public Block getBlock() {
+        return plant;
     }
 
     @Override

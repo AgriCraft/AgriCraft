@@ -6,6 +6,9 @@ CurseForge: [CurseForge](http://minecraft.curseforge.com/mc-mods/225635-agricraf
 
 FTB Thread: [FTB Thread](http://forum.feed-the-beast.com/threads/1-7-10-agricraft.50964/)
 
+## Contact
+I have a Slack channel where you can contact me for support/suggestions which you don't think fit on this issue tracker. Also if you want to discuss something with me, this is the place to be: [Join my Slack](https://join-infinityraider-slack.herokuapp.com)
+
 ## Bug reports
 
 Please report any and all bugs you might encounter while playing with this mod. Suggestions are also welcome.

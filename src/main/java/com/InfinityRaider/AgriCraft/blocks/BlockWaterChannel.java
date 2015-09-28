@@ -58,6 +58,7 @@ public class BlockWaterChannel extends BlockCustomWood {
      * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
      * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
      */
+    @SideOnly(Side.CLIENT)
     @Override
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB mask, List list, Entity entity) {
         //adjacent boxes

@@ -35,6 +35,11 @@ public class CropPlantExtraBiomesXL extends CropPlant {
         return new ItemStack(seed);
     }
 
+    @Override
+    public Block getBlock() {
+        return plant;
+    }
+
 
     @Override
     public ArrayList<ItemStack> getAllFruits() {
