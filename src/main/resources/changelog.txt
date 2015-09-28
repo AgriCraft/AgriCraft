@@ -16,6 +16,7 @@ Changelog
 -CHANGE: Changed default number of crops per craft to 4
 -CHANGE: The journal will now display parent and child mutations separated from each other
 -CHANGE: Tweaked lighting when rendering custom wood blocks
+-CHANGE: New textures for the rakes, trowel and magnifying glass (credits to MechWarrior99)
 -ADDED:  API (many thanks to HenryLoenwind)
 -ADDED:  Missing mutations for Harvestcraft crops (Strawberry, Spinach, White Mushroom)
 -ADDED:  Resource crop for nether quartz
