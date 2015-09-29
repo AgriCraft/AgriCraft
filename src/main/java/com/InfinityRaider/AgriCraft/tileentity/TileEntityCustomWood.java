@@ -101,7 +101,8 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
      * @param meta the metadata value of the material (block).
      */
     public final void setMaterial(String name, int meta) {
-        this.setMaterial((Block) Block.blockRegistry.getObject(name), meta);
+        Block block = (Block) Block.blockRegistry.getObject(name);
+        this.setMaterial(block==Blocks.air?DEFAULT_MATERIAL:block, block==Blocks.air?DEFAULT_META:meta);
     }
     
     /**
@@ -166,7 +167,7 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
      * @return the icon, or texture, of the CustomWood.
      */
     public IIcon getIcon() {
-    	return this.getMaterial().getIcon(0, this.getMaterialMeta());
+        return this.getMaterial().getIcon(0, this.getMaterialMeta());
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -15,15 +16,21 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CropPlantNatura extends CropPlant {
-    private Item seed;
-    private Item fruit;
+    private final Item seed;
+    private final Item fruit;
+    private final Block plant;
     private final int seedMeta;
 
     public CropPlantNatura(int seedMeta) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
         this.seedMeta = seedMeta;
+        seed = (Item) Item.itemRegistry.getObject("Natura:barley.seed");
+        fruit = (Item) Item.itemRegistry.getObject("Natura:barleyFood");
+        plant = ((ItemSeeds) seed).getPlant(null, 0, 0, 0);
+        /*
         Class naturaContent = Class.forName("mods.natura.common.NContent");
         seed = (Item) naturaContent.getField("seeds").get(null);
         fruit = (Item) naturaContent.getField("plantItem").get(null);
+        */
     }
 
     @Override
@@ -34,6 +41,11 @@ public class CropPlantNatura extends CropPlant {
     @Override
     public ItemStack getSeed() {
         return new ItemStack(seed, 1 , seedMeta);
+    }
+
+    @Override
+    public Block getBlock() {
+        return plant;
     }
 
     @Override
@@ -96,7 +108,7 @@ public class CropPlantNatura extends CropPlant {
             case 6: meta = 2+seedMeta*5;break;
             case 7: meta = 3+seedMeta*5;break;
         }
-        return ((ItemSeeds) seed).getPlant(null, 0, 0, 0).getIcon(0, meta);
+        return getBlock().getIcon(0, meta);
     }
 
     @Override

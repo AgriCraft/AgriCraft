@@ -14,7 +14,14 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class CropPlantCanola extends CropPlant{
+public class CropPlantCanola extends CropPlant {
+    private final Item seed;
+    private final Block plant;
+
+    public CropPlantCanola() {
+        seed = (Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola");
+        plant = (Block) Block.blockRegistry.getObject("RotaryCraft:rotarycraft_block_canola");
+    }
     @Override
     public int tier() {
         return 3;
@@ -22,19 +29,24 @@ public class CropPlantCanola extends CropPlant{
 
     @Override
     public ItemStack getSeed() {
-        return new ItemStack((Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola"), 1, 0);
+        return new ItemStack(seed, 1, 0);
+    }
+
+    @Override
+    public Block getBlock() {
+        return plant;
     }
 
     @Override
     public ArrayList<ItemStack> getAllFruits() {
         ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
-        fruits.add(new ItemStack((Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola"), 1, 0));
+        fruits.add(new ItemStack(seed, 1, 0));
         return fruits;
     }
 
     @Override
     public ItemStack getRandomFruit(Random rand) {
-        return new ItemStack((Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola"), 1, 0);
+        return new ItemStack(seed, 1, 0);
     }
 
     @Override
@@ -60,7 +72,7 @@ public class CropPlantCanola extends CropPlant{
 
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement((Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola"), 0).canGrow(world, x, y, z);
+        return GrowthRequirementHandler.getGrowthRequirement(seed, 0).canGrow(world, x, y, z);
     }
 
     @SideOnly(Side.CLIENT)
@@ -72,7 +84,6 @@ public class CropPlantCanola extends CropPlant{
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getPlantIcon(int growthStage) {
-        Block plant = (Block) Block.blockRegistry.getObject("RotaryCraft:rotarycraft_block_canola");
         int meta;
         if(growthStage==0) {
             meta = 0;

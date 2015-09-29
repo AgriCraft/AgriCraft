@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -29,6 +30,11 @@ public class CropPlantAgriCraft extends CropPlant {
     @Override
     public ItemStack getSeed() {
         return plant.getSeedStack(1);
+    }
+
+    @Override
+    public Block getBlock() {
+        return plant.getBlock();
     }
 
     @Override

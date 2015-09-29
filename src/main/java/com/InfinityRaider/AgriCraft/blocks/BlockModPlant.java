@@ -128,6 +128,11 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     public ItemModSeed getSeed() {return this.seed;}
 
     @Override
+    public Block getBlock() {
+        return this;
+    }
+
+    @Override
     public ItemStack getSeedStack(int amount) {
         return new ItemStack(this.seed, amount);
     }
