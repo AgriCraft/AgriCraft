@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -32,6 +33,11 @@ public class CropPlantAPI extends CropPlant {
     }
 
     @Override
+    public Block getBlock() {
+        return plant.getBlock();
+    }
+
+    @Override
     public ArrayList<ItemStack> getAllFruits() {
         return plant.getAllFruits();
     }
@@ -46,14 +52,17 @@ public class CropPlantAPI extends CropPlant {
         return plant.getFruitsOnHarvest(gain, rand);
     }
 
+    @Override
     public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
         return plant.onHarvest(world, x, y, z, player);
     }
 
+    @Override
     public void onSeedPlanted(World world, int x, int y, int z) {
         plant.onSeedPlanted(world, x, y, z);
     }
 
+    @Override
     public void onPlantRemoved(World world, int x, int y, int z) {
         plant.onPlantRemoved(world, x, y, z);
     }

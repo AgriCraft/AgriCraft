@@ -48,8 +48,10 @@ public class BotaniaHelper extends ModHelper {
 
     static boolean useAlternateTextures() {
         try {
-            return vazkii.botania.common.core.handler.ConfigHandler.altFlowerTextures;
+            Class configClass = Class.forName("vazkii.botania.common.core.handler.ConfigHandler");
+            return (Boolean) configClass.getField("altFlowerTextures").get(null);
         } catch(Exception e) {
+            LogHelper.printStackTrace(e);
             return false;
         }
     }

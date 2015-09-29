@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -18,10 +19,12 @@ import java.util.Random;
  */
 public abstract class CropPlantGeneric extends CropPlant {
     private final ItemSeeds seed;
+    private final Block plant;
     private ArrayList<ItemStack> fruits;
 
     public CropPlantGeneric(ItemSeeds seed) {
         this.seed = seed;
+        this.plant = seed.getPlant(null, 0, 0, 0);
         this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed());
     }
 
@@ -37,6 +40,10 @@ public abstract class CropPlantGeneric extends CropPlant {
         return new ItemStack(seed);
     }
 
+    @Override
+    public Block getBlock() {
+        return plant;
+    }
 
     @Override
     public ArrayList<ItemStack> getAllFruits() {
@@ -87,6 +94,6 @@ public abstract class CropPlantGeneric extends CropPlant {
     @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon(int growthStage) {
         //for the Vanilla SeedItem class the arguments for this method are not used
-        return seed.getPlant(null, 0, 0 ,0).getIcon(0, transformMeta(growthStage));
+        return getBlock().getIcon(0, transformMeta(growthStage));
     }
 }

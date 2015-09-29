@@ -1,7 +1,11 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.IIrrigationComponent;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -13,16 +17,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
 
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.IIrrigationComponent;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SideOnly(Side.CLIENT)
 public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {

@@ -105,7 +105,12 @@ public class APIimplv1 implements APIv1 {
        CropPlantHandler.addCropToRegister(new CropPlantAPI(plant));
     }
 
-    @Override
+	@Override
+	public ICropPlant getCropPlant(ItemStack seed) {
+		return CropPlantHandler.getPlantFromStack(seed);
+	}
+
+	@Override
     public void registerCropPlant(IAgriCraftPlant plant) {
         CropPlantHandler.addCropToRegister(new CropPlantAgriCraft(plant));
     }
@@ -206,6 +211,31 @@ public class APIimplv1 implements APIv1 {
 	}
 
 	@Override
+	public ItemStack getPlantedSeed(World world, int x, int y, int z) {
+		if(!isCrops(world, x, y, z)) {
+			return null;
+		}
+		return ((TileEntityCrop) world.getTileEntity(x, y, z)).getSeedStack();
+	}
+
+	@Override
+	public Block getPlantedBlock(World world, int x, int y, int z) {
+		if(!isCrops(world, x, y, z)) {
+			return null;
+		}
+		return ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlantBlock();
+	}
+
+	@Override
+	public ICropPlant getCropPlant(World world, int x, int y, int z) {
+		TileEntity te = world.getTileEntity(x, y, z);
+		if(te==null || !(te instanceof TileEntityCrop)) {
+			return null;
+		}
+		return ((TileEntityCrop) te).getPlant();
+	}
+
+	@Override
 	public boolean canGrow(World world, int x, int y, int z) {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileEntityCrop) {
@@ -229,7 +259,7 @@ public class APIimplv1 implements APIv1 {
 	public ISeedStats getStats(World world, int x, int y, int z) {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if(te==null || !(te instanceof TileEntityCrop)) {
-			return null;
+			return new PlantStats(-1, -1, -1);
 		}
 		TileEntityCrop crop = (TileEntityCrop) te;
 		return crop.getStats();
