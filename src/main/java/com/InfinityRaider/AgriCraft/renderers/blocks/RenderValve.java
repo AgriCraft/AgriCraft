@@ -1,16 +1,11 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import codechicken.multipart.BlockMultipart;
-import codechicken.multipart.TMultiPart;
-import codechicken.multipart.TileMultipart;
-import codechicken.multipart.minecraft.LeverPart;
-
+import com.InfinityRaider.AgriCraft.compatibility.forgemultipart.ForgeMultiPartHelper;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
-
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,7 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -138,18 +132,11 @@ public class RenderValve extends RenderChannel {
 			if (neighbour instanceof BlockLever && RenderHelper.isLeverFacingBlock(channel.getWorldObj().getBlockMetadata(channel.xCoord + direction.offsetX, channel.yCoord, channel.zCoord + direction.offsetZ), direction)) {
 				IIcon icon = channel.getIcon();
 				drawScaledPrism(tessellator, 5, 4, 0, 11, 12, 4, icon, cm, direction);
-			} else if (Loader.isModLoaded(Names.Mods.mcMultipart) && (neighbour instanceof BlockMultipart)) {
-				TileMultipart tile = BlockMultipart.getTile(channel.getWorldObj(), channel.xCoord + direction.offsetX, channel.yCoord, channel.zCoord + direction.offsetZ);
-				for (TMultiPart multiPart : tile.jPartList()) {
-					if (multiPart instanceof LeverPart) {
-						LeverPart leverPart = (LeverPart) multiPart;
-						if (RenderHelper.isLeverFacingBlock(leverPart.getMetadata(), direction)) {
-							IIcon icon = channel.getIcon();
-							drawScaledPrism(tessellator, 5, 4, 0, 11, 12, 4, icon, cm, direction);
-							break;
-						}
-					}
-				}
+			} else if (Loader.isModLoaded(Names.Mods.mcMultipart) && ForgeMultiPartHelper.isMultiPart(neighbour)) {
+                if(ForgeMultiPartHelper.isLeverFacingThis(channel.getWorldObj(), channel.xCoord, channel.yCoord, channel.zCoord, direction)) {
+                    IIcon icon = channel.getIcon();
+                    drawScaledPrism(tessellator, 5, 4, 0, 11, 12, 4, icon, cm, direction);
+                }
 			}
 		}
 		super.renderSide(channel, tessellator, direction);

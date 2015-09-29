@@ -25,7 +25,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -55,9 +54,9 @@ import java.util.Random;
  */
 @Optional.InterfaceList(value = {
         @Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IGrassHornExcempt"),
-        @Optional.Interface(modid = Names.Mods.ancientWarfare, iface = "net.shadowmage.ancientwarfare.api.IAncientWarfareFarmable"
-        )})
-public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityProvider, IGrowable, IPlantable, IGrassHornExcempt, IAncientWarfareFarmable {
+        @Optional.Interface(modid = Names.Mods.ancientWarfare, iface = "net.shadowmage.ancientwarfare.api.IAncientWarfareFarmable")
+})
+public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPlantable, IGrassHornExcempt, IAncientWarfareFarmable {
     /** The set of icons used to render weeds. */
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
@@ -722,9 +721,9 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
     }
 
     /**
-     * Retrieves the block form of the contained plant. WIP.
+     * Retrieves the block form of the contained plant.
      * 
-     * @return this - WIP.
+     * @return the Block isntance of the plant currently planted
      */
     @Override
     public Block getPlant(IBlockAccess world, int x, int y, int z) {
@@ -734,19 +733,19 @@ public class BlockCrop extends BlockContainerAgriCraft implements ITileEntityPro
         }
         TileEntityCrop crop = (TileEntityCrop) tileEntity;
         if(crop.hasPlant()) {
-            //TODO: make it return the Block instance of the planted crop
+            return crop.getPlantBlock();
         }
         return this;
     }
 
     /**
-     * Retrieves the metadata of the plant... May change.
+     * Retrieves the metadata of the plant.
      * 
-     * @return 0
+     * @return metadata representing the growth stage, ranges from 0 (inclusive) to 8 (exclusive)
      */
     @Override
     public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
-        return 0;
+        return world.getBlockMetadata(x, y, z);
     }
     
     @Override

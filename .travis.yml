@@ -1,23 +1,38 @@
+# Tell Travis this is a Java project
 language: java
 
+# Tell Travis we want container-based builds.
+sudo: false
+
+# Use the gradle wrapper for 2.7 instead of default 2.2
 before_install:
-  - chmod +x gradlew install_deps.sh
-  - ./install_deps.sh
+  - chmod +x gradlew
 
-install: ./gradlew setupCIWorkspace -S
+# Prepare the workspace.
+install:
+  - ./gradlew setupCIWorkspace -S
+
+# Build the Project.
 script:
- - ./gradlew build -S
- - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - ./gradlew build -S
 
-after_success: ./gradlew curse -S
+# Push success to CurseForge for release.
+after_success:
+  - ./gradlew curse -S
 
+# Clean up after Gradle
 env:
   global:
     TERM=dumb
 
-sudo: false
+# So the cache doesn't get rebuilt every time.
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 
+# Cache libs, as to improve speed.
 cache:
   directories:
     - ./libs
     - $HOME/.gradle/caches
+    # So gradle isn't downloaded every time.
+    - $HOME/.gradle/wrapper

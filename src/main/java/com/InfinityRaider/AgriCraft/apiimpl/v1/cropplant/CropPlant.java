@@ -1,11 +1,13 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
 
+import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,10 +20,10 @@ import java.util.Random;
 
 /**
  * The main class used by TileEntityCrop.
- * Only make one object of this per seed object, and register using 
- * {@link CropPlantHandler#registerPlant(CropPlant plant)}
+ * Only make one object of this per seed object, and register using {@link CropPlantHandler#registerPlant(CropPlant plant)}
+ * ICropPlant is implemented to be able to read data from this class from the API
  */
-public abstract class CropPlant {
+public abstract class CropPlant implements ICropPlant {
     public final int getGrowthRate() {
     	int tier = getTier();
     	
@@ -59,20 +61,31 @@ public abstract class CropPlant {
      * 
      * @return the tier of the seed.
      */
-    protected abstract int tier();
+    @Override
+    public abstract int tier();
 
     /**
      * Gets a stack of the seed for this plant.
      * 
      * @return a stack of the plant's seeds.
      */
+    @Override
     public abstract ItemStack getSeed();
+
+    /**
+     * Gets the block instance for this plant.
+     *
+     * @return the Block object for this plant.
+     */
+    @Override
+    public abstract Block getBlock();
 
     /**
      * Gets a list of all possible fruit drops from this plant.
      * 
      * @return a list containing of all possible fruit drops.
      */
+    @Override
     public abstract ArrayList<ItemStack> getAllFruits();
 
     /**
@@ -81,6 +94,7 @@ public abstract class CropPlant {
      * @param rand a random for choosing the drop.
      * @return a random fruit dropped by the plant.
      */
+    @Override
     public abstract ItemStack getRandomFruit(Random rand);
 
     /**
@@ -91,6 +105,7 @@ public abstract class CropPlant {
      * @param rand a random for choosing the drop.
      * @return a list containing random fruit drops from this plant.
      */
+    @Override
     public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
 
     /**
@@ -105,6 +120,7 @@ public abstract class CropPlant {
      * @param player the player attempting to harvest the plant.
      * @return true, by default.
      */
+    @Override
     public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
         return true;
     }
@@ -117,6 +133,7 @@ public abstract class CropPlant {
      * @param y the y-coordinate of the plant.
      * @param z the z-coordinate of the plant.
      */
+    @Override
     public void onSeedPlanted(World world, int x, int y, int z) {}
 
     /**
@@ -127,6 +144,7 @@ public abstract class CropPlant {
      * @param y the y-coordinate of the plant.
      * @param z the z-coordinate of the plant.
      */
+    @Override
     public void onPlantRemoved(World world, int x, int y, int z) {}
 
     /**
@@ -134,6 +152,7 @@ public abstract class CropPlant {
      * 
      * @return if the plant may be bonemealed.
      */
+    @Override
     public abstract boolean canBonemeal();
 
     /**
@@ -147,6 +166,7 @@ public abstract class CropPlant {
      * @param oldGrowthStage the current/old growth stage of the plant.
      * @return if the plant should be rendered again client side (e.g. if the next growth stage has a different icon)
      */
+    @Override
     public abstract boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage);
 
     /**
@@ -158,6 +178,7 @@ public abstract class CropPlant {
      * @param z the z-coordinate of the plant.
      * @return if the growth location for the plant is fertile.
      */
+    @Override
     public abstract boolean isFertile(World world, int x, int y, int z);
 
     /**
@@ -169,6 +190,7 @@ public abstract class CropPlant {
      * @param z the z-coordinate of the plant.
      * @return if the plant is mature.
      */
+    @Override
     public boolean isMature(IBlockAccess world, int x, int y, int z) {
         return world.getBlockMetadata(x, y, z) >= Constants.MATURE;
     }
@@ -180,6 +202,7 @@ public abstract class CropPlant {
      * @param meta the growth stage of the plant (may range from 0 to {@link Constants#MATURE}).
      * @return the current height of the plant.
      */
+    @Override
     @SideOnly(Side.CLIENT)
     public abstract float getHeight(int meta);
 
@@ -189,6 +212,7 @@ public abstract class CropPlant {
      * @param growthStage the growthstage of the plant may range from 0 to {@link Constants#MATURE}.
      * @return the current icon for the plant.
      */
+    @Override
     @SideOnly(Side.CLIENT)
     public abstract IIcon getPlantIcon(int growthStage);
 
@@ -197,6 +221,7 @@ public abstract class CropPlant {
      * 
      * @return false to render the plant as wheat (#), true to render as a flower (X).
      */
+    @Override
     @SideOnly(Side.CLIENT)
     public abstract boolean renderAsFlower();
 
@@ -206,8 +231,16 @@ public abstract class CropPlant {
      * 
      * @return a string describing the plant for use by the seed journal.
      */
+    @Override
     @SideOnly(Side.CLIENT)
     public abstract String getInformation();
+
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean overrideRendering() {
+        return false;
+    }
 
     /**
      * A function to render the crop. Called when the plant is rendered.
@@ -218,6 +251,7 @@ public abstract class CropPlant {
      * @param z the z-coordinate of the plant.
      * @param renderer the renderer to use in the rendering of the plant.
      */
+    @Override
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
         PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(world.getBlockMetadata(x, y, z)), 0);

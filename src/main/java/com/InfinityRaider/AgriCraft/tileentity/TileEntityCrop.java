@@ -19,6 +19,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -55,7 +56,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public CropPlant getPlant() {return plant;}
 
     public ISeedStats getStats() {
-        return this.hasPlant()?stats.copy():null;
+        return this.hasPlant()?stats.copy():new PlantStats(-1, -1, -1);
     }
 
     public short getGrowth() {return this.weed ? (short)ConfigurationHandler.weedGrowthMultiplier : stats.getGrowth();} //Pardon the cast.
@@ -156,12 +157,21 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord, player);
     }
 
+    /** returns an ItemStack holding the seed currently planted, initialized with an NBT tag holding the stats */
     public ItemStack getSeedStack() {
-        ItemStack seed = plant.getSeed();
+        if(plant == null) {
+            return null;
+        }
+        ItemStack seed = plant.getSeed().copy();
         NBTTagCompound tag = new NBTTagCompound();
         SeedHelper.setNBT(tag, getGrowth(), getGain(), getStrength(), this.analyzed);
         seed.setTagCompound(tag);
         return seed;
+    }
+
+    /** returns the Block instance of the plant currently planted on the crop */
+    public Block getPlantBlock() {
+        return plant==null?null:plant.getBlock();
     }
 
     /** spawns weed in the crop */
@@ -309,7 +319,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         if(plant!=null) {
             this.plant = plant;
         } else {
-            LogHelper.info("Couldn't find plant for "+stack.getUnlocalizedName() +" at ("+xCoord+","+yCoord+","+zCoord+"), plant has been removed");
+            LogHelper.info("Couldn't find plant for " + stack.getUnlocalizedName() + " at (" + xCoord + "," + yCoord + "," + zCoord + "), plant has been removed");
             this.clearPlant();
         }
     }
@@ -393,19 +403,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
             icon = ((BlockCrop) this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)).getWeedIcon(this.getBlockMetadata());
         }
         return icon;
-    }
-
-    //get the rendertype
-    @SideOnly(Side.CLIENT)
-    public int getRenderType() {
-        int type = -1;
-        if(this.hasPlant()) {
-                type = plant.renderAsFlower()?1:6;
-        }
-        else if(this.weed) {
-            type = 6;
-        }
-        return type;
     }
 
     @Override

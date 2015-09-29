@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -8,8 +9,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.InfinityRaider.AgriCraft.reference.Constants;
 
 public abstract class RenderHelper {
 	
@@ -90,18 +89,6 @@ public abstract class RenderHelper {
         String domain = path.substring(0, path.indexOf(":") + 1);
         String file = path.substring(path.indexOf(':')+1);
         return new ResourceLocation(domain+"textures/items/"+file+".png");
-    }
-    
-    /**
-     * Determines if a lever is facing a block, based off of the lever's metadata.
-     * 
-     * @param leverMeta the metadata value of the lever.
-     * @param direction the direction of the block from the lever.
-     * @return if the lever is facing the block.
-     */
-    @Deprecated
-    public static boolean isLeverFacingBlock(int leverMeta, char axis, int direction) {
-    	return isLeverFacingBlock(leverMeta, convertDirection(axis, direction));
     }
     
     /**
