@@ -39,7 +39,7 @@ public class ThaumcraftHelper extends ModHelper {
         //cinderpearl
         BlockModPlant cropCinderpearl;
         try {
-            cropCinderpearl = new BlockModPlant(new Object[]{"Cinderpearl", new ItemStack(thaumcraftPlant, 1, cinderpearlMeta), net.minecraft.init.Blocks.sand, 3, RenderMethod.CROSSED});
+            cropCinderpearl = new BlockModPlant(new Object[]{"Cinderpearl", new ItemStack(thaumcraftPlant, 1, cinderpearlMeta), new BlockWithMeta(net.minecraft.init.Blocks.sand), 3, RenderMethod.CROSSED});
         } catch (Exception e) {
             if (ConfigurationHandler.debug) {
                 e.printStackTrace();
@@ -69,7 +69,7 @@ public class ThaumcraftHelper extends ModHelper {
         //vishroom
         BlockModPlant cropVishroom;
         try {
-            cropVishroom = new BlockModPlant(new Object[]{"Vishroom", new ItemStack(thaumcraftPlant, 1, vishroomMeta), net.minecraft.init.Blocks.mycelium, 3, RenderMethod.CROSSED});
+            cropVishroom = new BlockModPlant(new Object[]{"Vishroom", new ItemStack(thaumcraftPlant, 1, vishroomMeta), new BlockWithMeta(net.minecraft.init.Blocks.mycelium), 3, RenderMethod.CROSSED});
         } catch (Exception e) {
             if (ConfigurationHandler.debug) {
                 e.printStackTrace();
@@ -83,7 +83,7 @@ public class ThaumcraftHelper extends ModHelper {
         //tainted root
         BlockModPlant cropTaintedRoot;
         try {
-            cropTaintedRoot = new BlockModPlant(new Object[]{"TaintedRoot", new ItemStack(thaumcraftTaintPlant, 1, taintPlantMeta), blockTaint, new BlockWithMeta(blockTaint, 0), 4, RenderMethod.CROSSED});
+            cropTaintedRoot = new BlockModPlant(new Object[]{"TaintedRoot", new ItemStack(thaumcraftTaintPlant, 1, taintPlantMeta), new BlockWithMeta(blockTaint), RequirementType.BELOW, new BlockWithMeta(blockTaint, 0), 4, RenderMethod.CROSSED});
         } catch (Exception e) {
             if (ConfigurationHandler.debug) {
                 e.printStackTrace();

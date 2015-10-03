@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.reference;
 
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -21,9 +22,9 @@ public class Data {
             {"TulipWhite", new ItemStack(Items.dye, 1, 7), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 6)},
             {"TulipPink", new ItemStack(Items.dye, 1, 9), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 7)},
             {"Daisy", new ItemStack(Items.dye, 1, 7), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 8)},
-            {"Cactus",  new ItemStack(net.minecraft.init.Items.dye, 1, 2),  Blocks.sand, 2, RenderMethod.HASHTAG, new ItemStack(Blocks.cactus)},
-            {"ShroomRed", new ItemStack(Item.getItemFromBlock(Blocks.red_mushroom)), Blocks.mycelium, 2, RenderMethod.HASHTAG},
-            {"ShroomBrown", new ItemStack(Item.getItemFromBlock(Blocks.brown_mushroom)), Blocks.mycelium, 2, RenderMethod.HASHTAG}
+            {"Cactus",  new ItemStack(net.minecraft.init.Items.dye, 1, 2),  new BlockWithMeta(Blocks.sand), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.cactus)},
+            {"ShroomRed", new ItemStack(Item.getItemFromBlock(Blocks.red_mushroom)), new BlockWithMeta(Blocks.mycelium), 2, RenderMethod.HASHTAG},
+            {"ShroomBrown", new ItemStack(Item.getItemFromBlock(Blocks.brown_mushroom)), new BlockWithMeta(Blocks.mycelium), 2, RenderMethod.HASHTAG}
     };
 
     public static final String[] botania = {

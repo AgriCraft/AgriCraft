@@ -236,23 +236,16 @@ public abstract class IOHelper {
      * @return the item as an itemstack, or null.
      */
     public static ItemStack getStack(String input) {
-    	
 		String[] data = input.split(":");
-		
 		if (data.length <= 1) {
 			return null;
 		}
-		
-		int meta;
-		
-		if (data.length == 3) {
-			meta = Integer.parseInt(data[2]);
-		} else {
-			meta = 0;
-		}
-
-        return GameRegistry.findItemStack(data[0], data[1], meta);
-
+		int meta = data.length==3?Integer.parseInt(data[2]):0;
+        ItemStack stack = GameRegistry.findItemStack(data[0], data[1], 1);
+        if(stack!=null && stack.getItem()!=null) {
+            stack.setItemDamage(meta);
+        }
+        return stack;
     }
     
     //This almost seems like it shouldn't be here. The instructions seem like they should almost be in the locale files...

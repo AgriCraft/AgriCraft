@@ -40,8 +40,16 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     private IIcon[] icons;
     private RenderMethod renderType;
 
-    /** Parameters can be given in any order, parameters can be:
-     * String name (needed), ItemStack fruit(needed), Block soil (optional), BlockWithMeta baseBlock (optional), int tier (necessary), RenderMethod renderType (necessary), ItemStack shearDrop (optional)
+    /** Parameters can be given in any order, parameters can be: @param args:
+     * Arguments can be given in any order, parameters can be:
+     *               String name (needed)
+     *               ItemStack fruit(needed)
+     *               BlockWithMeta soil (optional, pass this argument before the RequirementType, else it will be interpreted as a baseblock)
+     *               RequirementType (optional)
+     *               BlockWithMeta baseBlock (optional, only if a RequirementType is specified first, else it will be set a a soil)
+     *               int tier (necessary)
+     *               RenderMethod renderType (necessary)
+     *               ItemStack shearDrop (optional, first ItemStack argument will be the regular fruit, second ItemStack argument is the shear drop)
      * Will throw MissingArgumentsException if the needed arguments are not given.
      * This constructor creates the seed for this plant which can be gotten via blockModPlant.getSeed().
      * This constructor also registers this block and the item for the seed to the minecraft item/block registry and to the AgriCraft CropPlantHandler.
@@ -52,7 +60,8 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
         String name = null;
         ItemStack fruit = null;
         ItemStack shearable = null;
-        Block soil = null;
+        BlockWithMeta soil = null;
+        RequirementType type = RequirementType.NONE;
         BlockWithMeta base = null;
         int tier = -1;
         RenderMethod renderType = null;
@@ -72,13 +81,17 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
                 }
                 continue;
             }
-            if(arg instanceof Block) {
-                soil = (Block) arg;
-                continue;
+            if(arg instanceof RequirementType) {
+                type = (RequirementType) arg;
             }
             if(arg instanceof BlockWithMeta) {
-                base = (BlockWithMeta) arg;
-                base = base.getBlock()==null?null:base;
+                if(type != RequirementType.NONE) {
+                    base = (BlockWithMeta) arg;
+                    base = base.getBlock() == null ? null : base;
+                } else {
+                    soil = (BlockWithMeta) arg;
+                    soil = soil.getBlock() == null ? null : soil;
+                }
                 continue;
             }
             if(arg instanceof RenderMethod) {
@@ -95,13 +108,13 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
         }
         //set fields
         GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
-        if (base != null) {
-            builder.requiredBlock(base, RequirementType.BELOW, true);
+        if (base != null && type != RequirementType.NONE) {
+            builder.requiredBlock(base, type, true);
         }
         if (soil == null) {
             growthRequirement = builder.build();
         } else {
-            growthRequirement = builder.soil(new BlockWithMeta(soil)).build();
+            growthRequirement = builder.soil(soil).build();
         }
         this.products.addProduce(fruit);
         this.tier = tier;

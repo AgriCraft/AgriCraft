@@ -555,8 +555,9 @@ public interface APIv1 extends APIBase {
 	 * @param args: Arguments can be given in any order, parameters can be:
 	 *               String name (needed)
 	 *               ItemStack fruit(needed)
-	 *               Block soil (optional)
-	 *               BlockWithMeta baseBlock (optional)
+	 *               BlockWithMeta soil (optional, pass this argument before the RequirementType, else it will be interpreted as a baseblock)
+	 *               RequirementType (optional)
+	 *               BlockWithMeta baseBlock (optional, only if a RequirementType is specified first, else it will be set a a soil)
 	 *               int tier (necessary)
 	 *               RenderMethod renderType (necessary)
 	 *               ItemStack shearDrop (optional, first ItemStack argument will be the regular fruit, second ItemStack argument is the shear drop)

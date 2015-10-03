@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
+import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
@@ -44,23 +45,29 @@ public class CustomCrops {
                 LogHelper.debug(new StringBuffer("parsing ").append(cropsRawData[i]));
                 if(success) {
                     ItemStack fruitStack = IOHelper.getStack(cropData[1]);
-                    Item fruit = fruitStack!=null?fruitStack.getItem():null;
                     errorMsg = "Invalid fruit";
-                    success = (fruit!=null) || (cropData[1].equals("null")) ;
+                    success = (fruitStack!=null && fruitStack.getItem()!=null) || (cropData[1].equals("null")) ;
                     if(success) {
                         String name = cropData[0];
-                        int fruitMeta = fruit!=null?fruitStack.getItemDamage():0;
-                        Block soil = cropData[2].equalsIgnoreCase("null")?null:((Block) Block.blockRegistry.getObject(cropData[2]));
-                        ItemStack base = IOHelper.getStack(cropData[3]);
-                        Block baseBlock = base != null ? ((ItemBlock) base.getItem()).field_150939_a : null;
-                        int baseMeta = base != null ? base.getItemDamage() : 0;
+                        //soil
+                        ItemStack soilStack = IOHelper.getStack(cropData[2]);
+                        Block soilBlock = (soilStack!=null && soilStack.getItem()!=null && soilStack.getItem() instanceof ItemBlock)?((ItemBlock) soilStack.getItem()).field_150939_a:null;
+                        BlockWithMeta soil = soilBlock==null?null:new BlockWithMeta(soilBlock, soilStack.getItemDamage());
+                        //baseblock
+                        ItemStack baseStack = IOHelper.getStack(cropData[3]);
+                        Block baseBlock = (baseStack!=null && baseStack.getItem()!=null && baseStack.getItem() instanceof ItemBlock)? ((ItemBlock) baseStack.getItem()).field_150939_a : null;
+                        BlockWithMeta base = baseBlock==null?null:new BlockWithMeta(baseBlock, baseStack.getItemDamage());
+                        //tier
                         int tier = Integer.parseInt(cropData[4]);
+                        //render method
                         RenderMethod renderType = RenderMethod.getRenderMethod(Integer.parseInt(cropData[5]));
+                        //shearable
                         ItemStack shearable = cropData.length>7?IOHelper.getStack(cropData[7]):null;
                         shearable = (shearable!=null && shearable.getItem()!=null)?shearable:null;
+                        //info
                         String info = cropData[6];
                         try {
-                            customCrops[i] = new BlockModPlant(new Object[] {name, new ItemStack(fruit, 1, fruitMeta), soil, new BlockWithMeta(baseBlock, baseMeta), tier, renderType, shearable});
+                            customCrops[i] = new BlockModPlant(name, fruitStack, soil, RequirementType.BELOW, base, tier, renderType, shearable);
                         } catch (Exception e) {
                             if(ConfigurationHandler.debug) {
                             	LogHelper.printStackTrace(e);

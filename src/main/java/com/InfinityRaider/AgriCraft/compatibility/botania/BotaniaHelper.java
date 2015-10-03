@@ -24,7 +24,7 @@ public class BotaniaHelper extends ModHelper {
     @Override
     protected void initPlants() {
         for (int i = 0; i < 16; i++) {
-            Object[] args = {Data.botania[i], new ItemStack((Item) Item.itemRegistry.getObject("Botania:petal"), 1, i), 3, RenderMethod.CROSSED, new ItemStack((Block) Block.blockRegistry.getObject("Botania:flower"), 1, i)};
+            Object[] args = {Data.botania[i], new ItemStack((Item) Item.itemRegistry.getObject("Botania:petal"), 1, i), new BlockWithMeta(Blocks.dirt, 2), 3, RenderMethod.CROSSED, new ItemStack((Block) Block.blockRegistry.getObject("Botania:flower"), 1, i)};
             BlockModPlant plant;
             try {
                 plant = new BlockModPlantBotania(args);
@@ -36,7 +36,6 @@ public class BotaniaHelper extends ModHelper {
             }
             botaniaCrops.add(plant);
             botaniaSeeds.add(plant.getSeed());
-            GrowthRequirementHandler.getGrowthRequirement(plant.getSeed(), 0).setSoil(new BlockWithMeta(Blocks.dirt, 2));
         }
         LogHelper.info("Botania crops registered");
     }
