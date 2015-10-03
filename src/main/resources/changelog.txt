@@ -54,6 +54,7 @@ Changelog
 -ADDED:  Compatibility for crops with Ancient Warfare crop farms
 -ADDED:  Config option for irrigation channel capacity
 -ADDED:  Computercraft peripheral to read data from crops in the world
+-ADDED:  Mutating sprig from witchery will now work on wheat planted on crop sticks
 -FIXED:  Seeds added as drops from tall grass always having weight 10
 -FIXED:  Not being able to set max brightness in Minetweaker methods
 -FIXED:  Wrong error message in Minetweaker methods

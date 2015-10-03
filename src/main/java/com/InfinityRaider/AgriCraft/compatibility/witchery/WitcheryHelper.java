@@ -1,19 +1,31 @@
 package com.InfinityRaider.AgriCraft.compatibility.witchery;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class WitcheryHelper extends ModHelper {
+    private Item sprig;
+    private Block wispyCotton;
+    private Item wormwoodSeed;
+
     @Override
     protected void init() {
         LogHelper.debug("Initializing Witchery Support");
@@ -24,7 +36,7 @@ public final class WitcheryHelper extends ModHelper {
         Item seedSnowbell = (Item) Item.itemRegistry.getObject("witchery:seedssnowbell");
         Item seedWolfsbane = (Item) Item.itemRegistry.getObject("witchery:seedswolfsbane");
         Item seedGarlic = (Item) Item.itemRegistry.getObject("witchery:garlic");
-        Item seedWormwood = (Item) Item.itemRegistry.getObject("witchery:seedswormwood");
+        wormwoodSeed = (Item) Item.itemRegistry.getObject("witchery:seedswormwood");
 
         Item itemGeneric = (Item) Item.itemRegistry.getObject("witchery:ingredient");
 
@@ -34,7 +46,7 @@ public final class WitcheryHelper extends ModHelper {
         OreDictionary.registerOre("seedSnowbell", seedSnowbell);
         OreDictionary.registerOre("seedWolfsbane", seedWolfsbane);
         OreDictionary.registerOre("seedWitchGarlic", seedGarlic);
-        OreDictionary.registerOre("seedWormwood", seedWormwood);
+        OreDictionary.registerOre("seedWormwood", wormwoodSeed);
 
         OreDictionary.registerOre(Names.OreDict.listAllseed, seedBelladonna);
         OreDictionary.registerOre(Names.OreDict.listAllseed, seedMandrake);
@@ -42,7 +54,7 @@ public final class WitcheryHelper extends ModHelper {
         OreDictionary.registerOre(Names.OreDict.listAllseed, seedSnowbell);
         OreDictionary.registerOre(Names.OreDict.listAllseed, seedWolfsbane);
         OreDictionary.registerOre(Names.OreDict.listAllseed, seedGarlic);
-        OreDictionary.registerOre(Names.OreDict.listAllseed, seedWormwood);
+        OreDictionary.registerOre(Names.OreDict.listAllseed, wormwoodSeed);
 
         OreDictionary.registerOre("cropBelladonna", new ItemStack(itemGeneric, 1, 21));
         OreDictionary.registerOre("cropMandrake", new ItemStack(itemGeneric, 1, 22));
@@ -93,6 +105,61 @@ public final class WitcheryHelper extends ModHelper {
             e.printStackTrace();
         }
     }
+
+    protected void postTasks() {
+        sprig = (Item) Item.itemRegistry.getObject("witchery:mutator");
+        wispyCotton = (Block) Block.blockRegistry.getObject("witchery:somniancotton");
+    }
+
+    protected List<Item> getTools() {
+        ArrayList<Item> tools = new ArrayList<Item>();
+        tools.add(sprig);
+        return tools;
+    }
+
+    protected boolean useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
+        if(stack.getItem() == sprig) {
+            return tryCreateWormWood(world, x, y, z, player, stack, crop);
+        }
+        return false;
+    }
+
+    private boolean tryCreateWormWood(World world, int x, int y, int z, EntityPlayer player, ItemStack sprig, TileEntityCrop crop) {
+        //check for wheat and check if mature
+        if(!crop.hasPlant() || !crop.isMature() || crop.getPlant().getSeed().getItem() != Items.wheat_seeds) {
+            return false;
+        }
+        //check for wispy cotton
+        int cottonCount = 0;
+        cottonCount = world.getBlock(x+1, y, z) == wispyCotton?cottonCount+1:cottonCount;
+        cottonCount = world.getBlock(x-1, y, z) == wispyCotton?cottonCount+1:cottonCount;
+        cottonCount = world.getBlock(x, y, z+1) == wispyCotton?cottonCount+1:cottonCount;
+        cottonCount = world.getBlock(x, y, z-1) == wispyCotton?cottonCount+1:cottonCount;
+        if(cottonCount<4) {
+            return false;
+        }
+        //check for water
+        int waterCount = 0;
+        waterCount = world.getBlock(x+1, y-1, z+1) == net.minecraft.init.Blocks.water?waterCount+1:waterCount;
+        waterCount = world.getBlock(x+1, y-1, z-1) == net.minecraft.init.Blocks.water?waterCount+1:waterCount;
+        waterCount = world.getBlock(x-1, y-1, z+1) == net.minecraft.init.Blocks.water?waterCount+1:waterCount;
+        waterCount = world.getBlock(x-1, y-1, z-1) == net.minecraft.init.Blocks.water?waterCount+1:waterCount;
+        if(waterCount<4) {
+            return false;
+        }
+        //create wormwood
+        world.setBlockToAir(x+1, y, z);
+        world.setBlockToAir(x-1, y, z);
+        world.setBlockToAir(x, y, z+1);
+        world.setBlockToAir(x, y, z-1);
+        crop.clearPlant();
+        crop.setPlant(1, 1, 1, false, CropPlantHandler.getPlantFromStack(new ItemStack(wormwoodSeed, 0)));
+        if(!player.capabilities.isCreativeMode) {
+            sprig.damageItem(1, player);
+        }
+        return true;
+    }
+
 
     @Override
     protected String modId() {
