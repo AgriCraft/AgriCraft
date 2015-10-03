@@ -1,22 +1,36 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.IMethod;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.MethodException;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.HashMap;
 
 
 @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheral")
 public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPeripheral {
     private static IMethod[] methods;
     private boolean mayAnalyze = false;
+    /** Data to animate the peripheral client side */
+    @SideOnly(Side.CLIENT)
+    private HashMap<ForgeDirection, Integer> timers;
+    @SideOnly(Side.CLIENT)
+    private HashMap<ForgeDirection, Boolean> activeSides;
+
+    public static final ForgeDirection[] VALID_DIRECTIONS = {ForgeDirection.NORTH, ForgeDirection.EAST, ForgeDirection.SOUTH, ForgeDirection.WEST};
+    public static final int MAX = 60;
 
     public TileEntityPeripheral() {
         super();
@@ -56,7 +70,51 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
             } else {
                 reset();
             }
+        } if(worldObj.isRemote) {
+            checkSides();
+            for(ForgeDirection dir:VALID_DIRECTIONS) {
+                int timer = timers.get(dir);
+                timer = timer + (isSideActive(dir)?1:-1);
+                timer = timer<0?0:timer;
+                timer = timer>MAX?MAX:timer;
+                timers.put(dir, timer);
+            }
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int getTimer(ForgeDirection dir) {
+        return timers.get(dir);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private boolean isSideActive(ForgeDirection dir) {
+        return activeSides.containsKey(dir) && activeSides.get(dir);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void checkSides() {
+        for(ForgeDirection dir:VALID_DIRECTIONS) {
+            checkSide(dir);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void checkSide(ForgeDirection dir) {
+        if(timers == null) {
+            timers = new HashMap<ForgeDirection, Integer>();
+        }
+        if(!timers.containsKey(dir)) {
+            timers.put(dir, 0);
+        }
+        if(activeSides == null) {
+            activeSides = new HashMap<ForgeDirection, Boolean>();
+        }
+        activeSides.put(dir, isCrop(dir));
+    }
+
+    private boolean isCrop(ForgeDirection dir) {
+        return worldObj.getBlock(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ) instanceof BlockCrop;
     }
 
     public void startAnalyzing() {
@@ -114,7 +172,6 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
 
     @Override
     public void detach(IComputerAccess computer) {
-
     }
 
     @Override

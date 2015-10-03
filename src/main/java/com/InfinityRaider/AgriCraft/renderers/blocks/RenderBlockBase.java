@@ -291,7 +291,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
         //left
         drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, icon, minX/16.0F, colorMultiplier);
         //right
-        drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, icon, maxX/16.0F, colorMultiplier);
+        drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, icon, maxX / 16.0F, colorMultiplier);
 
     }
 
@@ -398,4 +398,34 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 		addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, minZ, icon);
 		addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, maxZ, icon);
 	}
+
+    /**
+     * Utility method helpful for debugging
+     */
+    protected void drawAxisSystem(boolean startDrawing) {
+        Tessellator tessellator = Tessellator.instance;
+
+        if(startDrawing) {
+            tessellator.startDrawingQuads();
+        }
+
+        tessellator.addVertexWithUV(-0.005F, 2, 0, 1, 0);
+        tessellator.addVertexWithUV(0.005F, 2, 0, 0, 0);
+        tessellator.addVertexWithUV(0.005F, -1, 0, 0, 1);
+        tessellator.addVertexWithUV(-0.005F, -1, 0, 1, 1);
+
+        tessellator.addVertexWithUV(2, -0.005F, 0, 1, 0);
+        tessellator.addVertexWithUV(2, 0.005F, 0, 0, 0);
+        tessellator.addVertexWithUV(-1, 0.005F, 0, 0, 1);
+        tessellator.addVertexWithUV(-1, -0.005F, 0, 1, 1);
+
+        tessellator.addVertexWithUV(0, -0.005F, 2, 1, 0);
+        tessellator.addVertexWithUV(0, 0.005F, 2, 0, 0);
+        tessellator.addVertexWithUV(0, 0.005F, -1, 0, 1);
+        tessellator.addVertexWithUV(0, -0.005F, -1, 1, 1);
+
+        if(startDrawing) {
+            tessellator.draw();
+        }
+    }
 }

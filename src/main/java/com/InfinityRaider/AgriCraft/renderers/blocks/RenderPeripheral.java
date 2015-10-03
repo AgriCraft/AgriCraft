@@ -4,9 +4,12 @@ import com.InfinityRaider.AgriCraft.blocks.BlockPeripheral;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.renderers.models.ModelPeripheralProbe;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,10 +17,15 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 public class RenderPeripheral extends RenderBlockBase {
+    private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/peripheralProbe.png");
+    private static final ModelBase probeModel = new ModelPeripheralProbe();
+
     public RenderPeripheral() {
         super(Blocks.blockPeripheral, new TileEntityPeripheral(), true);
     }
@@ -28,6 +36,7 @@ public class RenderPeripheral extends RenderBlockBase {
             if(tile instanceof TileEntityPeripheral) {
                 TileEntityPeripheral peripheral = (TileEntityPeripheral) tile;
                 drawSeed(tessellator, peripheral);
+                performAnimations(tessellator, peripheral, block.getIcon(3, 0), block.colorMultiplier(world, (int) x, (int) y, (int) z));
             }
         } else {
             renderBase(tessellator, (BlockPeripheral) block, block.colorMultiplier(world, (int) x, (int) y, (int) z));
@@ -64,6 +73,61 @@ public class RenderPeripheral extends RenderBlockBase {
         GL11.glRotatef(-angle, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
         GL11.glTranslated(-dx, -dy, -dz);
+        GL11.glPopMatrix();
+    }
+
+    private void performAnimations(Tessellator tessellator, TileEntityPeripheral peripheral, IIcon icon, int cm) {
+        int maxDoorPos = TileEntityPeripheral.MAX/2;
+        float unit = Constants.UNIT;
+
+        GL11.glPushMatrix();
+
+        for (ForgeDirection dir : TileEntityPeripheral.VALID_DIRECTIONS) {
+            int timer = peripheral.getTimer(dir);
+
+            //doors
+            float doorPosition = (timer >= maxDoorPos ? maxDoorPos : timer) * 4.0F / maxDoorPos;
+            if (doorPosition < 4) {
+                Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                tessellator.startDrawingQuads();
+                drawScaledPrism(tessellator, 4, 2, 0, 8 - doorPosition, 14, 1, icon, cm);
+                drawScaledPrism(tessellator, 8 + doorPosition, 2, 0, 12, 14, 1, icon, cm);
+                tessellator.draw();
+            }
+
+            //probe
+            float probePosition = (timer < maxDoorPos ? 0 : timer - maxDoorPos) * 90 / maxDoorPos;
+            GL11.glRotatef(180, 0, 0, 1);
+            float dx = -0.5F;
+            float dy = -1.5F;
+            float dz = 9 * unit;
+            GL11.glTranslatef(dx, dy, dz);
+
+            float dX = 0.0F;
+            float dY = 21.5F * unit;
+            float dZ = -5.5F * unit;
+
+            GL11.glTranslatef(dX, dY, dZ);
+            GL11.glRotatef(probePosition, 1, 0, 0);
+            GL11.glTranslatef(-dX, -dY, -dZ);
+
+            Minecraft.getMinecraft().renderEngine.bindTexture(probeTexture);
+            probeModel.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+
+            GL11.glTranslatef(dX, dY, dZ);
+            GL11.glRotatef(-probePosition, 1, 0, 0);
+            GL11.glTranslatef(-dX, -dY, -dZ);
+
+
+            GL11.glTranslatef(-dx, -dy, -dz);
+            GL11.glRotatef(-180, 0, 0, 1);
+
+            //rotate 90° for the next render
+            GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+            GL11.glRotatef(-90, 0, 1, 0);
+            GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+        }
+
         GL11.glPopMatrix();
     }
 
