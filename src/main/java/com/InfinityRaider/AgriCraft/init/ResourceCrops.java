@@ -70,7 +70,7 @@ public class ResourceCrops {
         for(String[] data:Data.modResources) {
             Block base = OreDictHelper.getOreBlockForName(data[0]);
             if(base!=null) {
-                Object[] args = {data[1], new ItemStack(OreDictHelper.getNuggetForName(data[0]), 1, OreDictHelper.getNuggetMetaForName(data[0])), new BlockWithMeta(OreDictHelper.getOreBlockForName(data[0]), OreDictHelper.getOreMetaForName(data[0])), 4, RenderMethod.HASHTAG};
+                Object[] args = {data[1], new ItemStack(OreDictHelper.getNuggetForName(data[0]), 1, OreDictHelper.getNuggetMetaForName(data[0])), RequirementType.BELOW, new BlockWithMeta(OreDictHelper.getOreBlockForName(data[0]), OreDictHelper.getOreMetaForName(data[0])), 4, RenderMethod.HASHTAG};
                 BlockModPlant plant;
                 try {
                     plant = new BlockModPlant(args);
@@ -78,7 +78,7 @@ public class ResourceCrops {
                     if(ConfigurationHandler.debug) {
                     	LogHelper.printStackTrace(e);
                     }
-                    return;
+                    continue;
                 }
                 modCrops.add(plant);
                 modSeeds.add(plant.getSeed());
