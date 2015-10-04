@@ -125,7 +125,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
     private void drainWaterFromChannel() {
         if (counter % 10 == 0) {
             TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord);
-            channel.drainFluid(ConfigurationHandler.sprinklerRatePerHalfSecond);
+            channel.pullFluid(ConfigurationHandler.sprinklerRatePerHalfSecond);
         }
     }
 

@@ -39,27 +39,6 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
     }
 
     /**
-     * Places the associated block at a location in the world.
-     * There is generally no need for overriding this method in subclasses.
-     * If the block can only be placed in certain spots, override the canPlaceBlockAt() method in the block class.
-     */
-    @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-        if (!world.setBlock(x, y, z, field_150939_a, metadata, 3)) {
-            return false;
-        }
-        if (world.getBlock(x, y, z) == field_150939_a) {
-            field_150939_a.onBlockPlacedBy(world, x, y, z, player, stack);
-            field_150939_a.onPostBlockPlaced(world, x, y, z, metadata);
-            if(world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityCustomWood) {
-                TileEntityCustomWood tileEntity = (TileEntityCustomWood) world.getTileEntity(x, y, z);
-                tileEntity.setMaterial(stack);
-            }
-        }
-        return true;
-    }
-
-    /**
      * Populates the sub-item list.
      */
     @Override

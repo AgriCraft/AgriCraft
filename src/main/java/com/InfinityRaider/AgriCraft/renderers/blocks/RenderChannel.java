@@ -163,7 +163,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 					y2 = (y + ((TileEntityChannel) te).getFluidHeight()) / 2;
 				}
 			} else {
-				float lvl = ((TileEntityTank) te).getScaledDiscreteFluidY() - 16 * ((TileEntityTank) te).getYPosition();
+				float lvl = ((TileEntityTank) te).getFluidHeight() - 16 * ((TileEntityTank) te).getComponent().posY;
 				y2 = lvl > 12 ? 12 : lvl < 5 ? (5 - 0.0001F) : lvl;
 			}
 			this.drawWaterEdge(tessellator, direction, y, y2, icon);

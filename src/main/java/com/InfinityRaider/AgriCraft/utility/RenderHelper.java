@@ -11,14 +11,36 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class RenderHelper {
+	
+    /**
+     * Retrieves a block's resource location, with meta support.
+     * 
+     * @param block the block to get the resource from.
+     * @param meta the meta value of the block.
+     * @return the resource of the block.
+     */
     public static ResourceLocation getResource(Block block, int meta) {
         return getBlockResource(getIcon(block, meta));
     }
 
+    /**
+     * Retrieves an item's resource location, with meta support.
+     * 
+     * @param item the item to get the resource from.
+     * @param meta the meta value (damage) of the item.
+     * @return the resource of the item.
+     */
     public static ResourceLocation getResource(Item item, int meta) {
         return getItemResource(getIcon(item, meta));
     }
 
+    /**
+     * Retrieves an item's icon, with meta support.
+     * 
+     * @param item the item to get the icon for.
+     * @param meta the meta value (damage) of the item.
+     * @return the icon representing the item.
+     */
     public static IIcon getIcon(Item item, int meta) {
         if(item instanceof ItemBlock) {
             return ((ItemBlock) item).field_150939_a.getIcon(3, meta);
@@ -26,10 +48,23 @@ public abstract class RenderHelper {
         return item.getIconFromDamage(meta);
     }
 
+    /**
+     * Retrieves an block's icon, with meta support.
+     * 
+     * @param block the block to get the icon for.
+     * @param meta the meta value of the block.
+     * @return the icon representing the block.
+     */
     public static IIcon getIcon(Block block, int meta) {
         return  block.getIcon(0, meta);
     }
 
+    /**
+     * Retrieves a resource location from a <em>block</em> icon.
+     * 
+     * @param icon the icon to get the resource location from.
+     * @return the resource location for the icon, or null.
+     */
     public static ResourceLocation getBlockResource(IIcon icon) {
         if(icon==null) {
             return null;
@@ -40,6 +75,12 @@ public abstract class RenderHelper {
         return new ResourceLocation(domain + "textures/blocks/" + file + ".png");
     }
 
+    /**
+     * Retrieves a resource location from an <em>item</em> icon.
+     * 
+     * @param icon the icon to get the resource location from.
+     * @return the resource location for the icon, or null.
+     */
     public static ResourceLocation getItemResource(IIcon icon) {
         if(icon==null) {
             return null;
@@ -80,6 +121,7 @@ public abstract class RenderHelper {
      * @param direction the magnitude of the direction. (+1,-1).
      * @return the associated ForgeDirection.
      */
+    @Deprecated
     public static ForgeDirection convertDirection(char axis, int direction) {
     	if(axis=='x') {
             if(direction>0) {
@@ -114,6 +156,7 @@ public abstract class RenderHelper {
      * @param direction the direction to lookup.
      * @return the char for the direction's axis.
      */
+    @Deprecated
     public static char getAxis(ForgeDirection direction) {
     	switch(direction) {
     		case EAST:
@@ -136,6 +179,7 @@ public abstract class RenderHelper {
      * @param direction the direction to lookup.
      * @return how far the direction extends on the axis.
      */
+    @Deprecated
     public static int getMagnitude(ForgeDirection direction) {
     	return direction.offsetX + direction.offsetY + direction.offsetZ; // Should always be in the -1 to 1 range.
     }
@@ -147,7 +191,7 @@ public abstract class RenderHelper {
      * This is for use up to the point that a way to rotate lower down is found. (IE. OpenGL).
      * </p>
      * 
-     * TODO: add up/down support.
+     * TODO: Test up/down rotations more thoroughly.
      */
     public static float[] rotatePrism(float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ForgeDirection direction) {
         
@@ -187,23 +231,66 @@ public abstract class RenderHelper {
 				adj[4] = maxY; //+y
 				adj[5] = maxX; //+z
 				break;
+			case UP:
+				adj[0] = minX; //-x
+				adj[1] = Constants.WHOLE - maxZ; //-y
+				adj[2] = minY; //-z
+				adj[3] = maxX; //+x
+				adj[4] = Constants.WHOLE - minZ; //+y
+				adj[5] = maxY; //+z
+			case DOWN:
+				adj[0] = minX; //-x
+				adj[1] = minZ; //-y
+				adj[2] = minY; //-z
+				adj[3] = maxX; //+x
+				adj[4] = maxZ; //+y
+				adj[5] = maxY; //+z
 		}
         
         return adj;
         
     }
 
-    //adds a vertex to the tessellator scaled with 1/16th of a block
+    /**
+     * Adds a vertex to the tessellator scaled to the unit size of a block.
+     * 
+     * @param tessellator
+     * @param x the x position, from 0 to {@value Constants.WHOLE}.
+     * @param y the y position, from 0 to {@value Constants.WHOLE}.
+     * @param z the z position, from 0 to {@value Constants.WHOLE}.
+     * @param u ???
+     * @param v ???
+     */
     public static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v) {
         tessellator.addVertexWithUV(x*Constants.UNIT, y*Constants.UNIT, z*Constants.UNIT, u*Constants.UNIT, v*Constants.UNIT);
     }
 
     //same as above method, but does not require the correct texture to be bound
+    /**
+     * Adds a vertex to the tessellator scaled to the unit size of a block.
+     * Same as {@link #addScaledVertexWithUV(Tessellator, float, float, float, float, float)}, but does not require the correct texture to be bound.
+     * 
+     * @param tessellator
+     * @param x the x position, from 0 to {@value Constants.WHOLE}.
+     * @param y the y position, from 0 to {@value Constants.WHOLE}.
+     * @param z the z position, from 0 to {@value Constants.WHOLE}.
+     * @param u ???
+     * @param v ???
+     * @param icon the texture of the point.
+     */
     public static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v, IIcon icon) {
         tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, icon.getInterpolatedU(u), icon.getInterpolatedV(v));
     }
 
-    //utility method: splits the string in different lines so it will fit on the page
+    /**
+     * Utility method: splits the string in different lines so it will fit on the page.
+     * 
+     * @param fontRendererObj the font renderer to check against.
+     * @param input the line to split up.
+     * @param maxWidth the maximum allowable width of the line before being wrapped.
+     * @param scale the scale of the text to the width.
+     * @return the string split up into lines by the '\n' character.
+     */
     public static String splitInLines(FontRenderer fontRendererObj, String input, float maxWidth, float scale) {
         maxWidth = maxWidth / scale;
         String notProcessed = input;

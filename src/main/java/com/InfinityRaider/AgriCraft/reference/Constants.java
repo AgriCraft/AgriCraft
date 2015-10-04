@@ -40,6 +40,16 @@ public final class Constants {
      * The representation of 1 bucket(b) in millibuckets(mB).
      */
     public static final int BUCKET_mB = 1000;
+    
+    /**
+     * The representation of 1/2 a bucket(b) in millibuckets(mB).
+     */
+    public static final int HALF_BUCKET_mB = BUCKET_mB / 2;
+    
+    /**
+     * The representation of 1/4 a bucket(b) in millibuckets(mB).
+     */
+    public static final int QUARTER_BUCKET_mB = HALF_BUCKET_mB / 2;
 
     /**
      * The meta-data value representing a mature crop.
