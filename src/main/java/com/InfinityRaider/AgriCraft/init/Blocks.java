@@ -39,7 +39,7 @@ public class Blocks {
         if(!ConfigurationHandler.disableSeedStorage) {
             blockSeedStorage = new BlockSeedStorage();
             if(!ConfigurationHandler.disableSeedWarehouse) {
-                blockSeedStorageController = new BlockSeedStorageController();
+                //blockSeedStorageController = new BlockSeedStorageController();
             }
         }
         if(ModHelper.allowIntegration(Names.Mods.computerCraft)) {
