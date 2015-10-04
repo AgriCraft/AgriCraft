@@ -1,0 +1,44 @@
+// Gradle automation tasks.
+
+apply plugin: 'curseforge'
+
+// Configure Travis auto-build info.
+allprojects {
+    if (System.getenv("TRAVIS") != null) {
+        def tag = System.getenv("TRAVIS_TAG");
+        if (tag != null && !tag.isEmpty()) {
+            project.ext.releaseType = tag.contains("SNAPSHOT") ? "alpha" : "release"
+            version += tag.contains("SNAPSHOT") ? "-b${System.getenv("TRAVIS_BUILD_NUMBER")}" : ""
+        } else {
+            version += "-b${System.getenv("TRAVIS_BUILD_NUMBER")}"
+            project.ext.releaseType = "alpha"
+        }
+    }
+}
+
+// Release to Curse from Travis.
+curse {
+    onlyIf {
+        (!System.env.TRAVIS_TAG.isEmpty() || getCommitMsg.commitMsg().contains("[cf push]")) && System.env.CFKEY != null
+    }
+
+    apiKey = System.env.CFKEY
+    projectId = "225635"
+    changelog = """
+            See https://github.com/InfinityRaider/AgriCraft/blob/master/src/main/resources/changelog.txt
+    """
+    releaseType = project.hasProperty('releaseType') ? project.releaseType : ""
+}
+
+// Retrieve the commit message from git.
+task getCommitMsg(type: Exec) {
+    def commit = System.env.TRAVIS_COMMIT != null ? System.env.TRAVIS_COMMIT : ""
+    commandLine "git log --format=%B -n 1 ${commit}".split(' ')
+    standardOutput = new ByteArrayOutputStream()
+    ext.commitMsg = {
+        return standardOutput.toString()
+    }
+}
+
+// Tell the Curse task it needs the commit message.
+curse.dependsOn getCommitMsg

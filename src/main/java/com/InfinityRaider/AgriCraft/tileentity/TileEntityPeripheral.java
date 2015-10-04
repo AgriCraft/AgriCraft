@@ -84,7 +84,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
 
     @SideOnly(Side.CLIENT)
     public int getTimer(ForgeDirection dir) {
-        return timers.get(dir);
+        return timers == null ? null : timers.get(dir);
     }
 
     @SideOnly(Side.CLIENT)

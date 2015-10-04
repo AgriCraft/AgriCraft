@@ -37,8 +37,8 @@ repositories {
 }
 
 apply plugin: 'forge'
-apply plugin: 'curseforge'
 apply plugin: 'java'
+apply from: 'automation.gradle'
 
 // Set build properties.
 sourceCompatibility = version_java
@@ -73,20 +73,6 @@ dependencies {
     compile "applecore:AppleCore:${version_applecore}:api"
 }
 
-// Configure Travis auto-build info.
-allprojects {
-    if (System.getenv("TRAVIS") != null) {
-        def tag = System.getenv("TRAVIS_TAG");
-        if (tag != null && !tag.isEmpty()) {
-            project.ext.releaseType = tag.contains("SNAPSHOT") ? "alpha" : "release"
-            version += tag.contains("SNAPSHOT") ? "-b${System.getenv("TRAVIS_BUILD_NUMBER")}" : ""
-        } else {
-            version += "-b${System.getenv("TRAVIS_BUILD_NUMBER")}"
-            project.ext.releaseType = "alpha"
-        }
-    }
-}
-
 // Configure Resource Processing.
 processResources {
     inputs.property "version", project.version_mod
@@ -105,34 +91,7 @@ processResources {
     }
 }
 
-// Release to Curse from Travis.
-curse {
-    onlyIf {
-        (!System.env.TRAVIS_TAG.isEmpty() || getCommitMsg.commitMsg().contains("[cf push]")) && System.env.CFKEY != null
-    }
-
-    apiKey = System.env.CFKEY
-    projectId = "225635"
-    changelog = """
-            See https://github.com/InfinityRaider/AgriCraft/blob/master/src/main/resources/changelog.txt
-    """
-    releaseType = project.hasProperty('releaseType') ? project.releaseType : ""
-}
-
-// Retrieve the commit message from git.
-task getCommitMsg(type: Exec) {
-    def commit = System.env.TRAVIS_COMMIT != null ? System.env.TRAVIS_COMMIT : ""
-    commandLine "git log --format=%B -n 1 ${commit}".split(' ')
-    standardOutput = new ByteArrayOutputStream()
-    ext.commitMsg = {
-        return standardOutput.toString()
-    }
-}
-
-// Tell the Curse task it needs the commit message.
-curse.dependsOn getCommitMsg
-
-// Compile the jar for the API
+// Compile the jar for the APIs
 task apiJar(type: Jar) {
     from sourceSets.main.allSource
     from sourceSets.main.output
@@ -142,3 +101,19 @@ task apiJar(type: Jar) {
 
 // Tell build that it needs the API compiled first.
 build.dependsOn apiJar
+
+// Javadoc
+task mainAgriCraftJavadoc(type: Javadoc) {
+  source = sourceSets.main.allJava
+  title = "AgriCraft ${version_mod} Documentation"
+  destinationDir = file("${project.docsDir}/mainJavadoc")
+  failOnError = false
+}
+
+task apiAgriCraftJavadoc(type: Javadoc) {
+  source = sourceSets.main.allJava
+  include "**/api/**"
+  title = "AgriCraft ${version_mod} API Documentation"
+  destinationDir = file("${project.docsDir}/apiJavadoc")
+  failOnError = false
+}
