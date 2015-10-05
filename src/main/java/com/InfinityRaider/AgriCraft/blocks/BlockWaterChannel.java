@@ -54,6 +54,11 @@ public class BlockWaterChannel extends BlockCustomWood {
         return world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z).receiveClientEvent(id, data);
     }
 
+    @Override
+    public boolean isMultiBlock() {
+        return false;
+    }
+
     /**
      * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
      * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity

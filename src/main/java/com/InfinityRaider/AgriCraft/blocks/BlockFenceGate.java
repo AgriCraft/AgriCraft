@@ -47,6 +47,11 @@ public class BlockFenceGate extends BlockCustomWood {
     }
 
     @Override
+    public boolean isMultiBlock() {
+        return false;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderBlockFenceGate();

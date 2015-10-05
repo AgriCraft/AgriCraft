@@ -31,7 +31,12 @@ public class BlockGrate extends BlockCustomWood {
     protected String getTileEntityName() {
         return Names.Objects.grate;
     }
-    
+
+    @Override
+    public boolean isMultiBlock() {
+        return false;
+    }
+
     @Override
     protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
         return ItemBlockGrate.class;

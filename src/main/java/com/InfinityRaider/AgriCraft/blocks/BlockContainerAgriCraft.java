@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -81,6 +82,14 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
                         break;
                 }
             }
+            if(this.isMultiBlock()) {
+                if (te instanceof IMultiBlockComponent) {
+                    LogHelper.debug("Checking if block completed multiblock.");
+                    ((IMultiBlockComponent) te).getMultiBLockLogic().checkMultiBlock();
+                } else {
+                    LogHelper.debug("Multiblock place failure. Unformed? At: (" + x + "," + y + "," + z + ").");
+                }
+            }
         }
     }
 
@@ -90,9 +99,18 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
-        super.breakBlock(world, x, y, z, b, meta);
-        world.removeTileEntity(x, y, z);
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+        if(this.isMultiBlock()) {
+            if (world.getTileEntity(x, y, z) instanceof IMultiBlockComponent) {
+                LogHelper.debug("Deconstructing multiblock.");
+                ((IMultiBlockComponent) world.getTileEntity(x, y, z)).onBlockBroken();
+            } else {
+                LogHelper.error("The tile entity at: (" + x + "," + y + "," + z + ") is not a multiblock, like it should be.");
+            }
+            world.removeTileEntity(x, y, z);
+        } else {
+            super.breakBlock(world, x, y, z, block, meta);
+        }
     }
 
     @Override
@@ -101,4 +119,6 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
         TileEntity tileentity = world.getTileEntity(x, y, z);
         return tileentity!=null && tileentity.receiveClientEvent(id, data);
     }
+
+    public abstract boolean isMultiBlock();
 }

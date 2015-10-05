@@ -127,7 +127,12 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
     protected String getTileEntityName() {
         return Names.Objects.sprinkler;
     }
-    
+
+    @Override
+    public boolean isMultiBlock() {
+        return false;
+    }
+
     @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z) {
     	return world.getBlock(x, y + 1, z) instanceof BlockWaterChannel && world.getBlock(x, y, z).getMaterial()== Material.air;

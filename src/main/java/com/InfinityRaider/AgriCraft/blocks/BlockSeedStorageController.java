@@ -47,6 +47,11 @@ public class BlockSeedStorageController extends BlockCustomWood {
     }
 
     @Override
+    public boolean isMultiBlock() {
+        return true;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return null;
