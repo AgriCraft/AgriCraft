@@ -25,6 +25,8 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
     private boolean mayAnalyze = false;
     /** Data to animate the peripheral client side */
     @SideOnly(Side.CLIENT)
+    private int updateCheck;
+    @SideOnly(Side.CLIENT)
     private HashMap<ForgeDirection, Integer> timers;
     @SideOnly(Side.CLIENT)
     private HashMap<ForgeDirection, Boolean> activeSides;
@@ -71,7 +73,9 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
                 reset();
             }
         } if(worldObj.isRemote) {
-            checkSides();
+            if(updateCheck == 0) {
+                checkSides();
+            }
             for(ForgeDirection dir:VALID_DIRECTIONS) {
                 int timer = timers.get(dir);
                 timer = timer + (isSideActive(dir)?1:-1);
@@ -79,12 +83,16 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
                 timer = timer>MAX?MAX:timer;
                 timers.put(dir, timer);
             }
+            updateCheck = (updateCheck+1)%1200;
         }
     }
 
     @SideOnly(Side.CLIENT)
     public int getTimer(ForgeDirection dir) {
-        return timers == null ? null : timers.get(dir);
+        if(updateCheck == 0) {
+            checkSides();
+        }
+        return timers.get(dir);
     }
 
     @SideOnly(Side.CLIENT)
@@ -93,10 +101,11 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
     }
 
     @SideOnly(Side.CLIENT)
-    private void checkSides() {
+    public void checkSides() {
         for(ForgeDirection dir:VALID_DIRECTIONS) {
             checkSide(dir);
         }
+        updateCheck = 0;
     }
 
     @SideOnly(Side.CLIENT)

@@ -5,12 +5,16 @@ import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHel
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.network.MessagePeripheralCheckNeighbours;
+import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -127,6 +131,13 @@ public class BlockPeripheral extends BlockContainerAgriCraft implements IPeriphe
             player.openGui(AgriCraft.instance, GuiHandler.peripheralID, world, x, y, z);
         }
         return true;
+    }
+
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+        IMessage msg = new MessagePeripheralCheckNeighbours(x, y, z);
+        NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 32);
+        NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
     }
 
     @Override
