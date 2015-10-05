@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class MultiBlockLogicTank extends MultiBlockLogic {
     private int sizeX = 1;
@@ -54,24 +55,6 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         return sizeX*sizeY*sizeZ;
     }
 
-    private boolean setRootComponent(TileEntityTank tank) {
-        if(!areCoordinatesSmallerThanCurrentRoot(tank)) {
-            return false;
-        }
-        TileEntityTank oldRoot = getRootComponent();
-        this.rootComponent = tank;
-        if(!checkMultiBlock()) {
-            this.rootComponent = oldRoot;
-            return false;
-        }
-        return true;
-    }
-
-    private boolean areCoordinatesSmallerThanCurrentRoot(TileEntityTank tank) {
-        TileEntityTank root = getRootComponent();
-        return tank.xCoord<=root.xCoord && tank.yCoord<=root.yCoord && tank.zCoord<=root.zCoord;
-    }
-
     private boolean isValidComponent(TileEntity tile) {
         return !(tile == null || !(tile instanceof TileEntityTank)) && isValidComponent((IMultiBlockComponent) tile);
     }
@@ -94,38 +77,77 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         return true;
     }
 
+    /** Only try to form multiblocks with existing multiblocks, if none are found, form new multiblock */
     @Override
-    public boolean checkMultiBlock() {
-        TileEntityTank root = getRootComponent();
-        CoordinateIterator iterator = new CoordinateIterator();
-        //check if a new root component has to be set
-        int newX = findNewRootCoordinate(iterator.setX());
-        int newY = findNewRootCoordinate(iterator.setY());
-        int newZ = findNewRootCoordinate(iterator.setZ());
-        if(newX * newY * newZ != 0) {
-            if(setRootComponent((TileEntityTank) root.getWorldObj().getTileEntity(root.xCoord - newX, root.yCoord - newY, root.zCoord - newZ))) {
+    public boolean checkMultiBlockOnPlace() {
+        TileEntityTank newTank = this.getRootComponent();
+        boolean onlySingleNeighbours = true;
+        for (ForgeDirection dir : ForgeDirection.values()) {
+            if (dir == ForgeDirection.UNKNOWN) {
+                continue;
+            }
+            TileEntity te = newTank.getWorldObj().getTileEntity(newTank.xCoord + dir.offsetX, newTank.yCoord + dir.offsetY, newTank.zCoord + dir.offsetZ);
+            if (te == null || !(te instanceof TileEntityTank)) {
+                continue;
+            }
+            TileEntityTank tankAt = (TileEntityTank) te;
+            if (tankAt.getMultiBLockLogic().checkToUpdateExistingMultiBlock()) {
+                //A new multiblock has been made with an existing multiblock
                 return true;
+            } else {
+                //keep track of a single neighbour blocks
+                if (tankAt.getMultiBLockLogic().getMultiBlockCount() > 1) {
+                    onlySingleNeighbours = false;
+                }
             }
         }
+        //there are only a single neighbours next to this block
+        return onlySingleNeighbours && formMultiBlockWithNeighbours();
+    }
+
+    @Override
+    public boolean checkToUpdateExistingMultiBlock() {
+        return this.getMultiBlockCount() > 1 && formMultiBlockWithNeighbours();
+    }
+
+    private boolean formMultiBlockWithNeighbours() {CoordinateIterator iterator = new CoordinateIterator();
+        TileEntityTank oldRoot = getRootComponent();
+        TileEntityTank newRoot = findNewRoot(iterator);
+        //check if a new root component has to be set
+        if(newRoot != oldRoot) {
+            this.rootComponent = newRoot;
+        }
         //calculate the new multiblock size
-        int sizeX = calculateSize(iterator.setX());
-        int sizeY = calculateSize(iterator.setY());
-        int sizeZ = calculateSize(iterator.setZ());
-        if(!areAllBlocksInRangeValidComponents(sizeX, sizeY, sizeZ)) {
+        int xMax = calculateSize(iterator.setX());
+        int yMax = calculateSize(iterator.setY());
+        int zMax = calculateSize(iterator.setZ());
+        //if not all blocks for new root are correct, turn back to the old root and return
+        if(!areAllBlocksInRangeValidComponents(xMax, yMax, zMax)) {
+            this.rootComponent = oldRoot;
             return false;
         }
-        if(sizeX==this.sizeX && sizeY==this.sizeY && sizeZ==this.sizeZ) {
-            return true;
+        //if dimensions and root are the same the multiblock hasn't changed and nothing has to happen
+        if(oldRoot==newRoot && xMax==this.sizeX && yMax==this.sizeY && zMax==this.sizeZ) {
+            return false;
         }
+        //new multiblock dimensions are required, update the multiblock
         breakMultiBlock();
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
-        this.sizeZ = sizeZ;
+        this.sizeX = xMax;
+        this.sizeY = yMax;
+        this.sizeZ = zMax;
         createMultiBLock();
         return true;
     }
 
-    private int findNewRootCoordinate(CoordinateIterator it) {
+    private TileEntityTank findNewRoot(CoordinateIterator iterator) {
+        TileEntityTank oldRoot = getRootComponent();
+        int xMin = findNewRootCoordinateOffset(iterator.setX());
+        int yMin = findNewRootCoordinateOffset(iterator.setY());
+        int zMin = findNewRootCoordinateOffset(iterator.setZ());
+        return (TileEntityTank) oldRoot.getWorldObj().getTileEntity(oldRoot.xCoord - xMin, oldRoot.yCoord - yMin, oldRoot.zCoord - zMin);
+    }
+
+    private int findNewRootCoordinateOffset(CoordinateIterator it) {
         TileEntityTank root = getRootComponent();
         if(!it.isActive()) {
             LogHelper.debug("ERROR WHEN ITERATING COORDINATES: ITERATOR NOT ACTIVE");
@@ -181,7 +203,7 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
                 for(int z = root.zCoord;z<root.zCoord+sizeZ;z++) {
                     TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
                     fluidLevel = fluidLevel + tank.getFluidLevel();
-                    tank.setMultiBlockLogic(this, true);
+                    tank.setMultiBlockLogic(this);
                 }
             }
         }
@@ -206,7 +228,10 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
             for(int y = root.yCoord;y<root.yCoord+sizeY;y++) {
                 for(int z = root.zCoord;z<root.zCoord+sizeZ;z++) {
                     TileEntityTank tank = (TileEntityTank) root.getWorldObj().getTileEntity(x, y, z);
-                    tank.setMultiBlockLogic(new MultiBlockLogicTank(tank), false);
+                    if(tank.getMultiBLockLogic() != this) {
+                        tank.getMultiBLockLogic().breakMultiBlock();
+                    }
+                    tank.setMultiBlockLogic(new MultiBlockLogicTank(tank));
                     tank.setFluidLevel(fluidLevelByLayer[y-root.yCoord]);
                 }
             }

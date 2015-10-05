@@ -5,7 +5,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public interface IMultiBlockComponent<L extends MultiBlockLogic> {
     L getMultiBLockLogic();
 
-    void setMultiBlockLogic(L logic, boolean syncToClient);
+    void setMultiBlockLogic(L logic);
 
     boolean hasNeighbour(ForgeDirection dir);
 

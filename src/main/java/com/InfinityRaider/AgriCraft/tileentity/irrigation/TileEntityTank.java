@@ -158,7 +158,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 	public int pullFluid(int amount) {
     	if(!worldObj.isRemote && this.canProvide() && amount >= 0) {
         	if (amount <= this.getFluidLevel()) {
-        		this.setFluidLevel(this.getFluidLevel()-amount);
+        		this.setFluidLevel(this.getFluidLevel() - amount);
         	} else {
         		amount = this.getFluidLevel();
         		this.setFluidLevel(0);
@@ -278,7 +278,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                 neighbours.append(dir.name()).append(", ");
             }
         }
-        list.add("  - Neighbours: "+neighbours.toString());
+        list.add("  - Neighbours: " + neighbours.toString());
         list.add("  - MultiBlock Size: "+ getMultiBLockLogic().sizeX()+"x"+getMultiBLockLogic().sizeY()+"x"+getMultiBLockLogic().sizeZ());
     }
     
@@ -292,20 +292,18 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public MultiBlockLogicTank getMultiBLockLogic() {
         if(this.multiBlockLogic == null) {
             this.multiBlockLogic = new MultiBlockLogicTank(this);
-            this.multiBlockLogic.checkMultiBlock();
+            this.multiBlockLogic.checkToUpdateExistingMultiBlock();
         }
         return multiBlockLogic;
     }
 
     @Override
-    public void setMultiBlockLogic(MultiBlockLogicTank logic, boolean syncToClient) {
+    public void setMultiBlockLogic(MultiBlockLogicTank logic) {
         this.multiBlockLogic = logic;
-        if(!multiBlockLogic.isRootComponent(this)) {
+        if (!multiBlockLogic.isRootComponent(this)) {
             fluidLevel = 0;
         }
-        if(syncToClient) {
-            this.markForUpdate();
-        }
+        this.markForUpdate();
     }
 
     @Override

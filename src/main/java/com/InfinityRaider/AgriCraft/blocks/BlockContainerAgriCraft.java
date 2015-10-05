@@ -88,13 +88,15 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
     @Override
     public void onBlockAdded(World world, int x, int y, int z) {
         super.onBlockAdded(world, x, y, z);
+        if(this.isMultiBlock()) {
+            ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBLockLogic().checkMultiBlockOnPlace();
+        }
     }
 
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
         if(this.isMultiBlock()) {
-            //TODO: fix this
             ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBLockLogic().breakMultiBlock();
         }
         super.breakBlock(world,x,y,z, b,meta);
@@ -105,7 +107,11 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
         if(this.isMultiBlock()) {
             if(world.getTileEntity(x, y, z) instanceof IMultiBlockComponent) {
-                ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBLockLogic().checkMultiBlock();
+                if(block == this) {
+
+                } else {
+                    //((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBLockLogic().checkToUpdateExistingMultiBlock();
+                }
             }
         }
     }
