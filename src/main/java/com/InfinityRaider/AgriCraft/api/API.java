@@ -11,7 +11,7 @@ import com.InfinityRaider.AgriCraft.api.v0.NoAPI;
  * 
  * On how to use an API without including it, see:
  * 
- * <nobr>http://www.minecraftforum.net/forums/mapping-and-modding/mapping-and-modding-tutorials/1571434-tutorial-modding-with-apis</nobr>
+ * <a href=http://www.minecraftforum.net/forums/mapping-and-modding/mapping-and-modding-tutorials/1571434-tutorial-modding-with-apis> this tutorial</a>.
  * 
  * <p>
  * Example code for using it:
