@@ -43,14 +43,18 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        if(this.fluidLevel>0 && getMultiBLockLogic().isRootComponent(this)) {
-            tag.setInteger(Names.NBT.level, this.fluidLevel);
+        if(getMultiBLockLogic().isRootComponent(this)) {
+            //TODO: write multiblock logic to NBT
+            if (this.fluidLevel > 0) {
+                tag.setInteger(Names.NBT.level, this.fluidLevel);
+            }
         }
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+        //TODO: read multiblock logic from NBT
         if(getMultiBLockLogic().isRootComponent(this) && tag.hasKey(Names.NBT.level)) {
         	this.fluidLevel = tag.getInteger(Names.NBT.level);
         }
@@ -294,6 +298,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     @Override
     public void onBlockBroken() {
-
+        //TODO: write multiblock breaking logic
     }
 }

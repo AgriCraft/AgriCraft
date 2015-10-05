@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+//TODO: make sure water levels are maintained correctly when breaking/constructing the multiblock
 public class MultiBlockLogicTank extends MultiBlockLogic {
     private int sizeX = 1;
     private int sizeY = 1;
