@@ -44,7 +44,8 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         if(getMultiBLockLogic().isRootComponent(this)) {
-            //TODO: write multiblock logic to NBT
+            tag.setBoolean(Names.NBT.tag, true);
+            multiBlockLogic.writeToNBT(tag);
             if (this.fluidLevel > 0) {
                 tag.setInteger(Names.NBT.level, this.fluidLevel);
             }
@@ -53,8 +54,12 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+        //TODO: make it read NBT correctly from old version
         super.readFromNBT(tag);
-        //TODO: read multiblock logic from NBT
+        if(tag.hasKey(Names.NBT.tag)) {
+            multiBlockLogic = new MultiBlockLogicTank(this);
+            multiBlockLogic.readFromNBT(tag);
+        }
         if(getMultiBLockLogic().isRootComponent(this) && tag.hasKey(Names.NBT.level)) {
         	this.fluidLevel = tag.getInteger(Names.NBT.level);
         }
@@ -66,7 +71,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     	super.updateEntity();
         if(!this.worldObj.isRemote) {
             if(this.worldObj.canBlockSeeTheSky(this.xCoord, this.yCoord, this.zCoord) && this.worldObj.isRaining()) {
-                if(!this.hasNeighBour(ForgeDirection.UP)) {
+                if(!this.hasNeighbour(ForgeDirection.UP)) {
                     BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(this.xCoord, this.zCoord);
                     if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
                        this.setFluidLevel(this.getFluidLevel() + 1);
@@ -74,7 +79,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
                 }
             }
             if(ConfigurationHandler.fillFromFlowingWater && (this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.water || this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.flowing_water)) {
-                this.setFluidLevel(this.getFluidLevel()+5);
+                this.setFluidLevel(this.getFluidLevel() + 5);
             }
         }
     }
@@ -111,6 +116,11 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         return getMultiBLockLogic().isRootComponent(this)?fluidLevel:getMultiBLockLogic().getRootComponent().getFluidLevel();
 	}
 
+    public int getYPosition() {
+        TileEntityTank tank = getMultiBLockLogic().getRootComponent();
+        return this.yCoord - tank.yCoord;
+    }
+
     /**
      * Maps the current fluid level into the interval [0, {@value #DISCRETE_MAX}]
      */
@@ -118,7 +128,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         float discreteFactor = DISCRETE_MAX / ((float) SINGLE_CAPACITY * getMultiBLockLogic().sizeX() * getMultiBLockLogic().sizeZ());
         int discreteFluidLevel = Math.round(discreteFactor * getFluidLevel());
         // This is so the fluid shows up over the bottom...
-        // TODO: Find less hackish way.
         if (discreteFluidLevel < 2 && getFluidLevel() > 0) {
             discreteFluidLevel = 2;
         }
@@ -263,6 +272,14 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + this.getCapacity());
         list.add("  - Water level is on layer " + (int) Math.floor((this.getFluidLevel() - 0.1F) / (this.getCapacity() * getMultiBLockLogic().sizeX() * getMultiBLockLogic().sizeZ())) + ".");
         list.add("  - Water height is " + this.getFluidHeight());
+        StringBuilder neighbours = new StringBuilder();
+        for(ForgeDirection dir:ForgeDirection.values()) {
+            if(this.hasNeighbour(dir)) {
+                neighbours.append(dir.name()).append(", ");
+            }
+        }
+        list.add("  - Neighbours: "+neighbours.toString());
+        list.add("  - MultiBlock Size: "+ getMultiBLockLogic().sizeX()+"x"+getMultiBLockLogic().sizeY()+"x"+getMultiBLockLogic().sizeZ());
     }
     
     @Override
@@ -281,23 +298,23 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     }
 
     @Override
-    public void setMultiBlockLogic(MultiBlockLogicTank logic) {
+    public void setMultiBlockLogic(MultiBlockLogicTank logic, boolean syncToClient) {
         this.multiBlockLogic = logic;
-        this.markForUpdate();
+        if(!multiBlockLogic.isRootComponent(this)) {
+            fluidLevel = 0;
+        }
+        if(syncToClient) {
+            this.markForUpdate();
+        }
     }
 
     @Override
-    public boolean hasNeighBour(ForgeDirection dir) {
-        return getMultiBLockLogic().isPartOfMultiBlock(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
+    public boolean hasNeighbour(ForgeDirection dir) {
+        return worldObj!=null && getMultiBLockLogic().isPartOfMultiBlock(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
     }
 
     @Override
     public boolean isValidComponent(IMultiBlockComponent component) {
         return component instanceof TileEntityTank && this.isSameMaterial((TileEntityTank) component);
-    }
-
-    @Override
-    public void onBlockBroken() {
-        //TODO: write multiblock breaking logic
     }
 }

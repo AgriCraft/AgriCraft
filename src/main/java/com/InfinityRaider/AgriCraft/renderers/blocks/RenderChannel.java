@@ -160,10 +160,10 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 				if (te instanceof TileEntityValve && ((TileEntityValve) te).isPowered()) {
 					y2 = y;
 				} else {
-					y2 = (y + ((TileEntityChannel) te).getFluidHeight()) / 2;
+					y2 = (y + te.getFluidHeight()) / 2;
 				}
 			} else {
-				float lvl = ((TileEntityTank) te).getFluidHeight() - 16 * ((TileEntityTank) te).getComponent().posY;
+				float lvl = (te.getFluidHeight() - 16 * ((TileEntityTank) te).getYPosition());
 				y2 = lvl > 12 ? 12 : lvl < 5 ? (5 - 0.0001F) : lvl;
 			}
 			this.drawWaterEdge(tessellator, direction, y, y2, icon);

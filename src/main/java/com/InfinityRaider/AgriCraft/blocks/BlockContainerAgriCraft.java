@@ -20,10 +20,10 @@ import net.minecraftforge.common.util.ForgeDirection;
  * The base class for all AgriCraft container blocks.
  */
 public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements ITileEntityProvider {
-	
+
     /**
      * The default constructor.
-     * 
+     *
      * @param material the material the block is composed of.
      */
     protected BlockContainerAgriCraft(Material material) {
@@ -48,7 +48,7 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
 
     /**
      * Retrieves the name of the TileEntity to this container block.
-     * 
+     *
      * @return the name of the block's TileEntity.
      */
     protected abstract String getTileEntityName();
@@ -82,14 +82,6 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
                         break;
                 }
             }
-            if(this.isMultiBlock()) {
-                if (te instanceof IMultiBlockComponent) {
-                    LogHelper.debug("Checking if block completed multiblock.");
-                    ((IMultiBlockComponent) te).getMultiBLockLogic().checkMultiBlock();
-                } else {
-                    LogHelper.debug("Multiblock place failure. Unformed? At: (" + x + "," + y + "," + z + ").");
-                }
-            }
         }
     }
 
@@ -98,18 +90,23 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
         super.onBlockAdded(world, x, y, z);
     }
 
+
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+    public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
         if(this.isMultiBlock()) {
-            if (world.getTileEntity(x, y, z) instanceof IMultiBlockComponent) {
-                LogHelper.debug("Deconstructing multiblock.");
-                ((IMultiBlockComponent) world.getTileEntity(x, y, z)).onBlockBroken();
-            } else {
-                LogHelper.error("The tile entity at: (" + x + "," + y + "," + z + ") is not a multiblock, like it should be.");
+            //TODO: fix this
+            ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBLockLogic().breakMultiBlock();
+        }
+        super.breakBlock(world,x,y,z, b,meta);
+        world.removeTileEntity(x, y, z);
+    }
+
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+        if(this.isMultiBlock()) {
+            if(world.getTileEntity(x, y, z) instanceof IMultiBlockComponent) {
+                ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBLockLogic().checkMultiBlock();
             }
-            world.removeTileEntity(x, y, z);
-        } else {
-            super.breakBlock(world, x, y, z, block, meta);
         }
     }
 

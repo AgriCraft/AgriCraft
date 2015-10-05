@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility.multiblock;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public abstract class MultiBlockLogic {
@@ -11,6 +12,18 @@ public abstract class MultiBlockLogic {
     public MultiBlockLogic(IMultiBlockComponent root) {
         rootComponent = root;
     }
+
+    /**
+     * Reads NBT data from an NBTTagCompound
+     * @param tag the NBTTagCompound to read data from
+     */
+    public abstract void readFromNBT(NBTTagCompound tag);
+
+    /**
+     * Writes data to an NBTTagCompound
+     * @param tag the NBTTagCompound to write data to
+     */
+    public abstract void writeToNBT(NBTTagCompound tag);
 
     /**
      * Checks if this component is the root for this multiblock
@@ -61,4 +74,9 @@ public abstract class MultiBlockLogic {
      * Assumes the sizes have been set correctly and all blocks in the
      */
     public abstract void createMultiBLock();
+
+    /**
+     * Performs the needed operation to break down this multiblock and turn each component into an individual block again
+     */
+    public abstract void breakMultiBlock();
 }
