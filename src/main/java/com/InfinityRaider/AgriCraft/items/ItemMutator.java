@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 /**
  * Creative tool to mutate crops.
  * <br>
- * I have no idea what I am doing here...
+ * I have no idea what I am doing here... Or do I?
  */
 public class ItemMutator extends ItemAgricraft {
 
@@ -28,9 +28,6 @@ public class ItemMutator extends ItemAgricraft {
         return Names.Objects.mutator;
     }
 
-    /**
-     * Not quite sure how the item use gets called...
-     */
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 	// Determine if the plant is ok to get.
@@ -51,7 +48,8 @@ public class ItemMutator extends ItemAgricraft {
 	}
 	
 	// Mutate the plant.
-	crop.setPlant(crop.getGrowth() + values[0], crop.getGain() + values[1], crop.getStrength() + values[2], false, crop.getPlant(), true);
+	// Should the analyzed state be kept?
+	crop.setPlant(crop.getGrowth() + values[0], crop.getGain() + values[1], crop.getStrength() + values[2], crop.isAnalyzed(), crop.getPlant(), true);
 
 	// Consume the item if not in creative.
 	stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
@@ -60,12 +58,11 @@ public class ItemMutator extends ItemAgricraft {
 
     }
 
-
     @Override
     public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
-        list.add(new ItemStack(item, 1, (int)Math.pow(ConfigurationHandler.cropStatCap, 0)));
-        list.add(new ItemStack(item, 1, (int)Math.pow(ConfigurationHandler.cropStatCap, 1)));
-        list.add(new ItemStack(item, 1, (int)Math.pow(ConfigurationHandler.cropStatCap, 2)));
+        list.add(new ItemStack(item, 1, composeMeta(ConfigurationHandler.cropStatCap, 0, 0, 1)));
+        list.add(new ItemStack(item, 1, composeMeta(ConfigurationHandler.cropStatCap, 0, 1, 0)));
+        list.add(new ItemStack(item, 1, composeMeta(ConfigurationHandler.cropStatCap, 1, 0, 0)));
     }
     
     /**
@@ -75,14 +72,44 @@ public class ItemMutator extends ItemAgricraft {
      * @param meta the metadata to decompose.
      * @return an array of delta values.
      */
-    private static int[] decomposeMeta(int meta) {
-	int[] values = new int[3];
+    private static final int[] decomposeMeta(int meta) {
+	return decomposeMeta(ConfigurationHandler.cropStatCap, 3, meta);
+    }
+    
+    /**
+     * Breaks up a meta value into an array of parameters.
+     * TODO: Move to utility class???
+     * 
+     * @param elements the number of parameters to decompose into.
+     * @param increment the size of each parameter.
+     * @param meta the metavalue to decompose.
+     * @return the array of parameters from the decomposed meta.
+     */
+    public static final int[] decomposeMeta(int increment, int elements, int meta) {
+	int[] values = new int[elements];
 	for(int i = 0; i < values.length; i++) {
-	    values[i] = (meta % ConfigurationHandler.cropStatCap);
-	    meta /= ConfigurationHandler.cropStatCap;
+	    values[i] = (meta % increment);
+	    meta /= increment;
 	}
 	return values;
     }
+    
+    /**
+     * Creates a metavalue from an array of elements.
+     * 
+     * @param increment the max value of the elements.
+     * @param elements the elements to combine.
+     * @return a meta value representing the combined elements.
+     */
+    public static final int composeMeta(int increment, int...elements) {
+	int meta = 0;
+	for(int element : elements) {
+	    meta *= increment;
+	    meta += element;
+	}
+	return meta;
+    }
+
 
     @Override
     @SideOnly(Side.CLIENT)

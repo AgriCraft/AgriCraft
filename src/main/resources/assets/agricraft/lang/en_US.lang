@@ -7,6 +7,7 @@ item.agricraft:journal.name=Agricultural Journal
 item.agricraft:trowel.name=Gardening Trowel
 item.agricraft:magnifyingGlass.name=Magnifying Glass
 item.agricraft:debugger.name=Debugger
+item.agricraft:mutator.name=Mutator
 item.agricraft:handRake.wood.name=Wooden Hand Rake
 item.agricraft:handRake.iron.name=Iron Hand Rake
 item.agricraft:nuggetDiamond.name=Diamond Nugget

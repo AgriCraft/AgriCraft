@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.entity.EntityVillagerFarmer;
 import com.InfinityRaider.AgriCraft.init.WorldGen;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.DebugHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -21,7 +22,7 @@ public class ItemDebugger extends ItemAgricraft {
 
     @Override
     protected String getInternalName() {
-        return "debugger";
+        return Names.Objects.debugger;
     }
 
     @Override
@@ -37,16 +38,11 @@ public class ItemDebugger extends ItemAgricraft {
         else {
             if(!world.isRemote) {
                 EntityVillager entityvillager = new EntityVillagerFarmer(world, WorldGen.getVillagerId());
-                entityvillager.setLocationAndAngles((double) x + 0.5D, (double) y+1, (double) z + 0.5D, 0.0F, 0.0F);
+                entityvillager.setLocationAndAngles(x + 0.5, y+1.0, z + 0.5, 0.0F, 0.0F);
                 world.spawnEntityInWorld(entityvillager);
             }
         }
         return false;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg) {
-        this.itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
-    }
 }

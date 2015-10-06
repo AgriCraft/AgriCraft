@@ -65,6 +65,7 @@ public final class Names {
         public static final String fenceGate = "fenceGate";
         public static final String grate = "grate";
         public static final String leash = "leash";
+        public static final String debugger = "debugger";
         public static final String mutator = "mutator";
     }
 
