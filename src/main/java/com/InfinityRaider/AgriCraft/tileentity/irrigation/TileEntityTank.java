@@ -44,9 +44,8 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
+        getMultiBlockLogic().writeToNBT(tag);
         if(getMultiBlockLogic().isRootComponent(this)) {
-            tag.setBoolean(Names.NBT.tag, true);
-            multiBlockLogic.writeToNBT(tag);
             if (this.fluidLevel > 0) {
                 tag.setInteger(Names.NBT.level, this.fluidLevel);
             }
@@ -57,10 +56,8 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public void readFromNBT(NBTTagCompound tag) {
         //TODO: make it read NBT correctly from old version
         super.readFromNBT(tag);
-        if(tag.hasKey(Names.NBT.tag)) {
-            multiBlockLogic = new MultiBlockLogicTank(this);
-            multiBlockLogic.readFromNBT(tag);
-        }
+        MultiBlockLogicTank cachedMultiBlockLogic = new MultiBlockLogicTank(this);
+        cachedMultiBlockLogic.readFromNBT(tag);
         if(getMultiBlockLogic().isRootComponent(this) && tag.hasKey(Names.NBT.level)) {
         	this.fluidLevel = tag.getInteger(Names.NBT.level);
         }
@@ -282,7 +279,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     //debug info
     @Override
     public void addDebugInfo(List<String> list) {
-    	super.addDebugInfo(list);
+        super.addDebugInfo(list);
         list.add("TANK:");
         list.add("coordinates: ("+xCoord+", "+yCoord+", "+zCoord+")");
         list.add("Tank: (single capacity: " + SINGLE_CAPACITY + ")");
@@ -303,6 +300,11 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public void addWailaInformation(List information) {
     	super.addWailaInformation(information);
     	information.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel")+": "+this.getFluidLevel()+"/"+this.getCapacity());
+    }
+
+    @Override
+    public TileEntity getTileEntity() {
+        return this;
     }
 
     @Override

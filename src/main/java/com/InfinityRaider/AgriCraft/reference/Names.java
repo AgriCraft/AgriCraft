@@ -28,6 +28,9 @@ public final class Names {
         public static final String x = "agricraftX";
         public static final String y = "agricraftY";
         public static final String z = "agricraftZ";
+        public static final String x2 = "agricraftX2";
+        public static final String y2 = "agricraftY2";
+        public static final String z2 = "agricraftZ2";
         public static final String override = "override";
         public static final String flag = "ac_Flag";
     }

@@ -24,8 +24,15 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         this.sizeX = tag.getInteger(Names.NBT.x);
         this.sizeY = tag.getInteger(Names.NBT.y);
         this.sizeZ = tag.getInteger(Names.NBT.z);
-        //TODO: make sure all chunks enveloping the multi block are loaded and that the root is loaded last or this might be buggy
-        createMultiBlock();
+        int x = tag.getInteger(Names.NBT.x2);
+        int y = tag.getInteger(Names.NBT.y2);
+        int z = tag.getInteger(Names.NBT.z2);
+        World world = this.getRootComponent().getWorldObj();
+        if(world == null) {
+            MultiBlockCache.getCache().addToCache(this.rootComponent, x, y, z);
+        } else {
+            this.checkForMultiBlock();
+        }
     }
 
     @Override
@@ -33,6 +40,9 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         tag.setInteger(Names.NBT.x, sizeX);
         tag.setInteger(Names.NBT.y, sizeY);
         tag.setInteger(Names.NBT.z, sizeZ);
+        tag.setInteger(Names.NBT.x2, getRootComponent().xCoord);
+        tag.setInteger(Names.NBT.y2, getRootComponent().yCoord);
+        tag.setInteger(Names.NBT.z2, getRootComponent().zCoord);
     }
 
     @Override
@@ -229,8 +239,8 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         for(int x = root.xCoord;x<root.xCoord+sizeX;x++) {
             for(int y = root.yCoord;y<root.yCoord+sizeY;y++) {
                 for(int z = root.zCoord;z<root.zCoord+sizeZ;z++) {
-                    IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(x, y, z);
-                    component.setMultiBlockLogic(this);
+                    TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
+                    tank.setMultiBlockLogic(this);
                 }
             }
         }
