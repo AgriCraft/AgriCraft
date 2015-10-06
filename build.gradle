@@ -44,7 +44,7 @@ apply from: 'automation.gradle'
 sourceCompatibility = version_java
 targetCompatibility = version_java
 ext.version_mod = "${version_mod_major}.${version_mod_minor}.${version_mod_revis}"
-version = "${version_minecraft}-${version_mod}-${version_minecraft}"
+version = "${version_minecraft}-${version_mod}"
 group = "com.InfinityRaider.AgriCraft"
 archivesBaseName = "AgriCraft"
 

@@ -1,5 +1,8 @@
 package com.InfinityRaider.AgriCraft.reference;
 
+/*
+ *  TODO: Find better way.
+ */
 public final class Names {
     //NBT tags
     public static class NBT {
@@ -19,7 +22,7 @@ public final class Names {
         public static final String material = "material";
         public static final String materialMeta = "matMeta";
         public static final String isSprinkled = "isSprinkled";
-        public static final String power = "powerrrr";
+        public static final String power = "powerrrr"; // ???
         public static final String inventory = "agricraftInv";
         public static final String size = "size";
         public static final String count = "count";
@@ -62,6 +65,7 @@ public final class Names {
         public static final String fenceGate = "fenceGate";
         public static final String grate = "grate";
         public static final String leash = "leash";
+        public static final String mutator = "mutator";
     }
 
     //tile entities

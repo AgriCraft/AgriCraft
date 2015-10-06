@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
+    // The plant stats are odd...
+    // I vote to internalize this into the CropPlant class...
     private PlantStats stats = new PlantStats();
     private boolean analyzed=false;
     private boolean crossCrop=false;
@@ -85,8 +87,8 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public boolean hasPlant() {return this.plant!=null;}
 
     /** sets the plant in the crop */
-    public void setPlant(int growth, int gain, int strength, boolean analyzed, CropPlant plant) {
-        if( (!this.crossCrop) && (!this.hasPlant())) {
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, CropPlant plant, boolean overwrite) {
+        if((!this.crossCrop) && (overwrite || !this.hasPlant())) {
             if(plant!=null) {
                 this.plant = plant;
                 this.stats = new PlantStats(growth, gain, strength);
@@ -99,22 +101,29 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** sets the plant in the crop */
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, CropPlant plant) {
+        setPlant(growth, gain, strength, analyzed, plant, false);
+    }
+
+    /** sets the plant in the crop */
     public void setPlant(int growth, int gain, int strength, boolean analyzed, Item seed, int seedMeta) {
         this.setPlant(growth, gain, strength, analyzed, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
     }
 
-    /** clears the plant in the crop */
+    /**
+     * Clears the plant in the crop.
+     * Needs cleaning...
+     */
     public void clearPlant() {
-        CropPlant oldPlant = getPlant();
+	if (this.plant != null) {
+            this.plant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord);
+        }
         this.stats = new PlantStats();
         this.plant = null;
         this.analyzed = false;
         this.weed = false;
         this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
         this.markForUpdate();
-        if (oldPlant != null) {
-            oldPlant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord);
-        }
     }
 
     /** check if the crop is fertile */

@@ -204,6 +204,7 @@ agricraft_tooltip.growthStage=Growthstage
 agricraft_tooltip.mature=Mature
 agricraft_tooltip.valve=Toggled with a redstone signal
 agricraft_tooltip.grate=Right click with vines to apply vines
+agricraft_tooltip.mutator=Right click to mutate a crop.
 
 //descriptions
 agricraft_description.peripheralHelp=Method Help

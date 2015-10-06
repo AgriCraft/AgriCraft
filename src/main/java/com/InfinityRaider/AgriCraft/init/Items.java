@@ -11,6 +11,7 @@ public class Items {
     public static ItemMagnifyingGlass magnifyingGlass;
     public static ItemDebugger debugItem;
     public static ItemHandRake handRake;
+    public static ItemMutator mutator;
 
     public static void init() {
         crops = new ItemCrop();
@@ -18,6 +19,8 @@ public class Items {
         trowel = new ItemTrowel();
         magnifyingGlass = new ItemMagnifyingGlass();
         debugItem = new ItemDebugger();
+        mutator = new ItemMutator();
+        
         if (ConfigurationHandler.enableHandRake) {
             handRake = new ItemHandRake();
         }
