@@ -63,6 +63,8 @@ public abstract class MultiBlockLogic {
      */
     public abstract boolean isPartOfMultiBlock(World world, int x, int y, int z);
 
+    public abstract void onBlockPlaced(World world, int x, int y, int z);
+
     /**
      * Checks if the existing multiblock has to be expanded
      * @return true if there is a new valid multiblock to be formed

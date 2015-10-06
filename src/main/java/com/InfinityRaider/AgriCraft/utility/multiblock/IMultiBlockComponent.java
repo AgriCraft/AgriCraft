@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.utility.multiblock;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public interface IMultiBlockComponent<L extends MultiBlockLogic> {
-    L getMultiBLockLogic();
+    L getMultiBlockLogic();
 
     void setMultiBlockLogic(L logic);
 

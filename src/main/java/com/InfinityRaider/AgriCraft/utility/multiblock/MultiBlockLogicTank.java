@@ -7,11 +7,13 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class MultiBlockLogicTank extends MultiBlockLogic {
     private int sizeX = 1;
     private int sizeY = 1;
     private int sizeZ = 1;
+    private boolean placeCheck = false;
 
     public MultiBlockLogicTank(TileEntityTank tank) {
         super(tank);
@@ -22,6 +24,7 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         this.sizeX = tag.getInteger(Names.NBT.x);
         this.sizeY = tag.getInteger(Names.NBT.y);
         this.sizeZ = tag.getInteger(Names.NBT.z);
+        //TODO: make sure all chunks enveloping the multi block are loaded and that the root is loaded last or this might be buggy
         createMultiBlock();
     }
 
@@ -77,6 +80,37 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
     }
 
     @Override
+    public void onBlockPlaced(World world, int x, int y, int z) {
+        if(placeCheck) {
+            return;
+        }
+        placeCheck = true;
+        boolean flag = false;
+        for(ForgeDirection dir:ForgeDirection.values()) {
+            if(dir == ForgeDirection.UNKNOWN) {
+                continue;
+            }
+            TileEntity te = world.getTileEntity(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
+            if(te!=null && te instanceof TileEntityTank) {
+                TileEntityTank tank = (TileEntityTank) te;
+                if(tank.getMultiBlockLogic().canCheckForMultiBlock()) {
+                    if(tank.getMultiBlockLogic().checkForMultiBlock()) {
+                        return;
+                    }
+                    flag = true;
+                }
+            }
+        }
+        if(!flag) {
+            this.checkForMultiBlock();
+        }
+    }
+
+    private boolean canCheckForMultiBlock() {
+        return getMultiBlockCount()>1;
+    }
+
+    @Override
     public boolean checkForMultiBlock() {
         CoordinateIterator iterator = new CoordinateIterator();
         TileEntityTank oldRoot = getRootComponent();
@@ -102,9 +136,9 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         //new multiblock dimensions are required, update the multiblock
         breakAllMultiBlocksInRange(xMin, yMin, zMin, xMax, yMax, zMax);
         this.rootComponent = newRoot;
-        this.sizeX = xMax;
-        this.sizeY = yMax;
-        this.sizeZ = zMax;
+        this.sizeX = xSizeNew;
+        this.sizeY = ySizeNew;
+        this.sizeZ = zSizeNew;
         createMultiBlock();
         return true;
     }
@@ -162,7 +196,7 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
                 for(int z = root.zCoord-zMin;z<root.zCoord+zMax;z++) {
                     TileEntity te = world.getTileEntity(x, y, z);
                     if(te != null && te instanceof TileEntityTank) {
-                        ((TileEntityTank) te).getMultiBLockLogic().breakMultiBlock();
+                        ((TileEntityTank) te).getMultiBlockLogic().breakMultiBlock();
                     }
                 }
             }
@@ -171,6 +205,7 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
 
     @Override
     public void createMultiBlock() {
+        //TODO: fix fluid level bug
         int fluidLevel = 0;
         TileEntityTank root = getRootComponent();
         World world = root.getWorldObj();
@@ -208,9 +243,6 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
             for(int y = root.yCoord;y<root.yCoord+sizeY;y++) {
                 for(int z = root.zCoord;z<root.zCoord+sizeZ;z++) {
                     TileEntityTank tank = (TileEntityTank) root.getWorldObj().getTileEntity(x, y, z);
-                    if(tank.getMultiBLockLogic() != this) {
-                        tank.getMultiBLockLogic().breakMultiBlock();
-                    }
                     tank.setMultiBlockLogic(new MultiBlockLogicTank(tank));
                     tank.setFluidLevel(fluidLevelByLayer[y-root.yCoord]);
                 }

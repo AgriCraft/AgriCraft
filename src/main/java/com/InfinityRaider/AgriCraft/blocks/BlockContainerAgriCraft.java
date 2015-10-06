@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -82,6 +83,9 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
                         break;
                 }
             }
+            if(this.isMultiBlock() && !world.isRemote) {
+                ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBlockLogic().onBlockPlaced(world, x, y, z);
+            }
         }
     }
 
@@ -89,7 +93,7 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
     public void onBlockAdded(World world, int x, int y, int z) {
         super.onBlockAdded(world, x, y, z);
         if(this.isMultiBlock() && !world.isRemote) {
-            ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBLockLogic().checkForMultiBlock();
+            //((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBlockLogic().onBlockPlaced();
         }
     }
 
@@ -97,23 +101,10 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
         if(this.isMultiBlock() && !world.isRemote) {
-            ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBLockLogic().breakMultiBlock();
+            ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBlockLogic().breakMultiBlock();
         }
         super.breakBlock(world,x,y,z, b,meta);
         world.removeTileEntity(x, y, z);
-    }
-
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-        if(this.isMultiBlock()) {
-            if(world.getTileEntity(x, y, z) instanceof IMultiBlockComponent) {
-                if(block == this) {
-
-                } else {
-                    //((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBLockLogic().checkForMultiBlock();
-                }
-            }
-        }
     }
 
     @Override
