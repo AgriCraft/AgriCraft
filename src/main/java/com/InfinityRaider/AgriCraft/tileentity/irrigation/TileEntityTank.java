@@ -284,6 +284,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public void addDebugInfo(List<String> list) {
     	super.addDebugInfo(list);
         list.add("TANK:");
+        list.add("coordinates: ("+xCoord+", "+yCoord+", "+zCoord+")");
         list.add("Tank: (single capacity: " + SINGLE_CAPACITY + ")");
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + this.getCapacity());
         list.add("  - Water level is on layer " + (int) Math.floor((this.getFluidLevel() - 0.1F) / (this.getCapacity() * getMultiBlockLogic().sizeX() * getMultiBlockLogic().sizeZ())) + ".");

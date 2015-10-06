@@ -135,11 +135,13 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         }
         //new multiblock dimensions are required, update the multiblock
         breakAllMultiBlocksInRange(xMin, yMin, zMin, xMax, yMax, zMax);
-        this.rootComponent = newRoot;
+        int fluidLevel = calculateTotalFluidLevelForBlocksInRange(xMin, yMin, zMin, xMax, yMax, zMax);
         this.sizeX = xSizeNew;
         this.sizeY = ySizeNew;
         this.sizeZ = zSizeNew;
+        this.rootComponent = newRoot;
         createMultiBlock();
+        newRoot.setFluidLevel(fluidLevel);
         return true;
     }
 
@@ -203,22 +205,35 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         }
     }
 
+    private int calculateTotalFluidLevelForBlocksInRange(int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
+        int lvl = 0;
+        TileEntityTank root = getRootComponent();
+        World world = root.getWorldObj();
+        for(int x = root.xCoord-xMin;x<root.xCoord+xMax;x++) {
+            for(int y = root.yCoord-yMin;y<root.yCoord+yMax;y++) {
+                for(int z = root.zCoord-zMin;z<root.zCoord+zMax;z++) {
+                    TileEntity te = world.getTileEntity(x, y, z);
+                    if(te != null && te instanceof TileEntityTank) {
+                        lvl = lvl + ((TileEntityTank) te).getFluidLevel();
+                    }
+                }
+            }
+        }
+        return lvl;
+    }
+
     @Override
     public void createMultiBlock() {
-        //TODO: fix fluid level bug
-        int fluidLevel = 0;
         TileEntityTank root = getRootComponent();
         World world = root.getWorldObj();
         for(int x = root.xCoord;x<root.xCoord+sizeX;x++) {
             for(int y = root.yCoord;y<root.yCoord+sizeY;y++) {
                 for(int z = root.zCoord;z<root.zCoord+sizeZ;z++) {
-                    TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
-                    fluidLevel = fluidLevel + tank.getFluidLevel();
-                    tank.setMultiBlockLogic(this);
+                    IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(x, y, z);
+                    component.setMultiBlockLogic(this);
                 }
             }
         }
-        this.getRootComponent().setFluidLevel(fluidLevel);
     }
 
     @Override
@@ -236,6 +251,7 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         while(fluidLevel>0) {
             fluidLevelByLayer[layer] = fluidLevel>fluidContentByLayer?fluidContentByLayer/area:fluidLevel/area;
             fluidLevel = fluidLevel>fluidContentByLayer?fluidLevel - fluidContentByLayer:0;
+            layer++;
         }
         //apply fluid levels
         TileEntityTank root = getRootComponent();
@@ -243,6 +259,9 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
             for(int y = root.yCoord;y<root.yCoord+sizeY;y++) {
                 for(int z = root.zCoord;z<root.zCoord+sizeZ;z++) {
                     TileEntityTank tank = (TileEntityTank) root.getWorldObj().getTileEntity(x, y, z);
+                    if(tank == null) {
+                        continue;
+                    }
                     tank.setMultiBlockLogic(new MultiBlockLogicTank(tank));
                     tank.setFluidLevel(fluidLevelByLayer[y-root.yCoord]);
                 }
