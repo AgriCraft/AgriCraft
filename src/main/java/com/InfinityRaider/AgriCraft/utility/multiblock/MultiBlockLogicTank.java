@@ -7,7 +7,6 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class MultiBlockLogicTank extends MultiBlockLogic {
     private int sizeX = 1;
@@ -23,7 +22,7 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         this.sizeX = tag.getInteger(Names.NBT.x);
         this.sizeY = tag.getInteger(Names.NBT.y);
         this.sizeZ = tag.getInteger(Names.NBT.z);
-        createMultiBLock();
+        createMultiBlock();
     }
 
     @Override
@@ -77,77 +76,40 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         return true;
     }
 
-    /** Only try to form multiblocks with existing multiblocks, if none are found, form new multiblock */
     @Override
-    public boolean checkMultiBlockOnPlace() {
-        TileEntityTank newTank = this.getRootComponent();
-        boolean onlySingleNeighbours = true;
-        for (ForgeDirection dir : ForgeDirection.values()) {
-            if (dir == ForgeDirection.UNKNOWN) {
-                continue;
-            }
-            TileEntity te = newTank.getWorldObj().getTileEntity(newTank.xCoord + dir.offsetX, newTank.yCoord + dir.offsetY, newTank.zCoord + dir.offsetZ);
-            if (te == null || !(te instanceof TileEntityTank)) {
-                continue;
-            }
-            TileEntityTank tankAt = (TileEntityTank) te;
-            if (tankAt.getMultiBLockLogic().checkToUpdateExistingMultiBlock()) {
-                //A new multiblock has been made with an existing multiblock
-                return true;
-            } else {
-                //keep track of a single neighbour blocks
-                if (tankAt.getMultiBLockLogic().getMultiBlockCount() > 1) {
-                    onlySingleNeighbours = false;
-                }
-            }
-        }
-        //there are only a single neighbours next to this block
-        return onlySingleNeighbours && formMultiBlockWithNeighbours();
-    }
-
-    @Override
-    public boolean checkToUpdateExistingMultiBlock() {
-        return this.getMultiBlockCount() > 1 && formMultiBlockWithNeighbours();
-    }
-
-    private boolean formMultiBlockWithNeighbours() {CoordinateIterator iterator = new CoordinateIterator();
+    public boolean checkForMultiBlock() {
+        CoordinateIterator iterator = new CoordinateIterator();
         TileEntityTank oldRoot = getRootComponent();
-        TileEntityTank newRoot = findNewRoot(iterator);
-        //check if a new root component has to be set
-        if(newRoot != oldRoot) {
-            this.rootComponent = newRoot;
-        }
+        int xMin = calculateDimensionOffsetBackwards(iterator.setX());
+        int yMin = calculateDimensionOffsetBackwards(iterator.setY());
+        int zMin = calculateDimensionOffsetBackwards(iterator.setZ());
         //calculate the new multiblock size
-        int xMax = calculateSize(iterator.setX());
-        int yMax = calculateSize(iterator.setY());
-        int zMax = calculateSize(iterator.setZ());
-        //if not all blocks for new root are correct, turn back to the old root and return
-        if(!areAllBlocksInRangeValidComponents(xMax, yMax, zMax)) {
-            this.rootComponent = oldRoot;
+        int xMax = calculateDimensionOffsetForwards(iterator.setX());
+        int yMax = calculateDimensionOffsetForwards(iterator.setY());
+        int zMax = calculateDimensionOffsetForwards(iterator.setZ());
+        //if not all blocks for new root are correct, do nothing
+        if(!areAllBlocksInRangeValidComponents(xMin, yMin, zMin, xMax, yMax, zMax)) {
             return false;
         }
+        TileEntityTank newRoot = (TileEntityTank) oldRoot.getWorldObj().getTileEntity(oldRoot.xCoord - xMin, oldRoot.yCoord - yMin, oldRoot.zCoord - zMin);
+        int xSizeNew = xMax + xMin;
+        int ySizeNew = yMax + yMin;
+        int zSizeNew = zMax + zMin;
         //if dimensions and root are the same the multiblock hasn't changed and nothing has to happen
-        if(oldRoot==newRoot && xMax==this.sizeX && yMax==this.sizeY && zMax==this.sizeZ) {
+        if(oldRoot==newRoot && xSizeNew==this.sizeX && ySizeNew==this.sizeY && zSizeNew==this.sizeZ) {
             return false;
         }
         //new multiblock dimensions are required, update the multiblock
-        breakMultiBlock();
+        breakAllMultiBlocksInRange(xMin, yMin, zMin, xMax, yMax, zMax);
+        this.rootComponent = newRoot;
         this.sizeX = xMax;
         this.sizeY = yMax;
         this.sizeZ = zMax;
-        createMultiBLock();
+        createMultiBlock();
         return true;
     }
 
-    private TileEntityTank findNewRoot(CoordinateIterator iterator) {
-        TileEntityTank oldRoot = getRootComponent();
-        int xMin = findNewRootCoordinateOffset(iterator.setX());
-        int yMin = findNewRootCoordinateOffset(iterator.setY());
-        int zMin = findNewRootCoordinateOffset(iterator.setZ());
-        return (TileEntityTank) oldRoot.getWorldObj().getTileEntity(oldRoot.xCoord - xMin, oldRoot.yCoord - yMin, oldRoot.zCoord - zMin);
-    }
-
-    private int findNewRootCoordinateOffset(CoordinateIterator it) {
+    private int calculateDimensionOffsetBackwards(CoordinateIterator it) {
         TileEntityTank root = getRootComponent();
         if(!it.isActive()) {
             LogHelper.debug("ERROR WHEN ITERATING COORDINATES: ITERATOR NOT ACTIVE");
@@ -162,7 +124,7 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         return it.getOffset()-1;
     }
 
-    private int calculateSize(CoordinateIterator it) {
+    private int calculateDimensionOffsetForwards(CoordinateIterator it) {
         TileEntityTank root = getRootComponent();
         if(!it.isActive()) {
             LogHelper.debug("ERROR WHEN ITERATING COORDINATES: ITERATOR NOT ACTIVE");
@@ -177,12 +139,12 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         return it.getOffset();
     }
 
-    private boolean areAllBlocksInRangeValidComponents(int sizeX, int sizeY, int sizeZ) {
+    private boolean areAllBlocksInRangeValidComponents(int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
         TileEntityTank root = getRootComponent();
         World world = root.getWorldObj();
-        for(int x = root.xCoord;x<root.xCoord+sizeX;x++) {
-            for(int y = root.yCoord;y<root.yCoord+sizeY;y++) {
-                for(int z = root.zCoord;z<root.zCoord+sizeZ;z++) {
+        for(int x = root.xCoord-xMin;x<root.xCoord+xMax;x++) {
+            for(int y = root.yCoord-yMin;y<root.yCoord+yMax;y++) {
+                for(int z = root.zCoord-zMin;z<root.zCoord+zMax;z++) {
                     if(!isValidComponent(world.getTileEntity(x, y, z))) {
                         return false;
                     }
@@ -192,12 +154,26 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         return true;
     }
 
+    private void breakAllMultiBlocksInRange(int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
+        TileEntityTank root = getRootComponent();
+        World world = root.getWorldObj();
+        for(int x = root.xCoord-xMin;x<root.xCoord+xMax;x++) {
+            for(int y = root.yCoord-yMin;y<root.yCoord+yMax;y++) {
+                for(int z = root.zCoord-zMin;z<root.zCoord+zMax;z++) {
+                    TileEntity te = world.getTileEntity(x, y, z);
+                    if(te != null && te instanceof TileEntityTank) {
+                        ((TileEntityTank) te).getMultiBLockLogic().breakMultiBlock();
+                    }
+                }
+            }
+        }
+    }
+
     @Override
-    public void createMultiBLock() {
+    public void createMultiBlock() {
         int fluidLevel = 0;
         TileEntityTank root = getRootComponent();
         World world = root.getWorldObj();
-        breakMultiBlock();
         for(int x = root.xCoord;x<root.xCoord+sizeX;x++) {
             for(int y = root.yCoord;y<root.yCoord+sizeY;y++) {
                 for(int z = root.zCoord;z<root.zCoord+sizeZ;z++) {
@@ -212,6 +188,10 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
 
     @Override
     public void breakMultiBlock() {
+        //if this is not a multiblock, do nothing
+        if(this.getMultiBlockCount()<=1) {
+            return;
+        }
         //calculate fluid levels
         int[] fluidLevelByLayer = new int[this.sizeY()];
         int fluidLevel = getRootComponent().getFluidLevel();
@@ -219,7 +199,7 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         int fluidContentByLayer = area*TileEntityTank.SINGLE_CAPACITY;
         int layer = 0;
         while(fluidLevel>0) {
-            fluidLevelByLayer[layer] = fluidLevel>fluidContentByLayer?fluidContentByLayer/area:fluidLevel/8;
+            fluidLevelByLayer[layer] = fluidLevel>fluidContentByLayer?fluidContentByLayer/area:fluidLevel/area;
             fluidLevel = fluidLevel>fluidContentByLayer?fluidLevel - fluidContentByLayer:0;
         }
         //apply fluid levels

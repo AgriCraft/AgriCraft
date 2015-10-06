@@ -63,24 +63,17 @@ public abstract class MultiBlockLogic {
      */
     public abstract boolean isPartOfMultiBlock(World world, int x, int y, int z);
 
-
-    /**
-     * Checks if the existing multiblock has to be expanded
-     * @return true if it can be integrated into a new multiblock
-     */
-    public abstract boolean checkMultiBlockOnPlace();
-
     /**
      * Checks if the existing multiblock has to be expanded
      * @return true if there is a new valid multiblock to be formed
      */
-    public abstract boolean checkToUpdateExistingMultiBlock();
+    public abstract boolean checkForMultiBlock();
 
     /**
      * Performs the needed operations when the multiblock is created
      * Assumes the sizes have been set correctly and all blocks in the
      */
-    public abstract void createMultiBLock();
+    public abstract void createMultiBlock();
 
     /**
      * Performs the needed operation to break down this multiblock and turn each component into an individual block again

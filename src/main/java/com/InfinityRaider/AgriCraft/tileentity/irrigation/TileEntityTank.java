@@ -37,8 +37,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
      * </p>
      */
     private MultiBlockLogicTank multiBlockLogic;
-    private int fluidLevel=0;
-    private int lastDiscreteLvl=0;
+    private int fluidLevel = 0;
+    private int lastFluidLevel = 0;
+    private int lastDiscreteFluidLevel =0;
     
     @Override
     public void writeToNBT(NBTTagCompound tag) {
@@ -86,13 +87,28 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     @Override
 	public void syncFluidLevel() {
-        int newDiscreteLvl = getDiscreteFluidLevel();
-        if(newDiscreteLvl != lastDiscreteLvl) {
-            lastDiscreteLvl = newDiscreteLvl;
+        if(needsSync()) {
             IMessage msg = new MessageSyncFluidLevel(this.fluidLevel, this.xCoord, this.yCoord, this.zCoord);
             NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 64);
             NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
         }
+    }
+
+    private boolean needsSync() {
+        int newDiscreteLvl = getDiscreteFluidLevel();
+        //sync when the discrete fluid level has changed
+        if(newDiscreteLvl != lastDiscreteFluidLevel) {
+            lastDiscreteFluidLevel = newDiscreteLvl;
+            lastFluidLevel = fluidLevel;
+            return true;
+        }
+        //sync when the fluid level ahs chagned too much
+        if(SYNC_DELTA<=Math.abs(lastFluidLevel-fluidLevel)) {
+            lastDiscreteFluidLevel = newDiscreteLvl;
+            lastFluidLevel = fluidLevel;
+            return true;
+        }
+        return false;
     }
 
     public boolean isConnectedToChannel(ForgeDirection direction) {
@@ -292,7 +308,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public MultiBlockLogicTank getMultiBLockLogic() {
         if(this.multiBlockLogic == null) {
             this.multiBlockLogic = new MultiBlockLogicTank(this);
-            this.multiBlockLogic.checkToUpdateExistingMultiBlock();
+            this.multiBlockLogic.checkForMultiBlock();
         }
         return multiBlockLogic;
     }
