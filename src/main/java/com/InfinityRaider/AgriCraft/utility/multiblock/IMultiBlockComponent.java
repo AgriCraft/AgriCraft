@@ -13,4 +13,6 @@ public interface IMultiBlockComponent<L extends MultiBlockLogic> {
     boolean hasNeighbour(ForgeDirection dir);
 
     boolean isValidComponent(IMultiBlockComponent component);
+
+    void syncMultiBlockToClient();
 }

@@ -52,6 +52,15 @@ public final class WorldCoordinates {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof WorldCoordinates) {
+            WorldCoordinates coords = (WorldCoordinates) obj;
+            return coords.x() == this.x() && coords.y() == this.y() && coords.z() == this.z();
+        }
+        return false;
+    }
+
+    @Override
     public int hashCode() {
         int hash = 7;
         hash = 71 * hash + this.x;

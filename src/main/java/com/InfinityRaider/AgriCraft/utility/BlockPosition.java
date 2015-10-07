@@ -56,4 +56,13 @@ public class BlockPosition {
         }
         return new BlockPosition(world, x()+dir.offsetX, y()+dir.offsetY, z()+dir.offsetZ);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof BlockPosition) {
+            BlockPosition pos = (BlockPosition) obj;
+            return pos.world == this.world && pos.coords.equals(this.coords);
+        }
+        return false;
+    }
 }

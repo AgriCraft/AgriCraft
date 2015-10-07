@@ -1,18 +1,13 @@
 package com.InfinityRaider.AgriCraft.utility.multiblock;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.CoordinateIterator;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class MultiBlockLogicTank extends MultiBlockLogic {
-    private int sizeX = 1;
-    private int sizeY = 1;
-    private int sizeZ = 1;
     private boolean placeCheck = false;
 
     public MultiBlockLogicTank(TileEntityTank tank) {
@@ -20,51 +15,16 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        this.sizeX = tag.getInteger(Names.NBT.x);
-        this.sizeY = tag.getInteger(Names.NBT.y);
-        this.sizeZ = tag.getInteger(Names.NBT.z);
-        int x = tag.getInteger(Names.NBT.x2);
-        int y = tag.getInteger(Names.NBT.y2);
-        int z = tag.getInteger(Names.NBT.z2);
-        World world = this.getRootComponent().getWorldObj();
-        if(world == null) {
-            MultiBlockCache.getCache().addToCache(this.rootComponent, x, y, z);
-        } else {
-            this.checkForMultiBlock();
+    public void setRootComponent(World world, int x, int y, int z) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if(te !=null && te instanceof TileEntityTank) {
+            this.rootComponent = (TileEntityTank) te;
         }
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        tag.setInteger(Names.NBT.x, sizeX);
-        tag.setInteger(Names.NBT.y, sizeY);
-        tag.setInteger(Names.NBT.z, sizeZ);
-        tag.setInteger(Names.NBT.x2, getRootComponent().xCoord);
-        tag.setInteger(Names.NBT.y2, getRootComponent().yCoord);
-        tag.setInteger(Names.NBT.z2, getRootComponent().zCoord);
     }
 
     @Override
     public TileEntityTank getRootComponent() {
         return (TileEntityTank) rootComponent;
-    }
-
-    public int sizeX() {
-        return sizeX;
-    }
-
-    public int sizeY() {
-        return sizeY;
-    }
-
-    public int sizeZ() {
-        return sizeZ;
-    }
-
-    @Override
-    public int getMultiBlockCount() {
-        return sizeX*sizeY*sizeZ;
     }
 
     private boolean isValidComponent(TileEntity tile) {
@@ -77,13 +37,13 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         if(root.getWorldObj() != world) {
             return false;
         }
-        if(root.xCoord>x || root.xCoord+sizeX<=x) {
+        if(root.xCoord>x || root.xCoord+sizeX()<=x) {
             return false;
         }
-        if(root.yCoord>y || root.yCoord+sizeY<=y) {
+        if(root.yCoord>y || root.yCoord+sizeY()<=y) {
             return false;
         }
-        if(root.zCoord>z || root.zCoord+sizeZ<=z) {
+        if(root.zCoord>z || root.zCoord+sizeZ()<=z) {
             return false;
         }
         return true;
@@ -140,15 +100,13 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         int ySizeNew = yMax + yMin;
         int zSizeNew = zMax + zMin;
         //if dimensions and root are the same the multiblock hasn't changed and nothing has to happen
-        if(oldRoot==newRoot && xSizeNew==this.sizeX && ySizeNew==this.sizeY && zSizeNew==this.sizeZ) {
+        if(oldRoot==newRoot && xSizeNew==this.sizeX() && ySizeNew==this.sizeY() && zSizeNew==this.sizeZ()) {
             return false;
         }
         //new multiblock dimensions are required, update the multiblock
         breakAllMultiBlocksInRange(xMin, yMin, zMin, xMax, yMax, zMax);
         int fluidLevel = calculateTotalFluidLevelForBlocksInRange(xMin, yMin, zMin, xMax, yMax, zMax);
-        this.sizeX = xSizeNew;
-        this.sizeY = ySizeNew;
-        this.sizeZ = zSizeNew;
+        this.setDimensions(xSizeNew, ySizeNew, zSizeNew);
         this.rootComponent = newRoot;
         createMultiBlock();
         newRoot.setFluidLevel(fluidLevel);
@@ -236,13 +194,16 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
     public void createMultiBlock() {
         TileEntityTank root = getRootComponent();
         World world = root.getWorldObj();
-        for(int x = root.xCoord;x<root.xCoord+sizeX;x++) {
-            for(int y = root.yCoord;y<root.yCoord+sizeY;y++) {
-                for(int z = root.zCoord;z<root.zCoord+sizeZ;z++) {
+        for(int x = root.xCoord;x<root.xCoord+sizeX();x++) {
+            for(int y = root.yCoord;y<root.yCoord+sizeY();y++) {
+                for(int z = root.zCoord;z<root.zCoord+sizeZ();z++) {
                     TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
                     tank.setMultiBlockLogic(this);
                 }
             }
+        }
+        if(!world.isRemote) {
+            root.syncMultiBlockToClient();
         }
     }
 
@@ -265,14 +226,15 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
         }
         //apply fluid levels
         TileEntityTank root = getRootComponent();
-        for(int x = root.xCoord;x<root.xCoord+sizeX;x++) {
-            for(int y = root.yCoord;y<root.yCoord+sizeY;y++) {
-                for(int z = root.zCoord;z<root.zCoord+sizeZ;z++) {
+        for(int x = root.xCoord;x<root.xCoord+sizeX();x++) {
+            for(int y = root.yCoord;y<root.yCoord+sizeY();y++) {
+                for(int z = root.zCoord;z<root.zCoord+sizeZ();z++) {
                     TileEntityTank tank = (TileEntityTank) root.getWorldObj().getTileEntity(x, y, z);
                     if(tank == null) {
                         continue;
                     }
                     tank.setMultiBlockLogic(new MultiBlockLogicTank(tank));
+                    tank.syncMultiBlockToClient();
                     tank.setFluidLevel(fluidLevelByLayer[y-root.yCoord]);
                 }
             }

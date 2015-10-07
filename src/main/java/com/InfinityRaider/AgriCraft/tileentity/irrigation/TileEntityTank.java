@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncFluidLevel;
+import com.InfinityRaider.AgriCraft.network.MessageSyncMultiBlock;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -319,9 +320,8 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public void setMultiBlockLogic(MultiBlockLogicTank logic) {
         this.multiBlockLogic = logic;
         if (!multiBlockLogic.isRootComponent(this)) {
-            fluidLevel = 0;
+            this.setFluidLevel(0);
         }
-        this.markForUpdate();
     }
 
     @Override
@@ -332,5 +332,12 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     @Override
     public boolean isValidComponent(IMultiBlockComponent component) {
         return component instanceof TileEntityTank && this.isSameMaterial((TileEntityTank) component);
+    }
+
+    @Override
+    public void syncMultiBlockToClient() {
+        if(!worldObj.isRemote) {
+            NetworkWrapperAgriCraft.wrapper.sendToDimension(new MessageSyncMultiBlock(this), worldObj.provider.dimensionId);
+        }
     }
 }

@@ -1,29 +1,77 @@
 package com.InfinityRaider.AgriCraft.utility.multiblock;
 
+import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public abstract class MultiBlockLogic {
-    /**
-     * The main component of the multiblock storing all the data
-     */
     protected IMultiBlockComponent rootComponent;
+    private int sizeX = 1;
+    private int sizeY = 1;
+    private int sizeZ = 1;
 
     public MultiBlockLogic(IMultiBlockComponent root) {
         rootComponent = root;
+    }
+
+    public void setDimensions(int sizeX, int sizeY, int sizeZ) {
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.sizeZ = sizeZ;
+    }
+
+    public abstract void setRootComponent(World world, int x, int y, int z);
+
+    public int sizeX() {
+        return sizeX;
+    }
+
+    public int sizeY() {
+        return sizeY;
+    }
+
+    public int sizeZ() {
+        return sizeZ;
+    }
+
+    /**
+     * @return the number of blocks in this multiblock
+     */
+    public int getMultiBlockCount() {
+        return sizeX*sizeY*sizeZ;
     }
 
     /**
      * Reads NBT data from an NBTTagCompound
      * @param tag the NBTTagCompound to read data from
      */
-    public abstract void readFromNBT(NBTTagCompound tag);
+    public void readFromNBT(NBTTagCompound tag) {
+        this.sizeX = tag.getInteger(Names.NBT.x);
+        this.sizeY = tag.getInteger(Names.NBT.y);
+        this.sizeZ = tag.getInteger(Names.NBT.z);
+        int x = tag.getInteger(Names.NBT.x2);
+        int y = tag.getInteger(Names.NBT.y2);
+        int z = tag.getInteger(Names.NBT.z2);
+        World world = this.getRootComponent().getTileEntity().getWorldObj();
+        if(world == null) {
+            MultiBlockCache.getCache().addToCache(this.rootComponent, x, y, z, sizeX()*sizeY()*sizeZ());
+        } else {
+            //this.checkForMultiBlock();
+        }
+    }
 
     /**
      * Writes data to an NBTTagCompound
      * @param tag the NBTTagCompound to write data to
      */
-    public abstract void writeToNBT(NBTTagCompound tag);
+    public void writeToNBT(NBTTagCompound tag) {
+        tag.setInteger(Names.NBT.x, sizeX);
+        tag.setInteger(Names.NBT.y, sizeY);
+        tag.setInteger(Names.NBT.z, sizeZ);
+        tag.setInteger(Names.NBT.x2, getRootComponent().getTileEntity().xCoord);
+        tag.setInteger(Names.NBT.y2, getRootComponent().getTileEntity().yCoord);
+        tag.setInteger(Names.NBT.z2, getRootComponent().getTileEntity().zCoord);
+    }
 
     /**
      * Checks if this component is the root for this multiblock
@@ -47,11 +95,6 @@ public abstract class MultiBlockLogic {
     public boolean isValidComponent(IMultiBlockComponent component) {
         return rootComponent.isValidComponent(component);
     }
-
-    /**
-     * @return the number of blocks in this multiblock
-     */
-    public abstract int getMultiBlockCount();
 
     /**
      * Checks if the block at the given coordinates is part of this multiblock

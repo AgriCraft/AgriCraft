@@ -21,11 +21,11 @@ public final class MultiBlockCache {
         return INSTANCE;
     }
 
-    public void addToCache(IMultiBlockComponent component, int rootX, int rootY, int rootZ) {
+    public void addToCache(IMultiBlockComponent component, int rootX, int rootY, int rootZ, int size) {
         WorldCoordinates coords = new WorldCoordinates(rootX, rootY, rootZ);
         if(!cache.containsKey(coords)) {
             cache.put(coords, new ArrayList<IMultiBlockComponent>());
-            cacheLimits.put(coords, getSize(component));
+            cacheLimits.put(coords, size);
         }
         ArrayList<IMultiBlockComponent> cachedComponents = cache.get(coords);
         if(isRoot(component, coords)) {
@@ -50,10 +50,5 @@ public final class MultiBlockCache {
         IMultiBlockComponent root = components.get(0);
         MultiBlockLogic logic = root.getMultiBlockLogic();
         logic.createMultiBlock();
-    }
-
-    private int getSize(IMultiBlockComponent<? extends MultiBlockLogic> component) {
-        MultiBlockLogic logic = component.getMultiBlockLogic();
-        return logic.getMultiBlockCount();
     }
 }
