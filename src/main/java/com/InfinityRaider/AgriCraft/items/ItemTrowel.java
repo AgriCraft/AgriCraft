@@ -1,9 +1,8 @@
 package com.InfinityRaider.AgriCraft.items;
 
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -82,7 +81,7 @@ public class ItemTrowel extends ItemAgricraft implements ITrowel {
             return null;
         }
         NBTTagCompound tag = trowel.getTagCompound();
-        CropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
+        AgriCraftPlantDelegate plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
         if(plant == null) {
             return null;
         }
@@ -110,7 +109,7 @@ public class ItemTrowel extends ItemAgricraft implements ITrowel {
         if(this.hasSeed(trowel)) {
             return false;
         }
-        CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
+        AgriCraftPlantDelegate plant = CropPlantHandler.getPlantFromStack(seed);
         if(plant == null) {
             return false;
         }
@@ -136,10 +135,11 @@ public class ItemTrowel extends ItemAgricraft implements ITrowel {
     }
 
     @Override
-    public ISeedStats getStats(ItemStack trowel) {
-        return PlantStats.getStatsFromStack(getSeed(trowel));
+    public PlantStats getStats(ItemStack trowel) {
+        return new PlantStats(trowel.stackTagCompound);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
         if(stack.getItemDamage()==0) {

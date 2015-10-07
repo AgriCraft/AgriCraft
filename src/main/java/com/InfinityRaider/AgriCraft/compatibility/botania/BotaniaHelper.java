@@ -18,8 +18,8 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 
 public class BotaniaHelper extends ModHelper {
-    public static ArrayList<BlockModPlant> botaniaCrops = new ArrayList<BlockModPlant>();
-    public static ArrayList<ItemModSeed> botaniaSeeds = new ArrayList<ItemModSeed>();
+    public static ArrayList<BlockModPlant> botaniaCrops = new ArrayList<>();
+    public static ArrayList<ItemStack> botaniaSeeds = new ArrayList<>();
 
     @Override
     protected void initPlants() {

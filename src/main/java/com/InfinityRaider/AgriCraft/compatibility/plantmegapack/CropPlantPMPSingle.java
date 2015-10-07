@@ -1,18 +1,18 @@
 package com.InfinityRaider.AgriCraft.compatibility.plantmegapack;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
 
-public class CropPlantPMPSingle extends CropPlantGeneric {
+public class CropPlantPMPSingle extends AgriCraftPlantGeneric {
     public CropPlantPMPSingle(ItemSeeds seed) {
-        super(seed);
+        super(seed, 2);
     }
 
     @Override
     public int transformMeta(int growthStage) {
-        return (int) Math.ceil(((float)growthStage)/2.0F);
+        return (int) Math.ceil((growthStage)/2.0F);
     }
 
     @Override

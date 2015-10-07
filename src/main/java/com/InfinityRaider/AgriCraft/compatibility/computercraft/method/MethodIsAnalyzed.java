@@ -9,7 +9,7 @@ public class MethodIsAnalyzed extends MethodCropBase {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
-        return new Object[] {crop.isAnalyzed()};
+        return new Object[] {crop.getStats().isAnalyzed};
     }
 
     @Override

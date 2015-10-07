@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,16 +41,16 @@ public class ItemMutator extends ItemAgricraft {
 		TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
 
 		// Decompose the meta value.
-		int[] values = decomposeMeta(stack.getItemDamage());
+		int[] values = SeedHelper.decomposeMeta(ConfigurationHandler.cropStatCap, 3, stack.getItemDamage());
 
 		// If the mutation would go overboard, abort.
-		if ((crop.getGrowth() + values[0]) > ConfigurationHandler.cropStatCap || (crop.getGain() + values[1]) > ConfigurationHandler.cropStatCap || (crop.getStrength() + values[2]) > ConfigurationHandler.cropStatCap) {
+		if ((crop.getStats().growth + values[0]) > ConfigurationHandler.cropStatCap || (crop.getStats().gain + values[1]) > ConfigurationHandler.cropStatCap || (crop.getStats().strength + values[2]) > ConfigurationHandler.cropStatCap) {
 		return false;
 		}
 
 		// Mutate the plant.
 		// Should the analyzed state be kept?
-		crop.setPlant(crop.getGrowth() + values[0], crop.getGain() + values[1], crop.getStrength() + values[2], crop.isAnalyzed(), crop.getPlant(), true);
+		crop.setPlant(crop.getStats().growth + values[0], crop.getStats().gain + values[1], crop.getStats().strength + values[2], crop.getStats().isAnalyzed, crop.getPlant(), true);
 
 		// Consume the item if not in creative.
 		stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
@@ -60,58 +61,15 @@ public class ItemMutator extends ItemAgricraft {
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
-		list.add(new ItemStack(item, 1, composeMeta(ConfigurationHandler.cropStatCap, 0, 0, 1)));
-		list.add(new ItemStack(item, 1, composeMeta(ConfigurationHandler.cropStatCap, 0, 1, 0)));
-		list.add(new ItemStack(item, 1, composeMeta(ConfigurationHandler.cropStatCap, 1, 0, 0)));
-	}
-
-	/**
-	 * Break up the metavalue into an array of mutation values. The system maxes out at a delta of cropStatCap - 1.
-	 * 
-	 * @param meta the metadata to decompose.
-	 * @return an array of delta values.
-	 */
-	private static final int[] decomposeMeta(int meta) {
-		return decomposeMeta(ConfigurationHandler.cropStatCap, 3, meta);
-	}
-
-	/**
-	 * Breaks up a meta value into an array of parameters. TODO: Move to utility class???
-	 * 
-	 * @param elements the number of parameters to decompose into.
-	 * @param increment the size of each parameter.
-	 * @param meta the metavalue to decompose.
-	 * @return the array of parameters from the decomposed meta.
-	 */
-	public static final int[] decomposeMeta(int increment, int elements, int meta) {
-		int[] values = new int[elements];
-		for (int i = 0; i < values.length; i++) {
-		values[i] = (meta % increment);
-		meta /= increment;
-		}
-		return values;
-	}
-
-	/**
-	 * Creates a metavalue from an array of elements.
-	 * 
-	 * @param increment the max value of the elements.
-	 * @param elements the elements to combine.
-	 * @return a meta value representing the combined elements.
-	 */
-	public static final int composeMeta(int increment, int... elements) {
-		int meta = 0;
-		for (int element : elements) {
-		meta *= increment;
-		meta += element;
-		}
-		return meta;
+		list.add(new ItemStack(item, 1, SeedHelper.composeMeta(ConfigurationHandler.cropStatCap, 0, 0, 1)));
+		list.add(new ItemStack(item, 1, SeedHelper.composeMeta(ConfigurationHandler.cropStatCap, 0, 1, 0)));
+		list.add(new ItemStack(item, 1, SeedHelper.composeMeta(ConfigurationHandler.cropStatCap, 1, 0, 0)));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-		int[] values = decomposeMeta(stack.getItemDamage());
+		int[] values = SeedHelper.decomposeMeta(ConfigurationHandler.cropStatCap, 3, stack.getItemDamage());
 		list.add(StatCollector.translateToLocal("agricraft_tooltip.mutator"));
 		list.add(StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + values[0]);
 		list.add(StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + values[1]);

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.mobdropcrops;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantGeneric;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,29 +15,13 @@ import net.minecraft.world.IBlockAccess;
 
 import java.util.ArrayList;
 
-public class CropPlantSlime extends CropPlantGeneric {
+public class CropPlantSlime extends AgriCraftPlantGeneric {
     private Block slimePad;
 
     public CropPlantSlime() {
-        super((ItemSeeds) Item.itemRegistry.getObject("mobdropcrops:slimeseedItem"));
-        slimePad = (Block) Block.blockRegistry.getObject("mobdropcrops:Slime Pad");
-    }
-
-    @Override
-    public int transformMeta(int growthStage) {
-        return growthStage;
-    }
-
-    @Override
-    public int tier() {
-        return 4;
-    }
-
-    @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
+        super((ItemSeeds) Item.itemRegistry.getObject("mobdropcrops:slimeseedItem"), 4);
         fruits.add(new ItemStack(Items.slime_ball));
-        return fruits;
+        slimePad = (Block) Block.blockRegistry.getObject("mobdropcrops:Slime Pad");
     }
 
     @Override

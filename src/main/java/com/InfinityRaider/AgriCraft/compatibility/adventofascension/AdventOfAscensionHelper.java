@@ -70,7 +70,7 @@ public class AdventOfAscensionHelper extends ModHelper {
                     continue;
                 }
                 ItemSeeds seed = (ItemSeeds) obj;
-                CropPlantHandler.registerPlant(new CropPlantAoA(seed, getName(seed)));
+                CropPlantHandler.registerPlant(new CropPlantAoA(seed, 2, getName(seed)));
             }
         } catch (Exception e) {
             LogHelper.printStackTrace(e);

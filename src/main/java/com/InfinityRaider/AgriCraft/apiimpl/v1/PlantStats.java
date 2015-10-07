@@ -1,107 +1,53 @@
+
 package com.InfinityRaider.AgriCraft.apiimpl.v1;
 
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class PlantStats implements ISeedStats {
-    private static final short MAX = (short) ConfigurationHandler.cropStatCap;
-    private static final short MIN = 1;
+public class PlantStats {
 
-    private short growth;
-    private short gain;
-    private short strength;
+	public static final short MAX = (short) ConfigurationHandler.cropStatCap;
+	public static final short MIN = 1;
+	public static final PlantStats DEFAULT = new PlantStats(MIN, MIN, MIN);
 
-    public PlantStats() {
-        this(MIN, MIN, MIN);
-    }
+	public final short growth;
+	public final short gain;
+	public final short strength;
 
-    public PlantStats(int growth, int gain, int strength) {
-        this.setStats(growth, gain, strength);
-    }
+	public final boolean isAnalyzed;
 
-    public void setStats(int growth, int gain, int strength) {
-        setGrowth(growth);
-        setGain(gain);
-        setStrength(strength);
-    }
+	public PlantStats(NBTTagCompound tag) {
+		this(tag.getShort(Names.NBT.growth), tag.getShort(Names.NBT.gain), tag.getShort(Names.NBT.strength), tag.getBoolean(Names.NBT.analyzed));
+	}
 
-    public short getGrowth() {
-        return growth;
-    }
+	public PlantStats(int growth, int gain, int strength) {
+		this(growth, gain, strength, false);
+	}
+	
+	public PlantStats(int growth, int gain, int strength, boolean isAnalyzed) {
+		this.growth = moveIntoBounds(growth);
+		this.gain = moveIntoBounds(gain);
+		this.strength = moveIntoBounds(strength);
+		this.isAnalyzed = isAnalyzed;
+	}
 
-    public short getGain() {
-        return gain;
-    }
+	private final short moveIntoBounds(int stat) {
+		int lowerLimit = Math.max(MIN, stat);
+		return (short) Math.min(MAX, lowerLimit);
+	}
 
-    public short getStrength() {
-        return strength;
-    }
+	public PlantStats copy() {
+		return new PlantStats(this.growth, this.gain, this.strength);
+	}
 
-    @Override
-    public short getMaxGrowth() {
-        return MAX;
-    }
-
-    @Override
-    public short getMaxGain() {
-        return MAX;
-    }
-
-    @Override
-    public short getMaxStrength() {
-        return MAX;
-    }
-
-    public void setGrowth(int growth) {
-        this.growth = moveIntoBounds(growth);
-    }
-
-    public void setGain(int gain) {
-        this.gain = moveIntoBounds(gain);
-    }
-
-    public void setStrength(int strength) {
-        this.strength = moveIntoBounds(strength);
-    }
-
-    private short moveIntoBounds(int stat) {
-        int lowerLimit = Math.max(MIN, stat);
-        return (short) Math.min(MAX, lowerLimit);
-    }
-
-    public PlantStats copy() {
-        return new PlantStats(getGrowth(), getGain(), getStrength());
-    }
-
-    public static PlantStats getStatsFromStack(ItemStack stack) {
-        if(stack==null || stack.getItem()==null) {
-            return null;
-        }
-        if(stack.getItem() instanceof ITrowel) {
-            ((ITrowel) stack.getItem()).getStats(stack);
-        }
-        return readFromNBT(stack.getTagCompound());
-    }
-
-    public static PlantStats readFromNBT(NBTTagCompound tag) {
-        if(tag !=null && tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
-            PlantStats stats = new PlantStats();
-            stats.setGrowth(tag.getShort(Names.NBT.growth));
-            stats.setGain(tag.getShort(Names.NBT.gain));
-            stats.setStrength(tag.getShort(Names.NBT.strength));
-            return stats;
-        }
-        return null;
-    }
-
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        tag.setShort(Names.NBT.growth, growth);
-        tag.setShort(Names.NBT.gain, gain);
-        tag.setShort(Names.NBT.strength, strength);
-        return tag;
-    }
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag.setShort(Names.NBT.growth, growth);
+		tag.setShort(Names.NBT.gain, gain);
+		tag.setShort(Names.NBT.strength, strength);
+		tag.setBoolean(Names.NBT.analyzed, isAnalyzed);
+		return tag;
+	}
 }

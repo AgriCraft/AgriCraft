@@ -6,7 +6,7 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -89,8 +89,8 @@ public class NEICropProductHandler extends TemplateRecipeHandler {
     @Override
     public void loadCraftingRecipes(String id, Object... results) {
         if(id.equalsIgnoreCase(NEICropProductHandler.id)) {
-            ArrayList<CropPlant> plants = CropPlantHandler.getPlants();
-            for (CropPlant plant:plants) {
+            ArrayList<AgriCraftPlantDelegate> plants = CropPlantHandler.getPlants();
+            for (AgriCraftPlantDelegate plant:plants) {
                 if (plant.getSeed()!=null && plant.getSeed().getItem()!=null) {
                     arecipes.add(new CachedCropProductRecipe(plant.getSeed()));
                 }
@@ -108,8 +108,8 @@ public class NEICropProductHandler extends TemplateRecipeHandler {
     //loads the crop product recipes for a given product
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        for(CropPlant plant:CropPlantHandler.getPlants()) {
-            ArrayList<ItemStack> drops = plant.getAllFruits();
+        for(AgriCraftPlantDelegate plant:CropPlantHandler.getPlants()) {
+            List<ItemStack> drops = plant.getAllFruits();
             if(drops==null) {
                 continue;
             }
@@ -133,8 +133,8 @@ public class NEICropProductHandler extends TemplateRecipeHandler {
         }
         else if(ingredient.getItem() instanceof ItemBlock) {
             BlockWithMeta block = new BlockWithMeta(((ItemBlock) ingredient.getItem()).field_150939_a, ingredient.getItemDamage());
-            ArrayList<CropPlant> plants = CropPlantHandler.getPlants();
-            for(CropPlant plant:plants) {
+            ArrayList<AgriCraftPlantDelegate> plants = CropPlantHandler.getPlants();
+            for(AgriCraftPlantDelegate plant:plants) {
                 if(plant.getSeed()==null || plant.getSeed().getItem()==null) {
                     continue;
                 }

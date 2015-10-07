@@ -171,9 +171,9 @@ public abstract class MutationHandler {
                 //3: any neighbouring plant that isn't a parent/same seed affects stat gain negatively (multiplier = 0 for incompatible crops)
                 multiplier = canInheritStats(result.getSeed(), result.getMeta(), parents[i].getSeedStack().getItem(), parents[i].getSeedStack().getItemDamage())?1:(multiplier==3?0:-1);
             }
-            growth[i] = multiplier * parents[i].getGrowth();
-            gain[i] = multiplier*parents[i].getGain();
-            strength[i] = multiplier*parents[i].getStrength();
+            growth[i] = multiplier * parents[i].getStats().growth;
+            gain[i] = multiplier*parents[i].getStats().gain;
+            strength[i] = multiplier*parents[i].getStats().strength;
         }
         int meanGrowth = getMean(growth);
         int meanGain = getMean(gain);

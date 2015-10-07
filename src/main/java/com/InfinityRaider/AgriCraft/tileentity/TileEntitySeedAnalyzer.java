@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
@@ -139,7 +139,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         }
         
         if (seed != null) {
-            CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
+            AgriCraftPlantDelegate plant = CropPlantHandler.getPlantFromStack(seed);
         	return plant==null?0:plant.getTier()*20;
         } else {
         	return 0;

@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -137,7 +137,7 @@ public class GrowthRequirementHandler {
         return growthRequirement;
     }
 
-    public static IGrowthRequirement getGrowthRequirement(CropPlant plant) {
+    public static IGrowthRequirement getGrowthRequirement(AgriCraftPlantDelegate plant) {
         ItemStack seed = plant.getSeed();
         return getGrowthRequirement(seed.getItem(), seed.getItemDamage());
     }

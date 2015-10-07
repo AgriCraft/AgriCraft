@@ -1,6 +1,10 @@
+
 package com.InfinityRaider.AgriCraft.compatibility.chococraft;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantGeneric;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantPartialGeneric;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
@@ -12,116 +16,101 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class CropPlantGhyshal extends CropPlant {
-    private Item seed;
-    private Block plant;
+public class CropPlantGhyshal extends AgriCraftPlantPartialGeneric {
 
-    private Block gysahlGreen;
-    private Item gysahlLovely;
-    private Item gysahlGold;
+	private ItemStack seed;
+	private Block plant;
+	private final List<ItemStack> fruits;
 
-    public CropPlantGhyshal() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-        super();
-        Class chochoCraftBlocks = Class.forName("chococraft.common.config.ChocoCraftBlocks");
-        Class chocoCraftItems = Class.forName("chococraft.common.config.ChocoCraftItems");
-        seed = (Item) chocoCraftItems.getField("gysahlSeedsItem").get(null);
-        plant = (Block) chochoCraftBlocks.getField("gysahlStemBlock").get(null);
-        gysahlGreen = (Block) chochoCraftBlocks.getField("gysahlGreenBlock").get(null);
-        gysahlLovely = (Item) chocoCraftItems.getField("gysahlLoverlyItem").get(null);
-        gysahlGold = (Item) chocoCraftItems.getField("gysahlGoldenItem").get(null);
-    }
+	private Block gysahlGreen;
+	private Item gysahlLovely;
+	private Item gysahlGold;
 
-    @Override
-    public int tier() {
-        return 3;
-    }
+	public CropPlantGhyshal() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
 
-    @Override
-    public ItemStack getSeed() {
-        return new ItemStack(seed);
-    }
+		Class chochoCraftBlocks = Class.forName("chococraft.common.config.ChocoCraftBlocks");
+		Class chocoCraftItems = Class.forName("chococraft.common.config.ChocoCraftItems");
 
-    @Override
-    public Block getBlock() {
-        return plant;
-    }
+		this.seed = new ItemStack((Item) chocoCraftItems.getField("gysahlSeedsItem").get(null));
+		this.plant = (Block) chochoCraftBlocks.getField("gysahlStemBlock").get(null);
 
-    @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        list.add(new ItemStack(gysahlGreen));
-        list.add(new ItemStack(gysahlLovely));
-        list.add(new ItemStack(gysahlGold));
-        return list;
-    }
+		gysahlGreen = (Block) chochoCraftBlocks.getField("gysahlGreenBlock").get(null);
+		gysahlLovely = (Item) chocoCraftItems.getField("gysahlLoverlyItem").get(null);
+		gysahlGold = (Item) chocoCraftItems.getField("gysahlGoldenItem").get(null);
 
-    @Override
-    public ItemStack getRandomFruit(Random rand) {
-        return null;
-    }
+		this.fruits = new ArrayList<>();
+		this.fruits.add(new ItemStack(gysahlGreen));
+		this.fruits.add(new ItemStack(gysahlLovely));
+		this.fruits.add(new ItemStack(gysahlGold));
+	}
+	
+	@Override
+	public List<ItemStack> getAllFruits() {
+		return fruits;
+	}
 
-    @Override
-    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        int nr = (int) (Math.ceil((gain + 0.00) / 3));
-        while(nr>0) {
-            ItemStack fruitStack;
-            double random = rand.nextDouble();
-            if (gain == 10) {
-                Item fruit = random < 0.2 ? gysahlGold : (random < 0.6 ? gysahlLovely : null);
-                if (fruit == null) {
-                    fruitStack = new ItemStack(gysahlGreen);
-                } else {
-                    fruitStack = new ItemStack(fruit, 1);
-                }
-            } else {
-                fruitStack = (random < gain * 0.04 ? new ItemStack(gysahlLovely, 1) : new ItemStack(gysahlGreen));
-            }
-            list.add(fruitStack);
-            nr--;
-        }
-        return list;
-    }
+	@Override
+	public ItemStack getRandomFruit(Random rand) {
+		return null;
+	}
 
-    @Override
-    public boolean canBonemeal() {
-        return true;
-    }
+	@Override
+	public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
+		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+		int nr = (int) (Math.ceil((gain + 0.00) / 3));
+		while (nr > 0) {
+			ItemStack fruitStack;
+			double random = rand.nextDouble();
+			if (gain == 10) {
+			Item fruit = random < 0.2 ? gysahlGold : (random < 0.6 ? gysahlLovely : null);
+			if (fruit == null) {
+				fruitStack = new ItemStack(gysahlGreen);
+			} else {
+				fruitStack = new ItemStack(fruit, 1);
+			}
+			} else {
+			fruitStack = (random < gain * 0.04 ? new ItemStack(gysahlLovely, 1) : new ItemStack(gysahlGreen));
+			}
+			list.add(fruitStack);
+			nr--;
+		}
+		return list;
+	}
 
-    @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
-        return true;
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getPlantIcon(int growthStage) {
+		int meta = (int) Math.ceil((growthStage) / 2.0F);
+		return plant.getIcon(0, meta);
+	}
 
-    @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement(seed, 0).canGrow(world, x, y, z);
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean renderAsFlower() {
+		return true;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public float getHeight(int meta) {
-        return Constants.UNIT*13;
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getInformation() {
+		return "agricraft_journal.ghyshal";
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getPlantIcon(int growthStage) {
-        int meta = (int) Math.ceil(( (float) growthStage ) / 2.0F );
-        return plant.getIcon(0, meta);
-    }
+	@Override
+	public int getTier() {
+		return 2;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean renderAsFlower() {
-        return true;
-    }
+	@Override
+	public ItemStack getSeed() {
+		return seed;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public String getInformation() {
-        return "agricraft_journal.ghyshal";
-    }
+	@Override
+	public Block getBlock() {
+		return plant;
+	}
 }

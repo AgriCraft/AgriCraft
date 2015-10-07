@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility.pneumaticcraft;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantGeneric;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -23,34 +24,17 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class CropPlantPneumaticCraft extends CropPlant {
-    private int meta;
-    private Block plant;
+public class CropPlantPneumaticCraft extends AgriCraftPlantGeneric {
+	
     private static final Item seed = (Item) Item.itemRegistry.getObject("PneumaticCraft:plasticPlant");
 
     public CropPlantPneumaticCraft(int meta, Block plant) {
-        this.meta = meta;
-        this.plant = plant;
-    }
-
-    @Override
-    public int tier() {
-        return 3;
-    }
-
-    @Override
-    public ItemStack getSeed() {
-        return new ItemStack(seed, 1, meta);
-    }
-
-    @Override
-    public Block getBlock() {
-        return plant;
+	    super(new ItemStack(seed, 1, meta), plant, 2);
     }
 
     @Override
     public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
-        int gain = ((TileEntityCrop) world.getTileEntity(x, y, z)).getGain();
+        int gain = ((TileEntityCrop) world.getTileEntity(x, y, z)).getStats().gain;
         try {
             Class clazz = Class.forName("pneumaticCraft.common.block.pneumaticPlants.BlockPneumaticPlantBase");
             Method method = clazz.getMethod("executeFullGrownEffect", World.class, int.class, int.class, int.class, Random.class);
@@ -70,53 +54,15 @@ public class CropPlantPneumaticCraft extends CropPlant {
     }
 
     @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        list.add(new ItemStack(seed, 1, meta));
-        return list;
-    }
-
-    @Override
-    public ItemStack getRandomFruit(Random rand) {
-        return new ItemStack(seed, 1, meta);
-    }
-
-    @Override
-    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
-        int amount = (int) (Math.ceil((gain + 0.00) / 3));
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        while(amount>0) {
-            list.add(new ItemStack(seed, 1, meta));
-            amount--;
-        }
-        return list;
-    }
-
-    @Override
-    public boolean canBonemeal() {
-        return true;
-    }
-
-    @Override
     public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
         if(oldGrowthStage==7) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-            int strength = crop.getStrength();
+            int strength = crop.getStats().strength;
             if(world.rand.nextInt(10)>strength) {
                 ((BlockCrop) world.getBlock(x, y, z)).harvest(world, x, y, z, null);
             }
         }
         return true;
-    }
-
-    @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return true;
-    }
-
-    @Override
-    public float getHeight(int meta) {
-        return Constants.UNIT*13;
     }
 
     @Override
@@ -131,13 +77,14 @@ public class CropPlantPneumaticCraft extends CropPlant {
 
     @Override
     public String getInformation() {
-        return "agricraft.journal_PC.plant"+meta;
+        return "agricraft.journal_PC.plant" + this.getSeed().getItemDamage();
     }
 
     /** This is called when the plant is rendered */
-    @SideOnly(Side.CLIENT)
+    @Override
+@SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
-        if(meta==11) {
+        if(this.getSeed().getItemDamage()==11) {
             IIcon icon = getPlantIcon(world.getBlockMetadata(x, y, z));
             Tessellator tessellator = Tessellator.instance;
             tessellator.addTranslation(x, y, z);

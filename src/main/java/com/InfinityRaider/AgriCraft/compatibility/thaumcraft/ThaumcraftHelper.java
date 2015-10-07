@@ -7,7 +7,6 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.common.event.FMLInterModComms;
@@ -18,8 +17,8 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 
 public class ThaumcraftHelper extends ModHelper {
-    public static ArrayList<BlockModPlant> thaumcraftCrops = new ArrayList<BlockModPlant>();
-    public static ArrayList<ItemModSeed> thaumcraftSeeds = new ArrayList<ItemModSeed>();
+    public static ArrayList<BlockModPlant> thaumcraftCrops = new ArrayList<>();
+    public static ArrayList<ItemStack> thaumcraftSeeds = new ArrayList<>();
 
     @Override
     protected void init() {

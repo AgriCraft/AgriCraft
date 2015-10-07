@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantAPI;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -19,25 +18,25 @@ public class InterModComsHandler {
             if(message.isItemStackMessage()) {
                 try {
                     Class cropPlantClass = Class.forName(message.key);
-                    if(ICropPlant.class.isAssignableFrom(cropPlantClass)) {
-                        ICropPlant cropPlant = null;
+                    if(IAgriCraftPlant.class.isAssignableFrom(cropPlantClass)) {
+                        IAgriCraftPlant agriCraftPlant = null;
                         ItemStack seed = message.getItemStackValue();
                         if(seed==null || seed.getItem()==null) {
-                            LogHelper.error("[IMC] CropPlant registering errored: ItemStack does not contain an item");
+                            LogHelper.error("[IMC] AgriCraftPlantDelegate registering errored: ItemStack does not contain an item");
                             continue;
                         }
                         try {
-                            cropPlant = (ICropPlant) cropPlantClass.getConstructor().newInstance(seed);
+                            agriCraftPlant = (IAgriCraftPlant) cropPlantClass.getConstructor().newInstance(seed);
                         } catch (Exception e) {
-                            LogHelper.error("[IMC] CropPlant registering errored: "+message.getStringValue()+" does not have a valid constructor, constructor should be public with ItemStack as parameter");
+                            LogHelper.error("[IMC] AgriCraftPlantDelegate registering errored: "+message.getStringValue()+" does not have a valid constructor, constructor should be public with ItemStack as parameter");
                         }
-                        CropPlantHandler.addCropToRegister(new CropPlantAPI(cropPlant));
-                        LogHelper.error("[IMC] Successfully registered CropPlant for "+seed.getUnlocalizedName());
+                        CropPlantHandler.addCropToRegister(agriCraftPlant);
+                        LogHelper.error("[IMC] Successfully registered AgriCraftPlantDelegate for "+seed.getUnlocalizedName());
                     } else {
-                        LogHelper.error("[IMC] CropPlant registering errored: Class "+cropPlantClass.getName()+" does not implement "+ICropPlant.class.getName());
+                        LogHelper.error("[IMC] AgriCraftPlantDelegate registering errored: Class "+cropPlantClass.getName()+" does not implement "+IAgriCraftPlant.class.getName());
                     }
                 } catch (ClassNotFoundException e) {
-                    LogHelper.error("[IMC] CropPlant registering errored: No class found for "+message.key);
+                    LogHelper.error("[IMC] AgriCraftPlantDelegate registering errored: No class found for "+message.key);
                 }
             }
             else if (message.key.equals("renderHooks")) {

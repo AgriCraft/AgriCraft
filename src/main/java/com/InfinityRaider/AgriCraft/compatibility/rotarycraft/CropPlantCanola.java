@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.rotarycraft;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantGeneric;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
@@ -14,34 +14,12 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class CropPlantCanola extends CropPlant {
-    private final Item seed;
-    private final Block plant;
+public class CropPlantCanola extends AgriCraftPlantGeneric {
+    private final static Item seed = (Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola");
+    private final static Block plant = (Block) Block.blockRegistry.getObject("RotaryCraft:rotarycraft_block_canola");
 
     public CropPlantCanola() {
-        seed = (Item) Item.itemRegistry.getObject("RotaryCraft:rotarycraft_item_canola");
-        plant = (Block) Block.blockRegistry.getObject("RotaryCraft:rotarycraft_block_canola");
-    }
-    @Override
-    public int tier() {
-        return 3;
-    }
-
-    @Override
-    public ItemStack getSeed() {
-        return new ItemStack(seed, 1, 0);
-    }
-
-    @Override
-    public Block getBlock() {
-        return plant;
-    }
-
-    @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
-        fruits.add(new ItemStack(seed, 1, 0));
-        return fruits;
+        super(new ItemStack(seed), plant, 2, new ItemStack(seed, 1, 0));
     }
 
     @Override

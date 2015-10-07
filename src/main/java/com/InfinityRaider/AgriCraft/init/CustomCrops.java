@@ -23,13 +23,13 @@ import java.util.List;
 
 public class CustomCrops {
     public static BlockModPlant[] customCrops;
-    public static ItemModSeed[] customSeeds;
+    public static ItemStack[] customSeeds;
 
     public static void init() {
         if(ConfigurationHandler.customCrops) {
             String[] cropsRawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readCustomCrops());
             customCrops = new BlockModPlant[cropsRawData.length];
-            customSeeds = new ItemModSeed[cropsRawData.length];
+            customSeeds = new ItemStack[cropsRawData.length];
             for(int i=0;i<cropsRawData.length;i++) {
                 String[] cropData = IOHelper.getData(cropsRawData[i]);
                 //cropData[0]: name
@@ -78,7 +78,8 @@ public class CustomCrops {
                         LanguageRegistry.addName(customCrops[i], Character.toUpperCase(name.charAt(0))+name.substring(1));
                         LanguageRegistry.addName(customSeeds[i], Character.toUpperCase(name.charAt(0))+name.substring(1) + " Seeds");
                         if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-                            customSeeds[i].setInformation(info);
+                        	// TODO: FIX.
+                            //customSeeds[i].;
                         }
                     }
                 }

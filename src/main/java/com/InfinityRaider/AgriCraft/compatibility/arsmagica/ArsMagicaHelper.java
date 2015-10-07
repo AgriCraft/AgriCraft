@@ -16,8 +16,8 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 
 public class ArsMagicaHelper extends ModHelper {
-    public static ArrayList<BlockModPlant> arsMagicaCrops = new ArrayList<BlockModPlant>();
-    public static ArrayList<ItemModSeed> arsMagicaSeeds = new ArrayList<ItemModSeed>();
+    public static ArrayList<BlockModPlant> arsMagicaCrops = new ArrayList<>();
+    public static ArrayList<ItemStack> arsMagicaSeeds = new ArrayList<>();
 
     @Override
     protected void initPlants() {

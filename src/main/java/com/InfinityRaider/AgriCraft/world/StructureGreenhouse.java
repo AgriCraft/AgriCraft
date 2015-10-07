@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.world;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
 import com.InfinityRaider.AgriCraft.entity.EntityVillagerFarmer;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -168,7 +168,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 15, 4, 10, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 8, 4, 2, boundingBox);
         //place crops
-        ArrayList<CropPlant> plants = CropPlantHandler.getPlantsUpToTier(ConfigurationHandler.greenHouseMaxTier);
+        ArrayList<AgriCraftPlantDelegate> plants = CropPlantHandler.getPlantsUpToTier(ConfigurationHandler.greenHouseMaxTier);
         for(int x=3;x<=7;x++) {
             for(int z=3;z<=7;z++) {
                 this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==0 && x%2==0) || (x==5 &&z==5), plants);
@@ -195,7 +195,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
     }
 
     //place a crop
-    protected boolean generateStructureCrop(World world, StructureBoundingBox boundingBox, int x, int y, int z, boolean crosscrop, ArrayList<CropPlant> plants) {
+    protected boolean generateStructureCrop(World world, StructureBoundingBox boundingBox, int x, int y, int z, boolean crosscrop, ArrayList<AgriCraftPlantDelegate> plants) {
         int xCoord = this.getXWithOffset(x, z);
         int yCoord = this.getYWithOffset(y);
         int zCoord = this.getZWithOffset(x, z);

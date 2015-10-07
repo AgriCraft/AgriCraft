@@ -40,10 +40,10 @@ public class ItemMagnifyingGlass extends ItemAgricraft {
             if(world.getBlock(x, y, z)!=null && world.getBlock(x, y, z) instanceof BlockCrop && world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityCrop) {
                 TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
                 if(crop.hasPlant()) {
-                    int growth = crop.getGrowth();
-                    int gain = crop.getGain();
-                    int strength = crop.getStrength();
-                    boolean analyzed = crop.isAnalyzed();
+                    int growth = crop.getStats().growth;
+                    int gain = crop.getStats().gain;
+                    int strength = crop.getStats().strength;
+                    boolean analyzed = crop.getStats().isAnalyzed;
                     ItemStack seed = crop.getSeedStack();
                     String seedName = seed.getItem().getItemStackDisplayName(seed);
                     int meta = world.getBlockMetadata(x, y, z);
@@ -85,7 +85,8 @@ public class ItemMagnifyingGlass extends ItemAgricraft {
         return true;   //return true so nothing else happens
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
         list.add(StatCollector.translateToLocal("agricraft_tooltip.magnifyingGlass"));
     }

@@ -1,54 +1,14 @@
 package com.InfinityRaider.AgriCraft.compatibility.magicalcrops;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
-import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
-
-public class CropPlantMagicalCropsV4 extends CropPlantGeneric {
-    private int meta = 0;
-    private Item drop;
-
+public class CropPlantMagicalCropsV4 extends AgriCraftPlantGeneric {
     public CropPlantMagicalCropsV4(ItemSeeds seed, Item drop) {
-        super(seed);
-        this.drop = drop;
-        //getDropMeta();
-    }
-
-    @Override
-    public int transformMeta(int growthStage) {
-        return growthStage;
-    }
-
-    private boolean highTier() {
-        //return getPlant() instanceof BlockMagicalCrops;
-        return true;
-    }
-
-    @Override
-    public int tier() {
-        return highTier()?3:4;
-    }
-
-    @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        if(highTier()) {
-            list.add(new ItemStack(drop, 1, meta));
-        } else {
-            list.addAll(OreDictHelper.getFruitsFromOreDict(getSeed()));
-        }
-        return list;
-    }
-
-    @Override
-    public boolean canBonemeal() {
-        return !highTier();
+        super(seed, 4);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility.mobdropcrops;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
@@ -22,7 +22,7 @@ public class MobDropCropsHelper extends ModHelper {
         try {
             ItemSeeds seed = (ItemSeeds) Item.itemRegistry.getObject("mobdropcrops:Creeper Seed");
             if(checkAndPrintWarningMessage(seed)) {
-                CropPlant plant = new CropPlantCreeper();
+                AgriCraftPlantDelegate plant = new AgriCraftPlantDelegate(new CropPlantCreeper());
                 CropPlantHandler.registerPlant(plant);
                 OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
                 GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));
@@ -34,7 +34,7 @@ public class MobDropCropsHelper extends ModHelper {
         try {
             ItemSeeds seed = (ItemSeeds) Item.itemRegistry.getObject("mobdropcrops:slimeseedItem");
             if(checkAndPrintWarningMessage(seed)) {
-                CropPlant plant = new CropPlantSlime();
+            	AgriCraftPlantDelegate plant = new AgriCraftPlantDelegate(new CropPlantSlime());
                 CropPlantHandler.registerPlant(plant);
                 OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
                 GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));
@@ -59,7 +59,7 @@ public class MobDropCropsHelper extends ModHelper {
                     }
                     ItemSeeds seed = (ItemSeeds) obj;
                     if(checkAndPrintWarningMessage(seed)) {
-                        CropPlant plant = new CropPlantMobDropCrop(seed);
+                        AgriCraftPlantDelegate plant = new AgriCraftPlantDelegate(new CropPlantMobDropCrop(seed));
                         CropPlantHandler.registerPlant(plant);
                         OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
                         GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));

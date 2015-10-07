@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
+import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
+
 import net.minecraft.item.ItemStack;
 
 /** Interface to be implemented in items that are considered trowels */
@@ -26,5 +28,5 @@ public interface ITrowel {
     void clearSeed(ItemStack trowel);
 
     /** Gets the stats from the seed */
-    ISeedStats getStats(ItemStack trowel) ;
+    PlantStats getStats(ItemStack trowel) ;
 }

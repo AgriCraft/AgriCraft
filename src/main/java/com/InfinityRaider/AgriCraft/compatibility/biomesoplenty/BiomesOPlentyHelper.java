@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility.biomesoplenty;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -17,7 +18,7 @@ public class BiomesOPlentyHelper extends ModHelper {
         Block plant = (Block) Block.blockRegistry.getObject("BiomesOPlenty:turnip");
         Item seed = (Item) Item.itemRegistry.getObject("BiomesOPlenty:turnipSeeds");
         Item fruit = (Item) Item.itemRegistry.getObject("BiomesOPlenty:food");
-        CropPlant strawberry = new CropPlantBiomesOPlenty(seed, plant, new ItemStack(fruit, 1, 11));
+        IAgriCraftPlant strawberry = new CropPlantBiomesOPlenty(new ItemStack(seed), plant, 2, new ItemStack(fruit, 1, 11));
         if(seed==null || plant==null || fruit==null) {
             return;
         }

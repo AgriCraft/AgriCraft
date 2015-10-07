@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
@@ -18,11 +17,11 @@ import java.util.ArrayList;
 public class ResourceCrops {
     //Resource crops
     public static ArrayList<BlockModPlant> vanillaCrops;
-    public static ArrayList<ItemModSeed> vanillaSeeds;
+    public static ArrayList<ItemStack> vanillaSeeds;
 
     //Metal crops
     public static ArrayList<BlockModPlant> modCrops;
-    public static ArrayList<ItemModSeed> modSeeds;
+    public static ArrayList<ItemStack> modSeeds;
 
     public static void init() {
         if (ConfigurationHandler.resourcePlants) {
@@ -37,8 +36,8 @@ public class ResourceCrops {
     }
 
     private static void initVanillaResources() {
-        vanillaCrops = new ArrayList<BlockModPlant>();
-        vanillaSeeds = new ArrayList<ItemModSeed>();
+        vanillaCrops = new ArrayList<>();
+        vanillaSeeds = new ArrayList<>();
         Object[][] vanillaResources = {
                 {"Aurigold", new ItemStack(net.minecraft.init.Items.gold_nugget), RequirementType.BELOW, new BlockWithMeta(Blocks.gold_ore, 0), 4, RenderMethod.HASHTAG},
                 {"Ferranium", new ItemStack(OreDictHelper.getNuggetForName("Iron"), 1, OreDictHelper.getNuggetMetaForName("Iron")), RequirementType.BELOW, new BlockWithMeta(Blocks.iron_ore, 0), 4, RenderMethod.HASHTAG},
@@ -65,8 +64,8 @@ public class ResourceCrops {
     }
 
     public static void initModdedResources() {
-        modCrops = new ArrayList<BlockModPlant>();
-        modSeeds = new ArrayList<ItemModSeed>();
+        modCrops = new ArrayList<>();
+        modSeeds = new ArrayList<>();
         for(String[] data:Data.modResources) {
             Block base = OreDictHelper.getOreBlockForName(data[0]);
             if(base!=null) {

@@ -1,6 +1,8 @@
+
 package com.InfinityRaider.AgriCraft.compatibility.growthcraft;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantPartialGeneric;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -18,93 +20,97 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class CropPlantGrowthCraftRice extends CropPlant {
-    private Item rice;
-    @SideOnly(Side.CLIENT)
-    private Block plant;
+public class CropPlantGrowthCraftRice extends AgriCraftPlantPartialGeneric {
 
-    CropPlantGrowthCraftRice() {
-        super();
-        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT) {
-            plant = (Block) Block.blockRegistry.getObject("Growthcraft|Rice:grc.riceBlock");
-        }
-        this.rice = (Item) Item.itemRegistry.getObject("Growthcraft|Rice:grc.rice");
-        boolean flag;
-    }
+	private Item rice;
+	@SideOnly(Side.CLIENT)
+	private Block plant;
 
-    @Override
-    public int tier() {
-        return 2;
-    }
+	CropPlantGrowthCraftRice() {
+		super();
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			plant = (Block) Block.blockRegistry.getObject("Growthcraft|Rice:grc.riceBlock");
+		}
+		this.rice = (Item) Item.itemRegistry.getObject("Growthcraft|Rice:grc.rice");
+		boolean flag;
+	}
 
-    @Override
-    public ItemStack getSeed() {
-        return new ItemStack(rice);
-    }
+	@Override
+	public ArrayList<ItemStack> getAllFruits() {
+		ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
+		fruits.add(new ItemStack(rice));
+		return fruits;
+	}
 
-    @Override
-    public Block getBlock() {
-        return plant;
-    }
+	@Override
+	public ItemStack getRandomFruit(Random rand) {
+		return new ItemStack(rice);
+	}
 
-    @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
-        fruits.add(new ItemStack(rice));
-        return fruits;
-    }
+	@Override
+	public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
+		int amount = (int) (Math.ceil((gain + 0.00) / 3));
+		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+		list.add(new ItemStack(rice, amount));
+		return list;
+	}
 
-    @Override
-    public ItemStack getRandomFruit(Random rand) {
-        return new ItemStack(rice);
-    }
+	@Override
+	public boolean canBonemeal() {
+		return true;
+	}
 
-    @Override
-    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
-        int amount = (int) (Math.ceil((gain + 0.00) / 3));
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        list.add(new ItemStack(rice, amount));
-        return list;
-    }
+	@Override
+	public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+		return true;
+	}
 
-    @Override
-    public boolean canBonemeal() {
-        return true;
-    }
+	@Override
+	public boolean isFertile(World world, int x, int y, int z) {
+		return GrowthRequirementHandler.getGrowthRequirement(rice, 0).canGrow(world, x, y, z);
+	}
 
-    @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
-        return true;
-    }
+	@Override
+	public float getHeight(int meta) {
+		return Constants.UNIT * 13;
+	}
 
-    @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement(rice, 0).canGrow(world, x, y, z);
-    }
+	@Override
+	public IIcon getPlantIcon(int growthStage) {
+		return plant.getIcon(0, growthStage >= 6 ? 6 : growthStage);
+	}
 
-    @Override
-    public float getHeight(int meta) {
-        return Constants.UNIT*13;
-    }
+	@Override
+	public boolean renderAsFlower() {
+		return false;
+	}
 
-    @Override
-    public IIcon getPlantIcon(int growthStage) {
-        return plant.getIcon(0, growthStage>=6?6:growthStage);
-    }
+	@Override
+	public String getInformation() {
+		return "agricraft_journal.hc_Rice";
+	}
 
-    @Override
-    public boolean renderAsFlower() {
-        return false;
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
+		RenderingRegistry.instance().renderWorldBlock(renderer, world, x, y, z, plant, plant.getRenderType());
+	}
 
-    @Override
-    public String getInformation() {
-        return "agricraft_journal.hc_Rice";
-    }
+	@Override
+	public int getTier() {
+		// TODO Auto-generated method stub
+		return 2;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
-        RenderingRegistry.instance().renderWorldBlock(renderer, world, x, y, z, plant, plant.getRenderType());
-    }
+	@Override
+	public ItemStack getSeed() {
+		// TODO Auto-generated method stub
+		return new ItemStack(rice);
+	}
+
+	@Override
+	public Block getBlock() {
+		// TODO Auto-generated method stub
+		return plant;
+	}
 }

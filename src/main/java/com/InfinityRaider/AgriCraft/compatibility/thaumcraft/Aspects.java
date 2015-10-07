@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.*;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApi;
@@ -15,44 +14,44 @@ import thaumcraft.api.aspects.AspectList;
 public class Aspects {
     public static void registerAspects() {
         //seeds
-        for(ItemModSeed seed : Crops.seeds) {
-            ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1));
+        for(ItemStack seed : Crops.seeds) {
+            ThaumcraftApi.registerObjectTag(seed, new AspectList().add(Aspect.PLANT, 1));
         }
         //resource crops
         if(ConfigurationHandler.resourcePlants) {
-            for(ItemModSeed seed : ResourceCrops.vanillaSeeds) {
-                ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.GREED, 1));
+            for(ItemStack seed : ResourceCrops.vanillaSeeds) {
+                ThaumcraftApi.registerObjectTag(seed, new AspectList().add(Aspect.PLANT, 1).add(Aspect.GREED, 1));
             }
-            for(ItemModSeed seed : ResourceCrops.modSeeds) {
-                ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.GREED, 1));
+            for(ItemStack seed : ResourceCrops.modSeeds) {
+                ThaumcraftApi.registerObjectTag(seed, new AspectList().add(Aspect.PLANT, 1).add(Aspect.GREED, 1));
             }
         }
         //botania crops
         if(ModHelper.allowIntegration(Names.Mods.botania)) {
-            for(ItemModSeed seed : BotaniaHelper.botaniaSeeds) {
-                ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1));
+            for(ItemStack seed : BotaniaHelper.botaniaSeeds) {
+                ThaumcraftApi.registerObjectTag(seed, new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1));
             }
         }
         //ars magica crops
         if(ModHelper.allowIntegration(Names.Mods.arsMagica)) {
-            for(ItemModSeed seed : ArsMagicaHelper.arsMagicaSeeds) {
-                ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1));
+            for(ItemStack seed : ArsMagicaHelper.arsMagicaSeeds) {
+                ThaumcraftApi.registerObjectTag(seed, new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1));
             }
         }
         //thaumcraft crops
         if(ModHelper.allowIntegration(Names.Mods.thaumcraft)) {
-            for(ItemModSeed seed : ThaumcraftHelper.thaumcraftSeeds) {
+            for(ItemStack seed : ThaumcraftHelper.thaumcraftSeeds) {
                 if(seed.getUnlocalizedName().equals("agricraft:seedTaintedRoot")) {
-                    ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1).add(Aspect.TAINT, 1));
+                    ThaumcraftApi.registerObjectTag(seed, new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1).add(Aspect.TAINT, 1));
                 } else {
-                    ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1));
+                    ThaumcraftApi.registerObjectTag(seed, new AspectList().add(Aspect.PLANT, 1).add(Aspect.MAGIC, 1));
                 }
             }
         }
         //custom crops
         if(ConfigurationHandler.customCrops) {
-            for (ItemModSeed seed : CustomCrops.customSeeds) {
-                ThaumcraftApi.registerObjectTag(new ItemStack(seed, 1, 0), new AspectList().add(Aspect.PLANT, 1));
+            for (ItemStack seed : CustomCrops.customSeeds) {
+                ThaumcraftApi.registerObjectTag(seed, new AspectList().add(Aspect.PLANT, 1));
             }
         }
         //seed analyzer

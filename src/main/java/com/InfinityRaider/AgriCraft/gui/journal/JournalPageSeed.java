@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.gui.journal;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
@@ -19,6 +19,7 @@ import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class JournalPageSeed extends JournalPage {
@@ -28,7 +29,7 @@ public class JournalPageSeed extends JournalPage {
     private ArrayList<ItemStack> discoveredSeeds;
     private int page;
 
-    private CropPlant plant;
+    private AgriCraftPlantDelegate plant;
 
     private ArrayList<Component<ItemStack>> fruits;
     private ArrayList<Component<ItemStack>> seeds;
@@ -196,7 +197,7 @@ public class JournalPageSeed extends JournalPage {
             this.plant = CropPlantHandler.getPlantFromStack(discoveredSeeds.get(page));
         }
         ArrayList<Component<ItemStack>> fruits = new ArrayList<Component<ItemStack>>();
-        ArrayList<ItemStack> allFruits = plant.getAllFruits();
+        List<ItemStack> allFruits = plant.getAllFruits();
         if(allFruits != null ) {
             for (int i = 0; i < allFruits.size(); i++) {
                 ItemStack stack = allFruits.get(i);

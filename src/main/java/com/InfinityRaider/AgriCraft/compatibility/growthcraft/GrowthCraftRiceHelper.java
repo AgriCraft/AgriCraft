@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility.growthcraft;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
@@ -14,7 +14,7 @@ public class GrowthCraftRiceHelper extends ModHelper {
     @Override
     protected void initPlants() {
         try {
-            CropPlant ricePlant = new CropPlantGrowthCraftRice();
+            IAgriCraftPlant ricePlant = new CropPlantGrowthCraftRice();
             CropPlantHandler.registerPlant(ricePlant);
             GrowthRequirementHandler.getGrowthRequirement(ricePlant.getSeed().getItem(), ricePlant.getSeed().getItemDamage()).setSoil(new BlockWithMeta(Blocks.blockWaterPadFull));
 
