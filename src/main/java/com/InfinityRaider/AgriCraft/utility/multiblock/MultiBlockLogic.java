@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.utility.multiblock;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public abstract class MultiBlockLogic {
@@ -52,11 +53,12 @@ public abstract class MultiBlockLogic {
         int x = tag.getInteger(Names.NBT.x2);
         int y = tag.getInteger(Names.NBT.y2);
         int z = tag.getInteger(Names.NBT.z2);
+        TileEntity tile = this.getRootComponent().getTileEntity();
         World world = this.getRootComponent().getTileEntity().getWorldObj();
-        if(world == null) {
-            MultiBlockCache.getCache().addToCache(this.rootComponent, x, y, z, sizeX()*sizeY()*sizeZ());
-        } else {
-            //this.checkForMultiBlock();
+        if(world != null) {
+            if(tile.xCoord == x && tile.yCoord == y && tile.zCoord == z) {
+                this.createMultiBlock();
+            }
         }
     }
 

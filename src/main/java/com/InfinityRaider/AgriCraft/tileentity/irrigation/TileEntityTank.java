@@ -338,6 +338,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public void syncMultiBlockToClient() {
         if(!worldObj.isRemote) {
             NetworkWrapperAgriCraft.wrapper.sendToDimension(new MessageSyncMultiBlock(this), worldObj.provider.dimensionId);
+            this.worldObj.getChunkFromBlockCoords(this.xCoord, this.zCoord).setChunkModified();
         }
     }
 }

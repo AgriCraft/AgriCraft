@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//Currently unused
 public final class MultiBlockCache {
     private static MultiBlockCache INSTANCE = new MultiBlockCache();
 
