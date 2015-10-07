@@ -1,11 +1,11 @@
+
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -35,432 +35,434 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
-    private PlantStats stats = new PlantStats();
-    private boolean analyzed=false;
-    private boolean crossCrop=false;
-    private boolean weed=false;
-    private CropPlant plant;
+public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable {
 
-    private final MutationEngine mutationEngine;
+	private PlantStats stats = PlantStats.DEFAULT;
+	private boolean crossCrop = false;
+	private boolean weed = false;
+	private AgriCraftPlantDelegate plant;
 
-    public TileEntityCrop() {
-        this.mutationEngine = new MutationEngine(this);
-    }
+	private final MutationEngine mutationEngine;
 
-    @Override
-    public boolean isRotatable() {
-        return false;
-    }
+	public TileEntityCrop() {
+		this.mutationEngine = new MutationEngine(this);
+	}
 
-    public CropPlant getPlant() {return plant;}
+	@Override
+	public boolean isRotatable() {
+		return false;
+	}
 
-    public ISeedStats getStats() {
-        return this.hasPlant()?stats.copy():new PlantStats(-1, -1, -1);
-    }
+	public PlantStats getStats() {
+		return stats;
+	}
 
-    public short getGrowth() {return this.weed ? (short)ConfigurationHandler.weedGrowthMultiplier : stats.getGrowth();} //Pardon the cast.
+	public AgriCraftPlantDelegate getPlant() {
+		return plant;
+	}
 
-    public short getGain() {return stats.getGain();}
+	public boolean hasWeed() {
+		return weed;
+	}
 
-    public short getStrength() {return stats.getStrength();}
+	public boolean isCrossCrop() {
+		return crossCrop;
+	}
 
-    public boolean isAnalyzed() {return analyzed;}
+	public void setCrossCrop(boolean status) {
+		if (status != this.crossCrop) {
+			this.crossCrop = status;
+			this.markForUpdate();
+		}
+	}
 
-    public boolean hasWeed() {return weed;}
+	/** get growthrate */
+	public int getGrowthRate() {
+		return this.weed ? ConfigurationHandler.weedGrowthRate : plant.getGrowthRate();
+	}
 
-    public boolean isCrossCrop() {return crossCrop;}
+	/** check to see if there is a plant here */
+	public boolean hasPlant() {
+		return this.plant != null;
+	}
 
-    public void setCrossCrop(boolean status) {
-        if(status!=this.crossCrop) {
-            this.crossCrop = status;
-            this.markForUpdate();
-        }
-    }
+	/** sets the plant in the crop */
+	public void setPlant(int growth, int gain, int strength, boolean analyzed, AgriCraftPlantDelegate plant, boolean overwrite) {
+		if ((!this.crossCrop) && (overwrite || !this.hasPlant())) {
+			if (plant != null) {
+			this.plant = plant;
+			this.stats = new PlantStats(growth, gain, strength, analyzed);
+			this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
+			this.markForUpdate();
+			plant.onSeedPlanted(worldObj, xCoord, yCoord, zCoord);
+			}
+		}
+	}
 
-    /** get growthrate */
-    public int getGrowthRate() {return this.weed ? ConfigurationHandler.weedGrowthRate : plant.getGrowthRate();}
+	/** sets the plant in the crop */
+	public void setPlant(int growth, int gain, int strength, boolean analyzed, AgriCraftPlantDelegate plant) {
+		setPlant(growth, gain, strength, analyzed, plant, false);
+	}
 
-    /** check to see if there is a plant here */
-    public boolean hasPlant() {return this.plant!=null;}
+	/** sets the plant in the crop */
+	public void setPlant(int growth, int gain, int strength, boolean analyzed, Item seed, int seedMeta) {
+		this.setPlant(growth, gain, strength, analyzed, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
+	}
 
-    /** sets the plant in the crop */
-    public void setPlant(int growth, int gain, int strength, boolean analyzed, CropPlant plant) {
-        if( (!this.crossCrop) && (!this.hasPlant())) {
-            if(plant!=null) {
-                this.plant = plant;
-                this.stats = new PlantStats(growth, gain, strength);
-                this.analyzed = analyzed;
-                this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
-                this.markForUpdate();
-                plant.onSeedPlanted(worldObj, xCoord, yCoord, zCoord);
-            }
-        }
-    }
+	/**
+	 * Clears the plant in the crop. Needs cleaning...
+	 */
+	public void clearPlant() {
+		if (this.plant != null) {
+			this.plant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord);
+		}
+		this.stats = PlantStats.DEFAULT;
+		this.plant = null;
+		this.weed = false;
+		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
+		this.markForUpdate();
+	}
 
-    /** sets the plant in the crop */
-    public void setPlant(int growth, int gain, int strength, boolean analyzed, Item seed, int seedMeta) {
-        this.setPlant(growth, gain, strength, analyzed, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
-    }
+	/** check if the crop is fertile */
+	public boolean isFertile() {
+		return this.weed || worldObj.isAirBlock(xCoord, yCoord + 1, zCoord) && plant.isFertile(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+	}
 
-    /** clears the plant in the crop */
-    public void clearPlant() {
-        CropPlant oldPlant = getPlant();
-        this.stats = new PlantStats();
-        this.plant = null;
-        this.analyzed = false;
-        this.weed = false;
-        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
-        this.markForUpdate();
-        if (oldPlant != null) {
-            oldPlant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord);
-        }
-    }
+	/** gets the height of the crop */
+	public float getCropHeight() {
+		return hasPlant() ? plant.getHeight(getBlockMetadata()) : Constants.UNIT * 13;
+	}
 
-    /** check if the crop is fertile */
-    public boolean isFertile() {
-        return this.weed || worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.isFertile(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-    }
+	/** check if bonemeal can be applied */
+	public boolean canBonemeal() {
+		if (this.crossCrop) {
+			return ConfigurationHandler.bonemealMutation;
+		}
+		if (this.hasPlant() && !this.isMature()) {
+			if (!this.isFertile()) {
+			return false;
+			}
+			return plant.canBonemeal();
+		}
+		if (this.hasWeed() && !this.isMature()) {
+			return true;
+		}
+		return false;
+	}
 
-    /** gets the height of the crop */
-    public float getCropHeight() {
-        return hasPlant()?plant.getHeight(getBlockMetadata()):Constants.UNIT*13;
-    }
+	/** check the block if the plant is mature */
+	public boolean isMature() {
+		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == Constants.MATURE;
+	}
 
-    /** check if bonemeal can be applied */
-    public boolean canBonemeal() {
-        if(this.crossCrop) {
-            return ConfigurationHandler.bonemealMutation;
-        }
-        if(this.hasPlant() && !this.isMature()) {
-            if(!this.isFertile()) {
-                return false;
-            }
-            return plant.canBonemeal();
-        }
-        if(this.hasWeed() && !this.isMature()) {
-        	return true;
-        }
-        return false;
-    }
+	/** gets the fruits for this plant */
+	public List<ItemStack> getFruits() {
+		return plant.getFruitsOnHarvest(stats.gain, worldObj.rand);
+	}
 
-    /** check the block if the plant is mature */
-    public boolean isMature() {
-        return worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == Constants.MATURE;
-    }
+	/** allow harvesting */
+	public boolean allowHarvest(EntityPlayer player) {
+		return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord, player);
+	}
 
-    /** gets the fruits for this plant */
-    public ArrayList<ItemStack> getFruits() {return plant.getFruitsOnHarvest(getGain(), worldObj.rand);}
+	/** returns an ItemStack holding the seed currently planted, initialized with an NBT tag holding the stats */
+	public ItemStack getSeedStack() {
+		if (plant == null) {
+			return null;
+		}
+		ItemStack seed = plant.getSeed().copy();
+		NBTTagCompound tag = new NBTTagCompound();
+		SeedHelper.setNBT(tag, stats.growth, stats.gain, stats.strength, stats.isAnalyzed);
+		seed.setTagCompound(tag);
+		return seed;
+	}
 
-    /** allow harvesting */
-    public boolean allowHarvest(EntityPlayer player) {
-        return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord, player);
-    }
+	/** returns the Block instance of the plant currently planted on the crop */
+	public Block getPlantBlock() {
+		return plant == null ? null : plant.getBlock();
+	}
 
-    /** returns an ItemStack holding the seed currently planted, initialized with an NBT tag holding the stats */
-    public ItemStack getSeedStack() {
-        if(plant == null) {
-            return null;
-        }
-        ItemStack seed = plant.getSeed().copy();
-        NBTTagCompound tag = new NBTTagCompound();
-        SeedHelper.setNBT(tag, getGrowth(), getGain(), getStrength(), this.analyzed);
-        seed.setTagCompound(tag);
-        return seed;
-    }
+	/** spawns weed in the crop */
+	public void spawnWeed() {
+		this.crossCrop = false;
+		this.clearPlant();
+		this.weed = true;
+		this.markForUpdate();
+	}
 
-    /** returns the Block instance of the plant currently planted on the crop */
-    public Block getPlantBlock() {
-        return plant==null?null:plant.getBlock();
-    }
+	/** spread the weed */
+	public void spreadWeed() {
+		List<TileEntityCrop> neighbours = this.getNeighbours();
+		for (TileEntityCrop crop : neighbours) {
+			if (crop != null && (!crop.weed) && Math.random() < crop.getWeedSpawnChance()) {
+			crop.spawnWeed();
+			break;
+			}
+		}
+	}
 
-    /** spawns weed in the crop */
-    public void spawnWeed() {
-        this.crossCrop=false;
-        this.clearPlant();
-        this.weed=true;
-        this.markForUpdate();
-    }
+	public void updateWeed(int growthStage) {
+		if (this.hasWeed()) {
+			if (growthStage == 0) {
+			this.weed = false;
+			}
+			this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, growthStage, 3);
+			this.markForUpdate();
+		}
+	}
 
-    /** spread the weed */
-    public void spreadWeed() {
-        List<TileEntityCrop> neighbours = this.getNeighbours();
-        for(TileEntityCrop crop:neighbours) {
-            if(crop!=null && (!crop.weed) && Math.random()<crop.getWeedSpawnChance()) {
-                crop.spawnWeed();
-                break;
-            }
-        }
-    }
+	// clear the weed
+	public void clearWeed() {
+		updateWeed(0);
+	}
 
-    public void updateWeed(int growthStage) {
-        if(this.hasWeed()) {
-            if (growthStage == 0) {
-                this.weed = false;
-            }
-            this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, growthStage, 3);
-            this.markForUpdate();
-        }
-    }
+	// weed spawn chance
+	private double getWeedSpawnChance() {
+		if (this.hasPlant()) {
+			return ConfigurationHandler.weedsWipePlants ? ((double) (10 - stats.strength)) / 10 : 0;
+		} else {
+			return this.weed ? 0 : 1;
+		}
+	}
 
-    //clear the weed
-    public void clearWeed() {updateWeed(0);}
+	// trowel usage
+	public void onTrowelUsed(ITrowel trowel, ItemStack trowelStack) {
+		if (this.hasPlant()) {
+			if (!trowel.hasSeed(trowelStack)) {
+			trowel.setSeed(trowelStack, this.getSeedStack(), worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
+			this.clearPlant();
+			this.markForUpdate();
+			}
+		} else if (!this.hasWeed() && !this.crossCrop) {
+			if (trowel.hasSeed(trowelStack)) {
+			ItemStack seed = trowel.getSeed(trowelStack);
+			int growthStage = trowel.getGrowthStage(trowelStack);
+			NBTTagCompound tag = seed.getTagCompound();
+			short growth = tag.getShort(Names.NBT.growth);
+			short gain = tag.getShort(Names.NBT.gain);
+			short strength = tag.getShort(Names.NBT.strength);
+			boolean analysed = tag.getBoolean(Names.NBT.analyzed);
+			this.setPlant(growth, gain, strength, analysed, seed.getItem(), seed.getItemDamage());
+			this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, growthStage, 3);
+			this.markForUpdate();
+			trowel.clearSeed(trowelStack);
+			}
+		}
+	}
 
-    //weed spawn chance
-    private double getWeedSpawnChance() {
-        if(this.hasPlant()) {
-            return ConfigurationHandler.weedsWipePlants ? ((double) (10 - getStrength())) / 10 : 0;
-        }
-        else {
-            return this.weed ? 0 : 1;
-        }
-    }
+	// is fertilizer allowed
+	public boolean allowFertiliser(IFertiliser fertiliser) {
+		if (this.crossCrop) {
+			return ConfigurationHandler.bonemealMutation && fertiliser.canTriggerMutation();
+		}
+		if (this.hasWeed()) {
+			return true;
+		}
+		if (this.hasPlant()) {
+			return fertiliser.isFertiliserAllowed(plant.getTier());
+		}
+		return false;
+	}
 
-    //trowel usage
-    public void onTrowelUsed(ITrowel trowel, ItemStack trowelStack) {
-        if(this.hasPlant()) {
-            if(!trowel.hasSeed(trowelStack)) {
-                trowel.setSeed(trowelStack, this.getSeedStack(), worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
-                this.clearPlant();
-                this.markForUpdate();
-            }
-        } else if(!this.hasWeed() && !this.crossCrop){
-            if(trowel.hasSeed(trowelStack)) {
-                ItemStack seed = trowel.getSeed(trowelStack);
-                int growthStage = trowel.getGrowthStage(trowelStack);
-                NBTTagCompound tag = seed.getTagCompound();
-                short growth = tag.getShort(Names.NBT.growth);
-                short gain = tag.getShort(Names.NBT.gain);
-                short strength = tag.getShort(Names.NBT.strength);
-                boolean analysed = tag.getBoolean(Names.NBT.analyzed);
-                this.setPlant(growth, gain, strength, analysed, seed.getItem(), seed.getItemDamage());
-                this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, growthStage, 3);
-                this.markForUpdate();
-                trowel.clearSeed(trowelStack);
-            }
-        }
-    }
+	// when fertiliser is applied
+	public void applyFertiliser(IFertiliser fertiliser, Random rand) {
+		if (fertiliser.hasSpecialBehaviour()) {
+			fertiliser.onFertiliserApplied(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord, rand);
+		}
+		if (this.hasPlant() || this.hasWeed()) {
+			((BlockCrop) Blocks.blockCrop).func_149853_b(this.worldObj, rand, this.xCoord, this.yCoord, this.zCoord);
+			this.markForUpdate();
+		} else if (this.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
+			this.crossOver();
+		}
+	}
 
-    //is fertilizer allowed
-    public boolean allowFertiliser(IFertiliser fertiliser) {
-        if(this.crossCrop) {
-            return ConfigurationHandler.bonemealMutation && fertiliser.canTriggerMutation();
-        }
-        if(this.hasWeed()) {
-            return true;
-        }
-        if(this.hasPlant()) {
-            return fertiliser.isFertiliserAllowed(plant.getTier());
-        }
-        return false;
-    }
+	// TileEntity is just to store data on the crop
+	@Override
+	public boolean canUpdate() {
+		return false;
+	}
 
-    //when fertiliser is applied
-    public void applyFertiliser(IFertiliser fertiliser, Random rand) {
-        if(fertiliser.hasSpecialBehaviour()) {
-            fertiliser.onFertiliserApplied(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord, rand);
-        }
-        if(this.hasPlant() || this.hasWeed()) {
-            ((BlockCrop) Blocks.blockCrop).func_149853_b(this.worldObj, rand, this.xCoord, this.yCoord, this.zCoord);
-            this.markForUpdate();
-        }
-        else if(this.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
-            this.crossOver();
-        }
-    }
+	// this saves the data on the tile entity
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		stats.writeToNBT(tag);
+		tag.setBoolean(Names.NBT.analyzed, stats.isAnalyzed);
+		tag.setBoolean(Names.NBT.crossCrop, crossCrop);
+		tag.setBoolean(Names.NBT.weed, weed);
+		if (this.plant != null) {
+			tag.setTag(Names.NBT.seed, CropPlantHandler.writePlantToNBT(plant));
+		}
+	}
 
-    //TileEntity is just to store data on the crop
-    @Override
-    public boolean canUpdate() {
-        return false;
-    }
+	// this loads the saved data for the tile entity
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		this.stats = new PlantStats(tag);
+		this.crossCrop = tag.getBoolean(Names.NBT.crossCrop);
+		this.weed = tag.getBoolean(Names.NBT.weed);
+		if (tag.hasKey(Names.NBT.seed) && !tag.hasKey(Names.NBT.meta)) {
+			this.plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
+		}
+		// This is to load NBT from crops prior to this update
+		else if (tag.hasKey(Names.NBT.seed) && tag.hasKey(Names.NBT.meta)) {
+			this.loadPlantFromOldVersion(tag);
+		} else {
+			this.plant = null;
+		}
+	}
 
-    //this saves the data on the tile entity
-    @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-        stats.writeToNBT(tag);
-        tag.setBoolean(Names.NBT.analyzed, analyzed);
-        tag.setBoolean(Names.NBT.crossCrop,crossCrop);
-        tag.setBoolean(Names.NBT.weed, weed);
-        if(this.plant!=null) {
-            tag.setTag(Names.NBT.seed, CropPlantHandler.writePlantToNBT(plant));
-        }
-    }
+	// This is to load NBT from crops prior to this update
+	@Deprecated
+	private void loadPlantFromOldVersion(NBTTagCompound tag) {
+		String name = tag.getString(Names.NBT.seed);
+		Item seed = name.equalsIgnoreCase("none") ? null : (Item) Item.itemRegistry.getObject(name);
+		int meta = tag.getInteger(Names.NBT.meta);
+		ItemStack stack = new ItemStack(seed, 1, meta);
+		AgriCraftPlantDelegate plant = CropPlantHandler.getPlantFromStack(stack);
+		if (plant != null) {
+			this.plant = plant;
+		} else {
+			LogHelper.info("Couldn't find plant for " + stack.getUnlocalizedName() + " at (" + xCoord + "," + yCoord + "," + zCoord + "), plant has been removed");
+			this.clearPlant();
+		}
+	}
 
-    //this loads the saved data for the tile entity
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
-        this.stats = PlantStats.readFromNBT(tag);
-        this.analyzed=tag.hasKey(Names.NBT.analyzed) && tag.getBoolean(Names.NBT.analyzed);
-        this.crossCrop=tag.getBoolean(Names.NBT.crossCrop);
-        this.weed=tag.getBoolean(Names.NBT.weed);
-        if(tag.hasKey(Names.NBT.seed) && !tag.hasKey(Names.NBT.meta)) {
-            this.plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
-        }
-        //This is to load NBT from crops prior to this update
-        else if(tag.hasKey(Names.NBT.seed) && tag.hasKey(Names.NBT.meta)) {
-            this.loadPlantFromOldVersion(tag);
-        }
-        else {
-            this.plant=null;
-        }
-    }
+	/** Apply a growth increment */
+	public void applyGrowthTick() {
+		int flag = 2;
+		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		if (hasPlant()) {
+			flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta) ? 2 : 6;
+		}
+		if (hasWeed() || !plant.isMature(worldObj, xCoord, yCoord, zCoord)) {
+			worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, flag);
+			AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
+		}
 
-    //This is to load NBT from crops prior to this update
-    @Deprecated
-    private void loadPlantFromOldVersion(NBTTagCompound tag) {
-        String name = tag.getString(Names.NBT.seed);
-        Item seed = name.equalsIgnoreCase("none")?null: (Item) Item.itemRegistry.getObject(name);
-        int meta = tag.getInteger(Names.NBT.meta);
-        ItemStack stack = new ItemStack(seed, 1, meta);
-        CropPlant plant = CropPlantHandler.getPlantFromStack(stack);
-        if(plant!=null) {
-            this.plant = plant;
-        } else {
-            LogHelper.info("Couldn't find plant for " + stack.getUnlocalizedName() + " at (" + xCoord + "," + yCoord + "," + zCoord + "), plant has been removed");
-            this.clearPlant();
-        }
-    }
+	}
 
-    /** Apply a growth increment */
-    public void applyGrowthTick() {
-        int flag = 2;
-        int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-        if(hasPlant()) {
-            flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta) ? 2 : 6;
-        }
-        if (hasWeed() || !plant.isMature(worldObj, xCoord, yCoord, zCoord)) {
-            worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, flag);
-            AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
-        }
+	/** the code that makes the crop cross with neighboring crops */
+	public void crossOver() {
+		mutationEngine.executeCrossOver();
+	}
 
-    }
+	/** Called by the mutation engine to apply the result of a cross over */
+	public void applyCrossOverResult(CrossOverResult result) {
+		crossCrop = false;
+		setPlant(result.getGrowth(), result.getGain(), result.getStrength(), false, result.getSeed(), result.getMeta());
+		markForUpdate();
+	}
 
-    /** the code that makes the crop cross with neighboring crops */
-    public void  crossOver() {mutationEngine.executeCrossOver();}
+	/**
+	 * @return a list with all neighbours of type <code>TileEntityCrop</code> in the NORTH, SOUTH, EAST and WEST direction
+	 */
+	public List<TileEntityCrop> getNeighbours() {
+		List<TileEntityCrop> neighbours = new ArrayList<TileEntityCrop>();
+		addNeighbour(neighbours, ForgeDirection.NORTH);
+		addNeighbour(neighbours, ForgeDirection.SOUTH);
+		addNeighbour(neighbours, ForgeDirection.EAST);
+		addNeighbour(neighbours, ForgeDirection.WEST);
+		return neighbours;
+	}
 
-    /** Called by the mutation engine to apply the result of a cross over */
-    public void applyCrossOverResult(CrossOverResult result) {
-        crossCrop = false;
-        setPlant(result.getGrowth(), result.getGain(), result.getStrength(), false, result.getSeed(), result.getMeta());
-        markForUpdate();
-    }
+	private void addNeighbour(List<TileEntityCrop> neighbours, ForgeDirection direction) {
+		TileEntity te = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+		if (te == null || !(te instanceof TileEntityCrop)) {
+			return;
+		}
 
-    /**
-     * @return a list with all neighbours of type <code>TileEntityCrop</code> in the
-     *          NORTH, SOUTH, EAST and WEST direction
-     */
-    public List<TileEntityCrop> getNeighbours() {
-        List<TileEntityCrop> neighbours = new ArrayList<TileEntityCrop>();
-        addNeighbour(neighbours, ForgeDirection.NORTH);
-        addNeighbour(neighbours, ForgeDirection.SOUTH);
-        addNeighbour(neighbours, ForgeDirection.EAST);
-        addNeighbour(neighbours, ForgeDirection.WEST);
-        return neighbours;
-    }
+		neighbours.add((TileEntityCrop) te);
+	}
 
-    private void addNeighbour(List<TileEntityCrop> neighbours, ForgeDirection direction) {
-        TileEntity te = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-        if (te == null || !(te instanceof TileEntityCrop)) {
-            return;
-        }
+	/**
+	 * @return a list with only mature neighbours of type <code>TileEntityCrop</code>
+	 */
+	public List<TileEntityCrop> getMatureNeighbours() {
+		List<TileEntityCrop> neighbours = getNeighbours();
+		for (Iterator<TileEntityCrop> iterator = neighbours.iterator(); iterator.hasNext();) {
+			TileEntityCrop crop = iterator.next();
+			if (!crop.isMature()) {
+			iterator.remove();
+			}
+		}
+		return neighbours;
+	}
 
-        neighbours.add((TileEntityCrop) te);
-    }
+	@Override
+	public boolean receiveClientEvent(int id, int value) {
+		if (worldObj.isRemote && id == 1) {
+			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
+			Minecraft.getMinecraft().renderGlobal.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		return true;
+	}
 
-    /** @return a list with only mature neighbours of type <code>TileEntityCrop</code> */
-    public List<TileEntityCrop> getMatureNeighbours() {
-        List<TileEntityCrop> neighbours = getNeighbours();
-        for (Iterator<TileEntityCrop> iterator = neighbours.iterator(); iterator.hasNext(); ) {
-            TileEntityCrop crop = iterator.next();
-            if (!crop.isMature()) {
-                iterator.remove();
-            }
-        }
-        return neighbours;
-    }
+	// get the plant icon
+	@SideOnly(Side.CLIENT)
+	public IIcon getPlantIcon() {
+		IIcon icon = null;
+		if (this.hasPlant()) {
+			icon = plant.getPlantIcon(this.getBlockMetadata());
+		} else if (this.weed) {
+			icon = ((BlockCrop) this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)).getWeedIcon(this.getBlockMetadata());
+		}
+		return icon;
+	}
 
-    @Override
-    public boolean receiveClientEvent(int id, int value) {
-        if(worldObj.isRemote && id == 1) {
-            this.worldObj.markBlockForUpdate(xCoord,yCoord,zCoord);
-            this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
-            Minecraft.getMinecraft().renderGlobal.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
-        return true;
-    }
+	@Override
+	public void addDebugInfo(List<String> list) {
+		list.add("CROP:");
+		if (this.crossCrop) {
+			list.add(" - This is a crosscrop");
+		} else if (this.hasPlant()) {
+			list.add(" - This crop has a plant");
+			list.add(" - Seed: " + (this.plant.getSeed().getItem()).getUnlocalizedName());
+			list.add(" - Seed class: " + this.plant.getSeed().getItem().getClass().getName());
+			list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject((this.plant.getSeed().getItem())) + ":" + this.plant.getSeed().getItemDamage());
+			list.add(" - Tier: " + plant.getTier());
+			list.add(" - Meta: " + this.getBlockMetadata());
+			list.add(" - Growth: " + stats.growth);
+			list.add(" - Gain: " + stats.gain);
+			list.add(" - Strength: " + stats.strength);
+			list.add(" - Fertile: " + this.isFertile());
+			list.add(" - Mature: " + this.isMature());
+		} else if (this.weed) {
+			list.add(" - This crop has weeds");
+			list.add(" - Meta: " + this.getBlockMetadata());
+		} else {
+			list.add(" - This crop has no plant");
+		}
+	}
 
-    //get the plant icon
-    @SideOnly(Side.CLIENT)
-    public IIcon getPlantIcon() {
-        IIcon icon = null;
-        if(this.hasPlant()) {
-            icon = plant.getPlantIcon(this.getBlockMetadata());
-        }
-        else if(this.weed) {
-            icon = ((BlockCrop) this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)).getWeedIcon(this.getBlockMetadata());
-        }
-        return icon;
-    }
-
-    @Override
-    public void addDebugInfo(List<String> list) {
-        list.add("CROP:");
-        if(this.crossCrop) {
-            list.add(" - This is a crosscrop");
-        }
-        else if(this.hasPlant()) {
-            list.add(" - This crop has a plant");
-            list.add(" - Seed: " + (this.plant.getSeed().getItem()).getUnlocalizedName());
-            list.add(" - Seed class: "+this.plant.getSeed().getItem().getClass().getName());
-            list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject((this.plant.getSeed().getItem())) + ":" + this.plant.getSeed().getItemDamage());
-            list.add(" - Tier: "+plant.getTier());
-            list.add(" - Meta: " + this.getBlockMetadata());
-            list.add(" - Growth: " + getGrowth());
-            list.add(" - Gain: " + getGain());
-            list.add(" - Strength: " + getStrength());
-            list.add(" - Fertile: " + this.isFertile());
-            list.add(" - Mature: " + this.isMature());
-        }
-        else if(this.weed) {
-            list.add(" - This crop has weeds");
-            list.add(" - Meta: " + this.getBlockMetadata());
-        }
-        else {
-            list.add(" - This crop has no plant");
-        }
-    }
-    
-    @Override
-    public void addWailaInformation(List information) {
-    	if(this.hasPlant()) {
-    		//Add the seed name.
-    		information.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + this.getSeedStack().getDisplayName());
-    		//Add the growth.
-    		if(this.isMature()) {
-    			information.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage")+": "+StatCollector.translateToLocal("agricraft_tooltip.mature"));
-    		} else {
-    			information.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage")+": "+((int) ( (100*(this.getBlockMetadata()+0.00F))/7.00F)+"%" ));
-    		}
-    		//Add the analyzed data.
-    		if(this.isAnalyzed()) {
-    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + this.getGrowth());
-    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + this.getGain());
-    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + this.getStrength());
-    		}
-    		else {
-    			information.add(StatCollector.translateToLocal("agricraft_tooltip.analyzed"));
-    		}
-    		//Add the fertility information.
-    		information.add(StatCollector.translateToLocal(this.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
-    	}
-    	else if(this.hasWeed()) {
-    		information.add(StatCollector.translateToLocal("agricraft_tooltip.weeds"));
-    	}
-    	else {
-    		information.add(StatCollector.translateToLocal("agricraft_tooltip.empty"));
-        }
-    }
+	@Override
+	public void addWailaInformation(List information) {
+		if (this.hasPlant()) {
+			// Add the seed name.
+			information.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + this.getSeedStack().getDisplayName());
+			// Add the growth.
+			if (this.isMature()) {
+			information.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage") + ": " + StatCollector.translateToLocal("agricraft_tooltip.mature"));
+			} else {
+			information.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage") + ": " + ((int) ((100 * (this.getBlockMetadata() + 0.00F)) / 7.00F) + "%"));
+			}
+			// Add the analyzed data.
+			if (this.stats.isAnalyzed) {
+			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + this.stats.growth);
+			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + this.stats.gain);
+			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + this.stats.strength);
+			} else {
+			information.add(StatCollector.translateToLocal("agricraft_tooltip.analyzed"));
+			}
+			// Add the fertility information.
+			information.add(StatCollector.translateToLocal(this.isFertile() ? "agricraft_tooltip.fertile" : "agricraft_tooltip.notFertile"));
+		} else if (this.hasWeed()) {
+			information.add(StatCollector.translateToLocal("agricraft_tooltip.weeds"));
+		} else {
+			information.add(StatCollector.translateToLocal("agricraft_tooltip.empty"));
+		}
+	}
 }

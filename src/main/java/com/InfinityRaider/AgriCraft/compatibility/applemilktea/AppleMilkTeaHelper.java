@@ -15,7 +15,7 @@ public class AppleMilkTeaHelper extends ModHelper {
         Item fruit = (Item) Item.itemRegistry.getObject("DCsAppleMilk:defeatedcrow.leafTea");
         Block plant = (Block) Block.blockRegistry.getObject("DCsAppleMilk:defeatedcrow.cropMint");
         try {
-            CropPlantHandler.registerPlant(new CropPlantAppleMilkTea(new ItemStack(seed), new ItemStack(fruit, 1, 1), plant));
+            CropPlantHandler.registerPlant(new CropPlantAppleMilkTea(new ItemStack(seed), plant, 2, new ItemStack(fruit, 1, 1)));
         } catch (Exception e) {
             if(ConfigurationHandler.debug) {
                 e.printStackTrace();

@@ -25,8 +25,8 @@ public class CropPlantMandrake extends CropPlantWitchery {
     @Override
     public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        int amount = (int) (Math.ceil((crop.getGain() + 0.00) / 3));
-        int strength = crop.getStrength();
+        int amount = (int) (Math.ceil((crop.getStats().gain + 0.00) / 3));
+        int strength = crop.getStats().strength;
         while(amount>0) {
             //determine if we want to spawn a mandrake depending on difficulty, time of day and strength of the crop
             boolean spawnMandrake = false;
@@ -39,7 +39,7 @@ public class CropPlantMandrake extends CropPlantWitchery {
                     //create and spawn the mandrake
                     Entity mandrake = (Entity) Class.forName("com.emoniph.witchery.entity.EntityMandrake").getConstructor(World.class).newInstance(world);
                     //EntityMandrake mandrake = new EntityMandrake(world);
-                    mandrake.setLocationAndAngles(1.5D + (double) x, 0.05D + (double) y, 1.5D + (double) z, 0.0F, 0.0F);
+                    mandrake.setLocationAndAngles(1.5D + x, 0.05D + y, 1.5D + z, 0.0F, 0.0F);
                     world.spawnEntityInWorld(mandrake);
                     //particle effect
                     Class particleEffectClass = Class.forName("com.emoniph.witchery.util.ParticleEffect");
@@ -67,10 +67,10 @@ public class CropPlantMandrake extends CropPlantWitchery {
                 if (world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
                     ItemStack drop = getRandomFruit(world.rand);
                     float f = 0.7F;
-                    double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                    double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                    double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                    EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, drop);
+                    double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+                    double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+                    double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+                    EntityItem entityitem = new EntityItem(world, x + d0, y + d1, z + d2, drop);
                     entityitem.delayBeforeCanPickup = 10;
                     world.spawnEntityInWorld(entityitem);
                 }

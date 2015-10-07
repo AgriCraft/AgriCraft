@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantDelegate;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
@@ -101,11 +101,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                 }
             	else if (crop.isFertile()) {
                     //multiplier from growth stat
-                    double growthBonus = 1.0 + crop.getGrowth() / 10.0;
+                    double growthBonus = 1.0 + crop.getStats().growth / 10.0;
                     //multiplier defined in the config
                     float global = 2.0F - ConfigurationHandler.growthMultiplier;
                     //crop dependent base growth rate
-                    float growthRate = (float) crop.getGrowthRate();
+                    float growthRate = crop.getGrowthRate();
                     //determine if growth tick should be applied or skipped
                     boolean shouldGrow = (rnd.nextDouble()<=(growthRate * growthBonus * global)/100);
                     if (shouldGrow) {
@@ -146,7 +146,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                 return false;
             } else if(crop.isMature() && crop.allowHarvest(player)) {
                 crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
-                ArrayList<ItemStack> drops = crop.getFruits();
+                List<ItemStack> drops = crop.getFruits();
                 for (ItemStack drop : drops) {
                     if(drop==null || drop.getItem()==null) {
                         continue;
@@ -249,7 +249,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                 if(crop.hasPlant()) {
                     this.harvest(world, x, y, z, player);
                 } else if (!crop.isCrossCrop() && !crop.hasWeed()) {
-                    CropPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack((ItemSeeds) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")));
+                    AgriCraftPlantDelegate sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack((ItemSeeds) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")));
                     if (sugarcane != null && sugarcane.isFertile(world, x, y, z)) {
                         crop.setPlant(1, 1, 1, false, sugarcane);
                         if (!player.capabilities.isCreativeMode) {
@@ -313,7 +313,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
     @Override
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
         if(!world.isRemote) {
-            CropPlant plant = ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlant();
+            AgriCraftPlantDelegate plant = ((TileEntityCrop) world.getTileEntity(x, y, z)).getPlant();
             if(!player.capabilities.isCreativeMode) {
                 //drop items if the player is not in creative
                 this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
@@ -392,7 +392,8 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
      * Increments the contained plant's growth stage.
      * Called when bonemeal is applied to the block.
      */
-    public void func_149853_b(World world, Random rand, int x, int y, int z) {
+    @Override
+public void func_149853_b(World world, Random rand, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         if(crop.hasPlant() || crop.hasWeed()) {
             int l = world.getBlockMetadata(x, y, z) + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
@@ -446,7 +447,8 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
      * 
      * @return if the crop is done growing.
      */
-    public boolean isMature(World world, int x, int y, int z) {
+    @Override
+public boolean isMature(World world, int x, int y, int z) {
         return world.getBlockMetadata(x, y, z) >= Constants.MATURE;
     }
 
@@ -582,7 +584,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + crop.getCropHeight(), (double)z + this.maxZ);
+        return AxisAlignedBB.getBoundingBox(x + this.minX, y + this.minY, z + this.minZ, x + this.maxX, (double)y + crop.getCropHeight(), z + this.maxZ);
     }
 
     /**

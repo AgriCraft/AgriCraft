@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.extrabiomesxl;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -8,6 +8,7 @@ import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantExcept
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ExtraBiomesXLHelper extends ModHelper {
     @Override
@@ -19,7 +20,7 @@ public class ExtraBiomesXLHelper extends ModHelper {
         if(seed==null || plant==null || fruit==null) {
             return;
         }
-        CropPlant strawberry = new CropPlantExtraBiomesXL(seed, plant, fruit);
+        IAgriCraftPlant strawberry = new CropPlantExtraBiomesXL(new ItemStack(seed), plant, new ItemStack(fruit));
         try {
             CropPlantHandler.registerPlant(strawberry);
         } catch (DuplicateCropPlantException e) {

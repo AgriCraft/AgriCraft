@@ -1,16 +1,16 @@
 package com.InfinityRaider.AgriCraft.compatibility.plantmegapack;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantTallGeneric;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantTallGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
-public class CropPlantPMPDouble extends CropPlantTallGeneric {
+public class CropPlantPMPDouble extends AgriCraftPlantTallGeneric {
 
     public CropPlantPMPDouble(ItemSeeds seed) {
-        super(seed);
+        super(seed, 2);
     }
 
     @Override
@@ -27,11 +27,6 @@ public class CropPlantPMPDouble extends CropPlantTallGeneric {
     @Override
     public int maxMetaBottomBlock() {
         return 1;
-    }
-
-    @Override
-    public boolean isMature(IBlockAccess world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z)>=7;
     }
 
 

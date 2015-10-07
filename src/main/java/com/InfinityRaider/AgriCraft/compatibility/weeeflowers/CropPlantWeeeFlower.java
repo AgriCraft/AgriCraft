@@ -1,40 +1,14 @@
 package com.InfinityRaider.AgriCraft.compatibility.weeeflowers;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
-import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
+public class CropPlantWeeeFlower extends AgriCraftPlantGeneric {
 
-public class CropPlantWeeeFlower extends CropPlantGeneric {
-    private static final Block flower = (Block) Block.blockRegistry.getObject("weeeflowers:Flower");
-
-    private final int meta;
-
-    public CropPlantWeeeFlower(ItemSeeds seed, int meta) {
-        super(seed);
-        this.meta = meta;
-    }
-
-    @Override
-    public int transformMeta(int growthStage) {
-        return growthStage;
-    }
-
-    @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
-        fruits.add(new ItemStack(flower, 1, meta));
-        return fruits;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean renderAsFlower() {
-        return false;
+    public CropPlantWeeeFlower(ItemSeeds seed) {
+        super(seed, 2);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.applemilktea;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantGeneric;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
@@ -14,48 +14,10 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class CropPlantAppleMilkTea extends CropPlant {
-    Item seed;
-    int seedMeta;
+public class CropPlantAppleMilkTea extends AgriCraftPlantGeneric {
 
-    Item fruit;
-    int fruitMeta;
-
-    Block plant;
-
-    public CropPlantAppleMilkTea(ItemStack seed, ItemStack fruit, Block plant) {
-        this.seed = seed.getItem();
-        this.seedMeta = seed.getItemDamage();
-        this.fruit = fruit.getItem();
-        this.fruitMeta = fruit.getItemDamage();
-        this.plant = plant;
-    }
-
-    @Override
-    public int tier() {
-        return 2;
-    }
-
-    @Override
-    public ItemStack getSeed() {
-        return new ItemStack(seed, 1, seedMeta);
-    }
-
-    @Override
-    public Block getBlock() {
-        return plant;
-    }
-
-    @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
-        fruits.add(new ItemStack(fruit, 1, fruitMeta));
-        return fruits;
-    }
-
-    @Override
-    public ItemStack getRandomFruit(Random rand) {
-        return new ItemStack(fruit, 1, fruitMeta);
+    public CropPlantAppleMilkTea(ItemStack seed, Block plant, int tier, ItemStack...fruits) {
+	super(seed, plant, tier, fruits);
     }
 
     @Override
@@ -67,27 +29,6 @@ public class CropPlantAppleMilkTea extends CropPlant {
             amount--;
         }
         return list;
-    }
-
-    @Override
-    public boolean canBonemeal() {
-        return true;
-    }
-
-    @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
-        return true;
-    }
-
-    @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta).canGrow(world, x, y, z);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public float getHeight(int meta) {
-        return Constants.UNIT*13;
     }
 
     @SideOnly(Side.CLIENT)
@@ -106,13 +47,7 @@ public class CropPlantAppleMilkTea extends CropPlant {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean renderAsFlower() {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
     public String getInformation() {
-        return "agricraft.journal_AMT."+seed.getUnlocalizedName()+":"+seedMeta;
+        return "agricraft.journal_AMT."+seed.getUnlocalizedName()+":"+seed.getItemDamage();
     }
 }

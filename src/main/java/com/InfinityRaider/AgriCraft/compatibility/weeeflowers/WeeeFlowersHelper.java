@@ -38,7 +38,7 @@ public class WeeeFlowersHelper extends ModHelper {
                         color = color.substring(0, color.indexOf(" Flower"));
                         Block flower = (Block) Block.blockRegistry.getObject("weeeflowers:"+color+" Flower Crop");
                         int meta = (Integer) getMetaMethod.invoke(flower, 0);
-                        CropPlantHandler.registerPlant(new CropPlantWeeeFlower(seed, meta));
+                        CropPlantHandler.registerPlant(new CropPlantWeeeFlower(seed));
                     }
                 } catch (Exception e) {
                     LogHelper.printStackTrace(e);

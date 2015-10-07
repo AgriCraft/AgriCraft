@@ -1,14 +1,14 @@
 package com.InfinityRaider.AgriCraft.compatibility.psychedelicraft;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantTallGeneric;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantTallGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.world.IBlockAccess;
 
-public class CropPlantPsychedeliCraft extends CropPlantTallGeneric {
+public class CropPlantPsychedeliCraft extends AgriCraftPlantTallGeneric {
     public CropPlantPsychedeliCraft(ItemSeeds seed) {
-        super(seed);
+        super(seed, 2);
     }
 
     @Override
@@ -24,11 +24,6 @@ public class CropPlantPsychedeliCraft extends CropPlantTallGeneric {
     @Override
     public int maxMetaBottomBlock() {
         return 3;
-    }
-
-    @Override
-    public boolean isMature(IBlockAccess world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z)>=7;
     }
 
     @Override

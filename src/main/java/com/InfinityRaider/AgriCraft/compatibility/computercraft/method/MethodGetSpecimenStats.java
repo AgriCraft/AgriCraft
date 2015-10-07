@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 import net.minecraft.item.ItemStack;
@@ -19,11 +18,11 @@ public class MethodGetSpecimenStats extends MethodBase {
         if(!peripheral.isSpecimenAnalyzed()) {
             return null;
         }
-        ISeedStats stats = PlantStats.getStatsFromStack(peripheral.getSpecimen());
+        PlantStats stats = new PlantStats(peripheral.getSpecimen().stackTagCompound);
         if( stats==null ) {
             return null;
         }
-        return new Object[] {stats.getGrowth(), stats.getGain(), stats.getStrength()};
+        return new Object[] {stats.growth, stats.gain, stats.strength};
     }
 
     @Override

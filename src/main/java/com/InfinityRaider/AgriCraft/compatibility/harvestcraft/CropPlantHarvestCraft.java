@@ -1,14 +1,14 @@
 package com.InfinityRaider.AgriCraft.compatibility.harvestcraft;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.AgriCraftPlantGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
 
-public class CropPlantHarvestCraft extends CropPlantGeneric {
+public class CropPlantHarvestCraft extends AgriCraftPlantGeneric {
 
     public CropPlantHarvestCraft(ItemSeeds seed) {
-        super(seed);
+        super(seed, 2);
     }
 
     @Override
