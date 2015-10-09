@@ -146,7 +146,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
 
     /** check the block if the plant is mature */
     public boolean isMature() {
-        return worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == Constants.MATURE;
+        return worldObj.getBlockMetadata(xCoord, yCoord, zCoord) >= Constants.MATURE;
     }
 
     /** gets the fruits for this plant */

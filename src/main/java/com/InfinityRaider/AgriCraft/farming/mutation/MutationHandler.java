@@ -31,10 +31,10 @@ public abstract class MutationHandler {
         
         for(String line:data) {
             Mutation mutation = readMutation(line);
-            if(mutation!=null && !mutations.contains(mutation)) {	// The latter requires us to look through the mutation table before adding... meaning O(n) likely is exponential...
+            if(mutation!=null && !mutations.contains(mutation)) {
                 mutations.add(mutation);
-                LogHelper.info(" - " + mutation.getFormula());		// A hashset might alleviate this at the cost of not being expandable once created, sans operation time.
-            }														// If the mutations have a predictable, fixed size it might work.
+                LogHelper.info(" - " + mutation.getFormula());
+            }
         }
     }
 
