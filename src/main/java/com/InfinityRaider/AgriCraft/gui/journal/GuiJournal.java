@@ -17,13 +17,21 @@ import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public class GuiJournal extends GuiScreen {
+    /** Some dimensions and constants */
     private static final int MINIMUM_PAGES = 2;
     private int xSize;
     private int ySize;
     private int guiLeft;
     private int guiTop;
 
-    private int currentPage;
+    /** Current page */
+    private int currentPageNumber;
+    private JournalPage currentPage;
+
+    /**Stuff to render */
+    ArrayList<Component<String>> textComponents;
+    ArrayList<Component<ResourceLocation>> iconComponents;
+    ArrayList<Component<ItemStack>> itemComponents;
 
     private ItemStack journal;
 
@@ -40,31 +48,31 @@ public class GuiJournal extends GuiScreen {
         //half of the screen size minus the gui size to centre the gui, the -16 is to ignore the players item bar
         this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - 16 - this.ySize) / 2;
+        currentPage = getCurrentPage();
+        textComponents = currentPage.getTextComponents();
+        iconComponents = currentPage.getTextureComponents();
+        itemComponents = currentPage.getItemComponents();
     }
 
     @Override
     public void drawScreen(int x, int y, float opacity) {
-        JournalPage page = getCurrentPage();
         //draw background
         drawBackground(0);
         //draw foreground
-        drawTexture(page.getForeground());
+        drawTexture(currentPage.getForeground());
         //draw text components
-        ArrayList<Component<String>> textComponents = page.getTextComponents();
         if(textComponents != null) {
             for(Component<String> textComponent:textComponents) {
                 drawTextComponent(textComponent);
             }
         }
         //draw icon components
-        ArrayList<Component<ResourceLocation>> iconComponents = page.getTextureComponents();
         if(iconComponents != null) {
             for(Component<ResourceLocation> iconComponent:iconComponents) {
                 drawTextureComponent(iconComponent);
             }
         }
         //draw item components
-        ArrayList<Component<ItemStack>> itemComponents = page.getItemComponents();
         if(itemComponents != null) {
             for(Component<ItemStack> itemComponent:itemComponents) {
                 drawItemComponent(itemComponent);
@@ -73,7 +81,7 @@ public class GuiJournal extends GuiScreen {
         //draw navigation arrows
         drawNavigationArrows(x, y);
         //draw tooltip
-        ArrayList<String> toolTip = page.getTooltip(x-this.guiLeft, y-this.guiTop);
+        ArrayList<String> toolTip = currentPage.getTooltip(x-this.guiLeft, y-this.guiTop);
         if(toolTip != null) {
             this.drawTooltip(toolTip, x, y);
         }
@@ -88,30 +96,31 @@ public class GuiJournal extends GuiScreen {
             if (x > this.guiLeft + 221 && x <= this.guiLeft + 221 + 16) {
                 //next page
                 pageIncrement = 1;
-            } else if (x > this.guiLeft + 19 && x <= this.guiLeft + 19 + 16 && this.currentPage > 0) {
+            } else if (x > this.guiLeft + 19 && x <= this.guiLeft + 19 + 16 && this.currentPageNumber > 0) {
                 //prev page
                 pageIncrement = -1;
             }
         //clicked to browse from within the page
         } else {
-            pageIncrement = getCurrentPage().getPagesToBrowseOnMouseClick(x-this.guiLeft, y-this.guiTop);
+            pageIncrement = getCurrentPage().getPagesToBrowseOnMouseClick(x - this.guiLeft, y - this.guiTop);
         }
         //go to new page
-        int newPage = currentPage + pageIncrement;
+        int newPage = currentPageNumber + pageIncrement;
         newPage = Math.max(0, newPage); //don't go negative
         newPage = Math.min(newPage, getNumberOfPages()-1); //don't go outside array bounds
-        if(newPage != currentPage) {
-            this.currentPage = newPage;
+        if(newPage != currentPageNumber) {
+            this.currentPageNumber = newPage;
+            this.initGui();
         }
     }
 
     private JournalPage getCurrentPage() {
-        switch(currentPage) {
+        switch(currentPageNumber) {
             case 0: return new JournalPageTitle();
             case 1: return new JournalPageIntroduction();
         }
         ArrayList<ItemStack> discoveredSeeds = getDiscoveredSeeds();
-        return new JournalPageSeed(discoveredSeeds, currentPage - MINIMUM_PAGES);
+        return new JournalPageSeed(discoveredSeeds, currentPageNumber - MINIMUM_PAGES);
     }
 
     private ArrayList<ItemStack> getDiscoveredSeeds() {
@@ -194,7 +203,7 @@ public class GuiJournal extends GuiScreen {
                 drawTexturedModalRect(this.guiLeft + 223, this.guiTop + 178, 224, 239, 32, 17);
                 GL11.glDisable(GL11.GL_ALPHA_TEST);
                 GL11.glEnable(GL11.GL_LIGHTING);
-            } else if (x > this.guiLeft + 19 && x <= this.guiLeft + 19 + 16 && this.currentPage > 0) {
+            } else if (x > this.guiLeft + 19 && x <= this.guiLeft + 19 + 16 && this.currentPageNumber > 0) {
                 Minecraft.getMinecraft().getTextureManager().bindTexture(JournalPage.getBackground());
                 GL11.glColor3f(1, 1, 1);
                 GL11.glDisable(GL11.GL_LIGHTING);
