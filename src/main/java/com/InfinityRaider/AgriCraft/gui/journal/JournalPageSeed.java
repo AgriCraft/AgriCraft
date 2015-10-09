@@ -24,6 +24,7 @@ import java.util.Arrays;
 public class JournalPageSeed extends JournalPage {
     private static final ResourceLocation ICON_FRAME = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalSeedFrame.png");
     private static final ResourceLocation MUTATION_TEMPLATE = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalMutationTemplate.png");
+    private static final ResourceLocation QUESTION_MARK = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalQuestionMark.png");
 
     private ArrayList<ItemStack> discoveredSeeds;
     private int page;
@@ -211,14 +212,13 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private ArrayList<Component<ItemStack>> getSeeds() {
-        ArrayList<Mutation> parentMutations = getDiscoveredParentMutations();
-        ArrayList<Mutation> childMutations = getDiscoveredChildMutations();
+        ArrayList<Mutation> completedMutations = getCompletedMutations();
+        ArrayList<Mutation> uncompletedMutations = getUncompleteMutations();
         ArrayList<Component<ItemStack>> seeds = new ArrayList<Component<ItemStack>>();
-        int n = parentMutations.size();
-        for(int i = 0;i<n;i++) {
-            Mutation mutation = parentMutations.get(i);
-            int y = 21 + i*20;
-            int x = 132;
+        int y = 1;
+        int x = 132;
+        for (Mutation mutation : completedMutations) {
+            y = y + 20;
             ItemStack resultStack = mutation.getResult();
             ItemStack parent1Stack = mutation.getParents()[0];
             ItemStack parent2Stack = mutation.getParents()[1];
@@ -226,19 +226,20 @@ public class JournalPageSeed extends JournalPage {
             seeds.add(new Component<ItemStack>(parent2Stack, x + 35, y, 16, 16));
             seeds.add(new Component<ItemStack>(resultStack, x + 69, y, 16, 16));
         }
-        for(int i = 0;i<childMutations.size();i++) {
-            Mutation mutation = childMutations.get(i);
-            int y = (n==0?21:31) + (n+i)*20;
-            int x = 132;
-            ItemStack resultStack = mutation.getResult();
+        for (Mutation mutation : uncompletedMutations) {
+            y = y + 20;
             ItemStack parent1Stack = mutation.getParents()[0];
             ItemStack parent2Stack = mutation.getParents()[1];
             seeds.add(new Component<ItemStack>(parent1Stack, x, y, 16, 16));
             seeds.add(new Component<ItemStack>(parent2Stack, x + 35, y, 16, 16));
-            seeds.add(new Component<ItemStack>(resultStack, x + 69, y, 16, 16));
-
         }
         return seeds;
+    }
+
+    private ArrayList<Mutation> getCompletedMutations() {
+        ArrayList<Mutation> mutations = getDiscoveredParentMutations();
+        mutations.addAll(getDiscoveredChildMutations());
+        return mutations;
     }
 
     private ArrayList<Mutation> getDiscoveredParentMutations() {
@@ -265,11 +266,33 @@ public class JournalPageSeed extends JournalPage {
         return mutations;
     }
 
+    private ArrayList<Mutation> getUncompleteMutations() {
+        ArrayList<Mutation> allMutations = new ArrayList<Mutation>();
+        ArrayList<Mutation> mutations = new ArrayList<Mutation>();
+        allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromParent(discoveredSeeds.get(page))));
+        for(Mutation mutation:allMutations) {
+            if(isMutationHalfDiscovered(mutation)) {
+                mutations.add(mutation);
+            }
+        }
+        return mutations;
+    }
+
     private boolean isMutationDiscovered(Mutation mutation) {
         ItemStack resultStack = mutation.getResult();
+        return areParentsDiscovered(mutation) && isSeedDiscovered(resultStack);
+    }
+
+    private boolean isMutationHalfDiscovered(Mutation mutation) {
+        ItemStack resultStack = mutation.getResult();
+        return areParentsDiscovered(mutation) && !isSeedDiscovered(resultStack);
+
+    }
+
+    private boolean areParentsDiscovered(Mutation mutation) {
         ItemStack parent1Stack = mutation.getParents()[0];
         ItemStack parent2Stack = mutation.getParents()[1];
-        return isSeedDiscovered(parent1Stack) && isSeedDiscovered(parent2Stack) && isSeedDiscovered(resultStack);
+        return isSeedDiscovered(parent1Stack) && isSeedDiscovered(parent2Stack);
     }
 
     private boolean isSeedDiscovered(ItemStack seed) {
@@ -333,16 +356,19 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private ArrayList<Component<ResourceLocation>> getMutationTemplates() {
-        int n = getDiscoveredParentMutations().size();
-        int m = getDiscoveredChildMutations().size();
+        int n = getCompletedMutations().size();
+        int l = getUncompleteMutations().size();
         ArrayList<Component<ResourceLocation>> components = new ArrayList<Component<ResourceLocation>>();
+        int y = 0;
         for(int i=0;i<n;i++) {
-            components.add(new Component<ResourceLocation>(MUTATION_TEMPLATE, 132, 20+20*i, 86, 18));
+            y = y + 20;
+            components.add(new Component<ResourceLocation>(MUTATION_TEMPLATE, 132, y, 86, 18));
         }
-        for(int i=0;i<m;i++) {
-            components.add(new Component<ResourceLocation>(MUTATION_TEMPLATE, 132, (n==0?20:30)+20*(i+n), 86, 18));
+        for(int i=0;i<l;i++) {
+            y = y + 20;
+            components.add(new Component<ResourceLocation>(MUTATION_TEMPLATE, 132, y, 86, 18));
+            components.add(new Component<ResourceLocation>(QUESTION_MARK, 201, y+1, 16, 16));
         }
         return components;
     }
-
 }
