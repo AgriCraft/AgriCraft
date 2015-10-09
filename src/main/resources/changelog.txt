@@ -1,5 +1,12 @@
 Changelog
 ---------
+1.4.1
+-CHANGE: Optimized the peripheral's performance a bit
+-CHANGE: Optimized the journal's gui code
+-ADDED:  When only the parents are discovered, the journal will now render a mutation with an undiscovered result
+-FIXED:  Crash involving the peripheral
+-FIXED:  Updated fr_FR.lang (Mazdallier)
+
 1.4.0
 -CHANGE: Updated to Forge 10.13.4.1448
 -CHANGE: Rewrote the crop system to prevent crashing
