@@ -141,12 +141,13 @@ public final class MagicalCropsHelper extends ModHelper {
 
     @Override
     protected List<Item> getTools() {
-        if(newVersion) {
-            return null;
-        }
         fertiliser = new MagicalCropsFertiliser();
         ArrayList<Item> list = new ArrayList<Item>();
-        list.add((Item) Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer"));
+        if(newVersion) {
+            list.add((Item) Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalFertilizer"));
+        } else {
+            list.add((Item) Item.itemRegistry.getObject("magicalcrops:magicalcrops_MagicalCropFertilizer"));
+        }
         return list;
     }
 
