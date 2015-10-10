@@ -153,21 +153,12 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private ArrayList<Component<String>> getMutationTitles() {
-        String parentText = StatCollector.translateToLocal("agricraft_journal.parentMutations") + ": ";
-        String childText = StatCollector.translateToLocal("agricraft_journal.childMutations") + ": ";
+        String text = StatCollector.translateToLocal("agricraft_journal.mutations") + ": ";
         int x = 132;
         int y = 13;
-        int n = getDiscoveredParentMutations().size();
-        int m = getDiscoveredChildMutations().size();
-        int offset = n==0?0:n*20+10;
         float scale = 0.5F;
         ArrayList<Component<String>> list = new ArrayList<Component<String>>();
-        if(n>0) {
-            list.add(new Component<String>(parentText, x, y, scale));
-        }
-        if(m>0) {
-            list.add(new Component<String>(childText, x, y + offset, scale));
-        }
+        list.add(new Component<String>(text, x, y, scale));
         return list;
     }
 
