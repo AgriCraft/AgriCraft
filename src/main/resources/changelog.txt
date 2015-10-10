@@ -12,6 +12,7 @@ Changelog
 -FIXED:  Crash involving the peripheral
 -FIXED:  Updated fr_FR.lang (Mazdallier)
 -FIXED:  Crash when crossbreeding
+-FIXED:  Sugarcane requires sand again instead of farmland
 
 1.4.0
 -CHANGE: Updated to Forge 10.13.4.1448
