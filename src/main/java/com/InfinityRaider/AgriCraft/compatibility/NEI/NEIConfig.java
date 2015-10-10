@@ -43,6 +43,8 @@ public class NEIConfig implements IConfigureNEI {
             //hide water pad
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockWaterPad, 1, i));
             AgriCraft.proxy.hideItemInNEI(new ItemStack(Blocks.blockWaterPadFull, 1, i));
+            //hide clippings
+            AgriCraft.proxy.hideItemInNEI(new ItemStack(Items.clipping, 1, i));
             //hide debugger
             if(!ConfigurationHandler.debug) {
                 AgriCraft.proxy.hideItemInNEI(new ItemStack(Items.debugItem, 1, i));
@@ -83,10 +85,6 @@ public class NEIConfig implements IConfigureNEI {
                 for (BlockModPlant customCrop:CustomCrops.customCrops) {
                     AgriCraft.proxy.hideItemInNEI(new ItemStack(customCrop, 1, i));
                 }
-            }
-            //hide debugger
-            if (ConfigurationHandler.debug) {
-                AgriCraft.proxy.hideItemInNEI(new ItemStack(Items.debugItem, 1, i));
             }
         }
         if(ConfigurationHandler.condenseCustomWoodInNei) {

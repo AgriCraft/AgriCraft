@@ -56,13 +56,21 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.journal, 1), "csc", "sbs", "csc", 'c', Items.crops, 's', Names.OreDict.listAllseed, 'b', net.minecraft.init.Items.writable_book));
         GameRegistry.addRecipe(new RecipeJournal());
         //trowel
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.trowel, 1, 0), "  s", "ii ", 's', "stickWood", 'i', "ingotIron"));
+        if(ConfigurationHandler.enableTrowel && Items.trowel != null) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.trowel, 1, 0), "  s", "ii ", 's', "stickWood", 'i', "ingotIron"));
+        }
         //magnifying glass
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.magnifyingGlass, 1, 0), "sgs", " s ", " s ", 's', "stickWood", 'g', "paneGlass"));
+        if(ConfigurationHandler.enableMagnifyingGlass && Items.magnifyingGlass != null) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.magnifyingGlass, 1, 0), "sgs", " s ", " s ", 's', "stickWood", 'g', "paneGlass"));
+        }
         //hand rakes
-        if (ConfigurationHandler.enableHandRake && Items.handRake != null) {
+        if(ConfigurationHandler.enableHandRake && Items.handRake != null) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.handRake, 1, 0), "fs", 'f', net.minecraft.init.Blocks.fence, 's', "stickWood"));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.handRake, 1, 1), "fs", 'f', net.minecraft.init.Blocks.iron_bars, 's', "stickWood"));
+        }
+        //clipper
+        if(ConfigurationHandler.enableClipper && Items.clipper != null) {
+
         }
         //peripheral
         if(ModHelper.allowIntegration(Names.Mods.computerCraft) && Blocks.blockPeripheral!=null) {

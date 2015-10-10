@@ -18,6 +18,7 @@ public class ConfigurationHandler {
 
     public static final String CATEGORY_AGRICRAFT = "agricraft";
     public static final String CATEGORY_FARMING = "farming";
+    public static final String CATEGORY_TOOLS = "tools";
     public static final String CATEGORY_DEBUG = "debug";
     public static final String CATEGORY_WORLDGEN = "world gen";
     public static final String CATEGORY_IRRIGATION = "irrigation";
@@ -55,11 +56,15 @@ public class ConfigurationHandler {
     public static int weedGrowthMultiplier;
     public static int weedGrowthRate;
     public static float weedSpawnChance;
-    public static boolean enableHandRake;
     public static boolean bonemealMutation;
     public static boolean onlyMatureDropSeeds;
     public static boolean weedsDestroyCropSticks;
     public static float growthMultiplier;
+    //toolds
+    public static boolean enableHandRake;
+    public static boolean enableTrowel;
+    public static boolean enableMagnifyingGlass;
+    public static boolean enableClipper;
     //world gen
     public static boolean disableWorldGen;
     public static int greenhouseWeight;
@@ -132,11 +137,15 @@ public class ConfigurationHandler {
         weedGrowthRate = config.getInt("Weed Growth Rate", CATEGORY_FARMING, 50, 10, 50, "The average number of growth ticks for the weed to grow.");
         weedSpawnChance = config.getFloat("Weed Spawn Chance", CATEGORY_FARMING, 0.15f, 0.05f, 0.95f, "The percent chance of weeds to spawn or spread. At 95% abandon all hope of farming. Range 0.05-0.95.");
         weedsWipePlants = enableWeeds && config.getBoolean("Weeds can overtake plants",CATEGORY_FARMING,true,"set to false if you don't want weeds to be able to overgrow other plants");
-        enableHandRake = config.getBoolean("Enable Hand Rake", CATEGORY_FARMING, true, "When enabled, weeds can only be removed by using this Hand Rake tool");
         bonemealMutation = config.getBoolean("Bonemeal Mutations", CATEGORY_FARMING, false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
         onlyMatureDropSeeds = config.getBoolean("Only mature crops drop seeds", CATEGORY_FARMING, false, "set this to true to make only mature crops drop seeds (to encourage trowel usage)");
         weedsDestroyCropSticks = config.getBoolean("Weeds destroy crop sticks", CATEGORY_FARMING, false, "set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage)");
         growthMultiplier = config.getFloat("Growth rate multiplier", CATEGORY_FARMING, 1.0F, 0.0F, 2.0F, "This is a global growth rate multiplier");
+        //tools
+        enableHandRake = config.getBoolean("Enable Hand Rake", CATEGORY_TOOLS, true, "Set to false to disable the Hand Rake");
+        enableMagnifyingGlass = config.getBoolean("Enable Magnifying Glass", CATEGORY_TOOLS, true, "Set to false to disable the Magnifying Glass");
+        enableTrowel = config.getBoolean("Enable Trowel", CATEGORY_TOOLS, true, "Set to false to disable the Trowel");
+        enableClipper = config.getBoolean("Enable Clipper", CATEGORY_TOOLS, true, "Set to false to disable the Clipper");
         //world gen
         disableWorldGen = config.getBoolean("Disable World Gen", CATEGORY_WORLDGEN, false, "set to true to disable world gen, no greenhouses will spawn in villages");
         greenhouseWeight = config.getInt("Greenhouse weight", CATEGORY_WORLDGEN, 10, 0, 100, "The weight for a greenhouse to be generated in a village");
