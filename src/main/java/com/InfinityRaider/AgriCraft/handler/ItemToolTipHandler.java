@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.api.v2.IClipper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemClipping;
-import com.InfinityRaider.AgriCraft.items.ItemTrowel;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -17,6 +16,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 @SideOnly(Side.CLIENT)
 public class ItemToolTipHandler {
+    /** Adds tooltips for seed stats */
     @SubscribeEvent
     public void addSeedStatsTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.itemStack;
@@ -44,6 +44,7 @@ public class ItemToolTipHandler {
         }
     }
 
+    /** Adds tooltips to items that are trowels (implementing ITrowel) */
     @SubscribeEvent
     public void addTrowelTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.itemStack;
@@ -60,6 +61,7 @@ public class ItemToolTipHandler {
         }
     }
 
+    /** Adds tooltips to items that are clippers (implementing IClipper) */
     @SubscribeEvent
     public void addClipperTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.itemStack;
