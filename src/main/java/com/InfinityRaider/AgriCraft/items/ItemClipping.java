@@ -62,7 +62,7 @@ public class ItemClipping extends ItemAgricraft {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        String text = StatCollector.translateToLocal("item.agricraft.clipping.name");
+        String text = StatCollector.translateToLocal("item.agricraft:clipping.name");
         if(stack==null || stack.stackTagCompound==null) {
             return text;
         }
