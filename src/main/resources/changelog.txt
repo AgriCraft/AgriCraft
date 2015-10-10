@@ -6,6 +6,7 @@ Changelog
 -ADDED:  When only the parents are discovered, the journal will now render a mutation with an undiscovered result
 -FIXED:  Crash involving the peripheral
 -FIXED:  Updated fr_FR.lang (Mazdallier)
+-FIXED:  Crash when crossbreeding
 
 1.4.0
 -CHANGE: Updated to Forge 10.13.4.1448

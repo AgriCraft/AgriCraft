@@ -375,7 +375,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         List<TileEntityCrop> neighbours = getNeighbours();
         for (Iterator<TileEntityCrop> iterator = neighbours.iterator(); iterator.hasNext(); ) {
             TileEntityCrop crop = iterator.next();
-            if (!crop.isMature()) {
+            if (!crop.hasPlant() || !crop.isMature()) {
                 iterator.remove();
             }
         }
