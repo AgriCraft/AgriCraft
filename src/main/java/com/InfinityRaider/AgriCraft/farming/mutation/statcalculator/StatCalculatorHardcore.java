@@ -52,6 +52,7 @@ public class StatCalculatorHardcore extends StatCalculatorBase {
         }
 
         public int getWeight(int count) {
+            count--;
             count = Math.max(Math.min(count, weights.length-1), 0);
             return weights[count];
         }
