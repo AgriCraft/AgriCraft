@@ -46,7 +46,8 @@ public class ConfigurationHandler {
     public static boolean disableVanillaFarming;
     public static double mutationChance;
     public static boolean singleSpreadsIncrement;
-    public static int spreadingDifficulty;
+    public static int validParents;
+    public static boolean otherCropsAffectStatsNegatively;
     public static int cropStatDivisor;
     public static boolean enableWeeds;
     public static boolean weedsWipePlants;
@@ -119,9 +120,10 @@ public class ConfigurationHandler {
         renderBookInAnalyzer = config.getBoolean("Render journal in analyzer", CATEGORY_AGRICRAFT, true, "set to false to not render the journal on the analyzer");
         //farming
         disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", CATEGORY_FARMING, false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
-        mutationChance = (double) config.getFloat("Mutation Chance",CATEGORY_FARMING, (float) Constants.DEFAULT_MUTATION_CHANCE, 0, 1 , "Define mutation chance (0.0 means no mutations, only spreading and 1.0 means only mutations no spreading");
+        mutationChance = (double) config.getFloat("Mutation Chance",CATEGORY_FARMING, Constants.DEFAULT_MUTATION_CHANCE, 0, 1 , "Define mutation chance (0.0 means no mutations, only spreading and 1.0 means only mutations no spreading");
         singleSpreadsIncrement = config.getBoolean("Single spread stat increase", CATEGORY_FARMING, false, "Set to true to allow crops that spread from one single crop to increase stats");
-        spreadingDifficulty = config.getInt("Farming difficulty", CATEGORY_FARMING, 3, 1, 3, "Farming difficulty: 1 = Crops can inherit stats from any crop. 2 = Crops only inherit stats from parent and identical crops. 3 = Same as 2, but any other nearby crop will affect stats negatively.");
+        validParents = config.getInt("Valid parents", CATEGORY_FARMING, 2, 1, 3, "What are considered valid parents for stat increasing: 1 = Any. 2 = Mutation parents and identical crops. 3 = Only identical crops");
+        otherCropsAffectStatsNegatively = config.getBoolean("Non parent crops affect stats negatively", CATEGORY_FARMING, true, "True means any crop that is not considered a valid parent will affect stat gain negatively");
         cropStatDivisor = config.getInt("Crop stat divisor", CATEGORY_FARMING, 2, 1, 3, "On a mutation the stats on the crop will be divided by this number");
         enableWeeds = config.getBoolean("Enable weeds", CATEGORY_FARMING, true, "set to false if you wish to disable weeds");
         weedGrowthMultiplier = config.getInt("Weed Growth Multiplier", CATEGORY_FARMING, 2, 1, 2, "Ranges from 1-2 inclusive.");

@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import java.util.List;
 
 public class SpreadStrategy extends BaseStrategy {
-
     public SpreadStrategy(MutationEngine mutationEngine) {
         super(mutationEngine);
     }
@@ -21,7 +20,7 @@ public class SpreadStrategy extends BaseStrategy {
         int index = engine.getRandom().nextInt(matureNeighbours.size());
         TileEntityCrop neighbour = matureNeighbours.get(index);
         CrossOverResult result = CrossOverResult.fromTileEntityCrop(neighbour);
-        MutationHandler.setResultStats(result, matureNeighbours, false);
+        calculator.setResultStats(result, matureNeighbours, false);
         return result;
     }
 }

@@ -3,7 +3,9 @@ Changelog
 1.4.1
 -CHANGE: Optimized the peripheral's performance a bit
 -CHANGE: Optimized the journal's gui code
+-CHANGE: Split the difficulty setting in two: one to define what are considered valid parents for stat inheritance, and one to define if non-parents affect stat gain negatively
 -ADDED:  When only the parents are discovered, the journal will now render a mutation with an undiscovered result
+-ADDED:  Config option to only allow stat inheritance from identical crops
 -FIXED:  Crash involving the peripheral
 -FIXED:  Updated fr_FR.lang (Mazdallier)
 -FIXED:  Crash when crossbreeding
