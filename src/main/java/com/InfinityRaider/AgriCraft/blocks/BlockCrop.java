@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
+import com.InfinityRaider.AgriCraft.api.v2.IClipper;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
@@ -33,6 +34,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
@@ -266,6 +268,10 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
             else if (heldItem.getItem() instanceof ITrowel) {
                 crop.onTrowelUsed((ITrowel) heldItem.getItem(), heldItem);
             }
+            else if(heldItem.getItem() instanceof IClipper) {
+                this.onClipperUsed(world, x, y, z, crop);
+                ((IClipper) heldItem.getItem()).onClipperUsed(world, x, y, z, player);
+            }
             //check to see if the player wants and is allowed to use bonemeal
             else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
                 return !crop.canBonemeal();
@@ -476,6 +482,21 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
             crop.markForUpdate();
         }
         return drops;
+    }
+
+    /** Performs the needed action when this crop is clipped: check if there is a valid plant, drop a clipping and decrement the growth stage */
+    public void onClipperUsed(World world, int x, int y, int z, TileEntityCrop crop) {
+        if(!crop.hasPlant()) {
+            return;
+        }
+        int growthStage = world.getBlockMetadata(x, y, z);
+        if(growthStage<=0) {
+            return;
+        }
+        ItemStack clipping = new ItemStack(Items.clipping, 1, 0);
+        clipping.setTagCompound(crop.getSeedStack().writeToNBT(new NBTTagCompound()));
+        this.dropBlockAsItem(world, x, y, z, clipping);
+        world.setBlockMetadataWithNotify(x, y, z, growthStage-1, 3);
     }
 
     /**

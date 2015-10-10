@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -17,17 +16,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class ItemTrowel extends ItemAgricraft implements ITrowel {
     private IIcon[] icons = new IIcon[2];
 
     public ItemTrowel() {
         super();
-        this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.maxStackSize=1;
     }
 
@@ -138,17 +133,6 @@ public class ItemTrowel extends ItemAgricraft implements ITrowel {
     @Override
     public ISeedStats getStats(ItemStack trowel) {
         return PlantStats.getStatsFromStack(getSeed(trowel));
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-        if(stack.getItemDamage()==0) {
-            list.add(StatCollector.translateToLocal("agricraft_tooltip.trowel"));
-        }
-        else if(this.hasSeed(stack)) {
-            ItemStack seed = this.getSeed(stack);
-            list.add(StatCollector.translateToLocal("agricraft_tooltip.seed")+": "+ seed.getItem().getItemStackDisplayName(seed));
-        }
     }
 
     @Override

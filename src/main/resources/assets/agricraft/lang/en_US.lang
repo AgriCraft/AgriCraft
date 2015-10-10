@@ -9,6 +9,9 @@ item.agricraft:magnifyingGlass.name=Magnifying Glass
 item.agricraft:debugger.name=Debugger
 item.agricraft:handRake.wood.name=Wooden Hand Rake
 item.agricraft:handRake.iron.name=Iron Hand Rake
+item.agricraft.clipper.name=Clipper
+item.agricraft.clipping.name=Clipping
+
 item.agricraft:nuggetDiamond.name=Diamond Nugget
 item.agricraft:nuggetIron.name=Iron Nugget
 item.agricraft:nuggetEmerald.name=Emerald Nugget
@@ -204,6 +207,9 @@ agricraft_tooltip.growthStage=Growthstage
 agricraft_tooltip.mature=Mature
 agricraft_tooltip.valve=Toggled with a redstone signal
 agricraft_tooltip.grate=Right click with vines to apply vines
+agricraft_tooltip.clipper1=Right click on crops to obtain clippings
+agricraft_tooltip.clipper2=Clippings can be planted on other crops
+agricraft_tooltip.clipper3=Success of planting is based on strength
 
 //descriptions
 agricraft_description.peripheralHelp=Method Help

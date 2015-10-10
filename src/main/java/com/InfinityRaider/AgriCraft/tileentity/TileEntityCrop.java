@@ -84,6 +84,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     /** check to see if there is a plant here */
     public boolean hasPlant() {return this.plant!=null;}
 
+    /** check to see if a seed can be planted */
+    public boolean canPlant() {
+        return !this.hasPlant() && !this.hasWeed() && !this.isCrossCrop();
+    }
+
     /** sets the plant in the crop */
     public void setPlant(int growth, int gain, int strength, boolean analyzed, CropPlant plant) {
         if( (!this.crossCrop) && (!this.hasPlant())) {
