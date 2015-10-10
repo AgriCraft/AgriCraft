@@ -48,6 +48,7 @@ public class ConfigurationHandler {
     public static boolean singleSpreadsIncrement;
     public static int validParents;
     public static boolean otherCropsAffectStatsNegatively;
+    public static boolean hardCoreStats;
     public static int cropStatDivisor;
     public static boolean enableWeeds;
     public static boolean weedsWipePlants;
@@ -124,6 +125,7 @@ public class ConfigurationHandler {
         singleSpreadsIncrement = config.getBoolean("Single spread stat increase", CATEGORY_FARMING, false, "Set to true to allow crops that spread from one single crop to increase stats");
         validParents = config.getInt("Valid parents", CATEGORY_FARMING, 2, 1, 3, "What are considered valid parents for stat increasing: 1 = Any. 2 = Mutation parents and identical crops. 3 = Only identical crops");
         otherCropsAffectStatsNegatively = config.getBoolean("Non parent crops affect stats negatively", CATEGORY_FARMING, true, "True means any crop that is not considered a valid parent will affect stat gain negatively");
+        hardCoreStats = config.getBoolean("Hardcore stats", CATEGORY_FARMING, false, "Set to true to enable hardcore mode for stat increasing: 1 parent: 3/4 decrement, 1/4 nothing.\n 2 parents: 2/4 decrement, 1/4 nothing, 1/4 increment.\n 3 parents: 1/4 decrement, 1/2 nothing, 1/4 increment.\n 4 parents: 1/4 decrement, 1/4 nothing, 1/2 increment.");
         cropStatDivisor = config.getInt("Crop stat divisor", CATEGORY_FARMING, 2, 1, 3, "On a mutation the stats on the crop will be divided by this number");
         enableWeeds = config.getBoolean("Enable weeds", CATEGORY_FARMING, true, "set to false if you wish to disable weeds");
         weedGrowthMultiplier = config.getInt("Weed Growth Multiplier", CATEGORY_FARMING, 2, 1, 2, "Ranges from 1-2 inclusive.");

@@ -14,9 +14,15 @@ import java.util.List;
 public abstract class StatCalculator {
     private static StatCalculator instance;
 
+    protected StatCalculator() {}
+
     public static StatCalculator getInstance() {
         if(instance == null) {
-            instance = new StatCalculatorNormal();
+            if(ConfigurationHandler.hardCoreStats) {
+                instance = new StatCalculatorHardcore();
+            } else {
+                instance = new StatCalculatorNormal();
+            }
         }
         return instance;
     }
