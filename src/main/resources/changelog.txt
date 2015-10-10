@@ -8,7 +8,7 @@ Changelog
 -ADDED:  Config option to only allow stat inheritance from identical crops
 -ADDED:  Hardcore stat breeding: 1 parent: 3/4 decrement, 1/4 nothing. 2 parents: 2/4 decrement, 1/4 nothing, 1/4 increment. 3 parents: 1/4 decrement, 1/2 nothing, 1/4 increment.
 -ADDED:  Config options to disable the trowel and the magnifying glass
--ADDED:  Clipper item: use on crops to get a clipping, a clipping can be planted on crop sticks to get an identical sprout. Success is dependent on strength stat
+-ADDED:  Clipper item: use on crops to get a clipping, a clipping can be planted on crop sticks to get an identical sprout. Success is dependent on strength stat (credits for texture to skullygamingmc)
 -FIXED:  Crash involving the peripheral
 -FIXED:  Updated fr_FR.lang (Mazdallier)
 -FIXED:  Crash when crossbreeding
