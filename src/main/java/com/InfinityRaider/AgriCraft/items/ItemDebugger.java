@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.entity.EntityVillagerFarmer;
 import com.InfinityRaider.AgriCraft.init.WorldGen;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.utility.DebugHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,5 +49,11 @@ public class ItemDebugger extends ItemAgricraft {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister reg) {
         this.itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderItemBase getItemRenderer() {
+        return null;
     }
 }

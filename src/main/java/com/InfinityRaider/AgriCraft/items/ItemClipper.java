@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.api.v2.IClipper;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +20,12 @@ public class ItemClipper extends ItemAgricraft implements IClipper {
     @Override
     protected String getInternalName() {
         return Names.Objects.clipper;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderItemBase getItemRenderer() {
+        return null;
     }
 
     @Override

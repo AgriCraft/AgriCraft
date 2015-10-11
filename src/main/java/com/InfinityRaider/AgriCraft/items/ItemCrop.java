@@ -3,6 +3,9 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -12,6 +15,12 @@ public class ItemCrop extends ItemAgricraft {
     @Override
     protected String getInternalName() {
         return Names.Objects.crops+"Item";
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderItemBase getItemRenderer() {
+        return null;
     }
 
     //I'm overriding this just to be sure

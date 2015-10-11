@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -35,4 +36,7 @@ public abstract class ItemAgricraft extends Item {
         LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
         itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
     }
+
+    @SideOnly(Side.CLIENT)
+    public abstract RenderItemBase getItemRenderer();
 }

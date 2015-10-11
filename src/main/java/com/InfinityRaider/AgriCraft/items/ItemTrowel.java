@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -141,6 +142,12 @@ public class ItemTrowel extends ItemAgricraft implements ITrowel {
         LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
         icons[0] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1)+"_empty");
         icons[1] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1)+"_full");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderItemBase getItemRenderer() {
+        return null;
     }
 
     @Override

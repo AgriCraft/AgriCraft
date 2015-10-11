@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemMagnifyingGlass extends ItemAgricraft {
-	
     public ItemMagnifyingGlass() {
         super();
         this.setMaxStackSize(1);
@@ -95,5 +95,11 @@ public class ItemMagnifyingGlass extends ItemAgricraft {
     public void registerIcons(IIconRegister reg) {
         LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
         this.itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderItemBase getItemRenderer() {
+        return null;
     }
 }

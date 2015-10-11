@@ -6,6 +6,8 @@ import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.items.ItemAgricraft;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;
@@ -61,6 +63,21 @@ public class ClientProxy extends CommonProxy {
                         ((BlockAgriCraft) obj).getRenderer();
                     }
                 } catch (IllegalAccessException e) {
+                    LogHelper.printStackTrace(e);
+                }
+            }
+        }
+
+        //ITEMS
+        //-----
+        for(Field field: Items.class.getDeclaredFields()) {
+            if(field.getType().isAssignableFrom(ItemAgricraft.class)) {
+                try {
+                    Object obj = field.get(null);
+                    if(obj!=null) {
+                        ((ItemAgricraft) obj).getItemRenderer();
+                    }
+                }catch (IllegalAccessException e) {
                     LogHelper.printStackTrace(e);
                 }
             }

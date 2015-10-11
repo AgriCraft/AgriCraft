@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -24,7 +25,6 @@ import java.util.Random;
  * Comes in a wooden and iron variant.
  */
 public class ItemHandRake extends ItemAgricraft {
-
     private static final int WOOD_VARIANT_META = 0;
     private static final int IRON_VARIANT_META = 1;
     private static final Random random = new Random();
@@ -105,6 +105,12 @@ public class ItemHandRake extends ItemAgricraft {
         LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
         icons[0] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1)+"_wood");
         icons[1] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1)+"_iron");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderItemBase getItemRenderer() {
+        return null;
     }
 
     @Override

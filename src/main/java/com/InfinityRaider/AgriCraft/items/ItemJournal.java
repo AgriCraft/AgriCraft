@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemJournal extends ItemAgricraft {
-	
     public ItemJournal() {
         super();
         this.setMaxStackSize(1);
@@ -81,6 +81,12 @@ public class ItemJournal extends ItemAgricraft {
     public void registerIcons(IIconRegister reg) {
         LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
         itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderItemBase getItemRenderer() {
+        return null;
     }
 
     private NBTTagList getDiscoveredSeedsTaglist(ItemStack journal) {

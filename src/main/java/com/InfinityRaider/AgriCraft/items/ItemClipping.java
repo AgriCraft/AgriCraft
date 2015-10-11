@@ -5,7 +5,11 @@ import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderItemClipping;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,6 +26,12 @@ public class ItemClipping extends ItemAgricraft {
     @Override
     protected String getInternalName() {
         return Names.Objects.clipping;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderItemBase getItemRenderer() {
+        return new RenderItemClipping(this);
     }
 
     @Override
