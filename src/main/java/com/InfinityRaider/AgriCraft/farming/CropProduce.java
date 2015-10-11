@@ -11,6 +11,9 @@ public class CropProduce {
     private int totalWeight;
 
     public void addProduce(ItemStack stack) {
+        if(stack==null || stack.getItem()==null) {
+            return;
+        }
         this.addProduce(stack, DEFAULT_WEIGHT);
     }
 

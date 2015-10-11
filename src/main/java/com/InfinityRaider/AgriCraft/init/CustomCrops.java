@@ -72,7 +72,7 @@ public class CustomCrops {
                             if(ConfigurationHandler.debug) {
                             	LogHelper.printStackTrace(e);
                             }
-                            return;
+                            break;
                         }
                         customSeeds[i] = customCrops[i].getSeed();
                         LanguageRegistry.addName(customCrops[i], Character.toUpperCase(name.charAt(0))+name.substring(1));

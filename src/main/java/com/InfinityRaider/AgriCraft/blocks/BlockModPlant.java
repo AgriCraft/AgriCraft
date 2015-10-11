@@ -103,7 +103,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
             }
         }
         //check if necessary parameters have been passed
-        if(name==null || fruit==null || tier<0 || renderType==null) {
+        if(name==null || tier<0 || renderType==null) {
             throw new MissingArgumentsException();
         }
         //set fields
