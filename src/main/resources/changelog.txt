@@ -14,6 +14,7 @@ Changelog
 -FIXED:  Updated fr_FR.lang (Mazdallier)
 -FIXED:  Crash when crossbreeding
 -FIXED:  Sugarcane requires sand again instead of farmland
+-FIXED:  Mutations not being synced to players connecting to a local LAN world
 
 1.4.0
 -CHANGE: Updated to Forge 10.13.4.1448
