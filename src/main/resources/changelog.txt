@@ -1,5 +1,10 @@
 Changelog
 ---------
+1.4.2
+-ADDED:  A recipe for the clipper
+-FIXED:  The soil and base block requirements for custom crops will actually have fuzzy metadata when no metadata is specified instead of defaulting to 0
+-FIXED:  Fixed error with the parent config numbers
+
 1.4.1
 -CHANGE: Optimized the peripheral's performance a bit
 -CHANGE: Optimized the journal's gui code
