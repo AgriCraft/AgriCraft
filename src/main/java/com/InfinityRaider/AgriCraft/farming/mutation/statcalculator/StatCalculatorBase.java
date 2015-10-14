@@ -53,13 +53,13 @@ public abstract  class StatCalculatorBase extends StatCalculator {
 
     protected boolean canInheritStats(Item child, int childMeta, Item seed, int seedMeta) {
         int validParentId = ConfigurationHandler.validParents;
-        //0: any crop
-        //1: only parent crops and identical crops
-        //2: only identical crops
-        if(validParentId == 0) {
+        //1: any crop
+        //2: only parent crops and identical crops
+        //3: only identical crops
+        if(validParentId == 1) {
             return true;
         }
-        if(validParentId == 2) {
+        if(validParentId == 3) {
             return child==seed && childMeta==seedMeta;
         }
         boolean b = child==seed && childMeta==seedMeta;
