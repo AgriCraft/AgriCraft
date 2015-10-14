@@ -11,9 +11,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
@@ -50,13 +48,9 @@ public class CustomCrops {
                     if(success) {
                         String name = cropData[0];
                         //soil
-                        ItemStack soilStack = IOHelper.getStack(cropData[2]);
-                        Block soilBlock = (soilStack!=null && soilStack.getItem()!=null && soilStack.getItem() instanceof ItemBlock)?((ItemBlock) soilStack.getItem()).field_150939_a:null;
-                        BlockWithMeta soil = soilBlock==null?null:new BlockWithMeta(soilBlock, soilStack.getItemDamage());
+                        BlockWithMeta soil =IOHelper.getBlock(cropData[2]);
                         //baseblock
-                        ItemStack baseStack = IOHelper.getStack(cropData[3]);
-                        Block baseBlock = (baseStack!=null && baseStack.getItem()!=null && baseStack.getItem() instanceof ItemBlock)? ((ItemBlock) baseStack.getItem()).field_150939_a : null;
-                        BlockWithMeta base = baseBlock==null?null:new BlockWithMeta(baseBlock, baseStack.getItemDamage());
+                        BlockWithMeta base = IOHelper.getBlock(cropData[3]);
                         //tier
                         int tier = Integer.parseInt(cropData[4]);
                         //render method

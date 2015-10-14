@@ -1,9 +1,11 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 import java.io.IOException;
@@ -247,8 +249,27 @@ public abstract class IOHelper {
         }
         return stack;
     }
-    
-    //This almost seems like it shouldn't be here. The instructions seem like they should almost be in the locale files...
+
+    /**
+     * Retrieves a ablock from a string representation.
+     * The string must be formatted as "modid:name:meta".
+     * The meta is not required in all cases.
+     *
+     * @param input the string representation of the block to get.
+     * @return the block as a blockWithMeta, or null.
+     */
+    public static BlockWithMeta getBlock(String input) {
+        String[] data = input.split(":");
+        if (data.length <= 1) {
+            return null;
+        }
+        int meta = data.length==3?Integer.parseInt(data[2]):-1;
+        Block block = GameRegistry.findBlock(data[0], data[1]);
+        if(block == null) {
+            return null;
+        }
+        return meta<0?new BlockWithMeta(block):new BlockWithMeta(block, meta);
+    }
 
     private static final String grassDropInstructions =
             "#Put a list of seeds here that will drop from tall grass with the following schematic: <seedname:seedmeta>,<weight>\n" +
