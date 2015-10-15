@@ -4,6 +4,7 @@ Changelog
 -ADDED:  A recipe for the clipper
 -FIXED:  The soil and base block requirements for custom crops will actually have fuzzy metadata when no metadata is specified instead of defaulting to 0
 -FIXED:  Fixed error with the parent config numbers
+-FIXED:  Fruits added via MineTweaker will be registered to the OreDictionary correctly
 
 1.4.1
 -CHANGE: Optimized the peripheral's performance a bit

@@ -96,8 +96,9 @@ public class CropProduct {
         public Object getOverrideKey() {
             return null;
         }
+
         private String fruitTag() {
-            return crop.getUnlocalizedName().substring(crop.getUnlocalizedName().indexOf(':'));
+            return crop.getUnlocalizedName().substring(crop.getUnlocalizedName().indexOf(':')+1);
         }
     }
 
@@ -148,8 +149,9 @@ public class CropProduct {
         public Object getOverrideKey() {
             return null;
         }
+
         private String fruitTag() {
-            return crop.getUnlocalizedName().substring(crop.getUnlocalizedName().indexOf(':'));
+            return crop.getUnlocalizedName().substring(crop.getUnlocalizedName().indexOf(':')+1);
         }
     }
 }
