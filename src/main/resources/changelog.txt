@@ -3,6 +3,7 @@ Changelog
 1.4.2
 -ADDED:  A recipe for the clipper
 -ADDED:  Config option to disable registering of crop products into the ore dictionary
+-ADDED:  Config option to disable particles
 -FIXED:  The soil and base block requirements for custom crops will actually have fuzzy metadata when no metadata is specified instead of defaulting to 0
 -FIXED:  Fixed error with the parent config numbers
 -FIXED:  Fruits added via MineTweaker will be registered to the OreDictionary correctly

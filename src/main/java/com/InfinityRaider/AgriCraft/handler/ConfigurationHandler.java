@@ -95,6 +95,7 @@ public class ConfigurationHandler {
     //CLIENT
     //------
     public static boolean condenseCustomWoodInNei;
+    public static boolean disableParticles;
 
     public static void init(FMLPreInitializationEvent event) {
         directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
@@ -110,6 +111,7 @@ public class ConfigurationHandler {
     @SideOnly(Side.CLIENT)
     public static void initClientConfigs(FMLPreInitializationEvent event) {
         condenseCustomWoodInNei = config.getBoolean("condense custom wood blocks in NEI", CATEGORY_CLIENT, true, "set to true to condense all entries for custom wood blocks into one entry in NEI");
+        disableParticles = config.getBoolean("Disable particles", CATEGORY_CLIENT, false, "set to true to disable particles for the sprinklers");
     }
 
 
