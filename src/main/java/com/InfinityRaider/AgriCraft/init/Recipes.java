@@ -70,7 +70,7 @@ public class Recipes {
         }
         //clipper
         if(ConfigurationHandler.enableClipper && Items.clipper != null) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.clipper, 1, 0), " n ", "scn", " s ", 'n', "nuggetIron", 's', "stickWood", 'c', new ItemStack(net.minecraft.init.Items.shears)));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.clipper, 1, 0), " i ", "scn", " s ", 'i', "ingotIron", 's', "stickWood", 'c', new ItemStack(net.minecraft.init.Items.shears)));
         }
         //peripheral
         if(ModHelper.allowIntegration(Names.Mods.computerCraft) && Blocks.blockPeripheral!=null) {
