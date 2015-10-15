@@ -43,6 +43,7 @@ public class ConfigurationHandler {
     public static boolean resourcePlants;
     public static boolean wipeTallGrassDrops;
     public static boolean renderBookInAnalyzer;
+    public static boolean registerCropProductsToOreDict;
     //farming
     public static boolean disableVanillaFarming;
     public static double mutationChance;
@@ -124,6 +125,7 @@ public class ConfigurationHandler {
         customCrops = config.getBoolean("Custom crops", CATEGORY_AGRICRAFT, false, "set to true if you wish to create your own crops");
         wipeTallGrassDrops = config.getBoolean("Clear tall grass drops", CATEGORY_AGRICRAFT, false, "set to true to clear the list of items dropping from tall grass (Will run before adding seeds defined in the grass drops config).");
         renderBookInAnalyzer = config.getBoolean("Render journal in analyzer", CATEGORY_AGRICRAFT, true, "set to false to not render the journal on the analyzer");
+        registerCropProductsToOreDict = config.getBoolean("Register crop products in the ore dict", CATEGORY_AGRICRAFT, true, "set to false to not register crop products to the ore dictionary if you are experiencing issues with GregTech (note that disabling this will have the side effect that seeds will no longer work with the Phytogenic Insulator");
         //farming
         disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", CATEGORY_FARMING, false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
         mutationChance = (double) config.getFloat("Mutation Chance",CATEGORY_FARMING, Constants.DEFAULT_MUTATION_CHANCE, 0, 1 , "Define mutation chance (0.0 means no mutations, only spreading and 1.0 means only mutations no spreading");

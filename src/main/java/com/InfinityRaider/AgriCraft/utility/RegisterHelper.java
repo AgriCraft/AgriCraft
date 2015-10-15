@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -34,9 +35,11 @@ public abstract class RegisterHelper {
     public static void registerCrop(BlockModPlant plant, String name) {
         name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
         registerBlock(plant, Names.Objects.crop + name);
-        for(ItemStack fruit:plant.products.getAllProducts()) {
-            if(fruit!=null && fruit.getItem()!=null && !OreDictHelper.hasOreId(fruit, Names.Objects.crop + name)) {
-                OreDictionary.registerOre(Names.Objects.crop + name, fruit);
+        if(ConfigurationHandler.registerCropProductsToOreDict) {
+            for (ItemStack fruit : plant.products.getAllProducts()) {
+                if (fruit != null && fruit.getItem() != null && !OreDictHelper.hasOreId(fruit, Names.Objects.crop + name)) {
+                    OreDictionary.registerOre(Names.Objects.crop + name, fruit);
+                }
             }
         }
     }
