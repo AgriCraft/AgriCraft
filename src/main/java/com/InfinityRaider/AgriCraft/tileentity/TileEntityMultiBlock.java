@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import java.util.List;
 
+import com.InfinityRaider.AgriCraft.gui.Component;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -25,16 +26,11 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 	 * If the {@link TileEntityMultiBlock} should attempt to reform a multiblock on the next tick.
 	 */
 	private boolean reform = false;
-	
-	
-	public TileEntityMultiBlock() {
-		this.component = new MultiBlockComponent(xCoord, yCoord, zCoord, 0, 0, 0, 1, 1, 1);
-	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		this.component.writeToNBT(tag);
+		this.getComponent().writeToNBT(tag);
 	}
 
 	@Override
@@ -76,6 +72,9 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 	 * @return the {@link MultiBlockComponent} associated with the entity.
 	 */
 	public final MultiBlockComponent getComponent() {
+		if(this.component == null) {
+			resetComponent();
+		}
 		return this.component;
 	}
 
@@ -127,11 +126,11 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 				for (int z = 0; z < zSizeNew; z++) {
 					TileEntity te = this.worldObj.getTileEntity(anchorXNew + x, anchorYNew + y, anchorZNew + z);
 					if (te instanceof TileEntityMultiBlock) {
-						TileEntityMultiBlock block = ((TileEntityMultiBlock) te);
-						block.breakupMultiBlock();
-						block.component = new MultiBlockComponent(anchorXNew, anchorYNew, anchorZNew, x, y, z, xSizeNew, ySizeNew, zSizeNew);
-						block.addBlock();
-						block.markForUpdate();
+						TileEntityMultiBlock teMB = ((TileEntityMultiBlock) te);
+						teMB.breakupMultiBlock();
+						teMB.component = new MultiBlockComponent(anchorXNew, anchorYNew, anchorZNew, x, y, z, xSizeNew, ySizeNew, zSizeNew);
+						teMB.addBlock();
+						teMB.markForUpdate();
 					} else {
 						LogHelper.debug("This is odd... a tile entity in the structure isn't the right type...");
 					}
@@ -221,12 +220,13 @@ public abstract class TileEntityMultiBlock extends TileEntityCustomWood implemen
 		list.add("MULTIBLOCK:");
 		list.add("Multiblock:");
 		super.addDebugInfo(list);
-		list.add("  - MultiBlock: " + this.component.isPartOfMultiBlock);
-		if (this.component.isPartOfMultiBlock) {
-			list.add("  - Connected: " + this.component.size);
-			list.add("  - MultiBlock Size: " + this.component.sizeX + "x" + this.component.sizeY + "x" + this.component.sizeZ);
-			list.add("  - Is controller? " + this.component.isController);
-			list.add("  - Clicked on layer: " + this.component.posY);
+		MultiBlockComponent component = this.getComponent();
+		list.add("  - MultiBlock: " + component.isPartOfMultiBlock);
+		if (this.getComponent().isPartOfMultiBlock) {
+			list.add("  - Connected: " + component.size);
+			list.add("  - MultiBlock Size: " + component.sizeX + "x" + component.sizeY + "x" + component.sizeZ);
+			list.add("  - Is controller? " + component.isController);
+			list.add("  - Clicked on layer: " + component.posY);
 			list.add("  - Component Information: ");
 			list.add("     - Position: (" + component.posX + "," + component.posY + "," + component.posZ + ").");
 			list.add("     - Anchor: (" + component.anchorX + "," + component.anchorY + "," + component.anchorZ + ").");
