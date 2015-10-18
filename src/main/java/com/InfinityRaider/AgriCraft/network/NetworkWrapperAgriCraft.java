@@ -14,6 +14,7 @@ public abstract class NetworkWrapperAgriCraft {
     public static final int messageSyncFluidlevel_ID = 5;
     public static final int messagePeripheralNeighBourCheck_ID = 6;
     public static final int messageSyncMultiBlock_ID = 7;
+    public static final int messageRequestMultiBlockSync_ID = 8;
 
     public static SimpleNetworkWrapper wrapper;
 
@@ -31,5 +32,6 @@ public abstract class NetworkWrapperAgriCraft {
         wrapper.registerMessage(MessageSyncFluidLevel.MessageHandler.class, MessageSyncFluidLevel.class, messageSyncFluidlevel_ID, Side.CLIENT);
         wrapper.registerMessage(MessagePeripheralCheckNeighbours.MessageHandler.class, MessagePeripheralCheckNeighbours.class, messagePeripheralNeighBourCheck_ID, Side.CLIENT);
         wrapper.registerMessage(MessageSyncMultiBlock.MessageHandler.class, MessageSyncMultiBlock.class, messageSyncMultiBlock_ID, Side.CLIENT);
+        wrapper.registerMessage(MessageRequestMultiBlockSync.MessageHandler.class, MessageRequestMultiBlockSync.class, messageRequestMultiBlockSync_ID, Side.SERVER);
     }
 }

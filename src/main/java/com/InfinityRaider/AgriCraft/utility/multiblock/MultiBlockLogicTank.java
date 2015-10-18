@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.utility.multiblock;
 
+import com.InfinityRaider.AgriCraft.network.MessageRequestMultiBlockSync;
+import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.CoordinateIterator;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -198,12 +200,22 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
             for(int y = root.yCoord;y<root.yCoord+sizeY();y++) {
                 for(int z = root.zCoord;z<root.zCoord+sizeZ();z++) {
                     TileEntityTank tank = (TileEntityTank) world.getTileEntity(x, y, z);
-                    tank.setMultiBlockLogic(this);
+                    if(tank!=null) {
+                        tank.setMultiBlockLogic(this);
+                    } else {
+                        LogHelper.debug("ERROR: Desync when creating multiblock at ("+x+", "+y+", "+z+")");
+                        if(world.isRemote) {
+                            LogHelper.debug("Client world: requesting data from server");
+                            NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageRequestMultiBlockSync(world, x, y, z));
+                        }
+                    }
                 }
             }
         }
         if(!world.isRemote) {
             root.syncMultiBlockToClient();
+        } else {
+            world.markBlockRangeForRenderUpdate(root.xCoord, root.yCoord, root.zCoord, root.xCoord+sizeX(), root.yCoord+sizeY(), root.zCoord+sizeZ());
         }
     }
 
