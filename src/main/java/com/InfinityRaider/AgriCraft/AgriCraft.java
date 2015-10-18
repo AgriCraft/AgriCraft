@@ -59,8 +59,8 @@ public class AgriCraft {
         LogHelper.debug("Starting Pre-Initialization");
         NetworkWrapperAgriCraft.init();
         proxy.initConfiguration(event);
-        ModHelper.findHelpers();
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
+        ModHelper.findHelpers();
         if (ConfigurationHandler.debug) {
             FMLCommonHandler.instance().bus().register(new RenderLogger());
         }

@@ -112,6 +112,8 @@ public class ConfigurationHandler {
     public static void initClientConfigs(FMLPreInitializationEvent event) {
         condenseCustomWoodInNei = config.getBoolean("condense custom wood blocks in NEI", CATEGORY_CLIENT, true, "set to true to condense all entries for custom wood blocks into one entry in NEI");
         disableParticles = config.getBoolean("Disable particles", CATEGORY_CLIENT, false, "set to true to disable particles for the sprinklers");
+
+        if(config.hasChanged()) {config.save();}
     }
 
 
