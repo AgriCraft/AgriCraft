@@ -62,10 +62,9 @@ public final class WorldCoordinates {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 71 * hash + this.x;
-        hash = 71 * hash + this.y;
-        hash = 71 * hash + this.z;
-        return hash;
+        int result = x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        return result;
     }
 }

@@ -59,7 +59,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         super.readFromNBT(tag);
         MultiBlockLogicTank cachedMultiBlockLogic = new MultiBlockLogicTank(this);
         cachedMultiBlockLogic.readFromNBT(tag);
-        if(getMultiBlockLogic().isRootComponent(this) && tag.hasKey(Names.NBT.level)) {
+        if(tag.hasKey(Names.NBT.level)) {
         	this.fluidLevel = tag.getInteger(Names.NBT.level);
         }
     }
@@ -281,8 +281,10 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     @Override
     public void addDebugInfo(List<String> list) {
         super.addDebugInfo(list);
+        TileEntityTank root = getMultiBlockLogic().getRootComponent();
         list.add("TANK:");
         list.add("coordinates: ("+xCoord+", "+yCoord+", "+zCoord+")");
+        list.add("root coords: ("+root.xCoord+", "+root.yCoord+", "+root.zCoord+")");
         list.add("Tank: (single capacity: " + SINGLE_CAPACITY + ")");
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + this.getCapacity());
         list.add("  - Water level is on layer " + (int) Math.floor((this.getFluidLevel() - 0.1F) / (this.getCapacity() * getMultiBlockLogic().sizeX() * getMultiBlockLogic().sizeZ())) + ".");
@@ -336,9 +338,12 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     @Override
     public void syncMultiBlockToClient() {
+        this.markForUpdate();
+        /*
         if(!worldObj.isRemote) {
             NetworkWrapperAgriCraft.wrapper.sendToDimension(new MessageSyncMultiBlock(this), worldObj.provider.dimensionId);
             this.worldObj.getChunkFromBlockCoords(this.xCoord, this.zCoord).setChunkModified();
         }
+        */
     }
 }

@@ -3,53 +3,46 @@ package com.InfinityRaider.AgriCraft.utility.multiblock;
 import com.InfinityRaider.AgriCraft.utility.WorldCoordinates;
 import net.minecraft.tileentity.TileEntity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-//Currently unused
 public final class MultiBlockCache {
-    private static MultiBlockCache INSTANCE = new MultiBlockCache();
+    private static HashMap<Integer, MultiBlockCache> INSTANCES = new HashMap<Integer, MultiBlockCache>();
 
-    private HashMap<WorldCoordinates, ArrayList<IMultiBlockComponent>> cache;
-    private HashMap<WorldCoordinates, Integer> cacheLimits;
+    private HashMap<WorldCoordinates, MultiBlockLogic> cache;
+    private HashMap<WorldCoordinates, Integer> cacheCount;
 
     private MultiBlockCache() {
-        this.cache = new HashMap<WorldCoordinates, ArrayList<IMultiBlockComponent>>();
-        this.cacheLimits = new HashMap<WorldCoordinates, Integer>();
+        this.cache = new HashMap<WorldCoordinates, MultiBlockLogic>();
+        this.cacheCount = new HashMap<WorldCoordinates, Integer>();
     }
 
-    public static MultiBlockCache getCache() {
-        return INSTANCE;
+    public static MultiBlockCache getCache(int dimension) {
+        if(!INSTANCES.containsKey(dimension)) {
+            INSTANCES.put(dimension, new MultiBlockCache());
+        }
+        return INSTANCES.get(dimension);
     }
 
-    public void addToCache(IMultiBlockComponent component, int rootX, int rootY, int rootZ, int size) {
+    public void addToCache(MultiBlockLogic logic, int rootX, int rootY, int rootZ) {
         WorldCoordinates coords = new WorldCoordinates(rootX, rootY, rootZ);
-        if(!cache.containsKey(coords)) {
-            cache.put(coords, new ArrayList<IMultiBlockComponent>());
-            cacheLimits.put(coords, size);
-        }
-        ArrayList<IMultiBlockComponent> cachedComponents = cache.get(coords);
-        if(isRoot(component, coords)) {
-            cachedComponents.add(0, component);
+        if(!this.isCached(coords)) {
+            createCache(logic, coords);
         } else {
-            cachedComponents.add(component);
-        }
-        if(cachedComponents.size()>=cacheLimits.get(coords)) {
-            loadCache(cachedComponents);
-            cache.remove(coords);
-            cacheLimits.remove(coords);
+            MultiBlockLogic cachedLogic = cache.get(coords);
+            TileEntity newLogicRoot = logic.getRootComponent().getTileEntity();
+            if(newLogicRoot.xCoord==rootX && newLogicRoot.yCoord==rootY && newLogicRoot.zCoord==rootZ) {
+                cachedLogic.setRootComponent(logic.getRootComponent());
+            }
+            logic.getRootComponent().setMultiBlockLogic(cachedLogic);
         }
     }
 
-    private boolean isRoot(IMultiBlockComponent component, WorldCoordinates coords) {
-        TileEntity tile = component.getTileEntity();
-        return tile.xCoord == coords.x() && tile.yCoord == coords.y() && tile.zCoord == coords.z();
+    private boolean isCached(WorldCoordinates coords) {
+        return cache.containsKey(coords);
     }
 
-    private void loadCache(ArrayList<IMultiBlockComponent> components) {
-        //We made sure the root is first in the array
-        IMultiBlockComponent root = components.get(0);
-        MultiBlockLogic logic = root.getMultiBlockLogic();
-        logic.createMultiBlock();
+    private void createCache(MultiBlockLogic logic, WorldCoordinates coords) {
+        cache.put(coords, logic);
+        cacheCount.put(coords, 1);
     }
 }

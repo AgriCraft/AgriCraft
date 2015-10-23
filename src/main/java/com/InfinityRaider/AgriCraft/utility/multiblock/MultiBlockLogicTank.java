@@ -25,6 +25,13 @@ public class MultiBlockLogicTank extends MultiBlockLogic {
     }
 
     @Override
+    public void setRootComponent(IMultiBlockComponent component) {
+        if(component instanceof TileEntityTank) {
+            this.rootComponent = component;
+        }
+    }
+
+    @Override
     public TileEntityTank getRootComponent() {
         return (TileEntityTank) rootComponent;
     }

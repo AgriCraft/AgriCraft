@@ -4,6 +4,9 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+
+import java.util.ArrayList;
 
 public abstract class MultiBlockLogic {
     protected IMultiBlockComponent rootComponent;
@@ -22,6 +25,12 @@ public abstract class MultiBlockLogic {
     }
 
     public abstract void setRootComponent(World world, int x, int y, int z);
+
+    public abstract void setRootComponent(IMultiBlockComponent component);
+
+    public World world() {
+        return getRootComponent().getTileEntity().getWorldObj();
+    }
 
     public int sizeX() {
         return sizeX;
@@ -53,9 +62,12 @@ public abstract class MultiBlockLogic {
         int x = tag.getInteger(Names.NBT.x2);
         int y = tag.getInteger(Names.NBT.y2);
         int z = tag.getInteger(Names.NBT.z2);
+        int dim = tag.getInteger(Names.NBT.count);
         TileEntity tile = this.getRootComponent().getTileEntity();
         World world = this.getRootComponent().getTileEntity().getWorldObj();
-        if(world != null) {
+        if(world == null) {
+            MultiBlockCache.getCache(dim).addToCache(this, x, y, z);
+        } else {
             if(tile.xCoord == x && tile.yCoord == y && tile.zCoord == z) {
                 this.createMultiBlock();
             }
@@ -73,6 +85,7 @@ public abstract class MultiBlockLogic {
         tag.setInteger(Names.NBT.x2, getRootComponent().getTileEntity().xCoord);
         tag.setInteger(Names.NBT.y2, getRootComponent().getTileEntity().yCoord);
         tag.setInteger(Names.NBT.z2, getRootComponent().getTileEntity().zCoord);
+        tag.setInteger(Names.NBT.count, world().provider.dimensionId);
     }
 
     /**
