@@ -128,6 +128,9 @@ public class CropPlantHandler {
      * @return if the stack is a valid seed.
      */
     public static boolean isValidPlant(ItemStack stack) { //The method name should match the rest of the class.
+        if(stack==null || stack.getItem()==null) {
+            return false;
+        }
     	if (cropPlants.containsKey(stack.getItem())) { //Is the plant/seed in the registry? If the plant/seed is in the registry it is o.k. to get.
     		return cropPlants.get(stack.getItem()).containsKey(stack.getItemDamage()); // Is the damage value in the registry? If so, this is a valid seed. 
     	}
