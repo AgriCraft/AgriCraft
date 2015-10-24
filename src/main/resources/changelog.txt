@@ -1,5 +1,8 @@
 Changelog
 ---------
+1.4.3
+-CHANGE: Entirely rewrote the multi-block code fixing a lot of bugs and improving performance.
+
 1.4.2
 -ADDED:  A recipe for the clipper
 -ADDED:  Config option to disable registering of crop products into the ore dictionary

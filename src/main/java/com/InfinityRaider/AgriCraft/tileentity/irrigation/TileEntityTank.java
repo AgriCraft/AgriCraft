@@ -38,8 +38,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     private int fluidLevel = 0;
     private int lastFluidLevel = 0;
     private int lastDiscreteFluidLevel =0;
-    private TileEntityTank mainComponent;
     private MultiBlockPartData multiBlockData;
+    /** Main component cache is only used in the server thread because it's accessed there very often */
+    private TileEntityTank mainComponent;
     
     @Override
     public void writeToNBT(NBTTagCompound tag) {
