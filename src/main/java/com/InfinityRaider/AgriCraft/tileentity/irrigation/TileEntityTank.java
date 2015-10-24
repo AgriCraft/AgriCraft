@@ -51,7 +51,6 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        //TODO: make it read NBT correctly from old version
         super.readFromNBT(tag);
         this.fluidLevel = tag.hasKey(Names.NBT.level) ? tag.getInteger(Names.NBT.level) : 0;
     }

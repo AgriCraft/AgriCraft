@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
-import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockManager;
-import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockPartData;
+import com.InfinityRaider.AgriCraft.utility.multiblock.MultiBlockPartData;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -52,10 +52,18 @@ public abstract class TileEntityAgricraft extends TileEntity {
         if (tag.hasKey(Names.NBT.direction)) {
             this.setOrientation(tag.getByte(Names.NBT.direction));
         }
-        if(this.isMultiBlock() && tag.hasKey(Names.NBT.multiBlock)) {
-            NBTTagCompound multiBlockTag = tag.getCompoundTag(Names.NBT.multiBlock);
-            ((IMultiBlockComponent) this).getMultiBlockData().readFromNBT(multiBlockTag);
-
+        if(this.isMultiBlock()) {
+            if(tag.hasKey(Names.NBT.multiBlock)) {
+                NBTTagCompound multiBlockTag = tag.getCompoundTag(Names.NBT.multiBlock);
+                ((IMultiBlockComponent) this).getMultiBlockData().readFromNBT(multiBlockTag);
+            } else {
+                //This is to allow old version tanks to be converted on world load
+                if(this instanceof TileEntityTank && tag.hasKey("posX") && tag.hasKey("posY") && tag.hasKey("posZ")&& tag.hasKey("sizeX") && tag.hasKey("sizeY") && tag.hasKey("sizeZ")) {
+                    TileEntityTank tank = (TileEntityTank) this;
+                    MultiBlockPartData data = new MultiBlockPartData(tag.getInteger("posX"), tag.getInteger("posY"), tag.getInteger("posZ"), tag.getInteger("sizeX"), tag.getInteger("sizeY"), tag.getInteger("sizeZ"));
+                    tank.setMultiBlockPartData(data);
+                }
+            }
         }
     }
 
