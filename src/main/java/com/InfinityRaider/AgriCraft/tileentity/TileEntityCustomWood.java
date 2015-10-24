@@ -42,10 +42,8 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-    	//Can never be null. (Has to be made out of something... lol).
     	tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(this.getMaterial()));
         tag.setInteger(Names.NBT.materialMeta, this.getMaterialMeta());
-        //Required call to super.
         super.writeToNBT(tag);
     }
 

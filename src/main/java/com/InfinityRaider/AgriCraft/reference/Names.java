@@ -28,8 +28,13 @@ public final class Names {
         public static final String x = "agricraftX";
         public static final String y = "agricraftY";
         public static final String z = "agricraftZ";
+        public static final String x2 = "agricraftX2";
+        public static final String y2 = "agricraftY2";
+        public static final String z2 = "agricraftZ2";
         public static final String override = "override";
         public static final String flag = "ac_Flag";
+        public static final String direction = "direction";
+        public static final String multiBlock = "agricraft_MultiBlock";
     }
 
     //mod objects

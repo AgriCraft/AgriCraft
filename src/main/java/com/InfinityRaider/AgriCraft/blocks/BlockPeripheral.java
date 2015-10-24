@@ -87,6 +87,11 @@ public class BlockPeripheral extends BlockContainerAgriCraft implements IPeriphe
         }
     }
 
+    @Override
+    public boolean isMultiBlock() {
+        return false;
+    }
+
     //override this to delay the removal of the tile entity until after harvestBlock() has been called
     @Override
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {

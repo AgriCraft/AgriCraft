@@ -34,11 +34,11 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-    	super.onBlockPlacedBy(world, x, y, z, entity, stack);
-    	if(world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityCustomWood) {
+        if(world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityCustomWood) {
             TileEntityCustomWood tileEntity = (TileEntityCustomWood) world.getTileEntity(x, y, z);
             tileEntity.setMaterial(stack);
         }
+    	super.onBlockPlacedBy(world, x, y, z, entity, stack);
     }
 
     @Override

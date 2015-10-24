@@ -87,7 +87,6 @@ public interface IIrrigationComponent {
 	 * Attempts to remove an amount of fluid from the irrigation component.
 	 * 
 	 * @param amount the amount of fluid desired to be removed.
-	 * @param y the y-level of the connection point, relative to the bottom of the block.
 	 * @return the amount of fluid <em>actually</em> removed.
 	 */
 	int pullFluid(int amount);

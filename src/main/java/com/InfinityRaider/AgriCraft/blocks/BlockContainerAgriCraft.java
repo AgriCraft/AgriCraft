@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -19,10 +20,10 @@ import net.minecraftforge.common.util.ForgeDirection;
  * The base class for all AgriCraft container blocks.
  */
 public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements ITileEntityProvider {
-	
+
     /**
      * The default constructor.
-     * 
+     *
      * @param material the material the block is composed of.
      */
     protected BlockContainerAgriCraft(Material material) {
@@ -47,7 +48,7 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
 
     /**
      * Retrieves the name of the TileEntity to this container block.
-     * 
+     *
      * @return the name of the block's TileEntity.
      */
     protected abstract String getTileEntityName();
@@ -81,17 +82,29 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
                         break;
                 }
             }
+            if(this.isMultiBlock() && !world.isRemote) {
+                IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(x, y, z);
+                component.getMultiBlockManager().onBlockPlaced(world, x, y, z, component);
+            }
         }
     }
 
     @Override
     public void onBlockAdded(World world, int x, int y, int z) {
         super.onBlockAdded(world, x, y, z);
+        if(this.isMultiBlock() && !world.isRemote) {
+            //((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBlockLogic().onBlockPlaced();
+        }
     }
+
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
-        super.breakBlock(world, x, y, z, b, meta);
+        if(this.isMultiBlock() && !world.isRemote) {
+            IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(x, y, z);
+            component.getMultiBlockManager().onBlockBroken(world, x, y, z, component);
+        }
+        super.breakBlock(world,x,y,z, b,meta);
         world.removeTileEntity(x, y, z);
     }
 
@@ -101,4 +114,6 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
         TileEntity tileentity = world.getTileEntity(x, y, z);
         return tileentity!=null && tileentity.receiveClientEvent(id, data);
     }
+
+    public abstract boolean isMultiBlock();
 }

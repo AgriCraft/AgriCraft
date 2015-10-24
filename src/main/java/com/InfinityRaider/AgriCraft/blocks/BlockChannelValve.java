@@ -94,7 +94,12 @@ public class BlockChannelValve extends BlockWaterChannel {
     protected String getTileEntityName() {
         return Names.Objects.valve;
     }
-    
+
+    @Override
+    public boolean isMultiBlock() {
+        return false;
+    }
+
     @Override
     protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
     	return ItemBlockValve.class;

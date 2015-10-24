@@ -710,6 +710,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
         return (tileEntity!=null)&&(tileEntity.receiveClientEvent(id,data));
     }
 
+    @Override
+    public boolean isMultiBlock() {
+        return false;
+    }
+
     /**
      * Retrieves the custom renderer for the crops.
      * 

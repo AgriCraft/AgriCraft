@@ -1,4 +1,3 @@
-
 package com.InfinityRaider.AgriCraft.blocks;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +17,7 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockWaterTank extends BlockMultiBlock {
+public class BlockWaterTank extends BlockCustomWood {
 
 	public BlockWaterTank() {
 		super();
@@ -96,6 +95,11 @@ public class BlockWaterTank extends BlockMultiBlock {
 			}
 		}
 		return update;
+	}
+
+	@Override
+	public boolean isMultiBlock() {
+		return true;
 	}
 
 	@Override

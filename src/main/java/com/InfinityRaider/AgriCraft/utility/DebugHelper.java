@@ -27,21 +27,7 @@ public abstract class DebugHelper {
     public static void debug(EntityPlayer player, World world, int x, int y, int z) {
         for(String dataLine:getDebugData(world, x, y,z)) {
             LogHelper.debug(dataLine);
-            player.addChatComponentMessage(new ChatComponentText(dataLine));
-        }
-    }
-
-    /**
-     * Retrieves the debug data for a location, and enters it into the log.
-     * 
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     */
-    public static void debug(World world, int x, int y, int z) {
-        for(String dataLine:getDebugData(world, x, y,z)) {
-            LogHelper.debug(dataLine);
+            //player.addChatComponentMessage(new ChatComponentText(dataLine));
         }
     }
 
