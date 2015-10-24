@@ -13,7 +13,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -84,7 +83,8 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
                 }
             }
             if(this.isMultiBlock() && !world.isRemote) {
-                ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBlockLogic().onBlockPlaced(world, x, y, z);
+                IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(x, y, z);
+                component.getMultiBlockManager().onBlockPlaced(world, x, y, z, component);
             }
         }
     }
@@ -101,7 +101,8 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
         if(this.isMultiBlock() && !world.isRemote) {
-            ((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBlockLogic().breakMultiBlock();
+            IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(x, y, z);
+            component.getMultiBlockManager().onBlockBroken(world, x, y, z, component);
         }
         super.breakBlock(world,x,y,z, b,meta);
         world.removeTileEntity(x, y, z);

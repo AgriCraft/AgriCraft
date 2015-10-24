@@ -33,6 +33,8 @@ public final class Names {
         public static final String z2 = "agricraftZ2";
         public static final String override = "override";
         public static final String flag = "ac_Flag";
+        public static final String direction = "direction";
+        public static final String multiBlock = "agricraft_MultiBlock";
     }
 
     //mod objects

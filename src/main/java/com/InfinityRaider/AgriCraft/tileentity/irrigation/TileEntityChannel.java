@@ -227,7 +227,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
                         //total volume is between channel connection top and bottom
                         else {
                             //some parameters
-                            int tankYSize = tank.getMultiBlockLogic().sizeY();
+                            int tankYSize = tank.getMultiBlockData().sizeY();
                             int C = tank.getCapacity();
                             //calculate the y corresponding to the total volume: y = f(V_tot), V_tank = f(y), V_channel = f(y)
                             float enumerator = (V_tot) + ((ABSOLUTE_MAX * y1) / (y2 - y1) + ((float) 2 * C) / (Constants.WHOLE * tankYSize - 2));

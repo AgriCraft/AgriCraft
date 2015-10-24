@@ -3,14 +3,12 @@ package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncFluidLevel;
-import com.InfinityRaider.AgriCraft.network.MessageSyncMultiBlock;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
-import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
-import com.InfinityRaider.AgriCraft.utility.multiblock.MultiBlockLogicTank;
+import com.InfinityRaider.AgriCraft.utility.multiblock.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import net.minecraft.init.Blocks;
@@ -23,7 +21,7 @@ import net.minecraftforge.fluids.*;
 
 import java.util.List;
 
-public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockLogicTank>, IDebuggable {
+public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
 	public static final int SYNC_DELTA = Constants.HALF_BUCKET_mB;
 
     public static final int DISCRETE_MAX = Constants.WHOLE;
@@ -37,19 +35,17 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
      * Represents the amount of fluid the tank is holding.
      * </p>
      */
-    private MultiBlockLogicTank multiBlockLogic;
     private int fluidLevel = 0;
     private int lastFluidLevel = 0;
     private int lastDiscreteFluidLevel =0;
+    private TileEntityTank mainComponent;
+    private MultiBlockPartData multiBlockData;
     
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        getMultiBlockLogic().writeToNBT(tag);
-        if(getMultiBlockLogic().isRootComponent(this)) {
-            if (this.fluidLevel > 0) {
-                tag.setInteger(Names.NBT.level, this.fluidLevel);
-            }
+        if (this.fluidLevel > 0) {
+            tag.setInteger(Names.NBT.level, this.fluidLevel);
         }
     }
 
@@ -57,11 +53,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public void readFromNBT(NBTTagCompound tag) {
         //TODO: make it read NBT correctly from old version
         super.readFromNBT(tag);
-        MultiBlockLogicTank cachedMultiBlockLogic = new MultiBlockLogicTank(this);
-        cachedMultiBlockLogic.readFromNBT(tag);
-        if(tag.hasKey(Names.NBT.level)) {
-        	this.fluidLevel = tag.getInteger(Names.NBT.level);
-        }
+        this.fluidLevel = tag.hasKey(Names.NBT.level) ? tag.getInteger(Names.NBT.level) : 0;
     }
 
     //updates the tile entity every tick
@@ -100,7 +92,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
             lastFluidLevel = fluidLevel;
             return true;
         }
-        //sync when the fluid level ahs chagned too much
+        //sync when the fluid level ahs changed too much
         if(SYNC_DELTA<=Math.abs(lastFluidLevel-fluidLevel)) {
             lastDiscreteFluidLevel = newDiscreteLvl;
             lastFluidLevel = fluidLevel;
@@ -127,19 +119,23 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
 	@Override
 	public int getFluidLevel() {
-        return getMultiBlockLogic().isRootComponent(this)?fluidLevel: getMultiBlockLogic().getRootComponent().getFluidLevel();
+        if(this.getMainComponent() == this) {
+            return this.fluidLevel;
+        }
+        TileEntityTank mainComponent = this.getMainComponent();
+        return mainComponent!=null ? mainComponent.getFluidLevel() : 0;
 	}
 
     public int getYPosition() {
-        TileEntityTank tank = getMultiBlockLogic().getRootComponent();
-        return this.yCoord - tank.yCoord;
+        return getMultiBlockData().posY();
     }
 
     /**
      * Maps the current fluid level into the interval [0, {@value #DISCRETE_MAX}]
      */
     public int getDiscreteFluidLevel() {
-        float discreteFactor = DISCRETE_MAX / ((float) SINGLE_CAPACITY * getMultiBlockLogic().sizeX() * getMultiBlockLogic().sizeZ());
+        IMultiBlockPartData data = getMultiBlockData();
+        float discreteFactor = DISCRETE_MAX / ((float) SINGLE_CAPACITY * data.sizeX() * data.sizeZ());
         int discreteFluidLevel = Math.round(discreteFactor * getFluidLevel());
         // This is so the fluid shows up over the bottom...
         if (discreteFluidLevel < 2 && getFluidLevel() > 0) {
@@ -184,15 +180,11 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     @Override
 	public void setFluidLevel(int lvl) {
         if(lvl!=this.getFluidLevel()) {
-            if(!getMultiBlockLogic().isRootComponent(this)) {
-                getMultiBlockLogic().getRootComponent().setFluidLevel(lvl);
-            } else {
-                lvl = lvl > this.getCapacity() ? this.getCapacity() : lvl;
-                this.fluidLevel = lvl;
-                if (!this.worldObj.isRemote) {
-                    this.syncFluidLevel();
-                }
-
+            TileEntityTank tank = this.getMainComponent();
+            lvl = lvl > tank.getCapacity() ? tank.getCapacity() : lvl;
+            tank.fluidLevel = lvl;
+            if (!tank.worldObj.isRemote) {
+                tank.syncFluidLevel();
             }
         }
     }
@@ -204,7 +196,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     
     @Override
     public int getCapacity() {
-    	return SINGLE_CAPACITY* getMultiBlockLogic().getMultiBlockCount();
+    	return SINGLE_CAPACITY * getMultiBlockData().size();
     }
 
     @Override
@@ -277,58 +269,46 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         return info;
     }
 
-    //debug info
     @Override
-    public void addDebugInfo(List<String> list) {
-        super.addDebugInfo(list);
-        TileEntityTank root = getMultiBlockLogic().getRootComponent();
-        list.add("TANK:");
-        list.add("coordinates: ("+xCoord+", "+yCoord+", "+zCoord+")");
-        list.add("root coords: ("+root.xCoord+", "+root.yCoord+", "+root.zCoord+")");
-        list.add("Tank: (single capacity: " + SINGLE_CAPACITY + ")");
-        list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + this.getCapacity());
-        list.add("  - Water level is on layer " + (int) Math.floor((this.getFluidLevel() - 0.1F) / (this.getCapacity() * getMultiBlockLogic().sizeX() * getMultiBlockLogic().sizeZ())) + ".");
-        list.add("  - Water height is " + this.getFluidHeight());
-        StringBuilder neighbours = new StringBuilder();
-        for(ForgeDirection dir:ForgeDirection.values()) {
-            if(this.hasNeighbour(dir)) {
-                neighbours.append(dir.name()).append(", ");
-            }
+    public TileEntityTank getMainComponent() {
+        if(worldObj.isRemote) {
+            IMultiBlockPartData data = this.getMultiBlockData();
+            return (TileEntityTank) worldObj.getTileEntity(xCoord - data.posX(), yCoord - data.posY(), zCoord - data.posZ());
         }
-        list.add("  - Neighbours: " + neighbours.toString());
-        list.add("  - MultiBlock Size: "+ getMultiBlockLogic().sizeX()+"x"+ getMultiBlockLogic().sizeY()+"x"+ getMultiBlockLogic().sizeZ());
-    }
-    
-    @Override
-    public void addWailaInformation(List information) {
-    	super.addWailaInformation(information);
-    	information.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel")+": "+this.getFluidLevel()+"/"+this.getCapacity());
+        if(this.mainComponent == null) {
+            IMultiBlockPartData data = this.getMultiBlockData();
+            this.mainComponent =  (TileEntityTank) worldObj.getTileEntity(xCoord - data.posX(), yCoord - data.posY(), zCoord - data.posZ());
+        }
+        return mainComponent;
     }
 
     @Override
-    public TileEntity getTileEntity() {
-        return this;
+    public MultiBlockManager getMultiBlockManager() {
+        return MultiBlockManager.getInstance();
     }
 
     @Override
-    public MultiBlockLogicTank getMultiBlockLogic() {
-        if(this.multiBlockLogic == null) {
-            this.multiBlockLogic = new MultiBlockLogicTank(this);
-        }
-        return multiBlockLogic;
+    public void setMultiBlockPartData(MultiBlockPartData data) {
+        this.multiBlockData = data;
+        this.mainComponent = null;
+        this.markForUpdate();
     }
 
     @Override
-    public void setMultiBlockLogic(MultiBlockLogicTank logic) {
-        this.multiBlockLogic = logic;
-        if (!multiBlockLogic.isRootComponent(this)) {
-            this.setFluidLevel(0);
+    public MultiBlockPartData getMultiBlockData() {
+        if(this.multiBlockData == null) {
+            this.multiBlockData = new MultiBlockPartData(0, 0, 0, 1, 1, 1);
         }
+        return this.multiBlockData;
     }
 
     @Override
     public boolean hasNeighbour(ForgeDirection dir) {
-        return worldObj!=null && getMultiBlockLogic().isPartOfMultiBlock(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
+        IMultiBlockPartData data= this.getMultiBlockData();
+        int x = data.posX()+dir.offsetX;
+        int y = data.posY()+dir.offsetY;
+        int z = data.posZ()+dir.offsetZ;
+        return (x>=0 && x<data.sizeX()) && (y>=0 && y<data.sizeY()) && (z>=0 && z<data.sizeZ());
     }
 
     @Override
@@ -337,13 +317,86 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     }
 
     @Override
-    public void syncMultiBlockToClient() {
-        this.markForUpdate();
-        /*
-        if(!worldObj.isRemote) {
-            NetworkWrapperAgriCraft.wrapper.sendToDimension(new MessageSyncMultiBlock(this), worldObj.provider.dimensionId);
-            this.worldObj.getChunkFromBlockCoords(this.xCoord, this.zCoord).setChunkModified();
+    public void preMultiBlockCreation(int sizeX, int sizeY, int sizeZ) {
+        int lvl = 0;
+        for(int x=0;x<sizeX;x++) {
+            for(int y=0;y<sizeY;y++) {
+                for(int z=0;z<sizeZ;z++) {
+                    TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(x+xCoord, y+yCoord, z+zCoord);
+                    if(tank == null) {
+                        continue;
+                    }
+                    lvl = lvl + tank.fluidLevel;
+                    tank.fluidLevel = 0;
+                }
+            }
         }
-        */
+        this.fluidLevel = lvl;
+    }
+
+    @Override
+    public void postMultiBlockCreation() {
+        this.mainComponent = null;
+    }
+
+    @Override
+    public void preMultiBlockBreak() {
+        MultiBlockPartData data = this.getMultiBlockData();
+        int[] fluidLevelByLayer = new int[data.sizeY()];
+        int area = data.sizeX()*data.sizeZ();
+        int fluidContentByLayer = area*TileEntityTank.SINGLE_CAPACITY;
+        int layer = 0;
+        while(fluidLevel>0) {
+            fluidLevelByLayer[layer] = fluidLevel>fluidContentByLayer?fluidContentByLayer/area:fluidLevel/area;
+            fluidLevel = fluidLevel>fluidContentByLayer?fluidLevel - fluidContentByLayer:0;
+            layer++;
+        }
+        for(int x=0;x<data.sizeX();x++) {
+            for(int y=0;y<data.sizeY();y++) {
+                for(int z=0;z<data.sizeZ();z++) {
+                    TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(x+xCoord, y+yCoord, z+zCoord);
+                    tank.fluidLevel = fluidLevelByLayer[y];
+                }
+            }
+        }
+    }
+
+    @Override
+    public void postMultiBlockBreak() {
+        this.mainComponent = null;
+        this.syncFluidLevel();
+    }
+
+    //debug info
+    @Override
+    public void addDebugInfo(List<String> list) {
+        super.addDebugInfo(list);
+        IMultiBlockPartData data = this.getMultiBlockData();
+        TileEntityTank root = getMainComponent();
+        list.add("TANK:");
+        list.add("coordinates: ("+xCoord+", "+yCoord+", "+zCoord+")");
+        list.add("root coords: ("+root.xCoord+", "+root.yCoord+", "+root.zCoord+")");
+        list.add("Tank: (single capacity: " + SINGLE_CAPACITY + ")");
+        list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + this.getCapacity());
+        list.add("  - Water level is on layer " + (int) Math.floor((this.getFluidLevel() - 0.1F) / (this.getCapacity() * data.sizeX() * data.sizeZ())) + ".");
+        list.add("  - Water height is " + this.getFluidHeight());
+        StringBuilder neighbours = new StringBuilder();
+        for(ForgeDirection dir:ForgeDirection.values()) {
+            if(dir==ForgeDirection.UNKNOWN) {
+                continue;
+            }
+            if(this.hasNeighbour(dir)) {
+                neighbours.append(dir.name()).append(", ");
+            }
+        }
+        list.add("  - Neighbours: " + neighbours.toString());
+        list.add("  - MultiBlock data: " + data.toString());
+        list.add("  - MultiBlock Size: "+ data.sizeX()+"x"+ data.sizeY()+"x"+data.sizeZ());
+    }
+
+    @Override
+    public void addWailaInformation(List information) {
+        super.addWailaInformation(information);
+        information.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidLevel() + "/" + this.getCapacity());
     }
 }
