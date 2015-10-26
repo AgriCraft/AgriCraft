@@ -81,7 +81,7 @@ public class GrowthRequirement implements IGrowthRequirement{
     /** @return true, if the correct base block is below **/
     private boolean isBaseBlockBelow(World world, int x, int y, int z) {
         if(this.requiresBaseBlock() && this.requiredType==RequirementType.BELOW) {
-            return this.isBlockAdequate(world.getBlock(x, y - 2, z), world.getBlockMetadata(x, y - 2, z));
+            return this.isBlockAdequate(world, x, y - 2, z);
         }
         return true;
     }
@@ -93,7 +93,7 @@ public class GrowthRequirement implements IGrowthRequirement{
             for (int xPos = x - range; xPos <= x + range; xPos++) {
                 for (int yPos = y - range; yPos <= y + range; yPos++) {
                     for (int zPos = z - range; zPos <= z + range; zPos++) {
-                        if(this.isBlockAdequate(world.getBlock(xPos, yPos, zPos), world.getBlockMetadata(xPos, yPos, zPos))) {
+                        if(this.isBlockAdequate(world, xPos, yPos, zPos)) {
                             return true;
                         }
                     }
@@ -105,7 +105,9 @@ public class GrowthRequirement implements IGrowthRequirement{
     }
 
     /** @return true, if this block corresponds to the required block **/
-    private boolean isBlockAdequate(Block block, int meta) {
+    private boolean isBlockAdequate(World world, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
+        int meta = block.getDamageValue(world, x, y, z);
         if(this.oreDict) {
             return OreDictHelper.isSameOre(block, meta, this.requiredBlock.getBlock(), this.requiredBlock.getMeta());
         }
