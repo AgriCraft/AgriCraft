@@ -21,7 +21,7 @@ public abstract class MessageAgriCraft implements IMessage {
         Iterator iterator = list.iterator();
         while (iterator.hasNext() && player==null) {
             EntityPlayer nextPlayer = (EntityPlayer)iterator.next();
-            if(nextPlayer.getDisplayName().equals(name)) {
+            if(nextPlayer.getGameProfile().getName().equals(name)) {
                 player = nextPlayer;
             }
         }
@@ -29,7 +29,7 @@ public abstract class MessageAgriCraft implements IMessage {
     }
 
     protected void writePlayerToByteBuf(EntityPlayer player, ByteBuf buf) {
-        String playerName = player==null?"null":player.getDisplayName();
+        String playerName = player==null?"null":player.getGameProfile().getName();
         buf.writeInt(playerName.length());
         buf.writeBytes(playerName.getBytes());
     }
