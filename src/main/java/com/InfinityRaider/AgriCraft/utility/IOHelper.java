@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-//class containing the default mutations for each supported mod
+//helper class to read, write and parse data to and from the config files
 public abstract class IOHelper {
 	
 	/**
@@ -271,6 +271,7 @@ public abstract class IOHelper {
         return meta<0?new BlockWithMeta(block):new BlockWithMeta(block, meta);
     }
 
+    //TODO: move all this crap to asset files
     private static final String grassDropInstructions =
             "#Put a list of seeds here that will drop from tall grass with the following schematic: <seedname:seedmeta>,<weight>\n" +
             "#The seedname should be the name NEI gives you, the weight is the weighted chance for this seed to drop (for reference, minecraft wheat seeds have weight 10)\n" +
