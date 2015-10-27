@@ -9,6 +9,9 @@ item.agricraft:magnifyingGlass.name=Loupe
 item.agricraft:debugger.name=Débogueur
 item.agricraft:handRake.wood.name=Râteau en bois
 item.agricraft:handRake.iron.name=Râteau en fer
+item.agricraft:clipper.name=Sécateur
+item.agricraft:clipping.name=Bouture
+
 item.agricraft:nuggetDiamond.name=Pépite de diamant
 item.agricraft:nuggetIron.name=Pépite de fer
 item.agricraft:nuggetEmerald.name=Pépite d'émeraude
@@ -38,7 +41,7 @@ item.agricraft:seedShroomRed.name=Spore d'amanite
 item.agricraft:seedShroomBrown.name=Spore de bolet
 item.agricraft:seedNitorWart.name=Spore de verrues de Nitor
 item.agricraft:seedQuartzanthemum=Graine de quartzanthème
-
+// Botania
 item.agricraft:seedBotaniaWhite.name=Graines de fleur mystique blanche
 item.agricraft:seedBotaniaOrange.name=Graines de fleur mystique orange
 item.agricraft:seedBotaniaMagenta.name=Graines de fleur mystique magenta
@@ -122,7 +125,7 @@ tile.agricraft:cropShroomRed.name=Amanite
 tile.agricraft:cropShroomBrown.name=Bolet
 tile.agricraft:cropNitorWart.name=Verrues de Nitor
 tile.agricraft:cropQuartzanthemum.name=Quartzanthème
-
+// Botania
 tile.agricraft:cropBotaniaWhite.name=Fleur mystique blanche
 tile.agricraft:cropBotaniaOrange.name=Fleur mystique orange
 tile.agricraft:cropBotaniaMagenta.name=Fleur mystique magenta
@@ -204,6 +207,9 @@ agricraft_tooltip.growthStage=Croissance
 agricraft_tooltip.mature=Mature
 agricraft_tooltip.valve=basculé avec un signal redstone
 agricraft_tooltip.grate=Cliquez droit avec des vignes pour placer les vignes
+agricraft_tooltip.clipper1=Cliquez droit les cultures pour obtenir des boutures
+agricraft_tooltip.clipper2=Les boutures peuvent être planté sur d'autres tuteurs
+agricraft_tooltip.clipper3=Le succès du bouturage dépend de la force de la plante
 
 //descriptions
 agricraft_description.peripheralHelp=Aide de méthode
@@ -248,8 +254,7 @@ agricraft_journal.information=Information
 agricraft_journal.tier=Niveau
 agricraft_journal.fruits=Fruits
 agricraft_journal.growthStages=Croissance
-agricraft_journal.parentMutations=Mutations parentales découvertes
-agricraft_journal.childMutations=Mutations d'enfants découvertes
+agricraft_journal.parentMutations=Mutations découvertes
 
 //agricraft seeds
 agricraft_journal.potato=La pomme de terre est la base de presque chaque repas, cependant certains ont même trouvé des façons de la transformer en boisson.
@@ -461,7 +466,7 @@ agricraft_journal.lotr_pipeweedSeeds=L'herbe à pipe (aussi connu comme tabac de
 //advent of ascension
 agricraft_journal.aoa_BubbleBerry=Il y a un drôle de goût dans ces baies.
 agricraft_journal.aoa_Chili=Ce piment est si épicé, il pourrait simplement brûler plus que votre bouche.
-agricraft_journal.aoa_EyeBulb=Vous connaissez le sentiment que quelqu'un vous observe ? Bien maintenant vous pouvez l'avoir tout le temps.
+agricraft_journal.aoa_EyeBulb=Vous avez le sentiment que quelqu'un vous observe ? Bien maintenant vous pouvez l'avoir tout le temps.
 agricraft_journal.aoa_Floracle=Il y a un étrange aura émanant de ces fleurs.
 agricraft_journal.aoa_Goldicap=Les pétales de cette fleur semblent être un antidote universel.
 agricraft_journal.aoa_HeartFruit=Les fruits de cette plante ont si bon goût, ca fesait mal en fait.
@@ -471,7 +476,7 @@ agricraft_journal.aoa_Lunaglobe=Les fruits de cette plante sont riches en énerg
 agricraft_journal.aoa_Lunalon=Ceux qui disent que les carottes sont bonnes pour la vue n'ont jamais essayé cette plante.
 agricraft_journal.aoa_MagicMarang=Parfait pour ceux qui apprécient une bonne nourriture empoisonnée.
 agricraft_journal.aoa_HavenShroom=Ne pas confondre avec des champignons magiques.
-agricraft_journal.aoa_Rosidon=Eating this plant will get you higher, literally higher.
+agricraft_journal.aoa_Rosidon=Manger cette plante vous emportera haut, littéralement en haut.
 agricraft_journal.aoa_Tea="Une bonne tasse de thé alors !."
 agricraft_journal.aoa_ThornyPlant=Considéré comme de la monnaie, prennez garde de ne pas causer une crise économique en la cultivant.
 agricraft_journal.aoa_Trilliad=les feuilles de cette plante sont tout à fait nutritives.
