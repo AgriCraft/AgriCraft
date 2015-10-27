@@ -344,18 +344,20 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         MultiBlockPartData data = this.getMultiBlockData();
         int[] fluidLevelByLayer = new int[data.sizeY()];
         int area = data.sizeX()*data.sizeZ();
-        int fluidContentByLayer = area*TileEntityTank.SINGLE_CAPACITY;
+        int fluidContentByLayer = area*SINGLE_CAPACITY;
         int layer = 0;
-        while(fluidLevel>0) {
-            fluidLevelByLayer[layer] = fluidLevel>fluidContentByLayer?fluidContentByLayer/area:fluidLevel/area;
-            fluidLevel = fluidLevel>fluidContentByLayer?fluidLevel - fluidContentByLayer:0;
+        while(fluidLevel>0 && layer<fluidLevelByLayer.length) {
+            fluidLevelByLayer[layer] = (fluidLevel>=fluidContentByLayer) ? (fluidContentByLayer/area) : (fluidLevel/area);
+            fluidLevel = (fluidLevel>=fluidContentByLayer) ? (fluidLevel-fluidContentByLayer) : 0;
             layer++;
         }
         for(int x=0;x<data.sizeX();x++) {
-            for(int y=0;y<data.sizeY();y++) {
+            for(int y=0;y<fluidLevelByLayer.length;y++) {
                 for(int z=0;z<data.sizeZ();z++) {
                     TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(x+xCoord, y+yCoord, z+zCoord);
-                    tank.fluidLevel = fluidLevelByLayer[y];
+                    if(tank != null) {
+                        tank.fluidLevel = fluidLevelByLayer[y];
+                    }
                 }
             }
         }
