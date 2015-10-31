@@ -1,17 +1,21 @@
 package com.InfinityRaider.AgriCraft.farming.mutation.statcalculator;
 
+import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
+import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+import com.InfinityRaider.AgriCraft.api.v2.IStatCalculator;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public abstract class StatCalculator {
-    private static StatCalculator instance;
+public abstract class StatCalculator implements IStatCalculator {
+    private static IStatCalculator instance;
 
     protected StatCalculator() {}
 
-    public static StatCalculator getInstance() {
+    public static IStatCalculator getInstance() {
         if(instance == null) {
             if(ConfigurationHandler.hardCoreStats) {
                 instance = new StatCalculatorHardcore();
@@ -22,11 +26,20 @@ public abstract class StatCalculator {
         return instance;
     }
 
+    public static void setStatCalculator(IStatCalculator calculator) {
+        instance = calculator;
+    }
+
     /**
      * Applies the stats to the resulting crop after a spread or mutation
      * @param result The result from the spread/mutation
      * @param input A list with all the neighbouring crops, any neighbouring crop is in this list (with or without plant, mature or not, with weeds or not, ...)
      * @param mutation if this result comes from a mutation or from a spread
      */
-    public abstract void setResultStats(CrossOverResult result, List<TileEntityCrop> input, boolean mutation);
+    public static void setResultStats(CrossOverResult result, List<ICrop> input, boolean mutation) {
+        ISeedStats stats = instance.calculateStats(result.toStack(), input, mutation);
+
+    }
+
+    public abstract ISeedStats calculateStats(ItemStack result, List<ICrop> input, boolean mutation);
 }

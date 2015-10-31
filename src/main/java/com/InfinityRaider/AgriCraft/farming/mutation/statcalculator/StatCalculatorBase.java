@@ -1,10 +1,11 @@
 package com.InfinityRaider.AgriCraft.farming.mutation.statcalculator;
 
-import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
+import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
+import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -12,15 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract  class StatCalculatorBase extends StatCalculator {
-    public void setResultStats(CrossOverResult result, List<TileEntityCrop> input, boolean mutation) {
-        TileEntityCrop[] parents = filterParents(input);
+    @Override
+    public ISeedStats calculateStats(ItemStack result, List<ICrop> input, boolean mutation) {
+        ICrop[] parents = filterParents(input);
         int nrParents = parents.length;
         int nrValidParents = 0;
         int[] growth = new int[nrParents];
         int[] gain = new int[nrParents];
         int[] strength = new int[nrParents];
         for (int i = 0; i < nrParents; i++) {
-            boolean canInherit = canInheritStats(result.getSeed(), result.getMeta(), parents[i].getSeedStack().getItem(), parents[i].getSeedStack().getItemDamage());
+            boolean canInherit = canInheritStats(result.getItem(), result.getItemDamage(), parents[i].getSeedStack().getItem(), parents[i].getSeedStack().getItemDamage());
             if (canInherit) {
                 nrValidParents = nrValidParents + 1;
             }
@@ -37,18 +39,18 @@ public abstract  class StatCalculatorBase extends StatCalculator {
         int meanGain = getMeanIgnoringNegativeValues(gain);
         int meanStrength = getMeanIgnoringNegativeValues(strength);
         int divisor = mutation ? ConfigurationHandler.cropStatDivisor : 1;
-        result.setStats(calculateStats(meanGrowth, nrValidParents, divisor), calculateStats(meanGain, nrValidParents, divisor), calculateStats(meanStrength, nrValidParents, divisor));
+        return new PlantStats(calculateStats(meanGrowth, nrValidParents, divisor), calculateStats(meanGain, nrValidParents, divisor), calculateStats(meanStrength, nrValidParents, divisor));
     }
 
     //gets an array of all the possible parents from the array containing all the neighbouring crops
-    protected TileEntityCrop[] filterParents(List<TileEntityCrop> input) {
-        ArrayList<TileEntityCrop> list = new ArrayList<TileEntityCrop>();
-        for(TileEntityCrop crop:input) {
+    protected ICrop[] filterParents(List<ICrop> input) {
+        ArrayList<ICrop> list = new ArrayList<ICrop>();
+        for(ICrop crop:input) {
             if (crop != null && crop.isMature()) {
                 list.add(crop);
             }
         }
-        return list.toArray(new TileEntityCrop[list.size()]);
+        return list.toArray(new ICrop[list.size()]);
     }
 
     protected boolean canInheritStats(Item child, int childMeta, Item seed, int seedMeta) {
