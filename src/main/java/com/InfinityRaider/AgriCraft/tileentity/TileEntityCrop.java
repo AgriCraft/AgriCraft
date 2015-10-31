@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
 import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
+import com.InfinityRaider.AgriCraft.api.v2.ICrop;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
@@ -30,12 +31,13 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
+public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebuggable{
     private PlantStats stats = new PlantStats();
     private boolean analyzed=false;
     private boolean crossCrop=false;
@@ -53,24 +55,33 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         return false;
     }
 
+    @Override
     public CropPlant getPlant() {return plant;}
 
+    @Override
     public ISeedStats getStats() {
         return this.hasPlant()?stats.copy():new PlantStats(-1, -1, -1);
     }
 
+    @Override
     public short getGrowth() {return this.weed ? (short)ConfigurationHandler.weedGrowthMultiplier : stats.getGrowth();} //Pardon the cast.
 
+    @Override
     public short getGain() {return stats.getGain();}
 
+    @Override
     public short getStrength() {return stats.getStrength();}
 
+    @Override
     public boolean isAnalyzed() {return analyzed;}
 
+    @Override
     public boolean hasWeed() {return weed;}
 
+    @Override
     public boolean isCrossCrop() {return crossCrop;}
 
+    @Override
     public void setCrossCrop(boolean status) {
         if(status!=this.crossCrop) {
             this.crossCrop = status;
@@ -82,9 +93,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     public int getGrowthRate() {return this.weed ? ConfigurationHandler.weedGrowthRate : plant.getGrowthRate();}
 
     /** check to see if there is a plant here */
+    @Override
     public boolean hasPlant() {return this.plant!=null;}
 
     /** check to see if a seed can be planted */
+    @Override
     public boolean canPlant() {
         return !this.hasPlant() && !this.hasWeed() && !this.isCrossCrop();
     }
@@ -104,11 +117,13 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** sets the plant in the crop */
+    @Override
     public void setPlant(int growth, int gain, int strength, boolean analyzed, Item seed, int seedMeta) {
         this.setPlant(growth, gain, strength, analyzed, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
     }
 
     /** clears the plant in the crop */
+    @Override
     public void clearPlant() {
         CropPlant oldPlant = getPlant();
         this.stats = new PlantStats();
@@ -123,6 +138,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** check if the crop is fertile */
+    @Override
     public boolean isFertile() {
         return this.weed || worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.isFertile(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
     }
@@ -133,6 +149,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** check if bonemeal can be applied */
+    @Override
     public boolean canBonemeal() {
         if(this.crossCrop) {
             return ConfigurationHandler.bonemealMutation;
@@ -150,6 +167,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** check the block if the plant is mature */
+    @Override
     public boolean isMature() {
         return worldObj.getBlockMetadata(xCoord, yCoord, zCoord) >= Constants.MATURE;
     }
@@ -163,6 +181,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** returns an ItemStack holding the seed currently planted, initialized with an NBT tag holding the stats */
+    @Override
     public ItemStack getSeedStack() {
         if(plant == null) {
             return null;
@@ -175,11 +194,13 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     /** returns the Block instance of the plant currently planted on the crop */
+    @Override
     public Block getPlantBlock() {
         return plant==null?null:plant.getBlock();
     }
 
     /** spawns weed in the crop */
+    @Override
     public void spawnWeed() {
         this.crossCrop=false;
         this.clearPlant();
@@ -209,6 +230,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     //clear the weed
+    @Override
     public void clearWeed() {updateWeed(0);}
 
     //weed spawn chance
@@ -247,6 +269,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     //is fertilizer allowed
+    @Override
     public boolean allowFertiliser(IFertiliser fertiliser) {
         if(this.crossCrop) {
             return ConfigurationHandler.bonemealMutation && fertiliser.canTriggerMutation();
@@ -261,6 +284,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
     }
 
     //when fertiliser is applied
+    @Override
     public void applyFertiliser(IFertiliser fertiliser, Random rand) {
         if(fertiliser.hasSpecialBehaviour()) {
             fertiliser.onFertiliserApplied(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord, rand);
@@ -272,6 +296,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements IDebuggable{
         else if(this.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
             this.crossOver();
         }
+    }
+
+    @Override
+    public boolean harvest(@Nullable EntityPlayer player) {
+        return ((BlockCrop) worldObj.getBlock(xCoord, yCoord, zCoord)).harvest(worldObj, xCoord, yCoord, zCoord, player);
     }
 
     //TileEntity is just to store data on the crop
