@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.farming.mutation.statcalculator;
 
 import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v2.ICrop;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
+import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public abstract  class StatCalculatorBase extends StatCalculator {
     @Override
-    public ISeedStats calculateStats(ItemStack result, List<ICrop> input, boolean mutation) {
+    public ISeedStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation) {
         ICrop[] parents = filterParents(input);
         int nrParents = parents.length;
         int nrValidParents = 0;
@@ -43,7 +43,7 @@ public abstract  class StatCalculatorBase extends StatCalculator {
     }
 
     //gets an array of all the possible parents from the array containing all the neighbouring crops
-    protected ICrop[] filterParents(List<ICrop> input) {
+    protected ICrop[] filterParents(List<? extends ICrop> input) {
         ArrayList<ICrop> list = new ArrayList<ICrop>();
         for(ICrop crop:input) {
             if (crop != null && crop.isMature()) {
