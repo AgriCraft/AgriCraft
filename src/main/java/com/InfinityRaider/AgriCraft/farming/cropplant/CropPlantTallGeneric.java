@@ -82,7 +82,6 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
         return (meta>maxMetaBottomBlock()?2:1)*Constants.UNIT*13;
     }
 
-
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getBottomIcon(int growthStage) {

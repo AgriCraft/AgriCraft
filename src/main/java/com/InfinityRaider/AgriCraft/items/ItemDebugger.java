@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.utility.DebugHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,9 +31,11 @@ public class ItemDebugger extends ItemAgricraft {
         if(!player.isSneaking()) {
             DebugHelper.debug(player, world, x, y, z);
         }
-        else if(world.getBlock(x, y, z) instanceof BlockBush) {
+        else if(world.getBlock(x, y, z) instanceof IGrowable) {
             if(player.isSneaking()) {
-                world.getBlock(x, y, z).updateTick(world, x, y, z, world.rand);
+                int meta = world.getBlockMetadata(x, y, z);
+                world.setBlockMetadataWithNotify(x, y, z, (meta+1)%16, 3);
+                //world.getBlock(x, y, z).updateTick(world, x, y, z, world.rand);
             }
         }
         else {

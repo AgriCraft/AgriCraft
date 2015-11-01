@@ -3,6 +3,7 @@ Changelog
 1.4.4
 -CHANGE: Generified the way growth requirements search for metadata (fixes compatibility with GrechTech ores)
 -FIXED:  ArrayIndexOutOfBoundsException and NullPointerException when breaking tank multi blocks under certain conditions
+-FIXED:  Crash with Psychedelicraft coffee seeds
 
 1.4.3
 -CHANGE: Entirely rewrote the multi-block code fixing a lot of bugs and improving performance.

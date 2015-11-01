@@ -494,8 +494,9 @@ public abstract class IOHelper {
     private static final String psychedelicraftMutations =
             "psychedelicraft:tobaccoSeeds=AgriCraft:seedShroomBrown+minecraft:nether_wart\n" +
             "psychedelicraft:hop_seeds=psychedelicraft:tobaccoSeeds+minecraft:wheat_seeds\n" +
-            "psychedelicraft:cannabisSeeds=psychedelicraft:tobaccoSeeds+psychedelicraft:hop_seeds\n" +
-            "psychedelicraft:cocaSeeds=psychedelicraft:cannabisSeeds+psychedelicraft:hop_seeds";
+            "psychedelicraft:cannabisSeeds=psychedelicraft:coffeaCherries+psychedelicraft:hop_seeds\n" +
+            "psychedelicraft:cocaSeeds=psychedelicraft:cannabisSeeds+psychedelicraft:hop_seeds\n" +
+            "psychedelicraft:coffeaCherries=psychedelicraft:hop_seeds+psychedelicraft:tobaccoSeeds";
 
     private static final String thaumcraft_ArsMagicaMutations =
             "AgriCraft:seedCinderpearl=AgriCraft:seedCactus+AgriCraft:seedTulipRed\n" +
