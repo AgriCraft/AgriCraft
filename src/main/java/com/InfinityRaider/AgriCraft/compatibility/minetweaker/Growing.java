@@ -9,6 +9,7 @@ import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.minecraft.MineTweakerMC;
+import minetweaker.api.oredict.IOreDictEntry;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -321,27 +322,37 @@ public class Growing {
 
         @ZenMethod
         public static void set(IItemStack seed, IItemStack base, int type, boolean oreDict) {
+            set(MineTweakerMC.getItemStack(seed), MineTweakerMC.getItemStack(base), type, oreDict);
+        }
+
+        @ZenMethod
+        public static void set(IItemStack seed, IItemStack base, int type) {
+            set(seed, base, type, false);
+        }
+
+        @ZenMethod
+        public static void set(IItemStack seed, IOreDictEntry base, int type) {
+            set(MineTweakerMC.getItemStack(seed), MineTweakerMC.getItemStack(base), type, true);
+        }
+
+        private static void set(ItemStack seed, ItemStack base, int type, boolean oreDict) {
             if (type < 1 || type > 2) {
                 MineTweakerAPI.logError("Type needs to be either 1 (below) or 2 (nearby)");
                 return;
             }
-
-            ItemStack seedIS = MineTweakerMC.getItemStack(seed);
-            if (seedIS == null || !(seedIS.getItem() instanceof ItemSeeds)) {
+            if (seed == null || !(seed.getItem() instanceof ItemSeeds)) {
                 MineTweakerAPI.logError("Seeds has to be non-null and of type ItemSeeds.");
                 return;
             }
-
-            ItemStack baseIS = MineTweakerMC.getItemStack(base);
-            if (baseIS == null || !(baseIS.getItem() instanceof ItemBlock)) {
+            if (base == null || !(base.getItem() instanceof ItemBlock)) {
                 MineTweakerAPI.logError("Base has to be non-null and ot type ItemBlock.");
                 return;
             }
-
-            BlockWithMeta baseWM = new BlockWithMeta(((ItemBlock) baseIS.getItem()).field_150939_a, baseIS.getItemDamage());
+            BlockWithMeta baseWM = new BlockWithMeta(((ItemBlock) base.getItem()).field_150939_a, base.getItemDamage());
             RequirementType reqType = type == 1 ? RequirementType.BELOW
                     : RequirementType.NEARBY;
-            MineTweakerAPI.apply(new SetAction(seedIS, baseWM, reqType, oreDict));
+            MineTweakerAPI.apply(new SetAction(seed, baseWM, reqType, oreDict));
+
         }
 
         @ZenMethod
