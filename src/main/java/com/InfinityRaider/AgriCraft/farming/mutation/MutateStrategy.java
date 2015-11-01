@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
+import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculator;
 
 public class MutateStrategy extends BaseStrategy {
     public MutateStrategy(MutationEngine mutationEngine) {
@@ -13,7 +14,7 @@ public class MutateStrategy extends BaseStrategy {
             int index = engine.getRandom().nextInt(crossOvers.length);
             if (crossOvers[index].getResult().getItem() != null) {
                 CrossOverResult result = CrossOverResult.fromMutation(crossOvers[index]);
-                calculator.setResultStats(result, engine.getCrop().getMatureNeighbours(), true);
+                StatCalculator.setResultStats(result, engine.getCrop().getMatureNeighbours(), true);
                 return result;
             }
         }

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.gui;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
+import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;

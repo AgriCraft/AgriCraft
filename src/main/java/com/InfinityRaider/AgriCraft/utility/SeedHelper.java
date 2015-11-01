@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;

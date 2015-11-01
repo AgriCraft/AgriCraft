@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.rotarycraft;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;

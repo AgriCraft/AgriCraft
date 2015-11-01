@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.pneumaticcraft;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.psychedelicraft;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantTallGeneric;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantTallGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;

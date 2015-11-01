@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.bluepower;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantTallGeneric;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantTallGeneric;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

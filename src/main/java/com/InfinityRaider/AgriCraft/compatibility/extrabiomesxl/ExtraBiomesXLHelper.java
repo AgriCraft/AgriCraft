@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.extrabiomesxl;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;

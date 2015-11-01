@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.mobdropcrops;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantStem;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantStem;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

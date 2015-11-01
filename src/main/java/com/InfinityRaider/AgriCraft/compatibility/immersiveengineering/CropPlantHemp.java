@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.immersiveengineering;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantTall;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantTall;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;

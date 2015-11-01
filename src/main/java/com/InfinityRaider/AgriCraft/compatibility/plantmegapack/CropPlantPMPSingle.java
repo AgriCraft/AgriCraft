@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.plantmegapack;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;

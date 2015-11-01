@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.apiimpl.v1;
+package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;

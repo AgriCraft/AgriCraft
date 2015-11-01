@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.lordoftherings;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;

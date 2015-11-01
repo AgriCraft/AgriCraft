@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
+package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;

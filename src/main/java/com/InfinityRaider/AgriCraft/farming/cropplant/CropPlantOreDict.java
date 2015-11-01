@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
+package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

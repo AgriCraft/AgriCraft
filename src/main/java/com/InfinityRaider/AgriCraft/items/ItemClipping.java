@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.PlantStats;
+import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;

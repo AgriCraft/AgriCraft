@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.gui.journal;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;

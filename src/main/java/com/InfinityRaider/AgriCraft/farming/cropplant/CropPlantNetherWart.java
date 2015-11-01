@@ -1,12 +1,12 @@
-package com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant;
+package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.item.ItemSeeds;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -14,46 +14,39 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class CropPlantVanilla extends CropPlant {
-    private BlockCrops plant;
-    private ItemSeeds seed;
-
-    public CropPlantVanilla(BlockCrops crop, ItemSeeds seed) {
-        this.plant = crop;
-        this.seed = seed;
-    }
+public class CropPlantNetherWart extends CropPlant {
     @Override
     public int tier() {
-        return 1;
+        return 2;
     }
 
     @Override
     public ItemStack getSeed() {
-        return new ItemStack(seed);
+        return new ItemStack(Items.nether_wart);
     }
 
     @Override
     public Block getBlock() {
-        return plant;
+        return Blocks.nether_wart;
     }
 
     @Override
     public ArrayList<ItemStack> getAllFruits() {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        list.add(new ItemStack(plant.getItemDropped(7, null, 0)));
+        list.add(new ItemStack(Items.nether_wart));
         return list;
     }
 
     @Override
     public ItemStack getRandomFruit(Random rand) {
-        return new ItemStack(plant.getItemDropped(7, rand, 0));
+        return new ItemStack(Items.nether_wart);
     }
 
     @Override
     public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
         int amount = (int) (Math.ceil((gain + 0.00) / 3));
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        while(amount>0) {
+        while (amount > 0) {
             list.add(getRandomFruit(rand));
             amount--;
         }
@@ -72,19 +65,26 @@ public class CropPlantVanilla extends CropPlant {
 
     @Override
     public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement(seed, 0).canGrow(world, x, y, z);
+        return GrowthRequirementHandler.getGrowthRequirement(Items.nether_wart, 0).canGrow(world, x, y, z);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {
-        return Constants.UNIT*13;
+        return Constants.UNIT * 13;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon(int growthStage) {
-        return plant.getIcon(0, growthStage);
+        int meta = 1;
+        if(growthStage>=7) {
+            meta = 3;
+        }
+        else if(growthStage<4) {
+            meta = 0;
+        }
+        return Blocks.nether_wart.getIcon(0, meta);
     }
 
     @Override
@@ -96,12 +96,6 @@ public class CropPlantVanilla extends CropPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public String getInformation() {
-        String name = seed.getUnlocalizedName();
-        int index = name.indexOf('_');
-        if(index<0) {
-            index = name.indexOf('.');
-        }
-        name = name.substring(index+1);
-        return "agricraft_journal."+name;
+        return "agricraft_journal." + "nether_wart";
     }
 }

@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Data;

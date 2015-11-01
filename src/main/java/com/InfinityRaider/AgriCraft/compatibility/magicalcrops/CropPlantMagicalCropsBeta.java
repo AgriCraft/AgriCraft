@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.magicalcrops;
 
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlantGeneric;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantGeneric;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

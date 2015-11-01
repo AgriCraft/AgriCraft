@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.apiimpl.v1;
+package com.InfinityRaider.AgriCraft.farming.growthrequirement;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;

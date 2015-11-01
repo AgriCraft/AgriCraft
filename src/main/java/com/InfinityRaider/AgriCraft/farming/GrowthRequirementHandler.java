@@ -1,8 +1,9 @@
 package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.GrowthRequirement;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
