@@ -133,9 +133,8 @@ public abstract class ModHelper {
     /** called during the initialization phase of FML's mod loading cycle */
     protected void init() {}
 
-
     /** called during the post-initialization phase of FML's mod loading cycle to register all CropPlants for this mod*/
-    protected  void initPlants() {};
+    protected  void initPlants() {}
 
     /** called during the post-initialization phase of FML's mod loading cycle */
     protected void postTasks() {}

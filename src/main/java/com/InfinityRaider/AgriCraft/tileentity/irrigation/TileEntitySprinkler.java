@@ -11,11 +11,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockFarmland;
+import net.minecraft.block.IGrowable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.common.IPlantable;
 
 import java.util.List;
 
@@ -112,7 +114,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
                 // irrigate farmland
                 int flag = counter==0?2:6;
                 this.worldObj.setBlockMetadataWithNotify(x, y, z, 7, flag);
-            } else if (block instanceof BlockBush && !farmlandOnly) {
+            } else if (((block instanceof IPlantable) || (block instanceof IGrowable)) && !farmlandOnly) {
                 // x chance to force growth tick on plant every y ticks
                 if (counter == 0 && worldObj.rand.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
                     block.updateTick(this.worldObj, x, y, z, worldObj.rand);

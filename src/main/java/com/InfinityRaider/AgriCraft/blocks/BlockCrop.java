@@ -105,7 +105,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                     //multiplier from growth stat
                     double growthBonus = 1.0 + crop.getGrowth() / 10.0;
                     //multiplier defined in the config
-                    float global = 2.0F - ConfigurationHandler.growthMultiplier;
+                    float global = ConfigurationHandler.growthMultiplier;
                     //crop dependent base growth rate
                     float growthRate = (float) crop.getGrowthRate();
                     //determine if growth tick should be applied or skipped
