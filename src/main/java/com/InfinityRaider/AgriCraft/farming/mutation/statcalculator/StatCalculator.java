@@ -38,7 +38,7 @@ public abstract class StatCalculator implements IStatCalculator {
      */
     public static void setResultStats(CrossOverResult result, List<? extends ICrop> input, boolean mutation) {
         ISeedStats stats = instance.calculateStats(result.toStack(), input, mutation);
-
+        result.setStats(stats.getGrowth(), stats.getGain(), stats.getStrength());
     }
 
     public abstract ISeedStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation);
