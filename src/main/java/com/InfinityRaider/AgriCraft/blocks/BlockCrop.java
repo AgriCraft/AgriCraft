@@ -136,9 +136,9 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
      * @param player the player harvesting the crop. May be null if harvested through automation.
      * @return if the block was harvested
      */
-    public boolean harvest(World world, int x, int y, int z, EntityPlayer player) {
+    public boolean harvest(World world, int x, int y, int z, EntityPlayer player, TileEntityCrop crop) {
         if(!world.isRemote) {
-            TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
+            crop = crop==null?((TileEntityCrop) world.getTileEntity(x, y, z)):crop;
             if(crop.hasWeed()) {
                 crop.clearWeed();   //update is not needed because it is called in the clearWeed() method
                 return false;
@@ -180,7 +180,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                 crop.markForUpdate();
             }
             else {
-                this.harvest(world, x, y, z, player);
+                this.harvest(world, x, y, z, player, crop);
             }
         }
     }
@@ -241,15 +241,15 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
             }
             ItemStack heldItem = player.getCurrentEquippedItem();
             if (player.isSneaking()) {
-                this.harvest(world, x, y, z, player);
+                this.harvest(world, x, y, z, player, crop);
             } else if (heldItem == null || heldItem.getItem() == null) {
                 //harvest operation
-                this.harvest(world, x, y, z, player);
+                this.harvest(world, x, y, z, player, crop);
             } else if (heldItem.getItem() == net.minecraft.init.Items.reeds) {
                 //Enables reed planting, temporary code until I code in seed proxy's
                 //TODO: create seed proxy handler to plant other things directly onto crops (for example the Ex Nihilo seeds)
                 if(crop.hasPlant()) {
-                    this.harvest(world, x, y, z, player);
+                    this.harvest(world, x, y, z, player, crop);
                 } else if (!crop.isCrossCrop() && !crop.hasWeed()) {
                     CropPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack((ItemSeeds) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")));
                     if (sugarcane != null && sugarcane.isFertile(world, x, y, z)) {
@@ -297,7 +297,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                 return ModHelper.handleRightClickOnCrop(world, x, y, z, player, heldItem, this, crop);
             } else {
                 //harvest operation
-                this.harvest(world, x, y, z, player);
+                this.harvest(world, x, y, z, player, crop);
                 //check to see if clicked with seeds
                 if (CropPlantHandler.isValidSeed(heldItem)) {
                     if(this.plantSeed(player.getCurrentEquippedItem(), world, x, y, z)) {

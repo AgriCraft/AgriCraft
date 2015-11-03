@@ -17,7 +17,7 @@ public class HarvestHandler implements IHarvestHandler {
         if(meta<7) {
             return false;
         }
-        ((BlockCrop) block).harvest(world, x, y, z, null);
+        ((BlockCrop) block).harvest(world, x, y, z, null, null);
         return true;
     }
 }

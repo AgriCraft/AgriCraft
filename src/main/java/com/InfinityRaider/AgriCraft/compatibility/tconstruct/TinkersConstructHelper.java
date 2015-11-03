@@ -63,7 +63,7 @@ public class TinkersConstructHelper extends ModHelper {
                     if(toolTag.getBoolean("Broken")) {
                         break;
                     }
-                    else if (world.getBlock(xPos, y, zPos) instanceof BlockCrop && block.harvest(world, xPos, y, zPos, player)) {
+                    else if (world.getBlock(xPos, y, zPos) instanceof BlockCrop && block.harvest(world, xPos, y, zPos, player, null)) {
                         if(damageTool != null) {
                             try {
                                 damageTool.invoke(null, player.getCurrentEquippedItem(), 1, player, false);

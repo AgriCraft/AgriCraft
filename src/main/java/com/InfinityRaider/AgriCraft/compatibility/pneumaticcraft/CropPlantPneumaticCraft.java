@@ -103,7 +103,7 @@ public class CropPlantPneumaticCraft extends CropPlant {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
             int strength = crop.getStrength();
             if(world.rand.nextInt(10)>strength) {
-                ((BlockCrop) world.getBlock(x, y, z)).harvest(world, x, y, z, null);
+                ((BlockCrop) world.getBlock(x, y, z)).harvest(world, x, y, z, null, crop);
             }
         }
         return true;

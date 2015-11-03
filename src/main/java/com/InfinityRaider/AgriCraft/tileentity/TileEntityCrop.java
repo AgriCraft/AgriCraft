@@ -300,7 +300,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
 
     @Override
     public boolean harvest(@Nullable EntityPlayer player) {
-        return ((BlockCrop) worldObj.getBlock(xCoord, yCoord, zCoord)).harvest(worldObj, xCoord, yCoord, zCoord, player);
+        return ((BlockCrop) worldObj.getBlock(xCoord, yCoord, zCoord)).harvest(worldObj, xCoord, yCoord, zCoord, player, this);
     }
 
     //TileEntity is just to store data on the crop
