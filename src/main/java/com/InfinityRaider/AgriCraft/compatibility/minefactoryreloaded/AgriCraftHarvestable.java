@@ -63,11 +63,6 @@ public class AgriCraftHarvestable implements IFactoryHarvestable {
         if(block==null || !(block instanceof BlockCrop)) {
             return;
         }
-        TileEntity te = world.getTileEntity(x, y, z);
-        if(te==null || !(te instanceof TileEntityCrop)) {
-            return;
-        }
         world.setBlockMetadataWithNotify(x, y, z, 2, 3);
-        ((TileEntityCrop) te).markForUpdate();
     }
 }
