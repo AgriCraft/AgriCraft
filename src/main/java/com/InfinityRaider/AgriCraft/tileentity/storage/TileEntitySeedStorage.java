@@ -394,4 +394,34 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public boolean isRotatable() {
         return true;
     }
+
+    @Override
+    public int[] getAccessibleSlotsFromSide(int side) {
+        int[] array = new int[slots.size()];
+        int i = 0;
+        for(Map.Entry<Integer, SeedStorageSlot> entry:slots.entrySet()) {
+            array[i] = entry.getKey();
+            i++;
+        }
+        return array;
+    }
+
+    @Override
+    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+        return false;
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+        if(!this.hasLockedSeed()) {
+            return false;
+        }
+        if(stack==null || stack.getItem()==null) {
+            return false;
+        }
+        if(stack.getItem()!=lockedSeed || stack.getItemDamage()!=lockedSeedMeta) {
+            return false;
+        }
+        return ItemStack.areItemStackTagsEqual(stack, slots.get(slot).getStack(lockedSeed, lockedSeedMeta));
+    }
 }

@@ -1,12 +1,12 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public interface ISeedStorageControllable extends IInventory{
+public interface ISeedStorageControllable extends ISidedInventory {
     /**
      * Tries to add a stack to the inventory, returns true on success
      */

@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +25,6 @@ public class BlockSeedStorage extends BlockCustomWood {
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
-        LogHelper.debug("Right clicked block");
         if (!world.isRemote) {
             player.openGui(AgriCraft.instance, GuiHandler.seedStorageID, world, x, y, z);
         }
