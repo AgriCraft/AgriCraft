@@ -62,7 +62,7 @@ public abstract class BlockAgriCraft extends Block {
     /**
      * Retrieves the stack to show in waila.
      * 
-     * @param the tile entity associated with the block, possibly null.
+     * @param tea tile entity associated with the block, possibly null.
      */
     public ItemStack getWailaStack(BlockAgriCraft block, TileEntityAgricraft tea) {
     	return null;

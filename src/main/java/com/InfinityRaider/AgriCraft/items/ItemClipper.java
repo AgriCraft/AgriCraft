@@ -41,6 +41,7 @@ public class ItemClipper extends ItemAgricraft implements IClipper {
     public void onClipperUsed(World world, int x, int y, int z, EntityPlayer player) {}
 
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
         if (stack == null || stack.getItem() == null) {
             list.add("ERROR");

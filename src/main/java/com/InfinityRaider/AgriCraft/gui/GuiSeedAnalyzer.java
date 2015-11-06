@@ -37,6 +37,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void initGui() {
         super.initGui();
         this.buttonList.add(new GuiButton(0, this.guiLeft + 131, this.guiTop + 67, 18, 18, ""));
@@ -49,7 +50,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
         int white = 4210752;        //the number for white
         //write name: x coordinate is in the middle, 6 down from the top, and setting color to white
         this.fontRendererObj.drawString(name, this.xSize/2 - this.fontRendererObj.getStringWidth(name)/2, 6, white);
-        this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 9, this.ySize - 96 + 2, white);
+        this.fontRendererObj.drawString(I18n.format("container.inventory"), 9, this.ySize - 96 + 2, white);
     }
 
     //draw background

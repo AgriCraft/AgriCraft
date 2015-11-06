@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.api.v2.ICrop;
 import com.InfinityRaider.AgriCraft.api.v2.IStatCalculator;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;

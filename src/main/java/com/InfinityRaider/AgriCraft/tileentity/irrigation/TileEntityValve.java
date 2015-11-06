@@ -67,6 +67,7 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
     	//Required super call
     	super.addWailaInformation(information);

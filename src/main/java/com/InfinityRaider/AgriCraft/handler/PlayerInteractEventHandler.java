@@ -24,7 +24,6 @@ public class PlayerInteractEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void vanillaSeedPlanting(PlayerInteractEvent event) {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            Block block = event.world.getBlock(event.x, event.y, event.z);
             if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
                 if (GrowthRequirementHandler.isSoilValid(event.world, event.x, event.y, event.z)) {
                     if (ConfigurationHandler.disableVanillaFarming) {

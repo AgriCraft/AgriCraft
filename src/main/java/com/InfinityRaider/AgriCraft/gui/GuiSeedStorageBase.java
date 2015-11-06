@@ -93,6 +93,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
         loadButtons();
     }
 
+    @SuppressWarnings("unchecked")
     protected void loadButtons() {
         this.buttonList.clear();
         int buttonWidth = 60;
@@ -258,7 +259,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
         return this.hasActiveSeed()?this.container.getSeedSlots(activeSeed, activeMeta).size():0;
     }
 
-    protected void drawActiveEntries(int x, int y, ResourceLocation texture, int xOffset, int yOffset) {
+    protected void drawActiveEntries(ResourceLocation texture, int xOffset, int yOffset) {
         if(!this.hasActiveSeed()) {
             return;
         }
@@ -313,8 +314,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
         if(!this.hasActiveSeed()) {
             return;
         }
-        for(int i=0;i<this.activeSeeds.size();i++) {
-            Component<PlantStatsStorage> component = activeSeeds.get(i);
+        for (Component<PlantStatsStorage> component : this.activeSeeds) {
             if (component != null && component.getComponent() != null) {
                 //tooltip
                 if (component.isOverComponent(x, y)) {
@@ -325,7 +325,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
                     ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
                     stack.stackTagCompound = SeedHelper.setNBT(new NBTTagCompound(), growth, gain, strength, true);
                     List toolTip = stack.getTooltip(Minecraft.getMinecraft().thePlayer, true);
-                    drawHoveringText(toolTip, x-this.guiLeft, y-this.guiTop, fontRendererObj);
+                    drawHoveringText(toolTip, x - this.guiLeft, y - this.guiTop, fontRendererObj);
                 }
             }
         }

@@ -397,6 +397,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
         super.addWailaInformation(information);
         information.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidLevel() + "/" + this.getCapacity());

@@ -77,6 +77,7 @@ public class ItemHandRake extends ItemAgricraft {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
         list.add(new ItemStack(item, 1, WOOD_VARIANT_META));
         list.add(new ItemStack(item, 1, IRON_VARIANT_META));
@@ -95,6 +96,7 @@ public class ItemHandRake extends ItemAgricraft {
     }
 
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
         list.add(StatCollector.translateToLocal("agricraft_tooltip.handRake"));
     }

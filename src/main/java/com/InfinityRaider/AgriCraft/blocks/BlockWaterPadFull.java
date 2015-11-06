@@ -68,6 +68,7 @@ public class BlockWaterPadFull extends BlockWaterPad {
 
         @Override
         @SideOnly(Side.CLIENT)
+        @SuppressWarnings("unchecked")
         public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
             super.addInformation(stack, player, list, flag);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.waterPadWet"));

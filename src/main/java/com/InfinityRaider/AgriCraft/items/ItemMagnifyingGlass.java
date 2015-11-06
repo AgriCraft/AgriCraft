@@ -86,6 +86,7 @@ public class ItemMagnifyingGlass extends ItemAgricraft {
     }
 
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
         list.add(StatCollector.translateToLocal("agricraft_tooltip.magnifyingGlass"));
     }

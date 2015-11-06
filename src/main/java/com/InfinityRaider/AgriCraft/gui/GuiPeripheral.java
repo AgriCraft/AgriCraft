@@ -100,7 +100,6 @@ public class GuiPeripheral extends GuiContainer {
         float f = 0.00390625F;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        int xMin = xOffset;
         int xMax = xOffset + 5;
         int yMin = yOffset + offset + 1;
         int yMax = yOffset + length + offset;
@@ -108,10 +107,10 @@ public class GuiPeripheral extends GuiContainer {
         float uMax = 5*f;
         float vMin = 254*f;
         float vMax = 254*f;
-        tessellator.addVertexWithUV(xMin, yMax, this.zLevel, uMin, vMax);
+        tessellator.addVertexWithUV(xOffset, yMax, this.zLevel, uMin, vMax);
         tessellator.addVertexWithUV(xMax, yMax, this.zLevel, uMax, vMax);
         tessellator.addVertexWithUV(xMax, yMin, this.zLevel, uMax, vMin);
-        tessellator.addVertexWithUV(xMin, yMin, this.zLevel, uMin, vMin);
+        tessellator.addVertexWithUV(xOffset, yMin, this.zLevel, uMin, vMin);
         tessellator.draw();
         //bottom part
         this.drawTexturedModalRect(xOffset, yOffset + offset + length, 0, 255, 5, 1);
@@ -136,6 +135,7 @@ public class GuiPeripheral extends GuiContainer {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void loadButtonList() {
         this.buttonList.add(new GuiButton(BUTTON_ID_OPEN_GUIDE, this.guiLeft + 154, this.guiTop + 7, 12, 12, "?"));
         this.buttonList.add( new GuiButton(BUTTON_ID_SCROLL_TOP, this.guiLeft + 154, this.guiTop + 20, 10, 10, "\u219F"));

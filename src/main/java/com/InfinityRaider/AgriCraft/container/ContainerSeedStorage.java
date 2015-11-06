@@ -25,6 +25,7 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<ItemStack> getSeedEntries() {
         ArrayList<ItemStack> list = this.te.getInventory();
         return list;

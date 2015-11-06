@@ -117,9 +117,4 @@ public final class Names {
         public static final String psychedelicraft = "psychedelicraft";
         public static final String witchery = "witchery";
     }
-
-    //item registry keywords
-    public static final String seedItem = "seedItem";
-
-
 }

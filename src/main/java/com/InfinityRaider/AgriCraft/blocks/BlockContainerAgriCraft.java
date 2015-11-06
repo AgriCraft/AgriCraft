@@ -61,6 +61,7 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
      * Sets the block's orientation based upon the direction the player is looking when the block is placed.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
         TileEntity te = world.getTileEntity(x, y, z);
         if(te!=null && te instanceof TileEntityAgricraft) {
@@ -99,6 +100,7 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
         if(this.isMultiBlock() && !world.isRemote) {
             IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(x, y, z);

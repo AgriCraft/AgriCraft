@@ -25,7 +25,7 @@ public class GuiSeedStorageController extends GuiSeedStorageBase {
     @Override
     protected void drawGuiContainerBackgroundLayer(float opacity, int x, int y) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(this.texture);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
     }
 
@@ -33,7 +33,7 @@ public class GuiSeedStorageController extends GuiSeedStorageBase {
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
         if(this.activeSeed!=null) {
-            this.drawActiveEntries(x, y,  this.texture, 82, 35);
+            this.drawActiveEntries(texture, 82, 35);
         }
     }
 }

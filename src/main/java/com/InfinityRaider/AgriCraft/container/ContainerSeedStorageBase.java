@@ -60,8 +60,7 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
      */
     @Override
     public List getInventory() {
-        List list = super.getInventory();
-        return list;
+        return super.getInventory();
     }
 
     /**
@@ -98,31 +97,28 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int clickedSlot) {
         ItemStack originalStackInSlot = null;
-        Slot slot = (Slot)this.inventorySlots.get(clickedSlot);
+        Slot slot = (Slot) this.inventorySlots.get(clickedSlot);
         if (slot != null && slot.getHasStack()) {
             ItemStack notMergedStack = slot.getStack();
             originalStackInSlot = notMergedStack.copy();
-            if(slot!=null) {
-                //try to move item from the player's inventory into the container
-                if(SeedHelper.isAnalyzedSeed(notMergedStack)) {
-                    ISeedStorageControllable controllable = this.getControllable(notMergedStack);
-                    if(controllable!=null && controllable.hasLockedSeed()) {
-                        ItemStack locked = controllable.getLockedSeed();
-                        if(notMergedStack.getItem()!=locked.getItem() || notMergedStack.getItemDamage()!=locked.getItemDamage()) {
-                            return null;
-                        }
-                    }
-                    if (this.addSeedToStorage(notMergedStack)) {
-                        notMergedStack.stackSize = 0;
-                    } else {
+            //try to move item from the player's inventory into the container
+            if (SeedHelper.isAnalyzedSeed(notMergedStack)) {
+                ISeedStorageControllable controllable = this.getControllable(notMergedStack);
+                if (controllable != null && controllable.hasLockedSeed()) {
+                    ItemStack locked = controllable.getLockedSeed();
+                    if (notMergedStack.getItem() != locked.getItem() || notMergedStack.getItemDamage() != locked.getItemDamage()) {
                         return null;
                     }
+                }
+                if (this.addSeedToStorage(notMergedStack)) {
+                    notMergedStack.stackSize = 0;
+                } else {
+                    return null;
                 }
             }
             if (notMergedStack.stackSize == 0) {
                 slot.putStack(null);
-            }
-            else {
+            } else {
                 slot.onSlotChanged();
             }
             if (notMergedStack.stackSize == originalStackInSlot.stackSize) {

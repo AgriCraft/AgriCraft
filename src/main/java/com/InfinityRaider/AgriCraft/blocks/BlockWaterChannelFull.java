@@ -25,6 +25,7 @@ public class BlockWaterChannelFull extends BlockWaterChannel {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB boundingBox, List list, Entity entity) {
         AxisAlignedBB axisalignedbb = this.getCollisionBoundingBoxFromPool(world, x, y, z);
         if (axisalignedbb != null && boundingBox.intersectsWith(axisalignedbb)) {

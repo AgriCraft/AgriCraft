@@ -145,7 +145,7 @@ public class BlockGrate extends BlockCustomWood {
         if (!this.isVecInsideXYBounds(world, x, y, z, vec7)) {
             vec7 = null;
         }
-        if (vec2 != null && (vec8 == null || vec0.squareDistanceTo(vec2) < vec0.squareDistanceTo(vec8))) {
+        if (vec2 != null) {
             vec8 = vec2;
         }
         if (vec3 != null && (vec8 == null || vec0.squareDistanceTo(vec3) < vec0.squareDistanceTo(vec8))) {

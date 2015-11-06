@@ -9,7 +9,6 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.client.Minecraft;

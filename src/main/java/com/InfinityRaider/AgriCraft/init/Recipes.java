@@ -170,7 +170,7 @@ public class Recipes {
 
     /**
      * Adds the given recipe for every available wood type.
-     * @params Same as for GameRegistry. The only difference is that planks will get replaced with the different woods.
+     * @param params Same as for GameRegistry. The only difference is that planks will get replaced with the different woods.
      */
     public static void registerCustomWoodRecipe(Block block, int stackSize, boolean shaped, Object... params) {
         for (ItemStack stack : woodList) {
@@ -199,6 +199,8 @@ public class Recipes {
             }
         }
     }
+
+    @SuppressWarnings("unchecked")
     public static void registerCustomWoodRecipe(IRecipe recipe) {
         if(recipe instanceof ShapedRecipes) {
             ShapedRecipes shapedRecipe = (ShapedRecipes) recipe;
@@ -206,19 +208,20 @@ public class Recipes {
         }
         else if (recipe instanceof ShapelessRecipes) {
             ShapelessRecipes shapelessRecipe = (ShapelessRecipes) recipe;
-            registerCustomWoodRecipe(((ItemBlock) shapelessRecipe.getRecipeOutput().getItem()).field_150939_a, shapelessRecipe.getRecipeOutput().stackSize, false, shapelessRecipe.recipeItems.toArray(new ItemStack[]{}));
+            registerCustomWoodRecipe(((ItemBlock) shapelessRecipe.getRecipeOutput().getItem()).field_150939_a, shapelessRecipe.getRecipeOutput().stackSize, false, shapelessRecipe.recipeItems.toArray(new ItemStack[shapelessRecipe.recipeItems.size()]));
         }
     }
+
+    @SuppressWarnings("unchecked")
     private static void addShapelessCustomWoodRecipe(ItemStack output, Object... params) {
         List recipeItemsCopy = new ArrayList();
-        for(int j = 0; j < params.length; ++j) {
-            Object recipeItem = params[j];
-            if(recipeItem instanceof ItemStack) {
+        for (Object recipeItem : params) {
+            if (recipeItem instanceof ItemStack) {
                 recipeItemsCopy.add(((ItemStack) recipeItem).copy());
-            } else if(recipeItem instanceof Item) {
+            } else if (recipeItem instanceof Item) {
                 recipeItemsCopy.add(new ItemStack((Item) recipeItem));
             } else {
-                if(!(recipeItem instanceof Block)) {
+                if (!(recipeItem instanceof Block)) {
                     throw new RuntimeException("Invalid shapeless recipe!");
                 }
                 recipeItemsCopy.add(new ItemStack((Block) recipeItem));

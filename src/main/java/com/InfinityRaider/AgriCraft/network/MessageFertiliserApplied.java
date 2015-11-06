@@ -16,9 +16,7 @@ public class MessageFertiliserApplied extends MessageAgriCraft {
     private Item fertiliser;
     private int meta;
 
-    public MessageFertiliserApplied() {
-
-    }
+    public MessageFertiliserApplied() {}
 
     public MessageFertiliserApplied(ItemStack fertiliser, int x, int y, int z) {
         this.x = x;

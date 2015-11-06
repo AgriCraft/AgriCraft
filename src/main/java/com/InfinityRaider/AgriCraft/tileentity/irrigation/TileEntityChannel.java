@@ -40,7 +40,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
     protected static final int DISCRETE_MAX = 16;
     protected static final int ABSOLUTE_MAX = ConfigurationHandler.channelCapacity;
     protected static final float DISCRETE_FACTOR = (float) DISCRETE_MAX / (float)ABSOLUTE_MAX;
-    protected static final float SCALE_FACTOR = (float)ABSOLUTE_MAX / (float) DISCRETE_MAX;
 
     private int lvl;
     private int lastDiscreteLvl=0;
@@ -299,6 +298,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
     	//Required call to super.
     	super.addWailaInformation(information);

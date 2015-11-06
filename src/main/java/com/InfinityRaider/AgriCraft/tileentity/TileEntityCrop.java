@@ -468,6 +468,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
     	if(this.hasPlant()) {
     		//Add the seed name.

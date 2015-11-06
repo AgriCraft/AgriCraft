@@ -41,6 +41,7 @@ public class AgriCraftGuiConfig extends GuiConfig {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         protected GuiScreen buildChildScreen() {
             return new GuiConfig(this.owningScreen,
                     new ConfigElement(ConfigurationHandler.config.getCategory(ConfigurationHandler.CATEGORY_AGRICRAFT)).getChildElements(),
@@ -56,6 +57,7 @@ public class AgriCraftGuiConfig extends GuiConfig {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         protected GuiScreen buildChildScreen() {
             return new GuiConfig(this.owningScreen,
                     new ConfigElement(ConfigurationHandler.config.getCategory(ConfigurationHandler.CATEGORY_IRRIGATION)).getChildElements(),
@@ -71,6 +73,7 @@ public class AgriCraftGuiConfig extends GuiConfig {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         protected GuiScreen buildChildScreen() {
             return new GuiConfig(this.owningScreen,
                     new ConfigElement(ConfigurationHandler.config.getCategory(ConfigurationHandler.CATEGORY_COMPATIBILITY)).getChildElements(),

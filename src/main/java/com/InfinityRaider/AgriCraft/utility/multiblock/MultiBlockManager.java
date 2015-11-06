@@ -50,6 +50,7 @@ public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void createMultiBlock(World world, int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
         int sizeX = xMax-xMin;
         int sizeY = yMax-yMin;
@@ -160,6 +161,7 @@ public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData>
         return (te != null) && (te instanceof IMultiBlockComponent) && (component.isValidComponent((IMultiBlockComponent) te));
     }
 
+    @SuppressWarnings("unchecked")
     private void breakAllMultiBlocksInRange(World world, int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
         for (int x=xMin; x<xMax;x++) {
             for (int y=yMin;y<yMax;y++) {

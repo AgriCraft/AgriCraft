@@ -47,7 +47,7 @@ public class RenderSprinkler extends RenderBlockBase {
         GL11.glRotatef(-angle, 0, -1, 0);
         GL11.glTranslatef(-0.5F, -1.5F, -0.5F);
         GL11.glEnable(GL11.GL_LIGHTING);
-        renderConnection(sprinkler, x, y, z);
+        renderConnection(sprinkler);
         return true;
     }
 
@@ -68,7 +68,7 @@ public class RenderSprinkler extends RenderBlockBase {
         return false;
     }
 
-    private void renderConnection(TileEntitySprinkler sprinkler, double x, double y, double z) {
+    private void renderConnection(TileEntitySprinkler sprinkler) {
         //set up tessellator
         Tessellator tessellator = Tessellator.instance;
         //start GL

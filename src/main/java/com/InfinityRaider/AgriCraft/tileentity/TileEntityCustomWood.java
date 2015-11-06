@@ -188,6 +188,7 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
     	ItemStack mat = this.getMaterialStack();
     	information.add(StatCollector.translateToLocal("agricraft_tooltip.material")+": "+ mat.getItem().getItemStackDisplayName(mat));
