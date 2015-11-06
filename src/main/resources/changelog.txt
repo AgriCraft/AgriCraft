@@ -4,7 +4,7 @@ Changelog
 -CHANGE: Generified the way growth requirements search for metadata (fixes compatibility with GrechTech ores)
 -FIXED:  ArrayIndexOutOfBoundsException and NullPointerException when breaking tank multi blocks under certain conditions
 -FIXED:  Crash with Psychedelicraft coffee seeds
--FIXED:  Quirks with the seed storage when automatically inserting item stacks: Automatic input is no longer allowed
+-FIXED:  Quirks with the seed storage when automatically inserting item stacks
 
 1.4.3
 -CHANGE: Entirely rewrote the multi-block code fixing a lot of bugs and improving performance.

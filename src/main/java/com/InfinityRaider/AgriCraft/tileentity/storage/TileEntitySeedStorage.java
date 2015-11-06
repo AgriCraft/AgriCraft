@@ -313,6 +313,10 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack inputStack) {
+        if(slot<0) {
+            this.addStackToInventory(inputStack);
+            return;
+        }
         slot = slot%1000;
         if(this.isItemValidForSlot(slot, inputStack)) {
             SeedStorageSlot slotAt = this.slots.get(slot);
@@ -397,8 +401,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        int[] array = new int[slots.size()];
-        int i = 0;
+        int[] array = new int[slots.size()+1];
+        array[0] = -1;
+        int i = 1;
         for(Map.Entry<Integer, SeedStorageSlot> entry:slots.entrySet()) {
             array[i] = entry.getKey();
             i++;
@@ -408,11 +413,21 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return false;
+        if(worldObj.isRemote) {
+            return false;
+        }
+        if(slot>=0) {
+            //0 is a virtual slot only used for inputs, this is a workaround to prevent derpy behaviour with code which modifies stacks in slots directly
+            return false;
+        }
+        return (!this.hasLockedSeed()) || (stack!=null && stack.getItem()==lockedSeed && stack.getItemDamage()==lockedSeedMeta);
     }
 
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, int side) {
+        if(slot<0) {
+            return false;
+        }
         if(!this.hasLockedSeed()) {
             return false;
         }
