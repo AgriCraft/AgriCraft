@@ -84,6 +84,7 @@ public final class PlantMegaPackHelper extends ModHelper {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void cleanOreDict(String name) {
         List<ArrayList<ItemStack>> idToStack;
         try {

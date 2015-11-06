@@ -23,7 +23,7 @@ public final class BluePowerHelper extends ModHelper {
         OreDictionary.registerOre("cropFlax", Items.string);
 
         try {
-            CropPlantHandler.registerPlant(new CropPlantBluePower((ItemSeeds) (Item) Item.itemRegistry.getObject("bluepower:flax_seeds")));
+            CropPlantHandler.registerPlant(new CropPlantBluePower((ItemSeeds) Item.itemRegistry.getObject("bluepower:flax_seeds")));
         } catch (DuplicateCropPlantException e) {
             e.printStackTrace();
         } catch (BlacklistedCropPlantException e) {

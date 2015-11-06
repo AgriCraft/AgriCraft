@@ -184,6 +184,7 @@ public abstract class ModHelper {
     }
 
     /** method holding all ModHelper classes */
+    @SuppressWarnings("unchecked")
     public static void findHelpers() {
         Class[] classes = {
                 AdventOfAscensionHelper.class,

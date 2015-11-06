@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 
 public class CropPlantMagicalCropsV4 extends CropPlantGeneric {
-    private int meta = 0;
     private Item drop;
 
     public CropPlantMagicalCropsV4(ItemSeeds seed, Item drop) {
@@ -32,13 +31,14 @@ public class CropPlantMagicalCropsV4 extends CropPlantGeneric {
 
     @Override
     public int tier() {
-        return highTier()?3:4;
+        return highTier()?4:3;
     }
 
     @Override
     public ArrayList<ItemStack> getAllFruits() {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         if(highTier()) {
+            int meta = 0;
             list.add(new ItemStack(drop, 1, meta));
         } else {
             list.addAll(OreDictHelper.getFruitsFromOreDict(getSeed()));

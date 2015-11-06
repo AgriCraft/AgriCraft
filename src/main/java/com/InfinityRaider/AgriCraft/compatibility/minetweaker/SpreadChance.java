@@ -42,7 +42,7 @@ public class SpreadChance {
 
         @Override
         public void apply() {
-            oldChance = SeedHelper.overrideSpreadChance((ItemSeeds) seed.getItem(), seed.getItemDamage(), chance);
+            oldChance = SeedHelper.overrideSpreadChance(seed.getItem(), seed.getItemDamage(), chance);
         }
 
         @Override
@@ -52,7 +52,7 @@ public class SpreadChance {
 
         @Override
         public void undo() {
-            SeedHelper.overrideSpreadChance((ItemSeeds) seed.getItem(), seed.getItemDamage(), oldChance);
+            SeedHelper.overrideSpreadChance(seed.getItem(), seed.getItemDamage(), oldChance);
         }
 
         @Override

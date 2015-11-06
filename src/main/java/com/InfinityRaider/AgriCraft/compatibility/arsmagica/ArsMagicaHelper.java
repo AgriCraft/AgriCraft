@@ -25,7 +25,7 @@ public class ArsMagicaHelper extends ModHelper {
         Item aum = (Item) Item.itemRegistry.getObject("arsmagica2:Aum");
         BlockModPlant cropAum;
         try {
-            cropAum = new BlockModPlant(new Object[]{"Aum", new ItemStack(aum), 3, RenderMethod.CROSSED});
+            cropAum = new BlockModPlant("Aum", new ItemStack(aum), 3, RenderMethod.CROSSED);
         } catch (Exception e) {
             if (ConfigurationHandler.debug) {
                 e.printStackTrace();
@@ -43,7 +43,7 @@ public class ArsMagicaHelper extends ModHelper {
         Item tarmaRoot = (Item) Item.itemRegistry.getObject("arsmagica2:TarmaRoot");
         BlockModPlant cropTarmaRoot;
         try {
-            cropTarmaRoot = new BlockModPlant(new Object[]{"TarmaRoot", new ItemStack(tarmaRoot), 3, RenderMethod.CROSSED});
+            cropTarmaRoot = new BlockModPlant("TarmaRoot", new ItemStack(tarmaRoot), 3, RenderMethod.CROSSED);
         } catch (Exception e) {
             if (ConfigurationHandler.debug) {
                 e.printStackTrace();
@@ -58,7 +58,7 @@ public class ArsMagicaHelper extends ModHelper {
         Item cerublossom = (Item) Item.itemRegistry.getObject("arsmagica2:blueOrchid");
         BlockModPlant cropCerublossom;
         try {
-            cropCerublossom = new BlockModPlant(new Object[]{"Cerublossom", new ItemStack(cerublossom), 3, RenderMethod.CROSSED});
+            cropCerublossom = new BlockModPlant("Cerublossom", new ItemStack(cerublossom), 3, RenderMethod.CROSSED);
         } catch (Exception e) {
             if (ConfigurationHandler.debug) {
                 e.printStackTrace();
@@ -72,7 +72,7 @@ public class ArsMagicaHelper extends ModHelper {
         Item desertNova = (Item) Item.itemRegistry.getObject("arsmagica2:desertNova");
         BlockModPlant cropDesertNova;
         try {
-            cropDesertNova = new BlockModPlant(new Object[]{"DesertNova", new ItemStack(desertNova), 3, RenderMethod.CROSSED});
+            cropDesertNova = new BlockModPlant("DesertNova", new ItemStack(desertNova), 3, RenderMethod.CROSSED);
         } catch (Exception e) {
             if (ConfigurationHandler.debug) {
                 e.printStackTrace();
@@ -87,7 +87,7 @@ public class ArsMagicaHelper extends ModHelper {
         Item wakebloom = (Item) Item.itemRegistry.getObject("arsmagica2:wakebloom");
         BlockModPlant cropWakebloom;
         try {
-            cropWakebloom = new BlockModPlant(new Object[]{"Wakebloom", new ItemStack(wakebloom), 3, RenderMethod.CROSSED});
+            cropWakebloom = new BlockModPlant("Wakebloom", new ItemStack(wakebloom), 3, RenderMethod.CROSSED);
         } catch (Exception e) {
             if (ConfigurationHandler.debug) {
                 e.printStackTrace();

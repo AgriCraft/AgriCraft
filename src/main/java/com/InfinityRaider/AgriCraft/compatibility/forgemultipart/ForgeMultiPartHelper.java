@@ -19,7 +19,6 @@ public class ForgeMultiPartHelper extends ModHelper {
     private static Class multiBlockClass;
     private static Method getTileMethod;
 
-    private static Class tileMultiPartClass;
     private static Method getMultiPartsMethod;
 
     private static Class leverPartClass;
@@ -31,6 +30,7 @@ public class ForgeMultiPartHelper extends ModHelper {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void postTasks() {
         if(FMLCommonHandler.instance().getSide() == Side.SERVER) {
             return;
@@ -42,7 +42,7 @@ public class ForgeMultiPartHelper extends ModHelper {
             LogHelper.printStackTrace(e);
         }
         try {
-            tileMultiPartClass = Class.forName("codechicken.multipart.TileMultipart");
+            Class tileMultiPartClass = Class.forName("codechicken.multipart.TileMultipart");
             getMultiPartsMethod = tileMultiPartClass.getMethod("jPartList");
         } catch (Exception e) {
             LogHelper.printStackTrace(e);
@@ -74,7 +74,7 @@ public class ForgeMultiPartHelper extends ModHelper {
                         return true;
                     }
                 } catch(Exception e) {
-                    continue;
+                    LogHelper.printStackTrace(e);
                 }
             }
             return false;

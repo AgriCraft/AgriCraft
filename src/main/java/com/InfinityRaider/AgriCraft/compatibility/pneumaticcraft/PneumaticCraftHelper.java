@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 
 public class PneumaticCraftHelper extends ModHelper {
     @Override
+    @SuppressWarnings("unchecked")
     protected void initPlants() {
         Method getPlantsMethod = null;
         int maxMeta = 16;

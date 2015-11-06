@@ -29,7 +29,6 @@ public class CropPlantGrowthCraftRice extends CropPlant {
             plant = (Block) Block.blockRegistry.getObject("Growthcraft|Rice:grc.riceBlock");
         }
         this.rice = (Item) Item.itemRegistry.getObject("Growthcraft|Rice:grc.rice");
-        boolean flag;
     }
 
     @Override
@@ -104,6 +103,7 @@ public class CropPlantGrowthCraftRice extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
     public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
         RenderingRegistry.instance().renderWorldBlock(renderer, world, x, y, z, plant, plant.getRenderType());
     }

@@ -54,7 +54,7 @@ public class CustomWood {
                 }
             }
 
-            MineTweakerAPI.apply(new AddRecipeAction(outputStack, inputsConverted.toArray(new ItemStack[]{}), shaped));
+            MineTweakerAPI.apply(new AddRecipeAction(outputStack, inputsConverted.toArray(new ItemStack[inputsConverted.size()]), shaped));
         } else {
             MineTweakerAPI.logError(outputStack.getDisplayName() + " is not of type ItemBlockCustomWood.");
         }
@@ -95,6 +95,7 @@ public class CustomWood {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public void undo() {
             List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
             for (Iterator<IRecipe> iter = recipes.iterator(); iter.hasNext();) {
@@ -131,6 +132,7 @@ public class CustomWood {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public void apply() {
             List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
             for (Iterator<IRecipe> iter = recipes.iterator(); iter.hasNext();) {
@@ -148,6 +150,7 @@ public class CustomWood {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public void undo() {
             CraftingManager.getInstance().getRecipeList().addAll(removedRecipes);
         }
