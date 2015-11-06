@@ -5,9 +5,9 @@ import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -23,80 +23,75 @@ public class ArsMagicaHelper extends ModHelper {
     protected void initPlants() {
         //aum
         Item aum = (Item) Item.itemRegistry.getObject("arsmagica2:Aum");
-        BlockModPlant cropAum;
+        BlockModPlant cropAum = null;
         try {
             cropAum = new BlockModPlant("Aum", new ItemStack(aum), 3, RenderMethod.CROSSED);
         } catch (Exception e) {
-            if (ConfigurationHandler.debug) {
-                e.printStackTrace();
+            LogHelper.printStackTrace(e);
+        }
+        if(cropAum != null) {
+            Block log = (Block) Block.blockRegistry.getObject("arsmagica2:WitchwoodLog");
+            if (log != null) {
+                cropAum.getGrowthRequirement().setRequiredBlock(new BlockWithMeta(log), RequirementType.NEARBY, false);
             }
-            return;
+            arsMagicaCrops.add(cropAum);
+            arsMagicaSeeds.add(cropAum.getSeed());
         }
-        Block log = (Block) Block.blockRegistry.getObject("arsmagica2:WitchwoodLog");
-        if (log != null) {
-            cropAum.getGrowthRequirement().setRequiredBlock(new BlockWithMeta(log), RequirementType.NEARBY, false);
-        }
-        arsMagicaCrops.add(cropAum);
-        arsMagicaSeeds.add(cropAum.getSeed());
 
         //tarma root
         Item tarmaRoot = (Item) Item.itemRegistry.getObject("arsmagica2:TarmaRoot");
-        BlockModPlant cropTarmaRoot;
+        BlockModPlant cropTarmaRoot = null;
         try {
             cropTarmaRoot = new BlockModPlant("TarmaRoot", new ItemStack(tarmaRoot), 3, RenderMethod.CROSSED);
         } catch (Exception e) {
-            if (ConfigurationHandler.debug) {
-                e.printStackTrace();
-            }
-            return;
+            LogHelper.printStackTrace(e);
         }
-        cropTarmaRoot.getGrowthRequirement().setBrightnessRange(0, 8);
-        arsMagicaCrops.add(cropTarmaRoot);
-        arsMagicaSeeds.add(cropTarmaRoot.getSeed());
+        if(cropTarmaRoot != null) {
+            cropTarmaRoot.getGrowthRequirement().setBrightnessRange(0, 8);
+            arsMagicaCrops.add(cropTarmaRoot);
+            arsMagicaSeeds.add(cropTarmaRoot.getSeed());
+        }
 
         //cerublossom
         Item cerublossom = (Item) Item.itemRegistry.getObject("arsmagica2:blueOrchid");
-        BlockModPlant cropCerublossom;
+        BlockModPlant cropCerublossom = null;
         try {
             cropCerublossom = new BlockModPlant("Cerublossom", new ItemStack(cerublossom), 3, RenderMethod.CROSSED);
         } catch (Exception e) {
-            if (ConfigurationHandler.debug) {
-                e.printStackTrace();
-            }
-            return;
+            LogHelper.printStackTrace(e);
         }
-        arsMagicaCrops.add(cropCerublossom);
-        arsMagicaSeeds.add(cropCerublossom.getSeed());
+        if(cropCerublossom != null) {
+            arsMagicaCrops.add(cropCerublossom);
+            arsMagicaSeeds.add(cropCerublossom.getSeed());
+        }
 
         //desert nova
         Item desertNova = (Item) Item.itemRegistry.getObject("arsmagica2:desertNova");
-        BlockModPlant cropDesertNova;
+        BlockModPlant cropDesertNova = null;
         try {
             cropDesertNova = new BlockModPlant("DesertNova", new ItemStack(desertNova), 3, RenderMethod.CROSSED);
         } catch (Exception e) {
-            if (ConfigurationHandler.debug) {
-                e.printStackTrace();
-            }
-            return;
+            LogHelper.printStackTrace(e);
         }
-        cropDesertNova.getGrowthRequirement().setSoil(new BlockWithMeta(Blocks.sand));
-        arsMagicaCrops.add(cropDesertNova);
-        arsMagicaSeeds.add(cropDesertNova.getSeed());
+        if(cropDesertNova != null) {
+            cropDesertNova.getGrowthRequirement().setSoil(new BlockWithMeta(Blocks.sand));
+            arsMagicaCrops.add(cropDesertNova);
+            arsMagicaSeeds.add(cropDesertNova.getSeed());
+        }
 
         //wakebloom
         Item wakebloom = (Item) Item.itemRegistry.getObject("arsmagica2:wakebloom");
-        BlockModPlant cropWakebloom;
+        BlockModPlant cropWakebloom = null;
         try {
             cropWakebloom = new BlockModPlant("Wakebloom", new ItemStack(wakebloom), 3, RenderMethod.CROSSED);
         } catch (Exception e) {
-            if (ConfigurationHandler.debug) {
-                e.printStackTrace();
-            }
-            return;
+            LogHelper.printStackTrace(e);
         }
-        cropWakebloom.getGrowthRequirement().setSoil(new BlockWithMeta(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPadFull));
-        arsMagicaCrops.add(cropWakebloom);
-        arsMagicaSeeds.add(cropWakebloom.getSeed());
+        if(cropWakebloom != null) {
+            cropWakebloom.getGrowthRequirement().setSoil(new BlockWithMeta(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPadFull));
+            arsMagicaCrops.add(cropWakebloom);
+            arsMagicaSeeds.add(cropWakebloom.getSeed());
+        }
     }
 
     @Override
