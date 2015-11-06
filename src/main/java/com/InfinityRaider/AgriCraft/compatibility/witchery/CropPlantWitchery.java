@@ -20,6 +20,11 @@ public class CropPlantWitchery extends CropPlantGeneric {
     }
 
     @Override
+    protected boolean modSpecificFruits() {
+        return false;
+    }
+
+    @Override
     public int tier() {
         return tier;
     }

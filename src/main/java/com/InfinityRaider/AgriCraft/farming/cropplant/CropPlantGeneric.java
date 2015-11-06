@@ -25,7 +25,11 @@ public abstract class CropPlantGeneric extends CropPlant {
     public CropPlantGeneric(ItemSeeds seed) {
         this.seed = seed;
         this.plant = seed.getPlant(null, 0, 0, 0);
-        this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed());
+        this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed(), modSpecificFruits());
+    }
+
+    protected boolean modSpecificFruits() {
+        return true;
     }
 
     public abstract int transformMeta(int growthStage);

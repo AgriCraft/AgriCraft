@@ -133,29 +133,29 @@ public abstract class OreDictHelper {
     }
 
     public static ArrayList<ItemStack> getFruitsFromOreDict(ItemStack seed) {
+        return getFruitsFromOreDict(seed, true);
+    }
+
+    public static ArrayList<ItemStack> getFruitsFromOreDict(ItemStack seed, boolean sameMod) {
+        String seedModId = IOHelper.getModId(seed);
         ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
+
         for(int id:OreDictionary.getOreIDs(seed)) {
             if(OreDictionary.getOreName(id).substring(0,4).equalsIgnoreCase("seed")) {
                 String name = OreDictionary.getOreName(id).substring(4);
                 ArrayList<ItemStack> fromOredict = OreDictionary.getOres("crop"+name);
-                //Cull duplicate fruits from the list (e.g.: pmp and hc crops)
-                boolean flag = false;
                 for(ItemStack stack:fromOredict) {
-                    String stackName = stack.getUnlocalizedName();
-                    if(stack.getItem()==null) {
+                    if(stack==null || stack.getItem()==null) {
                         continue;
                     }
-                    if(stackName.contains(name) || stackName.contains(name.toLowerCase())) {
-                        if(!flag) {
-                            fruits.add(stack);
-                            flag = true;
-                        }
-                    } else {
+                    String stackModId = IOHelper.getModId(stack);
+                    if((!sameMod) || stackModId.equals(seedModId)) {
                         fruits.add(stack);
                     }
                 }
             }
         }
+
         return fruits;
     }
 }

@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.io.IOException;
@@ -16,6 +17,14 @@ import java.util.ArrayList;
 
 //helper class to read, write and parse data to and from the config files
 public abstract class IOHelper {
+    public static String getModId(ItemStack stack) {
+        String name = Item.itemRegistry.getNameForObject(stack.getItem());
+        int split = name.indexOf(':');
+        if(split>=0) {
+            name = name.substring(0, split);
+        }
+        return name;
+    }
 	
 	/**
 	 * <p>
