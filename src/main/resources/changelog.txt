@@ -5,7 +5,7 @@ Changelog
 -CHANGE: When scanning the ore dictionary for seed/fruit combinations the mod id is now taken into account (except when told not to): no more Natura berries dropping from HC crops
 -FIXED:  ArrayIndexOutOfBoundsException and NullPointerException when breaking tank multi blocks under certain conditions
 -FIXED:  Crash with Psychedelicraft coffee seeds
--FIXED:  Quirks with the seed storage when automatically inserting item stacks
+-FIXED:  Quirks with the seed storage when automatically inserting item stacks (hoppers, pipes, transfer nodes, ... )
 
 1.4.3
 -CHANGE: Entirely rewrote the multi-block code fixing a lot of bugs and improving performance.

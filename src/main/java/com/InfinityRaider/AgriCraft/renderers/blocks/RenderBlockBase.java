@@ -399,9 +399,11 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 		addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, maxZ, icon);
 	}
 
+
     /**
-     * Utility method helpful for debugging
+     * utility method used for debugging rendering
      */
+    @SuppressWarnings("unused")
     protected void drawAxisSystem(boolean startDrawing) {
         Tessellator tessellator = Tessellator.instance;
 

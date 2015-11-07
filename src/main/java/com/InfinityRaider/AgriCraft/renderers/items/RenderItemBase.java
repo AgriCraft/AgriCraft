@@ -59,6 +59,10 @@ public abstract class RenderItemBase implements IItemRenderer {
 
     protected abstract void renderItemMap(ItemStack stack, Tessellator tessellator);
 
+    /**
+     * utility method used for debugging rendering
+     */
+    @SuppressWarnings("unused")
     protected void drawAxisSystem(boolean startDrawing) {
         Tessellator tessellator = Tessellator.instance;
 

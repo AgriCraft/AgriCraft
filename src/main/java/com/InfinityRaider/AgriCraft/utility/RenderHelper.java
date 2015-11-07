@@ -11,29 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class RenderHelper {
-	
-    /**
-     * Retrieves a block's resource location, with meta support.
-     * 
-     * @param block the block to get the resource from.
-     * @param meta the meta value of the block.
-     * @return the resource of the block.
-     */
-    public static ResourceLocation getResource(Block block, int meta) {
-        return getBlockResource(getIcon(block, meta));
-    }
-
-    /**
-     * Retrieves an item's resource location, with meta support.
-     * 
-     * @param item the item to get the resource from.
-     * @param meta the meta value (damage) of the item.
-     * @return the resource of the item.
-     */
-    public static ResourceLocation getResource(Item item, int meta) {
-        return getItemResource(getIcon(item, meta));
-    }
-
     /**
      * Retrieves an item's icon, with meta support.
      * 
@@ -74,22 +51,6 @@ public abstract class RenderHelper {
         String file = path.substring(path.indexOf(':') + 1);
         return new ResourceLocation(domain + "textures/blocks/" + file + ".png");
     }
-
-    /**
-     * Retrieves a resource location from an <em>item</em> icon.
-     * 
-     * @param icon the icon to get the resource location from.
-     * @return the resource location for the icon, or null.
-     */
-    public static ResourceLocation getItemResource(IIcon icon) {
-        if(icon==null) {
-            return null;
-        }
-        String path = icon.getIconName();
-        String domain = path.substring(0, path.indexOf(":") + 1);
-        String file = path.substring(path.indexOf(':')+1);
-        return new ResourceLocation(domain+"textures/items/"+file+".png");
-    }
     
     /**
      * Determines if a lever is facing a block, based off of the lever's metadata.
@@ -114,77 +75,6 @@ public abstract class RenderHelper {
     }
     
     /**
-     * Converts an axis-position direction to a ForgeDirection.
-     * This is a temporary method to facilitate the conversion to ForgeDirection.
-     * 
-     * @param axis the axis of the direction. (x,y,z).
-     * @param direction the magnitude of the direction. (+1,-1).
-     * @return the associated ForgeDirection.
-     */
-    @Deprecated
-    public static ForgeDirection convertDirection(char axis, int direction) {
-    	if(axis=='x') {
-            if(direction>0) {
-                return ForgeDirection.EAST;
-            }
-            else {
-                return ForgeDirection.WEST;
-            }
-        }
-        else if(axis=='y') {
-        	if(direction>0) {
-                return ForgeDirection.UP;
-            }
-            else {
-                return ForgeDirection.DOWN;
-            }
-        }
-        else if(axis=='z') {
-            if(direction>0) {
-                return ForgeDirection.SOUTH;
-            }
-            else {
-                return ForgeDirection.NORTH;
-            }
-        }
-        return ForgeDirection.UNKNOWN;
-    }
-    
-    /**
-     * Retrieves the axis char for the old direction system.
-     * 
-     * @param direction the direction to lookup.
-     * @return the char for the direction's axis.
-     */
-    @Deprecated
-    public static char getAxis(ForgeDirection direction) {
-    	switch(direction) {
-    		case EAST:
-    		case WEST:
-    			return 'x';
-    		case UP:
-    		case DOWN:
-    			return 'y';
-    		case NORTH:
-    		case SOUTH:
-    			return 'z';
-    		default:
-    			return '?'; //Umm... Ignore this.
-    	}
-    }
-    
-    /**
-     * Retrieves the axis length for the old direction system.
-     * 
-     * @param direction the direction to lookup.
-     * @return how far the direction extends on the axis.
-     */
-    @Deprecated
-    public static int getMagnitude(ForgeDirection direction) {
-    	return direction.offsetX + direction.offsetY + direction.offsetZ; // Should always be in the -1 to 1 range.
-    }
-    
-    /**
      * Rotates a plane. This is impressively useful, but may not be impressively efficient.
      * Always returns a 6-element array. Defaults to the north direction (the base direction).
      * <p>
@@ -194,7 +84,6 @@ public abstract class RenderHelper {
      * TODO: Test up/down rotations more thoroughly.
      */
     public static float[] rotatePrism(float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ForgeDirection direction) {
-        
         float adj[] = new float[6];
         
         switch (direction) {
@@ -246,20 +135,18 @@ public abstract class RenderHelper {
 				adj[4] = maxZ; //+y
 				adj[5] = maxY; //+z
 		}
-        
         return adj;
-        
     }
 
     /**
      * Adds a vertex to the tessellator scaled to the unit size of a block.
      * 
-     * @param tessellator
-     * @param x the x position, from 0 to {@value Constants.WHOLE}.
-     * @param y the y position, from 0 to {@value Constants.WHOLE}.
-     * @param z the z position, from 0 to {@value Constants.WHOLE}.
-     * @param u ???
-     * @param v ???
+     * @param tessellator the Tessellator instance used for rendering
+     * @param x the x position, from 0 to 1.
+     * @param y the y position, from 0 to 1.
+     * @param z the z position, from 0 to 1.
+     * @param u u offset for the bound texture
+     * @param v v offset for the bound texture
      */
     public static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v) {
         tessellator.addVertexWithUV(x*Constants.UNIT, y*Constants.UNIT, z*Constants.UNIT, u*Constants.UNIT, v*Constants.UNIT);
@@ -270,13 +157,13 @@ public abstract class RenderHelper {
      * Adds a vertex to the tessellator scaled to the unit size of a block.
      * Same as {@link #addScaledVertexWithUV(Tessellator, float, float, float, float, float)}, but does not require the correct texture to be bound.
      * 
-     * @param tessellator
-     * @param x the x position, from 0 to {@value Constants.WHOLE}.
-     * @param y the y position, from 0 to {@value Constants.WHOLE}.
-     * @param z the z position, from 0 to {@value Constants.WHOLE}.
-     * @param u ???
-     * @param v ???
-     * @param icon the texture of the point.
+     * @param tessellator the Tessellator instance used for rendering
+     * @param x the x position, from 0 to 1
+     * @param y the y position, from 0 to 1
+     * @param z the z position, from 0 to 1
+     * @param u u offset for the bound texture
+     * @param v v offset for the bound texture
+     * @param icon the icon to render
      */
     public static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v, IIcon icon) {
         tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, icon.getInterpolatedU(u), icon.getInterpolatedV(v));

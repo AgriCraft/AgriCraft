@@ -24,6 +24,10 @@ abstract class PlayerEffectRenderer {
         GL11.glRotatef(-yaw, 0, 1, 0);
     }
 
+    /**
+     * utility method used for debugging rendering
+     */
+    @SuppressWarnings("unused")
     protected void drawAxisSystem() {
         Tessellator tessellator = Tessellator.instance;
 
