@@ -35,7 +35,9 @@ import java.util.ArrayList;
  * 	<li> VSWE for his "Forging a Minecraft Mod" summer courses. </li>
  * 	<li> NealeGaming for his Minecraft modding tutorials on youtube. </li>
  * 	<li> Imasius (a.k.a. Nimo) for learning me to better code in java. </li>
- * 	<li> HenryLoenwind for the API
+ * 	<li> RlonRyan for helping out with the code. </li>
+ * 	<li> HenryLoenwind for the API. </li>
+ * 	<li> MechWarrior99, SkullyGamingMC, VapourDrive and SkeletonPunk for providing textures. </li>
  * </ul>
  * 
  * I've annotated my code heavily, for myself and for possible others who might learn from it.
