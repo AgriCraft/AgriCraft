@@ -17,6 +17,7 @@ public class MinetweakerHelper extends ModHelper {
         MineTweakerAPI.registerClass(Growing.Soil.class);
         MineTweakerAPI.registerClass(Growing.Brightness.class);
         MineTweakerAPI.registerClass(Growing.BaseBlock.class);
+        MineTweakerAPI.registerClass(WeedRaking.class);
     }
 
     @Override

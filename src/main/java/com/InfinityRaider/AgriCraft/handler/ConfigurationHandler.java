@@ -61,7 +61,8 @@ public class ConfigurationHandler {
     public static boolean onlyMatureDropSeeds;
     public static boolean weedsDestroyCropSticks;
     public static float growthMultiplier;
-    //toolds
+    public static boolean rakingDrops;
+    //tools
     public static boolean enableHandRake;
     public static boolean enableTrowel;
     public static boolean enableMagnifyingGlass;
@@ -147,6 +148,7 @@ public class ConfigurationHandler {
         onlyMatureDropSeeds = config.getBoolean("Only mature crops drop seeds", CATEGORY_FARMING, false, "set this to true to make only mature crops drop seeds (to encourage trowel usage)");
         weedsDestroyCropSticks = config.getBoolean("Weeds destroy crop sticks", CATEGORY_FARMING, false, "set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage)");
         growthMultiplier = config.getFloat("Growth rate multiplier", CATEGORY_FARMING, 1.0F, 0.0F, 2.0F, "This is a global growth rate multiplier");
+        rakingDrops = config.getBoolean("Raking weeds drops items", CATEGORY_FARMING, true, "set to false if you wish to disable drops from raking weeds");
         //tools
         enableHandRake = config.getBoolean("Enable Hand Rake", CATEGORY_TOOLS, true, "Set to false to disable the Hand Rake");
         enableMagnifyingGlass = config.getBoolean("Enable Magnifying Glass", CATEGORY_TOOLS, true, "Set to false to disable the Magnifying Glass");

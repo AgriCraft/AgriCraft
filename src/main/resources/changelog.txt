@@ -1,6 +1,7 @@
 Changelog
 ---------
 1.4.4
+-ADDED:  Configurable option for weeds to drop certain items when raked (can be fully MineTweaked)
 -CHANGE: Generified the way growth requirements search for metadata (fixes compatibility with GrechTech ores)
 -CHANGE: When scanning the ore dictionary for seed/fruit combinations the mod id is now taken into account (except when told not to): no more Natura berries dropping from HC crops
 -FIXED:  ArrayIndexOutOfBoundsException and NullPointerException when breaking tank multi blocks under certain conditions
