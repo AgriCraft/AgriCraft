@@ -53,14 +53,11 @@ public class ResourceCrops {
             BlockModPlant plant;
             try {
                 plant = new BlockModPlant(data);
+                vanillaCrops.add(plant);
+                vanillaSeeds.add(plant.getSeed());
             } catch (Exception e) {
-                if(ConfigurationHandler.debug) {
-                    e.printStackTrace();
-                }
-                return;
+                LogHelper.printStackTrace(e);
             }
-            vanillaCrops.add(plant);
-            vanillaSeeds.add(plant.getSeed());
         }
     }
 
@@ -74,14 +71,11 @@ public class ResourceCrops {
                 BlockModPlant plant;
                 try {
                     plant = new BlockModPlant(args);
+                    modCrops.add(plant);
+                    modSeeds.add(plant.getSeed());
                 } catch (Exception e) {
-                    if(ConfigurationHandler.debug) {
-                    	LogHelper.printStackTrace(e);
-                    }
-                    continue;
+                    LogHelper.printStackTrace(e);
                 }
-                modCrops.add(plant);
-                modSeeds.add(plant.getSeed());
             }
         }
     }
