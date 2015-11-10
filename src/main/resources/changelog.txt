@@ -9,6 +9,7 @@ Changelog
 -FIXED:  ArrayIndexOutOfBoundsException and NullPointerException when breaking tank multi blocks under certain conditions
 -FIXED:  Crash with Psychedelicraft coffee seeds
 -FIXED:  Quirks with the seed storage when automatically inserting item stacks (hoppers, pipes, transfer nodes, ... )
+-FIXED:  Inverted boolean return for an API method
 
 1.4.3
 -CHANGE: Entirely rewrote the multi-block code fixing a lot of bugs and improving performance.
