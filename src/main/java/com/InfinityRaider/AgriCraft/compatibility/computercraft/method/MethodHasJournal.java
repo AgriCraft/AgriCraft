@@ -6,15 +6,14 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
-public class MethodHasJournal extends MethodBase {
-    @Override
-    public String getName() {
-        return "hasJournal";
+public class MethodHasJournal extends MethodBasePeripheral {
+    public MethodHasJournal() {
+        super("hasJournal");
     }
 
     @Override
-    public Object[] call(TileEntityPeripheral peripheral, World world, int x, int y, int z, ItemStack journal, Object... args) throws MethodException {
-        return new Object[] {journal!=null};
+    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
+        return new Object[] {peripheral.getJournal()!=null};
     }
 
     @Override

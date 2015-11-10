@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
-public class MethodGetBrightness extends MethodCropBase {
+public class MethodGetBrightness extends MethodBaseCrop {
     public MethodGetBrightness() {
         super("getBrightness");
     }
@@ -10,10 +10,5 @@ public class MethodGetBrightness extends MethodCropBase {
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) {
         return new Object[] {crop.getWorldObj().getFullBlockLightValue(crop.xCoord, crop.yCoord+1, crop.zCoord)};
-    }
-
-    @Override
-    protected boolean requiresJournal() {
-        return false;
     }
 }

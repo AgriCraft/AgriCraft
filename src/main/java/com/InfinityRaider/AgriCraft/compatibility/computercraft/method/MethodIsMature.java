@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
-public class MethodIsMature extends MethodCropBase {
+public class MethodIsMature extends MethodBaseCrop {
     public MethodIsMature() {
         super("isMature");
     }

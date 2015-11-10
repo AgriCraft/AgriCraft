@@ -2,16 +2,16 @@ package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 
-public class MethodNeedsBaseBlock extends MethodCropBase {
+public class MethodNeedsBaseBlock extends MethodBaseGrowthReq {
     public MethodNeedsBaseBlock() {
         super("needsBaseBlock");
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityCrop crop) {
-        return new Object[] {crop.hasPlant() && GrowthRequirementHandler.getGrowthRequirement(crop.getPlant()).getRequiredType()!= RequirementType.NONE};
+    protected Object[] onMethodCalled(CropPlant plant) throws MethodException {
+        return new Object[] {GrowthRequirementHandler.getGrowthRequirement(plant).getRequiredType()!= RequirementType.NONE};
     }
 
     @Override

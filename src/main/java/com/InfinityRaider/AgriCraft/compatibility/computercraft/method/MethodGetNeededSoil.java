@@ -2,23 +2,18 @@ package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import net.minecraft.item.ItemStack;
 
-public class MethodGetNeededSoil extends MethodCropBase {
+public class MethodGetNeededSoil extends MethodBaseGrowthReq {
     public MethodGetNeededSoil() {
         super("getNeededSoil");
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityCrop crop) {
-        BlockWithMeta block = GrowthRequirementHandler.getGrowthRequirement(crop.getPlant()).getSoil();
+    protected Object[] onMethodCalled(CropPlant plant) {
+        BlockWithMeta block = GrowthRequirementHandler.getGrowthRequirement(plant).getSoil();
         String msg = block==null?"null":(new ItemStack(block.getBlock(), 1, block.getMeta())).getDisplayName();
         return new Object[] {msg};
-    }
-
-    @Override
-    protected boolean requiresJournal() {
-        return true;
     }
 }

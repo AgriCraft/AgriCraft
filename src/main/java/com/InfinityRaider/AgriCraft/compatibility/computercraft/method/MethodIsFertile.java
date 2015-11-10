@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
-public class MethodIsFertile extends MethodCropBase {
+public class MethodIsFertile extends MethodBaseCrop {
     public MethodIsFertile() {
         super("isFertile");
     }

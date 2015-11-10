@@ -1,19 +1,16 @@
 package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
-public class MethodAnalyze extends MethodBase {
-    @Override
-    public String getName() {
-        return "analyze";
+public class MethodAnalyze extends MethodBasePeripheral {
+    public MethodAnalyze() {
+        super("analyze");
     }
 
     @Override
-    public Object[] call(TileEntityPeripheral peripheral, World world, int x, int y, int z, ItemStack journal, Object... args) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
         peripheral.startAnalyzing();
         return new Object[0];
     }

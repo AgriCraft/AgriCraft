@@ -19,8 +19,7 @@ public class ComputerCraftHelper extends ModHelper {
                 new MethodGetNeededSoil(),
                 new MethodGetPlant(),
                 new MethodGetSpecimen(),
-                new MethodGetSpecimenStats(),
-                new MethodGetStatsFromCrop(),
+                new MethodGetStats(),
                 new MethodHasJournal(),
                 new MethodHasPlant(),
                 new MethodHasWeeds(),
@@ -28,7 +27,6 @@ public class ComputerCraftHelper extends ModHelper {
                 new MethodIsCrossCrop(),
                 new MethodIsFertile(),
                 new MethodIsMature(),
-                new MethodIsSpecimenAnalyzed(),
                 new MethodNeedsBaseBlock()
         };
     }

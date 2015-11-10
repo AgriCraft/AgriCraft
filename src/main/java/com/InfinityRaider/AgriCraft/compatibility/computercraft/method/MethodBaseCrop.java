@@ -1,13 +1,12 @@
 package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
 
 import java.util.ArrayList;
 
-public class MethodIsAnalyzed extends MethodBase {
-    public MethodIsAnalyzed() {
-        super("isAnalyzed");
+public abstract class MethodBaseCrop extends MethodBase {
+    public MethodBaseCrop(String name) {
+        super(name);
     }
 
     @Override
@@ -16,18 +15,13 @@ public class MethodIsAnalyzed extends MethodBase {
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
-        return new Object[] {crop.isAnalyzed()};
-    }
-
-    @Override
     protected boolean appliesToPeripheral() {
-        return true;
+        return false;
     }
 
     @Override
     protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
-        return new Object[] {peripheral.isSpecimenAnalyzed()};
+        return new Object[0];
     }
 
     @Override
@@ -37,6 +31,8 @@ public class MethodIsAnalyzed extends MethodBase {
 
     @Override
     protected ArrayList<MethodParameter> getParameters() {
-        return null;
+        ArrayList<MethodParameter> pars = new ArrayList<MethodParameter>();
+        pars.add(MethodParameter.DIRECTION);
+        return pars;
     }
 }

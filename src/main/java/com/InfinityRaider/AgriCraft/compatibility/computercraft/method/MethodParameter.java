@@ -4,6 +4,7 @@ import net.minecraft.util.StatCollector;
 
 public class MethodParameter {
     public static final MethodParameter DIRECTION = new MethodParameter("direction");
+    public static final MethodParameter DIRECTION_OPTIONAL = new MethodParameter("direction.optional");
 
     private String name;
 
