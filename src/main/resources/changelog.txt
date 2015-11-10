@@ -1,5 +1,8 @@
 Changelog
 ---------
+1.4.5
+-FIXED:  MineTweaker support for weed raking drops having wrong import
+
 1.4.4
 -ADDED:  Configurable option for weeds to drop certain items when raked (can be fully MineTweaked)
 -ADDED:  Client side config option to change how stats are displayed (also added an API method to change it)

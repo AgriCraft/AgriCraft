@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-@ZenClass("mods.agricraft.SpreadChance")
+@ZenClass("mods.agricraft.WeedRaking")
 public class WeedRaking {
     @ZenMethod
     public static void add(IItemStack drop, int weight) {
