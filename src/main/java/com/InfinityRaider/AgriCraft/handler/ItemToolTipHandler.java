@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.api.v2.IClipper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemClipping;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -33,9 +34,9 @@ public class ItemToolTipHandler {
             NBTTagCompound tag = stack.getTagCompound();
             if(tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength) && tag.hasKey(Names.NBT.analyzed)) {
                 if(tag.getBoolean(Names.NBT.analyzed)) {
-                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + tag.getInteger(Names.NBT.growth));
-                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + tag.getInteger(Names.NBT.gain));
-                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + tag.getInteger(Names.NBT.strength));
+                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + StatStringDisplayer.instance().getStatDisplayString(tag.getInteger(Names.NBT.growth), ConfigurationHandler.cropStatCap));
+                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + StatStringDisplayer.instance().getStatDisplayString(tag.getInteger(Names.NBT.gain), ConfigurationHandler.cropStatCap));
+                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + StatStringDisplayer.instance().getStatDisplayString(tag.getInteger(Names.NBT.strength), ConfigurationHandler.cropStatCap));
                 }
                 else {
                     event.toolTip.add(" "+ StatCollector.translateToLocal("agricraft_tooltip.unidentified"));

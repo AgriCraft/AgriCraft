@@ -18,6 +18,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -481,9 +482,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     		}
     		//Add the analyzed data.
     		if(this.isAnalyzed()) {
-    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + this.getGrowth());
-    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + this.getGain());
-    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + this.getStrength());
+    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGrowth(), ConfigurationHandler.cropStatCap));
+                information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGain(), ConfigurationHandler.cropStatCap));
+    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getStrength(), ConfigurationHandler.cropStatCap));
     		}
     		else {
     			information.add(StatCollector.translateToLocal("agricraft_tooltip.analyzed"));
