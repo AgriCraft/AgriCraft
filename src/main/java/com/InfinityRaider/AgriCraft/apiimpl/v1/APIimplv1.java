@@ -196,7 +196,7 @@ public class APIimplv1 implements APIv1 {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			return crop.hasPlant();
+			return !crop.hasPlant();
 		}
 		return false;
 	}
