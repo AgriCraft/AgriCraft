@@ -199,7 +199,7 @@ public interface APIv1 extends APIBase {
 	 * Checks if the given position contains empty crops.
 	 *
 	 * <p>
-	 * Note: Crops with crosscrops are NOT considered empty.
+	 * Note: Crops with crosscrops or weeds are NOT considered empty.
 	 * </p>
 	 *
 	 * @param world

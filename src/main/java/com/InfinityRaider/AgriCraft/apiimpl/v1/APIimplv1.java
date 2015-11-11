@@ -196,7 +196,7 @@ public class APIimplv1 implements APIv1 {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			return !crop.hasPlant();
+			return !(crop.isCrossCrop() || crop.hasWeed() || crop.hasPlant());
 		}
 		return false;
 	}
@@ -358,15 +358,12 @@ public class APIimplv1 implements APIv1 {
 			TileEntity te = world.getTileEntity(x, y, z);
 			if (te instanceof TileEntityCrop) {
 				TileEntityCrop crop = (TileEntityCrop) te;
-				if (crop.isCrossCrop() || crop.hasPlant()) {
+				if (crop.isCrossCrop() || crop.hasPlant() || crop.hasWeed()) {
 					return SeedRequirementStatus.BAD_LOCATION;
 				}
 				IGrowthRequirement growthRequirement = GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage());
 				if(!growthRequirement.isValidSoil(world, x, y-1, z)) {
 					return SeedRequirementStatus.WRONG_SOIL;
-				}
-				if (!growthRequirement.isBaseBlockPresent(world, x, y, z)) {
-					return SeedRequirementStatus.MISSING_REQUIREMENTS;
 				}
 				if (!growthRequirement.canGrow(world, x, y, z)) {
 					return SeedRequirementStatus.MISSING_REQUIREMENTS;
@@ -387,7 +384,7 @@ public class APIimplv1 implements APIv1 {
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te instanceof TileEntityCrop) {
 					TileEntityCrop crop = (TileEntityCrop) te;
-					if (crop.isCrossCrop() || crop.hasPlant() || !GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage()).canGrow(world, x, y, z)) {
+					if (crop.isCrossCrop() || crop.hasPlant() || crop.hasWeed() || !GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage()).canGrow(world, x, y, z)) {
 						return false;
 					}
 					if (seed.stackTagCompound != null && seed.stackTagCompound.hasKey(Names.NBT.growth)) {
