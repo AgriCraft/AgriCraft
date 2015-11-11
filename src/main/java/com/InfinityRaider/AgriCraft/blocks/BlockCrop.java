@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.api.v2.IRake;
 import com.InfinityRaider.AgriCraft.api.v2.ITrowel;
 import com.InfinityRaider.AgriCraft.api.v2.IClipper;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
@@ -235,11 +236,11 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
         TileEntity te = world.getTileEntity(x, y, z);
         if (te != null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
-            if (ConfigurationHandler.enableHandRake && crop.hasWeed()) {
+            ItemStack heldItem = player.getCurrentEquippedItem();
+            if (ConfigurationHandler.enableHandRake && crop.hasWeed() && heldItem==null) {
                 //if weeds can only be removed by using a hand rake, nothing should happen
                 return false;
             }
-            ItemStack heldItem = player.getCurrentEquippedItem();
             if (player.isSneaking()) {
                 this.harvest(world, x, y, z, player, crop);
             } else if (heldItem == null || heldItem.getItem() == null) {
@@ -268,9 +269,17 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
             else if (heldItem.getItem() instanceof ITrowel) {
                 crop.onTrowelUsed((ITrowel) heldItem.getItem(), heldItem);
             }
+            //clipper usage
             else if(heldItem.getItem() instanceof IClipper) {
                 this.onClipperUsed(world, x, y, z, crop);
                 ((IClipper) heldItem.getItem()).onClipperUsed(world, x, y, z, player);
+            }
+            else if(heldItem.getItem() instanceof IRake) {
+                if(crop.hasPlant()) {
+                    return this.canUproot(world, x, y, z);
+                } else if(crop.hasWeed()) {
+                    ((IRake) heldItem.getItem()).removeWeeds(crop, heldItem);
+                }
             }
             //check to see if the player wants and is allowed to use bonemeal
             else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {

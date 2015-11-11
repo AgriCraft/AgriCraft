@@ -1,10 +1,10 @@
 package com.InfinityRaider.AgriCraft.items;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
+import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+import com.InfinityRaider.AgriCraft.api.v2.IRake;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.WeightedRandom;
 import cpw.mods.fml.relauncher.Side;
@@ -16,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -28,7 +27,7 @@ import java.util.Random;
  * Tool to uproot weeds.
  * Comes in a wooden and iron variant.
  */
-public class ItemHandRake extends ItemAgricraft {
+public class ItemHandRake extends ItemAgricraft implements IRake{
     private static final int WOOD_VARIANT_META = 0;
     private static final int IRON_VARIANT_META = 1;
     private static final int[] dropChance = new int[] {10, 25};
@@ -48,36 +47,7 @@ public class ItemHandRake extends ItemAgricraft {
 
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-        if (world.isRemote) {
-            return false;
-        }
-        TileEntity te = world.getTileEntity(x, y, z);
-        if (te == null || !(te instanceof TileEntityCrop)) {
-            return false;
-        }
-        TileEntityCrop crop = (TileEntityCrop) te;
-        if (crop.hasWeed()) {
-            int weedGrowthStage = world.getBlockMetadata(x, y, z);
-            int newWeedGrowthStage = calculateGrowthStage(stack.getItemDamage(), weedGrowthStage, world.rand);
-            crop.updateWeed(newWeedGrowthStage);
-            if(ConfigurationHandler.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100)<dropChance[stack.getItemDamage()%dropChance.length]) {
-                ItemStack drop = ItemDropRegistry.instance().getDrop(world.rand);
-                if(drop != null && drop.getItem() != null) {
-                    float f = 0.7F;
-                    double d0 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-                    double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-                    double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-                    EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, drop);
-                    entityitem.delayBeforeCanPickup = 10;
-                    world.spawnEntityInWorld(entityitem);
-                }
-            }
-            return true;
-        }
-        else if (crop.hasPlant()) {
-            ((BlockCrop) world.getBlock(x, y, z)).canUproot(world, x, y, z);
-        }
-        return true;
+        return false;
     }
 
     /**
@@ -138,6 +108,33 @@ public class ItemHandRake extends ItemAgricraft {
             return this.icons[meta];
         }
         return null;
+    }
+
+    @Override
+    public boolean removeWeeds(ICrop crop, ItemStack rake) {
+        World world = crop.getTileEntity().getWorldObj();
+        int x = crop.getTileEntity().xCoord;
+        int y = crop.getTileEntity().yCoord;
+        int z = crop.getTileEntity().zCoord;
+        if (crop.hasWeed()) {
+            int weedGrowthStage = world.getBlockMetadata(x, y, z);
+            int newWeedGrowthStage = calculateGrowthStage(rake.getItemDamage(), weedGrowthStage, world.rand);
+            crop.updateWeed(newWeedGrowthStage);
+            if(ConfigurationHandler.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100)<dropChance[rake.getItemDamage()%dropChance.length]) {
+                ItemStack drop = ItemDropRegistry.instance().getDrop(world.rand);
+                if(drop != null && drop.getItem() != null) {
+                    float f = 0.7F;
+                    double d0 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+                    double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+                    double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+                    EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, drop);
+                    entityitem.delayBeforeCanPickup = 10;
+                    world.spawnEntityInWorld(entityitem);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     public static final class ItemDropRegistry {

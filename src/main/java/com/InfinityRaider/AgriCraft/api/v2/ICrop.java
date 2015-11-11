@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -117,6 +118,17 @@ public interface ICrop {
     void spawnWeed();
 
     /**
+     * Attempts to spread weeds to neighbouring crops
+     */
+    void spreadWeed();
+
+    /**
+     * Updates the growthstage of the weeds on this crop
+     * @param growthStage the growth stage to be applied, should be in [0, 8[. 0 means clearing weeds
+     */
+    void updateWeed(int growthStage);
+
+    /**
      * Clears weeds from this crop
      */
     void clearWeed();
@@ -141,4 +153,10 @@ public interface ICrop {
      * @return if the harvest was successful
      */
      boolean harvest(@Nullable EntityPlayer player);
+
+    /**
+     * Utility method to get access to the TileEntity fields and methods for the crop
+     * @return the TileEntity implementing ICrop
+     */
+    TileEntity getTileEntity();
 }

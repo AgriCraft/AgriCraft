@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.api.API;
 import com.InfinityRaider.AgriCraft.api.APIBase;
 import com.InfinityRaider.AgriCraft.api.APIStatus;
 import com.InfinityRaider.AgriCraft.api.v1.*;
+import com.InfinityRaider.AgriCraft.api.v2.IRake;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAPI;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAgriCraft;
@@ -34,7 +35,7 @@ public class APIimplv1 implements APIv1 {
 
 	private final int version;
 	private final APIStatus status;
-	
+
 	public APIimplv1(int version, APIStatus status) {
 		this.version = version;
 		this.status = status;
@@ -294,7 +295,13 @@ public class APIimplv1 implements APIv1 {
 	
 	@Override
 	public boolean removeWeeds(World world, int x, int y, int z, ItemStack rake) {
+		if(world.isRemote) {
+			return false;
+		}
 		if (!ConfigurationHandler.enableWeeds) {
+			return false;
+		}
+		if(rake == null || rake.getItem() == null || !(rake.getItem() instanceof IRake)) {
 			return false;
 		}
 		TileEntity te = world.getTileEntity(x, y, z);
@@ -303,13 +310,7 @@ public class APIimplv1 implements APIv1 {
 			if (!crop.hasWeed()) {
 				return false;
 			}
-			int weedGrowthStage = world.getBlockMetadata(x, y, z);
-			int toolMeta = rake.getItemDamage();
-			while (!world.isRemote && weedGrowthStage > 0) {
-				weedGrowthStage = (toolMeta == 1) ? 0 : Math.max(random.nextInt(weedGrowthStage / 2 + 1) - 1, 0) + weedGrowthStage / 2;
-				crop.updateWeed(weedGrowthStage);
-			}
-			return true;
+			return ((IRake) rake.getItem()).removeWeeds(crop, rake);
 		}
 		return false;
 	}

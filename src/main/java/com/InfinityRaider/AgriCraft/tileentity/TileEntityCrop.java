@@ -207,6 +207,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     }
 
     /** spread the weed */
+    @Override
     public void spreadWeed() {
         List<TileEntityCrop> neighbours = this.getNeighbours();
         for(TileEntityCrop crop:neighbours) {
@@ -217,8 +218,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         }
     }
 
+    @Override
     public void updateWeed(int growthStage) {
         if(this.hasWeed()) {
+            growthStage = growthStage>7?7:growthStage<0?0:growthStage;
             if (growthStage == 0) {
                 this.weed = false;
             }
@@ -299,6 +302,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     @Override
     public boolean harvest(@Nullable EntityPlayer player) {
         return ((BlockCrop) worldObj.getBlock(xCoord, yCoord, zCoord)).harvest(worldObj, xCoord, yCoord, zCoord, player, this);
+    }
+
+    @Override
+    public TileEntity getTileEntity() {
+        return this;
     }
 
     //TileEntity is just to store data on the crop
