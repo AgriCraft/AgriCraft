@@ -6,17 +6,17 @@ package com.InfinityRaider.AgriCraft.api.v1;
 public interface ISeedStats {
 
 	/**
-	 * @return The growth value of the seed. Will be -1 if the seed is not analyzed.
+	 * @return The growth value of the seed.
 	 */
 	short getGrowth();
 	
 	/**
-	 * @return The gain value of the seed. Will be -1 if the seed is not analyzed.
+	 * @return The gain value of the seed.
 	 */
 	short getGain();
 	
 	/**
-	 * @return The strength value of the seed. Will be -1 if the seed is not analyzed.
+	 * @return The strength value of the seed.
 	 */
 	short getStrength();
 	
