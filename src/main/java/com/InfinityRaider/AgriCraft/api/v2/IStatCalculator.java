@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.api.v2;
 
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;

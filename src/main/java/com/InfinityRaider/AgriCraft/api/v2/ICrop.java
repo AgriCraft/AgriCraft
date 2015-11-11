@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.api.v2;
 
 import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

@@ -2,8 +2,8 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
-import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
+import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
+import com.InfinityRaider.AgriCraft.api.v2.ITrowel;
 import com.InfinityRaider.AgriCraft.api.v2.ICrop;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
