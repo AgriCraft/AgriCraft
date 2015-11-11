@@ -25,6 +25,9 @@ public class ItemToolTipHandler {
             return;
         }
         if(stack.getItem() instanceof ItemClipping) {
+            if(!stack.hasTagCompound()) {
+                return;
+            }
             stack = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
         }
         if(stack==null || stack.getItem()==null) {
