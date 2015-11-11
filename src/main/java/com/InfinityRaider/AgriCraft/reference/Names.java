@@ -86,6 +86,7 @@ public final class Names {
     //mod ids
     public static class Mods {
         public static final String adventOfAscension = "nevermine";
+        public static final String agriculture = "Agriculture";
         public static final String ancientWarfare = "AncientWarfare";
         public static final String arsMagica = "arsmagica2";
         public static final String bloodMagic = "AWWayofTime";

@@ -1,7 +1,9 @@
 Changelog
 ---------
 1.4.5
+-ADDED:  Support for Agriculture 2
 -FIXED:  MineTweaker support for weed raking drops having wrong import
+-FIXED:  Weird behaviour for some API methods
 
 1.4.4
 -ADDED:  Configurable option for weeds to drop certain items when raked (can be fully MineTweaked)
