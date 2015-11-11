@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
+import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -14,13 +14,19 @@ public class PlantStats implements ISeedStats {
     private short growth;
     private short gain;
     private short strength;
+    private boolean analyzed;
 
     public PlantStats() {
         this(MIN, MIN, MIN);
     }
 
     public PlantStats(int growth, int gain, int strength) {
+        this(growth, gain, strength, false);
+    }
+
+    public PlantStats(int growth, int gain, int strength, boolean analyzed) {
         this.setStats(growth, gain, strength);
+        this.analyzed = analyzed;
     }
 
     public void setStats(int growth, int gain, int strength) {
@@ -74,7 +80,7 @@ public class PlantStats implements ISeedStats {
     }
 
     public PlantStats copy() {
-        return new PlantStats(getGrowth(), getGain(), getStrength());
+        return new PlantStats(getGrowth(), getGain(), getStrength(), analyzed);
     }
 
     public static PlantStats getStatsFromStack(ItemStack stack) {
@@ -93,6 +99,7 @@ public class PlantStats implements ISeedStats {
             stats.setGrowth(tag.getShort(Names.NBT.growth));
             stats.setGain(tag.getShort(Names.NBT.gain));
             stats.setStrength(tag.getShort(Names.NBT.strength));
+            stats.analyzed=tag.hasKey(Names.NBT.analyzed) && tag.getBoolean(Names.NBT.analyzed);
             return stats;
         }
         return null;
@@ -102,6 +109,17 @@ public class PlantStats implements ISeedStats {
         tag.setShort(Names.NBT.growth, growth);
         tag.setShort(Names.NBT.gain, gain);
         tag.setShort(Names.NBT.strength, strength);
+        tag.setBoolean(Names.NBT.analyzed, analyzed);
         return tag;
+    }
+
+    @Override
+    public boolean isAnalyzed() {
+        return analyzed;
+    }
+
+    @Override
+    public void setAnalyzed(boolean value) {
+        this.analyzed = value;
     }
 }

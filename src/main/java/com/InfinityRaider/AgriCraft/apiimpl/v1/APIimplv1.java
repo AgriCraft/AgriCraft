@@ -303,13 +303,13 @@ public class APIimplv1 implements APIv1 {
 			if (!crop.hasWeed()) {
 				return false;
 			}
-      int weedGrowthStage = world.getBlockMetadata(x, y, z);
-      int toolMeta = rake.getItemDamage();
-      while (!world.isRemote && weedGrowthStage > 0) {
-	      weedGrowthStage = (toolMeta == 1) ? 0 : Math.max(random.nextInt(weedGrowthStage/2+1)-1, 0)+weedGrowthStage/2;
-	      crop.updateWeed(weedGrowthStage);
-      }
-      return true;
+			int weedGrowthStage = world.getBlockMetadata(x, y, z);
+			int toolMeta = rake.getItemDamage();
+			while (!world.isRemote && weedGrowthStage > 0) {
+				weedGrowthStage = (toolMeta == 1) ? 0 : Math.max(random.nextInt(weedGrowthStage / 2 + 1) - 1, 0) + weedGrowthStage / 2;
+				crop.updateWeed(weedGrowthStage);
+			}
+			return true;
 		}
 		return false;
 	}

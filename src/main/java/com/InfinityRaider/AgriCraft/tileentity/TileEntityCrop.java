@@ -40,7 +40,6 @@ import java.util.Random;
 
 public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebuggable{
     private PlantStats stats = new PlantStats();
-    private boolean analyzed=false;
     private boolean crossCrop=false;
     private boolean weed=false;
     private CropPlant plant;
@@ -74,7 +73,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public short getStrength() {return stats.getStrength();}
 
     @Override
-    public boolean isAnalyzed() {return analyzed;}
+    public boolean isAnalyzed() {return stats.isAnalyzed();}
 
     @Override
     public boolean hasWeed() {return weed;}
@@ -108,8 +107,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         if( (!this.crossCrop) && (!this.hasPlant())) {
             if(plant!=null) {
                 this.plant = plant;
-                this.stats = new PlantStats(growth, gain, strength);
-                this.analyzed = analyzed;
+                this.stats = new PlantStats(growth, gain, strength, analyzed);
                 this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
                 this.markForUpdate();
                 plant.onSeedPlanted(worldObj, xCoord, yCoord, zCoord);
@@ -129,7 +127,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         CropPlant oldPlant = getPlant();
         this.stats = new PlantStats();
         this.plant = null;
-        this.analyzed = false;
         this.weed = false;
         this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
         this.markForUpdate();
@@ -189,7 +186,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         }
         ItemStack seed = plant.getSeed().copy();
         NBTTagCompound tag = new NBTTagCompound();
-        SeedHelper.setNBT(tag, getGrowth(), getGain(), getStrength(), this.analyzed);
+        SeedHelper.setNBT(tag, getGrowth(), getGain(), getStrength(), stats.isAnalyzed());
         seed.setTagCompound(tag);
         return seed;
     }
@@ -315,7 +312,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         stats.writeToNBT(tag);
-        tag.setBoolean(Names.NBT.analyzed, analyzed);
         tag.setBoolean(Names.NBT.crossCrop,crossCrop);
         tag.setBoolean(Names.NBT.weed, weed);
         if(this.plant!=null) {
@@ -328,7 +324,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         this.stats = PlantStats.readFromNBT(tag);
-        this.analyzed=tag.hasKey(Names.NBT.analyzed) && tag.getBoolean(Names.NBT.analyzed);
         this.crossCrop=tag.getBoolean(Names.NBT.crossCrop);
         this.weed=tag.getBoolean(Names.NBT.weed);
         if(tag.hasKey(Names.NBT.seed) && !tag.hasKey(Names.NBT.meta)) {
