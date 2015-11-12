@@ -223,8 +223,7 @@ agricraft_description.method.getGrowthStage=Donne le pourcentage de croisssance 
 agricraft_description.method.getNeededSoil=Donne le sol nécessaire pour la culture dans la direction indiquée
 agricraft_description.method.getPlant=Donne la graine plantée actuellement dans la culture dans la direction indiquée
 agricraft_description.method.getSpecimen=Donne le spécimen actuellement dans l'analyseur 
-agricraft_description.method.getSpecimenStats=Donne les statistiques [croissance, gain, force] du spécimen actuellement dans l'analyseur
-agricraft_description.method.getStatsFromCrop=Donne les statistiques [croissance, gain, force] de la culture dans la direction indiquée
+agricraft_description.method.getStats=Donne les statistiques [croissance, gain, force] de la culture dans la direction indiquée
 agricraft_description.method.hasJournal=Averti si l'analyseur a un journal
 agricraft_description.method.hasPlant=Averti si il y a une plante sur les tuteurs dans la direction indiquée
 agricraft_description.method.hasWeeds=Averti si il y a des mauvises herbes dans la culture dans la direction indiquée
@@ -232,11 +231,11 @@ agricraft_description.method.isAnalyzed=Averti si la culture dans la direction i
 agricraft_description.method.isCrossCrop=Averti si la culture dans la direction indiquée est un tuteur croisé
 agricraft_description.method.isFertile=Averti si la culture dans la direction indiquée est fertile et peut croitre
 agricraft_description.method.isMature=Averti si la culture dans la direction indiquée est mature
-agricraft_description.method.isSpecimenAnalyzed=Averti si le spécimen dans l'analyseur est analysé
 agricraft_description.method.needsBaseBlock=Averti si la culture dans la direction a besoin d'un bloc de base
 
 //misc
 agricraft_arg.direction=direction
+agricraft_arg.direction.optional=direction (optionelle)
 
 // nei GUI
 agricraft_nei.mutation.title=Mutation des tuteurs
@@ -481,3 +480,9 @@ agricraft_journal.aoa_Rosidon=Manger cette plante vous emportera haut, littéral
 agricraft_journal.aoa_Tea="Une bonne tasse de thé alors !."
 agricraft_journal.aoa_ThornyPlant=Considéré comme de la monnaie, prennez garde de ne pas causer une crise économique en la cultivant.
 agricraft_journal.aoa_Trilliad=les feuilles de cette plante sont tout à fait nutritives.
+
+//agriculture
+agricraft_journal.agriculture_cinnamon=Les tiges de cannelle doivent être traitées immédiatement après avoir récolté tant que l'intérieur de l'écorce est toujours humide.
+agricraft_journal.agriculture_peanut=Les arachides ont beaucoup d'utilisations. Ils peuvent être mangés crus, utilisés dans des recettes, produire des solvants et des huiles, des médicaments, des matériaux textiles, le beurre de cacahuètes et aussi bien que beaucoup d'autres utilisations.
+agricraft_journal.agriculture_strawberry=Les fraises sont des plantes populaires et utiles pouvant grandir dans l'environnement domestique, être là pour la consommation ou la décoration.
+agricraft_journal.agriculture_vanilla=La vanille est le second épice le plus cher après le safran.
