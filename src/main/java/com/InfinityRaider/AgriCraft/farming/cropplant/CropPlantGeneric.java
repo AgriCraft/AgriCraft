@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import sun.security.krb5.Config;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -29,7 +31,7 @@ public abstract class CropPlantGeneric extends CropPlant {
     }
 
     protected boolean modSpecificFruits() {
-        return true;
+        return ConfigurationHandler.modSpecifDrops;
     }
 
     public abstract int transformMeta(int growthStage);

@@ -62,6 +62,7 @@ public class ConfigurationHandler {
     public static boolean weedsDestroyCropSticks;
     public static float growthMultiplier;
     public static boolean rakingDrops;
+    public static boolean modSpecifDrops;
     //tools
     public static boolean enableHandRake;
     public static boolean enableTrowel;
@@ -151,6 +152,7 @@ public class ConfigurationHandler {
         weedsDestroyCropSticks = config.getBoolean("Weeds destroy crop sticks", CATEGORY_FARMING, false, "set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage)");
         growthMultiplier = config.getFloat("Growth rate multiplier", CATEGORY_FARMING, 1.0F, 0.0F, 2.0F, "This is a global growth rate multiplier");
         rakingDrops = config.getBoolean("Raking weeds drops items", CATEGORY_FARMING, true, "set to false if you wish to disable drops from raking weeds");
+        modSpecifDrops = config.getBoolean("Mod specific drops", CATEGORY_FARMING, true, "set to false to disable mod specific drops, this will (for instance) cause Natura berries to drop from Harvestcraft berry crops");
         //tools
         enableHandRake = config.getBoolean("Enable Hand Rake", CATEGORY_TOOLS, true, "Set to false to disable the Hand Rake");
         enableMagnifyingGlass = config.getBoolean("Enable Magnifying Glass", CATEGORY_TOOLS, true, "Set to false to disable the Magnifying Glass");

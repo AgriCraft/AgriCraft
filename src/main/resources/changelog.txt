@@ -2,6 +2,7 @@ Changelog
 ---------
 1.4.5
 -ADDED:  Support for Agriculture 2
+-ADDED:  Config option to disable mod specific fruit drops
 -FIXED:  MineTweaker support for weed raking drops having wrong import
 -FIXED:  Weird behaviour for some API methods
 -FIXED:  Weird lighting when rendering (thanks HenryLoenwind)
