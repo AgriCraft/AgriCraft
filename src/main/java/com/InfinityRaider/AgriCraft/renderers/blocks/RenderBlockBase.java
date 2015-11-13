@@ -75,6 +75,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
             rotateMatrix((TileEntityAgricraft) tile, tessellator, false);
         }
 
+        tessellator.setBrightness(block.getMixedBrightnessForBlock(world, (int) x,  (int) y, (int) z));
         tessellator.setColorRGBA_F(1, 1, 1, 1);
 
         boolean result = doWorldRender(tessellator, world, x, y, z, tile, block, f, modelId, renderer, callFromTESR);
