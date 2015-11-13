@@ -98,6 +98,14 @@ public class TransformationMatrix {
         this.matrix[2][3] = z;
     }
 
+    /**
+     * gets the translation for this matrix
+     * @return a vector with size 3 containing the translation components
+     */
+    public double[] getTranslation() {
+        return new double[] {matrix[0][3], matrix[1][3], matrix[2][3]};
+    }
+
     /** scales the matrix */
     public TransformationMatrix scale(double x, double y, double z) {
         TransformationMatrix m = new TransformationMatrix();

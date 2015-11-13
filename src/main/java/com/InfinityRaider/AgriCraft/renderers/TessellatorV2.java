@@ -85,6 +85,10 @@ public class TessellatorV2 extends Tessellator {
         this.matrix.multiplyRightWith(transformationMatrix);
     }
 
+    public TransformationMatrix getTransformationMatrix() {
+        return this.matrix;
+    }
+
     //---------------
     //other overrides
     //---------------

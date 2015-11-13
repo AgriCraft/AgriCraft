@@ -282,30 +282,25 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     //draws a rectangular prism
     protected void drawScaledPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier) {
         //bottom
-        drawScaledFaceBackXZ(tessellator, minX, minZ, maxX, maxZ, icon, minY/16.0F, colorMultiplier);
+        drawScaledFaceBackXZ(tessellator, minX, minZ, maxX, maxZ, icon, minY / 16.0F, colorMultiplier);
         //top
-        drawScaledFaceFrontXZ(tessellator, minX, minZ, maxX, maxZ, icon, maxY/16.0F, colorMultiplier);
+        drawScaledFaceFrontXZ(tessellator, minX, minZ, maxX, maxZ, icon, maxY / 16.0F, colorMultiplier);
         //back
-        drawScaledFaceBackXY(tessellator, minX, minY, maxX, maxY, icon, minZ/16.0F, colorMultiplier);
+        drawScaledFaceBackXY(tessellator, minX, minY, maxX, maxY, icon, minZ / 16.0F, colorMultiplier);
         //front
-        drawScaledFaceFrontXY(tessellator, minX, minY, maxX, maxY, icon, maxZ/16.0F, colorMultiplier);
+        drawScaledFaceFrontXY(tessellator, minX, minY, maxX, maxY, icon, maxZ / 16.0F, colorMultiplier);
         //left
-        drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, icon, minX/16.0F, colorMultiplier);
+        drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, icon, minX / 16.0F, colorMultiplier);
         //right
         drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, icon, maxX / 16.0F, colorMultiplier);
 
     }
 
     protected void drawScaledFaceFrontXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z, int colorMultiplier) {
-        //z positive
-        float r = 0.8F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float g = 0.8F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float b = 0.8F * ((float)(colorMultiplier & 255) / 255.0F);
-        tessellator.setColorOpaque_F(r, g, b);
         z = z*16.0F;
         float minV = 16-maxY;
         float maxV = 16-minY;
-        //front
+        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.SOUTH);
         addScaledVertexWithUV(tessellator, maxX, maxY, z, maxX, minV, icon);
         addScaledVertexWithUV(tessellator, minX, maxY, z, minX, minV, icon);
         addScaledVertexWithUV(tessellator, minX, minY, z, minX, maxV, icon);
@@ -313,13 +308,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     }
 
     protected void drawScaledFaceFrontXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y, int colorMultiplier) {
-        //y positive
-        float r = ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float g = ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float b = ((float)(colorMultiplier & 255) / 255.0F);
-        tessellator.setColorOpaque_F(r, g, b);
         y = y*16.0F;
-        //front
+        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.UP);
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ, icon);
         addScaledVertexWithUV(tessellator, maxX, y, minZ, maxX, minZ, icon);
         addScaledVertexWithUV(tessellator, minX, y, minZ, minX, minZ, icon);
@@ -327,15 +317,10 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     }
 
     protected void drawScaledFaceFrontYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x, int colorMultiplier) {
-        //x positive
-        float r = 0.6F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float g = 0.6F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float b = 0.6F * ((float)(colorMultiplier & 255) / 255.0F);
-        tessellator.setColorOpaque_F(r, g, b);
         x = x*16.0F;
         float minV = 16-maxY;
         float maxV = 16-minY;
-        //front
+        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.EAST);
         addScaledVertexWithUV(tessellator, x, maxY, maxZ, maxZ, minV, icon);
         addScaledVertexWithUV(tessellator, x, minY, maxZ, maxZ, maxV, icon);
         addScaledVertexWithUV(tessellator, x, minY, minZ, minZ, maxV, icon);
@@ -343,15 +328,10 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     }
 
     protected void drawScaledFaceBackXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z, int colorMultiplier) {
-        //z negative
-        float r = 0.8F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float g = 0.8F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float b = 0.8F * ((float)(colorMultiplier & 255) / 255.0F);
-        tessellator.setColorOpaque_F(r, g, b);
         z = z*16.0F;
         float minV = 16 - maxY;
         float maxV = 16 - minY;
-        //back
+        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.NORTH);
         addScaledVertexWithUV(tessellator, maxX, maxY, z, maxX, minV, icon);
         addScaledVertexWithUV(tessellator, maxX, minY, z, maxX, maxV, icon);
         addScaledVertexWithUV(tessellator, minX, minY, z, minX, maxV, icon);
@@ -359,13 +339,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     }
 
     protected void drawScaledFaceBackXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y, int colorMultiplier) {
-        float f10 = 0.5F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float f13 = 0.5F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float f16 = 0.5F * ((float)(colorMultiplier & 255) / 255.0F);
-        //y negative
-        tessellator.setColorOpaque_F(f10, f13, f16);
         y = y*16.0F;
-        //back
+        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.DOWN);
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ, icon);
         addScaledVertexWithUV(tessellator, minX, y, maxZ, minX, maxZ, icon);
         addScaledVertexWithUV(tessellator, minX, y, minZ, minX, minZ, icon);
@@ -373,25 +348,69 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     }
 
     protected void drawScaledFaceBackYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x, int colorMultiplier) {
-        //x negative
-        float r = 0.6F * ((float)(colorMultiplier >> 16 & 255) / 255.0F);
-        float g = 0.6F * ((float)(colorMultiplier >> 8 & 255) / 255.0F);
-        float b = 0.6F * ((float)(colorMultiplier & 255) / 255.0F);
-        tessellator.setColorOpaque_F(r, g, b);
         x = x*16.0F;
         float minV = 16 - maxY;
         float maxV = 16 - minY;
-        //back
+        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.WEST);
         addScaledVertexWithUV(tessellator, x, maxY, maxZ, maxZ, minV, icon);
         addScaledVertexWithUV(tessellator, x, maxY, minZ, minZ, minV, icon);
         addScaledVertexWithUV(tessellator, x, minY, minZ, minZ, maxV, icon);
         addScaledVertexWithUV(tessellator, x, minY, maxZ, maxZ, maxV, icon);
+    }
+
+    protected void applyColorMultiplier(Tessellator tessellator, int colorMultiplier, ForgeDirection side) {
+        float preMultiplier;
+        if(tessellator instanceof TessellatorV2) {
+            preMultiplier = getMultiplier(transformSide((TessellatorV2) tessellator, side));
+        } else {
+            preMultiplier = getMultiplier(side);
+        }
+        float r = preMultiplier * ((float) (colorMultiplier >> 16 & 255) / 255.0F);
+        float g = preMultiplier * ((float) (colorMultiplier >> 8 & 255) / 255.0F);
+        float b = preMultiplier * ((float) (colorMultiplier & 255) / 255.0F);
+        tessellator.setColorOpaque_F(r, g, b);
+    }
+
+    protected ForgeDirection transformSide(TessellatorV2 tessellator, ForgeDirection dir) {
+        if(dir==ForgeDirection.UNKNOWN) {
+            return dir;
+        }
+        double[] coords = tessellator.getTransformationMatrix().transform(dir.offsetX, dir.offsetY, dir.offsetZ);
+        double[] translation = tessellator.getTransformationMatrix().getTranslation();
+        coords[0] = coords[0] - translation[0];
+        coords[1] = coords[1] - translation[1];
+        coords[2] = coords[2] - translation[2];
+        double x = Math.abs(coords[0]);
+        double y = Math.abs(coords[1]);
+        double z = Math.abs(coords[2]);
+        if(x > z) {
+            if(x > y) {
+                return coords[0] > 0 ? ForgeDirection.EAST : ForgeDirection.WEST;
+            }
+        } else {
+            if(z > y) {
+                return coords[2] > 0 ? ForgeDirection.SOUTH : ForgeDirection.NORTH;
+            }
+        }
+        return coords[1] > 0 ? ForgeDirection.UP : ForgeDirection.DOWN;
+    }
+
+    protected float getMultiplier(ForgeDirection side) {
+        switch(side) {
+            case DOWN: return 0.5F;
+            case NORTH:
+            case SOUTH: return 0.8F;
+            case EAST:
+            case WEST: return 0.6F;
+            default: return 1;
+        }
     }
     
 	protected void drawPlane(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, ForgeDirection direction) {
 		float[] rot = RenderHelper.rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
 		drawPlane(tessellator, rot[0], rot[1], rot[2], rot[3], rot[4], rot[5], icon);
 	}
+
 
 	private void drawPlane(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon) {
 		addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, maxZ, icon);
