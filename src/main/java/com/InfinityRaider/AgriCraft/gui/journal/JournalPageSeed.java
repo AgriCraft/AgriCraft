@@ -25,6 +25,8 @@ public class JournalPageSeed extends JournalPage {
     private static final ResourceLocation ICON_FRAME = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalSeedFrame.png");
     private static final ResourceLocation MUTATION_TEMPLATE = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalMutationTemplate.png");
     private static final ResourceLocation QUESTION_MARK = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalQuestionMark.png");
+    private static final ResourceLocation BRIGHTNESS_BAR = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalBrightnessBar.png");
+    private static final ResourceLocation BRIGHTNESS_FRAME = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalBrightnessFrame.png");
 
     private ArrayList<ItemStack> discoveredSeeds;
     private int page;
@@ -95,6 +97,7 @@ public class JournalPageSeed extends JournalPage {
         textComponents.add(getDescriptionHead());
         textComponents.add(getSeedInformation());
         textComponents.add(getTier());
+        textComponents.add(getBrightnessTitle());
         textComponents.add(getFruitTitle());
         textComponents.add(getGrowthTitle());
         textComponents.addAll(getMutationTitles());
@@ -131,7 +134,15 @@ public class JournalPageSeed extends JournalPage {
     private Component<String> getTier() {
         String text = StatCollector.translateToLocal("agricraft_journal.tier") + ": " + plant.getTier();
         int x = 29;
-        int y = 70;
+        int y = 66;
+        float scale = 0.5F;
+        return new Component<String>(text, x , y, scale);
+    }
+
+    private Component<String> getBrightnessTitle() {
+        String text = StatCollector.translateToLocal("agricraft_journal.brightness") + ": ";
+        int x = 29;
+        int y = 76;
         float scale = 0.5F;
         return new Component<String>(text, x , y, scale);
     }
@@ -139,7 +150,7 @@ public class JournalPageSeed extends JournalPage {
     private Component<String> getFruitTitle() {
         String text = StatCollector.translateToLocal("agricraft_journal.fruits") + ": ";
         int x = 29;
-        int y = 84;
+        int y = 95;
         float scale = 0.5F;
         return new Component<String>(text, x, y, scale);
     }
@@ -147,7 +158,7 @@ public class JournalPageSeed extends JournalPage {
     private Component<String> getGrowthTitle() {
         String text = StatCollector.translateToLocal("agricraft_journal.growthStages") + ": ";
         int x = 29;
-        int y = 117;
+        int y = 122;
         float scale = 0.5F;
         return new Component<String>(text, x, y, scale);
     }
@@ -194,7 +205,7 @@ public class JournalPageSeed extends JournalPage {
                 ItemStack stack = allFruits.get(i);
                 if (stack != null && stack.getItem() != null) {
                     int x = 30 + 24 * i;
-                    int y = 91;
+                    int y = 102;
                     fruits.add(new Component<ItemStack>(stack, x, y, 16, 16));
                 }
             }
@@ -305,6 +316,7 @@ public class JournalPageSeed extends JournalPage {
         ArrayList<Component<ResourceLocation>> textureComponents = new ArrayList<Component<ResourceLocation>>();
         textureComponents.add(getSoil());
         textureComponents.addAll(getGrowthStages());
+        textureComponents.addAll(getBrightnessTextures());
         textureComponents.addAll(getFruitIconFrames());
         textureComponents.addAll(getMutationTemplates());
         return textureComponents;
@@ -329,10 +341,25 @@ public class JournalPageSeed extends JournalPage {
         for(int i=0;i<8;i++) {
             ResourceLocation texture = RenderHelper.getBlockResource(plant.getPlantIcon(i));
             int x = 30 + 24 * (i % 4);
-            int y = 124 + 24 * (i / 4);
+            int y = 129 + 24 * (i / 4);
             growthStages.add(new Component<ResourceLocation>(texture, x, y, 16, 16));
         }
         return growthStages;
+    }
+
+    private ArrayList<Component<ResourceLocation>> getBrightnessTextures() {
+        ArrayList<Component<ResourceLocation>> textures = new ArrayList<Component<ResourceLocation>>();
+        int x = 29;
+        int y = 81;
+        int u = 4;
+        int v = 8;
+        int[] brightnessRange = GrowthRequirementHandler.getGrowthRequirement(plant).getBrightnessRange();
+        textures.add(new Component<ResourceLocation>(BRIGHTNESS_BAR, x, y, 2+16*u, v));
+        textures.add(new Component<ResourceLocation>(BRIGHTNESS_FRAME, x+u*brightnessRange[0], y, 1, v));
+        textures.add(new Component<ResourceLocation>(BRIGHTNESS_FRAME, x+u*brightnessRange[1]+1, y, 1, v));
+        textures.add(new Component<ResourceLocation>(BRIGHTNESS_FRAME, x+u*brightnessRange[0]+1, y, u*(brightnessRange[1]-brightnessRange[0]), 1));
+        textures.add(new Component<ResourceLocation>(BRIGHTNESS_FRAME, x+u*brightnessRange[0]+1, y+v-1, u*(brightnessRange[1]-brightnessRange[0]), 1));
+        return textures;
     }
 
     private ArrayList<Component<ResourceLocation>> getFruitIconFrames() {
@@ -341,7 +368,7 @@ public class JournalPageSeed extends JournalPage {
         }
         ArrayList<Component<ResourceLocation>> components = new ArrayList<Component<ResourceLocation>>();
         for(int i=0;i<fruits.size();i++) {
-            components.add(new Component<ResourceLocation>(ICON_FRAME, 29+24*i, 90, 18, 18));
+            components.add(new Component<ResourceLocation>(ICON_FRAME, 29+24*i, 101, 18, 18));
         }
         return components;
     }
