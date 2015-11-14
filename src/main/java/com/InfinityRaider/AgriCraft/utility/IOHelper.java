@@ -395,7 +395,10 @@ public abstract class IOHelper {
             "harvestcraft:turnipseedItem=harvestcraft:parsnipseedItem+harvestcraft:radishseedItem\n" +
             "harvestcraft:wintersquashseedItem=minecraft:pumpkin_seeds+harvestcraft:zucchiniseedItem\n" +
             "harvestcraft:zucchiniseedItem=minecraft:pumpkin_seeds+harvestcraft:cucumberseedItem\n" +
-            "harvestcraft:whitemushroomseedItem=AgriCraft:seedShroomRed+AgriCraft:seedShroomBrown";
+            "harvestcraft:whitemushroomseedItem=AgriCraft:seedShroomRed+AgriCraft:seedShroomBrown\n" +
+            "harvestcraft:curryleafseedItem=harvestcraft:spiceleafseedItem+harvestcraft:mustardseedItem\n" +
+            "harvestcraft:sesameseedsseedItem=harvestcraft:riceseedItem+harvestcraft:coffeeseedItem\n" +
+            "harvestcraft:waterchestnutseedItem=harvestcraft:sesameseedsseedItem+harvestcraft:seaweedseedItem";
 
     private static final String weeeFlowersMutations =
             "weeeflowers:Red Flower Seed=AgriCraft:seedPoppy+AgriCraft:seedCarrot\n" +
@@ -492,7 +495,8 @@ public abstract class IOHelper {
             "plantmegapack:seedBellPepperOrange=plantmegapack:seedBellPepperYellow+plantmegapack:seedTomato\n" +
             "plantmegapack:seedBellPepperRed=plantmegapack:seedBellPepperOrange+plantmegapack:seedTomato\n" +
             "plantmegapack:seedSorrel=plantmegapack:seedBroccoli+plantmegapack:seedCassava\n" +
-            "plantmegapack:seedCucumber=plantmegapack:seedBeet+plantmegapack:seedBellPepperYellow";
+            "plantmegapack:seedCucumber=plantmegapack:seedBeet+plantmegapack:seedBellPepperYellow\n" +
+            "plantmegapack:seedEggplant=plantmegapack:seedBeet+plantmegapack:seedCucumber";
 
     private static final String chococraftMutations =
             "chococraft:Gysahl_Seeds=AgriCraft:seedPotato+AgriCraft:seedTulipRed";

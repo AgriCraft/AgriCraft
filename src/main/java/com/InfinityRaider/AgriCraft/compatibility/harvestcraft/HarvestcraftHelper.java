@@ -40,7 +40,9 @@ public final class HarvestcraftHelper extends ModHelper {
                             continue;
                         }
                         CropPlantHandler.registerPlant(new CropPlantHarvestCraft(seed));
-                        if(seed == Item.itemRegistry.getObject("harvestcraft:seaweedseedItem") || seed == Item.itemRegistry.getObject("harvestcraft:riceseedItem")) {
+                        if(seed == Item.itemRegistry.getObject("harvestcraft:seaweedseedItem")
+                                || seed == Item.itemRegistry.getObject("harvestcraft:riceseedItem")
+                                || seed == Item.itemRegistry.getObject("harvestcraft:waterchestnutseedItem")) {
                             GrowthRequirementHandler.getGrowthRequirement(seed, 0).setSoil(new BlockWithMeta(Blocks.blockWaterPadFull));
                         }
                     }
