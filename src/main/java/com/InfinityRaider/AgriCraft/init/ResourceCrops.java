@@ -43,7 +43,7 @@ public class ResourceCrops {
                 {"Aurigold", new ItemStack(net.minecraft.init.Items.gold_nugget), RequirementType.BELOW, new BlockWithMeta(Blocks.gold_ore, 0), 4, RenderMethod.HASHTAG},
                 {"Ferranium", new ItemStack(OreDictHelper.getNuggetForName("Iron"), 1, OreDictHelper.getNuggetMetaForName("Iron")), RequirementType.BELOW, new BlockWithMeta(Blocks.iron_ore, 0), 4, RenderMethod.HASHTAG},
                 {"Diamahlia", new ItemStack(OreDictHelper.getNuggetForName("Diamond"), 1, OreDictHelper.getNuggetMetaForName("Diamond")), RequirementType.BELOW, new BlockWithMeta(Blocks.diamond_ore, 0), 5, RenderMethod.HASHTAG},
-                {"Lapender", new ItemStack(net.minecraft.init.Items.dye, 1, 4), RequirementType.BELOW, new BlockWithMeta(Blocks.lapis_ore, 0), 3, RenderMethod.HASHTAG},
+                {"Lapender", new ItemStack(net.minecraft.init.Items.dye, 1, 4), RequirementType.BELOW, new BlockWithMeta(Blocks.lapis_ore, 4), 3, RenderMethod.HASHTAG},
                 {"Emeryllis", new ItemStack(OreDictHelper.getNuggetForName("Emerald"), 1, OreDictHelper.getNuggetMetaForName("Emerald")), RequirementType.BELOW, new BlockWithMeta(Blocks.emerald_ore, 0), 5, RenderMethod.HASHTAG},
                 {"Redstodendron", new ItemStack(net.minecraft.init.Items.redstone), RequirementType.BELOW, new BlockWithMeta(Blocks.redstone_ore, 0), 3, RenderMethod.HASHTAG},
                 {"NitorWart", new ItemStack(net.minecraft.init.Items.glowstone_dust), new BlockWithMeta(Blocks.soul_sand), RequirementType.BELOW, new BlockWithMeta(Blocks.glowstone, 0), 4, RenderMethod.HASHTAG},

@@ -9,6 +9,7 @@ Changelog
 -FIXED:  MineTweaker support for weed raking drops having wrong import
 -FIXED:  Weird behaviour for some API methods
 -FIXED:  Weird lighting when rendering (thanks HenryLoenwind)
+-FIXED:  Lapis not growing
 
 1.4.4
 -ADDED:  Configurable option for weeds to drop certain items when raked (can be fully MineTweaked)
