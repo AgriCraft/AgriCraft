@@ -1,5 +1,8 @@
 Changelog
 ---------
+1.4.6
+-CHANGE: Updated Botania drum/horn of the wild interaction: crops will now be harvested instead of uprooted
+
 1.4.5
 -ADDED:  Support for Agriculture 2
 -ADDED:  Config option to disable mod specific fruit drops

@@ -46,7 +46,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.shadowmage.ancientwarfare.api.IAncientWarfareFarmable;
-import vazkii.botania.api.item.IGrassHornExcempt;
+import vazkii.botania.api.item.IHornHarvestable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +56,10 @@ import java.util.Random;
  * The most important block in the mod.
  */
 @Optional.InterfaceList(value = {
-        @Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IGrassHornExcempt"),
+        @Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IHornHarvestable"),
         @Optional.Interface(modid = Names.Mods.ancientWarfare, iface = "net.shadowmage.ancientwarfare.api.IAncientWarfareFarmable")
 })
-public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPlantable, IGrassHornExcempt, IAncientWarfareFarmable {
+public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPlantable, IHornHarvestable, IAncientWarfareFarmable {
     /** The set of icons used to render weeds. */
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
@@ -276,7 +276,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
             }
             else if(heldItem.getItem() instanceof IRake) {
                 if(crop.hasPlant()) {
-                    return this.canUproot(world, x, y, z);
+                    return this.upRoot(world, x, y, z);
                 } else if(crop.hasWeed()) {
                     ((IRake) heldItem.getItem()).removeWeeds(crop, heldItem);
                 }
@@ -554,13 +554,10 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
     }
 
     /**
-     * Determines if block can be harvested by the Botania Horn of the Wild.
-     * <p>
-     * Since the block cannot be harvested normally, by breaking, this function handles the harvesting for the horn in the process.
+     * Tries to uproot the plant: remove the plant, but keep the crop sticks in place
      * @return false, since the crops can't uproot normally.
      */
-    @Override
-    public boolean canUproot(World world, int x, int y, int z) {
+    public boolean upRoot(World world, int x, int y, int z) {
         if(!world.isRemote) {
             TileEntity te = world.getTileEntity(x, y, z);
             if(te!=null && te instanceof TileEntityCrop) {
@@ -786,5 +783,32 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
     @Override
     public ItemStack getWailaStack(BlockAgriCraft block, TileEntityAgricraft tea) {
     	return new ItemStack(Items.crops, 1, 0);
+    }
+
+    @Override
+    public boolean canHornHarvest(World world, int x, int y, int z, ItemStack stack, EnumHornType hornType) {
+        return hornType.ordinal()==0;
+    }
+
+    @Override
+    public boolean hasSpecialHornHarvest(World world, int x, int y, int z, ItemStack stack, EnumHornType hornType) {
+        return hornType.ordinal()==0;
+    }
+
+    @Override
+    public void harvestByHorn(World world, int x, int y, int z, ItemStack stack, EnumHornType hornType) {
+        if(hornType.ordinal()!=0) {
+            return;
+        }
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if(tile == null || !(tile instanceof TileEntityCrop)) {
+            return;
+        }
+        TileEntityCrop crop = (TileEntityCrop) tile;
+        if(crop.hasPlant()) {
+            if(this.harvest(world, x, y ,z, null, crop) && stack!=null && stack.getItem()!=null) {
+                stack.attemptDamageItem(1, world.rand);
+            }
+        }
     }
 }
