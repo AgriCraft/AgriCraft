@@ -9,6 +9,9 @@ item.agricraft:magnifyingGlass.name=放大镜
 item.agricraft:debugger.name=调试器
 item.agricraft:handRake.wood.name=木耙
 item.agricraft:handRake.iron.name=铁耙
+item.agricraft:clipper.name=剪枝器
+item.agricraft:clipping.name=接穗
+
 item.agricraft:nuggetDiamond.name=钻石颗粒
 item.agricraft:nuggetIron.name=铁颗粒
 item.agricraft:nuggetEmerald.name=绿宝石颗粒
@@ -36,6 +39,7 @@ item.agricraft:seedCactus.name=仙人掌种子
 item.agricraft:seedShroomRed.name=红色蘑菇孢子
 item.agricraft:seedShroomBrown.name=棕色蘑菇孢子
 item.agricraft:seedNitorWart.name=闪耀疣孢子
+item.agricraft:seedQuartzanthemum.name=石英菊种子
 
 item.agricraft:seedBotaniaWhite.name=白色神秘花种子
 item.agricraft:seedBotaniaOrange.name=橙色神秘花种子
@@ -54,20 +58,32 @@ item.agricraft:seedBotaniaGreen.name=绿色神秘花种子
 item.agricraft:seedBotaniaRed.name=红色神秘花种子
 item.agricraft:seedBotaniaBlack.name=黑色神秘花种子
 
+item.agricraft:seedCinderpearl.name=火焰草种子
+item.agricraft:seedShimmerleaf.name=水银花种子
+item.agricraft:seedVishroom.name=纤毛菇种子
+item.agricraft:seedTaintedRoot.name=腐化之根种子
+
+item.agricraft:seedAum.name=全知草种子
+item.agricraft:seedCerublossom.name=万代兰种子
+item.agricraft:seedDesertNova.name=沙漠新星种子
+item.agricraft:seedTarmaRoot.name=塔尔玛根种子
+item.agricraft:seedWakebloom.name=觉苏草种子
+
 item.agricraft:seedFerranium.name=铁叶草种子
 item.agricraft:seedAurigold.name=金光花种子
-item.agricraft:seedDiamahlia.name=钻石花种子
-item.agricraft:seedLapender.name=天青花种子
-item.agricraft:seedEmeryllis.name=翡翠草种子
+item.agricraft:seedDiamahlia.name=金刚大丽种子
+item.agricraft:seedLapender.name=蓝熏衣种子
+item.agricraft:seedEmeryllis.name=朱顶绿种子
 item.agricraft:seedRedstodendron.name=红灌木种子
-item.agricraft:seedCuprosia.name=赤铜花种子
-item.agricraft:seedPetinia.name=锡白叶种子
+item.agricraft:seedCuprosia.name=铜茜草种子
+item.agricraft:seedPetinia.name=锡牵牛种子
 item.agricraft:seedPlombean.name=铅斑豆种子
 item.agricraft:seedSilverweed.name=银辉草种子
 item.agricraft:seedJaslumine.name=铝茉莉种子
 item.agricraft:seedNiccissus.name=镍粉藤种子
 item.agricraft:seedPlatiolus.name=铂金草种子
 item.agricraft:seedOsmonium.name=锇蓝草种子
+
 
 
 //blocks
@@ -99,6 +115,7 @@ tile.agricraft:cropCactus.name=仙人掌
 tile.agricraft:cropShroomRed.name=红蘑菇
 tile.agricraft:cropShroomBrown.name=棕蘑菇
 tile.agricraft:cropNitorWart.name=闪耀疣
+tile.agricraft:cropQuartzanthemum.name=石英菊
 
 tile.agricraft:cropBotaniaWhite.name=白色神秘花
 tile.agricraft:cropBotaniaOrange.name=橙色神秘花
@@ -117,20 +134,39 @@ tile.agricraft:cropBotaniaGreen.name=绿色神秘花
 tile.agricraft:cropBotaniaRed.name=红色神秘花
 tile.agricraft:cropBotaniaBlack.name=黑色神秘花
 
+tile.agricraft:cropCinderpearl.name=火焰草
+tile.agricraft:cropShimmerleaf.name=水银花
+tile.agricraft:cropVishroom.name=纤毛菇
+tile.agricraft:cropTaintedRoot.name=腐化之根
+
+tile.agricraft:cropAum.name=全知草
+tile.agricraft.cropCerublossom.name=万代兰
+tile.agricraft.cropDesertNova.name=沙漠新星
+tile.agricraft.cropTarmaRoot.name=塔尔玛根
+tile.agricraft.cropWakebloom.name=觉苏草
+
 tile.agricraft:cropFerranium.name=铁叶草
 tile.agricraft:cropAurigold.name=金光花
-tile.agricraft:cropDiamahlia.name=钻石花
-tile.agricraft:cropLapender.name=天青花
-tile.agricraft:cropEmeryllis.name=翡翠草
+tile.agricraft:cropDiamahlia.name=金刚大丽
+tile.agricraft:cropLapender.name=蓝熏衣
+tile.agricraft:cropEmeryllis.name=朱顶绿
 tile.agricraft:cropRedstodendron.name=红灌木
-tile.agricraft:cropCuprosia.name=赤铜花
-tile.agricraft:cropPetinia.name=锡白叶
+tile.agricraft:cropCuprosia.name=铜茜草
+tile.agricraft:cropPetinia.name=锡牵牛
 tile.agricraft:cropPlombean.name=铅斑豆
 tile.agricraft:cropSilverweed.name=银辉草
 tile.agricraft:cropJaslumine.name=铝茉莉
 tile.agricraft:cropNiccissus.name=镍粉藤
 tile.agricraft:cropPlatiolus.name=铂金草
 tile.agricraft:cropOsmonium.name=锇蓝草
+
+//entities
+entity.AgriCraft.villagerFarmer.name=村民
+entity.AgriCraft.leash.name=皮带结
+
+//gui
+agricraft_gui.seedAnalyzer=种子分析仪
+agricraft_gui.peripheral=数控种子分析仪
 
 //tooltips
 agricraft_tooltip.unidentified=未识别
@@ -156,6 +192,15 @@ agricraft_tooltip.closed=关闭
 agricraft_tooltip.open=开启
 agricraft_tooltip.state=阶段
 agricraft_tooltip.empty=这里没有种植作物
+agricraft_tooltip.waterPadDry=用铲子挖掘耕地以得到小坑
+agricraft_tooltip.waterPadWet=然后用水桶填满
+agricraft_tooltip.growthStage=生长阶段
+agricraft_tooltip.mature=成熟
+agricraft_tooltip.valve=受红石信号控制
+agricraft_tooltip.grate=用藤蔓右击中藤蔓
+agricraft_tooltip.clipper1=在租屋上右击得到接穗
+agricraft_tooltip.clipper2=接穗可种在其他作物上
+agricraft_tooltip.clipper3=成功率由强度决定
 
 // nei GUI
 agricraft_nei.mutation.title=作物杂交
@@ -163,6 +208,7 @@ agricraft_nei.soil=土壤
 agricraft_nei.needs=需要
 agricraft_nei.below=底部
 agricraft_nei.nearby=旁边
+agricraft_nei.nearby=附近
 
 //journal entries
 //---------------
@@ -197,7 +243,7 @@ agricraft_journal.ferranium=这奇怪的植物的根并不在意水源.它们只
 agricraft_journal.lapender=在它鲜艳的蓝色背后,这种花可以产出闪亮的 小石头.
 agricraft_journal.emeryllis=如果你和一个村庄里的农学家交谈,它们将 会告诉你这种可以带来无限财富的植物的 传说.
 agricraft_journal.redstodendron=奇异的光辉似乎正从红灌木丛中散发出来.
-agricraft_journal.cuprosia=Cuprosia是一种奇怪的花,它从土壤中提取铜,以滋养 其美丽的花瓣.
+agricraft_journal.cuprosia=铜茜草是一种奇怪的花,它从土壤中提取铜,以滋养 其美丽的花瓣.
 agricraft_journal.petinia=这种花只能在富含锡的土壤中生长茂盛.
 agricraft_journal.plombean=有时人们会以为这是普通的豆子,然后在吃下 其果实后中毒身亡.
 agricraft_journal.silverweed=有时,阅历不够的农学家会将这珍贵的作物当作 杂草并丢弃.
