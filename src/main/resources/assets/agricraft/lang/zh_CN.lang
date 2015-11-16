@@ -9,6 +9,9 @@ item.agricraft:magnifyingGlass.name=放大镜
 item.agricraft:debugger.name=调试器
 item.agricraft:handRake.wood.name=木耙
 item.agricraft:handRake.iron.name=铁耙
+item.agricraft:clipper.name=剪枝器
+item.agricraft:clipping.name=接穗
+
 item.agricraft:nuggetDiamond.name=钻石颗粒
 item.agricraft:nuggetIron.name=铁颗粒
 item.agricraft:nuggetEmerald.name=绿宝石颗粒
@@ -157,6 +160,14 @@ tile.agricraft:cropNiccissus.name=镍粉藤
 tile.agricraft:cropPlatiolus.name=铂金草
 tile.agricraft:cropOsmonium.name=锇蓝草
 
+//entities
+entity.AgriCraft.villagerFarmer.name=村民
+entity.AgriCraft.leash.name=皮带结
+
+//gui
+agricraft_gui.seedAnalyzer=种子分析仪
+agricraft_gui.peripheral=数控种子分析仪
+
 //tooltips
 agricraft_tooltip.unidentified=未识别
 agricraft_tooltip.seed=种子名字
@@ -181,6 +192,15 @@ agricraft_tooltip.closed=关闭
 agricraft_tooltip.open=开启
 agricraft_tooltip.state=阶段
 agricraft_tooltip.empty=这里没有种植作物
+agricraft_tooltip.waterPadDry=用铲子挖掘耕地以得到小坑
+agricraft_tooltip.waterPadWet=然后用水桶填满
+agricraft_tooltip.growthStage=生长阶段
+agricraft_tooltip.mature=成熟
+agricraft_tooltip.valve=受红石信号控制
+agricraft_tooltip.grate=用藤蔓右击中藤蔓
+agricraft_tooltip.clipper1=在租屋上右击得到接穗
+agricraft_tooltip.clipper2=接穗可种在其他作物上
+agricraft_tooltip.clipper3=成功率由强度决定
 
 // nei GUI
 agricraft_nei.mutation.title=作物杂交
@@ -188,6 +208,7 @@ agricraft_nei.soil=土壤
 agricraft_nei.needs=需要
 agricraft_nei.below=底部
 agricraft_nei.nearby=旁边
+agricraft_nei.nearby=附近
 
 //journal entries
 //---------------
