@@ -54,6 +54,17 @@ item.agricraft:seedBotaniaGreen.name=绿色神秘花种子
 item.agricraft:seedBotaniaRed.name=红色神秘花种子
 item.agricraft:seedBotaniaBlack.name=黑色神秘花种子
 
+item.agricraft:seedCinderpearl.name=火焰草种子
+item.agricraft:seedShimmerleaf.name=水银花种子
+item.agricraft:seedVishroom.name=纤毛菇种子
+item.agricraft:seedTaintedRoot.name=腐化之根种子
+
+item.agricraft:seedAum.name=全知草种子
+item.agricraft:seedCerublossom.name=Cerublossom Seeds
+item.agricraft:seedDesertNova.name=Desert Nova Seeds
+item.agricraft:seedTarmaRoot.name=Tarma Root Seeds
+item.agricraft:seedWakebloom.name=Wakebloom seeds
+
 item.agricraft:seedFerranium.name=铁叶草种子
 item.agricraft:seedAurigold.name=金光花种子
 item.agricraft:seedDiamahlia.name=钻石花种子
@@ -68,6 +79,7 @@ item.agricraft:seedJaslumine.name=铝茉莉种子
 item.agricraft:seedNiccissus.name=镍粉藤种子
 item.agricraft:seedPlatiolus.name=铂金草种子
 item.agricraft:seedOsmonium.name=锇蓝草种子
+
 
 
 //blocks
