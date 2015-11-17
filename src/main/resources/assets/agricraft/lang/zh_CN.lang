@@ -272,28 +272,24 @@ agricraft_journal.botaniaRed=这神秘的鲜花里有着大量红色花瓣,又�
 agricraft_journal.botaniaBlack=这神秘的鲜花里有着大量黑色花瓣,又有谁知 道它们可能被用作什么呢.
 
 //thaumcraft seeds
-agricraft_journal.shimmerleaf=这种奇怪的发光的小花只生长在银树的树荫下.收获并打浆后能得到水银.
-agricraft_journal.cinderpearl=这些植物伴随熊熊的元素烈火生长,只分布于炎热气候的地区.采摘并研磨它们可以得到重要的炼金材料烈焰粉.
-agricraft_journal.vishroom=Vishrooms grow naturally in Magical Forests. When touched by the naked hand, their poison is known to inflict nausea.
-agricraft_journal.taintedRoot=Tainted Roots can be grown and harvested in Tainted Lands, but who would need the tendrils it produces?
+agricraft_journal.shimmerleaf=这种奇怪的发光的小花只生长在银树的树荫下. 收获并打浆后能得到水银.
+agricraft_journal.cinderpearl=这些植物伴随熊熊的元素烈火生长,只分布于炎 热气候的地区.采摘并研磨它们可以得到重要的炼金材料烈焰粉.
+agricraft_journal.vishroom=纤毛菇在魔法森林中自然生长. 如果光着手采集, 他们的毒性会导致反胃.
+agricraft_journal.taintedRoot=腐化根能在孵化之地生长和收获, 但谁会要它出产的那些触手?
 
 //ars magica seeds
-agricraft_journal.aum=A flower with healing properties, Aum is a component in many spells. It can only be found at the base of Witchwood trees.
-agricraft_journal.cerublossom=Cerublossom flowers thrive in lush, green environments. They were one of the first magical plants discovered, being used in potions and salves.
-agricraft_journal.desertNova=Desert Novas grow in dry conditions. They get their name from the small bursts of magic that they periodically emit.
-agricraft_journal.tarmaRoot=Lighter than it looks, Tarma Root grows in caves and other dark places. It is an ingredient in spells and air essences.
-agricraft_journal.wakebloom=Growing on the surface of water in warm climates, wakebloom is used frequently in water-based spells.
+agricraft_journal.aum=一种具有治愈性的花, 全知草是很多魔咒的组分. 它只能在巫魂树树根找到.
+agricraft_journal.cerublossom=万代兰能在茂盛, 青翠的环境中发现. 它们是第一种已知的魔法植物, 用于制作药水和药膏.
+agricraft_journal.desertNova=沙漠新星在干燥的环境下生长. 它们因周期性产生的小型魔法爆发而得名.
+agricraft_journal.tarmaRoot=比看起来要亮, 塔尔玛根生长在洞穴和其他湖南的环境中. 它是魔咒和空气精华的成分.
+agricraft_journal.wakebloom=在温暖气候下的水面上生长, 觉苏草经常用在与水有关的魔咒中.
 
 
 //minecraft seeds
-<<<<<<< HEAD
-agricraft_journal.wheat=小麦是一种非常普遍,营养价值又高的作物.
-agricraft_journal.pumpkin=大多数人认为南瓜是一种装饰性的蔬菜,然而也 有人喜欢南瓜派的味道.
-=======
 agricraft_journal.seeds=小麦是一种非常普遍,营养价值又高的作物.
-agricraft_journal.pumpkin=大多数人认为南瓜是一种装饰性的蔬菜,然而也有人喜欢南瓜派的味道.
->>>>>>> CropRewrite
+agricraft_journal.pumpkin=大多数人认为南瓜是一种装饰性的蔬菜,然而也 有人喜欢南瓜派的味道.
 agricraft_journal.melon=人们都喜欢西瓜,因为西瓜的甜和含水量高.
+agricraft_journal.nether_wart=地狱疣似乎在下界的废弃要塞中有栽培.
 
 //natura seeds
 agricraft_journal.barleyNatura=相比于普通面包,一些人更喜欢大麦面包 的味道, 然而也有一些人声称它们的味道是 一样的.
