@@ -163,6 +163,10 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
         return false;
     }
 
+    public boolean harvest(World world, int x, int y, int z, EntityPlayer player) {
+        return harvest (world, x, y, z, player, null);
+    }
+
     /**
      * Changes the crop from normal operation, to cross-crop operation.
      * 
