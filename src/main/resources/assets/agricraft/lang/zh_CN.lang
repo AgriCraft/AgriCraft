@@ -84,11 +84,11 @@ item.agricraft:seedNiccissus.name=镍粉藤种子
 item.agricraft:seedPlatiolus.name=铂金草种子
 item.agricraft:seedOsmonium.name=锇蓝草种子
 
-
-
 //blocks
-tile.agricraft:crops.name=作物
+tile.agricraft:crops.name=作物架
 tile.agricraft:seedAnalyzer.name=种子分析仪
+tile.agricraft:waterPad.name=水垫
+tile.agricraft:waterPadFull.name=水垫
 tile.agricraft:waterTank.0.name=木质水箱
 tile.agricraft:waterTank.1.name=铁质水箱
 tile.agricraft:waterChannel.0.name=木质浇灌水道
@@ -96,6 +96,12 @@ tile.agricraft:waterChannel.1.name=铁质浇灌水道
 tile.agricraft:channelValve.0.name=木质水道阀门
 tile.agricraft:channelValve.1.name=铁质水道阀门
 tile.agricraft:sprinkler.name=洒水壶
+tile.agricraft:seedStorage.0.name=种子储存器
+tile.agricraft:seedStorageController.0.name=种子储存控制器
+tile.agricraft:fence.0.name=栅栏
+tile.agricraft:fenceGate.0.name=栅栏门
+tile.agricraft:grate.0.name=木格栅
+tile.agricraft:peripheral.name=数控种子分析仪
 
 tile.agricraft:cropPotato.name=马铃薯
 tile.agricraft:cropCarrot.name=胡萝卜
