@@ -92,6 +92,7 @@ tile.agricraft:waterPadFull.name=水垫
 tile.agricraft:waterTank.0.name=木质水箱
 tile.agricraft:waterTank.1.name=铁质水箱
 tile.agricraft:waterChannel.0.name=木质浇灌水道
+tile.agricraft:waterChannelFull.0.name=木质浇灌水道
 tile.agricraft:waterChannel.1.name=铁质浇灌水道
 tile.agricraft:channelValve.0.name=木质水道阀门
 tile.agricraft:channelValve.1.name=铁质水道阀门
