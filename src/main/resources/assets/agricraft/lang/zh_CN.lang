@@ -237,6 +237,7 @@ agricraft_journal.cactus=种植仙人掌可以获取常用作绿色染料的绿 
 agricraft_journal.shroomRed=这种红色蘑菇的味道确实很好,它绝对是 蘑菇煲的上好材料.
 agricraft_journal.shroomBrown=这种棕色蘑菇的味道确实很好,它绝对是 蘑菇煲的上好材料.
 agricraft_journal.nitorWart=据信这种来自下界的作物是确实存在的, 那些长者们说它会从周围的环境中吸取荧 石颗粒并产出光亮的粉末.
+agricraft_journal.quartzanthemum=一种吸收土壤中石英精华的下界作物.
 agricraft_journal.diamahlia=仍有很多人相信这种花只存在于神话和传 说中.然而,有些农学家声称他们已经成 功得到了这种传奇的植物.
 agricraft_journal.aurigold=金光花是一种罕见的,只存在于寓言里的花, 以土壤中含量甚微的金为养料,只有十分耐心 并且技术高超的农学家才可以培养出这罕见 的珍宝.
 agricraft_journal.ferranium=这奇怪的植物的根并不在意水源.它们只是深 深地扎根于土壤中,吸收铁的粒子以强化 自身.
@@ -269,6 +270,20 @@ agricraft_journal.botaniaBrown=这神秘的鲜花里有着大量棕色花瓣,又
 agricraft_journal. botaniaGreen=这神秘的鲜花里有着大量绿色花瓣,又有谁知 道它们可能被用作什么呢.
 agricraft_journal.botaniaRed=这神秘的鲜花里有着大量红色花瓣,又有谁知 道它们可能被用作什么呢.
 agricraft_journal.botaniaBlack=这神秘的鲜花里有着大量黑色花瓣,又有谁知 道它们可能被用作什么呢.
+
+//thaumcraft seeds
+agricraft_journal.shimmerleaf=这种奇怪的发光的小花只生长在银树的树荫下.收获并打浆后能得到水银.
+agricraft_journal.cinderpearl=这些植物伴随熊熊的元素烈火生长,只分布于炎热气候的地区.采摘并研磨它们可以得到重要的炼金材料烈焰粉.
+agricraft_journal.vishroom=Vishrooms grow naturally in Magical Forests. When touched by the naked hand, their poison is known to inflict nausea.
+agricraft_journal.taintedRoot=Tainted Roots can be grown and harvested in Tainted Lands, but who would need the tendrils it produces?
+
+//ars magica seeds
+agricraft_journal.aum=A flower with healing properties, Aum is a component in many spells. It can only be found at the base of Witchwood trees.
+agricraft_journal.cerublossom=Cerublossom flowers thrive in lush, green environments. They were one of the first magical plants discovered, being used in potions and salves.
+agricraft_journal.desertNova=Desert Novas grow in dry conditions. They get their name from the small bursts of magic that they periodically emit.
+agricraft_journal.tarmaRoot=Lighter than it looks, Tarma Root grows in caves and other dark places. It is an ingredient in spells and air essences.
+agricraft_journal.wakebloom=Growing on the surface of water in warm climates, wakebloom is used frequently in water-based spells.
+
 
 //minecraft seeds
 <<<<<<< HEAD
