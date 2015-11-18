@@ -317,7 +317,6 @@ public class JournalPageSeed extends JournalPage {
     public ArrayList<Component<ResourceLocation>> getTextureComponents() {
         ArrayList<Component<ResourceLocation>> textureComponents = new ArrayList<Component<ResourceLocation>>();
         textureComponents.add(getSoil());
-        //textureComponents.addAll(getGrowthStages());
         textureComponents.addAll(getBrightnessTextures());
         textureComponents.addAll(getFruitIconFrames());
         textureComponents.addAll(getMutationTemplates());
@@ -336,17 +335,6 @@ public class JournalPageSeed extends JournalPage {
         int x = 26;
         int y = 11;
         return new Component<ResourceLocation>(texture, x, y, 16, 16);
-    }
-
-    private ArrayList<Component<ResourceLocation>> getGrowthStages() {
-        ArrayList<Component<ResourceLocation>> growthStages = new ArrayList<Component<ResourceLocation>>();
-        for(int i=0;i<8;i++) {
-            ResourceLocation texture = RenderHelper.getBlockResource(plant.getPlantIcon(i));
-            int x = 30 + 24 * (i % 4);
-            int y = 129 + 24 * (i / 4);
-            growthStages.add(new Component<ResourceLocation>(texture, x, y, 16, 16));
-        }
-        return growthStages;
     }
 
     private ArrayList<Component<ResourceLocation>> getBrightnessTextures() {
