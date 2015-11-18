@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -266,7 +267,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         for(int x=3;x<=6;x++) {
             for(int y=5;y<=8;y++) {
                 for(int z=1;z<=4;z++) {
-                    this.generateStructureWoodenTank(world, boundingBox, x, y, z);
+                    this.generateStructureWoodenTank(world, boundingBox, x, y, z, (x==6 && y==8 && z==4));
                 }
             }
         }
@@ -289,17 +290,22 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
     }
 
     //place a tank
-    protected boolean generateStructureWoodenTank(World world, StructureBoundingBox boundingBox, int x, int y, int z) {
+    protected boolean generateStructureWoodenTank(World world, StructureBoundingBox boundingBox, int x, int y, int z, boolean multiBlockify) {
         int xCoord = this.getXWithOffset(x, z);
         int yCoord = this.getYWithOffset(y);
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(xCoord, yCoord, zCoord)) {
             world.setBlock(xCoord, yCoord, zCoord, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, 0, 2);
             TileEntityTank tank = (TileEntityTank) world.getTileEntity(xCoord, yCoord, zCoord);
-            if (tank!=null) {
-                tank.setMaterial(new ItemStack(Blocks.planks, 1, 0));
+            if (tank == null) {
+                tank = new TileEntityTank();
+                world.setTileEntity(xCoord, yCoord, zCoord, tank);
             }
-            world.getBlock(xCoord, yCoord, zCoord).onNeighborBlockChange(world, xCoord, yCoord, zCoord, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank);
+            tank.setMaterial(new ItemStack(Blocks.planks, 1, 0));
+            if(multiBlockify) {
+                tank.getMultiBlockManager().onBlockPlaced(world, xCoord, yCoord, zCoord, tank);
+                LogHelper.debug("Creating Multiblock at (" + xCoord + ", " + yCoord + ", " + zCoord + ")");
+            }
             return true;
         }
         else {
