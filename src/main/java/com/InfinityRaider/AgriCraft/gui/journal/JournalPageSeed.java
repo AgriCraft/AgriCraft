@@ -12,8 +12,10 @@ import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -315,7 +317,7 @@ public class JournalPageSeed extends JournalPage {
     public ArrayList<Component<ResourceLocation>> getTextureComponents() {
         ArrayList<Component<ResourceLocation>> textureComponents = new ArrayList<Component<ResourceLocation>>();
         textureComponents.add(getSoil());
-        textureComponents.addAll(getGrowthStages());
+        //textureComponents.addAll(getGrowthStages());
         textureComponents.addAll(getBrightnessTextures());
         textureComponents.addAll(getFruitIconFrames());
         textureComponents.addAll(getMutationTemplates());
@@ -388,5 +390,35 @@ public class JournalPageSeed extends JournalPage {
             components.add(new Component<ResourceLocation>(QUESTION_MARK, 201, y+1, 16, 16));
         }
         return components;
+    }
+
+
+    // ******************************* //
+    // TEXTURES TO RENDER ON THIS PAGE //
+    // ******************************* //
+
+    @Override
+    public ArrayList<ResourceLocation> getTextureMaps() {
+        ArrayList<ResourceLocation> list = new ArrayList<ResourceLocation>();
+        list.add(TextureMap.locationBlocksTexture);
+        return list;
+    }
+
+    @Override
+    public ArrayList<Component<IIcon>> getIconComponents(ResourceLocation textureMap) {
+        if(textureMap != TextureMap.locationBlocksTexture) {
+            return null;
+        }
+        return getGrowthStageIcons();
+    }
+
+    private ArrayList<Component<IIcon>> getGrowthStageIcons() {
+        ArrayList<Component<IIcon>> growthStages = new ArrayList<Component<IIcon>>();
+        for(int i=0;i<8;i++) {
+            int x = 30 + 24 * (i % 4);
+            int y = 129 + 24 * (i / 4);
+            growthStages.add(new Component<IIcon>(plant.getPlantIcon(i), x, y, 16, 16));
+        }
+        return growthStages;
     }
 }

@@ -2,6 +2,7 @@ Changelog
 ---------
 1.4.6
 -CHANGE: Updated Botania drum/horn of the wild interaction: crops will now be harvested instead of uprooted
+-FIXED:  Changed the way growth stages are rendered in the journal, fixing rendering for animated textures
 
 1.4.5
 -ADDED:  Support for Agriculture 2

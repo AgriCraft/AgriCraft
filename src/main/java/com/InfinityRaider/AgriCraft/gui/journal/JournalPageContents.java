@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
@@ -33,6 +34,16 @@ public class JournalPageContents extends JournalPage {
 
     @Override
     public ArrayList<Component<ResourceLocation>> getTextureComponents() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<ResourceLocation> getTextureMaps() {
+        return new ArrayList<ResourceLocation>();
+    }
+
+    @Override
+    public ArrayList<Component<IIcon>> getIconComponents(ResourceLocation textureMap) {
         return null;
     }
 
