@@ -2,6 +2,10 @@ package com.InfinityRaider.AgriCraft.api.v1;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+/**
+ * Preferred method to use this interface is to read or set data to existing GrowthRequirements, use IGrowthRequirementBuilder to create new ones
+ * Creating your own implementation is possible, but should only be used in special cases.
+ */
 public interface IGrowthRequirement {
 	//Methods to check if a seed can grow
 	//-----------------------------------

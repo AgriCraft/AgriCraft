@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.api.v2.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.APIimplv1;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculator;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
@@ -67,6 +68,11 @@ public class APIimplv2 extends APIimplv1 implements APIv2 {
     @Override
     public void setStatCalculator(IStatCalculator calculator) {
         StatCalculator.setStatCalculator(calculator);
+    }
+
+    @Override
+    public IGrowthRequirementBuilder createGrowthRequirementBuilder() {
+        return new GrowthRequirement.Builder();
     }
 
     @Override

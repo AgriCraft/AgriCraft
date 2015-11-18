@@ -35,6 +35,10 @@ public class GrowthRequirementHandler {
             throw new InvalidSeedException();
         }
         growthRequirements.put(item, requirement);
+        BlockWithMeta soil = requirement.getSoil();
+        if(soil != null) {
+            GrowthRequirementHandler.addSoil(soil);
+        }
     }
 
     //Methods for fertile soils

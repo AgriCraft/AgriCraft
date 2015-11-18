@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.ISoilContainer;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
+import com.InfinityRaider.AgriCraft.api.v2.IGrowthRequirementBuilder;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
@@ -200,7 +201,7 @@ public class GrowthRequirement implements IGrowthRequirement{
     //-------------
     private GrowthRequirement() {}
 
-    public static class Builder {
+    public static class Builder implements IGrowthRequirementBuilder {
 
         private final GrowthRequirement growthRequirement;
 
@@ -209,6 +210,7 @@ public class GrowthRequirement implements IGrowthRequirement{
         }
 
         /** Adds a required block to this GrowthRequirement instance */
+        @Override
         public Builder requiredBlock(BlockWithMeta requiredBlock, RequirementType requiredType, boolean oreDict) {
             if (requiredBlock == null || requiredType == RequirementType.NONE) {
                 throw new IllegalArgumentException("Required block must be not null and required type must be other than NONE.");
@@ -220,18 +222,20 @@ public class GrowthRequirement implements IGrowthRequirement{
         }
 
         /** Sets the required soil */
+        @Override
         public Builder soil(BlockWithMeta block) {
-            GrowthRequirementHandler.addSoil(block);
             growthRequirement.soil = block;
             return this;
         }
 
+        @Override
         public Builder brightnessRange(int min, int max) {
             this.growthRequirement.minBrightness = min;
             this.growthRequirement.maxBrightness = max;
             return this;
         }
 
+        @Override
         public GrowthRequirement build() {
             return growthRequirement;
         }

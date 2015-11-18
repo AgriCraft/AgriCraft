@@ -41,6 +41,12 @@ public interface APIv2 extends APIv1 {
     void setStatCalculator(IStatCalculator calculator);
 
     /**
+     * Gets a new IGrowthRequirementBuilder object used to create new IGrowthRequirements
+     * @return a new IGrowthRequirementBuilder instance
+     */
+    IGrowthRequirementBuilder createGrowthRequirementBuilder();
+
+    /**
      * Method used to set custom stat displaying methods
      * @param displayer the IStatStringDisplayer Object to be used when displaying stat strings in tooltips
      */
