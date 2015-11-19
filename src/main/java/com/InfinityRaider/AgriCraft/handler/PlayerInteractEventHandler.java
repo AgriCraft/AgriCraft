@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.tconstruct.TinkersConstructHelper;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.Event;
@@ -17,10 +18,12 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 public class PlayerInteractEventHandler {
+    /** Event handler to disable vanilla farming */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void vanillaSeedPlanting(PlayerInteractEvent event) {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
@@ -43,6 +46,7 @@ public class PlayerInteractEventHandler {
         }
     }
 
+    /** Event handler to create water pads */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void waterPadCreation(PlayerInteractEvent event) {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
@@ -70,6 +74,7 @@ public class PlayerInteractEventHandler {
         }
     }
 
+    /** This is done with an event because else the player will place the vines as a block instead of applying them to the grate */
     @SubscribeEvent
     public void applyVinesToGrate(PlayerInteractEvent event) {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
@@ -85,6 +90,27 @@ public class PlayerInteractEventHandler {
                 denyEvent(event, true);
             } else {
                 block.onBlockActivated(event.world, event.x, event.y, event.z, event.entityPlayer, event.face, 0, 0, 0);
+            }
+        }
+    }
+
+    /** Event handler to deny bonemeal while sneaking on crops that are not allowed to be bonemealed */
+    @SubscribeEvent
+    public void denyBonemeal(PlayerInteractEvent event) {
+        if(event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+        if(!event.entityPlayer.isSneaking()) {
+            return;
+        }
+        ItemStack heldItem = event.entityPlayer.getHeldItem();
+        if(heldItem!=null && heldItem.getItem()==net.minecraft.init.Items.dye && heldItem.getItemDamage()==15) {
+            TileEntity te = event.world.getTileEntity(event.x, event.y, event.z);
+            if(te!=null && (te instanceof TileEntityCrop)) {
+                TileEntityCrop crop = (TileEntityCrop) te;
+                if(!crop.canBonemeal()) {
+                    this.denyEvent(event, false);
+                }
             }
         }
     }
