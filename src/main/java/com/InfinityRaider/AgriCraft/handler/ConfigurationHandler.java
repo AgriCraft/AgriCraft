@@ -101,18 +101,22 @@ public class ConfigurationHandler {
     public static String statDisplay;
 
     public static void init(FMLPreInitializationEvent event) {
-        directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
-
-        if(config == null) {
-            config = new Configuration(new File(directory, "Configuration.cfg"));
-            loadConfiguration();
-        }
-
+        checkAndCreateConfig(event);
+        loadConfiguration();
         LogHelper.debug("Configuration Loaded");
+    }
+
+    private static void checkAndCreateConfig(FMLPreInitializationEvent event) {
+        if(config == null) {
+            directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
+            config = new Configuration(new File(directory, "Configuration.cfg"));
+        }
     }
 
     @SideOnly(Side.CLIENT)
     public static void initClientConfigs(FMLPreInitializationEvent event) {
+        checkAndCreateConfig(event);
+
         condenseCustomWoodInNei = config.getBoolean("condense custom wood blocks in NEI", CATEGORY_CLIENT, true, "set to true to condense all entries for custom wood blocks into one entry in NEI");
         disableParticles = config.getBoolean("Disable particles", CATEGORY_CLIENT, false, "set to true to disable particles for the sprinklers");
         statDisplay = config.getString("Stat Display", CATEGORY_CLIENT, "NUMBER", "This defines how to display the stats of plants. Possible settings are 'NUMBER': just display a simple number (ex: \"6\"), 'FRACTION': number/maximum (ex: \"6/10\"), 'CHARACTER-'char'': number of characters equal to the stats (ex: CHARACTER-• will give \"••••••\") and 'KEYWORD-'type'-'keyword'': keyword followed by the type and then the stat, type is any of the previous types (ex: KEYWORD-FRACTION-Rank will give \"Rank: 6/10\") . Invalid entries will default to NUMBER ");
@@ -234,6 +238,7 @@ public class ConfigurationHandler {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.modID.equals(Reference.MOD_ID)) {
             loadConfiguration();

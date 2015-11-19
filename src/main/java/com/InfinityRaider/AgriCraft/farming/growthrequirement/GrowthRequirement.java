@@ -19,9 +19,6 @@ import java.util.List;
  * Uses the Builder class inside to construct instances.
  */
 public class GrowthRequirement implements IGrowthRequirement{
-    //static fields storing other requirements for seeds from other mods
-    public static final IGrowthRequirement DEFAULT = new GrowthRequirement();
-
     public static final int NEARBY_DEFAULT_RANGE = 4;
 
     //brightness

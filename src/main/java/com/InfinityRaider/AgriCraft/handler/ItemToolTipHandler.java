@@ -16,6 +16,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 @SideOnly(Side.CLIENT)
+@SuppressWarnings("unused")
 public class ItemToolTipHandler {
     /** Adds tooltips for seed stats */
     @SubscribeEvent

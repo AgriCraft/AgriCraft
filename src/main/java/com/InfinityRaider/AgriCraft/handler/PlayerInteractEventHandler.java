@@ -22,6 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
+@SuppressWarnings("unused")
 public class PlayerInteractEventHandler {
     /** Event handler to disable vanilla farming */
     @SubscribeEvent(priority = EventPriority.HIGHEST)

@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
+@SuppressWarnings("unused")
 public class SyncMutationsHandler {
     /** Receive mutations from the server when connecting to the server */
     @SubscribeEvent

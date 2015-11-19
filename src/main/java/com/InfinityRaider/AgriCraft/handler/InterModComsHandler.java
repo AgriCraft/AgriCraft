@@ -11,8 +11,8 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.item.ItemStack;
 
+@SuppressWarnings("unused")
 public class InterModComsHandler {
-
     @Mod.EventHandler
     @SuppressWarnings("unchecked")
     public void receiveMessage(FMLInterModComms.IMCEvent event) {
