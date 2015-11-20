@@ -410,10 +410,9 @@ public class APIimplv1 implements APIv1 {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			if(crop.isMature()) {
+			if(crop.allowHarvest(null)) {
 				crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
-				crop.markForUpdate();
-				return CropPlantHandler.getPlantFromStack(crop.getSeedStack()).getFruitsOnHarvest(crop.getGain(), world.rand);
+				return crop.getPlant().getFruitsOnHarvest(crop.getGain(), world.rand);
 			}
 		}
 		return null;
