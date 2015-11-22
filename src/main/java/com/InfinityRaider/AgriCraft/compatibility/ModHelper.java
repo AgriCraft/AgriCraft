@@ -12,6 +12,7 @@ import com.InfinityRaider.AgriCraft.compatibility.bloodmagic.BloodMagicHelper;
 import com.InfinityRaider.AgriCraft.compatibility.bluepower.BluePowerHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChocoCraftHelper;
+import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
 import com.InfinityRaider.AgriCraft.compatibility.extrabiomesxl.ExtraBiomesXLHelper;
 import com.InfinityRaider.AgriCraft.compatibility.forestry.ForestryHelper;
@@ -135,14 +136,18 @@ public abstract class ModHelper {
         return null;
     }
 
+
+    /** called during the pre-initialization phase of FML's mod loading cycle */
+    protected void onPreInit() {}
+
     /** called during the initialization phase of FML's mod loading cycle */
-    protected void init() {}
+    protected void onInit() {}
 
     /** called during the post-initialization phase of FML's mod loading cycle to register all CropPlants for this mod*/
     protected  void initPlants() {}
 
     /** called during the post-initialization phase of FML's mod loading cycle */
-    protected void postTasks() {}
+    protected void onPostInit() {}
 
     /** returns the mod id for this mod */
     protected abstract String modId();
@@ -153,7 +158,18 @@ public abstract class ModHelper {
             String id = helper.modId();
             boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
             if(flag) {
-                helper.init();
+                helper.onInit();
+            }
+        }
+    }
+
+    /** calls the onPreInit() method for all mod helpers which have their mod loaded and compatibility enabled */
+    public static void preInit() {
+        for(ModHelper helper:modHelpers.values()) {
+            String id = helper.modId();
+            boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
+            if(flag) {
+                helper.onPreInit();
             }
         }
     }
@@ -175,7 +191,7 @@ public abstract class ModHelper {
             String id = helper.modId();
             boolean flag = Loader.isModLoaded(id) && ConfigurationHandler.enableModCompatibility(id);
             if(flag) {
-                helper.postTasks();
+                helper.onPostInit();
                 List<Item> tools = helper.getTools();
                 if(tools != null) {
                     for(Item tool:tools) {
@@ -201,6 +217,7 @@ public abstract class ModHelper {
                 BloodMagicHelper.class,
                 BluePowerHelper.class,
                 BotaniaHelper.class,
+                ComputerCraftHelper.class,
                 ChocoCraftHelper.class,
                 ExNihiloHelper.class,
                 ExtraBiomesXLHelper.class,

@@ -27,7 +27,7 @@ public final class WitcheryHelper extends ModHelper {
     private Item wormwoodSeed;
 
     @Override
-    protected void init() {
+    protected void onInit() {
         LogHelper.debug("Initializing Witchery Support");
 
         Item seedBelladonna = (Item) Item.itemRegistry.getObject("witchery:seedsbelladonna");
@@ -106,7 +106,7 @@ public final class WitcheryHelper extends ModHelper {
         }
     }
 
-    protected void postTasks() {
+    protected void onPostInit() {
         sprig = (Item) Item.itemRegistry.getObject("witchery:mutator");
         wispyCotton = (Block) Block.blockRegistry.getObject("witchery:somniancotton");
     }

@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 public class BloodMagicHelper extends ModHelper {
     @Override
     @SuppressWarnings("unchecked")
-    protected void init() {
+    protected void onInit() {
         try {
             Class harvestRegistry = Class.forName("WayofTime.alchemicalWizardry.api.harvest.HarvestRegistry");
             Class harvestHandler = Class.forName("WayofTime.alchemicalWizardry.api.harvest.IHarvestHandler");

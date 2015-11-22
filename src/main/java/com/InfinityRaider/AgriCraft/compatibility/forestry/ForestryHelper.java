@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 public class ForestryHelper extends ModHelper {
     @Override
-    protected void postTasks() {
+    protected void onPostInit() {
         registerSeedOilRecipes();
         registerSoils();
     }

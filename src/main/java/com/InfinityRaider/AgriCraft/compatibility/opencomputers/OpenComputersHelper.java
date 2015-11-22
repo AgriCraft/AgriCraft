@@ -11,7 +11,7 @@ public class OpenComputersHelper extends ModHelper {
         return Names.Mods.openComputers;
     }
 
-    protected void postTasks() {
+    protected void onPostInit() {
         Driver.add(new AgriCraftEnvironment());
     }
 

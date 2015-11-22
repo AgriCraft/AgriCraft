@@ -9,7 +9,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public final class ExNihiloHelper extends ModHelper {
     @Override
-    protected void init() {
+    protected void onInit() {
         Item seedPotato = (Item) Item.itemRegistry.getObject("exnihilo:seed_potato");
         Item seedCarrot = (Item) Item.itemRegistry.getObject("exnihilo:seed_carrot");
         Item seedSugarCane = (Item) Item.itemRegistry.getObject("exnihilo:seed_sugar_cane");

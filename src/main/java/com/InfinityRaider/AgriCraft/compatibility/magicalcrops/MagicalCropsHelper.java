@@ -27,7 +27,7 @@ public final class MagicalCropsHelper extends ModHelper {
     private IFertiliser fertiliser;
 
     @Override
-    protected void init() {
+    protected void onInit() {
         Class magicalCropsClass=null;
         try {
            magicalCropsClass = Class.forName("com.mark719.magicalcrops.MagicalCrops");

@@ -22,7 +22,7 @@ public final class PlantMegaPackHelper extends ModHelper {
     private ArrayList<String> names;
 
     @Override
-    protected void init() {
+    protected void onInit() {
         findNames();
         registerOres();
     }

@@ -70,6 +70,7 @@ public class AgriCraft {
         Crops.init();
         Items.init();
         APISelector.init();
+        ModHelper.preInit();
         LogHelper.debug("Pre-Initialization Complete");
     }
 

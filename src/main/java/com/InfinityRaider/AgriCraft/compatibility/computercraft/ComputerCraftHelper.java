@@ -12,7 +12,7 @@ public class ComputerCraftHelper extends ModHelper {
     }
 
     @Override
-    protected void postTasks() {
+    protected void onPostInit() {
         dan200.computercraft.api.ComputerCraftAPI.registerPeripheralProvider((IPeripheralProvider) Blocks.blockPeripheral);
     }
 

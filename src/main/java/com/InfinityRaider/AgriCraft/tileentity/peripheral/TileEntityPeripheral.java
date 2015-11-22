@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.method.*;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -169,7 +170,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
         return method.call(this, worldObj, xCoord, yCoord, zCoord, this.getJournal(), arguments);
     }
 
-    public static IMethod[] methodList() {
+    private static IMethod[] methodList() {
         return new IMethod[] {
                 new MethodAnalyze(),
                 new MethodGetBaseBlock(),
@@ -250,18 +251,22 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
     @Optional.Method(modid = Names.Mods.openComputers)
     public Object[] invoke(String method, Context context, Arguments args) throws Exception {
         IMethod calledMethod = null;
+        LogHelper.debug("Called method: "+method);
         for(IMethod iMethod: methods) {
             if(iMethod.getName().equals(method)) {
                 calledMethod = iMethod;
+                LogHelper.debug("Found method");
                 break;
             }
         }
-        if(calledMethod == null) {
+        if(calledMethod == null)  {
+            LogHelper.debug("Didn't find method");
             return null;
         }
         try {
             return invokeMethod(calledMethod, args);
         } catch(MethodException e) {
+            LogHelper.debug("Error while executing method");
             throw new Exception(e.getDescription());
         }
     }

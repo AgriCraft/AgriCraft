@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 
 public class AdventOfAscensionHelper extends ModHelper {
     @Override
-    protected void init() {
+    protected void onInit() {
         try {
             Class registry = Class.forName("net.nevermine.izer.Plantizer");
             for(Field field:registry.getDeclaredFields()) {

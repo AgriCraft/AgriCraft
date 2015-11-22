@@ -22,7 +22,7 @@ public class TinkersConstructHelper extends ModHelper {
     private Method damageTool;
 
     @Override
-    protected void postTasks() {
+    protected void onPostInit() {
         shovels = new ArrayList<Item>();
         shovels.add((Item) Item.itemRegistry.getObject("TConstruct:shovel"));
         shovels.add((Item) Item.itemRegistry.getObject("TConstruct:excavator"));

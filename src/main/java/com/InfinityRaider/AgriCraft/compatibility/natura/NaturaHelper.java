@@ -19,7 +19,7 @@ import java.util.List;
 
 public final class NaturaHelper extends ModHelper {
     @Override
-    protected void init() {
+    protected void onInit() {
         try {
             Class naturaContent = Class.forName("mods.natura.common.NContent");
             Item seed = (Item) naturaContent.getField("seeds").get(null);

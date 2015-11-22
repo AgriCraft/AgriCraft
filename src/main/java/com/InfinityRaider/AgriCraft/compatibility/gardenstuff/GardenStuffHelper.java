@@ -8,7 +8,7 @@ import net.minecraft.block.Block;
 
 public class GardenStuffHelper extends ModHelper {
     @Override
-    protected void postTasks() {
+    protected void onPostInit() {
         registerSoils();
     }
 

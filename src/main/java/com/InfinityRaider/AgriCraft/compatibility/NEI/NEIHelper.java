@@ -11,7 +11,7 @@ public class NEIHelper extends ModHelper {
     }
 
     @Override
-    protected void postTasks() {
+    protected void onPostInit() {
         AgriCraft.proxy.initNEI();
     }
 }

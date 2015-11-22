@@ -23,7 +23,7 @@ public class ThaumcraftHelper extends ModHelper {
     public static ArrayList<ItemModSeed> thaumcraftSeeds = new ArrayList<ItemModSeed>();
 
     @Override
-    protected void init() {
+    protected void onInit() {
         FMLInterModComms.sendMessage(Names.Mods.thaumcraft, "harvestClickableCrop", new ItemStack(Blocks.blockCrop, 1, Constants.MATURE));
     }
 
@@ -96,7 +96,7 @@ public class ThaumcraftHelper extends ModHelper {
 
 
     @Override
-    protected void postTasks() {
+    protected void onPostInit() {
         Aspects.registerAspects();
     }
 

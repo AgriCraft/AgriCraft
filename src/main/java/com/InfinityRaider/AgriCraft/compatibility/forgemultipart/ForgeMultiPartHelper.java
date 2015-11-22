@@ -31,7 +31,7 @@ public class ForgeMultiPartHelper extends ModHelper {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void postTasks() {
+    protected void onPostInit() {
         if(FMLCommonHandler.instance().getSide() == Side.SERVER) {
             return;
         }
