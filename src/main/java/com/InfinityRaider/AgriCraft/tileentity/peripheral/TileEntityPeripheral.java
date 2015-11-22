@@ -134,12 +134,12 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
             this.markForUpdate();
         }
     }
+
     @Override
     public void analyze() {
         super.analyze();
         reset();
     }
-
 
     private void reset() {
         if(mayAnalyze) {
@@ -207,6 +207,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
     }
 
     @Override
+    @Optional.Method(modid = Names.Mods.computerCraft)
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
         IMethod calledMethod = methods[method];
         try {
@@ -217,14 +218,17 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
     }
 
     @Override
+    @Optional.Method(modid = Names.Mods.computerCraft)
     public void attach(IComputerAccess computer) {
     }
 
     @Override
+    @Optional.Method(modid = Names.Mods.computerCraft)
     public void detach(IComputerAccess computer) {
     }
 
     @Override
+    @Optional.Method(modid = Names.Mods.computerCraft)
     public boolean equals(IPeripheral other) {
         return other instanceof TileEntityPeripheral;
     }
@@ -243,6 +247,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
     }
 
     @Override
+    @Optional.Method(modid = Names.Mods.openComputers)
     public Object[] invoke(String method, Context context, Arguments args) throws Exception {
         IMethod calledMethod = null;
         for(IMethod iMethod: methods) {
@@ -257,7 +262,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
         try {
             return invokeMethod(calledMethod, args);
         } catch(MethodException e) {
-            throw new LuaException(e.getDescription());
+            throw new Exception(e.getDescription());
         }
     }
 }

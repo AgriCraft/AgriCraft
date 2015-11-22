@@ -71,12 +71,15 @@ public abstract class ModHelper {
 
     /** Checks if integration for this mod id is allowed, meaning the mod is present, and integration is allowed in the config */
     public static boolean allowIntegration(String modId) {
-        ModHelper helper = modHelpers.get(modId);
-        if(helper != null ) {
-            return helper.allowIntegration();
-        } else {
-            return Loader.isModLoaded(modId) && ConfigurationHandler.enableModCompatibility(modId);
+        if(Loader.isModLoaded(modId)) {
+            ModHelper helper = modHelpers.get(modId);
+            if (helper != null) {
+                return helper.allowIntegration();
+            } else {
+                return ConfigurationHandler.enableModCompatibility(modId);
+            }
         }
+        return false;
     }
 
     /** Checks if integration for this mod id is allowed, meaning the mod is present, and integration is allowed in the config */

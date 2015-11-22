@@ -1,8 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
@@ -41,9 +39,6 @@ public class BlockPeripheral extends BlockContainerAgriCraft implements IPeriphe
 
     public BlockPeripheral() {
         super(Material.iron);
-        if(ModHelper.allowIntegration(Names.Mods.computerCraft)) {
-            ComputerCraftHelper.registerPeripheralProvider(this);
-        }
     }
 
     @Override
@@ -68,6 +63,7 @@ public class BlockPeripheral extends BlockContainerAgriCraft implements IPeriphe
     }
 
     @Override
+    @Optional.Method(modid = Names.Mods.computerCraft)
     public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
         TileEntity te = world.getTileEntity(x, y, z);
         if(te==null || !(te instanceof TileEntityPeripheral)) {
