@@ -61,7 +61,7 @@ public class CropPlantPMPDouble extends CropPlantTallGeneric {
     @Override
     @SideOnly(Side.CLIENT)
     public boolean renderTopLayer(int growthStage) {
-        return growthStage>1;
+        return growthStage>2;
     }
 
 }
