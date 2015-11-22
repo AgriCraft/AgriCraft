@@ -13,18 +13,18 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.ManagedPeripheral;
+import li.cil.oc.api.network.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import java.util.HashMap;
 
 
 @Optional.InterfaceList( value = {
         @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheral"),
+        @Optional.Interface(modid = Names.Mods.openComputers, iface = "li.cil.oc.api.network.SimpleComponent"),
         @Optional.Interface(modid = Names.Mods.openComputers, iface = "li.cil.oc.api.network.ManagedPeripheral")
 })
-public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPeripheral, ManagedPeripheral {
+public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPeripheral, SimpleComponent, ManagedPeripheral {
     private static IMethod[] methods;
     private boolean mayAnalyze = false;
     /** Data to animate the peripheral client side */
@@ -153,8 +153,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
         return false;
     }
 
-    @Override
-    public String getType() {
+    public String getName() {
         return "agricraft_peripheral";
     }
 
@@ -168,6 +167,38 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
 
     public Object[] invokeMethod(IMethod method, Object... arguments) throws MethodException {
         return method.call(this, worldObj, xCoord, yCoord, zCoord, this.getJournal(), arguments);
+    }
+
+    public static IMethod[] methodList() {
+        return new IMethod[] {
+                new MethodAnalyze(),
+                new MethodGetBaseBlock(),
+                new MethodGetBaseBlockType(),
+                new MethodGetBrightness(),
+                new MethodGetBrightnessRange(),
+                new MethodGetCurrentSoil(),
+                new MethodGetGrowthStage(),
+                new MethodGetNeededSoil(),
+                new MethodGetPlant(),
+                new MethodGetSpecimen(),
+                new MethodGetStats(),
+                new MethodHasJournal(),
+                new MethodHasPlant(),
+                new MethodHasWeeds(),
+                new MethodIsAnalyzed(),
+                new MethodIsCrossCrop(),
+                new MethodIsFertile(),
+                new MethodIsMature(),
+                new MethodNeedsBaseBlock()
+        };
+    }
+
+    //---------------------
+    //ComputerCraft methods
+    //---------------------
+    @Override
+    public String getType() {
+        return getName();
     }
 
     @Override
@@ -198,6 +229,14 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
         return other instanceof TileEntityPeripheral;
     }
 
+    //---------------------
+    //OpenComputers methods
+    //---------------------
+    @Override
+    public String getComponentName() {
+        return getName();
+    }
+
     @Override
     public String[] methods() {
         return getAllMethodNames();
@@ -216,33 +255,9 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
             return null;
         }
         try {
-            return invokeMethod(calledMethod, args.toArray());
+            return invokeMethod(calledMethod, args);
         } catch(MethodException e) {
             throw new LuaException(e.getDescription());
         }
-    }
-
-    public static IMethod[] methodList() {
-        return new IMethod[] {
-                new MethodAnalyze(),
-                new MethodGetBaseBlock(),
-                new MethodGetBaseBlockType(),
-                new MethodGetBrightness(),
-                new MethodGetBrightnessRange(),
-                new MethodGetCurrentSoil(),
-                new MethodGetGrowthStage(),
-                new MethodGetNeededSoil(),
-                new MethodGetPlant(),
-                new MethodGetSpecimen(),
-                new MethodGetStats(),
-                new MethodHasJournal(),
-                new MethodHasPlant(),
-                new MethodHasWeeds(),
-                new MethodIsAnalyzed(),
-                new MethodIsCrossCrop(),
-                new MethodIsFertile(),
-                new MethodIsMature(),
-                new MethodNeedsBaseBlock()
-        };
     }
 }

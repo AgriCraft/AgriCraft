@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.opencomputers;
 
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import li.cil.oc.api.Driver;
 import net.minecraft.block.Block;
 
 public class OpenComputersHelper extends ModHelper {
@@ -10,7 +11,11 @@ public class OpenComputersHelper extends ModHelper {
         return Names.Mods.openComputers;
     }
 
+    protected void postTasks() {
+        Driver.add(new AgriCraftEnvironment());
+    }
+
     public static Block getComputerBlock() {
-        return (Block) Block.blockRegistry.getObject("");
+        return (Block) Block.blockRegistry.getObject("OpenComputers:case1");
     }
 }
