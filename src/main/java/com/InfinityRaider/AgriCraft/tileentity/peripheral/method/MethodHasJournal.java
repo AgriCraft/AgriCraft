@@ -1,8 +1,6 @@
-package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
+package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 
 import java.util.ArrayList;
 

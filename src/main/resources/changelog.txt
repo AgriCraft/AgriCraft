@@ -1,6 +1,7 @@
 Changelog
 ---------
 1.4.6
+-ADDED:  The peripheral should now also work for OpenComputers
 -CHANGE: Updated Botania drum/horn of the wild interaction: crops will now be harvested instead of uprooted
 -FIXED:  Changed the way growth stages are rendered in the journal, fixing rendering for animated textures
 -FIXED:  Tanks in greenhouses not correctly forming a multiblock on world generation

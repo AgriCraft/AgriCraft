@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
+package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;

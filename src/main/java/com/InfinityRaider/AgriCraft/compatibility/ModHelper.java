@@ -27,6 +27,7 @@ import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.MFRHelper;
 import com.InfinityRaider.AgriCraft.compatibility.minetweaker.MinetweakerHelper;
 import com.InfinityRaider.AgriCraft.compatibility.mobdropcrops.MobDropCropsHelper;
 import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
+import com.InfinityRaider.AgriCraft.compatibility.opencomputers.OpenComputersHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.rotarycraft.RotaryCraftHelper;
@@ -214,6 +215,7 @@ public abstract class ModHelper {
                 MobDropCropsHelper.class,
                 NaturaHelper.class,
                 NEIHelper.class,
+                OpenComputersHelper.class,
                 PlantMegaPackHelper.class,
                 //PneumaticCraftHelper.class,
                 PsychedelicraftHelper.class,

@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.gui;
 
-import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.IMethod;
+import com.InfinityRaider.AgriCraft.tileentity.peripheral.method.IMethod;
 import com.InfinityRaider.AgriCraft.container.ContainerPeripheral;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
+import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;

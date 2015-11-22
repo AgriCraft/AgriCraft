@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.compatibility.computercraft.method;
+package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 
 import com.InfinityRaider.AgriCraft.api.v2.ITrowel;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
+import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;

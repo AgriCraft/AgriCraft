@@ -9,7 +9,7 @@ import com.InfinityRaider.AgriCraft.gui.GuiSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.gui.GuiSeedStorage;
 import com.InfinityRaider.AgriCraft.gui.GuiSeedStorageController;
 import com.InfinityRaider.AgriCraft.gui.journal.GuiJournal;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
+import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;

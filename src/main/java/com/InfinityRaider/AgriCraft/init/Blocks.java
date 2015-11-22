@@ -42,7 +42,7 @@ public class Blocks {
                 //blockSeedStorageController = new BlockSeedStorageController();
             }
         }
-        if(ModHelper.allowIntegration(Names.Mods.computerCraft)) {
+        if(ModHelper.allowIntegration(Names.Mods.computerCraft) || ModHelper.allowIntegration(Names.Mods.openComputers)) {
             blockPeripheral = new BlockPeripheral();
         }
         if(!ConfigurationHandler.disableFences) {

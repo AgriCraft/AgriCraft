@@ -1,11 +1,9 @@
-package com.InfinityRaider.AgriCraft.tileentity;
+package com.InfinityRaider.AgriCraft.tileentity.peripheral;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
-import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.IMethod;
-import com.InfinityRaider.AgriCraft.compatibility.computercraft.method.MethodException;
+import com.InfinityRaider.AgriCraft.tileentity.peripheral.method.*;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -13,14 +11,20 @@ import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.ManagedPeripheral;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.HashMap;
 
 
-@Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheral")
-public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPeripheral {
+@Optional.InterfaceList( value = {
+        @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheral"),
+        @Optional.Interface(modid = Names.Mods.openComputers, iface = "li.cil.oc.api.network.ManagedPeripheral")
+})
+public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPeripheral, ManagedPeripheral {
     private static IMethod[] methods;
     private boolean mayAnalyze = false;
     /** Data to animate the peripheral client side */
@@ -53,9 +57,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
 
     private void initMethods() {
         if(methods ==null) {
-            if(ModHelper.allowIntegration(Names.Mods.computerCraft)) {
-                methods = ComputerCraftHelper.getMethods();
-            }
+            methods = methodList();
         }
     }
 
@@ -156,8 +158,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
         return "agricraft_peripheral";
     }
 
-    @Override
-    public String[] getMethodNames() {
+    public String[] getAllMethodNames() {
         String[] names = new String[methods.length];
         for(int i=0;i<names.length;i++) {
             names[i] = methods[i].getName();
@@ -165,11 +166,20 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
         return names;
     }
 
+    public Object[] invokeMethod(IMethod method, Object... arguments) throws MethodException {
+        return method.call(this, worldObj, xCoord, yCoord, zCoord, this.getJournal(), arguments);
+    }
+
+    @Override
+    public String[] getMethodNames() {
+        return getAllMethodNames();
+    }
+
     @Override
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
         IMethod calledMethod = methods[method];
         try {
-            return calledMethod.call(this, worldObj, xCoord, yCoord, zCoord, this.getJournal(), computer, context, arguments);
+            return invokeMethod(calledMethod, arguments);
         } catch(MethodException e) {
             throw new LuaException(e.getDescription());
         }
@@ -188,4 +198,51 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
         return other instanceof TileEntityPeripheral;
     }
 
+    @Override
+    public String[] methods() {
+        return getAllMethodNames();
+    }
+
+    @Override
+    public Object[] invoke(String method, Context context, Arguments args) throws Exception {
+        IMethod calledMethod = null;
+        for(IMethod iMethod: methods) {
+            if(iMethod.getName().equals(method)) {
+                calledMethod = iMethod;
+                break;
+            }
+        }
+        if(calledMethod == null) {
+            return null;
+        }
+        try {
+            return invokeMethod(calledMethod, args.toArray());
+        } catch(MethodException e) {
+            throw new LuaException(e.getDescription());
+        }
+    }
+
+    public static IMethod[] methodList() {
+        return new IMethod[] {
+                new MethodAnalyze(),
+                new MethodGetBaseBlock(),
+                new MethodGetBaseBlockType(),
+                new MethodGetBrightness(),
+                new MethodGetBrightnessRange(),
+                new MethodGetCurrentSoil(),
+                new MethodGetGrowthStage(),
+                new MethodGetNeededSoil(),
+                new MethodGetPlant(),
+                new MethodGetSpecimen(),
+                new MethodGetStats(),
+                new MethodHasJournal(),
+                new MethodHasPlant(),
+                new MethodHasWeeds(),
+                new MethodIsAnalyzed(),
+                new MethodIsCrossCrop(),
+                new MethodIsFertile(),
+                new MethodIsMature(),
+                new MethodNeedsBaseBlock()
+        };
+    }
 }

@@ -94,6 +94,7 @@ public final class Names {
         public static final String computerCraft = "ComputerCraft";
         public static final String harvestcraft = "harvestcraft";
         public static final String natura = "Natura";
+        public static final String openComputers = "OpenComputers";
         public static final String weeeFlowers = "weeeflowers";
         public static final String forestry = "Forestry";
         public static final String growthcraft= "Growthcraft";

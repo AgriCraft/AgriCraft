@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
@@ -10,7 +11,7 @@ import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderPeripheral;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityPeripheral;
+import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -40,7 +41,9 @@ public class BlockPeripheral extends BlockContainerAgriCraft implements IPeriphe
 
     public BlockPeripheral() {
         super(Material.iron);
-        ComputerCraftHelper.registerPeripheralProvider(this);
+        if(ModHelper.allowIntegration(Names.Mods.computerCraft)) {
+            ComputerCraftHelper.registerPeripheralProvider(this);
+        }
     }
 
     @Override
