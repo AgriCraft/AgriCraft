@@ -251,22 +251,18 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements IPer
     @Optional.Method(modid = Names.Mods.openComputers)
     public Object[] invoke(String method, Context context, Arguments args) throws Exception {
         IMethod calledMethod = null;
-        LogHelper.debug("Called method: "+method);
         for(IMethod iMethod: methods) {
             if(iMethod.getName().equals(method)) {
                 calledMethod = iMethod;
-                LogHelper.debug("Found method");
                 break;
             }
         }
         if(calledMethod == null)  {
-            LogHelper.debug("Didn't find method");
             return null;
         }
         try {
-            return invokeMethod(calledMethod, args);
+            return invokeMethod(calledMethod, args.toArray());
         } catch(MethodException e) {
-            LogHelper.debug("Error while executing method");
             throw new Exception(e.getDescription());
         }
     }
