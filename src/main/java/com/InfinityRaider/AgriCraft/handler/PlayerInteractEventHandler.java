@@ -57,6 +57,8 @@ public class PlayerInteractEventHandler {
             } else if(ModHelper.allowIntegration(Names.Mods.tconstruct) && TinkersConstructHelper.isShovel(event.entityPlayer.getCurrentEquippedItem())) {
                 flag = true;
             }
+            if(event.world.getBlock(event.x, event.y, event.z) != Blocks.farmland)
+                flag = false;
             if(flag) {
                 if (event.world.isRemote) {
                     denyEvent(event, true);
