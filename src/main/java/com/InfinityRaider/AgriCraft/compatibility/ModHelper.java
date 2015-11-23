@@ -31,6 +31,7 @@ import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
 import com.InfinityRaider.AgriCraft.compatibility.opencomputers.OpenComputersHelper;
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
+import com.InfinityRaider.AgriCraft.compatibility.resourcefulcrops.ResourcefulCropsHelper;
 import com.InfinityRaider.AgriCraft.compatibility.rotarycraft.RotaryCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.tconstruct.TinkersConstructHelper;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
@@ -239,6 +240,7 @@ public abstract class ModHelper {
                 PlantMegaPackHelper.class,
                 //PneumaticCraftHelper.class,
                 PsychedelicraftHelper.class,
+                ResourcefulCropsHelper.class,
                 RotaryCraftHelper.class,
                 ThaumcraftHelper.class,
                 TinkersConstructHelper.class,
