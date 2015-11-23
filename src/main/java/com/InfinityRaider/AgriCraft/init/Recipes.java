@@ -75,10 +75,10 @@ public class Recipes {
         }
         //peripheral
         if(Blocks.blockPeripheral!=null) {
-            if (ModHelper.allowIntegration(Names.Mods.computerCraft)) {
+            if(ModHelper.allowIntegration(Names.Mods.computerCraft)) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', Blocks.blockSeedAnalyzer, 'r', net.minecraft.init.Items.comparator, 'c', ComputerCraftHelper.getComputerBlock()));
             }
-            else if (ModHelper.allowIntegration(Names.Mods.openComputers)) {
+            if(ModHelper.allowIntegration(Names.Mods.openComputers)) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', Blocks.blockSeedAnalyzer, 'r', net.minecraft.init.Items.comparator, 'c', OpenComputersHelper.getComputerBlock()));
             }
         }
