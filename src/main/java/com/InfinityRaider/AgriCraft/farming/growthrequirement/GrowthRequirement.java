@@ -222,6 +222,7 @@ public class GrowthRequirement implements IGrowthRequirement{
         @Override
         public Builder soil(BlockWithMeta block) {
             growthRequirement.soil = block;
+            GrowthRequirementHandler.addSoil(block);
             return this;
         }
 
