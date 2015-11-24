@@ -15,6 +15,7 @@ import tehnut.resourceful.crops.api.ResourcefulAPI;
 import tehnut.resourceful.crops.api.base.Seed;
 import tehnut.resourceful.crops.api.base.SeedReq;
 import tehnut.resourceful.crops.api.registry.SeedRegistry;
+import tehnut.resourceful.crops.api.util.BlockStack;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -59,14 +60,17 @@ public class ResourcefulCropsAPI extends ResourcefulCropsAPIwrapper {
         Seed seed = SeedRegistry.getSeed(meta);
         ItemStack fruit1 = seed.getOutputStack();
         if(fruit1!=null && fruit1.getItem()!=null) {
+            fruit1.stackSize = 1;
             list.add(fruit1);
         }
         ItemStack fruit2 = seed.getSecondOutputStack();
         if(fruit2!=null && fruit2.getItem()!=null) {
+            fruit2.stackSize = 1;
             list.add(fruit1);
         }
         ItemStack fruit3 = seed.getThirdOutputStack();
         if(fruit3!=null && fruit3.getItem()!=null) {
+            fruit3.stackSize = 1;
             list.add(fruit1);
         }
         return list;
@@ -75,8 +79,11 @@ public class ResourcefulCropsAPI extends ResourcefulCropsAPIwrapper {
     protected IGrowthRequirement getGrowthRequirement(int meta) {
         SeedReq seedReq = SeedRegistry.getSeed(meta).getSeedReq();
         GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
-        builder.brightnessRange(seedReq.getLightLevelMin(), seedReq.getLightLevelMax());
-        builder.requiredBlock(new BlockWithMeta(seedReq.getGrowthReq().getBlock(), seedReq.getGrowthReq().getMeta()), RequirementType.BELOW, false);
+        builder.brightnessRange(seedReq.getLightLevelMin()>>8, seedReq.getLightLevelMax()>>8);
+        BlockStack growthReq = seedReq.getGrowthReq();
+        if(growthReq != null) {
+            builder.requiredBlock(new BlockWithMeta(growthReq.getBlock(), growthReq.getMeta()), RequirementType.BELOW, false);
+        }
         return builder.build();
     }
 

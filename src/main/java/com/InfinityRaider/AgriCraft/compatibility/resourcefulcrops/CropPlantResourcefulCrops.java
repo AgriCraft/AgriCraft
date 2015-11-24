@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.compatibility.resourcefulcrops;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -127,17 +128,13 @@ public class CropPlantResourcefulCrops extends CropPlant {
     @SideOnly(Side.CLIENT)
     public IIcon getPlantIcon(int growthStage) {
         growthStage = growthStage>7?7:growthStage<0?0:growthStage;
-        if(overlayIcons== null) {
-            return getBlock().getIcon(0, growthStage);
-        } else {
-            return overlayIcons[growthStage%overlayIcons.length];
-        }
+        return getBlock().getIcon(0, growthStage);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
-        return false;
+        return true;
     }
 
     @Override
@@ -149,31 +146,11 @@ public class CropPlantResourcefulCrops extends CropPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
-        int growthStage = world.getBlockMetadata(x, y, z);
-        growthStage = growthStage>7?7:growthStage<0?0:growthStage;
-        IIcon icon = getBlock().getIcon(0, growthStage);
-        // Yes I copied this from ResourcefulCrops' source code
         Tessellator tessellator = Tessellator.instance;
-        Color cleared = new Color(16777215);
-        renderer.setOverrideBlockTexture(icon);
-        tessellator.setColorRGBA(cleared.getRed(), cleared.getGreen(), cleared.getBlue(), cleared.getAlpha());
-        renderer.drawCrossedSquares(icon, x, y - 06F, z, 1.0F);
-        renderer.clearOverrideBlockTexture();
+        int growthStage = world.getBlockMetadata(x, y, z);
+        PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(growthStage), 0);
         Color color = api.getColor(meta);
-        if(overlayIcons!=null) {
-            icon = getPlantIcon(growthStage);
-            tessellator.setColorRGBA(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-            switch (growthStage) {
-                case 6:
-                    renderer.drawCrossedSquares(icon, x, y - 06F + 0.0625F, z, 1.0F);
-                    break;
-                case 7:
-                    renderer.drawCrossedSquares(icon, x, y - 06F + 0.125F, z, 1.0F);
-                    break;
-                default:
-                    renderer.drawCrossedSquares(icon, x, y - 06F, z, 1.0F);
-                    break;
-            }
-        }
+        tessellator.setColorRGBA(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, overlayIcons[growthStage], 0, false);
     }
 }
