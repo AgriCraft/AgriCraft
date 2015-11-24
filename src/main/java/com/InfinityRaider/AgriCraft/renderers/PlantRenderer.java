@@ -13,11 +13,17 @@ import net.minecraft.util.IIcon;
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
     public static void renderPlantLayer(int x, int y, int z, RenderBlocks renderer, int renderType, IIcon icon, int layer) {
+        renderPlantLayer(x, y, z, renderer, renderType, icon, layer, true);
+    }
+
+    public static void renderPlantLayer(int x, int y, int z, RenderBlocks renderer, int renderType, IIcon icon, int layer, boolean resetColor) {
         if(icon!=null) {
             Tessellator tessellator = Tessellator.instance;
             tessellator.addTranslation(x, y, z);
             tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
-            tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+            if(resetColor) {
+                tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+            }
             if (renderType != 6) {
                 renderCrossPattern(tessellator, icon, layer);
             } else {
