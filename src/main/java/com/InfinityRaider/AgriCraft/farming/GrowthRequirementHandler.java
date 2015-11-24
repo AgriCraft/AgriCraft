@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -31,7 +30,7 @@ public class GrowthRequirementHandler {
     static List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
 
     public static void registerGrowthRequirement(ItemWithMeta item, IGrowthRequirement requirement) throws InvalidSeedException {
-        if(CropPlantHandler.isValidSeed(item.toStack())) {
+        if(!CropPlantHandler.isValidSeed(item.toStack())) {
             throw new InvalidSeedException();
         }
         growthRequirements.put(item, requirement);
