@@ -4,10 +4,13 @@ import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class ResourcefulCropsAPIwrapper {
@@ -46,5 +49,10 @@ public class ResourcefulCropsAPIwrapper {
 
     protected IGrowthRequirement getGrowthRequirement(int meta) {
         return new GrowthRequirement.Builder().build();
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected Color getColor(int meta) {
+        return new Color(16777215);
     }
 }

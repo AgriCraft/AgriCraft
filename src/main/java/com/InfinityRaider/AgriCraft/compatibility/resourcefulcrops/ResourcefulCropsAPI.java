@@ -6,6 +6,8 @@ import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,6 +16,7 @@ import tehnut.resourceful.crops.api.base.Seed;
 import tehnut.resourceful.crops.api.base.SeedReq;
 import tehnut.resourceful.crops.api.registry.SeedRegistry;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class ResourcefulCropsAPI extends ResourcefulCropsAPIwrapper {
@@ -75,5 +78,11 @@ public class ResourcefulCropsAPI extends ResourcefulCropsAPIwrapper {
         builder.brightnessRange(seedReq.getLightLevelMin(), seedReq.getLightLevelMax());
         builder.requiredBlock(new BlockWithMeta(seedReq.getGrowthReq().getBlock(), seedReq.getGrowthReq().getMeta()), RequirementType.BELOW, false);
         return builder.build();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected Color getColor(int meta) {
+        return SeedRegistry.getSeed(meta).getColor();
     }
 }
