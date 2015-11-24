@@ -114,7 +114,7 @@ public interface APIv1 extends APIBase {
 
     /**
      * Register a default soil that any crop that doesn't require a specific soil can grow on
-     * @return true if the soil was successfully regsitered
+     * @return true if the soil was successfully registered
      */
     boolean registerDefaultSoil(BlockWithMeta soil);
 

@@ -8,6 +8,12 @@ import net.minecraft.world.World;
 
 public interface APIv2 extends APIv1 {
     /**
+     * Register a  soil that crop sticks can be placed on use this if you have your own ICropPlant which doesn't use IGrowthRequirement
+     * @return true if the soil was successfully registered
+     */
+    boolean registerValidSoil(BlockWithMeta soil);
+
+    /**
      * Gets the stats for the seed the given ItemStack
      * @param seed Any ItemStack that is a seed.
      * @return the stats for this stack

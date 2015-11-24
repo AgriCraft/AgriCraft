@@ -1,9 +1,11 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v2;
 
 import com.InfinityRaider.AgriCraft.api.APIStatus;
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v2.*;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.APIimplv1;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculator;
@@ -19,6 +21,12 @@ import net.minecraft.world.World;
 public class APIimplv2 extends APIimplv1 implements APIv2 {
     public APIimplv2(int version, APIStatus status) {
         super(version, status);
+    }
+
+    @Override
+    public boolean registerValidSoil(BlockWithMeta soil) {
+        GrowthRequirementHandler.addSoil(soil);
+        return true;
     }
 
     @Override
