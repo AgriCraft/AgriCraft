@@ -6,7 +6,6 @@ import com.google.common.collect.Sets;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import lombok.SneakyThrows;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -56,7 +55,6 @@ public class WorldCache<I> {
     }
 
     @SubscribeEvent
-    @SneakyThrows
     public void onWorldLoad(WorldEvent.Load event) {
         if (!event.world.isRemote && event.world.provider.dimensionId == 0) {
             loadData(getSaveFile());
@@ -64,43 +62,45 @@ public class WorldCache<I> {
         locked = true;
     }
 
-    @SneakyThrows
     protected void loadData(File file) {
-        if (!file.createNewFile()) {
-            NBTTagCompound tag = null;
-            try {
-                tag = CompressedStreamTools.read(file);
-            } catch (Exception e) {
-                generateIDs();
-                return;
-            }
-            if (tag.hasKey("ItemData")) {
-                // name <-> id mappings
-                NBTTagList list = tag.getTagList("ItemData", Constants.NBT.TAG_COMPOUND);
-                for (int i = 0; i < list.tagCount(); i++) {
-                    NBTTagCompound dataTag = list.getCompoundTagAt(i);
-                    int id = dataTag.getInteger("V");
-                    String name = dataTag.getString("K");
-                    nameToID.put(name, id);
-                    if (objToName.values().contains(name)) {
-                        usedIDs.set(id, true);
+        try {
+            if (!file.createNewFile()) {
+                NBTTagCompound tag = null;
+                try {
+                    tag = CompressedStreamTools.read(file);
+                } catch (Exception e) {
+                    generateIDs();
+                    return;
+                }
+                if (tag.hasKey("ItemData")) {
+                    // name <-> id mappings
+                    NBTTagList list = tag.getTagList("ItemData", Constants.NBT.TAG_COMPOUND);
+                    for (int i = 0; i < list.tagCount(); i++) {
+                        NBTTagCompound dataTag = list.getCompoundTagAt(i);
+                        int id = dataTag.getInteger("V");
+                        String name = dataTag.getString("K");
+                        nameToID.put(name, id);
+                        if (objToName.values().contains(name)) {
+                            usedIDs.set(id, true);
+                        }
                     }
-                }
 
-                // blocked ids
-                for (int id : tag.getIntArray("BlockedItemIds")) {
-                    blockedIDs.add(id);
-                }
+                    // blocked ids
+                    for (int id : tag.getIntArray("BlockedItemIds")) {
+                        blockedIDs.add(id);
+                    }
 
-                blockOldIDs();
-                mergeNewIDs();
-                return;
+                    blockOldIDs();
+                    mergeNewIDs();
+                    return;
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         generateIDs();
     }
 
-    @SneakyThrows
     protected void saveData(File file) {
         NBTTagCompound data = new NBTTagCompound();
 
@@ -116,7 +116,11 @@ public class WorldCache<I> {
         // blocked ids
         data.setIntArray("BlockedItemIds", ArrayUtils.toPrimitive(blockedIDs.toArray(new Integer[0])));
 
-        CompressedStreamTools.write(data, file);
+        try {
+            CompressedStreamTools.write(data, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void blockOldIDs() {
@@ -172,7 +176,6 @@ public class WorldCache<I> {
         usedIDs.set(id, true);
     }
 
-    @SneakyThrows
     protected File getSaveFile() {
         return new File(DimensionManager.getCurrentSaveRootDirectory().getAbsolutePath() + "/" + ident + ".json");
     }
