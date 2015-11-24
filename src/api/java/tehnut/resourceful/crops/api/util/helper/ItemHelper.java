@@ -5,7 +5,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import tehnut.resourceful.crops.util.helper.LogHelper;
 
 public class ItemHelper {
 
