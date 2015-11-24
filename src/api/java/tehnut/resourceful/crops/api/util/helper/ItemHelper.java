@@ -110,7 +110,7 @@ public class ItemHelper {
                 return new ItemStack(oreStack.getItem(), amount, oreStack.getItemDamage());
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            LogHelper.error("Error adding " + (input ? "inputStack" : "outputStack") + ": " + stackString + ". Is it formatted correctly?");
+            //LogHelper.error("Error adding " + (input ? "inputStack" : "outputStack") + ": " + stackString + ". Is it formatted correctly?");
         }
 
         return null;
