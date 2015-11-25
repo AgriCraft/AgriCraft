@@ -19,9 +19,11 @@ import java.util.Random;
  */
 public abstract class CropPlantTallGeneric extends CropPlantTall {
     private final ItemSeeds seed;
+    private final ArrayList<ItemStack> fruits;
 
     public CropPlantTallGeneric(ItemSeeds seed) {
         this.seed = seed;
+        this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed());
     }
 
     public abstract int transformMeta(int growthStage);
@@ -43,12 +45,12 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
 
     @Override
     public ArrayList<ItemStack> getAllFruits() {
-        return OreDictHelper.getFruitsFromOreDict(getSeed());
+        return new ArrayList<ItemStack>(fruits);
     }
 
     @Override
     public ItemStack getRandomFruit(Random rand) {
-        ArrayList<ItemStack> list = getAllFruits();
+        ArrayList<ItemStack> list = fruits;
         if(list!=null && list.size()>0) {
             return list.get(rand.nextInt(list.size())).copy();
         }

@@ -8,6 +8,7 @@ Changelog
 -FIXED:  Changed the way growth stages are rendered in the journal, fixing rendering for animated textures
 -FIXED:  Tanks in greenhouses not correctly forming a multiblock on world generation
 -FIXED:  Plants being able to be bonemealed while sneaking even though they shouldn't be
+-FIXED:  Blue Power flax not dropping fruit on harvest
 
 1.4.5
 -ADDED:  Support for Agriculture 2

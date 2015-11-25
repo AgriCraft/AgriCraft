@@ -4,12 +4,22 @@ import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantTallGeneric;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.ItemStack;
+
+import java.util.Random;
 
 public class CropPlantBluePower extends CropPlantTallGeneric {
     public CropPlantBluePower(ItemSeeds seed) {
         super(seed);
     }
+
+    @Override
+    public ItemStack getRandomFruit(Random rand) {
+        return new ItemStack(Items.string);
+    }
+
     @Override
     public int transformMeta(int growthStage) {
         switch(growthStage) {
