@@ -12,9 +12,11 @@ import com.InfinityRaider.AgriCraft.api.v0.NoAPI;
  * On how to use an API without including it, see:
  * 
  * <a href=http://www.minecraftforum.net/forums/mapping-and-modding/mapping-and-modding-tutorials/1571434-tutorial-modding-with-apis> this tutorial</a>.
- * 
+ *
+ *
  * <p>
- * Example code for using it:
+ * Example code for using the API can be found in the example package, you don't have to do it this way, but if you have no idea how to use it without shipping the api in your jar, it might help.
+ * But in general, short version:
  * </p>
  * 
  * <pre>
@@ -23,6 +25,8 @@ import com.InfinityRaider.AgriCraft.api.v0.NoAPI;
  * 	agricraft = (APIv1) api;
  * }
  * </pre>
+ *
+ *
  * 
  */
 public class API {

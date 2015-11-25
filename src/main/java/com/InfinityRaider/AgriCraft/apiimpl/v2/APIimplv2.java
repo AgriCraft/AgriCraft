@@ -9,6 +9,7 @@ import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculator;
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
 import cpw.mods.fml.relauncher.Side;
@@ -27,6 +28,11 @@ public class APIimplv2 extends APIimplv1 implements APIv2 {
     public boolean registerValidSoil(BlockWithMeta soil) {
         GrowthRequirementHandler.addSoil(soil);
         return true;
+    }
+
+    @Override
+    public short getStatCap() {
+        return (short) ConfigurationHandler.cropStatCap;
     }
 
     @Override

@@ -282,7 +282,7 @@ public interface APIv1 extends APIBase {
 	boolean isAnalyzed(World world, int x, int y, int z);
 
 	/**
-	 * Returns the stats of the crop at the given location.	 *
+	 * Returns the stats of the crop at the given location.
 	 *
 	 * @param world
 	 * @param x

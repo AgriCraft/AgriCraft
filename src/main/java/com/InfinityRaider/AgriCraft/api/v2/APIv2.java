@@ -13,6 +13,19 @@ public interface APIv2 extends APIv1 {
      */
     boolean registerValidSoil(BlockWithMeta soil);
 
+    short getStatCap();
+
+    /**
+     * Returns the stats of the crop at the given location.
+     *
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @return ISeedStats object holding the stats or null if there is no crop there, or the crop doesn't have a plant
+     */
+    ISeedStats getStats(World world, int x, int y, int z);
+
     /**
      * Gets the stats for the seed the given ItemStack
      * @param seed Any ItemStack that is a seed.

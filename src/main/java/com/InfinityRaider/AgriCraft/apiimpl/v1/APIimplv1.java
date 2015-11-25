@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.api.APIBase;
 import com.InfinityRaider.AgriCraft.api.APIStatus;
 import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.api.v2.IRake;
+import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAPI;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAgriCraft;
