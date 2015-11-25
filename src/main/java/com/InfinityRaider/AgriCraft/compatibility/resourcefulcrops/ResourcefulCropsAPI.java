@@ -79,7 +79,7 @@ public class ResourcefulCropsAPI extends ResourcefulCropsAPIwrapper {
     protected IGrowthRequirement getGrowthRequirement(int meta) {
         SeedReq seedReq = SeedRegistry.getSeed(meta).getSeedReq();
         GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
-        builder.brightnessRange(seedReq.getLightLevelMin()>>8, seedReq.getLightLevelMax()>>8);
+        builder.brightnessRange(seedReq.getLightLevelMin(), seedReq.getLightLevelMax());
         BlockStack growthReq = seedReq.getGrowthReq();
         if(growthReq != null) {
             builder.requiredBlock(new BlockWithMeta(growthReq.getBlock(), growthReq.getMeta()), RequirementType.BELOW, false);

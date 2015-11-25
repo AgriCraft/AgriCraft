@@ -228,8 +228,8 @@ public class GrowthRequirement implements IGrowthRequirement{
 
         @Override
         public Builder brightnessRange(int min, int max) {
-            this.growthRequirement.minBrightness = min;
-            this.growthRequirement.maxBrightness = max;
+            this.growthRequirement.minBrightness = Math.max(0, min);
+            this.growthRequirement.maxBrightness = Math.min(16, max);
             return this;
         }
 
