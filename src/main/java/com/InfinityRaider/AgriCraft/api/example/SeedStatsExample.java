@@ -57,6 +57,6 @@ public class SeedStatsExample implements ISeedStats {
 
     @Override
     public void setAnalyzed(boolean value) {
-
+        this.analyzed = value;
     }
 }
