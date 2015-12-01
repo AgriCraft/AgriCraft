@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.google.common.base.Joiner;
 import minetweaker.IUndoableAction;
@@ -340,8 +341,8 @@ public class Growing {
                 MineTweakerAPI.logError("Type needs to be either 1 (below) or 2 (nearby)");
                 return;
             }
-            if (seed == null || !(seed.getItem() instanceof ItemSeeds)) {
-                MineTweakerAPI.logError("Seeds has to be non-null and of type ItemSeeds.");
+            if (seed == null || !(CropPlantHandler.isValidSeed(seed))) {
+                MineTweakerAPI.logError("Seeds has to be non-null and should be recognized by AgriCraft as a seed.");
                 return;
             }
             if (base == null || !(base.getItem() instanceof ItemBlock)) {
@@ -358,8 +359,8 @@ public class Growing {
         @ZenMethod
         public static void clear(IItemStack seed) {
             ItemStack seedIS = MineTweakerMC.getItemStack(seed);
-            if (seedIS == null || !(seedIS.getItem() instanceof ItemSeeds)) {
-                MineTweakerAPI.logError("Seeds has to be non-null and of type ItemSeeds.");
+            if (seedIS == null || !(CropPlantHandler.isValidSeed(seedIS))) {
+                MineTweakerAPI.logError("Seeds has to be non-null and should be recognized by AgriCraft as a seed.");
                 return;
             }
 

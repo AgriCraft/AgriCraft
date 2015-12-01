@@ -11,6 +11,7 @@ Changelog
 -FIXED:  Plants being able to be bonemealed while sneaking even though they shouldn't be
 -FIXED:  Blue Power flax not dropping fruit on harvest
 -FIXED:  NPE when storing Canola seeds in Seed Storage
+-FIXED:  Seeds no longer have to be instance of ItemSeeds to be able to change the base block with MineTweaker (no idea how this survived so long)
 
 1.4.5
 -ADDED:  Support for Agriculture 2
