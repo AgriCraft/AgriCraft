@@ -6,6 +6,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+
 public interface APIv2 extends APIv1 {
     /**
      * Register a  soil that crop sticks can be placed on use this if you have your own ICropPlant which doesn't use IGrowthRequirement
@@ -71,4 +73,28 @@ public interface APIv2 extends APIv1 {
      */
     @SideOnly(Side.CLIENT)
     void setStatStringDisplayer(IStatStringDisplayer displayer);
+
+
+    /**
+     * Checks if a seed is discovered in the journal
+     * @param journal an ItemStack holding the journal
+     * @param seed an ItemStack containing a seed
+     * @return if the seed is discovered in the journal
+     */
+    boolean isSeedDiscoveredInJournal(ItemStack journal, ItemStack seed);
+
+    /**
+     * This adds an entry the journal, for example when a seed is analyzed in the seed analyzer this method is called.
+     * This internally checks if the seed is discovered already before adding to prevent duplicate entries
+     * @param journal an ItemStack holding the journal
+     * @param seed an ItemStack containing a seed
+     */
+    void addEntryToJournal(ItemStack journal, ItemStack seed);
+
+    /**
+     * Gets an ArrayList containing all seeds discovered in this journal
+     * @param journal an ItemStack holding the journal
+     * @return an ArrayList containing an ItemStack for every discovered seed (the list may be empty but will never be null)
+     */
+    ArrayList<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal);
 }

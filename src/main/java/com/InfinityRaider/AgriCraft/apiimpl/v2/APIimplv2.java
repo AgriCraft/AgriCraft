@@ -19,6 +19,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+
 public class APIimplv2 extends APIimplv1 implements APIv2 {
     public APIimplv2(int version, APIStatus status) {
         super(version, status);
@@ -93,5 +95,29 @@ public class APIimplv2 extends APIimplv1 implements APIv2 {
     @SideOnly(Side.CLIENT)
     public void setStatStringDisplayer(IStatStringDisplayer displayer) {
         StatStringDisplayer.setStatStringDisplayer(displayer);
+    }
+
+    @Override
+    public boolean isSeedDiscoveredInJournal(ItemStack journal, ItemStack seed) {
+        if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
+            return false;
+        }
+        return ((IJournal) journal.getItem()).isSeedDiscovered(journal, seed);
+    }
+
+    @Override
+    public void addEntryToJournal(ItemStack journal, ItemStack seed) {
+        if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
+            return;
+        }
+        ((IJournal) journal.getItem()).addEntry(journal, seed);
+    }
+
+    @Override
+    public ArrayList<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal) {
+        if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
+            return new ArrayList<ItemStack>();
+        }
+        return ((IJournal) journal.getItem()).getDiscoveredSeeds(journal);
     }
 }

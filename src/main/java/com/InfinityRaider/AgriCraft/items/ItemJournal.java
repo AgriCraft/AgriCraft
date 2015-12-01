@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.api.v2.IJournal;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -20,7 +21,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemJournal extends ItemAgricraft {
+public class ItemJournal extends ItemAgricraft implements IJournal {
     public ItemJournal() {
         super();
         this.setMaxStackSize(1);
