@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.handler;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -93,6 +94,9 @@ public class ConfigurationHandler {
     //decorative
     public static boolean disableFences;
     public static boolean disableGrates;
+    //compatibility
+    public static boolean neiMutation;
+    public static boolean neiProduct;
 
     //CLIENT
     //------
@@ -195,10 +199,18 @@ public class ConfigurationHandler {
 
     public static boolean enableModCompatibility(String modId) {
         boolean flag = config.getBoolean(modId, CATEGORY_COMPATIBILITY, true, "set to false to disable compatibility for "+modId);
+        enableCompatibilityConfiguration(modId);
         if(config.hasChanged()) {
             config.save();
         }
         return flag;
+    }
+
+    public static void enableCompatibilityConfiguration(String modId) {
+        if(modId.equals(Names.Mods.nei)){
+            neiMutation = config.getBoolean("NEI Mutations", CATEGORY_COMPATIBILITY, true, "set to false to disable seed mutations in NEI");
+            neiProduct = config.getBoolean("NEI Products", CATEGORY_COMPATIBILITY, true, "set to false to disable seed products in NEI");
+        }
     }
 
     public static String readGrassDrops() {
