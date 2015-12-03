@@ -214,9 +214,9 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     protected void drawScaledFaceDoubleXY(Tessellator tessellator, float minX, float minY, float maxX, float maxY, IIcon icon, float z) {
         z = z*16.0F;
         float minU = 0;
-        float maxU = icon.getIconWidth();
+        float maxU = 16;
         float minV = 0;
-        float maxV = icon.getIconHeight();
+        float maxV = 16;
         //front
         addScaledVertexWithUV(tessellator, maxX, maxY, z, maxU, minV, icon);
         addScaledVertexWithUV(tessellator, maxX, minY, z, maxU, maxV, icon);
@@ -232,9 +232,9 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     protected void drawScaledFaceDoubleXZ(Tessellator tessellator, float minX, float minZ, float maxX, float maxZ, IIcon icon, float y) {
         y = y*16.0F;
         float minU = 0;
-        float maxU = icon.getIconWidth();
+        float maxU = 16;
         float minV = 0;
-        float maxV = icon.getIconHeight();
+        float maxV = 16;
         //front
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxU, maxV, icon);
         addScaledVertexWithUV(tessellator, maxX, y, minZ, maxU, minV, icon);
@@ -251,9 +251,9 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     protected void drawScaledFaceDoubleYZ(Tessellator tessellator, float minY, float minZ, float maxY, float maxZ, IIcon icon, float x) {
         x = x*16.0F;
         float minU = 0;
-        float maxU = icon.getIconWidth();
+        float maxU = 16;
         float minV = 0;
-        float maxV = icon.getIconHeight();
+        float maxV = 16;
         //front
         addScaledVertexWithUV(tessellator, x, maxY, maxZ, maxU, minV, icon);
         addScaledVertexWithUV(tessellator, x, minY, maxZ, maxU, maxV, icon);
