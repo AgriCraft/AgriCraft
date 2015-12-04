@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 public class MessageGuiSeedStorageClearSeed extends MessageAgriCraft {
     private EntityPlayer player;
 
+    @SuppressWarnings("unused")
     public MessageGuiSeedStorageClearSeed() {}
 
     public MessageGuiSeedStorageClearSeed(EntityPlayer player) {

@@ -14,6 +14,7 @@ public class MessagePeripheralCheckNeighbours extends MessageAgriCraft {
     private int y;
     private int z;
 
+    @SuppressWarnings("unused")
     public MessagePeripheralCheckNeighbours() {}
 
     public MessagePeripheralCheckNeighbours(int x, int y, int z) {

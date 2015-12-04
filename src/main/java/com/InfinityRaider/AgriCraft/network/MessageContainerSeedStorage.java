@@ -18,6 +18,7 @@ public class MessageContainerSeedStorage extends MessageAgriCraft {
     private EntityPlayer player;
     private int slotId;
 
+    @SuppressWarnings("unused")
     public MessageContainerSeedStorage() {}
 
     public MessageContainerSeedStorage(ItemStack stack, int slotId) {

@@ -16,6 +16,7 @@ public class MessageFertiliserApplied extends MessageAgriCraft {
     private Item fertiliser;
     private int meta;
 
+    @SuppressWarnings("unused")
     public MessageFertiliserApplied() {}
 
     public MessageFertiliserApplied(ItemStack fertiliser, int x, int y, int z) {

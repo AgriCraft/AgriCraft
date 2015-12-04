@@ -15,6 +15,7 @@ public class MessageSyncMutation extends MessageAgriCraft {
     private double chance;
     private boolean last;
 
+    @SuppressWarnings("unused")
     public MessageSyncMutation() {
     }
 

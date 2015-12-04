@@ -15,6 +15,7 @@ public class MessageSyncFluidLevel extends MessageAgriCraft {
     int y;
     int z;
 
+    @SuppressWarnings("unused")
     public MessageSyncFluidLevel() {}
 
     public MessageSyncFluidLevel(int lvl, int x, int y, int z) {

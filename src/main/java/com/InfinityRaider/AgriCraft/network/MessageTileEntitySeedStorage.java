@@ -23,6 +23,7 @@ public class MessageTileEntitySeedStorage extends MessageAgriCraft {
     private int gain;
     private int strength;
 
+    @SuppressWarnings("unused")
     public MessageTileEntitySeedStorage() {}
 
     public MessageTileEntitySeedStorage(int x, int y, int z, SeedStorageSlot slot) {

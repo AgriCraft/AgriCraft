@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.handler;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncMutation;
@@ -13,10 +15,17 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
 @SuppressWarnings("unused")
-public class SyncMutationsHandler {
+public class PlayerConnectToServerHandler {
     /** Receive mutations from the server when connecting to the server */
     @SubscribeEvent
-    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+    public void sendNEIconfig(PlayerEvent.PlayerLoggedInEvent event) {
+        if(!event.player.worldObj.isRemote) {
+            NEIHelper.sendSettingsToClient();
+        }
+    }
+
+    @SubscribeEvent
+    public void syncMutations(PlayerEvent.PlayerLoggedInEvent event) {
         if(!event.player.worldObj.isRemote) {
             if(MinecraftServer.getServer().isDedicatedServer()) {
                 //for dedicated server sync to every player
