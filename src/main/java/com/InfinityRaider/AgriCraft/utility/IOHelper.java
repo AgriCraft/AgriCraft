@@ -532,7 +532,7 @@ public abstract class IOHelper {
             "AgriCraft:seedDesertNova=AgriCraft:seedCactus+AgriCraft:seedTulipRed\n" +
             "AgriCraft:seedCerublossom=AgriCraft:seedDesertNova+AgriCraft:seedOrchid\n" +
             "AgriCraft:seedAum=AgriCraft:seedCerublossom+AgriCraft:seedTulipWhite\n" +
-            "AgriCraft:seedTarmaRoot=seedDesertNova+AgriCraft:seedShroomBrown\n" +
+            "AgriCraft:seedTarmaRoot=AgriCraft:seedDesertNova+AgriCraft:seedShroomBrown\n" +
             "AgriCraft:seedWakebloom=AgriCraft:seedAum+AgriCraft:seedCerublossom";
 
     private static final String copperMutation =
