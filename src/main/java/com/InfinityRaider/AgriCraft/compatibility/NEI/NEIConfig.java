@@ -26,11 +26,13 @@ public class NEIConfig implements IConfigureNEI {
         //register NEI recipe handler
         LogHelper.debug("Registering NEI recipe handlers");
         //mutation handler
-        API.registerRecipeHandler(new NEICropMutationHandler());
-        API.registerUsageHandler(new NEICropMutationHandler());
+        NEICropMutationHandler mutationHandler = new NEICropMutationHandler();
+        API.registerRecipeHandler(mutationHandler);
+        API.registerUsageHandler(mutationHandler);
         //crop product handler
-        API.registerRecipeHandler(new NEICropProductHandler());
-        API.registerUsageHandler(new NEICropProductHandler());
+        NEICropProductHandler productHandler = new NEICropProductHandler();
+        API.registerRecipeHandler(productHandler);
+        API.registerUsageHandler(productHandler);
         //hide crop blocks in NEI
         hideItems();
     }

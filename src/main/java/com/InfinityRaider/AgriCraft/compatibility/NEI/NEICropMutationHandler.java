@@ -22,7 +22,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NEICropMutationHandler extends TemplateRecipeHandler {
+public class NEICropMutationHandler extends AgriCraftNEIHandler {
     //this is a class which handles the recipe for crop mutation (has to contain a CachedRecipe for the mutation)
     private static String name = StatCollector.translateToLocal("agricraft_nei.mutation.title");
     private static String id = "cropMutation";
@@ -91,7 +91,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
 
     //loads the mutation recipes for a given mutation
     @Override
-    public void loadCraftingRecipes(String id, Object... results) {
+    protected void loadCraftingRecipesDo(String id, Object... results) {
         if(id.equalsIgnoreCase(NEICropMutationHandler.id)) {
             Mutation[] mutations = MutationHandler.getMutations();
             for (Mutation mutation:mutations) {
@@ -114,7 +114,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
 
     //loads the mutation recipes for a given mutation
     @Override
-    public void loadCraftingRecipes(ItemStack result) {
+    protected void loadCraftingRecipesDo(ItemStack result) {
         if(CropPlantHandler.isValidSeed(result)) {
             Mutation[] mutations = MutationHandler.getMutationsFromChild(result);
             for(Mutation mutation:mutations) {
@@ -129,7 +129,7 @@ public class NEICropMutationHandler extends TemplateRecipeHandler {
 
     //loads the mutation recipes for a given parent
     @Override
-    public void loadUsageRecipes(ItemStack ingredient) {
+    protected void loadUsageRecipesDo(ItemStack ingredient) {
         if(ingredient == null || ingredient.getItem() == null) {
             return;
         }

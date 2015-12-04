@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.handler;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
@@ -20,7 +19,7 @@ public class PlayerConnectToServerHandler {
     @SubscribeEvent
     public void sendNEIconfig(PlayerEvent.PlayerLoggedInEvent event) {
         if(!event.player.worldObj.isRemote) {
-            NEIHelper.sendSettingsToClient();
+            NEIHelper.sendSettingsToClient((EntityPlayerMP) event.player);
         }
     }
 
