@@ -136,9 +136,9 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
         GL11.glScalef(f, f, f);
 
         EntityItem item = new EntityItem(AgriCraft.proxy.getClientWorld(), 0, 0, 0, seed);
-        item.hoverStart = 0.0F;
+        item.hoverStart = 0;
         RenderItem.renderInFrame = true;
-        RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+        RenderManager.instance.renderEntityWithPosYaw(item, 0, 0, 0, 0, 0);
         RenderItem.renderInFrame = false;
 
         GL11.glScalef(1F/f, 1F/f, 1F/f);
