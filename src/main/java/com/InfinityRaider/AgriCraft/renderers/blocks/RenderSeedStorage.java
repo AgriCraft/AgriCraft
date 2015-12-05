@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
@@ -9,7 +10,9 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -46,8 +49,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
             if(callFromTESR) {
                 //seed
                 if(storage.hasLockedSeed()) {
-                    ItemStack seed = storage.getLockedSeed();
-                    drawSeed(tessellator, seed);
+                    drawSeed(storage.getLockedSeed());
                 }
             } else {
                 IIcon icon = storage.getIcon();
@@ -119,23 +121,29 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
     }
 
     /**
-     * Render the seed as TESR because the item icons are on TextureMap.locationsItemsTexture, while the blocks are being rendered using TextureMap.locationsBlocksTexture     *
+     * Render the seed as TESR
      */
-    private void drawSeed(Tessellator tessellator, ItemStack seed) {
+    private void drawSeed(ItemStack seed) {
+        float a = 180;
+        float dx = 8*Constants.UNIT;
+        float dy = 5*Constants.UNIT;
+        float dz = 0.99F*Constants.UNIT;
+        float f = 0.75F;
+
         GL11.glPushMatrix();
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glTranslatef(dx, dy, dz);
+        GL11.glRotatef(a, 0, 1, 0);
+        GL11.glScalef(f, f, f);
 
-        tessellator.startDrawingQuads();
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
+        EntityItem item = new EntityItem(AgriCraft.proxy.getClientWorld(), 0, 0, 0, seed);
+        item.hoverStart = 0.0F;
+        RenderItem.renderInFrame = true;
+        RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+        RenderItem.renderInFrame = false;
 
-        IIcon icon = seed.getItem().getIconFromDamage(seed.getItemDamage());
-        if(icon != null) {
-            drawScaledFaceDoubleXY(tessellator, 5, 4, 11, 10, icon, Constants.UNIT - 0.001F);
-        }
-
-        tessellator.draw();
-
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glScalef(1F/f, 1F/f, 1F/f);
+        GL11.glRotatef(-a, 0, 1, 0);
+        GL11.glTranslatef(-dx, -dy, -dz);
         GL11.glPopMatrix();
     }
 
