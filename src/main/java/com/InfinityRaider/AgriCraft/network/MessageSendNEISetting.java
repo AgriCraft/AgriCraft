@@ -13,8 +13,8 @@ public class MessageSendNEISetting extends MessageAgriCraft {
     @SuppressWarnings("unused")
     public MessageSendNEISetting() {}
 
-    public MessageSendNEISetting(Class clazz, boolean active) {
-        this.className = clazz.getName();
+    public MessageSendNEISetting(String className, boolean active) {
+        this.className = className;
         this.value = active;
     }
 

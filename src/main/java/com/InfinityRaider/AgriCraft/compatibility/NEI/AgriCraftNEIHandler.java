@@ -1,14 +1,13 @@
 package com.InfinityRaider.AgriCraft.compatibility.NEI;
 
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.InfinityRaider.AgriCraft.network.MessageSendNEISetting;
-import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
-import net.minecraft.entity.player.EntityPlayerMP;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 
 import java.util.HashMap;
-import java.util.Map;
 
+@SideOnly(Side.CLIENT)
 public abstract class AgriCraftNEIHandler extends TemplateRecipeHandler {
     private static HashMap<Class<? extends AgriCraftNEIHandler>, Boolean> handlerStatuses = new HashMap<Class<? extends AgriCraftNEIHandler>, Boolean>();
 
@@ -20,12 +19,6 @@ public abstract class AgriCraftNEIHandler extends TemplateRecipeHandler {
 
     public static void setActive(Class<? extends AgriCraftNEIHandler> clazz, boolean active) {
         handlerStatuses.put(clazz, active);
-    }
-
-    public static void sendSettingsToClient(EntityPlayerMP player) {
-        for (Map.Entry<Class<? extends AgriCraftNEIHandler>, Boolean> entry : handlerStatuses.entrySet()) {
-            NetworkWrapperAgriCraft.wrapper.sendTo(new MessageSendNEISetting(entry.getKey(), entry.getValue()), player);
-        }
     }
 
     public boolean isActive() {
