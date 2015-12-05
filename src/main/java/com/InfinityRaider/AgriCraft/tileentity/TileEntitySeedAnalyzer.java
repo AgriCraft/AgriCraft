@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v2.ITrowel;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -18,6 +17,7 @@ import net.minecraft.util.StatCollector;
 import java.util.List;
 
 public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISidedInventory {
+    private static final int[] SLOTS = new int[] {0, 1};
 	
     /**
      * The seed that the seed analyzer contains.
@@ -286,16 +286,17 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //-----------------
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[]{ContainerSeedAnalyzer.seedSlotId,ContainerSeedAnalyzer.journalSlotId};
+        return SLOTS;
     }
 
     //check if item can be inserted
     @Override
     public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        if(slot==ContainerSeedAnalyzer.seedSlotId) {
+        slot = slot%2;
+        if(slot == 0) {
             return isValid(stack);
         }
-        else if(slot==ContainerSeedAnalyzer.journalSlotId) {
+        else if(slot == 1) {
             return (this.journal==null && this.isItemValidForSlot(slot, stack));
         }
         return false;
@@ -304,7 +305,8 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //check if an item can be extracted
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        if(slot==ContainerSeedAnalyzer.seedSlotId &&this.specimen !=null && this.specimen.hasTagCompound()) {
+        slot = slot%2;
+        if(slot == 0 && this.specimen != null && this.specimen.hasTagCompound()) {
             return this.isSpecimenAnalyzed();
         }
         return false;
@@ -319,9 +321,10 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //returns the stack in the slot
     @Override
     public ItemStack getStackInSlot(int slot) {
+        slot = slot%2;
         switch(slot) {
-            case ContainerSeedAnalyzer.seedSlotId: return this.specimen;
-            case ContainerSeedAnalyzer.journalSlotId: return this.journal;
+            case 0: return this.specimen;
+            case 1: return this.journal;
             default: return null;
         }
     }
@@ -329,8 +332,9 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //decreases the stack in a slot by an amount and returns that amount as an itemstack
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
+        slot = slot%2;
         ItemStack output = null;
-        if(slot==ContainerSeedAnalyzer.seedSlotId && this.specimen !=null) {
+        if(slot == 0 && this.specimen != null) {
             if(amount<this.specimen.stackSize) {
                 output = this.specimen.splitStack(amount);
             } else {
@@ -338,7 +342,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
                 this.specimen = null;
             }
         }
-        else if(slot==ContainerSeedAnalyzer.journalSlotId && this.journal!=null) {
+        else if(slot == 1 && this.journal != null) {
             output = this.journal.copy();
             this.journal = null;
         }
@@ -349,10 +353,11 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //gets item stack in the slot when closing the inventory
     @Override
     public ItemStack getStackInSlotOnClosing(int slot) {
+        slot = slot%2;
         ItemStack stackInSlot;
         switch(slot) {
-            case ContainerSeedAnalyzer.seedSlotId: stackInSlot = this.specimen; break;
-            case ContainerSeedAnalyzer.journalSlotId: stackInSlot = this.journal; break;
+            case 0: stackInSlot = this.specimen; break;
+            case 1: stackInSlot = this.journal; break;
             default: return null;
         }
         if(stackInSlot!=null) {
@@ -364,14 +369,15 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     //sets the items in a slot to this stack
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
-        if(slot==ContainerSeedAnalyzer.seedSlotId) {
+        slot = slot%2;
+        if(slot == 0) {
             this.specimen = stack;
             if(stack!=null && stack.stackSize>getInventoryStackLimit()) {
                 stack.stackSize = getInventoryStackLimit();
             }
             progress = 0;
         }
-        else if(slot==ContainerSeedAnalyzer.journalSlotId) {
+        else if(slot == 1) {
             this.journal = stack;
         }
     }
@@ -421,9 +427,10 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
      */
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        slot = slot%2;
         switch (slot) {
-            case ContainerSeedAnalyzer.seedSlotId: return TileEntitySeedAnalyzer.isValid(stack);
-            case ContainerSeedAnalyzer.journalSlotId: return (stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemJournal);
+            case 0: return TileEntitySeedAnalyzer.isValid(stack);
+            case 1: return (stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemJournal);
             default: return false;
         }
     }
