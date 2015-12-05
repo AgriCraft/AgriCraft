@@ -11,6 +11,8 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.multiblock.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -397,6 +399,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
         super.addWailaInformation(information);

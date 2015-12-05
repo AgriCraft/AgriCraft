@@ -2,6 +2,8 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -129,6 +131,7 @@ public abstract class TileEntityAgricraft extends TileEntity {
      *
      * @param information the list to add to.
      */
+    @SideOnly(Side.CLIENT)
     public abstract void addWailaInformation(List information);
 
     private boolean isMultiBlock() {

@@ -165,6 +165,7 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWailaInformation(List information) {
     	//Nothing to add here. Move along!
     }

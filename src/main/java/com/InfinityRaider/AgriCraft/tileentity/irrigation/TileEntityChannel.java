@@ -298,6 +298,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
     	//Required call to super.

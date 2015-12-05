@@ -4,6 +4,8 @@ package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
@@ -67,6 +69,7 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
     	//Required super call

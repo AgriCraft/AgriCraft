@@ -472,6 +472,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
     	if(this.hasPlant()) {

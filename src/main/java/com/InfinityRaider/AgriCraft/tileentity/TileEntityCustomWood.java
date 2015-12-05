@@ -188,6 +188,7 @@ public class TileEntityCustomWood extends TileEntityAgricraft implements IDebugg
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
     	ItemStack mat = this.getMaterialStack();
