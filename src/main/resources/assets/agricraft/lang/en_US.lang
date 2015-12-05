@@ -210,6 +210,9 @@ agricraft_tooltip.grate=Right click with vines to apply vines
 agricraft_tooltip.clipper1=Right click on crops to obtain clippings
 agricraft_tooltip.clipper2=Clippings can be planted on other crops
 agricraft_tooltip.clipper3=Success of planting is based on strength
+agricraft_tooltip.analyzer=Specimen
+agricraft_tooltip.storage=Locked Seed
+agricraft_tooltip.none=none
 
 //descriptions
 agricraft_description.peripheralHelp=Method Help

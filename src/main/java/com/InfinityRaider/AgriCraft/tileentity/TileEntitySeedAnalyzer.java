@@ -7,10 +7,13 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 
 import java.util.List;
 
@@ -431,7 +434,9 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
-    	//NO OP
+    	information.add(StatCollector.translateToLocal("agricraft_tooltip.analyzer")+": "+(this.hasSpecimen()?specimen.getDisplayName():StatCollector.translateToLocal("agricraft_tooltip.none")));
     }
 }

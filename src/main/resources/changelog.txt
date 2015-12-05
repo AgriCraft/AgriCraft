@@ -5,6 +5,7 @@ Changelog
 -ADDED:  Support for ResourcefulCrops
 -ADDED:  API implementation example
 -ADDED:  Added config option to disable specific NEI handlers (config setting is enforced via the server)
+-ADDED:  Waila tooltips to seed storage & analyzer
 -CHANGE: Updated Botania drum/horn of the wild interaction: crops will now be harvested instead of uprooted
 -CHANGE: Updated to Forge 10.13.4.1566
 -FIXED:  Changed the way growth stages are rendered in the journal, fixing rendering for animated textures

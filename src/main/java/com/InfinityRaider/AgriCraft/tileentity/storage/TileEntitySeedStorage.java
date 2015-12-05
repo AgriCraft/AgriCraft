@@ -8,11 +8,14 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
@@ -438,5 +441,13 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             return false;
         }
         return ItemStack.areItemStackTagsEqual(stack, slots.get(slot).getStack(lockedSeed, lockedSeedMeta));
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public void addWailaInformation(List information) {
+        information.add(StatCollector.translateToLocal("agricraft_tooltip.storage") + ": " + (this.hasLockedSeed() ? getLockedSeed().getDisplayName() : StatCollector.translateToLocal("agricraft_tooltip.none")));
+        super.addWailaInformation(information);
     }
 }
