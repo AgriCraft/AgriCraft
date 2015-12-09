@@ -23,11 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable{
+public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable {
     public ForgeDirection direction;
     private Item lockedSeed;
     private int lockedSeedMeta;
     private Map<Integer, SeedStorageSlot> slots = new HashMap<Integer, SeedStorageSlot>();
+    private ArrayList<SeedStorageSlot> slotsList = new ArrayList<SeedStorageSlot>();
     private ISeedStorageController controller;
 
     public TileEntitySeedStorage() {
@@ -93,7 +94,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                     NBTTagCompound stackTag = new NBTTagCompound();
                     SeedHelper.setNBT(stackTag, slotTag.getShort(Names.NBT.growth), slotTag.getShort(Names.NBT.gain), slotTag.getShort(Names.NBT.strength), true);
                     int id = slotTag.getInteger(Names.NBT.id);
-                    slots.put(id, new SeedStorageSlot(stackTag, slotTag.getInteger(Names.NBT.count), id, invId));
+                    SeedStorageSlot slot = new SeedStorageSlot(stackTag, slotTag.getInteger(Names.NBT.count), id, invId);
+                    slots.put(id, slot);
+                    slotsList.add(slot);
                 }
             }
         } else {
@@ -109,9 +112,31 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     @Override
     public boolean receiveClientEvent(int id, int data) {
         if(this.worldObj.isRemote) {
-            this.decrStackSize(id, data);
+            this.decreaseStackSize(id, data);
         }
         return true;
+    }
+
+    private ItemStack decreaseStackSize(int realSlotId, int amount) {
+        if(!worldObj.isRemote) {
+            ItemStack stackInSlot = null;
+            if (this.slots != null) {
+                SeedStorageSlot slotAt = this.slots.get(realSlotId);
+                if (slotAt != null) {
+                    stackInSlot = slotAt.getStack(this.lockedSeed, this.lockedSeedMeta);
+                    stackInSlot.stackSize = Math.min(amount, slotAt.count);
+                    if (slotAt.count <= amount) {
+                        this.slots.remove(realSlotId);
+                        slotAt.count = 0;
+                    } else {
+                        slotAt.count = slotAt.count - amount;
+                    }
+                }
+                this.syncSlotToClient(slotAt);
+            }
+            return stackInSlot;
+        }
+        return null;
     }
 
     //sets the direction based on an int
@@ -122,6 +147,28 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public void syncSlotToClient(SeedStorageSlot slot) {
         NetworkWrapperAgriCraft.wrapper.sendToDimension(new MessageTileEntitySeedStorage(this.xCoord, this.yCoord, this.zCoord, slot), this.worldObj.provider.dimensionId);
         this.worldObj.getChunkFromBlockCoords(this.xCoord, this.zCoord).setChunkModified();
+    }
+
+    //Debug method
+    @Override
+    public void addDebugInfo(List<String> list) {
+        String info = this.lockedSeed==null?"null":this.getLockedSeed().getDisplayName();
+        int size = this.slots==null?0:this.slots.size();
+        list.add("Locked Seed: " + info);
+        list.add("Number of seeds: " + size);
+    }
+
+    @Override
+    public boolean isRotatable() {
+        return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public void addWailaInformation(List information) {
+        information.add(StatCollector.translateToLocal("agricraft_tooltip.storage") + ": " + (this.hasLockedSeed() ? getLockedSeed().getDisplayName() : StatCollector.translateToLocal("agricraft_tooltip.none")));
+        super.addWailaInformation(information);
     }
 
 
@@ -140,7 +187,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                         if (ItemStack.areItemStackTagsEqual(entry.getValue().getStack(this.lockedSeed, this.lockedSeedMeta), stack)) {
                             ItemStack newStack = stack.copy();
                             newStack.stackSize = newStack.stackSize + entry.getValue().count;
-                            this.setInventorySlotContents(entry.getKey(), newStack);
+                            this.setSlotContents(entry.getKey(), newStack);
                             success = true;
                             break;
                         }
@@ -148,12 +195,12 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                 }
                 if (!success) {
                     if (this.slots.size() == 0) {
-                        this.setInventorySlotContents(0, stack);
+                        this.setSlotContents(0, stack);
                         success = true;
                     } else {
                         int slotId = getFirstFreeSlot();
                         if(slotId>=0) {
-                            this.setInventorySlotContents(slotId, stack);
+                            this.setSlotContents(slotId, stack);
                             success = true;
                         }
                     }
@@ -161,20 +208,63 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             }
             else {
                 this.setLockedSeed(stack.getItem(), stack.getItemDamage());
-                this.setInventorySlotContents(0, stack);
+                this.setSlotContents(0, stack);
                 success = true;
             }
         }
         return success;
     }
 
+    private void setSlotContents(int realSlotId, ItemStack inputStack) {
+        if(realSlotId<0) {
+            this.addStackToInventory(inputStack);
+            return;
+        }
+        if(this.isValidForSlot(realSlotId, inputStack)) {
+            SeedStorageSlot slotAt = this.slots.get(realSlotId);
+            if(slotAt!=null) {
+                slotAt.count = inputStack.stackSize;
+                if(slotAt.count<=0) {
+                    slots.remove(realSlotId);
+                }
+            }
+            else {
+                slotAt = new SeedStorageSlot(inputStack.getTagCompound(), inputStack.stackSize, realSlotId, this.getControllableID());
+                if(slotAt.count>0) {
+                    this.slots.put(realSlotId, slotAt);
+                }
+            }
+            if(!this.worldObj.isRemote) {
+                this.syncSlotToClient(slotAt);
+            }
+            else {
+                this.markForUpdate();
+            }
+        }
+    }
+
+    private boolean isValidForSlot(int realSlot, ItemStack stack) {
+        if(!SeedHelper.isAnalyzedSeed(stack)) {
+            return false;
+        }
+        if(this.hasLockedSeed()) {
+            if (stack.getItem() == this.lockedSeed && stack.getItemDamage() == this.lockedSeedMeta && SeedHelper.isAnalyzedSeed(stack)) {
+                SeedStorageSlot slotAt = this.slots.get(realSlot);
+                return slotAt == null || ItemStack.areItemStackTagsEqual(stack, slotAt.getStack(lockedSeed, lockedSeedMeta));
+            }
+        } else {
+            return true;
+        }
+        return false;
+    }
+
     public int getFirstFreeSlot() {
-        for(int i=0;i<1000;i++) {
+        for(int i=0;i<slots.size();i++) {
             if(!slots.containsKey(i)) {
                 return i;
             }
         }
-        return -1;
+        return slots.size();
     }
 
     @Override
@@ -259,16 +349,15 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     //INVENTORY METHODS
     //-----------------
-    //Note that I am taking the modulus of 1000 for all the slot indices. This is because a seed has 3 stats with 10 values,
-    // so the maximum amount of different slots in the inventory is 1000
+    /*
     @Override
     public int getSizeInventory() {
+        //One extra for the 'fake' input only slot
         return this.slots.size()+1;
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        slot = slot%1000;
         ItemStack stackInSlot = null;
         if(this.slots!=null) {
             SeedStorageSlot slotAt = this.slots.get(slot);
@@ -282,7 +371,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
         if(!worldObj.isRemote) {
-            slot = slot % 1000;
             ItemStack stackInSlot = null;
             if (this.slots != null) {
                 SeedStorageSlot slotAt = this.slots.get(slot);
@@ -305,7 +393,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public ItemStack getStackInSlotOnClosing(int slot) {
-        slot = slot%1000;
         ItemStack stackInSlot = null;
         if(this.slots!=null) {
             stackInSlot = this.getStackInSlot(slot).copy();
@@ -320,7 +407,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             this.addStackToInventory(inputStack);
             return;
         }
-        slot = slot%1000;
         if(this.isItemValidForSlot(slot, inputStack)) {
             SeedStorageSlot slotAt = this.slots.get(slot);
             if(slotAt!=null) {
@@ -388,20 +474,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         return false;
     }
 
-    //Debug method
-    @Override
-    public void addDebugInfo(List<String> list) {
-        String info = this.lockedSeed==null?"null":this.getLockedSeed().getDisplayName();
-        int size = this.slots==null?0:this.slots.size();
-        list.add("Locked Seed: "+info);
-        list.add("Number of seeds: "+size);
-    }
-
-    @Override
-    public boolean isRotatable() {
-        return true;
-    }
-
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
         int[] array = new int[slots.size()+1];
@@ -442,12 +514,5 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         }
         return ItemStack.areItemStackTagsEqual(stack, slots.get(slot).getStack(lockedSeed, lockedSeedMeta));
     }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
-    public void addWailaInformation(List information) {
-        information.add(StatCollector.translateToLocal("agricraft_tooltip.storage") + ": " + (this.hasLockedSeed() ? getLockedSeed().getDisplayName() : StatCollector.translateToLocal("agricraft_tooltip.none")));
-        super.addWailaInformation(information);
-    }
+    */
 }

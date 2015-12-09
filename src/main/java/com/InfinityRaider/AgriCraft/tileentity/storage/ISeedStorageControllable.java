@@ -6,7 +6,8 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public interface ISeedStorageControllable extends ISidedInventory {
+//public interface ISeedStorageControllable extends ISidedInventory {
+public interface ISeedStorageControllable {
     /**
      * Tries to add a stack to the inventory, returns true on success
      */
