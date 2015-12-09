@@ -71,7 +71,7 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
         if (controllable == null) {
             return;
         }
-        ItemStack stackToMove = controllable.getStackInSlot(slotId);
+        ItemStack stackToMove = controllable.getStackForSlotId(slotId);
         if (stack == null) {
             return;
         }
@@ -79,14 +79,14 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
             return;
         }
         stackToMove.stackSize = stack.stackSize > stackToMove.stackSize ? stackToMove.stackSize : stack.stackSize;
-        stackToMove.stackTagCompound = controllable.getStackInSlot(slotId).stackTagCompound;
+        stackToMove.stackTagCompound = controllable.getStackForSlotId(slotId).stackTagCompound;
         if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
             if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                 //this method is only called form the gui client side, so we need to manually tell the server to execute it there
                 NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(stack, slotId));
             } else {
                 //on the server decrease the size of the stack, where it is synced to the client
-                controllable.decrStackSize(slotId, stack.stackSize - stackToMove.stackSize);
+                controllable.decreaseStackSizeInSlot(slotId, stack.stackSize - stackToMove.stackSize);
             }
         }
     }

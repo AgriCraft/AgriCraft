@@ -86,7 +86,7 @@ public class MessageTileEntitySeedStorage extends MessageAgriCraft {
                 ItemStack stack = storage.getLockedSeed();
                 stack.stackSize = message.amount;
                 stack.stackTagCompound = message.getTag();
-                storage.setInventorySlotContents(message.slotId, stack);
+                storage.setSlotContents(message.slotId, stack);
             }
             return null;
         }
