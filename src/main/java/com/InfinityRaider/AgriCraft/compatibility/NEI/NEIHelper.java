@@ -29,8 +29,8 @@ public class NEIHelper extends ModHelper {
 
     public static void setServerConfigs() {
         if(ModHelper.allowIntegration(Names.Mods.nei)) {
-            boolean enableMutationHandler = ConfigurationHandler.config.getBoolean("NEI Mutations", ConfigurationHandler.CATEGORY_COMPATIBILITY, true, "set to false to disable seed mutations in NEI");
-            boolean enableProductHandler = ConfigurationHandler.config.getBoolean("NEI Products", ConfigurationHandler.CATEGORY_COMPATIBILITY, true, "set to false to disable seed products in NEI");
+            boolean enableMutationHandler = ConfigurationHandler.config.getBoolean("NEI Mutations", ConfigurationHandler.Categories.CATEGORY_COMPATIBILITY, true, "set to false to disable seed mutations in NEI");
+            boolean enableProductHandler = ConfigurationHandler.config.getBoolean("NEI Products", ConfigurationHandler.Categories.CATEGORY_COMPATIBILITY, true, "set to false to disable seed products in NEI");
             handlerStatuses.put("com.InfinityRaider.AgriCraft.compatibility.NEI.NEICropMutationHandler", enableMutationHandler);
             handlerStatuses.put("com.InfinityRaider.AgriCraft.compatibility.NEI.NEICropProductHandler", enableProductHandler);
         }
