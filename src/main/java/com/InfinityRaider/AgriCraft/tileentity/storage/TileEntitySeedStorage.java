@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable {
+public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable /*, ISidedInventory*/ {
     private Item lockedSeed;
     private int lockedSeedMeta;
     /** Slots stored in a HashMap to use with Container and with Controller */
@@ -72,6 +72,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         this.slots = new HashMap<Integer, SeedStorageSlot>();
+        this.slotsList = new ArrayList<SeedStorageSlot>();
         if (tag.hasKey(Names.NBT.seed)) {
             //read the locked seed
             ItemStack seedStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.NBT.seed));
@@ -118,9 +119,11 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     @Override
     public void addDebugInfo(List<String> list) {
         String info = this.lockedSeed==null?"null":this.getLockedSeed().getDisplayName();
-        int size = this.slots==null?0:this.slots.size();
+        int mapSize = this.slots==null?0:this.slots.size();
+        int listSize = this.slotsList==null?0:this.slotsList.size();
         list.add("Locked Seed: " + info);
-        list.add("Number of seeds: " + size);
+        list.add("Nr of map entries: " + mapSize);
+        list.add("Nr of list entries: " + listSize);
     }
 
     @Override
@@ -180,6 +183,15 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         return success;
     }
 
+    private int getFirstFreeSlot() {
+        for(int i=0;i<slots.size();i++) {
+            if(!slots.containsKey(i)) {
+                return i;
+            }
+        }
+        return slots.size();
+    }
+
     @Override
     public ItemStack getStackForSlotId(int slotId) {
         if(!this.hasLockedSeed()) {
@@ -201,12 +213,14 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                 slotAt.count = inputStack.stackSize;
                 if(slotAt.count<=0) {
                     slots.remove(realSlotId);
+                    slotsList.remove(slotAt);
                 }
             }
             else {
                 slotAt = new SeedStorageSlot(inputStack.getTagCompound(), inputStack.stackSize, realSlotId, this.getControllableID());
                 if(slotAt.count>0) {
                     this.slots.put(realSlotId, slotAt);
+                    this.slotsList.add(slotAt);
                 }
             }
             if(!this.worldObj.isRemote) {
@@ -244,6 +258,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                     stackInSlot.stackSize = Math.min(amount, slotAt.count);
                     if (slotAt.count <= amount) {
                         this.slots.remove(realSlotId);
+                        this.slotsList.remove(slotAt);
                         slotAt.count = 0;
                     } else {
                         slotAt.count = slotAt.count - amount;
@@ -254,15 +269,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             return stackInSlot;
         }
         return null;
-    }
-
-    public int getFirstFreeSlot() {
-        for(int i=0;i<slots.size();i++) {
-            if(!slots.containsKey(i)) {
-                return i;
-            }
-        }
-        return slots.size();
     }
 
     @Override
@@ -280,11 +286,14 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public List<SeedStorageSlot> getSlots(Item seed, int meta) {
+        /*
         ArrayList<SeedStorageSlot> list = new ArrayList<SeedStorageSlot>();
         if(this.lockedSeed!=null && this.lockedSeed==seed && this.lockedSeedMeta==meta) {
             list = new ArrayList<SeedStorageSlot>(slots.values());
         }
         return list;
+        */
+        return slotsList;
     }
 
     @Override
@@ -347,6 +356,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     //INVENTORY METHODS
     //-----------------
+    //TODO: Fix these methods to work with slot ID's from the ArrayList and then forward them to the ISeedStorageControllable methods with the correct ID's
     /*
     @Override
     public int getSizeInventory() {

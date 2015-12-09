@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerSeedStorage extends ContainerSeedStorageBase {
@@ -27,8 +26,7 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase {
     @Override
     @SuppressWarnings("unchecked")
     public List<ItemStack> getSeedEntries() {
-        ArrayList<ItemStack> list = this.te.getInventory();
-        return list;
+        return this.te.getInventory();
     }
 
     @Override
