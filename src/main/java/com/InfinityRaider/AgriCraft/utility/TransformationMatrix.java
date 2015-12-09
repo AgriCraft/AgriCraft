@@ -15,7 +15,7 @@ public class TransformationMatrix {
         }
     }
 
-    /** TransformationMatrix for a rotation */
+    /** TransformationMatrix for a rotation (http://xkcd.com/184/)*/
     public TransformationMatrix(double angle, double x, double y, double z) {
         matrix = new double[SIZE][SIZE];
         setRotation(angle, x, y, z);
