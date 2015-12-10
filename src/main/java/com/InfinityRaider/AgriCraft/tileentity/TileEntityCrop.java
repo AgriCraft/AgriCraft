@@ -85,6 +85,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public void setCrossCrop(boolean status) {
         if(status!=this.crossCrop) {
             this.crossCrop = status;
+            if(!worldObj.isRemote) {
+                worldObj.playSoundEffect((double)((float) xCoord + 0.5F), (double)((float) yCoord + 0.5F), (double)((float) zCoord + 0.5F), net.minecraft.init.Blocks.planks.stepSound.func_150496_b(), (net.minecraft.init.Blocks.leaves.stepSound.getVolume() + 1.0F) / 2.0F, net.minecraft.init.Blocks.leaves.stepSound.getPitch() * 0.8F);
+
+            }
             this.markForUpdate();
         }
     }

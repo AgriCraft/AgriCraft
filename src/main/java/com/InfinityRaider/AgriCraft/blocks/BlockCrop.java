@@ -182,7 +182,6 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
             if(!crop.hasWeed() && !crop.isCrossCrop() && !crop.hasPlant()) {
                 crop.setCrossCrop(true);
                 player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode?player.getCurrentEquippedItem().stackSize:player.getCurrentEquippedItem().stackSize - 1;
-                crop.markForUpdate();
             }
             else {
                 this.harvest(world, x, y, z, player, crop);
