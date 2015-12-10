@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
+import com.InfinityRaider.AgriCraft.utility.LeverHelper;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -129,7 +129,7 @@ public class RenderValve extends RenderChannel {
 		}
 		if (neighbour != null) {
 			int cm = channel.colorMultiplier();
-			if (neighbour instanceof BlockLever && RenderHelper.isLeverFacingBlock(channel.getWorldObj().getBlockMetadata(channel.xCoord + direction.offsetX, channel.yCoord, channel.zCoord + direction.offsetZ), direction)) {
+			if (neighbour instanceof BlockLever && LeverHelper.isLeverFacingBlock(channel.getWorldObj().getBlockMetadata(channel.xCoord + direction.offsetX, channel.yCoord, channel.zCoord + direction.offsetZ), direction)) {
 				IIcon icon = channel.getIcon();
 				drawScaledPrism(tessellator, 5, 4, 0, 11, 12, 4, icon, cm, direction);
 			} else if (Loader.isModLoaded(Names.Mods.mcMultipart) && ForgeMultiPartHelper.isMultiPart(neighbour)) {

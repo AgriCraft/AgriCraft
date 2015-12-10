@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -275,7 +274,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
      * </p>
      */
     protected void drawScaledPrism(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, int colorMultiplier, ForgeDirection direction) {
-        float adj[] = RenderHelper.rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
+        float adj[] = rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
         drawScaledPrism(tessellator, adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], icon, colorMultiplier);
     }
     
@@ -407,7 +406,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
     }
     
 	protected void drawPlane(Tessellator tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, IIcon icon, ForgeDirection direction) {
-		float[] rot = RenderHelper.rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
+		float[] rot = rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
 		drawPlane(tessellator, rot[0], rot[1], rot[2], rot[3], rot[4], rot[5], icon);
 	}
 
@@ -418,6 +417,70 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 		addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, minZ, icon);
 		addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, maxZ, icon);
 	}
+
+    /**
+     * Rotates a plane. This is impressively useful, but may not be impressively efficient.
+     * Always returns a 6-element array. Defaults to the north direction (the base direction).
+     * <p>
+     * This is for use up to the point that a way to rotate lower down is found. (IE. OpenGL).
+     * </p>
+     *
+     * TODO: Test up/down rotations more thoroughly.
+     */
+    public float[] rotatePrism(float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ForgeDirection direction) {
+        float adj[] = new float[6];
+
+        switch (direction) {
+            default:
+            case NORTH:
+                adj[0] = minX; //-x
+                adj[1] = minY; //-y
+                adj[2] = minZ; //-z
+                adj[3] = maxX; //+x
+                adj[4] = maxY; //+y
+                adj[5] = maxZ; //+z
+                break;
+            case EAST:
+                adj[0] = Constants.WHOLE - maxZ; //-x
+                adj[1] = minY; //-y
+                adj[2] = minX; //-z
+                adj[3] = Constants.WHOLE - minZ; //+x
+                adj[4] = maxY; //+y
+                adj[5] = maxX; //+z
+                break;
+            case SOUTH:
+                adj[0] = minX; //-x
+                adj[1] = minY; //-y
+                adj[2] = Constants.WHOLE - maxZ; //-z
+                adj[3] = maxX; //+x
+                adj[4] = maxY; //+y
+                adj[5] = Constants.WHOLE - minZ; //+z
+                break;
+            case WEST:
+                adj[0] = minZ; //-x
+                adj[1] = minY; //-y
+                adj[2] = minX; //-z
+                adj[3] = maxZ; //+x
+                adj[4] = maxY; //+y
+                adj[5] = maxX; //+z
+                break;
+            case UP:
+                adj[0] = minX; //-x
+                adj[1] = Constants.WHOLE - maxZ; //-y
+                adj[2] = minY; //-z
+                adj[3] = maxX; //+x
+                adj[4] = Constants.WHOLE - minZ; //+y
+                adj[5] = maxY; //+z
+            case DOWN:
+                adj[0] = minX; //-x
+                adj[1] = minZ; //-y
+                adj[2] = minY; //-z
+                adj[3] = maxX; //+x
+                adj[4] = maxZ; //+y
+                adj[5] = maxY; //+z
+        }
+        return adj;
+    }
 
 
     /**

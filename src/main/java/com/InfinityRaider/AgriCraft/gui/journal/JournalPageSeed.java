@@ -8,7 +8,6 @@ import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.gui.Component;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -328,13 +327,30 @@ public class JournalPageSeed extends JournalPage {
         BlockWithMeta soil = GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage()).getSoil();
         ResourceLocation texture;
         if (soil != null) {
-            texture = RenderHelper.getBlockResource(soil.getBlock().getIcon(1, soil.getMeta()));
+            texture = getBlockResource(soil.getBlock().getIcon(1, soil.getMeta()));
         } else {
-            texture = RenderHelper.getBlockResource(Blocks.farmland.getIcon(1, 7));
+            texture = getBlockResource(Blocks.farmland.getIcon(1, 7));
         }
         int x = 26;
         int y = 11;
         return new Component<ResourceLocation>(texture, x, y, 16, 16);
+    }
+
+    /**
+     * Retrieves a resource location from a <em>block</em> icon.
+     *
+     * @param icon the icon to get the resource location from.
+     * @return the resource location for the icon, or null.
+     */
+    //TODO: get rid of this method and do it the legit way
+    private ResourceLocation getBlockResource(IIcon icon) {
+        if(icon==null) {
+            return null;
+        }
+        String path = icon.getIconName();
+        String domain = path.substring(0, path.indexOf(":") + 1);
+        String file = path.substring(path.indexOf(':') + 1);
+        return new ResourceLocation(domain + "textures/blocks/" + file + ".png");
     }
 
     private ArrayList<Component<ResourceLocation>> getBrightnessTextures() {

@@ -286,13 +286,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public List<SeedStorageSlot> getSlots(Item seed, int meta) {
-        /*
-        ArrayList<SeedStorageSlot> list = new ArrayList<SeedStorageSlot>();
-        if(this.lockedSeed!=null && this.lockedSeed==seed && this.lockedSeedMeta==meta) {
-            list = new ArrayList<SeedStorageSlot>(slots.values());
-        }
-        return list;
-        */
         return slotsList;
     }
 

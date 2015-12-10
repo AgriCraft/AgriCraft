@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.container.ContainerPeripheral;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -123,7 +122,7 @@ public class GuiPeripheral extends GuiContainer {
             this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_description.peripheralHelp") + ": " + method.signature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
             float scale = 0.9F;
             GL11.glScalef(scale, scale, scale);
-            String[] write = IOHelper.getLinesArrayFromData(RenderHelper.splitInLines(this.fontRendererObj, method.getDescription(), 230, scale));
+            String[] write = IOHelper.getLinesArrayFromData(IOHelper.splitInLines(this.fontRendererObj, method.getDescription(), 230, scale));
             int x = 4+this.guiLeft+7;
             int y = this.guiTop+175+height;
             for (int i = 0; i < write.length; i++) {

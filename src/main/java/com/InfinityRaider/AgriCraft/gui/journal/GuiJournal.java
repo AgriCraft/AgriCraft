@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.gui.journal;
 import com.InfinityRaider.AgriCraft.gui.Component;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -172,7 +171,7 @@ public class GuiJournal extends GuiScreen {
             String text[] = IOHelper.getLinesArrayFromData(component.getComponent());
             GL11.glScalef(scale, scale, scale);
             for (String paragraph : text) {
-                String[] write = IOHelper.getLinesArrayFromData(RenderHelper.splitInLines(this.fontRendererObj, paragraph, 95, scale));
+                String[] write = IOHelper.getLinesArrayFromData(IOHelper.splitInLines(this.fontRendererObj, paragraph, 95, scale));
                 for (int i = 0; i < write.length; i++) {
                     String line = write[i];
                     int xOffset = component.centered() ? -fontRendererObj.getStringWidth(line) / 2 : 0;

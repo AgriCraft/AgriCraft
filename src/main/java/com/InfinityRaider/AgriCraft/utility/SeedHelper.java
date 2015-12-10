@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.*;
 
+//TODO: clean this messy class up
 public abstract class SeedHelper {
     private static List<ItemStack> seedBlackList = new ArrayList<ItemStack>();
     private static HashMap<Item, Integer[]> spreadChances;

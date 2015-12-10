@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.utility.RenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -113,15 +112,15 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
 
         tessellator.startDrawingQuads();
             //front
-            RenderHelper.addScaledVertexWithUV(tessellator, scale * (-8), 0, 0, 16, 16);
-            RenderHelper.addScaledVertexWithUV(tessellator, scale * (8), 0, 0, 0, 16);
-            RenderHelper.addScaledVertexWithUV(tessellator, scale * (8), scale * 16, 0, 0, 0);
-            RenderHelper.addScaledVertexWithUV(tessellator, scale * (-8), scale * 16, 0, 16, 0);
+            addScaledVertexWithUV(tessellator, scale * (-8), 0, 0, 16, 16);
+            addScaledVertexWithUV(tessellator, scale * (8), 0, 0, 0, 16);
+            addScaledVertexWithUV(tessellator, scale * (8), scale * 16, 0, 0, 0);
+            addScaledVertexWithUV(tessellator, scale * (-8), scale * 16, 0, 16, 0);
             //back
-            RenderHelper.addScaledVertexWithUV(tessellator, scale*(-8), 0, 0, 16, 16);
-            RenderHelper.addScaledVertexWithUV(tessellator, scale*(-8), scale*16, 0, 16, 0);
-            RenderHelper.addScaledVertexWithUV(tessellator, scale * (8), scale * 16, 0, 0, 0);
-            RenderHelper.addScaledVertexWithUV(tessellator, scale * (8), 0, 0, 0, 16);
+            addScaledVertexWithUV(tessellator, scale*(-8), 0, 0, 16, 16);
+            addScaledVertexWithUV(tessellator, scale*(-8), scale*16, 0, 16, 0);
+            addScaledVertexWithUV(tessellator, scale * (8), scale * 16, 0, 0, 0);
+            addScaledVertexWithUV(tessellator, scale * (8), 0, 0, 0, 16);
         tessellator.draw();
 
         //rotate the coordinate system back after rendering this orb

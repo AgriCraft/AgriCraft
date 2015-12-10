@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -78,6 +79,39 @@ public abstract class IOHelper {
 		}
 		return defaultData;
 	}
+
+    /**
+     * Utility method: splits the string in different lines so it will fit on the page.
+     *
+     * @param fontRendererObj the font renderer to check against.
+     * @param input the line to split up.
+     * @param maxWidth the maximum allowable width of the line before being wrapped.
+     * @param scale the scale of the text to the width.
+     * @return the string split up into lines by the '\n' character.
+     */
+    public static String splitInLines(FontRenderer fontRendererObj, String input, float maxWidth, float scale) {
+        maxWidth = maxWidth / scale;
+        String notProcessed = input;
+        String output = "";
+        while (fontRendererObj.getStringWidth(notProcessed) > maxWidth) {
+            int index = 0;
+            if (notProcessed != null && !notProcessed.equals("")) {
+                //find the first index at which the string exceeds the size limit
+                while (notProcessed.length() - 1 > index && fontRendererObj.getStringWidth(notProcessed.substring(0, index)) < maxWidth) {
+                    index = (index + 1) < notProcessed.length() ? index + 1 : index;
+                }
+                //go back to the first space to cut the string in two lines
+                while (index>0 && notProcessed.charAt(index) != ' ') {
+                    index--;
+                }
+                //update the data for the next iteration
+                output = output.equals("") ? output : output + '\n';
+                output = output + notProcessed.substring(0, index);
+                notProcessed = notProcessed.length() > index + 1 ? notProcessed.substring(index + 1) : notProcessed;
+            }
+        }
+        return output + '\n' + notProcessed;
+    }
 
     //get the mutations file contents
 	//This should probably be a loop...
@@ -558,5 +592,4 @@ public abstract class IOHelper {
 
     private static final String osmiumMutation =
             "AgriCraft:seedOsmonium=AgriCraft:seedFerranium+AgriCraft:seedOrchid";
-
 }
