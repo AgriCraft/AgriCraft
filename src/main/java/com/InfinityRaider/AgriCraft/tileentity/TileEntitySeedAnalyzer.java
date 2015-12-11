@@ -340,11 +340,13 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
             } else {
                 output = this.specimen.copy();
                 this.specimen = null;
+                this.markForUpdate();
             }
         }
         else if(slot == 1 && this.journal != null) {
             output = this.journal.copy();
             this.journal = null;
+            this.markForUpdate();
         }
         this.progress = 0;
         return output;
@@ -380,6 +382,7 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         else if(slot == 1) {
             this.journal = stack;
         }
+        this.markForUpdate();
     }
 
     //returns the unlocalized inventory name
