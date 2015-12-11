@@ -49,7 +49,6 @@ public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
             }
         }
         player.getCurrentEquippedItem().damageItem(1, player);
-        crop.markForUpdate();
         return false;
     }
 }

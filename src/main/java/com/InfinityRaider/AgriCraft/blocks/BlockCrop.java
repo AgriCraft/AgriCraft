@@ -156,7 +156,6 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                     }
                     this.dropBlockAsItem(world, x, y, z, drop);
                 }
-                crop.markForUpdate();
                 return true;
             }
         }
@@ -218,7 +217,6 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                 //NBT data was not initialized: set defaults
                 crop.setPlant(Constants.DEFAULT_GROWTH, Constants.DEFAULT_GAIN, Constants.DEFAULT_STRENGTH, false, stack.getItem(), stack.getItemDamage());
             }
-            crop.markForUpdate();
             return true;
         }
         return false;
@@ -418,7 +416,6 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                 l = Constants.MATURE;
             }
             world.setBlockMetadataWithNotify(x, y, z, l, 2);
-            crop.markForUpdate();
         }
         else if(crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
             crop.crossOver();
@@ -491,7 +488,6 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                 }
                 drops.add(stack);
             }
-            crop.markForUpdate();
         }
         return drops;
     }

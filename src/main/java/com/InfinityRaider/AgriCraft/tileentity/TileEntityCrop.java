@@ -28,6 +28,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
@@ -89,7 +91,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
             this.crossCrop = status;
             if(!worldObj.isRemote) {
                 worldObj.playSoundEffect((double)((float) xCoord + 0.5F), (double)((float) yCoord + 0.5F), (double)((float) zCoord + 0.5F), net.minecraft.init.Blocks.planks.stepSound.func_150496_b(), (net.minecraft.init.Blocks.leaves.stepSound.getVolume() + 1.0F) / 2.0F, net.minecraft.init.Blocks.leaves.stepSound.getPitch() * 0.8F);
-
             }
             this.markForUpdate();
         }
@@ -115,12 +116,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
                 this.plant = plant;
                 this.stats = new PlantStats(growth, gain, strength, analyzed);
                 this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
-                this.markForUpdate();
                 plant.onSeedPlanted(worldObj, xCoord, yCoord, zCoord);
                 IAdditionalCropData data = plant.getInitialCropData(worldObj, xCoord, yCoord, zCoord, this);
                 if(data != null) {
                     this.data = data;
                 }
+                this.markForUpdate();
             }
         }
     }
@@ -212,9 +213,8 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     @Override
     public void spawnWeed() {
         this.crossCrop=false;
-        this.clearPlant();
         this.weed=true;
-        this.markForUpdate();
+        this.clearPlant();
     }
 
     /** spread the weed */
@@ -237,7 +237,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
                 this.weed = false;
             }
             this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, growthStage, 3);
-            this.markForUpdate();
         }
     }
 
@@ -261,7 +260,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
             if(!trowel.hasSeed(trowelStack)) {
                 trowel.setSeed(trowelStack, this.getSeedStack(), worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
                 this.clearPlant();
-                this.markForUpdate();
             }
         } else if(!this.hasWeed() && !this.crossCrop){
             if(trowel.hasSeed(trowelStack)) {
@@ -274,7 +272,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
                 boolean analysed = tag.getBoolean(Names.NBT.analyzed);
                 this.setPlant(growth, gain, strength, analysed, seed.getItem(), seed.getItemDamage());
                 this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, growthStage, 3);
-                this.markForUpdate();
                 trowel.clearSeed(trowelStack);
             }
         }
@@ -303,7 +300,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         }
         if(this.hasPlant() || this.hasWeed()) {
             ((BlockCrop) Blocks.blockCrop).func_149853_b(this.worldObj, rand, this.xCoord, this.yCoord, this.zCoord);
-            this.markForUpdate();
         }
         else if(this.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
             this.crossOver();
@@ -395,7 +391,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
             worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, flag);
             AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
         }
-
     }
 
     /** the code that makes the crop cross with neighboring crops */
@@ -405,7 +400,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public void applyCrossOverResult(CrossOverResult result) {
         crossCrop = false;
         setPlant(result.getGrowth(), result.getGain(), result.getStrength(), false, result.getSeed(), result.getMeta());
-        markForUpdate();
     }
 
     /**

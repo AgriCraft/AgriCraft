@@ -324,7 +324,6 @@ public class APIimplv1 implements APIv1 {
 			if(!crop.hasWeed() && !crop.isCrossCrop() && !crop.hasPlant()) {
 				crop.setCrossCrop(true);
 				crops.stackSize--;
-				crop.markForUpdate();
 				return true;
 			}
 		}
@@ -341,7 +340,6 @@ public class APIimplv1 implements APIv1 {
 			TileEntityCrop crop = (TileEntityCrop) te;
 			if(crop.isCrossCrop()) {
 				crop.setCrossCrop(false);
-				crop.markForUpdate();
 				return new ItemStack(Items.crops, 1);
 			}
 		}
@@ -388,7 +386,6 @@ public class APIimplv1 implements APIv1 {
 					} else {
 						crop.setPlant(Constants.DEFAULT_GROWTH, Constants.DEFAULT_GAIN, Constants.DEFAULT_STRENGTH, false, seed.getItem(), seed.getItemDamage());
 					}
-					crop.markForUpdate();
 					seed.stackSize--;
 					return true;
 				}
