@@ -7,7 +7,7 @@ import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -48,7 +48,7 @@ public class NEICropMutationHandler extends AgriCraftNEIHandler {
             this.parent2 = new PositionedStack(parent2Stack, Constants.nei_X_parent2, Constants.nei_Y_seeds);
             this.result = new PositionedStack(resultStack, Constants.nei_X_result, Constants.nei_Y_seeds);
 
-            IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(result.item.getItem(), result.item.getItemDamage());
+            IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(result.item.getItem(), result.item.getItemDamage());
             if (growthReq.getSoil() != null) {
                 soils.add(new PositionedStack(growthReq.getSoil().toStack(), Constants.nei_X_result, Constants.nei_Y_soil));
             } else {
@@ -148,7 +148,7 @@ public class NEICropMutationHandler extends AgriCraftNEIHandler {
             BlockWithMeta block = new BlockWithMeta(((ItemBlock) ingredient.getItem()).field_150939_a, ingredient.getItemDamage());
             Mutation[] mutations = MutationHandler.getMutations();
             for(Mutation mutation:mutations) {
-                IGrowthRequirement req = GrowthRequirementHandler.getGrowthRequirement(mutation.getResult().getItem(), mutation.getResult().getItemDamage());
+                IGrowthRequirement req = CropPlantHandler.getGrowthRequirement(mutation.getResult().getItem(), mutation.getResult().getItemDamage());
                 if(req.isValidSoil(block)) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));
                     continue;

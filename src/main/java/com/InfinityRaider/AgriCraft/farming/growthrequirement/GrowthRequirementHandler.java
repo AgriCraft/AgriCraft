@@ -1,16 +1,12 @@
-package com.InfinityRaider.AgriCraft.farming;
+package com.InfinityRaider.AgriCraft.farming.growthrequirement;
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v2.IGrowthRequirementBuilder;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -22,23 +18,20 @@ import java.util.*;
  * Also holds all GrowthRequirements.
  */
 public class GrowthRequirementHandler {
+    public static final IGrowthRequirement NULL = new GrowthRequirementNull();
+    public static IGrowthRequirementBuilder getNewBuilder() {return new GrowthRequirementHandler.Builder();}
 
-    private static Map<ItemWithMeta, IGrowthRequirement> growthRequirements = new HashMap<ItemWithMeta, IGrowthRequirement>();
-
-    // Package private so GrowthRequirement can access it
+    /**
+     * This list contains soils which pose as a default soil, meaning any CropPlant which doesn't require a specific soil will be able to grown on these
+     * This list can be modified with MineTweaker
+     */
     public static List<BlockWithMeta> defaultSoils = new ArrayList<BlockWithMeta>();
-    static List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
 
-    public static void registerGrowthRequirement(ItemWithMeta item, IGrowthRequirement requirement) throws InvalidSeedException {
-        if(!CropPlantHandler.isValidSeed(item.toStack())) {
-            throw new InvalidSeedException();
-        }
-        growthRequirements.put(item, requirement);
-        BlockWithMeta soil = requirement.getSoil();
-        if(soil != null) {
-            GrowthRequirementHandler.addSoil(soil);
-        }
-    }
+    /**
+     * This list contains soils needed for certain CropPlants
+     * This list cannot be modified externally
+     */
+    static List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
 
     //Methods for fertile soils
     //-------------------------
@@ -56,33 +49,11 @@ public class GrowthRequirementHandler {
 
     public static void init() {
         registerSoils();
-        initGrowthReqs();
-        registerOverrides();
         registerCustomEntries();
     }
 
     private static void registerSoils() {
         addDefaultSoil(new BlockWithMeta(Blocks.farmland));
-    }
-
-    private static void initGrowthReqs() {
-        //Set these crops to need darkness instead of light
-        ArrayList<IGrowthRequirement> darkCrops = new ArrayList<IGrowthRequirement>();
-        darkCrops.add(getGrowthRequirement((Item) Item.itemRegistry.getObject("AgriCraft:seedShroomRed"), 0));
-        darkCrops.add(getGrowthRequirement((Item) Item.itemRegistry.getObject("AgriCraft:seedShroomBrown"), 0));
-        if(ConfigurationHandler.resourcePlants) {
-            darkCrops.add(getGrowthRequirement((Item) Item.itemRegistry.getObject("AgriCraft:seedNitorWart"), 0));
-        }
-        darkCrops.add(getGrowthRequirement(Items.nether_wart, 0));
-        for(IGrowthRequirement req:darkCrops) {
-            req.setBrightnessRange(0, 8);
-        }
-    }
-
-    private static void registerOverrides() {
-        //adds a growth requirement for nether wart
-        GrowthRequirement netherWartReq = new GrowthRequirement.Builder().soil(new BlockWithMeta(Blocks.soul_sand)).brightnessRange(0,8).build();
-        growthRequirements.put(new ItemWithMeta(Items.nether_wart, 0), netherWartReq);
     }
 
     private static void registerCustomEntries() {
@@ -118,34 +89,6 @@ public class GrowthRequirementHandler {
         defaultSoils.removeAll(list);
     }
 
-    /**
-     * @return growthRequirement of the given seed.
-     */
-    public static IGrowthRequirement getGrowthRequirement(Item seed, int meta) {
-        
-    	if(seed == null) {
-            return null;
-        }
-        
-        if (seed instanceof IAgriCraftSeed) {
-            return ((IAgriCraftSeed) seed).getPlant().getGrowthRequirement();
-        }
-        
-        IGrowthRequirement growthRequirement = growthRequirements.get(new ItemWithMeta(seed, meta));
-        
-        if (growthRequirement == null) {
-            growthRequirement = new GrowthRequirement.Builder().build();
-            growthRequirements.put(new ItemWithMeta(seed, meta), growthRequirement);
-        }
-        
-        return growthRequirement;
-    }
-
-    public static IGrowthRequirement getGrowthRequirement(CropPlant plant) {
-        ItemStack seed = plant.getSeed();
-        return getGrowthRequirement(seed.getItem(), seed.getItemDamage());
-    }
-
     public static void addSoil(BlockWithMeta block) {
         if (!soils.contains(block)) {
             soils.add(block);
@@ -160,4 +103,43 @@ public class GrowthRequirementHandler {
         return false;
     }
 
+    //Builder class
+    //-------------
+    private static class Builder implements IGrowthRequirementBuilder {
+
+        private final GrowthRequirement growthRequirement;
+
+        public Builder() {
+            this.growthRequirement = new GrowthRequirement();
+        }
+
+        /** Adds a required block to this GrowthRequirement instance */
+        @Override
+        public Builder requiredBlock(BlockWithMeta requiredBlock, RequirementType requiredType, boolean oreDict) {
+            if (requiredBlock == null || requiredType == RequirementType.NONE) {
+                throw new IllegalArgumentException("Required block must be not null and required type must be other than NONE.");
+            }
+            growthRequirement.setRequiredBlock(requiredBlock, requiredType, oreDict);
+            return this;
+        }
+
+        /** Sets the required soil */
+        @Override
+        public Builder soil(BlockWithMeta block) {
+            growthRequirement.setSoil(block);
+            addSoil(block);
+            return this;
+        }
+
+        @Override
+        public Builder brightnessRange(int min, int max) {
+            this.growthRequirement.setBrightnessRange(Math.max(0, min), Math.min(16, max));
+            return this;
+        }
+
+        @Override
+        public IGrowthRequirement build() {
+            return growthRequirement;
+        }
+    }
 }

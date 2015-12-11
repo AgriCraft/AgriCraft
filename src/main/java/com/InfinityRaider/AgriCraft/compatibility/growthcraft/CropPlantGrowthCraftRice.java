@@ -1,7 +1,10 @@
 package com.InfinityRaider.AgriCraft.compatibility.growthcraft;
 
+import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -72,13 +75,13 @@ public class CropPlantGrowthCraftRice extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
-        return true;
+    protected IGrowthRequirement initGrowthRequirement() {
+        return GrowthRequirementHandler.getNewBuilder().soil(new BlockWithMeta(Blocks.blockWaterPadFull)).build();
     }
 
     @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement(rice, 0).canGrow(world, x, y, z);
+    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+        return true;
     }
 
     @Override

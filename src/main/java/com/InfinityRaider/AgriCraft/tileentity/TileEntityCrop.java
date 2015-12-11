@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.InfinityRaider.AgriCraft.api.v2.IAdditionalCropData;
 import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v2.ITrowel;
 import com.InfinityRaider.AgriCraft.api.v2.ICrop;
@@ -43,6 +44,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     private boolean crossCrop=false;
     private boolean weed=false;
     private CropPlant plant;
+    private IAdditionalCropData data;
 
     private final MutationEngine mutationEngine;
 
@@ -115,6 +117,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
                 this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
                 this.markForUpdate();
                 plant.onSeedPlanted(worldObj, xCoord, yCoord, zCoord);
+                IAdditionalCropData data = plant.getInitialCropData(worldObj, xCoord, yCoord, zCoord, this);
+                if(data != null) {
+                    this.data = data;
+                }
             }
         }
     }
@@ -137,12 +143,13 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         if (oldPlant != null) {
             oldPlant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord);
         }
+        this.data = null;
     }
 
     /** check if the crop is fertile */
     @Override
     public boolean isFertile() {
-        return this.weed || worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.isFertile(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        return this.weed || worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.getGrowthRequirement().canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
     }
 
     /** gets the height of the crop */
@@ -313,6 +320,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         return this;
     }
 
+    @Override
+    public IAdditionalCropData getAdditionalCropData() {
+        return this.data;
+    }
+
     //TileEntity is just to store data on the crop
     @Override
     public boolean canUpdate() {
@@ -326,8 +338,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         stats.writeToNBT(tag);
         tag.setBoolean(Names.NBT.crossCrop,crossCrop);
         tag.setBoolean(Names.NBT.weed, weed);
-        if(this.plant!=null) {
+        if(this.plant != null) {
             tag.setTag(Names.NBT.seed, CropPlantHandler.writePlantToNBT(plant));
+            if(this.data != null) {
+                tag.setTag(Names.NBT.inventory, data.writeToNBT());
+            }
         }
     }
 
@@ -347,6 +362,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         }
         else {
             this.plant=null;
+        }
+        if(tag.hasKey(Names.NBT.inventory) && this.plant != null) {
+            IAdditionalCropData data = plant.readCropDataFromNBT(tag.getCompoundTag(Names.NBT.inventory));
         }
     }
 

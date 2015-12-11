@@ -1,7 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.biomesoplenty;
 
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -73,13 +74,13 @@ public class CropPlantBiomesOPlenty extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
-        return true;
+    protected IGrowthRequirement initGrowthRequirement() {
+        return GrowthRequirementHandler.getNewBuilder().build();
     }
 
     @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement(seed, 0).canGrow(world, x, y, z);
+    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+        return true;
     }
 
     @Override

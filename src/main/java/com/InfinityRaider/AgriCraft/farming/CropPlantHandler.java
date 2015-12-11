@@ -1,8 +1,10 @@
 package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.cropplant.*;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
@@ -86,6 +88,7 @@ public class CropPlantHandler {
     private static void suppressedRegisterPlant(CropPlant plant) {
     	try {
     		registerPlant(plant);
+            GrowthRequirementHandler.addSoil(plant.getGrowthRequirement().getSoil());
     	} catch (DuplicateCropPlantException e) {
     		LogHelper.debug("Unable to register duplicate plant: " + plant.getSeed().getUnlocalizedName());
     		LogHelper.printStackTrace(e);
@@ -174,6 +177,18 @@ public class CropPlantHandler {
         else {
         	return null; //The plant was invalid.
         }
+    }
+    public static IGrowthRequirement getGrowthRequirement(Item seed, int meta) {
+        CropPlant plant = cropPlants.get(seed).get(meta);
+        return plant==null? GrowthRequirementHandler.NULL:plant.getGrowthRequirement();
+
+    }
+
+    public static IGrowthRequirement getGrowthRequirement(ItemStack stack) {
+        if(stack==null || stack.getItem()==null) {
+            return GrowthRequirementHandler.NULL;
+        }
+        return getGrowthRequirement(stack.getItem(), stack.getItemDamage());
     }
 
     /**

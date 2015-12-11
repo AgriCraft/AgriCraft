@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.psychedelicraft;
 
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantTallGeneric;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
@@ -24,6 +26,11 @@ public class CropPlantPsychedeliCraft extends CropPlantTallGeneric {
     @Override
     public int maxMetaBottomBlock() {
         return 3;
+    }
+
+    @Override
+    protected IGrowthRequirement initGrowthRequirement() {
+        return GrowthRequirementHandler.getNewBuilder().build();
     }
 
     @Override

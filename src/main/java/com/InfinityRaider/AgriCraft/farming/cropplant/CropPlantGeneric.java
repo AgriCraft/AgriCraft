@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
@@ -11,7 +12,6 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import sun.security.krb5.Config;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -81,13 +81,13 @@ public abstract class CropPlantGeneric extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
-        return true;
+    protected IGrowthRequirement initGrowthRequirement() {
+        return GrowthRequirementHandler.getNewBuilder().build();
     }
 
     @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement(seed, 0).canGrow(world, x, y, z);
+    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+        return true;
     }
 
     @Override

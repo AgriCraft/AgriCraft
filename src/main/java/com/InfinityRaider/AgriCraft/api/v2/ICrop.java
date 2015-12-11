@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.api.v2;
 
-import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -159,4 +158,9 @@ public interface ICrop {
      * @return the TileEntity implementing ICrop
      */
     TileEntity getTileEntity();
+
+    /**
+     * @return Any additional data this crop might hold
+     */
+    IAdditionalCropData getAdditionalCropData();
 }

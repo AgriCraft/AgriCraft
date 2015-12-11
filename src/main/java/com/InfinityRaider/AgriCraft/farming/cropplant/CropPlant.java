@@ -1,7 +1,11 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
-import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v2.IAdditionalCropData;
+import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+import com.InfinityRaider.AgriCraft.api.v2.ICropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
@@ -11,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -24,6 +29,8 @@ import java.util.Random;
  * ICropPlant is implemented to be able to read data from this class from the API
  */
 public abstract class CropPlant implements ICropPlant {
+    private IGrowthRequirement growthRequirement;
+
     public final int getGrowthRate() {
     	int tier = getTier();
     	
@@ -155,6 +162,26 @@ public abstract class CropPlant implements ICropPlant {
     @Override
     public abstract boolean canBonemeal();
 
+    @Override
+    public IAdditionalCropData getInitialCropData(World world, int x, int y, int z, ICrop crop) {
+        return null;
+    }
+
+    public IAdditionalCropData readCropDataFromNBT(NBTTagCompound tag) {
+        return null;
+    }
+
+    @Override
+    public final IGrowthRequirement getGrowthRequirement() {
+        if(growthRequirement == null) {
+            growthRequirement = this.initGrowthRequirement();
+            growthRequirement = growthRequirement == null ? GrowthRequirementHandler.getNewBuilder().build() : growthRequirement;
+        }
+        return growthRequirement;
+    }
+
+    protected abstract IGrowthRequirement initGrowthRequirement();
+
     /**
      * Attempts to apply a growth tick to the plant, if allowed.
      * Should return true to re-render the crop clientside.
@@ -179,7 +206,9 @@ public abstract class CropPlant implements ICropPlant {
      * @return if the growth location for the plant is fertile.
      */
     @Override
-    public abstract boolean isFertile(World world, int x, int y, int z);
+    public final boolean isFertile(World world, int x, int y, int z) {
+        return getGrowthRequirement().canGrow(world, x, y, z);
+    }
 
     /**
      * Determines if the plant is mature. That is, the plant's metadata matches {@link Constants#MATURE}.

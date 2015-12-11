@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -59,13 +60,13 @@ public class CropPlantAgriCraft extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
-        return false;
+    protected IGrowthRequirement initGrowthRequirement() {
+        return plant.getGrowthRequirement();
     }
 
     @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return plant.getGrowthRequirement().canGrow(world, x, y, z);
+    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+        return false;
     }
 
     @Override

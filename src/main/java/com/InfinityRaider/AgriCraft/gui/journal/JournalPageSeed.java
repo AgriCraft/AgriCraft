@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.gui.journal;
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.gui.Component;
@@ -324,7 +323,7 @@ public class JournalPageSeed extends JournalPage {
 
     private Component<ResourceLocation> getSoil() {
         ItemStack seed = plant.getSeed();
-        BlockWithMeta soil = GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage()).getSoil();
+        BlockWithMeta soil = CropPlantHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage()).getSoil();
         ResourceLocation texture;
         if (soil != null) {
             texture = getBlockResource(soil.getBlock().getIcon(1, soil.getMeta()));
@@ -359,7 +358,7 @@ public class JournalPageSeed extends JournalPage {
         int y = 81;
         int u = 4;
         int v = 8;
-        int[] brightnessRange = GrowthRequirementHandler.getGrowthRequirement(plant).getBrightnessRange();
+        int[] brightnessRange = plant.getGrowthRequirement().getBrightnessRange();
         textures.add(new Component<ResourceLocation>(BRIGHTNESS_BAR, x, y, 2+16*u, v));
         textures.add(new Component<ResourceLocation>(BRIGHTNESS_FRAME, x+u*brightnessRange[0], y, 1, v));
         textures.add(new Component<ResourceLocation>(BRIGHTNESS_FRAME, x+u*brightnessRange[1]+1, y, 1, v));

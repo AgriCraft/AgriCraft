@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.plantmegapack;
 
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantTallGeneric;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
@@ -27,6 +29,11 @@ public class CropPlantPMPDouble extends CropPlantTallGeneric {
     @Override
     public int maxMetaBottomBlock() {
         return 1;
+    }
+
+    @Override
+    protected IGrowthRequirement initGrowthRequirement() {
+        return GrowthRequirementHandler.getNewBuilder().build();
     }
 
     @Override

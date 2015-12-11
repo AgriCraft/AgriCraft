@@ -1,16 +1,19 @@
 package com.InfinityRaider.AgriCraft.apiimpl.v2;
 
 import com.InfinityRaider.AgriCraft.api.APIStatus;
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
+import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.api.v2.*;
+import com.InfinityRaider.AgriCraft.api.v2.ICropPlant;
+import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
 import com.InfinityRaider.AgriCraft.apiimpl.v1.APIimplv1;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
-import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAPIv2;
 import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculator;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -47,6 +50,25 @@ public class APIimplv2 extends APIimplv1 implements APIv2 {
         } else {
             return new PlantStats(-1, -1, -1);
         }
+    }
+
+    @Override
+    public void registerCropPlant(ICropPlant plant) {
+        CropPlantHandler.addCropToRegister(new CropPlantAPIv2(plant));
+    }
+
+    @Override
+    public ICropPlant getCropPlant(ItemStack seed) {
+        return CropPlantHandler.getPlantFromStack(seed);
+    }
+
+    @Override
+    public ICropPlant getCropPlant(World world, int x, int y, int z) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if(te==null || !(te instanceof TileEntityCrop)) {
+            return null;
+        }
+        return ((TileEntityCrop) te).getPlant();
     }
 
     @Override
@@ -88,7 +110,12 @@ public class APIimplv2 extends APIimplv1 implements APIv2 {
 
     @Override
     public IGrowthRequirementBuilder createGrowthRequirementBuilder() {
-        return new GrowthRequirement.Builder();
+        return GrowthRequirementHandler.getNewBuilder();
+    }
+
+    @Override
+    public IGrowthRequirement createDefaultGrowthRequirement() {
+        return GrowthRequirementHandler.getNewBuilder().build();
     }
 
     @Override

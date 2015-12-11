@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import net.minecraft.item.ItemStack;
 
 public class MethodGetBaseBlock extends MethodBaseGrowthReq {
@@ -15,7 +14,7 @@ public class MethodGetBaseBlock extends MethodBaseGrowthReq {
         if(plant==null) {
             return null;
         }
-        BlockWithMeta block = GrowthRequirementHandler.getGrowthRequirement(plant).getRequiredBlock();
+        BlockWithMeta block = plant.getGrowthRequirement().getRequiredBlock();
         String msg = block==null?"null":(new ItemStack(block.getBlock(), 1, block.getMeta())).getDisplayName();
         return new Object[] {msg};
     }

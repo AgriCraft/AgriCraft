@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 
 public class MethodGetBaseBlockType extends MethodBaseGrowthReq {
     public MethodGetBaseBlockType() {
@@ -13,6 +12,6 @@ public class MethodGetBaseBlockType extends MethodBaseGrowthReq {
         if(plant==null) {
             return null;
         }
-        return new Object[] {GrowthRequirementHandler.getGrowthRequirement(plant).getRequiredType().name()};
+        return new Object[] {plant.getGrowthRequirement().getRequiredType().name()};
     }
 }

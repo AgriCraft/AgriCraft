@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.resourcefulcrops;
 
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,7 +48,7 @@ public class ResourcefulCropsAPIwrapper {
     }
 
     protected IGrowthRequirement getGrowthRequirement(int meta) {
-        return new GrowthRequirement.Builder().build();
+        return GrowthRequirementHandler.NULL;
     }
 
     @SideOnly(Side.CLIENT)

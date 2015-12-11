@@ -4,8 +4,6 @@ import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.ISoilContainer;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
-import com.InfinityRaider.AgriCraft.api.v2.IGrowthRequirementBuilder;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -19,6 +17,8 @@ import java.util.List;
  * Uses the Builder class inside to construct instances.
  */
 public class GrowthRequirement implements IGrowthRequirement{
+    GrowthRequirement() {}
+
     public static final int NEARBY_DEFAULT_RANGE = 4;
 
     //brightness
@@ -165,7 +165,6 @@ public class GrowthRequirement implements IGrowthRequirement{
     @Override
     public void setSoil(BlockWithMeta soil) {
         this.soil = soil;
-        GrowthRequirementHandler.addSoil(soil);
     }
 
     @Override
@@ -194,48 +193,4 @@ public class GrowthRequirement implements IGrowthRequirement{
         return oreDict;
     }
 
-    //Builder class
-    //-------------
-    private GrowthRequirement() {}
-
-    public static class Builder implements IGrowthRequirementBuilder {
-
-        private final GrowthRequirement growthRequirement;
-
-        public Builder() {
-            this.growthRequirement = new GrowthRequirement();
-        }
-
-        /** Adds a required block to this GrowthRequirement instance */
-        @Override
-        public Builder requiredBlock(BlockWithMeta requiredBlock, RequirementType requiredType, boolean oreDict) {
-            if (requiredBlock == null || requiredType == RequirementType.NONE) {
-                throw new IllegalArgumentException("Required block must be not null and required type must be other than NONE.");
-            }
-            growthRequirement.requiredBlock = requiredBlock;
-            growthRequirement.requiredType = requiredType;
-            growthRequirement.oreDict = oreDict;
-            return this;
-        }
-
-        /** Sets the required soil */
-        @Override
-        public Builder soil(BlockWithMeta block) {
-            growthRequirement.soil = block;
-            GrowthRequirementHandler.addSoil(block);
-            return this;
-        }
-
-        @Override
-        public Builder brightnessRange(int min, int max) {
-            this.growthRequirement.minBrightness = Math.max(0, min);
-            this.growthRequirement.maxBrightness = Math.min(16, max);
-            return this;
-        }
-
-        @Override
-        public GrowthRequirement build() {
-            return growthRequirement;
-        }
-    }
 }

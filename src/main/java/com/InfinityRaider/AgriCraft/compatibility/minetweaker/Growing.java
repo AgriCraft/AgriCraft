@@ -4,7 +4,7 @@ import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.google.common.base.Joiner;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
@@ -202,9 +202,10 @@ public class Growing {
 
             @Override
             public void apply() {
-                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
+                IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(seed, meta);
                 oldSoil = growthReq.getSoil();
                 growthReq.setSoil(soil);
+                GrowthRequirementHandler.addSoil(soil);
             }
 
             @Override
@@ -214,7 +215,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
+                IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(seed, meta);
                 growthReq.setSoil(oldSoil);
             }
 
@@ -284,7 +285,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
+                IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(seed, meta);
                 old = growthReq.getBrightnessRange();
                 growthReq.setBrightnessRange(min, max);
             }
@@ -296,7 +297,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, meta);
+                IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(seed, meta);
                 growthReq.setBrightnessRange(old[0], old[1]);
             }
 
@@ -391,7 +392,7 @@ public class Growing {
 
             @Override
             public void apply() {
-                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta);
+                IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(seed, seedMeta);
                 oldReqBlock = growthReq.getRequiredBlock();
                 oldRequiredType = growthReq.getRequiredType();
                 oldReqBlockIsOreDict = growthReq.isOreDict();
@@ -405,7 +406,7 @@ public class Growing {
 
             @Override
             public void undo() {
-                IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(seed, seedMeta);
+                IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(seed, seedMeta);
                 growthReq.setRequiredBlock(oldReqBlock, oldRequiredType, oldReqBlockIsOreDict);
             }
 

@@ -8,7 +8,7 @@ import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
@@ -207,7 +207,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                 return false;
             }
             //the seed can be planted here
-            if (!GrowthRequirementHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y - 1, z)) {
+            if (!CropPlantHandler.getGrowthRequirement(stack).isValidSoil(world, x, y - 1, z)) {
                 return false;
             }
             //get NBT data from the seeds
@@ -256,7 +256,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                     this.harvest(world, x, y, z, player, crop);
                 } else if (!crop.isCrossCrop() && !crop.hasWeed()) {
                     CropPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack((ItemSeeds) Item.itemRegistry.getObject("AgriCraft:seedSugarcane")));
-                    if (sugarcane != null && sugarcane.isFertile(world, x, y, z)) {
+                    if (sugarcane != null && sugarcane.getGrowthRequirement().canGrow(world, x, y, z)) {
                         crop.setPlant(1, 1, 1, false, sugarcane);
                         if (!player.capabilities.isCreativeMode) {
                             heldItem.stackSize = heldItem.stackSize - 1;

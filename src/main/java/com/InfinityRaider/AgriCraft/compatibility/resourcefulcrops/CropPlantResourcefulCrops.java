@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.resourcefulcrops;
 
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
@@ -27,18 +27,20 @@ public class CropPlantResourcefulCrops extends CropPlant {
     private final int meta;
     private final int tier;
     private final ArrayList<ItemStack> fruits;
+    private final IGrowthRequirement growthRequirement;
 
     @SideOnly(Side.CLIENT)
     private static IIcon[] overlayIcons;
     private static boolean grabIcons = true;
 
-    protected CropPlantResourcefulCrops(int meta) {
+    protected CropPlantResourcefulCrops(int meta,  IGrowthRequirement requirement) {
         if(api==null) {
             api = ResourcefulCropsAPIwrapper.getInstance();
         }
         this.meta = meta;
         this.fruits = api.getAllFruits(meta);
         this.tier = api.getTier(meta);
+        this.growthRequirement = requirement;
         if(grabIcons) {
             try {
                 if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
@@ -109,15 +111,14 @@ public class CropPlantResourcefulCrops extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
-        return true;
+    protected IGrowthRequirement initGrowthRequirement() {
+        return growthRequirement;
     }
 
     @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return GrowthRequirementHandler.getGrowthRequirement(api.getSeed(), meta).canGrow(world, x, y, z);
+    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+        return true;
     }
-
     @Override
     @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {

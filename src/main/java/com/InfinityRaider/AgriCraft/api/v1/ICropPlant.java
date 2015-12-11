@@ -17,7 +17,10 @@ import java.util.Random;
  * This interface is used both for you to read the AgriCraft CropPlants as well as coding your own.
  * If you register your own ICropPlant object, it will be wrapped by the api.
  * Meaning if you query the ICropPlant object you registered, it will return a different object.
+ *
+ * DEPRECATED: THIS ONE WILL MOSTLY STILL WORK, BUT IT IS ADVISED TO USE THE ONE IN APIv2
  */
+@Deprecated
 public interface ICropPlant {
 	/** Gets the tier of this plant, can be overridden trough the configs */
 	int tier();
@@ -52,7 +55,12 @@ public interface ICropPlant {
 	/** When a growth thick is allowed for this plant, return true to re-render the crop clientside */
 	boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage);
 
-	/** Checks if the plant can grow on this position */
+	/**
+	 * Checks if the plant can grow on this position
+	 *
+	 * DEPRECATED: THIS METHOD IS NO LONGER CALLED
+	 */
+	@Deprecated
 	boolean isFertile(World world, int x, int y, int z);
 
 	/** Checks if the plant is mature */

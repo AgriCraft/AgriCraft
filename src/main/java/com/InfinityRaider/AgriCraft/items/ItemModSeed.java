@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
@@ -63,7 +63,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
             LogHelper.debug("Trying to plant seed " + stack.getItem().getUnlocalizedName() + " on crops");
             return true;
         }
-        if (GrowthRequirementHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y, z)) {
+        if (CropPlantHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y, z)) {
             if (side != 1) {
                 return false;
             } else if (player.canPlayerEdit(x, y, z, side, stack) && player.canPlayerEdit(x, y + 1, z, side, stack)) {

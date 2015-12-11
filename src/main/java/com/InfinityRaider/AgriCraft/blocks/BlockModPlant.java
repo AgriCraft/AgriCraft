@@ -1,15 +1,13 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
-import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
-import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
-import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.*;
+import com.InfinityRaider.AgriCraft.api.v2.IGrowthRequirementBuilder;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAgriCraftShearable;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -32,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
-    private GrowthRequirement growthRequirement;
+    private IGrowthRequirement growthRequirement;
     public CropProduce products = new CropProduce();
     private ItemModSeed seed;
     public int tier;
@@ -50,6 +48,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
      *               int tier (necessary)
      *               RenderMethod renderType (necessary)
      *               ItemStack shearDrop (optional, first ItemStack argument will be the regular fruit, second ItemStack argument is the shear drop)
+     *               int[] brightness (optional, if not given it will default to 8, 16. Only works if the array is size 2: {minBrightness, maxBrightness})
      * Will throw MissingArgumentsException if the needed arguments are not given.
      * This constructor creates the seed for this plant which can be gotten via blockModPlant.getSeed().
      * This constructor also registers this block and the item for the seed to the minecraft item/block registry and to the AgriCraft CropPlantHandler.
@@ -65,6 +64,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
         BlockWithMeta base = null;
         int tier = -1;
         RenderMethod renderType = null;
+        int[] brightness = null;
         for(Object arg:arguments) {
             if(arg == null) {
                 continue;
@@ -101,15 +101,22 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
             if(arg instanceof Integer) {
                 tier = (Integer) arg;
             }
+            if(arg instanceof int[]) {
+                int[] array = (int[]) arg;
+                brightness = array.length==2?array:brightness;
+            }
         }
         //check if necessary parameters have been passed
         if(name==null || tier<0 || renderType==null) {
             throw new MissingArgumentsException();
         }
         //set fields
-        GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
+        IGrowthRequirementBuilder builder = GrowthRequirementHandler.getNewBuilder();
         if (base != null && type != RequirementType.NONE) {
             builder.requiredBlock(base, type, true);
+        }
+        if(brightness != null) {
+            builder.brightnessRange(brightness[0], brightness[1]);
         }
         if (soil == null) {
             growthRequirement = builder.build();
@@ -304,7 +311,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     }
 
     @Override
-    public GrowthRequirement getGrowthRequirement() {
+    public IGrowthRequirement getGrowthRequirement() {
         return growthRequirement;
     }
 }

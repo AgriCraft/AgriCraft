@@ -1,10 +1,10 @@
 package com.InfinityRaider.AgriCraft.compatibility.resourcefulcrops;
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
+import com.InfinityRaider.AgriCraft.api.v2.IGrowthRequirementBuilder;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirement;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,10 +28,9 @@ public class ResourcefulCropsAPI extends ResourcefulCropsAPIwrapper {
     @Override
     protected void init() {
         for(int i=0;i<SeedRegistry.getSize();i++) {
-            CropPlant cropPlant = new CropPlantResourcefulCrops(i);
+            CropPlant cropPlant = new CropPlantResourcefulCrops(i, getGrowthRequirement(i));
             try {
                 CropPlantHandler.registerPlant(cropPlant);
-                GrowthRequirementHandler.registerGrowthRequirement(new ItemWithMeta(getSeed(), i), getGrowthRequirement(i));
             } catch (Exception e) {
                 LogHelper.printStackTrace(e);
             }
@@ -78,7 +77,7 @@ public class ResourcefulCropsAPI extends ResourcefulCropsAPIwrapper {
 
     protected IGrowthRequirement getGrowthRequirement(int meta) {
         SeedReq seedReq = SeedRegistry.getSeed(meta).getSeedReq();
-        GrowthRequirement.Builder builder = new GrowthRequirement.Builder();
+        IGrowthRequirementBuilder builder = GrowthRequirementHandler.getNewBuilder();
         builder.brightnessRange(seedReq.getLightLevelMin(), seedReq.getLightLevelMax());
         BlockStack growthReq = seedReq.getGrowthReq();
         if(growthReq != null) {

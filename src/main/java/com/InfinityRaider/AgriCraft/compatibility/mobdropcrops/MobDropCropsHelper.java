@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.init.Blocks;
@@ -25,7 +24,7 @@ public class MobDropCropsHelper extends ModHelper {
                 CropPlant plant = new CropPlantCreeper();
                 CropPlantHandler.registerPlant(plant);
                 OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
-                GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));
+                plant.getGrowthRequirement().setSoil(new BlockWithMeta(Blocks.soul_sand));
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -37,7 +36,7 @@ public class MobDropCropsHelper extends ModHelper {
                 CropPlant plant = new CropPlantSlime();
                 CropPlantHandler.registerPlant(plant);
                 OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
-                GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));
+                plant.getGrowthRequirement().setSoil(new BlockWithMeta(Blocks.soul_sand));
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -62,7 +61,7 @@ public class MobDropCropsHelper extends ModHelper {
                         CropPlant plant = new CropPlantMobDropCrop(seed);
                         CropPlantHandler.registerPlant(plant);
                         OreDictionary.registerOre(Names.OreDict.listAllseed, plant.getSeed());
-                        GrowthRequirementHandler.getGrowthRequirement(plant).setSoil(new BlockWithMeta(Blocks.soul_sand));
+                        plant.getGrowthRequirement().setSoil(new BlockWithMeta(Blocks.soul_sand));
                     }
                 }
             } catch(Exception e) {

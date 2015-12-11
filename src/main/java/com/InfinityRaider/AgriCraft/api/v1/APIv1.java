@@ -87,11 +87,13 @@ public interface APIv1 extends APIBase {
 	 * @return An ISeedStats object that describes the given seeds, or null if the
 	 *         given item was no seed.
 	 */
+	@Deprecated
 	ISeedStats getSeedStats(ItemStack seed);
 
     /**
      * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
      */
+	@Deprecated
     void registerCropPlant(ICropPlant plant);
 
 	/**
@@ -99,6 +101,7 @@ public interface APIv1 extends APIBase {
 	 * @param seed Stack holding the seed
 	 * @return an ICropPlant object if the seed is considered a seed for AgriCraft, or null if not
 	 */
+	@Deprecated
 	ICropPlant getCropPlant(ItemStack seed);
 
     /**
@@ -109,7 +112,10 @@ public interface APIv1 extends APIBase {
     /**
      * Register a growth requirement for this seed
      * @return true if the registering was successful
+	 *
+	 * DEPRECATED: GROWTH REQUIREMENTS ARE NOW AUTOMATICALLY REGISTERED WHEN REGISTERING CROPPLANTS
      */
+	@Deprecated
     boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement);
 
     /**
@@ -250,6 +256,7 @@ public interface APIv1 extends APIBase {
 	 * @param z
 	 * @return an ICropPlant object if there is a seed planted here, or null if not
 	 */
+	@Deprecated
 	ICropPlant getCropPlant(World world, int x, int y, int z);
 
 	/**
@@ -290,6 +297,7 @@ public interface APIv1 extends APIBase {
 	 * @param z
 	 * @return ISeedStats object holding the stats or null if there is no crop there, or the crop doesn't have a plant
 	 */
+	@Deprecated
 	ISeedStats getStats(World world, int x, int y, int z);
 
 	/**
@@ -561,6 +569,7 @@ public interface APIv1 extends APIBase {
 	 *               int tier (necessary)
 	 *               RenderMethod renderType (necessary)
 	 *               ItemStack shearDrop (optional, first ItemStack argument will be the regular fruit, second ItemStack argument is the shear drop)
+	 *               int[] brightness (optional, if not given it will default to 8, 16. Only works if the array is size 2: {minBrightness, maxBrightness})
 	 * @return
 	 * The Block corresponding with the plant, return type will always be instance of Block as well IAgriCraftPlant.
 	 * The seed is instance of Item and implements IAgriCraftSeed. It can be obtained by calling getSeed() on the returned object.

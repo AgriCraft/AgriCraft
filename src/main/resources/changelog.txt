@@ -9,6 +9,7 @@ Changelog
 -ADDED:  Placing cross crops will make wood sound
 -CHANGE: Updated Botania drum/horn of the wild interaction: crops will now be harvested instead of uprooted
 -CHANGE: Updated to Forge 10.13.4.1566
+-CHANGE: [API] IGrowthRequirement is now specified via the ICropPlant it applies to
 -FIXED:  Changed the way growth stages are rendered in the journal, fixing rendering for animated textures
 -FIXED:  Tanks in greenhouses not correctly forming a multiblock on world generation
 -FIXED:  Plants being able to be bonemealed while sneaking even though they shouldn't be

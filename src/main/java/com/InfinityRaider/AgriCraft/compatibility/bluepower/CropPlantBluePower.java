@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.compatibility.bluepower;
 
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantTallGeneric;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -18,6 +20,11 @@ public class CropPlantBluePower extends CropPlantTallGeneric {
     @Override
     public ItemStack getRandomFruit(Random rand) {
         return new ItemStack(Items.string);
+    }
+
+    @Override
+    protected IGrowthRequirement initGrowthRequirement() {
+        return GrowthRequirementHandler.getNewBuilder().build();
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import net.minecraft.item.ItemBlock;
@@ -46,7 +46,7 @@ public class NEICropProductHandler extends AgriCraftNEIHandler {
                     products.add(new PositionedStack(drops.get(i), Constants.nei_X_parent2 + 16 * (i % 3), Constants.nei_Y_seeds + 16 * ((i / 3) - 1)));
                 }
             }
-            IGrowthRequirement growthReq = GrowthRequirementHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage());
+            IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage());
             if (growthReq.getSoil() != null) {
                 soils.add(new PositionedStack(growthReq.getSoil().toStack(), Constants.nei_X_parent1, Constants.nei_Y_soil));
             } else {
@@ -138,7 +138,7 @@ public class NEICropProductHandler extends AgriCraftNEIHandler {
                 if(plant.getSeed()==null || plant.getSeed().getItem()==null) {
                     continue;
                 }
-                IGrowthRequirement req = GrowthRequirementHandler.getGrowthRequirement(plant.getSeed().getItem(), plant.getSeed().getItemDamage());
+                IGrowthRequirement req = CropPlantHandler.getGrowthRequirement(plant.getSeed().getItem(), plant.getSeed().getItemDamage());
                 if(req.isValidSoil(block)) {
                     arecipes.add(new CachedCropProductRecipe(plant.getSeed()));
                     continue;

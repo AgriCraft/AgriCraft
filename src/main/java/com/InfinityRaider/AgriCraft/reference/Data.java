@@ -23,8 +23,8 @@ public class Data {
             {"TulipPink", new ItemStack(Items.dye, 1, 9), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 7)},
             {"Daisy", new ItemStack(Items.dye, 1, 7), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.red_flower, 1, 8)},
             {"Cactus",  new ItemStack(net.minecraft.init.Items.dye, 1, 2),  new BlockWithMeta(Blocks.sand), 2, RenderMethod.HASHTAG, new ItemStack(Blocks.cactus)},
-            {"ShroomRed", new ItemStack(Item.getItemFromBlock(Blocks.red_mushroom)), new BlockWithMeta(Blocks.mycelium), 2, RenderMethod.HASHTAG},
-            {"ShroomBrown", new ItemStack(Item.getItemFromBlock(Blocks.brown_mushroom)), new BlockWithMeta(Blocks.mycelium), 2, RenderMethod.HASHTAG}
+            {"ShroomRed", new ItemStack(Item.getItemFromBlock(Blocks.red_mushroom)), new BlockWithMeta(Blocks.mycelium), 2, RenderMethod.HASHTAG, new int[]{0, 8}},
+            {"ShroomBrown", new ItemStack(Item.getItemFromBlock(Blocks.brown_mushroom)), new BlockWithMeta(Blocks.mycelium), 2, RenderMethod.HASHTAG, new int[]{0,8}}
     };
 
     public static final String[] botania = {

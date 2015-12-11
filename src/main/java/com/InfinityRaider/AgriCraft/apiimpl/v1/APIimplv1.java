@@ -7,12 +7,12 @@ import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.api.v2.IRake;
 import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAPI;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAPIv1;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -21,7 +21,6 @@ import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.exception.InvalidSeedException;
 import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -105,7 +104,7 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public void registerCropPlant(ICropPlant plant) {
-       CropPlantHandler.addCropToRegister(new CropPlantAPI(plant));
+       CropPlantHandler.addCropToRegister(new CropPlantAPIv1(plant));
     }
 
 	@Override
@@ -120,12 +119,7 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement) {
-        try {
-            GrowthRequirementHandler.registerGrowthRequirement(seed, requirement);
-            return true;
-        } catch (InvalidSeedException e) {
-            return false;
-        }
+		return false;
     }
 
    @Override
@@ -138,7 +132,7 @@ public class APIimplv1 implements APIv1 {
         if(!CropPlantHandler.isValidSeed(seed)) {
             return null;
         }
-        return GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage());
+        return CropPlantHandler.getGrowthRequirement(seed);
     }
 
 	@Override
@@ -363,7 +357,7 @@ public class APIimplv1 implements APIv1 {
 				if (crop.isCrossCrop() || crop.hasPlant() || crop.hasWeed()) {
 					return SeedRequirementStatus.BAD_LOCATION;
 				}
-				IGrowthRequirement growthRequirement = GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage());
+				IGrowthRequirement growthRequirement = CropPlantHandler.getGrowthRequirement(seed);
 				if(!growthRequirement.isValidSoil(world, x, y-1, z)) {
 					return SeedRequirementStatus.WRONG_SOIL;
 				}
@@ -386,7 +380,7 @@ public class APIimplv1 implements APIv1 {
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te instanceof TileEntityCrop) {
 					TileEntityCrop crop = (TileEntityCrop) te;
-					if (crop.isCrossCrop() || crop.hasPlant() || crop.hasWeed() || !GrowthRequirementHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage()).canGrow(world, x, y, z)) {
+					if (crop.isCrossCrop() || crop.hasPlant() || crop.hasWeed() || !CropPlantHandler.getGrowthRequirement(seed).canGrow(world, x, y, z)) {
 						return false;
 					}
 					if (seed.stackTagCompound != null && seed.stackTagCompound.hasKey(Names.NBT.growth)) {
