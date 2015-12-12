@@ -7,6 +7,7 @@ Changelog
 -ADDED:  Added config option to disable specific NEI handlers (config setting is enforced via the server)
 -ADDED:  Waila tooltips to seed storage & analyzer
 -ADDED:  Placing cross crops will make wood sound
+-ADDED:  Placing crop sticks while sneaking will now instantly create cross crops
 -CHANGE: Updated Botania drum/horn of the wild interaction: crops will now be harvested instead of uprooted
 -CHANGE: Updated to Forge 10.13.4.1566
 -CHANGE: [API] IGrowthRequirement is now specified via the ICropPlant it applies to
