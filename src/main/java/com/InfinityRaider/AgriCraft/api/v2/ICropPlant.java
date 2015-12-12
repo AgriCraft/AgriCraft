@@ -15,6 +15,12 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * This interface is used both for you to read the AgriCraft CropPlants as well as coding your own.
+ * If you register your own ICropPlant object, it will be wrapped by the api.
+ * Meaning if you query the ICropPlant object you registered, it will return a different object.
+ */
+@SuppressWarnings("deprecation")
 public interface ICropPlant extends com.InfinityRaider.AgriCraft.api.v1.ICropPlant {
     /** Gets the tier of this plant, can be overridden trough the configs */
     @Override

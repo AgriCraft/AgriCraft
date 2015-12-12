@@ -10,6 +10,24 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <h1>This is the AgriCraft API, version 2.</h1>
+ *
+ * <p>
+ * General notes:
+ * </p>
+ *
+ * <ul>
+ * <li>version 2 is backwards compatible with version 1,
+ * methods from version 1 are overridden here to clarify that they still work as before,
+ * methods not overridden here no longer work and should not be used.
+ * <li>The methods of this API will never modify the parameter objects unless
+ * explicitly stated.
+ * <li>All parameters are required and may not be null unless stated otherwise.
+ * <li>Return values will never be null unless stated otherwise.
+ * </ul>
+ *
+ */
 public interface APIv2 extends APIv1 {
 
     /**
