@@ -274,13 +274,6 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
         return Math.round(((float) this.progress*scale)/((float) this.maxProgress()));
     }
 
-    @Override
-    public boolean receiveClientEvent(int id, int value) {
-        this.worldObj.markBlockForUpdate(xCoord,yCoord,zCoord);
-        //This block consumes clicks.
-        return true;
-    }
-
 
     //Inventory methods
     //-----------------

@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -112,9 +113,8 @@ public abstract class TileEntityAgricraft extends TileEntity {
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
         readFromNBT(pkt.func_148857_g());
-        if (this.worldObj.isRemote) {
-            //cause a block update on the client to re-render the block
-            this.markForUpdate();
+        if(worldObj.isRemote) {
+            markForRenderUpdate();
         }
     }
 
@@ -122,7 +122,15 @@ public abstract class TileEntityAgricraft extends TileEntity {
      * Marks the tile entity for an update.
      */
     public final void markForUpdate() {
-        this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        if(!worldObj.isRemote) {
+            this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public final void markForRenderUpdate() {
+        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+
     }
 
     /**

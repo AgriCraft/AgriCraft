@@ -23,13 +23,10 @@ import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDispla
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
@@ -434,16 +431,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
             }
         }
         return neighbours;
-    }
-
-    @Override
-    public boolean receiveClientEvent(int id, int value) {
-        if(worldObj.isRemote && id == 1) {
-            this.worldObj.markBlockForUpdate(xCoord,yCoord,zCoord);
-            this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
-            Minecraft.getMinecraft().renderGlobal.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
-        return true;
     }
 
     //get the plant icon

@@ -102,14 +102,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         }
     }
 
-    @Override
-    public boolean receiveClientEvent(int id, int data) {
-        if(this.worldObj.isRemote) {
-            this.decreaseStackSizeInSlot(id, data);
-        }
-        return true;
-    }
-
     public void syncSlotToClient(SeedStorageSlot slot) {
         NetworkWrapperAgriCraft.wrapper.sendToDimension(new MessageTileEntitySeedStorage(this.xCoord, this.yCoord, this.zCoord, slot), this.worldObj.provider.dimensionId);
         this.worldObj.getChunkFromBlockCoords(this.xCoord, this.zCoord).setChunkModified();
