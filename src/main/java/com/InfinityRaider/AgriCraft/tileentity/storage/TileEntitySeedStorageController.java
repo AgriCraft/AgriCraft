@@ -38,7 +38,7 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
 
     @Override
     public List<SeedStorageSlot> getSlots(Item seed, int meta) {
-        return this.getControllable(new ItemStack(seed, 1, meta)).getSlots(seed, meta);
+        return this.getControllable(new ItemStack(seed, 1, meta)).getSlots();
     }
 
     @Override

@@ -4,11 +4,14 @@ import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.network.MessageTileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable /*, ISidedInventory*/ {
+public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable, ISidedInventory {
     private Item lockedSeed;
     private int lockedSeedMeta;
     /** Slots stored in a HashMap to use with Container and with Controller */
@@ -276,8 +279,10 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         return stacks;
     }
 
-    @Override
-    public List<SeedStorageSlot> getSlots(Item seed, int meta) {
+    public List<SeedStorageSlot> getSlots() {
+        if(slotsList == null) {
+            slotsList = new ArrayList<SeedStorageSlot>();
+        }
         return slotsList;
     }
 
@@ -342,7 +347,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     //INVENTORY METHODS
     //-----------------
     //TODO: Fix these methods to work with slot ID's from the ArrayList and then forward them to the ISeedStorageControllable methods with the correct ID's
-    /*
+
     @Override
     public int getSizeInventory() {
         //One extra for the 'fake' input only slot
@@ -351,32 +356,32 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        slot = slot - 1;
-        if(slot < 0 || (!this.hasLockedSeed()) || slotsList == null || slotsList.size() == 0) {
+        if(slotsList == null || slot >= slotsList.size() || (!this.hasLockedSeed())) {
             return null;
         }
-        slot = slot%slotsList.size();
         return slotsList.get(slot).getStack(lockedSeed, lockedSeedMeta);
     }
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
+        if(slotsList == null || slot >= slotsList.size() || (!this.hasLockedSeed())) {
+            return null;
+        }
         if(!worldObj.isRemote) {
             ItemStack stackInSlot = null;
-            if (this.slots != null) {
-                SeedStorageSlot slotAt = this.slots.get(slot);
-                if (slotAt != null) {
-                    stackInSlot = slotAt.getStack(this.lockedSeed, this.lockedSeedMeta);
-                    stackInSlot.stackSize = Math.min(amount, slotAt.count);
-                    if (slotAt.count <= amount) {
-                        this.slots.remove(slot);
-                        slotAt.count = 0;
-                    } else {
-                        slotAt.count = slotAt.count - amount;
-                    }
+            SeedStorageSlot slotAt = this.slotsList.get(slot);
+            if (slotAt != null) {
+                stackInSlot = slotAt.getStack(this.lockedSeed, this.lockedSeedMeta);
+                stackInSlot.stackSize = Math.min(amount, slotAt.count);
+                if (slotAt.count <= amount) {
+                    this.slots.remove(slotAt.getId());
+                    this.slotsList.remove(slotAt);
+                    slotAt.count = 0;
+                } else {
+                    slotAt.count = slotAt.count - amount;
                 }
-                this.syncSlotToClient(slotAt);
             }
+            this.syncSlotToClient(slotAt);
             return stackInSlot;
         }
         return null;
@@ -384,39 +389,36 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public ItemStack getStackInSlotOnClosing(int slot) {
-        ItemStack stackInSlot = null;
-        if(this.slots!=null) {
-            stackInSlot = this.getStackInSlot(slot).copy();
-            this.slots.remove(slot);
+        if (slotsList == null || slot >= slotsList.size() || (!this.hasLockedSeed())) {
+            return null;
         }
+        SeedStorageSlot slotAt = slotsList.get(slot);
+        ItemStack stackInSlot = slotAt.getStack(lockedSeed, lockedSeedMeta);
+        this.slots.remove(slotAt.getId());
+        this.slotsList.remove(slotAt);
         return stackInSlot;
     }
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack inputStack) {
-        if(slot<0) {
+        if(slotsList==null || slot>= slotsList.size()) {
             this.addStackToInventory(inputStack);
             return;
         }
         if(this.isItemValidForSlot(slot, inputStack)) {
-            SeedStorageSlot slotAt = this.slots.get(slot);
+            SeedStorageSlot slotAt = this.slotsList.get(slot);
             if(slotAt!=null) {
                 slotAt.count = inputStack.stackSize;
                 if(slotAt.count<=0) {
-                    slots.remove(slot);
+                    slots.remove(slotAt.getId());
+                    slotsList.remove(slotAt);
+                }
+                if(!this.worldObj.isRemote) {
+                    this.syncSlotToClient(slotAt);
                 }
             }
             else {
-                slotAt = new SeedStorageSlot(inputStack.getTagCompound(), inputStack.stackSize, slot, this.getControllableID());
-                if(slotAt.count>0) {
-                    this.slots.put(slot, slotAt);
-                }
-            }
-            if(!this.worldObj.isRemote) {
-                this.syncSlotToClient(slotAt);
-            }
-            else {
-                this.markForUpdate();
+                this.addStackToInventory(inputStack);
             }
         }
     }
@@ -456,7 +458,10 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         }
         if(this.hasLockedSeed()) {
             if (stack.getItem() == this.lockedSeed && stack.getItemDamage() == this.lockedSeedMeta && SeedHelper.isAnalyzedSeed(stack)) {
-                SeedStorageSlot slotAt = this.slots.get(slot);
+                if(slot>=slotsList.size()) {
+                    return true;
+                }
+                SeedStorageSlot slotAt = this.slotsList.get(slot);
                 return slotAt == null || ItemStack.areItemStackTagsEqual(stack, this.getStackInSlot(slot));
             }
         } else {
@@ -467,12 +472,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        int[] array = new int[slots.size()+1];
-        array[0] = -1;
-        int i = 1;
-        for(Map.Entry<Integer, SeedStorageSlot> entry:slots.entrySet()) {
-            array[i] = entry.getKey();
-            i++;
+        int[] array = new int[slotsList.size()+1];
+        for(int i=0;i<array.length;i++) {
+            array[i] = i;
         }
         return array;
     }
@@ -482,16 +484,16 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if(worldObj.isRemote) {
             return false;
         }
-        if(slot>=0) {
+        if(slot>=slotsList.size()) {
             //0 is a virtual slot only used for inputs, this is a workaround to prevent derpy behaviour with code which modifies stacks in slots directly
-            return false;
+            return (!this.hasLockedSeed()) || (stack!=null && stack.getItem()==lockedSeed && stack.getItemDamage()==lockedSeedMeta);
         }
-        return (!this.hasLockedSeed()) || (stack!=null && stack.getItem()==lockedSeed && stack.getItemDamage()==lockedSeedMeta);
+        return false;
     }
 
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        if(slot<0) {
+        if(slot>=slotsList.size()) {
             return false;
         }
         if(!this.hasLockedSeed()) {
@@ -503,7 +505,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if(stack.getItem()!=lockedSeed || stack.getItemDamage()!=lockedSeedMeta) {
             return false;
         }
-        return ItemStack.areItemStackTagsEqual(stack, slots.get(slot).getStack(lockedSeed, lockedSeedMeta));
+        return ItemStack.areItemStackTagsEqual(stack, slotsList.get(slot).getStack(lockedSeed, lockedSeedMeta));
     }
-    */
 }

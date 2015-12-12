@@ -31,7 +31,7 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase {
 
     @Override
     public List<SeedStorageSlot> getSeedSlots(Item seed, int meta) {
-        return this.te.getSlots(seed, meta);
+        return this.te.getSlots();
     }
 
     @Override
