@@ -27,9 +27,16 @@ public class RenderCrop extends RenderBlockBase {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (tileEntity instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) tileEntity;
-            this.renderBase(renderer, block, x, y, z);
+            //this.renderBase(renderer, block, x, y, z);
+            tessellator.addTranslation(0, -3*Constants.UNIT, 0);
+            drawScaledPrism(tessellator, 2, 0, 2, 3, 16, 3, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
+            drawScaledPrism(tessellator, 13, 0, 2, 14, 16, 3, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
+            drawScaledPrism(tessellator, 13, 0, 13, 14, 16, 14, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
+            drawScaledPrism(tessellator, 2, 0, 13, 3, 16, 14, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
+            tessellator.addTranslation(0, 3*Constants.UNIT, 0);
             if (crop.isCrossCrop()) {
                 //render four horizontal sticks (crosscrop)
+                /*
                 renderer.setRenderBounds(0.1875F, 0.6875F, 0.0F, 0.125F, 0.6F, 1.0F);
                 renderer.renderStandardBlock(block, x, y, z);
 
@@ -39,8 +46,13 @@ public class RenderCrop extends RenderBlockBase {
                 renderer.setRenderBounds(1.0F, 0.6875F, 0.8125F, 0.0F, 0.6F, 0.875F);
                 renderer.renderStandardBlock(block, x, y, z);
 
-                renderer.setRenderBounds(0.0F, 0.6875F, 0.1875, 1.0F, 0.6F, 0.125F);
+                renderer.setRenderBounds(0.0F, 0.6875F, 0.1875F, 1.0F, 0.6F, 0.125F);
                 renderer.renderStandardBlock(block, x, y, z);
+                */
+                drawScaledPrism(tessellator, 0, 10, 2, 16, 11, 3, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
+                drawScaledPrism(tessellator, 0, 10, 13, 16, 11, 14, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
+                drawScaledPrism(tessellator, 2, 10, 0, 3, 11, 16, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
+                drawScaledPrism(tessellator, 13, 10, 0, 14, 11, 16, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
             }
             else if (crop.hasPlant()) {
                 //render the plant
@@ -56,16 +68,16 @@ public class RenderCrop extends RenderBlockBase {
 
     //render four sticks vertical in the ground
     private void renderBase(RenderBlocks renderer, Block block, int x, int y, int z) {
-        renderer.setRenderBounds(0.125F, -0.125F*8, 0.125F, 0.1875F, Constants.UNIT * 13, 0.1875F);
+        renderer.setRenderBounds(0.125F, -0.125F * 8, 0.125F, 0.1875F, Constants.UNIT * 13, 0.1875F);
         renderer.renderStandardBlock(block, x, y, z);
         
-        renderer.setRenderBounds(0.875F, -0.125F*8, 0.875F, 0.8125F, Constants.UNIT * 13, 0.8125F);
+        renderer.setRenderBounds(0.875F, -0.125F * 8, 0.875F, 0.8125F, Constants.UNIT * 13, 0.8125F);
         renderer.renderStandardBlock(block, x, y, z);
         
-        renderer.setRenderBounds(0.8125F, -0.125F*8, 0.125F, 0.875F, Constants.UNIT * 13, 0.1875F);
+        renderer.setRenderBounds(0.8125F, -0.125F * 8, 0.125F, 0.875F, Constants.UNIT * 13, 0.1875F);
         renderer.renderStandardBlock(block, x, y, z);
         
-        renderer.setRenderBounds(0.125F, -0.125F*8, 0.8125F, 0.1875F, Constants.UNIT * 13, 0.875F);
+        renderer.setRenderBounds(0.125F, -0.125F * 8, 0.8125F, 0.1875F, Constants.UNIT * 13, 0.875F);
         renderer.renderStandardBlock(block, x, y, z);
     }
 
