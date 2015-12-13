@@ -165,6 +165,7 @@ public class GrowthRequirement implements IGrowthRequirement{
     @Override
     public void setSoil(BlockWithMeta soil) {
         this.soil = soil;
+        GrowthRequirementHandler.addSoil(soil);
     }
 
     @Override
