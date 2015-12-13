@@ -28,6 +28,7 @@ import java.util.List;
  * </ul>
  *
  */
+@SuppressWarnings("unused")
 public interface APIv2 extends APIv1 {
 
     /**
@@ -142,10 +143,10 @@ public interface APIv2 extends APIv1 {
      * block a player would click on.
      * </p>
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @param crops
      *            An item stack of one of the items getCropsItems() returns.
      * @return True if the crops can be placed.
@@ -158,10 +159,10 @@ public interface APIv2 extends APIv1 {
      * stack's size will be decreased (and may be 0). All world interaction will
      * be handled by this method.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @param crops
      *            An item stack of at least one of the items getCropsItems()
      *            returns. Will be modified on success!
@@ -173,10 +174,10 @@ public interface APIv2 extends APIv1 {
     /**
      * Checks if the given position contains crops.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return True if there are crops.
      */
     @Override
@@ -185,10 +186,10 @@ public interface APIv2 extends APIv1 {
     /**
      * Checks if the given position contains crops with a mature plant in it.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return True if there is a mature (harvestable) plant, false otherwise.
      */
     @Override
@@ -197,10 +198,10 @@ public interface APIv2 extends APIv1 {
     /**
      * Checks if the given position contains crops with weeds in them.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return True if there are weeds, false otherwise.
      */
     @Override
@@ -213,10 +214,10 @@ public interface APIv2 extends APIv1 {
      * Note: Crops with crosscrops or weeds are NOT considered empty.
      * </p>
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return True if there are empty crops, false otherwise.
      */
     @Override
@@ -225,10 +226,10 @@ public interface APIv2 extends APIv1 {
     /**
      * Checks if the given position contains crops with crosscrops.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return True if there are crosscrops, false otherwise.
      */
     @Override
@@ -237,9 +238,10 @@ public interface APIv2 extends APIv1 {
     /**
      * Gets the seed currently planted on the crop sticks at this location
      *
-     * @param world
-     * @param x
-     * @param y
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return an ItemStack with the seed currently planted on this crop, returns null if there is no crop there, or there is no seed planted
      */
     @Override
@@ -248,9 +250,10 @@ public interface APIv2 extends APIv1 {
     /**
      * Gets the Block instance of the block currently planted on the crop sticks at this location
      *
-     * @param world
-     * @param x
-     * @param y
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return an ItemStack with the seed currently planted on this crop, returns null if there is no crop there, or there is no seed planted
      */
     @Override
@@ -259,10 +262,10 @@ public interface APIv2 extends APIv1 {
     /**
      * Gets the ICropPlant object containing all the data AgriCraft knows about the seed planted on this crop
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return an ICropPlant object if there is a seed planted here, or null if not
      */
     @Override
@@ -279,10 +282,10 @@ public interface APIv2 extends APIv1 {
      * <li>Not all growth conditions are met
      * </ul>
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return True if the given plant can grow, false otherwise.
      */
     @Override
@@ -290,10 +293,10 @@ public interface APIv2 extends APIv1 {
 
     /**
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return true if the crop at the location is analyzed, false if not, or if there is no crop with a plant at the location
      */
     @Override
@@ -302,10 +305,10 @@ public interface APIv2 extends APIv1 {
     /**
      * Returns the stats of the crop at the given location.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return ISeedStats object holding the stats or null if there is no crop there, or the crop doesn't have a plant
      */
     @Override
@@ -322,10 +325,10 @@ public interface APIv2 extends APIv1 {
     /**
      * Tries to remove the weeds at the given position.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @param byHand
      *            True if the interaction should be considered as a player using
      *            their bare hand or not. If not, it is assumed that the caller
@@ -341,10 +344,10 @@ public interface APIv2 extends APIv1 {
      * Tries to remove the weeds at the given position with the given tool. If
      * the tool takes damage, this method will update the item stack.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @param rake
      *            An item stack of one of the items getRakeItems() returns. Will
      *            possibly be modified on success!
@@ -370,10 +373,10 @@ public interface APIv2 extends APIv1 {
      * <li>The given crops don't match the existing ones
      * </ul>
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @param crops
      *            An item stack of at least one of the items getCropsItems()
      *            returns. Will be modified on success!
@@ -390,10 +393,10 @@ public interface APIv2 extends APIv1 {
      * removal gained to item. Check isCrosscrops() afterward if you need to
      * differentiate these cases.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return An item stack with the removed crops or null if nothing was
      *         removed.
      */
@@ -404,10 +407,10 @@ public interface APIv2 extends APIv1 {
      * Checks if the given seeds can be placed into the crops at the given
      * position. See {@link SeedRequirementStatus} for details.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @param seed
      *            An item stack of seeds.
      * @return A SeedRequirementStatus object.
@@ -425,10 +428,10 @@ public interface APIv2 extends APIv1 {
      * before.
      * </p>
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @param seed
      *            An item stack of seeds. Will be modified on success!
      * @return True if the seeds were placed, false otherwise.
@@ -448,10 +451,10 @@ public interface APIv2 extends APIv1 {
      * the result will be null.
      * </p>
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return A harvest result or null.
      */
     @Override
@@ -469,10 +472,10 @@ public interface APIv2 extends APIv1 {
      * crops, the result will be null.
      * </p>
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @return A list of dropped items or null.
      */
     @Override
@@ -499,10 +502,10 @@ public interface APIv2 extends APIv1 {
      * Checks if the given fertilizer is valid for the plant in the crop at the
      * given position.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @param fertilizer
      *            Any item, preferable one that is a fertilizer.
      * @return True if the item is a valid fertilizer and can be applied, false
@@ -522,10 +525,10 @@ public interface APIv2 extends APIv1 {
      * fertilizer, only if it was applied.
      * </p>
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world World object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      * @param fertilizer
      *            Any item, preferable one that is a fertilizer. Will be
      *            modified on success!
@@ -558,20 +561,21 @@ public interface APIv2 extends APIv1 {
 
 
     /**
-     * Registers a new mutation
-     * @param result
-     * @param parent1
-     * @param parent2
+     * Registers a new mutation: result = parent1 + parent2
+     * @param result ItemStack containing the resulting seed of the mutation
+     * @param parent1 ItemStack containing one parent for the mutation
+     * @param parent2 ItemStack containing the other parent for the mutation
      * @return True if successful
      */
     @Override
     boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2);
 
     /**
-     * Registers a new mutation
-     * @param result
-     * @param parent1
-     * @param parent2
+     * Registers a new mutation: result = parent1 + parent2
+     * @param result ItemStack containing the resulting seed of the mutation
+     * @param parent1 ItemStack containing one parent for the mutation
+     * @param parent2 ItemStack containing the other parent for the mutation
+     * @param chance the chance for this mutation to occur, default is 0.2D
      * @return True if successful
      */
     @Override
@@ -579,7 +583,7 @@ public interface APIv2 extends APIv1 {
 
     /**
      * Removes all mutations that give this stack as a result
-     * @param result
+     * @param result ItemStack containing the resulting seed for all the mutations to be removed
      * @return True if successful
      */
     @Override
