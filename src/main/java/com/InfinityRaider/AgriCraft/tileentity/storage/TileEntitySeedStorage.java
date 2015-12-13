@@ -405,24 +405,22 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
             this.addStackToInventory(inputStack);
             return;
         }
+        if(inputStack == null) {
+            inputStack = slotsList.get(slot).getStack(lockedSeed, lockedSeedMeta);
+            inputStack.stackSize = 0;
+        }
         if(this.isItemValidForSlot(slot, inputStack)) {
             SeedStorageSlot slotAt = this.slotsList.get(slot);
-            if(slotAt!=null) {
-                if(inputStack==null) {
-                    slots.remove(slotAt.getId());
-                    slotsList.remove(slotAt);
-                    return;
-                }
+            if (slotAt != null) {
                 slotAt.count = inputStack.stackSize;
-                if(slotAt.count<=0) {
+                if (slotAt.count <= 0) {
                     slots.remove(slotAt.getId());
                     slotsList.remove(slotAt);
                 }
-                if(!this.worldObj.isRemote) {
+                if (!this.worldObj.isRemote) {
                     this.syncSlotToClient(slotAt);
                 }
-            }
-            else {
+            } else {
                 this.addStackToInventory(inputStack);
             }
         }
