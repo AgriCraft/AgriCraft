@@ -19,6 +19,7 @@ Changelog
 -FIXED:  Seeds no longer have to be instance of ItemSeeds to be able to change the base block with MineTweaker (no idea how this survived so long)
 -FIXED:  Seed icons rendering wrongly for some IIcons
 -FIXED:  Bugs concerning automatic input and output with Seed Storages and Analyzers
+-FIXED:  Crash when Botania is not present
 
 1.4.5
 -ADDED:  Support for Agriculture 2
