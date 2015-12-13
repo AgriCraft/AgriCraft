@@ -408,6 +408,11 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if(this.isItemValidForSlot(slot, inputStack)) {
             SeedStorageSlot slotAt = this.slotsList.get(slot);
             if(slotAt!=null) {
+                if(inputStack==null) {
+                    slots.remove(slotAt.getId());
+                    slotsList.remove(slotAt);
+                    return;
+                }
                 slotAt.count = inputStack.stackSize;
                 if(slotAt.count<=0) {
                     slots.remove(slotAt.getId());
