@@ -199,17 +199,20 @@ agricraft_tooltip.magnifyingGlass=utilisez-la pour inspecter vos plantes
 agricraft_tooltip.handRake=utilisez ceci pour enlever les mauvaises herbes
 agricraft_tooltip.closed=Fermé
 agricraft_tooltip.open=Ouvert
-agricraft_tooltip.state=Etat
+agricraft_tooltip.state=État
 agricraft_tooltip.empty=Pas de semis
-agricraft_tooltip.waterPadDry=Creusez avec une pelle dans des terres agricoles pour créer une petite fosse
+agricraft_tooltip.waterPadDry=Creusez avec une pelle dans des terres agricoles pour créer une petite tranchée
 agricraft_tooltip.waterPadWet=ensuite utilisez un seau d'eau pour le remplir
 agricraft_tooltip.growthStage=Croissance
 agricraft_tooltip.mature=Mature
-agricraft_tooltip.valve=basculé avec un signal redstone
+agricraft_tooltip.valve=Basculé avec un signal redstone
 agricraft_tooltip.grate=Cliquez droit avec des vignes pour placer les vignes
 agricraft_tooltip.clipper1=Cliquez droit les cultures pour obtenir des boutures
 agricraft_tooltip.clipper2=Les boutures peuvent être planté sur d'autres tuteurs
 agricraft_tooltip.clipper3=Le succès du bouturage dépend de la force de la plante
+agricraft_tooltip.analyzer=Spécimen
+agricraft_tooltip.storage=Graine verrouillée
+agricraft_tooltip.none=aucun
 
 //descriptions
 agricraft_description.peripheralHelp=Aide de méthode
