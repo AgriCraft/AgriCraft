@@ -202,6 +202,8 @@ public abstract class CropPlant implements ICropPlant {
 
     /**
      * Determines if the plant can grow at a location.
+     * This is an override of a deprecated method for the sake of backwards API compatibility and should not be called anymore,
+     * To check if a plant is fertile, use getGrowthRequirement().canGrow(world, x, y, z)
      * 
      * @param world the world the plant is in.
      * @param x the x-coordinate of the plant.
@@ -210,6 +212,7 @@ public abstract class CropPlant implements ICropPlant {
      * @return if the growth location for the plant is fertile.
      */
     @Override
+    @SuppressWarnings("deprecation")
     public final boolean isFertile(World world, int x, int y, int z) {
         return getGrowthRequirement().canGrow(world, x, y, z);
     }
