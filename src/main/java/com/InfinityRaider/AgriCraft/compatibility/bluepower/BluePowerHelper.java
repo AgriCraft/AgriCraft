@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.compatibility.bluepower;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -25,8 +24,6 @@ public final class BluePowerHelper extends ModHelper {
         try {
             CropPlantHandler.registerPlant(new CropPlantBluePower((ItemSeeds) Item.itemRegistry.getObject("bluepower:flax_seeds")));
         } catch (DuplicateCropPlantException e) {
-            e.printStackTrace();
-        } catch (BlacklistedCropPlantException e) {
             e.printStackTrace();
         }
     }

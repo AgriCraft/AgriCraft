@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,7 +30,7 @@ public class CrossOverResult {
     public static CrossOverResult fromTileEntityCrop(TileEntityCrop crop) {
         Item seed = crop.getSeedStack().getItem();
         int meta = crop.getSeedStack().getItemDamage();
-        double chance = SeedHelper.getSpreadChance(seed, meta);
+        double chance = ((double) crop.getPlant().getSpreadChance())/100.0;
 
         return new CrossOverResult(seed, meta, chance);
     }
@@ -46,7 +46,7 @@ public class CrossOverResult {
     public ItemStack toStack() {
         ItemStack stack = new ItemStack(seed, 1, meta);
         NBTTagCompound tag = new NBTTagCompound();
-        SeedHelper.setNBT(tag, (short) growth, (short) gain, (short) strength, false);
+        CropPlantHandler.setSeedNBT(tag, (short) growth, (short) gain, (short) strength, false);
         stack.stackTagCompound = tag;
         return stack;
     }

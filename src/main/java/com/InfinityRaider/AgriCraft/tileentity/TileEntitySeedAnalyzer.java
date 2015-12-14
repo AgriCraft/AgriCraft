@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -220,11 +219,11 @@ public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISide
                 if (tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
                     tag.setBoolean(Names.NBT.analyzed, true);
                 } else {
-                    SeedHelper.setNBT(tag, (short) 0, (short) 0, (short) 0, true);
+                    CropPlantHandler.setSeedNBT(tag, (short) 0, (short) 0, (short) 0, true);
                 }
             } else {
                 this.specimen.setTagCompound(new NBTTagCompound());
-                SeedHelper.setNBT(this.specimen.stackTagCompound, (short) 0, (short) 0, (short) 0, true);
+                CropPlantHandler.setSeedNBT(this.specimen.stackTagCompound, (short) 0, (short) 0, (short) 0, true);
             }
         }
         else if(this.hasTrowel()) {

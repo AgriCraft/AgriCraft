@@ -1,11 +1,11 @@
 package com.InfinityRaider.AgriCraft.gui;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -274,7 +274,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
                 short strength = stats.getStrength();
                 //draw the seed icon
                 ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
-                stack.stackTagCompound = SeedHelper.setNBT(new NBTTagCompound(), growth, gain, strength, true);
+                stack.stackTagCompound = CropPlantHandler.setSeedNBT(new NBTTagCompound(), growth, gain, strength, true);
                 itemRender.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, component.xOffset(), component.yOffset());
                 itemRender.renderItemOverlayIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, component.xOffset(), component.yOffset());
                 //draw the stat bars
@@ -323,7 +323,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
                     short gain = stats.getGain();
                     short strength = stats.getStrength();
                     ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
-                    stack.stackTagCompound = SeedHelper.setNBT(new NBTTagCompound(), growth, gain, strength, true);
+                    stack.stackTagCompound = CropPlantHandler.setSeedNBT(new NBTTagCompound(), growth, gain, strength, true);
                     List toolTip = stack.getTooltip(Minecraft.getMinecraft().thePlayer, true);
                     drawHoveringText(toolTip, x - this.guiLeft, y - this.guiTop, fontRendererObj);
                 }

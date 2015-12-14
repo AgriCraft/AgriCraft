@@ -9,7 +9,6 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -66,7 +65,7 @@ public class ItemTrowel extends ItemAgricraft implements ITrowel {
                 tag.setBoolean(Names.NBT.analyzed, true);
             } else {
                 NBTTagCompound tag = new NBTTagCompound();
-                SeedHelper.setNBT(tag, (short) 1, (short) 1, (short) 1, true);
+                CropPlantHandler.setSeedNBT(tag, (short) 1, (short) 1, (short) 1, true);
                 trowel.setTagCompound(tag);
             }
         }
@@ -87,7 +86,7 @@ public class ItemTrowel extends ItemAgricraft implements ITrowel {
         short strength = tag.getShort(Names.NBT.strength);
         boolean analysed = tag.getBoolean(Names.NBT.analyzed);
         NBTTagCompound seedTag = new NBTTagCompound();
-        SeedHelper.setNBT(seedTag, growth, gain, strength, analysed);
+        CropPlantHandler.setSeedNBT(seedTag, growth, gain, strength, analysed);
         ItemStack seed = plant.getSeed();
         seed.stackTagCompound = seedTag;
         return seed;
@@ -117,7 +116,7 @@ public class ItemTrowel extends ItemAgricraft implements ITrowel {
         short strength = (initialised && seedTag.hasKey(Names.NBT.strength))?seedTag.getShort(Names.NBT.strength): Constants.DEFAULT_STRENGTH;
         boolean analysed = (initialised && seedTag.hasKey(Names.NBT.analyzed)) && seedTag.getBoolean(Names.NBT.analyzed);
         NBTTagCompound tag = new NBTTagCompound();
-        SeedHelper.setNBT(tag, growth, gain, strength, analysed);
+        CropPlantHandler.setSeedNBT(tag, growth, gain, strength, analysed);
         tag.setTag(Names.NBT.seed, CropPlantHandler.writePlantToNBT(plant));
         tag.setShort(Names.NBT.materialMeta, (short) growthStage);
         trowel.setTagCompound(tag);

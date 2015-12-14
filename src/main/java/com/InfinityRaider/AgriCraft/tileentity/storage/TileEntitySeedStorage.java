@@ -1,13 +1,13 @@
 package com.InfinityRaider.AgriCraft.tileentity.storage;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.network.MessageTileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -88,7 +88,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                 for (int i = 0; i < tagList.tagCount(); i++) {
                     NBTTagCompound slotTag = tagList.getCompoundTagAt(i);
                     NBTTagCompound stackTag = new NBTTagCompound();
-                    SeedHelper.setNBT(stackTag, slotTag.getShort(Names.NBT.growth), slotTag.getShort(Names.NBT.gain), slotTag.getShort(Names.NBT.strength), true);
+                    CropPlantHandler.setSeedNBT(stackTag, slotTag.getShort(Names.NBT.growth), slotTag.getShort(Names.NBT.gain), slotTag.getShort(Names.NBT.strength), true);
                     int id = slotTag.getInteger(Names.NBT.id);
                     SeedStorageSlot slot = new SeedStorageSlot(stackTag, slotTag.getInteger(Names.NBT.count), id, invId);
                     slots.put(id, slot);
@@ -140,7 +140,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     @Override
     public boolean addStackToInventory(ItemStack stack) {
         boolean success = false;
-        if(!SeedHelper.isAnalyzedSeed(stack)) {
+        if(!CropPlantHandler.isAnalyzedSeed(stack)) {
             return false;
         }
         if(!this.worldObj.isRemote) {
@@ -228,11 +228,11 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     private boolean isValidForSlot(int realSlot, ItemStack stack) {
-        if(!SeedHelper.isAnalyzedSeed(stack)) {
+        if(!CropPlantHandler.isAnalyzedSeed(stack)) {
             return false;
         }
         if(this.hasLockedSeed()) {
-            if (stack.getItem() == this.lockedSeed && stack.getItemDamage() == this.lockedSeedMeta && SeedHelper.isAnalyzedSeed(stack)) {
+            if (stack.getItem() == this.lockedSeed && stack.getItemDamage() == this.lockedSeedMeta) {
                 SeedStorageSlot slotAt = this.slots.get(realSlot);
                 return slotAt == null || ItemStack.areItemStackTagsEqual(stack, slotAt.getStack(lockedSeed, lockedSeedMeta));
             }
@@ -456,11 +456,11 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if(!SeedHelper.isAnalyzedSeed(stack)) {
+        if(!CropPlantHandler.isAnalyzedSeed(stack)) {
             return false;
         }
         if(this.hasLockedSeed()) {
-            if (stack.getItem() == this.lockedSeed && stack.getItemDamage() == this.lockedSeedMeta && SeedHelper.isAnalyzedSeed(stack)) {
+            if (stack.getItem() == this.lockedSeed && stack.getItemDamage() == this.lockedSeedMeta) {
                 if(slot>=slotsList.size()) {
                     return true;
                 }

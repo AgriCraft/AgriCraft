@@ -8,7 +8,6 @@ import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -34,6 +33,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 
     public StructureGreenhouse() {}
 
+    @SuppressWarnings("unused")
     public StructureGreenhouse(StructureVillagePieces.Start villagePiece, int nr, Random rand, StructureBoundingBox structureBoundingBox, int coordBaseMode) {
         super();
         this.coordBaseMode = coordBaseMode;
@@ -188,7 +188,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         int size = (int) Math.ceil(Math.random()*10);
         WeightedRandomChestContent[] loot = new WeightedRandomChestContent[size];
         for(int i=0;i<size;i++) {
-            ItemStack seed = SeedHelper.getRandomSeed(new Random(), true);
+            ItemStack seed = CropPlantHandler.getRandomSeed(new Random(), true);
             loot[i] = new WeightedRandomChestContent(seed.getItem(), seed.getItemDamage(), 1, 3, 85);
         }
         return loot;
@@ -208,7 +208,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
                     crop.setCrossCrop(true);
                 }
                 else {
-                    ItemStack seed = SeedHelper.getRandomSeed(world.rand, false, plants);
+                    ItemStack seed = CropPlantHandler.getRandomSeed(world.rand, false, plants);
                     crop.setPlant((int) Math.ceil(Math.random() * 7), (int) Math.ceil(Math.random() * 7), (int) Math.ceil(Math.random() * 7), false, seed.getItem(), seed.getItemDamage());
                 }
             }

@@ -1,11 +1,11 @@
 package com.InfinityRaider.AgriCraft.container;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.network.MessageContainerSeedStorage;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageController;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
@@ -102,7 +102,7 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
             ItemStack notMergedStack = slot.getStack();
             originalStackInSlot = notMergedStack.copy();
             //try to move item from the player's inventory into the container
-            if (SeedHelper.isAnalyzedSeed(notMergedStack)) {
+            if (CropPlantHandler.isAnalyzedSeed(notMergedStack)) {
                 ISeedStorageControllable controllable = this.getControllable(notMergedStack);
                 if (controllable != null && controllable.hasLockedSeed()) {
                     ItemStack locked = controllable.getLockedSeed();

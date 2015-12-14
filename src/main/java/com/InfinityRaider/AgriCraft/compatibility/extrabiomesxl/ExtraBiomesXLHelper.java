@@ -3,8 +3,7 @@ package com.InfinityRaider.AgriCraft.compatibility.extrabiomesxl;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -23,13 +22,7 @@ public class ExtraBiomesXLHelper extends ModHelper {
         try {
             CropPlantHandler.registerPlant(strawberry);
         } catch (DuplicateCropPlantException e) {
-            if(ConfigurationHandler.debug) {
-                e.printStackTrace();
-            }
-        } catch (BlacklistedCropPlantException e) {
-            if(ConfigurationHandler.debug) {
-                e.printStackTrace();
-            }
+            LogHelper.printStackTrace(e);
         }
     }
 

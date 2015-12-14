@@ -14,7 +14,6 @@ import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RenderLogger;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -93,7 +92,6 @@ public class AgriCraft {
         ResourceCrops.init();
         CustomCrops.init();
         Recipes.init();
-        SeedHelper.init();
         GrowthRequirementHandler.init();
         CropPlantHandler.init();
         CropProducts.init();

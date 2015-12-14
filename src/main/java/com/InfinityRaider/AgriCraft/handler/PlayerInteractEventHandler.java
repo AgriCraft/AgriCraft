@@ -3,16 +3,18 @@ package com.InfinityRaider.AgriCraft.handler;
 import com.InfinityRaider.AgriCraft.blocks.BlockGrate;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.tconstruct.TinkersConstructHelper;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
@@ -31,7 +33,7 @@ public class PlayerInteractEventHandler {
             if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
                 if (GrowthRequirementHandler.isSoilValid(event.world, event.x, event.y, event.z)) {
                     if (ConfigurationHandler.disableVanillaFarming) {
-                        if(!SeedHelper.allowVanillaPlanting(event.entityPlayer.getCurrentEquippedItem())) {
+                        if(!allowVanillaPlanting(event.entityPlayer.getCurrentEquippedItem())) {
                             this.denyEvent(event, false);
                             return;
                         }
@@ -45,6 +47,35 @@ public class PlayerInteractEventHandler {
                 }
             }
         }
+    }
+
+    private static boolean allowVanillaPlanting(ItemStack seed) {
+        if(seed == null || seed.getItem() == null) {
+            return false;
+        }
+        if(ConfigurationHandler.disableVanillaFarming) {
+            if(ignoresVanillaPlantingSetting(seed)) {
+                return true;
+            }
+            if(CropPlantHandler.isValidSeed(seed)) {
+                return false;
+            }
+            if(seed.getItem() == Items.potato) {
+                return false;
+            }
+            if(seed.getItem() == Items.carrot) {
+                return false;
+            }
+            if(seed.getItem() == Items.reeds) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean ignoresVanillaPlantingSetting(ItemStack seed) {
+        CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
+        return plant != null && plant.ingoresVanillaPlantingRule();
     }
 
     /** Event handler to create water pads */

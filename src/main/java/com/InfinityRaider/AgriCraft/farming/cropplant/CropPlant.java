@@ -8,7 +8,6 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -29,8 +28,28 @@ import java.util.Random;
  * ICropPlant is implemented to be able to read data from this class from the API
  */
 public abstract class CropPlant implements ICropPlant {
-    protected IGrowthRequirement growthRequirement;
+    private IGrowthRequirement growthRequirement;
+    private int tier;
+    private int spreadChance;
+    private boolean blackListed;
+    private boolean ignoreVanillaPlantingRule;
 
+    public CropPlant() {
+        this.growthRequirement = initGrowthRequirement();
+        growthRequirement = growthRequirement == null ? GrowthRequirementHandler.getNewBuilder().build() : growthRequirement;
+        this.tier = tier();
+        this.blackListed = false;
+        this.ignoreVanillaPlantingRule = false;
+    }
+
+    /**
+     * GLOBAL CROPPLANT METHODS
+     */
+
+    /**
+     * Gets the growth rate for this CropPlant, used in calculations on growth tick
+     * @return the growth rate
+     */
     public final int getGrowthRate() {
     	int tier = getTier();
     	
@@ -52,12 +71,64 @@ public abstract class CropPlant implements ICropPlant {
      * @return the tier of the seed.
      */
     public final int getTier() {
-        int seedTierOverride = SeedHelper.getSeedTierOverride(getSeed());
-        if(seedTierOverride>0) {
-            return seedTierOverride;
-        }
-        return tier();
+        return tier;
     }
+
+    /**
+     * Sets the tier for this crop plant
+     */
+    public final void setTier(int tier) {
+        tier = tier >= Constants.GROWTH_TIER.length ? Constants.GROWTH_TIER.length-1 : tier;
+        tier = tier <= 0 ? 1 : tier;
+        this.tier = tier;
+    }
+
+    /** Gets the spread chance in percent for this plant */
+    public final int getSpreadChance() {
+        return spreadChance;
+    }
+
+    /** Sets the spread chance in percent for this plant */
+    public final void setSpreadChance(int spreadChance) {
+        this.spreadChance = spreadChance;
+    }
+
+    /**
+     * @return if the plant is blacklisted
+     */
+    public final boolean isBlackListed() {
+        return blackListed;
+    }
+
+    /**
+     * Sets the blacklist status for this plant
+     * @param status true if it should be blacklisted, false if not
+     */
+    public final void setBlackListStatus(boolean status) {
+        this.blackListed = status;
+    }
+
+    /**
+     * Checks if this plant ignores the rule to disabled vanilla planting
+     * true means that the seed for this plant can still be planted even though vanilla planting is disabled
+     * @return if this ignores the vanilla planting rule or not
+     */
+    public final boolean ingoresVanillaPlantingRule() {
+        return ignoreVanillaPlantingRule;
+    }
+
+    /**
+     * Sets if this plant should ignore the rule to disabled vanilla planting
+     * true means that the seed for this plant can still be planted even though vanilla planting is disabled
+     * @param value if this ignores the vanilla planting rule or not
+     */
+    public final void setIgnoreVanillaPlantingRule(boolean value) {
+        this.ignoreVanillaPlantingRule = value;
+    }
+
+    /**
+     * ICROPPLANT METHODS
+     */
 
     /**
      * Returns the tier of this plant, called by {@link #getTier()}.
@@ -177,10 +248,6 @@ public abstract class CropPlant implements ICropPlant {
 
     @Override
     public final IGrowthRequirement getGrowthRequirement() {
-        if(growthRequirement == null) {
-            growthRequirement = this.initGrowthRequirement();
-            growthRequirement = growthRequirement == null ? GrowthRequirementHandler.getNewBuilder().build() : growthRequirement;
-        }
         return growthRequirement;
     }
 

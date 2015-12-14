@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -699,4 +700,36 @@ public interface APIv2 extends APIv1 {
      * @return an ArrayList containing an ItemStack for every discovered seed (the list may be empty but will never be null)
      */
     ArrayList<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal);
+
+
+    /**
+     * Checks if a seed is BlackListed
+     * @param seed the seed to check
+     * @return if the seed is blacklisted and should not be plantable on crop sticks
+     */
+    boolean isSeedBlackListed(ItemStack seed);
+
+    /**
+     * Adds a seed to the blacklist
+     * @param seed the seed to add to the blacklist
+     */
+    void addToSeedBlackList(ItemStack seed);
+
+    /**
+     * Adds a collection of seeds to the blacklist
+     * @param seeds collection containing all seeds to be added to the blacklist
+     */
+    void addToSeedBlacklist(Collection<? extends ItemStack> seeds);
+
+    /**
+     * Removes a seed from the blacklist
+     * @param seed the seed to be removed from the blacklist
+     */
+    void removeFromSeedBlackList(ItemStack seed);
+
+    /**
+     * Removes a collection of seeds from the blacklist
+     * @param seeds collection containing all seeds to be removed from the blacklist
+     */
+    void removeFromSeedBlacklist(Collection<? extends ItemStack> seeds);
 }

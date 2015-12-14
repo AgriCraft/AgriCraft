@@ -18,7 +18,6 @@ import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -195,7 +194,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         }
         ItemStack seed = plant.getSeed().copy();
         NBTTagCompound tag = new NBTTagCompound();
-        SeedHelper.setNBT(tag, getGrowth(), getGain(), getStrength(), stats.isAnalyzed());
+        CropPlantHandler.setSeedNBT(tag, getGrowth(), getGain(), getStrength(), stats.isAnalyzed());
         seed.setTagCompound(tag);
         return seed;
     }

@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
 
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.google.common.base.Joiner;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
@@ -73,7 +73,7 @@ public class SeedBlacklist {
 
         @Override
         public void apply() {
-            SeedHelper.addAllToSeedBlacklist(seeds);
+            CropPlantHandler.addAllToSeedBlacklist(seeds);
         }
 
         @Override
@@ -83,7 +83,7 @@ public class SeedBlacklist {
 
         @Override
         public void undo() {
-            SeedHelper.removeAllFromSeedBlacklist(seeds);
+            CropPlantHandler.removeAllFromSeedBlacklist(seeds);
         }
 
         @Override
@@ -113,7 +113,7 @@ public class SeedBlacklist {
 
         @Override
         public void apply() {
-            SeedHelper.removeAllFromSeedBlacklist(seeds);
+            CropPlantHandler.removeAllFromSeedBlacklist(seeds);
         }
 
         @Override
@@ -123,7 +123,7 @@ public class SeedBlacklist {
 
         @Override
         public void undo() {
-            SeedHelper.addAllToSeedBlacklist(seeds);
+            CropPlantHandler.addAllToSeedBlacklist(seeds);
         }
 
         @Override

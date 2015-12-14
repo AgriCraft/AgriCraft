@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.exception.BlacklistedCropPlantException;
 import com.InfinityRaider.AgriCraft.utility.exception.DuplicateCropPlantException;
 
 public class GrowthCraftRiceHelper extends ModHelper {
@@ -14,8 +13,6 @@ public class GrowthCraftRiceHelper extends ModHelper {
             CropPlant ricePlant = new CropPlantGrowthCraftRice();
             CropPlantHandler.registerPlant(ricePlant);
         } catch (DuplicateCropPlantException e) {
-            e.printStackTrace();
-        } catch (BlacklistedCropPlantException e) {
             e.printStackTrace();
         }
     }

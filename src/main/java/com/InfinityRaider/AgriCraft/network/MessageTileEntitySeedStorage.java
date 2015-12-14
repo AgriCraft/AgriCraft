@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.network;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
-import com.InfinityRaider.AgriCraft.utility.SeedHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -45,7 +45,7 @@ public class MessageTileEntitySeedStorage extends MessageAgriCraft {
 
     private NBTTagCompound getTag() {
         NBTTagCompound tag = new NBTTagCompound();
-        SeedHelper.setNBT(tag, (short) growth, (short) gain, (short) strength, true);
+        CropPlantHandler.setSeedNBT(tag, (short) growth, (short) gain, (short) strength, true);
         return tag;
     }
 

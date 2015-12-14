@@ -23,6 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class APIimplv2 extends APIimplv1 implements APIv2 {
     public APIimplv2(int version, APIStatus status) {
@@ -146,5 +147,30 @@ public class APIimplv2 extends APIimplv1 implements APIv2 {
             return new ArrayList<ItemStack>();
         }
         return ((IJournal) journal.getItem()).getDiscoveredSeeds(journal);
+    }
+
+    @Override
+    public boolean isSeedBlackListed(ItemStack seed) {
+        return CropPlantHandler.isSeedBlackListed(seed);
+    }
+
+    @Override
+    public void addToSeedBlackList(ItemStack seed) {
+        CropPlantHandler.addSeedToBlackList(seed);
+    }
+
+    @Override
+    public void addToSeedBlacklist(Collection<? extends ItemStack> seeds) {
+        CropPlantHandler.addAllToSeedBlacklist(seeds);
+    }
+
+    @Override
+    public void removeFromSeedBlackList(ItemStack seed) {
+        CropPlantHandler.removeFromSeedBlackList(seed);
+    }
+
+    @Override
+    public void removeFromSeedBlacklist(Collection<? extends ItemStack> seeds) {
+        CropPlantHandler.removeAllFromSeedBlacklist(seeds);
     }
 }
