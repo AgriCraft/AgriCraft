@@ -22,6 +22,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CropPlantHandler {
     private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, CropPlant>>();
@@ -105,6 +106,15 @@ public class CropPlantHandler {
         plantsToRegister.add(plant);
     }
 
+    /**
+     * Get the list of plants that are queued up to be registered. Only to be used for API v1 compatibility.
+     * 
+     * @return The list of queued plants
+     */
+    public static List<CropPlant> getUnregisteredPlants() {
+    	return plantsToRegister;
+    }
+    
     /**
      * Tests to see if the provided stack is a valid {@link #cropPlants seed}.
      * Tentatively provides the same output as {@link #isValidPlant(ItemStack)}.

@@ -22,6 +22,7 @@ import java.util.Random;
 
 public class CropPlantAPIv1 extends CropPlant {
     protected ICropPlant plant;
+    private IGrowthRequirement growthRequirementOverride;
 
     public CropPlantAPIv1(ICropPlant plant) {
         this.plant = plant;
@@ -89,9 +90,13 @@ public class CropPlantAPIv1 extends CropPlant {
 
     @Override
     protected IGrowthRequirement initGrowthRequirement() {
-        return GrowthRequirementHandler.getNewBuilder().build();
+        return growthRequirementOverride != null ? growthRequirementOverride : GrowthRequirementHandler.getNewBuilder().build();
     }
 
+    public void setGrowthRequirement(IGrowthRequirement growthRequirement) {
+    	growthRequirementOverride = growthRequirement;
+    }
+    
     @Override
     public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
         return plant.onAllowedGrowthTick(world, x, y, z, oldGrowthStage);
