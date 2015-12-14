@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.api.v2.IRake;
 import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAPIv1;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
@@ -24,6 +25,7 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -119,6 +121,20 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement) {
+		if (seed != null) {
+			List<CropPlant> plants = CropPlantHandler.getUnregisteredPlants();
+			if (plants != null) {
+				for (CropPlant plant : plants) {
+					if (plant instanceof CropPlantAPIv1) {
+						ItemStack stack = plant.getSeed();
+						if (stack != null && stack.getItem() == seed.getItem() && stack.getItemDamage() == seed.getMeta()) {
+							((CropPlantAPIv1)plant).setGrowthRequirement(requirement);
+							return true;
+						}
+					}
+				}
+			}
+		}
 		return false;
     }
 
