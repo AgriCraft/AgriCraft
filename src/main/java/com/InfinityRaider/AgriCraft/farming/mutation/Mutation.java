@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.farming.mutation;
 
 import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -43,7 +44,8 @@ public class Mutation implements IMutation {
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
         this(result, parent1, parent2, 100);
-        this.chance = 1.00/ CropPlantHandler.getPlantFromStack(result).getTier();
+        CropPlant plant = CropPlantHandler.getPlantFromStack(result);
+        this.chance = plant == null? 0 : ((double) plant.getSpreadChance())/100.0D;
     }
 
     //copy constructor

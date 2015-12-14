@@ -38,6 +38,7 @@ public abstract class CropPlant implements ICropPlant {
         this.growthRequirement = initGrowthRequirement();
         growthRequirement = growthRequirement == null ? GrowthRequirementHandler.getNewBuilder().build() : growthRequirement;
         this.tier = tier();
+        this.spreadChance = 100/getTier();
         this.blackListed = false;
         this.ignoreVanillaPlantingRule = false;
     }
