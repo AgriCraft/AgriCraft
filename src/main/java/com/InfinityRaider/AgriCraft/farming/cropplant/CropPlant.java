@@ -29,7 +29,7 @@ import java.util.Random;
  * ICropPlant is implemented to be able to read data from this class from the API
  */
 public abstract class CropPlant implements ICropPlant {
-    private IGrowthRequirement growthRequirement;
+    protected IGrowthRequirement growthRequirement;
 
     public final int getGrowthRate() {
     	int tier = getTier();
@@ -169,6 +169,10 @@ public abstract class CropPlant implements ICropPlant {
 
     public IAdditionalCropData readCropDataFromNBT(NBTTagCompound tag) {
         return null;
+    }
+
+    public final void setGrowthRequirement(IGrowthRequirement growthRequirement) {
+        this.growthRequirement = growthRequirement;
     }
 
     @Override

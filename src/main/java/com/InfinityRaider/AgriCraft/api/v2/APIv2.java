@@ -104,18 +104,27 @@ public interface APIv2 extends APIv1 {
     ISeedStats getSeedStats(ItemStack seed);
 
     /**
-     * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
-     */
-    @Override
-    void registerCropPlant(IAgriCraftPlant plant);
-
-    /**
      * Gets the ICropPlant object containing all the data AgriCraft knows about this seed
      * @param seed Stack holding the seed
      * @return an ICropPlant object if the seed is considered a seed for AgriCraft, or null if not
      */
     @Override
     ICropPlant getCropPlant(ItemStack seed);
+
+    /**
+     * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
+     */
+    @Override
+    void registerCropPlant(IAgriCraftPlant plant);
+
+    /**
+     * Register a growth requirement for this seed,
+     * This will effectively override the IGrowthRequirement previously registered for the given seed
+     *
+     * @return true if the registering was successful
+     */
+    @Override
+    boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement);
 
     /**
      * Register a default soil that any crop that doesn't require a specific soil can grow on

@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.farming;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.ItemWithMeta;
 import com.InfinityRaider.AgriCraft.farming.cropplant.*;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
@@ -22,7 +23,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class CropPlantHandler {
     private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, CropPlant>>();
@@ -107,47 +107,62 @@ public class CropPlantHandler {
     }
 
     /**
-     * Get the list of plants that are queued up to be registered. Only to be used for API v1 compatibility.
-     * 
-     * @return The list of queued plants
+     * Sets the growth requirement for a seed, effectively overriding the previously registered growth requirement
+     * @param seed The seed for which to set the growth requirement
+     * @param req The growth requirement to be set
+     * @return if the growth requirement was successfully set
      */
-    public static List<CropPlant> getUnregisteredPlants() {
-    	return plantsToRegister;
+    public static boolean setGrowthRequirement(ItemWithMeta seed, IGrowthRequirement req) {
+        if(seed == null || seed.getItem() == null) {
+            return false;
+        }
+        if(!isValidSeed(seed)) {
+            for(CropPlant plant:plantsToRegister) {
+                ItemStack plantSeed = plant.getSeed();
+                if(plantSeed == null || plantSeed.getItem() == null) {
+                    continue;
+                }
+                if(plantSeed.getItem() == seed.getItem() && plantSeed.getItemDamage() == seed.getMeta()) {
+                    plant.setGrowthRequirement(req);
+                    return true;
+                }
+            }
+            return false;
+        }
+        cropPlants.get(seed.getItem()).get(seed.getMeta()).setGrowthRequirement(req);
+        return true;
     }
     
     /**
      * Tests to see if the provided stack is a valid {@link #cropPlants seed}.
-     * Tentatively provides the same output as {@link #isValidPlant(ItemStack)}.
-     * 
-     * @see #isValidPlant(ItemStack)
-     * 
-     * @param stack the stack to test as a seed.
+     * @param seed the stack to test as a seed.
      * @return if the stack is a valid seed.
      */
-    public static boolean isValidSeed(ItemStack stack) { //The method name should match the rest of the class.
-    	if (stack != null && cropPlants.containsKey(stack.getItem())) { //Is the plant/seed in the registry? If the plant/seed is in the registry it is o.k. to get.
-    		return cropPlants.get(stack.getItem()).containsKey(stack.getItemDamage()); // Is the damage value in the registry? If so, this is a valid seed. 
-    	}
-        return false; // Exceptions are very costly and should generally be avoided.
+    public static boolean isValidSeed(ItemStack seed) {
+        return (seed != null)
+                && (seed.getItem() != null)
+                && isValidSeed(seed.getItem(), seed.getItemDamage());
     }
-    
+
     /**
-     * Tests to see if the provided stack is a valid {@link #cropPlants plant}.
-     * Tentatively provides the same output as {@link #isValidSeed(ItemStack)}.
-     * 
-     * @see #isValidPlant(ItemStack)
-     * 
-     * @param stack the stack to test as a seed.
+     * Tests to see if the provided stack is a valid {@link #cropPlants seed}.
+     * @param seed the stack to test as a seed.
      * @return if the stack is a valid seed.
      */
-    public static boolean isValidPlant(ItemStack stack) { //The method name should match the rest of the class.
-        if(stack==null || stack.getItem()==null) {
-            return false;
-        }
-    	if (cropPlants.containsKey(stack.getItem())) { //Is the plant/seed in the registry? If the plant/seed is in the registry it is o.k. to get.
-    		return cropPlants.get(stack.getItem()).containsKey(stack.getItemDamage()); // Is the damage value in the registry? If so, this is a valid seed. 
-    	}
-        return false; // Exceptions are very costly and should generally be avoided.
+    public static boolean isValidSeed(ItemWithMeta seed) {
+        return (seed !=null)
+                && isValidSeed(seed.getItem(), seed.getMeta());
+    }
+
+    /**
+     * Tests to see if the provided stack is a valid {@link #cropPlants seed}.
+     * @param seed the stack to test as a seed.
+     * @return if the stack is a valid seed.
+     */
+    public static boolean isValidSeed(Item seed, int meta) {
+        return (seed != null)
+                && cropPlants.containsKey(seed)
+                && cropPlants.get(seed).containsKey(meta);
     }
 
     /**
@@ -181,7 +196,7 @@ public class CropPlantHandler {
      * @return the plant in the stack, or null, if the stack does not contain a valid plant. 
      */
     public static CropPlant getPlantFromStack(ItemStack stack) {
-        if (isValidPlant(stack)) { //Is this a valid plant? If so it is safe to lookup.
+        if (isValidSeed(stack)) { //Is this a valid plant? If so it is safe to lookup.
             return cropPlants.get(stack.getItem()).get(stack.getItemDamage());
         }
         else {

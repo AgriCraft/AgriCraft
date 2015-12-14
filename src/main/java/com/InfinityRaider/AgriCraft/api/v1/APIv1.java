@@ -110,12 +110,11 @@ public interface APIv1 extends APIBase {
     void registerCropPlant(IAgriCraftPlant plant);
 
     /**
-     * Register a growth requirement for this seed
-     * @return true if the registering was successful
+     * Register a growth requirement for this seed,
+	 * This will effectively override the IGrowthRequirement previously registered for the given seed
 	 *
-	 * DEPRECATED: GROWTH REQUIREMENTS ARE NOW AUTOMATICALLY REGISTERED WHEN REGISTERING CROPPLANTS
+     * @return true if the registering was successful
      */
-	@Deprecated
     boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement);
 
     /**

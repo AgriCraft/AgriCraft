@@ -20,9 +20,9 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class CropPlantAPIv1 extends CropPlant {
     protected ICropPlant plant;
-    private IGrowthRequirement growthRequirementOverride;
 
     public CropPlantAPIv1(ICropPlant plant) {
         this.plant = plant;
@@ -90,11 +90,7 @@ public class CropPlantAPIv1 extends CropPlant {
 
     @Override
     protected IGrowthRequirement initGrowthRequirement() {
-        return growthRequirementOverride != null ? growthRequirementOverride : GrowthRequirementHandler.getNewBuilder().build();
-    }
-
-    public void setGrowthRequirement(IGrowthRequirement growthRequirement) {
-    	growthRequirementOverride = growthRequirement;
+        return GrowthRequirementHandler.getNewBuilder().build();
     }
     
     @Override
