@@ -31,6 +31,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class APIimplv1 implements APIv1 {
 
 	private final int version;

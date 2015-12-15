@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.items.blocks;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -16,7 +15,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -110,6 +108,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
      * @param objectMeta the material's meta value.
      * @param registeredMaterials the list of materials to check against.
      */
+    @SuppressWarnings("unchecked")
     private void addMaterialToList(ItemStack stack, List list, int objectMeta, ArrayList<ItemStack> registeredMaterials) {
         if(!hasMaterial(registeredMaterials, stack)) {
             ItemStack entry = new ItemStack(this.field_150939_a, 1, objectMeta);
@@ -135,6 +134,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
      * </p>
      */
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
         ItemStack material;
         if(stack.getItemDamage()==0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(Names.NBT.material) && stack.getTagCompound().hasKey(Names.NBT.materialMeta)) {

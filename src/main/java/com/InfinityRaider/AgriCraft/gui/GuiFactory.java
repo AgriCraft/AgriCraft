@@ -10,6 +10,7 @@ import java.util.Set;
 
 
 @SideOnly(Side.CLIENT)
+@SuppressWarnings("unused")
 public class GuiFactory implements IModGuiFactory {
 
     @Override

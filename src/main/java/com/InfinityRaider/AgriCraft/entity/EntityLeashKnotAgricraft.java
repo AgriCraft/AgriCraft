@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class EntityLeashKnotAgricraft extends EntityLeashKnot {
+    @SuppressWarnings("unused")
     public EntityLeashKnotAgricraft(World world) {
         super(world);
     }

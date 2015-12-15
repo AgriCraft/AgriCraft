@@ -340,6 +340,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
 
     //this loads the saved data for the tile entity
     @Override
+    @SuppressWarnings("deprecation")
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         this.stats = PlantStats.readFromNBT(tag);
@@ -356,7 +357,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
             this.plant=null;
         }
         if(tag.hasKey(Names.NBT.inventory) && this.plant != null) {
-            IAdditionalCropData data = plant.readCropDataFromNBT(tag.getCompoundTag(Names.NBT.inventory));
+            this.data = plant.readCropDataFromNBT(tag.getCompoundTag(Names.NBT.inventory));
         }
     }
 

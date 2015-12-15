@@ -17,6 +17,7 @@ public class TessellatorV2 extends Tessellator {
 
     private TransformationMatrix matrix = new TransformationMatrix();
 
+    @SuppressWarnings("unused")
     private TessellatorV2(int a) {}
 
     static {
@@ -81,6 +82,7 @@ public class TessellatorV2 extends Tessellator {
     }
 
     /** Applies a coordinate transformation */
+    @SuppressWarnings("unused")
     public void applyTranformation(TransformationMatrix transformationMatrix) {
         this.matrix.multiplyRightWith(transformationMatrix);
     }

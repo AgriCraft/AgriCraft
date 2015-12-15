@@ -701,7 +701,6 @@ public interface APIv2 extends APIv1 {
      */
     ArrayList<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal);
 
-
     /**
      * Checks if a seed is BlackListed
      * @param seed the seed to check

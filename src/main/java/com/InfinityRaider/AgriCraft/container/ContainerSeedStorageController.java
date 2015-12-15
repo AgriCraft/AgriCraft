@@ -16,6 +16,7 @@ public class ContainerSeedStorageController extends ContainerSeedStorageBase {
 
     public ContainerSeedStorageController(InventoryPlayer inventory, TileEntitySeedStorageController te) {
         super(inventory, invOffsetX, invOffsetY);
+        this.te = te;
     }
 
     @Override

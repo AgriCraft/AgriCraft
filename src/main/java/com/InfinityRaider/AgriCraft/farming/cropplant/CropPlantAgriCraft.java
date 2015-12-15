@@ -20,12 +20,16 @@ public class CropPlantAgriCraft extends CropPlant {
     IAgriCraftPlant plant;
 
     public CropPlantAgriCraft(IAgriCraftPlant plant) {
-       this.plant = plant;
+        super();
+        this.plant = plant;
+        this.setTier(plant.getSeed().tier());
+        this.setGrowthRequirement(plant.getGrowthRequirement());
+        this.setSpreadChance(100/getTier());
     }
 
     @Override
     public int tier() {
-        return plant.getSeed().tier();
+        return 1;
     }
 
     @Override
@@ -61,7 +65,7 @@ public class CropPlantAgriCraft extends CropPlant {
 
     @Override
     protected IGrowthRequirement initGrowthRequirement() {
-        return plant.getGrowthRequirement();
+        return null;
     }
 
     @Override

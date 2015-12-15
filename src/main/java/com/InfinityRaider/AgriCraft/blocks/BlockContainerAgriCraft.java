@@ -91,15 +91,6 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
     }
 
     @Override
-    public void onBlockAdded(World world, int x, int y, int z) {
-        super.onBlockAdded(world, x, y, z);
-        if(this.isMultiBlock() && !world.isRemote) {
-            //((IMultiBlockComponent) world.getTileEntity(x, y, z)).getMultiBlockLogic().onBlockPlaced();
-        }
-    }
-
-
-    @Override
     @SuppressWarnings("unchecked")
     public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
         if(this.isMultiBlock() && !world.isRemote) {

@@ -57,10 +57,10 @@ public abstract class MutationHandler {
 		Mutation mutation = null;
 		String[] data = IOHelper.getData(input);
 
-		if (data.length != 1 && data.length != 3) {
-			LogHelper.info("Error when reading mutation: invalid number of arguments. (line: " + input + ")");
-			return null;
-		}
+        if (data.length == 0) {
+            LogHelper.info("Error when reading mutation: invalid number of arguments. (line: " + input + ")");
+            return null;
+        }
 
 		String mutationData = data[0];
 		int indexEquals = mutationData.indexOf('=');

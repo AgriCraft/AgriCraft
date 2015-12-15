@@ -9,6 +9,7 @@ public class EntityVillagerFarmer extends EntityVillager {
         this(world, 0);
     }
 
+    @SuppressWarnings("unused")
     public EntityVillagerFarmer(World world, int profession) {
         super(world, WorldGen.getVillagerId());
         this.tasks.addTask(5, new EntityAIClearWeeds(this));

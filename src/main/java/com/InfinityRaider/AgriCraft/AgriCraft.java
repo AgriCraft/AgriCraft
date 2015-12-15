@@ -13,7 +13,6 @@ import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.RenderLogger;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -57,15 +56,13 @@ public class AgriCraft {
     public static IProxy proxy;
 
     @Mod.EventHandler
+    @SuppressWarnings("unused")
     public static void preInit(FMLPreInitializationEvent event) {
         LogHelper.debug("Starting Pre-Initialization");
         NetworkWrapperAgriCraft.init();
         proxy.initConfiguration(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
         ModHelper.findHelpers();
-        if (ConfigurationHandler.debug) {
-            FMLCommonHandler.instance().bus().register(new RenderLogger());
-        }
         Blocks.init();
         Crops.init();
         Items.init();
@@ -75,6 +72,7 @@ public class AgriCraft {
     }
 
     @Mod.EventHandler
+    @SuppressWarnings("unused")
     public static void init(FMLInitializationEvent event) {
         LogHelper.debug("Starting Initialization");
         proxy.registerEventHandlers();
@@ -86,6 +84,7 @@ public class AgriCraft {
     }
 
     @Mod.EventHandler
+    @SuppressWarnings("unused")
     public static void postInit(FMLPostInitializationEvent event) {
         LogHelper.debug("Starting Post-Initialization");
         //Have to do this in postInit because some mods don't register their items/blocks until init
@@ -102,16 +101,19 @@ public class AgriCraft {
     }
 
     @Mod.EventHandler
+    @SuppressWarnings("unused")
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
         MutationHandler.init();
         NEIHelper.setServerConfigs();
     }
 
     @Mod.EventHandler
+    @SuppressWarnings("unused")
     public void onServerStart(FMLServerStartingEvent event) {
     }
 
     @Mod.EventHandler
+    @SuppressWarnings("unused")
     public void onMissingMappings(FMLMissingMappingsEvent event) {
         ArrayList<String> removedIds = new ArrayList<String>();
         removedIds.add("AgriCraft:cropMelon");

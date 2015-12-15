@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemClipping;
@@ -80,7 +81,11 @@ public class ItemClipping extends ItemAgricraft {
         if(seed==null || seed.getItem()==null || !CropPlantHandler.isValidSeed(seed)) {
             return text;
         }
-        ItemStack fruit = CropPlantHandler.getPlantFromStack(seed).getAllFruits().get(0);
+        CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
+        if(plant == null) {
+            return text;
+        }
+        ItemStack fruit = plant.getAllFruits().get(0);
         return fruit.getDisplayName() + " " + text;
     }
 }

@@ -25,7 +25,6 @@ public class CropPlantResourcefulCrops extends CropPlant {
     private static ResourcefulCropsAPIwrapper api;
 
     private final int meta;
-    private final int tier;
     private final ArrayList<ItemStack> fruits;
     private final IGrowthRequirement growthRequirement;
 
@@ -39,7 +38,7 @@ public class CropPlantResourcefulCrops extends CropPlant {
         }
         this.meta = meta;
         this.fruits = api.getAllFruits(meta);
-        this.tier = api.getTier(meta);
+        this.setTier(api.getTier(meta));
         this.growthRequirement = requirement;
         if(grabIcons) {
             try {
@@ -66,6 +65,11 @@ public class CropPlantResourcefulCrops extends CropPlant {
 
     @Override
     public int tier() {
+        if(api==null) {
+            api = ResourcefulCropsAPIwrapper.getInstance();
+        }
+        int tier = api.getTier(meta);
+        tier = tier <= 0 ? 1: tier >= Constants.GROWTH_TIER.length ? Constants.GROWTH_TIER.length-1 : tier;
         return tier;
     }
 

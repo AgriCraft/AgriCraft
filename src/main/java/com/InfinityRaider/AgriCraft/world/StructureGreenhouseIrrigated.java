@@ -26,6 +26,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
     //helper fields
     private int averageGroundLevel = -1;
 
+    @SuppressWarnings("unused")
     public StructureGreenhouseIrrigated() {}
 
     public StructureGreenhouseIrrigated(StructureVillagePieces.Start villagePiece, int nr, Random rand, StructureBoundingBox structureBoundingBox, int coordBaseMode) {

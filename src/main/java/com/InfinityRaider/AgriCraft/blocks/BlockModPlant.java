@@ -48,7 +48,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
      *               int tier (necessary)
      *               RenderMethod renderType (necessary)
      *               ItemStack shearDrop (optional, first ItemStack argument will be the regular fruit, second ItemStack argument is the shear drop)
-     *               int[] brightness (optional, if not given it will default to 8, 16. Only works if the array is size 2: {minBrightness, maxBrightness})
+     *               int[] brightness (optional, if not given it will default to {8, 16}. Only works if the array is size 2: {minBrightness, maxBrightness})
      * Will throw MissingArgumentsException if the needed arguments are not given.
      * This constructor creates the seed for this plant which can be gotten via blockModPlant.getSeed().
      * This constructor also registers this block and the item for the seed to the minecraft item/block registry and to the AgriCraft CropPlantHandler.

@@ -41,8 +41,8 @@ public class API {
 	 * APIBase.getStatus() and APIBase.getVersion() before typecasting the
 	 * result to any specific interface.
 	 * 
-	 * @param maxVersion
-	 * @return
+	 * @param maxVersion The maximum version allowed to be returned, effectively returned version might be lower
+	 * @return an APIBase object which interfaces with AgriCraft
 	 */
 	public static APIBase getAPI(int maxVersion) {
 		return api.getAPI(maxVersion);

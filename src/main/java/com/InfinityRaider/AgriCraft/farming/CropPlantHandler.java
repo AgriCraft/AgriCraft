@@ -157,7 +157,7 @@ public class CropPlantHandler {
      * @return if the stack is a valid seed.
      */
     public static boolean isValidSeed(ItemStack seed) {
-        return (seed != null)&& (seed.getItem() != null) && isValidSeed(seed.getItem(), seed.getItemDamage());
+        return (seed != null) && (seed.getItem() != null) && isValidSeed(seed.getItem(), seed.getItemDamage());
     }
 
     /**
