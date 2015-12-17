@@ -134,7 +134,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         CropPlant oldPlant = getPlant();
         this.stats = new PlantStats();
         this.plant = null;
-        this.weed = false;
         this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
         this.markForUpdate();
         if (oldPlant != null) {
