@@ -26,4 +26,17 @@ public class CropPlantAPIv2 extends CropPlantAPIv1 {
         IGrowthRequirement req = ((ICropPlant) plant).getGrowthRequirement();
         return req==null? super.initGrowthRequirement():req;
     }
+
+    @Override
+    public void onValidate(World world, int x, int y, int z, ICrop crop) {
+        ((ICropPlant) plant).onValidate(world, x, y, z, crop);
+    }
+
+    @Override
+    public void onInvalidate(World world, int x, int y, int z, ICrop crop) {
+        ((ICropPlant) plant).onInvalidate(world, x, y, z, crop);}
+
+    @Override
+    public void onChunkUnload(World world, int x, int y, int z, ICrop crop) {
+        ((ICropPlant) plant).onChunkUnload(world, x, y, z, crop);}
 }

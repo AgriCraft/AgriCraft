@@ -151,7 +151,7 @@ public interface ICrop {
      * @param player the player which harvests the crop, may be null if it is harvested by automation
      * @return if the harvest was successful
      */
-     boolean harvest(@Nullable EntityPlayer player);
+    boolean harvest(@Nullable EntityPlayer player);
 
     /**
      * Utility method to get access to the TileEntity fields and methods for the crop

@@ -239,9 +239,19 @@ public abstract class CropPlant implements ICropPlant {
         return null;
     }
 
+    @Override
     public IAdditionalCropData readCropDataFromNBT(NBTTagCompound tag) {
         return null;
     }
+
+    @Override
+    public void onValidate(World world, int x, int y, int z, ICrop crop) {}
+
+    @Override
+    public void onInvalidate(World world, int x, int y, int z, ICrop crop) {}
+
+    @Override
+    public void onChunkUnload(World world, int x, int y, int z, ICrop crop) {}
 
     public final void setGrowthRequirement(IGrowthRequirement growthRequirement) {
         this.growthRequirement = growthRequirement;

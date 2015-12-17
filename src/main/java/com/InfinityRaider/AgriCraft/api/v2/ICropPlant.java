@@ -34,7 +34,7 @@ public interface ICropPlant extends com.InfinityRaider.AgriCraft.api.v1.ICropPla
     @Override
     Block getBlock();
 
-    /** Gets an arraylist of all possible fruit drops from this plant */
+    /** Gets an ArrayList of all possible fruit drops from this plant */
     @Override
     ArrayList<ItemStack> getAllFruits();
 
@@ -42,7 +42,7 @@ public interface ICropPlant extends com.InfinityRaider.AgriCraft.api.v1.ICropPla
     @Override
     ItemStack getRandomFruit(Random rand);
 
-    /** Returns an ArrayList with amount of random fruit stacks for this plant */
+    /** Returns an ArrayList with random fruit stacks for this plant */
     @Override
     ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
 
@@ -79,6 +79,36 @@ public interface ICropPlant extends com.InfinityRaider.AgriCraft.api.v1.ICropPla
      * @return an object holding the data
      */
     IAdditionalCropData readCropDataFromNBT(NBTTagCompound tag);
+
+    /**
+     * Called when the TileEntity with this plant has its validate() method called
+     * @param world the World object for the TileEntity
+     * @param x the x-coordinate for the TileEntity
+     * @param y the x-coordinate for the TileEntity
+     * @param z the x-coordinate for the TileEntity
+     * @param crop the ICrop instance of the TileEntity (is the same object as the TileEntity, but is for convenience)
+     */
+    void onValidate(World world, int x, int y, int z, ICrop crop);
+
+    /**
+     * Called when the TileEntity with this plant has its invalidate() method called
+     * @param world the World object for the TileEntity
+     * @param x the x-coordinate for the TileEntity
+     * @param y the x-coordinate for the TileEntity
+     * @param z the x-coordinate for the TileEntity
+     * @param crop the ICrop instance of the TileEntity (is the same object as the TileEntity, but is for convenience)
+     */
+    void onInvalidate(World world, int x, int y, int z, ICrop crop);
+
+    /**
+     * Called when the TileEntity with this plant has its onChunkUnload() method called
+     * @param world the World object for the TileEntity
+     * @param x the x-coordinate for the TileEntity
+     * @param y the x-coordinate for the TileEntity
+     * @param z the x-coordinate for the TileEntity
+     * @param crop the ICrop instance of the TileEntity (is the same object as the TileEntity, but is for convenience)
+     */
+    void onChunkUnload(World world, int x, int y, int z, ICrop crop);
 
     /**
      * Gets the growth requirement for this plant, this is used to check if the plant can be planted or grow in certain locations

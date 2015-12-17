@@ -150,6 +150,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     }
 
     /** gets the height of the crop */
+    @SideOnly(Side.CLIENT)
     public float getCropHeight() {
         return hasPlant()?plant.getHeight(getBlockMetadata()):Constants.UNIT*13;
     }
@@ -317,6 +318,30 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         return this.data;
     }
 
+    @Override
+    public void validate() {
+        super.validate();
+        if(this.hasPlant()) {
+            plant.onValidate(worldObj, xCoord, yCoord, zCoord, this);
+        }
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        if(this.hasPlant()) {
+            plant.onInvalidate(worldObj, xCoord, yCoord, zCoord, this);
+        }
+    }
+
+    @Override
+    public void onChunkUnload() {
+        super.onChunkUnload();
+        if(this.hasPlant()) {
+            plant.onChunkUnload(worldObj, xCoord, yCoord, zCoord, this);
+        }
+    }
+
     //TileEntity is just to store data on the crop
     @Override
     public boolean canUpdate() {
@@ -332,8 +357,8 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         tag.setBoolean(Names.NBT.weed, weed);
         if(this.plant != null) {
             tag.setTag(Names.NBT.seed, CropPlantHandler.writePlantToNBT(plant));
-            if(this.data != null) {
-                tag.setTag(Names.NBT.inventory, data.writeToNBT());
+            if(getAdditionalCropData() != null) {
+                tag.setTag(Names.NBT.inventory, getAdditionalCropData().writeToNBT());
             }
         }
     }
@@ -417,7 +442,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         if (te == null || !(te instanceof TileEntityCrop)) {
             return;
         }
-
         neighbours.add((TileEntityCrop) te);
     }
 
