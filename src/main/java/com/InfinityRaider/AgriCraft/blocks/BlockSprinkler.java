@@ -47,6 +47,12 @@ public class BlockSprinkler extends BlockContainerAgriCraft {
         return false;
     }
 
+    //prevent block from being removed by leaves
+    @Override
+    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+        return false;
+    }
+
     @Override
     public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
         if((!world.isRemote) && (!player.isSneaking())) {
