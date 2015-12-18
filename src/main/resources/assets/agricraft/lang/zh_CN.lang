@@ -361,18 +361,38 @@ agricraft_journal.hc_WinterSquash=只要笋瓜颜色变深,趋于泥土颜色,�
 agricraft_journal.hc_Zucchini=西葫芦通常是炒着吃的, 当然也可用很多别的 烹调手段,包括蒸,煮,烤,填满别的材料并 烘烤,烧烤,炸,或者作为原料并入别的菜谱.
 
 //plant mega pack seeds
-agricraft_journal.pmp_Spinach=卡通动漫角色"大力水手"被描绘为一个对菠 菜有强烈喜爱的人,在吃过菠菜后会变得力大 无穷.
 agricraft_journal.pmp_Beet=地底深处的紫色甜菜根可以生吃,烧烤,水煮,或者烘烤.
-agricraft_journal.pmp_Broccoli=西兰花是卷心菜科中的一种可食用绿色蔬菜,其开花的巨大头部被用作蔬菜.
+agricraft_journal.pmp_Broccoli=花椰菜是卷心菜科中的一种可食用绿色蔬菜,其开花的巨大头部被用作蔬菜.
 agricraft_journal.pmp_Celery=芹菜是一种非常普遍的蔬菜,可食用部分是它的茎.
 agricraft_journal.pmp_Corn=因为它浅层的根,玉米很容易受干旱影响,对土壤养分不足非常敏感,狂风之后甚至会被连根拔起.
 agricraft_journal.pmp_Cucumber=黄瓜是一种匍匐藤的圆柱形果实,在厨房里被用作蔬菜.
-agricraft_journal.pmp_Leek=不像洋葱那样紧密的球茎,韭葱有着被紧密的叶鞘包围的圆柱球茎,因将泥土拉到身边,终日不见阳光而日渐变白.
-agricraft_journal.pmp_Lettuce=通常作为不耐寒的一年生作物,生菜是很容易培养的,尽管它仍需要较低温度以避免过早开花.
+agricraft_journal.pmp_Leek=不像洋葱那样紧密的球茎,象大蒜有着被紧密的叶鞘包围的圆柱球茎,因将泥土拉到身边, 终日不见阳光而日渐变白.
+agricraft_journal.pmp_Lettuce=通常作为不耐寒的一年生作物,莴苣是很容易培养的,尽管它仍需要较低温度以避免过早开花.
 agricraft_journal.pmp_Onion=洋葱植物有一个中空,偏蓝的绿叶组成的扇形,其基础的球茎会在时长足够时膨胀饱满.
 agricraft_journal.pmp_Spinach=卡通动漫角色"大力水手"被描绘为一个对菠菜有强烈喜爱的人,在吃过菠菜后会变得力大无穷.
 agricraft_journal.pmp_Tomato=西红柿有多种食用方式,包括生吃,还有各种菜的原料,酱料,沙拉,或者饮料.
+agricraft_journal.pmp_BellPepperYellow=世界上有各种各样的甜椒:红,黄,绿,但这种是黄的.
+agricraft_journal.pmp_BellPepperOrange=世界上有各种各样的甜椒:红,黄,绿,但这种是橙色的.
+agricraft_journal.pmp_BellPepperRed=世界上有各种各样的甜椒:红,黄,绿,但这种是红的.
+agricraft_journal.pmp_Sorrel=酸模是一种细长的根系扎得很深的草本植物.
 
+//witchery seeds
+agricraft_journal.wi_Belladonna=这种植物的一切都有高毒性: 叶子, 花蕾还有花.
+agricraft_journal.wi_Garlic=根据民间传言, 大蒜可以驱退吸血鬼. 但又有谁信吸血鬼?
+agricraft_journal.wi_Mandrake=一种根从土里拔出来以后, 会发出刺耳尖叫的植物.
+agricraft_journal.wi_Snowbell=雪铃花是一种似乎会冻结吸收的一切水分的魔力花卉.
+agricraft_journal.wi_Artichoke=水洋蓟是一种奇怪的朝鲜蓟变种, 只有很少人知道他究竟能干啥.
+agricraft_journal.wi_Wolfsbane=传言说这种花能揭示受狼人咒之苦者的本来面目.
+agricraft_journal.wi_Wormwood=苦艾是一种稀有植物. 药学家赞美它压制瘟疫的功效.
 
 //chococraft seeds
 agricraft_journal.cc_Gysahl=基沙尔野菜是虚构的生物"陆行鸟"的最爱的 食物.有时一棵基沙尔野菜可以长出可爱的基 沙尔野菜,还有人说细心培育的基沙尔野 菜可以长出金基沙尔野菜.
+
+//psychedelicraft seeds
+agricraft_journal.pc_cannabis=通常被称为药用大麻, 是一种广泛使用的软性瘾品.
+agricraft_journal.pc_coca=这种植物的叶子是可卡因的原材料.
+agricraft_journal.pc_hop=啤酒花用于酿造各种麦酒和淡啤.
+agricraft_journal.pc_tobacco=即使有害健康,世界各地都在吸烟.
+
+//blue power flax
+agricraft_journal.bp_flax_seeds=亚麻就是线 ~Sjin.
