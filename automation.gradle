@@ -1,6 +1,6 @@
 // Gradle automation tasks.
 
-apply plugin: 'curseforge'
+//apply plugin: 'curseforge'
 
 // Configure Travis auto-build info.
 allprojects {
@@ -17,6 +17,7 @@ allprojects {
 }
 
 // Release to Curse from Travis.
+/*
 curse {
     onlyIf {
         (!System.env.TRAVIS_TAG.isEmpty() || getCommitMsg.commitMsg().contains("[cf push]")) && System.env.CFKEY != null
@@ -29,6 +30,7 @@ curse {
     """
     releaseType = project.hasProperty('releaseType') ? project.releaseType : ""
 }
+*/
 
 // Retrieve the commit message from git.
 task getCommitMsg(type: Exec) {
@@ -41,4 +43,4 @@ task getCommitMsg(type: Exec) {
 }
 
 // Tell the Curse task it needs the commit message.
-curse.dependsOn getCommitMsg
+//curse.dependsOn getCommitMsg
