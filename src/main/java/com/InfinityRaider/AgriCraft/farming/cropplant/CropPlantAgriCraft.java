@@ -3,12 +3,12 @@ package com.InfinityRaider.AgriCraft.farming.cropplant;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -69,7 +69,7 @@ public class CropPlantAgriCraft extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+    public boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
         return false;
     }
 

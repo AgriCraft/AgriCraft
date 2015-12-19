@@ -44,7 +44,7 @@ public class MutationEngine {
         IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(result.getSeed(), result.getMeta());
 
         boolean valid = result.getSeed() != null && CropPlantHandler.isValidSeed(result.toStack());
-        return valid && growthReq.canGrow(crop.getWorldObj(), crop.xCoord, crop.yCoord, crop.zCoord);
+        return valid && growthReq.canGrow(crop.getWorld(), crop.getPos());
     }
 
     public ICrossOverStrategy rollStrategy() {

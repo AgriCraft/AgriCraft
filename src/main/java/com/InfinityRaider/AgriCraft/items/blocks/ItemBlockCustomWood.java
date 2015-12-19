@@ -2,10 +2,6 @@ package com.InfinityRaider.AgriCraft.items.blocks;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +11,10 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -53,17 +53,17 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
      * @param list the list to populate.
      */
     public void getSubItems(List list) {
-        ArrayList<ItemStack> registeredMaterials = new ArrayList<ItemStack>();
-        ArrayList<ItemStack> planks = OreDictionary.getOres(Names.OreDict.plankWood);
+        List<ItemStack> registeredMaterials = new ArrayList<>();
+        List<ItemStack> planks = OreDictionary.getOres(Names.OreDict.plankWood);
         for(ItemStack plank:planks) {
             if(plank.getItem() instanceof ItemBlock) {
                 // Skip the ExU stuff for now as we don't support its textures yet
                 // TODO: Find out how ExU generates the colored textures and integrate it
-                if (Loader.isModLoaded(Names.Mods.extraUtilities) && ((ItemBlock) plank.getItem()).field_150939_a.getClass().getSimpleName().equals("BlockColor"))
+                if (Loader.isModLoaded(Names.Mods.extraUtilities) && ((ItemBlock) plank.getItem()).block.getClass().getSimpleName().equals("BlockColor"))
                     continue;
 
                 if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                    ArrayList<ItemStack> subItems = new ArrayList<ItemStack>();
+                    List<ItemStack> subItems = new ArrayList<>();
                     Side side = FMLCommonHandler.instance().getEffectiveSide();
                     if(side==Side.CLIENT) {
                         plank.getItem().getSubItems(plank.getItem(), null, subItems);
@@ -109,9 +109,9 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
      * @param registeredMaterials the list of materials to check against.
      */
     @SuppressWarnings("unchecked")
-    private void addMaterialToList(ItemStack stack, List list, int objectMeta, ArrayList<ItemStack> registeredMaterials) {
+    private void addMaterialToList(ItemStack stack, List list, int objectMeta, List<ItemStack> registeredMaterials) {
         if(!hasMaterial(registeredMaterials, stack)) {
-            ItemStack entry = new ItemStack(this.field_150939_a, 1, objectMeta);
+            ItemStack entry = new ItemStack(this.block, 1, objectMeta);
             NBTTagCompound tag = NBTHelper.getMaterialTag(stack);
             if (tag != null) {
                 entry.setTagCompound(tag);
@@ -141,7 +141,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
             NBTTagCompound tag = stack.getTagCompound();
             String name = tag.getString(Names.NBT.material);
             int meta = tag.getInteger(Names.NBT.materialMeta);
-            material = new ItemStack((Block) Block.blockRegistry.getObject(name), 1, meta);
+            material = new ItemStack(Block.getBlockFromName(name), 1, meta);
         } else {
             material = new ItemStack(Blocks.planks);
         }

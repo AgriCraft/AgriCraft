@@ -75,9 +75,9 @@ public class Mutation implements IMutation {
     }
     
     public String getFormula(){
-        String result = this.result != null ? (Item.itemRegistry.getNameForObject(this.result.getItem()) + ':' + this.result.getItemDamage()) : "null";
-        String parent1 = this.parent1.getItem() != null ? (Item.itemRegistry.getNameForObject(this.parent1.getItem())) + ':' + this.parent1.getItemDamage() : "null";
-        String parent2 = this.parent2.getItem() != null ? (Item.itemRegistry.getNameForObject(this.parent2.getItem())) + ':' + this.parent2.getItemDamage() : "null";
+        String result = this.result != null ? (Item.itemRegistry.getNameForObject(this.result.getItem()).toString() + ':' + this.result.getItemDamage()) : "null";
+        String parent1 = this.parent1.getItem() != null ? (Item.itemRegistry.getNameForObject(this.parent1.getItem())).toString() + ':' + this.parent1.getItemDamage() : "null";
+        String parent2 = this.parent2.getItem() != null ? (Item.itemRegistry.getNameForObject(this.parent2.getItem())).toString() + ':' + this.parent2.getItemDamage() : "null";
         return result + " = " + parent1 + " + " + parent2;
     }
 }

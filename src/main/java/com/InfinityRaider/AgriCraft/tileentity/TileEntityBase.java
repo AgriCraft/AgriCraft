@@ -1,28 +1,39 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
 /**
  * The root class for all AgriCraft TileEntities.
  */
-public abstract class TileEntityAgricraft extends TileEntity {
+public abstract class TileEntityBase extends TileEntity {
     /**
      * The orientation of the block.
      * Defaults to ForgeDirection.UNKNOWN;
      */
     private ForgeDirection orientation = ForgeDirection.UNKNOWN;
+
+    public final int xCoord() {
+        return this.getPos().getX();
+    }
+
+    public final int yCoord() {
+        return this.getPos().getY();
+    }
+
+    public final int zCoord() {
+        return this.getPos().getZ();
+    }
 
     /**
      * Saves the tile entity to an NBTTag.
@@ -106,15 +117,15 @@ public abstract class TileEntityAgricraft extends TileEntity {
     public Packet getDescriptionPacket() {
         NBTTagCompound nbtTag = new NBTTagCompound();
         writeToNBT(nbtTag);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, this.blockMetadata, nbtTag);
+        return new S35PacketUpdateTileEntity(this.getPos(), this.getBlockMetadata(), nbtTag);
     }
 
     //read data from packet
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        readFromNBT(pkt.func_148857_g());
+        readFromNBT(pkt.getNbtCompound());
         if(worldObj.isRemote) {
-            markForRenderUpdate();
+            markForUpdate();
         }
     }
 
@@ -123,14 +134,8 @@ public abstract class TileEntityAgricraft extends TileEntity {
      */
     public final void markForUpdate() {
         if(!worldObj.isRemote) {
-            this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            this.worldObj.markBlockForUpdate(this.getPos());
         }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public final void markForRenderUpdate() {
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
-
     }
 
     /**

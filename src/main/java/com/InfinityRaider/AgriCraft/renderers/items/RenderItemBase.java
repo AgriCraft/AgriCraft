@@ -1,15 +1,14 @@
 package com.InfinityRaider.AgriCraft.renderers.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.RenderBlocks;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -64,7 +63,7 @@ public abstract class RenderItemBase implements IItemRenderer {
      */
     @SuppressWarnings("unused")
     protected void drawAxisSystem(boolean startDrawing) {
-        Tessellator tessellator = Tessellator.instance;
+        TessellatorV2 tessellator = TessellatorV2.instance;
 
         if(startDrawing) {
             tessellator.startDrawingQuads();

@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -14,5 +15,5 @@ public interface IClipper {
      * @param pos the block position
      * @param player the player using the clipper
      */
-    void onClipperUsed(World world, BlockPos pos, EntityPlayer player);
+    void onClipperUsed(World world, BlockPos pos, IBlockState state, EntityPlayer player);
 }

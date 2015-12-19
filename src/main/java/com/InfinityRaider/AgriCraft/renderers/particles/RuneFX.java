@@ -1,12 +1,14 @@
 package com.InfinityRaider.AgriCraft.renderers.particles;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RuneFX extends AgriCraftFX {
@@ -27,7 +29,8 @@ public class RuneFX extends AgriCraftFX {
     }
 
     @Override
-    public void renderParticle(Tessellator tessellator, float f0, float f1, float f2, float f3, float f4, float f5) {
+    public void renderParticle(WorldRenderer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
+        TessellatorV2 tessellator = TessellatorV2.getInstance();
         tessellator.draw();
         tessellator.startDrawingQuads();
 

@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
@@ -17,13 +18,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class StructureGreenhouse extends StructureVillagePieces.House1 {
+public class StructureGreenhouse extends StructureVillagePieces.House1 implements VillagerRegistry.IVillageCreationHandler {
     //structure dimensions
     private static final int xSize = 17;
     private static final int ySize = 10;

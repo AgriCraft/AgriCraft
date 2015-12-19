@@ -1,11 +1,11 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelDragon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class PlayerEffectRendererEntityDragon extends PlayerEffectRendererEntity
 
     @Override
     ArrayList<String> getDisplayNames() {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         names.add("GreatOrator");
         return names;
     }

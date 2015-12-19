@@ -5,17 +5,19 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFence;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFence;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -48,12 +50,12 @@ public class BlockFence extends BlockCustomWood {
 
     //Allow leads to be connected to these fences
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float hitX, float hitY, float hitZ) {
-        return world.isRemote || applyLead(player, world, x, y, z);
+    public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float hitX, float hitY, float hitZ) {
+        return world.isRemote || applyLead(player, world, pos);
     }
 
-    public boolean applyLead(EntityPlayer player, World world, int x, int y, int z) {
-        EntityLeashKnotAgricraft entityleashknot = EntityLeashKnotAgricraft.getKnotForBlock(world, x, y, z);
+    public boolean applyLead(EntityPlayer player, World world, BlockPos pos) {
+        EntityLeashKnotAgricraft entityleashknot = EntityLeashKnotAgricraft.getKnotForPosition(world, pos);
         boolean flag = false;
         double d0 = 7.0D;
         List list = world.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox((double)x - d0, (double) y - d0, (double) z - d0, (double)x + d0, (double)y + d0, (double)z + d0));
@@ -62,7 +64,7 @@ public class BlockFence extends BlockCustomWood {
                 EntityLiving entityliving = (EntityLiving) obj;
                 if (entityliving.getLeashed() && entityliving.getLeashedToEntity() == player) {
                     if (entityleashknot == null) {
-                        entityleashknot = EntityLeashKnotAgricraft.func_110129_a(world, x, y, z);
+                        entityleashknot = EntityLeashKnotAgricraft.createKnot(world, x, y, z);
                     }
                     entityliving.setLeashedToEntity(entityleashknot, true);
                     flag = true;
@@ -127,8 +129,8 @@ public class BlockFence extends BlockCustomWood {
         this.setBlockBounds(f, 0.0F, f2, f1, 1.0F, f3);
     }
 
-    public boolean canConnect(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
-        Block block = world.getBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
+    public boolean canConnect(IBlockAccess world, BlockPos pos, IBlockState state, ForgeDirection dir) {
+        Block block = world.getBlockState(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ)).getBlock();
         if (block == null) {
             return false;
         }

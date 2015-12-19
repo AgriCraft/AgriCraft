@@ -11,7 +11,7 @@ public abstract class NBTHelper {
     public static NBTTagCompound getMaterialTag(ItemStack stack) {
         NBTTagCompound tag = null;
         if(stack!=null && stack.getItem()!=null) {
-            String name = Block.blockRegistry.getNameForObject(((ItemBlock) stack.getItem()).field_150939_a);
+            String name = Block.blockRegistry.getNameForObject(((ItemBlock) stack.getItem()).block).toString();
             if(name!=null && !name.equals("")) {
                 tag = new NBTTagCompound();
                 tag.setString(Names.NBT.material, name);

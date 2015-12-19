@@ -2,13 +2,13 @@ package com.InfinityRaider.AgriCraft.container;
 
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerSeedAnalyzer extends ContainerAgricraft {
     public TileEntitySeedAnalyzer seedAnalyzer;
@@ -80,7 +80,7 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int clickedSlot) {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(clickedSlot);
+        Slot slot = this.inventorySlots.get(clickedSlot);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
@@ -129,7 +129,7 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
         //try to stack with existing stacks first
         if (stack.isStackable()) {
             while (stack.stackSize > 0 && (!backwards && slotIndex < stop || backwards && slotIndex >= start)) {
-                slot = (Slot)this.inventorySlots.get(slotIndex);
+                slot = this.inventorySlots.get(slotIndex);
                 stackInSlot = slot.getStack();
                 if (stackInSlot != null && slot.isItemValid(stack) && stackInSlot.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == stackInSlot.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, stackInSlot)) {
                     int combinedSize = stackInSlot.stackSize + stack.stackSize;
@@ -153,7 +153,7 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
         if (stack.stackSize > 0) {
             slotIndex = backwards?stop-1:start;
             while (!backwards && slotIndex < stop || backwards && slotIndex >= start && !foundSlot) {
-                slot = (Slot)this.inventorySlots.get(slotIndex);
+                slot = this.inventorySlots.get(slotIndex);
                 stackInSlot = slot.getStack();
                 if (stackInSlot == null && slot.isItemValid(stack)) {
                     slot.putStack(stack.copy());

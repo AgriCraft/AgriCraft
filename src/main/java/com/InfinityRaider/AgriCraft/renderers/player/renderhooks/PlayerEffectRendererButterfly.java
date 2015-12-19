@@ -1,14 +1,14 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.renderers.particles.DustFX;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
 
     @Override
     ArrayList<String> getDisplayNames() {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         names.add("ValsNoisyToys");
         return names;
     }
@@ -50,7 +50,7 @@ public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
     }
 
     private void renderWings() {
-        Tessellator tessellator = Tessellator.instance;
+        TessellatorV2 tessellator = TessellatorV2.instance;
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDisable(GL11.GL_LIGHTING);
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
@@ -76,7 +76,7 @@ public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
         GL11.glEnable(GL11.GL_LIGHTING);
     }
 
-    private void draw(Tessellator tessellator, float scale) {
+    private void draw(TessellatorV2 tessellator, float scale) {
         //x-, y & z-axis
         //this.drawAxisSystem();
 
@@ -109,7 +109,7 @@ public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
             double sin = Math.sin(yaw);
             double xNew = x*cos - z*sin;
             double zNew = x*sin + z*cos;
-            Vec3 vector = Vec3.createVectorHelper(0, 0, 0);
+            Vec3 vector = new Vec3(0, 0, 0);
             float scale = player.worldObj.rand.nextFloat();
             double radius = 0.3*player.worldObj.rand.nextDouble();
             double angle = Math.toRadians(player.worldObj.rand.nextInt(360));

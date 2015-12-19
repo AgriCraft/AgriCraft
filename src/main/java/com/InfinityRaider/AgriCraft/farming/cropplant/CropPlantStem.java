@@ -1,14 +1,13 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStem;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemSeeds;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CropPlantStem extends CropPlantGeneric {
     private final Block block;
@@ -41,7 +40,7 @@ public class CropPlantStem extends CropPlantGeneric {
 
     @SideOnly(Side.CLIENT)
     public IIcon getStemIcon() {
-        BlockStem plant = (BlockStem) ((ItemSeeds) getSeed().getItem()).getPlant(null, 0, 0 ,0);
+        BlockStem plant = (BlockStem) ((ItemSeeds) getSeed().getItem()).getPlant(null, null).getBlock();
         return plant.getStemIcon();
     }
 
@@ -53,11 +52,11 @@ public class CropPlantStem extends CropPlantGeneric {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
-        int meta = world.getBlockMetadata(x, y, z);
-        boolean mature = isMature(world, x, y ,z);
-        Block vine = ((ItemSeeds) getSeed().getItem()).getPlant(null, 0, 0, 0);
-        PlantRenderer.renderStemPlant(x, y, z, renderer, getPlantIcon(meta), meta, vine, block, mature);
+    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, RenderBlocks renderer) {
+        int meta = world.getBlockMetadata(pos);
+        boolean mature = isMature(world, pos);
+        Block vine = ((ItemSeeds) getSeed().getItem()).getPlant(null, null).getBlock();
+        PlantRenderer.renderStemPlant(world, pos, renderer, getPlantIcon(meta), meta, vine, block, mature);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -70,8 +70,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
             }
             tessellator.addTranslation((float) x, (float) y, (float) z);
         }
-        if (tile != null && tile instanceof TileEntityAgricraft) {
-            rotateMatrix((TileEntityAgricraft) tile, tessellator, false);
+        if (tile != null && tile instanceof TileEntityBase) {
+            rotateMatrix((TileEntityBase) tile, tessellator, false);
         }
 
         tessellator.setBrightness(block.getMixedBrightnessForBlock(world, (int) x,  (int) y, (int) z));
@@ -79,8 +79,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
         boolean result = doWorldRender(tessellator, world, x, y, z, tile, block, f, modelId, renderer, callFromTESR);
 
-        if (tile != null && tile instanceof TileEntityAgricraft) {
-            rotateMatrix((TileEntityAgricraft) tile, tessellator, true);
+        if (tile != null && tile instanceof TileEntityBase) {
+            rotateMatrix((TileEntityBase) tile, tessellator, true);
         }
         if (callFromTESR) {
             GL11.glTranslated(-x, -y, -z);
@@ -160,16 +160,16 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer implemen
 
     //UTILITY METHODS
     //---------------
-    protected void rotateMatrix(TileEntityAgricraft tileEntityAgricraft, Tessellator tessellator, boolean inverse) {
+    protected void rotateMatrix(TileEntityBase tileEntityBase, Tessellator tessellator, boolean inverse) {
         //+x = EAST
         //+z = SOUTH
         //-x = WEST
         //-z = NORTH
-        if(!tileEntityAgricraft.isRotatable()) {
+        if(!tileEntityBase.isRotatable()) {
             return;
         }
         float angle;
-        switch(tileEntityAgricraft.getOrientation()) {
+        switch(tileEntityBase.getOrientation()) {
             case SOUTH: angle = 180; break;
             case WEST: angle = 90; break;
             case NORTH: angle = 0; break;

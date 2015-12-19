@@ -1,12 +1,14 @@
 package com.InfinityRaider.AgriCraft.renderers.items;
 
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RenderItemMagnifyingGlass extends RenderItemBase {
     protected RenderItemMagnifyingGlass(Item item) {
         super(item);

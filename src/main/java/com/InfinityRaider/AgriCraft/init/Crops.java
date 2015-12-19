@@ -13,8 +13,8 @@ public class Crops {
     public static ArrayList<ItemModSeed> seeds;
 
     public static void init() {
-        crops = new ArrayList<BlockModPlant>();
-        seeds = new ArrayList<ItemModSeed>();
+        crops = new ArrayList<>();
+        seeds = new ArrayList<>();
         for(Object[] data: Data.defaults) {
             BlockModPlant plant;
             try {

@@ -2,8 +2,8 @@ package com.InfinityRaider.AgriCraft.utility.statstringdisplayer;
 
 import com.InfinityRaider.AgriCraft.api.v1.IStatStringDisplayer;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class StatStringDisplayer implements IStatStringDisplayer {

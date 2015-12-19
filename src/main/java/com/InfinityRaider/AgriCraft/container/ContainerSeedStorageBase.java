@@ -6,14 +6,14 @@ import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageController;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
      * returns a list if itemStacks, for each slot.
      */
     @Override
-    public List getInventory() {
+    public List<ItemStack> getInventory() {
         return super.getInventory();
     }
 
@@ -79,7 +79,7 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
             return;
         }
         stackToMove.stackSize = stack.stackSize > stackToMove.stackSize ? stackToMove.stackSize : stack.stackSize;
-        stackToMove.stackTagCompound = controllable.getStackForSlotId(slotId).stackTagCompound;
+        stackToMove.setTagCompound(controllable.getStackForSlotId(slotId).getTagCompound());
         if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
             if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                 //this method is only called form the gui client side, so we need to manually tell the server to execute it there
@@ -97,7 +97,7 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int clickedSlot) {
         ItemStack originalStackInSlot = null;
-        Slot slot = (Slot) this.inventorySlots.get(clickedSlot);
+        Slot slot = this.inventorySlots.get(clickedSlot);
         if (slot != null && slot.getHasStack()) {
             ItemStack notMergedStack = slot.getStack();
             originalStackInSlot = notMergedStack.copy();
@@ -140,7 +140,7 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
         ItemStack currentStack;
         //look for identical stacks to merge with
         while (stack.stackSize > 0 && (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot)) {
-            currentSlot = (Slot)this.inventorySlots.get(k);
+            currentSlot = this.inventorySlots.get(k);
             currentStack = currentSlot.getStack();
             if (currentStack != null && currentStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == currentStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, currentStack)) {
                 int l = currentStack.stackSize + stack.stackSize;
@@ -165,7 +165,7 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
         if (stack.stackSize > 0) {
             k = iterateBackwards?endSlot-1:startSlot;
             while (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot) {
-                currentSlot = (Slot)this.inventorySlots.get(k);
+                currentSlot = this.inventorySlots.get(k);
                 currentStack = currentSlot.getStack();
                 if (currentStack == null) {
                     currentSlot.putStack(stack.copy());

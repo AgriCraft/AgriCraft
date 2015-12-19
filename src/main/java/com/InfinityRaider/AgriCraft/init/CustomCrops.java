@@ -8,13 +8,13 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.LanguageRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -71,7 +71,7 @@ public class CustomCrops {
                         }
                         customSeeds[i] = customCrops[i].getSeed();
                         LanguageRegistry.addName(customCrops[i], Character.toUpperCase(name.charAt(0))+name.substring(1));
-                        LanguageRegistry.addName(customSeeds[i], Character.toUpperCase(name.charAt(0))+name.substring(1) + " Seeds");
+                        LanguageRegistry.addName(customSeeds[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds");
                         if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                             customSeeds[i].setInformation(info);
                         }
@@ -93,9 +93,7 @@ public class CustomCrops {
                 Field fieldSeedList = (ForgeHooks.class).getDeclaredField("seedList");
                 fieldSeedList.setAccessible(true);
                 seedList = (List) fieldSeedList.get(null);
-            } catch (NoSuchFieldException e) {
-                error = true;
-            } catch (IllegalAccessException e) {
+            } catch (NoSuchFieldException | IllegalAccessException e) {
                 error = true;
             }
             if(error) {

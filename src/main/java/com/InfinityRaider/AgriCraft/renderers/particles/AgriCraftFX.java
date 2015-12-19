@@ -1,15 +1,17 @@
 package com.InfinityRaider.AgriCraft.renderers.particles;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.IIcon;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract  class AgriCraftFX extends EntityFX {
@@ -28,7 +30,7 @@ public abstract  class AgriCraftFX extends EntityFX {
         this.motionZ = vector.zCoord;
     }
 
-    protected AgriCraftFX(World world, double x, double y, double z, float scale, float gravity, Vec3 vector, IIcon icon) {
+    protected AgriCraftFX(World world, double x, double y, double z, float scale, float gravity, Vec3 vector, TextureAtlasSprite icon) {
         super(world, x, y, z, 0, 0, 0);
         this.texture = null;
         this.setParticleIcon(icon);
@@ -48,9 +50,10 @@ public abstract  class AgriCraftFX extends EntityFX {
     }
 
     @Override
-    public void renderParticle(Tessellator tessellator, float f0, float f1, float f2, float f3, float f4, float f5) {
+    public void renderParticle(WorldRenderer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
         //I'm doing this because else the textures blink and are fucked up and I have no idea how to fix it,
         //if anyone sees this and knows how, let me know please, thanks :D
+        TessellatorV2 tessellator = TessellatorV2.getInstance();
         tessellator.draw();
         tessellator.startDrawingQuads();
 
@@ -71,7 +74,7 @@ public abstract  class AgriCraftFX extends EntityFX {
             tessellator.addVertexWithUV((double) (f11 + f1 * f10 - f4 * f10), (double) (f12 - f2 * f10), (double) (f13 + f3 * f10 - f6 * f10), (double) f6, (double) f9);
         } else {
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-            super.renderParticle(tessellator, f0, f1, f2, f3, f4, f5);
+            super.renderParticle(worldRenderer, entity, partialTicks, f0, f1, f2, f3, f4);
         }
 
         tessellator.draw();

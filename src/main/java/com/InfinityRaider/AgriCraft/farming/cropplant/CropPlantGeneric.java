@@ -5,13 +5,13 @@ import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementH
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -26,7 +26,7 @@ public abstract class CropPlantGeneric extends CropPlant {
 
     public CropPlantGeneric(ItemSeeds seed) {
         this.seed = seed;
-        this.plant = seed.getPlant(null, 0, 0, 0);
+        this.plant = seed.getPlant(null, null).getBlock();
         this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed(), modSpecificFruits());
     }
 
@@ -68,7 +68,7 @@ public abstract class CropPlantGeneric extends CropPlant {
     @Override
     public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
         int amount = (int) (Math.ceil((gain + 0.00) / 3));
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> list = new ArrayList<>();
         while(amount>0) {
             list.add(getRandomFruit(rand));
             amount--;
@@ -86,7 +86,7 @@ public abstract class CropPlantGeneric extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+    public boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
         return true;
     }
 

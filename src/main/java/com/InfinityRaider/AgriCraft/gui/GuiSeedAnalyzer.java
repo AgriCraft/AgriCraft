@@ -6,8 +6,6 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -18,7 +16,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
 
 @SideOnly(Side.CLIENT)
 public class GuiSeedAnalyzer extends GuiContainer {
@@ -83,7 +85,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
         ItemStack journal = seedAnalyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId);
         if(journal != null) {
             if (journal.hasTagCompound()) {
-                NBTTagCompound tag = journal.stackTagCompound;
+                NBTTagCompound tag = journal.getTagCompound();
                 if (tag.hasKey(Names.NBT.discoveredSeeds)) {
                     NBTTagList list = tag.getTagList(Names.NBT.discoveredSeeds, 10);
                     NBTHelper.clearEmptyStacksFromNBT(list);
@@ -97,7 +99,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
     }
 
     @Override
-    protected void keyTyped(char key, int number)  {
+    protected void keyTyped(char key, int number) throws IOException {
         if(this.journalOpen) {
             if (number == 1 || number == this.mc.gameSettings.keyBindInventory.getKeyCode())  {
                 this.journalOpen = false;
@@ -118,7 +120,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int rightClick) {
+    protected void mouseClicked(int x, int y, int rightClick) throws IOException {
         if(journalOpen) {
             guiJournal.mouseClicked(x, y, rightClick);
         }

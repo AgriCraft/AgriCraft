@@ -2,19 +2,17 @@ package com.InfinityRaider.AgriCraft.gui.journal;
 
 import com.InfinityRaider.AgriCraft.gui.Component;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
@@ -191,7 +189,7 @@ public class GuiJournal extends GuiScreen {
             int ySize = component.ySize();
             int x = guiLeft + component.xOffset();
             int y = guiTop + component.yOffset();
-            Tessellator tessellator = Tessellator.instance;
+            TessellatorV2 tessellator = TessellatorV2.instance;
             Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
             GL11.glColor3f(1, 1, 1);
             GL11.glDisable(GL11.GL_LIGHTING);
@@ -210,7 +208,7 @@ public class GuiJournal extends GuiScreen {
             int x = this.guiLeft + component.xOffset();
             int y = this.guiTop + component.yOffset();
             ItemStack stack = component.getComponent();
-            GuiScreen.itemRender.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stack, x, y);
+            itemRender.renderItemIntoGUI(stack, x, y);
         }
     }
 
@@ -221,7 +219,7 @@ public class GuiJournal extends GuiScreen {
             int ySize = component.ySize();
             int x = guiLeft + component.xOffset();
             int y = guiTop + component.yOffset();
-            Tessellator tessellator = Tessellator.instance;
+            TessellatorV2 tessellator = TessellatorV2.instance;
             GL11.glColor3f(1, 1, 1);
             GL11.glDisable(GL11.GL_LIGHTING);
             tessellator.startDrawingQuads();

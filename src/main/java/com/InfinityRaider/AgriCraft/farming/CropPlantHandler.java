@@ -26,11 +26,11 @@ import java.util.*;
 
 public class CropPlantHandler {
     /** HashMap containing all plants known to AgriCraft */
-    private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<Item, HashMap<Integer, CropPlant>>();
+    private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<>();
     /** Queue to store plants registered via the API before the cropPlants HashMap has been initialized */
-    private static ArrayList<CropPlant> plantsToRegister = new ArrayList<CropPlant>();
+    private static ArrayList<CropPlant> plantsToRegister = new ArrayList<>();
     /** Queue to store BlackListed seeds which are not recognized as seeds by agricraft */
-    private static ArrayList<ItemStack> blacklist = new ArrayList<ItemStack>();
+    private static ArrayList<ItemStack> blacklist = new ArrayList<>();
 
     /**
      * Registers the plant into the cropPlants HashMap.
@@ -67,7 +67,7 @@ public class CropPlantHandler {
             }
         }
         else {
-            entryForSeed = new HashMap<Integer, CropPlant>();
+            entryForSeed = new HashMap<>();
             entryForSeed.put(meta, plant);
             cropPlants.put(seed, entryForSeed);
         }
@@ -147,8 +147,8 @@ public class CropPlantHandler {
     public static boolean isAnalyzedSeed(ItemStack seedStack) {
         return isValidSeed(seedStack)
                 && (seedStack.hasTagCompound())
-                && (seedStack.stackTagCompound.hasKey(Names.NBT.analyzed))
-                && (seedStack.stackTagCompound.getBoolean(Names.NBT.analyzed));
+                && (seedStack.getTagCompound().hasKey(Names.NBT.analyzed))
+                && (seedStack.getTagCompound().getBoolean(Names.NBT.analyzed));
     }
     
     /**
@@ -247,7 +247,7 @@ public class CropPlantHandler {
      * @return the registered plants, taken from the internal HashMap, and placed into an ArrayList.
      */
     public static ArrayList<CropPlant> getPlants() {
-        ArrayList<CropPlant> plants = new ArrayList<CropPlant>();
+        ArrayList<CropPlant> plants = new ArrayList<>();
         for(HashMap<Integer, CropPlant> subMap:cropPlants.values()) {
             for(CropPlant plant : subMap.values()) {
                 if(!plant.isBlackListed()) {
@@ -265,7 +265,7 @@ public class CropPlantHandler {
      * @return the registered plants within the provided range.
      */
     public static ArrayList<CropPlant> getPlantsUpToTier(int tier) {
-        ArrayList<CropPlant> plants = new ArrayList<CropPlant>();
+        ArrayList<CropPlant> plants = new ArrayList<>();
         for(HashMap<Integer, CropPlant> subMap:cropPlants.values()) {
             for(CropPlant plant : subMap.values()) {
                 if(plant.getTier() <= tier && !plant.isBlackListed()) {
@@ -315,7 +315,7 @@ public class CropPlantHandler {
         if(setTag) {
             NBTTagCompound tag = new NBTTagCompound();
             setSeedNBT(tag, (short) (rand.nextInt(ConfigurationHandler.cropStatCap) / 2 + 1), (short) (rand.nextInt(ConfigurationHandler.cropStatCap) / 2 + 1), (short) (rand.nextInt(ConfigurationHandler.cropStatCap) / 2 + 1), false);
-            seed.stackTagCompound = tag;
+            seed.setTagCompound(tag);
         }
         return seed;
     }
@@ -456,7 +456,7 @@ public class CropPlantHandler {
         plantsToRegister = null;
         
         //Register crops found in the ore dictionary.
-        ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
+        List<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
         for (ItemStack seed : seeds) {
             if (!isValidSeed(seed) && (seed.getItem() instanceof ItemSeeds)) {
             	ArrayList<ItemStack> fruits = OreDictHelper.getFruitsFromOreDict(seed);

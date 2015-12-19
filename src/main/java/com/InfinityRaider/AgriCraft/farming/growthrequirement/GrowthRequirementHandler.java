@@ -5,9 +5,11 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -24,22 +26,23 @@ public class GrowthRequirementHandler {
      * This list contains soils which pose as a default soil, meaning any CropPlant which doesn't require a specific soil will be able to grown on these
      * This list can be modified with MineTweaker
      */
-    public static List<BlockWithMeta> defaultSoils = new ArrayList<BlockWithMeta>();
+    public static List<BlockWithMeta> defaultSoils = new ArrayList<>();
 
     /**
      * This list contains soils needed for certain CropPlants
      * This list cannot be modified externally
      */
-    static List<BlockWithMeta> soils = new ArrayList<BlockWithMeta>();
+    static List<BlockWithMeta> soils = new ArrayList<>();
 
     //Methods for fertile soils
     //-------------------------
-    public static boolean isSoilValid(World world, int x, int y, int z) {
-        Block block = world.getBlock(x, y, z);
-        int meta = world.getBlockMetadata(x, y, z);
+    public static boolean isSoilValid(World world,BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+        int meta = block.getDamageValue(world, pos);
         BlockWithMeta soil;
         if (block instanceof ISoilContainer) {
-            soil = new BlockWithMeta(((ISoilContainer) block).getSoil(world, x, y, z), ((ISoilContainer) block).getSoilMeta(world, x, y, z));
+            soil = new BlockWithMeta(((ISoilContainer) block).getSoil(world, pos), ((ISoilContainer) block).getSoilMeta(world, pos));
         } else {
             soil = new BlockWithMeta(block, meta);
         }
@@ -63,7 +66,7 @@ public class GrowthRequirementHandler {
         for (String line : data) {
             LogHelper.debug("  Parsing " + line + total);
             ItemStack stack = IOHelper.getStack(line);
-            Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).field_150939_a : null;
+            Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).block : null;
             
             if (block != null) {
                 addDefaultSoil(new BlockWithMeta(block, stack.getItemDamage()));

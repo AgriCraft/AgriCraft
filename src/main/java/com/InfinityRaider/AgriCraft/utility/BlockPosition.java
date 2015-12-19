@@ -2,14 +2,15 @@ package com.InfinityRaider.AgriCraft.utility;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockPosition {
+public class BlockPosition extends BlockPos {
     private World world;
     private WorldCoordinates coords;
 
     public BlockPosition(World world, int x, int y, int z) {
+        super(x, y, z);
         this.world = world;
         this.coords = new WorldCoordinates(x, y, z);
     }
@@ -47,7 +48,7 @@ public class BlockPosition {
     }
 
     public int dimensionId() {
-        return world.provider.dimensionId;
+        return world.provider.getDimensionId();
     }
 
     public BlockPosition getNeighbour(ForgeDirection dir) {

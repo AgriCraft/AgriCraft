@@ -6,8 +6,6 @@ import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -17,8 +15,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -111,27 +112,27 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
         if(this.setActiveSeedButtonOffset_X<0 || this.setActiveSeedButtonOffset_Y<0) {
             return;
         }
-        this.setActiveSeedButtons = new ArrayList<Component<ItemStack>>();
+        this.setActiveSeedButtons = new ArrayList<>();
         List<ItemStack> list = container.getSeedEntries();
         if(list!=null) {
             for (int i = 0; i < list.size(); i++) {
                 int xOffset = this.setActiveSeedButtonOffset_X + (16*i)%64;
                 int yOffset = this.setActiveSeedButtonOffset_Y + 16*(i/4);
-                this.setActiveSeedButtons.add(new Component<ItemStack>(list.get(i), xOffset, yOffset, 16, 16));
+                this.setActiveSeedButtons.add(new Component<>(list.get(i), xOffset, yOffset, 16, 16));
             }
         }
     }
 
     private void initSeedSlots() {
         getActiveSeed();
-        this.activeSeeds = new ArrayList<Component<PlantStatsStorage>>();
+        this.activeSeeds = new ArrayList<>();
         List<SeedStorageSlot> list = this.container.getSeedSlots(this.activeSeed, this.activeMeta);
         if(list!=null) {
             this.sortByStat(list);
             for (int i = scrollPositionHorizontal; i < Math.min(list.size(), scrollPositionHorizontal + maxHorSlots); i++) {
                 SeedStorageSlot slot = list.get(i);
                 PlantStatsStorage stats = new PlantStatsStorage(slot.getId(), slot.getStack(this.activeSeed, this.activeMeta));
-                activeSeeds.add(new Component<PlantStatsStorage>(stats, this.guiLeft + seedSlotButtonOffset_X + (i-scrollPositionHorizontal) * 16, this.guiTop + seedSlotButtonOffset_Y, 16, 16));
+                activeSeeds.add(new Component<>(stats, this.guiLeft + seedSlotButtonOffset_X + (i-scrollPositionHorizontal) * 16, this.guiTop + seedSlotButtonOffset_Y, 16, 16));
             }
         }
     }
@@ -179,7 +180,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int rightClick) {
+    protected void mouseClicked(int x, int y, int rightClick) throws IOException {
         //set active seed button clicked
         if(this.setActiveSeedButtons != null) {
             for (Component<ItemStack> component : setActiveSeedButtons) {
@@ -274,9 +275,9 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
                 short strength = stats.getStrength();
                 //draw the seed icon
                 ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
-                stack.stackTagCompound = CropPlantHandler.setSeedNBT(new NBTTagCompound(), growth, gain, strength, true);
-                itemRender.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, component.xOffset(), component.yOffset());
-                itemRender.renderItemOverlayIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(), stack, component.xOffset(), component.yOffset());
+                stack.setTagCompound(CropPlantHandler.setSeedNBT(new NBTTagCompound(), growth, gain, strength, true));
+                itemRender.renderItemIntoGUI(stack, component.xOffset(), component.yOffset());
+                itemRender.renderItemOverlayIntoGUI(fontRendererObj, stack, component.xOffset(), component.yOffset(), "" + stack.stackSize);
                 //draw the stat bars
                 Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
                 GL11.glDisable(GL11.GL_LIGHTING);
@@ -310,6 +311,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
         GL11.glEnable(GL11.GL_LIGHTING);
     }
 
+    @SuppressWarnings("unchecked")
     protected void drawTooltip(int x, int y) {
         if(!this.hasActiveSeed()) {
             return;
@@ -323,7 +325,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
                     short gain = stats.getGain();
                     short strength = stats.getStrength();
                     ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
-                    stack.stackTagCompound = CropPlantHandler.setSeedNBT(new NBTTagCompound(), growth, gain, strength, true);
+                    stack.setTagCompound(CropPlantHandler.setSeedNBT(new NBTTagCompound(), growth, gain, strength, true));
                     List toolTip = stack.getTooltip(Minecraft.getMinecraft().thePlayer, true);
                     drawHoveringText(toolTip, x - this.guiLeft, y - this.guiTop, fontRendererObj);
                 }

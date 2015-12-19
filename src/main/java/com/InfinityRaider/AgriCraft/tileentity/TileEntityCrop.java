@@ -17,19 +17,18 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebuggable{
+public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable{
     private PlantStats stats = new PlantStats();
     private boolean crossCrop=false;
     private boolean weed=false;
@@ -86,7 +85,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         if(status!=this.crossCrop) {
             this.crossCrop = status;
             if(!worldObj.isRemote) {
-                worldObj.playSoundEffect((double)((float) xCoord + 0.5F), (double)((float) yCoord + 0.5F), (double)((float) zCoord + 0.5F), net.minecraft.init.Blocks.planks.stepSound.func_150496_b(), (net.minecraft.init.Blocks.leaves.stepSound.getVolume() + 1.0F) / 2.0F, net.minecraft.init.Blocks.leaves.stepSound.getPitch() * 0.8F);
+                worldObj.playSoundEffect((double)((float) xCoord() + 0.5F), (double)((float) yCoord() + 0.5F), (double)((float) zCoord() + 0.5F), net.minecraft.init.Blocks.planks.stepSound.soundName, (net.minecraft.init.Blocks.leaves.stepSound.getVolume() + 1.0F) / 2.0F, net.minecraft.init.Blocks.leaves.stepSound.getPitch() * 0.8F);
             }
             this.markForUpdate();
         }
@@ -111,9 +110,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
             if(plant!=null) {
                 this.plant = plant;
                 this.stats = new PlantStats(growth, gain, strength, analyzed);
-                this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
-                plant.onSeedPlanted(worldObj, xCoord, yCoord, zCoord);
-                IAdditionalCropData data = plant.getInitialCropData(worldObj, xCoord, yCoord, zCoord, this);
+                this.worldObj.setBlockMetadataWithNotify(pos, 0, 3);
+                plant.onSeedPlanted(worldObj, pos);
+                IAdditionalCropData data = plant.getInitialCropData(worldObj, getPos(), this);
                 if(data != null) {
                     this.data = data;
                 }
@@ -134,10 +133,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         CropPlant oldPlant = getPlant();
         this.stats = new PlantStats();
         this.plant = null;
-        this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
+        this.worldObj.setBlockMetadataWithNotify(pos, 0, 3);
         this.markForUpdate();
         if (oldPlant != null) {
-            oldPlant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord);
+            oldPlant.onPlantRemoved(worldObj, pos);
         }
         this.data = null;
     }
@@ -145,7 +144,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     /** check if the crop is fertile */
     @Override
     public boolean isFertile() {
-        return this.weed || worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.getGrowthRequirement().canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        return this.weed || worldObj.isAirBlock(this.getPos().add(0, 1, 0)) && plant.getGrowthRequirement().canGrow(this.worldObj, pos);
     }
 
     /** gets the height of the crop */
@@ -175,7 +174,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     /** check the block if the plant is mature */
     @Override
     public boolean isMature() {
-        return worldObj.getBlockMetadata(xCoord, yCoord, zCoord) >= Constants.MATURE;
+        return worldObj.getBlockMetadata(pos) >= Constants.MATURE;
     }
 
     /** gets the fruits for this plant */
@@ -183,7 +182,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
 
     /** allow harvesting */
     public boolean allowHarvest(EntityPlayer player) {
-        return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord, player);
+        return hasPlant() && isMature() && plant.onHarvest(worldObj, pos, player);
     }
 
     /** returns an ItemStack holding the seed currently planted, initialized with an NBT tag holding the stats */
@@ -203,6 +202,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     @Override
     public Block getPlantBlock() {
         return plant==null?null:plant.getBlock();
+    }
+
+    @Override
+    public BlockState getPlantBlockState() {
+        return plant==null?null:new BlockState(plant.getBlock());
     }
 
     /** spawns weed in the crop */
@@ -232,7 +236,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
             if (growthStage == 0) {
                 this.weed = false;
             }
-            this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, growthStage, 3);
+            this.worldObj.setBlockMetadataWithNotify(pos, growthStage, 3);
         }
     }
 
@@ -254,7 +258,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public void onTrowelUsed(ITrowel trowel, ItemStack trowelStack) {
         if(this.hasPlant()) {
             if(!trowel.hasSeed(trowelStack)) {
-                trowel.setSeed(trowelStack, this.getSeedStack(), worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
+                trowel.setSeed(trowelStack, this.getSeedStack(), worldObj.getBlockMetadata(pos));
                 this.clearPlant();
             }
         } else if(!this.hasWeed() && !this.crossCrop){
@@ -267,7 +271,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
                 short strength = tag.getShort(Names.NBT.strength);
                 boolean analysed = tag.getBoolean(Names.NBT.analyzed);
                 this.setPlant(growth, gain, strength, analysed, seed.getItem(), seed.getItemDamage());
-                this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, growthStage, 3);
+                this.worldObj.setBlockMetadataWithNotify(pos, growthStage, 3);
                 trowel.clearSeed(trowelStack);
             }
         }
@@ -292,10 +296,10 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     @Override
     public void applyFertiliser(IFertiliser fertiliser, Random rand) {
         if(fertiliser.hasSpecialBehaviour()) {
-            fertiliser.onFertiliserApplied(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord, rand);
+            fertiliser.onFertiliserApplied(getWorld(), getPos(), rand);
         }
         if(this.hasPlant() || this.hasWeed()) {
-            ((BlockCrop) Blocks.blockCrop).func_149853_b(this.worldObj, rand, this.xCoord, this.yCoord, this.zCoord);
+            ((BlockCrop) Blocks.blockCrop).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
         }
         else if(this.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
             this.crossOver();
@@ -304,7 +308,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
 
     @Override
     public boolean harvest(@Nullable EntityPlayer player) {
-        return ((BlockCrop) worldObj.getBlock(xCoord, yCoord, zCoord)).harvest(worldObj, xCoord, yCoord, zCoord, player, this);
+        return ((BlockCrop) getWorld().getBlockState(pos).getBlock()).harvest(getWorld(), getPos(), getWorld().getBlockState(getPos()), player, this);
     }
 
     @Override
@@ -321,7 +325,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public void validate() {
         super.validate();
         if(this.hasPlant()) {
-            plant.onValidate(worldObj, xCoord, yCoord, zCoord, this);
+            plant.onValidate(worldObj, pos, this);
         }
     }
 
@@ -329,7 +333,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public void invalidate() {
         super.invalidate();
         if(this.hasPlant()) {
-            plant.onInvalidate(worldObj, xCoord, yCoord, zCoord, this);
+            plant.onInvalidate(worldObj, pos, this);
         }
     }
 
@@ -337,14 +341,8 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public void onChunkUnload() {
         super.onChunkUnload();
         if(this.hasPlant()) {
-            plant.onChunkUnload(worldObj, xCoord, yCoord, zCoord, this);
+            plant.onChunkUnload(worldObj, pos, this);
         }
-    }
-
-    //TileEntity is just to store data on the crop
-    @Override
-    public boolean canUpdate() {
-        return false;
     }
 
     //this saves the data on the tile entity
@@ -373,10 +371,6 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         if(tag.hasKey(Names.NBT.seed) && !tag.hasKey(Names.NBT.meta)) {
             this.plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
         }
-        //This is to load NBT from crops prior to this update
-        else if(tag.hasKey(Names.NBT.seed) && tag.hasKey(Names.NBT.meta)) {
-            this.loadPlantFromOldVersion(tag);
-        }
         else {
             this.plant=null;
         }
@@ -385,32 +379,16 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         }
     }
 
-    //This is to load NBT from crops prior to this update
-    @Deprecated
-    private void loadPlantFromOldVersion(NBTTagCompound tag) {
-        String name = tag.getString(Names.NBT.seed);
-        Item seed = name.equalsIgnoreCase("none")?null: (Item) Item.itemRegistry.getObject(name);
-        int meta = tag.getInteger(Names.NBT.meta);
-        ItemStack stack = new ItemStack(seed, 1, meta);
-        CropPlant plant = CropPlantHandler.getPlantFromStack(stack);
-        if(plant!=null) {
-            this.plant = plant;
-        } else {
-            LogHelper.info("Couldn't find plant for " + stack.getUnlocalizedName() + " at (" + xCoord + "," + yCoord + "," + zCoord + "), plant has been removed");
-            this.clearPlant();
-        }
-    }
-
     /** Apply a growth increment */
     public void applyGrowthTick() {
         int flag = 2;
-        int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+        int meta = worldObj.getBlockMetadata(pos);
         if(hasPlant()) {
-            flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta) ? 2 : 6;
+            flag = plant.onAllowedGrowthTick(worldObj, pos, meta) ? 2 : 6;
         }
-        if (hasWeed() || !plant.isMature(worldObj, xCoord, yCoord, zCoord)) {
-            worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, flag);
-            AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
+        if (hasWeed() || !plant.isMature(worldObj, pos)) {
+            worldObj.setBlockMetadataWithNotify(pos, meta + 1, flag);
+            AppleCoreHelper.announceGrowthTick(getWorld(), getPos(), getWorld().getBlockState(getPos()));
         }
     }
 
@@ -437,7 +415,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     }
 
     private void addNeighbour(List<TileEntityCrop> neighbours, ForgeDirection direction) {
-        TileEntity te = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+        TileEntity te = worldObj.getTileEntity(getPos().add(direction.offsetX, direction.offsetY, direction.offsetZ));
         if (te == null || !(te instanceof TileEntityCrop)) {
             return;
         }
@@ -464,7 +442,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
             icon = plant.getPlantIcon(this.getBlockMetadata());
         }
         else if(this.weed) {
-            icon = ((BlockCrop) this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord)).getWeedIcon(this.getBlockMetadata());
+            icon = ((BlockCrop) getWorld().getBlockState(getPos()).getBlock()).getWeedIcon(this.getBlockMetadata());
         }
         return icon;
     }

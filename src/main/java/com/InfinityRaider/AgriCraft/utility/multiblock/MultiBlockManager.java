@@ -1,10 +1,11 @@
 package com.InfinityRaider.AgriCraft.utility.multiblock;
 
 import com.InfinityRaider.AgriCraft.utility.CoordinateIterator;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData> {
     private static MultiBlockManager INSTANCE;
@@ -20,7 +21,7 @@ public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData>
     }
 
     @Override
-    public void onBlockPlaced(World world, int x, int y, int z, IMultiBlockComponent component) {
+    public void onBlockPlaced(World world, BlockPos pos, IMultiBlockComponent component) {
         boolean flag = false;
         for (ForgeDirection dir : ForgeDirection.values()) {
             if (dir == ForgeDirection.UNKNOWN) {
@@ -43,10 +44,10 @@ public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData>
     }
 
     @Override
-    public void onBlockBroken(World world, int x, int y, int z, IMultiBlockComponent<? extends IMultiBlockManager<MultiBlockPartData>, MultiBlockPartData> component) {
+    public void onBlockBroken(World world, BlockPos pos, IMultiBlockComponent<? extends IMultiBlockManager<MultiBlockPartData>, MultiBlockPartData> component) {
         component.getMainComponent().preMultiBlockBreak();
         IMultiBlockPartData data = component.getMultiBlockData();
-        breakAllMultiBlocksInRange(world, x - data.posX(), y - data.posY(), z - data.posZ(), x + data.sizeX(), y + data.sizeY(), z + data.sizeZ());
+        breakAllMultiBlocksInRange(world, pos.getX() - data.posX(), pos.getY() - data.posY(), pos.getZ() - data.posZ(), pos.getX() + data.sizeX(), pos.getY() + data.sizeY(), pos.getZ() + data.sizeZ());
     }
 
     @Override

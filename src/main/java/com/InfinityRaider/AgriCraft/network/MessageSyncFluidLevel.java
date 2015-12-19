@@ -2,43 +2,36 @@ package com.InfinityRaider.AgriCraft.network;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.IIrrigationComponent;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageSyncFluidLevel extends MessageAgriCraft {
-    int lvl;
-    int x;
-    int y;
-    int z;
+    private int lvl;
+    private BlockPos pos;
 
     @SuppressWarnings("unused")
     public MessageSyncFluidLevel() {}
 
-    public MessageSyncFluidLevel(int lvl, int x, int y, int z) {
+    public MessageSyncFluidLevel(int lvl, BlockPos pos) {
         this.lvl = lvl;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.pos = pos;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         this.lvl = buf.readInt();
-        this.x = buf.readInt();
-        this.y = buf.readInt();
-        this.z = buf.readInt();
+        this.pos = readBlockPosFromByteBuf(buf);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(lvl);
-        buf.writeInt(x);
-        buf.writeInt(y);
-        buf.writeInt(z);
+        this.writeBlockPosToByteBuf(buf, pos);
     }
 
     public static class MessageHandler implements IMessageHandler<MessageSyncFluidLevel, IMessage> {
@@ -46,7 +39,7 @@ public class MessageSyncFluidLevel extends MessageAgriCraft {
         public IMessage onMessage(MessageSyncFluidLevel message, MessageContext ctx) {
             World world = AgriCraft.proxy.getClientWorld();
             if(world != null) {
-                TileEntity tile = world.getTileEntity(message.x, message.y, message.z);
+                TileEntity tile = world.getTileEntity(message.pos);
                 if(tile!=null && (tile instanceof IIrrigationComponent)) {
                     ((IIrrigationComponent) tile).setFluidLevel(message.lvl);
                 }

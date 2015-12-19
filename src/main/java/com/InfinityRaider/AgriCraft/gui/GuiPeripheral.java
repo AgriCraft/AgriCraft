@@ -1,22 +1,22 @@
 package com.InfinityRaider.AgriCraft.gui;
 
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.method.IMethod;
 import com.InfinityRaider.AgriCraft.container.ContainerPeripheral;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -97,7 +97,7 @@ public class GuiPeripheral extends GuiContainer {
         this.drawTexturedModalRect(xOffset, yOffset + offset, 0, 253, 5, 1);
         //middle part
         float f = 0.00390625F;
-        Tessellator tessellator = Tessellator.instance;
+        TessellatorV2 tessellator = TessellatorV2.instance;
         tessellator.startDrawingQuads();
         int xMax = xOffset + 5;
         int yMin = yOffset + offset + 1;
@@ -185,7 +185,7 @@ public class GuiPeripheral extends GuiContainer {
     private void updateButtons() {
         for(int i=1;i<buttonList.size();i++) {
             Object obj = buttonList.get(i);
-            if(obj==null || !(obj instanceof GuiButton)) {
+            if(obj==null) {
                 continue;
             }
             GuiButton button = (GuiButton) obj;
@@ -257,11 +257,11 @@ public class GuiPeripheral extends GuiContainer {
         @Override
         public void drawButton(Minecraft minecraft, int x, int y) {
             if (this.visible) {
-                FontRenderer fontrenderer = minecraft.fontRenderer;
+                FontRenderer fontrenderer = minecraft.fontRendererObj;
                 minecraft.getTextureManager().bindTexture(buttonTextures);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                this.field_146123_n = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
-                int k = this.getHoverState(this.field_146123_n);
+                this.hovered = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
+                int k = this.getHoverState(this.isMouseOver());
                 GL11.glEnable(GL11.GL_BLEND);
                 OpenGlHelper.glBlendFunc(770, 771, 1, 0);
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -276,7 +276,7 @@ public class GuiPeripheral extends GuiContainer {
                 else if (!this.enabled) {
                     l = 10526880;
                 }
-                else if (this.field_146123_n) {
+                else if (this.hovered) {
                     l = 16777120;
                 }
                 float scale = 0.6F;

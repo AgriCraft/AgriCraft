@@ -1,8 +1,5 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 public abstract class LeverHelper {
     /**
      * Determines if a lever is facing a block, based off of the lever's metadata.

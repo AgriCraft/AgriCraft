@@ -3,9 +3,11 @@ package com.InfinityRaider.AgriCraft.compatibility;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 
@@ -63,9 +65,8 @@ public abstract class ModHelper {
      * delegates the call to useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) on the correct ModHelper.
      *
      * @param world the World object for the crop
-     * @param x the x-coordinate for the crop
-     * @param y the y-coordinate for the crop
-     * @param z the z-coordinate for the crop
+     * @param pos the block position
+     * @param state the block state
      * @param player the EntityPlayer object interacting with the crop, might be null if done trough automation
      * @param stack the ItemStack holding the Item
      * @param block the BlockCrop instance
@@ -73,17 +74,16 @@ public abstract class ModHelper {
      *
      * @return true to consume the right click
      */
-    public static boolean handleRightClickOnCrop(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
-        return isRightClickHandled(stack.getItem()) && modTools.get(stack.getItem()).useTool(world, x, y, z, player, stack, block, crop);
+    public static boolean handleRightClickOnCrop(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
+        return isRightClickHandled(stack.getItem()) && modTools.get(stack.getItem()).useTool(world, pos, state, player, stack, block, crop);
     }
 
     /**
      * called when the item contained in the ItemStack has custom behaviour when used on crops
      *
      * @param world the World object for the crop
-     * @param x the x-coordinate for the crop
-     * @param y the y-coordinate for the crop
-     * @param z the z-coordinate for the crop
+     * @param pos the block position
+     * @param state the block state
      * @param player the EntityPlayer object interacting with the crop, might be null if done trough automation
      * @param stack the ItemStack holding the Item
      * @param block the BlockCrop instance
@@ -91,7 +91,7 @@ public abstract class ModHelper {
      *
      * @return true to consume the right click
      */
-    protected boolean useTool(World world, int x, int y, int z, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
+    protected boolean useTool(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack stack, BlockCrop block, TileEntityCrop crop) {
         return false;
     }
 

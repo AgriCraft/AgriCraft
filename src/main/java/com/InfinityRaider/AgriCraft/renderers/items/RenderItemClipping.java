@@ -3,17 +3,16 @@ package com.InfinityRaider.AgriCraft.renderers.items;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -22,7 +21,7 @@ public class RenderItemClipping extends RenderItemBase {
         super(item);
     }
 
-    private void drawIcons(Tessellator tessellator, IIcon mainIcon, IIcon plantIcon) {
+    private void drawIcons(TessellatorV2 tessellator, IIcon mainIcon, IIcon plantIcon) {
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
 
         tessellator.startDrawingQuads();
@@ -132,10 +131,10 @@ public class RenderItemClipping extends RenderItemBase {
     }
 
     private IIcon getPlantIcon(ItemStack stack) {
-        if(stack==null || stack.getItem()==null || stack.stackTagCompound==null) {
+        if(stack==null || stack.getItem()==null || stack.getTagCompound()==null) {
             return null;
         }
-        ItemStack seed = ItemStack.loadItemStackFromNBT(stack.stackTagCompound);
+        ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
         CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
         if(plant == null) {
             return null;

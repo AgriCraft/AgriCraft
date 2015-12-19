@@ -1,15 +1,18 @@
 package com.InfinityRaider.AgriCraft.items.blocks;
 
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -36,10 +39,10 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
     }
 
     @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-        if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
-            TileEntityGrate grate = (TileEntityGrate) world.getTileEntity(x, y, z);
-            if (side == 0 || side == 1) {
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+        if (super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) {
+            TileEntityGrate grate = (TileEntityGrate) world.getTileEntity(pos);
+            if (side == EnumFacing.UP || side == EnumFacing.DOWN) {
                 ForgeDirection dir = PlayerHelper.getPlayerFacing(player);
                 if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
                     setOffsetAndOrientation(grate, hitZ, (short) 0);

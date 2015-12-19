@@ -2,8 +2,8 @@ package com.InfinityRaider.AgriCraft.handler;
 
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouse;
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouseIrrigated;
-import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.util.List;
 import java.util.Random;

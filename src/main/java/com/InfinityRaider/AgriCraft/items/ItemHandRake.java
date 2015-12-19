@@ -7,18 +7,18 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.WeightedRandom;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
@@ -27,7 +27,7 @@ import java.util.Random;
  * Tool to uproot weeds.
  * Comes in a wooden and iron variant.
  */
-public class ItemHandRake extends ItemAgricraft implements IRake{
+public class ItemHandRake extends ItemBase implements IRake{
     private static final int WOOD_VARIANT_META = 0;
     private static final int IRON_VARIANT_META = 1;
     private static final int[] dropChance = new int[] {10, 25};
@@ -46,7 +46,7 @@ public class ItemHandRake extends ItemAgricraft implements IRake{
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         return false;
     }
 
@@ -112,10 +112,10 @@ public class ItemHandRake extends ItemAgricraft implements IRake{
 
     @Override
     public boolean removeWeeds(ICrop crop, ItemStack rake) {
-        World world = crop.getTileEntity().getWorldObj();
-        int x = crop.getTileEntity().xCoord;
-        int y = crop.getTileEntity().yCoord;
-        int z = crop.getTileEntity().zCoord;
+        World world = crop.getTileEntity().getWorld();
+        int x = crop.xCoord();
+        int y = crop.yCoord();
+        int z = crop.zCoord();
         if (crop.hasWeed()) {
             int weedGrowthStage = world.getBlockMetadata(x, y, z);
             int newWeedGrowthStage = calculateGrowthStage(rake.getItemDamage(), weedGrowthStage, world.rand);
@@ -128,7 +128,7 @@ public class ItemHandRake extends ItemAgricraft implements IRake{
                     double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
                     double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
                     EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, drop);
-                    entityitem.delayBeforeCanPickup = 10;
+                    entityitem.setPickupDelay(10);
                     world.spawnEntityInWorld(entityitem);
                 }
             }
@@ -149,7 +149,7 @@ public class ItemHandRake extends ItemAgricraft implements IRake{
         }
 
         private ItemDropRegistry() {
-            registry = new WeightedRandom<ItemStack>();
+            registry = new WeightedRandom<>();
         }
 
         public static ItemDropRegistry instance() {

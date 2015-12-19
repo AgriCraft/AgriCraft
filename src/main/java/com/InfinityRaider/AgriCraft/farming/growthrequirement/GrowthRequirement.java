@@ -6,7 +6,9 @@ import com.InfinityRaider.AgriCraft.api.v1.ISoilContainer;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class GrowthRequirement implements IGrowthRequirement{
 
     public List<BlockWithMeta> getSoilBlocks() {
         if(this.requiresSpecificSoil()) {
-            List<BlockWithMeta> list = new ArrayList<BlockWithMeta>();
+            List<BlockWithMeta> list = new ArrayList<>();
             list.add(soil);
             return list;
         }
@@ -44,7 +46,7 @@ public class GrowthRequirement implements IGrowthRequirement{
     }
 
     public List<BlockWithMeta> getBelowBlocks() {
-        List<BlockWithMeta> list = new ArrayList<BlockWithMeta>();
+        List<BlockWithMeta> list = new ArrayList<>();
         if(this.requiredType==RequirementType.BELOW) {
             list.add(requiredBlock);
         }
@@ -52,7 +54,7 @@ public class GrowthRequirement implements IGrowthRequirement{
     }
 
     public List<BlockWithMeta> getNearBlocks() {
-        List<BlockWithMeta> list = new ArrayList<BlockWithMeta>();
+        List<BlockWithMeta> list = new ArrayList<>();
         if(this.requiredType==RequirementType.NEARBY) {
             list.add(requiredBlock);
         }
@@ -61,37 +63,40 @@ public class GrowthRequirement implements IGrowthRequirement{
 
     //Methods to check if a seed can grow
     //-----------------------------------
-	public boolean canGrow(World world, int x, int y, int z) {
-        return this.isValidSoil(world, x, y-1, z) && this.isBrightnessGood(world, x, y, z) && this.isBaseBlockPresent(world, x, y, z);
+	public boolean canGrow(World world, BlockPos pos) {
+        return this.isValidSoil(world, pos.add(0, -1, 0)) && this.isBrightnessGood(world,  pos.getX(), pos.getY(), pos.getZ()) && this.isBaseBlockPresent(world, pos);
     }
 
     @Override
-    public boolean isBaseBlockPresent(World world, int x, int y, int z) {
+    public boolean isBaseBlockPresent(World world, BlockPos pos) {
         if(this.requiresBaseBlock()) {
             switch(this.requiredType) {
-                case BELOW: return this.isBaseBlockBelow(world, x, y, z);
-                case NEARBY: return this.isBaseBlockNear(world, x, y, z);
+                case BELOW: return this.isBaseBlockBelow(world, pos.add(0, -2, 0));
+                case NEARBY: return this.isBaseBlockNear(world, pos);
             }
         }
         return true;
     }
 
     /** @return true, if the correct base block is below **/
-    private boolean isBaseBlockBelow(World world, int x, int y, int z) {
+    private boolean isBaseBlockBelow(World world, BlockPos pos) {
         if(this.requiresBaseBlock() && this.requiredType==RequirementType.BELOW) {
-            return this.isBlockAdequate(world, x, y - 2, z);
+            return this.isBlockAdequate(world, pos);
         }
         return true;
     }
 
     /** @return true, if the correct base block is below **/
-    private boolean isBaseBlockNear(World world, int x, int y, int z) {
+    private boolean isBaseBlockNear(World world, BlockPos pos) {
         if(this.requiresBaseBlock() && this.requiredType==RequirementType.NEARBY) {
             int range = NEARBY_DEFAULT_RANGE;
+            int x = pos.getX();
+            int y = pos.getY();
+            int z = pos.getZ();
             for (int xPos = x - range; xPos <= x + range; xPos++) {
                 for (int yPos = y - range; yPos <= y + range; yPos++) {
                     for (int zPos = z - range; zPos <= z + range; zPos++) {
-                        if(this.isBlockAdequate(world, xPos, yPos, zPos)) {
+                        if(this.isBlockAdequate(world, pos.add(xPos, yPos, zPos))) {
                             return true;
                         }
                     }
@@ -103,9 +108,10 @@ public class GrowthRequirement implements IGrowthRequirement{
     }
 
     /** @return true, if this block corresponds to the required block **/
-    private boolean isBlockAdequate(World world, int x, int y, int z) {
-        Block block = world.getBlock(x, y, z);
-        int meta = block.getDamageValue(world, x, y, z);
+    private boolean isBlockAdequate(World world, BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+        int meta = block.getDamageValue(world, pos);
         if(this.oreDict) {
             return OreDictHelper.isSameOre(block, meta, this.requiredBlock.getBlock(), this.requiredBlock.getMeta());
         }
@@ -120,12 +126,12 @@ public class GrowthRequirement implements IGrowthRequirement{
     }
 
     @Override
-    public boolean isValidSoil(World world, int x, int y, int z) {
-        Block block = world.getBlock(x, y, z);
-        int meta = world.getBlockMetadata(x, y, z);
+    public boolean isValidSoil(World world, BlockPos pos) {
+        Block block = world.getBlockState(pos).getBlock();
+        int meta = block.getDamageValue(world, pos);
         BlockWithMeta soil = new BlockWithMeta(block, meta);
         if (block instanceof ISoilContainer) {
-            soil = new BlockWithMeta(((ISoilContainer) block).getSoil(world, x, y, z), ((ISoilContainer) block).getSoilMeta(world, x, y, z));
+            soil = new BlockWithMeta(((ISoilContainer) block).getSoil(world, pos), ((ISoilContainer) block).getSoilMeta(world, pos));
         }
         return isValidSoil(soil);
     }

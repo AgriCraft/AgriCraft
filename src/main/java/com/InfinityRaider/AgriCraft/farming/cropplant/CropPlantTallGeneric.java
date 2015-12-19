@@ -2,12 +2,11 @@ package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -38,12 +37,12 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
 
     @Override
     public Block getBlock() {
-        return seed.getPlant(null, 0, 0, 0);
+        return seed.getPlant(null, null).getBlock();
     }
 
     @Override
     public ArrayList<ItemStack> getAllFruits() {
-        return new ArrayList<ItemStack>(fruits);
+        return new ArrayList<>(fruits);
     }
 
     @Override
@@ -58,7 +57,7 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
     @Override
     public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
         int amount = (int) (Math.ceil((gain + 0.00) / 3));
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> list = new ArrayList<>();
         while(amount>0) {
             list.add(getRandomFruit(rand));
             amount--;

@@ -88,6 +88,7 @@ public final class Names {
         public static final String adventOfAscension = "nevermine";
         public static final String agriculture = "Agriculture";
         public static final String ancientWarfare = "AncientWarfare";
+        public static final String appleCore = "applecore";
         public static final String arsMagica = "arsmagica2";
         public static final String bloodMagic = "AWWayofTime";
         public static final String bluePower = "bluepower";

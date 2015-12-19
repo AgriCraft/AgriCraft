@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class RecipeShapelessCustomWood extends ShapelessRecipes {
 
-    public RecipeShapelessCustomWood(ItemStack recipeOutput, List recipeItems) {
+    public RecipeShapelessCustomWood(ItemStack recipeOutput, List<ItemStack> recipeItems) {
         super(recipeOutput, recipeItems);
     }
 
@@ -29,7 +30,9 @@ public class RecipeShapelessCustomWood extends ShapelessRecipes {
                         ItemStack itemStack = (ItemStack) recipeItem;
                         if (itemStackToMatch.getItem() == itemStack.getItem() && (itemStack.getItemDamage() == 32767 || itemStackToMatch.getItemDamage() == itemStack.getItemDamage())) {
                             if (itemStackToMatch.getItem() instanceof ItemBlockCustomWood) {
-                                if (itemStackToMatch.stackTagCompound != null && itemStack.stackTagCompound != null && itemStackToMatch.stackTagCompound.equals(itemStack.stackTagCompound)) {
+                                NBTTagCompound tag = itemStack.getTagCompound();
+                                NBTTagCompound tagToMatch = itemStackToMatch.getTagCompound();
+                                if (tagToMatch !=null && tag != null && tagToMatch.equals(tag)) {
                                     match = true;
                                     recipeItems.remove(itemStack);
                                     break;

@@ -6,11 +6,11 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 //helper class to read, write and parse data to and from the config files
 public abstract class IOHelper {
     public static String getModId(ItemStack stack) {
-        String name = Item.itemRegistry.getNameForObject(stack.getItem());
+        String name = Item.itemRegistry.getNameForObject(stack.getItem()).getResourcePath();
         int split = name.indexOf(':');
         if(split>=0) {
             name = name.substring(0, split);
@@ -385,11 +385,11 @@ public abstract class IOHelper {
 			return null;
 		}
 		int meta = data.length==3?Integer.parseInt(data[2]):0;
-        ItemStack stack = GameRegistry.findItemStack(data[0], data[1], 1);
-        if(stack!=null && stack.getItem()!=null) {
-            stack.setItemDamage(meta);
+        Item item = Item.getByNameOrId(data[0] + ":" +data[1]);
+        if(item == null) {
+            return null;
         }
-        return stack;
+        return new ItemStack(item, 1, meta);
     }
 
     /**

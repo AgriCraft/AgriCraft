@@ -47,7 +47,7 @@ public class CrossOverResult {
         ItemStack stack = new ItemStack(seed, 1, meta);
         NBTTagCompound tag = new NBTTagCompound();
         CropPlantHandler.setSeedNBT(tag, (short) growth, (short) gain, (short) strength, false);
-        stack.stackTagCompound = tag;
+        stack.setTagCompound(tag);
         return stack;
     }
 

@@ -5,10 +5,10 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +24,7 @@ public abstract class MutationHandler {
         //Read mutations & initialize the mutation arrays
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationData());
         
-        mutations = new ArrayList<Mutation>();
+        mutations = new ArrayList<>();
         
       //print registered mutations to the log
         LogHelper.info("Registered Mutations:");
@@ -42,7 +42,7 @@ public abstract class MutationHandler {
     public static void syncFromServer(Mutation mutation, boolean finished) {
         if(!isSyncing) {
             LogHelper.info("Receiving mutations from server");
-            mutations = new ArrayList<Mutation>();
+            mutations = new ArrayList<>();
             isSyncing = true;
         }
         mutations.add(mutation);
@@ -102,7 +102,7 @@ public abstract class MutationHandler {
     //gets all the possible crossovers
     public static Mutation[] getCrossOvers(List<TileEntityCrop> crops) {
         TileEntityCrop[] parents = MutationHandler.filterParents(crops);
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
+        ArrayList<Mutation> list = new ArrayList<>();
         switch (parents.length) {
             case 2:
                 list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[1]));
@@ -126,7 +126,7 @@ public abstract class MutationHandler {
 
     //gets an array of all the possible parents from the array containing all the neighbouring crops
     private static TileEntityCrop[] filterParents(List<TileEntityCrop> input) {
-        ArrayList<TileEntityCrop> list = new ArrayList<TileEntityCrop>();
+        ArrayList<TileEntityCrop> list = new ArrayList<>();
         for(TileEntityCrop crop:input) {
             if (crop != null && crop.isMature()) {
                 list.add(crop);
@@ -141,7 +141,7 @@ public abstract class MutationHandler {
         Item seed2 = parent2.getSeedStack().getItem();
         int meta1 = parent1.getSeedStack().getItemDamage();
         int meta2 = parent2.getSeedStack().getItemDamage();
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
+        ArrayList<Mutation> list = new ArrayList<>();
         for (Mutation mutation:mutations) {
             ItemStack parent1Stack = mutation.getParents()[0];
             ItemStack parent2Stack = mutation.getParents()[1];
@@ -157,7 +157,7 @@ public abstract class MutationHandler {
 
     //removes null instance from a mutations array
     private static Mutation[] cleanMutationArray(Mutation[] input) {
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
+        ArrayList<Mutation> list = new ArrayList<>();
         for(Mutation mutation:input) {
             if (mutation.getResult() != null) {
                 list.add(mutation);
@@ -176,7 +176,7 @@ public abstract class MutationHandler {
 
     //gets all the mutations this crop can mutate to
     public static Mutation[] getMutationsFromParent(ItemStack stack) {
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
+        ArrayList<Mutation> list = new ArrayList<>();
         for (Mutation mutation : mutations) {
             ItemStack parent1Stack = mutation.getParents()[0];
             ItemStack parent2Stack = mutation.getParents()[1];
@@ -200,7 +200,7 @@ public abstract class MutationHandler {
 
     //gets the parents this crop mutates from
     public static Mutation[] getMutationsFromChild(ItemStack stack) {
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
+        ArrayList<Mutation> list = new ArrayList<>();
         if(CropPlantHandler.isValidSeed(stack)) {
             for (Mutation mutation:mutations) {
                 if (mutation.getResult().getItem() == stack.getItem() && mutation.getResult().getItemDamage() == stack.getItemDamage()) {
@@ -216,7 +216,7 @@ public abstract class MutationHandler {
      * @return Removed mutations
      */
     public static List<Mutation> removeMutationsByResult(ItemStack result) {
-        List<Mutation> removedMutations = new ArrayList<Mutation>();
+        List<Mutation> removedMutations = new ArrayList<>();
         for (Iterator<Mutation> iter = mutations.iterator(); iter.hasNext();) {
             Mutation mutation = iter.next();
             if (mutation.getResult().isItemEqual(result)) {

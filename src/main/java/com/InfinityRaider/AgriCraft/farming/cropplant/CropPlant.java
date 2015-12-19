@@ -9,12 +9,10 @@ import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementH
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -312,12 +310,12 @@ public abstract class CropPlant implements ICropPlant {
     /**
      * Gets the icon for the plant, as a function of the plant's growth stage.
      *
-     * @param pos the block position.
+     * @param growthStage the growthStage
      * @return the current icon for the plant.
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public abstract IIcon getPlantIcon(BlockPos pos);
+    public abstract IIcon getPlantIcon(int growthStage);
 
     /**
      * Determines how the plant is rendered.

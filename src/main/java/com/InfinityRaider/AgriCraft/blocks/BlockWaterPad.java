@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
 
-public class BlockWaterPad extends BlockAgriCraft {
+public class BlockWaterPad extends BlockBase {
     public BlockWaterPad() {
         this(Material.ground);
     }

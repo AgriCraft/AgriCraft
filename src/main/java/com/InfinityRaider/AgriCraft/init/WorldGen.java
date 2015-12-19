@@ -7,8 +7,8 @@ import com.InfinityRaider.AgriCraft.handler.VillagerTradeHandler;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouse;
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouseIrrigated;
-import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.util.Collection;
 

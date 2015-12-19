@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.api.v1.IClipper;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -13,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemClipper extends ItemAgricraft implements IClipper {
+public class ItemClipper extends ItemBase implements IClipper {
     public ItemClipper() {
         super();
         this.setMaxStackSize(1);
@@ -40,7 +41,7 @@ public class ItemClipper extends ItemAgricraft implements IClipper {
     }
 
     @Override
-    public void onClipperUsed(World world, BlockPos pos, EntityPlayer player) {}
+    public void onClipperUsed(World world, BlockPos pos, IBlockState state, EntityPlayer player) {}
 
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")

@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class CropProduce {
     public static final int DEFAULT_WEIGHT = 100;
-    private ArrayList<Product> products = new ArrayList<Product>();
+    private ArrayList<Product> products = new ArrayList<>();
     private int totalWeight;
 
     public void addProduce(ItemStack stack) {
@@ -52,7 +52,7 @@ public class CropProduce {
     }
 
     public ArrayList<ItemStack> getProduce(int amount, Random rand) {
-        ArrayList<ItemStack> results = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> results = new ArrayList<>();
         while(amount>0) {
             double stop = rand.nextDouble()*this.totalWeight;
             for (Product product:this.products) {
@@ -68,7 +68,7 @@ public class CropProduce {
     }
 
     public ArrayList<ItemStack> getAllProducts() {
-        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> fruits = new ArrayList<>();
         for(Product product:this.products) {
             fruits.add(product.product.copy());
         }

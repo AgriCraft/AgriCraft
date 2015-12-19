@@ -2,19 +2,19 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * The base class for all AgriCraft blocks.
  */
-public abstract class BlockAgriCraft extends Block {
+public abstract class BlockBase extends Block {
 	
     /**
      * The default, base constructor for all AgriCraft blocks.
@@ -22,7 +22,7 @@ public abstract class BlockAgriCraft extends Block {
      * 
      * @param mat the {@link Material} the block is comprised of.
      */
-    protected BlockAgriCraft(Material mat) {
+    protected BlockBase(Material mat) {
         super(mat);
         RegisterHelper.registerBlock(this, getInternalName(), getItemBlockClass());
     }
@@ -64,7 +64,7 @@ public abstract class BlockAgriCraft extends Block {
      * 
      * @param tea tile entity associated with the block, possibly null.
      */
-    public ItemStack getWailaStack(BlockAgriCraft block, TileEntityAgricraft tea) {
+    public ItemStack getWailaStack(BlockBase block, TileEntityBase tea) {
     	return null;
     }
 }

@@ -2,39 +2,32 @@ package com.InfinityRaider.AgriCraft.network;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MessagePeripheralCheckNeighbours extends MessageAgriCraft {
-    private int x;
-    private int y;
-    private int z;
+    private BlockPos pos;
 
     @SuppressWarnings("unused")
     public MessagePeripheralCheckNeighbours() {}
 
-    public MessagePeripheralCheckNeighbours(int x, int y, int z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public MessagePeripheralCheckNeighbours(BlockPos pos) {
+        this.pos = pos;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.x = buf.readInt();
-        this.y = buf.readInt();
-        this.z = buf.readInt();
+        this.pos = readBlockPosFromByteBuf(buf);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeInt(this.x);
-        buf.writeInt(this.y);
-        buf.writeInt(this.z);
+        this.writeBlockPosToByteBuf(buf, pos);
     }
 
     public static class MessageHandler implements IMessageHandler<MessagePeripheralCheckNeighbours, IMessage> {
@@ -42,7 +35,7 @@ public class MessagePeripheralCheckNeighbours extends MessageAgriCraft {
         public IMessage onMessage(MessagePeripheralCheckNeighbours message, MessageContext ctx) {
             World world = AgriCraft.proxy.getClientWorld();
             if(world != null) {
-                TileEntity te = world.getTileEntity(message.x, message.y, message.z);
+                TileEntity te = world.getTileEntity(message.pos);
                 if(te != null && te instanceof TileEntityPeripheral) {
                     ((TileEntityPeripheral) te).checkSides();
                 }

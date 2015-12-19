@@ -6,22 +6,20 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemJournal extends ItemAgricraft implements IJournal {
+public class ItemJournal extends ItemBase implements IJournal {
     public ItemJournal() {
         super();
         this.setMaxStackSize(1);
@@ -37,13 +35,6 @@ public class ItemJournal extends ItemAgricraft implements IJournal {
         return true;
     }
 
-    //when this item is used in a crafting grid, it stays in the grid
-    @Override
-    public boolean doesContainerItemLeaveCraftingGrid(ItemStack itemStack)
-    {
-        return true;
-    }
-
     //when this item is used in a crafting recipe it is replaced by the item return by this method
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
@@ -54,8 +45,8 @@ public class ItemJournal extends ItemAgricraft implements IJournal {
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         ItemStack journal = player.getCurrentEquippedItem();
         if(journal.hasTagCompound()) {
-            NBTTagCompound tag = journal.stackTagCompound;
-            if(tag.hasKey(Names.NBT.discoveredSeeds)){
+            NBTTagCompound tag = journal.getTagCompound();
+            if(tag.hasKey(Names.NBT.discoveredSeeds)) {
                 NBTTagList list = tag.getTagList(Names.NBT.discoveredSeeds, 10);
                 NBTHelper.clearEmptyStacksFromNBT(list);
                 tag.setTag(Names.NBT.discoveredSeeds, list);
@@ -72,17 +63,10 @@ public class ItemJournal extends ItemAgricraft implements IJournal {
     @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
         int nr = 0;
-        if(stack.hasTagCompound() && stack.stackTagCompound.hasKey(Names.NBT.discoveredSeeds)) {
-            nr = stack.stackTagCompound.getTagList(Names.NBT.discoveredSeeds, 10).tagCount();
+        if(stack.hasTagCompound() && stack.getTagCompound().hasKey(Names.NBT.discoveredSeeds)) {
+            nr = stack.getTagCompound().getTagList(Names.NBT.discoveredSeeds, 10).tagCount();
         }
         list.add(StatCollector.translateToLocal("agricraft_tooltip.discoveredSeeds")+": "+nr);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg) {
-        LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
-        itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
     }
 
     @Override
@@ -96,7 +80,7 @@ public class ItemJournal extends ItemAgricraft implements IJournal {
         if(!journal.hasTagCompound()) {
             journal.setTagCompound(new NBTTagCompound());
         }
-        NBTTagCompound tag = journal.stackTagCompound;
+        NBTTagCompound tag = journal.getTagCompound();
         //check if the NBT tag has a list of discovered seeds and if it doesn't, create a new one
         NBTTagList list;
         if(tag.hasKey(Names.NBT.discoveredSeeds)) {
@@ -114,13 +98,13 @@ public class ItemJournal extends ItemAgricraft implements IJournal {
             return;
         }
         NBTTagList list = getDiscoveredSeedsTaglist(journal);
-        NBTTagCompound tag = journal.stackTagCompound;
+        NBTTagCompound tag = journal.getTagCompound();
         //add the analyzed seed to the NBT tag list if it doesn't already have it
         if(!isSeedDiscovered(journal, newEntry)) {
             NBTTagCompound seedTag = new NBTTagCompound();
             ItemStack write = newEntry.copy();
             write.stackSize = 1;
-            write.stackTagCompound = null;
+            write.setTagCompound(null);
             write.writeToNBT(seedTag);
             list.appendTag(seedTag);
         }
@@ -137,7 +121,7 @@ public class ItemJournal extends ItemAgricraft implements IJournal {
     }
 
     public ArrayList<ItemStack> getDiscoveredSeeds(ItemStack journal) {
-        ArrayList<ItemStack> seeds = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> seeds = new ArrayList<>();
         NBTTagCompound tag = null;
         if (journal != null && journal.stackSize > 0 && journal.getItem() instanceof ItemJournal && journal.hasTagCompound()) {
             tag = journal.getTagCompound();

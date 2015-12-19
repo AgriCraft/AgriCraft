@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft;
 
 import com.InfinityRaider.AgriCraft.apiimpl.APISelector;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
@@ -13,11 +12,11 @@ import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.ArrayList;
 
@@ -104,7 +103,7 @@ public class AgriCraft {
     @SuppressWarnings("unused")
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
         MutationHandler.init();
-        NEIHelper.setServerConfigs();
+        //NEIHelper.setServerConfigs();
     }
 
     @Mod.EventHandler

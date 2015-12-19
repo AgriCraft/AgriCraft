@@ -3,13 +3,13 @@ package com.InfinityRaider.AgriCraft.gui;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import cpw.mods.fml.client.config.DummyConfigElement;
-import cpw.mods.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.config.IConfigElement;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
+import net.minecraftforge.fml.client.config.DummyConfigElement;
+import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class AgriCraftGuiConfig extends GuiConfig {
     }
 
     private static List<IConfigElement> getConfigElements() {
-        List<IConfigElement> configElements = new ArrayList<IConfigElement>();
+        List<IConfigElement> configElements = new ArrayList<>();
         for(Field field:ConfigurationHandler.Categories.class.getDeclaredFields()) {
             if(field.getType() == String.class) {
                 try {

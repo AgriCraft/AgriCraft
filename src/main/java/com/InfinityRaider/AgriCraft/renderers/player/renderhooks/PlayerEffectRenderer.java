@@ -1,11 +1,11 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.Tessellator;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ abstract class PlayerEffectRenderer {
      * @param u u offset for the bound texture
      * @param v v offset for the bound texture
      */
-    protected void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v) {
+    protected void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v) {
         tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, u * Constants.UNIT, v * Constants.UNIT);
     }
 
@@ -44,7 +44,7 @@ abstract class PlayerEffectRenderer {
      */
     @SuppressWarnings("unused")
     protected void drawAxisSystem() {
-        Tessellator tessellator = Tessellator.instance;
+        TessellatorV2 tessellator = TessellatorV2.instance;
 
         tessellator.startDrawingQuads();
 

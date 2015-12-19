@@ -1,22 +1,15 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
-import codechicken.nei.api.API;
-import com.InfinityRaider.AgriCraft.blocks.BlockAgriCraft;
-import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIConfig;
+import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
-import com.InfinityRaider.AgriCraft.items.ItemAgricraft;
+import com.InfinityRaider.AgriCraft.items.ItemBase;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -25,6 +18,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -57,11 +55,11 @@ public class ClientProxy extends CommonProxy {
         //BLOCKS
         //------
         for(Field field:Blocks.class.getDeclaredFields()) {
-            if(field.getType().isAssignableFrom(BlockAgriCraft.class)) {
+            if(field.getType().isAssignableFrom(BlockBase.class)) {
                 try {
                     Object obj = field.get(null);
                     if(obj!=null) {
-                        ((BlockAgriCraft) obj).getRenderer();
+                        ((BlockBase) obj).getRenderer();
                     }
                 } catch (IllegalAccessException e) {
                     LogHelper.printStackTrace(e);
@@ -72,11 +70,11 @@ public class ClientProxy extends CommonProxy {
         //ITEMS
         //-----
         for(Field field: Items.class.getDeclaredFields()) {
-            if(field.getType().isAssignableFrom(ItemAgricraft.class)) {
+            if(field.getType().isAssignableFrom(ItemBase.class)) {
                 try {
                     Object obj = field.get(null);
                     if(obj!=null) {
-                        ((ItemAgricraft) obj).getItemRenderer();
+                        ((ItemBase) obj).getItemRenderer();
                     }
                 }catch (IllegalAccessException e) {
                     LogHelper.printStackTrace(e);
@@ -105,8 +103,10 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void initNEI() {
+        /*
         NEIConfig configNEI = new NEIConfig();
         configNEI.loadConfig();
+        */
     }
 
     @Override
@@ -116,7 +116,7 @@ public class ClientProxy extends CommonProxy {
         while(mods.hasNext()) {
             modContainer = (ModContainer) mods.next();
             if(modContainer.getModId().equalsIgnoreCase("NotEnoughItems")) {
-                API.hideItem(stack);
+                //API.hideItem(stack);
             }
         }
     }

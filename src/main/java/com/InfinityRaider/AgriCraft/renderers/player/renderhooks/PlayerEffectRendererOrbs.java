@@ -1,14 +1,13 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
 
     @Override
     ArrayList<String> getDisplayNames() {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add(Reference.AUTHOR);
         return list;
     }
@@ -41,7 +40,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
     @Override
     void renderEffects(EntityPlayer player, RenderPlayer renderer, float partialTick) {
         //tessellator instance
-        Tessellator tessellator = Tessellator.instance;
+        TessellatorV2 tessellator = TessellatorV2.instance;
 
         //rotate the coordinate system to the minecraft (x,y,z) instead of the system attached to the player
         rotateToGeneralCoordinates(player, partialTick);
@@ -99,7 +98,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
         tessellator.addTranslation(0, dy, 0);
     }
 
-    private void renderOrb(Tessellator tessellator, float x, float y, float z, int index) {
+    private void renderOrb(TessellatorV2 tessellator, float x, float y, float z, int index) {
         //rescale the size of the orbs and make them smaller towards the end of the trail
         float scale = 0.375F*(1.0F - 0.25F*(index+0.0F)/MAX_BLURS);
 
@@ -107,8 +106,8 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
         GL11.glTranslatef(x, y, z);
 
         //rotate the coordinate system to make sure the texture always renders parallel to the player's screen
-        GL11.glRotatef(RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(RenderManager.instance.playerViewX, 1F, 0F, 0F);
+        GL11.glRotatef(Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(Minecraft.getMinecraft().getRenderManager().playerViewX, 1F, 0F, 0F);
 
         tessellator.startDrawingQuads();
             //front
@@ -124,8 +123,8 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
         tessellator.draw();
 
         //rotate the coordinate system back after rendering this orb
-        GL11.glRotatef(-RenderManager.instance.playerViewX, 1F, 0F, 0F);
-        GL11.glRotatef(-RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(-Minecraft.getMinecraft().getRenderManager().playerViewX, 1F, 0F, 0F);
+        GL11.glRotatef(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 
         //translate back to the player after rendering
         GL11.glTranslatef(-x, -y, -z);

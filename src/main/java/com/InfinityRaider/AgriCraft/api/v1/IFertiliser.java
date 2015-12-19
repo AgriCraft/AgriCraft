@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,9 +18,9 @@ public interface IFertiliser {
     public boolean hasSpecialBehaviour();
 
     /** this is called when the fertiliser is used on a crop, this only is called if true is returned from hasSpecialBehaviour */
-    public void onFertiliserApplied(World world, int x, int y, int z, Random random);
+    public void onFertiliserApplied(World world, BlockPos pos, Random random);
 
     /** this is called on the client when the fertiliser is applied, can be used for particles or other visual effects */
     @SideOnly(Side.CLIENT)
-    public void performClientAnimations(ItemStack stack, World world, BlockPos pos);
+    public void performClientAnimations(int meta, World world, BlockPos pos);
 }

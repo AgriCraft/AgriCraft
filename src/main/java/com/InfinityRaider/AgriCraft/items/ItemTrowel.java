@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class ItemTrowel extends ItemAgricraft implements ITrowel {
+public class ItemTrowel extends ItemBase implements ITrowel {
     private IIcon[] icons = new IIcon[2];
 
     public ItemTrowel() {

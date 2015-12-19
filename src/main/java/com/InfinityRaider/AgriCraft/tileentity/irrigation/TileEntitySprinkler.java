@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.particles.LiquidSprayFX;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -20,7 +20,7 @@ import net.minecraftforge.common.IPlantable;
 
 import java.util.List;
 
-public class TileEntitySprinkler extends TileEntityAgricraft {
+public class TileEntitySprinkler extends TileEntityBase {
 
     private int counter = 0;
     public float angle = 0.0F;

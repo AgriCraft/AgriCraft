@@ -15,7 +15,7 @@ import net.minecraft.util.StatCollector;
 
 import java.util.List;
 
-public class TileEntitySeedAnalyzer extends TileEntityAgricraft implements ISidedInventory {
+public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory {
     private static final int[] SLOTS = new int[] {0, 1};
 	
     /**

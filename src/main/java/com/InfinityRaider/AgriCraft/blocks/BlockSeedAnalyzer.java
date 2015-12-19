@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
-public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
+public class BlockSeedAnalyzer extends BlockContainerBase {
     public BlockSeedAnalyzer() {
         super(Material.ground);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);

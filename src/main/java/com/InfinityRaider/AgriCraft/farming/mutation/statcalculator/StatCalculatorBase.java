@@ -44,7 +44,7 @@ public abstract  class StatCalculatorBase extends StatCalculator {
 
     //gets an array of all the possible parents from the array containing all the neighbouring crops
     protected ICrop[] filterParents(List<? extends ICrop> input) {
-        ArrayList<ICrop> list = new ArrayList<ICrop>();
+        ArrayList<ICrop> list = new ArrayList<>();
         for(ICrop crop:input) {
             if (crop != null && crop.isMature()) {
                 list.add(crop);

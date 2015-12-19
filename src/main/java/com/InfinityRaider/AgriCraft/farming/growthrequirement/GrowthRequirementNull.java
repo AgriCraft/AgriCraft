@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -13,17 +14,17 @@ public final class GrowthRequirementNull implements IGrowthRequirement {
     GrowthRequirementNull() {}
 
     @Override
-    public boolean canGrow(World world, int x, int y, int z) {
+    public boolean canGrow(World world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isBaseBlockPresent(World world, int x, int y, int z) {
+    public boolean isBaseBlockPresent(World world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isValidSoil(World world, int x, int y, int z) {
+    public boolean isValidSoil(World world, BlockPos pos) {
         return false;
     }
 

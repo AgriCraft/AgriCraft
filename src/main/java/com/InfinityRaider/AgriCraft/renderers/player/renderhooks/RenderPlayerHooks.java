@@ -1,13 +1,13 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -66,7 +66,7 @@ public final class RenderPlayerHooks {
 
     private void registerPlayerEffectRenderer(PlayerEffectRenderer renderer) {
         if(activeEffectRenderers == null) {
-            activeEffectRenderers = new HashMap<String, PlayerEffectRenderer>();
+            activeEffectRenderers = new HashMap<>();
         }
         for(String name:renderer.getDisplayNames()) {
             this.activeEffectRenderers.put(name, renderer);
@@ -75,10 +75,10 @@ public final class RenderPlayerHooks {
 
     @SubscribeEvent
     public void RenderPlayerEffects(RenderPlayerEvent.Specials.Post event) {
-        if(activeEffectRenderers.containsKey(event.entityPlayer.getDisplayName())) {
+        if(activeEffectRenderers.containsKey(event.entityPlayer.getDisplayNameString())) {
             if(!event.entityPlayer.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer)) {
                 GL11.glPushMatrix();
-                activeEffectRenderers.get(event.entityPlayer.getDisplayName()).renderEffects(event.entityPlayer, event.renderer, event.partialRenderTick);
+                activeEffectRenderers.get(event.entityPlayer.getDisplayNameString()).renderEffects(event.entityPlayer, event.renderer, event.partialRenderTick);
                 GL11.glPopMatrix();
             }
         }

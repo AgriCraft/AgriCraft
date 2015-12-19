@@ -117,7 +117,7 @@ public interface ICropPlant {
 
     /** Gets the icon for the plant, growth stage goes from 0 to 7 (both inclusive, 0 is sprout and 7 is mature) */
     @SideOnly(Side.CLIENT)
-    IIcon getPlantIcon(BlockPos pos);
+    IIcon getPlantIcon(int growthStage);
 
     /** Determines how the plant is rendered, return false to render as wheat (#), true to render as a flower (X) */
     @SideOnly(Side.CLIENT)

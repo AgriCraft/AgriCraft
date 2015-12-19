@@ -2,26 +2,28 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityAgricraft;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public abstract class BlockCustomWood extends BlockContainerAgriCraft {
+public abstract class BlockCustomWood extends BlockContainerBase {
 	
     public BlockCustomWood() {
         super(Material.wood);
@@ -33,76 +35,75 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     }
     
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-        if(world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityCustomWood) {
-            TileEntityCustomWood tileEntity = (TileEntityCustomWood) world.getTileEntity(x, y, z);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileEntity te = world.getTileEntity(pos);
+        if(te != null && te instanceof TileEntityCustomWood) {
+            TileEntityCustomWood tileEntity = (TileEntityCustomWood) te;
             tileEntity.setMaterial(stack);
         }
-    	super.onBlockPlacedBy(world, x, y, z, entity, stack);
+    	super.onBlockPlacedBy(world, pos, state, placer, stack);
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
-        super.breakBlock(world,x,y,z, b,meta);
-        world.removeTileEntity(x,y,z);
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        super.breakBlock(world, pos, state);
     }
 
     //override this to delay the removal of the tile entity until after harvestBlock() has been called
     @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-        return !player.capabilities.isCreativeMode || super.removedByPlayer(world, player, x, y, z, willHarvest);
+    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        return !player.capabilities.isCreativeMode || super.removedByPlayer(world, pos, player, willHarvest);
     }
 
     //when the block is harvested
     @Override
-    public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
         if((!world.isRemote) && (!player.isSneaking())) {
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
-                this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x,y,z), 0);
+                this.dropBlockAsItem(world,pos, world.getBlockMetadata(pos), 0);
             }
-            world.setBlockToAir(x, y, z);
+            world.setBlockToAir(pos);
         }
     }
 
     @Override
-     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int fortune) {
+     public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
         if(!world.isRemote) {
-            ArrayList<ItemStack> drops = this.getDrops(world, x, y, z, meta, fortune);
+            List<ItemStack> drops = this.getDrops(world, pos, state, fortune);
             for(ItemStack drop:drops) {
-                this.dropBlockAsItem(world, x, y, z, drop);
+                spawnAsEntity(world, pos, drop);
             }
         }
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-        if(!world.isRemote) {
-            ItemStack drop = new ItemStack(this, 1);
-            this.setTag(world, x, y, z, drop);
-            drops.add(drop);
-        }
+        ItemStack drop = new ItemStack(this, 1);
+        this.setTag(world, pos, state, drop);
+        drops.add(drop);
         return drops;
     }
 
     //creative item picking
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-        ItemStack stack = new ItemStack(this, 1, world.getBlockMetadata(x, y, z));
-        this.setTag(world, x, y, z, stack);
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+        ItemStack stack = new ItemStack(this, 1, world.getBlockMetadata(pos));
+        this.setTag(world, pos, world.getBlockState(pos), stack);
         return stack;
     }
 
     //prevent block from being removed by leaves
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
         return false;
     }
 
-    protected void setTag(World world, int x, int y, int z, ItemStack stack) {
-        if(world.getTileEntity(x, y, z)!=null && world.getTileEntity(x, y, z) instanceof TileEntityCustomWood) {
-            TileEntityCustomWood te = (TileEntityCustomWood) world.getTileEntity(x, y, z);
-            stack.stackTagCompound = te.getMaterialTag();
+    protected void setTag(IBlockAccess world, BlockPos pos, IBlockState state, ItemStack stack) {
+        TileEntity te = world.getTileEntity(pos);
+        if(te != null && te instanceof TileEntityCustomWood) {
+            TileEntityCustomWood tile = (TileEntityCustomWood) te;
+            stack.setTagCompound(tile.getMaterialTag());
         }
     }
 
@@ -121,11 +122,8 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
 
     @Override
-    public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
-
-    @Override
     @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return false;}
+    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {return false;}
 
     @Override
     protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
@@ -133,7 +131,7 @@ public abstract class BlockCustomWood extends BlockContainerAgriCraft {
     }
     
     @Override
-    public ItemStack getWailaStack(BlockAgriCraft block, TileEntityAgricraft te) {
+    public ItemStack getWailaStack(BlockBase block, TileEntityBase te) {
     	if(te != null && te instanceof TileEntityCustomWood) {
     		ItemStack stack = new ItemStack(block, 1, 0);
     		stack.setTagCompound(((TileEntityCustomWood) te).getMaterialTag());

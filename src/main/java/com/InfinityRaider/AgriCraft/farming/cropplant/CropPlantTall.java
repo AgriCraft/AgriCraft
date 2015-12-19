@@ -1,12 +1,11 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Basic abstract implementation for crops that are 2 blocks tall
@@ -21,7 +20,7 @@ public abstract class CropPlantTall extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+    public boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
         return true;
     }
 
@@ -35,11 +34,11 @@ public abstract class CropPlantTall extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
-        int meta = world.getBlockMetadata(x, y, z);
-        PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getBottomIcon(meta), 0);
+    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, RenderBlocks renderer) {
+        int meta = world.getBlockMetadata(pos);
+        PlantRenderer.renderPlantLayer(world, pos, renderer, renderAsFlower() ? 1 : 6, getBottomIcon(meta), 0);
         if(renderTopLayer(meta)) {
-            PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(meta), 1);
+            PlantRenderer.renderPlantLayer(world, pos, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(meta), 1);
         }
     }
 }

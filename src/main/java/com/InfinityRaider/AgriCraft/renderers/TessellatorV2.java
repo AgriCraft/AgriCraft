@@ -1,10 +1,9 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.utility.TransformationMatrix;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.shader.TesselatorVertexState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Note that this class isn't used by vanilla minecraft, the matrix operations done by this class will be ignored by the calls made by vanilla to the Tessellator
@@ -13,15 +12,18 @@ import net.minecraft.client.shader.TesselatorVertexState;
 @SideOnly(Side.CLIENT)
 public class TessellatorV2 extends Tessellator {
     public static final TessellatorV2 instance = new TessellatorV2(2097152);
-    private static final Tessellator tessellator = Tessellator.instance;
+    private static final Tessellator tessellator = Tessellator.getInstance();
 
     private TransformationMatrix matrix = new TransformationMatrix();
 
     @SuppressWarnings("unused")
-    private TessellatorV2(int a) {}
+    private TessellatorV2(int a) {
+        super(a);
+    }
 
-    static {
-        instance.defaultTexture = true;
+    /** The static instance of the Tessellator. */
+    public static TessellatorV2 getInstance() {
+        return instance;
     }
 
     //---------------------------------------------

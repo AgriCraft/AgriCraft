@@ -1,27 +1,24 @@
 package com.InfinityRaider.AgriCraft.utility.multiblock;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public interface IMultiBlockManager<T extends IMultiBlockPartData> {
     /**
      * Called when an IMultiBlockComponent with this manager as type is placed in the world
      * @param world the world object
-     * @param x the x-coordinate
-     * @param y the y-coordinate
-     * @param z the z-coordinate
+     * @param pos the block position
      * @param component the component placed
      */
-    void onBlockPlaced(World world, int x, int y, int z, IMultiBlockComponent<? extends IMultiBlockManager<T>, T> component);
+    void onBlockPlaced(World world, BlockPos pos, IMultiBlockComponent<? extends IMultiBlockManager<T>, T> component);
 
     /**
      * Called when an IMultiBlockComponent with this manager as type is broken
      * @param world the world object
-     * @param x the x-coordinate
-     * @param y the y-coordinate
-     * @param z the z-coordinate
+     * @param pos the block position
      * @param component the component broken
      */
-    void onBlockBroken(World world, int x, int y, int z, IMultiBlockComponent<? extends IMultiBlockManager<T>, T> component);
+    void onBlockBroken(World world, BlockPos pos, IMultiBlockComponent<? extends IMultiBlockManager<T>, T> component);
 
     /**
      * Performs needed operations to create the multiblock structure

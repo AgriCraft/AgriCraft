@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +14,21 @@ import java.util.Random;
  * use API.getCrop(World world, int x, int y, int z) to retrieve the ICrop instance
  */
 public interface ICrop {
+    /**
+     * @return the x coordinate for this crop
+     */
+    int xCoord();
+
+    /**
+     * @return the y coordinate for this crop
+     */
+    int yCoord();
+
+    /**
+     * @return the z coordinate for this crop
+     */
+    int zCoord();
+
     /**
      * @return if this crop has a plant
      */
@@ -109,6 +125,11 @@ public interface ICrop {
      * @return the Block for the plant currently planted on this crop
      */
     Block getPlantBlock();
+
+    /**
+     * @return the Block state for the plant currently planted on this crop
+     */
+    BlockState getPlantBlockState();
 
     /**
      * Spawns weeds on this crop

@@ -5,17 +5,18 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.utility.BlockStatePlaceHolder;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
     @SideOnly(Side.CLIENT)
@@ -33,7 +34,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
     }
 
     public BlockModPlant getPlant() {
-        return (BlockModPlant) this.getPlant(null, 0, 0, 0);
+        return (BlockModPlant) this.getPlant(null, null);
     }
 
     @Override
@@ -58,17 +59,18 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float f1, float f2, float f3) {
-        if (world.getBlock(x, y, z) == Blocks.blockCrop) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (world.getBlockState(pos).getBlock() == Blocks.blockCrop) {
             LogHelper.debug("Trying to plant seed " + stack.getItem().getUnlocalizedName() + " on crops");
             return true;
         }
-        if (CropPlantHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, x, y, z)) {
-            if (side != 1) {
+        if (CropPlantHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, pos)) {
+            BlockPos blockPosUp = pos.add(0, 1, 0);
+            if (side != EnumFacing.UP) {
                 return false;
-            } else if (player.canPlayerEdit(x, y, z, side, stack) && player.canPlayerEdit(x, y + 1, z, side, stack)) {
-                if (world.isAirBlock(x, y + 1, z)) {
-                    world.setBlock(x, y + 1, z, this.getPlant());
+            } else if (player.canPlayerEdit(pos, side, stack) && player.canPlayerEdit(blockPosUp, side, stack)) {
+                if (world.isAirBlock(blockPosUp)) {
+                    world.setBlockState(blockPosUp, new BlockStatePlaceHolder(this.getPlant(), 0));
                     --stack.stackSize;
                     return true;
                 } else {

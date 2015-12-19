@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.items.ItemAgricraft;
+import com.InfinityRaider.AgriCraft.items.ItemBase;
 import com.InfinityRaider.AgriCraft.items.ItemNugget;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import net.minecraft.block.Block;
@@ -17,11 +17,11 @@ import java.util.Map;
 
 public abstract class OreDictHelper {
 
-    private static final Map<String, Block> oreBlocks = new HashMap<String, Block>();
-    private static final Map<String, Integer> oreBlockMeta = new HashMap<String, Integer>();
+    private static final Map<String, Block> oreBlocks = new HashMap<>();
+    private static final Map<String, Integer> oreBlockMeta = new HashMap<>();
 
-    private static final Map<String, Item> nuggets = new HashMap<String, Item>();
-    private static final Map<String, Integer> nuggetMeta = new HashMap<String, Integer>();
+    private static final Map<String, Item> nuggets = new HashMap<>();
+    private static final Map<String, Integer> nuggetMeta = new HashMap<>();
 
     public static Block getOreBlockForName(String name) {
         return oreBlocks.get(name);
@@ -80,7 +80,7 @@ public abstract class OreDictHelper {
     //finds the ingot for a nugget ore dictionary entry
     public static ItemStack getIngot(String ore) {
         ItemStack ingot = null;
-        ArrayList<ItemStack> entries = OreDictionary.getOres("ingot" + ore);
+        List<ItemStack> entries = OreDictionary.getOres("ingot" + ore);
         if (entries.size() > 0 && entries.get(0).getItem() != null) {
             ingot = entries.get(0);
         }
@@ -111,7 +111,7 @@ public abstract class OreDictHelper {
             if (itemStack.getItem() instanceof ItemBlock) {
                 ItemBlock block = (ItemBlock) itemStack.getItem();
 
-                oreBlocks.put(oreName, block.field_150939_a);
+                oreBlocks.put(oreName, block.block);
                 oreBlockMeta.put(oreName, itemStack.getItemDamage());
                 break;
             }
@@ -125,7 +125,7 @@ public abstract class OreDictHelper {
             OreDictHelper.nuggets.put(oreName, nugget);
             nuggetMeta.put(oreName, nuggets.get(0).getItemDamage());
         } else {
-            ItemAgricraft nugget = new ItemNugget(oreName);
+            ItemBase nugget = new ItemNugget(oreName);
             OreDictionary.registerOre("nugget"+oreName, nugget);
             OreDictHelper.nuggets.put(oreName, nugget);
             nuggetMeta.put(oreName, 0);
@@ -138,12 +138,12 @@ public abstract class OreDictHelper {
 
     public static ArrayList<ItemStack> getFruitsFromOreDict(ItemStack seed, boolean sameMod) {
         String seedModId = IOHelper.getModId(seed);
-        ArrayList<ItemStack> fruits = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> fruits = new ArrayList<>();
 
         for(int id:OreDictionary.getOreIDs(seed)) {
             if(OreDictionary.getOreName(id).substring(0,4).equalsIgnoreCase("seed")) {
                 String name = OreDictionary.getOreName(id).substring(4);
-                ArrayList<ItemStack> fromOredict = OreDictionary.getOres("crop"+name);
+                List<ItemStack> fromOredict = OreDictionary.getOres("crop"+name);
                 for(ItemStack stack:fromOredict) {
                     if(stack==null || stack.getItem()==null) {
                         continue;

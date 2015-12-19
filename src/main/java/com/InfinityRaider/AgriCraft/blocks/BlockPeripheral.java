@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
-public class BlockPeripheral extends BlockContainerAgriCraft implements IPeripheralProvider {
+public class BlockPeripheral extends BlockContainerBase implements IPeripheralProvider {
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
 

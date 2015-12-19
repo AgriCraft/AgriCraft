@@ -13,13 +13,14 @@ import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
-import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
-public class GuiHandler implements IGuiHandler{
+public class GuiHandler implements IGuiHandler {
     public static final int seedAnalyzerID = 1;
     public static final int journalID = 2;
     public static final int seedStorageID = 3;
@@ -28,7 +29,7 @@ public class GuiHandler implements IGuiHandler{
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
         switch(ID) {
             case(seedAnalyzerID):
                 if(te != null && te instanceof TileEntitySeedAnalyzer) {
@@ -53,7 +54,7 @@ public class GuiHandler implements IGuiHandler{
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
         switch (ID) {
             case (seedAnalyzerID):
                 if (te != null && te instanceof TileEntitySeedAnalyzer) {

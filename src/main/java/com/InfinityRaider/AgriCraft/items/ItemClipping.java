@@ -9,16 +9,18 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemClipping;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemClipping extends ItemAgricraft {
+public class ItemClipping extends ItemBase {
     public ItemClipping() {
         super();
         this.setCreativeTab(null);
@@ -40,18 +42,18 @@ public class ItemClipping extends ItemAgricraft {
 
     //this is called when you right click with this item in hand
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(world.isRemote) {
             return false;
         }
-        if(stack==null || stack.getItem()==null || stack.stackTagCompound==null) {
+        if(stack==null || stack.getItem()==null || !stack.hasTagCompound()) {
             return false;
         }
-        Block block = world.getBlock(x, y, z);
+        Block block = world.getBlockState(pos).getBlock();
         if(!(block instanceof BlockCrop)) {
             return false;
         }
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(pos);
         if(te == null || !(te instanceof TileEntityCrop)) {
             return true;
         }
@@ -65,7 +67,7 @@ public class ItemClipping extends ItemAgricraft {
             return false;
         }
         if(world.rand.nextInt(10)<=stats.getStrength()) {
-            blockCrop.plantSeed(seed, world, x, y, z);
+            blockCrop.plantSeed(seed, world, pos);
         }
         stack.stackSize = stack.stackSize-1;
         return true;
@@ -74,10 +76,10 @@ public class ItemClipping extends ItemAgricraft {
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         String text = StatCollector.translateToLocal("item.agricraft:clipping.name");
-        if(stack==null || stack.stackTagCompound==null) {
+        if(stack==null || !stack.hasTagCompound()) {
             return text;
         }
-        ItemStack seed = ItemStack.loadItemStackFromNBT(stack.stackTagCompound);
+        ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
         if(seed==null || seed.getItem()==null || !CropPlantHandler.isValidSeed(seed)) {
             return text;
         }

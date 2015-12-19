@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
@@ -20,7 +21,7 @@ public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
     }
 
     @Override
-    public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
+    public boolean onHarvest(World world, BlockPos pos, EntityPlayer player) {
         if(player == null) {
             return true;
         }
@@ -33,18 +34,18 @@ public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
         if(!(player.getCurrentEquippedItem().getItem() instanceof ItemShears)) {
             return true;
         }
-        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
-        crop.getWorldObj().setBlockMetadataWithNotify(crop.xCoord, crop.yCoord, crop.zCoord, 2, 2);
+        TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
+        crop.getWorld().setBlockMetadataWithNotify(pos, 2, 2);
         int amount = ((int) (Math.ceil((crop.getGain() + 0.00) / 3)))/2;
         if(amount>0) {
             ItemStack drop = new ItemStack(item, amount, meta);
             if (world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
                 float f = 0.7F;
-                double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, drop);
-                entityitem.delayBeforeCanPickup = 10;
+                double dx = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                double dy = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                double dz = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                EntityItem entityitem = new EntityItem(world, (double) pos.getX() + dx, (double) pos.getY() + dy, (double) pos.getZ() + dz, drop);
+                entityitem.setPickupDelay(10);
                 world.spawnEntityInWorld(entityitem);
             }
         }

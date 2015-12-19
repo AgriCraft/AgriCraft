@@ -2,11 +2,10 @@ package com.InfinityRaider.AgriCraft.gui.journal;
 
 import com.InfinityRaider.AgriCraft.gui.Component;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 

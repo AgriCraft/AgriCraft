@@ -5,6 +5,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.world.World;
 
 public class EntityVillagerFarmer extends EntityVillager {
+    @SuppressWarnings("unused")
     public EntityVillagerFarmer(World world) {
         this(world, 0);
     }
@@ -21,7 +22,7 @@ public class EntityVillagerFarmer extends EntityVillager {
     }
 
     @Override
-    public boolean isAIEnabled() {
-        return true;
+    public boolean isAIDisabled() {
+        return super.isAIDisabled();
     }
 }

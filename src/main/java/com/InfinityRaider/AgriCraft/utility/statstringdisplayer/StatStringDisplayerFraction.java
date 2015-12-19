@@ -1,7 +1,8 @@
 package com.InfinityRaider.AgriCraft.utility.statstringdisplayer;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class StatStringDisplayerFraction extends StatStringDisplayer {

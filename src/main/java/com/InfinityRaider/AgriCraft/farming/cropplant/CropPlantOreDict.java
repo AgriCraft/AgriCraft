@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemSeeds;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CropPlantOreDict extends CropPlantGeneric {
     public CropPlantOreDict(ItemSeeds seed) {

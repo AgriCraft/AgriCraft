@@ -21,7 +21,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockSprinkler extends BlockContainerAgriCraft {
+public class BlockSprinkler extends BlockContainerBase {
 	
     public BlockSprinkler() {
     	super(Material.iron);

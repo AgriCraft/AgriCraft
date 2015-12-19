@@ -1,10 +1,9 @@
 package com.InfinityRaider.AgriCraft.network;
 
-import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageSendNEISetting extends MessageAgriCraft {
     private String className;
@@ -35,7 +34,7 @@ public class MessageSendNEISetting extends MessageAgriCraft {
     public static class MessageHandler implements IMessageHandler<MessageSendNEISetting, IMessage> {
         @Override
         public IMessage onMessage(MessageSendNEISetting message, MessageContext ctx) {
-            NEIHelper.setHandlerStatus(message.className, message.value);
+            //NEIHelper.setHandlerStatus(message.className, message.value);
             return null;
         }
     }

@@ -1,13 +1,13 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
 import com.InfinityRaider.AgriCraft.renderers.particles.RuneFX;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class PlayerEffectRendererParticlesEnchanted extends PlayerEffectRenderer
         double y = player.posY + (Minecraft.getMinecraft().thePlayer==player?0:1);
         double z = player.posZ-0.5F;
 
-        Vec3 vector = Vec3.createVectorHelper(0, 0, 0);
+        Vec3 vector = new Vec3(0, 0, 0);
         double radius = 2*player.worldObj.rand.nextDouble();
         double angle = Math.toRadians(player.worldObj.rand.nextInt(360));
         double height = player.worldObj.rand.nextDouble();
@@ -52,7 +52,7 @@ public class PlayerEffectRendererParticlesEnchanted extends PlayerEffectRenderer
     }
 
     ArrayList<String> getDisplayNames() {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("Gideonseymour");
         return list;
     }

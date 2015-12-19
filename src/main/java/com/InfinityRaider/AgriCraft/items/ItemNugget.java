@@ -1,11 +1,11 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemNugget extends ItemAgricraft {
+public class ItemNugget extends ItemBase {
     private final String name;
 
     public ItemNugget(String name) {

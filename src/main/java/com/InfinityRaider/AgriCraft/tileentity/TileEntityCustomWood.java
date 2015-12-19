@@ -18,7 +18,7 @@ import java.util.List;
  * This class represents the root tile entity for all AgriCraft custom wood blocks.
  * Through this class, the custom woods are remembered for the blocks. *
  */
-public class TileEntityCustomWood extends TileEntityAgricraft implements IDebuggable {
+public class TileEntityCustomWood extends TileEntityBase implements IDebuggable {
 	
 	/** The default material to use. Currently is wood planks. */
     private static final Block DEFAULT_MATERIAL = Blocks.planks;

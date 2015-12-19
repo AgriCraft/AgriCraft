@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -180,10 +181,10 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.placeBlockAtCurrentPosition(world, Blocks.oak_stairs, 7, 3, 4, 2, boundingBox);
         this.placeBlockAtCurrentPosition(world, Blocks.oak_stairs, 7, 6, 4, 2, boundingBox);
         //place doors
-        this.placeBlockAtCurrentPosition(world, Blocks.wooden_door, 0, 1, 2, 10, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.wooden_door, 8, 1, 3, 10, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.wooden_door, 2, 15, 2, 10, boundingBox);
-        this.placeBlockAtCurrentPosition(world, Blocks.wooden_door, 8, 15, 3, 10, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.oak_door, 0, 1, 2, 10, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.oak_door, 8, 1, 3, 10, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.oak_door, 2, 15, 2, 10, boundingBox);
+        this.placeBlockAtCurrentPosition(world, Blocks.oak_door, 8, 15, 3, 10, boundingBox);
         //place air blocks
         this.fillWithBlocks(world, boundingBox, 0, 2, 0, 0, 9, 15, Blocks.air, Blocks.air, false);
         this.fillWithBlocks(world, boundingBox, 16, 2, 0, 16, 9, 15, Blocks.air, Blocks.air, false);

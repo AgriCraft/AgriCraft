@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.utility;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -9,11 +10,13 @@ public final class WorldCoordinates {
     private int x;
     private int y;
     private int z;
+    private BlockPos pos;
 
     public WorldCoordinates(int x,  int y,  int z) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.pos = new BlockPos(x, y, z);
     }
 
     public int x() {
@@ -28,8 +31,12 @@ public final class WorldCoordinates {
         return z;
     }
 
+    public BlockPos pos() {
+        return pos;
+    }
+
     public Block getBlock(World world) {
-        return world.getBlock(x, y, z);
+        return world.getBlockState(pos).getBlock();
     }
 
     public int getMetaData(World world) {
@@ -37,7 +44,7 @@ public final class WorldCoordinates {
     }
 
     public TileEntity getTileEntity(World world) {
-        return world.getTileEntity(x, y, z);
+        return world.getTileEntity(pops);
     }
 
     public void setBlock(World world, Block block, int meta, int flag) {
