@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming;
 
-import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
-import com.InfinityRaider.AgriCraft.api.v2.ITrowel;
+import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
+import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.item.ItemStack;

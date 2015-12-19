@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v2.IAdditionalCropData;
-import com.InfinityRaider.AgriCraft.api.v2.ICrop;
-import com.InfinityRaider.AgriCraft.api.v2.ICropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IAdditionalCropData;
+import com.InfinityRaider.AgriCraft.api.v1.ICrop;
+import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 

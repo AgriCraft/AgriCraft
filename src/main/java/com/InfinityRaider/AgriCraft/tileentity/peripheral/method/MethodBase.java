@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 
-import com.InfinityRaider.AgriCraft.api.v2.ITrowel;
+import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;

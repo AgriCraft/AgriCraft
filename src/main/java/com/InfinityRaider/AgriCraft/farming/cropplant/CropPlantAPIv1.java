@@ -2,8 +2,8 @@ package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v2.IAdditionalCropData;
-import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+import com.InfinityRaider.AgriCraft.api.v1.IAdditionalCropData;
+import com.InfinityRaider.AgriCraft.api.v1.ICrop;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import cpw.mods.fml.relauncher.Side;

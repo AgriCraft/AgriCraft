@@ -1,8 +1,4 @@
-package com.InfinityRaider.AgriCraft.api.v2;
-
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
+package com.InfinityRaider.AgriCraft.api.v1;
 
 public interface IGrowthRequirementBuilder {
 

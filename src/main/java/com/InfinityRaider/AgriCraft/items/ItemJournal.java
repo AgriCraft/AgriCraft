@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.api.v2.IJournal;
+import com.InfinityRaider.AgriCraft.api.v1.IJournal;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;

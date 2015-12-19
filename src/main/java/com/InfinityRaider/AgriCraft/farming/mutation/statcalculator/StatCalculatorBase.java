@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming.mutation.statcalculator;
 
-import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
-import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
+import com.InfinityRaider.AgriCraft.api.v1.ICrop;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;

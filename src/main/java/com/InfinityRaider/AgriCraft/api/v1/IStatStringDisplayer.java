@@ -1,7 +1,8 @@
-package com.InfinityRaider.AgriCraft.api.v2;
+package com.InfinityRaider.AgriCraft.api.v1;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Register custom stat display methods via APIv2.setStatStringDisplayer

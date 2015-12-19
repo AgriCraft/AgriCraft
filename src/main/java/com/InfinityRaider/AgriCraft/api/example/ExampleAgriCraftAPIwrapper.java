@@ -1,7 +1,8 @@
 package com.InfinityRaider.AgriCraft.api.example;
 
-import cpw.mods.fml.common.Loader;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 
 /**
  * This is an example implementation of how to use the AgriCraft API, you don't have to do it this way,
@@ -49,7 +50,7 @@ public class ExampleAgriCraftAPIwrapper {
     /**
      * Example method, this one gets the stats of a crop
      */
-    public SeedStatsExample exampleMethodGetSeedStats(World world, int x, int y, int z) {
+    public SeedStatsExample exampleMethodGetSeedStats(World world, BlockPos pos) {
         return new SeedStatsExample((short) -1, (short) -1, (short) -1, false);
     }
 

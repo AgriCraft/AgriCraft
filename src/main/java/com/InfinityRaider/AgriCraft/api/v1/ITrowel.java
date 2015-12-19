@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.api.v1;
 
 import net.minecraft.item.ItemStack;
 
-/** Interface to be implemented in items that are considered trowels */
 public interface ITrowel {
     /** Return true if this trowel is currently carrying a plant */
     boolean hasSeed(ItemStack trowel);
@@ -27,4 +26,5 @@ public interface ITrowel {
 
     /** Gets the stats from the seed */
     ISeedStats getStats(ItemStack trowel) ;
+    /** Gets the stats from the seed */
 }

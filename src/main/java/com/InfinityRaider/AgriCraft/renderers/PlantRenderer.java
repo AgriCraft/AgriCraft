@@ -1,25 +1,26 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
-    public static void renderPlantLayer(int x, int y, int z, RenderBlocks renderer, int renderType, IIcon icon, int layer) {
-        renderPlantLayer(x, y, z, renderer, renderType, icon, layer, true);
+    public static void renderPlantLayer(IBlockAccess world, BlockPos pos, RenderBlocks renderer, int renderType, IIcon icon, int layer) {
+        renderPlantLayer(pos, renderer, renderType, icon, layer, true);
     }
 
-    public static void renderPlantLayer(int x, int y, int z, RenderBlocks renderer, int renderType, IIcon icon, int layer, boolean resetColor) {
+    public static void renderPlantLayer(IBlockAccess world, BlockPos pos, RenderBlocks renderer, int renderType, IIcon icon, int layer, boolean resetColor) {
         if(icon!=null) {
-            Tessellator tessellator = Tessellator.instance;
-            tessellator.addTranslation(x, y, z);
-            tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
+            TessellatorV2 tessellator = TessellatorV2.instance;
+            tessellator.addTranslation(pos.getX(), pos.getY(), pos.getZ());
+            tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(renderer.blockAccess, pos.getX(), pos.getY(), pos.getZ()));
             if(resetColor) {
                 tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
             }
@@ -28,11 +29,11 @@ public abstract class PlantRenderer {
             } else {
                 renderHashTagPattern(tessellator, icon, layer);
             }
-            tessellator.addTranslation(-x, -y, -z);
+            tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
         }
     }
 
-    private static void renderHashTagPattern(Tessellator tessellator, IIcon icon, int layer) {
+    private static void renderHashTagPattern(TessellatorV2 tessellator, IIcon icon, int layer) {
         int minY = 16*layer;
         int maxY = 16*(layer+1);
         //plane 1 front
@@ -77,7 +78,7 @@ public abstract class PlantRenderer {
         addScaledVertexWithUV(tessellator, 12, minY, 0, 16, 16, icon);
     }
 
-    private static void renderCrossPattern(Tessellator tessellator, IIcon icon, int layer) {
+    private static void renderCrossPattern(TessellatorV2 tessellator, IIcon icon, int layer) {
         int minY = 12*layer;
         int maxY = 12*(layer+1);
         //plane 1 front right
@@ -162,16 +163,16 @@ public abstract class PlantRenderer {
         addScaledVertexWithUV(tessellator, 12.001F, minY,-2, 16, 16, icon);
     }
 
-    public static void renderStemPlant(int x, int y, int z, RenderBlocks renderer, IIcon icon, int meta, Block vine, Block block, boolean mature) {
-        Tessellator tessellator = Tessellator.instance;
+    public static void renderStemPlant(IBlockAccess world, BlockPos pos, RenderBlocks renderer, IIcon icon, int meta, Block vine, Block block, boolean mature) {
+        TessellatorV2 tessellator = TessellatorV2.instance;
         int translation = meta>=6?0:5-meta;
-        tessellator.setBrightness(vine.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
-        int l = vine.getRenderColor(meta);
+        tessellator.setBrightness(vine.getMixedBrightnessForBlock(world, pos);
+        int l = vine.getRenderColor(world.getBlockState(pos));
         float f = (float)(l >> 16 & 255) / 255.0F;
         float f1 = (float)(l >> 8 & 255) / 255.0F;
         float f2 = (float)(l & 255) / 255.0F;
         tessellator.setColorOpaque_F(f, f1, f2);
-        tessellator.addTranslation(x, y - Constants.UNIT * 2 * translation, z);
+        tessellator.addTranslation(pos.getX(), pos.getY() - Constants.UNIT * 2 * translation, pos.getZ());
         //render the vines
         if(mature) {
             renderStemPattern(tessellator, icon);
@@ -179,7 +180,7 @@ public abstract class PlantRenderer {
         else {
             renderCrossPattern(tessellator, icon, 0);
         }
-        tessellator.addTranslation(-x, -y+Constants.UNIT*2*translation, -z);
+        tessellator.addTranslation(-pos.getX(), -pos.getY()+Constants.UNIT*2*translation, -pos.getZ());
         //render the block
         if(mature) {
             float u = Constants.UNIT;
@@ -202,7 +203,7 @@ public abstract class PlantRenderer {
         }
     }
 
-    private static void renderStemPattern(Tessellator tessellator, IIcon icon) {
+    private static void renderStemPattern(TessellatorV2 tessellator, IIcon icon) {
         int minY = 0;
         int maxY = 12;
         //plane 1 front left
@@ -258,7 +259,7 @@ public abstract class PlantRenderer {
      * @param v v offset for the bound texture
      * @param icon the icon to render
      */
-    private static void addScaledVertexWithUV(Tessellator tessellator, float x, float y, float z, float u, float v, IIcon icon) {
+    private static void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v, IIcon icon) {
         tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, icon.getInterpolatedU(u), icon.getInterpolatedV(v));
     }
 }

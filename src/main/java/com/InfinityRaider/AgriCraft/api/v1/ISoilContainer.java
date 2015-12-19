@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -8,7 +9,7 @@ import net.minecraft.world.World;
  */
 public interface ISoilContainer {
     /** returns the block contained within this container */
-    public Block getSoil(World world, int x, int y, int z);
+    public Block getSoil(World world, BlockPos pos);
 
-    public int getSoilMeta(World world, int x, int y, int z);
+    public int getSoilMeta(World world, BlockPos pos);
 }

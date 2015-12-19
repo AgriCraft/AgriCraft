@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.api.v2.ITrowel;
-import com.InfinityRaider.AgriCraft.api.v2.IClipper;
+import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
+import com.InfinityRaider.AgriCraft.api.v1.IClipper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemClipping;
 import com.InfinityRaider.AgriCraft.reference.Names;

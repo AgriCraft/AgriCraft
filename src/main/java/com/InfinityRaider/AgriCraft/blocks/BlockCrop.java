@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
-import com.InfinityRaider.AgriCraft.api.v2.IRake;
-import com.InfinityRaider.AgriCraft.api.v2.ITrowel;
-import com.InfinityRaider.AgriCraft.api.v2.IClipper;
+import com.InfinityRaider.AgriCraft.api.v1.IRake;
+import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
+import com.InfinityRaider.AgriCraft.api.v1.IClipper;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
@@ -38,6 +38,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -408,7 +409,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
      * Increments the contained plant's growth stage.
      * Called when bonemeal is applied to the block.
      */
-    public void func_149853_b(World world, Random rand, int x, int y, int z) {
+    public void func_149853_b(World world, Random rand, BlockPos pos) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(x, y, z);
         if(crop.hasPlant() || crop.hasWeed()) {
             int l = world.getBlockMetadata(x, y, z) + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);

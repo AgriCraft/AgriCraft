@@ -1,6 +1,5 @@
-package com.InfinityRaider.AgriCraft.api.v2;
+package com.InfinityRaider.AgriCraft.api.v1;
 
-import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

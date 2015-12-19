@@ -2,12 +2,13 @@ package com.InfinityRaider.AgriCraft.api.example;
 
 import com.InfinityRaider.AgriCraft.api.API;
 import com.InfinityRaider.AgriCraft.api.APIBase;
-import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
-import com.InfinityRaider.AgriCraft.api.v2.APIv2;
+import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
+import com.InfinityRaider.AgriCraft.api.v1.APIv1;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrapper {
-    private APIv2 api;
+    private APIv1 api;
     private boolean ok;
 
     /**
@@ -16,8 +17,8 @@ public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrappe
     protected ExampleAgriCraftAPIimplementation() {
         super();
         APIBase apiObj = API.getAPI(1);
-        if(apiObj != null && (apiObj instanceof APIv2)) {
-            api = (APIv2) apiObj;
+        if(apiObj != null && (apiObj instanceof APIv1)) {
+            api = (APIv1) apiObj;
             ok = api.getStatus().isOK();
         } else {
             ok = false;
@@ -41,12 +42,12 @@ public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrappe
     /**
      * Example method, this one gets the stats of a crop
      */
-    public SeedStatsExample exampleMethodGetSeedStats(World world, int x, int y, int z) {
+    public SeedStatsExample exampleMethodGetSeedStats(World world, BlockPos pos) {
         if(isOk()) {
-            ISeedStats stats = api.getStats(world, x, y ,z);
+            ISeedStats stats = api.getStats(world, pos);
             return new SeedStatsExample(stats.getGrowth(), stats.getGain(), stats.getStrength(), stats.isAnalyzed());
         } else {
-            return super.exampleMethodGetSeedStats(world, x, y, z);
+            return super.exampleMethodGetSeedStats(world, pos);
         }
     }
 

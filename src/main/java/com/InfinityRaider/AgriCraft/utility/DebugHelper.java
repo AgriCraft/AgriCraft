@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;

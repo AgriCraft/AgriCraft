@@ -1,8 +1,10 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -21,5 +23,5 @@ public interface IFertiliser {
 
     /** this is called on the client when the fertiliser is applied, can be used for particles or other visual effects */
     @SideOnly(Side.CLIENT)
-    public void performClientAnimations(int meta, World world, int x, int y, int z);
+    public void performClientAnimations(ItemStack stack, World world, BlockPos pos);
 }

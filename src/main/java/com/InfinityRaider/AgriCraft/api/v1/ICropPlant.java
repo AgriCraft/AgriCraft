@@ -1,14 +1,14 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -17,73 +17,121 @@ import java.util.Random;
  * This interface is used both for you to read the AgriCraft CropPlants as well as coding your own.
  * If you register your own ICropPlant object, it will be wrapped by the api.
  * Meaning if you query the ICropPlant object you registered, it will return a different object.
- *
- * DEPRECATED: THIS ONE WILL MOSTLY STILL WORK, BUT IT IS ADVISED TO USE THE ONE IN APIv2
  */
-@Deprecated
+@SuppressWarnings("deprecation")
 public interface ICropPlant {
-	/** Gets the tier of this plant, can be overridden trough the configs */
-	int tier();
+    /** Gets the tier of this plant, can be overridden trough the configs */
+    int tier();
 
-	/** Gets a stack of the seed for this plant */
-	ItemStack getSeed();
+    /** Gets a stack of the seed for this plant */
+    ItemStack getSeed();
 
-	/** Gets a block instance of the crop */
-	Block getBlock();
+    /** Gets a block instance of the crop */
+    Block getBlock();
 
-	/** Gets an arraylist of all possible fruit drops from this plant */
-	ArrayList<ItemStack> getAllFruits();
+    /** Gets an ArrayList of all possible fruit drops from this plant */
+    ArrayList<ItemStack> getAllFruits();
 
-	/** Returns a random fruit for this plant */
-	ItemStack getRandomFruit(Random rand);
+    /** Returns a random fruit for this plant */
+    ItemStack getRandomFruit(Random rand);
 
-	/** Returns an ArrayList with amount of random fruit stacks for this plant */
-	ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
+    /** Returns an ArrayList with random fruit stacks for this plant */
+    ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
 
-	/** Gets called right before a harvest attempt, return false to prevent further processing, player may be null if harvested by automation */
-	boolean onHarvest(World world, int x, int y, int z, EntityPlayer player);
+    /** Gets called right before a harvest attempt, return false to prevent further processing, player may be null if harvested by automation */
+    boolean onHarvest(World world,BlockPos pos, EntityPlayer player);
 
-	/** This is called right after this plant is planted on a crop, either trough planting, mutation or spreading */
-	void onSeedPlanted(World world, int x, int y, int z);
+    /** This is called right after this plant is planted on a crop, either trough planting, mutation or spreading */
+    void onSeedPlanted(World world, BlockPos pos);
 
-	/** This is called right after this plant is removed from a crop or a crop holding this plant is broken */
-	void onPlantRemoved(World world, int x, int y, int z);
+    /** This is called right after this plant is removed from a crop or a crop holding this plant is broken */
+    void onPlantRemoved(World world, BlockPos pos);
 
-	/** Allow this plant to be bonemealed or not */
-	boolean canBonemeal();
+    /** Allow this plant to be bonemealed or not */
+    boolean canBonemeal();
 
-	/** When a growth thick is allowed for this plant, return true to re-render the crop clientside */
-	boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage);
+    /**
+     * If you want your crop to have additional data, this is called when the plant is first applied to crop sticks, either trough planting, spreading or mutation
+     * @param world the world object for the crop
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     * @param z the z-coordinate
+     * @param crop the crop where this plant is planted on
+     * @return initial IAdditionalCropData object (can be null if you don't need additional data)
+     */
+    IAdditionalCropData getInitialCropData(World world,BlockPos pos, ICrop crop);
 
-	/**
-	 * Checks if the plant can grow on this position
-	 *
-	 * DEPRECATED: THIS METHOD IS NO LONGER CALLED
-	 */
-	@Deprecated
-	boolean isFertile(World world, int x, int y, int z);
+    /**
+     * If this CropPlant should track additional data, this method will be called when the crop containing such a CropPlant is reading from NBT
+     * @param tag the same tag returned from the IAdditionalCropData.writeToNBT() method
+     * @return an object holding the data
+     */
+    IAdditionalCropData readCropDataFromNBT(NBTTagCompound tag);
 
-	/** Checks if the plant is mature */
-	boolean isMature(IBlockAccess world, int x, int y, int z);
+    /**
+     * Called when the TileEntity with this plant has its validate() method called
+     * @param world the World object for the TileEntity
+     * @param x the x-coordinate for the TileEntity
+     * @param y the x-coordinate for the TileEntity
+     * @param z the x-coordinate for the TileEntity
+     * @param crop the ICrop instance of the TileEntity (is the same object as the TileEntity, but is for convenience)
+     */
+    void onValidate(World world,BlockPos pos, ICrop crop);
 
-	/** Gets the height of the crop */
-	float getHeight(int meta);
+    /**
+     * Called when the TileEntity with this plant has its invalidate() method called
+     * @param world the World object for the TileEntity
+     * @param x the x-coordinate for the TileEntity
+     * @param y the x-coordinate for the TileEntity
+     * @param z the x-coordinate for the TileEntity
+     * @param crop the ICrop instance of the TileEntity (is the same object as the TileEntity, but is for convenience)
+     */
+    void onInvalidate(World world, BlockPos pos, ICrop crop);
 
-	/** Gets the icon for the plant, growth stage goes from 0 to 7 (both inclusive, 0 is sprout and 7 is mature) */
-	IIcon getPlantIcon(int growthStage);
+    /**
+     * Called when the TileEntity with this plant has its onChunkUnload() method called
+     * @param world the World object for the TileEntity
+     * @param x the x-coordinate for the TileEntity
+     * @param y the x-coordinate for the TileEntity
+     * @param z the x-coordinate for the TileEntity
+     * @param crop the ICrop instance of the TileEntity (is the same object as the TileEntity, but is for convenience)
+     */
+    void onChunkUnload(World world, BlockPos pos, ICrop crop);
 
-	/** Determines how the plant is rendered, return false to render as wheat (#), true to render as a flower (X) */
-	boolean renderAsFlower();
+    /**
+     * Gets the growth requirement for this plant, this is used to check if the plant can be planted or grow in certain locations
+     *
+     * If you don't want to create your own class for this, you can use APIv2.getGrowthRequirementBuilder() to get a Builder object to build IGrowthRequirements
+     * If you just want to have vanilla crop behaviour, you can use APIv2.getDefaultGrowthRequirement() to get a growth requirement with default behaviour
+     */
+    IGrowthRequirement getGrowthRequirement();
 
-	/** Gets some information about the plant for the journal */
-	String getInformation();
+    /** When a growth thick is allowed for this plant, return true to re-render the crop client side */
+    boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage);
 
-	/** Return true if you want to render the plant yourself, else agricraft will render the plant based on the data returned by the getIcon and renderAsFlower methods */
-	@SideOnly(Side.CLIENT)
-	boolean overrideRendering();
+    /** Checks if the plant is mature */
+    boolean isMature(IBlockAccess world, BlockPos pos);
 
-	/** This is called when the plant is rendered, this is never called if returned false on overrideRendering */
-	@SideOnly(Side.CLIENT)
-	void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer);
+    /** Gets the height of the crop */
+    float getHeight(int meta);
 
+    /** Gets the icon for the plant, growth stage goes from 0 to 7 (both inclusive, 0 is sprout and 7 is mature) */
+    @SideOnly(Side.CLIENT)
+    IIcon getPlantIcon(BlockPos pos);
+
+    /** Determines how the plant is rendered, return false to render as wheat (#), true to render as a flower (X) */
+    @SideOnly(Side.CLIENT)
+    boolean renderAsFlower();
+
+    /** Gets some information about the plant for the journal */
+    @SideOnly(Side.CLIENT)
+    String getInformation();
+
+    /** Return true if you want to render the plant yourself, else agricraft will render the plant based on the data returned by the getIcon and renderAsFlower methods */
+    @SideOnly(Side.CLIENT)
+    boolean overrideRendering();
+
+    /** This is called when the plant is rendered, this is never called if returned false on overrideRendering */
+    @SideOnly(Side.CLIENT)
+    void renderPlantInCrop(IBlockAccess world, BlockPos pos, RenderBlocks renderer);
 }

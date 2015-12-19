@@ -1,23 +1,24 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v2.IAdditionalCropData;
-import com.InfinityRaider.AgriCraft.api.v2.ICrop;
-import com.InfinityRaider.AgriCraft.api.v2.ICropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.IAdditionalCropData;
+import com.InfinityRaider.AgriCraft.api.v1.ICrop;
+import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -193,14 +194,12 @@ public abstract class CropPlant implements ICropPlant {
      * World object and coordinates are passed in the case you would want to keep track of all planted crops and their status
      * 
      * @param world the current world of the plant being harvested.
-     * @param x the x-coordinate of the plant being harvested.
-     * @param y the y-coordinate of the plant being harvested.
-     * @param z the z-coordinate of the plant being harvested.
+     * @param pos the block position.
      * @param player the player attempting to harvest the plant.
      * @return true, by default.
      */
     @Override
-    public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
+    public boolean onHarvest(World world, BlockPos pos, EntityPlayer player) {
         return true;
     }
 
@@ -208,23 +207,19 @@ public abstract class CropPlant implements ICropPlant {
      * Called right after the plant is added to a crop through planting, mutation, or spreading.
      * 
      * @param world the world the plant is in.
-     * @param x the x-coordinate of the plant.
-     * @param y the y-coordinate of the plant.
-     * @param z the z-coordinate of the plant.
+  * @param pos the block position.
      */
     @Override
-    public void onSeedPlanted(World world, int x, int y, int z) {}
+    public void onSeedPlanted(World world, BlockPos pos) {}
 
     /**
      * Called right after the plant is removed from a crop, or a crop holding the plant is broken.
      * 
      * @param world the world the plant is in.
-     * @param x the x-coordinate of the plant.
-     * @param y the y-coordinate of the plant.
-     * @param z the z-coordinate of the plant.
+  * @param pos the block position.
      */
     @Override
-    public void onPlantRemoved(World world, int x, int y, int z) {}
+    public void onPlantRemoved(World world, BlockPos pos) {}
 
     /**
      * Determines if the plant may be grown with Bonemeal.
@@ -235,7 +230,7 @@ public abstract class CropPlant implements ICropPlant {
     public abstract boolean canBonemeal();
 
     @Override
-    public IAdditionalCropData getInitialCropData(World world, int x, int y, int z, ICrop crop) {
+    public IAdditionalCropData getInitialCropData(World world, BlockPos pos, ICrop crop) {
         return null;
     }
 
@@ -245,13 +240,13 @@ public abstract class CropPlant implements ICropPlant {
     }
 
     @Override
-    public void onValidate(World world, int x, int y, int z, ICrop crop) {}
+    public void onValidate(World world, BlockPos pos, ICrop crop) {}
 
     @Override
-    public void onInvalidate(World world, int x, int y, int z, ICrop crop) {}
+    public void onInvalidate(World world, BlockPos pos, ICrop crop) {}
 
     @Override
-    public void onChunkUnload(World world, int x, int y, int z, ICrop crop) {}
+    public void onChunkUnload(World world, BlockPos pos, ICrop crop) {}
 
     public final void setGrowthRequirement(IGrowthRequirement growthRequirement) {
         this.growthRequirement = growthRequirement;
@@ -269,14 +264,12 @@ public abstract class CropPlant implements ICropPlant {
      * Should return true to re-render the crop clientside.
      * 
      * @param world the world the plant is in.
-     * @param x the x-coordinate of the plant.
-     * @param y the y-coordinate of the plant.
-     * @param z the z-coordinate of the plant.
+  * @param pos the block position.
      * @param oldGrowthStage the current/old growth stage of the plant.
      * @return if the plant should be rendered again client side (e.g. if the next growth stage has a different icon)
      */
     @Override
-    public abstract boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage);
+    public abstract boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage);
 
     /**
      * Determines if the plant can grow at a location.
@@ -284,14 +277,12 @@ public abstract class CropPlant implements ICropPlant {
      * To check if a plant is fertile, use getGrowthRequirement().canGrow(world, x, y, z)
      * 
      * @param world the world the plant is in.
-     * @param x the x-coordinate of the plant.
-     * @param y the y-coordinate of the plant.
-     * @param z the z-coordinate of the plant.
+  * @param pos the block position.
      * @return if the growth location for the plant is fertile.
      */
     @Override
     @SuppressWarnings("deprecation")
-    public final boolean isFertile(World world, int x, int y, int z) {
+    public final boolean isFertile(World world, BlockPos pos) {
         return getGrowthRequirement().canGrow(world, x, y, z);
     }
 
@@ -299,13 +290,11 @@ public abstract class CropPlant implements ICropPlant {
      * Determines if the plant is mature. That is, the plant's metadata matches {@link Constants#MATURE}.
      * 
      * @param world the world the plant is in.
-     * @param x the x-coordinate of the plant.
-     * @param y the y-coordinate of the plant.
-     * @param z the z-coordinate of the plant.
+  * @param pos the block position.
      * @return if the plant is mature.
      */
     @Override
-    public boolean isMature(IBlockAccess world, int x, int y, int z) {
+    public boolean isMature(IBlockAccess world, BlockPos pos) {
         return world.getBlockMetadata(x, y, z) >= Constants.MATURE;
     }
 
@@ -323,12 +312,12 @@ public abstract class CropPlant implements ICropPlant {
     /**
      * Gets the icon for the plant, as a function of the plant's growth stage.
      *
-     * @param growthStage the growthstage of the plant may range from 0 to {@link Constants#MATURE}.
+     * @param pos the block position.
      * @return the current icon for the plant.
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public abstract IIcon getPlantIcon(int growthStage);
+    public abstract IIcon getPlantIcon(BlockPos pos);
 
     /**
      * Determines how the plant is rendered.
@@ -360,14 +349,12 @@ public abstract class CropPlant implements ICropPlant {
      * A function to render the crop. Called when the plant is rendered.
      * 
      * @param world the world the plant is in.
-     * @param x the x-coordinate of the plant.
-     * @param y the y-coordinate of the plant.
-     * @param z the z-coordinate of the plant.
+  * @param pos the block position.
      * @param renderer the renderer to use in the rendering of the plant.
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
-        PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(world.getBlockMetadata(x, y, z)), 0);
+    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, RenderBlocks renderer) {
+        PlantRenderer.renderPlantLayer(world, pos, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(pos), 0);
     }
 }

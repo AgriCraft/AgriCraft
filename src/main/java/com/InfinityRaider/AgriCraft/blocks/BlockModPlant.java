@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
-import com.InfinityRaider.AgriCraft.api.v2.IGrowthRequirementBuilder;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAgriCraftShearable;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;

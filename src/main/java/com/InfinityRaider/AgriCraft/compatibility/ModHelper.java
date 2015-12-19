@@ -1,50 +1,13 @@
 package com.InfinityRaider.AgriCraft.compatibility;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
-import com.InfinityRaider.AgriCraft.compatibility.adventofascension.AdventOfAscensionHelper;
-import com.InfinityRaider.AgriCraft.compatibility.agriculture.AgricultureHelper;
-import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
-import com.InfinityRaider.AgriCraft.compatibility.applemilktea.AppleMilkTeaHelper;
-import com.InfinityRaider.AgriCraft.compatibility.arsmagica.ArsMagicaHelper;
-import com.InfinityRaider.AgriCraft.compatibility.biomesoplenty.BiomesOPlentyHelper;
-import com.InfinityRaider.AgriCraft.compatibility.bloodmagic.BloodMagicHelper;
-import com.InfinityRaider.AgriCraft.compatibility.bluepower.BluePowerHelper;
-import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
-import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChocoCraftHelper;
-import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
-import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
-import com.InfinityRaider.AgriCraft.compatibility.extrabiomesxl.ExtraBiomesXLHelper;
-import com.InfinityRaider.AgriCraft.compatibility.forestry.ForestryHelper;
-import com.InfinityRaider.AgriCraft.compatibility.forgemultipart.ForgeMultiPartHelper;
-import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
-import com.InfinityRaider.AgriCraft.compatibility.growthcraft.GrowthCraftRiceHelper;
-import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
-import com.InfinityRaider.AgriCraft.compatibility.hungeroverhaul.HungerOverhaulHelper;
-import com.InfinityRaider.AgriCraft.compatibility.immersiveengineering.ImmersiveEngineeringHelper;
-import com.InfinityRaider.AgriCraft.compatibility.lordoftherings.LordOfTheRingsHelper;
-import com.InfinityRaider.AgriCraft.compatibility.magicalcrops.MagicalCropsHelper;
-import com.InfinityRaider.AgriCraft.compatibility.minefactoryreloaded.MFRHelper;
-import com.InfinityRaider.AgriCraft.compatibility.minetweaker.MinetweakerHelper;
-import com.InfinityRaider.AgriCraft.compatibility.mobdropcrops.MobDropCropsHelper;
-import com.InfinityRaider.AgriCraft.compatibility.natura.NaturaHelper;
-import com.InfinityRaider.AgriCraft.compatibility.opencomputers.OpenComputersHelper;
-import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
-import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
-import com.InfinityRaider.AgriCraft.compatibility.resourcefulcrops.ResourcefulCropsHelper;
-import com.InfinityRaider.AgriCraft.compatibility.rotarycraft.RotaryCraftHelper;
-import com.InfinityRaider.AgriCraft.compatibility.tconstruct.TinkersConstructHelper;
-import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
-import com.InfinityRaider.AgriCraft.compatibility.waila.WailaHelper;
-import com.InfinityRaider.AgriCraft.compatibility.weeeflowers.WeeeFlowersHelper;
-import com.InfinityRaider.AgriCraft.compatibility.witchery.WitcheryHelper;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import cpw.mods.fml.common.Loader;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 
 import java.util.HashMap;
 import java.util.List;
@@ -209,44 +172,6 @@ public abstract class ModHelper {
     @SuppressWarnings("unchecked")
     public static void findHelpers() {
         Class[] classes = {
-                AdventOfAscensionHelper.class,
-                AgricultureHelper.class,
-                AppleCoreHelper.class,
-                AppleMilkTeaHelper.class,
-                ArsMagicaHelper.class,
-                BiomesOPlentyHelper.class,
-                BloodMagicHelper.class,
-                BluePowerHelper.class,
-                BotaniaHelper.class,
-                ComputerCraftHelper.class,
-                ChocoCraftHelper.class,
-                ExNihiloHelper.class,
-                ExtraBiomesXLHelper.class,
-                ForestryHelper.class,
-                ForgeMultiPartHelper.class,
-                GardenStuffHelper.class,
-                GrowthCraftRiceHelper.class,
-                HarvestcraftHelper.class,
-                HungerOverhaulHelper.class,
-                ImmersiveEngineeringHelper.class,
-                LordOfTheRingsHelper.class,
-                MagicalCropsHelper.class,
-                MFRHelper.class,
-                MinetweakerHelper.class,
-                MobDropCropsHelper.class,
-                NaturaHelper.class,
-                NEIHelper.class,
-                OpenComputersHelper.class,
-                PlantMegaPackHelper.class,
-                //PneumaticCraftHelper.class,
-                PsychedelicraftHelper.class,
-                ResourcefulCropsHelper.class,
-                RotaryCraftHelper.class,
-                ThaumcraftHelper.class,
-                TinkersConstructHelper.class,
-                WailaHelper.class,
-                WeeeFlowersHelper.class,
-                WitcheryHelper.class
         };
         for(Class clazz:classes) {
             if(ModHelper.class.isAssignableFrom(clazz)) {

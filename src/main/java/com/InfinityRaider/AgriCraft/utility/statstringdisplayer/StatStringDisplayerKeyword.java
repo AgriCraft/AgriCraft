@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility.statstringdisplayer;
 
-import com.InfinityRaider.AgriCraft.api.v2.IStatStringDisplayer;
+import com.InfinityRaider.AgriCraft.api.v1.IStatStringDisplayer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

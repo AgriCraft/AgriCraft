@@ -1,6 +1,7 @@
-package com.InfinityRaider.AgriCraft.api.v2;
+package com.InfinityRaider.AgriCraft.api.v1;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -10,10 +11,8 @@ public interface IClipper {
     /**
      * Method provided to allow more things to happen when the clipper is used, default behaviour will always happen, even if this method does nothing
      * @param world the World object for the crop being clipped
-     * @param x the x-coordinate for the crop being clipped
-     * @param y the y-coordinate object for the crop being clipped
-     * @param z the z-coordinate object for the crop being clipped
+     * @param pos the block position
      * @param player the player using the clipper
      */
-    void onClipperUsed(World world, int x, int y, int z, EntityPlayer player);
+    void onClipperUsed(World world, BlockPos pos, EntityPlayer player);
 }

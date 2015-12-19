@@ -1,13 +1,15 @@
 package com.InfinityRaider.AgriCraft.items;
 
-import com.InfinityRaider.AgriCraft.api.v2.IClipper;
+import com.InfinityRaider.AgriCraft.api.v1.IClipper;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -33,12 +35,12 @@ public class ItemClipper extends ItemAgricraft implements IClipper {
 
     //this is called when you right click with this item in hand
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         return false;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
     }
 
     @Override
-    public void onClipperUsed(World world, int x, int y, int z, EntityPlayer player) {}
+    public void onClipperUsed(World world, BlockPos pos, EntityPlayer player) {}
 
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
