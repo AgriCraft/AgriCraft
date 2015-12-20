@@ -396,3 +396,63 @@ agricraft_journal.pc_tobacco=即使有害健康,世界各地都在吸烟.
 
 //blue power flax
 agricraft_journal.bp_flax_seeds=亚麻就是线 ~Sjin.
+
+//pneumaticCraft plants
+agricraft.journal_PC.plant0=这种植物的花蕾中有有时会携带种子的鱿鱼.
+agricraft.journal_PC.plant1=成熟的植物会喷火并且有时喷种子.
+agricraft.journal_PC.plant2=成熟时, 这些植物会自爆并且散布种子.
+agricraft.journal_PC.plant3=这种植物的花蕾中有有时会携带种子的史莱姆.
+agricraft.journal_PC.plant4=成熟时, 这些植物会在暴雨天制造种子雨.
+agricraft.journal_PC.plant5=成熟的植物会把种子传送到附近随机地点.
+agricraft.journal_PC.plant6=雷雨天, 这些植物会吸引闪电.
+agricraft.journal_PC.plant8=成熟时, 这些植物会爆发出种子.
+agricraft.journal_PC.plant9=这些植物会释放烟雾. 谁知道这些烟有什么效果呢.
+agricraft.journal_PC.plant10=这些植物的种子有高斥力并且在地上会弹走.
+agricraft.journal_PC.plant11=这些植物的种子比空气轻, 它们会飞进大气层.
+agricraft.journal_PC.plant12=成熟时, 这些植物会向不同方向射出4个种子.
+agricraft.journal_PC.plant14=这些植物在地面附近高速射出种子, 只有撞墙是才停下来.
+agricraft.journal_PC.plant15=这些植物的种子随风飞行寻找沃土.
+
+//applemilktea
+agricraft.journal_AMT.item.defeatedcrow.seedMint:0=这种植物的叶子可以泡一杯美味的薄荷茶或者给菜调味.
+
+//rotarycraft
+agricraft.journal_RoC.canola=油菜的种子荚可以提炼优质润滑油.
+
+//immersive engineering
+agricraft_journal.ie_hemp=工业大麻纤维是工业上广泛应用的重要物资.
+
+//extra biomes xl
+agricraft_journal.EBXL_strawberry=草莓很受欢迎,适合种植于家庭环境中,可以直 接消费掉,或者用作装饰用途.
+
+//biomes o plenty
+agricraft_journal.BoP_turnip=芜菁是一种根状蔬菜,在世界范围内通常在温 和的气候下种植,因为其白色的块状主根.
+
+//lord of the rings
+agricraft_journal.lotr_flaxSeeds=亚麻就是线 ~Sjin.
+agricraft_journal.lotr_lettuce=通常作为不耐寒的一年生作物,莴苣是很容易 培养的,尽管它仍需要较低温度以避免过早开 花.
+agricraft_journal.lotr_pipeweedSeeds=烟斗草 (又叫半身人之叶) 是一种烟草, 类似于普通烟草, 由夏尔的霍比特人栽培并享用, 最早发现者是托博德·吹号.
+
+//advent of ascension
+agricraft_journal.aoa_BubbleBerry=这些果实味道很好玩.
+agricraft_journal.aoa_Chili=这些辣椒很辣, 它们烧掉的不仅仅是你的嘴.
+agricraft_journal.aoa_EyeBulb=你知道被人看着的感觉是什么样的吗? 你现在可以随时感受.
+agricraft_journal.aoa_Floracle=有一种奇怪的气场笼罩在这些花四周.
+agricraft_journal.aoa_Goldicap=这种花的花瓣似乎是万能解毒药.
+agricraft_journal.aoa_HeartFruit=这种植物的果实味道不错, 但是会伤人.
+agricraft_journal.aoa_HollyTop=众所周知这种植物的果实可以做优质箭头.
+agricraft_journal.aoa_Lunacrike=众所周知这种植物的果实会产生短暂, 但强大的能量爆发.
+agricraft_journal.aoa_Lunaglobe=这种植物的果实富含能量.
+agricraft_journal.aoa_Lunalon=那些讲胡萝卜对眼睛好的人没试过这个.
+agricraft_journal.aoa_MagicMarang=对那些喜欢食物中毒的人来说相当不错.
+agricraft_journal.aoa_HavenShroom=不要和魔菇弄混.
+agricraft_journal.aoa_Rosidon=吃这种植物会高, 真的很高.
+agricraft_journal.aoa_Tea="不错, 再来杯茶."
+agricraft_journal.aoa_ThornyPlant=被某些人用作货币, 种植这种作物时注意不要引发经济危机.
+agricraft_journal.aoa_Trilliad=这种植物的叶子富含营养.
+
+//agriculture
+agricraft_journal.agriculture_cinnamon=肉桂必须在收获后内皮未干时处理.
+agricraft_journal.agriculture_peanut=花生有很多用途.可以直接吃,经常出现在各 种食谱中,制成溶剂,油脂,药物,纺织材料, 哦还有花生酱,还有很多其他用途.
+agricraft_journal.agriculture_strawberry=草莓很受欢迎,适合种植于家庭环境中,可以直 接消费掉,或者用作装饰用途.
+agricraft_journal.agriculture_vanilla=香子兰是仅次于藏红花的第二名贵的香料.
