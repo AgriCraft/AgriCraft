@@ -11,6 +11,7 @@ Changelog
 -ADDED:  Support for Garden Stuff's candelilla crop
 -ADDED:  Support for Millenaire's crops
 -ADDED:  Support for Pam's Harvest the Nether crops
+-ADDED:  Support for The Kitchen Mod crops
 -CHANGE: Updated Botania drum/horn of the wild interaction: crops will now be harvested instead of uprooted
 -CHANGE: Updated to Forge 10.13.4.1566
 -CHANGE: [API] IGrowthRequirement is now specified via the ICropPlant it applies to
@@ -23,6 +24,7 @@ Changelog
 -FIXED:  Seed icons rendering wrongly for some IIcons
 -FIXED:  Bugs concerning automatic input and output with Seed Storages and Analyzers
 -FIXED:  Crash when Botania is not present
+-FIXED:  Weeds being removed as long as you don't have an empty hand with rakes enabled
 
 1.4.5
 -ADDED:  Support for Agriculture 2
