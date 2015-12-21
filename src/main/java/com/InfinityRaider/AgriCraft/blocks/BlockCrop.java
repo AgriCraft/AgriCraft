@@ -238,8 +238,9 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
         if (te != null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             ItemStack heldItem = player.getCurrentEquippedItem();
-            if (ConfigurationHandler.enableHandRake && crop.hasWeed() && heldItem==null) {
+            if (ConfigurationHandler.enableHandRake && crop.hasWeed()) {
                 //if weeds can only be removed by using a hand rake, nothing should happen
+                if(heldItem==null || heldItem.getItem()==null || !(heldItem.getItem() instanceof IRake))
                 return false;
             }
             if (player.isSneaking()) {
