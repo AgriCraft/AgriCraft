@@ -105,6 +105,7 @@ public final class Names {
         public static final String magicalCrops = "magicalcrops";
         public static final String mcMultipart = "McMultipart";
         public static final String mfr = "MineFactoryReloaded";
+        public static final String millenaire = "millenaire";
         public static final String minetweaker = "MineTweaker3";
         public static final String natura = "Natura";
         public static final String nei = "NotEnoughItems";

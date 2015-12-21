@@ -498,3 +498,8 @@ agricraft_journal.agriculture_vanilla=Vanilla is the second most expensive spice
 
 //garden stuff
 agricraft_journal.gardenstuff_candelillaSeeds=The waxy product of this plant can be used to create candles.
+
+//millenaire
+agricraft_journal.millenaire_cropMaize=Also known as corn, because of its shallow roots, corn is susceptible to droughts, intolerant of nutrient-deficient soils, and prone to be uprooted by severe winds.
+agricraft_journal.millenaire_cropRice=The traditional method for cultivating rice is flooding the fields while, or after, setting the young seedlings.
+agricraft_journal.millenaire_cropTurmeric=This plant is commonly used as a spice for curries.
