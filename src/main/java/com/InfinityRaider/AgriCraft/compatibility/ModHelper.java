@@ -20,6 +20,7 @@ import com.InfinityRaider.AgriCraft.compatibility.forgemultipart.ForgeMultiPartH
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
 import com.InfinityRaider.AgriCraft.compatibility.growthcraft.GrowthCraftRiceHelper;
 import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
+import com.InfinityRaider.AgriCraft.compatibility.harvestthenether.HarvestTheNetherHelper;
 import com.InfinityRaider.AgriCraft.compatibility.hungeroverhaul.HungerOverhaulHelper;
 import com.InfinityRaider.AgriCraft.compatibility.immersiveengineering.ImmersiveEngineeringHelper;
 import com.InfinityRaider.AgriCraft.compatibility.lordoftherings.LordOfTheRingsHelper;
@@ -228,6 +229,7 @@ public abstract class ModHelper {
                 GardenStuffHelper.class,
                 GrowthCraftRiceHelper.class,
                 HarvestcraftHelper.class,
+                HarvestTheNetherHelper.class,
                 HungerOverhaulHelper.class,
                 ImmersiveEngineeringHelper.class,
                 LordOfTheRingsHelper.class,

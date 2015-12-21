@@ -10,6 +10,7 @@ Changelog
 -ADDED:  Placing crop sticks while sneaking will now instantly create cross crops
 -ADDED:  Support for Garden Stuff's candelilla crop
 -ADDED:  Support for Millenaire's crops
+-ADDED:  Support for Pam's Harvest the Nether crops
 -CHANGE: Updated Botania drum/horn of the wild interaction: crops will now be harvested instead of uprooted
 -CHANGE: Updated to Forge 10.13.4.1566
 -CHANGE: [API] IGrowthRequirement is now specified via the ICropPlant it applies to
