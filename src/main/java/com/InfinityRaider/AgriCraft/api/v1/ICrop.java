@@ -35,6 +35,17 @@ public interface ICrop {
     boolean hasPlant();
 
     /**
+     * @return The growth stage of the crop, between 0 and 7 (both inclusive).
+     */
+    int getGrowthStage();
+
+    /**
+     * Sets the growth stage for this crop
+     * @param stage the growth stage, between 0 and 7 (both inclusive).
+     */
+    void setGrowthStage(int stage);
+
+    /**
      * @return the ICropPlant instance planted on this crop
      */
     ICropPlant getPlant();

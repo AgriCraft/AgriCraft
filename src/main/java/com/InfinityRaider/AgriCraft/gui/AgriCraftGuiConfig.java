@@ -17,7 +17,6 @@ import java.util.List;
 
 
 @SideOnly(Side.CLIENT)
-@SuppressWarnings("unchecked")
 public class AgriCraftGuiConfig extends GuiConfig {
 
     public AgriCraftGuiConfig(GuiScreen guiScreen) {

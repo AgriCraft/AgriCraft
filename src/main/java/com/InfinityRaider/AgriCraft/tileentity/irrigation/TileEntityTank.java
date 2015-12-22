@@ -8,22 +8,25 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.multiblock.*;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class TileEntityTank extends TileEntityCustomWood implements IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
+public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
 	public static final int SYNC_DELTA = Constants.HALF_BUCKET_mB;
 
     public static final int DISCRETE_MAX = Constants.WHOLE;
@@ -60,18 +63,18 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     //updates the tile entity every tick
     @Override
-    public void updateEntity() {
-    	super.updateEntity();
+    public void tick() {
         if(!this.worldObj.isRemote) {
-            if(this.worldObj.canBlockSeeTheSky(this.xCoord, this.yCoord, this.zCoord) && this.worldObj.isRaining()) {
+            if(this.worldObj.canBlockSeeSky(getPos()) && this.worldObj.isRaining()) {
                 if(!this.hasNeighbour(ForgeDirection.UP)) {
-                    BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(this.xCoord, this.zCoord);
+                    BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(getPos());
                     if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
                        this.setFluidLevel(this.getFluidLevel() + 1);
                     }
                 }
             }
-            if(ConfigurationHandler.fillFromFlowingWater && (this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.water || this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord)==Blocks.flowing_water)) {
+            Block block = this.worldObj.getBlockState(pos.add(0, 1, 0)).getBlock();
+            if(ConfigurationHandler.fillFromFlowingWater && (block==Blocks.water || block==Blocks.flowing_water)) {
                 this.setFluidLevel(this.getFluidLevel() + 5);
             }
         }
@@ -80,8 +83,8 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     @Override
 	public void syncFluidLevel() {
         if(needsSync()) {
-            IMessage msg = new MessageSyncFluidLevel(this.fluidLevel, this.xCoord, this.yCoord, this.zCoord);
-            NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 64);
+            IMessage msg = new MessageSyncFluidLevel(this.fluidLevel, this.getPos());
+            NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimensionId(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
             NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
         }
     }
@@ -105,7 +108,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     public boolean isConnectedToChannel(ForgeDirection direction) {
         if((this.worldObj != null) && (direction != ForgeDirection.UNKNOWN) && (direction.offsetY == 0)) {
-        	TileEntity tile = this.getWorldObj().getTileEntity(this.xCoord+direction.offsetX, this.yCoord+direction.offsetY, this.zCoord+direction.offsetZ);
+        	TileEntity tile = this.getWorld().getTileEntity(direction.offset(getPos()));
             if(tile instanceof TileEntityChannel) {
                 return ((TileEntityChannel) tile).isSameMaterial(this);
             }
@@ -215,14 +218,13 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         return this.getFluidLevel()==0;
     }
 
-    //try to fill the tank
-    public int fill(ForgeDirection from, int amount, boolean doFill) {
-        return this.fill(from, new FluidStack(FluidRegistry.WATER, amount), doFill);
-    }
+
+    /** IFluidHandler methods */
+    /** --------------------- */
 
     //try to fill the tank
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         if(resource==null || !this.canFill(from, resource.getFluid())) {
             return 0;
         }
@@ -235,7 +237,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     //try to drain from the tank
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if(resource==null || !this.canDrain(from, resource.getFluid())) {
            return null;
         }
@@ -248,38 +250,41 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 
     //try to drain from the tank
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return this.drain(from, new FluidStack(FluidRegistry.WATER, maxDrain), doDrain);
     }
 
     //check if the tank can be filled
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return fluid==FluidRegistry.WATER && this.canAccept();
     }
 
     //check if the tank can be drained
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return fluid==FluidRegistry.WATER && this.canProvide();
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+    public FluidTankInfo[] getTankInfo(EnumFacing from) {
         FluidTankInfo[] info = new FluidTankInfo[1];
         info[0] = new FluidTankInfo(this.getContents(), this.getCapacity());
         return info;
     }
 
+    /** MultiBlock methods */
+    /** ------------------ */
+
     @Override
     public TileEntityTank getMainComponent() {
         if(worldObj.isRemote) {
             IMultiBlockPartData data = this.getMultiBlockData();
-            return (TileEntityTank) worldObj.getTileEntity(xCoord - data.posX(), yCoord - data.posY(), zCoord - data.posZ());
+            return (TileEntityTank) worldObj.getTileEntity(getPos().add(-data.posX(), -data.posY(), -data.posZ()));
         }
         if(this.mainComponent == null) {
             IMultiBlockPartData data = this.getMultiBlockData();
-            this.mainComponent =  (TileEntityTank) worldObj.getTileEntity(xCoord - data.posX(), yCoord - data.posY(), zCoord - data.posZ());
+            this.mainComponent =  (TileEntityTank) worldObj.getTileEntity(getPos().add(-data.posX(), -data.posY(), -data.posZ()));
         }
         return mainComponent;
     }
@@ -324,7 +329,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         for(int x=0;x<sizeX;x++) {
             for(int y=0;y<sizeY;y++) {
                 for(int z=0;z<sizeZ;z++) {
-                    TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(x+xCoord, y+yCoord, z+zCoord);
+                    TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(getPos().add(xCoord(), yCoord(), zCoord()));
                     if(tank == null) {
                         continue;
                     }
@@ -356,7 +361,7 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         for(int x=0;x<data.sizeX();x++) {
             for(int y=0;y<fluidLevelByLayer.length;y++) {
                 for(int z=0;z<data.sizeZ();z++) {
-                    TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(x+xCoord, y+yCoord, z+zCoord);
+                    TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(getPos().add(xCoord(), yCoord(), zCoord()));
                     if(tank != null) {
                         tank.fluidLevel = fluidLevelByLayer[y];
                     }
@@ -371,6 +376,10 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         this.syncFluidLevel();
     }
 
+
+    /** IDebuggable methods */
+    /** ------------------- */
+
     //debug info
     @Override
     public void addDebugInfo(List<String> list) {
@@ -378,8 +387,8 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         IMultiBlockPartData data = this.getMultiBlockData();
         TileEntityTank root = getMainComponent();
         list.add("TANK:");
-        list.add("coordinates: ("+xCoord+", "+yCoord+", "+zCoord+")");
-        list.add("root coords: ("+root.xCoord+", "+root.yCoord+", "+root.zCoord+")");
+        list.add("coordinates: ("+xCoord()+", "+yCoord()+", "+zCoord()+")");
+        list.add("root coords: ("+root.xCoord()+", "+root.yCoord()+", "+root.zCoord()+")");
         list.add("Tank: (single capacity: " + SINGLE_CAPACITY + ")");
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + this.getCapacity());
         list.add("  - Water level is on layer " + (int) Math.floor((this.getFluidLevel() - 0.1F) / (this.getCapacity() * data.sizeX() * data.sizeZ())) + ".");
@@ -397,6 +406,9 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
         list.add("  - MultiBlock data: " + data.toString());
         list.add("  - MultiBlock Size: "+ data.sizeX()+"x"+ data.sizeY()+"x"+data.sizeZ());
     }
+
+    /** Waila methods */
+    /** ------------- */
 
     @Override
     @SideOnly(Side.CLIENT)

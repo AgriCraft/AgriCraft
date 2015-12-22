@@ -40,20 +40,20 @@ public class CropPlantVanilla extends CropPlant {
 
     @Override
     public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        list.add(new ItemStack(plant.getItemDropped(7, null, 0)));
+        ArrayList<ItemStack> list = new ArrayList<>();
+        list.add(new ItemStack(plant.getItemDropped(plant.getStateFromMeta(7), null, 0)));
         return list;
     }
 
     @Override
     public ItemStack getRandomFruit(Random rand) {
-        return new ItemStack(plant.getItemDropped(7, rand, 0));
+        return new ItemStack(plant.getItemDropped(plant.getStateFromMeta(7), rand, 0));
     }
 
     @Override
     public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
         int amount = (int) (Math.ceil((gain + 0.00) / 3));
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> list = new ArrayList<>();
         while(amount>0) {
             list.add(getRandomFruit(rand));
             amount--;
@@ -73,7 +73,7 @@ public class CropPlantVanilla extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
+    public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
         return true;
     }
 

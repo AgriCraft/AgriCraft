@@ -88,13 +88,13 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
 
     public boolean isPlayerInFront(EntityPlayer player) {
         if(this.orientation == 0) {
-            return player.posZ < this.zCoord + OFFSETS[offset] + Constants.UNIT;
+            return player.posZ < this.zCoord() + OFFSETS[offset] + Constants.UNIT;
         }
         else if(this.orientation == 1) {
-            return player.posX < this.xCoord + OFFSETS[offset] + Constants.UNIT;
+            return player.posX < this.xCoord() + OFFSETS[offset] + Constants.UNIT;
         }
         else {
-            return player.posY < this.yCoord + OFFSETS[offset] + Constants.UNIT;
+            return player.posY < this.yCoord() + OFFSETS[offset] + Constants.UNIT;
         }
     }
 
@@ -123,23 +123,18 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
 
     public AxisAlignedBB getBoundingBox() {
         if(this.orientation == 0) {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord+OFFSETS[offset], xCoord+LENGTH, yCoord+LENGTH, zCoord+OFFSETS[offset]+WIDTH);
+            return new AxisAlignedBB(xCoord(), yCoord(), zCoord()+OFFSETS[offset], xCoord()+LENGTH, yCoord()+LENGTH, zCoord()+OFFSETS[offset]+WIDTH);
         }
         else if(this.orientation == 1) {
-            return AxisAlignedBB.getBoundingBox(xCoord+OFFSETS[offset], yCoord, zCoord, xCoord+OFFSETS[offset]+WIDTH, yCoord+LENGTH, zCoord+LENGTH);
+            return new AxisAlignedBB(xCoord()+OFFSETS[offset], yCoord(), zCoord(), xCoord()+OFFSETS[offset]+WIDTH, yCoord()+LENGTH, zCoord()+LENGTH);
         }
         else {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord+OFFSETS[offset], zCoord, xCoord+LENGTH, yCoord+OFFSETS[offset]+WIDTH, zCoord+LENGTH);
+            return new AxisAlignedBB(xCoord(), yCoord()+OFFSETS[offset], zCoord(), xCoord()+LENGTH, yCoord()+OFFSETS[offset]+WIDTH, zCoord()+LENGTH);
         }
     }
 
     public double[] getBlockBounds() {
         return bounds;
-    }
-
-    @Override
-    public boolean canUpdate() {
-        return false;
     }
 
     //debug info

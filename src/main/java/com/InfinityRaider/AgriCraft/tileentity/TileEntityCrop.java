@@ -15,12 +15,14 @@ import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -85,7 +87,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         if(status!=this.crossCrop) {
             this.crossCrop = status;
             if(!worldObj.isRemote) {
-                worldObj.playSoundEffect((double)((float) xCoord() + 0.5F), (double)((float) yCoord() + 0.5F), (double)((float) zCoord() + 0.5F), net.minecraft.init.Blocks.planks.stepSound.soundName, (net.minecraft.init.Blocks.leaves.stepSound.getVolume() + 1.0F) / 2.0F, net.minecraft.init.Blocks.leaves.stepSound.getPitch() * 0.8F);
+                worldObj.playSoundEffect((double)((float) xCoord() + 0.5F), (double)((float) yCoord() + 0.5F), (double)((float) zCoord() + 0.5F), net.minecraft.init.Blocks.planks.stepSound.soundName, (net.minecraft.init.Blocks.leaves.stepSound.getVolume() + 1.0F) / 2.0F, net.minecraft.init.Blocks.leaves.stepSound.getFrequency() * 0.8F);
             }
             this.markForUpdate();
         }
@@ -97,6 +99,21 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     /** check to see if there is a plant here */
     @Override
     public boolean hasPlant() {return this.plant!=null;}
+
+    @Override
+    public int getGrowthStage() {
+        return worldObj.getBlockState(getPos()).getValue(BlockStates.AGE);
+    }
+
+    @Override
+    public void setGrowthStage(int stage) {
+        if(this.hasPlant() || this.hasWeed()) {
+            stage = Math.max(Math.min(stage, Constants.MATURE), 0);
+            IBlockState state = worldObj.getBlockState(pos);
+            state.withProperty(BlockStates.AGE, stage);
+            this.worldObj.setBlockState(pos, state, 3);
+        }
+    }
 
     /** check to see if a seed can be planted */
     @Override
@@ -110,7 +127,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
             if(plant!=null) {
                 this.plant = plant;
                 this.stats = new PlantStats(growth, gain, strength, analyzed);
-                this.worldObj.setBlockMetadataWithNotify(pos, 0, 3);
+                this.setGrowthStage(0);
                 plant.onSeedPlanted(worldObj, pos);
                 IAdditionalCropData data = plant.getInitialCropData(worldObj, getPos(), this);
                 if(data != null) {
@@ -131,9 +148,9 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     @Override
     public void clearPlant() {
         CropPlant oldPlant = getPlant();
+        this.setGrowthStage(0);
         this.stats = new PlantStats();
         this.plant = null;
-        this.worldObj.setBlockMetadataWithNotify(pos, 0, 3);
         this.markForUpdate();
         if (oldPlant != null) {
             oldPlant.onPlantRemoved(worldObj, pos);
@@ -174,7 +191,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     /** check the block if the plant is mature */
     @Override
     public boolean isMature() {
-        return worldObj.getBlockMetadata(pos) >= Constants.MATURE;
+        return getGrowthStage() >= Constants.MATURE;
     }
 
     /** gets the fruits for this plant */
@@ -182,7 +199,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
     /** allow harvesting */
     public boolean allowHarvest(EntityPlayer player) {
-        return hasPlant() && isMature() && plant.onHarvest(worldObj, pos, player);
+        return hasPlant() && isMature() && plant.onHarvest(worldObj, pos, worldObj.getBlockState(getPos()), player);
     }
 
     /** returns an ItemStack holding the seed currently planted, initialized with an NBT tag holding the stats */
@@ -233,10 +250,11 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     public void updateWeed(int growthStage) {
         if(this.hasWeed()) {
             growthStage = growthStage>7?7:growthStage<0?0:growthStage;
+            this.setGrowthStage(growthStage);
             if (growthStage == 0) {
                 this.weed = false;
             }
-            this.worldObj.setBlockMetadataWithNotify(pos, growthStage, 3);
+            markForUpdate();
         }
     }
 
@@ -258,7 +276,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     public void onTrowelUsed(ITrowel trowel, ItemStack trowelStack) {
         if(this.hasPlant()) {
             if(!trowel.hasSeed(trowelStack)) {
-                trowel.setSeed(trowelStack, this.getSeedStack(), worldObj.getBlockMetadata(pos));
+                trowel.setSeed(trowelStack, this.getSeedStack(), getGrowthStage());
                 this.clearPlant();
             }
         } else if(!this.hasWeed() && !this.crossCrop){
@@ -271,7 +289,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
                 short strength = tag.getShort(Names.NBT.strength);
                 boolean analysed = tag.getBoolean(Names.NBT.analyzed);
                 this.setPlant(growth, gain, strength, analysed, seed.getItem(), seed.getItemDamage());
-                this.worldObj.setBlockMetadataWithNotify(pos, growthStage, 3);
+                this.setGrowthStage(growthStage);
                 trowel.clearSeed(trowelStack);
             }
         }
@@ -381,14 +399,14 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
     /** Apply a growth increment */
     public void applyGrowthTick() {
-        int flag = 2;
-        int meta = worldObj.getBlockMetadata(pos);
+        int meta = getGrowthStage();
         if(hasPlant()) {
-            flag = plant.onAllowedGrowthTick(worldObj, pos, meta) ? 2 : 6;
+            plant.onAllowedGrowthTick(worldObj, pos, meta);
         }
-        if (hasWeed() || !plant.isMature(worldObj, pos)) {
-            worldObj.setBlockMetadataWithNotify(pos, meta + 1, flag);
-            AppleCoreHelper.announceGrowthTick(getWorld(), getPos(), getWorld().getBlockState(getPos()));
+        IBlockState state = getWorld().getBlockState(getPos());
+        if (hasWeed() || !plant.isMature(getWorld(), pos, state)) {
+            setGrowthStage(meta + 1);
+            AppleCoreHelper.announceGrowthTick(getWorld(), getPos(), state.getBlock(), state);
         }
     }
 

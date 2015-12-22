@@ -66,9 +66,7 @@ public class CropPlantNetherWart extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
-        return true;
-    }
+    public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {}
 
     @Override
     @SideOnly(Side.CLIENT)

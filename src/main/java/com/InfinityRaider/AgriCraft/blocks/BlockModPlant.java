@@ -9,23 +9,25 @@ import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
+import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
@@ -144,9 +146,6 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     }
 
     @Override
-    public ItemModSeed getSeed() {return this.seed;}
-
-    @Override
     public Block getBlock() {
         return this;
     }
@@ -180,13 +179,13 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     }
 
     @Override
-    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z) {
+    public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
         return EnumPlantType.Crop;
     }
 
     @Override
-    public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
-        return this.tier<=3 && super.func_149851_a(world, x, y, z, isRemote);
+    public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isRemote) {
+        return this.tier<=3 && super.canGrow(world, pos, state, isRemote);
     }
 
     //register icons
@@ -202,9 +201,9 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     //growing
     @Override
-    public void updateTick(World world, int x, int y, int z, Random rnd) {
-        int meta = this.getPlantMetadata(world, x, y, z);
-        if (meta < Constants.MATURE && this.isFertile(world, x, y ,z)) {
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rnd) {
+        int meta = state.getValue(BlockStates.AGE);
+        if (meta < Constants.MATURE && this.isFertile(world, pos)) {
             //Base growth rate
             int growthRate = (tier > 0 && tier <= Constants.GROWTH_TIER.length)?Constants.GROWTH_TIER[tier]:Constants.GROWTH_TIER[0];
             //Bonus for growth stat (because these crops are not planted on crop sticks, growth of 1 is applied)
@@ -213,15 +212,16 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
             float global = 2.0F - ConfigurationHandler.growthMultiplier;
             int newMeta = (rnd.nextDouble() > (growthRate * bonus * global) / 100) ? meta : meta + 1;
             if (newMeta != meta) {
-                world.setBlockMetadataWithNotify(x, y, z, newMeta, 2);
-                AppleCoreHelper.announceGrowthTick(this, world, x, y, z);
+                world.setBlockState(pos, state.withProperty(BlockStates.AGE, newMeta), 2);
+                AppleCoreHelper.announceGrowthTick(world, pos, this, state);
             }
         }
     }
 
     //check if the plant is mature
-    public boolean isMature(World world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z) >= Constants.MATURE;
+    public boolean isMature(World world, BlockPos pos, IBlockState state) {
+        state = state == null ? world.getBlockState(pos) : state;
+        return state.getValue(BlockStates.AGE) >= Constants.MATURE;
     }
 
     //render different stages
@@ -241,25 +241,19 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
         return this.icons[meta/5];
     }
 
-    //item drops
     @Override
-    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
-        super.dropBlockAsItemWithChance(world, x, y, z, meta, f, 0);
-    }
-
-    @Override
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-        ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        ArrayList<ItemStack> list = new ArrayList<>();
         list.add(new ItemStack(this.seed, 1, 0));
-        if(metadata==7) {
-            list.add(this.getRandomFruit(world.rand));
+        if(state.getValue(BlockStates.AGE)==7) {
+            list.add(this.getRandomFruit(world instanceof World ? ((World) world).rand : new Random()));
         }
         return list;
     }
 
     @Override
-    public Item getItemDropped(int meta, Random rand, int side) {
-        return meta >= Constants.MATURE ? this.func_149865_P() : this.func_149866_i();
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return state.getValue(BlockStates.AGE) >= Constants.MATURE ? this.getCrop() : this.getSeed();
     }
 
     //fruit gain
@@ -270,36 +264,34 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     //neighboring blocks get updated
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
         //check if crops can stay
-        if(!this.canBlockStay(world,x,y,z)) {
+        if(!this.canBlockStay(world, pos, state)) {
             //the crop will be destroyed
-            this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-            world.setBlockToAir(x, y, z);
+            this.dropBlockAsItem(world, pos, state, 0);
+            world.setBlockToAir(pos);
         }
     }
 
     //see if the block can stay
     @Override
-    public boolean canBlockStay(World world, int x, int y, int z) {
-        return (this.growthRequirement.isValidSoil(world, x, y-1, z));
+    public boolean canBlockStay(World world, BlockPos pos, IBlockState state) {
+        return (this.growthRequirement.isValidSoil(world, pos.add(0, -1, 0)));
     }
 
     //check if the plant can grow
     @Override
-    public boolean isFertile(World world, int x, int y, int z) {
-        return this.growthRequirement.canGrow(world, x, y, z);
+    public boolean isFertile(World world, BlockPos pos) {
+        return this.growthRequirement.canGrow(world, pos);
     }
 
     //return the seeds
     @Override
-    protected Item func_149866_i() {
-        return this.seed;
-    }
+    public ItemModSeed getSeed() {return this.seed;}
 
     //return the fruit
     @Override
-    protected Item func_149865_P() {
+    protected Item getCrop() {
         Item randomFruit = this.getRandomFruit(new Random()).getItem();
         return randomFruit==null?null:randomFruit;
     }

@@ -6,17 +6,20 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderValve;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -28,25 +31,25 @@ public class BlockChannelValve extends BlockWaterChannel {
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
         if (!world.isRemote) {
-            super.onNeighborBlockChange(world, x, y, z, block);
-            updatePowerStatus(world, x, y, z);
+            super.onNeighborBlockChange(world, pos, state, block);
+            updatePowerStatus(world, pos);
             if(block instanceof BlockLever) {
-                world.markBlockForUpdate(x, y, z);
+                world.markBlockForUpdate(pos);
             }
         }
     }
 
     @Override
-    public void onPostBlockPlaced(World world, int x, int y, int z, int metadata) {
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if (!world.isRemote) {
-            updatePowerStatus(world, x, y, z);
+            updatePowerStatus(world, pos);
         }
     }
 
-    private void updatePowerStatus(World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
+    private void updatePowerStatus(World world, BlockPos pos) {
+        TileEntity te = world.getTileEntity(pos);
         if (te !=null && te instanceof TileEntityValve) {
             TileEntityValve valve = (TileEntityValve) te;
             valve.updatePowerStatus();
@@ -55,8 +58,8 @@ public class BlockChannelValve extends BlockWaterChannel {
 
     //allows levers to be attached to the block
     @Override
-    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-        return side!=ForgeDirection.UP;
+    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return side!=EnumFacing.UP;
     }
 
     @Override
@@ -65,17 +68,12 @@ public class BlockChannelValve extends BlockWaterChannel {
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
-        return false;
-    }
-
-    @Override
     public boolean isOpaqueCube() {
         return false;
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {
+    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
     }
 
@@ -112,8 +110,7 @@ public class BlockChannelValve extends BlockWaterChannel {
 
         @Override
         @SideOnly(Side.CLIENT)
-        @SuppressWarnings("unchecked")
-        public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+        public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
             super.addInformation(stack, player, list, flag);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.valve"));
         }

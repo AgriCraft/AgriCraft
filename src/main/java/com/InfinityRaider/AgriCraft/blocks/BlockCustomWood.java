@@ -60,7 +60,7 @@ public abstract class BlockCustomWood extends BlockContainerBase {
     public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
         if((!world.isRemote) && (!player.isSneaking())) {
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
-                this.dropBlockAsItem(world,pos, world.getBlockMetadata(pos), 0);
+                this.dropBlockAsItem(world,pos, state, 0);
             }
             world.setBlockToAir(pos);
         }
@@ -88,7 +88,8 @@ public abstract class BlockCustomWood extends BlockContainerBase {
     //creative item picking
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
-        ItemStack stack = new ItemStack(this, 1, world.getBlockMetadata(pos));
+        IBlockState state = world.getBlockState(pos);
+        ItemStack stack = new ItemStack(this, 1, state.getBlock().getDamageValue(world, pos));
         this.setTag(world, pos, world.getBlockState(pos), stack);
         return stack;
     }

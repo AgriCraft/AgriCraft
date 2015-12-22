@@ -3,8 +3,8 @@ package com.InfinityRaider.AgriCraft.utility;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public final class WorldCoordinates {
     private int x;
@@ -39,16 +39,12 @@ public final class WorldCoordinates {
         return world.getBlockState(pos).getBlock();
     }
 
-    public int getMetaData(World world) {
-        return world.getBlockMetadata(x, y, z);
-    }
-
     public TileEntity getTileEntity(World world) {
-        return world.getTileEntity(pops);
+        return world.getTileEntity(pos);
     }
 
-    public void setBlock(World world, Block block, int meta, int flag) {
-        world.setBlock(x, y, z, block, meta, flag);
+    public void setBlock(World world, Block block, int flag) {
+        world.setBlockState(pos, block.getDefaultState(), flag);
     }
 
     public WorldCoordinates getNeighbour(ForgeDirection dir) {
@@ -56,6 +52,10 @@ public final class WorldCoordinates {
             return this;
         }
         return new WorldCoordinates(x()+dir.offsetX, y()+dir.offsetY, z()+dir.offsetZ);
+    }
+
+    public WorldCoordinates getNeighbour(EnumFacing facing) {
+        return getNeighbour(ForgeDirection.getFromEnumFacing(facing));
     }
 
     @Override

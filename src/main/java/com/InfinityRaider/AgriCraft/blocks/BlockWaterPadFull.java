@@ -2,19 +2,22 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.utility.BlockStatePlaceHolder;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -24,7 +27,7 @@ public class BlockWaterPadFull extends BlockWaterPad {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float fX, float fY, float fZ) {
         ItemStack stack = player.getCurrentEquippedItem();
         if (stack == null || stack.getItem() == null) {
             return false;
@@ -39,7 +42,7 @@ public class BlockWaterPadFull extends BlockWaterPad {
                 player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
             }
             if (!world.isRemote) {
-                world.setBlock(x, y, z, Blocks.blockWaterPad, 0, 3);
+                world.setBlockState(pos, new BlockStatePlaceHolder(Blocks.blockWaterPad, 0), 3);
             }
             return true;
         }
@@ -47,7 +50,7 @@ public class BlockWaterPadFull extends BlockWaterPad {
     }
 
     @Override
-    public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+    public boolean isReplaceable(World world, BlockPos pos) {
         return false;
     }
 
@@ -68,8 +71,7 @@ public class BlockWaterPadFull extends BlockWaterPad {
 
         @Override
         @SideOnly(Side.CLIENT)
-        @SuppressWarnings("unchecked")
-        public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+        public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
             super.addInformation(stack, player, list, flag);
             list.add(StatCollector.translateToLocal("agricraft_tooltip.waterPadWet"));
         }

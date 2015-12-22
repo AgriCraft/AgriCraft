@@ -8,15 +8,18 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,9 +30,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     private Item lockedSeed;
     private int lockedSeedMeta;
     /** Slots stored in a HashMap to use with Container and with Controller */
-    private Map<Integer, SeedStorageSlot> slots = new HashMap<Integer, SeedStorageSlot>();
+    private Map<Integer, SeedStorageSlot> slots = new HashMap<>();
     /** Slots also stored in an ArrayList to use with ISidedInventory */
-    private ArrayList<SeedStorageSlot> slotsList = new ArrayList<SeedStorageSlot>();
+    private ArrayList<SeedStorageSlot> slotsList = new ArrayList<>();
     private ISeedStorageController controller;
 
     public TileEntitySeedStorage() {
@@ -74,8 +77,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        this.slots = new HashMap<Integer, SeedStorageSlot>();
-        this.slotsList = new ArrayList<SeedStorageSlot>();
+        this.slots = new HashMap<>();
+        this.slotsList = new ArrayList<>();
         if (tag.hasKey(Names.NBT.seed)) {
             //read the locked seed
             ItemStack seedStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.NBT.seed));
@@ -101,13 +104,13 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         }
         int[] coords = NBTHelper.getCoordsFromNBT(tag);
         if (coords != null && coords.length == 3) {
-            this.controller = (ISeedStorageController) worldObj.getTileEntity(xCoord, yCoord, zCoord);
+            this.controller = (ISeedStorageController) worldObj.getTileEntity(getPos());
         }
     }
 
     public void syncSlotToClient(SeedStorageSlot slot) {
-        NetworkWrapperAgriCraft.wrapper.sendToDimension(new MessageTileEntitySeedStorage(this.xCoord, this.yCoord, this.zCoord, slot), this.worldObj.provider.dimensionId);
-        this.worldObj.getChunkFromBlockCoords(this.xCoord, this.zCoord).setChunkModified();
+        NetworkWrapperAgriCraft.wrapper.sendToDimension(new MessageTileEntitySeedStorage(this.getPos(), slot), this.worldObj.provider.getDimensionId());
+        this.worldObj.getChunkFromBlockCoords(this.getPos()).setChunkModified();
     }
 
     //Debug method
@@ -268,7 +271,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public ArrayList<ItemStack> getInventory() {
-        ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> stacks = new ArrayList<>();
         if(this.hasLockedSeed()) {
             for(Map.Entry<Integer, SeedStorageSlot> entries:slots.entrySet()) {
                 if(entries!=null && entries.getValue()!=null) {
@@ -281,7 +284,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     public List<SeedStorageSlot> getSlots() {
         if(slotsList == null) {
-            slotsList = new ArrayList<SeedStorageSlot>();
+            slotsList = new ArrayList<>();
         }
         return slotsList;
     }
@@ -293,7 +296,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public int[] getCoords() {
-        return new int[] {this.xCoord, this.yCoord, this.zCoord};
+        return new int[] {this.xCoord(), this.yCoord(), this.zCoord()};
     }
 
     @Override
@@ -346,8 +349,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     //INVENTORY METHODS
     //-----------------
-    //TODO: Fix these methods to work with slot ID's from the ArrayList and then forward them to the ISeedStorageControllable methods with the correct ID's
-
     @Override
     public int getSizeInventory() {
         //One extra for the 'fake' input only slot
@@ -427,13 +428,39 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public String getInventoryName() {
+     public String getCommandSenderName() {
         return Reference.MOD_ID.toLowerCase()+":"+Names.Objects.seedStorage;
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return true;
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return new ChatComponentText(getCommandSenderName());
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {}
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        this.slotsList = new ArrayList<>();
+        this.slots = new HashMap<>();
+        this.lockedSeed = null;
+        this.lockedSeedMeta = 0;
     }
 
     @Override
@@ -447,12 +474,10 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public void openInventory() {
-    }
+    public void openInventory(EntityPlayer player) {}
 
     @Override
-    public void closeInventory() {
-    }
+    public void closeInventory(EntityPlayer player) {}
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
@@ -474,7 +499,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         int[] array = new int[slotsList.size()+1];
         for(int i=0;i<array.length;i++) {
             array[i] = i;
@@ -483,7 +508,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
         if(worldObj.isRemote) {
             return false;
         }
@@ -495,7 +520,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
         if(slot>=slotsList.size()) {
             return false;
         }

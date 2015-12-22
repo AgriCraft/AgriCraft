@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.api.v1;
 
 import com.InfinityRaider.AgriCraft.api.APIBase;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -458,13 +459,13 @@ public interface APIv1 extends APIBase {
      *
      * @param world World object
      * @param pos the block position
+     * @param state the block state
      * @param fertilizer
      *            Any item, preferable one that is a fertilizer. Will be
      *            modified on success!
      * @return True if the fertilizer was applied successfully, false otherwise.
      */
-    boolean applyFertilizer(World world, BlockPos pos,
-                            ItemStack fertilizer);
+    boolean applyFertilizer(World world, BlockPos pos, IBlockState state, ItemStack fertilizer);
 
     /**
      * Gets a list of all mutations currently registered

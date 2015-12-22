@@ -1,17 +1,16 @@
 package com.InfinityRaider.AgriCraft.handler;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncMutation;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 @SuppressWarnings("unused")
 public class PlayerConnectToServerHandler {
@@ -19,7 +18,7 @@ public class PlayerConnectToServerHandler {
     @SubscribeEvent
     public void sendNEIconfig(PlayerEvent.PlayerLoggedInEvent event) {
         if(!event.player.worldObj.isRemote) {
-            NEIHelper.sendSettingsToClient((EntityPlayerMP) event.player);
+            //NEIHelper.sendSettingsToClient((EntityPlayerMP) event.player);
         }
     }
 

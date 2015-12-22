@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.api.v1;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +19,6 @@ import java.util.Random;
  * If you register your own ICropPlant object, it will be wrapped by the api.
  * Meaning if you query the ICropPlant object you registered, it will return a different object.
  */
-@SuppressWarnings("deprecation")
 public interface ICropPlant {
     /** Gets the tier of this plant, can be overridden trough the configs */
     int tier();
@@ -39,7 +39,7 @@ public interface ICropPlant {
     ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
 
     /** Gets called right before a harvest attempt, return false to prevent further processing, player may be null if harvested by automation */
-    boolean onHarvest(World world,BlockPos pos, EntityPlayer player);
+    boolean onHarvest(World world,BlockPos pos, IBlockState state, EntityPlayer player);
 
     /** This is called right after this plant is planted on a crop, either trough planting, mutation or spreading */
     void onSeedPlanted(World world, BlockPos pos);
@@ -53,9 +53,7 @@ public interface ICropPlant {
     /**
      * If you want your crop to have additional data, this is called when the plant is first applied to crop sticks, either trough planting, spreading or mutation
      * @param world the world object for the crop
-     * @param x the x-coordinate
-     * @param y the y-coordinate
-     * @param z the z-coordinate
+     * @param pos the block position
      * @param crop the crop where this plant is planted on
      * @return initial IAdditionalCropData object (can be null if you don't need additional data)
      */
@@ -71,9 +69,7 @@ public interface ICropPlant {
     /**
      * Called when the TileEntity with this plant has its validate() method called
      * @param world the World object for the TileEntity
-     * @param x the x-coordinate for the TileEntity
-     * @param y the x-coordinate for the TileEntity
-     * @param z the x-coordinate for the TileEntity
+     * @param pos the block position
      * @param crop the ICrop instance of the TileEntity (is the same object as the TileEntity, but is for convenience)
      */
     void onValidate(World world,BlockPos pos, ICrop crop);
@@ -81,9 +77,7 @@ public interface ICropPlant {
     /**
      * Called when the TileEntity with this plant has its invalidate() method called
      * @param world the World object for the TileEntity
-     * @param x the x-coordinate for the TileEntity
-     * @param y the x-coordinate for the TileEntity
-     * @param z the x-coordinate for the TileEntity
+     * @param pos the block position
      * @param crop the ICrop instance of the TileEntity (is the same object as the TileEntity, but is for convenience)
      */
     void onInvalidate(World world, BlockPos pos, ICrop crop);
@@ -91,9 +85,7 @@ public interface ICropPlant {
     /**
      * Called when the TileEntity with this plant has its onChunkUnload() method called
      * @param world the World object for the TileEntity
-     * @param x the x-coordinate for the TileEntity
-     * @param y the x-coordinate for the TileEntity
-     * @param z the x-coordinate for the TileEntity
+     * @param pos the block position
      * @param crop the ICrop instance of the TileEntity (is the same object as the TileEntity, but is for convenience)
      */
     void onChunkUnload(World world, BlockPos pos, ICrop crop);
@@ -106,11 +98,11 @@ public interface ICropPlant {
      */
     IGrowthRequirement getGrowthRequirement();
 
-    /** When a growth thick is allowed for this plant, return true to re-render the crop client side */
-    boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage);
+    /** When a growth thick is allowed for this plant */
+    void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage);
 
     /** Checks if the plant is mature */
-    boolean isMature(IBlockAccess world, BlockPos pos);
+    boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state);
 
     /** Gets the height of the crop */
     float getHeight(int meta);

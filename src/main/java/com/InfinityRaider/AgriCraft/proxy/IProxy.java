@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+@SuppressWarnings("unused")
 public interface IProxy {
     /** Returns the instance of the EntityPlayer on the client, null on the server */
     EntityPlayer getClientPlayer();

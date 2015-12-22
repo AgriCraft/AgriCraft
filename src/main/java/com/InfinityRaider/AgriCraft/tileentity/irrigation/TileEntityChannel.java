@@ -7,18 +7,19 @@ import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class TileEntityChannel extends TileEntityCustomWood implements IIrrigationComponent, IDebuggable{
+public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable{
 	
     public static final int FORGE_DIRECTION_OFFSET = 2;
     
@@ -145,7 +146,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
     public final void findNeighbours() {
         for(int i=0;i<validDirections.length;i++) {
             ForgeDirection dir = validDirections[i];
-            TileEntity te = worldObj.getTileEntity(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ);
+            TileEntity te = worldObj.getTileEntity(dir.offset(getPos()));
             if(!(te instanceof IIrrigationComponent)) {
                 neighbours[i] = null;
             } else {
@@ -162,7 +163,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
         if(this.worldObj==null) {
             return false;
         }
-        TileEntity tileEntityAt = this.worldObj.getTileEntity(this.xCoord+direction.offsetX, this.yCoord+direction.offsetY, this.zCoord+direction.offsetZ);
+        TileEntity tileEntityAt = this.worldObj.getTileEntity(direction.offset(getPos()));
         return (tileEntityAt!=null) && (tileEntityAt instanceof IIrrigationComponent)  && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
     }
     
@@ -177,7 +178,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
     		return null;
     	}
     	else if(direction.offsetY == 0 && direction.offsetX + direction.offsetZ != 0) {
-        	TileEntity tileEntityAt = this.worldObj.getTileEntity(this.xCoord + direction.offsetX, this.yCoord, this.zCoord + direction.offsetZ);
+        	TileEntity tileEntityAt = this.worldObj.getTileEntity(this.getPos().add(direction.offsetX, 0, direction.offsetZ));
         	return tileEntityAt instanceof IIrrigationComponent ? (IIrrigationComponent)tileEntityAt : null;
         }
         return null;
@@ -185,7 +186,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
 
     //updates the tile entity every tick
     @Override
-    public void updateEntity() {
+    public void tick() {
         if (!this.worldObj.isRemote) {
             updateNeighbours();
             //calculate total fluid lvl and capacity
@@ -268,8 +269,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
             int newDiscreteLvl = getDiscreteFluidLevel();
             if(newDiscreteLvl != lastDiscreteLvl) {
                 lastDiscreteLvl = newDiscreteLvl;
-                IMessage msg = new MessageSyncFluidLevel(this.lvl, this.xCoord, this.yCoord, this.zCoord);
-                NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 64);
+                IMessage msg = new MessageSyncFluidLevel(this.lvl, this.getPos());
+                NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimensionId(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
                 NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
             }
         }

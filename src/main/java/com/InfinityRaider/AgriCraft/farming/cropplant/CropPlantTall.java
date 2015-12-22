@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
+import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -15,14 +17,12 @@ public abstract class CropPlantTall extends CropPlant {
     public abstract int maxMetaBottomBlock();
 
     @Override
-    public boolean isMature(IBlockAccess world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z)>=7;
+    public boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state) {
+        return state.getValue(BlockStates.AGE)>=7;
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
-        return true;
-    }
+    public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {}
 
     @SideOnly(Side.CLIENT)
     public abstract IIcon getBottomIcon(int growthStage);

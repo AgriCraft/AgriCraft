@@ -47,7 +47,7 @@ public class MethodGetStats extends MethodBase {
 
     @Override
     protected ArrayList<MethodParameter> getParameters() {
-        ArrayList<MethodParameter> pars = new ArrayList<MethodParameter>();
+        ArrayList<MethodParameter> pars = new ArrayList<>();
         pars.add(MethodParameter.DIRECTION_OPTIONAL);
         return pars;
     }

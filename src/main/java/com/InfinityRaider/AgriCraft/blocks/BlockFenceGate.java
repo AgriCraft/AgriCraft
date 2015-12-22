@@ -5,26 +5,29 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFenceGate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFenceGate;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockFenceGate extends BlockCustomWood {
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
-        world.playAuxSFXAtEntity(player, 1003, x, y, z, 0);
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+        world.playAuxSFXAtEntity(player, 1003, pos, 0);
         if(world.isRemote) {
             return false;
         }
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(pos);
         if(tile==null || !(tile instanceof TileEntityFenceGate)) {
             return true;
         }
@@ -33,9 +36,9 @@ public class BlockFenceGate extends BlockCustomWood {
             gate.close();
         } else {
             if(gate.isZAxis()) {
-                gate.open(player.posZ>=z+fZ);
+                gate.open(player.posZ>=pos.getZ()+hitZ);
             } else {
-                gate.open(player.posX>=x+fX);
+                gate.open(player.posX>=pos.getX()+hitX);
             }
         }
         return true;
@@ -73,21 +76,21 @@ public class BlockFenceGate extends BlockCustomWood {
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
+        TileEntity tile = world.getTileEntity(pos);
         if(tile==null || !(tile instanceof TileEntityFenceGate)) {
             return null;
         }
         TileEntityFenceGate gate = (TileEntityFenceGate) tile;
-        return gate.isOpen()?null:(!gate.isZAxis()?AxisAlignedBB.getBoundingBox((double)((float)x + 0.375F), (double)y, (double)z, (double)((float)x + 0.625F), (double)((float)y + 1.5F), (double)(z + 1)) : AxisAlignedBB.getBoundingBox((double)x, (double)y, (double)((float)z + 0.375F), (double)(x + 1), (double)((float)y + 1.5F), (double)((float)z + 0.625F)));
+        return gate.isOpen()?null:(!gate.isZAxis()?new AxisAlignedBB((double)((float) pos.getX() + 0.375F), (double) pos.getY(), (double) pos.getZ(), (double)((float) pos.getX() + 0.625F), (double)((float) pos.getY() + 1.5F), (double)(pos.getZ() + 1)) : new AxisAlignedBB((double) pos.getX(), (double) pos.getY(), (double)((float) pos.getZ() + 0.375F), (double)(pos.getX() + 1), (double)((float) pos.getY() + 1.5F), (double)((float) pos.getZ() + 0.625F)));
     }
 
     /**
-     * Updates the blocks bounds based on its current state. Args: world, x, y, z
+     * Updates the blocks bounds based on its current state. Args: world, pos
      */
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
         if(tile==null || !(tile instanceof TileEntityFenceGate)) {
             return;
         }
@@ -100,13 +103,8 @@ public class BlockFenceGate extends BlockCustomWood {
         }
     }
 
-    @Override
-    public boolean getBlocksMovement(IBlockAccess world, int x, int y, int z)  {
-        return isFenceGateOpen(world, x, y, z);
-    }
-
-    public boolean isFenceGateOpen(IBlockAccess world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public boolean isFenceGateOpen(IBlockAccess world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
         return !(tile == null || !(tile instanceof TileEntityFenceGate)) && ((TileEntityFenceGate) tile).isOpen();
     }
 
@@ -116,10 +114,10 @@ public class BlockFenceGate extends BlockCustomWood {
         }
 
         @Override
-        public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-            if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
+        public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+            if (super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) {
                 ForgeDirection dir = PlayerHelper.getPlayerFacing(player);
-                TileEntityFenceGate gate = (TileEntityFenceGate) world.getTileEntity(x, y, z);
+                TileEntityFenceGate gate = (TileEntityFenceGate) world.getTileEntity(pos);
                 gate.setZAxis(dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH);
                 return true;
             } else {

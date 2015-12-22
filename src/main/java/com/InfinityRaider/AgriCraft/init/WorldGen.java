@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.init;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.VillageCreationHandler;
-import com.InfinityRaider.AgriCraft.handler.VillagerTradeHandler;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouse;
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouseIrrigated;
@@ -28,12 +27,12 @@ public class WorldGen {
             }
 
             //add greenhouses to villages
-            MapGenStructureIO.func_143031_a(StructureGreenhouse.class, Reference.MOD_ID + ":Greenhouse");
+            MapGenStructureIO.registerStructureComponent(StructureGreenhouse.class, Reference.MOD_ID + ":Greenhouse");
             VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseHandler());
 
             //add irrigated greenhouses to villages
             if (!ConfigurationHandler.disableIrrigation) {
-                MapGenStructureIO.func_143031_a(StructureGreenhouseIrrigated.class, Reference.MOD_ID + ":GreenhouseIrrigated");
+                MapGenStructureIO.registerStructureComponent(StructureGreenhouseIrrigated.class, Reference.MOD_ID + ":GreenhouseIrrigated");
                 VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseIrrigatedHandler());
             }
         }
@@ -45,7 +44,6 @@ public class WorldGen {
 
     private static void registerVillager(int id) {
         VillagerRegistry.instance().registerVillagerId(id);
-        VillagerRegistry.instance().registerVillageTradeHandler(id, new VillagerTradeHandler());
         AgriCraft.proxy.registerVillagerSkin(id, "textures/entities/villager.png");
         villagerId = id;
     }

@@ -3,10 +3,12 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.api.v1.ICrop;
 import com.InfinityRaider.AgriCraft.api.v1.IRake;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.WeightedRandom;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -82,8 +84,7 @@ public class ItemHandRake extends ItemBase implements IRake{
     }
 
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
         list.add(StatCollector.translateToLocal("agricraft_tooltip.handRake"));
     }
 
@@ -111,13 +112,9 @@ public class ItemHandRake extends ItemBase implements IRake{
     }
 
     @Override
-    public boolean removeWeeds(ICrop crop, ItemStack rake) {
-        World world = crop.getTileEntity().getWorld();
-        int x = crop.xCoord();
-        int y = crop.yCoord();
-        int z = crop.zCoord();
+    public boolean removeWeeds(World world, BlockPos pos, IBlockState state, ICrop crop, ItemStack rake) {
         if (crop.hasWeed()) {
-            int weedGrowthStage = world.getBlockMetadata(x, y, z);
+            int weedGrowthStage = state.getValue(BlockStates.AGE);
             int newWeedGrowthStage = calculateGrowthStage(rake.getItemDamage(), weedGrowthStage, world.rand);
             crop.updateWeed(newWeedGrowthStage);
             if(ConfigurationHandler.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100)<dropChance[rake.getItemDamage()%dropChance.length]) {
@@ -127,7 +124,7 @@ public class ItemHandRake extends ItemBase implements IRake{
                     double d0 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
                     double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
                     double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-                    EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, drop);
+                    EntityItem entityitem = new EntityItem(world, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, drop);
                     entityitem.setPickupDelay(10);
                     world.spawnEntityInWorld(entityitem);
                 }

@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class GrowthRequirement implements IGrowthRequirement{
     //Methods to check if a seed can grow
     //-----------------------------------
 	public boolean canGrow(World world, BlockPos pos) {
-        return this.isValidSoil(world, pos.add(0, -1, 0)) && this.isBrightnessGood(world,  pos.getX(), pos.getY(), pos.getZ()) && this.isBaseBlockPresent(world, pos);
+        return this.isValidSoil(world, pos.add(0, -1, 0)) && this.isBrightnessGood(world, pos) && this.isBaseBlockPresent(world, pos);
     }
 
     @Override
@@ -120,8 +121,9 @@ public class GrowthRequirement implements IGrowthRequirement{
         }
     }
 
-    public boolean isBrightnessGood(World world, int x, int y, int z) {
-        int lvl = world.getFullBlockLightValue(x, y+1, z);
+    public boolean isBrightnessGood(World world, BlockPos pos) {
+        BlockPos above = pos.add(0, 1, 0);
+        int lvl = Math.max(world.getLightFor(EnumSkyBlock.BLOCK, above), world.getLightFor(EnumSkyBlock.SKY, above));
         return lvl<this.maxBrightness && lvl>=this.minBrightness;
     }
 

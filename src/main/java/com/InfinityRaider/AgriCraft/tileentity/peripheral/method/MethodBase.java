@@ -6,11 +6,12 @@ import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public abstract class MethodBase implements IMethod {
     }
 
     @Override
-    public final Object[] call(TileEntityPeripheral peripheral, World world, int x, int y, int z, ItemStack journal, Object... args) throws MethodException {
+    public final Object[] call(TileEntityPeripheral peripheral, World world, BlockPos pos, ItemStack journal, Object... args) throws MethodException {
         if(this.appliesToPeripheral() && (args==null || args.length==0)) {
             return callMethodForPeripheral(peripheral, journal);
         }
@@ -35,7 +36,7 @@ public abstract class MethodBase implements IMethod {
             if (dir==ForgeDirection.UNKNOWN) {
                 throw new MethodException(this, "Invalid direction");
             }
-            TileEntity tile = world.getTileEntity(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
+            TileEntity tile = world.getTileEntity(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
             if (tile == null || !(tile instanceof TileEntityCrop)) {
                 throw new MethodException(this, "There is no crop there");
             }

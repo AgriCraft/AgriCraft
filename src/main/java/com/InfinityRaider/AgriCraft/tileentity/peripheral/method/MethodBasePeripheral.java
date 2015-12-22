@@ -31,6 +31,6 @@ public abstract class MethodBasePeripheral extends MethodBase {
 
     @Override
     protected ArrayList<MethodParameter> getParameters() {
-        return new ArrayList<MethodParameter>();
+        return new ArrayList<>();
     }
 }

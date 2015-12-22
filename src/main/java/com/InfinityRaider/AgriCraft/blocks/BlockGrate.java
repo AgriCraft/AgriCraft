@@ -6,19 +6,19 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockGrate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class BlockGrate extends BlockCustomWood {
 	
@@ -54,8 +54,8 @@ public class BlockGrate extends BlockCustomWood {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile == null || !(tile instanceof TileEntityGrate)) {
             return true;
         }
@@ -63,7 +63,7 @@ public class BlockGrate extends BlockCustomWood {
         boolean front = grate.isPlayerInFront(player);
         if(player.isSneaking()) {
             if(grate.removeVines(front)) {
-                this.dropBlockAsItem(world, x, y, z, new ItemStack(Blocks.vine, 1));
+                spawnAsEntity(world, pos, new ItemStack(Blocks.vine, 1));
                 return true;
             }
         }
@@ -77,37 +77,37 @@ public class BlockGrate extends BlockCustomWood {
     }
 
     @Override
-     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-        ArrayList<ItemStack> items = super.getDrops(world, x, y, z, metadata, fortune);
-        if(!world.isRemote) {
-            TileEntity te = world.getTileEntity(x, y, z);
-            if (te != null && (te instanceof TileEntityGrate)) {
-                TileEntityGrate grate = (TileEntityGrate) te;
-                int stackSize = 0;
-                stackSize = grate.hasVines(true)?stackSize+1:stackSize;
-                stackSize = grate.hasVines(false)?stackSize+1:stackSize;
-                if(stackSize>0) {
-                    items.add(new ItemStack(Blocks.vine, stackSize));
-                }
+     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        List<ItemStack> items = super.getDrops(world, pos, state, fortune);
+        TileEntity te = world.getTileEntity(pos);
+        if (te != null && (te instanceof TileEntityGrate)) {
+            TileEntityGrate grate = (TileEntityGrate) te;
+            int stackSize = 0;
+            stackSize = grate.hasVines(true) ? stackSize + 1 : stackSize;
+            stackSize = grate.hasVines(false) ? stackSize + 1 : stackSize;
+            if (stackSize > 0) {
+                items.add(new ItemStack(Blocks.vine, stackSize));
             }
         }
         return items;
     }
 
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        return getBoundingBox(world, x, y, z);
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
+        return getBoundingBox(world, pos, state);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-        return getBoundingBox(world, x, y, z);
+    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+        return getBoundingBox(world, pos, world.getBlockState(pos));
     }
 
-    public AxisAlignedBB getBoundingBox(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public AxisAlignedBB getBoundingBox(World world, BlockPos pos, IBlockState state) {
+        TileEntity tile = world.getTileEntity(pos);
         AxisAlignedBB box;
         if (tile == null || !(tile instanceof TileEntityGrate)) {
-            box = super.getCollisionBoundingBoxFromPool(world, x, y, z);
+            box = super.getCollisionBoundingBox(world, pos, state);
         } else {
             box = ((TileEntityGrate) tile).getBoundingBox();
         }
@@ -116,10 +116,10 @@ public class BlockGrate extends BlockCustomWood {
 
     /** Copied from the Block class, but changed the calls to isVecInside**Bounds methods */
     @Override
-    public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 vec0, Vec3 vec1) {
-        this.setBlockBoundsBasedOnState(world, x, y, z);
-        vec0 = vec0.addVector((double)(-x), (double)(-y), (double)(-z));
-        vec1 = vec1.addVector((double) (-x), (double) (-y), (double) (-z));
+    public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 vec0, Vec3 vec1) {
+        this.setBlockBoundsBasedOnState(world, pos);
+        vec0 = vec0.addVector((double)(-pos.getX()), (double)(-pos.getY()), (double)(-pos.getZ()));
+        vec1 = vec1.addVector((double) (-pos.getX()), (double) (-pos.getY()), (double) (-pos.getZ()));
         Vec3 vec2 = vec0.getIntermediateWithXValue(vec1, this.minX);
         Vec3 vec3 = vec0.getIntermediateWithXValue(vec1, this.maxX);
         Vec3 vec4 = vec0.getIntermediateWithYValue(vec1, this.minY);
@@ -127,22 +127,22 @@ public class BlockGrate extends BlockCustomWood {
         Vec3 vec6 = vec0.getIntermediateWithZValue(vec1, this.minZ);
         Vec3 vec7 = vec0.getIntermediateWithZValue(vec1, this.maxZ);
         Vec3 vec8 = null;
-        if (!this.isVecInsideYZBounds(world, x, y, z, vec2)) {
+        if (!this.isVecInsideYZBounds(world, pos, vec2)) {
             vec2 = null;
         }
-        if (!this.isVecInsideYZBounds(world, x, y, z, vec3)) {
+        if (!this.isVecInsideYZBounds(world, pos, vec3)) {
             vec3 = null;
         }
-        if (!this.isVecInsideXZBounds(world, x, y, z, vec4)) {
+        if (!this.isVecInsideXZBounds(world, pos, vec4)) {
             vec4 = null;
         }
-        if (!this.isVecInsideXZBounds(world, x, y, z, vec5)) {
+        if (!this.isVecInsideXZBounds(world, pos, vec5)) {
             vec5 = null;
         }
-        if (!this.isVecInsideXYBounds(world, x, y, z, vec6)) {
+        if (!this.isVecInsideXYBounds(world, pos, vec6)) {
             vec6 = null;
         }
-        if (!this.isVecInsideXYBounds(world, x, y, z, vec7)) {
+        if (!this.isVecInsideXYBounds(world, pos, vec7)) {
             vec7 = null;
         }
         if (vec2 != null) {
@@ -165,56 +165,56 @@ public class BlockGrate extends BlockCustomWood {
         }
         if (vec8 == null) {
             return null;
-        } else {
-            byte b0 = -1;
-            if (vec8 == vec2)  {
-                b0 = 4;
+        }  else {
+            EnumFacing enumfacing = null;
+            if (vec8 == vec3) {
+                enumfacing = EnumFacing.WEST;
+            }
+            if (vec8 == vec2) {
+                enumfacing = EnumFacing.EAST;
             }
             if (vec8 == vec3) {
-                b0 = 5;
+                enumfacing = EnumFacing.DOWN;
             }
             if (vec8 == vec4) {
-                b0 = 0;
+                enumfacing = EnumFacing.UP;
             }
             if (vec8 == vec5) {
-                b0 = 1;
+                enumfacing = EnumFacing.NORTH;
             }
             if (vec8 == vec6) {
-                b0 = 2;
+                enumfacing = EnumFacing.SOUTH;
             }
-            if (vec8 == vec7) {
-                b0 = 3;
-            }
-            return new MovingObjectPosition(x, y, z, b0, vec8.addVector((double)x, (double)y, (double) z));
+            return new MovingObjectPosition(vec8.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), enumfacing, pos);
         }
     }
 
     /**
      * Checks if a vector is within the Y and Z bounds of the block.
      */
-    private boolean isVecInsideYZBounds(World world, int x, int y, int z, Vec3 vec) {
-        double[] bounds = getBlockBounds(world, x, y, z);
+    private boolean isVecInsideYZBounds(World world, BlockPos pos, Vec3 vec) {
+        double[] bounds = getBlockBounds(world, pos);
         return bounds!=null && vec!=null && vec.yCoord>=bounds[1]&& vec.yCoord<=bounds[4] &&vec.zCoord>=bounds[2] && vec.zCoord<=bounds[5];
     }
 
     /**
      * Checks if a vector is within the X and Z bounds of the block.
      */
-    private boolean isVecInsideXZBounds(World world, int x, int y, int z, Vec3 vec) {
-        double[] bounds = getBlockBounds(world, x, y, z);
+    private boolean isVecInsideXZBounds(World world, BlockPos pos, Vec3 vec) {
+        double[] bounds = getBlockBounds(world, pos);
         return bounds!=null && vec!=null && vec.xCoord>=bounds[0] && vec.xCoord<=bounds[3] && vec.zCoord>=bounds[2] && vec.zCoord<=bounds[5];
     }
 
     /**
      * Checks if a vector is within the X and Y bounds of the block.
      */
-    private boolean isVecInsideXYBounds(World world, int x, int y, int z, Vec3 vec) {
-        double[] bounds = getBlockBounds(world, x, y, z);
+    private boolean isVecInsideXYBounds(World world, BlockPos pos, Vec3 vec) {
+        double[] bounds = getBlockBounds(world, pos);
         return bounds!=null && vec!=null && vec.xCoord>=bounds[0] && vec.xCoord<=bounds[3] && vec.yCoord>=bounds[1] && vec.yCoord<=bounds[4];
     }
 
-    private double[] getBlockBounds(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    private double[] getBlockBounds(World world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
         if(tile==null || !(tile instanceof TileEntityGrate)) {
             //something is wrong
             return null;

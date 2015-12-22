@@ -5,17 +5,21 @@ import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory {
+public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
     private static final int[] SLOTS = new int[] {0, 1};
 	
     /**
@@ -177,7 +181,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
             return ((ITrowel) this.specimen.getItem()).isSeedAnalysed(this.specimen);
         }
         if(this.hasSeed()) {
-            return this.specimen.hasTagCompound() && this.specimen.stackTagCompound.getBoolean(Names.NBT.analyzed);
+            return this.specimen.hasTagCompound() && this.specimen.getTagCompound().getBoolean(Names.NBT.analyzed);
         }
         return false;
     }
@@ -188,7 +192,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
      * Used to update the progress counter.
      */
     @Override
-    public void updateEntity() {
+    public void tick() {
         boolean change = false;
         if(this.isAnalyzing()) {
             //increment progress counter
@@ -201,8 +205,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         }
         if(change) {
             this.markForUpdate();
-            this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord), 0, 0);
-            this.worldObj.notifyBlockChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
+            this.worldObj.addBlockEvent(this.getPos(), this.worldObj.getBlockState(getPos()).getBlock(), 0, 0);
+            this.worldObj.notifyBlockOfStateChange(getPos(), this.getBlockType());
         }
     }
 
@@ -223,7 +227,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
                 }
             } else {
                 this.specimen.setTagCompound(new NBTTagCompound());
-                CropPlantHandler.setSeedNBT(this.specimen.stackTagCompound, (short) 0, (short) 0, (short) 0, true);
+                CropPlantHandler.setSeedNBT(this.specimen.getTagCompound(), (short) 0, (short) 0, (short) 0, true);
             }
         }
         else if(this.hasTrowel()) {
@@ -277,13 +281,13 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     //Inventory methods
     //-----------------
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     //check if item can be inserted
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing direction) {
         slot = slot%2;
         if(slot == 0) {
             return isValid(stack);
@@ -296,7 +300,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     //check if an item can be extracted
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int slot, ItemStack itemStackIn, EnumFacing direction) {
         slot = slot%2;
         if(slot == 0 && this.specimen != null && this.specimen.hasTagCompound()) {
             return this.isSpecimenAnalyzed();
@@ -377,18 +381,6 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         this.markForUpdate();
     }
 
-    //returns the unlocalized inventory name
-    @Override
-    public String getInventoryName() {
-        return "container.agricraft:seedAnalyzer";
-    }
-
-    //if this has a custom inventory name
-    @Override
-    public final boolean hasCustomInventoryName() {
-        return true;
-    }
-
     //returns the maximum stacksize
     @Override
     public final int getInventoryStackLimit() {
@@ -405,17 +397,13 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
      * Opens the inventory. (Empty method).
      */
     @Override
-    public void openInventory() {
-
-    }
+    public void openInventory(EntityPlayer player) {}
 
     /**
      * Closes the inventory. (Empty method).
      */
     @Override
-    public void closeInventory() {
-
-    }
+    public void closeInventory(EntityPlayer player) {}
 
     /**
      * Checks if a stack is valid for a slot.
@@ -428,6 +416,40 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
             case 1: return (stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemJournal);
             default: return false;
         }
+    }
+
+    @Override
+    public String getCommandSenderName() {
+        return "container.agricraft:seedAnalyzer";
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return true;
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return new ChatComponentText("container.agricraft:seedAnalyzer");
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {}
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        this.specimen = null;
+        this.journal = null;
     }
 
     @Override

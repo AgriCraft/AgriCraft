@@ -28,11 +28,6 @@ public class TileEntityFenceGate extends TileEntityCustomWood {
         open = tag.hasKey(Names.NBT.meta)?tag.getShort(Names.NBT.meta):0;
     }
 
-    @Override
-    public boolean canUpdate() {
-        return false;
-    }
-
     public boolean isOpen() {
         return open!=0;
     }
@@ -57,14 +52,6 @@ public class TileEntityFenceGate extends TileEntityCustomWood {
 
     public boolean isZAxis() {
         return zAxis;
-    }
-
-    public void setAxis(char c) {
-        if(c=='z' || c=='Z') {
-            setZAxis(true);
-        } else if(c=='x' || c=='X') {
-            setZAxis(false);
-        }
     }
 
     public void setZAxis(boolean value) {

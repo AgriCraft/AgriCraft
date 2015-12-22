@@ -34,18 +34,11 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting crafting) {
-        super.addCraftingToCrafters(crafting);
-        crafting.sendProgressBarUpdate(this, 0, this.seedAnalyzer.getProgress());
-    }
-
-    @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        for (Object crafter : this.crafters) {
-            ICrafting crafting = (ICrafting) crafter;
+        for (ICrafting crafter : this.crafters) {
             if (this.progress != this.seedAnalyzer.getProgress()) {
-                crafting.sendProgressBarUpdate(this, 0, this.seedAnalyzer.getProgress());
+                crafter.sendProgressBarUpdate(this, 0, this.seedAnalyzer.getProgress());
             }
         }
         this.progress = this.seedAnalyzer.getProgress();

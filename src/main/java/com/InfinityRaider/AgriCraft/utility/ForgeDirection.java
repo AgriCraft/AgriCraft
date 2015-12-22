@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 /** Copied from MinecraftForge for 1.7.10 and added methods to convert between ForgeDirection and EnumFacing */
@@ -77,5 +78,9 @@ public enum ForgeDirection {
             return UNKNOWN;
         }
         return values()[facing.ordinal()];
+    }
+
+    public BlockPos offset(BlockPos pos) {
+        return pos.add(this.offsetX, this.offsetY, this.offsetZ);
     }
 }

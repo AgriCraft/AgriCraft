@@ -69,9 +69,7 @@ public class CropPlantAgriCraft extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
-        return false;
-    }
+    public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {}
 
     @Override
     @SideOnly(Side.CLIENT)

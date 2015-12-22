@@ -19,14 +19,15 @@ import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculat
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.BlockStatePlaceHolder;
 import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -147,7 +148,7 @@ public class APIimplv1 implements APIv1 {
     public boolean canPlaceCrops(World world, BlockPos pos, ItemStack crops) {
         if (crops == null || crops.getItem() == null || crops.getItem() != Items.crops) {
             return false;
-        } else if (GrowthRequirementHandler.isSoilValid(world, pos.getX(), pos.getY() - 1, pos.getZ()) && world.isAirBlock(pos)) {
+        } else if (GrowthRequirementHandler.isSoilValid(world, pos.add(0, -1, 0)) && world.isAirBlock(pos)) {
             return true;
         } else {
             return false;
@@ -159,7 +160,7 @@ public class APIimplv1 implements APIv1 {
     public boolean placeCrops(World world, BlockPos pos, ItemStack crops) {
         if (canPlaceCrops(world, pos, crops) && crops.stackSize >= 1) {
             if (!world.isRemote) {
-                world.setBlockState(pos, new BlockStatePlaceHolder(Blocks.blockCrop, 0), 3);
+                world.setBlockState(pos, Blocks.blockCrop.getDefaultState().withProperty(BlockStates.AGE, 0), 3);
                 crops.stackSize--;
             }
             return true;
@@ -313,7 +314,7 @@ public class APIimplv1 implements APIv1 {
             if (!crop.hasWeed()) {
                 return false;
             }
-            return ((IRake) rake.getItem()).removeWeeds(crop, rake);
+            return ((IRake) rake.getItem()).removeWeeds(world, pos, world.getBlockState(pos), crop, rake);
         }
         return false;
     }
@@ -364,10 +365,10 @@ public class APIimplv1 implements APIv1 {
                     return SeedRequirementStatus.BAD_LOCATION;
                 }
                 IGrowthRequirement growthRequirement = CropPlantHandler.getGrowthRequirement(seed);
-                if(!growthRequirement.isValidSoil(world, pos.getX(), pos.getY()-1, pos.getZ())) {
+                if(!growthRequirement.isValidSoil(world, pos.add(0, -1, 0))) {
                     return SeedRequirementStatus.WRONG_SOIL;
                 }
-                if (!growthRequirement.canGrow(world, pos.getX(), pos.getY(), pos.getZ())) {
+                if (!growthRequirement.canGrow(world, pos)) {
                     return SeedRequirementStatus.MISSING_REQUIREMENTS;
                 }
                 return SeedRequirementStatus.CAN_APPLY;
@@ -386,7 +387,7 @@ public class APIimplv1 implements APIv1 {
                 TileEntity te = world.getTileEntity(pos);
                 if (te instanceof TileEntityCrop) {
                     TileEntityCrop crop = (TileEntityCrop) te;
-                    if (crop.isCrossCrop() || crop.hasPlant() || crop.hasWeed() || !CropPlantHandler.getGrowthRequirement(seed).canGrow(world, pos.getX(), pos.getY(), pos.getZ())) {
+                    if (crop.isCrossCrop() || crop.hasPlant() || crop.hasWeed() || !CropPlantHandler.getGrowthRequirement(seed).canGrow(world, pos)) {
                         return false;
                     }
                     NBTTagCompound tag = seed.getTagCompound();
@@ -412,7 +413,7 @@ public class APIimplv1 implements APIv1 {
         if (te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             if(crop.allowHarvest(null)) {
-                crop.getWorld().setBlockState(pos, new BlockStatePlaceHolder(Blocks.blockCrop, 2), 2);
+                crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(BlockStates.AGE, 2), 2);
                 return crop.getPlant().getFruitsOnHarvest(crop.getGain(), world.rand);
             }
         }
@@ -462,12 +463,12 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public boolean applyFertilizer(World world, BlockPos pos, ItemStack fertilizer) {
+    public boolean applyFertilizer(World world, BlockPos pos, IBlockState state, ItemStack fertilizer) {
         if (world.isRemote || !isValidFertilizer(world, pos, fertilizer)) {
             return false;
         }
         if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
-            ((BlockCrop) Blocks.blockCrop).func_149853_b(world, random, pos);
+            ((BlockCrop) Blocks.blockCrop).grow(world, random, pos, state);
             fertilizer.stackSize--;
             world.playAuxSFX(2005, pos, 0);
             return true;

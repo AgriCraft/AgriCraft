@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.api.v1.IAdditionalCropData;
 import com.InfinityRaider.AgriCraft.api.v1.ICrop;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,8 +58,8 @@ public class CropPlantAPIv1 extends CropPlant {
     }
 
     @Override
-    public boolean onHarvest(World world, BlockPos pos, EntityPlayer player) {
-        return plant.onHarvest(world, pos, player);
+    public boolean onHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+        return plant.onHarvest(world, pos, state, player);
     }
 
     @Override
@@ -92,8 +93,8 @@ public class CropPlantAPIv1 extends CropPlant {
     }
     
     @Override
-    public boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
-        return plant.onAllowedGrowthTick(world, pos, oldGrowthStage);
+    public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
+        plant.onAllowedGrowthTick(world, pos, oldGrowthStage);
     }
 
     @Override

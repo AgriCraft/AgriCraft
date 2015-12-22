@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.compatibility.applecore;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -20,6 +21,6 @@ public class AppleCoreHelper extends ModHelper {
         return Event.Result.ALLOW;
     }
 
-    public static void announceGrowthTick(World world, BlockPos pos, IBlockState state) {
+    public static void announceGrowthTick(World world, BlockPos pos, Block block, IBlockState state) {
     }
 }

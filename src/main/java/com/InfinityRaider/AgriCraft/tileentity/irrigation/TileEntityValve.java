@@ -4,10 +4,10 @@ package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -33,10 +33,10 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
     }
 
     @Override
-    public void updateEntity() {
+    public void tick() {
         if(!this.worldObj.isRemote) {
             if(!this.powered) {
-                super.updateEntity();
+                super.tick();
             } else {
                 updateNeighbours();
             }
@@ -45,7 +45,7 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
 
     public void updatePowerStatus() {
         boolean wasPowered = powered;
-        powered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+        powered = worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0;
         if (powered != wasPowered) {
             markForUpdate();
         }

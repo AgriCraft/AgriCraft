@@ -6,15 +6,18 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class BlockSeedStorage extends BlockCustomWood {
 
@@ -24,9 +27,9 @@ public class BlockSeedStorage extends BlockCustomWood {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float fX, float fY, float fZ) {
         if (!world.isRemote) {
-            player.openGui(AgriCraft.instance, GuiHandler.seedStorageID, world, x, y, z);
+            player.openGui(AgriCraft.instance, GuiHandler.seedStorageID, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }
@@ -42,8 +45,8 @@ public class BlockSeedStorage extends BlockCustomWood {
     }
 
     @Override
-    public boolean onBlockEventReceived(World world, int x, int y, int z, int id, int data) {
-        TileEntity tileentity = world.getTileEntity(x, y, z);
+    public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
+        TileEntity tileentity = world.getTileEntity(pos);
         return tileentity != null && tileentity.receiveClientEvent(id, data);
 
     }
@@ -54,23 +57,22 @@ public class BlockSeedStorage extends BlockCustomWood {
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-        ArrayList<ItemStack> items = super.getDrops(world, x, y, z, metadata, fortune);
-        if(!world.isRemote) {
-            TileEntity te = world.getTileEntity(x, y, z);
-            if (te != null && (te instanceof TileEntitySeedStorage)) {
-                TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
-                for (ItemStack stack : storage.getInventory()) {
-                    int total = stack.stackSize;
-                    while (total > 0) {
-                        ItemStack newStack = stack.copy();
-                        newStack.stackSize = Math.min(total, 64);
-                        total = total - newStack.stackSize;
-                        items.add(newStack);
-                    }
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        List<ItemStack> items = super.getDrops(world, pos, state, fortune);
+        TileEntity te = world.getTileEntity(pos);
+        if (te != null && (te instanceof TileEntitySeedStorage)) {
+            TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
+            for (ItemStack stack : storage.getInventory()) {
+                int total = stack.stackSize;
+                while (total > 0) {
+                    ItemStack newStack = stack.copy();
+                    newStack.stackSize = Math.min(total, 64);
+                    total = total - newStack.stackSize;
+                    items.add(newStack);
                 }
             }
         }
+
         return items;
     }
 
@@ -79,15 +81,10 @@ public class BlockSeedStorage extends BlockCustomWood {
     @Override
     public boolean isOpaqueCube() {
         return false;
-    }           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
+    }
 
     @Override
-    public boolean renderAsNormalBlock() {
-        return false;
-    }    //tells minecraft that this has custom rendering
-
-    @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {
+    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
     }
 

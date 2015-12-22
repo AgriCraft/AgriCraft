@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import net.minecraft.world.EnumSkyBlock;
 
 public class MethodGetBrightness extends MethodBaseCrop {
     public MethodGetBrightness() {
@@ -9,6 +10,6 @@ public class MethodGetBrightness extends MethodBaseCrop {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) {
-        return new Object[] {crop.getWorldObj().getFullBlockLightValue(crop.xCoord, crop.yCoord+1, crop.zCoord)};
+        return new Object[] {Math.max(crop.getWorld().getLightFor(EnumSkyBlock.SKY, crop.getPos()), crop.getWorld().getLightFor(EnumSkyBlock.BLOCK, crop.getPos()))};
     }
 }

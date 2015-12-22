@@ -6,9 +6,11 @@ import com.InfinityRaider.AgriCraft.api.v1.ICrop;
 import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -168,7 +170,7 @@ public abstract class CropPlant implements ICropPlant {
 
     /**
      * Returns a random fruit for this plant.
-     * 
+     *
      * @param rand a random for choosing the drop.
      * @return a random fruit dropped by the plant.
      */
@@ -197,7 +199,7 @@ public abstract class CropPlant implements ICropPlant {
      * @return true, by default.
      */
     @Override
-    public boolean onHarvest(World world, BlockPos pos, EntityPlayer player) {
+    public boolean onHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         return true;
     }
 
@@ -262,27 +264,11 @@ public abstract class CropPlant implements ICropPlant {
      * Should return true to re-render the crop clientside.
      * 
      * @param world the world the plant is in.
-  * @param pos the block position.
+     * @param pos the block position.
      * @param oldGrowthStage the current/old growth stage of the plant.
-     * @return if the plant should be rendered again client side (e.g. if the next growth stage has a different icon)
      */
     @Override
-    public abstract boolean onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage);
-
-    /**
-     * Determines if the plant can grow at a location.
-     * This is an override of a deprecated method for the sake of backwards API compatibility and should not be called anymore,
-     * To check if a plant is fertile, use getGrowthRequirement().canGrow(world, x, y, z)
-     * 
-     * @param world the world the plant is in.
-  * @param pos the block position.
-     * @return if the growth location for the plant is fertile.
-     */
-    @Override
-    @SuppressWarnings("deprecation")
-    public final boolean isFertile(World world, BlockPos pos) {
-        return getGrowthRequirement().canGrow(world, x, y, z);
-    }
+    public abstract void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage);
 
     /**
      * Determines if the plant is mature. That is, the plant's metadata matches {@link Constants#MATURE}.
@@ -292,8 +278,8 @@ public abstract class CropPlant implements ICropPlant {
      * @return if the plant is mature.
      */
     @Override
-    public boolean isMature(IBlockAccess world, BlockPos pos) {
-        return world.getBlockMetadata(x, y, z) >= Constants.MATURE;
+    public boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state) {
+        return state.getValue(BlockStates.AGE) >= Constants.MATURE;
     }
 
     /**

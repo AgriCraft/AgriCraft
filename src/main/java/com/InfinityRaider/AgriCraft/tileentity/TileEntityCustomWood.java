@@ -2,15 +2,15 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-    	tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(this.getMaterial()));
+    	tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(this.getMaterial()).toString());
         tag.setInteger(Names.NBT.materialMeta, this.getMaterialMeta());
         super.writeToNBT(tag);
     }
@@ -88,7 +88,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
      */
     public final void setMaterial(ItemStack stack) {
         if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemBlock) {
-        	this.setMaterial(stack.stackTagCompound);
+        	this.setMaterial(stack.getTagCompound());
         }
     }
 
@@ -99,7 +99,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
      * @param meta the metadata value of the material (block).
      */
     public final void setMaterial(String name, int meta) {
-        Block block = (Block) Block.blockRegistry.getObject(name);
+        Block block = Block.getBlockFromName(name);
         this.setMaterial(block==Blocks.air?DEFAULT_MATERIAL:block, block==Blocks.air?DEFAULT_META:meta);
     }
     
@@ -125,6 +125,11 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
         return this.material==null?DEFAULT_MATERIAL:this.material;
     }
 
+    public final IBlockState getMaterialState() {
+        Block mat = this.getMaterial();
+        return mat.getStateFromMeta(getMaterialMeta());
+    }
+
     /**
      * Retrieves the metadata of the material the CustomWood is mimicking.
      * 
@@ -144,7 +149,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
      * @return the name of the material.
      */
     public final String getMaterialName() {
-        return Block.blockRegistry.getNameForObject(this.getMaterial());
+        return Block.blockRegistry.getNameForObject(this.getMaterial()).toString();
     }
     
     /**
@@ -183,7 +188,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
         if(this.worldObj==null) {
             return 16777215;
         } else {
-            return getBlockType().colorMultiplier(worldObj, xCoord, yCoord, zCoord);
+            return getBlockType().colorMultiplier(worldObj, this.getPos());
         }
     }
     

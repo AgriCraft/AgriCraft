@@ -9,14 +9,14 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
     private IIcon[] icons = new IIcon[2];
@@ -37,16 +37,16 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 
     //this is called when you right click with this item in hand
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         return false;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
     }
 
     @Override
     public boolean hasSeed(ItemStack trowel) {
-        if(trowel==null || trowel.getItem()==null || trowel.stackTagCompound==null) {
+        if(trowel==null || trowel.getItem()==null || trowel.getTagCompound()==null) {
             return false;
         }
-        return CropPlantHandler.readPlantFromNBT(trowel.stackTagCompound.getCompoundTag(Names.NBT.seed)) != null;
+        return CropPlantHandler.readPlantFromNBT(trowel.getTagCompound().getCompoundTag(Names.NBT.seed)) != null;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         if(!this.hasSeed(trowel)) {
             return false;
         }
-        return trowel.stackTagCompound.hasKey(Names.NBT.analyzed) && trowel.stackTagCompound.getBoolean(Names.NBT.analyzed);
+        return trowel.getTagCompound().hasKey(Names.NBT.analyzed) && trowel.getTagCompound().getBoolean(Names.NBT.analyzed);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         NBTTagCompound seedTag = new NBTTagCompound();
         CropPlantHandler.setSeedNBT(seedTag, growth, gain, strength, analysed);
         ItemStack seed = plant.getSeed();
-        seed.stackTagCompound = seedTag;
+        seed.setTagCompound(seedTag);
         return seed;
     }
 
@@ -97,7 +97,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         if(!this.hasSeed(trowel)) {
             return -1;
         }
-        return trowel.stackTagCompound.getShort(Names.NBT.materialMeta);
+        return trowel.getTagCompound().getShort(Names.NBT.materialMeta);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityChannelFull extends TileEntityChannel {
     /** this is just so client side it'll render like a connected channel while held in hand */

@@ -1,7 +1,9 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
+import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -21,7 +23,7 @@ public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
     }
 
     @Override
-    public boolean onHarvest(World world, BlockPos pos, EntityPlayer player) {
+    public boolean onHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         if(player == null) {
             return true;
         }
@@ -35,7 +37,7 @@ public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
             return true;
         }
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
-        crop.getWorld().setBlockMetadataWithNotify(pos, 2, 2);
+        crop.getWorld().setBlockState(pos, state.withProperty(BlockStates.AGE, 2), 2);
         int amount = ((int) (Math.ceil((crop.getGain() + 0.00) / 3)))/2;
         if(amount>0) {
             ItemStack drop = new ItemStack(item, amount, meta);

@@ -4,16 +4,16 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderWaterPad;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.utility.BlockStatePlaceHolder;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
@@ -21,6 +21,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class BlockWaterPad extends BlockBase {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float fX, float fY, float fZ) {
         ItemStack stack = player.getCurrentEquippedItem();
         if (stack == null || stack.getItem() == null) {
             return false;
@@ -69,7 +71,7 @@ public class BlockWaterPad extends BlockBase {
                 player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
             }
             if (!world.isRemote) {
-                world.setBlock(x, y, z, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPadFull, 7, 3);
+                world.setBlockState(pos, new BlockStatePlaceHolder(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPadFull, 7), 3);
             }
             return true;
 
@@ -78,34 +80,26 @@ public class BlockWaterPad extends BlockBase {
     }
 
     @Override
-    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i) {
+    public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float f, int i) {
         if(!world.isRemote) {
             ItemStack drop = new ItemStack(Blocks.dirt, 1);
-            this.dropBlockAsItem(world, x, y, z, drop);
+            spawnAsEntity(world, pos, drop);
         }
     }
 
     //creative item picking
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
         return new ItemStack(Blocks.dirt);
-    }
-
-    @Override
-    public int damageDropped(int meta) {
-        return 0;
     }
 
     //render methods
     //--------------
     @Override
-    public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
+    public boolean isOpaqueCube() {return false;}
 
     @Override
-    public boolean renderAsNormalBlock() {return false;}    //tells minecraft that this has custom rendering
-
-    @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int i) {return true;}
+    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -127,8 +121,7 @@ public class BlockWaterPad extends BlockBase {
 
         @Override
         @SideOnly(Side.CLIENT)
-        @SuppressWarnings("unchecked")
-        public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+        public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
             list.add(StatCollector.translateToLocal("agricraft_tooltip.waterPadDry"));
         }
     }

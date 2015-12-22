@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class PlayerHelper {
     public static float getPlayerYaw(EntityPlayer player) {

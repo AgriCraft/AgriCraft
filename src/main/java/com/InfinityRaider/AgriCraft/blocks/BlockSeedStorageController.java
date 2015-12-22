@@ -5,11 +5,14 @@ import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSeedStorageController extends BlockCustomWood {
 
@@ -29,20 +32,20 @@ public class BlockSeedStorageController extends BlockCustomWood {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float fX, float fY, float fZ) {
         if(player.isSneaking()) {
             return false;
         }
         if(!world.isRemote) {
-            player.openGui(AgriCraft.instance, GuiHandler.seedStorageControllerID, world, x, y, z);
+            player.openGui(AgriCraft.instance, GuiHandler.seedStorageControllerID, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }
 
     @Override
-    public boolean onBlockEventReceived(World world, int x, int y, int z, int id, int data) {
-        super.onBlockEventReceived(world, x, y, z, id, data);
-        TileEntity tileentity = world.getTileEntity(x, y, z);
+    public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
+        super.onBlockEventReceived(world, pos, state, id, data);
+        TileEntity tileentity = world.getTileEntity(pos);
         return tileentity != null && tileentity.receiveClientEvent(id, data);
     }
 

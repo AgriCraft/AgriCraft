@@ -31,7 +31,7 @@ public abstract class MethodBaseCrop extends MethodBase {
 
     @Override
     protected ArrayList<MethodParameter> getParameters() {
-        ArrayList<MethodParameter> pars = new ArrayList<MethodParameter>();
+        ArrayList<MethodParameter> pars = new ArrayList<>();
         pars.add(MethodParameter.DIRECTION);
         return pars;
     }
