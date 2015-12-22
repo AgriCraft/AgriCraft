@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 public class CropPlantAPIv2 extends CropPlantAPIv1 {
     public CropPlantAPIv2(ICropPlant plant) {
         super(plant);
+        this.setGrowthRequirement(plant.getGrowthRequirement());
     }
 
     @Override
@@ -23,8 +24,7 @@ public class CropPlantAPIv2 extends CropPlantAPIv1 {
 
     @Override
     public IGrowthRequirement initGrowthRequirement() {
-        IGrowthRequirement req = ((ICropPlant) plant).getGrowthRequirement();
-        return req==null? super.initGrowthRequirement():req;
+        return plant == null ? null : ((ICropPlant) plant).getGrowthRequirement();
     }
 
     @Override

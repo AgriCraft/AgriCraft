@@ -25,6 +25,7 @@ Changelog
 -FIXED:  Bugs concerning automatic input and output with Seed Storages and Analyzers
 -FIXED:  Crash when Botania is not present
 -FIXED:  Weeds being removed as long as you don't have an empty hand with rakes enabled
+-FIXED:  [HOTFIX] crash on startup when plants are registered via the API
 
 1.4.5
 -ADDED:  Support for Agriculture 2

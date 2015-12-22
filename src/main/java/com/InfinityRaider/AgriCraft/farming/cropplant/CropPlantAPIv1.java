@@ -26,11 +26,12 @@ public class CropPlantAPIv1 extends CropPlant {
 
     public CropPlantAPIv1(ICropPlant plant) {
         this.plant = plant;
+        this.setTier(plant.tier());
     }
 
     @Override
     public int tier() {
-        return plant.tier();
+        return plant == null ? 1 : plant.tier();
     }
 
     @Override
