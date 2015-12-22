@@ -10,7 +10,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -123,18 +122,6 @@ public class BlockWaterChannel extends BlockCustomWood {
     //--------------
     @Override
     public boolean isOpaqueCube() {return false;}
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-        if(meta==0) {
-            return Blocks.planks.getIcon(0, 0);
-        }
-        else if(meta==1) {
-            return Blocks.iron_block.getIcon(0, 0);
-        }
-        return null;
-    }
 
     @Override
     @SideOnly(Side.CLIENT)

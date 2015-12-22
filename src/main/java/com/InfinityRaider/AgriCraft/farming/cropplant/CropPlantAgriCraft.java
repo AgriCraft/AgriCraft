@@ -79,12 +79,6 @@ public class CropPlantAgriCraft extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getPlantIcon(int growthStage) {
-        return plant.getIcon(growthStage);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return plant.renderAsFlower();
     }

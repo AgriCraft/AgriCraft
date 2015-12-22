@@ -12,7 +12,6 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITickable;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
@@ -61,14 +60,6 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
         return this.worldObj!=null && this.worldObj.getBlockState(getPos().add(0, 1, 0)).getBlock() instanceof BlockWaterChannel;
     }
 
-    public IIcon getChannelIcon() {
-        if(this.isConnected()) {
-            TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(getPos().add(0, 1, 0));
-            return channel.getIcon();
-        }
-        return Blocks.planks.getIcon(0, 0);
-    }
-
     @Override
     public void tick() {
         if (!worldObj.isRemote) {
@@ -115,7 +106,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
             if (block instanceof BlockFarmland && block.getMetaFromState(state) < 7) {
                 // irrigate farmland
                 int flag = counter==0?2:6;
-                block.getMetaFromState(x, y, z, 7, flag);
+                worldObj.setBlockState(pos, block.getStateFromMeta(7), flag);
             } else if (((block instanceof IPlantable) || (block instanceof IGrowable)) && !farmlandOnly) {
                 // x chance to force growth tick on plant every y ticks
                 if (counter == 0 && worldObj.rand.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {

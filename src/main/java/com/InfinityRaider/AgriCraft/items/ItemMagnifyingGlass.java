@@ -52,7 +52,7 @@ public class ItemMagnifyingGlass extends ItemBase {
                     boolean analyzed = crop.isAnalyzed();
                     ItemStack seed = crop.getSeedStack();
                     String seedName = seed.getItem().getItemStackDisplayName(seed);
-                    int meta = world.getBlockMetadata(pos);
+                    int meta = crop.getGrowthStage();
                     float growthPercentage = ((float) meta)/((float) 7)*100.0F;
                     list.add(StatCollector.translateToLocal("agricraft_tooltip.cropWithPlant"));
                     list.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + seedName);

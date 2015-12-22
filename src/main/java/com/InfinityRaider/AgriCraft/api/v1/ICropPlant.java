@@ -107,10 +107,6 @@ public interface ICropPlant {
     /** Gets the height of the crop */
     float getHeight(int meta);
 
-    /** Gets the icon for the plant, growth stage goes from 0 to 7 (both inclusive, 0 is sprout and 7 is mature) */
-    @SideOnly(Side.CLIENT)
-    IIcon getPlantIcon(int growthStage);
-
     /** Determines how the plant is rendered, return false to render as wheat (#), true to render as a flower (X) */
     @SideOnly(Side.CLIENT)
     boolean renderAsFlower();
@@ -125,5 +121,5 @@ public interface ICropPlant {
 
     /** This is called when the plant is rendered, this is never called if returned false on overrideRendering */
     @SideOnly(Side.CLIENT)
-    void renderPlantInCrop(IBlockAccess world, BlockPos pos, RenderBlocks renderer);
+    void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage);
 }

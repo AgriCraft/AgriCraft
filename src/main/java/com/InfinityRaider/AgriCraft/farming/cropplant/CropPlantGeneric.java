@@ -34,8 +34,6 @@ public abstract class CropPlantGeneric extends CropPlant {
         return ConfigurationHandler.modSpecifDrops;
     }
 
-    public abstract int transformMeta(int growthStage);
-
     @Override
     public int tier() {
         return 2;
@@ -92,12 +90,5 @@ public abstract class CropPlantGeneric extends CropPlant {
     @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {
         return Constants.UNIT*13;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getPlantIcon(int growthStage) {
-        //for the Vanilla SeedItem class the arguments for this method are not used
-        return getBlock().getIcon(0, transformMeta(growthStage));
     }
 }

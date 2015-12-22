@@ -452,19 +452,6 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         return neighbours;
     }
 
-    //get the plant icon
-    @SideOnly(Side.CLIENT)
-    public IIcon getPlantIcon() {
-        IIcon icon = null;
-        if(this.hasPlant()) {
-            icon = plant.getPlantIcon(this.getBlockMetadata());
-        }
-        else if(this.weed) {
-            icon = ((BlockCrop) getWorld().getBlockState(getPos()).getBlock()).getWeedIcon(this.getBlockMetadata());
-        }
-        return icon;
-    }
-
     @Override
     public void addDebugInfo(List<String> list) {
         list.add("CROP:");

@@ -73,20 +73,12 @@ public class CropPlantVanilla extends CropPlant {
     }
 
     @Override
-    public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
-        return true;
-    }
+    public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {}
 
     @Override
     @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {
         return Constants.UNIT*13;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getPlantIcon(int growthStage) {
-        return plant.getIcon(0, growthStage);
     }
 
     @Override

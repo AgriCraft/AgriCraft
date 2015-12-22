@@ -36,7 +36,6 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     private ItemModSeed seed;
     public int tier;
     @SideOnly(Side.CLIENT)
-    private IIcon[] icons;
     private RenderMethod renderType;
 
     /** Parameters can be given in any order, parameters can be: @param args:
@@ -168,12 +167,6 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     public ArrayList<ItemStack> getFruit(int nr, Random rand) {return this.products.getProduce(nr, rand);}
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int meta) {
-        return this.getIcon(0, meta);
-    }
-
-    @Override
     public boolean renderAsFlower() {
         return this.renderType==RenderMethod.CROSSED;
     }
@@ -186,17 +179,6 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     @Override
     public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isRemote) {
         return this.tier<=3 && super.canGrow(world, pos, state, isRemote);
-    }
-
-    //register icons
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister reg) {
-        LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
-        this.icons = new IIcon[4];
-        for(int i=1;i<this.icons.length+1;i++) {
-            this.icons[i-1] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1)+i);
-        }
     }
 
     //growing
@@ -222,23 +204,6 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     public boolean isMature(World world, BlockPos pos, IBlockState state) {
         state = state == null ? world.getBlockState(pos) : state;
         return state.getValue(BlockStates.AGE) >= Constants.MATURE;
-    }
-
-    //render different stages
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-        switch(meta) {
-            case 0:
-            case 1: return this.icons[0];
-            case 2: 
-            case 3: 
-            case 4: return this.icons[1];
-            case 5: 
-            case 6: return this.icons[2];
-            case 7: return this.icons[3];
-        }
-        return this.icons[meta/5];
     }
 
     @Override

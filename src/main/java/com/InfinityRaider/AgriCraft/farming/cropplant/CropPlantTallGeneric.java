@@ -23,8 +23,6 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
         this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed());
     }
 
-    public abstract int transformMeta(int growthStage);
-
     @Override
     public int tier() {
         return 3;
@@ -74,21 +72,5 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
     @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {
         return (meta>maxMetaBottomBlock()?2:1)*Constants.UNIT*13;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getBottomIcon(int growthStage) {
-        if(growthStage<maxMetaBottomBlock()) {
-            return getPlantIcon(growthStage);
-        }
-        return getPlantIcon(maxMetaBottomBlock());
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getPlantIcon(int growthStage) {
-        //for the Vanilla SeedItem class the arguments for this method are not used
-        return getBlock().getIcon(0, transformMeta(growthStage));
     }
 }

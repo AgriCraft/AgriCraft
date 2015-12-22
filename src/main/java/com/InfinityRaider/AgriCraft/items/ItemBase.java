@@ -29,13 +29,6 @@ public abstract class ItemBase extends Item {
 
     protected abstract String getInternalName();
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg) {
-        LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
-        itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
-    }
-
     @SideOnly(Side.CLIENT)
     public abstract RenderItemBase getItemRenderer();
 }

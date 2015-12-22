@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.WeightedRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -33,8 +32,6 @@ public class ItemHandRake extends ItemBase implements IRake{
     private static final int WOOD_VARIANT_META = 0;
     private static final int IRON_VARIANT_META = 1;
     private static final int[] dropChance = new int[] {10, 25};
-
-    private final IIcon[] icons = new IIcon[2];
 
     public ItemHandRake() {
         super();
@@ -90,24 +87,7 @@ public class ItemHandRake extends ItemBase implements IRake{
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg) {
-        LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
-        icons[0] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1)+"_wood");
-        icons[1] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1)+"_iron");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
     public RenderItemBase getItemRenderer() {
-        return null;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int meta) {
-        if(meta<=1) {
-            return this.icons[meta];
-        }
         return null;
     }
 

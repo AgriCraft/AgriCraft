@@ -164,15 +164,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
         return tag;
     }
 
-    /**
-     * Retrieves the CustomWood icon.
-     * 
-     * @return the icon, or texture, of the CustomWood.
-     */
-    public IIcon getIcon() {
-        return this.getMaterial().getIcon(0, this.getMaterialMeta());
-    }
-
     @Override
     public void addDebugInfo(List<String> list) {
         list.add("this material is: " + this.getMaterialName() + ":" + this.getMaterialMeta());

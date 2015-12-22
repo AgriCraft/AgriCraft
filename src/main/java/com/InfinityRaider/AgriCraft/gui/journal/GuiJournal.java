@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class GuiJournal extends GuiScreen {
@@ -32,7 +31,6 @@ public class GuiJournal extends GuiScreen {
     ArrayList<Component<String>> textComponents;
     ArrayList<Component<ResourceLocation>> textureComponents;
     ArrayList<Component<ItemStack>> itemComponents;
-    HashMap<ResourceLocation, ArrayList<Component<IIcon>>> iconComponents;
 
     private ItemStack journal;
 
@@ -53,13 +51,6 @@ public class GuiJournal extends GuiScreen {
         textComponents = currentPage.getTextComponents();
         textureComponents = currentPage.getTextureComponents();
         itemComponents = currentPage.getItemComponents();
-        iconComponents = new HashMap<ResourceLocation, ArrayList<Component<IIcon>>>();
-        for(ResourceLocation textureMap:currentPage.getTextureMaps()) {
-            if(textureMap == null) {
-                continue;
-            }
-            iconComponents.put(textureMap, currentPage.getIconComponents(textureMap));
-        }
     }
 
     @Override
@@ -78,17 +69,6 @@ public class GuiJournal extends GuiScreen {
         if(textureComponents != null) {
             for(Component<ResourceLocation> iconComponent: textureComponents) {
                 drawTextureComponent(iconComponent);
-            }
-        }
-        if(iconComponents != null) {
-            for(Map.Entry<ResourceLocation, ArrayList<Component<IIcon>>> entry:iconComponents.entrySet()) {
-                if(entry.getValue() == null) {
-                    continue;
-                }
-                Minecraft.getMinecraft().renderEngine.bindTexture(entry.getKey());
-                for(Component<IIcon> component: entry.getValue()) {
-                    drawIconComponent(component);
-                }
             }
         }
         //draw item components
@@ -209,26 +189,6 @@ public class GuiJournal extends GuiScreen {
             int y = this.guiTop + component.yOffset();
             ItemStack stack = component.getComponent();
             itemRender.renderItemIntoGUI(stack, x, y);
-        }
-    }
-
-    private void drawIconComponent(Component<IIcon> component) {
-        if(component != null) {
-            IIcon icon = component.getComponent();
-            int xSize = component.xSize();
-            int ySize = component.ySize();
-            int x = guiLeft + component.xOffset();
-            int y = guiTop + component.yOffset();
-            TessellatorV2 tessellator = TessellatorV2.instance;
-            GL11.glColor3f(1, 1, 1);
-            GL11.glDisable(GL11.GL_LIGHTING);
-            tessellator.startDrawingQuads();
-            tessellator.addVertexWithUV(x, y + ySize, this.zLevel, icon.getMinU(), icon.getMaxV());
-            tessellator.addVertexWithUV(x + xSize, y + ySize, this.zLevel, icon.getMaxU(), icon.getMaxV());
-            tessellator.addVertexWithUV(x + xSize, y, this.zLevel, icon.getMaxU(), icon.getMinV());
-            tessellator.addVertexWithUV(x, y, this.zLevel, icon.getMinU(), icon.getMinV());
-            tessellator.draw();
-            GL11.glEnable(GL11.GL_LIGHTING);
         }
     }
 

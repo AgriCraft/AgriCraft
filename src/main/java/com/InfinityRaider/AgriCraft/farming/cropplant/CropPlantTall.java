@@ -25,20 +25,16 @@ public abstract class CropPlantTall extends CropPlant {
     public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {}
 
     @SideOnly(Side.CLIENT)
-    public abstract IIcon getBottomIcon(int growthStage);
-
-    @SideOnly(Side.CLIENT)
     public boolean renderTopLayer(int growthStage) {
         return growthStage> maxMetaBottomBlock();
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, RenderBlocks renderer) {
-        int meta = world.getBlockMetadata(pos);
-        PlantRenderer.renderPlantLayer(world, pos, renderer, renderAsFlower() ? 1 : 6, getBottomIcon(meta), 0);
-        if(renderTopLayer(meta)) {
-            PlantRenderer.renderPlantLayer(world, pos, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(meta), 1);
+    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
+        PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0);
+        if(renderTopLayer(growthStage)) {
+            PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 1);
         }
     }
 }

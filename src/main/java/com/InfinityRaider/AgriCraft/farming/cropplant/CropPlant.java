@@ -294,16 +294,6 @@ public abstract class CropPlant implements ICropPlant {
     public abstract float getHeight(int meta);
 
     /**
-     * Gets the icon for the plant, as a function of the plant's growth stage.
-     *
-     * @param growthStage the growthStage
-     * @return the current icon for the plant.
-     */
-    @Override
-    @SideOnly(Side.CLIENT)
-    public abstract IIcon getPlantIcon(int growthStage);
-
-    /**
      * Determines how the plant is rendered.
      * 
      * @return false to render the plant as wheat (#), true to render as a flower (X).
@@ -333,12 +323,11 @@ public abstract class CropPlant implements ICropPlant {
      * A function to render the crop. Called when the plant is rendered.
      * 
      * @param world the world the plant is in.
-  * @param pos the block position.
-     * @param renderer the renderer to use in the rendering of the plant.
+     * @param pos the block position.
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, RenderBlocks renderer) {
-        PlantRenderer.renderPlantLayer(world, pos, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(pos), 0);
+    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
+        PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0);
     }
 }

@@ -104,12 +104,6 @@ public class CropPlantAPIv1 extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getPlantIcon(int growthStage) {
-        return plant.getPlantIcon(growthStage);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return plant.renderAsFlower();
     }
@@ -122,11 +116,11 @@ public class CropPlantAPIv1 extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, RenderBlocks renderer) {
+    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
         if(plant.overrideRendering()) {
-            plant.renderPlantInCrop(world, pos, renderer);
+            plant.renderPlantInCrop(world, pos, state, growthStage);
         } else {
-            PlantRenderer.renderPlantLayer(pos, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(world.getBlockMetadata(pos)), 0);
+            PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0);
         }
     }
 

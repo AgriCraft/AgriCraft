@@ -1,9 +1,8 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.BlockStatePlaceHolder;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +23,12 @@ import java.util.List;
 public class BlockWaterPadFull extends BlockWaterPad {
     public BlockWaterPadFull() {
         super(Material.water);
+        this.setDefaultState(this.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7));
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7);
     }
 
     @Override
@@ -42,7 +47,7 @@ public class BlockWaterPadFull extends BlockWaterPad {
                 player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
             }
             if (!world.isRemote) {
-                world.setBlockState(pos, new BlockStatePlaceHolder(Blocks.blockWaterPad, 0), 3);
+                world.setBlockState(pos, this.getDefaultState(), 3);
             }
             return true;
         }

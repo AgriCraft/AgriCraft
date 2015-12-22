@@ -40,16 +40,6 @@ public class JournalPageIntroduction extends JournalPage {
     }
 
     @Override
-    public ArrayList<ResourceLocation> getTextureMaps() {
-        return new ArrayList<ResourceLocation>();
-    }
-
-    @Override
-    public ArrayList<Component<IIcon>> getIconComponents(ResourceLocation textureMap) {
-        return null;
-    }
-
-    @Override
     public int getPagesToBrowseOnMouseClick(int x, int y) {
         return 0;
     }

@@ -9,7 +9,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BlockCustomWood extends BlockContainerBase {
-	
     public BlockCustomWood() {
         super(Material.wood);
         this.setHardness(2.0F);
@@ -78,9 +76,9 @@ public abstract class BlockCustomWood extends BlockContainerBase {
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> drops = new ArrayList<>();
         ItemStack drop = new ItemStack(this, 1);
-        this.setTag(world, pos, state, drop);
+        this.setTag(world, pos, drop);
         drops.add(drop);
         return drops;
     }
@@ -90,7 +88,7 @@ public abstract class BlockCustomWood extends BlockContainerBase {
     public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
         IBlockState state = world.getBlockState(pos);
         ItemStack stack = new ItemStack(this, 1, state.getBlock().getDamageValue(world, pos));
-        this.setTag(world, pos, world.getBlockState(pos), stack);
+        this.setTag(world, pos,  stack);
         return stack;
     }
 
@@ -100,25 +98,13 @@ public abstract class BlockCustomWood extends BlockContainerBase {
         return false;
     }
 
-    protected void setTag(IBlockAccess world, BlockPos pos, IBlockState state, ItemStack stack) {
+    protected void setTag(IBlockAccess world, BlockPos pos, ItemStack stack) {
         TileEntity te = world.getTileEntity(pos);
         if(te != null && te instanceof TileEntityCustomWood) {
             TileEntityCustomWood tile = (TileEntityCustomWood) te;
             stack.setTagCompound(tile.getMaterialTag());
         }
     }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-        return Blocks.planks.getIcon(side, 0);
-    }
-
-    //register icons
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister reg) {}
-
     @Override
     public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
 

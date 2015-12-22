@@ -10,11 +10,6 @@ public class CropPlantOreDict extends CropPlantGeneric {
     }
 
     @Override
-    public int transformMeta(int growthStage) {
-        return growthStage;
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return false;

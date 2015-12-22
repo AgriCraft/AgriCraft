@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
-import com.InfinityRaider.AgriCraft.utility.BlockStatePlaceHolder;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +17,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
+public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
     @SideOnly(Side.CLIENT)
     private String information;
 
@@ -48,11 +47,6 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
         return this.information;
     }
 
-    @Override
-    public IIcon getIcon(ItemStack stack) {
-        return getIconFromDamage(stack.getItemDamage());
-    }
-
     @SideOnly(Side.CLIENT)
     public void setInformation(String information) {
         this.information = information;
@@ -70,7 +64,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
                 return false;
             } else if (player.canPlayerEdit(pos, side, stack) && player.canPlayerEdit(blockPosUp, side, stack)) {
                 if (world.isAirBlock(blockPosUp)) {
-                    world.setBlockState(blockPosUp, new BlockStatePlaceHolder(this.getPlant(), 0));
+                    world.setBlockState(blockPosUp, this.getPlant().getStateFromMeta(0), 3);
                     --stack.stackSize;
                     return true;
                 } else {
@@ -81,12 +75,5 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
             }
         }
         return false;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg) {
-        LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
-        itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
     }
 }

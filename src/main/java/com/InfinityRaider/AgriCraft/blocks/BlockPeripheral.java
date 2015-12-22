@@ -34,8 +34,6 @@ import java.util.List;
 
 @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockContainerBase{
-    @SideOnly(Side.CLIENT)
-    private IIcon[] icons;
 
     public BlockPeripheral() {
         super(Material.iron);
@@ -81,7 +79,7 @@ public class BlockPeripheral extends BlockContainerBase{
 
     //called when the block is broken
     @Override
-    public void breakBlock(World world, BlockPos pos, Block b, int meta) {
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
         if(!world.isRemote) {
             world.removeTileEntity(pos);
             world.setBlockToAir(pos);
@@ -104,7 +102,7 @@ public class BlockPeripheral extends BlockContainerBase{
     public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
         if(!world.isRemote) {
             if(!player.capabilities.isCreativeMode) {
-                this.dropBlockAsItem(world, pos, meta, 0);
+                this.dropBlockAsItem(world, pos, state, 0);
             }
             this.breakBlock(world, pos,state);
         }
@@ -144,24 +142,6 @@ public class BlockPeripheral extends BlockContainerBase{
         IMessage msg = new MessagePeripheralCheckNeighbours(pos);
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), 32);
         NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister reg) {
-        this.icons = new IIcon[4];
-        this.icons[0] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1)+"Top");
-        this.icons[1] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1)+"Side");
-        this.icons[2] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1)+"Bottom");
-        this.icons[3] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1)+"Inner");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-        side = side>=icons.length?icons.length-1:side;
-        side = side<0?0:side;
-        return icons[side];
     }
 
     @Override

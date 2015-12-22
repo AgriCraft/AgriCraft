@@ -33,12 +33,6 @@ public abstract class JournalPage {
     /** Gets a list of texture components to render on this page */
     public abstract ArrayList<Component<ResourceLocation>> getTextureComponents();
 
-    /** Gets a list of textureMaps from where IIcons have to be rendered on this page, empty list is allowed, but this should never return null */
-    public abstract ArrayList<ResourceLocation> getTextureMaps();
-
-    /** Gets a list of IIcon components to render on this page, will only be called for ResourceLocations returned in getTextureMaps() */
-    public abstract ArrayList<Component<IIcon>> getIconComponents(ResourceLocation textureMap);
-
     /** Gets the increment to the page number on a mouseclick, >0 means browse forwards, <0 means browse backwards and 0 means stay on this page */
     public abstract int getPagesToBrowseOnMouseClick(int x, int y);
 }

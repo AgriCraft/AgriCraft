@@ -76,19 +76,6 @@ public class CropPlantNetherWart extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getPlantIcon(int growthStage) {
-        int meta = 1;
-        if(growthStage>=7) {
-            meta = 3;
-        }
-        else if(growthStage<4) {
-            meta = 0;
-        }
-        return Blocks.nether_wart.getIcon(0, meta);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return false;
     }

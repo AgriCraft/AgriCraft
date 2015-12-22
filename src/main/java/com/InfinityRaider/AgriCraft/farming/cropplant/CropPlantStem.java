@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStem;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -22,29 +22,6 @@ public class CropPlantStem extends CropPlantGeneric {
     }
 
     @Override
-    public int transformMeta(int growthStage) {
-        return growthStage;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getPlantIcon(int growthStage) {
-        if(growthStage<7) {
-            //for the Vanilla SeedItem class the arguments for this method are not used
-            return super.getPlantIcon(growthStage);
-        }
-        else {
-            return getStemIcon();
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public IIcon getStemIcon() {
-        BlockStem plant = (BlockStem) ((ItemSeeds) getSeed().getItem()).getPlant(null, null).getBlock();
-        return plant.getStemIcon();
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return true;
@@ -52,11 +29,10 @@ public class CropPlantStem extends CropPlantGeneric {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, RenderBlocks renderer) {
-        int meta = world.getBlockMetadata(pos);
-        boolean mature = isMature(world, pos);
+    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
+        boolean mature = isMature(world, pos, state);
         Block vine = ((ItemSeeds) getSeed().getItem()).getPlant(null, null).getBlock();
-        PlantRenderer.renderStemPlant(world, pos, renderer, getPlantIcon(meta), meta, vine, block, mature);
+        PlantRenderer.renderStemPlant(world, pos, growthStage, vine, getFruitBlock(), mature);
     }
 
     @Override

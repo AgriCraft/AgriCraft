@@ -23,11 +23,9 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -50,8 +48,6 @@ import java.util.Random;
  */
 public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantable {
     /** The set of icons used to render weeds. */
-    @SideOnly(Side.CLIENT)
-    private TextureAtlasSprite[] weedIcons;
 
     /** The default constructor for the block. */
     public BlockCrop() {
@@ -61,6 +57,7 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
         this.setStepSound(soundTypeGrass);
         this.setHardness(0.0F);
         this.disableStats();
+        this.setDefaultState(this.getDefaultState().withProperty(BlockStates.AGE, 0));
         //set the bounding box dimensions
         this.maxX = Constants.UNIT*(Constants.WHOLE - 2);
         this.minX = Constants.UNIT*2;
@@ -79,6 +76,11 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     @Override
     protected String getTileEntityName() {
         return Names.Objects.crop;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(BlockStates.AGE, meta);
     }
 
     /** Randomly called to apply growth ticks */
@@ -237,7 +239,7 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
                 if(crop.hasPlant()) {
                     this.harvest(world, pos, state, player, crop);
                 } else if (!crop.isCrossCrop() && !crop.hasWeed()) {
-                    CropPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack((ItemSeeds) Item.itemRegistry.getObject(new ResourceLocation("AgriCraft:seedSugarcane"))));
+                    CropPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack(Item.itemRegistry.getObject(new ResourceLocation("AgriCraft:seedSugarcane"))));
                     if (sugarcane != null && sugarcane.getGrowthRequirement().canGrow(world, pos)) {
                         crop.setPlant(1, 1, 1, false, sugarcane);
                         if (!player.capabilities.isCreativeMode) {
@@ -342,7 +344,7 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
         if(!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
             if (crop != null) {
-                ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+                ArrayList<ItemStack> drops = new ArrayList<>();
                 if (crop.isCrossCrop()) {
                     drops.add(new ItemStack(Items.crops, 2));
                 } else {
@@ -629,54 +631,6 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.EffectRenderer effectRenderer) {return false;}
 
     /**
-     * Registers the block's icons.
-     */
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister reg) {
-        this.blockIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1));
-        this.weedIcons = new TextureAtlasSprite[4];
-        for(int i=0;i<weedIcons.length;i++) {
-            this.weedIcons[i] = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1) + "WeedTexture" + (i + 1));
-        }
-    }
-
-    /**
-     * Retrieve the icon for a side of the block.
-     * 
-     * @param side the side to get the icon for.
-     * @param meta the metadata of the block.
-     * @return the icon representing the side of the block.
-     */
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-        return this.blockIcon;
-    }
-
-    /**
-     * Retrieve the icon for the weeds at a certain growth level represented by the metadata.
-     * 
-     * @param meta the growth level of the weeds.
-     * @return the icon representing the current weed growth.
-     */
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getWeedIcon(int meta) {
-        int index = 0;
-        switch(meta) {
-            case 0:
-            case 1:index = 0;break;
-            case 2:
-            case 3:
-            case 4:index = 1;break;
-            case 5:
-            case 6:index = 2;break;
-            case 7:index = 3;break;
-        }
-        return this.weedIcons[index];
-    }
-
-    /**
      * Handles the block receiving events.
      * 
      * @return if the event was received properly.
@@ -722,15 +676,6 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     @Override
     public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
         return EnumPlantType.Crop;
-    }
-
-    /**
-     * Retrieves the block form of the contained plant.
-     * 
-     * @return the Block isntance of the plant currently planted
-     */
-    public Block getPlantBlock(IBlockAccess world, BlockPos pos) {
-        return this.getPlant(world, pos).getBlock();
     }
 
     @Override

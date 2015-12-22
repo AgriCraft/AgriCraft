@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.gui.journal;
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
@@ -8,8 +7,6 @@ import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.gui.Component;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -313,46 +310,14 @@ public class JournalPageSeed extends JournalPage {
     @Override
     public ArrayList<Component<ResourceLocation>> getTextureComponents() {
         ArrayList<Component<ResourceLocation>> textureComponents = new ArrayList<>();
-        textureComponents.add(getSoil());
         textureComponents.addAll(getBrightnessTextures());
         textureComponents.addAll(getFruitIconFrames());
         textureComponents.addAll(getMutationTemplates());
         return textureComponents;
     }
 
-    private Component<ResourceLocation> getSoil() {
-        ItemStack seed = plant.getSeed();
-        BlockWithMeta soil = CropPlantHandler.getGrowthRequirement(seed.getItem(), seed.getItemDamage()).getSoil();
-        ResourceLocation texture;
-        if (soil != null) {
-            texture = getBlockResource(soil.getBlock().getIcon(1, soil.getMeta()));
-        } else {
-            texture = getBlockResource(Blocks.farmland.getIcon(1, 7));
-        }
-        int x = 26;
-        int y = 11;
-        return new Component<>(texture, x, y, 16, 16);
-    }
-
-    /**
-     * Retrieves a resource location from a <em>block</em> icon.
-     *
-     * @param icon the icon to get the resource location from.
-     * @return the resource location for the icon, or null.
-     */
-    //TODO: get rid of this method and do it the legit way
-    private ResourceLocation getBlockResource(IIcon icon) {
-        if(icon==null) {
-            return null;
-        }
-        String path = icon.getIconName();
-        String domain = path.substring(0, path.indexOf(":") + 1);
-        String file = path.substring(path.indexOf(':') + 1);
-        return new ResourceLocation(domain + "textures/blocks/" + file + ".png");
-    }
-
     private ArrayList<Component<ResourceLocation>> getBrightnessTextures() {
-        ArrayList<Component<ResourceLocation>> textures = new ArrayList<Component<ResourceLocation>>();
+        ArrayList<Component<ResourceLocation>> textures = new ArrayList<>();
         int x = 29;
         int y = 81;
         int u = 4;
@@ -370,7 +335,7 @@ public class JournalPageSeed extends JournalPage {
         if(this.fruits==null) {
             this.fruits = getFruits();
         }
-        ArrayList<Component<ResourceLocation>> components = new ArrayList<Component<ResourceLocation>>();
+        ArrayList<Component<ResourceLocation>> components = new ArrayList<>();
         for(int i=0;i<fruits.size();i++) {
             components.add(new Component<>(ICON_FRAME, 29+24*i, 101, 18, 18));
         }
@@ -392,35 +357,5 @@ public class JournalPageSeed extends JournalPage {
             components.add(new Component<>(QUESTION_MARK, 201, y+1, 16, 16));
         }
         return components;
-    }
-
-
-    // ******************************* //
-    // TEXTURES TO RENDER ON THIS PAGE //
-    // ******************************* //
-
-    @Override
-    public ArrayList<ResourceLocation> getTextureMaps() {
-        ArrayList<ResourceLocation> list = new ArrayList<>();
-        list.add(TextureMap.locationBlocksTexture);
-        return list;
-    }
-
-    @Override
-    public ArrayList<Component<IIcon>> getIconComponents(ResourceLocation textureMap) {
-        if(textureMap != TextureMap.locationBlocksTexture) {
-            return null;
-        }
-        return getGrowthStageIcons();
-    }
-
-    private ArrayList<Component<IIcon>> getGrowthStageIcons() {
-        ArrayList<Component<IIcon>> growthStages = new ArrayList<>();
-        for(int i=0;i<8;i++) {
-            int x = 30 + 24 * (i % 4);
-            int y = 129 + 24 * (i / 4);
-            growthStages.add(new Component<IIcon>(plant.getPlantIcon(i), x, y, 16, 16));
-        }
-        return growthStages;
     }
 }

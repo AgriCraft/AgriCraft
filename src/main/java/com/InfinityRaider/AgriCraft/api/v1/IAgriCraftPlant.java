@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.api.v1;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,10 +32,6 @@ public interface IAgriCraftPlant extends IGrowable, IPlantable {
 
     /** Returns an ArrayList with amount of  random fruit stacks for this plant */
     public ArrayList<ItemStack> getFruit(int amount, Random rand);
-
-    /** Gets the icon for the growth stage, going from 0 to 7. 0 is a newly planted plant and 7 is a mature plant */
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int meta);
 
     /** Determines how the plant is rendered, return false to render as wheat (#), true to render as a flower (X) */
     @SideOnly(Side.CLIENT)

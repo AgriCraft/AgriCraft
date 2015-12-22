@@ -1,22 +1,21 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.IIrrigationComponent;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,8 +33,8 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     }
 
     @Override
-    protected void renderInInventory(ItemRenderType type, ItemStack item, Object... data) {
-        Tessellator tessellator = Tessellator.instance;
+    protected void renderInInventory(ItemStack item, Object... data) {
+        TessellatorV2 tessellator = TessellatorV2.instance;
         tessellator.startDrawingQuads();
         this.renderBottom(teDummy, tessellator);
         this.renderSide(teDummy, tessellator, ForgeDirection.NORTH);
@@ -46,7 +45,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     }
 
     @Override
-    protected boolean doWorldRender(Tessellator tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR) {
         //call correct drawing methods
         if (tile instanceof TileEntityChannel) {
             TileEntityChannel channel = (TileEntityChannel) tile;
@@ -73,8 +72,6 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
                 this.renderIronChannel(channel, tessellator);
             }
         }
-        //clear texture overrides
-        renderer.clearOverrideBlockTexture();
         return true;
     }
 
@@ -88,7 +85,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
         return true;
     }
 
-    protected void renderWoodChannel(TileEntityChannel channel, Tessellator tessellator) {
+    protected void renderWoodChannel(TileEntityChannel channel, TessellatorV2 tessellator) {
         this.renderBottom(channel, tessellator);
         this.renderSide(channel, tessellator, ForgeDirection.NORTH);
         this.renderSide(channel, tessellator, ForgeDirection.EAST);
@@ -96,40 +93,38 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
         this.renderSide(channel, tessellator, ForgeDirection.WEST);
     }
 
-    protected void renderBottom(TileEntityChannel channel, Tessellator tessellator) {
+    protected void renderBottom(TileEntityChannel channel, TessellatorV2 tessellator) {
         //the texture
-        IIcon icon = channel.getIcon();
         int cm = channel.colorMultiplier();
         //bottom
-        drawScaledPrism(tessellator, 4, 4, 4, 12, 5, 12, icon, cm);
+        drawScaledPrism(tessellator, 4, 4, 4, 12, 5, 12, cm);
         //corners
-        drawScaledPrism(tessellator, 4, 5, 4, 5, 12, 5, icon, cm);
-        drawScaledPrism(tessellator, 11, 5, 4, 12, 12, 5, icon, cm);
-        drawScaledPrism(tessellator, 4, 5, 11, 5, 12, 12, icon, cm);
-        drawScaledPrism(tessellator, 11, 5, 11, 12, 12, 12, icon, cm);
+        drawScaledPrism(tessellator, 4, 5, 4, 5, 12, 5, cm);
+        drawScaledPrism(tessellator, 11, 5, 4, 12, 12, 5, cm);
+        drawScaledPrism(tessellator, 4, 5, 11, 5, 12, 12, cm);
+        drawScaledPrism(tessellator, 11, 5, 11, 12, 12, 12, cm);
     }
 
     //renders one of the four sides of a channel
-	protected void renderSide(TileEntityChannel channel, Tessellator tessellator, ForgeDirection dir) {
+	protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection dir) {
 		// the texture
-		IIcon icon = channel.getIcon();
 		int cm = channel.colorMultiplier();
 		if (channel.hasNeighbourCheck(dir)) {
 			// extend bottom plane and side edges
-			drawScaledPrism(tessellator, 4, 4, 0, 12, 5, 4, icon, cm, dir);
-			drawScaledPrism(tessellator, 4, 5, 0, 5, 12, 5, icon, cm, dir);
-			drawScaledPrism(tessellator, 11, 5, 0, 12, 12, 5, icon, cm, dir);
+			drawScaledPrism(tessellator, 4, 4, 0, 12, 5, 4, cm, dir);
+			drawScaledPrism(tessellator, 4, 5, 0, 5, 12, 5, cm, dir);
+			drawScaledPrism(tessellator, 11, 5, 0, 12, 12, 5, cm, dir);
 		} else {
 			// draw an edge
 			drawScaledPrism(tessellator, 4, 4, 4, 12, 12, 5, icon, cm, dir);
 		}
 	}
 
-    private void renderIronChannel(TileEntityChannel channel, Tessellator tessellator) {
+    private void renderIronChannel(TileEntityChannel channel, TessellatorV2 tessellator) {
     	// Do nothing ATM.
     }
 
-    protected void drawWater(TileEntityChannel channel, Tessellator tessellator) {
+    protected void drawWater(TileEntityChannel channel, TessellatorV2 tessellator) {
         float y = channel.getFluidHeight();
         //the texture
         IIcon icon = Blocks.water.getIcon(1, 0);
