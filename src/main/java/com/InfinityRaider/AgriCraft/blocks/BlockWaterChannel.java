@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -22,7 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class BlockWaterChannel extends BlockCustomWood {
-    
     protected static final float MIN = Constants.UNIT * Constants.QUARTER;
     protected static final float MAX = Constants.UNIT * Constants.THREE_QUARTER;
     
@@ -122,6 +122,11 @@ public class BlockWaterChannel extends BlockCustomWood {
     //--------------
     @Override
     public boolean isOpaqueCube() {return false;}
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[0];
+    }
 
     @Override
     @SideOnly(Side.CLIENT)

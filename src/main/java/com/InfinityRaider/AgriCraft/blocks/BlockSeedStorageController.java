@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -15,7 +16,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSeedStorageController extends BlockCustomWood {
-
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntitySeedStorageController();
@@ -52,6 +52,11 @@ public class BlockSeedStorageController extends BlockCustomWood {
     @Override
     public boolean isMultiBlock() {
         return true;
+    }
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[0];
     }
 
     @Override

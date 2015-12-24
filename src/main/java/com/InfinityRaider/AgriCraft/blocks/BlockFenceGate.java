@@ -8,6 +8,7 @@ import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFenceGate;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -52,6 +53,11 @@ public class BlockFenceGate extends BlockCustomWood {
     @Override
     public boolean isMultiBlock() {
         return false;
+    }
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[0];
     }
 
     @Override

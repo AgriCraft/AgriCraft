@@ -11,6 +11,7 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -138,6 +139,11 @@ public class BlockSeedAnalyzer extends BlockContainerBase {
     @Override
     public boolean isMultiBlock() {
         return false;
+    }
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[0];
     }
 
     @Override

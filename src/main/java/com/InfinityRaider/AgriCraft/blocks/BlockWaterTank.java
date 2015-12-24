@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWaterTank extends BlockCustomWood {
-
 	public BlockWaterTank() {
 		super();
 	}
@@ -103,6 +103,11 @@ public class BlockWaterTank extends BlockCustomWood {
 	@Override
 	protected String getTileEntityName() {
 		return Names.Objects.tank;
+	}
+
+	@Override
+	protected IProperty[] getPropertyArray() {
+		return new IProperty[0];
 	}
 
 	@Override

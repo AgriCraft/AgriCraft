@@ -3,19 +3,17 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -32,7 +30,7 @@ public class RenderSprinkler extends RenderBlockBase {
     }
 
     @Override
-    protected boolean doWorldRender(Tessellator tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR) {
         TileEntitySprinkler sprinkler= (TileEntitySprinkler) tile;
         //render the model
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -52,13 +50,6 @@ public class RenderSprinkler extends RenderBlockBase {
     }
 
     @Override
-    protected void doInventoryRender(ItemRenderType type, ItemStack item, Object... data) {
-        GL11.glTranslatef(0, -0.25F, 0);
-        this.doWorldRender(Tessellator.instance, Minecraft.getMinecraft().theWorld, 0, 0, 0, sprinklerDummy, Blocks.blockSprinkler, 0, 0, RenderBlocks.getInstance(), true);
-        GL11.glTranslatef(0, 0.25F, 0);
-    }
-
-    @Override
     public boolean shouldBehaveAsTESR() {
         return true;
     }
@@ -70,7 +61,7 @@ public class RenderSprinkler extends RenderBlockBase {
 
     private void renderConnection(TileEntitySprinkler sprinkler) {
         //set up tessellator
-        Tessellator tessellator = Tessellator.instance;
+        TessellatorV2 tessellator = TessellatorV2.instance;
         //start GL
         GL11.glPushMatrix();
             //disable lighting so the plants render bright
@@ -79,7 +70,7 @@ public class RenderSprinkler extends RenderBlockBase {
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
             tessellator.startDrawingQuads();
             tessellator.addTranslation(0, 4 * Constants.UNIT, 0);
-            drawScaledPrism(tessellator, 4, 8, 4, 12, 16, 12, sprinkler.getChannelIcon(), net.minecraft.init.Blocks.planks.colorMultiplier(sprinkler.getWorldObj(), sprinkler.xCoord, sprinkler.yCoord, sprinkler.zCoord));
+            drawScaledPrism(tessellator, 4, 8, 4, 12, 16, 12, net.minecraft.init.Blocks.planks.colorMultiplier(sprinkler.getWorld(), sprinkler.getPos()));
             tessellator.addTranslation(0, -4 * Constants.UNIT, 0);
             tessellator.draw();
             //don't forget to enable lighting again

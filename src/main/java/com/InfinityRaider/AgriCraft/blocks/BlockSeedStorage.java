@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedStorage;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class BlockSeedStorage extends BlockCustomWood {
-
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntitySeedStorage();
@@ -86,6 +86,11 @@ public class BlockSeedStorage extends BlockCustomWood {
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
+    }
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[0];
     }
 
     @Override

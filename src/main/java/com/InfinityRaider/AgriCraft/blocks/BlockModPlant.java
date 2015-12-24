@@ -16,6 +16,7 @@ import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -142,6 +143,21 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
         } catch (Exception e) {
             LogHelper.printStackTrace(e);
         }
+    }
+
+    @Override
+    protected final BlockState createBlockState() {
+        return new BlockState(this, BlockStates.AGE);
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(BlockStates.AGE, Math.max(Math.min(0, meta), Constants.MATURE));
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(BlockStates.AGE);
     }
 
     @Override

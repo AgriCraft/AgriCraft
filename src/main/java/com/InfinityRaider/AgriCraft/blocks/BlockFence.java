@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFence;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFence;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -31,6 +32,11 @@ public class BlockFence extends BlockCustomWood {
     @Override
     public boolean isMultiBlock() {
         return false;
+    }
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[0];
     }
 
     @Override

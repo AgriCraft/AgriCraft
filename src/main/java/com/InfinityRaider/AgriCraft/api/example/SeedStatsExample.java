@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.api.example;
 
 import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 /**
  * Example implementation of the ISeedStats interface

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.items;
 
-import net.minecraft.client.renderer.Tessellator;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -15,27 +15,27 @@ public class RenderItemMagnifyingGlass extends RenderItemBase {
     }
 
     @Override
-    protected void renderItemEntity(ItemStack stack, Tessellator tessellator, RenderBlocks renderBlocks, EntityItem entityItem) {
+    protected void renderItemEntity(ItemStack stack, TessellatorV2 tessellator, EntityItem entityItem) {
 
     }
 
     @Override
-    protected void renderItemEquipped(ItemStack stack, Tessellator tessellator, RenderBlocks renderBlocks, EntityPlayer player) {
+    protected void renderItemEquipped(ItemStack stack, TessellatorV2 tessellator, EntityPlayer player) {
 
     }
 
     @Override
-    protected void renderItemEquippedFirstPerson(ItemStack stack, Tessellator tessellator, RenderBlocks renderBlocks, EntityPlayer player) {
+    protected void renderItemEquippedFirstPerson(ItemStack stack, TessellatorV2 tessellator, EntityPlayer player) {
 
     }
 
     @Override
-    protected void renderItemInventory(ItemStack stack, Tessellator tessellator, RenderBlocks renderBlocks) {
+    protected void renderItemInventory(ItemStack stack, TessellatorV2 tessellator) {
 
     }
 
     @Override
-    protected void renderItemMap(ItemStack stack, Tessellator tessellator) {
+    protected void renderItemMap(ItemStack stack, TessellatorV2 tessellator) {
 
     }
 }

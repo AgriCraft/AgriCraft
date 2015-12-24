@@ -35,16 +35,12 @@ public class BlockPosition extends BlockPos {
         return coords.getBlock(world);
     }
 
-    public int getMetaData() {
-        return coords.getMetaData(world);
-    }
-
     public TileEntity getTileEntity() {
         return coords.getTileEntity(world);
     }
 
     public void setBlock(Block block, int meta, int flag) {
-        coords.setBlock(world, block, meta, flag);
+        coords.setBlock(world, block, flag);
     }
 
     public int dimensionId() {

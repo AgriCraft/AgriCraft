@@ -5,8 +5,8 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderWaterPad;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -36,7 +36,11 @@ public class BlockWaterPad extends BlockBase {
         this.setHardness(0.5F);
         this.setStepSound(soundTypeGravel);
         this.maxY = Constants.UNIT * (Constants.WHOLE / 2);
-        this.setDefaultState(this.getDefaultState().withProperty(BlockFarmland.MOISTURE, 0));
+    }
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[0];
     }
 
     @Override
@@ -57,7 +61,7 @@ public class BlockWaterPad extends BlockBase {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(BlockFarmland.MOISTURE, 0);
+        return this.getDefaultState();
     }
 
     @Override

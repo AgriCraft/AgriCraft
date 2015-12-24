@@ -13,6 +13,7 @@ import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
-public class BlockPeripheral extends BlockContainerBase{
+public class BlockPeripheral extends BlockContainerBase {
 
     public BlockPeripheral() {
         super(Material.iron);
@@ -42,6 +43,11 @@ public class BlockPeripheral extends BlockContainerBase{
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntityPeripheral();
+    }
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[0];
     }
 
     @Override

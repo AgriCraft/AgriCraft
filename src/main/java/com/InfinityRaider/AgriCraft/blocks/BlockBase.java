@@ -6,6 +6,8 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,6 +28,13 @@ public abstract class BlockBase extends Block {
         super(mat);
         RegisterHelper.registerBlock(this, getInternalName(), getItemBlockClass());
     }
+
+    @Override
+    protected final BlockState createBlockState() {
+        return new BlockState(this, getPropertyArray());
+    }
+
+    protected  abstract IProperty[] getPropertyArray();
 
     /**
      * Retrieves the block's renderer.

@@ -1,27 +1,21 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzerBook;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -44,12 +38,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
     }
 
     @Override
-    protected void doInventoryRender(ItemRenderType type, ItemStack item, Object... data) {
-        this.doWorldRender(Tessellator.instance, Minecraft.getMinecraft().theWorld, 0, 0, 0, seedAnalyzerDummy, Blocks.blockSeedAnalyzer, 0, 0, RenderBlocks.getInstance(), false);
-    }
-
-    @Override
-    protected boolean doWorldRender(Tessellator tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR) {
         if(tile==null || !(tile instanceof TileEntitySeedAnalyzer)) {
             return false;
         }
@@ -74,13 +63,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
     //renders the seed
     private void renderSeed(TileEntitySeedAnalyzer analyzer) {
         //set up the tessellator
-        Tessellator tessellator = Tessellator.instance;
-        //grab the texture
-        ItemStack stack = analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId);
-        IIcon icon = stack.getItem().getIconFromDamage(stack.getItemDamage());
-        if(icon==null) {
-            return;
-        }
+        TessellatorV2 tessellator = TessellatorV2.instance;
         //define rotation angle in function of system time
         float angle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);   //credits to Pahimar
         GL11.glPushMatrix();
@@ -91,8 +74,9 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
         //rotate the renderer
         GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
         GL11.glTranslatef(-8 * Constants.UNIT, 0, 0);
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-        ItemRenderer.renderItemIn2D(tessellator, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), Constants.UNIT);
+
+        //TODO: Render the item
+
         GL11.glTranslatef(8 * Constants.UNIT, 0, 0);
         GL11.glRotatef(-angle, 0.0F, 1.0F, 0.0F);
         GL11.glScalef(2, 2, 2);

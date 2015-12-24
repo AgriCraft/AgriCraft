@@ -8,6 +8,7 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -22,7 +23,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSprinkler extends BlockContainerBase {
-	
     public BlockSprinkler() {
     	super(Material.iron);
     	this.setCreativeTab(AgriCraftTab.agriCraftTab);
@@ -100,6 +100,11 @@ public class BlockSprinkler extends BlockContainerBase {
     @Override
     @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {return false;}
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[0];
+    }
 
     @Override
     @SideOnly(Side.CLIENT)

@@ -8,7 +8,6 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -116,7 +115,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 			drawScaledPrism(tessellator, 11, 5, 0, 12, 12, 5, cm, dir);
 		} else {
 			// draw an edge
-			drawScaledPrism(tessellator, 4, 4, 4, 12, 12, 5, icon, cm, dir);
+			drawScaledPrism(tessellator, 4, 4, 4, 12, 12, 5, cm, dir);
 		}
 	}
 
@@ -127,26 +126,25 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     protected void drawWater(TileEntityChannel channel, TessellatorV2 tessellator) {
         float y = channel.getFluidHeight();
         //the texture
-        IIcon icon = Blocks.water.getIcon(1, 0);
         //stolen from Vanilla code
-        int l = Blocks.water.colorMultiplier(channel.getWorldObj(), channel.xCoord, channel.yCoord, channel.zCoord);
+        int l = Blocks.water.colorMultiplier(channel.getWorld(), channel.getPos());
         float f = (float)(l >> 16 & 255) / 255.0F;
         float f1 = (float)(l >> 8 & 255) / 255.0F;
         float f2 = (float) (l & 255) / 255.0F;
         float f4 = 1.0F;
-        tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(channel.getWorldObj(), channel.xCoord, channel.yCoord, channel.zCoord));
+        tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(channel.getWorld(), channel.getPos()));
         tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
 
         //draw central water levels
-        drawPlane(tessellator, 5, y-0.001f, 5, 11, y-0.001f, 11, icon, ForgeDirection.NORTH);
+        drawPlane(tessellator, 5, y-0.001f, 5, 11, y-0.001f, 11, ForgeDirection.NORTH);
         //connect to edges
-        this.connectWater(channel, tessellator, ForgeDirection.NORTH, y, icon);
-        this.connectWater(channel, tessellator, ForgeDirection.EAST, y, icon);
-        this.connectWater(channel, tessellator, ForgeDirection.SOUTH, y, icon);
-        this.connectWater(channel, tessellator, ForgeDirection.WEST, y, icon);
+        this.connectWater(channel, tessellator, ForgeDirection.NORTH, y);
+        this.connectWater(channel, tessellator, ForgeDirection.EAST, y);
+        this.connectWater(channel, tessellator, ForgeDirection.SOUTH, y);
+        this.connectWater(channel, tessellator, ForgeDirection.WEST, y);
     }
 
-	protected void connectWater(TileEntityChannel channel, Tessellator tessellator, ForgeDirection direction, float y, IIcon icon) {
+	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection direction, float y) {
 		// checks if there is a neighboring block that this block can connect to
 		if (channel.hasNeighbourCheck(direction)) {
 			IIrrigationComponent te = channel.getNeighbor(direction);
@@ -161,11 +159,11 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 				float lvl = (te.getFluidHeight() - 16 * ((TileEntityTank) te).getYPosition());
 				y2 = lvl > 12 ? 12 : lvl < 5 ? (5 - 0.0001F) : lvl;
 			}
-			this.drawWaterEdge(tessellator, direction, y, y2, icon);
+			this.drawWaterEdge(tessellator, direction, y, y2);
 		}
 	}
 
-    protected void drawWaterEdge(Tessellator tessellator, ForgeDirection direction, float lvl1, float lvl2, IIcon icon) {
-    	drawPlane(tessellator, 5, lvl1-0.001f, 0, 11, lvl2-0.001f, 5, icon, direction);
+    protected void drawWaterEdge(TessellatorV2 tessellator, ForgeDirection direction, float lvl1, float lvl2) {
+    	drawPlane(tessellator, 5, lvl1-0.001f, 0, 11, lvl2-0.001f, 5, direction);
     }
 }

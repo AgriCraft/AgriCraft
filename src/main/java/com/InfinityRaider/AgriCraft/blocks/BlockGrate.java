@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockGrate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -40,6 +41,11 @@ public class BlockGrate extends BlockCustomWood {
     @Override
     protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
         return ItemBlockGrate.class;
+    }
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[0];
     }
 
     @Override

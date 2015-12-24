@@ -21,6 +21,7 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,9 +40,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * The most important block in the mod.
@@ -57,7 +56,6 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
         this.setStepSound(soundTypeGrass);
         this.setHardness(0.0F);
         this.disableStats();
-        this.setDefaultState(this.getDefaultState().withProperty(BlockStates.AGE, 0));
         //set the bounding box dimensions
         this.maxX = Constants.UNIT*(Constants.WHOLE - 2);
         this.minX = Constants.UNIT*2;
@@ -65,6 +63,16 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
         this.minZ = this.minX;
         this.maxY = Constants.UNIT*(Constants.WHOLE - 3);
         this.minY = 0;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(BlockStates.AGE, Math.max(Math.min(0, meta), Constants.MATURE));
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(BlockStates.AGE);
     }
 
     /** Creates a new tile entity every time the block is placed. */
@@ -76,11 +84,6 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     @Override
     protected String getTileEntityName() {
         return Names.Objects.crop;
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(BlockStates.AGE, meta);
     }
 
     /** Randomly called to apply growth ticks */
@@ -645,6 +648,11 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     @Override
     public boolean isMultiBlock() {
         return false;
+    }
+
+    @Override
+    protected IProperty[] getPropertyArray() {
+        return new IProperty[] {BlockStates.AGE};
     }
 
     /**

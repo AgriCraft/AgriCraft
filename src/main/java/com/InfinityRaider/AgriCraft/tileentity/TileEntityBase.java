@@ -150,4 +150,8 @@ public abstract class TileEntityBase extends TileEntity {
     private boolean isMultiBlock() {
         return this instanceof IMultiBlockComponent;
     }
+
+    public Class getTileClass() {
+        return this.getClass();
+    }
 }

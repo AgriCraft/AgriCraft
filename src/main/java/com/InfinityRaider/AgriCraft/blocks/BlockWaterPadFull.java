@@ -23,12 +23,11 @@ import java.util.List;
 public class BlockWaterPadFull extends BlockWaterPad {
     public BlockWaterPadFull() {
         super(Material.water);
-        this.setDefaultState(this.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7));
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7);
+        return this.getDefaultState();
     }
 
     @Override
