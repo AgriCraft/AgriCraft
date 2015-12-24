@@ -57,7 +57,13 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
         if(analyzer.hasSeed() || analyzer.hasTrowel()) {
             renderSeed(analyzer);
         }
+        test(tessellator);
         return false;
+    }
+
+    private void test(TessellatorV2 tessellator) {
+        //drawScaledPrism(tessellator, 0, 0, 0, 1, 1, 1, COLOR_MULTIPLIER_STANDARD);
+
     }
 
     //renders the seed

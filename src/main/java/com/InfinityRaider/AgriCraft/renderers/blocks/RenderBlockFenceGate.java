@@ -99,13 +99,14 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceG
         return true;
     }
 
+
     @Override
     public boolean shouldBehaveAsTESR() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean shouldBehaveAsISBRH() {
-        return true;
+        return false;
     }
 }

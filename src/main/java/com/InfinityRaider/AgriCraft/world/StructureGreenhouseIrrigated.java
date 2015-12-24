@@ -299,7 +299,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel.getDefaultState(), 2);
+            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank.getDefaultState(), 2);
             TileEntityTank tank = (TileEntityTank) world.getTileEntity(pos);
             if (tank == null) {
                 tank = new TileEntityTank();

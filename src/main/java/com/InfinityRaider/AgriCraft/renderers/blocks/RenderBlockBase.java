@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -31,21 +30,21 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
 
     protected RenderBlockBase(Block block, TileEntityBase te, boolean inventory) {
         this.block = block;
-        if(!renderIds.containsKey(block)) {
+        if (!renderIds.containsKey(block)) {
             this.registerRenderer(block, te);
         }
-        if(inventory) {
+        if (inventory) {
             //MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(block), this);
         }
     }
 
     @SuppressWarnings("unchecked")
     private void registerRenderer(Block block, TileEntityBase te) {
-        if(te!=null && this.shouldBehaveAsTESR()) {
+        if (te != null && this.shouldBehaveAsTESR()) {
             ClientRegistry.bindTileEntitySpecialRenderer(te.getTileClass(), this);
             renderIds.put(block, 2);
         }
-        if(this.shouldBehaveAsISBRH()) {
+        if (this.shouldBehaveAsISBRH()) {
             renderIds.put(block, 3);
         }
     }
@@ -61,16 +60,24 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
             tessellator.addTranslation((float) x, (float) y, (float) z);
         }
         if (tile != null && tile instanceof TileEntityBase) {
-            rotateMatrix((TileEntityBase) tile, tessellator, false);
+            if(callFromTESR) {
+                rotateMatrix((TileEntityBase) tile, false);
+            } else {
+                rotateMatrix((TileEntityBase) tile, tessellator, false);
+            }
         }
 
-        tessellator.setBrightness(block.getMixedBrightnessForBlock(world, new BlockPos((int) x,  (int) y, (int) z)));
+        tessellator.setBrightness(block.getMixedBrightnessForBlock(world, new BlockPos((int) x, (int) y, (int) z)));
         tessellator.setColorRGBA_F(1, 1, 1, 1);
 
         boolean result = doWorldRender(tessellator, world, x, y, z, tile, block, f, modelId, callFromTESR);
 
         if (tile != null && tile instanceof TileEntityBase) {
-            rotateMatrix((TileEntityBase) tile, tessellator, true);
+            if(callFromTESR) {
+                rotateMatrix((TileEntityBase) tile, true);
+            } else {
+                rotateMatrix((TileEntityBase) tile, tessellator, true);
+            }
         }
         if (callFromTESR) {
             GL11.glTranslated(-x, -y, -z);
@@ -143,19 +150,47 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
     }
 
     public static int getRenderId(Block block) {
-        return renderIds.containsKey(block)?renderIds.get(block):-1;
+        return renderIds.containsKey(block) ? renderIds.get(block) : -1;
     }
 
 
     //UTILITY METHODS
     //---------------
-    protected void rotateMatrix(TileEntityBase tileEntityBase, Tessellator tessellator, boolean inverse) {
-        //+x = EAST
-        //+z = SOUTH
-        //-x = WEST
-        //-z = NORTH
-        if(!tileEntityBase.isRotatable()) {
+    protected void rotateMatrix(TileEntityBase tileEntityBase, boolean inverse) {
+        float angle = getAngle(tileEntityBase);
+        if (angle == 0) {
             return;
+        }
+        float dx = angle % 270 == 0 ? 0 : -1;
+        float dz = angle > 90 ? -1 : 0;
+        if (inverse) {
+            GL11.glTranslatef(-dx, 0, -dz);
+            GL11.glRotatef(-angle, 0, 1, 0);
+        } else {
+            GL11.glRotatef(angle, 0, 1, 0);
+            GL11.glTranslatef(dx, 0, dz);
+        }
+    }
+
+    protected void rotateMatrix(TileEntityBase tileEntityBase, TessellatorV2 tessellator, boolean inverse) {
+        float angle = getAngle(tileEntityBase);
+        if (angle == 0) {
+            return;
+        }
+        float dx = angle % 270 == 0 ? 0 : -1;
+        float dz = angle > 90 ? -1 : 0;
+        if (inverse) {
+            tessellator.addTranslation(-dx, 0, -dz);
+            tessellator.addRotation(-angle, 0, 1, 0);
+        } else {
+            tessellator.addRotation(angle, 0, 1, 0);
+            tessellator.addTranslation(dx, 0, dz);
+        }
+    }
+
+    private float getAngle(TileEntityBase tileEntityBase) {
+        if(!tileEntityBase.isRotatable()) {
+            return 0;
         }
         float angle;
         switch(tileEntityBase.getOrientation()) {
@@ -163,28 +198,9 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
             case WEST: angle = 90; break;
             case NORTH: angle = 0; break;
             case EAST: angle = 270; break;
-            default: return;
+            default: return 0;
         }
-        float dx = angle%270==0?0:-1;
-        float dz = angle>90?-1:0;
-        if(tessellator instanceof TessellatorV2) {
-            TessellatorV2 tessellatorV2 = (TessellatorV2) tessellator;
-            if(inverse) {
-                tessellatorV2.addTranslation(-dx , 0, -dz);
-                tessellatorV2.addRotation(-angle, 0, 1, 0);
-            } else {
-                tessellatorV2.addRotation(angle, 0, 1, 0);
-                tessellatorV2.addTranslation(dx, 0, dz);
-            }
-        } else {
-            if (inverse) {
-                GL11.glTranslatef(-dx, 0, -dz);
-                GL11.glRotatef(-angle, 0, 1, 0);
-            } else {
-                GL11.glRotatef(angle, 0, 1, 0);
-                GL11.glTranslatef(dx, 0, dz);
-            }
-        }
+        return angle;
     }
 
     //adds a vertex to the tessellator scaled with 1/16th of a block
