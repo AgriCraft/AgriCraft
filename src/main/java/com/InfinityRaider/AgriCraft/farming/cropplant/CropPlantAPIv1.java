@@ -7,10 +7,12 @@ import com.InfinityRaider.AgriCraft.api.v1.ICrop;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -106,6 +108,18 @@ public class CropPlantAPIv1 extends CropPlant {
     @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return plant.renderAsFlower();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getPlantTextureMap(int growthStage) {
+        return plant.getPlantTextureMap(growthStage);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getPlantIcon(int growthStage) {
+        return plant.getPlantIcon(growthStage);
     }
 
     @Override

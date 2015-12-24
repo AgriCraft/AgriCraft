@@ -10,12 +10,14 @@ import com.InfinityRaider.AgriCraft.renderers.models.ModelPeripheralProbe;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,16 +34,14 @@ public class RenderPeripheral extends RenderBlockBase {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR) {
-        BlockPos pos = new BlockPos(x, y, z);
-        if(callFromTESR) {
-            if(tile instanceof TileEntityPeripheral) {
-                TileEntityPeripheral peripheral = (TileEntityPeripheral) tile;
-                drawSeed(tessellator, peripheral);
-                performAnimations(tessellator, peripheral, block.colorMultiplier(world, pos));
-            }
-        } else {
-            renderBase(tessellator, (BlockPeripheral) block, block.colorMultiplier(world, pos));
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
+        tessellator.startDrawingQuads();
+        if (tile instanceof TileEntityPeripheral) {
+            TileEntityPeripheral peripheral = (TileEntityPeripheral) tile;
+            drawSeed(tessellator,  peripheral);
+            performAnimations(tessellator, peripheral.getTexture(state, null), peripheral, block.colorMultiplier(world, pos));
+            renderBase(tessellator, world, pos, (BlockPeripheral) block, state, peripheral, block.colorMultiplier(world, pos));
+            tessellator.draw();
         }
         return true;
     }
@@ -72,7 +72,7 @@ public class RenderPeripheral extends RenderBlockBase {
         GL11.glPopMatrix();
     }
 
-    private void performAnimations(TessellatorV2 tessellator, TileEntityPeripheral peripheral, int cm) {
+    private void performAnimations(TessellatorV2 tessellator, ResourceLocation texture, TileEntityPeripheral peripheral, int cm) {
         int maxDoorPos = TileEntityPeripheral.MAX/2;
         float unit = Constants.UNIT;
 
@@ -86,8 +86,8 @@ public class RenderPeripheral extends RenderBlockBase {
             if (doorPosition < 4) {
                 Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
                 tessellator.startDrawingQuads();
-                drawScaledPrism(tessellator, 4, 2, 0, 8 - doorPosition, 14, 1, cm);
-                drawScaledPrism(tessellator, 8 + doorPosition, 2, 0, 12, 14, 1, cm);
+                drawScaledPrism(tessellator, 4, 2, 0, 8 - doorPosition, 14, 1, cm, texture);
+                drawScaledPrism(tessellator, 8 + doorPosition, 2, 0, 12, 14, 1, cm, texture);
                 tessellator.draw();
             }
 
@@ -127,55 +127,43 @@ public class RenderPeripheral extends RenderBlockBase {
         GL11.glPopMatrix();
     }
 
-    private void renderBase(TessellatorV2 tessellator2, BlockPeripheral blockPeripheral, int colorMultiplier) {
-        /*
-        IIcon iconTop = blockPeripheral.getIcon(0, 0);
-        IIcon iconSide = blockPeripheral.getIcon(1, 0);
-        IIcon iconBottom = blockPeripheral.getIcon(2, 0);
-        IIcon iconInside = blockPeripheral.getIcon(3, 0);
-        */
+    private void renderBase(TessellatorV2 tessellator2, IBlockAccess world, BlockPos pos, BlockPeripheral blockPeripheral, IBlockState state, TileEntityPeripheral peripheral, int colorMultiplier) {
+        ResourceLocation iconTop = blockPeripheral.getTexture(world, pos, state, EnumFacing.UP, peripheral);
+        ResourceLocation iconSide = blockPeripheral.getTexture(world, pos, state, EnumFacing.NORTH, peripheral);
+        ResourceLocation iconBottom = blockPeripheral.getTexture(world, pos, state, EnumFacing.DOWN, peripheral);
+        ResourceLocation iconInside = blockPeripheral.getTexture(world, pos, state, null, peripheral);
         float unit = Constants.UNIT;
         //top
-        drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier);
-        drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier);
+        drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconTop);
+        drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconTop);
         //bottom
-        drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier);
-        drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier);
+        drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconBottom);
+        drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconBottom);
         //front
-        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 0, colorMultiplier);
-        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 0, colorMultiplier);
+        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconSide);
+        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconSide);
         //right
-        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier);
-        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier);
+        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconSide);
+        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconSide);
         //left
-        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier);
-        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier);
+        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconSide);
+        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconSide);
         //back
-        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 1, colorMultiplier);
-        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 1, colorMultiplier);
+        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconSide);
+        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconSide);
         //inside top
-        drawScaledFaceFrontXZ(tessellator2, 4, 4, 12, 12, 12 * unit, colorMultiplier);
+        drawScaledFaceFrontXZ(tessellator2, 4, 4, 12, 12, 12 * unit, colorMultiplier, iconBottom);
         //inside front
-        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier);
-        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier);
+        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier, iconInside);
+        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier, iconInside);
         //inside right
-        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier);
-        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier);
+        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier, iconInside);
+        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier, iconInside);
         //inside left
-        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier);
-        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier);
+        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier, iconInside);
+        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier, iconInside);
         //inside back
-        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier);
-        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier);
-    }
-
-    @Override
-    public boolean shouldBehaveAsTESR() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldBehaveAsISBRH() {
-        return true;
+        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier, iconInside);
+        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier, iconInside);
     }
 }

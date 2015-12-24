@@ -8,15 +8,23 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * The base class for all AgriCraft blocks.
  */
 public abstract class BlockBase extends Block {
+    private final ResourceLocation texture;
 	
     /**
      * The default, base constructor for all AgriCraft blocks.
@@ -27,6 +35,7 @@ public abstract class BlockBase extends Block {
     protected BlockBase(Material mat) {
         super(mat);
         RegisterHelper.registerBlock(this, getInternalName(), getItemBlockClass());
+        this.texture = Block.blockRegistry.getNameForObject(this);
     }
 
     @Override
@@ -75,5 +84,21 @@ public abstract class BlockBase extends Block {
      */
     public ItemStack getWailaStack(BlockBase block, TileEntityBase tea) {
     	return null;
+    }
+
+    public  ResourceLocation getTexture() {
+        return this.texture;
+    }
+
+    /**
+     * Gets the texture to render this block with
+     * @param world the world object
+     * @param pos the block position
+     * @param state the block state
+     * @param te the tile entity (can be null)
+     * @return a ResourceLocation holding the texture
+     */
+    public ResourceLocation getTexture(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
+        return this.getTexture();
     }
 }

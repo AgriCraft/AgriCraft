@@ -5,11 +5,14 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,102 +33,89 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         GL11.glDisable(GL11.GL_LIGHTING);
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
-        this.renderTank(teDummy, tessellator, item.getItemDamage());
+        this.renderTank(teDummy, tessellator);
         tessellator.draw();
         //enable lighting
         GL11.glEnable(GL11.GL_LIGHTING);
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
         //call correct drawing methods
         boolean success = false;
         if (tile instanceof TileEntityTank) {
             TileEntityTank tank = (TileEntityTank) tile;
-            if(callFromTESR) {
-                if(tank.getFluidHeight()>0) {
-                    GL11.glPushMatrix();
-                    GL11.glDisable(GL11.GL_LIGHTING);
-                    tessellator.startDrawingQuads();
-                    Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-                    drawWater(tank, tessellator);
-                    tessellator.draw();
-                    GL11.glEnable(GL11.GL_LIGHTING);
-                    GL11.glPopMatrix();
-                    success = true;
-                }
-            } else {
-                success = renderTank(tank, tessellator, tank.getBlockMetadata());
+            tessellator.startDrawingQuads();
+            if (tank.getFluidHeight() > 0) {
+                GL11.glPushMatrix();
+                GL11.glDisable(GL11.GL_LIGHTING);
+                Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                drawWater(tank, tessellator);
+                GL11.glEnable(GL11.GL_LIGHTING);
+                GL11.glPopMatrix();
             }
+            success = renderTank(tank, tessellator);
+            tessellator.draw();
         }
         return success;
     }
 
-	private boolean renderTank(TileEntityTank tank, TessellatorV2 tessellator, int meta) {
+	private boolean renderTank(TileEntityTank tank, TessellatorV2 tessellator) {
 		this.drawWoodTank(tank, tessellator);
 		// draw the waterTexture
-		if ((!shouldBehaveAsTESR()) && (tank.getFluidHeight() > 0)) {
+		if (tank.getFluidHeight() > 0) {
 			this.drawWater(tank, tessellator);
 		}
 		return true;
 	}
 
-    @Override
-    public boolean shouldBehaveAsTESR() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldBehaveAsISBRH() {
-        return true;
-    }
-
     private void drawWoodTank(TileEntityTank tank, TessellatorV2 tessellator) {
-        this.renderBottom(tank, tessellator);
-        this.renderSide(tank, tessellator, ForgeDirection.NORTH);
-        this.renderSide(tank, tessellator, ForgeDirection.EAST);
-        this.renderSide(tank, tessellator, ForgeDirection.SOUTH);
-        this.renderSide(tank, tessellator, ForgeDirection.WEST);
+        ResourceLocation texture = tank.getTexture(null);
+        this.renderBottom(tank, tessellator, texture);
+        this.renderSide(tank, tessellator, ForgeDirection.NORTH, texture);
+        this.renderSide(tank, tessellator, ForgeDirection.EAST, texture);
+        this.renderSide(tank, tessellator, ForgeDirection.SOUTH, texture);
+        this.renderSide(tank, tessellator, ForgeDirection.WEST, texture);
     }
 
-    private void renderBottom(TileEntityTank tank, TessellatorV2 tessellator) {
+    private void renderBottom(TileEntityTank tank, TessellatorV2 tessellator, ResourceLocation texture) {
         //the texture
         int cm = tank.colorMultiplier();
         //bottom
         boolean bottom = !tank.hasNeighbour(ForgeDirection.DOWN);
         if (bottom) {
-            drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, cm);
+            drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, cm, texture);
         }
         //corners
         int yMin = bottom?1:0;
         if (!tank.hasNeighbour(ForgeDirection.WEST) || !tank.hasNeighbour(ForgeDirection.NORTH)) {
-            drawScaledPrism(tessellator, 0, yMin, 0, 2, 16, 2, cm);
+            drawScaledPrism(tessellator, 0, yMin, 0, 2, 16, 2, cm, texture);
         }
         if (!tank.hasNeighbour(ForgeDirection.EAST) || !tank.hasNeighbour(ForgeDirection.NORTH)) {
-            drawScaledPrism(tessellator, 14, yMin, 0, 16, 16, 2, cm);
+            drawScaledPrism(tessellator, 14, yMin, 0, 16, 16, 2, cm, texture);
         }
         if (!tank.hasNeighbour(ForgeDirection.WEST) || !tank.hasNeighbour(ForgeDirection.SOUTH)) {
-            drawScaledPrism(tessellator, 0, yMin, 14, 2, 16, 16, cm);
+            drawScaledPrism(tessellator, 0, yMin, 14, 2, 16, 16, cm, texture);
         }
         if (!tank.hasNeighbour(ForgeDirection.EAST) || !tank.hasNeighbour(ForgeDirection.SOUTH)) {
-            drawScaledPrism(tessellator, 14, yMin, 14, 16, 16, 16, cm);
+            drawScaledPrism(tessellator, 14, yMin, 14, 16, 16, 16, cm, texture);
         }
     }
 
-    private void renderSide(TileEntityTank tank, TessellatorV2 tessellator, ForgeDirection dir) {
+    private void renderSide(TileEntityTank tank, TessellatorV2 tessellator, ForgeDirection dir, ResourceLocation texture) {
         int cm = tank.colorMultiplier();
         int yMin = tank.hasNeighbour(ForgeDirection.DOWN)?0:1;
         if ((dir != null) && (dir != ForgeDirection.UNKNOWN)) {
             //connected to a channel
             if(tank.isConnectedToChannel(dir)) {
-                drawScaledPrism(tessellator, 2, yMin, 0, 14, 5, 2, cm, dir);
-                drawScaledPrism(tessellator, 2, 5, 0, 5, 12, 2, cm, dir);
-                drawScaledPrism(tessellator, 11, 5, 0, 14, 12, 2, cm, dir);
-                drawScaledPrism(tessellator, 2, 12, 0, 14, 16, 2, cm, dir);
+                drawScaledPrism(tessellator, 2, yMin, 0, 14, 5, 2, cm, dir, texture);
+                drawScaledPrism(tessellator, 2, 5, 0, 5, 12, 2, cm, dir, texture);
+                drawScaledPrism(tessellator, 11, 5, 0, 14, 12, 2, cm, dir, texture);
+                drawScaledPrism(tessellator, 2, 12, 0, 14, 16, 2, cm, dir, texture);
             }
             //not connected to anything
             else if(!tank.hasNeighbour(dir)) {
-                drawScaledPrism(tessellator, 2, yMin, 0, 14, 16, 2, cm, dir);
+                drawScaledPrism(tessellator, 2, yMin, 0, 14, 16, 2, cm, dir, texture);
             }
         }
     }

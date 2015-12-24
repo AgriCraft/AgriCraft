@@ -11,10 +11,12 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -301,6 +303,20 @@ public abstract class CropPlant implements ICropPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public abstract boolean renderAsFlower();
+
+    /** Gets the texture map to render this plant with as a ResourceLocation */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getPlantTextureMap(int growthStage) {
+        return null;
+    }
+
+    /** Gets the TextureAtlasSprite for the texture map to render this plant with */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getPlantIcon(int growthStage) {
+        return null;
+    }
 
     /**
      * Retrieves information about the plant for the seed journal.

@@ -1,16 +1,21 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -33,6 +38,11 @@ public abstract class TileEntityBase extends TileEntity {
 
     public final int zCoord() {
         return this.getPos().getZ();
+    }
+
+    @Override
+    public BlockBase getBlockType() {
+        return (BlockBase) super.getBlockType();
     }
 
     /**
@@ -153,5 +163,13 @@ public abstract class TileEntityBase extends TileEntity {
 
     public Class getTileClass() {
         return this.getClass();
+    }
+
+    public ResourceLocation getTexture(@Nullable EnumFacing side) {
+        return this.getTexture(getWorld().getBlockState(getPos()), side);
+    }
+
+    public ResourceLocation getTexture(IBlockState state, @Nullable EnumFacing side) {
+        return this.getBlockType().getTexture(getWorld(), getPos(), state, side, this);
     }
 }

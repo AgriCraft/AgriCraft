@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -34,6 +35,11 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
     public ItemBlockCustomWood(Block block) {
         super(block);
         this.setHasSubtypes(true);
+    }
+
+    public static ResourceLocation getTextureFromStack(ItemStack stack) {
+        //TODO
+        return null;
     }
 
     /**

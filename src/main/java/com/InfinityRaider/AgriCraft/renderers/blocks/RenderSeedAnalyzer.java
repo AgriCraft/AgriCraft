@@ -10,8 +10,10 @@ import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzerBook;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +40,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
         if(tile==null || !(tile instanceof TileEntitySeedAnalyzer)) {
             return false;
         }
@@ -57,13 +59,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
         if(analyzer.hasSeed() || analyzer.hasTrowel()) {
             renderSeed(analyzer);
         }
-        test(tessellator);
         return false;
-    }
-
-    private void test(TessellatorV2 tessellator) {
-        //drawScaledPrism(tessellator, 0, 0, 0, 1, 1, 1, COLOR_MULTIPLIER_STANDARD);
-
     }
 
     //renders the seed
@@ -87,15 +83,5 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
         GL11.glRotatef(-angle, 0.0F, 1.0F, 0.0F);
         GL11.glScalef(2, 2, 2);
         GL11.glPopMatrix();
-    }
-
-    @Override
-    public boolean shouldBehaveAsTESR() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldBehaveAsISBRH() {
-        return false;
     }
 }

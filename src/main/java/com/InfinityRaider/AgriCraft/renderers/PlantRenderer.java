@@ -2,8 +2,10 @@ package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -259,5 +261,11 @@ public abstract class PlantRenderer {
      */
     private static void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v) {
         tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, u, v);
+    }
+
+    protected void bindTexture(ResourceLocation texture) {
+        if(texture != null) {
+            Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+        }
     }
 }

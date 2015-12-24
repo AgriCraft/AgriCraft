@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -20,17 +21,18 @@ public class RenderWaterPad extends RenderBlockBase {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double xCoord, double yCoord, double zCoord, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double xCoord, double yCoord, double zCoord, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
         int x = (int) xCoord;
         int y = (int) yCoord;
         int z = (int) zCoord;
-        BlockPos pos = new BlockPos(x, y, z);
         boolean full = block instanceof BlockWaterPadFull;
+        tessellator.startDrawingQuads();
         this.renderBase(tessellator, world, pos, full);
         this.renderSide(tessellator, world, pos, full, ForgeDirection.NORTH);
         this.renderSide(tessellator, world, pos, full, ForgeDirection.EAST);
         this.renderSide(tessellator, world, pos, full, ForgeDirection.SOUTH);
         this.renderSide(tessellator, world, pos, full, ForgeDirection.WEST);
+        tessellator.draw();
         return false;
     }
 
@@ -193,15 +195,5 @@ public class RenderWaterPad extends RenderBlockBase {
         renderer.renderStandardBlock(Blocks.farmland, x, y, z);
         renderer.renderAllFaces = renderAllFaces;
         */
-    }
-
-    @Override
-    public boolean shouldBehaveAsTESR() {
-        return false;
-    }
-
-    @Override
-    public boolean shouldBehaveAsISBRH() {
-        return true;
     }
 }

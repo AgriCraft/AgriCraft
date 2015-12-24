@@ -7,10 +7,13 @@ import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,44 +35,47 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
         }
         this.rotateMatrix(teDummy, tessellator, false);
         tessellator.startDrawingQuads();
-        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, teDummy, Blocks.blockSeedStorage, 0, 0, false);
+        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, null, Blocks.blockSeedStorage, teDummy, 0, 0);
         tessellator.draw();
         this.rotateMatrix(teDummy, tessellator, true);
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
         //call correct drawing methods
         if (tile instanceof TileEntitySeedStorage) {
+            tessellator.startDrawingQuads();
             TileEntitySeedStorage storage = (TileEntitySeedStorage) tile;
-            if(callFromTESR) {
-                //seed
-                if(storage.hasLockedSeed()) {
-                    drawSeed(storage.getLockedSeed());
-                }
-            } else {
-                int cm = storage.colorMultiplier();
-                //casing
-                drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, cm);
-                drawScaledPrism(tessellator, 0, 15, 0, 16, 16, 16, cm);
-                drawScaledPrism(tessellator, 0, 1, 0, 1, 15, 16, cm);
-                drawScaledPrism(tessellator, 15, 1, 0, 16, 15, 16, cm);
-                drawScaledPrism(tessellator, 1, 1, 15, 15, 15, 16, cm);
-                //drawer
-                drawScaledPrism(tessellator, 1.1F, 1.1F, 1, 14.9F, 14.9F, 2, cm);
-                drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, cm);   //Render this with iron block texture
-                drawScaledPrism(tessellator, 4, 3, 0, 5, 10, 1, cm);
-                drawScaledPrism(tessellator, 11, 3, 0, 12, 10, 1, cm);
-                drawScaledPrism(tessellator, 4, 10, 0, 12, 11, 1, cm);
-                drawScaledPrism(tessellator, 4, 3, 0, 12, 4, 1, cm);
-                //trace
-                renderSides(tessellator, storage);
+            //seed
+            if (storage.hasLockedSeed()) {
+                drawSeed(storage.getLockedSeed());
             }
+            int cm = storage.colorMultiplier();
+            ResourceLocation texture = storage.getTexture(state, null);
+            ResourceLocation ironTexture = Block.blockRegistry.getNameForObject(net.minecraft.init.Blocks.iron_block);
+            //casing
+            drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, cm, texture);
+            drawScaledPrism(tessellator, 0, 15, 0, 16, 16, 16, cm, texture);
+            drawScaledPrism(tessellator, 0, 1, 0, 1, 15, 16, cm, texture);
+            drawScaledPrism(tessellator, 15, 1, 0, 16, 15, 16, cm, texture);
+            drawScaledPrism(tessellator, 1, 1, 15, 15, 15, 16, cm, texture);
+            //drawer
+            drawScaledPrism(tessellator, 1.1F, 1.1F, 1, 14.9F, 14.9F, 2, cm, texture);
+            drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, cm, ironTexture);
+            drawScaledPrism(tessellator, 4, 3, 0, 5, 10, 1, cm, texture);
+            drawScaledPrism(tessellator, 11, 3, 0, 12, 10, 1, cm, texture);
+            drawScaledPrism(tessellator, 4, 10, 0, 12, 11, 1, cm, texture);
+            drawScaledPrism(tessellator, 4, 3, 0, 12, 4, 1, cm, texture);
+            //trace
+            renderSides(tessellator, texture);
+            tessellator.draw();
         }
         return true;
     }
 
-    private void renderSides(TessellatorV2 tessellator, TileEntitySeedStorage seedStorage) {
+    private void renderSides(TessellatorV2 tessellator, ResourceLocation texture) {
+        bindTexture(texture);
+
         addScaledVertexWithUV(tessellator, 1, 1, 0.99F, 2, 3);
         addScaledVertexWithUV(tessellator, 1, 15, 0.99F, 2, 4);
         addScaledVertexWithUV(tessellator, 1.5F, 15, 0.99F, 3, 4);
@@ -135,15 +141,5 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
         GL11.glRotatef(-a, 0, 1, 0);
         GL11.glTranslatef(-dx, -dy, -dz);
         GL11.glPopMatrix();
-    }
-
-    @Override
-    public boolean shouldBehaveAsTESR() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldBehaveAsISBRH() {
-        return true;
     }
 }

@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.IIrrigationComponent;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
@@ -7,11 +8,12 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,87 +37,76 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     protected void renderInInventory(ItemStack item, Object... data) {
         TessellatorV2 tessellator = TessellatorV2.instance;
         tessellator.startDrawingQuads();
-        this.renderBottom(teDummy, tessellator);
-        this.renderSide(teDummy, tessellator, ForgeDirection.NORTH);
-        this.renderSide(teDummy, tessellator, ForgeDirection.EAST);
-        this.renderSide(teDummy, tessellator, ForgeDirection.SOUTH);
-        this.renderSide(teDummy, tessellator, ForgeDirection.WEST);
+        ResourceLocation texture = ItemBlockCustomWood.getTextureFromStack(item);
+        this.renderBottom(teDummy, tessellator, texture);
+        this.renderSide(teDummy, tessellator, ForgeDirection.NORTH, texture);
+        this.renderSide(teDummy, tessellator, ForgeDirection.EAST, texture);
+        this.renderSide(teDummy, tessellator, ForgeDirection.SOUTH, texture);
+        this.renderSide(teDummy, tessellator, ForgeDirection.WEST, texture);
         tessellator.draw();
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
         //call correct drawing methods
         if (tile instanceof TileEntityChannel) {
             TileEntityChannel channel = (TileEntityChannel) tile;
+            tessellator.startDrawingQuads();
             if (channel.getBlockMetadata() == 0) {
-                if (callFromTESR) {
-                    if(channel.getDiscreteFluidLevel()>0) {
-                        renderCallCounter.incrementAndGet();
-                        GL11.glPushMatrix();
-                        GL11.glDisable(GL11.GL_LIGHTING);
-                        tessellator.startDrawingQuads();
-                        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-                        this.drawWater(channel, tessellator);
-                        tessellator.draw();
-                        GL11.glEnable(GL11.GL_LIGHTING);
-                        GL11.glPopMatrix();
-                    }
-                } else {
-                    this.renderWoodChannel(channel, tessellator);
-                    if ((!this.shouldBehaveAsTESR()) && channel.getDiscreteFluidLevel() > 0) {
-                        this.drawWater(channel, tessellator);
-                    }
+                if (channel.getDiscreteFluidLevel() > 0) {
+                    renderCallCounter.incrementAndGet();
+                    GL11.glPushMatrix();
+                    GL11.glDisable(GL11.GL_LIGHTING);
+                    this.drawWater(channel, tessellator);
+                    GL11.glEnable(GL11.GL_LIGHTING);
+                    GL11.glPopMatrix();
                 }
+                ResourceLocation texture = channel.getTexture(state, null);
+                this.renderWoodChannel(channel, tessellator, texture);
+                if (channel.getDiscreteFluidLevel() > 0) {
+                    this.drawWater(channel, tessellator);
+                }
+
             } else if (channel.getBlockMetadata() == 1) {
                 this.renderIronChannel(channel, tessellator);
             }
+            tessellator.draw();
         }
         return true;
     }
 
-    @Override
-    public boolean shouldBehaveAsTESR() {
-        return true;
+    protected void renderWoodChannel(TileEntityChannel channel, TessellatorV2 tessellator, ResourceLocation texture) {
+        this.renderBottom(channel, tessellator, texture);
+        this.renderSide(channel, tessellator, ForgeDirection.NORTH, texture);
+        this.renderSide(channel, tessellator, ForgeDirection.EAST, texture);
+        this.renderSide(channel, tessellator, ForgeDirection.SOUTH, texture);
+        this.renderSide(channel, tessellator, ForgeDirection.WEST, texture);
     }
 
-    @Override
-    public boolean shouldBehaveAsISBRH() {
-        return true;
-    }
-
-    protected void renderWoodChannel(TileEntityChannel channel, TessellatorV2 tessellator) {
-        this.renderBottom(channel, tessellator);
-        this.renderSide(channel, tessellator, ForgeDirection.NORTH);
-        this.renderSide(channel, tessellator, ForgeDirection.EAST);
-        this.renderSide(channel, tessellator, ForgeDirection.SOUTH);
-        this.renderSide(channel, tessellator, ForgeDirection.WEST);
-    }
-
-    protected void renderBottom(TileEntityChannel channel, TessellatorV2 tessellator) {
+    protected void renderBottom(TileEntityChannel channel, TessellatorV2 tessellator, ResourceLocation texture) {
         //the texture
         int cm = channel.colorMultiplier();
         //bottom
-        drawScaledPrism(tessellator, 4, 4, 4, 12, 5, 12, cm);
+        drawScaledPrism(tessellator, 4, 4, 4, 12, 5, 12, cm, texture);
         //corners
-        drawScaledPrism(tessellator, 4, 5, 4, 5, 12, 5, cm);
-        drawScaledPrism(tessellator, 11, 5, 4, 12, 12, 5, cm);
-        drawScaledPrism(tessellator, 4, 5, 11, 5, 12, 12, cm);
-        drawScaledPrism(tessellator, 11, 5, 11, 12, 12, 12, cm);
+        drawScaledPrism(tessellator, 4, 5, 4, 5, 12, 5, cm, texture);
+        drawScaledPrism(tessellator, 11, 5, 4, 12, 12, 5, cm, texture);
+        drawScaledPrism(tessellator, 4, 5, 11, 5, 12, 12, cm, texture);
+        drawScaledPrism(tessellator, 11, 5, 11, 12, 12, 12, cm, texture);
     }
 
     //renders one of the four sides of a channel
-	protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection dir) {
+	protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection dir, ResourceLocation texture) {
 		// the texture
 		int cm = channel.colorMultiplier();
 		if (channel.hasNeighbourCheck(dir)) {
 			// extend bottom plane and side edges
-			drawScaledPrism(tessellator, 4, 4, 0, 12, 5, 4, cm, dir);
-			drawScaledPrism(tessellator, 4, 5, 0, 5, 12, 5, cm, dir);
-			drawScaledPrism(tessellator, 11, 5, 0, 12, 12, 5, cm, dir);
+			drawScaledPrism(tessellator, 4, 4, 0, 12, 5, 4, cm, dir, texture);
+			drawScaledPrism(tessellator, 4, 5, 0, 5, 12, 5, cm, dir, texture);
+			drawScaledPrism(tessellator, 11, 5, 0, 12, 12, 5, cm, dir, texture);
 		} else {
 			// draw an edge
-			drawScaledPrism(tessellator, 4, 4, 4, 12, 12, 5, cm, dir);
+			drawScaledPrism(tessellator, 4, 4, 4, 12, 12, 5, cm, dir, texture);
 		}
 	}
 
@@ -136,15 +127,16 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
         tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
 
         //draw central water levels
-        drawPlane(tessellator, 5, y-0.001f, 5, 11, y-0.001f, 11, ForgeDirection.NORTH);
+        ResourceLocation texture = Block.blockRegistry.getNameForObject(Blocks.water);
+        drawPlane(tessellator, 5, y-0.001f, 5, 11, y-0.001f, 11, ForgeDirection.NORTH, texture);
         //connect to edges
-        this.connectWater(channel, tessellator, ForgeDirection.NORTH, y);
-        this.connectWater(channel, tessellator, ForgeDirection.EAST, y);
-        this.connectWater(channel, tessellator, ForgeDirection.SOUTH, y);
-        this.connectWater(channel, tessellator, ForgeDirection.WEST, y);
+        this.connectWater(channel, tessellator, ForgeDirection.NORTH, y, texture);
+        this.connectWater(channel, tessellator, ForgeDirection.EAST, y, texture);
+        this.connectWater(channel, tessellator, ForgeDirection.SOUTH, y, texture);
+        this.connectWater(channel, tessellator, ForgeDirection.WEST, y, texture);
     }
 
-	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection direction, float y) {
+	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection direction, float y, ResourceLocation texture) {
 		// checks if there is a neighboring block that this block can connect to
 		if (channel.hasNeighbourCheck(direction)) {
 			IIrrigationComponent te = channel.getNeighbor(direction);
@@ -159,11 +151,11 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 				float lvl = (te.getFluidHeight() - 16 * ((TileEntityTank) te).getYPosition());
 				y2 = lvl > 12 ? 12 : lvl < 5 ? (5 - 0.0001F) : lvl;
 			}
-			this.drawWaterEdge(tessellator, direction, y, y2);
+			this.drawWaterEdge(tessellator, direction, y, y2, texture);
 		}
 	}
 
-    protected void drawWaterEdge(TessellatorV2 tessellator, ForgeDirection direction, float lvl1, float lvl2) {
-    	drawPlane(tessellator, 5, lvl1-0.001f, 0, 11, lvl2-0.001f, 5, direction);
+    protected void drawWaterEdge(TessellatorV2 tessellator, ForgeDirection direction, float lvl1, float lvl2, ResourceLocation texture ) {
+    	drawPlane(tessellator, 5, lvl1-0.001f, 0, 11, lvl2-0.001f, 5, direction, texture);
     }
 }

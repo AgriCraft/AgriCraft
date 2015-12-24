@@ -9,6 +9,7 @@ import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderPeripheral;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import net.minecraft.block.Block;
@@ -22,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
@@ -30,14 +32,23 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockContainerBase {
+    private final ResourceLocation textureTop;
+    private final ResourceLocation textureSide;
+    private final ResourceLocation textureBottom;
+    private final ResourceLocation textureInner;
 
     public BlockPeripheral() {
         super(Material.iron);
+        this.textureTop = new ResourceLocation(Block.blockRegistry.getNameForObject(this).toString()+"Top");
+        this.textureSide = new ResourceLocation(Block.blockRegistry.getNameForObject(this).toString()+"Side");
+        this.textureBottom = new ResourceLocation(Block.blockRegistry.getNameForObject(this).toString()+"Bottom");
+        this.textureInner = new ResourceLocation(Block.blockRegistry.getNameForObject(this).toString()+"Inner");
     }
 
     @Override
@@ -155,4 +166,17 @@ public class BlockPeripheral extends BlockContainerBase {
 
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
+
+    public ResourceLocation getTexture(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
+        if(side == null) {
+            return this.textureInner;
+        }
+        if(side == EnumFacing.UP) {
+            return this.textureTop;
+        }
+        if(side == EnumFacing.DOWN) {
+            return this.textureBottom;
+        }
+        return this.textureSide;
+    }
 }

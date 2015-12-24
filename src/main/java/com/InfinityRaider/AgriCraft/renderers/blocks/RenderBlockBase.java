@@ -1,14 +1,16 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,73 +36,47 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
             this.registerRenderer(block, te);
         }
         if (inventory) {
-            //MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(block), this);
+
         }
     }
 
     @SuppressWarnings("unchecked")
     private void registerRenderer(Block block, TileEntityBase te) {
-        if (te != null && this.shouldBehaveAsTESR()) {
+        if (te != null) {
             ClientRegistry.bindTileEntitySpecialRenderer(te.getTileClass(), this);
             renderIds.put(block, 2);
-        }
-        if (this.shouldBehaveAsISBRH()) {
-            renderIds.put(block, 3);
         }
     }
 
     //WORLD
     //-----
-    private boolean renderBlock(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, Block block, TileEntity tile, float f, int modelId, boolean callFromTESR) {
-        if (callFromTESR) {
-            GL11.glPushMatrix();
-            GL11.glTranslated(x, y, z);
-        } else {
-            tessellator.setRotation(0, 0, 0, 0);
-            tessellator.addTranslation((float) x, (float) y, (float) z);
-        }
+    private boolean renderBlock(TessellatorV2 tessellator, IBlockAccess world, BlockPos pos, double x, double y, double z, Block block, TileEntity tile, float f, int modelId) {
+        GL11.glPushMatrix();
+        GL11.glTranslated(x, y, z);
         if (tile != null && tile instanceof TileEntityBase) {
-            if(callFromTESR) {
-                rotateMatrix((TileEntityBase) tile, false);
-            } else {
-                rotateMatrix((TileEntityBase) tile, tessellator, false);
-            }
+            rotateMatrix((TileEntityBase) tile, false);
         }
 
-        tessellator.setBrightness(block.getMixedBrightnessForBlock(world, new BlockPos((int) x, (int) y, (int) z)));
+        tessellator.setBrightness(block.getMixedBrightnessForBlock(world, pos));
         tessellator.setColorRGBA_F(1, 1, 1, 1);
 
-        boolean result = doWorldRender(tessellator, world, x, y, z, tile, block, f, modelId, callFromTESR);
+        boolean result = doWorldRender(tessellator, world, x, y, z, pos, world.getBlockState(pos), block, tile, modelId, f);
 
         if (tile != null && tile instanceof TileEntityBase) {
-            if(callFromTESR) {
-                rotateMatrix((TileEntityBase) tile, true);
-            } else {
-                rotateMatrix((TileEntityBase) tile, tessellator, true);
-            }
+            rotateMatrix((TileEntityBase) tile, true);
         }
-        if (callFromTESR) {
-            GL11.glTranslated(-x, -y, -z);
-            GL11.glPopMatrix();
-        } else {
-            tessellator.setRotation(0, 0, 0, 0);
-            tessellator.addTranslation((float) -x, (float) -y, (float) -z);
-        }
+        GL11.glTranslated(-x, -y, -z);
+        GL11.glPopMatrix();
 
         return result;
     }
 
     @Override
     public final void renderTileEntityAt(TileEntityBase te, double x, double y, double z, float partialTicks, int destroyStage) {
-        renderBlock(TessellatorV2.instance, te.getWorld(), x, y, z, te.getBlockType(), te, partialTicks, 0, true);
+        renderBlock(TessellatorV2.instance, te.getWorld(), te.getPos(), x, y, z, te.getBlockType(), te, partialTicks, destroyStage);
     }
 
-    //Old ISBRH method callback
-    public final boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId) {
-        return renderBlock(TessellatorV2.instance, world, x, y, z, block, world.getTileEntity(new BlockPos(x, y, z)), 0, modelId, false);
-    }
-
-    protected abstract boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR);
+    protected abstract boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f);
 
 
     //INVENTORY
@@ -141,21 +117,18 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         return this.block;
     }
 
-    public abstract boolean shouldBehaveAsTESR();
-
-    public abstract boolean shouldBehaveAsISBRH();
-
-    public final int getRenderId() {
-        return AgriCraft.proxy.getRenderId(this.getBlock());
-    }
-
     public static int getRenderId(Block block) {
         return renderIds.containsKey(block) ? renderIds.get(block) : -1;
     }
 
-
     //UTILITY METHODS
     //---------------
+    protected void bindTexture(ResourceLocation texture) {
+        if(texture != null) {
+            Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+        }
+    }
+
     protected void rotateMatrix(TileEntityBase tileEntityBase, boolean inverse) {
         float angle = getAngle(tileEntityBase);
         if (angle == 0) {
@@ -209,7 +182,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         tessellator.addVertexWithUV(x*unit, y*unit, z*unit, u*unit, v*unit);
     }
 
-    protected void drawScaledFaceDoubleXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z) {
+    protected void drawScaledFaceDoubleXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, ResourceLocation texture) {
+        bindTexture(texture);
         z = z*16.0F;
         float minU = 0;
         float maxU = 16;
@@ -227,7 +201,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, maxX, minY, z, maxU, maxV);
     }
 
-    protected void drawScaledFaceDoubleXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y) {
+    protected void drawScaledFaceDoubleXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, ResourceLocation texture) {
+        bindTexture(texture);
         y = y*16.0F;
         float minU = 0;
         float maxU = 16;
@@ -246,7 +221,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
     }
 
 
-    protected void drawScaledFaceDoubleYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x) {
+    protected void drawScaledFaceDoubleYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, ResourceLocation texture) {
+        bindTexture(texture);
         x = x*16.0F;
         float minU = 0;
         float maxU = 16;
@@ -272,29 +248,32 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
      * The prism is relative to the bottom left corner of the block.
      * </p>
      */
-    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, int colorMultiplier, ForgeDirection direction) {
+    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, int colorMultiplier, ForgeDirection direction, ResourceLocation texture) {
+        bindTexture(texture);
         float adj[] = rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
-        drawScaledPrism(tessellator, adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], colorMultiplier);
+        drawScaledPrism(tessellator, adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], colorMultiplier, texture);
     }
     
     //draws a rectangular prism
-    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, int colorMultiplier) {
+    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, int colorMultiplier, ResourceLocation texture) {
+        bindTexture(texture);
         //bottom
-        drawScaledFaceBackXZ(tessellator, minX, minZ, maxX, maxZ, minY / 16.0F, colorMultiplier);
+        drawScaledFaceBackXZ(tessellator, minX, minZ, maxX, maxZ, minY / 16.0F, colorMultiplier, texture);
         //top
-        drawScaledFaceFrontXZ(tessellator, minX, minZ, maxX, maxZ, maxY / 16.0F, colorMultiplier);
+        drawScaledFaceFrontXZ(tessellator, minX, minZ, maxX, maxZ, maxY / 16.0F, colorMultiplier, texture);
         //back
-        drawScaledFaceBackXY(tessellator, minX, minY, maxX, maxY, minZ / 16.0F, colorMultiplier);
+        drawScaledFaceBackXY(tessellator, minX, minY, maxX, maxY, minZ / 16.0F, colorMultiplier, texture);
         //front
-        drawScaledFaceFrontXY(tessellator, minX, minY, maxX, maxY, maxZ / 16.0F, colorMultiplier);
+        drawScaledFaceFrontXY(tessellator, minX, minY, maxX, maxY, maxZ / 16.0F, colorMultiplier, texture);
         //left
-        drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, minX / 16.0F, colorMultiplier);
+        drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, minX / 16.0F, colorMultiplier, texture);
         //right
-        drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, maxX / 16.0F, colorMultiplier);
+        drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, maxX / 16.0F, colorMultiplier, texture);
 
     }
 
-    protected void drawScaledFaceFrontXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, int colorMultiplier) {
+    protected void drawScaledFaceFrontXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, int colorMultiplier, ResourceLocation texture) {
+        bindTexture(texture);
         z = z*16.0F;
         float minV = 16-maxY;
         float maxV = 16-minY;
@@ -305,7 +284,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, maxX, minY, z, maxX, maxV);
     }
 
-    protected void drawScaledFaceFrontXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, int colorMultiplier) {
+    protected void drawScaledFaceFrontXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, int colorMultiplier, ResourceLocation texture) {
+        bindTexture(texture);
         y = y*16.0F;
         applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.UP);
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ);
@@ -314,7 +294,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, minX, y, maxZ, minX, maxZ);
     }
 
-    protected void drawScaledFaceFrontYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, int colorMultiplier) {
+    protected void drawScaledFaceFrontYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, int colorMultiplier, ResourceLocation texture) {
+        bindTexture(texture);
         x = x*16.0F;
         float minV = 16-maxY;
         float maxV = 16-minY;
@@ -325,7 +306,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, x, maxY, minZ, minZ, minV);
     }
 
-    protected void drawScaledFaceBackXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, int colorMultiplier) {
+    protected void drawScaledFaceBackXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, int colorMultiplier, ResourceLocation texture) {
+        bindTexture(texture);
         z = z*16.0F;
         float minV = 16 - maxY;
         float maxV = 16 - minY;
@@ -336,7 +318,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, minX, maxY, z, minX, minV);
     }
 
-    protected void drawScaledFaceBackXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, int colorMultiplier) {
+    protected void drawScaledFaceBackXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, int colorMultiplier, ResourceLocation texture) {
+        bindTexture(texture);
         y = y*16.0F;
         applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.DOWN);
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ);
@@ -345,7 +328,8 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, maxX, y, minZ, maxX, minZ);
     }
 
-    protected void drawScaledFaceBackYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, int colorMultiplier) {
+    protected void drawScaledFaceBackYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, int colorMultiplier, ResourceLocation texture) {
+        bindTexture(texture);
         x = x*16.0F;
         float minV = 16 - maxY;
         float maxV = 16 - minY;
@@ -399,13 +383,15 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         }
     }
     
-	protected void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ForgeDirection direction) {
+	protected void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ForgeDirection direction, ResourceLocation texture) {
+        bindTexture(texture);
 		float[] rot = rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
-		drawPlane(tessellator, rot[0], rot[1], rot[2], rot[3], rot[4], rot[5]);
+		drawPlane(tessellator, rot[0], rot[1], rot[2], rot[3], rot[4], rot[5], texture);
 	}
 
 
-	private void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+	private void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ResourceLocation texture) {
+        bindTexture(texture);
 		addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, maxZ);
 		addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, minZ);
 		addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, minZ);

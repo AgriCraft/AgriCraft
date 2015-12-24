@@ -7,9 +7,11 @@ import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,7 +32,7 @@ public class RenderSprinkler extends RenderBlockBase {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, TileEntity tile, Block block, float f, int modelId, boolean callFromTESR) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
         TileEntitySprinkler sprinkler= (TileEntitySprinkler) tile;
         //render the model
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -49,16 +51,6 @@ public class RenderSprinkler extends RenderBlockBase {
         return true;
     }
 
-    @Override
-    public boolean shouldBehaveAsTESR() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldBehaveAsISBRH() {
-        return false;
-    }
-
     private void renderConnection(TileEntitySprinkler sprinkler) {
         //set up tessellator
         TessellatorV2 tessellator = TessellatorV2.instance;
@@ -70,7 +62,7 @@ public class RenderSprinkler extends RenderBlockBase {
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
             tessellator.startDrawingQuads();
             tessellator.addTranslation(0, 4 * Constants.UNIT, 0);
-            drawScaledPrism(tessellator, 4, 8, 4, 12, 16, 12, net.minecraft.init.Blocks.planks.colorMultiplier(sprinkler.getWorld(), sprinkler.getPos()));
+            drawScaledPrism(tessellator, 4, 8, 4, 12, 16, 12, net.minecraft.init.Blocks.planks.colorMultiplier(sprinkler.getWorld(), sprinkler.getPos()), sprinkler.getTexture(null));
             tessellator.addTranslation(0, -4 * Constants.UNIT, 0);
             tessellator.draw();
             //don't forget to enable lighting again

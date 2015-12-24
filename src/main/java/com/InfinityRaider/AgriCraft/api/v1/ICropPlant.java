@@ -2,10 +2,12 @@ package com.InfinityRaider.AgriCraft.api.v1;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -110,6 +112,14 @@ public interface ICropPlant {
     /** Determines how the plant is rendered, return false to render as wheat (#), true to render as a flower (X) */
     @SideOnly(Side.CLIENT)
     boolean renderAsFlower();
+
+    /** Gets the texture map to render this plant with as a ResourceLocation */
+    @SideOnly(Side.CLIENT)
+    ResourceLocation getPlantTextureMap(int growthStage);
+
+    /** Gets the TextureAtlasSprite for the texture map to render this plant with */
+    @SideOnly(Side.CLIENT)
+    TextureAtlasSprite getPlantIcon(int growthStage);
 
     /** Gets some information about the plant for the journal */
     @SideOnly(Side.CLIENT)

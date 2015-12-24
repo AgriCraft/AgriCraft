@@ -5,22 +5,28 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSprinkler;
+import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
+import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class BlockSprinkler extends BlockContainerBase {
     public BlockSprinkler() {
@@ -135,6 +141,15 @@ public class BlockSprinkler extends BlockContainerBase {
     @Override
     protected Class<? extends ItemBlock> getItemBlockClass() {
     	return null;
+    }
+
+    @Override
+    public ResourceLocation getTexture(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
+        TileEntity channel = world.getTileEntity(pos.add(0, 1, 0));
+        if(channel != null && channel instanceof TileEntityChannel) {
+            return ((TileEntityChannel) channel).getTexture(side);
+        }
+        return Block.blockRegistry.getNameForObject(Blocks.planks);
     }
     
 }
