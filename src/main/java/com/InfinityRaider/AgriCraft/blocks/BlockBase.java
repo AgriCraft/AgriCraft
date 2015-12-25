@@ -35,7 +35,8 @@ public abstract class BlockBase extends Block {
     protected BlockBase(Material mat) {
         super(mat);
         RegisterHelper.registerBlock(this, getInternalName(), getItemBlockClass());
-        this.texture = Block.blockRegistry.getNameForObject(this);
+        ResourceLocation loc = Block.blockRegistry.getNameForObject(this);
+        this.texture = new ResourceLocation(loc.getResourceDomain(), "blocks/" + loc.getResourcePath());
     }
 
     @Override

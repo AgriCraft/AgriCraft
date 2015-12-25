@@ -75,6 +75,11 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
         return state.getValue(BlockStates.AGE);
     }
 
+    /** This gets the actual state, containing data not contained by metadata */
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        return state;
+    }
+
     /** Creates a new tile entity every time the block is placed. */
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {

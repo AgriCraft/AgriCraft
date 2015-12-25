@@ -46,15 +46,14 @@ public class TessellatorV2 {
         double[] coords = this.matrix.transform(x, y, z);
         //apply the transformed coordinates as a vertex to the world renderer
         worldRenderer.func_181662_b(coords[0], coords[1], coords[2]);
-        //finish the vertex
-        worldRenderer.func_181675_d();
     }
 
     /**
      * Sets the texture coordinates.
      */
     public void setTextureUV(double u, double v) {
-        worldRenderer.func_181673_a(u, v);
+        //this does not seem to work...
+        //worldRenderer.func_181673_a(u, v);
     }
 
     /**
@@ -108,6 +107,7 @@ public class TessellatorV2 {
      */
     public void startDrawingQuads() {
         worldRenderer.func_181668_a(7, DefaultVertexFormats.BLOCK);
+        //worldRenderer.setTranslation(0, 0, 0);
     }
 
     public void setBrightness(int value) {

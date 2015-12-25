@@ -29,9 +29,9 @@ public class RenderCrop extends RenderBlockBase {
             tessellator.startDrawingQuads();
             tessellator.addTranslation(0, -3*Constants.UNIT, 0);
             drawScaledPrism(tessellator, 2, 0, 2, 3, 16, 3, RenderBlockBase.COLOR_MULTIPLIER_STANDARD, texture);
-            drawScaledPrism(tessellator, 13, 0, 2, 14, 16, 3, RenderBlockBase.COLOR_MULTIPLIER_STANDARD, texture);
-            drawScaledPrism(tessellator, 13, 0, 13, 14, 16, 14,RenderBlockBase.COLOR_MULTIPLIER_STANDARD, texture);
-            drawScaledPrism(tessellator, 2, 0, 13, 3, 16, 14, RenderBlockBase.COLOR_MULTIPLIER_STANDARD, texture);
+            //drawScaledPrism(tessellator, 13, 0, 2, 14, 16, 3, RenderBlockBase.COLOR_MULTIPLIER_STANDARD, texture);
+            //drawScaledPrism(tessellator, 13, 0, 13, 14, 16, 14,RenderBlockBase.COLOR_MULTIPLIER_STANDARD, texture);
+            //drawScaledPrism(tessellator, 2, 0, 13, 3, 16, 14, RenderBlockBase.COLOR_MULTIPLIER_STANDARD, texture);
             tessellator.addTranslation(0, 3*Constants.UNIT, 0);
             if (crop.isCrossCrop()) {
                 drawScaledPrism(tessellator, 0, 10, 2, 16, 11, 3, RenderBlockBase.COLOR_MULTIPLIER_STANDARD, texture);
