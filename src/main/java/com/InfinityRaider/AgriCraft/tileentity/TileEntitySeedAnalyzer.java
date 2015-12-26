@@ -350,7 +350,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     //gets item stack in the slot when closing the inventory
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
+    public ItemStack removeStackFromSlot(int slot) {
         slot = slot%2;
         ItemStack stackInSlot;
         switch(slot) {
@@ -419,7 +419,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     @Override
-    public String getCommandSenderName() {
+    public String getName() {
         return "container.agricraft:seedAnalyzer";
     }
 

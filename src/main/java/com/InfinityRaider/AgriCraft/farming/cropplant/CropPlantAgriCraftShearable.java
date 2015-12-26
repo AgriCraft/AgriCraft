@@ -41,7 +41,7 @@ public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
         int amount = ((int) (Math.ceil((crop.getGain() + 0.00) / 3)))/2;
         if(amount>0) {
             ItemStack drop = new ItemStack(item, amount, meta);
-            if (world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
+            if (world.getGameRules().getBoolean("doTileDrops") && !world.restoringBlockSnapshots) {
                 float f = 0.7F;
                 double dx = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
                 double dy = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;

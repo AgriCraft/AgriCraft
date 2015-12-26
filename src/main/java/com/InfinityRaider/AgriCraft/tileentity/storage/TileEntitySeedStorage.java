@@ -389,7 +389,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
+    public ItemStack removeStackFromSlot(int slot) {
         if (slotsList == null || slot >= slotsList.size() || (!this.hasLockedSeed())) {
             return null;
         }
@@ -428,7 +428,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-     public String getCommandSenderName() {
+     public String getName() {
         return Reference.MOD_ID.toLowerCase()+":"+Names.Objects.seedStorage;
     }
 
@@ -439,7 +439,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public IChatComponent getDisplayName() {
-        return new ChatComponentText(getCommandSenderName());
+        return new ChatComponentText(getName());
     }
 
     @Override

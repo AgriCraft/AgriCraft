@@ -33,27 +33,17 @@ public class TessellatorV2 {
      * Adds a vertex specifying both x,y,z and the texture u,v for it.
      */
     public void addVertexWithUV(double x, double y, double z, double u, double v) {
-        this.setTextureUV(u, v);
-        this.addVertex(x, y, z);
-    }
-
-    /**
-     * Adds a vertex with the specified x,y,z to the current draw call. It will trigger a draw() if the buffer gets
-     * full.
-     */
-    public void addVertex(double x, double y, double z) {
-        //transform the coordinates
         double[] coords = this.matrix.transform(x, y, z);
-        //apply the transformed coordinates as a vertex to the world renderer
-        worldRenderer.func_181662_b(coords[0], coords[1], coords[2]);
+        worldRenderer.pos(coords[0], coords[1], coords[2]);
+        worldRenderer.endVertex();
     }
 
     /**
      * Sets the texture coordinates.
      */
     public void setTextureUV(double u, double v) {
-        //this does not seem to work...
-        //worldRenderer.func_181673_a(u, v);
+        //this doesn't seem to work
+        worldRenderer.tex(u, v);
     }
 
     /**
@@ -66,7 +56,7 @@ public class TessellatorV2 {
     /**
      * Adds a translation to the current coordinate system
      */
-    public void addTranslation(float x, float y, float z) {
+    public void addTranslation(double x, double y, double z) {
         this.matrix.multiplyRightWith(new TransformationMatrix(x, y, z));
     }
 
@@ -106,8 +96,7 @@ public class TessellatorV2 {
      * Sets draw mode in the worldRenderer to draw quads.
      */
     public void startDrawingQuads() {
-        worldRenderer.func_181668_a(7, DefaultVertexFormats.BLOCK);
-        //worldRenderer.setTranslation(0, 0, 0);
+        worldRenderer.begin(7, DefaultVertexFormats.POSITION);
     }
 
     public void setBrightness(int value) {

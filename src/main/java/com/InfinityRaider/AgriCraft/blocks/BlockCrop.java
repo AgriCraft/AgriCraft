@@ -679,8 +679,8 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     @Override
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
-        //return new RenderCrop();
-        return null;
+        return new RenderCrop();
+        //return null;
     }
 
     @Override
