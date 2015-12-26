@@ -41,7 +41,7 @@ public class RenderCrop extends RenderBlockBase {
             }
             else if (crop.hasPlant()) {
                 //render the plant
-                crop.getPlant().renderPlantInCrop(world, pos, state, state.getValue(BlockStates.AGE));
+                crop.getPlant().renderPlantInCrop(world, pos, state, state.getValue(BlockStates.GROWTHSTAGE));
             }
             else if(crop.hasWeed()) {
                 //render weeds

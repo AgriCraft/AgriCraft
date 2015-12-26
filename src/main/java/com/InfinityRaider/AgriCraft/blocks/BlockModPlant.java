@@ -147,17 +147,17 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     protected final BlockState createBlockState() {
-        return new BlockState(this, BlockStates.AGE);
+        return new BlockState(this, BlockStates.GROWTHSTAGE);
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(BlockStates.AGE, Math.max(Math.min(0, meta), Constants.MATURE));
+        return getDefaultState().withProperty(BlockStates.GROWTHSTAGE, Math.max(Math.min(0, meta), Constants.MATURE));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(BlockStates.AGE);
+        return state.getValue(BlockStates.GROWTHSTAGE);
     }
 
     @Override
@@ -200,7 +200,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     //growing
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rnd) {
-        int meta = state.getValue(BlockStates.AGE);
+        int meta = state.getValue(BlockStates.GROWTHSTAGE);
         if (meta < Constants.MATURE && this.isFertile(world, pos)) {
             //Base growth rate
             int growthRate = (tier > 0 && tier <= Constants.GROWTH_TIER.length)?Constants.GROWTH_TIER[tier]:Constants.GROWTH_TIER[0];
@@ -210,7 +210,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
             float global = 2.0F - ConfigurationHandler.growthMultiplier;
             int newMeta = (rnd.nextDouble() > (growthRate * bonus * global) / 100) ? meta : meta + 1;
             if (newMeta != meta) {
-                world.setBlockState(pos, state.withProperty(BlockStates.AGE, newMeta), 2);
+                world.setBlockState(pos, state.withProperty(BlockStates.GROWTHSTAGE, newMeta), 2);
                 AppleCoreHelper.announceGrowthTick(world, pos, this, state);
             }
         }
@@ -219,14 +219,14 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     //check if the plant is mature
     public boolean isMature(World world, BlockPos pos, IBlockState state) {
         state = state == null ? world.getBlockState(pos) : state;
-        return state.getValue(BlockStates.AGE) >= Constants.MATURE;
+        return state.getValue(BlockStates.GROWTHSTAGE) >= Constants.MATURE;
     }
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> list = new ArrayList<>();
         list.add(new ItemStack(this.seed, 1, 0));
-        if(state.getValue(BlockStates.AGE)==7) {
+        if(state.getValue(BlockStates.GROWTHSTAGE)==7) {
             list.add(this.getRandomFruit(world instanceof World ? ((World) world).rand : new Random()));
         }
         return list;
@@ -234,7 +234,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return state.getValue(BlockStates.AGE) >= Constants.MATURE ? this.getCrop() : this.getSeed();
+        return state.getValue(BlockStates.GROWTHSTAGE) >= Constants.MATURE ? this.getCrop() : this.getSeed();
     }
 
     //fruit gain

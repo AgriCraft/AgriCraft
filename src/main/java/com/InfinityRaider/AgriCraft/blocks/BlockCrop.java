@@ -67,16 +67,27 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(BlockStates.AGE, Math.max(Math.min(0, meta), Constants.MATURE));
+        return getDefaultState()
+                .withProperty(BlockStates.GROWTHSTAGE, Math.max(Math.min(0, meta), Constants.MATURE))
+                .withProperty(BlockStates.WEEDS, false)
+                .withProperty(BlockStates.CROSSCROP, false)
+                .withProperty(BlockStates.PLANT, CropPlantHandler.NONE);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(BlockStates.AGE);
+        return state.getValue(BlockStates.GROWTHSTAGE);
     }
 
     /** This gets the actual state, containing data not contained by metadata */
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileEntity te = world.getTileEntity(pos);
+        if(te != null && te instanceof TileEntityCrop) {
+            TileEntityCrop crop = (TileEntityCrop) te;
+            state.withProperty(BlockStates.WEEDS, crop.hasWeed());
+            state.withProperty(BlockStates.CROSSCROP, crop.isCrossCrop());
+            state.withProperty(BlockStates.PLANT, crop.hasPlant() ? crop.getPlant() : CropPlantHandler.NONE);
+        }
         return state;
     }
 
@@ -145,7 +156,7 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
                 spawnAsEntity(world, pos, new ItemStack(Items.crops, 1));
                 return false;
             } else if(crop.isMature() && crop.allowHarvest(player)) {
-                crop.getWorld().setBlockState(crop.getPos(), state.withProperty(BlockStates.AGE, 2), 2);
+                crop.getWorld().setBlockState(crop.getPos(), state.withProperty(BlockStates.GROWTHSTAGE, 2), 2);
                 ArrayList<ItemStack> drops = crop.getFruits();
                 for (ItemStack drop : drops) {
                     if(drop==null || drop.getItem()==null) {
@@ -385,7 +396,7 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
      */
     @Override
     public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
-        return state.getValue(BlockStates.AGE) < Constants.MATURE;
+        return state.getValue(BlockStates.GROWTHSTAGE) < Constants.MATURE;
     }
 
     /**
@@ -405,11 +416,11 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if(crop.hasPlant() || crop.hasWeed()) {
-            int l = state.getValue(BlockStates.AGE) + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
+            int l = state.getValue(BlockStates.GROWTHSTAGE) + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
             if (l > Constants.MATURE) {
                 l = Constants.MATURE;
             }
-            world.setBlockState(pos, state.withProperty(BlockStates.AGE, l), 2);
+            world.setBlockState(pos, state.withProperty(BlockStates.GROWTHSTAGE, l), 2);
         }
         else if(crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
             crop.crossOver();
@@ -455,7 +466,7 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
      * @return if the crop is done growing.
      */
     public boolean isMature(World world, BlockPos pos) {
-        return world.getBlockState(pos).getValue(BlockStates.AGE) >= Constants.MATURE;
+        return world.getBlockState(pos).getValue(BlockStates.GROWTHSTAGE) >= Constants.MATURE;
     }
 
     /**
@@ -473,7 +484,7 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
             crop.setCrossCrop(false);
             drops.add(new ItemStack(Items.crops, 1));
         } else if (crop.isMature() && crop.allowHarvest(null)) {
-            crop.getWorld().setBlockState(pos, state.withProperty(BlockStates.AGE, 2), 2);
+            crop.getWorld().setBlockState(pos, state.withProperty(BlockStates.GROWTHSTAGE, 2), 2);
             for(ItemStack stack:crop.getFruits()) {
                 if(stack==null || stack.getItem()==null) {
                     continue;
@@ -489,14 +500,14 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
         if(!crop.hasPlant()) {
             return;
         }
-        int growthStage = state.getValue(BlockStates.AGE);
+        int growthStage = state.getValue(BlockStates.GROWTHSTAGE);
         if(growthStage<=0) {
             return;
         }
         ItemStack clipping = new ItemStack(Items.clipping, 1, 0);
         clipping.setTagCompound(crop.getSeedStack().writeToNBT(new NBTTagCompound()));
         spawnAsEntity(world, pos, clipping);
-        world.setBlockState(pos, state.withProperty(BlockStates.AGE, growthStage-1), 3);
+        world.setBlockState(pos, state.withProperty(BlockStates.GROWTHSTAGE, growthStage-1), 3);
     }
 
     /**
@@ -657,7 +668,7 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
 
     @Override
     protected IProperty[] getPropertyArray() {
-        return new IProperty[] {BlockStates.AGE};
+        return new IProperty[] {BlockStates.GROWTHSTAGE, BlockStates.CROSSCROP, BlockStates.WEEDS, BlockStates.PLANT};
     }
 
     /**
@@ -668,7 +679,8 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     @Override
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
-        return new RenderCrop();
+        //return new RenderCrop();
+        return null;
     }
 
     @Override

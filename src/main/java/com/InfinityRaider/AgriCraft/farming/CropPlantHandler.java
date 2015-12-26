@@ -25,6 +25,8 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.*;
 
 public class CropPlantHandler {
+    /** None object to avoid NPE's with block states */
+    public static final CropPlant NONE = CropPlantNone.NONE;
     /** HashMap containing all plants known to AgriCraft */
     private static HashMap<Item, HashMap<Integer, CropPlant>> cropPlants = new HashMap<>();
     /** Queue to store plants registered via the API before the cropPlants HashMap has been initialized */

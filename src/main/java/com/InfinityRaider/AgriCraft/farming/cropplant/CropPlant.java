@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -30,7 +31,7 @@ import java.util.Random;
  * Only make one object of this per seed object, and register using {@link CropPlantHandler#registerPlant(CropPlant plant)}
  * ICropPlant is implemented to be able to read data from this class from the API
  */
-public abstract class CropPlant implements ICropPlant {
+public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
     private IGrowthRequirement growthRequirement;
     private int tier;
     private int spreadChance;
@@ -281,7 +282,7 @@ public abstract class CropPlant implements ICropPlant {
      */
     @Override
     public boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state) {
-        return state.getValue(BlockStates.AGE) >= Constants.MATURE;
+        return state.getValue(BlockStates.GROWTHSTAGE) >= Constants.MATURE;
     }
 
     /**
@@ -345,5 +346,17 @@ public abstract class CropPlant implements ICropPlant {
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
         PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0);
+    }
+
+    @Override
+    public int compareTo(CropPlant plant) {
+        ItemStack seedThis = this.getSeed();
+        ItemStack seedOther = plant.getSeed();
+        int idThis = seedThis == null ? 0 : Item.getIdFromItem(seedThis.getItem());
+        int idOther = seedOther == null ? 0 : Item.getIdFromItem(seedOther.getItem());
+        if(idOther == idThis && idThis != 0) {
+            return seedThis.getItemDamage() - seedOther.getItemDamage();
+        }
+        return idThis - idOther;
     }
 }

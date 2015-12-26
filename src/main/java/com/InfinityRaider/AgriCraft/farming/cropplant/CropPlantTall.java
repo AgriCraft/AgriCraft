@@ -18,7 +18,7 @@ public abstract class CropPlantTall extends CropPlant {
 
     @Override
     public boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state) {
-        return state.getValue(BlockStates.AGE)>=7;
+        return state.getValue(BlockStates.GROWTHSTAGE)>=7;
     }
 
     @Override

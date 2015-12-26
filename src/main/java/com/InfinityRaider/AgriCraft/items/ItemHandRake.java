@@ -94,7 +94,7 @@ public class ItemHandRake extends ItemBase implements IRake{
     @Override
     public boolean removeWeeds(World world, BlockPos pos, IBlockState state, ICrop crop, ItemStack rake) {
         if (crop.hasWeed()) {
-            int weedGrowthStage = state.getValue(BlockStates.AGE);
+            int weedGrowthStage = state.getValue(BlockStates.GROWTHSTAGE);
             int newWeedGrowthStage = calculateGrowthStage(rake.getItemDamage(), weedGrowthStage, world.rand);
             crop.updateWeed(newWeedGrowthStage);
             if(ConfigurationHandler.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100)<dropChance[rake.getItemDamage()%dropChance.length]) {

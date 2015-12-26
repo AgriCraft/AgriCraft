@@ -37,7 +37,7 @@ public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
             return true;
         }
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
-        crop.getWorld().setBlockState(pos, state.withProperty(BlockStates.AGE, 2), 2);
+        crop.getWorld().setBlockState(pos, state.withProperty(BlockStates.GROWTHSTAGE, 2), 2);
         int amount = ((int) (Math.ceil((crop.getGain() + 0.00) / 3)))/2;
         if(amount>0) {
             ItemStack drop = new ItemStack(item, amount, meta);

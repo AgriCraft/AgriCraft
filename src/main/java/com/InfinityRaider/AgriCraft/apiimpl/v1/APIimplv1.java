@@ -160,7 +160,7 @@ public class APIimplv1 implements APIv1 {
     public boolean placeCrops(World world, BlockPos pos, ItemStack crops) {
         if (canPlaceCrops(world, pos, crops) && crops.stackSize >= 1) {
             if (!world.isRemote) {
-                world.setBlockState(pos, Blocks.blockCrop.getDefaultState().withProperty(BlockStates.AGE, 0), 3);
+                world.setBlockState(pos, Blocks.blockCrop.getDefaultState().withProperty(BlockStates.GROWTHSTAGE, 0), 3);
                 crops.stackSize--;
             }
             return true;
@@ -413,7 +413,7 @@ public class APIimplv1 implements APIv1 {
         if (te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             if(crop.allowHarvest(null)) {
-                crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(BlockStates.AGE, 2), 2);
+                crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(BlockStates.GROWTHSTAGE, 2), 2);
                 return crop.getPlant().getFruitsOnHarvest(crop.getGain(), world.rand);
             }
         }

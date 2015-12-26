@@ -57,7 +57,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     }
 
     @Override
-    public CropPlant getPlant() {return plant;}
+    public CropPlant getPlant() {return this.hasPlant() ? plant : null;}
 
     @Override
     public ISeedStats getStats() {
@@ -102,7 +102,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
     @Override
     public int getGrowthStage() {
-        return worldObj.getBlockState(getPos()).getValue(BlockStates.AGE);
+        return worldObj.getBlockState(getPos()).getValue(BlockStates.GROWTHSTAGE);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         if(this.hasPlant() || this.hasWeed()) {
             stage = Math.max(Math.min(stage, Constants.MATURE), 0);
             IBlockState state = worldObj.getBlockState(pos);
-            state.withProperty(BlockStates.AGE, stage);
+            state.withProperty(BlockStates.GROWTHSTAGE, stage);
             this.worldObj.setBlockState(pos, state, 3);
         }
     }
