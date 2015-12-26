@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
@@ -7,10 +8,11 @@ import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,10 +59,11 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
             rotateMatrix((TileEntityBase) tile, false);
         }
 
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         tessellator.setBrightness(block.getMixedBrightnessForBlock(world, pos));
         tessellator.setColorRGBA_F(1, 1, 1, 1);
 
-        boolean result = doWorldRender(tessellator, world, x, y, z, pos, world.getBlockState(pos), block, tile, modelId, f);
+        boolean result = doWorldRender(tessellator, world, x, y, z, pos, world.getBlockState(pos), (BlockBase) block, tile, modelId, f);
 
         if (tile != null && tile instanceof TileEntityBase) {
             rotateMatrix((TileEntityBase) tile, true);
@@ -76,7 +79,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         renderBlock(TessellatorV2.instance, te.getWorld(), te.getPos(), x, y, z, te.getBlockType(), te, partialTicks, destroyStage);
     }
 
-    protected abstract boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f);
+    protected abstract boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, BlockBase block, TileEntity tile, int modelId, float f);
 
 
     //INVENTORY
@@ -123,12 +126,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
 
     //UTILITY METHODS
     //---------------
-    protected void bindTexture(ResourceLocation texture) {
-        if(texture != null) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-        }
-    }
-
     protected void rotateMatrix(TileEntityBase tileEntityBase, boolean inverse) {
         float angle = getAngle(tileEntityBase);
         if (angle == 0) {
@@ -182,62 +179,65 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         tessellator.addVertexWithUV(x*unit, y*unit, z*unit, u*unit, v*unit);
     }
 
-    protected void drawScaledFaceDoubleXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledFaceDoubleXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, TextureAtlasSprite texture) {
         z = z*16.0F;
+        /*
         float minU = 0;
         float maxU = 16;
         float minV = 0;
         float maxV = 16;
+        */
         //front
-        addScaledVertexWithUV(tessellator, maxX, maxY, z, maxU, minV);
-        addScaledVertexWithUV(tessellator, maxX, minY, z, maxU, maxV);
-        addScaledVertexWithUV(tessellator, minX, minY, z, minU, maxV);
-        addScaledVertexWithUV(tessellator, minX, maxY, z, minU, minV);
+        addScaledVertexWithUV(tessellator, maxX, maxY, z, texture.getMaxU(), texture.getMinV());
+        addScaledVertexWithUV(tessellator, maxX, minY, z, texture.getMaxU(), texture.getMaxV());
+        addScaledVertexWithUV(tessellator, minX, minY, z, texture.getMinU(), texture.getMaxV());
+        addScaledVertexWithUV(tessellator, minX, maxY, z, texture.getMinU(), texture.getMinV());
         //back
-        addScaledVertexWithUV(tessellator, maxX, maxY, z, maxU, minV);
-        addScaledVertexWithUV(tessellator, minX, maxY, z, minU, minV);
-        addScaledVertexWithUV(tessellator, minX, minY, z, minU, maxV);
-        addScaledVertexWithUV(tessellator, maxX, minY, z, maxU, maxV);
+        addScaledVertexWithUV(tessellator, maxX, maxY, z, texture.getMaxU(), texture.getMinV());
+        addScaledVertexWithUV(tessellator, minX, maxY, z, texture.getMinU(), texture.getMinV());
+        addScaledVertexWithUV(tessellator, minX, minY, z, texture.getMinU(), texture.getMaxV());
+        addScaledVertexWithUV(tessellator, maxX, minY, z, texture.getMaxU(), texture.getMaxV());
     }
 
-    protected void drawScaledFaceDoubleXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledFaceDoubleXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, TextureAtlasSprite texture) {
         y = y*16.0F;
+        /*
         float minU = 0;
         float maxU = 16;
         float minV = 0;
         float maxV = 16;
+        */
         //front
-        addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxU, maxV);
-        addScaledVertexWithUV(tessellator, maxX, y, minZ, maxU, minV);
-        addScaledVertexWithUV(tessellator, minX, y, minZ, minU, minV);
-        addScaledVertexWithUV(tessellator, minX, y, maxZ, minU, maxV);
+        addScaledVertexWithUV(tessellator, maxX, y, maxZ, texture.getMaxU(), texture.getMaxV());
+        addScaledVertexWithUV(tessellator, maxX, y, minZ, texture.getMaxU(), texture.getMinV());
+        addScaledVertexWithUV(tessellator, minX, y, minZ, texture.getMinU(), texture.getMinV());
+        addScaledVertexWithUV(tessellator, minX, y, maxZ, texture.getMinU(), texture.getMaxV());
         //back
-        addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxU, maxV);
-        addScaledVertexWithUV(tessellator, minX, y, maxZ, minU, maxV);
-        addScaledVertexWithUV(tessellator, minX, y, minZ, minU, minV);
-        addScaledVertexWithUV(tessellator, maxX, y, minZ, maxU, minV);
+        addScaledVertexWithUV(tessellator, maxX, y, maxZ, texture.getMaxU(), texture.getMaxV());
+        addScaledVertexWithUV(tessellator, minX, y, maxZ, texture.getMinU(), texture.getMaxV());
+        addScaledVertexWithUV(tessellator, minX, y, minZ, texture.getMinU(), texture.getMinV());
+        addScaledVertexWithUV(tessellator, maxX, y, minZ, texture.getMaxU(), texture.getMinV());
     }
 
 
-    protected void drawScaledFaceDoubleYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledFaceDoubleYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, TextureAtlasSprite texture) {
         x = x*16.0F;
+        /*
         float minU = 0;
         float maxU = 16;
         float minV = 0;
         float maxV = 16;
+        */
         //front
-        addScaledVertexWithUV(tessellator, x, maxY, maxZ, maxU, minV);
-        addScaledVertexWithUV(tessellator, x, minY, maxZ, maxU, maxV);
-        addScaledVertexWithUV(tessellator, x, minY, minZ, minU, maxV);
-        addScaledVertexWithUV(tessellator, x, maxY, minZ, minU, minV);
+        addScaledVertexWithUV(tessellator, x, maxY, maxZ, texture.getMaxU(), texture.getMinV());
+        addScaledVertexWithUV(tessellator, x, minY, maxZ, texture.getMaxU(), texture.getMaxV());
+        addScaledVertexWithUV(tessellator, x, minY, minZ, texture.getMinU(), texture.getMaxV());
+        addScaledVertexWithUV(tessellator, x, maxY, minZ, texture.getMinU(), texture.getMinV());
         //back
-        addScaledVertexWithUV(tessellator, x, maxY, maxZ, maxU, minV);
-        addScaledVertexWithUV(tessellator, x, maxY, minZ, minU, minV);
-        addScaledVertexWithUV(tessellator, x, minY, minZ, minU, maxV);
-        addScaledVertexWithUV(tessellator, x, minY, maxZ, maxU, maxV);
+        addScaledVertexWithUV(tessellator, x, maxY, maxZ, texture.getMaxU(), texture.getMinV());
+        addScaledVertexWithUV(tessellator, x, maxY, minZ, texture.getMinU(), texture.getMinV());
+        addScaledVertexWithUV(tessellator, x, minY, minZ, texture.getMinU(), texture.getMaxV());
+        addScaledVertexWithUV(tessellator, x, minY, maxZ, texture.getMaxU(), texture.getMaxV());
     }
 
     /**
@@ -248,32 +248,29 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
      * The prism is relative to the bottom left corner of the block.
      * </p>
      */
-    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, int colorMultiplier, ForgeDirection direction, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, int colorMultiplier, ForgeDirection direction, TextureAtlasSprite texture) {
         float adj[] = rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
         drawScaledPrism(tessellator, adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], colorMultiplier, texture);
     }
     
     //draws a rectangular prism
-    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, int colorMultiplier, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, int colorMultiplier, TextureAtlasSprite icon) {
         //bottom
-        drawScaledFaceBackXZ(tessellator, minX, minZ, maxX, maxZ, minY / 16.0F, colorMultiplier, texture);
+        drawScaledFaceBackXZ(tessellator, minX, minZ, maxX, maxZ, minY / 16.0F, colorMultiplier, icon);
         //top
-        drawScaledFaceFrontXZ(tessellator, minX, minZ, maxX, maxZ, maxY / 16.0F, colorMultiplier, texture);
+        drawScaledFaceFrontXZ(tessellator, minX, minZ, maxX, maxZ, maxY / 16.0F, colorMultiplier, icon);
         //back
-        drawScaledFaceBackXY(tessellator, minX, minY, maxX, maxY, minZ / 16.0F, colorMultiplier, texture);
+        drawScaledFaceBackXY(tessellator, minX, minY, maxX, maxY, minZ / 16.0F, colorMultiplier, icon);
         //front
-        drawScaledFaceFrontXY(tessellator, minX, minY, maxX, maxY, maxZ / 16.0F, colorMultiplier, texture);
+        drawScaledFaceFrontXY(tessellator, minX, minY, maxX, maxY, maxZ / 16.0F, colorMultiplier, icon);
         //left
-        drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, minX / 16.0F, colorMultiplier, texture);
+        drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, minX / 16.0F, colorMultiplier, icon);
         //right
-        drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, maxX / 16.0F, colorMultiplier, texture);
+        drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, maxX / 16.0F, colorMultiplier, icon);
 
     }
 
-    protected void drawScaledFaceFrontXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, int colorMultiplier, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledFaceFrontXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, int colorMultiplier, TextureAtlasSprite texture) {
         z = z*16.0F;
         float minV = 16-maxY;
         float maxV = 16-minY;
@@ -284,8 +281,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, maxX, minY, z, maxX, maxV);
     }
 
-    protected void drawScaledFaceFrontXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, int colorMultiplier, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledFaceFrontXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, int colorMultiplier, TextureAtlasSprite texture) {
         y = y*16.0F;
         applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.UP);
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ);
@@ -294,8 +290,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, minX, y, maxZ, minX, maxZ);
     }
 
-    protected void drawScaledFaceFrontYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, int colorMultiplier, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledFaceFrontYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, int colorMultiplier, TextureAtlasSprite texture) {
         x = x*16.0F;
         float minV = 16-maxY;
         float maxV = 16-minY;
@@ -306,8 +301,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, x, maxY, minZ, minZ, minV);
     }
 
-    protected void drawScaledFaceBackXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, int colorMultiplier, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledFaceBackXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, int colorMultiplier, TextureAtlasSprite texture) {
         z = z*16.0F;
         float minV = 16 - maxY;
         float maxV = 16 - minY;
@@ -318,8 +312,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, minX, maxY, z, minX, minV);
     }
 
-    protected void drawScaledFaceBackXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, int colorMultiplier, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledFaceBackXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, float y, int colorMultiplier, TextureAtlasSprite texture) {
         y = y*16.0F;
         applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.DOWN);
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ);
@@ -328,8 +321,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         addScaledVertexWithUV(tessellator, maxX, y, minZ, maxX, minZ);
     }
 
-    protected void drawScaledFaceBackYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, int colorMultiplier, ResourceLocation texture) {
-        bindTexture(texture);
+    protected void drawScaledFaceBackYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, float x, int colorMultiplier, TextureAtlasSprite texture) {
         x = x*16.0F;
         float minV = 16 - maxY;
         float maxV = 16 - minY;
@@ -383,15 +375,13 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         }
     }
     
-	protected void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ForgeDirection direction, ResourceLocation texture) {
-        bindTexture(texture);
+	protected void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ForgeDirection direction, TextureAtlasSprite texture) {
 		float[] rot = rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
 		drawPlane(tessellator, rot[0], rot[1], rot[2], rot[3], rot[4], rot[5], texture);
 	}
 
 
-	private void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ResourceLocation texture) {
-        bindTexture(texture);
+	private void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite texture) {
 		addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, maxZ);
 		addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, minZ);
 		addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, minZ);

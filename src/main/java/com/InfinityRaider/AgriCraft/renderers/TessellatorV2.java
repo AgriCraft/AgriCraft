@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Note that this class isn't used by vanilla minecraft, the matrix operations done by this class will be ignored by the calls made by vanilla to the Tessellator
@@ -25,6 +26,15 @@ public class TessellatorV2 {
         return instance;
     }
 
+    /** Color values */
+    int red;
+    int green;
+    int blue;
+    int alpha;
+
+    /** Brightness value */
+    int light;
+
     //---------------------------------------------
     //methods requiring some linear transformations
     //---------------------------------------------
@@ -32,9 +42,12 @@ public class TessellatorV2 {
     /**
      * Adds a vertex specifying both x,y,z and the texture u,v for it.
      */
-    public void addVertexWithUV(double x, double y, double z, double u, double v) {
+    public void addVertexWithUV(double x, double y, double z, float u, float v) {
         double[] coords = this.matrix.transform(x, y, z);
         worldRenderer.pos(coords[0], coords[1], coords[2]);
+        //worldRenderer.color(red, green, blue, alpha);
+        setTextureUV(u, v);
+        //worldRenderer.putBrightness4(light, light, light, light);
         worldRenderer.endVertex();
     }
 
@@ -96,11 +109,11 @@ public class TessellatorV2 {
      * Sets draw mode in the worldRenderer to draw quads.
      */
     public void startDrawingQuads() {
-        worldRenderer.begin(7, DefaultVertexFormats.POSITION);
+        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
     }
 
     public void setBrightness(int value) {
-        //worldRenderer.putBrightness4();
+        this.light = value;
     }
 
     /**
@@ -128,6 +141,9 @@ public class TessellatorV2 {
      * Sets the RGBA values for the color. Also clamps them to 0-255.
      */
     public void setColorRGBA(int red, int green, int blue, int alpha) {
-
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.alpha = alpha;
     }
 }

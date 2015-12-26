@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
@@ -7,6 +8,7 @@ import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -47,12 +49,12 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, BlockBase block, TileEntity tile, int modelId, float f) {
         if(tile==null || !(tile instanceof TileEntityGrate)) {
             return false;
         }
         TileEntityGrate grate = (TileEntityGrate) tile;
-        ResourceLocation texture = grate.getTexture(state, null);
+        TextureAtlasSprite texture = grate.getTexture(state, null);
         tessellator.startDrawingQuads();
         int cm = block.colorMultiplier(world, pos);
         Block vines = net.minecraft.init.Blocks.vine;
@@ -122,7 +124,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
 
     private void drawVines(TessellatorV2 tessellator, boolean front, float offset, int orientation) {
         float pos = offset + (front?-0.001F:2* Constants.UNIT+0.001F);
-        ResourceLocation texture = Block.blockRegistry.getNameForObject(net.minecraft.init.Blocks.vine);
+        TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();;
         if(orientation == 0) {
             drawScaledFaceDoubleXY(tessellator, 0, 0, 16, 16, pos, texture);
         }

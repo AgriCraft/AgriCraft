@@ -1,10 +1,12 @@
 package com.InfinityRaider.AgriCraft.utility;
 
+import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.utility.icon.IconRegisterable;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -21,7 +23,7 @@ public abstract class RegisterHelper {
         RegisterHelper.registerBlock(block, name, null);
     }
 
-    public static void registerBlock(Block block,String name, Class<? extends ItemBlock> itemClass) {
+    public static void registerBlock(Block block, String name, Class<? extends ItemBlock> itemClass) {
         block.setUnlocalizedName(Reference.MOD_ID.toLowerCase()+':'+name);
         LogHelper.info("registering " + block.getUnlocalizedName());
         if(itemClass!=null) {
@@ -29,6 +31,9 @@ public abstract class RegisterHelper {
         }
         else {
             GameRegistry.registerBlock(block, name);
+        }
+        if(block instanceof IconRegisterable) {
+            AgriCraft.proxy.registerIcons((IconRegisterable) block);
         }
     }
 
@@ -44,10 +49,13 @@ public abstract class RegisterHelper {
         }
     }
 
-    public static void registerItem(Item item,String name) {
+    public static void registerItem(Item item, String name) {
         item.setUnlocalizedName(Reference.MOD_ID.toLowerCase()+':'+name);
         LogHelper.info("registering " + item.getUnlocalizedName());
         GameRegistry.registerItem(item, name);
+        if(item instanceof IconRegisterable) {
+            AgriCraft.proxy.registerIcons((IconRegisterable) item);
+        }
     }
 
     public static void registerSeed(ItemModSeed seed, BlockModPlant plant) {

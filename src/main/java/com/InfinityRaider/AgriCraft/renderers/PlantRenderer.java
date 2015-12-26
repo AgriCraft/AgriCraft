@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.renderers;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
@@ -12,13 +13,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
-    public static void renderPlantLayer(IBlockAccess world, BlockPos pos,int renderType, int layer) {
-        renderPlantLayer(world, pos, renderType, layer, true);
+    public static void renderPlantLayer(IBlockAccess world, BlockPos pos,int renderType, int layer, TextureAtlasSprite texture) {
+        renderPlantLayer(world, pos, renderType, layer, texture, true);
     }
 
-    public static void renderPlantLayer(IBlockAccess world, BlockPos pos,int renderType, int layer, boolean resetColor) {
+    public static void renderPlantLayer(IBlockAccess world, BlockPos pos,int renderType, int layer, TextureAtlasSprite icon, boolean resetColor) {
         TessellatorV2 tessellator = TessellatorV2.instance;
-        tessellator.addTranslation(pos.getX(), pos.getY(), pos.getZ());
         tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(world, pos));
         if (resetColor) {
             tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
@@ -28,7 +28,6 @@ public abstract class PlantRenderer {
         } else {
             renderHashTagPattern(tessellator, layer);
         }
-        tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
     }
 
     private static void renderHashTagPattern(TessellatorV2 tessellator, int layer) {
@@ -260,10 +259,10 @@ public abstract class PlantRenderer {
      * @param v v offset for the bound texture
      */
     private static void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v) {
-        tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, u, v);
+        tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, u * Constants.UNIT, v * Constants.UNIT);
     }
 
-    protected void bindTexture(ResourceLocation texture) {
+    private static void bindTexture(ResourceLocation texture) {
         if(texture != null) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         }

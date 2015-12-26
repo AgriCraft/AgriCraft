@@ -12,15 +12,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -143,13 +143,13 @@ public class BlockSprinkler extends BlockContainerBase {
     	return null;
     }
 
-    @Override
-    public ResourceLocation getTexture(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
         TileEntity channel = world.getTileEntity(pos.add(0, 1, 0));
         if(channel != null && channel instanceof TileEntityChannel) {
-            return ((TileEntityChannel) channel).getTexture(side);
+            return ((TileEntityChannel) channel).getTexture(state, side);
         }
-        return Block.blockRegistry.getNameForObject(Blocks.planks);
+        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
     }
     
 }

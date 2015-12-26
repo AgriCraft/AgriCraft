@@ -5,13 +5,16 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -80,6 +83,11 @@ public abstract class TileEntityBase extends TileEntity {
                 ((IMultiBlockComponent) this).getMultiBlockData().readFromNBT(multiBlockTag);
             }
         }
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return oldState.getBlock() != newSate.getBlock();
     }
 
     /**
@@ -165,11 +173,8 @@ public abstract class TileEntityBase extends TileEntity {
         return this.getClass();
     }
 
-    public ResourceLocation getTexture(@Nullable EnumFacing side) {
-        return this.getTexture(getWorld().getBlockState(getPos()), side);
-    }
-
-    public ResourceLocation getTexture(IBlockState state, @Nullable EnumFacing side) {
-        return this.getBlockType().getTexture(getWorld(), getPos(), state, side, this);
+    public TextureAtlasSprite getTexture(IBlockState state, @Nullable EnumFacing side) {
+        //TODO
+        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
     }
 }

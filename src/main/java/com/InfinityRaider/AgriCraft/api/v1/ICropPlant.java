@@ -113,13 +113,9 @@ public interface ICropPlant {
     @SideOnly(Side.CLIENT)
     boolean renderAsFlower();
 
-    /** Gets the texture map to render this plant with as a ResourceLocation */
+    /** Gets the texture to render this plant with as a ResourceLocation */
     @SideOnly(Side.CLIENT)
-    ResourceLocation getPlantTextureMap(int growthStage);
-
-    /** Gets the TextureAtlasSprite for the texture map to render this plant with */
-    @SideOnly(Side.CLIENT)
-    TextureAtlasSprite getPlantIcon(int growthStage);
+    TextureAtlasSprite getPlantTexture(int growthStage);
 
     /** Gets some information about the plant for the journal */
     @SideOnly(Side.CLIENT)

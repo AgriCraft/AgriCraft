@@ -12,10 +12,12 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+import com.InfinityRaider.AgriCraft.utility.icon.IIconRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -23,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
@@ -38,17 +39,17 @@ import java.util.List;
 
 @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockContainerBase {
-    private final ResourceLocation textureTop;
-    private final ResourceLocation textureSide;
-    private final ResourceLocation textureBottom;
-    private final ResourceLocation textureInner;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite textureTop;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite textureSide;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite textureBottom;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite textureInner;
 
     public BlockPeripheral() {
         super(Material.iron);
-        this.textureTop = new ResourceLocation(Block.blockRegistry.getNameForObject(this).toString()+"Top");
-        this.textureSide = new ResourceLocation(Block.blockRegistry.getNameForObject(this).toString()+"Side");
-        this.textureBottom = new ResourceLocation(Block.blockRegistry.getNameForObject(this).toString()+"Bottom");
-        this.textureInner = new ResourceLocation(Block.blockRegistry.getNameForObject(this).toString()+"Inner");
     }
 
     @Override
@@ -167,7 +168,7 @@ public class BlockPeripheral extends BlockContainerBase {
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
 
-    public ResourceLocation getTexture(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
+    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
         if(side == null) {
             return this.textureInner;
         }
@@ -178,5 +179,13 @@ public class BlockPeripheral extends BlockContainerBase {
             return this.textureBottom;
         }
         return this.textureSide;
+    }
+
+    @Override
+    public void registerIcons(IIconRegistrar iconRegistrar) {
+        this.textureTop = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString()+"Top");
+        this.textureSide =iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString()+"Side");
+        this.textureBottom = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString()+"Bottom");
+        this.textureInner = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString()+"Inner");
     }
 }

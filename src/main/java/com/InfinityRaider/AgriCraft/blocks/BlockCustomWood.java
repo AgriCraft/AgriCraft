@@ -5,24 +5,22 @@ import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
-import net.minecraft.block.Block;
+import com.InfinityRaider.AgriCraft.utility.icon.IIconRegistrar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,10 +131,12 @@ public abstract class BlockCustomWood extends BlockContainerBase {
     }
 
     @Override
-    public ResourceLocation getTexture(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
-        if(te == null || !(te instanceof TileEntityCustomWood)) {
-            return Block.blockRegistry.getNameForObject(Blocks.planks);
-        }
-        return new ResourceLocation(((TileEntityCustomWood) te).getMaterialName());
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getIcon() {
+        return null;
     }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegistrar iconRegistrar) {}
 }

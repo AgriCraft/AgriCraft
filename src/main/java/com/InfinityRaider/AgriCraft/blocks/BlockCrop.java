@@ -18,12 +18,14 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.InfinityRaider.AgriCraft.utility.icon.IIconRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -46,7 +48,8 @@ import java.util.*;
  * The most important block in the mod.
  */
 public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantable {
-    /** The set of icons used to render weeds. */
+    /** The set of textures used to render weeds. */
+    private TextureAtlasSprite[] weedTextures;
 
     /** The default constructor for the block. */
     public BlockCrop() {
@@ -684,6 +687,17 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegistrar iconRegistrar) {
+        super.registerIcons(iconRegistrar);
+        TextureAtlasSprite tex1 = iconRegistrar.registerIcon("agricraft:textures/blocks/cropsWeedTexture1.png");
+        TextureAtlasSprite tex2 = iconRegistrar.registerIcon("agricraft:textures/blocks/cropsWeedTexture2.png");
+        TextureAtlasSprite tex3 = iconRegistrar.registerIcon("agricraft:textures/blocks/cropsWeedTexture3.png");
+        TextureAtlasSprite tex4 = iconRegistrar.registerIcon("agricraft:textures/blocks/cropsWeedTexture4.png");
+        weedTextures = new TextureAtlasSprite[] {tex1, tex1, tex2, tex2, tex2, tex3, tex3, tex4};
+    }
+
+    @Override
     protected Class<? extends ItemBlock> getItemBlockClass() {
         return null;
     }
@@ -719,5 +733,11 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     @Override
     public ItemStack getWailaStack(BlockBase block, TileEntityBase tea) {
     	return new ItemStack(Items.crops, 1, 0);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getWeedTexture(int growthStage) {
+        growthStage = Math.max(Math.min(weedTextures.length-1, growthStage), 0);
+        return weedTextures[growthStage];
     }
 }

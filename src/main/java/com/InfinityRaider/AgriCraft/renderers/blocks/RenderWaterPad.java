@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterPad;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterPadFull;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -21,7 +22,7 @@ public class RenderWaterPad extends RenderBlockBase {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double xCoord, double yCoord, double zCoord, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double xCoord, double yCoord, double zCoord, BlockPos pos, IBlockState state, BlockBase block, TileEntity tile, int modelId, float f) {
         int x = (int) xCoord;
         int y = (int) yCoord;
         int z = (int) zCoord;

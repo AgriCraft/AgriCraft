@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.blocks.BlockPeripheral;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.init.Blocks;
@@ -9,10 +10,10 @@ import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelPeripheralProbe;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -34,7 +35,7 @@ public class RenderPeripheral extends RenderBlockBase {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, BlockBase block, TileEntity tile, int modelId, float f) {
         tessellator.startDrawingQuads();
         if (tile instanceof TileEntityPeripheral) {
             TileEntityPeripheral peripheral = (TileEntityPeripheral) tile;
@@ -72,7 +73,7 @@ public class RenderPeripheral extends RenderBlockBase {
         GL11.glPopMatrix();
     }
 
-    private void performAnimations(TessellatorV2 tessellator, ResourceLocation texture, TileEntityPeripheral peripheral, int cm) {
+    private void performAnimations(TessellatorV2 tessellator, TextureAtlasSprite texture, TileEntityPeripheral peripheral, int cm) {
         int maxDoorPos = TileEntityPeripheral.MAX/2;
         float unit = Constants.UNIT;
 
@@ -128,10 +129,10 @@ public class RenderPeripheral extends RenderBlockBase {
     }
 
     private void renderBase(TessellatorV2 tessellator2, IBlockAccess world, BlockPos pos, BlockPeripheral blockPeripheral, IBlockState state, TileEntityPeripheral peripheral, int colorMultiplier) {
-        ResourceLocation iconTop = blockPeripheral.getTexture(world, pos, state, EnumFacing.UP, peripheral);
-        ResourceLocation iconSide = blockPeripheral.getTexture(world, pos, state, EnumFacing.NORTH, peripheral);
-        ResourceLocation iconBottom = blockPeripheral.getTexture(world, pos, state, EnumFacing.DOWN, peripheral);
-        ResourceLocation iconInside = blockPeripheral.getTexture(world, pos, state, null, peripheral);
+        TextureAtlasSprite iconTop = blockPeripheral.getIcon(world, pos, state, EnumFacing.UP, peripheral);
+        TextureAtlasSprite iconSide = blockPeripheral.getIcon(world, pos, state, EnumFacing.NORTH, peripheral);
+        TextureAtlasSprite iconBottom = blockPeripheral.getIcon(world, pos, state, EnumFacing.DOWN, peripheral);
+        TextureAtlasSprite iconInside = blockPeripheral.getIcon(world, pos, state, null, peripheral);
         float unit = Constants.UNIT;
         //top
         drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconTop);

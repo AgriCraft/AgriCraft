@@ -443,7 +443,7 @@ public class CropPlantHandler {
         OreDictionary.registerOre("seedPumpkin", Items.pumpkin_seeds);
         OreDictionary.registerOre("cropPumpkin", Blocks.pumpkin);
         
-        suppressedRegisterPlant(new CropPlantVanilla((BlockCrops) net.minecraft.init.Blocks.wheat, (ItemSeeds) net.minecraft.init.Items.wheat_seeds));
+        suppressedRegisterPlant(new CropPlantVanilla((BlockCrops) net.minecraft.init.Blocks.wheat, (ItemSeeds) net.minecraft.init.Items.wheat_seeds, "wheat"));
         suppressedRegisterPlant(new CropPlantStem((ItemSeeds) Items.melon_seeds, Blocks.melon_block));
         suppressedRegisterPlant(new CropPlantStem((ItemSeeds) Items.pumpkin_seeds, Blocks.pumpkin));
         suppressedRegisterPlant(new CropPlantNetherWart());

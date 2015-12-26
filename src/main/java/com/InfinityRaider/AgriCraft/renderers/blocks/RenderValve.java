@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
@@ -10,12 +11,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,7 +38,7 @@ public class RenderValve extends RenderChannel {
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
 
-        ResourceLocation texture = ItemBlockCustomWood.getTextureFromStack(item);
+        TextureAtlasSprite texture = ItemBlockCustomWood.getTextureFromStack(item);
         
         //Render channel.
         drawScaledPrism(tessellator, 2, 4, 4, 14, 12, 5, cm, texture);
@@ -46,7 +46,7 @@ public class RenderValve extends RenderChannel {
         drawScaledPrism(tessellator, 2, 4, 5, 14, 5, 11, cm, texture);
         
         //Render separators.
-        ResourceLocation ironTexture = Block.blockRegistry.getNameForObject(Blocks.iron_block);
+        TextureAtlasSprite ironTexture = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
         drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, cm, ironTexture);
         drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, cm, ironTexture);
         drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, cm, ironTexture);
@@ -71,7 +71,7 @@ public class RenderValve extends RenderChannel {
      * TODO: Use rotation to eliminate duplicate code.
      */
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, BlockBase block, TileEntity tile, int modelId, float f) {
         TileEntityValve valve = (TileEntityValve) tile;
         tessellator.startDrawingQuads();
         if (valve != null) {
@@ -86,7 +86,7 @@ public class RenderValve extends RenderChannel {
                 GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glPopMatrix();
             }
-            ResourceLocation texture = valve.getTexture(state, null);
+            TextureAtlasSprite texture = valve.getTexture(state, null);
             this.renderWoodChannel(valve, tessellator, texture);
             if (valve.getDiscreteFluidLevel() > 0) {
                 this.drawWater(valve, tessellator);
@@ -94,7 +94,7 @@ public class RenderValve extends RenderChannel {
             int cm = valve.colorMultiplier();
             for (ForgeDirection dir : TileEntityChannel.validDirections) {
                 if (valve.hasNeighbourCheck(dir)) {
-                    ResourceLocation ironTexture = Block.blockRegistry.getNameForObject(Blocks.iron_block);
+                    TextureAtlasSprite ironTexture = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
                     if (valve.isPowered()) {
                         //Draw closed separator.
                         drawScaledPrism(tessellator, 6, 5, 0, 10, 12, 2, cm, dir, ironTexture);
@@ -114,7 +114,7 @@ public class RenderValve extends RenderChannel {
     }
 
     @Override
-	protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection direction, ResourceLocation texture) {
+	protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection direction, TextureAtlasSprite texture) {
 		Block neighbour;
         IBlockState state;
 		if (channel.getWorld() == null) {
@@ -142,7 +142,7 @@ public class RenderValve extends RenderChannel {
 	}
 
 	@Override
-	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection direction, float y, ResourceLocation texture) {
+	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection direction, float y, TextureAtlasSprite texture) {
 		TileEntityValve valve = (TileEntityValve) channel;
 		// checks if there is a neighboring block that this block can connect to
 		if (channel.hasNeighbourCheck(direction)) {

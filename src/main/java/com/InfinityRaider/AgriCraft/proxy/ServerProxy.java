@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
+import com.InfinityRaider.AgriCraft.utility.icon.IconRegisterable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -43,4 +44,12 @@ public class ServerProxy extends CommonProxy {
     @Override
     public void registerVillagerSkin(int id, String resource) {
     }
+
+    @Override
+    public String registerTextureAtlasSprite(String texturePath) {
+        return null;
+    }
+
+    @Override
+    public void registerIcons(IconRegisterable block) {}
 }

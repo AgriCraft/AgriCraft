@@ -3,28 +3,26 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
+import com.InfinityRaider.AgriCraft.utility.icon.IIconRegistrar;
+import com.InfinityRaider.AgriCraft.utility.icon.IconRegisterable;
+import com.InfinityRaider.AgriCraft.utility.icon.IconRegistrar;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
 
 /**
  * The base class for all AgriCraft blocks.
  */
-public abstract class BlockBase extends Block {
-    private final ResourceLocation texture;
+public abstract class BlockBase extends Block implements IconRegisterable {
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite icon;
 	
     /**
      * The default, base constructor for all AgriCraft blocks.
@@ -35,8 +33,6 @@ public abstract class BlockBase extends Block {
     protected BlockBase(Material mat) {
         super(mat);
         RegisterHelper.registerBlock(this, getInternalName(), getItemBlockClass());
-        ResourceLocation loc = Block.blockRegistry.getNameForObject(this);
-        this.texture = new ResourceLocation(loc.getResourceDomain(), "blocks/" + loc.getResourcePath());
     }
 
     @Override
@@ -87,19 +83,13 @@ public abstract class BlockBase extends Block {
     	return null;
     }
 
-    public  ResourceLocation getTexture() {
-        return this.texture;
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getIcon() {
+        return icon;
     }
 
-    /**
-     * Gets the texture to render this block with
-     * @param world the world object
-     * @param pos the block position
-     * @param state the block state
-     * @param te the tile entity (can be null)
-     * @return a ResourceLocation holding the texture
-     */
-    public ResourceLocation getTexture(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
-        return this.getTexture();
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegistrar iconRegistrar) {
+        this.icon = iconRegistrar.registerIcon("agricraft:textures/blocks/"+this.getUnlocalizedName()+".png");
     }
 }

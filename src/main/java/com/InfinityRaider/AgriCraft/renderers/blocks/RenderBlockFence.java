@@ -1,17 +1,17 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFence;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,12 +43,12 @@ public class RenderBlockFence extends RenderBlockCustomWood<TileEntityFence> {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, BlockBase block, TileEntity tile, int modelId, float f) {
         if(tile==null || !(tile instanceof TileEntityFence)) {
             return false;
         }
         TileEntityFence fence = (TileEntityFence) tile;
-        ResourceLocation texture = fence.getTexture(state, null);
+        TextureAtlasSprite texture = fence.getTexture(state, null);
         tessellator.startDrawingQuads();
         int cm = block.colorMultiplier(world, new BlockPos(x, y, z));
         drawScaledPrism(tessellator, 6, 0, 6, 10, 16, 10, cm, texture);

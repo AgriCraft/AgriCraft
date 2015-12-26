@@ -1,18 +1,18 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,7 +40,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, Block block, TileEntity tile, int modelId, float f) {
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, BlockBase block, TileEntity tile, int modelId, float f) {
         //call correct drawing methods
         boolean success = false;
         if (tile instanceof TileEntityTank) {
@@ -70,7 +70,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 	}
 
     private void drawWoodTank(TileEntityTank tank, TessellatorV2 tessellator) {
-        ResourceLocation texture = tank.getTexture(null);
+        TextureAtlasSprite texture = tank.getTexture(null, null);
         this.renderBottom(tank, tessellator, texture);
         this.renderSide(tank, tessellator, ForgeDirection.NORTH, texture);
         this.renderSide(tank, tessellator, ForgeDirection.EAST, texture);
@@ -78,7 +78,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         this.renderSide(tank, tessellator, ForgeDirection.WEST, texture);
     }
 
-    private void renderBottom(TileEntityTank tank, TessellatorV2 tessellator, ResourceLocation texture) {
+    private void renderBottom(TileEntityTank tank, TessellatorV2 tessellator, TextureAtlasSprite texture) {
         //the texture
         int cm = tank.colorMultiplier();
         //bottom
@@ -102,7 +102,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         }
     }
 
-    private void renderSide(TileEntityTank tank, TessellatorV2 tessellator, ForgeDirection dir, ResourceLocation texture) {
+    private void renderSide(TileEntityTank tank, TessellatorV2 tessellator, ForgeDirection dir, TextureAtlasSprite texture) {
         int cm = tank.colorMultiplier();
         int yMin = tank.hasNeighbour(ForgeDirection.DOWN)?0:1;
         if ((dir != null) && (dir != ForgeDirection.UNKNOWN)) {

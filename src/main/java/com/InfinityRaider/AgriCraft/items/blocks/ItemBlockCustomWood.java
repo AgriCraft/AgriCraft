@@ -3,6 +3,8 @@ package com.InfinityRaider.AgriCraft.items.blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -37,9 +39,10 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
         this.setHasSubtypes(true);
     }
 
-    public static ResourceLocation getTextureFromStack(ItemStack stack) {
+    @SideOnly(Side.CLIENT)
+    public static TextureAtlasSprite getTextureFromStack(ItemStack stack) {
         //TODO
-        return null;
+        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
     }
 
     /**

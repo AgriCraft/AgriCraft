@@ -305,17 +305,10 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
     @SideOnly(Side.CLIENT)
     public abstract boolean renderAsFlower();
 
-    /** Gets the texture map to render this plant with as a ResourceLocation */
+    /** Gets the texture to render this plant with as a ResourceLocation */
     @Override
     @SideOnly(Side.CLIENT)
-    public ResourceLocation getPlantTextureMap(int growthStage) {
-        return null;
-    }
-
-    /** Gets the TextureAtlasSprite for the texture map to render this plant with */
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getPlantIcon(int growthStage) {
+    public TextureAtlasSprite getPlantTexture(int growthStage) {
         return null;
     }
 
@@ -345,7 +338,7 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
-        PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0);
+        PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0, getPlantTexture(growthStage));
     }
 
     @Override

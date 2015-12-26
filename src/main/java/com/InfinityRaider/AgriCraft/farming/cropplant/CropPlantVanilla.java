@@ -5,6 +5,8 @@ import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementH
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -18,11 +20,17 @@ import java.util.Random;
 public class CropPlantVanilla extends CropPlant {
     private BlockCrops plant;
     private ItemSeeds seed;
+    private String[] textures;
 
-    public CropPlantVanilla(BlockCrops crop, ItemSeeds seed) {
+    public CropPlantVanilla(BlockCrops crop, ItemSeeds seed, String textureBase) {
         this.plant = crop;
         this.seed = seed;
+        textures = new String[8];
+        for(int i=0;i<textures.length;i++) {
+            textures[i] = "minecraft:textures/blocks/"+textureBase+"_stage_" + i + ".png";
     }
+    }
+
     @Override
     public int tier() {
         return 1;
@@ -66,7 +74,6 @@ public class CropPlantVanilla extends CropPlant {
         return true;
     }
 
-
     @Override
     protected IGrowthRequirement initGrowthRequirement() {
         return GrowthRequirementHandler.getNewBuilder().build();
@@ -85,6 +92,12 @@ public class CropPlantVanilla extends CropPlant {
     @SideOnly(Side.CLIENT)
     public boolean renderAsFlower() {
         return false;
+    }
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getPlantTexture(int growthStage) {
+        growthStage = Math.max(Math.min(growthStage, textures.length-1), 0);
+        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textures[growthStage]);
     }
 
     @Override

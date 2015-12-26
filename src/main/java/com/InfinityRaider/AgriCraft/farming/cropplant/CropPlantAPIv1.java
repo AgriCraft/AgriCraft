@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,7 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Random;
 
-@SuppressWarnings("deprecation")
 public class CropPlantAPIv1 extends CropPlant {
     protected ICropPlant plant;
 
@@ -112,14 +110,8 @@ public class CropPlantAPIv1 extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public ResourceLocation getPlantTextureMap(int growthStage) {
-        return plant.getPlantTextureMap(growthStage);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getPlantIcon(int growthStage) {
-        return plant.getPlantIcon(growthStage);
+    public TextureAtlasSprite getPlantTexture(int growthStage) {
+        return plant.getPlantTexture(growthStage);
     }
 
     @Override
@@ -134,7 +126,7 @@ public class CropPlantAPIv1 extends CropPlant {
         if(plant.overrideRendering()) {
             plant.renderPlantInCrop(world, pos, state, growthStage);
         } else {
-            PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0);
+            PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0, getPlantTexture(growthStage));
         }
     }
 
