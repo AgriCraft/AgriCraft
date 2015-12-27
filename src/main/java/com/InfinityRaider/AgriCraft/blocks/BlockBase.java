@@ -57,7 +57,7 @@ public abstract class BlockBase extends Block implements IconRegisterable {
      */
     @Override
     public int getRenderType() {
-        return AgriCraft.proxy.getRenderId(this);
+        return 3;
     }
 
     /**

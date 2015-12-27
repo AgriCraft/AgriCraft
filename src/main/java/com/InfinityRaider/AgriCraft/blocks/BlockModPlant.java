@@ -279,7 +279,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     public int getRenderType() {
-        return this.renderType.renderId();
+        return 3;
     }
 
     @Override

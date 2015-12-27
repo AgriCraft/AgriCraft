@@ -4,6 +4,8 @@ import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -162,6 +164,11 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
         tag.setString(Names.NBT.material, this.getMaterialName());
         tag.setInteger(Names.NBT.materialMeta, this.materialMeta);
         return tag;
+    }
+
+    public final TextureAtlasSprite getIcon() {
+        //TODO: find <Block, meta>  <--> ResourceLocation/TextureAtlasSprite relation
+        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
     }
 
     @Override

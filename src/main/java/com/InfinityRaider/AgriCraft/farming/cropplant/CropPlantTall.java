@@ -32,9 +32,9 @@ public abstract class CropPlantTall extends CropPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
-        PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0, getPlantTexture(growthStage));
+        PlantRenderer.renderPlantLayer(world, pos, getRenderMethod(), 0, getPlantTexture(growthStage));
         if(renderTopLayer(growthStage)) {
-            PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 1, getPlantTexture(growthStage));
+            PlantRenderer.renderPlantLayer(world, pos, getRenderMethod(), 1, getPlantTexture(growthStage));
         }
     }
 }

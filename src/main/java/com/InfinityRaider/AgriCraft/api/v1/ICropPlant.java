@@ -111,7 +111,7 @@ public interface ICropPlant {
 
     /** Determines how the plant is rendered, return false to render as wheat (#), true to render as a flower (X) */
     @SideOnly(Side.CLIENT)
-    boolean renderAsFlower();
+    RenderMethod getRenderMethod();
 
     /** Gets the texture to render this plant with as a ResourceLocation */
     @SideOnly(Side.CLIENT)

@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> extends RenderBlockBase {
@@ -15,15 +16,13 @@ public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> exte
         this.teDummy = te;
     }
 
-    /*
     @Override
-    protected final void doInventoryRender(ItemStack item, Object... data) {
+    protected final void doInventoryRender(Block block, ItemStack item) {
         teDummy.setMaterial(item);
         GL11.glDisable(GL11.GL_LIGHTING);
-        renderInInventory(item, data);
+        renderInInventory(block, item);
         GL11.glEnable(GL11.GL_LIGHTING);
     }
-    */
 
-    protected abstract void renderInInventory(ItemStack item, Object... data);
+    protected abstract void renderInInventory(Block block, ItemStack item);
 }

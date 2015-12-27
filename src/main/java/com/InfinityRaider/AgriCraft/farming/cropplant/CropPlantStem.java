@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -23,8 +24,8 @@ public class CropPlantStem extends CropPlantGeneric {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderAsFlower() {
-        return true;
+    public RenderMethod getRenderMethod() {
+        return RenderMethod.STEM;
     }
 
     @Override

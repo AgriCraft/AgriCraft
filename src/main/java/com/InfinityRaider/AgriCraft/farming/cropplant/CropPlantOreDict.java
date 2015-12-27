@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import net.minecraft.item.ItemSeeds;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -11,8 +12,8 @@ public class CropPlantOreDict extends CropPlantGeneric {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderAsFlower() {
-        return false;
+    public RenderMethod getRenderMethod() {
+        return RenderMethod.HASHTAG;
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDispla
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -450,6 +451,11 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
             }
         }
         return neighbours;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getPlantIcon(IBlockState state) {
+        return plant.getPlantTexture(state.getValue(BlockStates.GROWTHSTAGE));
     }
 
     @Override

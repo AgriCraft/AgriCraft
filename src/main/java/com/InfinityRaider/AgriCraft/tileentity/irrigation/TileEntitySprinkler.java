@@ -12,6 +12,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITickable;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
@@ -122,6 +123,11 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
             TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(getPos().add(0, 1, 0));
             channel.pullFluid(ConfigurationHandler.sprinklerRatePerHalfSecond);
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getChannelIcon() {
+        return ((TileEntityChannel) getWorld().getTileEntity(getPos().add(0, 1, 0))).getIcon();
     }
 
     @SideOnly(Side.CLIENT)

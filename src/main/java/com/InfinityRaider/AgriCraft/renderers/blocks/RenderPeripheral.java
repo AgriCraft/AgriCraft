@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.blocks.BlockPeripheral;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.init.Blocks;
@@ -10,9 +9,11 @@ import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelPeripheralProbe;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
@@ -21,11 +22,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
 public class RenderPeripheral extends RenderBlockBase {
     private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/peripheralProbe.png");
     private static final ModelBase probeModel = new ModelPeripheralProbe();
@@ -35,14 +33,15 @@ public class RenderPeripheral extends RenderBlockBase {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, IBlockState state, BlockBase block, TileEntity tile, int modelId, float f) {
-        tessellator.startDrawingQuads();
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
         if (tile instanceof TileEntityPeripheral) {
             TileEntityPeripheral peripheral = (TileEntityPeripheral) tile;
-            drawSeed(tessellator,  peripheral);
-            performAnimations(tessellator, peripheral.getTexture(state, null), peripheral, block.colorMultiplier(world, pos));
-            renderBase(tessellator, world, pos, (BlockPeripheral) block, state, peripheral, block.colorMultiplier(world, pos));
-            tessellator.draw();
+            if (callFromTESR) {
+                drawSeed(tessellator, peripheral);
+                performAnimations(tessellator, peripheral, ((BlockPeripheral) block).getIcon(world, pos, state, null, peripheral), block.colorMultiplier(world, pos));
+            } else {
+                renderBase(tessellator, world, pos, (BlockPeripheral) block, state, peripheral, block.colorMultiplier(world, pos));
+            }
         }
         return true;
     }
@@ -52,9 +51,16 @@ public class RenderPeripheral extends RenderBlockBase {
         if(stack == null || stack.getItem() == null) {
             return;
         }
-        float dx = 4*Constants.UNIT;
-        float dy = 14*Constants.UNIT;
-        float dz = 4*Constants.UNIT;
+
+        TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: find seed icon
+
+        if(icon == null) {
+            return;
+        }
+
+        float dx = 4* Constants.UNIT;
+        float dy = 14* Constants.UNIT;
+        float dz = 4* Constants.UNIT;
         float scale = 0.5F;
         float angle = 90.0F;
 
@@ -64,16 +70,21 @@ public class RenderPeripheral extends RenderBlockBase {
         GL11.glScalef(scale, scale, scale);
         //rotate the renderer
         GL11.glRotatef(angle, 1.0F, 0.0F, 0.0F);
-        
-        //TODO: render item
-        
+
+        //TODO: render the seed
+
+        /*
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
+        ItemRenderer.renderItemIn2D(tessellator, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), Constants.UNIT);
+        */
+
         GL11.glRotatef(-angle, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
         GL11.glTranslated(-dx, -dy, -dz);
         GL11.glPopMatrix();
     }
 
-    private void performAnimations(TessellatorV2 tessellator, TextureAtlasSprite texture, TileEntityPeripheral peripheral, int cm) {
+    private void performAnimations(TessellatorV2 tessellator, TileEntityPeripheral peripheral, TextureAtlasSprite icon, int cm) {
         int maxDoorPos = TileEntityPeripheral.MAX/2;
         float unit = Constants.UNIT;
 
@@ -87,8 +98,8 @@ public class RenderPeripheral extends RenderBlockBase {
             if (doorPosition < 4) {
                 Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
                 tessellator.startDrawingQuads();
-                drawScaledPrism(tessellator, 4, 2, 0, 8 - doorPosition, 14, 1, cm, texture);
-                drawScaledPrism(tessellator, 8 + doorPosition, 2, 0, 12, 14, 1, cm, texture);
+                drawScaledPrism(tessellator, 4, 2, 0, 8 - doorPosition, 14, 1, icon, cm);
+                drawScaledPrism(tessellator, 8 + doorPosition, 2, 0, 12, 14, 1, icon, cm);
                 tessellator.draw();
             }
 
@@ -135,36 +146,61 @@ public class RenderPeripheral extends RenderBlockBase {
         TextureAtlasSprite iconInside = blockPeripheral.getIcon(world, pos, state, null, peripheral);
         float unit = Constants.UNIT;
         //top
-        drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconTop);
-        drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconTop);
+        drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, iconTop, 1, colorMultiplier);
+        drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, iconTop, 1, colorMultiplier);
         //bottom
-        drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconBottom);
-        drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconBottom);
+        drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, iconBottom, 0, colorMultiplier);
+        drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, iconBottom, 0, colorMultiplier);
         //front
-        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconSide);
-        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconSide);
+        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, iconSide, 0, colorMultiplier);
+        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, iconSide, 0, colorMultiplier);
         //right
-        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconSide);
-        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconSide);
+        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, iconSide, 1, colorMultiplier);
+        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, iconSide, 1, colorMultiplier);
         //left
-        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconSide);
-        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 0, colorMultiplier, iconSide);
+        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, iconSide, 0, colorMultiplier);
+        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, iconSide, 0, colorMultiplier);
         //back
-        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconSide);
-        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 1, colorMultiplier, iconSide);
+        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, iconSide, 1, colorMultiplier);
+        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, iconSide, 1, colorMultiplier);
         //inside top
-        drawScaledFaceFrontXZ(tessellator2, 4, 4, 12, 12, 12 * unit, colorMultiplier, iconBottom);
+        drawScaledFaceFrontXZ(tessellator2, 4, 4, 12, 12, iconBottom, 12 * unit, colorMultiplier);
         //inside front
-        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier, iconInside);
-        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier, iconInside);
+        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, iconInside, 4 * unit, colorMultiplier);
+        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, iconInside, 4 * unit, colorMultiplier);
         //inside right
-        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier, iconInside);
-        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier, iconInside);
+        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, iconInside, 12 * unit, colorMultiplier);
+        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, iconInside, 12 * unit, colorMultiplier);
         //inside left
-        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier, iconInside);
-        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, 4 * unit, colorMultiplier, iconInside);
+        drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, iconInside, 4 * unit, colorMultiplier);
+        drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, iconInside, 4 * unit, colorMultiplier);
         //inside back
-        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier, iconInside);
-        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, 12 * unit, colorMultiplier, iconInside);
+        drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, iconInside, 12 * unit, colorMultiplier);
+        drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, iconInside, 12 * unit, colorMultiplier);
+    }
+
+    @Override
+    protected void doInventoryRender(Block block, ItemStack item) {
+        TessellatorV2 tessellator = TessellatorV2.instance;
+
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        tessellator.startDrawingQuads();
+
+        renderBase(tessellator, Minecraft.getMinecraft().theWorld, null, (BlockPeripheral) Blocks.blockPeripheral, null, null, COLOR_MULTIPLIER_STANDARD);
+
+        tessellator.draw();
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glPopMatrix();
+    }
+
+    @Override
+    public boolean shouldBehaveAsTESR() {
+        return true;
+    }
+
+    @Override
+    public boolean shouldBehaveAsISBRH() {
+        return true;
     }
 }

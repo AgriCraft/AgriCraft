@@ -7,12 +7,11 @@ import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemBase;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
+import com.InfinityRaider.AgriCraft.renderers.BlockRendererDispatcherWrapped;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.InfinityRaider.AgriCraft.utility.icon.IconRegisterable;
 import com.InfinityRaider.AgriCraft.utility.icon.IconRegistrar;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,6 +53,9 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerRenderers() {
+        //apply the wrapped BlockRendererDispatcher
+        BlockRendererDispatcherWrapped.init();
+
         //BLOCKS
         //------
         for(Field field:Blocks.class.getDeclaredFields()) {
@@ -121,11 +123,6 @@ public class ClientProxy extends CommonProxy {
                 //API.hideItem(stack);
             }
         }
-    }
-
-    @Override
-    public int getRenderId(Block block) {
-        return RenderBlockBase.getRenderId(block);
     }
 
     @Override

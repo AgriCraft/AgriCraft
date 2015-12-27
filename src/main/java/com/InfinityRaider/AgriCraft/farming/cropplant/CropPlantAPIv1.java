@@ -1,9 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
-import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
-import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v1.IAdditionalCropData;
-import com.InfinityRaider.AgriCraft.api.v1.ICrop;
+import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -104,8 +101,8 @@ public class CropPlantAPIv1 extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderAsFlower() {
-        return plant.renderAsFlower();
+    public RenderMethod getRenderMethod() {
+        return plant.getRenderMethod();
     }
 
     @Override
@@ -126,7 +123,7 @@ public class CropPlantAPIv1 extends CropPlant {
         if(plant.overrideRendering()) {
             plant.renderPlantInCrop(world, pos, state, growthStage);
         } else {
-            PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0, getPlantTexture(growthStage));
+            PlantRenderer.renderPlantLayer(world, pos, getRenderMethod(), 0, getPlantTexture(growthStage));
         }
     }
 

@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -13,20 +14,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
-    public static void renderPlantLayer(IBlockAccess world, BlockPos pos,int renderType, int layer, TextureAtlasSprite texture) {
+    public static void renderPlantLayer(IBlockAccess world, BlockPos pos, RenderMethod renderType, int layer, TextureAtlasSprite texture) {
         renderPlantLayer(world, pos, renderType, layer, texture, true);
     }
 
-    public static void renderPlantLayer(IBlockAccess world, BlockPos pos,int renderType, int layer, TextureAtlasSprite icon, boolean resetColor) {
+    public static void renderPlantLayer(IBlockAccess world, BlockPos pos, RenderMethod renderType, int layer, TextureAtlasSprite icon, boolean resetColor) {
         TessellatorV2 tessellator = TessellatorV2.instance;
         tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(world, pos));
         if (resetColor) {
             tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
         }
-        if (renderType != 6) {
-            renderCrossPattern(tessellator, layer);
-        } else {
-            renderHashTagPattern(tessellator, layer);
+        switch(renderType) {
+            case CROSSED: renderCrossPattern(tessellator, layer); break;
+            case HASHTAG: renderHashTagPattern(tessellator, layer); break;
         }
     }
 

@@ -55,7 +55,7 @@ public class CustomCrops {
                         //tier
                         int tier = Integer.parseInt(cropData[4]);
                         //render method
-                        RenderMethod renderType = RenderMethod.getRenderMethod(Integer.parseInt(cropData[5]));
+                        RenderMethod renderType = RenderMethod.values()[Integer.parseInt(cropData[5])];
                         //shearable
                         ItemStack shearable = cropData.length>7?IOHelper.getStack(cropData[7]):null;
                         shearable = (shearable!=null && shearable.getItem()!=null)?shearable:null;

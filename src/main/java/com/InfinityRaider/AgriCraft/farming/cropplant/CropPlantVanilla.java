@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
@@ -90,9 +91,10 @@ public class CropPlantVanilla extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderAsFlower() {
-        return false;
+    public RenderMethod getRenderMethod() {
+        return RenderMethod.HASHTAG;
     }
+
     @Override
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getPlantTexture(int growthStage) {

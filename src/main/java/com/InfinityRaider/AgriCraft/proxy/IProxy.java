@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
 import com.InfinityRaider.AgriCraft.utility.icon.IconRegisterable;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -36,9 +35,6 @@ public interface IProxy {
 
     /** Registers all the needed event handlers to the correct event bus */
     void registerEventHandlers();
-
-    /** Returns the correct render id, might return a wrong id on the server */
-    int getRenderId(Block block);
 
     /** Registers a villager skin on the client, does nothing on the server */
     void registerVillagerSkin(int id, String resource);

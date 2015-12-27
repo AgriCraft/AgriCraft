@@ -1,9 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
-import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v1.IAdditionalCropData;
-import com.InfinityRaider.AgriCraft.api.v1.ICrop;
-import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
+import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
@@ -17,7 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -303,7 +299,7 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public abstract boolean renderAsFlower();
+    public abstract RenderMethod getRenderMethod();
 
     /** Gets the texture to render this plant with as a ResourceLocation */
     @Override
@@ -338,7 +334,7 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
-        PlantRenderer.renderPlantLayer(world, pos, renderAsFlower() ? 1 : 6, 0, getPlantTexture(growthStage));
+        PlantRenderer.renderPlantLayer(world, pos, getRenderMethod(), 0, getPlantTexture(growthStage));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -65,8 +66,8 @@ public final class CropPlantNone extends CropPlant {
     }
 
     @Override
-    public boolean renderAsFlower() {
-        return false;
+    public RenderMethod getRenderMethod() {
+        return RenderMethod.HASHTAG;
     }
 
     @Override
