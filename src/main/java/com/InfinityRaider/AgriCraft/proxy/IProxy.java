@@ -42,9 +42,6 @@ public interface IProxy {
     /** Initializes the configuration file */
     void initConfiguration(FMLPreInitializationEvent event);
 
-    /** Registers a ResourceLocation as a TextureAtlasSprite */
-    String registerTextureAtlasSprite(String texturePath);
-
     /** Registers icons for all blocks and items in agricraft */
-    void registerIcons(IconRegisterable block);
+    void registerIcons(IconRegisterable iconRegisterable);
 }

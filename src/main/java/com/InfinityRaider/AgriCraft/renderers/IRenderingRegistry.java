@@ -9,4 +9,6 @@ public interface IRenderingRegistry {
     void registerRenderingHandler(Block block, ISimpleBlockRenderingHandler renderer);
 
     ISimpleBlockRenderingHandler getRenderingHandler(Block block);
+
+    boolean hasRenderingHandler(Block block);
 }

@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.utility.icon.IIconRegistrar;
 import com.InfinityRaider.AgriCraft.utility.icon.IconRegisterable;
-import com.InfinityRaider.AgriCraft.utility.icon.IconRegistrar;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -14,6 +13,7 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -57,7 +57,7 @@ public abstract class BlockBase extends Block implements IconRegisterable {
      */
     @Override
     public int getRenderType() {
-        return 3;
+        return 2;
     }
 
     /**
@@ -90,6 +90,16 @@ public abstract class BlockBase extends Block implements IconRegisterable {
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegistrar iconRegistrar) {
-        this.icon = iconRegistrar.registerIcon("agricraft:textures/blocks/"+this.getUnlocalizedName()+".png");
+        String name = this.getUnlocalizedName();
+        int index = name.indexOf(":");
+        name = index > 0 ? name.substring(index+1) : name;
+        index = name.indexOf(".");
+        name = index > 0 ? name.substring(index+1) : name;
+        this.icon = iconRegistrar.registerIcon("agricraft:blocks/" + name);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public EnumWorldBlockLayer getBlockLayer() {
+        return EnumWorldBlockLayer.CUTOUT;
     }
 }

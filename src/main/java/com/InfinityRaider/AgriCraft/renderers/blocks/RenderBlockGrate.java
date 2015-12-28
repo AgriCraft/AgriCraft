@@ -31,14 +31,14 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
 
-        drawScaledPrism(tessellator, 7, 0, 1, 9, 16, 3, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 0, 5, 9, 16, 7, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 0, 9, 9, 16, 11, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 0, 13, 9, 16, 15, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 1, 0, 9, 3, 16, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 5, 0, 9, 7, 16, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 9, 0, 9, 11, 16, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 13, 0, 9, 15, 16, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 0, 1, 9, 16, 3, icon);
+        drawScaledPrism(tessellator, 7, 0, 5, 9, 16, 7, icon);
+        drawScaledPrism(tessellator, 7, 0, 9, 9, 16, 11, icon);
+        drawScaledPrism(tessellator, 7, 0, 13, 9, 16, 15, icon);
+        drawScaledPrism(tessellator, 7, 1, 0, 9, 3, 16, icon);
+        drawScaledPrism(tessellator, 7, 5, 0, 9, 7, 16, icon);
+        drawScaledPrism(tessellator, 7, 9, 0, 9, 11, 16, icon);
+        drawScaledPrism(tessellator, 7, 13, 0, 9, 15, 16, icon);
 
         tessellator.draw();
         //enable lighting

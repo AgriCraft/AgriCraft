@@ -4,6 +4,8 @@ import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -30,10 +32,23 @@ public class CropPlantStem extends CropPlantGeneric {
 
     @Override
     @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getPlantTexture(int growthStage) {
+        //TODO: get vine icon
+        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getFruitIcon() {
+        //TODO: get icon from fruit block
+        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
         boolean mature = isMature(world, pos, state);
         Block vine = ((ItemSeeds) getSeed().getItem()).getPlant(null, null).getBlock();
-        PlantRenderer.renderStemPlant(world, pos, growthStage, vine, getFruitBlock(), mature);
+        PlantRenderer.renderStemPlant(world, pos, getPlantTexture(growthStage), getFruitIcon(), growthStage, vine, mature);
     }
 
     @Override

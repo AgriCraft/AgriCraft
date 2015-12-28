@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -27,22 +28,21 @@ public class RenderWaterPad extends RenderBlockBase {
     }
 
     @Override
-    protected void doInventoryRender(Block block, ItemStack item) {
+    protected void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         TessellatorV2 tessellator = TessellatorV2.instance;
         GL11.glColor3f(1, 1, 1);
         GL11.glDisable(GL11.GL_LIGHTING);
         tessellator.startDrawingQuads();
         boolean full = ((ItemBlock) item.getItem()).block instanceof BlockWaterPadFull;
-        int cm = COLOR_MULTIPLIER_STANDARD;
         TextureAtlasSprite dirtIcon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: get dirt icon;
-        drawScaledPrism(tessellator, 0, 0, 0, 16, 8, 16, dirtIcon, cm);
-        drawScaledPrism(tessellator, 1, 8, 0, 1, 15, 16, dirtIcon, cm);
-        drawScaledPrism(tessellator, 15, 8, 1, 16, 15, 16, dirtIcon, cm);
-        drawScaledPrism(tessellator, 0, 8, 15, 15, 15, 16, dirtIcon, cm);
-        drawScaledPrism(tessellator, 0, 8, 0, 15, 1, 15, dirtIcon, cm);
+        drawScaledPrism(tessellator, 0, 0, 0, 16, 8, 16, dirtIcon);
+        drawScaledPrism(tessellator, 1, 8, 0, 1, 15, 16, dirtIcon);
+        drawScaledPrism(tessellator, 15, 8, 1, 16, 15, 16, dirtIcon);
+        drawScaledPrism(tessellator, 0, 8, 15, 15, 15, 16, dirtIcon);
+        drawScaledPrism(tessellator, 0, 8, 0, 15, 1, 15, dirtIcon);
         if(full) {
             TextureAtlasSprite waterIcon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: get water icon;
-            drawScaledPrism(tessellator, 1, 14, 1, 15, 15, 15, waterIcon, cm);
+            drawScaledPrism(tessellator, 1, 14, 1, 15, 15, 15, waterIcon);
         }
         tessellator.draw();
         GL11.glEnable(GL11.GL_LIGHTING);

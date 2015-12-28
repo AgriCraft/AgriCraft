@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -54,7 +55,7 @@ public class RenderSprinkler extends RenderBlockBase {
     }
 
     @Override
-    protected void doInventoryRender(Block block, ItemStack item) {
+    protected void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         GL11.glTranslatef(0, -0.25F, 0);
         this.doWorldRender(TessellatorV2.instance, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, Blocks.blockSprinkler, null, sprinklerDummy, 0, 0, null, true);
         GL11.glTranslatef(0, 0.25F, 0);

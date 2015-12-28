@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 public class TessellatorV2 {
     public static final TessellatorV2 instance = new TessellatorV2();
     private static final Tessellator tessellator = Tessellator.getInstance();
-    private static final WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+    private static WorldRenderer worldRenderer = tessellator.getWorldRenderer();
 
     /** Transformation matrix */
     private TransformationMatrix matrix = new TransformationMatrix();
@@ -27,17 +27,17 @@ public class TessellatorV2 {
     }
 
     /** Color values */
-    int red;
-    int green;
-    int blue;
-    int alpha;
+    float red;
+    float green;
+    float blue;
+    float alpha;
 
     /** Brightness value */
     int light;
 
-    //---------------------------------------------
-    //methods requiring some linear transformations
-    //---------------------------------------------
+    public void setWorldRenderer(WorldRenderer renderer) {
+        worldRenderer = renderer;
+    }
 
     /**
      * Adds a vertex specifying both x,y,z and the texture u,v for it.
@@ -45,9 +45,9 @@ public class TessellatorV2 {
     public void addVertexWithUV(double x, double y, double z, float u, float v) {
         double[] coords = this.matrix.transform(x, y, z);
         worldRenderer.pos(coords[0], coords[1], coords[2]);
-        //worldRenderer.color(red, green, blue, alpha);
+        worldRenderer.color(red, green, blue, alpha);
         setTextureUV(u, v);
-        //worldRenderer.putBrightness4(light, light, light, light);
+        worldRenderer.lightmap(light >> 16 & 65535, light& 65535);
         worldRenderer.endVertex();
     }
 
@@ -55,7 +55,6 @@ public class TessellatorV2 {
      * Sets the texture coordinates.
      */
     public void setTextureUV(double u, double v) {
-        //this doesn't seem to work
         worldRenderer.tex(u, v);
     }
 
@@ -109,7 +108,7 @@ public class TessellatorV2 {
      * Sets draw mode in the worldRenderer to draw quads.
      */
     public void startDrawingQuads() {
-        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
     }
 
     public void setBrightness(int value) {
@@ -120,14 +119,17 @@ public class TessellatorV2 {
      * Sets the RGB values as specified, converting from floats between 0 and 1 to integers from 0-255.
      */
     public void setColorOpaque_F(float red, float green, float blue) {
-        this.setColorRGBA_F(red, green, blue, 255);
+        this.setColorRGBA_F(red, green, blue, 1);
     }
 
     /**
      * Sets the RGBA values for the color, converting from floats between 0 and 1 to integers from 0-255.
      */
     public void setColorRGBA_F(float red, float green, float blue, float alpha) {
-        this.setColorRGBA((int)(red * 255.0F), (int)(green * 255.0F), (int)(blue * 255.0F), (int)(alpha * 255.0F));
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.alpha = alpha;
     }
 
     /**
@@ -141,9 +143,6 @@ public class TessellatorV2 {
      * Sets the RGBA values for the color. Also clamps them to 0-255.
      */
     public void setColorRGBA(int red, int green, int blue, int alpha) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.alpha = alpha;
+        this.setColorRGBA_F(((float) red)/255.0F, ((float) green)/255.0F, ((float) blue)/255.0F, ((float) alpha)/255.0F);
     }
 }

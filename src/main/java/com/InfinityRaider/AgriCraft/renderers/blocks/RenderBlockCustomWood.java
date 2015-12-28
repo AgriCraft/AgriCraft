@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,7 +18,7 @@ public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> exte
     }
 
     @Override
-    protected final void doInventoryRender(Block block, ItemStack item) {
+    protected final void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         teDummy.setMaterial(item);
         GL11.glDisable(GL11.GL_LIGHTING);
         renderInInventory(block, item);

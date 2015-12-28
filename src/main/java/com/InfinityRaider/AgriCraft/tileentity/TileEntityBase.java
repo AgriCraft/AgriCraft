@@ -151,9 +151,7 @@ public abstract class TileEntityBase extends TileEntity {
      * Marks the tile entity for an update.
      */
     public final void markForUpdate() {
-        if(!worldObj.isRemote) {
-            this.worldObj.markBlockForUpdate(this.getPos());
-        }
+        this.worldObj.markBlockForUpdate(this.getPos());
     }
 
     /**

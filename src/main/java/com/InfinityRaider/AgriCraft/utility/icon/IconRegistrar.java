@@ -18,6 +18,7 @@ public final class IconRegistrar implements IIconRegistrar {
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite registerIcon(String texturePath) {
         try {
+
             return Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(new ResourceLocation(texturePath));
         } catch(Exception e) {
             return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();

@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.InfinityRaider.AgriCraft.renderers.RenderUtil;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelPeripheralProbe;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
@@ -14,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
@@ -180,14 +182,14 @@ public class RenderPeripheral extends RenderBlockBase {
     }
 
     @Override
-    protected void doInventoryRender(Block block, ItemStack item) {
+    protected void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         TessellatorV2 tessellator = TessellatorV2.instance;
 
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
         tessellator.startDrawingQuads();
 
-        renderBase(tessellator, Minecraft.getMinecraft().theWorld, null, (BlockPeripheral) Blocks.blockPeripheral, null, null, COLOR_MULTIPLIER_STANDARD);
+        renderBase(tessellator, Minecraft.getMinecraft().theWorld, null, (BlockPeripheral) Blocks.blockPeripheral, null, null, RenderUtil.COLOR_MULTIPLIER_STANDARD);
 
         tessellator.draw();
         GL11.glEnable(GL11.GL_LIGHTING);

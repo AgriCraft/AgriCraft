@@ -13,10 +13,9 @@ import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -46,7 +45,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
     }
 
     @Override
-    protected void doInventoryRender(Block block, ItemStack item) {
+    protected void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         this.doWorldRender(TessellatorV2.instance, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, Blocks.blockSeedAnalyzer, null, seedAnalyzerDummy, 0, 0, null, false);
     }
 

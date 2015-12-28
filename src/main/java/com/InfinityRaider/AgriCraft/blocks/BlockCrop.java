@@ -690,10 +690,10 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegistrar iconRegistrar) {
         super.registerIcons(iconRegistrar);
-        TextureAtlasSprite tex1 = iconRegistrar.registerIcon("agricraft:textures/blocks/cropsWeedTexture1.png");
-        TextureAtlasSprite tex2 = iconRegistrar.registerIcon("agricraft:textures/blocks/cropsWeedTexture2.png");
-        TextureAtlasSprite tex3 = iconRegistrar.registerIcon("agricraft:textures/blocks/cropsWeedTexture3.png");
-        TextureAtlasSprite tex4 = iconRegistrar.registerIcon("agricraft:textures/blocks/cropsWeedTexture4.png");
+        TextureAtlasSprite tex1 = iconRegistrar.registerIcon("agricraft:blocks/cropsWeedTexture1");
+        TextureAtlasSprite tex2 = iconRegistrar.registerIcon("agricraft:blocks/cropsWeedTexture2");
+        TextureAtlasSprite tex3 = iconRegistrar.registerIcon("agricraft:blocks/cropsWeedTexture3");
+        TextureAtlasSprite tex4 = iconRegistrar.registerIcon("agricraft:blocks/cropsWeedTexture4");
         weedTextures = new TextureAtlasSprite[] {tex1, tex1, tex2, tex2, tex2, tex3, tex3, tex4};
     }
 

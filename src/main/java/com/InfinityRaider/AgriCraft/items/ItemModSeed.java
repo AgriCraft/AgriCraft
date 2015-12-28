@@ -33,7 +33,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
     }
 
     public BlockModPlant getPlant() {
-        return (BlockModPlant) this.getPlant(null, null);
+        return (BlockModPlant) (this.getPlant(null, null).getBlock());
     }
 
     @Override

@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.settings.GameSettings;
@@ -34,6 +35,8 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
         BlockRendererDispatcher prevDispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
         INSTANCE = new BlockRendererDispatcherWrapped(prevDispatcher, getGameSettings(prevDispatcher));
         applyDispatcher();
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(INSTANCE);
+        RenderItemWrapped.init();
     }
 
     public static BlockRendererDispatcherWrapped getInstance() {
@@ -54,6 +57,11 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
     @Override
     public ISimpleBlockRenderingHandler getRenderingHandler(Block block) {
         return renderers.get(block);
+    }
+
+    @Override
+    public boolean hasRenderingHandler(Block block) {
+        return renderers.containsKey(block);
     }
 
     @Override

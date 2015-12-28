@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.proxy;
 import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
+import com.InfinityRaider.AgriCraft.handler.TextureStitchHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemBase;
@@ -10,7 +11,6 @@ import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.BlockRendererDispatcherWrapped;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.InfinityRaider.AgriCraft.utility.icon.IconRegisterable;
-import com.InfinityRaider.AgriCraft.utility.icon.IconRegistrar;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -98,6 +98,9 @@ public class ClientProxy extends CommonProxy {
     public void registerEventHandlers() {
         super.registerEventHandlers();
 
+        TextureStitchHandler textureStitchHandler = new TextureStitchHandler();
+        MinecraftForge.EVENT_BUS.register(textureStitchHandler);
+
         ItemToolTipHandler itemToolTipHandler = new ItemToolTipHandler();
         MinecraftForge.EVENT_BUS.register(itemToolTipHandler);
 
@@ -137,12 +140,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public String registerTextureAtlasSprite(String texturePath) {
-        return Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(new ResourceLocation(texturePath)).getIconName();
-    }
-
-    @Override
-    public void registerIcons(IconRegisterable block) {
-        block.registerIcons(IconRegistrar.getInstance());
+    public void registerIcons(IconRegisterable iconRegisterable) {
+        TextureStitchHandler.addIconRegisterable(iconRegisterable);
     }
 }

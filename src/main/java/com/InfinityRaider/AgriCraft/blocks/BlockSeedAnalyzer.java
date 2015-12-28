@@ -10,10 +10,13 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+import com.InfinityRaider.AgriCraft.utility.icon.IIconRegistrar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -161,4 +164,13 @@ public class BlockSeedAnalyzer extends BlockContainerBase {
     protected String getInternalName() {
         return Names.Objects.seedAnalyzer;
     }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getIcon() {
+        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/oak_planks");
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegistrar iconRegistrar) {}
 }

@@ -27,9 +27,9 @@ public class CropPlantVanilla extends CropPlant {
         this.plant = crop;
         this.seed = seed;
         textures = new String[8];
-        for(int i=0;i<textures.length;i++) {
-            textures[i] = "minecraft:textures/blocks/"+textureBase+"_stage_" + i + ".png";
-    }
+        for (int i = 0; i < textures.length; i++) {
+            textures[i] = "minecraft:blocks/" + textureBase + "_stage_" + i;
+        }
     }
 
     @Override

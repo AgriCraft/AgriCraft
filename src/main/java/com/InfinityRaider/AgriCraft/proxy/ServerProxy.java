@@ -36,14 +36,8 @@ public class ServerProxy extends CommonProxy {
     public void registerEventHandlers() {super.registerEventHandlers();}
 
     @Override
-    public void registerVillagerSkin(int id, String resource) {
-    }
+    public void registerVillagerSkin(int id, String resource) {}
 
     @Override
-    public String registerTextureAtlasSprite(String texturePath) {
-        return null;
-    }
-
-    @Override
-    public void registerIcons(IconRegisterable block) {}
+    public void registerIcons(IconRegisterable iconRegisterable) {}
 }

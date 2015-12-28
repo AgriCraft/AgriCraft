@@ -30,11 +30,11 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceG
         //tell the tessellator to start drawing
         tessellator.startDrawingQuads();
 
-        drawScaledPrism(tessellator, 7, 5, 0, 9, 16, 2, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 5, 14, 9, 16, 16, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 12, 2, 9, 15, 14, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 6, 2, 9, 9, 14, icon, COLOR_MULTIPLIER_STANDARD);
-        drawScaledPrism(tessellator, 7, 9, 6, 9, 12, 10, icon, COLOR_MULTIPLIER_STANDARD);
+        drawScaledPrism(tessellator, 7, 5, 0, 9, 16, 2, icon);
+        drawScaledPrism(tessellator, 7, 5, 14, 9, 16, 16, icon);
+        drawScaledPrism(tessellator, 7, 12, 2, 9, 15, 14, icon);
+        drawScaledPrism(tessellator, 7, 6, 2, 9, 9, 14, icon);
+        drawScaledPrism(tessellator, 7, 9, 6, 9, 12, 10, icon);
 
         tessellator.draw();
         //enable lighting

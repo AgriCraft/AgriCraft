@@ -11,6 +11,7 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -26,23 +27,20 @@ public class RenderCrop extends RenderBlockBase {
 
     @Override
     protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double xCoord, double yCoord, double zCoord, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
-        int x = (int) xCoord;
-        int y = (int) yCoord;
-        int z = (int) zCoord;
         if (tile instanceof TileEntityCrop) {
             BlockCrop blockCrop = (BlockCrop) block;
             TileEntityCrop crop = (TileEntityCrop) tile;
             tessellator.addTranslation(0, -3* Constants.UNIT, 0);
-            drawScaledPrism(tessellator, 2, 0, 2, 3, 16, 3, blockCrop.getIcon(), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
-            drawScaledPrism(tessellator, 13, 0, 2, 14, 16, 3, blockCrop.getIcon(), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
-            drawScaledPrism(tessellator, 13, 0, 13, 14, 16, 14, blockCrop.getIcon(), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
-            drawScaledPrism(tessellator, 2, 0, 13, 3, 16, 14, blockCrop.getIcon(), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
+            drawScaledPrism(tessellator, 2, 0, 2, 3, 16, 3, blockCrop.getIcon());
+            drawScaledPrism(tessellator, 13, 0, 2, 14, 16, 3, blockCrop.getIcon());
+            drawScaledPrism(tessellator, 13, 0, 13, 14, 16, 14, blockCrop.getIcon());
+            drawScaledPrism(tessellator, 2, 0, 13, 3, 16, 14, blockCrop.getIcon());
             tessellator.addTranslation(0, 3* Constants.UNIT, 0);
             if (crop.isCrossCrop()) {
-                drawScaledPrism(tessellator, 0, 10, 2, 16, 11, 3, blockCrop.getIcon(), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
-                drawScaledPrism(tessellator, 0, 10, 13, 16, 11, 14, blockCrop.getIcon(), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
-                drawScaledPrism(tessellator, 2, 10, 0, 3, 11, 16, blockCrop.getIcon(), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
-                drawScaledPrism(tessellator, 13, 10, 0, 14, 11, 16, blockCrop.getIcon(), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
+                drawScaledPrism(tessellator, 0, 10, 2, 16, 11, 3, blockCrop.getIcon());
+                drawScaledPrism(tessellator, 0, 10, 13, 16, 11, 14, blockCrop.getIcon());
+                drawScaledPrism(tessellator, 2, 10, 0, 3, 11, 16, blockCrop.getIcon());
+                drawScaledPrism(tessellator, 13, 10, 0, 14, 11, 16, blockCrop.getIcon());
             }
             else if (crop.hasPlant()) {
                 //render the plant
@@ -50,14 +48,14 @@ public class RenderCrop extends RenderBlockBase {
             }
             else if(crop.hasWeed()) {
                 //render weeds
-                PlantRenderer.renderPlantLayer(world, pos, RenderMethod.HASHTAG, 0, crop.getPlantIcon(state));
+                PlantRenderer.renderPlantLayer(world, pos, RenderMethod.HASHTAG, 0, blockCrop.getWeedTexture(state.getValue(BlockStates.GROWTHSTAGE)));
             }
         }
         return true;
     }
 
     @Override
-    protected void doInventoryRender(Block block, ItemStack item) {
+    protected void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
     }
 
     @Override
