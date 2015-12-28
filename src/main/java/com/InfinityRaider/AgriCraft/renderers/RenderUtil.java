@@ -308,9 +308,7 @@ public final class RenderUtil {
      * utility method used for debugging rendering
      */
     @SuppressWarnings("unused")
-    public void drawAxisSystem(boolean startDrawing) {
-        TessellatorV2 tessellator = TessellatorV2.instance;
-
+    public void drawAxisSystem(TessellatorV2 tessellator, boolean startDrawing) {
         if(startDrawing) {
             tessellator.startDrawingQuads();
         }

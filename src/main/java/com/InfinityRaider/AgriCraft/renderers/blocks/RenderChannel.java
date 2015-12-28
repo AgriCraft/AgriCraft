@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
@@ -36,8 +37,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     }
 
     @Override
-    protected void renderInInventory(Block block, ItemStack item) {
-        TessellatorV2 tessellator = TessellatorV2.instance;
+    protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         tessellator.startDrawingQuads();
         this.renderBottom(teDummy, tessellator);
         this.renderSide(teDummy, tessellator, ForgeDirection.NORTH);

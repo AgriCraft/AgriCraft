@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -27,8 +28,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
     }
 
     @Override
-    protected void renderInInventory(Block block, ItemStack item) {
-        TessellatorV2 tessellator = TessellatorV2.getInstance();
+    protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         this.teDummy.setOrientation(ForgeDirection.EAST);
         this.rotateMatrix(teDummy, tessellator, false);
         tessellator.startDrawingQuads();

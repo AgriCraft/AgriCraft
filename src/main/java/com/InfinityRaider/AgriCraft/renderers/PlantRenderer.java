@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
@@ -13,13 +14,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class PlantRenderer {
     private static final RenderUtil renderUtil = RenderUtil.getInstance();
     
-    public static void renderPlantLayer(IBlockAccess world, BlockPos pos, RenderMethod renderType, int layer, TextureAtlasSprite icon) {
-        renderPlantLayer(world, pos, renderType, layer, icon, true);
+    public static void renderPlantLayer(WorldRenderer renderer, IBlockAccess world, BlockPos pos, RenderMethod renderType, int layer, TextureAtlasSprite icon) {
+        renderPlantLayer(renderer, world, pos, renderType, layer, icon, true);
     }
 
-    public static void renderPlantLayer(IBlockAccess world, BlockPos pos, RenderMethod renderType, int layer, TextureAtlasSprite icon, boolean resetColor) {
+    public static void renderPlantLayer(WorldRenderer renderer, IBlockAccess world, BlockPos pos, RenderMethod renderType, int layer, TextureAtlasSprite icon, boolean resetColor) {
         if(icon!=null) {
-            TessellatorV2 tessellator = TessellatorV2.instance;
+            TessellatorV2 tessellator = TessellatorV2.getInstance(renderer);
             tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(world, pos));
             if(resetColor) {
                 tessellator.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
@@ -161,8 +162,8 @@ public abstract class PlantRenderer {
         addScaledVertexWithUV(tessellator, 12.001F, minY,-2, 16, 16, icon);
     }
 
-    public static void renderStemPlant(IBlockAccess world, BlockPos pos, TextureAtlasSprite vineIcon, TextureAtlasSprite fruitIcon, int growhtStage, Block vine, boolean mature) {
-        TessellatorV2 tessellator = TessellatorV2.instance;
+    public static void renderStemPlant(WorldRenderer renderer, IBlockAccess world, BlockPos pos, TextureAtlasSprite vineIcon, TextureAtlasSprite fruitIcon, int growhtStage, Block vine, boolean mature) {
+        TessellatorV2 tessellator = TessellatorV2.getInstance(renderer);
         int translation = growhtStage>=6?0:5-growhtStage;
         tessellator.setBrightness(vine.getMixedBrightnessForBlock(world, pos));
         int l = vine.getRenderColor(vine.getStateFromMeta(growhtStage));

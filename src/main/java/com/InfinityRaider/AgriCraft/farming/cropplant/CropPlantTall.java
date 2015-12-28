@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.farming.cropplant;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,10 +32,10 @@ public abstract class CropPlantTall extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
-        PlantRenderer.renderPlantLayer(world, pos, getRenderMethod(), 0, getPlantTexture(growthStage));
+    public void renderPlantInCrop(WorldRenderer renderer, IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
+        PlantRenderer.renderPlantLayer(renderer, world, pos, getRenderMethod(), 0, getPlantTexture(growthStage));
         if(renderTopLayer(growthStage)) {
-            PlantRenderer.renderPlantLayer(world, pos, getRenderMethod(), 1, getPlantTexture(growthStage));
+            PlantRenderer.renderPlantLayer(renderer, world, pos, getRenderMethod(), 1, getPlantTexture(growthStage));
         }
     }
 }

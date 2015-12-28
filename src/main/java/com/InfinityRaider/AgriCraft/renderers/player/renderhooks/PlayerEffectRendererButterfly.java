@@ -33,10 +33,10 @@ public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
     }
 
     @Override
-    void renderEffects(EntityPlayer player, RenderPlayer renderer, float partialTick) {
+    void renderEffects(TessellatorV2 tessellator, EntityPlayer player, RenderPlayer renderer, float partialTick) {
         double[] pos = getPosition();
         GL11.glTranslated(pos[0], pos[1], pos[2]);
-        renderWings();
+        renderWings(tessellator);
         spawnParticles(player, pos[1], partialTick);
         GL11.glTranslated(-pos[0], -pos[1], -pos[2]);
     }
@@ -49,8 +49,7 @@ public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
         return new double[] {0, -1+dy, 0.5F};
     }
 
-    private void renderWings() {
-        TessellatorV2 tessellator = TessellatorV2.instance;
+    private void renderWings(TessellatorV2 tessellator) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDisable(GL11.GL_LIGHTING);
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);

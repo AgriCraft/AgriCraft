@@ -112,9 +112,8 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
 
     private static GameSettings getGameSettings(BlockRendererDispatcher dispatcher) {
         GameSettings settings = Minecraft.getMinecraft().gameSettings;
-        Minecraft mc = Minecraft.getMinecraft();
-        for (Field field : mc.getClass().getDeclaredFields()) {
-            if(field.getType() == GameSettings.class) {
+        for (Field field : dispatcher.getClass().getDeclaredFields()) {
+            if (field.getType() == GameSettings.class) {
                 field.setAccessible(true);
                 try {
                     settings = (GameSettings) field.get(dispatcher);
@@ -124,6 +123,18 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
                 field.setAccessible(false);
                 break;
             }
+            else if (field.getType() == BlockRendererDispatcher.class) {
+                field.setAccessible(true);
+                try {
+                    //Recursive, in case someone wrapped the BlockRenderingDispatcher too
+                    settings = getGameSettings((BlockRendererDispatcher) field.get(dispatcher));
+                } catch (Exception e) {
+                    LogHelper.printStackTrace(e);
+                }
+                field.setAccessible(false);
+                break;
+            }
+
         }
         return settings;
     }

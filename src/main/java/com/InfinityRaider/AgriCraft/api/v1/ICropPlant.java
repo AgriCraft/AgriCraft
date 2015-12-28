@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.api.v1;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -127,5 +128,5 @@ public interface ICropPlant {
 
     /** This is called when the plant is rendered, this is never called if returned false on overrideRendering */
     @SideOnly(Side.CLIENT)
-    void renderPlantInCrop(IBlockAccess world, BlockPos pos, IBlockState state, int growthStage);
+    void renderPlantInCrop(WorldRenderer renderer, IBlockAccess world, BlockPos pos, IBlockState state, int growthStage);
 }

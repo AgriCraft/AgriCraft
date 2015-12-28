@@ -10,6 +10,7 @@ import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
@@ -27,10 +28,9 @@ public class RenderValve extends RenderChannel {
     }
 
     @Override
-    protected void renderInInventory(Block block, ItemStack item) {
+    protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         TextureAtlasSprite icon = teDummy.getIcon();
         int cm = teDummy.colorMultiplier();
-        TessellatorV2 tessellator = TessellatorV2.instance;
         //render the iron valves
         float f = Constants.UNIT;
         TextureAtlasSprite ironIcon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: get iron block icon
@@ -69,8 +69,7 @@ public class RenderValve extends RenderChannel {
      * TODO: Use rotation to eliminate duplicate code.
      */
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator2, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
-        TessellatorV2 tessellator1 = TessellatorV2.instance;
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
         TileEntityValve valve = (TileEntityValve) tile;
         if (valve != null) {
             if (callFromTESR) {
@@ -78,17 +77,17 @@ public class RenderValve extends RenderChannel {
                     renderCallCounter.incrementAndGet();
                     GL11.glPushMatrix();
                     GL11.glDisable(GL11.GL_LIGHTING);
-                    tessellator1.startDrawingQuads();
+                    tessellator.startDrawingQuads();
                     Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-                    this.drawWater(valve, tessellator1);
-                    tessellator1.draw();
+                    this.drawWater(valve, tessellator);
+                    tessellator.draw();
                     GL11.glEnable(GL11.GL_LIGHTING);
                     GL11.glPopMatrix();
                 }
             } else {
-                this.renderWoodChannel(valve, tessellator2);
+                this.renderWoodChannel(valve, tessellator);
                 if ((!this.shouldBehaveAsTESR()) && (valve.getDiscreteFluidLevel() > 0)) {
-                    this.drawWater(valve, tessellator2);
+                    this.drawWater(valve, tessellator);
                 }
 
                 //render the iron valves
@@ -100,15 +99,15 @@ public class RenderValve extends RenderChannel {
 					if (valve.hasNeighbourCheck(dir)) {
 						if (valve.isPowered()) {
 							//Draw closed separator.
-							drawScaledPrism(tessellator2, 6, 5, 0, 10, 12, 2, icon, cm, dir);
+							drawScaledPrism(tessellator, 6, 5, 0, 10, 12, 2, icon, cm, dir);
 						} else {
 							//Draw open separator.
-							drawScaledPrism(tessellator2, 6, 1, 0, 10, 5.001F, 2, icon, cm, dir);
-							drawScaledPrism(tessellator2, 6, 12, 0, 10, 15, 2, icon, cm, dir);
+							drawScaledPrism(tessellator, 6, 1, 0, 10, 5.001F, 2, icon, cm, dir);
+							drawScaledPrism(tessellator, 6, 12, 0, 10, 15, 2, icon, cm, dir);
 						}
 						//Draw rails.
-						drawScaledPrism(tessellator2, 4, 0, 0, 6, 16, 2, icon2, cm, dir);
-						drawScaledPrism(tessellator2, 10, 0, 0, 12, 16, 2, icon2, cm, dir);
+						drawScaledPrism(tessellator, 4, 0, 0, 6, 16, 2, icon2, cm, dir);
+						drawScaledPrism(tessellator, 10, 0, 0, 12, 16, 2, icon2, cm, dir);
 					}
 				}
             }

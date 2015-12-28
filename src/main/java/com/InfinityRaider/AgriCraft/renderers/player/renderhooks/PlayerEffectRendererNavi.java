@@ -43,16 +43,16 @@ public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
 
     @Override
     ArrayList<String> getDisplayNames() {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("SkeletonPunk");
         return list;
     }
 
     @Override
-    void renderEffects(EntityPlayer player, RenderPlayer renderer, float partialTick) {
+    void renderEffects(TessellatorV2 tessellator, EntityPlayer player, RenderPlayer renderer, float partialTick) {
         double[] pos = getPosition(player, partialTick);
         GL11.glTranslated(pos[0], pos[1], pos[2]);
-        renderWings();
+        renderWings(tessellator);
         renderSphere();
         spawnParticles(player, pos[1], partialTick);
         GL11.glTranslated(-pos[0], -pos[1], -pos[2]);
@@ -78,8 +78,7 @@ public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
         sphere.draw(f, detail, detail);
     }
 
-    private void renderWings() {
-        TessellatorV2 tessellator = TessellatorV2.instance;
+    private void renderWings(TessellatorV2 tessellator) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
 

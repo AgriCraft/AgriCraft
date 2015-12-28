@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.proxy;
 import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
+import com.InfinityRaider.AgriCraft.handler.MissingJsonHandler;
 import com.InfinityRaider.AgriCraft.handler.TextureStitchHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
@@ -97,6 +98,9 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerEventHandlers() {
         super.registerEventHandlers();
+
+        MissingJsonHandler missingJsonHandler = new MissingJsonHandler();
+        MinecraftForge.EVENT_BUS.register(missingJsonHandler);
 
         TextureStitchHandler textureStitchHandler = new TextureStitchHandler();
         MinecraftForge.EVENT_BUS.register(textureStitchHandler);

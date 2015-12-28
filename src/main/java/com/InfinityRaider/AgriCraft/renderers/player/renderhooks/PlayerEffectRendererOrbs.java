@@ -38,10 +38,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
     }
 
     @Override
-    void renderEffects(EntityPlayer player, RenderPlayer renderer, float partialTick) {
-        //tessellator instance
-        TessellatorV2 tessellator = TessellatorV2.instance;
-
+    void renderEffects(TessellatorV2 tessellator, EntityPlayer player, RenderPlayer renderer, float partialTick) {
         //rotate the coordinate system to the minecraft (x,y,z) instead of the system attached to the player
         rotateToGeneralCoordinates(player, partialTick);
 

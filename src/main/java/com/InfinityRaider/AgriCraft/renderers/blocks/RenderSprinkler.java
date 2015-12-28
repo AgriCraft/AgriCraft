@@ -50,14 +50,14 @@ public class RenderSprinkler extends RenderBlockBase {
         GL11.glRotatef(-angle, 0, -1, 0);
         GL11.glTranslatef(-0.5F, -1.5F, -0.5F);
         GL11.glEnable(GL11.GL_LIGHTING);
-        renderConnection(sprinkler);
+        renderConnection(tessellator, sprinkler);
         return true;
     }
 
     @Override
-    protected void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
+    protected void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         GL11.glTranslatef(0, -0.25F, 0);
-        this.doWorldRender(TessellatorV2.instance, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, Blocks.blockSprinkler, null, sprinklerDummy, 0, 0, null, true);
+        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, Blocks.blockSprinkler, null, sprinklerDummy, 0, 0, null, true);
         GL11.glTranslatef(0, 0.25F, 0);
     }
 
@@ -71,9 +71,7 @@ public class RenderSprinkler extends RenderBlockBase {
         return false;
     }
 
-    private void renderConnection(TileEntitySprinkler sprinkler) {
-        //set up tessellator
-        TessellatorV2 tessellator = TessellatorV2.instance;
+    private void renderConnection(TessellatorV2 tessellator, TileEntitySprinkler sprinkler) {
         //start GL
         GL11.glPushMatrix();
             //disable lighting so the plants render bright

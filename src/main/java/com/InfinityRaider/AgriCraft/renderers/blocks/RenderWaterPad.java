@@ -28,8 +28,7 @@ public class RenderWaterPad extends RenderBlockBase {
     }
 
     @Override
-    protected void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
-        TessellatorV2 tessellator = TessellatorV2.instance;
+    protected void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         GL11.glColor3f(1, 1, 1);
         GL11.glDisable(GL11.GL_LIGHTING);
         tessellator.startDrawingQuads();
@@ -50,11 +49,7 @@ public class RenderWaterPad extends RenderBlockBase {
     }
 
     @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator2, IBlockAccess world, double xCoord, double yCoord, double zCoord, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
-        TessellatorV2 tessellator = TessellatorV2.instance;
-        int x = (int) xCoord;
-        int y = (int) yCoord;
-        int z = (int) zCoord;
+    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double xCoord, double yCoord, double zCoord, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
         boolean full = block instanceof BlockWaterPadFull;
         this.renderBase(tessellator, world, pos, full);
         this.renderSide(tessellator, world, pos, full, ForgeDirection.NORTH);

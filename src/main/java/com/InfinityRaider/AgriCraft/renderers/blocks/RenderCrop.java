@@ -44,18 +44,18 @@ public class RenderCrop extends RenderBlockBase {
             }
             else if (crop.hasPlant()) {
                 //render the plant
-                crop.getPlant().renderPlantInCrop(world, pos, state, state.getValue(BlockStates.GROWTHSTAGE));
+                crop.getPlant().renderPlantInCrop(renderer, world, pos, state, state.getValue(BlockStates.GROWTHSTAGE));
             }
             else if(crop.hasWeed()) {
                 //render weeds
-                PlantRenderer.renderPlantLayer(world, pos, RenderMethod.HASHTAG, 0, blockCrop.getWeedTexture(state.getValue(BlockStates.GROWTHSTAGE)));
+                PlantRenderer.renderPlantLayer(renderer, world, pos, RenderMethod.HASHTAG, 0, blockCrop.getWeedTexture(state.getValue(BlockStates.GROWTHSTAGE)));
             }
         }
         return true;
     }
 
     @Override
-    protected void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
+    protected void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
     }
 
     @Override

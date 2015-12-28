@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.items;
 
+import com.InfinityRaider.AgriCraft.renderers.RenderUtil;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 @SideOnly(Side.CLIENT)
 public abstract class RenderItemBase {
     private static HashMap<Item, RenderItemBase> renderers = new HashMap<>();
+    private static RenderUtil renderUtil = RenderUtil.getInstance();
 
     protected RenderItemBase(Item item) {
         if(!renderers.containsKey(item)) {
@@ -30,35 +32,4 @@ public abstract class RenderItemBase {
     protected abstract void renderItemInventory(ItemStack stack, TessellatorV2 tessellator);
 
     protected abstract void renderItemMap(ItemStack stack, TessellatorV2 tessellator);
-
-    /**
-     * utility method used for debugging rendering
-     */
-    @SuppressWarnings("unused")
-    protected void drawAxisSystem(boolean startDrawing) {
-        TessellatorV2 tessellator = TessellatorV2.instance;
-
-        if(startDrawing) {
-            tessellator.startDrawingQuads();
-        }
-
-        tessellator.addVertexWithUV(-0.005F, 2, 0, 1, 0);
-        tessellator.addVertexWithUV(0.005F, 2, 0, 0, 0);
-        tessellator.addVertexWithUV(0.005F, -1, 0, 0, 1);
-        tessellator.addVertexWithUV(-0.005F, -1, 0, 1, 1);
-
-        tessellator.addVertexWithUV(2, -0.005F, 0, 1, 0);
-        tessellator.addVertexWithUV(2, 0.005F, 0, 0, 0);
-        tessellator.addVertexWithUV(-1, 0.005F, 0, 0, 1);
-        tessellator.addVertexWithUV(-1, -0.005F, 0, 1, 1);
-
-        tessellator.addVertexWithUV(0, -0.005F, 2, 1, 0);
-        tessellator.addVertexWithUV(0, 0.005F, 2, 0, 0);
-        tessellator.addVertexWithUV(0, 0.005F, -1, 0, 1);
-        tessellator.addVertexWithUV(0, -0.005F, -1, 1, 1);
-
-        if(startDrawing) {
-            tessellator.draw();
-        }
-    }
 }

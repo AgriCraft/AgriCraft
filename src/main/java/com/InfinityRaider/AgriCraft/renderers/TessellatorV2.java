@@ -8,22 +8,44 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Note that this class isn't used by vanilla minecraft, the matrix operations done by this class will be ignored by the calls made by vanilla to the Tessellator
  * I chose not to replace the vanilla Tessellator.instance field with this one for obvious reasons.
  */
 @SideOnly(Side.CLIENT)
 public class TessellatorV2 {
-    public static final TessellatorV2 instance = new TessellatorV2();
-    private static final Tessellator tessellator = Tessellator.getInstance();
-    private static WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+    private static final Map<WorldRenderer, TessellatorV2> instances = new HashMap<>();
+    private final Tessellator tessellator ;
+    private final WorldRenderer worldRenderer;
 
     /** Transformation matrix */
     private TransformationMatrix matrix = new TransformationMatrix();
 
-    /** The static instance of the Tessellator. */
     public static TessellatorV2 getInstance() {
-        return instance;
+        return getInstance(Tessellator.getInstance());
+    }
+
+    public static TessellatorV2 getInstance(WorldRenderer renderer) {
+        return instances.containsKey(renderer) ? instances.get(renderer) : new TessellatorV2(renderer);
+    }
+
+    public static TessellatorV2 getInstance(Tessellator tessellator) {
+        return instances.containsKey(tessellator.getWorldRenderer()) ? instances.get(tessellator.getWorldRenderer()) : new TessellatorV2(tessellator);
+    }
+
+    private TessellatorV2(WorldRenderer worldRenderer) {
+        this.worldRenderer = worldRenderer;
+        this.tessellator = null;
+        instances.put(worldRenderer, this);
+    }
+
+    private TessellatorV2(Tessellator tessellator) {
+        this.worldRenderer = tessellator.getWorldRenderer();
+        this.tessellator = tessellator;
+        instances.put(worldRenderer, this);
     }
 
     /** Color values */
@@ -35,8 +57,19 @@ public class TessellatorV2 {
     /** Brightness value */
     int light;
 
-    public void setWorldRenderer(WorldRenderer renderer) {
-        worldRenderer = renderer;
+    public void draw() {
+        if(tessellator != null) {
+            tessellator.draw();
+        }
+    }
+
+    /**
+     * Sets draw mode in the worldRenderer to draw quads.
+     */
+    public void startDrawingQuads() {
+        if(tessellator != null) {
+            worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        }
     }
 
     /**
@@ -98,17 +131,6 @@ public class TessellatorV2 {
 
     public TransformationMatrix getTransformationMatrix() {
         return this.matrix;
-    }
-
-    public void draw() {
-        tessellator.draw();
-    }
-
-    /**
-     * Sets draw mode in the worldRenderer to draw quads.
-     */
-    public void startDrawingQuads() {
-        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
     }
 
     public void setBrightness(int value) {

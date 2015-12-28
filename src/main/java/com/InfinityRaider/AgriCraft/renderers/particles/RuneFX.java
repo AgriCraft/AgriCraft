@@ -30,7 +30,7 @@ public class RuneFX extends AgriCraftFX {
 
     @Override
     public void renderParticle(WorldRenderer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
-        TessellatorV2 tessellator = TessellatorV2.getInstance();
+        TessellatorV2 tessellator = TessellatorV2.getInstance(worldRenderer);
         tessellator.draw();
         tessellator.startDrawingQuads();
 

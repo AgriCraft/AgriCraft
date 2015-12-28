@@ -51,7 +51,9 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
 
     //WORLD
     //-----
-    private boolean renderBlock(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
+    private boolean renderBlock(IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
+        TessellatorV2 tessellator = TessellatorV2.getInstance(renderer);
+
         if (callFromTESR) {
             GL11.glPushMatrix();
             GL11.glTranslated(x, y, z);
@@ -68,7 +70,6 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
 
         tessellator.setBrightness(block.getMixedBrightnessForBlock(world, pos));
         tessellator.setColorRGBA_F(1, 1, 1, 1);
-        tessellator.setWorldRenderer(renderer);
 
         boolean result = doWorldRender(tessellator, world, x, y, z, pos, block, state, tile, partialTicks, destroyStage, renderer, callFromTESR);
 
@@ -91,13 +92,13 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
     /** Call from TESR */
     @Override
     public final void renderTileEntityAt(TileEntityBase te, double x, double y, double z, float partialTicks, int destroyStage) {
-        renderBlock(TessellatorV2.instance, te.getWorld(), x, y, z, te.getPos(), te.getBlockType(), te.getWorld().getBlockState(te.getPos()), te, partialTicks, destroyStage, Tessellator.getInstance().getWorldRenderer(), true);
+        renderBlock(getWorld(), x, y, z, te.getPos(), te.getBlockType(), te.getWorld().getBlockState(te.getPos()), te, partialTicks, destroyStage, Tessellator.getInstance().getWorldRenderer(), true);
     }
 
     /** Call from ISBRH */
     @Override
     public final boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockPos pos, Block block, IBlockState state, WorldRenderer renderer) {
-        return renderBlock(TessellatorV2.getInstance(), world, x, y, z, pos, block, state, world.getTileEntity(pos), 0, 0, renderer, false);
+        return renderBlock(world, x, y, z, pos, block, state, world.getTileEntity(pos), 0, 0, renderer, false);
     }
 
     protected abstract boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR);
@@ -113,11 +114,18 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
     @Override
     @SuppressWarnings("deprecation")
     public final void renderInventoryBlock(Block block, ItemStack stack, ItemCameraTransforms.TransformType transformType) {
-        doInventoryRender(block, stack, transformType);
+        renderInInventory(block, stack, transformType);
+    }
+
+    private void renderInInventory(Block block, ItemStack stack, ItemCameraTransforms.TransformType transformType) {
+        TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
+
+        doInventoryRender(tessellator, block, stack, transformType);
+
     }
 
     @SuppressWarnings("deprecation")
-    protected abstract void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType);
+    protected abstract void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType);
 
 
     //HELPER METHODS

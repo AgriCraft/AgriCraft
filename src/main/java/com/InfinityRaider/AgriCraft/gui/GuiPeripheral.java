@@ -97,7 +97,7 @@ public class GuiPeripheral extends GuiContainer {
         this.drawTexturedModalRect(xOffset, yOffset + offset, 0, 253, 5, 1);
         //middle part
         float f = 0.00390625F;
-        TessellatorV2 tessellator = TessellatorV2.instance;
+        TessellatorV2 tessellator = TessellatorV2.getInstance();
         tessellator.startDrawingQuads();
         int xMax = xOffset + 5;
         int yMin = yOffset + offset + 1;

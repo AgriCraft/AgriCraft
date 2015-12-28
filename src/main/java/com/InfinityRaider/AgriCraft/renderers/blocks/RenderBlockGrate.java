@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
@@ -22,8 +23,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
     }
 
     @Override
-    protected void renderInInventory(Block block, ItemStack item) {
-        TessellatorV2 tessellator = TessellatorV2.instance;
+    protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         TextureAtlasSprite icon = teDummy.getIcon();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         //disable lighting

@@ -53,7 +53,7 @@ public abstract  class AgriCraftFX extends EntityFX {
     public void renderParticle(WorldRenderer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
         //I'm doing this because else the textures blink and are fucked up and I have no idea how to fix it,
         //if anyone sees this and knows how, let me know please, thanks :D
-        TessellatorV2 tessellator = TessellatorV2.getInstance();
+        TessellatorV2 tessellator = TessellatorV2.getInstance(worldRenderer);
         tessellator.draw();
         tessellator.startDrawingQuads();
 

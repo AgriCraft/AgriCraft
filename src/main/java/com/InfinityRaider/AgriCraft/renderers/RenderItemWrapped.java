@@ -312,18 +312,23 @@ public final class RenderItemWrapped extends RenderItem {
         TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
         for(Field field : renderItem.getClass().getDeclaredFields()) {
             if(field.getType() == TextureManager.class) {
+                field.setAccessible(true);
                 try {
                     textureManager = (TextureManager) field.get(renderItem);
                 } catch (Exception e) {
                     LogHelper.printStackTrace(e);
                 }
+                field.setAccessible(false);
                 break;
             } else if(field.getType() == RenderItem.class) {
+                field.setAccessible(true);
                 try {
+                    //Recursive, in case someone wrapped the RenderItem too
                     textureManager = getTextureManager((RenderItem) field.get(renderItem));
                 } catch (Exception e) {
                     LogHelper.printStackTrace(e);
                 }
+                field.setAccessible(false);
                 break;
             }
         }
@@ -333,11 +338,13 @@ public final class RenderItemWrapped extends RenderItem {
     private static ModelManager getModelManager() {
         for(Field field : Minecraft.class.getDeclaredFields()) {
             if(field.getType() == ModelManager.class) {
+                field.setAccessible(true);
                 try {
                     return (ModelManager) field.get(Minecraft.getMinecraft());
                 } catch(Exception e) {
                     LogHelper.printStackTrace(e);
                 }
+                field.setAccessible(false);
             }
         }
         return ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "aL", "field_175617_aL", "modelManager");
@@ -356,11 +363,13 @@ public final class RenderItemWrapped extends RenderItem {
                 continue;
             }
             if (field.getType() == ItemRenderer.class) {
+                field.setAccessible(true);
                 try {
                     field.set(Minecraft.getMinecraft(), new ItemRenderer(Minecraft.getMinecraft()));
                 } catch (Exception e) {
                     LogHelper.printStackTrace(e);
                 }
+                field.setAccessible(false);
             }
         }
     }

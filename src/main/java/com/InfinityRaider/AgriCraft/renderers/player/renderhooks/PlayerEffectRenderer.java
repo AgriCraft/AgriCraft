@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.RenderUtil;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,13 +13,15 @@ import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 abstract class PlayerEffectRenderer {
+    protected static final RenderUtil renderUtil = RenderUtil.getInstance();
+
     PlayerEffectRenderer() {
 
     }
 
     abstract ArrayList<String> getDisplayNames();
 
-    abstract void renderEffects(EntityPlayer player, RenderPlayer renderer, float tick);
+    abstract void renderEffects(TessellatorV2 tessellator, EntityPlayer player, RenderPlayer renderer, float tick);
 
     protected void rotateToGeneralCoordinates(EntityPlayer player, float partialTick) {
         float yaw = player.prevRenderYawOffset + (player.renderYawOffset-player.prevRenderYawOffset)*partialTick;
@@ -37,32 +40,5 @@ abstract class PlayerEffectRenderer {
      */
     protected void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v) {
         tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, u * Constants.UNIT, v * Constants.UNIT);
-    }
-
-    /**
-     * utility method used for debugging rendering
-     */
-    @SuppressWarnings("unused")
-    protected void drawAxisSystem() {
-        TessellatorV2 tessellator = TessellatorV2.instance;
-
-        tessellator.startDrawingQuads();
-
-        tessellator.addVertexWithUV(-0.005F, 2, 0, 1, 0);
-        tessellator.addVertexWithUV(0.005F, 2, 0, 0, 0);
-        tessellator.addVertexWithUV(0.005F, -1, 0, 0, 1);
-        tessellator.addVertexWithUV(-0.005F, -1, 0, 1, 1);
-
-        tessellator.addVertexWithUV(2, -0.005F, 0, 1, 0);
-        tessellator.addVertexWithUV(2, 0.005F, 0, 0, 0);
-        tessellator.addVertexWithUV(-1, 0.005F, 0, 0, 1);
-        tessellator.addVertexWithUV(-1, -0.005F, 0, 1, 1);
-
-        tessellator.addVertexWithUV(0, -0.005F, 2, 1, 0);
-        tessellator.addVertexWithUV(0, 0.005F, 2, 0, 0);
-        tessellator.addVertexWithUV(0, 0.005F, -1, 0, 1);
-        tessellator.addVertexWithUV(0, -0.005F, -1, 1, 1);
-
-        tessellator.draw();
     }
 }

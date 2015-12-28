@@ -182,9 +182,7 @@ public class RenderPeripheral extends RenderBlockBase {
     }
 
     @Override
-    protected void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
-        TessellatorV2 tessellator = TessellatorV2.instance;
-
+    protected void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
         tessellator.startDrawingQuads();

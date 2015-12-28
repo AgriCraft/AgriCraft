@@ -45,8 +45,8 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
     }
 
     @Override
-    protected void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
-        this.doWorldRender(TessellatorV2.instance, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, Blocks.blockSeedAnalyzer, null, seedAnalyzerDummy, 0, 0, null, false);
+    protected void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
+        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, Blocks.blockSeedAnalyzer, null, seedAnalyzerDummy, 0, 0, null, false);
     }
 
     @Override
@@ -67,15 +67,13 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
         }
         GL11.glPopMatrix();
         if(analyzer.hasSeed() || analyzer.hasTrowel()) {
-            renderSeed(analyzer);
+            renderSeed(tessellator, analyzer);
         }
         return false;
     }
 
     //renders the seed
-    private void renderSeed(TileEntitySeedAnalyzer analyzer) {
-        //set up the tessellator
-        TessellatorV2 tessellator = TessellatorV2.instance;
+    private void renderSeed(TessellatorV2 tessellator, TileEntitySeedAnalyzer analyzer) {
         //grab the texture
         ItemStack stack = analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId);
         TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: find seed icon

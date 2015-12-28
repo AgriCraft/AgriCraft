@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -18,12 +19,12 @@ public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> exte
     }
 
     @Override
-    protected final void doInventoryRender(Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
+    protected final void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         teDummy.setMaterial(item);
         GL11.glDisable(GL11.GL_LIGHTING);
-        renderInInventory(block, item);
+        renderInInventory(tessellator, block, item, transformType);
         GL11.glEnable(GL11.GL_LIGHTING);
     }
 
-    protected abstract void renderInInventory(Block block, ItemStack item);
+    protected abstract void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType);
 }

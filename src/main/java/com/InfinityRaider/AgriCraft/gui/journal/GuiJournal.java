@@ -169,7 +169,7 @@ public class GuiJournal extends GuiScreen {
             int ySize = component.ySize();
             int x = guiLeft + component.xOffset();
             int y = guiTop + component.yOffset();
-            TessellatorV2 tessellator = TessellatorV2.instance;
+            TessellatorV2 tessellator = TessellatorV2.getInstance();
             Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
             GL11.glColor3f(1, 1, 1);
             GL11.glDisable(GL11.GL_LIGHTING);
