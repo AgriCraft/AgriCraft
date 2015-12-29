@@ -171,6 +171,10 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
         return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
     }
 
+    public static TextureAtlasSprite getDefaultIcon() {
+        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+    }
+
     @Override
     public void addDebugInfo(List<String> list) {
         list.add("this material is: " + this.getMaterialName() + ":" + this.getMaterialMeta());

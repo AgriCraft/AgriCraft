@@ -195,8 +195,7 @@ public final class RenderItemWrapped extends RenderItem {
         }
     }
 
-    private void setupGuiTransform(int xPosition, int yPosition, boolean isGui3d)
-    {
+    private void setupGuiTransform(int xPosition, int yPosition, boolean isGui3d) {
         GlStateManager.translate((float)xPosition, (float)yPosition, 100.0F + this.zLevel);
         GlStateManager.translate(8.0F, 8.0F, 0.0F);
         GlStateManager.scale(1.0F, 1.0F, -1.0F);

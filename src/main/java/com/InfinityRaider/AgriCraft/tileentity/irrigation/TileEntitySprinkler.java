@@ -127,6 +127,9 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getChannelIcon() {
+        if(this.getWorld() == null) {
+            return TileEntityChannel.getDefaultIcon();
+        }
         return ((TileEntityChannel) getWorld().getTileEntity(getPos().add(0, 1, 0))).getIcon();
     }
 

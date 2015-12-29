@@ -59,9 +59,10 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         if (callFromTESR) {
             GL11.glPushMatrix();
             GL11.glTranslated(x, y, z);
+        } else {
+            tessellator.addTranslation((float) x, (float) y, (float) z);
         }
         tessellator.setRotation(0, 0, 0, 0);
-        tessellator.addTranslation((float) x, (float) y, (float) z);        
         if (tile != null && tile instanceof TileEntityBase) {
             if(callFromTESR) {
                 rotateMatrix((TileEntityBase) tile, false);
@@ -83,10 +84,11 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
             }
         }
         tessellator.setRotation(0, 0, 0, 0);
-        tessellator.addTranslation((float) -x, (float) -y, (float) -z);
         if (callFromTESR) {
             GL11.glTranslated(-x, -y, -z);
             GL11.glPopMatrix();
+        } else {
+            tessellator.addTranslation((float) -x, (float) -y, (float) -z);
         }
         return result;
     }
