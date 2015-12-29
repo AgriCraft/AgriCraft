@@ -2,7 +2,8 @@
 language: java
 
 # Tell Travis to use JDK 8
-jdk: - oraclejdk8
+jdk:
+  - oraclejdk8
 
 # Tell Travis we want container-based builds.
 sudo: false
