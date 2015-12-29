@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -82,6 +83,16 @@ public class CropPlantAgriCraft extends CropPlant {
     @SideOnly(Side.CLIENT)
     public RenderMethod getRenderMethod() {
         return plant.renderAsFlower() ? RenderMethod.CROSSED : RenderMethod.HASHTAG;
+    }
+
+    @Override
+    public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
+        return plant.getPlantIcon(growthStage);
+    }
+
+    @Override
+    public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+        return null;
     }
 
     @Override

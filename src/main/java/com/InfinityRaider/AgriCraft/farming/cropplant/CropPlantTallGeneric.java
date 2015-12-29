@@ -1,8 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
+import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -14,42 +13,10 @@ import java.util.Random;
 /**
  * Generic abstract implementation of CropPlantTall for two-blocks tall plants
  */
-public abstract class CropPlantTallGeneric extends CropPlantTall {
-    private final ItemSeeds seed;
-    private final ArrayList<ItemStack> fruits;
+public abstract class CropPlantTallGeneric extends CropPlantGeneric {
 
     public CropPlantTallGeneric(ItemSeeds seed) {
-        this.seed = seed;
-        this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed());
-    }
-
-    @Override
-    public int tier() {
-        return 3;
-    }
-
-    @Override
-    public ItemStack getSeed() {
-        return new ItemStack(seed);
-    }
-
-    @Override
-    public Block getBlock() {
-        return seed.getPlant(null, null).getBlock();
-    }
-
-    @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        return new ArrayList<>(fruits);
-    }
-
-    @Override
-    public ItemStack getRandomFruit(Random rand) {
-        ArrayList<ItemStack> list = fruits;
-        if(list!=null && list.size()>0) {
-            return list.get(rand.nextInt(list.size())).copy();
-        }
-        return null;
+        super(seed);
     }
 
     @Override
@@ -71,6 +38,14 @@ public abstract class CropPlantTallGeneric extends CropPlantTall {
     @Override
     @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {
-        return (meta>maxMetaBottomBlock()?2:1)*Constants.UNIT*13;
+        return (getSecondaryPlantTexture(meta) != null ? 2 : 1)*Constants.UNIT*13;
     }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderMethod getRenderMethod() {
+        return getBaseRenderMethod() == RenderMethod.CROSSED ? RenderMethod.TALL_CROSSED : RenderMethod.TALL_HASHTAG;
+    }
+
+    protected abstract RenderMethod getBaseRenderMethod();
 }

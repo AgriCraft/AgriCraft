@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
@@ -48,7 +47,9 @@ public class RenderCrop extends RenderBlockBase {
             }
             else if(crop.hasWeed()) {
                 //render weeds
-                PlantRenderer.renderPlantLayer(renderer, world, pos, RenderMethod.HASHTAG, 0, blockCrop.getWeedTexture(state.getValue(BlockStates.GROWTHSTAGE)));
+                tessellator.setBrightness(net.minecraft.init.Blocks.wheat.getMixedBrightnessForBlock(world, pos));
+                tessellator.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
+                PlantRenderer.renderHashTagPattern(tessellator, blockCrop.getWeedTexture(state.getValue(BlockStates.GROWTHSTAGE)), 0);
             }
         }
         return true;

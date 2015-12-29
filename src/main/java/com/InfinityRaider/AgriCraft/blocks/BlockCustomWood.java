@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
-import com.InfinityRaider.AgriCraft.utility.icon.IIconRegistrar;
+import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

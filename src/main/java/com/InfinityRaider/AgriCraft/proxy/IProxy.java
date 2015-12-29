@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
-import com.InfinityRaider.AgriCraft.utility.icon.IconRegisterable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -41,7 +40,4 @@ public interface IProxy {
 
     /** Initializes the configuration file */
     void initConfiguration(FMLPreInitializationEvent event);
-
-    /** Registers icons for all blocks and items in agricraft */
-    void registerIcons(IconRegisterable iconRegisterable);
 }

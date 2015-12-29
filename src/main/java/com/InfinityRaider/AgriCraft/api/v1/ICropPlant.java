@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -114,9 +113,19 @@ public interface ICropPlant {
     @SideOnly(Side.CLIENT)
     RenderMethod getRenderMethod();
 
-    /** Gets the texture to render this plant with as a ResourceLocation */
+    /**
+     * Gets the primary texture to render this plant with as a TextureAtlasSprite, note that this must be on the locationBlocksTextureMap
+     * See {@link RenderMethod} for what primary texture should be returned
+     */
     @SideOnly(Side.CLIENT)
-    TextureAtlasSprite getPlantTexture(int growthStage);
+    TextureAtlasSprite getPrimaryPlantTexture(int growthStage);
+
+    /**
+     * Gets the secondary texture to render this plant with as a TextureAtlasSprite, note that this must be on the locationBlocksTextureMap
+     * See {@link RenderMethod}  for what secondary texture should be returned
+     */
+    @SideOnly(Side.CLIENT)
+    TextureAtlasSprite getSecondaryPlantTexture(int growthStage);
 
     /** Gets some information about the plant for the journal */
     @SideOnly(Side.CLIENT)

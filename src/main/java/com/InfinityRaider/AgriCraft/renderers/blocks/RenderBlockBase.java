@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.renderers.BlockRendererDispatcherWrapped;
-import com.InfinityRaider.AgriCraft.renderers.ISimpleBlockRenderingHandler;
-import com.InfinityRaider.AgriCraft.renderers.RenderUtil;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
+import com.InfinityRaider.AgriCraft.renderers.*;
+import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
+import com.InfinityRaider.AgriCraft.renderers.renderinghacks.IItemRenderer;
+import com.InfinityRaider.AgriCraft.renderers.renderinghacks.ISimpleBlockRenderingHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
 import net.minecraft.block.Block;
@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -23,11 +24,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEntityBase> implements ISimpleBlockRenderingHandler {
+public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEntityBase> implements ISimpleBlockRenderingHandler, IItemRenderer {
     protected static RenderUtil renderUtil = RenderUtil.getInstance();
 
     private final Block block;
-    private final boolean inventory;
 
     protected RenderBlockBase(Block block, boolean inventory) {
         this(block, null, inventory);
@@ -36,7 +36,9 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
     protected RenderBlockBase(Block block, TileEntityBase te, boolean inventory) {
         this.block = block;
         this.registerRenderer(block, te);
-        this.inventory = inventory;
+        if(inventory) {
+            BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(Item.getItemFromBlock(block), this);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -45,7 +47,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
             ClientRegistry.bindTileEntitySpecialRenderer(te.getTileClass(), this);
         }
         if(this.shouldBehaveAsISBRH()) {
-            BlockRendererDispatcherWrapped.getInstance().registerRenderingHandler(block, this);
+            BlockRendererDispatcherWrapped.getInstance().registerBlockRenderingHandler(block, this);
         }
     }
 
@@ -105,23 +107,15 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
 
     //INVENTORY
     //---------
-    /** Call from ISBRH */
-    @Override
-    public final boolean shouldRenderInventory3D(ItemStack stack) {
-        return inventory;
-    }
-
     @Override
     @SuppressWarnings("deprecation")
-    public final void renderInventoryBlock(Block block, ItemStack stack, ItemCameraTransforms.TransformType transformType) {
-        renderInInventory(block, stack, transformType);
+    public final void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
+        renderInInventory(stack, transformType);
     }
 
-    private void renderInInventory(Block block, ItemStack stack, ItemCameraTransforms.TransformType transformType) {
+    private void renderInInventory(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
         TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
-
         doInventoryRender(tessellator, block, stack, transformType);
-
     }
 
     @SuppressWarnings("deprecation")

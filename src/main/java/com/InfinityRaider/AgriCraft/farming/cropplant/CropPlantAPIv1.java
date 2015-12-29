@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
-import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -108,8 +107,14 @@ public class CropPlantAPIv1 extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getPlantTexture(int growthStage) {
-        return plant.getPlantTexture(growthStage);
+    public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
+        return plant.getPrimaryPlantTexture(growthStage);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+        return plant.getSecondaryPlantTexture(growthStage);
     }
 
     @Override
@@ -121,10 +126,10 @@ public class CropPlantAPIv1 extends CropPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(WorldRenderer renderer, IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
-        if(plant.overrideRendering()) {
+        if(getRenderMethod() == RenderMethod.CUSTOM) {
             plant.renderPlantInCrop(renderer, world, pos, state, growthStage);
         } else {
-            PlantRenderer.renderPlantLayer(renderer, world, pos, getRenderMethod(), 0, getPlantTexture(growthStage));
+            super.renderPlantInCrop(renderer, world, pos, state, growthStage);
         }
     }
 

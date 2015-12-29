@@ -1,12 +1,14 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
+import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -18,6 +20,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite icon;
     @SideOnly(Side.CLIENT)
     private String information;
 
@@ -75,5 +79,20 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
             }
         }
         return false;
+    }
+
+    @Override
+    public TextureAtlasSprite getIcon(ItemStack stack) {
+        return icon;
+    }
+
+    @Override
+    public void registerIcons(IIconRegistrar iconRegistrar) {
+        String name = this.getUnlocalizedName();
+        int index = name.indexOf(":");
+        name = index > 0 ? name.substring(index+1) : name;
+        index = name.indexOf(".");
+        name = index > 0 ? name.substring(index+1) : name;
+        icon = iconRegistrar.registerIcon("agricraft:items/"+name);
     }
 }

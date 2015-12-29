@@ -9,9 +9,8 @@ import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemBase;
 import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.renderers.BlockRendererDispatcherWrapped;
+import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;
-import com.InfinityRaider.AgriCraft.utility.icon.IconRegisterable;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -141,10 +140,5 @@ public class ClientProxy extends CommonProxy {
     public void initConfiguration(FMLPreInitializationEvent event) {
         super.initConfiguration(event);
         ConfigurationHandler.initClientConfigs(event);
-    }
-
-    @Override
-    public void registerIcons(IconRegisterable iconRegisterable) {
-        TextureStitchHandler.addIconRegisterable(iconRegisterable);
     }
 }

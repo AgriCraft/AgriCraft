@@ -302,12 +302,21 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
     @SideOnly(Side.CLIENT)
     public abstract RenderMethod getRenderMethod();
 
-    /** Gets the texture to render this plant with as a ResourceLocation */
+    /**
+     * Gets the primary texture to render this plant with as a TextureAtlasSprite, note that this must be on the locationBlocksTextureMap
+     * See RenderMethod for what primary texture should be returned
+     */
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getPlantTexture(int growthStage) {
-        return null;
-    }
+    public abstract TextureAtlasSprite getPrimaryPlantTexture(int growthStage);
+
+    /**
+     * Gets the secondary texture to render this plant with as a TextureAtlasSprite, note that this must be on the locationBlocksTextureMap
+     * See RenderMethod for what secondary texture should be returned
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public abstract TextureAtlasSprite getSecondaryPlantTexture(int growthStage);
 
     /**
      * Retrieves information about the plant for the seed journal.
@@ -335,7 +344,7 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(WorldRenderer renderer, IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
-        PlantRenderer.renderPlantLayer(renderer, world, pos, getRenderMethod(), 0, getPlantTexture(growthStage));
+        PlantRenderer.renderPlant(renderer, world, pos, state, growthStage, this);
     }
 
     @Override

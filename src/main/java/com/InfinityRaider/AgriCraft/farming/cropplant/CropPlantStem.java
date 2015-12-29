@@ -1,15 +1,12 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
-import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
+import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSeeds;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,10 +18,6 @@ public class CropPlantStem extends CropPlantGeneric {
         this.block = block;
     }
 
-    public Block getFruitBlock() {
-        return block;
-    }
-
     @Override
     @SideOnly(Side.CLIENT)
     public RenderMethod getRenderMethod() {
@@ -33,23 +26,25 @@ public class CropPlantStem extends CropPlantGeneric {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getPlantTexture(int growthStage) {
-        //TODO: get vine icon
-        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
-    }
-
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getFruitIcon() {
-        //TODO: get icon from fruit block
-        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+    public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
+        if(growthStage>= Constants.MATURE) {
+            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/pumpkin_stem_connected");
+        } else {
+            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/pumpkin_stem_disconnected");
+        }
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(WorldRenderer renderer, IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
-        boolean mature = isMature(world, pos, state);
-        Block vine = ((ItemSeeds) getSeed().getItem()).getPlant(null, null).getBlock();
-        PlantRenderer.renderStemPlant(renderer, world, pos, getPlantTexture(growthStage), getFruitIcon(), growthStage, vine, mature);
+    public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+        if(block == Blocks.melon_block) {
+            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/melon_side");
+
+        }
+        else if(block == Blocks.pumpkin) {
+            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/pumpkin_side");
+
+        }
+        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
     }
 
     @Override

@@ -97,9 +97,14 @@ public class CropPlantVanilla extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getPlantTexture(int growthStage) {
+    public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
         growthStage = Math.max(Math.min(growthStage, textures.length-1), 0);
         return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textures[growthStage]);
+    }
+
+    @Override
+    public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+        return null;
     }
 
     @Override

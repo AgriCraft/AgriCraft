@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Note that this class isn't used by vanilla minecraft, the matrix operations done by this class will be ignored by the calls made by vanilla to the Tessellator
- * I chose not to replace the vanilla Tessellator.instance field with this one for obvious reasons.
+ * This class is to have a Tessellator like the one in 1.7.10
+ * It's also extended with any possible linear transformation you can think of
  */
 @SideOnly(Side.CLIENT)
 public class TessellatorV2 {
@@ -55,11 +55,14 @@ public class TessellatorV2 {
     float alpha;
 
     /** Brightness value */
-    int light;
+    int light1;
+    int light2;
 
     public void draw() {
         if(tessellator != null) {
             tessellator.draw();
+        } else {
+            this.worldRenderer.finishDrawing();
         }
     }
 
@@ -67,9 +70,7 @@ public class TessellatorV2 {
      * Sets draw mode in the worldRenderer to draw quads.
      */
     public void startDrawingQuads() {
-        if(tessellator != null) {
-            worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        }
+        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
     }
 
     /**
@@ -79,16 +80,9 @@ public class TessellatorV2 {
         double[] coords = this.matrix.transform(x, y, z);
         worldRenderer.pos(coords[0], coords[1], coords[2]);
         worldRenderer.color(red, green, blue, alpha);
-        setTextureUV(u, v);
-        worldRenderer.lightmap(light >> 16 & 65535, light& 65535);
-        worldRenderer.endVertex();
-    }
-
-    /**
-     * Sets the texture coordinates.
-     */
-    public void setTextureUV(double u, double v) {
         worldRenderer.tex(u, v);
+        worldRenderer.lightmap(light1, light2);
+        worldRenderer.endVertex();
     }
 
     /**
@@ -134,7 +128,8 @@ public class TessellatorV2 {
     }
 
     public void setBrightness(int value) {
-        this.light = value;
+        light1 = value >> 16 & 65535;
+        light2 = value & 65535;
     }
 
     /**
@@ -157,14 +152,14 @@ public class TessellatorV2 {
     /**
      * Sets the RGB values as specified, and sets alpha to opaque.
      */
-    public void setColorOpaque(int red, int green, int blue) {
-        this.setColorRGBA(red, green, blue, 255);
+    public void setColorOpaque_I(int red, int green, int blue) {
+        this.setColorRGBA_I(red, green, blue, 255);
     }
 
     /**
      * Sets the RGBA values for the color. Also clamps them to 0-255.
      */
-    public void setColorRGBA(int red, int green, int blue, int alpha) {
+    public void setColorRGBA_I(int red, int green, int blue, int alpha) {
         this.setColorRGBA_F(((float) red)/255.0F, ((float) green)/255.0F, ((float) blue)/255.0F, ((float) alpha)/255.0F);
     }
 }

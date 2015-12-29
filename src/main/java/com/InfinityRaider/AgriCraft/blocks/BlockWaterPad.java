@@ -4,7 +4,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderWaterPad;
-import com.InfinityRaider.AgriCraft.utility.icon.IIconRegistrar;
+import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;

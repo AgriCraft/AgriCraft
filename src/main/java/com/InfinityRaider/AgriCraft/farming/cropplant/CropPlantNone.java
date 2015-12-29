@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.farming.cropplant;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -68,6 +69,16 @@ public final class CropPlantNone extends CropPlant {
     @Override
     public RenderMethod getRenderMethod() {
         return RenderMethod.HASHTAG;
+    }
+
+    @Override
+    public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
+        return null;
+    }
+
+    @Override
+    public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+        return null;
     }
 
     @Override

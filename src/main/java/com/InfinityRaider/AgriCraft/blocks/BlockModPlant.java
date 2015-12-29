@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -38,6 +39,8 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     public int tier;
     @SideOnly(Side.CLIENT)
     private RenderMethod renderType;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite[] icons;
 
     /** Parameters can be given in any order, parameters can be: @param args:
      * Arguments can be given in any order, parameters can be:
@@ -285,5 +288,34 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     @Override
     public IGrowthRequirement getGrowthRequirement() {
         return growthRequirement;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getPlantIcon(int growthStage) {
+        switch(growthStage) {
+            case 0:
+            case 1: return this.icons[0];
+            case 2:
+            case 3:
+            case 4: return this.icons[1];
+            case 5:
+            case 6: return this.icons[2];
+            case 7: return this.icons[3];
+        }
+        return this.icons[growthStage%icons.length];
+    }
+
+    @Override
+    public void registerIcons(IIconRegistrar iconRegistrar) {
+        icons = new TextureAtlasSprite[4];
+        String name = this.getUnlocalizedName();
+        int index = name.indexOf(":");
+        name = index > 0 ? name.substring(index+1) : name;
+        index = name.indexOf(".");
+        name = index > 0 ? name.substring(index+1) : name;
+        for(int i = 1; i <= icons.length; i++) {
+            icons[i-1] = iconRegistrar.registerIcon("agricraft:blocks/"+name+i);
+        }
     }
 }

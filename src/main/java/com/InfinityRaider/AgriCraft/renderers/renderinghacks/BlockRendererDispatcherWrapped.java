@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers;
+package com.InfinityRaider.AgriCraft.renderers.renderinghacks;
 
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
@@ -14,6 +14,7 @@ import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.IBlockAccess;
@@ -29,7 +30,9 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
     private static BlockRendererDispatcherWrapped INSTANCE;
 
     private final BlockRendererDispatcher prevDispatcher;
-    private Map<Block, ISimpleBlockRenderingHandler> renderers;
+
+    private Map<Block, ISimpleBlockRenderingHandler> blockRenderers;
+    private Map<Item, IItemRenderer> itemRenderers;
 
     public static void init() {
         BlockRendererDispatcher prevDispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
@@ -46,22 +49,38 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
     private BlockRendererDispatcherWrapped(BlockRendererDispatcher prevDispatcher, GameSettings settings) {
         super(prevDispatcher.getBlockModelShapes(), settings);
         this.prevDispatcher = prevDispatcher;
-        renderers = new HashMap<>();
+        blockRenderers = new HashMap<>();
+        itemRenderers = new HashMap<>();
     }
 
     @Override
-    public void registerRenderingHandler(Block block, ISimpleBlockRenderingHandler renderer) {
-        renderers.put(block, renderer);
+    public void registerBlockRenderingHandler(Block block, ISimpleBlockRenderingHandler renderer) {
+        blockRenderers.put(block, renderer);
+    }
+
+    @Override
+    public void registerItemRenderingHandler(Item item, IItemRenderer renderer) {
+        itemRenderers.put(item, renderer);
     }
 
     @Override
     public ISimpleBlockRenderingHandler getRenderingHandler(Block block) {
-        return renderers.get(block);
+        return blockRenderers.get(block);
+    }
+
+    @Override
+    public IItemRenderer getItemRenderer(Item item) {
+        return itemRenderers.get(item);
     }
 
     @Override
     public boolean hasRenderingHandler(Block block) {
-        return renderers.containsKey(block);
+        return blockRenderers.containsKey(block);
+    }
+
+    @Override
+    public boolean hasRenderingHandler(Item item) {
+        return itemRenderers.containsKey(item);
     }
 
     @Override
@@ -72,9 +91,9 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
     @Override
     public boolean renderBlock(IBlockState state, BlockPos pos, IBlockAccess world, WorldRenderer worldRendererIn) {
         Block block = state.getBlock();
-        if(renderers.containsKey(block)) {
+        if(blockRenderers.containsKey(block)) {
             try {
-                return renderers.get(block).renderWorldBlock(world, pos.getX(), pos.getY(), pos.getZ(), pos, block, state, worldRendererIn);
+                return blockRenderers.get(block).renderWorldBlock(world, pos.getX(), pos.getY(), pos.getZ(), pos, block, state, worldRendererIn);
             } catch (Throwable throwable) {
                 CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Tesselating block in world");
                 CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being tesselated");

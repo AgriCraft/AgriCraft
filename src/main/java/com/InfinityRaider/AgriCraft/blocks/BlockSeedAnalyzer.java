@@ -10,7 +10,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.utility.icon.IIconRegistrar;
+import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;

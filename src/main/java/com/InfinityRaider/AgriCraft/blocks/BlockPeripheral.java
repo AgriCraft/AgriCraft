@@ -12,7 +12,7 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.utility.icon.IIconRegistrar;
+import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;

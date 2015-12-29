@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers;
+package com.InfinityRaider.AgriCraft.renderers.renderinghacks;
 
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
@@ -66,15 +66,14 @@ public final class RenderItemWrapped extends RenderItem {
         this.textureManager = textureManager;
     }
 
-    private void renderItem(Block block, ItemStack stack, ItemCameraTransforms.TransformType transformType) {
-        renderingRegistry.getRenderingHandler(block).renderInventoryBlock(block, stack, transformType);
+    private void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
+        renderingRegistry.getItemRenderer(stack.getItem()).renderItem(stack, transformType);
     }
 
     private boolean isHandled(ItemStack stack) {
         return stack != null
                 && stack.getItem() != null
-                && stack.getItem() instanceof ItemBlock
-                && renderingRegistry.hasRenderingHandler(((ItemBlock) stack.getItem()).block);
+                && renderingRegistry.hasRenderingHandler(stack.getItem());
     }
 
     @Override
@@ -93,12 +92,7 @@ public final class RenderItemWrapped extends RenderItem {
 
     @Override
     public boolean shouldRenderItemIn3D(ItemStack stack) {
-        if(isHandled(stack)) {
-            return renderingRegistry.getRenderingHandler(((ItemBlock) stack.getItem()).block).shouldRenderInventory3D(stack);
-        }
-        else {
-            return prevRenderItem.shouldRenderItemIn3D(stack);
-        }
+        return isHandled(stack) || prevRenderItem.shouldRenderItemIn3D(stack);
     }
 
     @Override
@@ -147,7 +141,7 @@ public final class RenderItemWrapped extends RenderItem {
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
             GlStateManager.pushMatrix();
 
-            renderItem(((ItemBlock) stack.getItem()).block, stack, cameraTransformType);
+            renderItem(stack, cameraTransformType);
 
             GlStateManager.cullFace(1029);
             GlStateManager.popMatrix();
@@ -190,7 +184,7 @@ public final class RenderItemWrapped extends RenderItem {
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.setupGuiTransform(x, y, ibakedmodel.isGui3d());
 
-            this.renderItem(((ItemBlock) stack.getItem()).block, stack, ItemCameraTransforms.TransformType.GUI);
+            this.renderItem(stack, ItemCameraTransforms.TransformType.GUI);
 
             GlStateManager.disableAlpha();
             GlStateManager.disableRescaleNormal();
@@ -377,7 +371,8 @@ public final class RenderItemWrapped extends RenderItem {
     private static void resetRenderManagerEntries() {
         Minecraft minecraft = Minecraft.getMinecraft();
         RenderManager renderManager = minecraft.getRenderManager();
-        renderManager.entityRenderMap.remove(EntityItem.class);new RenderEntityItem(renderManager, INSTANCE);
+        renderManager.entityRenderMap.remove(EntityItem.class);
+        renderManager.entityRenderMap.put(EntityItem.class, new RenderEntityItem(renderManager, INSTANCE));
         renderManager.entityRenderMap.remove(EntityItemFrame.class);
         renderManager.entityRenderMap.put(EntityItemFrame.class, new RenderItemFrame(renderManager, INSTANCE));
         minecraft.entityRenderer = new EntityRenderer(minecraft, minecraft.getResourceManager());

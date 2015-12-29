@@ -455,7 +455,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getPlantIcon(IBlockState state) {
-        return plant.getPlantTexture(state.getValue(BlockStates.GROWTHSTAGE));
+        return plant.getPrimaryPlantTexture(state.getValue(BlockStates.GROWTHSTAGE));
     }
 
     @Override

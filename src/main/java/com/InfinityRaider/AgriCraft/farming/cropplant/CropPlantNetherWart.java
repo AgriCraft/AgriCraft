@@ -6,6 +6,8 @@ import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -18,6 +20,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CropPlantNetherWart extends CropPlant {
+    private String[] textureNames;
+
+    public CropPlantNetherWart() {
+        super();
+        this.textureNames = new String[3];
+        for(int i = 0; i< textureNames.length; i++) {
+            textureNames[i] = "minecraft:blocks/nether_wart_stage_"+i;
+        }
+    }
+
     @Override
     public int tier() {
         return 2;
@@ -79,6 +91,23 @@ public class CropPlantNetherWart extends CropPlant {
     @SideOnly(Side.CLIENT)
     public RenderMethod getRenderMethod() {
         return RenderMethod.HASHTAG;
+    }
+
+    @Override
+    public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
+        int index = 0;
+        if(growthStage >= Constants.MATURE) {
+            index = 2;
+        }
+        else if(growthStage > 3) {
+            index = 1;
+        }
+        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureNames[index]);
+    }
+
+    @Override
+    public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+        return null;
     }
 
     @Override
