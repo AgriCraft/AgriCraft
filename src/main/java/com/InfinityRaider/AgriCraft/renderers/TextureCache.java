@@ -49,15 +49,15 @@ public class TextureCache implements IIconCache {
     private final Map<Block, IStateMapper> blockStateMap;
 
     /** Map to cache ModelResourceLocations for IBlockStates */
-    private final Map<IBlockState, ModelResourceLocation> modelLocationsMap;
+    private Map<IBlockState, ModelResourceLocation> modelLocationsMap;
     /** Map to cache Variants for ModelResourceLocations */
-    private final Map<ModelResourceLocation, ModelBlockDefinition.Variants> variantsMap;
+    private Map<ModelResourceLocation, ModelBlockDefinition.Variants> variantsMap;
     /** Map to cache ModelBlocks for ResourceLocations */
-    private final Map<ResourceLocation, ModelBlock> modelMap;
+    private Map<ResourceLocation, ModelBlock> modelMap;
     /** Map to cache ModelBlock instances for IBlockStates */
-    private final Map<IBlockState, List<ModelBlock>> modelCache;
+    private Map<IBlockState, List<ModelBlock>> modelCache;
     /** Map to cache TextureAtlasSprite instances for IBlockStates */
-    private final Map<IBlockState, List<TextureAtlasSprite>> textureCache;
+    private Map<IBlockState, List<TextureAtlasSprite>> textureCache;
 
     private TextureCache(IReloadableResourceManager resourceManager) {
         this.resourceManager = resourceManager;
@@ -69,13 +69,12 @@ public class TextureCache implements IIconCache {
         this.modelMap = Maps.<ResourceLocation, ModelBlock>newLinkedHashMap();
         this.modelCache = Maps.<IBlockState, List<ModelBlock>>newLinkedHashMap();
         this.textureCache = Maps.<IBlockState, List<TextureAtlasSprite>>newLinkedHashMap();
-
-        resourceManager.registerReloadListener(this);
     }
 
     public static TextureCache getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new TextureCache((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
+            INSTANCE.resourceManager.registerReloadListener(INSTANCE);
         }
         return INSTANCE;
     }
@@ -103,14 +102,17 @@ public class TextureCache implements IIconCache {
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
         if(resourceManager instanceof IReloadableResourceManager) {
-            initializeCache((IReloadableResourceManager) resourceManager);
-        } else {
-            cachedObjects.forEach(INSTANCE::retrieveBlockIcons);
+            this.resourceManager = (IReloadableResourceManager) resourceManager;
         }
+        initializeCache();
     }
 
-    private void initializeCache(IReloadableResourceManager resourceManager) {
-        this.resourceManager = resourceManager;
+    private void initializeCache() {
+        this.modelLocationsMap = Maps.<IBlockState, ModelResourceLocation>newLinkedHashMap();
+        this.variantsMap = Maps.<ModelResourceLocation, ModelBlockDefinition.Variants>newLinkedHashMap();
+        this.modelMap = Maps.<ResourceLocation, ModelBlock>newLinkedHashMap();
+        this.modelCache = Maps.<IBlockState, List<ModelBlock>>newLinkedHashMap();
+        this.textureCache = Maps.<IBlockState, List<TextureAtlasSprite>>newLinkedHashMap();
         cachedObjects.forEach(INSTANCE::retrieveBlockIcons);
     }
 
