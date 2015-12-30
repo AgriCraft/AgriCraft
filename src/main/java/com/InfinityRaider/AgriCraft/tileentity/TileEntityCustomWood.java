@@ -1,7 +1,9 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
+import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.TextureCache;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -41,6 +43,10 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
      * Defaults to {@link #DEFAULT_META}.
      */
     private int materialMeta = 0;
+
+    /** Cached icon */
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite icon;
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
@@ -167,12 +173,33 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
     }
 
     public final TextureAtlasSprite getIcon() {
-        //TODO: find <Block, meta>  <--> ResourceLocation/TextureAtlasSprite relation
-        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+        if(this.icon == null) {
+            this.cacheIcon();
+        }
+        return this.icon == null ? getDefaultIcon() : this.icon;
     }
 
-    public static TextureAtlasSprite getDefaultIcon() {
-        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+    private void cacheIcon() {
+        if (this.material == null) {
+            return;
+        }
+        List<TextureAtlasSprite> icons = TextureCache.getInstance().retrieveIcons(getMaterialState());
+        if (icons.size() > 0) {
+            TextureAtlasSprite fromCache = icons.get(0);
+            if(fromCache != Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()) {
+                this.icon = fromCache;
+            }
+        }
+
+    }
+
+    @Override
+    public BlockCustomWood getBlockType() {
+        return (BlockCustomWood) super.getBlockType();
+    }
+
+    public TextureAtlasSprite getDefaultIcon() {
+        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/oak_planks");
     }
 
     @Override

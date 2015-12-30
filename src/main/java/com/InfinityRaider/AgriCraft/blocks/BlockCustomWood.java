@@ -2,15 +2,20 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
+import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.TextureCache;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
 import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -18,13 +23,19 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BlockCustomWood extends BlockContainerBase {
+    @SideOnly(Side.CLIENT)
+    private static TextureAtlasSprite defaultIcon;
+
     public BlockCustomWood() {
         super(Material.wood);
         this.setHardness(2.0F);
@@ -32,6 +43,37 @@ public abstract class BlockCustomWood extends BlockContainerBase {
         setHarvestLevel("axe", 0);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setStepSound(soundTypeWood);
+    }
+
+    public static List<ItemStack> getWoodTypes() {
+        List<ItemStack> list = new ArrayList<>();
+        List<ItemStack> planks = OreDictionary.getOres(Names.OreDict.plankWood);
+        for(ItemStack plank:planks) {
+            if(plank.getItem() instanceof ItemBlock) {
+                // Skip the ExU stuff for now as we don't support its textures yet
+                // TODO: Find out how ExU generates the colored textures and integrate it
+                if (Loader.isModLoaded(Names.Mods.extraUtilities) && ((ItemBlock) plank.getItem()).block.getClass().getSimpleName().equals("BlockColor")) {
+                    continue;
+                }
+                if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                    List<ItemStack> subItems = new ArrayList<>();
+                    Side side = FMLCommonHandler.instance().getEffectiveSide();
+                    if(side==Side.CLIENT) {
+                        plank.getItem().getSubItems(plank.getItem(), null, subItems);
+                    }
+                    else {
+                        for(int i=0;i<16;i++) {
+                            //on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
+                            subItems.add(new ItemStack(plank.getItem(), 1, i));
+                        }
+                    }
+                    list.addAll(subItems);
+                } else {
+                    list.add(plank);
+                }
+            }
+        }
+        return list;
     }
     
     @Override
@@ -90,7 +132,7 @@ public abstract class BlockCustomWood extends BlockContainerBase {
     public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
         IBlockState state = world.getBlockState(pos);
         ItemStack stack = new ItemStack(this, 1, state.getBlock().getDamageValue(world, pos));
-        this.setTag(world, pos,  stack);
+        this.setTag(world, pos, stack);
         return stack;
     }
 
@@ -133,10 +175,19 @@ public abstract class BlockCustomWood extends BlockContainerBase {
     @Override
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getIcon() {
-        return null;
+        return defaultIcon;
+
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegistrar iconRegistrar) {}
+    public void registerIcons(IIconRegistrar iconRegistrar) {
+        if(defaultIcon == null) {
+            for(ItemStack stack : BlockCustomWood.getWoodTypes()) {
+                Block block = ((ItemBlock) stack.getItem()).block;
+                TextureCache.getInstance().retrieveIcons(block.getStateFromMeta(stack.getItemDamage()));
+            }
+        }
+        defaultIcon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/oak_planks");
+    }
 }

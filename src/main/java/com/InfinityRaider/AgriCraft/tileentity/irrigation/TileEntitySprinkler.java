@@ -128,7 +128,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getChannelIcon() {
         if(this.getWorld() == null) {
-            return TileEntityChannel.getDefaultIcon();
+            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/oak_planks");
         }
         return ((TileEntityChannel) getWorld().getTileEntity(getPos().add(0, 1, 0))).getIcon();
     }
