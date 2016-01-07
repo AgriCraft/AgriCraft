@@ -788,7 +788,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
     @Override
     @Optional.Method(modid=Names.Mods.botania)
     public boolean canHornHarvest(World world, int x, int y, int z, ItemStack stack, EnumHornType hornType) {
-        return hornType.ordinal()==0;
+        return hornType.ordinal()==0 && this.isMature(world, x, y, z);
     }
 
     @Override
