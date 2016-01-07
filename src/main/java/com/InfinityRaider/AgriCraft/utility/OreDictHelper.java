@@ -149,7 +149,7 @@ public abstract class OreDictHelper {
                         continue;
                     }
                     String stackModId = IOHelper.getModId(stack);
-                    if((!sameMod) || stackModId.equals(seedModId)) {
+                    if((!sameMod) || seedModId.equals(stackModId)) {
                         fruits.add(stack);
                     }
                 }

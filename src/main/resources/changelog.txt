@@ -1,5 +1,8 @@
 Changelog
 ---------
+1.4.7:
+-FIXED:  NPE when scanning the ore dictionary for fruits (Damn you null stacks)
+
 1.4.6
 -ADDED:  The peripheral should now also work for OpenComputers
 -ADDED:  Support for ResourcefulCrops
