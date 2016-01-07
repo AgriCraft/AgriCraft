@@ -95,7 +95,9 @@ public abstract class BlockContainerAgriCraft extends BlockAgriCraft implements 
     public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
         if(this.isMultiBlock() && !world.isRemote) {
             IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(x, y, z);
-            component.getMultiBlockManager().onBlockBroken(world, x, y, z, component);
+            if(component != null) {
+                component.getMultiBlockManager().onBlockBroken(world, x, y, z, component);
+            }
         }
         super.breakBlock(world,x,y,z, b,meta);
         world.removeTileEntity(x, y, z);

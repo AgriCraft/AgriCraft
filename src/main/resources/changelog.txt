@@ -2,6 +2,7 @@ Changelog
 ---------
 1.4.7:
 -FIXED:  NPE when scanning the ore dictionary for fruits (Damn you null stacks)
+-FIXED:  rare NPE when part of a tank multiblock is loaded, while the main component isn't
 
 1.4.6
 -ADDED:  The peripheral should now also work for OpenComputers
