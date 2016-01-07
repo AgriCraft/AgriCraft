@@ -183,6 +183,10 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
 	public void setFluidLevel(int lvl) {
         if(lvl!=this.getFluidLevel()) {
             TileEntityTank tank = this.getMainComponent();
+            if (tank == null) {
+                //This is a crappy fix, but I don't have time or incentive to find out why the tank is null
+                tank = this;
+            }
             lvl = lvl > tank.getCapacity() ? tank.getCapacity() : lvl;
             tank.fluidLevel = lvl;
             if (!tank.worldObj.isRemote) {
