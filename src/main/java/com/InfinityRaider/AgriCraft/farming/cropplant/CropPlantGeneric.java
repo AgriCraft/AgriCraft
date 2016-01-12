@@ -25,6 +25,7 @@ public abstract class CropPlantGeneric extends CropPlant {
     private ArrayList<ItemStack> fruits;
 
     public CropPlantGeneric(ItemSeeds seed) {
+        super();
         this.seed = seed;
         this.plant = seed.getPlant(null, 0, 0, 0);
         this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed(), modSpecificFruits());

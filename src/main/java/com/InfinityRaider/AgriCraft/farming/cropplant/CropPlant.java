@@ -37,8 +37,7 @@ public abstract class CropPlant implements ICropPlant {
     public CropPlant() {
         this.growthRequirement = initGrowthRequirement();
         growthRequirement = growthRequirement == null ? GrowthRequirementHandler.getNewBuilder().build() : growthRequirement;
-        this.tier = tier();
-        this.spreadChance = 100/getTier();
+        this.setTier(tier());
         this.blackListed = false;
         this.ignoreVanillaPlantingRule = false;
     }
@@ -82,6 +81,7 @@ public abstract class CropPlant implements ICropPlant {
         tier = tier >= Constants.GROWTH_TIER.length ? Constants.GROWTH_TIER.length-1 : tier;
         tier = tier <= 0 ? 1 : tier;
         this.tier = tier;
+        this.spreadChance = 100/tier;
     }
 
     /** Gets the spread chance in percent for this plant */

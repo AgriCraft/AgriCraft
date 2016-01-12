@@ -5,6 +5,7 @@ Changelog
 -FIXED:  Rare NPE when part of a tank multiblock is loaded, while the main component isn't
 -FIXED:  Rare NPE when breaking a tank while raining
 -FIXED:  Weird harvesting behaviour with Botania drum of the wild
+-FIXED:  Issues with witchery seeds
 
 1.4.6
 -ADDED:  The peripheral should now also work for OpenComputers

@@ -16,6 +16,7 @@ public class CropPlantWitchery extends CropPlantGeneric {
 
     public CropPlantWitchery(ItemSeeds seed, int tier) {
         super(seed);
+        this.setTier(tier);
         this.tier = tier;
     }
 
