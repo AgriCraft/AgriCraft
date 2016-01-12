@@ -56,22 +56,8 @@ public class ResourcefulCropsAPI extends ResourcefulCropsAPIwrapper {
     @Override
     protected ArrayList<ItemStack> getAllFruits(int meta) {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        Seed seed = SeedRegistry.getSeed(meta);
-        ItemStack fruit1 = seed.getOutputStack();
-        if(fruit1!=null && fruit1.getItem()!=null) {
-            fruit1.stackSize = 1;
-            list.add(fruit1);
-        }
-        ItemStack fruit2 = seed.getSecondOutputStack();
-        if(fruit2!=null && fruit2.getItem()!=null) {
-            fruit2.stackSize = 1;
-            list.add(fruit1);
-        }
-        ItemStack fruit3 = seed.getThirdOutputStack();
-        if(fruit3!=null && fruit3.getItem()!=null) {
-            fruit3.stackSize = 1;
-            list.add(fruit1);
-        }
+        ItemStack fruit = new ItemStack(ResourcefulAPI.shard, 1, meta);
+        list.add(fruit);
         return list;
     }
 
