@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
@@ -32,23 +33,32 @@ public class RenderCrop extends RenderBlockBase {
             drawScaledPrism(tessellator, 13, 0, 2, 14, 16, 3, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
             drawScaledPrism(tessellator, 13, 0, 13, 14, 16, 14, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
             drawScaledPrism(tessellator, 2, 0, 13, 3, 16, 14, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
-            tessellator.addTranslation(0, 3*Constants.UNIT, 0);
+            tessellator.addTranslation(0, 3 * Constants.UNIT, 0);
             if (crop.isCrossCrop()) {
                 drawScaledPrism(tessellator, 0, 10, 2, 16, 11, 3, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
                 drawScaledPrism(tessellator, 0, 10, 13, 16, 11, 14, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
                 drawScaledPrism(tessellator, 2, 10, 0, 3, 11, 16, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
                 drawScaledPrism(tessellator, 13, 10, 0, 14, 11, 16, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
             }
-            else if (crop.hasPlant()) {
-                //render the plant
-                crop.getPlant().renderPlantInCrop(world, x, y, z, renderer);
-            }
-            else if(crop.hasWeed()) {
-                //render weeds
-                PlantRenderer.renderPlantLayer(x, y, z, renderer, 6, crop.getPlantIcon(), 0);
+            if(ConfigurationHandler.renderCropPlantsAsTESR) {
+                if(callFromTESR) {
+                    renderPlant(world, x, y, z, crop, renderer);
+                }
+            } else {
+                renderPlant(world, x, y, z, crop, renderer);
             }
         }
         return true;
+    }
+
+    private void renderPlant(IBlockAccess world, int x, int y, int z, TileEntityCrop crop, RenderBlocks renderer) {
+        if (crop.hasPlant()) {
+            //render the plant
+            crop.getPlant().renderPlantInCrop(world, x, y, z, renderer);
+        } else if (crop.hasWeed()) {
+            //render weeds
+            PlantRenderer.renderPlantLayer(x, y, z, renderer, 6, crop.getPlantIcon(), 0);
+        }
     }
 
     @Override
@@ -57,7 +67,7 @@ public class RenderCrop extends RenderBlockBase {
 
     @Override
     public boolean shouldBehaveAsTESR() {
-        return false;
+        return true;
     }
 
     @Override

@@ -37,7 +37,7 @@ public class SeedMutation {
     @ZenMethod
     public static void remove(IItemStack result) {
         ItemStack resultToRemove = MineTweakerMC.getItemStack(result);
-        if (resultToRemove.getItem() instanceof ItemSeeds) {
+        if (CropPlantHandler.isValidSeed(resultToRemove)) {
             MineTweakerAPI.apply(new RemoveAction(resultToRemove));
         } else {
             MineTweakerAPI.logError(resultToRemove.getDisplayName() + " is not of type ItemSeeds.");

@@ -26,6 +26,7 @@ public class ConfigurationHandler {
         public static final String CATEGORY_DECORATION = "decoration";
         public static final String CATEGORY_COMPATIBILITY = "compatibility";
         public static final String CATEGORY_CLIENT = "clientside config";
+        public static final String CATEGORY_RENDERING = "rendering";
     }
 
     public static Configuration config;
@@ -94,6 +95,8 @@ public class ConfigurationHandler {
     //decorative
     public static boolean disableFences;
     public static boolean disableGrates;
+    //rendering
+    public static boolean renderCropPlantsAsTESR;
 
     //CLIENT
     //------
@@ -189,6 +192,19 @@ public class ConfigurationHandler {
         disableGrates = config.getBoolean("Disable grates", Categories.CATEGORY_DECORATION, false, "Set to true to disable the decorative custom wood grates");
         //debug mode
         debug = config.getBoolean("debug", Categories.CATEGORY_DEBUG,false,"Set to true if you wish to enable debug mode");
+        //rendering
+        renderCropPlantsAsTESR = config.getBoolean("Crop rendering setting", Categories.CATEGORY_RENDERING, false,
+                "When rendering crops, the default (false) is that the plants will only be re-rendered whenever the chunk updates, " +
+                "this basically means that whenever a crop grows it causes the chunk containing the plant to re-rendered.\n" +
+                "For small farms this is the suggested approach, however for large farms, it is possible that a crop grows almost every tick, " +
+                "resulting in  re-rendering the chunk every tick, possibly causing huge FPS drops.\n" +
+                "When setting this to true, there will no longer be chunk updates when a crop grows, but the rendering will be different: " +
+                "The plant will be rendered every tick (the sticks itself will still be rendered the default way), for small farms this is a bad approach," +
+                "for large farms as well, but it might result in better FPS compared to the default.\n" +
+                "I recommend leaving this on false, if you have FPS problems, set this to true and see for yourself if it is an improvement or not.\n" +
+                "This config setting must match on server and client, the server should know if it should cause block updates and the client has to know how to render the crops"
+        );
+
 
         if(config.hasChanged()) {config.save();}
     }

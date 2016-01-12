@@ -160,7 +160,7 @@ public class Growing {
             ItemStack seedStack = MineTweakerMC.getItemStack(seed);
             ItemStack soilStack = MineTweakerMC.getItemStack(soil);
             String error = "Invalid first argument: has to be a seed";
-            boolean success = seedStack.getItem()!=null && seedStack.getItem() instanceof ItemSeeds;
+            boolean success = CropPlantHandler.isValidSeed(seedStack);
             if(success) {
                 error = "Invalid second argument: has to be a block";
                 success = soilStack.getItem()!=null && soilStack.getItem() instanceof ItemBlock;
@@ -246,7 +246,7 @@ public class Growing {
         @ZenMethod public static void set(IItemStack seed, int min, int max) {
             ItemStack seedStack = MineTweakerMC.getItemStack(seed);
             String error = "Invalid first argument: has to be a seed";
-            boolean success = seedStack.getItem()!=null && seedStack.getItem() instanceof ItemSeeds;
+            boolean success = CropPlantHandler.isValidSeed(seedStack);
             if(success) {
                 error = "Invalid second argument: has to be larger than or equal to 0";
                 success = min>=0;

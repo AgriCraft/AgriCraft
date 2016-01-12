@@ -408,6 +408,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         if(hasPlant()) {
             flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta) ? 2 : 6;
         }
+        if(ConfigurationHandler.renderCropPlantsAsTESR) {
+            flag = 6;
+        }
         if (hasWeed() || !plant.isMature(worldObj, xCoord, yCoord, zCoord)) {
             worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta + 1, flag);
             AppleCoreHelper.announceGrowthTick(this.getBlockType(), worldObj, xCoord, yCoord, zCoord);
