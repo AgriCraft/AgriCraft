@@ -127,7 +127,7 @@ public class CropPlantAPIv1 extends CropPlant {
         if(plant.overrideRendering()) {
             plant.renderPlantInCrop(world, x, y, z, renderer);
         } else {
-            PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(world.getBlockMetadata(x, y, z)), 0);
+            PlantRenderer.renderPlantLayer(world, x, y, z, renderAsFlower() ? 1 : 6, getPlantIcon(world.getBlockMetadata(x, y, z)), 0);
         }
     }
 }

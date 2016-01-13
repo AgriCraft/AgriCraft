@@ -8,18 +8,19 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
-    public static void renderPlantLayer(int x, int y, int z, RenderBlocks renderer, int renderType, IIcon icon, int layer) {
-        renderPlantLayer(x, y, z, renderer, renderType, icon, layer, true);
+    public static void renderPlantLayer(IBlockAccess world, int x, int y, int z, int renderType, IIcon icon, int layer) {
+        renderPlantLayer(world, x, y, z, renderType, icon, layer, true);
     }
 
-    public static void renderPlantLayer(int x, int y, int z, RenderBlocks renderer, int renderType, IIcon icon, int layer, boolean resetColor) {
+    public static void renderPlantLayer(IBlockAccess world, int x, int y, int z, int renderType, IIcon icon, int layer, boolean resetColor) {
         if(icon!=null) {
             Tessellator tessellator = Tessellator.instance;
             tessellator.addTranslation(x, y, z);
-            tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
+            tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(world, x, y, z));
             if(resetColor) {
                 tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
             }

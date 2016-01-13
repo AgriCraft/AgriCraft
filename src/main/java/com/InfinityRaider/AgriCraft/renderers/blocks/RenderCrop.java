@@ -8,8 +8,10 @@ import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -17,17 +19,13 @@ import net.minecraft.world.IBlockAccess;
 @SideOnly(Side.CLIENT)
 public class RenderCrop extends RenderBlockBase {
     public RenderCrop() {
-        super(Blocks.blockCrop, false);
+        super( Blocks.blockCrop, new TileEntityCrop(),false);
     }
 
     @Override
     protected boolean doWorldRender(Tessellator tessellator, IBlockAccess world, double xCoord, double yCoord, double zCoord, TileEntity tile, Block block, float f, int modelId, RenderBlocks renderer, boolean callFromTESR) {
-        int x = (int) xCoord;
-        int y = (int) yCoord;
-        int z = (int) zCoord;
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if (tileEntity instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) tileEntity;
+        if (tile instanceof TileEntityCrop) {
+            TileEntityCrop crop = (TileEntityCrop) tile;
             tessellator.addTranslation(0, -3*Constants.UNIT, 0);
             drawScaledPrism(tessellator, 2, 0, 2, 3, 16, 3, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
             drawScaledPrism(tessellator, 13, 0, 2, 14, 16, 3, block.getIcon(0, 0), RenderBlockBase.COLOR_MULTIPLIER_STANDARD);
@@ -42,10 +40,15 @@ public class RenderCrop extends RenderBlockBase {
             }
             if(ConfigurationHandler.renderCropPlantsAsTESR) {
                 if(callFromTESR) {
-                    renderPlant(world, x, y, z, crop, renderer);
+                    Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                    tessellator.startDrawingQuads();
+                    tessellator.addTranslation(-tile.xCoord, -tile.yCoord, -tile.zCoord);
+                    renderPlant(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord, crop, renderer);
+                    tessellator.addTranslation(tile.xCoord, tile.yCoord, tile.zCoord);
+                    tessellator.draw();
                 }
             } else {
-                renderPlant(world, x, y, z, crop, renderer);
+                renderPlant(world, tile.xCoord, tile.yCoord, tile.zCoord, crop, renderer);
             }
         }
         return true;
@@ -57,7 +60,7 @@ public class RenderCrop extends RenderBlockBase {
             crop.getPlant().renderPlantInCrop(world, x, y, z, renderer);
         } else if (crop.hasWeed()) {
             //render weeds
-            PlantRenderer.renderPlantLayer(x, y, z, renderer, 6, crop.getPlantIcon(), 0);
+            PlantRenderer.renderPlantLayer(world, x, y, z, 6, crop.getPlantIcon(), 0);
         }
     }
 
@@ -67,7 +70,7 @@ public class RenderCrop extends RenderBlockBase {
 
     @Override
     public boolean shouldBehaveAsTESR() {
-        return true;
+        return ConfigurationHandler.renderCropPlantsAsTESR;
     }
 
     @Override

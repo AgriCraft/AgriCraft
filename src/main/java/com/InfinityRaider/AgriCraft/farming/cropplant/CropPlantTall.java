@@ -37,9 +37,9 @@ public abstract class CropPlantTall extends CropPlant {
     @SideOnly(Side.CLIENT)
     public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
         int meta = world.getBlockMetadata(x, y, z);
-        PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getBottomIcon(meta), 0);
+        PlantRenderer.renderPlantLayer(world, x, y, z, renderAsFlower() ? 1 : 6, getBottomIcon(meta), 0);
         if(renderTopLayer(meta)) {
-            PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(meta), 1);
+            PlantRenderer.renderPlantLayer(world, x, y, z, renderAsFlower() ? 1 : 6, getPlantIcon(meta), 1);
         }
     }
 }

@@ -153,11 +153,11 @@ public class CropPlantResourcefulCrops extends CropPlant {
     public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
         Tessellator tessellator = Tessellator.instance;
         int growthStage = world.getBlockMetadata(x, y, z);
-        PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, getPlantIcon(growthStage), 0);
+        PlantRenderer.renderPlantLayer(world, x, y, z, renderAsFlower() ? 1 : 6, getPlantIcon(growthStage), 0);
         if(overlayIcons != null) {
             Color color = api.getColor(meta);
             tessellator.setColorRGBA(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-            PlantRenderer.renderPlantLayer(x, y, z, renderer, renderAsFlower() ? 1 : 6, overlayIcons[growthStage], 0, false);
+            PlantRenderer.renderPlantLayer(world, x, y, z, renderAsFlower() ? 1 : 6, overlayIcons[growthStage], 0, false);
         }
     }
 }

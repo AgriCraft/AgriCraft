@@ -1,6 +1,7 @@
 Changelog
 ---------
 1.4.7:
+-ADDED:  Config option to render plants on crop sticks as a TESR (might improve FPS if you have FPS issues with large farms)
 -FIXED:  NPE when scanning the ore dictionary for fruits (Damn you null stacks)
 -FIXED:  Rare NPE when part of a tank multiblock is loaded, while the main component isn't
 -FIXED:  Rare NPE when breaking a tank while raining
