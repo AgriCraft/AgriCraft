@@ -132,10 +132,10 @@ public class TileEntitySprinkler extends TileEntityAgricraft {
 
     @SideOnly(Side.CLIENT)
     private void renderLiquidSpray() {
+        this.angle = (this.angle+5F)%360;
         if(ConfigurationHandler.disableParticles) {
             return;
         }
-        this.angle = (this.angle+5F)%360;
         int particleSetting = Minecraft.getMinecraft().gameSettings.particleSetting;    //0 = all, 1 = decreased; 2 = minimal;
         counter = (counter+1)%(particleSetting+1);
         if(counter==0) {

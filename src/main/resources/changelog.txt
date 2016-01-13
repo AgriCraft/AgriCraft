@@ -7,6 +7,7 @@ Changelog
 -FIXED:  Weird harvesting behaviour with Botania drum of the wild
 -FIXED:  Issues with witchery seeds
 -FIXED:  Wrong drops from Resourceful Crops plants
+-FIXED:  Sprinkler not spinning when particles are disabled
 
 1.4.6
 -ADDED:  The peripheral should now also work for OpenComputers
