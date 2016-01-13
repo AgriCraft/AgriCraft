@@ -8,6 +8,7 @@ Changelog
 -FIXED:  Issues with witchery seeds
 -FIXED:  Wrong drops from Resourceful Crops plants
 -FIXED:  Sprinkler not spinning when particles are disabled
+-FIXED:  NPE when requesting documentation for the 'isAnalyzed()' method in the peripheral GUI
 
 1.4.6
 -ADDED:  The peripheral should now also work for OpenComputers

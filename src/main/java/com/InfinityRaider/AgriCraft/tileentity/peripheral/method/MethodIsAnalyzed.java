@@ -37,6 +37,6 @@ public class MethodIsAnalyzed extends MethodBase {
 
     @Override
     protected ArrayList<MethodParameter> getParameters() {
-        return null;
+        return new ArrayList<MethodParameter>();
     }
 }
