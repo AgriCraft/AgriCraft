@@ -114,7 +114,12 @@ public class CropPlantHandler {
      * @param plant the plant to be registered.
      */
     public static void addCropToRegister(CropPlant plant) {
-        plantsToRegister.add(plant);
+        if(plantsToRegister != null) {
+            plantsToRegister.add(plant);
+        }
+        else {
+            suppressedRegisterPlant(plant);
+        }
     }
 
     /**
