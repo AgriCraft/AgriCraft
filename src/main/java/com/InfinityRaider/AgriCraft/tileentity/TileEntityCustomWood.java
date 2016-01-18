@@ -183,7 +183,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
         if (this.material == null) {
             return;
         }
-        List<TextureAtlasSprite> icons = TextureCache.getInstance().retrieveIcons(getMaterialState());
+        List<TextureAtlasSprite> icons = TextureCache.getInstance().queryIcons(getMaterialState());
         if (icons.size() > 0) {
             TextureAtlasSprite fromCache = icons.get(0);
             if(fromCache != Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()) {

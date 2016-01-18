@@ -27,67 +27,67 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
-	public static final int SYNC_DELTA = Constants.HALF_BUCKET_mB;
+        public static final int SYNC_DELTA = Constants.HALF_BUCKET_mB;
 
-    public static final int DISCRETE_MAX = Constants.WHOLE;
-    
-    public static final int SINGLE_CAPACITY = 8 * Constants.BUCKET_mB;
-    
-    /**
-     * Don't call this directly, use getFluidLevel() and setFluidLevel(int amount) because only the tank at position (0, 0, 0)
-     * in the multiblock holds the liquid.
-     * <p>
-     * Represents the amount of fluid the tank is holding.
-     * </p>
-     */
-    private int fluidLevel = 0;
-    private int lastFluidLevel = 0;
-    private int lastDiscreteFluidLevel =0;
-    private MultiBlockPartData multiBlockData;
-    /** Main component cache is only used in the server thread because it's accessed there very often */
-    private TileEntityTank mainComponent;
-    
-    @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-        if (this.fluidLevel > 0) {
-            tag.setInteger(Names.NBT.level, this.fluidLevel);
+        public static final int DISCRETE_MAX = Constants.WHOLE;
+
+        public static final int SINGLE_CAPACITY = 8 * Constants.BUCKET_mB;
+
+        /**
+         * Don't call this directly, use getFluidLevel() and setFluidLevel(int amount) because only the tank at position (0, 0, 0)
+         * in the multiblock holds the liquid.
+         * <p>
+         * Represents the amount of fluid the tank is holding.
+         * </p>
+         */
+        private int fluidLevel = 0;
+        private int lastFluidLevel = 0;
+        private int lastDiscreteFluidLevel =0;
+        private MultiBlockPartData multiBlockData;
+        /** Main component cache is only used in the server thread because it's accessed there very often */
+        private TileEntityTank mainComponent;
+
+        @Override
+        public void writeToNBT(NBTTagCompound tag) {
+            super.writeToNBT(tag);
+            if (this.fluidLevel > 0) {
+                tag.setInteger(Names.NBT.level, this.fluidLevel);
+            }
         }
-    }
 
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
-        this.fluidLevel = tag.hasKey(Names.NBT.level) ? tag.getInteger(Names.NBT.level) : 0;
-    }
+        @Override
+        public void readFromNBT(NBTTagCompound tag) {
+            super.readFromNBT(tag);
+            this.fluidLevel = tag.hasKey(Names.NBT.level) ? tag.getInteger(Names.NBT.level) : 0;
+        }
 
-    //updates the tile entity every tick
-    @Override
-    public void tick() {
-        if(!this.worldObj.isRemote) {
-            if(this.worldObj.canBlockSeeSky(getPos()) && this.worldObj.isRaining()) {
-                if(!this.hasNeighbour(ForgeDirection.UP)) {
-                    BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(getPos());
-                    if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
-                       this.setFluidLevel(this.getFluidLevel() + 1);
+        //updates the tile entity every tick
+        @Override
+        public void tick() {
+            if(!this.worldObj.isRemote) {
+                if(this.worldObj.canBlockSeeSky(getPos()) && this.worldObj.isRaining()) {
+                    if(!this.hasNeighbour(ForgeDirection.UP)) {
+                        BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(getPos());
+                        if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
+                            this.setFluidLevel(this.getFluidLevel() + 1);
+                        }
                     }
                 }
-            }
-            Block block = this.worldObj.getBlockState(pos.add(0, 1, 0)).getBlock();
-            if(ConfigurationHandler.fillFromFlowingWater && (block==Blocks.water || block==Blocks.flowing_water)) {
-                this.setFluidLevel(this.getFluidLevel() + 5);
+                Block block = this.worldObj.getBlockState(pos.add(0, 1, 0)).getBlock();
+                if(ConfigurationHandler.fillFromFlowingWater && (block==Blocks.water || block==Blocks.flowing_water)) {
+                    this.setFluidLevel(this.getFluidLevel() + 5);
+                }
             }
         }
-    }
 
-    @Override
-	public void syncFluidLevel() {
-        if(needsSync()) {
-            IMessage msg = new MessageSyncFluidLevel(this.fluidLevel, this.getPos());
-            NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimensionId(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
-            NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
+        @Override
+        public void syncFluidLevel() {
+            if(needsSync()) {
+                IMessage msg = new MessageSyncFluidLevel(this.fluidLevel, this.getPos());
+                NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimensionId(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
+                NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
+            }
         }
-    }
 
     private boolean needsSync() {
         int newDiscreteLvl = getDiscreteFluidLevel();
@@ -108,7 +108,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 
     public boolean isConnectedToChannel(ForgeDirection direction) {
         if((this.worldObj != null) && (direction != ForgeDirection.UNKNOWN) && (direction.offsetY == 0)) {
-        	TileEntity tile = this.getWorld().getTileEntity(direction.offset(getPos()));
+            TileEntity tile = this.getWorld().getTileEntity(direction.offset(getPos()));
             if(tile instanceof TileEntityChannel) {
                 return ((TileEntityChannel) tile).isSameMaterial(this);
             }
@@ -122,14 +122,14 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         return new FluidStack(FluidRegistry.WATER, this.getFluidLevel());
     }
 
-	@Override
-	public int getFluidLevel() {
+    @Override
+    public int getFluidLevel() {
         if(this.getMainComponent() == this) {
             return this.fluidLevel;
         }
         TileEntityTank mainComponent = this.getMainComponent();
         return mainComponent!=null ? mainComponent.getFluidLevel() : 0;
-	}
+    }
 
     public int getYPosition() {
         return getMultiBlockData().posY();
@@ -148,36 +148,36 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         }
         return discreteFluidLevel;
     }
-    
+
     @Override
-	public float getFluidHeight() {
-    	return this.getDiscreteFluidLevel();
+    public float getFluidHeight() {
+        return this.getDiscreteFluidLevel();
     }
-    
+
     @Override
-	public int pushFluid(int amount) {
+    public int pushFluid(int amount) {
         if(!worldObj.isRemote && this.canAccept() && amount >= 0) {
-        	int room = this.getCapacity() - this.getFluidLevel();
-        	if (room >= amount) {
-        		this.setFluidLevel(this.getFluidLevel()+amount);
-        		amount = 0;
-        	} else if (room > 0) {
-        		this.setFluidLevel(this.getCapacity());
-        		amount = amount - room;
-        	}
+            int room = this.getCapacity() - this.getFluidLevel();
+            if (room >= amount) {
+                this.setFluidLevel(this.getFluidLevel()+amount);
+                amount = 0;
+            } else if (room > 0) {
+                this.setFluidLevel(this.getCapacity());
+                amount = amount - room;
+            }
         }
         return amount;
     }
-    
+
     @Override
-	public int pullFluid(int amount) {
-    	if(!worldObj.isRemote && this.canProvide() && amount >= 0) {
-        	if (amount <= this.getFluidLevel()) {
-        		this.setFluidLevel(this.getFluidLevel() - amount);
-        	} else {
-        		amount = this.getFluidLevel();
-        		this.setFluidLevel(0);
-        	}
+    public int pullFluid(int amount) {
+        if(!worldObj.isRemote && this.canProvide() && amount >= 0) {
+            if (amount <= this.getFluidLevel()) {
+                this.setFluidLevel(this.getFluidLevel() - amount);
+            } else {
+                amount = this.getFluidLevel();
+                this.setFluidLevel(0);
+            }
         }
         return amount;
     }
