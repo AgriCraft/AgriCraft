@@ -12,9 +12,9 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.RenderItemFrame;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -23,17 +23,16 @@ import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ReportedException;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.Field;
+import java.util.Iterator;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("deprecation")
@@ -41,14 +40,14 @@ public final class RenderItemWrapped extends RenderItem {
     private static RenderItemWrapped INSTANCE;
     private static IRenderingRegistry renderingRegistry;
 
-    private final RenderItem prevRenderItem;
+    private static RenderItem prevRenderItem;
     private final TextureManager textureManager;
 
     public static void init() {
-        RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-        TextureManager textureManager = getTextureManager(renderItem);
+        prevRenderItem = Minecraft.getMinecraft().getRenderItem();
+        TextureManager textureManager = getTextureManager(prevRenderItem);
         ModelManager modelManager = getModelManager();
-        INSTANCE = new RenderItemWrapped(renderItem, textureManager, modelManager);
+        INSTANCE = new RenderItemWrapped(textureManager, modelManager);
         applyRenderItem();
         resetRenderManagerEntries();
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(INSTANCE);
@@ -60,13 +59,12 @@ public final class RenderItemWrapped extends RenderItem {
         return INSTANCE;
     }
 
-    private RenderItemWrapped(RenderItem prevRenderItem, TextureManager textureManager, ModelManager modelManager) {
+    private RenderItemWrapped(TextureManager textureManager, ModelManager modelManager) {
         super(textureManager, modelManager);
-        this.prevRenderItem = prevRenderItem;
         this.textureManager = textureManager;
     }
 
-    private void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
+    private void renderItemOverride(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
         renderingRegistry.getItemRenderer(stack.getItem()).renderItem(stack, transformType);
     }
 
@@ -76,103 +74,67 @@ public final class RenderItemWrapped extends RenderItem {
                 && renderingRegistry.hasRenderingHandler(stack.getItem());
     }
 
+    /**
+     * Overrides from previous RenderItem instance
+     */
+
     @Override
-    public void func_175039_a(boolean flag) {
-        prevRenderItem.func_175039_a(flag);
+    public void func_175039_a(boolean b) {
+        prevRenderItem.func_175039_a(b);
+    }
+
+    @Override
+    public ItemModelMesher getItemModelMesher() {
+        return prevRenderItem.getItemModelMesher();
+    }
+
+    @Override
+    protected void registerItem(Item itm, int subType, String identifier) {
+        prevRenderItem.getItemModelMesher().register(itm, subType, new ModelResourceLocation(identifier, "inventory"));
+    }
+
+    @Override
+    protected void registerBlock(Block blk, int subType, String identifier) {
+        this.registerItem(Item.getItemFromBlock(blk), subType, identifier);
     }
 
     @Override
     public void renderItem(ItemStack stack, IBakedModel model) {
-        if(isHandled(stack)) {
-            this.renderItemModelTransform(stack, model, ItemCameraTransforms.TransformType.NONE);
-        } else {
-            prevRenderItem.renderItem(stack, model);
-        }
+        prevRenderItem.renderItem(stack, model);
     }
 
     @Override
     public boolean shouldRenderItemIn3D(ItemStack stack) {
-        return isHandled(stack) || prevRenderItem.shouldRenderItemIn3D(stack);
+        if(this.isHandled(stack)) {
+            return renderingRegistry.getItemRenderer(stack.getItem()).shouldRender3D(stack);
+        } else {
+            return prevRenderItem.shouldRenderItemIn3D(stack);
+        }
     }
 
     @Override
-    public void func_181564_a(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
-        if (isHandled(stack)) {
-            if(stack.getItem() != null && stack.getItem() instanceof ItemBlock) {
-                Block block = ((ItemBlock) stack.getItem()).block;
-                if(renderingRegistry.hasRenderingHandler(block)) {
-                    IBakedModel ibakedmodel = this.getItemModelMesher().getItemModel(stack);
-                    this.renderItemModelTransform(stack, ibakedmodel, transformType);
-                }
-            }
-        }
-        else {
-            prevRenderItem.func_181564_a(stack, transformType);
+    public void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
+        if(isHandled(stack)) {
+            renderItemOverride(stack, transformType);
+        } else {
+            prevRenderItem.renderItem(stack, transformType);
         }
     }
 
     @Override
     public void renderItemModelForEntity(ItemStack stack, EntityLivingBase entityToRenderFor, ItemCameraTransforms.TransformType cameraTransformType) {
-        if(isHandled(stack)) {
-            if (entityToRenderFor != null && entityToRenderFor instanceof EntityPlayer) {
-                IBakedModel ibakedmodel = this.getItemModelMesher().getItemModel(stack);
-                EntityPlayer entityplayer = (EntityPlayer)entityToRenderFor;
-                Item item = stack.getItem();
-                ModelResourceLocation modelresourcelocation = item.getModel(stack, entityplayer, entityplayer.getItemInUseCount());
-                if (modelresourcelocation != null) {
-                    ibakedmodel = this.getItemModelMesher().getModelManager().getModel(modelresourcelocation);
-                }
-                this.renderItemModelTransform(stack, ibakedmodel, cameraTransformType);
+        if (stack != null && entityToRenderFor != null) {
+            if(isHandled(stack)) {
+                renderItemOverride(stack, cameraTransformType);
+            } else {
+                prevRenderItem.renderItemModelForEntity(stack, entityToRenderFor, cameraTransformType);
             }
-        } else {
-            prevRenderItem.renderItemModelForEntity(stack, entityToRenderFor, cameraTransformType);
-        }
-    }
-
-    @Override
-    protected void renderItemModelTransform(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType) {
-        if(isHandled(stack)) {
-            this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
-            this.textureManager.getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(false, false);
-            this.preTransform(stack);
-            GlStateManager.enableRescaleNormal();
-            GlStateManager.alphaFunc(516, 0.1F);
-            GlStateManager.enableBlend();
-            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-            GlStateManager.pushMatrix();
-
-            renderItem(stack, cameraTransformType);
-
-            GlStateManager.cullFace(1029);
-            GlStateManager.popMatrix();
-            GlStateManager.disableRescaleNormal();
-            GlStateManager.disableBlend();
-            this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
-            this.textureManager.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
-        }
-        else {
-            prevRenderItem.renderItem(stack, model);
-        }
-    }
-
-    private void preTransform(ItemStack stack) {
-        IBakedModel ibakedmodel = this.getItemModelMesher().getItemModel(stack);
-        Item item = stack.getItem();
-        if (item != null) {
-            boolean flag = ibakedmodel.isGui3d();
-            if (!flag) {
-                GlStateManager.scale(2.0F, 2.0F, 2.0F);
-            }
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
     @Override
     public void renderItemIntoGUI(ItemStack stack, int x, int y) {
-        if(!isHandled(stack)) {
-            prevRenderItem.renderItemIntoGUI(stack, x, y);
-        } else {
-            IBakedModel ibakedmodel = this.getItemModelMesher().getItemModel(stack);
+        if(isHandled(stack)) {
             GlStateManager.pushMatrix();
             this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
             this.textureManager.getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(false, false);
@@ -182,9 +144,9 @@ public final class RenderItemWrapped extends RenderItem {
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(770, 771);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.setupGuiTransform(x, y, ibakedmodel.isGui3d());
+            this.setupGuiTransform(x, y, true);
 
-            this.renderItem(stack, ItemCameraTransforms.TransformType.GUI);
+            renderItemOverride(stack, ItemCameraTransforms.TransformType.GUI);
 
             GlStateManager.disableAlpha();
             GlStateManager.disableRescaleNormal();
@@ -192,6 +154,8 @@ public final class RenderItemWrapped extends RenderItem {
             GlStateManager.popMatrix();
             this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
             this.textureManager.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
+        } else {
+            prevRenderItem.renderItemIntoGUI(stack, x, y);
         }
     }
 
@@ -200,16 +164,12 @@ public final class RenderItemWrapped extends RenderItem {
         GlStateManager.translate(8.0F, 8.0F, 0.0F);
         GlStateManager.scale(1.0F, 1.0F, -1.0F);
         GlStateManager.scale(0.5F, 0.5F, 0.5F);
-
-        if (isGui3d)
-        {
+        if (isGui3d) {
             GlStateManager.scale(40.0F, 40.0F, 40.0F);
             GlStateManager.rotate(210.0F, 1.0F, 0.0F, 0.0F);
             GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.enableLighting();
-        }
-        else
-        {
+        } else {
             GlStateManager.scale(64.0F, 64.0F, 64.0F);
             GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
             GlStateManager.disableLighting();
@@ -218,15 +178,12 @@ public final class RenderItemWrapped extends RenderItem {
 
     @Override
     public void renderItemAndEffectIntoGUI(final ItemStack stack, int xPosition, int yPosition) {
-        if(isHandled(stack)) {
-            prevRenderItem.renderItemAndEffectIntoGUI(stack, xPosition, yPosition);
-        } else {
-            if (stack != null && stack.getItem() != null) {
+        if (stack != null && stack.getItem() != null) {
+            if(isHandled(stack)) {
                 this.zLevel += 50.0F;
                 try {
                     this.renderItemIntoGUI(stack, xPosition, yPosition);
-                }
-                catch (Throwable throwable) {
+                } catch (Throwable throwable) {
                     CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Rendering item");
                     CrashReportCategory crashreportcategory = crashreport.makeCategory("Item being rendered");
                     crashreportcategory.addCrashSectionCallable("Item Type", () -> String.valueOf(stack.getItem()));
@@ -236,70 +193,30 @@ public final class RenderItemWrapped extends RenderItem {
                     throw new ReportedException(crashreport);
                 }
                 this.zLevel -= 50.0F;
+            } else {
+                prevRenderItem.renderItemAndEffectIntoGUI(stack, xPosition, yPosition);
             }
         }
     }
 
     @Override
     public void renderItemOverlays(FontRenderer fr, ItemStack stack, int xPosition, int yPosition) {
-        if(isHandled(stack)) {
-            this.renderItemOverlayIntoGUI(fr, stack, xPosition, yPosition, null);
-        } else {
-            prevRenderItem.renderItemOverlays(fr, stack, xPosition, yPosition);
-        }
+        prevRenderItem.renderItemOverlays(fr, stack, xPosition, yPosition);
     }
 
+    @Override
     public void renderItemOverlayIntoGUI(FontRenderer fr, ItemStack stack, int xPosition, int yPosition, String text) {
-        if (isHandled(stack)) {
-            if (stack.stackSize != 1 || text != null) {
-                String s = text == null ? String.valueOf(stack.stackSize) : text;
-                if (text == null && stack.stackSize < 1) {
-                    s = EnumChatFormatting.RED + String.valueOf(stack.stackSize);
-                }
-                GlStateManager.disableLighting();
-                GlStateManager.disableDepth();
-                GlStateManager.disableBlend();
-                fr.drawStringWithShadow(s, (float) (xPosition + 19 - 2 - fr.getStringWidth(s)), (float) (yPosition + 6 + 3), 16777215);
-                GlStateManager.enableLighting();
-                GlStateManager.enableDepth();
-            }
-            if (stack.getItem().showDurabilityBar(stack)) {
-                double health = stack.getItem().getDurabilityForDisplay(stack);
-                int j = (int) Math.round(13.0D - health * 13.0D);
-                int i = (int) Math.round(255.0D - health * 255.0D);
-                GlStateManager.disableLighting();
-                GlStateManager.disableDepth();
-                GlStateManager.disableTexture2D();
-                GlStateManager.disableAlpha();
-                GlStateManager.disableBlend();
-                Tessellator tessellator = Tessellator.getInstance();
-                WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-                this.drawRectangle(worldrenderer, xPosition + 2, yPosition + 13, 13, 2, 0, 0, 0, 255);
-                this.drawRectangle(worldrenderer, xPosition + 2, yPosition + 13, 12, 1, (255 - i) / 4, 64, 0, 255);
-                this.drawRectangle(worldrenderer, xPosition + 2, yPosition + 13, j, 1, 255 - i, i, 0, 255);
-                GlStateManager.enableAlpha();
-                GlStateManager.enableTexture2D();
-                GlStateManager.enableLighting();
-                GlStateManager.enableDepth();
-            }
-        } else {
-            prevRenderItem.renderItemOverlayIntoGUI(fr, stack, xPosition, yPosition, text);
-        }
-    }
-
-    private void drawRectangle(WorldRenderer worldRenderer, int x, int y, int width, int height, int red, int blue, int green, int alpha) {
-        worldRenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        worldRenderer.pos((double) (x ), (double) (y), 0.0D).color(red, blue, green, alpha).endVertex();
-        worldRenderer.pos((double) (x), (double) (y + height), 0.0D).color(red, blue, green, alpha).endVertex();
-        worldRenderer.pos((double) (x + width), (double) (y + height), 0.0D).color(red, blue, green, alpha).endVertex();
-        worldRenderer.pos((double) (x + width), (double) (y), 0.0D).color(red, blue, green, alpha).endVertex();
-        Tessellator.getInstance().draw();
+        prevRenderItem.renderItemOverlayIntoGUI(fr, stack, xPosition, yPosition, text);
     }
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        this.getItemModelMesher().rebuildCache();
+        prevRenderItem.onResourceManagerReload(resourceManager);
     }
+
+    /**
+     * Methods requiring reflection to do hacky stuff
+     */
 
     private static TextureManager getTextureManager(RenderItem renderItem) {
         TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
@@ -343,6 +260,7 @@ public final class RenderItemWrapped extends RenderItem {
         return ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "aL", "field_175617_aL", "modelManager");
     }
 
+    @SuppressWarnings("unchecked")
     private static void applyRenderItem() {
         for(Field field : Minecraft.class.getDeclaredFields()) {
             if(field.getType() == RenderItem.class) {
@@ -359,6 +277,25 @@ public final class RenderItemWrapped extends RenderItem {
                 field.setAccessible(true);
                 try {
                     field.set(Minecraft.getMinecraft(), new ItemRenderer(Minecraft.getMinecraft()));
+                } catch (Exception e) {
+                    LogHelper.printStackTrace(e);
+                }
+                field.setAccessible(false);
+            }
+        }
+        IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
+        for(Field field:manager.getClass().getDeclaredFields()) {
+            if(field.getType() == List.class) {
+                field.setAccessible(true);
+                try {
+                    List<IResourceManagerReloadListener> list = (List<IResourceManagerReloadListener>) field.get(manager);
+                    Iterator<IResourceManagerReloadListener> it = list.iterator();
+                    while(it.hasNext()) {
+                        IResourceManagerReloadListener listener = it.next();
+                        if(listener instanceof RenderItem) {
+                            it.remove();
+                        }
+                    }
                 } catch (Exception e) {
                     LogHelper.printStackTrace(e);
                 }

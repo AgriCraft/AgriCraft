@@ -48,4 +48,9 @@ public class RenderItemIcon extends RenderItemBase {
     protected void renderItemFixed(TessellatorV2 tessellator, ItemStack item) {
         drawItemIcon3D(tessellator, item);
     }
+
+    @Override
+    public boolean shouldRender3D(ItemStack stack) {
+        return true;
+    }
 }

@@ -46,4 +46,9 @@ public class RenderItemMagnifyingGlass extends RenderItemBase {
     protected void renderItemFixed(TessellatorV2 tessellator, ItemStack item) {
 
     }
+
+    @Override
+    public boolean shouldRender3D(ItemStack stack) {
+        return true;
+    }
 }

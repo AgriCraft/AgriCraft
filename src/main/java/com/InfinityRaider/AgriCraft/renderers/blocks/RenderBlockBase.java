@@ -28,6 +28,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
     protected static RenderUtil renderUtil = RenderUtil.getInstance();
 
     private final Block block;
+    private final boolean inventory;
 
     protected RenderBlockBase(Block block, boolean inventory) {
         this(block, null, inventory);
@@ -36,6 +37,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
     protected RenderBlockBase(Block block, TileEntityBase te, boolean inventory) {
         this.block = block;
         this.registerRenderer(block, te);
+        this.inventory = inventory;
         if(inventory) {
             BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(Item.getItemFromBlock(block), this);
         }
@@ -109,6 +111,11 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
 
     //INVENTORY
     //---------
+    @Override
+    public boolean shouldRender3D(ItemStack stack) {
+        return inventory;
+    }
+
     @Override
     @SuppressWarnings("deprecation")
     public final void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {

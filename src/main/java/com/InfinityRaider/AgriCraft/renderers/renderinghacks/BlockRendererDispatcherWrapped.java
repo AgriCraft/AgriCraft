@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.crash.CrashReport;
@@ -23,6 +24,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
@@ -158,6 +161,7 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
         return settings;
     }
 
+    @SuppressWarnings("unchecked")
     private static void applyDispatcher() {
         Minecraft mc = Minecraft.getMinecraft();
         for(Field field:mc.getClass().getDeclaredFields()) {
@@ -170,6 +174,25 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
                 }
                 field.setAccessible(false);
                 break;
+            }
+        }
+        IResourceManager manager = mc.getResourceManager();
+        for(Field field:manager.getClass().getDeclaredFields()) {
+            if(field.getType() == List.class) {
+                field.setAccessible(true);
+                try {
+                    List<IResourceManagerReloadListener> list = (List<IResourceManagerReloadListener>) field.get(manager);
+                    Iterator<IResourceManagerReloadListener> it = list.iterator();
+                    while(it.hasNext()) {
+                        IResourceManagerReloadListener listener = it.next();
+                        if(listener instanceof BlockRendererDispatcher) {
+                            it.remove();
+                        }
+                    }
+                } catch (Exception e) {
+                    LogHelper.printStackTrace(e);
+                }
+                field.setAccessible(false);
             }
         }
     }

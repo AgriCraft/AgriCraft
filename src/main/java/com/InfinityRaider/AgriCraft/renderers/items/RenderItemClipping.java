@@ -99,7 +99,7 @@ public class RenderItemClipping extends RenderItemBase {
 
         drawIcons(tessellator, stack);
 
-        GL11.glScalef(1/scale, 1/scale, 1/scale);
+        GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
         GL11.glTranslatef(-dx, -dy, -dz);
         GL11.glRotatef(-a, 0, 1, 0);
     }
@@ -154,5 +154,10 @@ public class RenderItemClipping extends RenderItemBase {
             return null;
         }
         return plant.getPrimaryPlantTexture(7);
+    }
+
+    @Override
+    public boolean shouldRender3D(ItemStack stack) {
+        return true;
     }
 }

@@ -7,5 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface IItemRenderer {
+    boolean shouldRender3D(ItemStack stack);
+
     void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType);
 }
