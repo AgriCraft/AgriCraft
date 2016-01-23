@@ -131,10 +131,6 @@ public interface ICropPlant {
     @SideOnly(Side.CLIENT)
     String getInformation();
 
-    /** Return true if you want to render the plant yourself, else agricraft will render the plant based on the data returned by the getIcon and renderAsFlower methods */
-    @SideOnly(Side.CLIENT)
-    boolean overrideRendering();
-
     /** This is called when the plant is rendered, this is never called if returned false on overrideRendering */
     @SideOnly(Side.CLIENT)
     void renderPlantInCrop(WorldRenderer renderer, IBlockAccess world, BlockPos pos, IBlockState state, int growthStage);

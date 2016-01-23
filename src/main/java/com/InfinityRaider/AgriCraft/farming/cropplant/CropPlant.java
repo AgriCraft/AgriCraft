@@ -328,13 +328,6 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
     @SideOnly(Side.CLIENT)
     public abstract String getInformation();
 
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean overrideRendering() {
-        return false;
-    }
-
     /**
      * A function to render the crop. Called when the plant is rendered.
      * 
