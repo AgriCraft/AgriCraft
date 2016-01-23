@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.handler.MissingJsonHandler;
 import com.InfinityRaider.AgriCraft.handler.TextureStitchHandler;
+import com.InfinityRaider.AgriCraft.handler.SoundHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.items.ItemBase;
@@ -109,6 +110,9 @@ public class ClientProxy extends CommonProxy {
 
         RenderPlayerHooks renderPlayerHooks = new RenderPlayerHooks();
         MinecraftForge.EVENT_BUS.register(renderPlayerHooks);
+
+        SoundHandler soundHandler = new SoundHandler();
+        MinecraftForge.EVENT_BUS.register(soundHandler);
     }
 
     @Override
