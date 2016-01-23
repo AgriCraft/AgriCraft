@@ -55,10 +55,14 @@ public class ItemClipping extends ItemAgricraft {
         if(te == null || !(te instanceof TileEntityCrop)) {
             return true;
         }
-        if(!((TileEntityCrop) te).canPlant()) {
+        TileEntityCrop crop = (TileEntityCrop) te;
+        BlockCrop blockCrop = (BlockCrop) block;
+        if(crop.isCrossCrop()) {
+            blockCrop.harvest(world, x, y, z, player, crop);
+        }
+        if(!crop.canPlant()) {
             return true;
         }
-        BlockCrop blockCrop = (BlockCrop) block;
         ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
         ISeedStats stats = PlantStats.getStatsFromStack(seed);
         if(stats == null) {
