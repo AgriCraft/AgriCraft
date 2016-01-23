@@ -67,6 +67,7 @@ public final class MagicalCropsHelper extends ModHelper {
         Field[] fields = mc_ItemRegistry.getDeclaredFields();
         for(Field field : fields) {
             if(Modifier.isStatic(field.getModifiers())) {
+                field.setAccessible(true);
                 try {
                     Object obj = field.get(null);
                     if(obj instanceof ItemSeeds) {

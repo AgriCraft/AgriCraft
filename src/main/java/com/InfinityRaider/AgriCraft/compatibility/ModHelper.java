@@ -18,7 +18,6 @@ import com.InfinityRaider.AgriCraft.compatibility.extrabiomesxl.ExtraBiomesXLHel
 import com.InfinityRaider.AgriCraft.compatibility.forestry.ForestryHelper;
 import com.InfinityRaider.AgriCraft.compatibility.forgemultipart.ForgeMultiPartHelper;
 import com.InfinityRaider.AgriCraft.compatibility.ganysMods.EtFuturumHelper;
-import com.InfinityRaider.AgriCraft.compatibility.ganysMods.GanysEndHelper;
 import com.InfinityRaider.AgriCraft.compatibility.ganysMods.GanysNetherHelper;
 import com.InfinityRaider.AgriCraft.compatibility.ganysMods.GanysSurfaceHelper;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
@@ -231,7 +230,6 @@ public abstract class ModHelper {
                 ExtraBiomesXLHelper.class,
                 ForestryHelper.class,
                 ForgeMultiPartHelper.class,
-                GanysEndHelper.class,
                 GanysNetherHelper.class,
                 GanysSurfaceHelper.class,
                 GardenStuffHelper.class,
