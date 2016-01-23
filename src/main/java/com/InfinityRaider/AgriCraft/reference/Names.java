@@ -94,9 +94,13 @@ public final class Names {
         public static final String botania = "Botania";
         public static final String chococraft = "chococraft";
         public static final String computerCraft = "ComputerCraft";
+        public static final String etFuturum = "etfuturum";
         public static final String extraUtilities = "ExtraUtilities";
         public static final String exNihilo = "exnihilo";
         public static final String forestry = "Forestry";
+        public static final String ganysEnd = "ganysend";
+        public static final String ganysNether = "ganysnether";
+        public static final String ganysSurface = "ganyssurface";
         public static final String gardenStuff = "GardenCore";
         public static final String growthcraft= "Growthcraft";
         public static final String harvestcraft = "harvestcraft";
@@ -118,7 +122,6 @@ public final class Names {
         public static final String resourcefulCrops = "ResourcefulCrops";
         public static final String tconstruct = "TConstruct";
         public static final String thaumcraft = "Thaumcraft";
-        public static final String thaumicTinkerer = "ThaumicTinkerer";
         public static final String waila = "Waila";
         public static final String weeeFlowers = "weeeflowers";
         public static final String witchery = "witchery";

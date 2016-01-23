@@ -17,6 +17,10 @@ import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
 import com.InfinityRaider.AgriCraft.compatibility.extrabiomesxl.ExtraBiomesXLHelper;
 import com.InfinityRaider.AgriCraft.compatibility.forestry.ForestryHelper;
 import com.InfinityRaider.AgriCraft.compatibility.forgemultipart.ForgeMultiPartHelper;
+import com.InfinityRaider.AgriCraft.compatibility.ganysMods.EtFuturumHelper;
+import com.InfinityRaider.AgriCraft.compatibility.ganysMods.GanysEndHelper;
+import com.InfinityRaider.AgriCraft.compatibility.ganysMods.GanysNetherHelper;
+import com.InfinityRaider.AgriCraft.compatibility.ganysMods.GanysSurfaceHelper;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
 import com.InfinityRaider.AgriCraft.compatibility.growthcraft.GrowthCraftRiceHelper;
 import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
@@ -35,7 +39,6 @@ import com.InfinityRaider.AgriCraft.compatibility.opencomputers.OpenComputersHel
 import com.InfinityRaider.AgriCraft.compatibility.plantmegapack.PlantMegaPackHelper;
 import com.InfinityRaider.AgriCraft.compatibility.psychedelicraft.PsychedelicraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.resourcefulcrops.ResourcefulCropsHelper;
-import com.InfinityRaider.AgriCraft.compatibility.rotarycraft.RotaryCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.tconstruct.TinkersConstructHelper;
 import com.InfinityRaider.AgriCraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.waila.WailaHelper;
@@ -223,10 +226,14 @@ public abstract class ModHelper {
                 BotaniaHelper.class,
                 ComputerCraftHelper.class,
                 ChocoCraftHelper.class,
+                EtFuturumHelper.class,
                 ExNihiloHelper.class,
                 ExtraBiomesXLHelper.class,
                 ForestryHelper.class,
                 ForgeMultiPartHelper.class,
+                GanysEndHelper.class,
+                GanysNetherHelper.class,
+                GanysSurfaceHelper.class,
                 GardenStuffHelper.class,
                 GrowthCraftRiceHelper.class,
                 HarvestcraftHelper.class,
@@ -246,7 +253,6 @@ public abstract class ModHelper {
                 PlantMegaPackHelper.class,
                 PsychedelicraftHelper.class,
                 ResourcefulCropsHelper.class,
-                RotaryCraftHelper.class,
                 ThaumcraftHelper.class,
                 TinkersConstructHelper.class,
                 WailaHelper.class,
