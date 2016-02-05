@@ -22,6 +22,12 @@ public class Vector {
         this.y = vec.yCoord;
         this.z = vec.zCoord;
     }
+	
+	public Vector(ForgeDirection dir, double magnitude) {
+		this.x = dir.offsetX * magnitude;
+		this.y = dir.offsetY * magnitude;
+		this.z = dir.offsetZ * magnitude;
+	}
 
     public Vector(NBTTagCompound tag) throws UnknownPositionException {
         if(!tag.hasKey(Names.NBT.x)) {throw new UnknownPositionException();}
@@ -40,7 +46,7 @@ public class Vector {
         return tag;
     }
 
-    public void setX( double x) {this.x = x;}
+    public void setX(double x) {this.x = x;}
 
     public void setY(double y) {this.y = y;}
 

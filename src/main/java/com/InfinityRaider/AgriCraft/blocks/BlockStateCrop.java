@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 
 import java.util.Collection;
 
+// TODO: Replace bad class.
 public class BlockStateCrop implements IBlockState {
     @Override
     public Collection<IProperty> getPropertyNames() {

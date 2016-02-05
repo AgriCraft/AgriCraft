@@ -1,5 +1,6 @@
 eclipse/
 libs/
+.nb-gradle
 .gradle/
 .git/
 build/
@@ -12,8 +13,9 @@ schematics/
 AgriCraft_Dependencies.rar
 .idea/
 logs/
-/bin/
+bin/
 
+.nb-gradle-properties
 .classpath
 .project
 .settings/

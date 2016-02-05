@@ -35,6 +35,7 @@ public enum ForgeDirection {
     public final int flag;
     public static final ForgeDirection[] VALID_DIRECTIONS = {DOWN, UP, NORTH, SOUTH, WEST, EAST};
     public static final int[] OPPOSITES = {1, 0, 3, 2, 5, 4, 6};
+	public static final int[] ORDINALS = {2, 4, 3, 5};
     // Left hand rule rotation matrix for all possible axes of rotation
     public static final int[][] ROTATION_MATRIX = {
             {0, 1, 4, 5, 3, 2, 6},
@@ -59,6 +60,10 @@ public enum ForgeDirection {
             return VALID_DIRECTIONS[id];
         }
         return UNKNOWN;
+    }
+	
+	public static ForgeDirection getCardinal(int id) {
+        return VALID_DIRECTIONS[ORDINALS[(id < 0 ? -id : id) % 4]];
     }
 
     public ForgeDirection getOpposite() {

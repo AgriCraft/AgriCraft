@@ -24,15 +24,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class BlockFence extends BlockCustomWood {
-    @Override
-    protected String getTileEntityName() {
-        return Names.Objects.fence;
-    }
 
-    @Override
-    public boolean isMultiBlock() {
-        return false;
-    }
+	public BlockFence() {
+		super(Names.Objects.fence, false);
+	}
 
     @Override
     protected IProperty[] getPropertyArray() {
@@ -43,11 +38,6 @@ public class BlockFence extends BlockCustomWood {
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderBlockFence();
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.fence;
     }
 
     @Override

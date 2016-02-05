@@ -24,9 +24,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 
-public class BlockChannelValve extends BlockWaterChannel {
+public class BlockChannelValve extends AbstractBlockWaterChannel {
+	
     public BlockChannelValve() {
-        super();
+        super(Names.Objects.valve);
         this.setBlockBounds(4*Constants.UNIT, 0, 4*Constants.UNIT, 12*Constants.UNIT, 1, 12*Constants.UNIT);
     }
 
@@ -68,11 +69,6 @@ public class BlockChannelValve extends BlockWaterChannel {
     }
 
     @Override
-    public boolean isOpaqueCube() {
-        return false;
-    }
-
-    @Override
     public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
     }
@@ -81,21 +77,6 @@ public class BlockChannelValve extends BlockWaterChannel {
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderValve();
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.valve;
-    }
-
-    @Override
-    protected String getTileEntityName() {
-        return Names.Objects.valve;
-    }
-
-    @Override
-    public boolean isMultiBlock() {
-        return false;
     }
 
     @Override

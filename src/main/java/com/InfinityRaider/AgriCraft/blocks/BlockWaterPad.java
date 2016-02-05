@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -27,39 +26,20 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
-
-public class BlockWaterPad extends BlockBase {
-    public BlockWaterPad() {
+public class BlockWaterPad extends AbstractBlockWaterPad {
+	
+	public BlockWaterPad() {
         this(Material.ground);
     }
 
     protected BlockWaterPad(Material mat) {
-        super(mat);
-        this.setHardness(0.5F);
-        this.setStepSound(soundTypeGravel);
+        super(mat, Names.Objects.waterPad);
         this.maxY = Constants.UNIT * (Constants.WHOLE / 2);
-    }
-
-    @Override
-    protected IProperty[] getPropertyArray() {
-        return new IProperty[0];
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public RenderBlockBase getRenderer() {
-        return new RenderWaterPad(this);
     }
 
     @Override
     protected Class<? extends ItemBlock> getItemBlockClass() {
         return ItemBlockWaterPad.class;
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.waterPad;
     }
 
     @Override
@@ -112,18 +92,6 @@ public class BlockWaterPad extends BlockBase {
 
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
-
-    public static class ItemBlockWaterPad extends net.minecraft.item.ItemBlock {
-        public ItemBlockWaterPad(Block block) {
-            super(block);
-        }
-
-        @Override
-        @SideOnly(Side.CLIENT)
-        public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-            list.add(StatCollector.translateToLocal("agricraft_tooltip.waterPadDry"));
-        }
-    }
 
     @Override
     @SideOnly(Side.CLIENT)

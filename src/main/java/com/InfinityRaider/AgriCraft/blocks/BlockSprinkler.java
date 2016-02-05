@@ -28,9 +28,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class BlockSprinkler extends BlockContainerBase {
+public class BlockSprinkler extends BlockTileBase {
+	
     public BlockSprinkler() {
-    	super(Material.iron);
+    	super(Material.iron, Names.Objects.sprinkler, false);
     	this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setHardness(2.0F);
         this.setResistance(5.0F);
@@ -116,21 +117,6 @@ public class BlockSprinkler extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderSprinkler();
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.sprinkler;
-    }
-
-    @Override
-    protected String getTileEntityName() {
-        return Names.Objects.sprinkler;
-    }
-
-    @Override
-    public boolean isMultiBlock() {
-        return false;
     }
 
     @Override

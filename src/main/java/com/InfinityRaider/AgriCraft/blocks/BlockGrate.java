@@ -22,21 +22,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class BlockGrate extends BlockCustomWood {
-	
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.grate;
-    }
-	
-    @Override
-    protected String getTileEntityName() {
-        return Names.Objects.grate;
-    }
 
-    @Override
-    public boolean isMultiBlock() {
-        return false;
-    }
+	public BlockGrate() {
+		super(Names.Objects.grate, false);
+	}
 
     @Override
     protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
