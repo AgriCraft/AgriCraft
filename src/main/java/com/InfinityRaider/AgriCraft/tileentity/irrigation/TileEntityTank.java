@@ -289,9 +289,10 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         return mainComponent;
     }
 
+	// This is kinda an odd choice.
     @Override
     public MultiBlockManager getMultiBlockManager() {
-        return MultiBlockManager.getInstance();
+        return MultiBlockManager.INSTANCE;
     }
 
     @Override

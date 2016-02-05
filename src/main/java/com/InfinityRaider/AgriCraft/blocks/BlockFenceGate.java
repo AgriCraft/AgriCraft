@@ -22,6 +22,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockFenceGate extends BlockCustomWood {
+
+	public BlockFenceGate() {
+		super(Names.Objects.fenceGate, false);
+	}
+	
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         world.playAuxSFXAtEntity(player, 1003, pos, 0);
@@ -46,16 +51,6 @@ public class BlockFenceGate extends BlockCustomWood {
     }
 
     @Override
-    protected String getTileEntityName() {
-        return Names.Objects.fenceGate;
-    }
-
-    @Override
-    public boolean isMultiBlock() {
-        return false;
-    }
-
-    @Override
     protected IProperty[] getPropertyArray() {
         return new IProperty[0];
     }
@@ -64,11 +59,6 @@ public class BlockFenceGate extends BlockCustomWood {
     @SideOnly(Side.CLIENT)
     public RenderBlockBase getRenderer() {
         return new RenderBlockFenceGate();
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.fenceGate;
     }
 
     @Override

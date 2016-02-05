@@ -19,8 +19,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWaterTank extends BlockCustomWood {
+
 	public BlockWaterTank() {
-		super();
+		super(Names.Objects.tank, true);
 	}
 
 	@Override
@@ -96,16 +97,6 @@ public class BlockWaterTank extends BlockCustomWood {
 	}
 
 	@Override
-	public boolean isMultiBlock() {
-		return true;
-	}
-
-	@Override
-	protected String getTileEntityName() {
-		return Names.Objects.tank;
-	}
-
-	@Override
 	protected IProperty[] getPropertyArray() {
 		return new IProperty[0];
 	}
@@ -114,11 +105,6 @@ public class BlockWaterTank extends BlockCustomWood {
 	@SideOnly(Side.CLIENT)
 	public RenderBlockBase getRenderer() {
 		return new RenderTank();
-	}
-
-	@Override
-	protected String getInternalName() {
-		return Names.Objects.tank;
 	}
 
 }

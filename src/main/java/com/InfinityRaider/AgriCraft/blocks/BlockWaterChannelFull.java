@@ -15,9 +15,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class BlockWaterChannelFull extends BlockWaterChannel {
+public class BlockWaterChannelFull extends AbstractBlockWaterChannel {
+	
     public BlockWaterChannelFull() {
-        super();
+        super(Names.Objects.channelFull);
         this.setBlockBounds(0, 0, 0, 1, 1, 1);
     }
 
@@ -46,13 +47,4 @@ public class BlockWaterChannelFull extends BlockWaterChannel {
         return new RenderChannelFull();
     }
 
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.channelFull;
-    }
-
-    @Override
-    protected String getTileEntityName() {
-        return Names.Objects.channelFull;
-    }
 }

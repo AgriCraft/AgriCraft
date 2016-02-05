@@ -33,9 +33,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockSeedAnalyzer extends BlockContainerBase {
+public class BlockSeedAnalyzer extends BlockTileBase {
     public BlockSeedAnalyzer() {
-        super(Material.ground);
+        super(Material.ground, Names.Objects.seedAnalyzer, false);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.isBlockContainer = true;
         this.setTickRandomly(false);
@@ -55,11 +55,6 @@ public class BlockSeedAnalyzer extends BlockContainerBase {
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntitySeedAnalyzer();
-    }
-
-    @Override
-    protected String getTileEntityName() {
-        return Names.Objects.seedAnalyzer;
     }
 
     //called when the block is broken
@@ -140,11 +135,6 @@ public class BlockSeedAnalyzer extends BlockContainerBase {
     }
 
     @Override
-    public boolean isMultiBlock() {
-        return false;
-    }
-
-    @Override
     protected IProperty[] getPropertyArray() {
         return new IProperty[0];
     }
@@ -158,11 +148,6 @@ public class BlockSeedAnalyzer extends BlockContainerBase {
     @Override
     protected Class<? extends ItemBlock> getItemBlockClass() {
         return null;
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.seedAnalyzer;
     }
 
     @Override

@@ -25,6 +25,8 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEntityBase> implements ISimpleBlockRenderingHandler, IItemRenderer {
+	
+	// TODO: Determine if RenderUtil Changes. Might want to be final field.
     protected static RenderUtil renderUtil = RenderUtil.getInstance();
 
     private final Block block;

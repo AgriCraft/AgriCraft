@@ -8,17 +8,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData> {
-    private static MultiBlockManager INSTANCE;
-
-    private MultiBlockManager() {
-    }
-
-    public static MultiBlockManager getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new MultiBlockManager();
-        }
-        return INSTANCE;
-    }
+    
+	public static final MultiBlockManager INSTANCE = new MultiBlockManager();
 
     @Override
     public void onBlockPlaced(World world, BlockPos pos, IMultiBlockComponent component) {
@@ -50,29 +41,34 @@ public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData>
         breakAllMultiBlocksInRange(world, pos.getX() - data.posX(), pos.getY() - data.posY(), pos.getZ() - data.posZ(), pos.getX() + data.sizeX(), pos.getY() + data.sizeY(), pos.getZ() + data.sizeZ());
     }
 
-    @Override
+	@Override
+	public void createMultiBlock(World world, int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
+		createMultiBlock(world, new BlockPos(xMin, yMin, zMin), xMax - xMin, yMax - yMin, zMax - zMin);
+	}
+
+	
     @SuppressWarnings("unchecked")
-    public void createMultiBlock(World world, int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
-        int sizeX = xMax-xMin;
-        int sizeY = yMax-yMin;
-        int sizeZ = zMax-zMin;
-        BlockPos pos;
-        for (int x = xMin; x < xMax; x++) {
-            for (int y = yMin; y < yMax; y++) {
-                for (int z = zMin; z < zMax; z++) {
-                    pos = new BlockPos(x, y, z);
-                    IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(pos);
-                    if(x == xMin && y == yMin && z == zMin) {
-                        component.preMultiBlockCreation(xMax-xMin, yMax-yMin, zMax-zMin);
-                    }
-                    component.setMultiBlockPartData(new MultiBlockPartData(x-xMin, y-yMin, z-zMin, sizeX, sizeY, sizeZ));
+    public void createMultiBlock(World world, BlockPos pos, int sizeX, int sizeY, int sizeZ) {
+		
+        IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(pos);
+		component.preMultiBlockCreation(sizeX, sizeY, sizeZ);
+		
+        for (int x = 0; x < sizeX; x++) {
+            for (int y = 0; y < sizeY; y++) {
+                for (int z = 0; z < sizeZ; z++) {
+                    component = (IMultiBlockComponent) world.getTileEntity(pos.add(x, y, z));
+                    component.setMultiBlockPartData(new MultiBlockPartData(x, y, z, sizeX, sizeY, sizeZ));
                 }
             }
         }
+		
         if (world.isRemote) {
-            world.markBlockRangeForRenderUpdate(xMin, yMin, zMin, xMax, yMax, zMax);
+            world.markBlockRangeForRenderUpdate(pos, pos.add(sizeX, sizeY, sizeZ));
         }
-        ((IMultiBlockComponent) world.getTileEntity(new BlockPos(xMin, yMin, zMin))).postMultiBlockCreation();
+		
+		component = (IMultiBlockComponent) world.getTileEntity(pos);
+        component.postMultiBlockCreation();
+		
     }
 
     private boolean canCheckForMultiBlock(IMultiBlockComponent component) {

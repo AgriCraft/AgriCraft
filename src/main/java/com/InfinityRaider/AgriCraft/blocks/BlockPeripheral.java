@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
-public class BlockPeripheral extends BlockContainerBase {
+public class BlockPeripheral extends BlockTileBase {
     @SideOnly(Side.CLIENT)
     private TextureAtlasSprite textureTop;
     @SideOnly(Side.CLIENT)
@@ -49,7 +49,7 @@ public class BlockPeripheral extends BlockContainerBase {
     private TextureAtlasSprite textureInner;
 
     public BlockPeripheral() {
-        super(Material.iron);
+        super(Material.iron, Names.Objects.peripheral, false);
     }
 
     @Override
@@ -73,11 +73,6 @@ public class BlockPeripheral extends BlockContainerBase {
         return null;
     }
 
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.peripheral;
-    }
-
     /*
     @Override
     @Optional.Method(modid = Names.Mods.computerCraft)
@@ -90,11 +85,6 @@ public class BlockPeripheral extends BlockContainerBase {
     }
     */
 
-    @Override
-    protected String getTileEntityName() {
-        return Names.Objects.peripheral;
-    }
-
     //called when the block is broken
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
@@ -102,11 +92,6 @@ public class BlockPeripheral extends BlockContainerBase {
             world.removeTileEntity(pos);
             world.setBlockToAir(pos);
         }
-    }
-
-    @Override
-    public boolean isMultiBlock() {
-        return false;
     }
 
     //override this to delay the removal of the tile entity until after harvestBlock() has been called

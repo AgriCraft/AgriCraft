@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,9 +19,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class BlockWaterPadFull extends BlockWaterPad {
+public class BlockWaterPadFull extends AbstractBlockWaterPad {
+	
     public BlockWaterPadFull() {
-        super(Material.water);
+        super(Material.water, Names.Objects.waterPadFull);
     }
 
     @Override
@@ -61,11 +61,6 @@ public class BlockWaterPadFull extends BlockWaterPad {
     @Override
     protected Class<? extends ItemBlock> getItemBlockClass() {
         return ItemBlockWaterPadFull.class;
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.waterPadFull;
     }
 
     public static class ItemBlockWaterPadFull extends ItemBlockWaterPad {

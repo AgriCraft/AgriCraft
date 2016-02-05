@@ -45,13 +45,13 @@ import java.util.*;
 /**
  * The most important block in the mod.
  */
-public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantable {
+public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     /** The set of textures used to render weeds. */
     private TextureAtlasSprite[] weedTextures;
 
     /** The default constructor for the block. */
     public BlockCrop() {
-        super(Material.plants);
+        super(Material.plants, Names.Objects.crops, Names.Objects.crop, false);
         this.setTickRandomly(true);
         this.isBlockContainer = true;
         this.setStepSound(soundTypeGrass);
@@ -96,11 +96,6 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntityCrop();
-    }
-
-    @Override
-    protected String getTileEntityName() {
-        return Names.Objects.crop;
     }
 
     /** Randomly called to apply growth ticks */
@@ -662,11 +657,6 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     }
 
     @Override
-    public boolean isMultiBlock() {
-        return false;
-    }
-
-    @Override
     protected IProperty[] getPropertyArray() {
         return new IProperty[] {BlockStates.GROWTHSTAGE, BlockStates.CROSSCROP, BlockStates.WEEDS, BlockStates.PLANT};
     }
@@ -697,11 +687,6 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     @Override
     protected Class<? extends ItemBlock> getItemBlockClass() {
         return null;
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.crops;
     }
 
     /**

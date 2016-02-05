@@ -21,6 +21,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class BlockSeedStorage extends BlockCustomWood {
+
+	public BlockSeedStorage() {
+		super(Names.Objects.seedStorage, false);
+	}
+	
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntitySeedStorage();
@@ -35,25 +40,10 @@ public class BlockSeedStorage extends BlockCustomWood {
     }
 
     @Override
-    protected String getTileEntityName() {
-        return Names.Objects.seedStorage;
-    }
-    
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.seedStorage;
-    }
-
-    @Override
     public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
         TileEntity tileentity = world.getTileEntity(pos);
         return tileentity != null && tileentity.receiveClientEvent(id, data);
 
-    }
-
-    @Override
-    public boolean isMultiBlock() {
-        return false;
     }
 
     @Override
