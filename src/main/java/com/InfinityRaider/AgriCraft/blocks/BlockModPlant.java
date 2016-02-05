@@ -2,8 +2,8 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
+import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAgriCraftShearable;
-import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
@@ -214,7 +214,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
             int newMeta = (rnd.nextDouble() > (growthRate * bonus * global) / 100) ? meta : meta + 1;
             if (newMeta != meta) {
                 world.setBlockState(pos, state.withProperty(BlockStates.GROWTHSTAGE, newMeta), 2);
-                AppleCoreHelper.announceGrowthTick(world, pos, this, state);
+                CompatibilityHandler.getInstance().announceGrowthTick(world, pos, state);
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.blocks.*;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -42,7 +42,7 @@ public class Blocks {
                 //blockSeedStorageController = new BlockSeedStorageController();
             }
         }
-        if(ModHelper.allowIntegration(Names.Mods.computerCraft) || ModHelper.allowIntegration(Names.Mods.openComputers)) {
+        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.computerCraft) || CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.openComputers)) {
             blockPeripheral = new BlockPeripheral();
         }
         if(!ConfigurationHandler.disableFences) {

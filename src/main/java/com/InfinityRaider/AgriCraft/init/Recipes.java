@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.init;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemBase;
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
@@ -81,10 +81,10 @@ public class Recipes {
         }
         //peripheral
         if(Blocks.blockPeripheral!=null) {
-            if(ModHelper.allowIntegration(Names.Mods.computerCraft)) {
+            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.computerCraft)) {
                 //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', Blocks.blockSeedAnalyzer, 'r', net.minecraft.init.Items.comparator, 'c', ComputerCraftHelper.getComputerBlock()));
             }
-            if(ModHelper.allowIntegration(Names.Mods.openComputers)) {
+            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.openComputers)) {
                 //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', Blocks.blockSeedAnalyzer, 'r', net.minecraft.init.Items.comparator, 'c', OpenComputersHelper.getComputerBlock()));
             }
         }

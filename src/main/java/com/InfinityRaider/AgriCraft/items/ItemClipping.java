@@ -10,6 +10,7 @@ import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemClipping;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -49,7 +50,8 @@ public class ItemClipping extends ItemBase {
         if(stack==null || stack.getItem()==null || !stack.hasTagCompound()) {
             return false;
         }
-        Block block = world.getBlockState(pos).getBlock();
+        IBlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
         if(!(block instanceof BlockCrop)) {
             return false;
         }
@@ -60,7 +62,7 @@ public class ItemClipping extends ItemBase {
         TileEntityCrop crop = (TileEntityCrop) te;
         BlockCrop blockCrop = (BlockCrop) block;
         if(crop.isCrossCrop()) {
-            blockCrop.harvest(world, x, y, z, player, crop);
+            blockCrop.harvest(world, pos, state, player, crop);
         }
         if(!crop.canPlant()) {
             return true;

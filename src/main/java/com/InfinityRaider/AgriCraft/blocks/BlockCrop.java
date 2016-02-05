@@ -1,9 +1,8 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.api.v1.*;
-import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
+import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -37,7 +36,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -110,8 +108,7 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rnd) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if(crop.hasPlant() || crop.hasWeed()) {
-            Event.Result allowGrowthResult = AppleCoreHelper.validateGrowthTick(this, world, pos, rnd);
-            if (allowGrowthResult != Event.Result.DENY) {
+            if (CompatibilityHandler.getInstance().allowGrowthTick(world, pos, this, crop, rnd)) {
             	if (crop.isMature() && crop.hasWeed() && ConfigurationHandler.enableWeeds){
                 	crop.spreadWeed();
                 }
@@ -311,8 +308,8 @@ public class BlockCrop extends BlockContainerBase implements IGrowable, IPlantab
                 return false;
             }
             //mod interaction
-            else if (ModHelper.isRightClickHandled(heldItem.getItem())) {
-                return ModHelper.handleRightClickOnCrop(world, pos, state, player, heldItem, this, crop);
+            else if (CompatibilityHandler.getInstance().isRightClickHandled(heldItem.getItem())) {
+                return CompatibilityHandler.getInstance().handleRightClick(world, pos, this, crop, player, heldItem);
             } else {
                 //harvest operation
                 this.harvest(world, pos, state, player, crop);

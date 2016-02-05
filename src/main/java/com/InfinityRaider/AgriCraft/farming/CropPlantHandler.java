@@ -3,8 +3,8 @@ package com.InfinityRaider.AgriCraft.farming;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v1.ItemWithMeta;
+import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.*;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -23,6 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CropPlantHandler {
     /** None object to avoid NPE's with block states */
@@ -116,7 +117,9 @@ public class CropPlantHandler {
      * @param plant the plant to be registered.
      */
     public static void addCropToRegister(CropPlant plant) {
-        plantsToRegister.add(plant);
+        if(plantsToRegister != null) {
+            plantsToRegister.add(plant);
+        }
     }
 
     /**
@@ -251,11 +254,7 @@ public class CropPlantHandler {
     public static ArrayList<CropPlant> getPlants() {
         ArrayList<CropPlant> plants = new ArrayList<>();
         for(HashMap<Integer, CropPlant> subMap:cropPlants.values()) {
-            for(CropPlant plant : subMap.values()) {
-                if(!plant.isBlackListed()) {
-                    plants.add(plant);
-                }
-            }
+            plants.addAll(subMap.values().stream().filter(plant -> !plant.isBlackListed()).collect(Collectors.toList()));
         }
         return plants;
     }
@@ -269,11 +268,7 @@ public class CropPlantHandler {
     public static ArrayList<CropPlant> getPlantsUpToTier(int tier) {
         ArrayList<CropPlant> plants = new ArrayList<>();
         for(HashMap<Integer, CropPlant> subMap:cropPlants.values()) {
-            for(CropPlant plant : subMap.values()) {
-                if(plant.getTier() <= tier && !plant.isBlackListed()) {
-                    plants.add(plant);
-                }
-            }
+            plants.addAll(subMap.values().stream().filter(plant -> plant.getTier() <= tier && !plant.isBlackListed()).collect(Collectors.toList()));
         }
         return plants;
     }
@@ -384,9 +379,7 @@ public class CropPlantHandler {
      * @param seeds collection containing all seeds to be added to the blacklist
      */
     public static void addAllToSeedBlacklist(Collection<? extends ItemStack> seeds) {
-        for(ItemStack seed : seeds) {
-            addSeedToBlackList(seed);
-        }
+        seeds.forEach(CropPlantHandler::addSeedToBlackList);
     }
 
     /**
@@ -425,9 +418,7 @@ public class CropPlantHandler {
      * @param seeds collection containing all seeds to be removed from the blacklist
      */
     public static void removeAllFromSeedBlacklist(Collection<? extends ItemStack> seeds) {
-        for(ItemStack seed : seeds) {
-            removeFromSeedBlackList(seed);
-        }
+        seeds.forEach(CropPlantHandler::removeFromSeedBlackList);
     }
 
     /**
@@ -448,25 +439,21 @@ public class CropPlantHandler {
         suppressedRegisterPlant(new CropPlantStem((ItemSeeds) Items.pumpkin_seeds, Blocks.pumpkin));
         suppressedRegisterPlant(new CropPlantNetherWart());
 
-        //Register mod crops.
-        ModHelper.initModPlants();
-        
         //Register crops specified through the API.
-        for (CropPlant plant : plantsToRegister) {
-        	suppressedRegisterPlant(plant);
-        }
+        plantsToRegister.forEach(CropPlantHandler::suppressedRegisterPlant);
         plantsToRegister = null;
+
+        //Register mod crops.
+        CompatibilityHandler.getInstance().getCropPlants().forEach(CropPlantHandler::suppressedRegisterPlant);
         
         //Register crops found in the ore dictionary.
         List<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
-        for (ItemStack seed : seeds) {
-            if (!isValidSeed(seed) && (seed.getItem() instanceof ItemSeeds)) {
-            	ArrayList<ItemStack> fruits = OreDictHelper.getFruitsFromOreDict(seed);
-                if (fruits != null && fruits.size() > 0) {
-                	suppressedRegisterPlant(new CropPlantOreDict((ItemSeeds)seed.getItem()));
-                }
+        seeds.stream().filter(seed -> !isValidSeed(seed) && (seed.getItem() instanceof ItemSeeds)).forEach(seed -> {
+            ArrayList<ItemStack> fruits = OreDictHelper.getFruitsFromOreDict(seed);
+            if (fruits != null && fruits.size() > 0) {
+                suppressedRegisterPlant(new CropPlantOreDict((ItemSeeds) seed.getItem()));
             }
-        }
+        });
 
         //Set tier overrides
         IOHelper.initSeedTiers();

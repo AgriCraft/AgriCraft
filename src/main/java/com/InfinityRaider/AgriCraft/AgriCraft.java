@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft;
 
 import com.InfinityRaider.AgriCraft.apiimpl.APISelector;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
@@ -63,12 +63,11 @@ public class AgriCraft {
         NetworkWrapperAgriCraft.init();
         proxy.initConfiguration(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
-        ModHelper.findHelpers();
         Blocks.init();
         Crops.init();
         Items.init();
         APISelector.init();
-        ModHelper.preInit();
+        CompatibilityHandler.getInstance().preInit();
         LogHelper.debug("Pre-Initialization Complete");
     }
 
@@ -80,7 +79,7 @@ public class AgriCraft {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         proxy.registerRenderers();
         Entities.init();
-        ModHelper.initHelpers();
+        CompatibilityHandler.getInstance().init();
         LogHelper.debug("Initialization Complete");
     }
 
@@ -97,7 +96,7 @@ public class AgriCraft {
         CropProducts.init();
         WorldGen.init();
         CustomCrops.initGrassSeeds();
-        ModHelper.postInit();
+        CompatibilityHandler.getInstance().postInit();
         LogHelper.debug("Post-Initialization Complete");
     }
 

@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
@@ -244,41 +244,41 @@ public abstract class IOHelper {
                 data = data + '\n' + osmiumMutation;
             }
         }
-        if(ModHelper.allowIntegration(Names.Mods.botania)) {
+        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.botania)) {
             data = data + '\n' + botaniaMutations;
         }
-        if(ModHelper.allowIntegration(Names.Mods.harvestcraft) && ModHelper.allowIntegration(Names.Mods.natura)) {
+        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.harvestcraft) && CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.natura)) {
             data = data + '\n' + harvestcraftMutations + '\n' + barleyNaturaMutations;      //harvestcraft with natura barley
         } else {
-            if(ModHelper.allowIntegration(Names.Mods.harvestcraft)) {
+            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.harvestcraft)) {
                 data = data + '\n' + harvestcraftMutations + '\n' + barleyHarvestCraftMutations;
             }
-            if(ModHelper.allowIntegration(Names.Mods.natura)) {
+            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.natura)) {
                 data = data + '\n' + naturaMutations;
             }
         }
-        if(ModHelper.allowIntegration(Names.Mods.weeeFlowers)) {
+        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.weeeFlowers)) {
             data = data +'\n' + weeeFlowersMutations;
         }
-        if(ModHelper.allowIntegration(Names.Mods.plantMegaPack)) {
+        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.plantMegaPack)) {
             data = data + '\n' + plantMegaPackMutations;
         }
-        if(ModHelper.allowIntegration(Names.Mods.chococraft)) {
-            if(ModHelper.allowIntegration(Names.Mods.harvestcraft)) {
+        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.chococraft)) {
+            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.harvestcraft)) {
                 data = data + '\n' + chococraft_harvestcraftMutations;
             } else {
                 data = data + '\n' + chococraftMutations;
             }
         }
-        if(ModHelper.allowIntegration(Names.Mods.psychedelicraft)) {
+        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.psychedelicraft)) {
             data = data + '\n' + psychedelicraftMutations;
         }
-        if(ModHelper.allowIntegration(Names.Mods.thaumcraft) && ModHelper.allowIntegration(Names.Mods.arsMagica)) {
+        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.thaumcraft) && CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.arsMagica)) {
             data = data + '\n' + thaumcraft_ArsMagicaMutations;
         } else {
-            if(ModHelper.allowIntegration(Names.Mods.thaumcraft)) {
+            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.thaumcraft)) {
                 data = data + '\n' + thaumcraftMutations;
-            } else if(ModHelper.allowIntegration(Names.Mods.arsMagica)) {
+            } else if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.arsMagica)) {
                 data = data + '\n' + arsMagicaMutations;
             }
         }

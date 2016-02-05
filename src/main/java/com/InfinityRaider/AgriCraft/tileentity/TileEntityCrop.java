@@ -6,10 +6,10 @@ import com.InfinityRaider.AgriCraft.api.v1.IAdditionalCropData;
 import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.api.v1.ICrop;
+import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
@@ -407,7 +407,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         IBlockState state = getWorld().getBlockState(getPos());
         if (hasWeed() || !plant.isMature(getWorld(), pos, state)) {
             setGrowthStage(meta + 1);
-            AppleCoreHelper.announceGrowthTick(getWorld(), getPos(), state.getBlock(), state);
+            CompatibilityHandler.getInstance().announceGrowthTick(getWorld(), getPos(), state);
         }
     }
 
