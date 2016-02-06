@@ -119,7 +119,7 @@ public class GuiPeripheral extends GuiContainer {
         if(method != null) {
             drawTexturedModalRect(this.guiLeft, this.guiTop + this.ySize - 4, 0, this.ySize, 252, 70);
             int height = fontRendererObj.FONT_HEIGHT;
-            this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_description.peripheralHelp") + ": " + method.signature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
+            this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_description.peripheralHelp") + ": " + method.getSignature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
             float scale = 0.9F;
             GL11.glScalef(scale, scale, scale);
             String[] write = IOHelper.getLinesArrayFromData(IOHelper.splitInLines(this.fontRendererObj, method.getDescription(), 230, scale));
