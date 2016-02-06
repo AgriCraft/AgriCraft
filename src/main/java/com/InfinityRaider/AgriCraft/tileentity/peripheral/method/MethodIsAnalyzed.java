@@ -6,13 +6,9 @@ import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import java.util.ArrayList;
 
 public class MethodIsAnalyzed extends MethodBase {
+	
     public MethodIsAnalyzed() {
-        super("isAnalyzed");
-    }
-
-    @Override
-    protected boolean appliesToCrop() {
-        return true;
+        super("isAnalyzed", false, true, true);
     }
 
     @Override
@@ -21,18 +17,8 @@ public class MethodIsAnalyzed extends MethodBase {
     }
 
     @Override
-    protected boolean appliesToPeripheral() {
-        return true;
-    }
-
-    @Override
     protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
         return new Object[] {peripheral.isSpecimenAnalyzed()};
-    }
-
-    @Override
-    protected boolean requiresJournal() {
-        return false;
     }
 
     @Override

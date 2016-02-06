@@ -18,7 +18,7 @@ import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockState;
@@ -426,14 +426,14 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
      */
     public List<TileEntityCrop> getNeighbours() {
         List<TileEntityCrop> neighbours = new ArrayList<TileEntityCrop>();
-        addNeighbour(neighbours, ForgeDirection.NORTH);
-        addNeighbour(neighbours, ForgeDirection.SOUTH);
-        addNeighbour(neighbours, ForgeDirection.EAST);
-        addNeighbour(neighbours, ForgeDirection.WEST);
+        addNeighbour(neighbours, AgriForgeDirection.NORTH);
+        addNeighbour(neighbours, AgriForgeDirection.SOUTH);
+        addNeighbour(neighbours, AgriForgeDirection.EAST);
+        addNeighbour(neighbours, AgriForgeDirection.WEST);
         return neighbours;
     }
 
-    private void addNeighbour(List<TileEntityCrop> neighbours, ForgeDirection direction) {
+    private void addNeighbour(List<TileEntityCrop> neighbours, AgriForgeDirection direction) {
         TileEntity te = worldObj.getTileEntity(getPos().add(direction.offsetX, direction.offsetY, direction.offsetZ));
         if (te == null || !(te instanceof TileEntityCrop)) {
             return;

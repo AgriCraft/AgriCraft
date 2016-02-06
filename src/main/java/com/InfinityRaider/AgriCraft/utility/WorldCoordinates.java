@@ -47,15 +47,15 @@ public final class WorldCoordinates {
         world.setBlockState(pos, block.getDefaultState(), flag);
     }
 
-    public WorldCoordinates getNeighbour(ForgeDirection dir) {
-        if(dir == ForgeDirection.UNKNOWN) {
+    public WorldCoordinates getNeighbour(AgriForgeDirection dir) {
+        if(dir == AgriForgeDirection.UNKNOWN) {
             return this;
         }
         return new WorldCoordinates(x()+dir.offsetX, y()+dir.offsetY, z()+dir.offsetZ);
     }
 
     public WorldCoordinates getNeighbour(EnumFacing facing) {
-        return getNeighbour(ForgeDirection.getFromEnumFacing(facing));
+        return getNeighbour(AgriForgeDirection.getFromEnumFacing(facing));
     }
 
     @Override

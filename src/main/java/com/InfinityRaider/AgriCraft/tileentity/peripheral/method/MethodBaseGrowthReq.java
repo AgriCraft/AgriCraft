@@ -4,16 +4,14 @@ import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 
+import static com.InfinityRaider.AgriCraft.tileentity.peripheral.method.MethodUtilities.*;
+
 import java.util.ArrayList;
 
 public abstract class MethodBaseGrowthReq extends MethodBase {
+	
     public MethodBaseGrowthReq(String name) {
-        super(name);
-    }
-
-    @Override
-    protected boolean appliesToCrop() {
-        return true;
+        super(name, true, true, true);
     }
 
     @Override
@@ -27,16 +25,6 @@ public abstract class MethodBaseGrowthReq extends MethodBase {
     }
 
     protected abstract Object[] onMethodCalled(CropPlant plant) throws MethodException;
-
-    @Override
-    protected boolean appliesToPeripheral() {
-        return true;
-    }
-
-    @Override
-    protected boolean requiresJournal() {
-        return true;
-    }
 
     @Override
     protected ArrayList<MethodParameter> getParameters() {

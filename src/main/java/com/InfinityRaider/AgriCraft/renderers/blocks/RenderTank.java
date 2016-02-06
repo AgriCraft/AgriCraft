@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -84,10 +84,10 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 
     private void drawWoodTank(TileEntityTank tank, TessellatorV2 tessellator) {
         this.renderBottom(tank, tessellator);
-        this.renderSide(tank, tessellator, ForgeDirection.NORTH);
-        this.renderSide(tank, tessellator, ForgeDirection.EAST);
-        this.renderSide(tank, tessellator, ForgeDirection.SOUTH);
-        this.renderSide(tank, tessellator, ForgeDirection.WEST);
+        this.renderSide(tank, tessellator, AgriForgeDirection.NORTH);
+        this.renderSide(tank, tessellator, AgriForgeDirection.EAST);
+        this.renderSide(tank, tessellator, AgriForgeDirection.SOUTH);
+        this.renderSide(tank, tessellator, AgriForgeDirection.WEST);
     }
 
     private void renderBottom(TileEntityTank tank, TessellatorV2 tessellator) {
@@ -95,32 +95,32 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         TextureAtlasSprite icon = tank.getIcon();
         int cm = tank.colorMultiplier();
         //bottom
-        boolean bottom = !tank.hasNeighbour(ForgeDirection.DOWN);
+        boolean bottom = !tank.hasNeighbour(AgriForgeDirection.DOWN);
         if (bottom) {
             drawScaledPrism(tessellator, 0, 0, 0, 16, 1, 16, icon, cm);
         }
         //corners
         int yMin = bottom?1:0;
-        if (!tank.hasNeighbour(ForgeDirection.WEST) || !tank.hasNeighbour(ForgeDirection.NORTH)) {
+        if (!tank.hasNeighbour(AgriForgeDirection.WEST) || !tank.hasNeighbour(AgriForgeDirection.NORTH)) {
             drawScaledPrism(tessellator, 0, yMin, 0, 2, 16, 2, icon, cm);
         }
-        if (!tank.hasNeighbour(ForgeDirection.EAST) || !tank.hasNeighbour(ForgeDirection.NORTH)) {
+        if (!tank.hasNeighbour(AgriForgeDirection.EAST) || !tank.hasNeighbour(AgriForgeDirection.NORTH)) {
             drawScaledPrism(tessellator, 14, yMin, 0, 16, 16, 2, icon, cm);
         }
-        if (!tank.hasNeighbour(ForgeDirection.WEST) || !tank.hasNeighbour(ForgeDirection.SOUTH)) {
+        if (!tank.hasNeighbour(AgriForgeDirection.WEST) || !tank.hasNeighbour(AgriForgeDirection.SOUTH)) {
             drawScaledPrism(tessellator, 0, yMin, 14, 2, 16, 16, icon, cm);
         }
-        if (!tank.hasNeighbour(ForgeDirection.EAST) || !tank.hasNeighbour(ForgeDirection.SOUTH)) {
+        if (!tank.hasNeighbour(AgriForgeDirection.EAST) || !tank.hasNeighbour(AgriForgeDirection.SOUTH)) {
             drawScaledPrism(tessellator, 14, yMin, 14, 16, 16, 16, icon, cm);
         }
     }
 
-    private void renderSide(TileEntityTank tank, TessellatorV2 tessellator, ForgeDirection dir) {
+    private void renderSide(TileEntityTank tank, TessellatorV2 tessellator, AgriForgeDirection dir) {
         //the texture
         TextureAtlasSprite icon = tank.getIcon();
         int cm = tank.colorMultiplier();
-        int yMin = tank.hasNeighbour(ForgeDirection.DOWN)?0:1;
-        if ((dir != null) && (dir != ForgeDirection.UNKNOWN)) {
+        int yMin = tank.hasNeighbour(AgriForgeDirection.DOWN)?0:1;
+        if ((dir != null) && (dir != AgriForgeDirection.UNKNOWN)) {
             //connected to a channel
             if(tank.isConnectedToChannel(dir)) {
                 drawScaledPrism(tessellator, 2, yMin, 0, 14, 5, 2, icon, cm, dir);

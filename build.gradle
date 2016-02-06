@@ -22,7 +22,8 @@ repositories {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'java'
-apply from: 'automation.gradle'
+// Since curse was removed in gradle 2.
+// apply from: 'automation.gradle'
 
 // Set build properties.
 sourceCompatibility = version_java
@@ -40,7 +41,7 @@ minecraft {
     replace "@MAJOR@", version_mod_major
     replace "@MINOR@", version_mod_minor
     replace "@REVIS@", version_mod_revis
-    
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -53,7 +54,7 @@ minecraft {
 // Configure dependencies (build-only, shaded and packed libraries)
 dependencies {
     // Code Chicken
-	
+
     // Core
 
     // API
@@ -63,7 +64,7 @@ dependencies {
 processResources {
     inputs.property "version", project.version_mod
     inputs.property "mcversion", project.minecraft.version
-    
+
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
         expand ([

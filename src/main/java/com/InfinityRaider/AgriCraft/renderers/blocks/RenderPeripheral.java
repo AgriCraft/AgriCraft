@@ -9,7 +9,7 @@ import com.InfinityRaider.AgriCraft.renderers.RenderUtil;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelPeripheralProbe;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -92,7 +92,7 @@ public class RenderPeripheral extends RenderBlockBase {
 
         GL11.glPushMatrix();
 
-        for (ForgeDirection dir : TileEntityPeripheral.VALID_DIRECTIONS) {
+        for (AgriForgeDirection dir : TileEntityPeripheral.VALID_DIRECTIONS) {
             int timer = peripheral.getTimer(dir);
 
             //doors
@@ -132,7 +132,7 @@ public class RenderPeripheral extends RenderBlockBase {
             GL11.glTranslatef(-dx, -dy, -dz);
             GL11.glRotatef(-180, 0, 0, 1);
 
-            //rotate 90° for the next render
+            //rotate 90ï¿½ for the next render
             GL11.glTranslatef(0.5F, 0.5F, 0.5F);
             GL11.glRotatef(-90, 0, 1, 0);
             GL11.glTranslatef(-0.5F, -0.5F, -0.5F);

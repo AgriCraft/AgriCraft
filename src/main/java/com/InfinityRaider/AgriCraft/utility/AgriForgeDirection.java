@@ -3,8 +3,12 @@ package com.InfinityRaider.AgriCraft.utility;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-/** Copied from MinecraftForge for 1.7.10 and added methods to convert between ForgeDirection and EnumFacing */
-public enum ForgeDirection {
+/**
+ * Copied from MinecraftForge for 1.7.10 and added methods to convert between AgriForgeDirection and EnumFacing.
+ * 
+ * This class was renamed as to prevent conflict.
+ */
+public enum AgriForgeDirection {
     /** -Y */
     DOWN(0, -1, 0, EnumFacing.DOWN),
 
@@ -33,7 +37,7 @@ public enum ForgeDirection {
     public final int offsetZ;
     private final EnumFacing enumFacing;
     public final int flag;
-    public static final ForgeDirection[] VALID_DIRECTIONS = {DOWN, UP, NORTH, SOUTH, WEST, EAST};
+    public static final AgriForgeDirection[] VALID_DIRECTIONS = {DOWN, UP, NORTH, SOUTH, WEST, EAST};
     public static final int[] OPPOSITES = {1, 0, 3, 2, 5, 4, 6};
 	public static final int[] ORDINALS = {2, 4, 3, 5};
     // Left hand rule rotation matrix for all possible axes of rotation
@@ -47,7 +51,7 @@ public enum ForgeDirection {
             {0, 1, 2, 3, 4, 5, 6},
     };
 
-    private ForgeDirection(int x, int y, int z, EnumFacing enumFacing) {
+    private AgriForgeDirection(int x, int y, int z, EnumFacing enumFacing) {
         offsetX = x;
         offsetY = y;
         offsetZ = z;
@@ -55,22 +59,22 @@ public enum ForgeDirection {
         flag = 1 << ordinal();
     }
 
-    public static ForgeDirection getOrientation(int id) {
+    public static AgriForgeDirection getOrientation(int id) {
         if (id >= 0 && id < VALID_DIRECTIONS.length) {
             return VALID_DIRECTIONS[id];
         }
         return UNKNOWN;
     }
 	
-	public static ForgeDirection getCardinal(int id) {
+	public static AgriForgeDirection getCardinal(int id) {
         return VALID_DIRECTIONS[ORDINALS[(id < 0 ? -id : id) % 4]];
     }
 
-    public ForgeDirection getOpposite() {
+    public AgriForgeDirection getOpposite() {
         return getOrientation(OPPOSITES[ordinal()]);
     }
 
-    public ForgeDirection getRotation(ForgeDirection axis){
+    public AgriForgeDirection getRotation(AgriForgeDirection axis){
         return getOrientation(ROTATION_MATRIX[axis.ordinal()][ordinal()]);
     }
 
@@ -78,7 +82,7 @@ public enum ForgeDirection {
         return enumFacing;
     }
 
-    public static ForgeDirection getFromEnumFacing(EnumFacing facing) {
+    public static AgriForgeDirection getFromEnumFacing(EnumFacing facing) {
         if(facing == null) {
             return UNKNOWN;
         }

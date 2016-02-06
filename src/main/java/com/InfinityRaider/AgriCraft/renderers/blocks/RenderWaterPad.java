@@ -4,7 +4,7 @@ import com.InfinityRaider.AgriCraft.blocks.BlockWaterPad;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterPadFull;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -52,10 +52,10 @@ public class RenderWaterPad extends RenderBlockBase {
     protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double xCoord, double yCoord, double zCoord, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
         boolean full = block instanceof BlockWaterPadFull;
         this.renderBase(tessellator, world, pos, full);
-        this.renderSide(tessellator, world, pos, full, ForgeDirection.NORTH);
-        this.renderSide(tessellator, world, pos, full, ForgeDirection.EAST);
-        this.renderSide(tessellator, world, pos, full, ForgeDirection.SOUTH);
-        this.renderSide(tessellator, world, pos, full, ForgeDirection.WEST);
+        this.renderSide(tessellator, world, pos, full, AgriForgeDirection.NORTH);
+        this.renderSide(tessellator, world, pos, full, AgriForgeDirection.EAST);
+        this.renderSide(tessellator, world, pos, full, AgriForgeDirection.SOUTH);
+        this.renderSide(tessellator, world, pos, full, AgriForgeDirection.WEST);
         return false;
     }
 
@@ -72,7 +72,7 @@ public class RenderWaterPad extends RenderBlockBase {
         //boolean renderAllFaces = renderer.renderAllFaces;
         //renderer.renderAllFaces = true;
 
-        if (shouldRenderCorner(world, pos, full, ForgeDirection.WEST, ForgeDirection.NORTH)) {
+        if (shouldRenderCorner(world, pos, full, AgriForgeDirection.WEST, AgriForgeDirection.NORTH)) {
             //renderer.setRenderBounds(0, 8 * u, 0, u, 15 * u, 1 * u);
             //renderer.renderStandardBlock(Blocks.farmland, pos);
         } else if(full) {
@@ -91,7 +91,7 @@ public class RenderWaterPad extends RenderBlockBase {
             tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
         }
 
-        if (shouldRenderCorner(world, pos, full, ForgeDirection.NORTH, ForgeDirection.EAST)) {
+        if (shouldRenderCorner(world, pos, full, AgriForgeDirection.NORTH, AgriForgeDirection.EAST)) {
             //renderer.setRenderBounds(15 * u, 8 * u, 0, 16 * u, 15 * u, 1 * u);
             //renderer.renderStandardBlock(Blocks.farmland, pos);
         } else if(full) {
@@ -110,7 +110,7 @@ public class RenderWaterPad extends RenderBlockBase {
             tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
         }
 
-        if (shouldRenderCorner(world, pos, full, ForgeDirection.EAST, ForgeDirection.SOUTH)) {
+        if (shouldRenderCorner(world, pos, full, AgriForgeDirection.EAST, AgriForgeDirection.SOUTH)) {
             //renderer.setRenderBounds(15 * u, 8 * u, 15 * u, 16 * u, 15 * u, 16 * u);
             //renderer.renderStandardBlock(Blocks.farmland, pos);
         } else if(full) {
@@ -129,7 +129,7 @@ public class RenderWaterPad extends RenderBlockBase {
             tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
         }
 
-        if (shouldRenderCorner(world, pos, full, ForgeDirection.SOUTH, ForgeDirection.WEST)) {
+        if (shouldRenderCorner(world, pos, full, AgriForgeDirection.SOUTH, AgriForgeDirection.WEST)) {
             //renderer.setRenderBounds(0, 8 * u, 15 * u, u, 15 * u, 16 * u);
             //renderer.renderStandardBlock(Blocks.farmland, pos);
         } else if(full) {
@@ -167,7 +167,7 @@ public class RenderWaterPad extends RenderBlockBase {
         }
     }
 
-    private boolean shouldRenderCorner(IBlockAccess world, BlockPos pos, boolean full, ForgeDirection dir1, ForgeDirection dir2) {
+    private boolean shouldRenderCorner(IBlockAccess world, BlockPos pos, boolean full, AgriForgeDirection dir1, AgriForgeDirection dir2) {
         Block block = world.getBlockState(pos.add(dir1.offsetX, 0 ,dir1.offsetZ)).getBlock();
         boolean flag1 = block instanceof BlockWaterPad;
         boolean flag2 =  block instanceof BlockWaterPadFull;
@@ -186,7 +186,7 @@ public class RenderWaterPad extends RenderBlockBase {
         return !flag1 || (full!=flag2);
     }
 
-    private void renderSide(TessellatorV2 tessellator, IBlockAccess world, BlockPos pos, boolean full, ForgeDirection side) {
+    private void renderSide(TessellatorV2 tessellator, IBlockAccess world, BlockPos pos, boolean full, AgriForgeDirection side) {
         float u = Constants.UNIT;
         int xLower = Math.max(0, 1 + 14 * side.offsetX);
         int xUpper = Math.min(16, 15 + 14 * side.offsetX);

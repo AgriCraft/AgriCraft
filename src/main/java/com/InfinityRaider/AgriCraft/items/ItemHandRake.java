@@ -34,14 +34,9 @@ public class ItemHandRake extends ItemBase implements IRake{
     private static final int[] dropChance = new int[] {10, 25};
 
     public ItemHandRake() {
-        super();
+        super(Names.Objects.handRake);
         this.setMaxStackSize(1);
         this.setHasSubtypes(true);
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.handRake;
     }
 
     @Override

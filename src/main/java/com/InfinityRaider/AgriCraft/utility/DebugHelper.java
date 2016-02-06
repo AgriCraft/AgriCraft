@@ -38,7 +38,7 @@ public abstract class DebugHelper {
      */
     private static List<String> getDebugData(World world, BlockPos pos) {
     	
-    	List<String> debugData = new ArrayList<String>();
+    	List<String> debugData = new ArrayList<>();
     	
         if (!world.isRemote) {
             debugData.add("Server debug info:");

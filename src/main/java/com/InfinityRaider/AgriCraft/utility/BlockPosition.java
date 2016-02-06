@@ -47,8 +47,8 @@ public class BlockPosition extends BlockPos {
         return world.provider.getDimensionId();
     }
 
-    public BlockPosition getNeighbour(ForgeDirection dir) {
-        if(dir == ForgeDirection.UNKNOWN) {
+    public BlockPosition getNeighbour(AgriForgeDirection dir) {
+        if(dir == AgriForgeDirection.UNKNOWN) {
             return this;
         }
         return new BlockPosition(world, x()+dir.offsetX, y()+dir.offsetY, z()+dir.offsetZ);

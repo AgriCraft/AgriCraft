@@ -16,13 +16,8 @@ import java.util.List;
 
 public class ItemClipper extends ItemBase implements IClipper {
     public ItemClipper() {
-        super();
+        super(Names.Objects.clipper);
         this.setMaxStackSize(1);
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.clipper;
     }
 
     @Override

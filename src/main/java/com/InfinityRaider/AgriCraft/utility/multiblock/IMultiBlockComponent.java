@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility.multiblock;
 
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 
 public interface IMultiBlockComponent<M extends IMultiBlockManager<T>, T extends IMultiBlockPartData> {
     /**
@@ -27,7 +27,7 @@ public interface IMultiBlockComponent<M extends IMultiBlockManager<T>, T extends
      * @param dir the direction
      * @return if there is a neighbour in the same multiblock for a specified direction
      */
-    boolean hasNeighbour(ForgeDirection dir);
+    boolean hasNeighbour(AgriForgeDirection dir);
 
     /**
      * @param component the component to be checked

@@ -16,14 +16,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemDebugger extends ItemBase {
 	
 	public ItemDebugger() {
-		super();
+		super("debugger");
 		this.setMaxStackSize(1);
 	}
-
-    @Override
-    protected String getInternalName() {
-        return "debugger";
-    }
 
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {

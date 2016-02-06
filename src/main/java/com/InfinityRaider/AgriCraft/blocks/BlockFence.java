@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFence;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFence;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -77,10 +77,10 @@ public class BlockFence extends BlockCustomWood {
      */
     @Override
     public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
-        boolean flag = this.canConnect(world, pos, ForgeDirection.NORTH);
-        boolean flag1 = this.canConnect(world, pos, ForgeDirection.SOUTH);
-        boolean flag2 = this.canConnect(world, pos, ForgeDirection.WEST);
-        boolean flag3 = this.canConnect(world, pos, ForgeDirection.EAST);
+        boolean flag = this.canConnect(world, pos, AgriForgeDirection.NORTH);
+        boolean flag1 = this.canConnect(world, pos, AgriForgeDirection.SOUTH);
+        boolean flag2 = this.canConnect(world, pos, AgriForgeDirection.WEST);
+        boolean flag3 = this.canConnect(world, pos, AgriForgeDirection.EAST);
         float f = 0.375F;
         float f1 = 0.625F;
         float f2 = flag?0.0F:0.375F;
@@ -115,10 +115,10 @@ public class BlockFence extends BlockCustomWood {
      */
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-        boolean flag = this.canConnect(world, pos, ForgeDirection.NORTH);
-        boolean flag1 = this.canConnect(world, pos, ForgeDirection.SOUTH);
-        boolean flag2 = this.canConnect(world, pos, ForgeDirection.WEST);
-        boolean flag3 = this.canConnect(world, pos, ForgeDirection.EAST);
+        boolean flag = this.canConnect(world, pos, AgriForgeDirection.NORTH);
+        boolean flag1 = this.canConnect(world, pos, AgriForgeDirection.SOUTH);
+        boolean flag2 = this.canConnect(world, pos, AgriForgeDirection.WEST);
+        boolean flag3 = this.canConnect(world, pos, AgriForgeDirection.EAST);
         float f = flag2?0.0F:0.375F;
         float f1 = flag3?1.0F:0.625F;
         float f2 = flag?0.0F:0.375F;
@@ -126,7 +126,7 @@ public class BlockFence extends BlockCustomWood {
         this.setBlockBounds(f, 0.0F, f2, f1, 1.0F, f3);
     }
 
-    public boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirection dir) {
+    public boolean canConnect(IBlockAccess world, BlockPos pos, AgriForgeDirection dir) {
         Block block = world.getBlockState(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ)).getBlock();
         if (block == null) {
             return false;

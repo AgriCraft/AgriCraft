@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.utility.multiblock;
 
 import com.InfinityRaider.AgriCraft.utility.CoordinateIterator;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -14,8 +14,8 @@ public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData>
     @Override
     public void onBlockPlaced(World world, BlockPos pos, IMultiBlockComponent component) {
         boolean flag = false;
-        for (ForgeDirection dir : ForgeDirection.values()) {
-            if (dir == ForgeDirection.UNKNOWN) {
+        for (AgriForgeDirection dir : AgriForgeDirection.values()) {
+            if (dir == AgriForgeDirection.UNKNOWN) {
                 continue;
             }
             TileEntity te = world.getTileEntity(dir.offset(pos));

@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity.decoration;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockFence;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 
 public class TileEntityFence extends TileEntityCustomWood {
@@ -10,7 +10,7 @@ public class TileEntityFence extends TileEntityCustomWood {
         super();
     }
 
-    public boolean canConnect(ForgeDirection dir) {
+    public boolean canConnect(AgriForgeDirection dir) {
         if(this.worldObj == null) {
             return false;
         }

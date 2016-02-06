@@ -17,24 +17,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * The root Item class for all AgriCraft Items (excluding blockItems).
  */
 public abstract class ItemBase extends Item implements IconRegisterable {
+	
     @SideOnly(Side.CLIENT)
     private TextureAtlasSprite icon;
+	
+	public final String internalName;
 	
     public ItemBase(String name) {
         super();
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setMaxStackSize(64);
+		this.internalName = name;
         RegisterHelper.registerItem(this, name);
     }
-
-    public ItemBase() {
-        super();
-        this.setCreativeTab(AgriCraftTab.agriCraftTab);
-        this.setMaxStackSize(64);
-        RegisterHelper.registerItem(this, getInternalName());
-    }
-
-    protected abstract String getInternalName();
 
     @SideOnly(Side.CLIENT)
     public RenderItemBase getItemRenderer() {
@@ -56,4 +51,5 @@ public abstract class ItemBase extends Item implements IconRegisterable {
         name = index > 0 ? name.substring(index+1) : name;
         icon = iconRegistrar.registerIcon("agricraft:items/"+name);
     }
+	
 }

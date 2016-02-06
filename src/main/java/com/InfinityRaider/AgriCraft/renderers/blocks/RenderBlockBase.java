@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispat
 import com.InfinityRaider.AgriCraft.renderers.renderinghacks.IItemRenderer;
 import com.InfinityRaider.AgriCraft.renderers.renderinghacks.ISimpleBlockRenderingHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.Tessellator;
@@ -124,9 +124,16 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         renderInInventory(stack, transformType);
     }
 
+	/**
+	 * TODO: WARNING: HACK
+	*/
     private void renderInInventory(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
         TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
+		tessellator.scale(0.5, 0.5, 0.5);
+		tessellator.addTranslation(-1, -.9, 0);
         doInventoryRender(tessellator, block, stack, transformType);
+		tessellator.addTranslation(1, .9, 0);
+		tessellator.scale(2, 2, 2);
     }
 
     @SuppressWarnings("deprecation")
@@ -219,7 +226,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
     }
 
 
-    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, int colorMultiplier, ForgeDirection direction) {
+    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, int colorMultiplier, AgriForgeDirection direction) {
         renderUtil.drawScaledPrism(tessellator, minX, minY, minZ, maxX, maxY, maxZ, icon, colorMultiplier, direction);
     }
 
@@ -255,7 +262,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         renderUtil.drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, icon, x, colorMultiplier);
     }
     
-	protected void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, ForgeDirection direction) {
+	protected void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, AgriForgeDirection direction) {
         renderUtil.drawPlane(tessellator, minX, minY, minZ, maxX, maxY, maxZ, icon, direction);
 	}
 }

@@ -8,7 +8,7 @@ import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.entity.passive.EntityVillager;
@@ -214,7 +214,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
     }
 
     //place a seed analyzer
-    protected boolean generateStructureSeedAnalyzer(World world, StructureBoundingBox boundingBox, int x, int y, int z, ForgeDirection direction) {
+    protected boolean generateStructureSeedAnalyzer(World world, StructureBoundingBox boundingBox, int x, int y, int z, AgriForgeDirection direction) {
         int xCoord = this.getXWithOffset(x, z);
         int yCoord = this.getYWithOffset(y);
         int zCoord = this.getZWithOffset(x, z);

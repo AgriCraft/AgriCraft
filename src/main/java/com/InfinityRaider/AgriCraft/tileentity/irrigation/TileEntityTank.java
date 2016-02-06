@@ -8,7 +8,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.multiblock.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.ITickable;
@@ -66,7 +66,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         public void tick() {
             if(!this.worldObj.isRemote) {
                 if(this.worldObj.canBlockSeeSky(getPos()) && this.worldObj.isRaining()) {
-                    if(!this.hasNeighbour(ForgeDirection.UP)) {
+                    if(!this.hasNeighbour(AgriForgeDirection.UP)) {
                         BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(getPos());
                         if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
                             this.setFluidLevel(this.getFluidLevel() + 1);
@@ -106,8 +106,8 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         return false;
     }
 
-    public boolean isConnectedToChannel(ForgeDirection direction) {
-        if((this.worldObj != null) && (direction != ForgeDirection.UNKNOWN) && (direction.offsetY == 0)) {
+    public boolean isConnectedToChannel(AgriForgeDirection direction) {
+        if((this.worldObj != null) && (direction != AgriForgeDirection.UNKNOWN) && (direction.offsetY == 0)) {
             TileEntity tile = this.getWorld().getTileEntity(direction.offset(getPos()));
             if(tile instanceof TileEntityChannel) {
                 return ((TileEntityChannel) tile).isSameMaterial(this);
@@ -311,7 +311,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
     }
 
     @Override
-    public boolean hasNeighbour(ForgeDirection dir) {
+    public boolean hasNeighbour(AgriForgeDirection dir) {
         IMultiBlockPartData data= this.getMultiBlockData();
         int x = data.posX()+dir.offsetX;
         int y = data.posY()+dir.offsetY;
@@ -395,8 +395,8 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         list.add("  - Water level is on layer " + (int) Math.floor((this.getFluidLevel() - 0.1F) / (this.getCapacity() * data.sizeX() * data.sizeZ())) + ".");
         list.add("  - Water height is " + this.getFluidHeight());
         StringBuilder neighbours = new StringBuilder();
-        for(ForgeDirection dir:ForgeDirection.values()) {
-            if(dir==ForgeDirection.UNKNOWN) {
+        for(AgriForgeDirection dir:AgriForgeDirection.values()) {
+            if(dir==AgriForgeDirection.UNKNOWN) {
                 continue;
             }
             if(this.hasNeighbour(dir)) {

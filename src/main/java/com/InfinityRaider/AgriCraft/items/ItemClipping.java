@@ -22,14 +22,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemClipping extends ItemBase {
+	
     public ItemClipping() {
-        super();
+        super(Names.Objects.clipping);
         this.setCreativeTab(null);
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.clipping;
     }
 
     @Override

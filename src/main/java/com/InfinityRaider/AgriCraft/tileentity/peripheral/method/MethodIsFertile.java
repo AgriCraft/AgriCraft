@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 public class MethodIsFertile extends MethodBaseCrop {
+	
     public MethodIsFertile() {
         super("isFertile");
     }
@@ -12,8 +13,4 @@ public class MethodIsFertile extends MethodBaseCrop {
         return new Object[] {crop.isFertile()};
     }
 
-    @Override
-    protected boolean requiresJournal() {
-        return false;
-    }
 }

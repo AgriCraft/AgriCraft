@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -87,7 +87,7 @@ public final class RenderUtil {
     }
 
     /** Draws a prism which is rotated along the given direction */
-    public void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, int colorMultiplier, ForgeDirection direction) {
+    public void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, int colorMultiplier, AgriForgeDirection direction) {
         float adj[] = rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
         drawScaledPrism(tessellator, adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], icon, colorMultiplier);
     }
@@ -117,7 +117,7 @@ public final class RenderUtil {
         z = z*16.0F;
         float minV = 16-maxY;
         float maxV = 16-minY;
-        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.SOUTH);
+        applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.SOUTH);
         addScaledVertexWithUV(tessellator, maxX, maxY, z, maxX, minV, icon);
         addScaledVertexWithUV(tessellator, minX, maxY, z, minX, minV, icon);
         addScaledVertexWithUV(tessellator, minX, minY, z, minX, maxV, icon);
@@ -127,7 +127,7 @@ public final class RenderUtil {
     /** Draws the front side of a face parallel to the XZ plane */
     public void drawScaledFaceFrontXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, TextureAtlasSprite icon, float y, int colorMultiplier) {
         y = y*16.0F;
-        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.UP);
+        applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.UP);
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ, icon);
         addScaledVertexWithUV(tessellator, maxX, y, minZ, maxX, minZ, icon);
         addScaledVertexWithUV(tessellator, minX, y, minZ, minX, minZ, icon);
@@ -139,7 +139,7 @@ public final class RenderUtil {
         x = x*16.0F;
         float minV = 16-maxY;
         float maxV = 16-minY;
-        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.EAST);
+        applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.EAST);
         addScaledVertexWithUV(tessellator, x, maxY, maxZ, maxZ, minV, icon);
         addScaledVertexWithUV(tessellator, x, minY, maxZ, maxZ, maxV, icon);
         addScaledVertexWithUV(tessellator, x, minY, minZ, minZ, maxV, icon);
@@ -151,7 +151,7 @@ public final class RenderUtil {
         z = z*16.0F;
         float minV = 16 - maxY;
         float maxV = 16 - minY;
-        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.NORTH);
+        applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.NORTH);
         addScaledVertexWithUV(tessellator, maxX, maxY, z, maxX, minV, icon);
         addScaledVertexWithUV(tessellator, maxX, minY, z, maxX, maxV, icon);
         addScaledVertexWithUV(tessellator, minX, minY, z, minX, maxV, icon);
@@ -161,7 +161,7 @@ public final class RenderUtil {
     /** Draws the back side of a face parallel to the XZ plane */
     public void drawScaledFaceBackXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, TextureAtlasSprite icon, float y, int colorMultiplier) {
         y = y*16.0F;
-        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.DOWN);
+        applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.DOWN);
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ, icon);
         addScaledVertexWithUV(tessellator, minX, y, maxZ, minX, maxZ, icon);
         addScaledVertexWithUV(tessellator, minX, y, minZ, minX, minZ, icon);
@@ -173,7 +173,7 @@ public final class RenderUtil {
         x = x*16.0F;
         float minV = 16 - maxY;
         float maxV = 16 - minY;
-        applyColorMultiplier(tessellator, colorMultiplier, ForgeDirection.WEST);
+        applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.WEST);
         addScaledVertexWithUV(tessellator, x, maxY, maxZ, maxZ, minV, icon);
         addScaledVertexWithUV(tessellator, x, maxY, minZ, minZ, minV, icon);
         addScaledVertexWithUV(tessellator, x, minY, minZ, minZ, maxV, icon);
@@ -181,7 +181,7 @@ public final class RenderUtil {
     }
 
     /** Applies a color multiplier to the tessellator for a given side, the side is transformed according to the rotation of the tessellator */
-    public void applyColorMultiplier(TessellatorV2 tessellator, int colorMultiplier, ForgeDirection side) {
+    public void applyColorMultiplier(TessellatorV2 tessellator, int colorMultiplier, AgriForgeDirection side) {
         float preMultiplier = getMultiplier(transformSide(tessellator, side));
         float r = preMultiplier * ((float) (colorMultiplier >> 16 & 255) / 255.0F);
         float g = preMultiplier * ((float) (colorMultiplier >> 8 & 255) / 255.0F);
@@ -190,8 +190,8 @@ public final class RenderUtil {
     }
 
     /** Transforms a direction according to the rotation of the tessellator */
-    public ForgeDirection transformSide(TessellatorV2 tessellator, ForgeDirection dir) {
-        if(dir==ForgeDirection.UNKNOWN) {
+    public AgriForgeDirection transformSide(TessellatorV2 tessellator, AgriForgeDirection dir) {
+        if(dir==AgriForgeDirection.UNKNOWN) {
             return dir;
         }
         double[] coords = tessellator.getTransformationMatrix().transform(dir.offsetX, dir.offsetY, dir.offsetZ);
@@ -204,18 +204,18 @@ public final class RenderUtil {
         double z = Math.abs(coords[2]);
         if(x > z) {
             if(x > y) {
-                return coords[0] > 0 ? ForgeDirection.EAST : ForgeDirection.WEST;
+                return coords[0] > 0 ? AgriForgeDirection.EAST : AgriForgeDirection.WEST;
             }
         } else {
             if(z > y) {
-                return coords[2] > 0 ? ForgeDirection.SOUTH : ForgeDirection.NORTH;
+                return coords[2] > 0 ? AgriForgeDirection.SOUTH : AgriForgeDirection.NORTH;
             }
         }
-        return coords[1] > 0 ? ForgeDirection.UP : ForgeDirection.DOWN;
+        return coords[1] > 0 ? AgriForgeDirection.UP : AgriForgeDirection.DOWN;
     }
 
     /** Gets a color multiplier factor for the given side (same values used by vanilla) */
-    public float getMultiplier(ForgeDirection side) {
+    public float getMultiplier(AgriForgeDirection side) {
         switch(side) {
             case DOWN: return 0.5F;
             case NORTH:
@@ -227,7 +227,7 @@ public final class RenderUtil {
     }
 
     /** Draws a plane and rotates it according to the given direction */
-    public void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, ForgeDirection direction) {
+    public void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, AgriForgeDirection direction) {
         float[] rot = rotatePrism(minX, minY, minZ, maxX, maxY, maxZ, direction);
         drawPlane(tessellator, rot[0], rot[1], rot[2], rot[3], rot[4], rot[5], icon);
     }
@@ -249,7 +249,7 @@ public final class RenderUtil {
      *
      * TODO: Test up/down rotations more thoroughly.
      */
-    public float[] rotatePrism(float minX, float minY, float minZ, float maxX, float maxY, float maxZ, ForgeDirection direction) {
+    public float[] rotatePrism(float minX, float minY, float minZ, float maxX, float maxY, float maxZ, AgriForgeDirection direction) {
         float adj[] = new float[6];
 
         switch (direction) {

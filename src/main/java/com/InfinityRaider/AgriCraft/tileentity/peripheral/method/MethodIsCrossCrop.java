@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 
 public class MethodIsCrossCrop extends MethodBaseCrop {
+	
     public MethodIsCrossCrop() {
         super("isCrossCrop");
     }
@@ -12,8 +13,4 @@ public class MethodIsCrossCrop extends MethodBaseCrop {
         return new Object[] {crop.isCrossCrop()};
     }
 
-    @Override
-    protected boolean requiresJournal() {
-        return false;
-    }
 }

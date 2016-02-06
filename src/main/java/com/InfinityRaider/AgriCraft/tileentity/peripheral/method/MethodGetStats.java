@@ -8,13 +8,9 @@ import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import java.util.ArrayList;
 
 public class MethodGetStats extends MethodBase {
+	
     public MethodGetStats() {
-        super("getSpecimenStats");
-    }
-
-    @Override
-    protected boolean appliesToCrop() {
-        return true;
+        super("getSpecimenStats", false, true, true);
     }
 
     @Override
@@ -27,11 +23,6 @@ public class MethodGetStats extends MethodBase {
     }
 
     @Override
-    protected boolean appliesToPeripheral() {
-        return true;
-    }
-
-    @Override
     protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
         ISeedStats stats = PlantStats.getStatsFromStack(peripheral.getSpecimen());
         if(stats==null) {
@@ -41,14 +32,10 @@ public class MethodGetStats extends MethodBase {
     }
 
     @Override
-    protected boolean requiresJournal() {
-        return false;
-    }
-
-    @Override
     protected ArrayList<MethodParameter> getParameters() {
         ArrayList<MethodParameter> pars = new ArrayList<>();
         pars.add(MethodParameter.DIRECTION_OPTIONAL);
         return pars;
     }
+	
 }

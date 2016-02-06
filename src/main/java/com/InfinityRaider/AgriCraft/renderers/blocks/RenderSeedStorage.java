@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -29,7 +29,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
 
     @Override
     protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
-        this.teDummy.setOrientation(ForgeDirection.EAST);
+        this.teDummy.setOrientation(AgriForgeDirection.EAST);
         this.rotateMatrix(teDummy, tessellator, false);
         tessellator.startDrawingQuads();
         this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, Blocks.blockSeedStorage, null, teDummy, 0, 0, null, false);

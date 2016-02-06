@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFenceGate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFenceGate;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -112,9 +112,9 @@ public class BlockFenceGate extends BlockCustomWood {
         @Override
         public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
             if (super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) {
-                ForgeDirection dir = PlayerHelper.getPlayerFacing(player);
+                AgriForgeDirection dir = PlayerHelper.getPlayerFacing(player);
                 TileEntityFenceGate gate = (TileEntityFenceGate) world.getTileEntity(pos);
-                gate.setZAxis(dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH);
+                gate.setZAxis(dir == AgriForgeDirection.NORTH || dir == AgriForgeDirection.SOUTH);
                 return true;
             } else {
                 return false;

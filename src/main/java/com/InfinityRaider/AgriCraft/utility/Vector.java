@@ -23,7 +23,7 @@ public class Vector {
         this.z = vec.zCoord;
     }
 	
-	public Vector(ForgeDirection dir, double magnitude) {
+	public Vector(AgriForgeDirection dir, double magnitude) {
 		this.x = dir.offsetX * magnitude;
 		this.y = dir.offsetY * magnitude;
 		this.z = dir.offsetZ * magnitude;
