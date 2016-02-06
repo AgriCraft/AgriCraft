@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -61,19 +61,19 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityChannel) {
 			TileEntityChannel channel = (TileEntityChannel) te;
-			if (channel.hasNeighbourCheck(ForgeDirection.EAST)) {
+			if (channel.hasNeighbourCheck(AgriForgeDirection.EAST)) {
 				this.setBlockBounds(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX);
 				super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
 			}
-			if (channel.hasNeighbourCheck(ForgeDirection.WEST)) {
+			if (channel.hasNeighbourCheck(AgriForgeDirection.WEST)) {
 				this.setBlockBounds(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX);
 				super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
 			}
-			if (channel.hasNeighbourCheck(ForgeDirection.SOUTH)) {
+			if (channel.hasNeighbourCheck(AgriForgeDirection.SOUTH)) {
 				this.setBlockBounds(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE);
 				super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
 			}
-			if (channel.hasNeighbourCheck(ForgeDirection.NORTH)) {
+			if (channel.hasNeighbourCheck(AgriForgeDirection.NORTH)) {
 				this.setBlockBounds(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT);
 				super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
 			}
@@ -88,16 +88,16 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
 		TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(pos);
 		AxisAlignedBB minBB = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX);
-		if (channel.hasNeighbourCheck(ForgeDirection.EAST)) {
+		if (channel.hasNeighbourCheck(AgriForgeDirection.EAST)) {
 			minBB.addCoord(1, MAX, minBB.maxZ);
 		}
-		if (channel.hasNeighbourCheck(ForgeDirection.WEST)) {
+		if (channel.hasNeighbourCheck(AgriForgeDirection.WEST)) {
 			minBB.addCoord(0, MIN, minBB.minZ);
 		}
-		if (channel.hasNeighbourCheck(ForgeDirection.SOUTH)) {
+		if (channel.hasNeighbourCheck(AgriForgeDirection.SOUTH)) {
 			minBB.addCoord(minBB.maxX, MAX, 1);
 		}
-		if (channel.hasNeighbourCheck(ForgeDirection.NORTH)) {
+		if (channel.hasNeighbourCheck(AgriForgeDirection.NORTH)) {
 			minBB.addCoord(minBB.minX, MIN, 0);
 		}
 		return minBB.offset(pos.getX(), pos.getY(), pos.getZ());

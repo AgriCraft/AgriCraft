@@ -4,7 +4,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
@@ -95,7 +95,7 @@ public class RenderValve extends RenderChannel {
                 TextureAtlasSprite icon2 = valve.getIcon();
                 int cm = valve.colorMultiplier();
                 
-				for (ForgeDirection dir : TileEntityChannel.validDirections) {
+				for (AgriForgeDirection dir : TileEntityChannel.VALID_DIRECTIONS) {
 					if (valve.hasNeighbourCheck(dir)) {
 						if (valve.isPowered()) {
 							//Draw closed separator.
@@ -116,7 +116,7 @@ public class RenderValve extends RenderChannel {
     }
 
     @Override
-	protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection direction) {
+	protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, AgriForgeDirection direction) {
 		IBlockState neighbour;
 		if (channel.getWorld() == null) {
 			neighbour = null;
@@ -134,7 +134,7 @@ public class RenderValve extends RenderChannel {
 	}
 
 	@Override
-	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection direction, float y, TextureAtlasSprite icon) {
+	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, AgriForgeDirection direction, float y, TextureAtlasSprite icon) {
 		TileEntityValve valve = (TileEntityValve) channel;
 		// checks if there is a neighboring block that this block can connect to
 		if (channel.hasNeighbourCheck(direction)) {

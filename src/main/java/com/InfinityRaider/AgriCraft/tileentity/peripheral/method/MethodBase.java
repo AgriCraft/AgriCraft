@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -61,9 +61,9 @@ public abstract class MethodBase implements IMethod {
 			}
 		} else if (appliesToCrop) {
 
-			ForgeDirection dir = getDirection(args);
+			AgriForgeDirection dir = AgriForgeDirection.valueOf(args[0].toString());
 
-			if (dir == ForgeDirection.UNKNOWN) {
+			if (dir == AgriForgeDirection.UNKNOWN) {
 				throw new MethodException(this, "Invalid Direction!");
 			}
 

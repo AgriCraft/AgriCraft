@@ -11,17 +11,17 @@ public abstract class PlayerHelper {
         return yaw;
     }
 
-    public static ForgeDirection getPlayerFacing(EntityPlayer player) {
+    public static AgriForgeDirection getPlayerFacing(EntityPlayer player) {
         float yaw = getPlayerYaw(player);
         if(yaw>45 && yaw<=135) {
-            return ForgeDirection.WEST;
+            return AgriForgeDirection.WEST;
         }
         if(yaw>135 && yaw<=225) {
-            return ForgeDirection.NORTH;
+            return AgriForgeDirection.NORTH;
         }
         if(yaw>225 && yaw<=315) {
-            return ForgeDirection.EAST;
+            return AgriForgeDirection.EAST;
         }
-        return ForgeDirection.SOUTH;
+        return AgriForgeDirection.SOUTH;
     }
 }

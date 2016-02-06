@@ -16,11 +16,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCrop extends ItemBase {
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.crops+"Item";
-    }
 
+	public ItemCrop() {
+		super(Names.Objects.crops+"Item");
+	}
+	
     @Override
     @SideOnly(Side.CLIENT)
     public RenderItemBase getItemRenderer() {

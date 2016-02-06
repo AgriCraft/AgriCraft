@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.tileentity.irrigation.IIrrigationComponent;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -40,10 +40,10 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         tessellator.startDrawingQuads();
         this.renderBottom(teDummy, tessellator);
-        this.renderSide(teDummy, tessellator, ForgeDirection.NORTH);
-        this.renderSide(teDummy, tessellator, ForgeDirection.EAST);
-        this.renderSide(teDummy, tessellator, ForgeDirection.SOUTH);
-        this.renderSide(teDummy, tessellator, ForgeDirection.WEST);
+        this.renderSide(teDummy, tessellator, AgriForgeDirection.NORTH);
+        this.renderSide(teDummy, tessellator, AgriForgeDirection.EAST);
+        this.renderSide(teDummy, tessellator, AgriForgeDirection.SOUTH);
+        this.renderSide(teDummy, tessellator, AgriForgeDirection.WEST);
         tessellator.draw();
     }
 
@@ -91,10 +91,10 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 
     protected void renderWoodChannel(TileEntityChannel channel, TessellatorV2 tessellator) {
         this.renderBottom(channel, tessellator);
-        this.renderSide(channel, tessellator, ForgeDirection.NORTH);
-        this.renderSide(channel, tessellator, ForgeDirection.EAST);
-        this.renderSide(channel, tessellator, ForgeDirection.SOUTH);
-        this.renderSide(channel, tessellator, ForgeDirection.WEST);
+        this.renderSide(channel, tessellator, AgriForgeDirection.NORTH);
+        this.renderSide(channel, tessellator, AgriForgeDirection.EAST);
+        this.renderSide(channel, tessellator, AgriForgeDirection.SOUTH);
+        this.renderSide(channel, tessellator, AgriForgeDirection.WEST);
     }
 
     protected void renderBottom(TileEntityChannel channel, TessellatorV2 tessellator) {
@@ -111,7 +111,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     }
 
     //renders one of the four sides of a channel
-	protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection dir) {
+	protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, AgriForgeDirection dir) {
 		// the texture
 		TextureAtlasSprite icon = channel.getIcon();
 		int cm = channel.colorMultiplier();
@@ -144,15 +144,15 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
         tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
 
         //draw central water levels
-        drawPlane(tessellator, 5, y-0.001f, 5, 11, y-0.001f, 11, icon, ForgeDirection.NORTH);
+        drawPlane(tessellator, 5, y-0.001f, 5, 11, y-0.001f, 11, icon, AgriForgeDirection.NORTH);
         //connect to edges
-        this.connectWater(channel, tessellator, ForgeDirection.NORTH, y, icon);
-        this.connectWater(channel, tessellator, ForgeDirection.EAST, y, icon);
-        this.connectWater(channel, tessellator, ForgeDirection.SOUTH, y, icon);
-        this.connectWater(channel, tessellator, ForgeDirection.WEST, y, icon);
+        this.connectWater(channel, tessellator, AgriForgeDirection.NORTH, y, icon);
+        this.connectWater(channel, tessellator, AgriForgeDirection.EAST, y, icon);
+        this.connectWater(channel, tessellator, AgriForgeDirection.SOUTH, y, icon);
+        this.connectWater(channel, tessellator, AgriForgeDirection.WEST, y, icon);
     }
 
-	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection direction, float y, TextureAtlasSprite icon) {
+	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, AgriForgeDirection direction, float y, TextureAtlasSprite icon) {
 		// checks if there is a neighboring block that this block can connect to
 		if (channel.hasNeighbourCheck(direction)) {
 			IIrrigationComponent te = channel.getNeighbor(direction);
@@ -171,7 +171,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 		}
 	}
 
-    protected void drawWaterEdge(TessellatorV2 tessellator, ForgeDirection direction, float lvl1, float lvl2, TextureAtlasSprite icon) {
+    protected void drawWaterEdge(TessellatorV2 tessellator, AgriForgeDirection direction, float lvl1, float lvl2, TextureAtlasSprite icon) {
     	drawPlane(tessellator, 5, lvl1-0.001f, 0, 11, lvl2-0.001f, 5, icon, direction);
     }
 }

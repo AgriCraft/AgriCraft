@@ -19,13 +19,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
     public ItemTrowel() {
-        super();
+        super(Names.Objects.trowel);
         this.maxStackSize=1;
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.trowel;
     }
 
     //I'm overriding this just to be sure

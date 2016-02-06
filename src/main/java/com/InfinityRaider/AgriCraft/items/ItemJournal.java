@@ -20,14 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemJournal extends ItemBase implements IJournal {
+	
     public ItemJournal() {
-        super();
+        super(Names.Objects.journal);
         this.setMaxStackSize(1);
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.journal;
     }
 
     //this has to return true to make it so the getContainerItem method gets called when this item is used in a recipe

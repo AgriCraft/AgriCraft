@@ -9,7 +9,7 @@ import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzerBook;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -41,7 +41,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
         this.modelSeedAnalyzer = new ModelSeedAnalyzer();
         this.modelBook = new ModelSeedAnalyzerBook();
         seedAnalyzerDummy = new TileEntitySeedAnalyzer();
-        seedAnalyzerDummy.setOrientation(ForgeDirection.SOUTH);
+        seedAnalyzerDummy.setOrientation(AgriForgeDirection.SOUTH);
     }
 
     @Override

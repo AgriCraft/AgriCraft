@@ -6,17 +6,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemNugget extends ItemBase {
-    private final String name;
 
     public ItemNugget(String name) {
         super("nugget"+name);
-        this.name = "nugget"+name;
         this.setCreativeTab(CreativeTabs.tabMaterials);
-    }
-
-    @Override
-    protected String getInternalName() {
-        return name;
     }
 
     @Override
@@ -24,4 +17,5 @@ public class ItemNugget extends ItemBase {
     public RenderItemBase getItemRenderer() {
         return null;
     }
+	
 }

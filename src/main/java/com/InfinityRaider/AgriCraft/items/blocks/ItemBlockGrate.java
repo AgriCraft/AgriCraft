@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.items.blocks;
 
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -42,8 +42,8 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
         if (super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) {
             TileEntityGrate grate = (TileEntityGrate) world.getTileEntity(pos);
             if (side == EnumFacing.UP || side == EnumFacing.DOWN) {
-                ForgeDirection dir = PlayerHelper.getPlayerFacing(player);
-                if (dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
+                AgriForgeDirection dir = PlayerHelper.getPlayerFacing(player);
+                if (dir == AgriForgeDirection.NORTH || dir == AgriForgeDirection.SOUTH) {
                     setOffsetAndOrientation(grate, hitZ, (short) 0);
                 } else {
                     setOffsetAndOrientation(grate, hitX, (short) 1);

@@ -21,14 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemMagnifyingGlass extends ItemBase {
+	
     public ItemMagnifyingGlass() {
-        super();
+        super(Names.Objects.magnifyingGlass);
         this.setMaxStackSize(1);
-    }
-
-    @Override
-    protected String getInternalName() {
-        return Names.Objects.magnifyingGlass;
     }
 
     //I'm overriding this just to be sure

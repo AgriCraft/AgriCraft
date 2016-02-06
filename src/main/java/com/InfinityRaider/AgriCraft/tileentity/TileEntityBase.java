@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockBase;
 import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -27,9 +27,9 @@ import java.util.List;
 public abstract class TileEntityBase extends TileEntity {
     /**
      * The orientation of the block.
-     * Defaults to ForgeDirection.UNKNOWN;
+     * Defaults to AgriForgeDirection.UNKNOWN;
      */
-    private ForgeDirection orientation = ForgeDirection.UNKNOWN;
+    private AgriForgeDirection orientation = AgriForgeDirection.UNKNOWN;
 
     public final int xCoord() {
         return this.getPos().getX();
@@ -99,11 +99,11 @@ public abstract class TileEntityBase extends TileEntity {
     public abstract boolean isRotatable();
 
     /**
-     * Retrieves the block's orientation as a ForgeDirection.
+     * Retrieves the block's orientation as a AgriForgeDirection.
      *
      * @return the block's orientation.
      */
-    public final ForgeDirection getOrientation() {
+    public final AgriForgeDirection getOrientation() {
         return orientation;
     }
 
@@ -112,8 +112,8 @@ public abstract class TileEntityBase extends TileEntity {
      *
      * @param orientation the new orientation of the block.
      */
-    public final void setOrientation(ForgeDirection orientation) {
-        if (this.isRotatable() && orientation != ForgeDirection.UNKNOWN) {
+    public final void setOrientation(AgriForgeDirection orientation) {
+        if (this.isRotatable() && orientation != AgriForgeDirection.UNKNOWN) {
             this.orientation = orientation;
             if (this.worldObj != null) {
                 this.markForUpdate();
@@ -128,7 +128,7 @@ public abstract class TileEntityBase extends TileEntity {
      * @param orientation the orientation index
      */
     private void setOrientation(int orientation) {
-        this.setOrientation(ForgeDirection.getOrientation(orientation));
+        this.setOrientation(AgriForgeDirection.getOrientation(orientation));
     }
 
     @Override

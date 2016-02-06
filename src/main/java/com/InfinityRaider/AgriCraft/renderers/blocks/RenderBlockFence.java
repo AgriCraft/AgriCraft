@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFence;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -50,19 +50,19 @@ public class RenderBlockFence extends RenderBlockCustomWood<TileEntityFence> {
         TextureAtlasSprite icon = fence.getIcon();
         int cm = block.colorMultiplier(world, pos);
         drawScaledPrism(tessellator, 6, 0, 6, 10, 16, 10, icon, cm);
-        if(fence.canConnect(ForgeDirection.EAST)) {
+        if(fence.canConnect(AgriForgeDirection.EAST)) {
             drawScaledPrism(tessellator, 10, 12, 7, 16, 15, 9, icon, cm);
             drawScaledPrism(tessellator, 10, 6, 7, 16, 9, 9, icon, cm);
         }
-        if(fence.canConnect(ForgeDirection.WEST)) {
+        if(fence.canConnect(AgriForgeDirection.WEST)) {
             drawScaledPrism(tessellator, 0, 12, 7, 6, 15, 9, icon, cm);
             drawScaledPrism(tessellator, 0, 6, 7, 6, 9, 9, icon, cm);
         }
-        if(fence.canConnect(ForgeDirection.SOUTH)) {
+        if(fence.canConnect(AgriForgeDirection.SOUTH)) {
             drawScaledPrism(tessellator, 7, 12, 10, 9, 15, 16, icon, cm);
             drawScaledPrism(tessellator, 7, 6, 10, 9, 9, 16, icon, cm);
         }
-        if(fence.canConnect(ForgeDirection.NORTH)) {
+        if(fence.canConnect(AgriForgeDirection.NORTH)) {
             drawScaledPrism(tessellator, 7, 12, 0, 9, 15, 6, icon, cm);
             drawScaledPrism(tessellator, 7, 6, 0, 9, 9, 6, icon, cm);
         }

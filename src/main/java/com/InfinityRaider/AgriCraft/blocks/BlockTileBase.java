@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -54,7 +54,7 @@ public abstract class BlockTileBase extends BlockBase implements ITileEntityProv
 			TileEntityBase tile = (TileEntityBase) world.getTileEntity(pos);
 			if (tile.isRotatable()) {
 				int direction = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-				tile.setOrientation(ForgeDirection.getCardinal(direction));
+				tile.setOrientation(AgriForgeDirection.getCardinal(direction));
 			}
 			if (this.isMultiBlock && !world.isRemote) {
 				IMultiBlockComponent component = (IMultiBlockComponent) world.getTileEntity(pos);

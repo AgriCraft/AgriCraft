@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -287,7 +287,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.generateStructureSprinkler(world, boundingBox, 5, 4, 10);
         this.generateStructureSprinkler(world, boundingBox, 11, 4, 10);
         //place seed analyzer
-        this.generateStructureSeedAnalyzer(world, boundingBox, 11, 2, 4, ForgeDirection.SOUTH);
+        this.generateStructureSeedAnalyzer(world, boundingBox, 11, 2, 4, AgriForgeDirection.SOUTH);
         this.spawnVillagers(world, boundingBox, 3, 1, 3, 1);
         return true;
     }

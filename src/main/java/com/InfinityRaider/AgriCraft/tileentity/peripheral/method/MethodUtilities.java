@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Utilities for the computercraft api methods.
  */
 package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
 
@@ -10,7 +8,7 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import java.util.List;
 import net.minecraft.item.ItemStack;
 
@@ -19,30 +17,6 @@ import net.minecraft.item.ItemStack;
  * @author ryeni
  */
 public final class MethodUtilities {
-
-	/**
-	 * TODO: Remove
-	 *
-	 * @param args
-	 * @return
-	 */
-	public static ForgeDirection getDirection(Object... args) {
-		for (Object obj : args) {
-			ForgeDirection dir = ForgeDirection.UNKNOWN;
-			if (obj == null) {
-				continue;
-			}
-			if (obj instanceof Object[]) {
-				dir = getDirection((Object[]) obj);
-			} else if (obj instanceof String) {
-				dir = ForgeDirection.valueOf((String) obj);
-			}
-			if (dir != null && dir != ForgeDirection.UNKNOWN) {
-				return dir;
-			}
-		}
-		return ForgeDirection.UNKNOWN;
-	}
 
 	public static boolean isSeedDiscovered(ItemStack journal, ItemStack seed) {
 		if (journal == null || journal.getItem() == null || !(journal.getItem() instanceof ItemJournal)) {

@@ -4,7 +4,7 @@ import com.InfinityRaider.AgriCraft.init.Blocks;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannelFull;
-import com.InfinityRaider.AgriCraft.utility.ForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -36,7 +36,7 @@ public class RenderChannelFull extends RenderChannel {
   //renders one of the four sides of a channel
     // So tiny!
     @Override
-    protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, ForgeDirection dir) {
+    protected void renderSide(TileEntityChannel channel, TessellatorV2 tessellator, AgriForgeDirection dir) {
 		// the texture
 		TextureAtlasSprite icon = channel.getIcon();
 		int cm = channel.colorMultiplier();
