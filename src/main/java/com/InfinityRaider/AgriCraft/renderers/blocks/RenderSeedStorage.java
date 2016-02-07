@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -23,6 +25,9 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStorage> {
+	
+	private static final SafeIcon HANDLE_ICON = new SafeIcon(Blocks.iron_block);
+	
     public RenderSeedStorage() {
         super(AgriCraftBlocks.blockSeedStorage, new TileEntitySeedStorage(), true);
     }
@@ -58,7 +63,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
                 drawScaledPrism(tessellator, 1, 1, 15, 15, 15, 16, icon, cm);
                 //drawer
                 drawScaledPrism(tessellator, 1.1F, 1.1F, 1, 14.9F, 14.9F, 2, icon, cm);
-                drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(), cm);    //TODO: find iron block icon
+                drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, HANDLE_ICON.getIcon(), cm);    //TODO: find iron block icon
                 drawScaledPrism(tessellator, 4, 3, 0, 5, 10, 1, icon, cm);
                 drawScaledPrism(tessellator, 11, 3, 0, 12, 10, 1, icon, cm);
                 drawScaledPrism(tessellator, 4, 10, 0, 12, 11, 1, icon, cm);

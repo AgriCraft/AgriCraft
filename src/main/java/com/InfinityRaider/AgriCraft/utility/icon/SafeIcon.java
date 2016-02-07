@@ -1,8 +1,9 @@
 /*
  * A safe way to deal with those pesky icons.
  */
-package com.InfinityRaider.AgriCraft.utility;
+package com.InfinityRaider.AgriCraft.utility.icon;
 
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
