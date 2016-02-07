@@ -29,7 +29,7 @@ public class RenderValve extends RenderChannel {
 	private static final SafeIcon SEPARATOR_ICON = new SafeIcon(Blocks.iron_block);
 	
     public RenderValve() {
-        super(com.InfinityRaider.AgriCraft.init.Blocks.blockChannelValve, new TileEntityValve());
+        super(com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockChannelValve, new TileEntityValve());
     }
 
     @Override

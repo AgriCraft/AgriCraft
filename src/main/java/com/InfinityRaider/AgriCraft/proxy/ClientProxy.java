@@ -6,8 +6,8 @@ import com.InfinityRaider.AgriCraft.handler.ItemToolTipHandler;
 import com.InfinityRaider.AgriCraft.handler.MissingJsonHandler;
 import com.InfinityRaider.AgriCraft.handler.TextureStitchHandler;
 import com.InfinityRaider.AgriCraft.handler.SoundHandler;
-import com.InfinityRaider.AgriCraft.init.Blocks;
-import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.items.ItemBase;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
@@ -59,7 +59,7 @@ public class ClientProxy extends CommonProxy {
 
         //BLOCKS
         //------
-        for(Field field:Blocks.class.getDeclaredFields()) {
+        for(Field field:AgriCraftBlocks.class.getDeclaredFields()) {
             if(field.getType().isAssignableFrom(BlockBase.class)) {
                 try {
                     Object obj = field.get(null);
@@ -74,7 +74,7 @@ public class ClientProxy extends CommonProxy {
 
         //ITEMS
         //-----
-        for(Field field: Items.class.getDeclaredFields()) {
+        for(Field field: AgriCraftItems.class.getDeclaredFields()) {
             if(field.getType().isAssignableFrom(ItemBase.class)) {
                 try {
                     Object obj = field.get(null);

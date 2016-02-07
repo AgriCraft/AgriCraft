@@ -275,11 +275,11 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
             }
         }
         //place irrigation channels
-        this.fillWithBlocks(world, boundingBox, 5, 5, 5, 5, 5, 10, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel.getDefaultState(), com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel.getDefaultState(), false);
+        this.fillWithBlocks(world, boundingBox, 5, 5, 5, 5, 5, 10, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), false);
         for(int z=5;z<=10;z++) {
             this.generateStructureIrrigationChannel(world, boundingBox, 5, 5, z);
         }
-        this.fillWithBlocks(world, boundingBox, 6, 5, 10, 11, 5, 10, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel.getDefaultState(), com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel.getDefaultState(), false);
+        this.fillWithBlocks(world, boundingBox, 6, 5, 10, 11, 5, 10, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), false);
         for(int x=6;x<=11;x++) {
             this.generateStructureIrrigationChannel(world, boundingBox, x, 5, 10);
         }
@@ -299,7 +299,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank.getDefaultState(), 2);
+            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterTank.getDefaultState(), 2);
             TileEntityTank tank = (TileEntityTank) world.getTileEntity(pos);
             if (tank == null) {
                 tank = new TileEntityTank();
@@ -324,7 +324,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel.getDefaultState(), 2);
+            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), 2);
             TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(pos);
             if (channel!=null) {
                 channel.setMaterial(new ItemStack(Blocks.planks, 1, 0));
@@ -343,7 +343,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.Blocks.blockSprinkler.getDefaultState(), 2);
+            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockSprinkler.getDefaultState(), 2);
             return true;
         }
         else {

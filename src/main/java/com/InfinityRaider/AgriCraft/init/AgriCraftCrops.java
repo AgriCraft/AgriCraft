@@ -8,7 +8,7 @@ import com.InfinityRaider.AgriCraft.utility.LogHelper;
 
 import java.util.ArrayList;
 
-public class Crops {
+public class AgriCraftCrops {
     public static ArrayList<BlockModPlant> crops;
     public static ArrayList<ItemModSeed> seeds;
 

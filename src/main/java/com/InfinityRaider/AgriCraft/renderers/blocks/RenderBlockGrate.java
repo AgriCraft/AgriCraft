@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
     public RenderBlockGrate() {
-        super(Blocks.blockGrate, new TileEntityGrate(), true);
+        super(AgriCraftBlocks.blockGrate, new TileEntityGrate(), true);
     }
 
     @Override

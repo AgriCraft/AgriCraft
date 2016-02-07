@@ -195,7 +195,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         LogHelper.debug("Placing crop at ("+xCoord+","+yCoord+","+zCoord+")");
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.Blocks.blockCrop.getDefaultState().withProperty(BlockStates.GROWTHSTAGE, 0), 2);
+            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockCrop.getDefaultState().withProperty(BlockStates.GROWTHSTAGE, 0), 2);
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
             if (crop!=null) {
                 if(crosscrop) {
@@ -220,7 +220,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.Blocks.blockSeedAnalyzer.getDefaultState(), 2);
+            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockSeedAnalyzer.getDefaultState(), 2);
             TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(pos);
             if (analyzer!=null) {
                 if(direction!=null) {

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
@@ -27,7 +27,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 	private static final SafeIcon WATER_ICON = new SafeIcon(Blocks.waterlily);
 	
     public RenderTank() {
-        super(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, new TileEntityTank(), true);
+        super(com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterTank, new TileEntityTank(), true);
     }
 
     @Override

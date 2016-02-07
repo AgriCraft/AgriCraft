@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -37,7 +37,7 @@ public class ItemCrop extends ItemBase {
         if (!world.isRemote) {
             BlockPos cropPos = pos.add(0, 1, 0);
             if (GrowthRequirementHandler.isSoilValid(world, pos) && world.getBlockState(cropPos).getBlock().getMaterial()== Material.air && side == EnumFacing.UP) {
-                world.setBlockState(pos.add(0, 1, 0), Blocks.blockCrop.getDefaultState());
+                world.setBlockState(pos.add(0, 1, 0), AgriCraftBlocks.blockCrop.getDefaultState());
                 int use = 1;
                 if(player.isSneaking() && (player.capabilities.isCreativeMode || stack.stackSize>=2)) {
                     TileEntity tile = world.getTileEntity(cropPos);

@@ -99,7 +99,7 @@ public class PlayerInteractEventHandler {
                 if (event.world.isRemote) {
                     denyEvent(event, true);
                 }
-                event.world.setBlockState(event.pos, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPad.getDefaultState(), 3);
+                event.world.setBlockState(event.pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterPad.getDefaultState(), 3);
                 if (!event.entityPlayer.capabilities.isCreativeMode) {
                     event.entityPlayer.getCurrentEquippedItem().damageItem(1, event.entityPlayer);
                     event.setResult(Event.Result.ALLOW);

@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
@@ -24,7 +24,7 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStorage> {
     public RenderSeedStorage() {
-        super(Blocks.blockSeedStorage, new TileEntitySeedStorage(), true);
+        super(AgriCraftBlocks.blockSeedStorage, new TileEntitySeedStorage(), true);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
         this.teDummy.setOrientation(AgriForgeDirection.EAST);
         this.rotateMatrix(teDummy, tessellator, false);
         tessellator.startDrawingQuads();
-        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, Blocks.blockSeedStorage, null, teDummy, 0, 0, null, false);
+        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, AgriCraftBlocks.blockSeedStorage, null, teDummy, 0, 0, null, false);
         tessellator.draw();
         this.rotateMatrix(teDummy, tessellator, true);
     }

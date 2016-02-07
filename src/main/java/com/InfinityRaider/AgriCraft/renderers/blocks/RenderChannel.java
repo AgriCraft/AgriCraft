@@ -29,7 +29,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     public static AtomicInteger renderCallCounter = new AtomicInteger(0);
 
     public RenderChannel() {
-        this(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterChannel, new TileEntityChannel());
+        this(com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel, new TileEntityChannel());
     }
 
     protected RenderChannel(Block block, TileEntityChannel channel) {

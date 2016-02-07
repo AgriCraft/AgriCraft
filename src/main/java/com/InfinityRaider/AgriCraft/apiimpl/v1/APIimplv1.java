@@ -17,8 +17,8 @@ import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculator;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.Blocks;
-import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -76,17 +76,17 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public List<ItemStack> getCropsItems() {
-        return Lists.newArrayList(new ItemStack(Items.crops));
+        return Lists.newArrayList(new ItemStack(AgriCraftItems.crops));
     }
 
     @Override
     public List<ItemStack> getRakeItems() {
-        return Lists.newArrayList(new ItemStack(Items.handRake, 1, 0), new ItemStack(Items.handRake, 1, 1));
+        return Lists.newArrayList(new ItemStack(AgriCraftItems.handRake, 1, 0), new ItemStack(AgriCraftItems.handRake, 1, 1));
     }
 
     @Override
     public List<Block> getCropsBlocks() {
-        return Lists.newArrayList((Block) Blocks.blockCrop);
+        return Lists.newArrayList((Block) AgriCraftBlocks.blockCrop);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean canPlaceCrops(World world, BlockPos pos, ItemStack crops) {
-        if (crops == null || crops.getItem() == null || crops.getItem() != Items.crops) {
+        if (crops == null || crops.getItem() == null || crops.getItem() != AgriCraftItems.crops) {
             return false;
         } else if (GrowthRequirementHandler.isSoilValid(world, pos.add(0, -1, 0)) && world.isAirBlock(pos)) {
             return true;
@@ -160,7 +160,7 @@ public class APIimplv1 implements APIv1 {
     public boolean placeCrops(World world, BlockPos pos, ItemStack crops) {
         if (canPlaceCrops(world, pos, crops) && crops.stackSize >= 1) {
             if (!world.isRemote) {
-                world.setBlockState(pos, Blocks.blockCrop.getDefaultState().withProperty(BlockStates.GROWTHSTAGE, 0), 3);
+                world.setBlockState(pos, AgriCraftBlocks.blockCrop.getDefaultState().withProperty(BlockStates.GROWTHSTAGE, 0), 3);
                 crops.stackSize--;
             }
             return true;
@@ -170,7 +170,7 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean isCrops(World world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock() == Blocks.blockCrop;
+        return world.getBlockState(pos).getBlock() == AgriCraftBlocks.blockCrop;
     }
 
     @Override
@@ -324,7 +324,7 @@ public class APIimplv1 implements APIv1 {
         if (world.isRemote) {
             return false;
         }
-        if (crops == null || crops.getItem() == null || crops.getItem() != Items.crops || crops.stackSize < 1) {
+        if (crops == null || crops.getItem() == null || crops.getItem() != AgriCraftItems.crops || crops.stackSize < 1) {
             return false;
         }
         TileEntity te = world.getTileEntity(pos);
@@ -349,7 +349,7 @@ public class APIimplv1 implements APIv1 {
             TileEntityCrop crop = (TileEntityCrop) te;
             if(crop.isCrossCrop()) {
                 crop.setCrossCrop(false);
-                return new ItemStack(Items.crops, 1);
+                return new ItemStack(AgriCraftItems.crops, 1);
             }
         }
         return null;
@@ -425,7 +425,7 @@ public class APIimplv1 implements APIv1 {
         if (world.isRemote || !isCrops(world, pos)) {
             return null;
         }
-        List<ItemStack> result = Blocks.blockCrop.getDrops(world, pos, world.getBlockState(pos), 0);
+        List<ItemStack> result = AgriCraftBlocks.blockCrop.getDrops(world, pos, world.getBlockState(pos), 0);
         world.setBlockToAir(pos);
         world.removeTileEntity(pos);
         return result;
@@ -468,7 +468,7 @@ public class APIimplv1 implements APIv1 {
             return false;
         }
         if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
-            ((BlockCrop) Blocks.blockCrop).grow(world, random, pos, state);
+            ((BlockCrop) AgriCraftBlocks.blockCrop).grow(world, random, pos, state);
             fertilizer.stackSize--;
             world.playAuxSFX(2005, pos, 0);
             return true;

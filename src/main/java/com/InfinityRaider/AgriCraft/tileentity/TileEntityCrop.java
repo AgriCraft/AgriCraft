@@ -14,7 +14,7 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -318,7 +318,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
             fertiliser.onFertiliserApplied(getWorld(), getPos(), rand);
         }
         if(this.hasPlant() || this.hasWeed()) {
-            ((BlockCrop) Blocks.blockCrop).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
+            ((BlockCrop) AgriCraftBlocks.blockCrop).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
         }
         else if(this.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
             this.crossOver();
