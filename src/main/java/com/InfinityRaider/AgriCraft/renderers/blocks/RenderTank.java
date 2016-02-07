@@ -1,8 +1,10 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
+import com.InfinityRaider.AgriCraft.init.Items;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -21,6 +23,9 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
+	
+	private static final SafeIcon WATER_ICON = new SafeIcon(Blocks.waterlily);
+	
     public RenderTank() {
         super(com.InfinityRaider.AgriCraft.init.Blocks.blockWaterTank, new TileEntityTank(), true);
     }
@@ -140,7 +145,6 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
         if(tank.getYPosition()==0) {
             float y = tank.getFluidHeight()-0.01F; //-0.0001F to avoid Z-fighting on maximum filled tanks
             //the texture
-            TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: get water icon
             //stolen from Vanilla code
             int l = Blocks.water.colorMultiplier(tank.getWorld(), tank.getPos());
             float f = (float)(l >> 16 & 255) / 255.0F;
@@ -150,10 +154,10 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
             tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(tank.getWorld(), tank.getPos()));
             tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
             //draw surface
-            addScaledVertexWithUV(tessellator, 0, y, 0, 0, 0, icon);
-            addScaledVertexWithUV(tessellator, 0, y, 16, 0, 16, icon);
-            addScaledVertexWithUV(tessellator, 16, y, 16, 16, 16, icon);
-            addScaledVertexWithUV(tessellator, 16, y, 0, 16, 0, icon);
+            addScaledVertexWithUV(tessellator, 0, y, 0, 0, 0, WATER_ICON.getIcon());
+            addScaledVertexWithUV(tessellator, 0, y, 16, 0, 16, WATER_ICON.getIcon());
+            addScaledVertexWithUV(tessellator, 16, y, 16, 16, 16, WATER_ICON.getIcon());
+            addScaledVertexWithUV(tessellator, 16, y, 0, 16, 0, WATER_ICON.getIcon());
         }
     }
 }

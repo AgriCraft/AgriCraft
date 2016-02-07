@@ -4,6 +4,7 @@ import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.TextureCache;
+import com.InfinityRaider.AgriCraft.utility.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -25,10 +26,13 @@ import java.util.List;
 public class TileEntityCustomWood extends TileEntityBase implements IDebuggable {
 	
 	/** The default material to use. Currently is wood planks. */
-    private static final Block DEFAULT_MATERIAL = Blocks.planks;
+    public static final Block DEFAULT_MATERIAL = Blocks.planks;
     
     /** The default metadata to use. Currently is set to Oak(0) for Planks. */
-    private static final int DEFAULT_META = 0;
+    public static final int DEFAULT_META = 0;
+	
+	/** The default icon to use. Currently set to the default material. */
+	public static final SafeIcon DEFAULT_ICON = new SafeIcon(DEFAULT_MATERIAL);
 	
 	/**
      * A pointer to the the block the CustomWoodBlock is imitating.
@@ -176,7 +180,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
         if(this.icon == null) {
             this.cacheIcon();
         }
-        return this.icon == null ? getDefaultIcon() : this.icon;
+        return this.icon == null ? DEFAULT_ICON.getIcon() : this.icon;
     }
 
     private void cacheIcon() {
@@ -196,10 +200,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
     @Override
     public BlockCustomWood getBlockType() {
         return (BlockCustomWood) super.getBlockType();
-    }
-
-    public TextureAtlasSprite getDefaultIcon() {
-        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/oak_planks");
     }
 
     @Override
