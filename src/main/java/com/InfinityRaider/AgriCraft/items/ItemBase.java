@@ -5,8 +5,8 @@ import com.InfinityRaider.AgriCraft.api.v1.IconRegisterable;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderItemIcon;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class ItemBase extends Item implements IconRegisterable {
 	
     @SideOnly(Side.CLIENT)
-    private TextureAtlasSprite icon;
+    private final SafeIcon icon;
 	
 	public final String internalName;
 	
@@ -29,6 +29,7 @@ public abstract class ItemBase extends Item implements IconRegisterable {
         this.setMaxStackSize(64);
 		this.internalName = name;
         RegisterHelper.registerItem(this, name);
+		this.icon = new SafeIcon(this);
     }
 
     @SideOnly(Side.CLIENT)
@@ -38,7 +39,7 @@ public abstract class ItemBase extends Item implements IconRegisterable {
 
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getIcon(ItemStack stack) {
-        return icon;
+        return icon.getIcon();
     }
 
     @Override
@@ -49,7 +50,7 @@ public abstract class ItemBase extends Item implements IconRegisterable {
         name = index > 0 ? name.substring(index+1) : name;
         index = name.indexOf(".");
         name = index > 0 ? name.substring(index+1) : name;
-        icon = iconRegistrar.registerIcon("agricraft:items/"+name);
+        iconRegistrar.registerIcon("agricraft:items/"+name);
     }
 	
 }

@@ -20,12 +20,6 @@ public class ItemCrop extends ItemBase {
 	public ItemCrop() {
 		super(Names.Objects.crops+"Item");
 	}
-	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public RenderItemBase getItemRenderer() {
-        return null;
-    }
 
     //I'm overriding this just to be sure
     @Override

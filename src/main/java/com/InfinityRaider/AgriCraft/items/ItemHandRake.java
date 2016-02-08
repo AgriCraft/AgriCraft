@@ -81,12 +81,6 @@ public class ItemHandRake extends ItemBase implements IRake{
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public RenderItemBase getItemRenderer() {
-        return null;
-    }
-
-    @Override
     public boolean removeWeeds(World world, BlockPos pos, IBlockState state, ICrop crop, ItemStack rake) {
         if (crop.hasWeed()) {
             int weedGrowthStage = state.getValue(BlockStates.GROWTHSTAGE);

@@ -95,4 +95,5 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
         name = index > 0 ? name.substring(index+1) : name;
         icon = iconRegistrar.registerIcon("agricraft:items/"+name);
     }
+	
 }

@@ -115,7 +115,7 @@ public class AgriCraft {
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void onMissingMappings(FMLMissingMappingsEvent event) {
-        ArrayList<String> removedIds = new ArrayList<String>();
+        ArrayList<String> removedIds = new ArrayList<>();
         removedIds.add("AgriCraft:cropMelon");
         removedIds.add("AgriCraft:cropPumpkin");
         removedIds.add("AgriCraft:sprinklerItem");

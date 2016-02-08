@@ -64,12 +64,6 @@ public class ItemJournal extends ItemBase implements IJournal {
         list.add(StatCollector.translateToLocal("agricraft_tooltip.discoveredSeeds")+": "+nr);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public RenderItemBase getItemRenderer() {
-        return null;
-    }
-
     private NBTTagList getDiscoveredSeedsTaglist(ItemStack journal) {
         //check if the journal has NBT and if it doesn't, create a new one
         if(!journal.hasTagCompound()) {
