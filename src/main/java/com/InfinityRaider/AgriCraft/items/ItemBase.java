@@ -1,22 +1,22 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
-import com.InfinityRaider.AgriCraft.api.v1.IconRegisterable;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
-import com.InfinityRaider.AgriCraft.renderers.items.RenderItemBase;
-import com.InfinityRaider.AgriCraft.renderers.items.RenderItemIcon;
+import com.InfinityRaider.AgriCraft.renderers.items.AgriCraftRenderableItemRenderer;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftRenderable;
+import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
+import net.minecraft.client.renderer.ItemRenderer;
 
 /**
  * The root Item class for all AgriCraft Items (excluding blockItems).
  */
-public abstract class ItemBase extends Item implements IconRegisterable {
+public abstract class ItemBase extends Item implements IAgriCraftRenderable {
 	
     @SideOnly(Side.CLIENT)
     private final SafeIcon icon;
@@ -33,12 +33,13 @@ public abstract class ItemBase extends Item implements IconRegisterable {
     }
 
     @SideOnly(Side.CLIENT)
-    public RenderItemBase getItemRenderer() {
-        return new RenderItemIcon(this);
+    public void registerItemRenderer() {
+        BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(this, AgriCraftRenderableItemRenderer.DEFAULT_RENDERER);
     }
 
+	@Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(ItemStack stack) {
+    public TextureAtlasSprite getIcon() {
         return icon.getIcon();
     }
 

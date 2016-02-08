@@ -7,8 +7,10 @@ import com.InfinityRaider.AgriCraft.handler.MissingJsonHandler;
 import com.InfinityRaider.AgriCraft.handler.TextureStitchHandler;
 import com.InfinityRaider.AgriCraft.handler.SoundHandler;
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftCrops;
 import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.items.ItemBase;
+import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;
@@ -78,14 +80,24 @@ public class ClientProxy extends CommonProxy {
             if(field.getType().isAssignableFrom(ItemBase.class)) {
                 try {
                     Object obj = field.get(null);
-                    if(obj!=null) {
-                        ((ItemBase) obj).getItemRenderer();
+					// This is a safer check
+                    if(obj instanceof ItemBase) {
+                        ((ItemBase) obj).registerItemRenderer();
                     }
                 }catch (IllegalAccessException e) {
                     LogHelper.printStackTrace(e);
                 }
             }
         }
+		
+		// Seeds
+		for(ItemModSeed seed : AgriCraftCrops.seeds) {
+			try {
+				seed.registerItemRenderer();
+			} catch (Exception e) {
+				LogHelper.printStackTrace(e);
+			}
+		}
 
         //villager
         if (!ConfigurationHandler.disableWorldGen && ConfigurationHandler.villagerEnabled) {

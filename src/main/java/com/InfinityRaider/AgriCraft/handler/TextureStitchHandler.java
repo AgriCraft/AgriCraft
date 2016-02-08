@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.api.v1.IconRegisterable;
 import com.InfinityRaider.AgriCraft.utility.icon.IconRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -15,20 +14,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftRenderable;
 
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")
 public class TextureStitchHandler {
-    public List<IconRegisterable> getIconRegisterables() {
-        List<IconRegisterable> list = new ArrayList<>();
+    public List<IAgriCraftRenderable> getIconRegisterables() {
+        List<IAgriCraftRenderable> list = new ArrayList<>();
         for (Block block : Block.blockRegistry) {
-            if (block instanceof IconRegisterable) {
-                list.add((IconRegisterable) block);
+            if (block instanceof IAgriCraftRenderable) {
+                list.add((IAgriCraftRenderable) block);
             }
         }
         for (Item item : Item.itemRegistry) {
-            if (item instanceof IconRegisterable) {
-                list.add((IconRegisterable) item);
+            if (item instanceof IAgriCraftRenderable) {
+                list.add((IAgriCraftRenderable) item);
             }
         }
         return list;
@@ -37,7 +37,7 @@ public class TextureStitchHandler {
 
     @SubscribeEvent
     public void stitchTextures(TextureStitchEvent.Pre event) {
-        for (IconRegisterable iconRegisterable : getIconRegisterables()) {
+        for (IAgriCraftRenderable iconRegisterable : getIconRegisterables()) {
             iconRegisterable.registerIcons(IconRegistrar.getInstance());
         }
     }
