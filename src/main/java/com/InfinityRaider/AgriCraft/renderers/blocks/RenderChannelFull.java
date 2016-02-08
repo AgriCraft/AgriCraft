@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannelFull;
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RenderChannelFull extends RenderChannel {
 
     public RenderChannelFull() {
-        super(Blocks.blockWaterChannelFull, new TileEntityChannelFull());
+        super(AgriCraftBlocks.blockWaterChannelFull, new TileEntityChannelFull());
     }
 
     @Override

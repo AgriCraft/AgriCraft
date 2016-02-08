@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public abstract class DebugHelper {
     public static void debug(EntityPlayer player, World world, BlockPos pos) {
         for(String dataLine:getDebugData(world, pos)) {
             LogHelper.debug(dataLine);
-            //player.addChatComponentMessage(new ChatComponentText(dataLine));
+            player.addChatComponentMessage(new ChatComponentText(dataLine));
         }
     }
 

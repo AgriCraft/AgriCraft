@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.particles.LiquidSprayFX;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
+import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
@@ -23,6 +24,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable {
+	
+	public static final SafeIcon BASE_ICON = new SafeIcon("minecraft:blocks/oak_planks");
+	
     private int counter = 0;
     public float angle = 0.0F;
     private boolean isSprinkled = false;
@@ -127,8 +131,8 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getChannelIcon() {
-        if(this.getWorld() == null) {
-            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/oak_planks");
+        if(this.getWorld() == null || !(getWorld().getTileEntity(getPos().add(0, 1, 0)) instanceof TileEntityChannel)) {
+            return BASE_ICON.getIcon();
         }
         return ((TileEntityChannel) getWorld().getTileEntity(getPos().add(0, 1, 0))).getIcon();
     }

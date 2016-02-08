@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.items.*;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.item.Item;
 
-public class Items {
+public class AgriCraftItems {
     public static Item crops;
     public static Item journal;
     public static Item trowel;

@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockPeripheral;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.RenderUtil;
@@ -31,7 +31,7 @@ public class RenderPeripheral extends RenderBlockBase {
     private static final ModelBase probeModel = new ModelPeripheralProbe();
 
     public RenderPeripheral() {
-        super(Blocks.blockPeripheral, new TileEntityPeripheral(), true);
+        super(AgriCraftBlocks.blockPeripheral, new TileEntityPeripheral(), true);
     }
 
     @Override
@@ -187,7 +187,7 @@ public class RenderPeripheral extends RenderBlockBase {
         GL11.glDisable(GL11.GL_LIGHTING);
         tessellator.startDrawingQuads();
 
-        renderBase(tessellator, Minecraft.getMinecraft().theWorld, null, (BlockPeripheral) Blocks.blockPeripheral, null, null, RenderUtil.COLOR_MULTIPLIER_STANDARD);
+        renderBase(tessellator, Minecraft.getMinecraft().theWorld, null, (BlockPeripheral) AgriCraftBlocks.blockPeripheral, null, null, RenderUtil.COLOR_MULTIPLIER_STANDARD);
 
         tessellator.draw();
         GL11.glEnable(GL11.GL_LIGHTING);

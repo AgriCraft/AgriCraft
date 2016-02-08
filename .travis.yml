@@ -1,7 +1,10 @@
-# Tell Travis this is a Java project
+# Tell Travis this is a Java project.
 language: java
-jdk:
-  - oraclejdk8
+
+# Tell Travis this is a Java 8 project.
+matrix:
+  include:
+    - jdk: oraclejdk8
 
 # Tell Travis we want container-based builds.
 sudo: false
@@ -19,8 +22,9 @@ script:
   - ./gradlew build -S
 
 # Push success to CurseForge for release.
-after_success:
-  - ./gradlew curse -S
+# after_success:
+#  - ./gradlew curse -S
+# Removed for ForgeGradle 2
 
 # Clean up after Gradle
 env:

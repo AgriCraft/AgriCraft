@@ -5,6 +5,7 @@ import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -23,17 +25,21 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderValve extends RenderChannel {
+	
+	private static final SafeIcon SEPARATOR_ICON = new SafeIcon(Blocks.iron_block);
+	
     public RenderValve() {
-        super(com.InfinityRaider.AgriCraft.init.Blocks.blockChannelValve, new TileEntityValve());
+        super(com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockChannelValve, new TileEntityValve());
     }
 
     @Override
     protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
+		
         TextureAtlasSprite icon = teDummy.getIcon();
         int cm = teDummy.colorMultiplier();
         //render the iron valves
         float f = Constants.UNIT;
-        TextureAtlasSprite ironIcon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: get iron block icon
+		
         //disable lighting
         GL11.glDisable(GL11.GL_LIGHTING);
         //tell the tessellator to start drawing
@@ -45,10 +51,10 @@ public class RenderValve extends RenderChannel {
         drawScaledPrism(tessellator, 2, 4, 5, 14, 5, 11, icon, cm);
         
         //Render separators.
-        drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, ironIcon, cm);
-        drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, ironIcon, cm);
-        drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, ironIcon, cm);
-        drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.999f, 5.5f, 11, ironIcon, cm);
+        drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, SEPARATOR_ICON.getIcon(), cm);
+        drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, SEPARATOR_ICON.getIcon(), cm);
+        drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, SEPARATOR_ICON.getIcon(), cm);
+        drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.999f, 5.5f, 11, SEPARATOR_ICON.getIcon(), cm);
 
         //render the wooden guide rails along z-axis
         drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon, cm);
@@ -70,7 +76,9 @@ public class RenderValve extends RenderChannel {
      */
     @Override
     protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
-        TileEntityValve valve = (TileEntityValve) tile;
+		
+		TileEntityValve valve = (TileEntityValve) tile;
+		
         if (valve != null) {
             if (callFromTESR) {
                 if(valve.getDiscreteFluidLevel() > 0) {
@@ -90,20 +98,18 @@ public class RenderValve extends RenderChannel {
                     this.drawWater(valve, tessellator);
                 }
 
-                //render the iron valves
-                TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: get iron block icon
-                TextureAtlasSprite icon2 = valve.getIcon();
+                final TextureAtlasSprite icon2 = valve.getIcon();
                 int cm = valve.colorMultiplier();
                 
 				for (AgriForgeDirection dir : TileEntityChannel.VALID_DIRECTIONS) {
 					if (valve.hasNeighbourCheck(dir)) {
 						if (valve.isPowered()) {
 							//Draw closed separator.
-							drawScaledPrism(tessellator, 6, 5, 0, 10, 12, 2, icon, cm, dir);
+							drawScaledPrism(tessellator, 6, 5, 0, 10, 12, 2, SEPARATOR_ICON.getIcon(), cm, dir);
 						} else {
 							//Draw open separator.
-							drawScaledPrism(tessellator, 6, 1, 0, 10, 5.001F, 2, icon, cm, dir);
-							drawScaledPrism(tessellator, 6, 12, 0, 10, 15, 2, icon, cm, dir);
+							drawScaledPrism(tessellator, 6, 1, 0, 10, 5.001F, 2, SEPARATOR_ICON.getIcon(), cm, dir);
+							drawScaledPrism(tessellator, 6, 12, 0, 10, 15, 2, SEPARATOR_ICON.getIcon(), cm, dir);
 						}
 						//Draw rails.
 						drawScaledPrism(tessellator, 4, 0, 0, 6, 16, 2, icon2, cm, dir);
@@ -147,4 +153,5 @@ public class RenderValve extends RenderChannel {
 		}
 
 	}
+	
 }

@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
@@ -35,7 +35,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
     private TileEntitySeedAnalyzer seedAnalyzerDummy;
 
     public RenderSeedAnalyzer() {
-        super(Blocks.blockSeedAnalyzer, new TileEntitySeedAnalyzer(), true);
+        super(AgriCraftBlocks.blockSeedAnalyzer, new TileEntitySeedAnalyzer(), true);
         this.texture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/seedAnalyzer.png");
         this.bookTexture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/seedAnalyzerBook.png");
         this.modelSeedAnalyzer = new ModelSeedAnalyzer();
@@ -46,7 +46,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
 
     @Override
     protected void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
-        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, Blocks.blockSeedAnalyzer, null, seedAnalyzerDummy, 0, 0, null, false);
+        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, AgriCraftBlocks.blockSeedAnalyzer, null, seedAnalyzerDummy, 0, 0, null, false);
     }
 
     @Override

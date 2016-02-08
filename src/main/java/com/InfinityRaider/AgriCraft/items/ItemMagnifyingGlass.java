@@ -92,9 +92,4 @@ public class ItemMagnifyingGlass extends ItemBase {
         list.add(StatCollector.translateToLocal("agricraft_tooltip.magnifyingGlass"));
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public RenderItemBase getItemRenderer() {
-        return null;
-    }
 }

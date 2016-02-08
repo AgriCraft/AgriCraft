@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
@@ -28,7 +28,7 @@ public class RenderSprinkler extends RenderBlockBase {
     private final TileEntitySprinkler sprinklerDummy;
 
     public RenderSprinkler() {
-        super(Blocks.blockSprinkler, new TileEntitySprinkler(), true);
+        super(AgriCraftBlocks.blockSprinkler, new TileEntitySprinkler(), true);
         this.texture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/sprinkler.png");
         this.model = new ModelSprinkler();
         this.sprinklerDummy = new TileEntitySprinkler();
@@ -57,7 +57,7 @@ public class RenderSprinkler extends RenderBlockBase {
     @Override
     protected void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
         GL11.glTranslatef(0, -0.25F, 0);
-        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, Blocks.blockSprinkler, null, sprinklerDummy, 0, 0, null, true);
+        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, AgriCraftBlocks.blockSprinkler, null, sprinklerDummy, 0, 0, null, true);
         GL11.glTranslatef(0, 0.25F, 0);
     }
 

@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.renderers.items;
 
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.items.ItemClipping;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
@@ -21,7 +21,7 @@ public class RenderItemClipping extends RenderItemBase {
 
     public RenderItemClipping(Item item) {
         super(item);
-        this.mainIcon = ((ItemClipping) Items.clipping).getIcon(new ItemStack(item));
+        this.mainIcon = ((ItemClipping) AgriCraftItems.clipping).getIcon(new ItemStack(item));
     }
 
     @Override

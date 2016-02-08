@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -58,7 +58,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (world.getBlockState(pos).getBlock() == Blocks.blockCrop) {
+        if (world.getBlockState(pos).getBlock() == AgriCraftBlocks.blockCrop) {
             LogHelper.debug("Trying to plant seed " + stack.getItem().getUnlocalizedName() + " on crops");
             return true;
         }
@@ -95,4 +95,5 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
         name = index > 0 ? name.substring(index+1) : name;
         icon = iconRegistrar.registerIcon("agricraft:items/"+name);
     }
+	
 }

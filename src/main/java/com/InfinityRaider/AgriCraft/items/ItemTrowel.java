@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
+	
     public ItemTrowel() {
         super(Names.Objects.trowel);
         this.maxStackSize=1;
@@ -127,9 +128,4 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         return PlantStats.getStatsFromStack(getSeed(trowel));
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public RenderItemBase getItemRenderer() {
-        return null;
-    }
 }

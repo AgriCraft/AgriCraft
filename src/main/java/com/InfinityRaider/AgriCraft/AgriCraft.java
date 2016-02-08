@@ -8,8 +8,8 @@ import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.init.*;
-import com.InfinityRaider.AgriCraft.init.Blocks;
-import com.InfinityRaider.AgriCraft.init.Items;
+import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
+import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.proxy.IProxy;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -63,9 +63,9 @@ public class AgriCraft {
         NetworkWrapperAgriCraft.init();
         proxy.initConfiguration(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
-        Blocks.init();
-        Crops.init();
-        Items.init();
+        AgriCraftBlocks.init();
+        AgriCraftCrops.init();
+        AgriCraftItems.init();
         APISelector.init();
         CompatibilityHandler.getInstance().preInit();
         LogHelper.debug("Pre-Initialization Complete");
@@ -78,7 +78,7 @@ public class AgriCraft {
         proxy.registerEventHandlers();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         proxy.registerRenderers();
-        Entities.init();
+        AgriCraftEntities.init();
         CompatibilityHandler.getInstance().init();
         LogHelper.debug("Initialization Complete");
     }
@@ -90,7 +90,7 @@ public class AgriCraft {
         //Have to do this in postInit because some mods don't register their items/blocks until init
         ResourceCrops.init();
         CustomCrops.init();
-        Recipes.init();
+        AgriCraftRecipes.init();
         GrowthRequirementHandler.init();
         CropPlantHandler.init();
         CropProducts.init();
@@ -115,7 +115,7 @@ public class AgriCraft {
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void onMissingMappings(FMLMissingMappingsEvent event) {
-        ArrayList<String> removedIds = new ArrayList<String>();
+        ArrayList<String> removedIds = new ArrayList<>();
         removedIds.add("AgriCraft:cropMelon");
         removedIds.add("AgriCraft:cropPumpkin");
         removedIds.add("AgriCraft:sprinklerItem");

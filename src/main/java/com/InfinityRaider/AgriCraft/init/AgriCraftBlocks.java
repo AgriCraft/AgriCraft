@@ -7,7 +7,7 @@ import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.block.Block;
 
-public class Blocks {
+public class AgriCraftBlocks {
     public static Block blockCrop;
     public static Block blockSeedAnalyzer;
     public static Block blockWaterPad;
