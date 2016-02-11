@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import static com.InfinityRaider.AgriCraft.renderers.RenderUtil.*;
+
 @SideOnly(Side.CLIENT)
 public class RenderChannelFull extends RenderChannel {
 

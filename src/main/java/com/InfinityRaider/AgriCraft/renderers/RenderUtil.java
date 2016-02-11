@@ -107,13 +107,6 @@ public final class RenderUtil {
         //right
         drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, icon, maxX / 16.0F, colorMultiplier);
     }
-	
-	public static void drawScaledFace(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, float z, int colorMultiplier, TextureAtlasSprite icon, AgriForgeDirection dir) {
-		if(dir != AgriForgeDirection.UNKNOWN) {
-			applyColorMultiplier(tessellator, colorMultiplier, dir);
-			drawPlane(tessellator, minX, minY, z, maxX, maxY, z, icon);
-		}
-	}
 
     /** Draws the front side of a face parallel to the XY plane */
     public static void drawScaledFaceFrontXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, TextureAtlasSprite icon, float z, int colorMultiplier) {
@@ -227,20 +220,6 @@ public final class RenderUtil {
             case WEST: return 0.6F;
             default: return 1;
         }
-    }
-
-    /** Draws a plane and rotates it according to the given direction */
-    public static void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, AgriForgeDirection direction) {
-        float[] rot = rotatePlane(minX, minY, minZ, maxX, maxY, maxZ, direction);
-        drawPlane(tessellator, rot[0], rot[1], rot[2], rot[3], rot[4], rot[5], icon);
-    }
-
-    /** Helper method for the above method */
-    private static void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon) {
-        addScaledVertexWithUV(tessellator, maxX, minY, maxZ, maxX, maxZ, icon);
-        addScaledVertexWithUV(tessellator, maxX, maxY, minZ, maxX, minZ, icon);
-        addScaledVertexWithUV(tessellator, minX, maxY, minZ, minX, minZ, icon);
-        addScaledVertexWithUV(tessellator, minX, minY, maxZ, minX, maxZ, icon);
     }
 
     /**

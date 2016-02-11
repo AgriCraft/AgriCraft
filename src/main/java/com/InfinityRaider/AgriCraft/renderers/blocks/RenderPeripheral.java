@@ -26,6 +26,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
+import static com.InfinityRaider.AgriCraft.renderers.RenderUtil.*;
+
 public class RenderPeripheral extends RenderBlockBase {
     private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/peripheralProbe.png");
     private static final ModelBase probeModel = new ModelPeripheralProbe();
@@ -147,6 +149,7 @@ public class RenderPeripheral extends RenderBlockBase {
         TextureAtlasSprite iconBottom = blockPeripheral.getIcon(world, pos, state, EnumFacing.DOWN, peripheral);
         TextureAtlasSprite iconInside = blockPeripheral.getIcon(world, pos, state, null, peripheral);
         float unit = Constants.UNIT;
+		
         //top
         drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, iconTop, 1, colorMultiplier);
         drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, iconTop, 1, colorMultiplier);
@@ -179,6 +182,7 @@ public class RenderPeripheral extends RenderBlockBase {
         //inside back
         drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, iconInside, 12 * unit, colorMultiplier);
         drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, iconInside, 12 * unit, colorMultiplier);
+
     }
 
     @Override

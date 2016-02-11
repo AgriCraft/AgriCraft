@@ -17,6 +17,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
+import static com.InfinityRaider.AgriCraft.renderers.RenderUtil.*;
+
 public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
     public RenderBlockGrate() {
         super(AgriCraftBlocks.blockGrate, new TileEntityGrate(), true);
@@ -120,7 +122,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
 
     private void drawVines(TessellatorV2 tessellator, boolean front, float offset, int orientation, TextureAtlasSprite icon) {
         float pos = offset + (front?-0.001F:2* Constants.UNIT+0.001F);
-        if(orientation == 0) {
+		if(orientation == 0) {
             drawScaledFaceDoubleXY(tessellator, 0, 0, 16, 16, icon, pos);
         }
         else if(orientation == 1) {
