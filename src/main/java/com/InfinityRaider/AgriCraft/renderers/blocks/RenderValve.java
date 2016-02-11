@@ -58,13 +58,13 @@ public class RenderValve extends RenderChannel {
 
         //render the wooden guide rails along z-axis
         drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon, cm);
-        tessellator.addTranslation(0, 0, 6*f);
+        tessellator.translate(0, 0, 6*f);
         drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon, cm);
-        tessellator.addTranslation(14*f, 0, 0);
+        tessellator.translate(14*f, 0, 0);
         drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon, cm);
-        tessellator.addTranslation(0, 0, -6*f);
+        tessellator.translate(0, 0, -6*f);
         drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon, cm);
-        tessellator.addTranslation(-14*f, 0, 0);
+        tessellator.translate(-14*f, 0, 0);
 
         tessellator.draw();
         //enable lighting

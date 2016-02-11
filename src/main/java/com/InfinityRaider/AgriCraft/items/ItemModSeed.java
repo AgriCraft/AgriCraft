@@ -6,8 +6,11 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderableItemRenderer;
+import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSeeds;
@@ -20,8 +23,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
+	
     @SideOnly(Side.CLIENT)
-    private TextureAtlasSprite icon;
+    private final SafeIcon icon;
     @SideOnly(Side.CLIENT)
     private String information;
 
@@ -34,6 +38,12 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         //register seed
         RegisterHelper.registerSeed(this, plant);
+		this.icon = new SafeIcon(this);
+    }
+	
+	@SideOnly(Side.CLIENT)
+    public void registerItemRenderer() {
+        BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(this, RenderableItemRenderer.getInstance());
     }
 
     public BlockModPlant getPlant() {
@@ -82,8 +92,8 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
     }
 
     @Override
-    public TextureAtlasSprite getIcon(ItemStack stack) {
-        return icon;
+    public TextureAtlasSprite getIcon() {
+        return icon.getIcon();
     }
 
     @Override
@@ -93,7 +103,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
         name = index > 0 ? name.substring(index+1) : name;
         index = name.indexOf(".");
         name = index > 0 ? name.substring(index+1) : name;
-        icon = iconRegistrar.registerIcon("agricraft:items/"+name);
+        iconRegistrar.registerIcon("agricraft:items/"+name);
     }
 	
 }

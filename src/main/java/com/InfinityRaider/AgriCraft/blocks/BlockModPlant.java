@@ -306,6 +306,11 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
         return this.icons[growthStage%icons.length];
     }
 
+	@Override
+	public TextureAtlasSprite getIcon() {
+		return this.icons[0];
+	}
+
     @Override
     public void registerIcons(IIconRegistrar iconRegistrar) {
         icons = new TextureAtlasSprite[4];

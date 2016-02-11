@@ -9,27 +9,29 @@ import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class RenderItemClipping extends RenderItemBase {
-    private final TextureAtlasSprite mainIcon;
+public final class ClippingRenderer extends AbstractItemRenderer {
+	
+	private static final ClippingRenderer INSTANCE = new ClippingRenderer();
 
-    public RenderItemClipping(Item item) {
-        super(item);
-        this.mainIcon = ((ItemClipping) AgriCraftItems.clipping).getIcon(new ItemStack(item));
-    }
+	public static AbstractItemRenderer getInstance() {
+		return INSTANCE;
+	}
 
     @Override
-    protected void renderItemDefault(TessellatorV2 tessellator, ItemStack item) {
-        drawIcons(tessellator, item);
-    }
-
-    private void drawIcons(TessellatorV2 tessellator, ItemStack clipping) {
+    protected void renderItemDefault(TessellatorV2 tessellator, ItemStack clipping) {
+		
+		if (!(clipping.getItem() instanceof ItemClipping)) {
+			// ... Really?
+			return;
+		}
+		
+		TextureAtlasSprite mainIcon = ((ItemClipping) AgriCraftItems.clipping).getIcon();
 
         tessellator.startDrawingQuads();
 
@@ -71,7 +73,7 @@ public class RenderItemClipping extends RenderItemBase {
     protected void renderItemGround(TessellatorV2 tessellator, ItemStack stack) {
         GL11.glRotatef(180, 0, 1, 0);
         GL11.glTranslatef(-0.5F, 0, 0);
-        drawIcons(tessellator, stack);
+        renderItemDefault(tessellator, stack);
         GL11.glTranslatef(0.5F, 0, 0);
         GL11.glRotatef(-180, 0, 1, 0);
     }
@@ -81,7 +83,7 @@ public class RenderItemClipping extends RenderItemBase {
         float dx = 0F;
         float dz = 0.5F;
         GL11.glTranslatef(dx, 0, dz);
-        drawIcons(tessellator, stack);
+        renderItemDefault(tessellator, stack);
         GL11.glTranslatef(-dx, 0, -dz);
     }
 
@@ -97,51 +99,11 @@ public class RenderItemClipping extends RenderItemBase {
         GL11.glTranslatef(dx, dy, dz);
         GL11.glScalef(scale, scale, scale);
 
-        drawIcons(tessellator, stack);
+        renderItemDefault(tessellator, stack);
 
         GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
         GL11.glTranslatef(-dx, -dy, -dz);
         GL11.glRotatef(-a, 0, 1, 0);
-    }
-
-    @Override
-    protected void renderItemHead(TessellatorV2 tessellator, ItemStack item) {
-        drawIcons(tessellator, item);
-
-    }
-
-    @Override
-    protected void renderItemGui(TessellatorV2 tessellator, ItemStack stack) {
-        float unit = Constants.UNIT;
-
-        float dx = -13*unit;
-        float dy = -17*unit;
-        float dz = 1;
-
-        float a = 45;
-        float b = -45;
-
-        float scale = unit*25;
-
-        GL11.glRotatef(a, 0, 1, 0);
-        GL11.glRotatef(b, 1, 0, 0);
-        GL11.glTranslatef(dx, dy, dz);
-        GL11.glScalef(scale, scale, scale);
-
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        drawIcons(tessellator, stack);
-        GL11.glEnable(GL11.GL_LIGHTING);
-
-        GL11.glScalef(1/scale, 1/scale, 1/scale);
-        GL11.glTranslatef(-dx, -dy, -dz);
-        GL11.glRotatef(-b, 1, 0, 0);
-        GL11.glRotatef(-a, 0, 1, 0);
-    }
-
-    @Override
-    protected void renderItemFixed(TessellatorV2 tessellator, ItemStack stack) {
-
     }
 
     private TextureAtlasSprite getPlantIcon(ItemStack stack) {
@@ -155,9 +117,5 @@ public class RenderItemClipping extends RenderItemBase {
         }
         return plant.getPrimaryPlantTexture(7);
     }
-
-    @Override
-    public boolean shouldRender3D(ItemStack stack) {
-        return true;
-    }
+	
 }

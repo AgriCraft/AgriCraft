@@ -3,7 +3,6 @@ package com.InfinityRaider.AgriCraft.blocks;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
-import com.InfinityRaider.AgriCraft.api.v1.IconRegisterable;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -15,11 +14,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftRenderable;
 
 /**
  * The base class for all AgriCraft blocks.
  */
-public abstract class BlockBase extends Block implements IconRegisterable {
+public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 
 	public static final int DEFAULT_RENDER_TYPE = 2;
 	public static final EnumWorldBlockLayer DEFAULT_BLOCK_LAYER = EnumWorldBlockLayer.CUTOUT;

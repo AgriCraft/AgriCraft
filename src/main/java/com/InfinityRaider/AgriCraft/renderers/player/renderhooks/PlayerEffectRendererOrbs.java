@@ -44,7 +44,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
 
         //move origin to wanted height
         float dy = player.getEyeHeight()-(player!=Minecraft.getMinecraft().thePlayer?1.62F:0F)-0.25F;
-        tessellator.addTranslation(0, -dy, 0);
+        tessellator.translate(0, -dy, 0);
 
         //set some GL settings
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -92,7 +92,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        tessellator.addTranslation(0, dy, 0);
+        tessellator.translate(0, dy, 0);
     }
 
     private void renderOrb(TessellatorV2 tessellator, float x, float y, float z, int index) {

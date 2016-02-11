@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -187,7 +188,7 @@ public abstract class PlantRenderer {
         float f1 = (float)(l >> 8 & 255) / 255.0F;
         float f2 = (float)(l & 255) / 255.0F;
         tessellator.setColorOpaque_F(f, f1, f2);
-        tessellator.addTranslation(0, -Constants.UNIT*2*translation, 0);
+        tessellator.translate(0, -Constants.UNIT*2*translation, 0);
         if(growhtStage >= Constants.MATURE) {
             //render the vines
             renderStemPattern(tessellator, vineIcon);
@@ -203,7 +204,7 @@ public abstract class PlantRenderer {
             //render the vines
             renderCrossPattern(tessellator, vineIcon, 0);
         }
-        tessellator.addTranslation(0, Constants.UNIT*2*translation, 0);
+        tessellator.translate(0, Constants.UNIT*2*translation, 0);
     }
 
     public static void renderStemPattern(TessellatorV2 tessellator, TextureAtlasSprite icon) {

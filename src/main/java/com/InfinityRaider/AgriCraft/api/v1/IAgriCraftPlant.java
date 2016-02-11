@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /** should be implemented in Block class */
-public interface IAgriCraftPlant extends IGrowable, IPlantable, IconRegisterable {
+public interface IAgriCraftPlant extends IGrowable, IPlantable, IAgriCraftRenderable {
     /** Returns the GowthRequirement for this plant */
     IGrowthRequirement getGrowthRequirement();
 

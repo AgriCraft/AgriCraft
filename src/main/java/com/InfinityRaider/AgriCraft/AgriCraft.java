@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.ArrayList;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * <p>
@@ -97,6 +98,10 @@ public class AgriCraft {
         WorldGen.init();
         CustomCrops.initGrassSeeds();
         CompatibilityHandler.getInstance().postInit();
+		if (event.getSide() == Side.CLIENT) {
+			ResourceCrops.registerRenderers();
+			CustomCrops.registerRenderers();
+		}
         LogHelper.debug("Post-Initialization Complete");
     }
 

@@ -1,6 +1,8 @@
 package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.utility.TransformationMatrix;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -17,12 +19,30 @@ import java.util.Map;
  */
 @SideOnly(Side.CLIENT)
 public class TessellatorV2 {
+	
     private static final Map<WorldRenderer, TessellatorV2> instances = new HashMap<>();
+	
     private final Tessellator tessellator ;
     private final WorldRenderer worldRenderer;
-
-    /** Transformation matrix */
-    private TransformationMatrix matrix = new TransformationMatrix();
+	
+	private Deque<TransformationMatrix> matrixes;
+	
+	private TessellatorV2(Tessellator tessellator) {
+        this.worldRenderer = tessellator.getWorldRenderer();
+        this.tessellator = tessellator;
+		this.matrixes = new ArrayDeque<>();
+		this.matrixes.add(new TransformationMatrix());
+		// Leaking...
+        instances.put(worldRenderer, this);
+    }
+	
+	private TessellatorV2(WorldRenderer worldRenderer) {
+        this.worldRenderer = worldRenderer;
+        this.tessellator = null;
+		this.matrixes = new ArrayDeque<>();
+		this.matrixes.add(new TransformationMatrix());
+        instances.put(worldRenderer, this);
+    }
 
     public static TessellatorV2 getInstance() {
         return getInstance(Tessellator.getInstance());
@@ -34,18 +54,6 @@ public class TessellatorV2 {
 
     public static TessellatorV2 getInstance(Tessellator tessellator) {
         return instances.containsKey(tessellator.getWorldRenderer()) ? instances.get(tessellator.getWorldRenderer()) : new TessellatorV2(tessellator);
-    }
-
-    private TessellatorV2(WorldRenderer worldRenderer) {
-        this.worldRenderer = worldRenderer;
-        this.tessellator = null;
-        instances.put(worldRenderer, this);
-    }
-
-    private TessellatorV2(Tessellator tessellator) {
-        this.worldRenderer = tessellator.getWorldRenderer();
-        this.tessellator = tessellator;
-        instances.put(worldRenderer, this);
     }
 
     /** Color values */
@@ -77,7 +85,7 @@ public class TessellatorV2 {
      * Adds a vertex specifying both x,y,z and the texture u,v for it.
      */
     public void addVertexWithUV(double x, double y, double z, float u, float v) {
-        double[] coords = this.matrix.transform(x, y, z);
+        double[] coords = this.matrixes.getFirst().transform(x, y, z);
         worldRenderer.pos(coords[0], coords[1], coords[2]);
         worldRenderer.color(red, green, blue, alpha);
         worldRenderer.tex(u, v);
@@ -89,42 +97,42 @@ public class TessellatorV2 {
      * Sets the translation relative to the absolute coordinates
      */
     public void setTranslation(double x, double y, double z) {
-        this.matrix.setTranslation(x, y, z);
+        this.matrixes.getFirst().setTranslation(x, y, z);
     }
 
     /**
      * Adds a translation to the current coordinate system
      */
-    public void addTranslation(double x, double y, double z) {
-        this.matrix.multiplyRightWith(new TransformationMatrix(x, y, z));
+    public void translate(double x, double y, double z) {
+        this.matrixes.getFirst().multiplyRightWith(new TransformationMatrix(x, y, z));
     }
 
     /**
      *  Sets the rotation relative to the absolute coordinates
      */
     public void setRotation(double angle, double x, double y, double z) {
-        this.matrix.setRotation(angle, x, y, z);
+        this.matrixes.getFirst().setRotation(angle, x, y, z);
     }
 
     /**
      *  Rotates around the current coordinate system
      */
     public void addRotation(double angle, double x, double y, double z) {
-        this.matrix.multiplyRightWith(new TransformationMatrix(angle, x, y, z));
+        this.matrixes.getFirst().multiplyRightWith(new TransformationMatrix(angle, x, y, z));
     }
 
     public void scale(double x, double y, double z) {
-        this.matrix.scale(x, y, z);
+        this.matrixes.getFirst().scale(x, y, z);
     }
 
     /** Applies a coordinate transformation */
     @SuppressWarnings("unused")
     public void applyTranformation(TransformationMatrix transformationMatrix) {
-        this.matrix.multiplyRightWith(transformationMatrix);
+        this.matrixes.getFirst().multiplyRightWith(transformationMatrix);
     }
 
     public TransformationMatrix getTransformationMatrix() {
-        return this.matrix;
+        return this.matrixes.getFirst();
     }
 
     public void setBrightness(int value) {
@@ -162,4 +170,17 @@ public class TessellatorV2 {
     public void setColorRGBA_I(int red, int green, int blue, int alpha) {
         this.setColorRGBA_F(((float) red)/255.0F, ((float) green)/255.0F, ((float) blue)/255.0F, ((float) alpha)/255.0F);
     }
+	
+	/**
+	 * Push & Pop are better, because then you don't accrue roundoff errors.
+	 */
+	public void pushMatrix() {
+		this.matrixes.push(new TransformationMatrix(this.matrixes.getFirst()));
+	}
+	
+	public void popMatrix() {
+		if (this.matrixes.size() > 1) {
+			this.matrixes.pop();
+		}
+	}
 }

@@ -64,7 +64,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
             GL11.glPushMatrix();
             GL11.glTranslated(x, y, z);
         } else {
-            tessellator.addTranslation((float) x, (float) y, (float) z);
+            tessellator.translate((float) x, (float) y, (float) z);
         }
         tessellator.setRotation(0, 0, 0, 0);
         if (tile != null && tile instanceof TileEntityBase) {
@@ -92,7 +92,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
             GL11.glTranslated(-x, -y, -z);
             GL11.glPopMatrix();
         } else {
-            tessellator.addTranslation((float) -x, (float) -y, (float) -z);
+            tessellator.translate((float) -x, (float) -y, (float) -z);
         }
         return result;
     }
@@ -130,9 +130,9 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
     private void renderInInventory(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
         TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
 		tessellator.scale(0.5, 0.5, 0.5);
-		tessellator.addTranslation(-1, -.9, 0);
+		tessellator.translate(-1, -.9, 0);
         doInventoryRender(tessellator, block, stack, transformType);
-		tessellator.addTranslation(1, .9, 0);
+		tessellator.translate(1, .9, 0);
 		tessellator.scale(2, 2, 2);
     }
 
@@ -177,11 +177,11 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         float dx = angle % 270 == 0 ? 0 : -1;
         float dz = angle > 90 ? -1 : 0;
         if (inverse) {
-            tessellator.addTranslation(-dx, 0, -dz);
+            tessellator.translate(-dx, 0, -dz);
             tessellator.addRotation(-angle, 0, 1, 0);
         } else {
             tessellator.addRotation(angle, 0, 1, 0);
-            tessellator.addTranslation(dx, 0, dz);
+            tessellator.translate(dx, 0, dz);
         }
     }
     
