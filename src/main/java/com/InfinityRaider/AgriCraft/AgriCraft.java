@@ -78,7 +78,6 @@ public class AgriCraft {
         LogHelper.debug("Starting Initialization");
         proxy.registerEventHandlers();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-        proxy.registerRenderers();
         AgriCraftEntities.init();
         CompatibilityHandler.getInstance().init();
         LogHelper.debug("Initialization Complete");
@@ -98,10 +97,7 @@ public class AgriCraft {
         WorldGen.init();
         CustomCrops.initGrassSeeds();
         CompatibilityHandler.getInstance().postInit();
-		if (event.getSide() == Side.CLIENT) {
-			ResourceCrops.registerRenderers();
-			CustomCrops.registerRenderers();
-		}
+		proxy.registerRenderers();
         LogHelper.debug("Post-Initialization Complete");
     }
 

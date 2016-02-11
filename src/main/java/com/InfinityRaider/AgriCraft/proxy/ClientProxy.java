@@ -100,6 +100,51 @@ public class ClientProxy extends CommonProxy {
 				LogHelper.printStackTrace(e);
 			}
 		}
+		
+		/*
+		This method is getting too big... I'm still in favor of having a
+		registerRenderers function in each class...
+		*/
+		
+		// Custom Crops
+		if (CustomCrops.customSeeds != null) {
+			LogHelper.debug("Starting custom crop renderer registration...");
+			for (ItemModSeed seed : CustomCrops.customSeeds) {
+				try {
+					seed.registerItemRenderer();
+					LogHelper.debug("Registered Renderer for: " + seed.getRegistryName());
+				} catch (Exception e) {
+					LogHelper.printStackTrace(e);
+				}
+			}
+			LogHelper.debug("Registered custom crop renderers!");
+		}
+		
+		// Resource Crops
+		if (ResourceCrops.vanillaSeeds != null) {
+			LogHelper.debug("Starting vanillia crop renderer registration...");
+			for (ItemModSeed seed : ResourceCrops.vanillaSeeds) {
+				try {
+					seed.registerItemRenderer();
+					LogHelper.info("Registered Renderer for: " + seed.getRegistryName());
+				} catch (Exception e) {
+					LogHelper.printStackTrace(e);
+				}
+			}
+			LogHelper.debug("Registered vanillia crop renderers!");
+		}
+		if (ResourceCrops.modSeeds != null) {
+			LogHelper.debug("Starting resource crop renderer registration...");
+			for (ItemModSeed seed : ResourceCrops.modSeeds) {
+				try {
+					seed.registerItemRenderer();
+					LogHelper.info("Registered Renderer for: " + seed.getRegistryName());
+				} catch (Exception e) {
+					LogHelper.printStackTrace(e);
+				}
+			}
+			LogHelper.debug("Registered resource crop renderers!");
+		}
 
         //villager
         if (!ConfigurationHandler.disableWorldGen && ConfigurationHandler.villagerEnabled) {

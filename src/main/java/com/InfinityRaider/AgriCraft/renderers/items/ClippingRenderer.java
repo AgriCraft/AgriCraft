@@ -1,10 +1,12 @@
 package com.InfinityRaider.AgriCraft.renderers.items;
 
+import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftRenderable;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.items.ItemClipping;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.renderers.RenderUtil;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -34,35 +36,19 @@ public final class ClippingRenderer extends AbstractItemRenderer {
 		TextureAtlasSprite mainIcon = ((ItemClipping) AgriCraftItems.clipping).getIcon();
 
         tessellator.startDrawingQuads();
-
-        tessellator.addVertexWithUV(0, 0, 0, mainIcon.getMinU(), mainIcon.getMaxV());
-        tessellator.addVertexWithUV(1, 0, 0, mainIcon.getMaxU(), mainIcon.getMaxV());
-        tessellator.addVertexWithUV(1, 1, 0, mainIcon.getMaxU(), mainIcon.getMinV());
-        tessellator.addVertexWithUV(0, 1, 0, mainIcon.getMinU(), mainIcon.getMinV());
-
-        tessellator.addVertexWithUV(0, 0, 0, mainIcon.getMinU(), mainIcon.getMaxV());
-        tessellator.addVertexWithUV(0, 1, 0, mainIcon.getMinU(), mainIcon.getMinV());
-        tessellator.addVertexWithUV(1, 1, 0, mainIcon.getMaxU(), mainIcon.getMinV());
-        tessellator.addVertexWithUV(1, 0, 0, mainIcon.getMaxU(), mainIcon.getMaxV());
+		
+		RenderUtil.drawScaledPrism(tessellator, 0, 0, 0, 0, 16, 16, mainIcon);
 
         tessellator.draw();
 
         TextureAtlasSprite plantIcon = getPlantIcon(clipping);
         if(plantIcon != null) {
-            float unit = Constants.UNIT;
+			
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
             tessellator.startDrawingQuads();
 
-            tessellator.addVertexWithUV(4*unit, 4*unit, 0.001F, plantIcon.getMinU(), plantIcon.getMaxV());
-            tessellator.addVertexWithUV(12*unit, 4*unit, 0.001F, plantIcon.getMaxU(), plantIcon.getMaxV());
-            tessellator.addVertexWithUV(12*unit, 12*unit, 0.001F, plantIcon.getMaxU(), plantIcon.getMinV());
-            tessellator.addVertexWithUV(4*unit, 12*unit, 0.001F, plantIcon.getMinU(), plantIcon.getMinV());
-
-            tessellator.addVertexWithUV(4*unit, 4*unit, -0.001F, plantIcon.getMinU(), plantIcon.getMaxV());
-            tessellator.addVertexWithUV(4*unit, 12*unit, -0.001F, plantIcon.getMinU(), plantIcon.getMinV());
-            tessellator.addVertexWithUV(12*unit, 12*unit, -0.001F, plantIcon.getMaxU(), plantIcon.getMinV());
-            tessellator.addVertexWithUV(12*unit, 4*unit, -0.001F, plantIcon.getMaxU(), plantIcon.getMaxV());
+			RenderUtil.drawScaledPrism(tessellator, 0, 4, 4, 0, 12, 12, plantIcon);
 
             tessellator.draw();
 

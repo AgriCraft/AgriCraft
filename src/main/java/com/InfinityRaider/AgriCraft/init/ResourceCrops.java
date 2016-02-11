@@ -14,8 +14,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ResourceCrops {
 	//Resource crops
@@ -80,34 +78,6 @@ public class ResourceCrops {
 					LogHelper.printStackTrace(e);
 				}
 			}
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static void registerRenderers() {
-		if (modSeeds != null) {
-			LogHelper.debug("Starting vanillia crop renderer registration...");
-			for (ItemModSeed seed : vanillaSeeds) {
-				try {
-					seed.registerItemRenderer();
-					LogHelper.info("Registered Renderer for: " + seed.getRegistryName());
-				} catch (Exception e) {
-					LogHelper.printStackTrace(e);
-				}
-			}
-			LogHelper.debug("Registered vanillia crop renderers!");
-		}
-		if (modSeeds != null) {
-			LogHelper.debug("Starting resource crop renderer registration...");
-			for (ItemModSeed seed : modSeeds) {
-				try {
-					seed.registerItemRenderer();
-					LogHelper.info("Registered Renderer for: " + seed.getRegistryName());
-				} catch (Exception e) {
-					LogHelper.printStackTrace(e);
-				}
-			}
-			LogHelper.debug("Registered resource crop renderers!");
 		}
 	}
 

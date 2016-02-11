@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.renderers;
 
 import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -15,7 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
-    private static final RenderUtil renderUtil = RenderUtil.getInstance();
 
     public static void renderPlant(WorldRenderer renderer, IBlockAccess world, BlockPos pos, IBlockState state, int growthStage, ICropPlant plant) {
         TextureAtlasSprite iconA = plant.getPrimaryPlantTexture(growthStage);
@@ -253,10 +251,10 @@ public abstract class PlantRenderer {
     }
 
     public static void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v, TextureAtlasSprite icon) {
-        renderUtil.addScaledVertexWithUV(tessellator, x, y, z, u, v, icon);
+        RenderUtil.addScaledVertexWithUV(tessellator, x, y, z, u, v, icon);
     }
 
     public static void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon) {
-        renderUtil.drawScaledPrism(tessellator, minX, minY, minZ, maxX, maxY, maxZ, icon);
+        RenderUtil.drawScaledPrism(tessellator, minX, minY, minZ, maxX, maxY, maxZ, icon);
     }
 }
