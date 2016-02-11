@@ -79,9 +79,9 @@ public class RenderSprinkler extends RenderBlockBase {
             //bind the texture
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
             tessellator.startDrawingQuads();
-            tessellator.addTranslation(0, 4 * Constants.UNIT, 0);
+            tessellator.translate(0, 4 * Constants.UNIT, 0);
             drawScaledPrism(tessellator, 4, 8, 4, 12, 16, 12, sprinkler.getChannelIcon(), net.minecraft.init.Blocks.planks.colorMultiplier(sprinkler.getWorld(), sprinkler.getPos()));
-            tessellator.addTranslation(0, -4 * Constants.UNIT, 0);
+            tessellator.translate(0, -4 * Constants.UNIT, 0);
             tessellator.draw();
             //don't forget to enable lighting again
             GL11.glEnable(GL11.GL_LIGHTING);

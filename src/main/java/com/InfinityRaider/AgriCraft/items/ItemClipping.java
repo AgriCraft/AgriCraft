@@ -6,6 +6,8 @@ import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.renderers.items.ClippingRenderer;
+import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +25,11 @@ public class ItemClipping extends ItemBase {
         super(Names.Objects.clipping);
         this.setCreativeTab(null);
     }
+
+	@Override
+	public void registerItemRenderer() {
+		BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(this, ClippingRenderer.getInstance());
+	}
 
     @Override
     public boolean canItemEditBlocks() {return true;}

@@ -6,7 +6,7 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
-import com.InfinityRaider.AgriCraft.renderers.items.AgriCraftRenderableItemRenderer;
+import com.InfinityRaider.AgriCraft.renderers.items.RenderableItemRenderer;
 import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
@@ -43,7 +43,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	
 	@SideOnly(Side.CLIENT)
     public void registerItemRenderer() {
-        BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(this, AgriCraftRenderableItemRenderer.DEFAULT_RENDERER);
+        BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(this, RenderableItemRenderer.getInstance());
     }
 
     public BlockModPlant getPlant() {

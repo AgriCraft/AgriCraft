@@ -83,12 +83,12 @@ public class RenderWaterPad extends RenderBlockBase {
             float f4 = 1.0F;
             tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
             tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
-            tessellator.addTranslation(pos.getX(), pos.getY(), pos.getZ());
+            tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
             addScaledVertexWithUV(tessellator, 0, 14, 0, 0, 0, waterIcon);
             addScaledVertexWithUV(tessellator, 0, 14, 1, 0, 1, waterIcon);
             addScaledVertexWithUV(tessellator, 1, 14, 1, 1, 1, waterIcon);
             addScaledVertexWithUV(tessellator, 1, 14, 0, 1, 0, waterIcon);
-            tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
+            tessellator.translate(-pos.getX(), -pos.getY(), -pos.getZ());
         }
 
         if (shouldRenderCorner(world, pos, full, AgriForgeDirection.NORTH, AgriForgeDirection.EAST)) {
@@ -102,12 +102,12 @@ public class RenderWaterPad extends RenderBlockBase {
             float f4 = 1.0F;
             tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
             tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
-            tessellator.addTranslation(pos.getX(), pos.getY(), pos.getZ());
+            tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
             addScaledVertexWithUV(tessellator, 15, 14, 0, 15, 0, waterIcon);
             addScaledVertexWithUV(tessellator, 15, 14, 1, 15, 1, waterIcon);
             addScaledVertexWithUV(tessellator, 16, 14, 1, 16, 1, waterIcon);
             addScaledVertexWithUV(tessellator, 16, 14, 0, 16, 0, waterIcon);
-            tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
+            tessellator.translate(-pos.getX(), -pos.getY(), -pos.getZ());
         }
 
         if (shouldRenderCorner(world, pos, full, AgriForgeDirection.EAST, AgriForgeDirection.SOUTH)) {
@@ -121,12 +121,12 @@ public class RenderWaterPad extends RenderBlockBase {
             float f4 = 1.0F;
             tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
             tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
-            tessellator.addTranslation(pos.getX(), pos.getY(), pos.getZ());
+            tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
             addScaledVertexWithUV(tessellator, 15, 14, 15, 15, 15, waterIcon);
             addScaledVertexWithUV(tessellator, 15, 14, 16, 15, 16, waterIcon);
             addScaledVertexWithUV(tessellator, 16, 14, 16, 16, 16, waterIcon);
             addScaledVertexWithUV(tessellator, 16, 14, 15, 16, 15, waterIcon);
-            tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
+            tessellator.translate(-pos.getX(), -pos.getY(), -pos.getZ());
         }
 
         if (shouldRenderCorner(world, pos, full, AgriForgeDirection.SOUTH, AgriForgeDirection.WEST)) {
@@ -140,12 +140,12 @@ public class RenderWaterPad extends RenderBlockBase {
             float f4 = 1.0F;
             tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
             tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
-            tessellator.addTranslation(pos.getX(), pos.getY(), pos.getZ());
+            tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
             addScaledVertexWithUV(tessellator, 0, 14, 15, 0, 15, waterIcon);
             addScaledVertexWithUV(tessellator, 0, 14, 16, 0, 16, waterIcon);
             addScaledVertexWithUV(tessellator, 1, 14, 16, 1, 16, waterIcon);
             addScaledVertexWithUV(tessellator, 1, 14, 15, 1, 15, waterIcon);
-            tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
+            tessellator.translate(-pos.getX(), -pos.getY(), -pos.getZ());
         }
 
         //renderer.renderAllFaces = renderAllFaces;
@@ -158,12 +158,12 @@ public class RenderWaterPad extends RenderBlockBase {
             float f4 = 1.0F;
             tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
             tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
-            tessellator.addTranslation(pos.getX(), pos.getY(), pos.getZ());
+            tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
             addScaledVertexWithUV(tessellator, 1, 14, 1, 1, 1, waterIcon);
             addScaledVertexWithUV(tessellator, 1, 14, 15, 1, 15, waterIcon);
             addScaledVertexWithUV(tessellator, 15, 14, 15, 15, 15, waterIcon);
             addScaledVertexWithUV(tessellator, 15, 14, 1, 15, 1, waterIcon);
-            tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
+            tessellator.translate(-pos.getX(), -pos.getY(), -pos.getZ());
         }
     }
 
@@ -204,12 +204,12 @@ public class RenderWaterPad extends RenderBlockBase {
                 float f4 = 1.0F;
                 tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
                 tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
-                tessellator.addTranslation(pos.getX(), pos.getY(), pos.getZ());
+                tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
                 addScaledVertexWithUV(tessellator, xLower, 14, zLower, xLower, zLower, icon);
                 addScaledVertexWithUV(tessellator, xLower, 14, zUpper, xLower, zUpper, icon);
                 addScaledVertexWithUV(tessellator, xUpper, 14, zUpper, xUpper, zUpper, icon);
                 addScaledVertexWithUV(tessellator, xUpper, 14, zLower, xUpper, zLower, icon);
-                tessellator.addTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
+                tessellator.translate(-pos.getX(), -pos.getY(), -pos.getZ());
             }
             if (flag == full) {
                 return;

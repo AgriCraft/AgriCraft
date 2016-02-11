@@ -29,12 +29,12 @@ public class RenderCrop extends RenderBlockBase {
         if (tile instanceof TileEntityCrop) {
             BlockCrop blockCrop = (BlockCrop) block;
             TileEntityCrop crop = (TileEntityCrop) tile;
-            tessellator.addTranslation(0, -3* Constants.UNIT, 0);
+            tessellator.translate(0, -3* Constants.UNIT, 0);
             drawScaledPrism(tessellator, 2, 0, 2, 3, 16, 3, blockCrop.getIcon());
             drawScaledPrism(tessellator, 13, 0, 2, 14, 16, 3, blockCrop.getIcon());
             drawScaledPrism(tessellator, 13, 0, 13, 14, 16, 14, blockCrop.getIcon());
             drawScaledPrism(tessellator, 2, 0, 13, 3, 16, 14, blockCrop.getIcon());
-            tessellator.addTranslation(0, 3* Constants.UNIT, 0);
+            tessellator.translate(0, 3* Constants.UNIT, 0);
             if (crop.isCrossCrop()) {
                 drawScaledPrism(tessellator, 0, 10, 2, 16, 11, 3, blockCrop.getIcon());
                 drawScaledPrism(tessellator, 0, 10, 13, 16, 11, 14, blockCrop.getIcon());
