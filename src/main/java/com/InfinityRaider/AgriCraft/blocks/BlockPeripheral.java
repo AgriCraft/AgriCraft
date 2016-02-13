@@ -1,9 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
-import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.network.MessagePeripheralCheckNeighbours;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Names;
@@ -11,7 +9,6 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -19,9 +16,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -34,8 +29,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockTileBase {
@@ -109,23 +102,6 @@ public class BlockPeripheral extends BlockTileBase {
 			}
 			this.breakBlock(world, pos, state);
 		}
-	}
-
-	//get a list with items dropped by the the crop
-	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ArrayList<ItemStack> items = new ArrayList<>();
-		items.add(new ItemStack(Item.getItemFromBlock(AgriCraftBlocks.blockSeedAnalyzer), 1, 0));
-		if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntitySeedAnalyzer) {
-			TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(pos);
-			if (analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId) != null) {
-				items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId));
-			}
-			if (analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId) != null) {
-				items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId));
-			}
-		}
-		return items;
 	}
 
 	//open the gui when the block is activated
