@@ -2,9 +2,12 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftSeed;
 import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
+import com.InfinityRaider.AgriCraft.handler.config.MutationConfig;
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.renderers.items.RenderableItemRenderer;
 import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
@@ -13,6 +16,7 @@ import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -21,6 +25,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	
@@ -44,6 +51,18 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	@SideOnly(Side.CLIENT)
     public void registerItemRenderer() {
         BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(this, RenderableItemRenderer.getInstance());
+    }
+
+    @Override
+    public List<IMutation> getMutations() {
+        List<IMutation> list = new ArrayList<>();
+        list.add(new Mutation(new ItemStack(this), new ItemStack(Items.pumpkin_seeds), new ItemStack(Items.wheat_seeds)));
+        IMutation mutation = MutationConfig.getInstance().getDefaultMutation(new ItemStack(this));
+        if(mutation != null) {
+            mutation.setChance(((double) tier())/100.0D);
+            list.add(mutation);
+        }
+        return list;
     }
 
     public BlockModPlant getPlant() {

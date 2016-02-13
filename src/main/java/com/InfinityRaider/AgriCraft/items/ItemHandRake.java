@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.api.v1.ICrop;
 import com.InfinityRaider.AgriCraft.api.v1.IRake;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.WeightedRandom;

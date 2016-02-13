@@ -1,11 +1,9 @@
 package com.InfinityRaider.AgriCraft.utility;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
@@ -210,79 +208,6 @@ public abstract class IOHelper {
                 LogHelper.debug("Error when adding seed to vanilla overrides: " + errorMsg + " (line: " + line + ")");
             }
         }
-    }
-
-    //get the mutations file contents
-	//This should probably be a loop...
-    public static String getDefaultMutations() {
-        String data = mutationInstructions;                                     //mutationInstructions
-        data = data + '\n' + minecraftMutations;                                 //minecraft mutations
-        if(ConfigurationHandler.resourcePlants) {
-            data = data + '\n' + agricraftMutations;                             //agricraft mutations
-            if(OreDictHelper.getOreBlockForName("Copper")!=null) {
-                data = data + '\n' + copperMutation;
-            }
-            if(OreDictHelper.getOreBlockForName("Tin")!=null) {
-                data = data + '\n' + tinMutation;
-            }
-            if(OreDictHelper.getOreBlockForName("Lead")!=null) {
-                data = data + '\n' + leadMutation;
-            }
-            if(OreDictHelper.getOreBlockForName("Silver")!=null) {
-                data = data + '\n' + silverMutation;
-            }
-            if(OreDictHelper.getOreBlockForName("Aluminum")!=null) {
-                data = data + '\n' + aluminumMutation;
-            }
-            if(OreDictHelper.getOreBlockForName("Nickel")!=null) {
-                data = data + '\n' + nickelMutation;
-            }
-            if(OreDictHelper.getOreBlockForName("Platinum")!=null) {
-                data = data + '\n' + platinumMutation;
-            }
-            if(OreDictHelper.getOreBlockForName("Osmium")!=null) {
-                data = data + '\n' + osmiumMutation;
-            }
-        }
-        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.botania)) {
-            data = data + '\n' + botaniaMutations;
-        }
-        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.harvestcraft) && CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.natura)) {
-            data = data + '\n' + harvestcraftMutations + '\n' + barleyNaturaMutations;      //harvestcraft with natura barley
-        } else {
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.harvestcraft)) {
-                data = data + '\n' + harvestcraftMutations + '\n' + barleyHarvestCraftMutations;
-            }
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.natura)) {
-                data = data + '\n' + naturaMutations;
-            }
-        }
-        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.weeeFlowers)) {
-            data = data +'\n' + weeeFlowersMutations;
-        }
-        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.plantMegaPack)) {
-            data = data + '\n' + plantMegaPackMutations;
-        }
-        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.chococraft)) {
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.harvestcraft)) {
-                data = data + '\n' + chococraft_harvestcraftMutations;
-            } else {
-                data = data + '\n' + chococraftMutations;
-            }
-        }
-        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.psychedelicraft)) {
-            data = data + '\n' + psychedelicraftMutations;
-        }
-        if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.thaumcraft) && CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.arsMagica)) {
-            data = data + '\n' + thaumcraft_ArsMagicaMutations;
-        } else {
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.thaumcraft)) {
-                data = data + '\n' + thaumcraftMutations;
-            } else if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.arsMagica)) {
-                data = data + '\n' + arsMagicaMutations;
-            }
-        }
-        return data;
     }
 
     //get the custom crop file contents
@@ -568,34 +493,6 @@ public abstract class IOHelper {
             "AgriCraft:seedBotaniaGray=AgriCraft:seedBotaniaBlack+AgriCraft:seedBotaniaWhite\n" +
             "AgriCraft:seedBotaniaLightGray=AgriCraft:seedBotaniaGray+AgriCraft:seedBotaniaWhite\n" +
             "AgriCraft:seedBotaniaBrown=AgriCraft:seedBotaniaPurple+AgriCraft:seedBotaniaGreen";
-
-    private static final String minecraftMutations =
-            "AgriCraft:seedSugarcane=minecraft:wheat_seeds+AgriCraft:seedCarrot\n" +
-            "AgriCraft:seedCactus=AgriCraft:seedSugarcane+AgriCraft:seedPoppy\n" +
-            "minecraft:pumpkin_seeds=AgriCraft:seedPotato+AgriCraft:seedCarrot\n" +
-            "minecraft:melon_seeds=AgriCraft:seedCarrot+minecraft:pumpkin_seeds\n" +
-            "AgriCraft:seedPoppy=AgriCraft:seedSugarcane+minecraft:pumpkin_seeds\n" +
-            "AgriCraft:seedDandelion=AgriCraft:seedSugarcane+minecraft:melon_seeds\n" +
-            "AgriCraft:seedOrchid=AgriCraft:seedPoppy+AgriCraft:seedDandelion\n" +
-            "AgriCraft:seedAllium=AgriCraft:seedPoppy+AgriCraft:seedOrchid\n" +
-            "AgriCraft:seedTulipRed=AgriCraft:seedPoppy+AgriCraft:seedAllium\n" +
-            "AgriCraft:seedTulipOrange=AgriCraft:seedDaisy+AgriCraft:seedOrchid\n" +
-            "AgriCraft:seedTulipWhite=AgriCraft:seedDaisy+AgriCraft:seedDandelion\n" +
-            "AgriCraft:seedTulipPink=AgriCraft:seedAllium+AgriCraft:seedDandelion\n" +
-            "AgriCraft:seedDaisy=AgriCraft:seedDandelion+AgriCraft:seedOrchid\n" +
-            "AgriCraft:seedShroomRed=minecraft:nether_wart+AgriCraft:seedPoppy\n" +
-            "AgriCraft:seedShroomBrown=minecraft:nether_wart+AgriCraft:seedPotato\n";
-
-
-    private static final String agricraftMutations =
-            "AgriCraft:seedRedstodendron=AgriCraft:seedTulipRed+AgriCraft:seedDaisy\n" +
-            "AgriCraft:seedLapender=AgriCraft:seedTulipPink+AgriCraft:seedOrchid\n" +
-            "AgriCraft:seedFerranium=AgriCraft:seedLapender+AgriCraft:seedTulipWhite\n" +
-            "AgriCraft:seedAurigold=AgriCraft:seedRedstodendron+AgriCraft:seedTulipOrange\n" +
-            "AgriCraft:seedDiamahlia=AgriCraft:seedAurigold+AgriCraft:seedLapender\n" +
-            "AgriCraft:seedEmeryllis=AgriCraft:seedFerranium+AgriCraft:seedRedstodendron\n" +
-            "AgriCraft:seedNitorWart=minecraft:nether_wart+AgriCraft:seedTulipOrange\n" +
-            "AgriCraft:seedQuartzanthemum=AgriCraft:seedNitorWart+AgriCraft:seedLapender";
 
     private static final String barleyHarvestCraftMutations =
             "harvestcraft:barleyseedItem=minecraft:wheat_seeds+AgriCraft:seedSugarcane\n" +

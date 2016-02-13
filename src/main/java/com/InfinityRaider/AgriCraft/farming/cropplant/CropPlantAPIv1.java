@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class CropPlantAPIv1 extends CropPlant {
@@ -145,4 +146,9 @@ public class CropPlantAPIv1 extends CropPlant {
     @Override
     public void onChunkUnload(World world, BlockPos pos, ICrop crop) {
         plant.onChunkUnload(world, pos, crop);}
+
+    @Override
+    public List<IMutation> getDefaultMutations() {
+        return plant.getDefaultMutations();
+    }
 }

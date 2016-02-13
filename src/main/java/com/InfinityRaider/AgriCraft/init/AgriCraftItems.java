@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.init;
 
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.*;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.item.Item;

@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import net.minecraft.block.Block;
@@ -13,6 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -63,6 +65,11 @@ public class CropPlantAgriCraft extends CropPlant {
     @Override
     public boolean canBonemeal() {
         return getTier()<4;
+    }
+
+    @Override
+    public List<IMutation> getDefaultMutations() {
+        return plant.getSeed().getMutations();
     }
 
     @Override

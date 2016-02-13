@@ -4,7 +4,7 @@ import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ICrop;
 import com.InfinityRaider.AgriCraft.api.v1.IStatCalculator;
 import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;

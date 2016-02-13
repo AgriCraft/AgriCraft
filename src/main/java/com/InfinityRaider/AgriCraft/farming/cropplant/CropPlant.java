@@ -3,6 +3,7 @@ package com.InfinityRaider.AgriCraft.farming.cropplant;
 import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.InfinityRaider.AgriCraft.handler.config.MutationConfig;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -187,6 +189,17 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
      */
     @Override
     public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
+
+    @Override
+    public List<IMutation> getDefaultMutations() {
+        List<IMutation> list = new ArrayList<>();
+        IMutation mutation = MutationConfig.getInstance().getDefaultMutation(this.getSeed());
+        if(mutation != null) {
+            mutation.setChance(((double) this.getSpreadChance())/100.0D);
+            list.add(mutation);
+        }
+        return list;
+    }
 
     /**
      * Gets called right before a harvest attempt, player may be null if harvested by automation.

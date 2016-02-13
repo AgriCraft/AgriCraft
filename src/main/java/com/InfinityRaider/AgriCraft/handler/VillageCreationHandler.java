@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.handler;
 
+import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouse;
 import com.InfinityRaider.AgriCraft.world.StructureGreenhouseIrrigated;
 import net.minecraft.util.EnumFacing;

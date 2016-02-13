@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.particles.LiquidSprayFX;

@@ -6,7 +6,8 @@ import com.InfinityRaider.AgriCraft.api.v1.ItemWithMeta;
 import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.*;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
+import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
@@ -419,6 +420,14 @@ public class CropPlantHandler {
      */
     public static void removeAllFromSeedBlacklist(Collection<? extends ItemStack> seeds) {
         seeds.forEach(CropPlantHandler::removeFromSeedBlackList);
+    }
+
+    public static List<Mutation> getDefaultMutations() {
+        List<Mutation> list = new ArrayList<>();
+        for(CropPlant plant : getPlants()) {
+            list.addAll(plant.getDefaultMutations().stream().map(Mutation::new).collect(Collectors.toList()));
+        }
+        return list;
     }
 
     /**

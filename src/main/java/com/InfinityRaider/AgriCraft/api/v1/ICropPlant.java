@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -99,6 +100,8 @@ public interface ICropPlant {
      * If you just want to have vanilla crop behaviour, you can use APIv2.getDefaultGrowthRequirement() to get a growth requirement with default behaviour
      */
     IGrowthRequirement getGrowthRequirement();
+
+    List<IMutation> getDefaultMutations();
 
     /** When a growth thick is allowed for this plant */
     void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage);

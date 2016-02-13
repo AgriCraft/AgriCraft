@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -9,6 +10,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public final class CropPlantNone extends CropPlant {
@@ -49,6 +51,11 @@ public final class CropPlantNone extends CropPlant {
     @Override
     public boolean canBonemeal() {
         return false;
+    }
+
+    @Override
+    public List<IMutation> getDefaultMutations() {
+        return new ArrayList<>();
     }
 
     @Override

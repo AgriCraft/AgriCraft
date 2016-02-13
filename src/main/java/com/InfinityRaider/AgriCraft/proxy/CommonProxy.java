@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.proxy;
 
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.handler.PlayerInteractEventHandler;
 import com.InfinityRaider.AgriCraft.handler.PlayerConnectToServerHandler;
 import com.InfinityRaider.AgriCraft.utility.RenderLogger;

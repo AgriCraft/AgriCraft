@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
+import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
 import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
@@ -29,6 +30,14 @@ public class Mutation implements IMutation {
 
     public void setChance(double d) {
         this.chance = d;
+    }
+
+    public Mutation(IMutation mutation) {
+        this(mutation.getResult(), mutation.getParents()[0], mutation.getParents()[1], mutation.getChance());
+    }
+
+    public Mutation(ICropPlant result, ICropPlant parent1, ICropPlant parent2) {
+        this(result.getSeed(), parent1.getSeed(), parent2.getSeed());
     }
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int chance) {

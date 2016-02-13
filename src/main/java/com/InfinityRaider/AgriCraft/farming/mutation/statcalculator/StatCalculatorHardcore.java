@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.farming.mutation.statcalculator;
 
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 
 public class StatCalculatorHardcore extends StatCalculatorBase {
     /**

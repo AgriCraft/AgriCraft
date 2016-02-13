@@ -1,9 +1,8 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
+import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,20 +20,12 @@ public abstract class MutationHandler {
     private static boolean isSyncing = false;
 
     public static void init() {
-        //Read mutations & initialize the mutation arrays
-        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationData());
-        
         mutations = new ArrayList<>();
-        
-      //print registered mutations to the log
+        mutations.addAll(ConfigurationHandler.getMutations());
+         //print registered mutations to the log
         LogHelper.info("Registered Mutations:");
-        
-        for(String line:data) {
-            Mutation mutation = readMutation(line);
-            if(mutation!=null && !mutations.contains(mutation)) {
-                mutations.add(mutation);
-                LogHelper.info(" - " + mutation.getFormula());
-            }
+        for(Mutation mutation : mutations) {
+            LogHelper.info(" - " + mutation.getFormula());
         }
     }
 
@@ -51,53 +42,6 @@ public abstract class MutationHandler {
             LogHelper.info("Successfully received mutations from server");
         }
     }
-
-	private static Mutation readMutation(String input) { //Removed some string concatenation, and de-nested the if statements.
-		
-		Mutation mutation = null;
-		String[] data = IOHelper.getData(input);
-
-        if (data.length == 0) {
-            LogHelper.info("Error when reading mutation: invalid number of arguments. (line: " + input + ")");
-            return null;
-        }
-
-		String mutationData = data[0];
-		int indexEquals = mutationData.indexOf('=');
-		int indexPlus = mutationData.indexOf('+');
-
-		if (!(indexEquals > 0 && indexPlus > indexEquals)) {
-			LogHelper.info("Error when reading mutation: mutation is not defined correctly. (line: " + input + ")");
-			return null;
-		}
-
-		// read the stacks
-		ItemStack resultStack = IOHelper.getStack(mutationData.substring(0,indexEquals));
-		ItemStack parentStack1 = IOHelper.getStack(mutationData.substring(indexEquals + 1, indexPlus));
-		ItemStack parentStack2 = IOHelper.getStack(mutationData.substring(indexPlus + 1));
-
-		if (!CropPlantHandler.isValidSeed(resultStack)) {
-			LogHelper.info("Error when reading mutation: resulting stack is not correct. (line: " + input + ")");
-			return null;
-		} else if (!CropPlantHandler.isValidSeed(parentStack1)) {
-			LogHelper .info("Error when reading mutation: first parent stack is not correct. (line: " + input + ")");
-			return null;
-		} else if (!CropPlantHandler.isValidSeed(parentStack2)) {
-			LogHelper.info("Error when reading mutation: second parent stack is not correct. (line: " + input + ")");
-			return null;
-		}
-		try {
-			mutation = new Mutation(resultStack, parentStack1, parentStack2);
-		} catch (Exception e) {
-			LogHelper.debug("Caught exception when trying to add mutation: "
-					+ resultStack.getUnlocalizedName() + "="
-					+ parentStack1.getUnlocalizedName() + "+"
-					+ parentStack2.getUnlocalizedName()
-					+ ", this seed is not registered");
-		}
-
-		return mutation;
-	}
 
     //gets all the possible crossovers
     public static Mutation[] getCrossOvers(List<TileEntityCrop> crops) {

@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class CropPlantNetherWart extends CropPlant {
@@ -71,6 +73,11 @@ public class CropPlantNetherWart extends CropPlant {
     @Override
     public boolean canBonemeal() {
         return true;
+    }
+
+    @Override
+    public List<IMutation> getDefaultMutations() {
+        return new ArrayList<>();
     }
 
     @Override

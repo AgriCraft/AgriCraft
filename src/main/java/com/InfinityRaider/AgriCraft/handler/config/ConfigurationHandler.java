@@ -1,5 +1,7 @@
-package com.InfinityRaider.AgriCraft.handler;
+package com.InfinityRaider.AgriCraft.handler.config;
 
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
@@ -13,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.File;
+import java.util.List;
 
 public class ConfigurationHandler {
     public static class Categories {
@@ -211,13 +214,18 @@ public class ConfigurationHandler {
         return IOHelper.readOrWrite(directory, "CustomCrops", IOHelper.getCustomCropInstructions());
     }
 
-    public static String readMutationData() {
-        String data = IOHelper.readOrWrite(directory, "Mutations", IOHelper.getDefaultMutations(), generateDefaults);
-        if(generateDefaults) {
+    public static List<Mutation> getMutations() {
+        String filePath = directory + "/mutations.json";
+        File file = new File(filePath);
+        if(generateDefaults || !file.exists()) {
+            List<Mutation> mutations = CropPlantHandler.getDefaultMutations();
+            MutationConfig.getInstance().writeMutations(mutations, filePath);
             ConfigurationHandler.propGenerateDefaults.setToDefault();
             config.save();
+            return mutations;
+        } else {
+            return MutationConfig.getInstance().readMutations(filePath);
         }
-        return data;
     }
 
     public static String readSpreadChances() {
