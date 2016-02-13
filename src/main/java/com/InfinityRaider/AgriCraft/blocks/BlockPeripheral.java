@@ -108,23 +108,6 @@ public class BlockPeripheral extends BlockContainerAgriCraft implements IPeriphe
         }
     }
 
-    //get a list with items dropped by the the crop
-    @Override
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(new ItemStack(Item.getItemFromBlock(Blocks.blockSeedAnalyzer), 1, 0));
-        if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntitySeedAnalyzer) {
-            TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(x, y, z);
-            if(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId)!=null) {
-                items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId));
-            }
-            if(analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId)!=null) {
-                items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId));
-            }
-        }
-        return items;
-    }
-
     //open the gui when the block is activated
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fX, float fY, float fZ) {

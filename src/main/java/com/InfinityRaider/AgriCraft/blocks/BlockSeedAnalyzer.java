@@ -83,11 +83,11 @@ public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
         }
     }
 
-    //get a list with items dropped by the the crop
+    //get a list with items dropped when the block is broken
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(new ItemStack(Item.getItemFromBlock(Blocks.blockSeedAnalyzer), 1, 0));
+        items.add(new ItemStack(this, 1, 0));
         if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntitySeedAnalyzer) {
             TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(x, y, z);
             if(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId)!=null) {
