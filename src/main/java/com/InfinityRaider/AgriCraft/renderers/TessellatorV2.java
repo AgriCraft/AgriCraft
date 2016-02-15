@@ -25,7 +25,7 @@ public class TessellatorV2 {
     private final Tessellator tessellator ;
     private final WorldRenderer worldRenderer;
 	
-	private Deque<TransformationMatrix> matrixes;
+	private final Deque<TransformationMatrix> matrixes;
 	
 	private TessellatorV2(Tessellator tessellator) {
         this.worldRenderer = tessellator.getWorldRenderer();

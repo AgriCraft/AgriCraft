@@ -7,6 +7,10 @@ import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +19,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
+	
+	private static final ModelResourceLocation[] VARIENTS = {
+		new ModelResourceLocation("agricraft:trowel_empty", "inventory"),
+		new ModelResourceLocation("agricraft:trowel_full", "inventory")
+	};
 	
     public ItemTrowel() {
         super(Names.Objects.trowel);
@@ -30,7 +39,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         return false;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
     }
-
+	
     @Override
     public boolean hasSeed(ItemStack trowel) {
         if(trowel==null || trowel.getItem()==null || trowel.getTagCompound()==null) {
@@ -124,5 +133,13 @@ public class ItemTrowel extends ItemBase implements ITrowel {
     public ISeedStats getStats(ItemStack trowel) {
         return PlantStats.getStatsFromStack(getSeed(trowel));
     }
+	
+	@Override
+	public void registerItemRenderer() {
+		ModelBakery.registerItemVariants(this, VARIENTS);
+		for (int i = 0; i < VARIENTS.length; i++) {
+			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, i, VARIENTS[i]);
+		}
+	}
 
 }
