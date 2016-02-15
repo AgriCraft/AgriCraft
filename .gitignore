@@ -1,23 +1,36 @@
+# Ignore Rundirs.
+run/
+
+# Ignore IDE Files.
 eclipse/
-libs/
-.nb-gradle
+.nb-gradle/
+.idea/
+.nb-gradle-properties
+.classpath
+.project
+.settings/
+
+# Ignore Gradle Stuff
+gradle.properties
 .gradle/
+
+# Ignore Git
 .git/
+
+# Ignore Build Files
 build/
 out/
+logs/
+bin/
+
 *.iml
 *.ipr
 *.iws
 Schematic_to_Java*
 schematics/
-AgriCraft_Dependencies.rar
-.idea/
-logs/
-bin/
 
-.nb-gradle-properties
-.classpath
-.project
-.settings/
+# Ignore Dependencies
+libs/
+AgriCraft_Dependencies.rar
 dependencies.zip
 *.bak
