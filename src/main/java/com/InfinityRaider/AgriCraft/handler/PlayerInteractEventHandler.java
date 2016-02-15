@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -39,8 +39,8 @@ public class PlayerInteractEventHandler {
                         }
                     } if (event.entityPlayer.getCurrentEquippedItem().hasTagCompound()) {
                         NBTTagCompound tag = (NBTTagCompound) event.entityPlayer.getCurrentEquippedItem().getTagCompound().copy();
-                        if (tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
-                            //TODO: place a tile entity storing the seed's data
+                        if (tag.hasKey(AgriCraftNBT.GROWTH) && tag.hasKey(AgriCraftNBT.GAIN) && tag.hasKey(AgriCraftNBT.STRENGTH)) {
+                            //TODO: place a tile entity storing the SEED's data
                             this.denyEvent(event, false);
                         }
                     }
@@ -93,7 +93,7 @@ public class PlayerInteractEventHandler {
             }
             /*
             else if (ModHelper.allowIntegration(Names.Mods.tconstruct) && TinkersConstructHelper.isShovel(event.entityPlayer.getCurrentEquippedItem())) {
-                flag = true;
+                FLAG = true;
             }
             */
             if (flag) {

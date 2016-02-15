@@ -1,16 +1,16 @@
 //made by Malcanteth for version 1.3.1
 
 //Creative Tabs
-itemGroup.agricraft=Agricraft
+itemGroup.agricraft=AgriCraft
 
 //Items
-item.agricraft:cropsItem.name=Жёрдочки
+item.agricraft:crop_sticks.name=Жёрдочки
 item.agricraft:journal.name=Журнал агронома
 item.agricraft:trowel.name=Садовый совок
-item.agricraft:magnifyingGlass.name=Лупа
+item.agricraft:magnifying_glass.name=Лупа
 item.agricraft:debugger.name=Отладчик
-item.agricraft:handRake.wood.name=Деревянные ручные грабли
-item.agricraft:handRake.iron.name=Железные ручные грабли
+item.agricraft:hand_rake.wood.name=Деревянные ручные грабли
+item.agricraft:hand_rake.iron.name=Железные ручные грабли
 item.agricraft:nuggetDiamond.name=Алмазный самородок
 item.agricraft:nuggetIron.name=Железный самородок
 item.agricraft:nuggetEmerald.name=Изумрудный самородок

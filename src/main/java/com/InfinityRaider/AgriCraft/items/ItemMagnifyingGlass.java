@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -19,18 +18,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class ItemMagnifyingGlass extends ItemBase {
 	
-	// HACK: To account for different model name.
-	private static final ModelResourceLocation[] VARIENTS = {
-		new ModelResourceLocation("agricraft:magnifying_glass", "inventory")
-	};
-	
     public ItemMagnifyingGlass() {
-        super(Names.Objects.magnifyingGlass);
+        super("magnifying_glass");
         this.setMaxStackSize(1);
     }
 
@@ -101,10 +94,7 @@ public class ItemMagnifyingGlass extends ItemBase {
 	
 	@Override
 	public void registerItemRenderer() {
-		ModelBakery.registerItemVariants(this, VARIENTS);
-		for (int i = 0; i < VARIENTS.length; i++) {
-			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, i, VARIENTS[i]);
-		}
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
 	}
 
 }

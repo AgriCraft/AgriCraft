@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.api.v1.IClipper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemClipping;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")
 public class ItemToolTipHandler {
-    /** Adds tooltips for seed stats */
+    /** Adds tooltips for SEED stats */
     @SubscribeEvent
     public void addSeedStatsTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.itemStack;
@@ -37,11 +37,11 @@ public class ItemToolTipHandler {
         }
         if(CropPlantHandler.isValidSeed(stack) && stack.hasTagCompound()) {
             NBTTagCompound tag = stack.getTagCompound();
-            if(tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength) && tag.hasKey(Names.NBT.analyzed)) {
-                if(tag.getBoolean(Names.NBT.analyzed)) {
-                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + StatStringDisplayer.instance().getStatDisplayString(tag.getInteger(Names.NBT.growth), ConfigurationHandler.cropStatCap));
-                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + StatStringDisplayer.instance().getStatDisplayString(tag.getInteger(Names.NBT.gain), ConfigurationHandler.cropStatCap));
-                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + StatStringDisplayer.instance().getStatDisplayString(tag.getInteger(Names.NBT.strength), ConfigurationHandler.cropStatCap));
+            if(tag.hasKey(AgriCraftNBT.GROWTH) && tag.hasKey(AgriCraftNBT.GAIN) && tag.hasKey(AgriCraftNBT.STRENGTH) && tag.hasKey(AgriCraftNBT.ANALYZED)) {
+                if(tag.getBoolean(AgriCraftNBT.ANALYZED)) {
+                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + StatStringDisplayer.instance().getStatDisplayString(tag.getInteger(AgriCraftNBT.GROWTH), ConfigurationHandler.cropStatCap));
+                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + StatStringDisplayer.instance().getStatDisplayString(tag.getInteger(AgriCraftNBT.GAIN), ConfigurationHandler.cropStatCap));
+                    event.toolTip.add(EnumChatFormatting.GREEN + " - "+StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + StatStringDisplayer.instance().getStatDisplayString(tag.getInteger(AgriCraftNBT.STRENGTH), ConfigurationHandler.cropStatCap));
                 }
                 else {
                     event.toolTip.add(" "+ StatCollector.translateToLocal("agricraft_tooltip.unidentified"));

@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -14,8 +14,8 @@ public abstract class NBTHelper {
             String name = Block.blockRegistry.getNameForObject(((ItemBlock) stack.getItem()).block).toString();
             if(name!=null && !name.equals("")) {
                 tag = new NBTTagCompound();
-                tag.setString(Names.NBT.material, name);
-                tag.setInteger(Names.NBT.materialMeta, stack.getItemDamage());
+                tag.setString(AgriCraftNBT.MATERIAL, name);
+                tag.setInteger(AgriCraftNBT.MATERIAL_META, stack.getItemDamage());
             }
         }
         return tag;
@@ -45,15 +45,15 @@ public abstract class NBTHelper {
     }
 
     public static void addCoordsToNBT(int x, int y, int z, NBTTagCompound tag) {
-        tag.setInteger(Names.NBT.x, x);
-        tag.setInteger(Names.NBT.y, y);
-        tag.setInteger(Names.NBT.z, z);
+        tag.setInteger(AgriCraftNBT.X1, x);
+        tag.setInteger(AgriCraftNBT.Y1, y);
+        tag.setInteger(AgriCraftNBT.Z1, z);
     }
 
     public static int[] getCoordsFromNBT(NBTTagCompound tag) {
         int[] coords = null;
-        if(tag.hasKey(Names.NBT.x) && tag.hasKey(Names.NBT.y) && tag.hasKey(Names.NBT.z)) {
-            coords = new int[] {tag.getInteger(Names.NBT.x), tag.getInteger(Names.NBT.y), tag.getInteger(Names.NBT.z)};
+        if(tag.hasKey(AgriCraftNBT.X1) && tag.hasKey(AgriCraftNBT.Y1) && tag.hasKey(AgriCraftNBT.Z1)) {
+            coords = new int[] {tag.getInteger(AgriCraftNBT.X1), tag.getInteger(AgriCraftNBT.Y1), tag.getInteger(AgriCraftNBT.Z1)};
         }
         return coords;
     }

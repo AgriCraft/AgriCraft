@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.farming;
 import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -94,22 +94,22 @@ public class PlantStats implements ISeedStats {
     }
 
     public static PlantStats readFromNBT(NBTTagCompound tag) {
-        if(tag !=null && tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
+        if(tag !=null && tag.hasKey(AgriCraftNBT.GROWTH) && tag.hasKey(AgriCraftNBT.GAIN) && tag.hasKey(AgriCraftNBT.STRENGTH)) {
             PlantStats stats = new PlantStats();
-            stats.setGrowth(tag.getShort(Names.NBT.growth));
-            stats.setGain(tag.getShort(Names.NBT.gain));
-            stats.setStrength(tag.getShort(Names.NBT.strength));
-            stats.analyzed=tag.hasKey(Names.NBT.analyzed) && tag.getBoolean(Names.NBT.analyzed);
+            stats.setGrowth(tag.getShort(AgriCraftNBT.GROWTH));
+            stats.setGain(tag.getShort(AgriCraftNBT.GAIN));
+            stats.setStrength(tag.getShort(AgriCraftNBT.STRENGTH));
+            stats.analyzed=tag.hasKey(AgriCraftNBT.ANALYZED) && tag.getBoolean(AgriCraftNBT.ANALYZED);
             return stats;
         }
         return null;
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        tag.setShort(Names.NBT.growth, growth);
-        tag.setShort(Names.NBT.gain, gain);
-        tag.setShort(Names.NBT.strength, strength);
-        tag.setBoolean(Names.NBT.analyzed, analyzed);
+        tag.setShort(AgriCraftNBT.GROWTH, growth);
+        tag.setShort(AgriCraftNBT.GAIN, gain);
+        tag.setShort(AgriCraftNBT.STRENGTH, strength);
+        tag.setBoolean(AgriCraftNBT.ANALYZED, analyzed);
         return tag;
     }
 

@@ -2,13 +2,13 @@
 itemGroup.agricraft=农业工艺
 
 //Items
-item.agricraft:cropsItem.name=作物架
+item.agricraft:crop_sticks.name=作物架
 item.agricraft:journal.name=农学研究随笔
 item.agricraft:trowel.name=园丁铲
-item.agricraft:magnifyingGlass.name=放大镜
+item.agricraft:magnifying_glass.name=放大镜
 item.agricraft:debugger.name=调试器
-item.agricraft:handRake.wood.name=木耙
-item.agricraft:handRake.iron.name=铁耙
+item.agricraft:hand_rake.wood.name=木耙
+item.agricraft:hand_rake.iron.name=铁耙
 item.agricraft:clipper.name=剪枝器
 item.agricraft:clipping.name=接穗
 

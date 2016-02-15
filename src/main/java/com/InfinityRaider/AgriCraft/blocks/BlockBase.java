@@ -115,7 +115,7 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 
 	@Override
 	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.CUTOUT;
+		return DEFAULT_BLOCK_LAYER;
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.items.blocks;
 
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import net.minecraft.block.Block;
@@ -12,7 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -79,7 +79,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
                     }
                     else {
                         for(int i=0;i<16;i++) {
-                            //on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
+                            //on the server register every META as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
                             subItems.add(new ItemStack(plank.getItem(), 1, i));
                         }
                     }
@@ -94,11 +94,11 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
     }
 
     /**
-     * Determines if a list of materials (item stacks) has a material.
+     * Determines if a list of materials (item stacks) has a MATERIAL.
      * 
      * @param registeredMaterials The list of materials to check in.
-     * @param material the material to check for.
-     * @return if the list has the material.
+     * @param material the MATERIAL to check for.
+     * @return if the list has the MATERIAL.
      */
     private static boolean hasMaterial(List<ItemStack> registeredMaterials, ItemStack material) {
         for(ItemStack stack:registeredMaterials) {
@@ -110,11 +110,11 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
     }
 
     /**
-     * Adds a material (item stack) to a list if it's not registered in a list already.
+     * Adds a MATERIAL (item stack) to a list if it's not registered in a list already.
      * 
-     * @param stack the material to add.
+     * @param stack the MATERIAL to add.
      * @param list the list to add to.
-     * @param objectMeta the material's meta value.
+     * @param objectMeta the MATERIAL's META value.
      * @param registeredMaterials the list of materials to check against.
      */
     @SuppressWarnings("unchecked")
@@ -138,17 +138,17 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
      * If that does not correct the issue, ensure that the block overrides both getInternalName() and getTileEntityName() and returns Names.Objects.[blockname].
      * </p>
      * <p>
-     * All custom wood blocks have a material that we want shown, so we make this method final.
-     * Some however, has more information they want to add, so we add a addMore() method to override in that event.
-     * </p>
+ All custom WOOD blocks have a MATERIAL that we want shown, so we make this method final.
+ Some however, has more information they want to add, so we add a addMore() method to OVERRIDE in that event.
+ </p>
      */
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
         ItemStack material;
-        if(stack.getItemDamage()==0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(Names.NBT.material) && stack.getTagCompound().hasKey(Names.NBT.materialMeta)) {
+        if(stack.getItemDamage()==0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(AgriCraftNBT.MATERIAL) && stack.getTagCompound().hasKey(AgriCraftNBT.MATERIAL_META)) {
             NBTTagCompound tag = stack.getTagCompound();
-            String name = tag.getString(Names.NBT.material);
-            int meta = tag.getInteger(Names.NBT.materialMeta);
+            String name = tag.getString(AgriCraftNBT.MATERIAL);
+            int meta = tag.getInteger(AgriCraftNBT.MATERIAL_META);
             material = new ItemStack(Block.getBlockFromName(name), 1, meta);
         } else {
             material = new ItemStack(Blocks.planks);
@@ -159,8 +159,8 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
     /**
      * Retrieves the item's unlocalized name.
      * This is the key used in the language files.
-     * Should return something like tile.agricraft:[internalname].[meta].name
-     * Final as to prevent being messed up.
+ Should return something like tile.agricraft:[internalname].[META].name
+ Final as to prevent being messed up.
      * 
      * @param stack the item in question.
      */

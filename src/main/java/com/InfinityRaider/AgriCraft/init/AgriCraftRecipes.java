@@ -8,6 +8,7 @@ import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.items.crafting.RecipeJournal;
 import com.InfinityRaider.AgriCraft.items.crafting.RecipeShapelessCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Data;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
@@ -186,15 +187,15 @@ public class AgriCraftRecipes {
     }
 
     /**
-     * Adds the given recipe for every available wood type.
+     * Adds the given recipe for every available WOOD type.
      * @param params Same as for GameRegistry. The only difference is that planks will get replaced with the different woods.
      */
     public static void registerCustomWoodRecipe(Block block, int stackSize, boolean shaped, Object... params) {
         for (ItemStack stack : woodList) {
-            if(stack.hasTagCompound() && stack.getTagCompound().hasKey(Names.NBT.material) && stack.getTagCompound().hasKey(Names.NBT.materialMeta)) {
-                //get material
+            if(stack.hasTagCompound() && stack.getTagCompound().hasKey(AgriCraftNBT.MATERIAL) && stack.getTagCompound().hasKey(AgriCraftNBT.MATERIAL_META)) {
+                //get MATERIAL
                 NBTTagCompound materialTag = stack.getTagCompound();
-                ItemStack plank = new ItemStack(Block.getBlockFromName(materialTag.getString(Names.NBT.material)), 1, materialTag.getInteger(Names.NBT.materialMeta));
+                ItemStack plank = new ItemStack(Block.getBlockFromName(materialTag.getString(AgriCraftNBT.MATERIAL)), 1, materialTag.getInteger(AgriCraftNBT.MATERIAL_META));
                 Object[] ingredients = Arrays.copyOf(params, params.length);
                 for (int i = 0; i < ingredients.length; i++) {
                     // replace all planks with the custom ones
@@ -225,7 +226,7 @@ public class AgriCraftRecipes {
         }
         else if (recipe instanceof ShapelessRecipes) {
             ShapelessRecipes shapelessRecipe = (ShapelessRecipes) recipe;
-            registerCustomWoodRecipe(((ItemBlock) shapelessRecipe.getRecipeOutput().getItem()).block, shapelessRecipe.getRecipeOutput().stackSize, false, shapelessRecipe.recipeItems.toArray(new ItemStack[shapelessRecipe.recipeItems.size()]));
+            registerCustomWoodRecipe(((ItemBlock) shapelessRecipe.getRecipeOutput().getItem()).block, shapelessRecipe.getRecipeOutput().stackSize, false, (Object[]) shapelessRecipe.recipeItems.toArray(new ItemStack[shapelessRecipe.recipeItems.size()]));
         }
     }
 

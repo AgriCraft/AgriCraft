@@ -1,14 +1,14 @@
 //Creative Tabs
-itemGroup.agricraft=Agricraft
+itemGroup.agricraft=AgriCraft
 
 //Items
-item.agricraft:cropsItem.name=Tuteurs
+item.agricraft:crop_sticks.name=Tuteurs
 item.agricraft:journal.name=Journal agricole
 item.agricraft:trowel.name=Transplantoir
-item.agricraft:magnifyingGlass.name=Loupe
+item.agricraft:magnifying_glass.name=Loupe
 item.agricraft:debugger.name=Débogueur
-item.agricraft:handRake.wood.name=Râteau en bois
-item.agricraft:handRake.iron.name=Râteau en fer
+item.agricraft:hand_rake.wood.name=Râteau en bois
+item.agricraft:hand_rake.iron.name=Râteau en fer
 item.agricraft:clipper.name=Sécateur
 item.agricraft:clipping.name=Bouture
 

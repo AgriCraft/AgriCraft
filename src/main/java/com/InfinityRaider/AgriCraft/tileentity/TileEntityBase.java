@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockBase;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
 import net.minecraft.block.state.IBlockState;
@@ -57,12 +57,12 @@ public abstract class TileEntityBase extends TileEntity {
     public void writeToNBT (NBTTagCompound tag){
         super.writeToNBT(tag);
         if (this.orientation != null) {
-            tag.setByte(Names.NBT.direction, (byte) this.orientation.ordinal());
+            tag.setByte(AgriCraftNBT.DIRECTION, (byte) this.orientation.ordinal());
         }
         if(this.isMultiBlock()) {
             NBTTagCompound multiBlockTag = new NBTTagCompound();
             ((IMultiBlockComponent) this).getMultiBlockData().writeToNBT(multiBlockTag);
-            tag.setTag(Names.NBT.multiBlock, multiBlockTag);
+            tag.setTag(AgriCraftNBT.MULTI_BLOCK, multiBlockTag);
         }
     }
 
@@ -74,12 +74,12 @@ public abstract class TileEntityBase extends TileEntity {
     @Override
     public void readFromNBT (NBTTagCompound tag){
         super.readFromNBT(tag);
-        if (tag.hasKey(Names.NBT.direction)) {
-            this.setOrientation(tag.getByte(Names.NBT.direction));
+        if (tag.hasKey(AgriCraftNBT.DIRECTION)) {
+            this.setOrientation(tag.getByte(AgriCraftNBT.DIRECTION));
         }
         if(this.isMultiBlock()) {
-            if(tag.hasKey(Names.NBT.multiBlock)) {
-                NBTTagCompound multiBlockTag = tag.getCompoundTag(Names.NBT.multiBlock);
+            if(tag.hasKey(AgriCraftNBT.MULTI_BLOCK)) {
+                NBTTagCompound multiBlockTag = tag.getCompoundTag(AgriCraftNBT.MULTI_BLOCK);
                 ((IMultiBlockComponent) this).getMultiBlockData().readFromNBT(multiBlockTag);
             }
         }

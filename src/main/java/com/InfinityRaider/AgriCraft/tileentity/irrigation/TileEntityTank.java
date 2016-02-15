@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncFluidLevel;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
@@ -51,14 +51,14 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         public void writeToNBT(NBTTagCompound tag) {
             super.writeToNBT(tag);
             if (this.fluidLevel > 0) {
-                tag.setInteger(Names.NBT.level, this.fluidLevel);
+                tag.setInteger(AgriCraftNBT.LEVEL, this.fluidLevel);
             }
         }
 
         @Override
         public void readFromNBT(NBTTagCompound tag) {
             super.readFromNBT(tag);
-            this.fluidLevel = tag.hasKey(Names.NBT.level) ? tag.getInteger(Names.NBT.level) : 0;
+            this.fluidLevel = tag.hasKey(AgriCraftNBT.LEVEL) ? tag.getInteger(AgriCraftNBT.LEVEL) : 0;
         }
 
         //updates the tile entity every tick
@@ -91,13 +91,13 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 
     private boolean needsSync() {
         int newDiscreteLvl = getDiscreteFluidLevel();
-        //sync when the discrete fluid level has changed
+        //sync when the discrete fluid LEVEL has changed
         if(newDiscreteLvl != lastDiscreteFluidLevel) {
             lastDiscreteFluidLevel = newDiscreteLvl;
             lastFluidLevel = fluidLevel;
             return true;
         }
-        //sync when the fluid level ahs changed too much
+        //sync when the fluid LEVEL ahs changed too much
         if(SYNC_DELTA<=Math.abs(lastFluidLevel-fluidLevel)) {
             lastDiscreteFluidLevel = newDiscreteLvl;
             lastFluidLevel = fluidLevel;
@@ -136,7 +136,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
     }
 
     /**
-     * Maps the current fluid level into the interval [0, {@value #DISCRETE_MAX}]
+     * Maps the current fluid LEVEL into the interval [0, {@value #DISCRETE_MAX}]
      */
     public int getDiscreteFluidLevel() {
         IMultiBlockPartData data = getMultiBlockData();

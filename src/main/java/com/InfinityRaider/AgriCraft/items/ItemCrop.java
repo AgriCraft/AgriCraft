@@ -2,11 +2,9 @@ package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,13 +14,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemCrop extends ItemBase {
-	
-	private static final ModelResourceLocation[] VARIENTS = {
-		new ModelResourceLocation("agricraft:crop_sticks", "inventory")
-	};
 
 	public ItemCrop() {
-		super(Names.Objects.crops+"Item");
+		super("crop_sticks");
 	}
 
     //I'm overriding this just to be sure
@@ -54,10 +48,7 @@ public class ItemCrop extends ItemBase {
 	
 	@Override
 	public void registerItemRenderer() {
-		ModelBakery.registerItemVariants(this, VARIENTS);
-		for (int i = 0; i < VARIENTS.length; i++) {
-			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, i, VARIENTS[i]);
-		}
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
 	}
 	
 }

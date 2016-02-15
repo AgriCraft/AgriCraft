@@ -5,7 +5,7 @@ import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncFluidLevel;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.client.renderer.texture.ITickable;
@@ -54,15 +54,15 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		if (this.lvl > 0) {
-			tag.setInteger(Names.NBT.level, this.lvl);
+			tag.setInteger(AgriCraftNBT.LEVEL, this.lvl);
 		}
 	}
 
 	//this loads the saved data for the tile entity
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
-		if (tag.hasKey(Names.NBT.level)) {
-			this.lvl = tag.getInteger(Names.NBT.level);
+		if (tag.hasKey(AgriCraftNBT.LEVEL)) {
+			this.lvl = tag.getInteger(AgriCraftNBT.LEVEL);
 		} else {
 			this.lvl = 0;
 		}
@@ -197,7 +197,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 				if (component == null) {
 					continue;
 				}
-				//neighbour is a channel: add its volume to the total and increase the count
+				//neighbour is a channel: add its volume to the total and increase the COUNT
 				if (component instanceof TileEntityChannel) {
 					if (!(component instanceof TileEntityValve && ((TileEntityValve) component).isPowered())) {
 						totalLvl = totalLvl + ((TileEntityChannel) component).lvl;
@@ -207,10 +207,10 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 				else {
 					TileEntityTank tank = (TileEntityTank) component;
 					int Y = tank.getYPosition();
-					float y_c = Constants.WHOLE * Y + this.getFluidHeight();  //initial channel water y
-					float y_t = tank.getFluidHeight();           //initial tank water y
-					float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum y of the channel
-					float y2 = (float) MAX + Constants.WHOLE * Y;  //maximum y of the channel
+					float y_c = Constants.WHOLE * Y + this.getFluidHeight();  //initial channel water Y1
+					float y_t = tank.getFluidHeight();           //initial tank water Y1
+					float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum Y1 of the channel
+					float y2 = (float) MAX + Constants.WHOLE * Y;  //maximum Y1 of the channel
 					int V_tot = tank.getFluidLevel() + this.lvl;
 					if (y_c != y_t) {
 						//total volume is below the channel connection
@@ -226,11 +226,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 							//some parameters
 							int tankYSize = tank.getMultiBlockData().sizeY();
 							int C = tank.getCapacity();
-							//calculate the y corresponding to the total volume: y = f(V_tot), V_tank = f(y), V_channel = f(y)
+							//calculate the Y1 corresponding to the total volume: Y1 = f(V_tot), V_tank = f(Y1), V_channel = f(Y1)
 							float enumerator = (V_tot) + ((ABSOLUTE_MAX * y1) / (y2 - y1) + ((float) 2 * C) / (Constants.WHOLE * tankYSize - 2));
 							float denominator = ((ABSOLUTE_MAX) / (y2 - y1) + ((float) C) / ((float) (Constants.WHOLE * tankYSize - 2)));
 							float y = enumerator / denominator;
-							//convert the y to volumes
+							//convert the Y1 to volumes
 							int channelVolume = (int) Math.floor(ABSOLUTE_MAX * (y - y1) / (y2 - y1));
 							int tankVolume = (int) Math.ceil(C * (y - 2) / (Constants.WHOLE * tankYSize - 2));
 							updatedLevel = channelVolume;
@@ -239,7 +239,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 					}
 				}
 			}
-			//equalize water level over all neighbouring channels
+			//equalize water LEVEL over all neighbouring channels
 			totalLvl = totalLvl + updatedLevel;
 			int rest = totalLvl % nr;
 			int newLvl = totalLvl / nr;
@@ -274,7 +274,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	}
 
 	/**
-	 * Maps the current fluid level into the integer interval [0, 16]
+	 * Maps the current fluid LEVEL into the integer interval [0, 16]
 	 */
 	public int getDiscreteFluidLevel() {
 		int discreteFluidLevel = Math.round(DISCRETE_FACTOR * lvl);

@@ -3,16 +3,12 @@ package com.InfinityRaider.AgriCraft.handler;
 import com.InfinityRaider.AgriCraft.utility.icon.IconRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameData;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftRenderable;
 

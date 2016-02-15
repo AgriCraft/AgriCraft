@@ -4,7 +4,7 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.api.v1.IJournal;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -23,7 +23,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 public class ItemJournal extends ItemBase implements IJournal {
 	
     public ItemJournal() {
-        super(Names.Objects.journal);
+        super("journal");
         this.setMaxStackSize(1);
     }
 
@@ -43,10 +43,10 @@ public class ItemJournal extends ItemBase implements IJournal {
         ItemStack journal = player.getCurrentEquippedItem();
         if(journal.hasTagCompound()) {
             NBTTagCompound tag = journal.getTagCompound();
-            if(tag.hasKey(Names.NBT.discoveredSeeds)) {
-                NBTTagList list = tag.getTagList(Names.NBT.discoveredSeeds, 10);
+            if(tag.hasKey(AgriCraftNBT.DISCOVERED_SEEDS)) {
+                NBTTagList list = tag.getTagList(AgriCraftNBT.DISCOVERED_SEEDS, 10);
                 NBTHelper.clearEmptyStacksFromNBT(list);
-                tag.setTag(Names.NBT.discoveredSeeds, list);
+                tag.setTag(AgriCraftNBT.DISCOVERED_SEEDS, list);
             }
         }
         if(world.isRemote) {
@@ -59,22 +59,22 @@ public class ItemJournal extends ItemBase implements IJournal {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
         int nr = 0;
-        if(stack.hasTagCompound() && stack.getTagCompound().hasKey(Names.NBT.discoveredSeeds)) {
-            nr = stack.getTagCompound().getTagList(Names.NBT.discoveredSeeds, 10).tagCount();
+        if(stack.hasTagCompound() && stack.getTagCompound().hasKey(AgriCraftNBT.DISCOVERED_SEEDS)) {
+            nr = stack.getTagCompound().getTagList(AgriCraftNBT.DISCOVERED_SEEDS, 10).tagCount();
         }
         list.add(StatCollector.translateToLocal("agricraft_tooltip.discoveredSeeds")+": "+nr);
     }
 
     private NBTTagList getDiscoveredSeedsTaglist(ItemStack journal) {
-        //check if the journal has NBT and if it doesn't, create a new one
+        //check if the journal has AgriCraftNBT and if it doesn't, create a new one
         if(!journal.hasTagCompound()) {
             journal.setTagCompound(new NBTTagCompound());
         }
         NBTTagCompound tag = journal.getTagCompound();
-        //check if the NBT tag has a list of discovered seeds and if it doesn't, create a new one
+        //check if the AgriCraftNBT TAG has a list of discovered seeds and if it doesn't, create a new one
         NBTTagList list;
-        if(tag.hasKey(Names.NBT.discoveredSeeds)) {
-            list = tag.getTagList(Names.NBT.discoveredSeeds, 10);
+        if(tag.hasKey(AgriCraftNBT.DISCOVERED_SEEDS)) {
+            list = tag.getTagList(AgriCraftNBT.DISCOVERED_SEEDS, 10);
             NBTHelper.clearEmptyStacksFromNBT(list);
         }
         else {
@@ -89,7 +89,7 @@ public class ItemJournal extends ItemBase implements IJournal {
         }
         NBTTagList list = getDiscoveredSeedsTaglist(journal);
         NBTTagCompound tag = journal.getTagCompound();
-        //add the analyzed seed to the NBT tag list if it doesn't already have it
+        //add the ANALYZED SEED to the AgriCraftNBT TAG list if it doesn't already have it
         if(!isSeedDiscovered(journal, newEntry)) {
             NBTTagCompound seedTag = new NBTTagCompound();
             ItemStack write = newEntry.copy();
@@ -99,8 +99,8 @@ public class ItemJournal extends ItemBase implements IJournal {
             list.appendTag(seedTag);
         }
         NBTHelper.sortStacks(list);
-        //add the NBT tag to the journal
-        tag.setTag(Names.NBT.discoveredSeeds, list);
+        //add the AgriCraftNBT TAG to the journal
+        tag.setTag(AgriCraftNBT.DISCOVERED_SEEDS, list);
     }
 
     public boolean isSeedDiscovered(ItemStack journal, ItemStack seed) {
@@ -117,8 +117,8 @@ public class ItemJournal extends ItemBase implements IJournal {
             tag = journal.getTagCompound();
         }
         if(tag != null) {
-            if (tag.hasKey(Names.NBT.discoveredSeeds)) {
-                NBTTagList tagList = tag.getTagList(Names.NBT.discoveredSeeds, 10);      //10 for tagCompound
+            if (tag.hasKey(AgriCraftNBT.DISCOVERED_SEEDS)) {
+                NBTTagList tagList = tag.getTagList(AgriCraftNBT.DISCOVERED_SEEDS, 10);      //10 for tagCompound
                 for (int i = 0; i < tagList.tagCount(); i++) {
                     ItemStack seed = ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i));
                     if(CropPlantHandler.isValidSeed(seed)) {

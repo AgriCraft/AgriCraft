@@ -9,6 +9,7 @@ import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementH
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
@@ -124,10 +125,10 @@ public class CropPlantHandler {
     }
 
     /**
-     * Sets the growth requirement for a seed, effectively overriding the previously registered growth requirement
-     * @param seed The seed for which to set the growth requirement
-     * @param req The growth requirement to be set
-     * @return if the growth requirement was successfully set
+     * Sets the GROWTH requirement for a SEED, effectively overriding the previously registered GROWTH requirement
+     * @param seed The SEED for which to set the GROWTH requirement
+     * @param req The GROWTH requirement to be set
+     * @return if the GROWTH requirement was successfully set
      */
     public static boolean setGrowthRequirement(ItemWithMeta seed, IGrowthRequirement req) {
         if(seed == null || seed.getItem() == null) {
@@ -153,54 +154,54 @@ public class CropPlantHandler {
     public static boolean isAnalyzedSeed(ItemStack seedStack) {
         return isValidSeed(seedStack)
                 && (seedStack.hasTagCompound())
-                && (seedStack.getTagCompound().hasKey(Names.NBT.analyzed))
-                && (seedStack.getTagCompound().getBoolean(Names.NBT.analyzed));
+                && (seedStack.getTagCompound().hasKey(AgriCraftNBT.ANALYZED))
+                && (seedStack.getTagCompound().getBoolean(AgriCraftNBT.ANALYZED));
     }
     
     /**
-     * Tests to see if the provided stack is a valid {@link #cropPlants seed}.
-     * @param seed the stack to test as a seed.
-     * @return if the stack is a valid seed.
+     * Tests to see if the provided stack is a valid {@link #cropPlants SEED}.
+     * @param seed the stack to test as a SEED.
+     * @return if the stack is a valid SEED.
      */
     public static boolean isValidSeed(ItemStack seed) {
         return (seed != null) && (seed.getItem() != null) && isValidSeed(seed.getItem(), seed.getItemDamage());
     }
 
     /**
-     * Tests to see if the provided ItemWithMeta is a valid {@link #cropPlants seed}.
-     * @param seed the item to test as a seed.
-     * @return if the item is a valid seed.
+     * Tests to see if the provided ItemWithMeta is a valid {@link #cropPlants SEED}.
+     * @param seed the item to test as a SEED.
+     * @return if the item is a valid SEED.
      */
     public static boolean isValidSeed(ItemWithMeta seed) {
         return (seed !=null) && isValidSeed(seed.getItem(), seed.getMeta());
     }
 
     /**
-     * Tests to see if the provided stack is a valid {@link #cropPlants seed}, this takes the blacklist into account.
-     * @param seed the item to test as a seed.
-     * @param meta the meta for the seed
-     * @return if the item is a valid seed.
+     * Tests to see if the provided stack is a valid {@link #cropPlants SEED}, this takes the blacklist into account.
+     * @param seed the item to test as a SEED.
+     * @param meta the META for the SEED
+     * @return if the item is a valid SEED.
      */
     public static boolean isValidSeed(Item seed, int meta) {
         return isRecognizedByAgriCraft(seed, meta) && !cropPlants.get(seed).get(meta).isBlackListed();
     }
 
     /**
-     * Checks if the seed is recognized by AgriCraft, this does not take into account if the seed is blacklisted or not
-     * @param seed the item to test as a seed.
-     * @param meta the meta for the seed
-     * @return if the item is recognized as a seed
+     * Checks if the SEED is recognized by AgriCraft, this does not take into account if the SEED is blacklisted or not
+     * @param seed the item to test as a SEED.
+     * @param meta the META for the SEED
+     * @return if the item is recognized as a SEED
      */
     private static boolean isRecognizedByAgriCraft(Item seed, int meta) {
         return (seed != null) && cropPlants.containsKey(seed) && cropPlants.get(seed).containsKey(meta);
     }
 
     /**
-     * Writes the plant (or seed) to an NBTTag.
+     * Writes the plant (or SEED) to an NBTTag.
      * 
      * @see #readPlantFromNBT(NBTTagCompound)
      * 
-     * @param plant the plant (or seed) to write to an NBTTag.
+     * @param plant the plant (or SEED) to write to an NBTTag.
      * @return a NBTTagCompound, the serialized representation of the plant.
      */
     public static NBTTagCompound writePlantToNBT(CropPlant plant) {
@@ -208,7 +209,7 @@ public class CropPlantHandler {
     }
 
     /**
-     * Reads a plant (a.k.a seed) from an NBTTag.
+     * Reads a plant (a.k.a SEED) from an NBTTag.
      * 
      * @see #writePlantToNBT(CropPlant)
      * 
@@ -222,7 +223,7 @@ public class CropPlantHandler {
     /**
      * Retrieves the {@link #cropPlants plant} from a stack.
      * 
-     * @param stack the stack (possibly) containing the seed to retrieve.
+     * @param stack the stack (possibly) containing the SEED to retrieve.
      * @return the plant in the stack, or null, if the stack does not contain a valid plant. 
      */
     public static CropPlant getPlantFromStack(ItemStack stack) {
@@ -275,32 +276,32 @@ public class CropPlantHandler {
     }
 
     /**
-     * Gets a random seed which is recognized as a plant by AgriCraft
+     * Gets a random SEED which is recognized as a plant by AgriCraft
      * @param rand Random object to be used
-     * @param setTag If the seed should be initialized with an NBT tag containing random stats
-     * @return an ItemStack containing a random seed
+     * @param setTag If the SEED should be initialized with an AgriCraftNBT TAG containing random stats
+     * @return an ItemStack containing a random SEED
      */
     public static ItemStack getRandomSeed(Random rand, boolean setTag) {
         return getRandomSeed(rand, setTag, 5);
     }
 
     /**
-     * Gets a random seed which is recognized as a plant by AgriCraft
+     * Gets a random SEED which is recognized as a plant by AgriCraft
      * @param rand Random object to be used
-     * @param setTag If the seed should be initialized with an NBT tag containing random stats
-     * @param maxTier The maximum tier of the seed (inclusive)
-     * @return an ItemStack containing a random seed
+     * @param setTag If the SEED should be initialized with an AgriCraftNBT TAG containing random stats
+     * @param maxTier The maximum tier of the SEED (inclusive)
+     * @return an ItemStack containing a random SEED
      */
     public static ItemStack getRandomSeed(Random rand, boolean setTag, int maxTier) {
         return getRandomSeed(rand, setTag, CropPlantHandler.getPlantsUpToTier(maxTier));
     }
 
     /**
-     * Gets a random seed from a list of plants
+     * Gets a random SEED from a list of plants
      * @param rand Random object to be used
-     * @param setTag If the seed should be initialized with an NBT tag containing random stats
-     * @param plants List of plants to grab a random seed from
-     * @return an ItemStack containing a random seed
+     * @param setTag If the SEED should be initialized with an AgriCraftNBT TAG containing random stats
+     * @param plants List of plants to grab a random SEED from
+     * @return an ItemStack containing a random SEED
      */
     public static ItemStack getRandomSeed(Random rand, boolean setTag, List<CropPlant> plants) {
         boolean flag = false;
@@ -319,27 +320,27 @@ public class CropPlantHandler {
     }
 
     /**
-     * Sets the NBT tag for a seed to have stats, this method modifies the NBTTagCompound it is given to add the needed data and then returns it again
-     * @param tag the NBT tag of the ItemStack, is returned again
-     * @param growth the growth stat
-     * @param gain the gain stat
-     * @param strength the strength stat
-     * @param analyzed if the seed is analyzed
-     * @return the NBT tag
+     * Sets the AgriCraftNBT TAG for a SEED to have stats, this method modifies the NBTTagCompound it is given to add the needed data and then returns it again
+     * @param tag the AgriCraftNBT TAG of the ItemStack, is returned again
+     * @param growth the GROWTH stat
+     * @param gain the GAIN stat
+     * @param strength the STRENGTH stat
+     * @param analyzed if the SEED is ANALYZED
+     * @return the AgriCraftNBT TAG
      */
     public static NBTTagCompound setSeedNBT(NBTTagCompound tag, short growth, short gain, short strength, boolean analyzed) {
         short cap = (short) ConfigurationHandler.cropStatCap;
-        tag.setShort(Names.NBT.growth, growth==0? Constants.DEFAULT_GROWTH:growth>cap?cap:growth);
-        tag.setShort(Names.NBT.gain, gain==0?Constants.DEFAULT_GAIN:gain>cap?cap:gain);
-        tag.setShort(Names.NBT.strength, strength==0?Constants.DEFAULT_GAIN:strength>cap?cap:strength);
-        tag.setBoolean(Names.NBT.analyzed, analyzed);
+        tag.setShort(AgriCraftNBT.GROWTH, growth==0? Constants.DEFAULT_GROWTH:growth>cap?cap:growth);
+        tag.setShort(AgriCraftNBT.GAIN, gain==0?Constants.DEFAULT_GAIN:gain>cap?cap:gain);
+        tag.setShort(AgriCraftNBT.STRENGTH, strength==0?Constants.DEFAULT_GAIN:strength>cap?cap:strength);
+        tag.setBoolean(AgriCraftNBT.ANALYZED, analyzed);
         return tag;
     }
 
     /**
-     * Checks if a seed is BlackListed
-     * @param seed the seed to check
-     * @return if the seed is blacklisted and should not be plantable on crop sticks
+     * Checks if a SEED is BlackListed
+     * @param seed the SEED to check
+     * @return if the SEED is blacklisted and should not be plantable on crop sticks
      */
     public static boolean isSeedBlackListed(ItemStack seed) {
         if(seed == null || seed.getItem() == null) {
@@ -357,8 +358,8 @@ public class CropPlantHandler {
     }
 
     /**
-     * Adds a seed to the blacklist
-     * @param seed the seed to add to the blacklist
+     * Adds a SEED to the blacklist
+     * @param seed the SEED to add to the blacklist
      */
     public static void addSeedToBlackList(ItemStack seed) {
         if(seed == null || seed.getItem() == null) {
@@ -384,8 +385,8 @@ public class CropPlantHandler {
     }
 
     /**
-     * Removes a seed from the blacklist
-     * @param seed the seed to be removed from the blacklist
+     * Removes a SEED from the blacklist
+     * @param seed the SEED to be removed from the blacklist
      */
     public static void removeFromSeedBlackList(ItemStack seed) {
         if(seed == null || seed.getItem() == null) {
@@ -403,7 +404,7 @@ public class CropPlantHandler {
         LogHelper.debug("Removed seed from blacklist: " + Item.itemRegistry.getNameForObject(seed.getItem()) + ":" + seed.getItemDamage());
     }
 
-    /** Removes a seed from the blacklist array */
+    /** Removes a SEED from the blacklist array */
     private static void removeFromBlackListArray(ItemStack seed) {
         Iterator<ItemStack> it = blacklist.iterator();
         while(it.hasNext()) {
@@ -467,7 +468,7 @@ public class CropPlantHandler {
         //Set tier overrides
         IOHelper.initSeedTiers();
 
-        //Initialize seed blacklist
+        //Initialize SEED blacklist
         IOHelper.initSeedBlackList();
 
         //Set spread chance overrides

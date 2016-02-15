@@ -6,8 +6,7 @@ import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -26,7 +25,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 	};
 	
     public ItemTrowel() {
-        super(Names.Objects.trowel);
+        super("trowel");
         this.maxStackSize=1;
     }
 
@@ -45,7 +44,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         if(trowel==null || trowel.getItem()==null || trowel.getTagCompound()==null) {
             return false;
         }
-        return CropPlantHandler.readPlantFromNBT(trowel.getTagCompound().getCompoundTag(Names.NBT.seed)) != null;
+        return CropPlantHandler.readPlantFromNBT(trowel.getTagCompound().getCompoundTag(AgriCraftNBT.SEED)) != null;
     }
 
     @Override
@@ -53,7 +52,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         if(!this.hasSeed(trowel)) {
             return false;
         }
-        return trowel.getTagCompound().hasKey(Names.NBT.analyzed) && trowel.getTagCompound().getBoolean(Names.NBT.analyzed);
+        return trowel.getTagCompound().hasKey(AgriCraftNBT.ANALYZED) && trowel.getTagCompound().getBoolean(AgriCraftNBT.ANALYZED);
     }
 
     @Override
@@ -61,7 +60,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         if(this.hasSeed(trowel)) {
             if(trowel.hasTagCompound()) {
                 NBTTagCompound tag = trowel.getTagCompound();
-                tag.setBoolean(Names.NBT.analyzed, true);
+                tag.setBoolean(AgriCraftNBT.ANALYZED, true);
             } else {
                 NBTTagCompound tag = new NBTTagCompound();
                 CropPlantHandler.setSeedNBT(tag, (short) 1, (short) 1, (short) 1, true);
@@ -76,14 +75,14 @@ public class ItemTrowel extends ItemBase implements ITrowel {
             return null;
         }
         NBTTagCompound tag = trowel.getTagCompound();
-        CropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
+        CropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
         if(plant == null) {
             return null;
         }
-        short growth = tag.getShort(Names.NBT.growth);
-        short gain = tag.getShort(Names.NBT.gain);
-        short strength = tag.getShort(Names.NBT.strength);
-        boolean analysed = tag.getBoolean(Names.NBT.analyzed);
+        short growth = tag.getShort(AgriCraftNBT.GROWTH);
+        short gain = tag.getShort(AgriCraftNBT.GAIN);
+        short strength = tag.getShort(AgriCraftNBT.STRENGTH);
+        boolean analysed = tag.getBoolean(AgriCraftNBT.ANALYZED);
         NBTTagCompound seedTag = new NBTTagCompound();
         CropPlantHandler.setSeedNBT(seedTag, growth, gain, strength, analysed);
         ItemStack seed = plant.getSeed();
@@ -96,7 +95,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         if(!this.hasSeed(trowel)) {
             return -1;
         }
-        return trowel.getTagCompound().getShort(Names.NBT.materialMeta);
+        return trowel.getTagCompound().getShort(AgriCraftNBT.MATERIAL_META);
     }
 
     @Override
@@ -110,14 +109,14 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         }
         NBTTagCompound seedTag = seed.getTagCompound();
         boolean initialised = seedTag!=null;
-        short growth = (initialised && seedTag.hasKey(Names.NBT.growth))?seedTag.getShort(Names.NBT.growth): Constants.DEFAULT_GROWTH;
-        short gain = (initialised && seedTag.hasKey(Names.NBT.gain))?seedTag.getShort(Names.NBT.gain): Constants.DEFAULT_GAIN;
-        short strength = (initialised && seedTag.hasKey(Names.NBT.strength))?seedTag.getShort(Names.NBT.strength): Constants.DEFAULT_STRENGTH;
-        boolean analysed = (initialised && seedTag.hasKey(Names.NBT.analyzed)) && seedTag.getBoolean(Names.NBT.analyzed);
+        short growth = (initialised && seedTag.hasKey(AgriCraftNBT.GROWTH))?seedTag.getShort(AgriCraftNBT.GROWTH): Constants.DEFAULT_GROWTH;
+        short gain = (initialised && seedTag.hasKey(AgriCraftNBT.GAIN))?seedTag.getShort(AgriCraftNBT.GAIN): Constants.DEFAULT_GAIN;
+        short strength = (initialised && seedTag.hasKey(AgriCraftNBT.STRENGTH))?seedTag.getShort(AgriCraftNBT.STRENGTH): Constants.DEFAULT_STRENGTH;
+        boolean analysed = (initialised && seedTag.hasKey(AgriCraftNBT.ANALYZED)) && seedTag.getBoolean(AgriCraftNBT.ANALYZED);
         NBTTagCompound tag = new NBTTagCompound();
         CropPlantHandler.setSeedNBT(tag, growth, gain, strength, analysed);
-        tag.setTag(Names.NBT.seed, CropPlantHandler.writePlantToNBT(plant));
-        tag.setShort(Names.NBT.materialMeta, (short) growthStage);
+        tag.setTag(AgriCraftNBT.SEED, CropPlantHandler.writePlantToNBT(plant));
+        tag.setShort(AgriCraftNBT.MATERIAL_META, (short) growthStage);
         trowel.setTagCompound(tag);
         trowel.setItemDamage(1);
         return true;

@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.renderers.particles.LiquidSprayFX;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
@@ -36,31 +36,31 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         if(this.counter>0) {
-            tag.setInteger(Names.NBT.level, this.counter);
+            tag.setInteger(AgriCraftNBT.LEVEL, this.counter);
         }
-        tag.setBoolean(Names.NBT.isSprinkled, isSprinkled);
+        tag.setBoolean(AgriCraftNBT.IS_SPRINKLED, isSprinkled);
     }
 
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if(tag.hasKey(Names.NBT.level)) {
-            this.counter = tag.getInteger(Names.NBT.level);
+        if(tag.hasKey(AgriCraftNBT.LEVEL)) {
+            this.counter = tag.getInteger(AgriCraftNBT.LEVEL);
         }
         else {
             this.counter=0;
         }
         
-        if(tag.hasKey(Names.NBT.isSprinkled)) {
-             this.isSprinkled = tag.getBoolean(Names.NBT.isSprinkled);
+        if(tag.hasKey(AgriCraftNBT.IS_SPRINKLED)) {
+             this.isSprinkled = tag.getBoolean(AgriCraftNBT.IS_SPRINKLED);
          }
          else {
              this.isSprinkled = false;
          }
     }
 
-    //checks if the sprinkler is connected to an irrigation channel
+    //checks if the sprinkler is CONNECTED to an irrigation channel
     public boolean isConnected() {
         return this.worldObj!=null && this.worldObj.getBlockState(getPos().add(0, 1, 0)).getBlock() instanceof BlockWaterChannel;
     }
@@ -102,7 +102,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
         return this.isSprinkled;
     }
 
-    /** Depending on the block type either irrigates farmland or forces plant growth (based on chance) */
+    /** Depending on the block type either irrigates farmland or forces plant GROWTH (based on chance) */
     private void irrigate(int x, int y, int z, boolean farmlandOnly) {
         BlockPos pos = new BlockPos(x, y, z);
         IBlockState state = this.getWorld().getBlockState(pos);
@@ -113,7 +113,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
                 int flag = counter==0?2:6;
                 worldObj.setBlockState(pos, block.getStateFromMeta(7), flag);
             } else if (((block instanceof IPlantable) || (block instanceof IGrowable)) && !farmlandOnly) {
-                // x chance to force growth tick on plant every y ticks
+                // X1 chance to force GROWTH tick on plant every Y1 ticks
                 if (counter == 0 && worldObj.rand.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
                     block.updateTick(this.getWorld(), pos, state, worldObj.rand);
                 }
@@ -121,7 +121,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
         }
     }
 
-    /** Called once per tick, drains water out of the WaterChannel one y-level above */
+    /** Called once per tick, drains water out of the WaterChannel one Y1-LEVEL above */
     private void drainWaterFromChannel() {
         if (counter % 10 == 0) {
             TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(getPos().add(0, 1, 0));

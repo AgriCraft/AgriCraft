@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.items.ClippingRenderer;
 import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -22,7 +21,7 @@ import net.minecraft.world.World;
 public class ItemClipping extends ItemBase {
 	
     public ItemClipping() {
-        super(Names.Objects.clipping);
+        super("clipping");
         this.setCreativeTab(null);
     }
 

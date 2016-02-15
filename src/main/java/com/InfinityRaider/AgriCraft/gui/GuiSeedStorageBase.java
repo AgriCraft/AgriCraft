@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.gui;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
 import net.minecraft.client.Minecraft;
@@ -34,7 +34,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
     private int scrollPositionVertical;
     private int scrollPositionHorizontal;
     private int sortStatId = -1;
-    //button id constants
+    //button ID constants
     protected static final int buttonIdGrowth = 0;
     protected static final int buttonIdGain = 1;
     protected static final int buttonIdStrength = 2;
@@ -181,7 +181,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 
     @Override
     protected void mouseClicked(int x, int y, int rightClick) throws IOException {
-        //set active seed button clicked
+        //set active SEED button clicked
         if(this.setActiveSeedButtons != null) {
             for (Component<ItemStack> component : setActiveSeedButtons) {
                 if (component.isOverComponent(guiLeft + x, guiTop + y)) {
@@ -190,7 +190,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
                 }
             }
         }
-        //click to get seed out of the storage
+        //click to get SEED out of the storage
         if(this.hasActiveSeed()) {
             for(Component<PlantStatsStorage> component : activeSeeds) {
                 if(component.isOverComponent(x, y)) {
@@ -208,9 +208,9 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
     private void sortByStat(List<SeedStorageSlot> list) {
         String stat=null;
         switch(this.sortStatId) {
-            case buttonIdGrowth: stat = Names.NBT.growth; break;
-            case buttonIdGain: stat = Names.NBT.gain; break;
-            case buttonIdStrength: stat = Names.NBT.strength; break;
+            case buttonIdGrowth: stat = AgriCraftNBT.GROWTH; break;
+            case buttonIdGain: stat = AgriCraftNBT.GAIN; break;
+            case buttonIdStrength: stat = AgriCraftNBT.STRENGTH; break;
         }
         if(stat!=null && this.activeSeed!=null) {
             Collections.sort(list, new SeedStorageSlot.SlotComparator(stat));
@@ -273,7 +273,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
                 short growth = stats.getGrowth();
                 short gain = stats.getGain();
                 short strength = stats.getStrength();
-                //draw the seed icon
+                //draw the SEED icon
                 ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
                 stack.setTagCompound(CropPlantHandler.setSeedNBT(new NBTTagCompound(), growth, gain, strength, true));
                 itemRender.renderItemIntoGUI(stack, component.xOffset(), component.yOffset());
