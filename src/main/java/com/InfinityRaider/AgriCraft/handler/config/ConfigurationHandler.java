@@ -124,7 +124,7 @@ public class ConfigurationHandler {
 
         condenseCustomWoodInNei = config.getBoolean("condense custom wood blocks in NEI", Categories.CATEGORY_CLIENT, true, "set to true to condense all entries for custom wood blocks into one entry in NEI");
         disableParticles = config.getBoolean("Disable particles", Categories.CATEGORY_CLIENT, false, "set to true to disable particles for the sprinklers");
-        statDisplay = config.getString("Stat Display", Categories.CATEGORY_CLIENT, "NUMBER", "This defines how to display the stats of plants. Possible settings are 'NUMBER': just display a simple number (ex: \"6\"), 'FRACTION': number/maximum (ex: \"6/10\"), 'CHARACTER-'char'': number of characters equal to the stats (ex: CHARACTER-• will give \"••••••\") and 'KEYWORD-'type'-'keyword'': keyword followed by the type and then the stat, type is any of the previous types (ex: KEYWORD-FRACTION-Rank will give \"Rank: 6/10\") . Invalid entries will default to NUMBER ");
+        statDisplay = config.getString("Stat Display", Categories.CATEGORY_CLIENT, "NUMBER", "This defines how to display the stats of plants. Possible settings are 'NUMBER': just display a simple number (ex: \"6\"), 'FRACTION': number/maximum (ex: \"6/10\"), 'CHARACTER-'char'': number of characters equal to the stats (ex: CHARACTER-ï¿½ will give \"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\") and 'KEYWORD-'type'-'keyword'': keyword followed by the type and then the stat, type is any of the previous types (ex: KEYWORD-FRACTION-Rank will give \"Rank: 6/10\") . Invalid entries will default to NUMBER ");
         disableSounds = config.getBoolean("Disable sounds", Categories.CATEGORY_CLIENT, false, "Set to true to disable sounds.");
 
         if(config.hasChanged()) {config.save();}
