@@ -1,14 +1,14 @@
 //Creative Tabs
-itemGroup.agricraft=Agricraft
+itemGroup.agricraft=AgriCraft
 
 //Items
-item.agricraft:cropsItem.name=Ställning
+item.agricraft:crop_sticks.name=Ställning
 item.agricraft:journal.name=Agricraft-journal
 item.agricraft:trowel.name=Trädgårdsspade
-item.agricraft:magnifyingGlass.name=Förstorningsglas
+item.agricraft:magnifying_glass.name=Förstorningsglas
 item.agricraft:debugger.name=Felsökare
-item.agricraft:handRake.wood.name=Träkratta
-item.agricraft:handRake.iron.name=Järnkratta
+item.agricraft:hand_rake.wood.name=Träkratta
+item.agricraft:hand_rake.iron.name=Järnkratta
 item.agricraft:nuggetDiamond.name=Diamantflisa
 item.agricraft:nuggetIron.name=Järnklimp
 item.agricraft:nuggetEmerald.name=Smaragdflisa

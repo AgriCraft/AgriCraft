@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.items;
 
 import com.InfinityRaider.AgriCraft.api.v1.IClipper;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,7 +17,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 public class ItemClipper extends ItemBase implements IClipper {
 	
     public ItemClipper() {
-        super(Names.Objects.clipper);
+        super("clipper");
         this.setMaxStackSize(1);
     }
 

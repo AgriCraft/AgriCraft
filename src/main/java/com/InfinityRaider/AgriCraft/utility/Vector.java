@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.utility;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 
@@ -30,19 +30,19 @@ public class Vector {
 	}
 
     public Vector(NBTTagCompound tag) throws UnknownPositionException {
-        if(!tag.hasKey(Names.NBT.x)) {throw new UnknownPositionException();}
-        if(!tag.hasKey(Names.NBT.y)) {throw new UnknownPositionException();}
-        if(!tag.hasKey(Names.NBT.z)) {throw new UnknownPositionException();}
-        this.x = tag.getDouble(Names.NBT.x);
-        this.y = tag.getDouble(Names.NBT.y);
-        this.z = tag.getDouble(Names.NBT.z);
+        if(!tag.hasKey(AgriCraftNBT.X1)) {throw new UnknownPositionException();}
+        if(!tag.hasKey(AgriCraftNBT.Y1)) {throw new UnknownPositionException();}
+        if(!tag.hasKey(AgriCraftNBT.Z1)) {throw new UnknownPositionException();}
+        this.x = tag.getDouble(AgriCraftNBT.X1);
+        this.y = tag.getDouble(AgriCraftNBT.Y1);
+        this.z = tag.getDouble(AgriCraftNBT.Z1);
     }
 
     public NBTTagCompound writeToNBT() {
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setDouble(Names.NBT.x, x);
-        tag.setDouble(Names.NBT.y, y);
-        tag.setDouble(Names.NBT.z, z);
+        tag.setDouble(AgriCraftNBT.X1, x);
+        tag.setDouble(AgriCraftNBT.Y1, y);
+        tag.setDouble(AgriCraftNBT.Z1, z);
         return tag;
     }
 
@@ -121,7 +121,7 @@ public class Vector {
         return new Vector(vX, vY, vZ);
     }
 
-    /** Projects this vector on the direction defined by the argument (argument is not modified) */
+    /** Projects this vector on the DIRECTION defined by the argument (argument is not modified) */
     public Vector projectOn(Vector v) {
         Vector copy = v.copy();
         copy.normalize();

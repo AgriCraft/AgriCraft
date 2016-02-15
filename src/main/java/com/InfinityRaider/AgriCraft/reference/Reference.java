@@ -1,5 +1,11 @@
 package com.InfinityRaider.AgriCraft.reference;
 
+/**
+ * The version should be tracked in the base mod class.
+ * 
+ * @deprecated
+ */
+@Deprecated
 public final class Reference {
     public static final String MOD_NAME = "AgriCraft";
     public static final String MOD_ID = "AgriCraft";

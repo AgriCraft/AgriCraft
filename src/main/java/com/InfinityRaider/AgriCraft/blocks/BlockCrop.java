@@ -18,6 +18,7 @@ import com.InfinityRaider.AgriCraft.renderers.blocks.RenderCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
@@ -98,7 +99,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         return new TileEntityCrop();
     }
 
-    /** Randomly called to apply growth ticks */
+    /** Randomly called to apply GROWTH ticks */
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rnd) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
@@ -108,13 +109,13 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
                 	crop.spreadWeed();
                 }
             	else if (crop.isFertile()) {
-                    //multiplier from growth stat
+                    //multiplier from GROWTH stat
                     double growthBonus = 1.0 + crop.getGrowth() / 10.0;
                     //multiplier defined in the config
                     float global = ConfigurationHandler.growthMultiplier;
-                    //crop dependent base growth rate
+                    //crop dependent base GROWTH rate
                     float growthRate = (float) crop.getGrowthRate();
-                    //determine if growth tick should be applied or skipped
+                    //determine if GROWTH tick should be applied or skipped
                     boolean shouldGrow = (rnd.nextDouble()<=(growthRate * growthBonus * global)/100);
                     if (shouldGrow) {
                         crop.applyGrowthTick();
@@ -190,9 +191,9 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     }
 
     /**
-     * Attempts to plant a seed contained in the provided ItemStack.
+     * Attempts to plant a SEED contained in the provided ItemStack.
      * 
-     * @param stack the seed(s) to plant.
+     * @param stack the SEED(s) to plant.
      * @param world the World object for this block
      * @param pos the block position
      * @return if the planting operation was successful.
@@ -204,15 +205,15 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
             if (crop.isCrossCrop() || crop.hasPlant() || !(CropPlantHandler.isValidSeed(stack))) {
                 return false;
             }
-            //the seed can be planted here
+            //the SEED can be planted here
             if (!CropPlantHandler.getGrowthRequirement(stack).isValidSoil(world, pos.add(0, -1, 0))) {
                 return false;
             }
-            //get NBT data from the seeds
+            //get AgriCraftNBT data from the seeds
             NBTTagCompound tag = stack.getTagCompound();
-            if (tag != null && tag.hasKey(Names.NBT.growth)) {
+            if (tag != null && tag.hasKey(AgriCraftNBT.GROWTH)) {
                 //NBT data was found: copy data to plant
-                crop.setPlant(tag.getInteger(Names.NBT.growth), tag.getInteger(Names.NBT.gain), tag.getInteger(Names.NBT.strength), tag.getBoolean(Names.NBT.analyzed), stack.getItem(), stack.getItemDamage());
+                crop.setPlant(tag.getInteger(AgriCraftNBT.GROWTH), tag.getInteger(AgriCraftNBT.GAIN), tag.getInteger(AgriCraftNBT.STRENGTH), tag.getBoolean(AgriCraftNBT.ANALYZED), stack.getItem(), stack.getItemDamage());
             } else {
                 //NBT data was not initialized: set defaults
                 crop.setPlant(Constants.DEFAULT_GROWTH, Constants.DEFAULT_GAIN, Constants.DEFAULT_STRENGTH, false, stack.getItem(), stack.getItemDamage());
@@ -248,8 +249,8 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
                 //harvest operation
                 this.harvest(world, pos, state, player, crop);
             } else if (heldItem.getItem() == net.minecraft.init.Items.reeds) {
-                //Enables reed planting, temporary code until I code in seed proxy's
-                //TODO: create seed proxy handler to plant other things directly onto crops (for example the Ex Nihilo seeds)
+                //Enables reed planting, temporary code until I code in SEED proxy's
+                //TODO: create SEED proxy handler to plant other things directly onto crops (for example the Ex Nihilo seeds)
                 if(crop.hasPlant()) {
                     this.harvest(world, pos, state, player, crop);
                 } else if (!crop.isCrossCrop() && !crop.hasWeed()) {
@@ -311,7 +312,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
                 //check to see if clicked with seeds
                 if (CropPlantHandler.isValidSeed(heldItem)) {
                     if(this.plantSeed(player.getCurrentEquippedItem(), world, pos)) {
-                        //take one seed away if the player is not in creative
+                        //take one SEED away if the player is not in creative
                         player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
                     }
                 }
@@ -395,7 +396,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     }
 
     /**
-     * Determines if bonemeal speeds up the growth of the contained plant.
+     * Determines if bonemeal speeds up the GROWTH of the contained plant.
      * 
      * @return true, bonemeal may speed up any contained plant.
      */
@@ -405,7 +406,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     }
 
     /**
-     * Increments the contained plant's growth stage.
+     * Increments the contained plant's GROWTH stage.
      * Called when bonemeal is applied to the block.
      */
     public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
@@ -490,7 +491,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         return drops;
     }
 
-    /** Performs the needed action when this crop is clipped: check if there is a valid plant, drop a clipping and decrement the growth stage */
+    /** Performs the needed action when this crop is clipped: check if there is a valid plant, drop a clipping and decrement the GROWTH stage */
     public void onClipperUsed(World world, BlockPos pos, IBlockState state, TileEntityCrop crop) {
         if(!crop.hasPlant()) {
             return;

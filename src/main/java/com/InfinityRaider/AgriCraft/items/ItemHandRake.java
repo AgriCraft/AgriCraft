@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.api.v1.ICrop;
 import com.InfinityRaider.AgriCraft.api.v1.IRake;
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.WeightedRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -41,7 +40,7 @@ public class ItemHandRake extends ItemBase implements IRake {
 	};
 
 	public ItemHandRake() {
-		super(Names.Objects.handRake);
+		super("hand_rake");
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 	}
@@ -75,12 +74,13 @@ public class ItemHandRake extends ItemBase implements IRake {
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
 		String base = super.getUnlocalizedName(itemStack);
-		if (itemStack.getItemDamage() == WOOD_VARIANT_META) {
-			return base + ".wood";
-		} else if (itemStack.getItemDamage() == IRON_VARIANT_META) {
-			return base + ".iron";
-		} else {
-			throw new IllegalArgumentException("Unsupported meta value of " + itemStack.getItemDamage() + " for ItemHandRake.");
+		switch (itemStack.getItemDamage()) {
+			case WOOD_VARIANT_META:
+				return base + ".wood";
+			case IRON_VARIANT_META:
+				return base + ".iron";
+			default:
+				throw new IllegalArgumentException("Unsupported meta value of " + itemStack.getItemDamage() + " for ItemHandRake.");
 		}
 	}
 

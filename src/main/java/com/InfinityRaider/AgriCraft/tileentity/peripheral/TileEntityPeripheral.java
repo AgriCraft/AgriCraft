@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.tileentity.peripheral;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.method.*;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
@@ -41,13 +42,13 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setBoolean(Names.NBT.flag, mayAnalyze);
+        tag.setBoolean(AgriCraftNBT.FLAG, mayAnalyze);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        mayAnalyze = tag.hasKey(Names.NBT.flag) && tag.getBoolean(Names.NBT.flag);
+        mayAnalyze = tag.hasKey(AgriCraftNBT.FLAG) && tag.getBoolean(AgriCraftNBT.FLAG);
     }
 
     private void initMethods() {

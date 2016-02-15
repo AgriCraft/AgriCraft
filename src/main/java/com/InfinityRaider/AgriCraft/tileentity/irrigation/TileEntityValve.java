@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.tileentity.irrigation;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,13 +22,13 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setBoolean(Names.NBT.power, powered);
+        tag.setBoolean(AgriCraftNBT.POWER, powered);
     }
 
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        this.powered = tag.getBoolean(Names.NBT.power);
+        this.powered = tag.getBoolean(AgriCraftNBT.POWER);
         super.readFromNBT(tag);
     }
 

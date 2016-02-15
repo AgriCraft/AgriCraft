@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.network;
 
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
 import io.netty.buffer.ByteBuf;
@@ -31,9 +31,9 @@ public class MessageTileEntitySeedStorage extends MessageAgriCraft {
             this.slotId = slot.getId();
             this.amount = slot.count;
             NBTTagCompound tag = slot.getTag();
-            this.growth = tag.getInteger(Names.NBT.growth);
-            this.gain = tag.getInteger(Names.NBT.gain);
-            this.strength = tag.getInteger(Names.NBT.strength);
+            this.growth = tag.getInteger(AgriCraftNBT.GROWTH);
+            this.gain = tag.getInteger(AgriCraftNBT.GAIN);
+            this.strength = tag.getInteger(AgriCraftNBT.STRENGTH);
         }
         else {
             this.slotId = -1;

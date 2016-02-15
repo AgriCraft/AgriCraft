@@ -3,7 +3,9 @@ package com.InfinityRaider.AgriCraft.tileentity;
 import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
+import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,21 +25,21 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     private static final int[] SLOTS = new int[] {0, 1};
 	
     /**
-     * The seed that the seed analyzer contains.
+     * The SEED that the SEED analyzer contains.
      * 
      * Defaults to null, for empty.
      */
     private ItemStack specimen = null;
     
     /**
-     * The journal that the seed analyzer contains.
+     * The journal that the SEED analyzer contains.
      * 
      * Defaults to null, for empty.
      */
     private ItemStack journal = null;
     
     /**
-     * The current progress of the seed analyzer.
+     * The current progress of the SEED analyzer.
      */
     private int progress = 0;
 
@@ -53,7 +55,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         if(this.journal!=null && this.journal.getItem()!=null) {
             NBTTagCompound journalTag = new NBTTagCompound();
             this.journal.writeToNBT(journalTag);
-            tag.setTag(Names.Objects.journal, journalTag);
+            tag.setTag(AgriCraftItems.journal.getUnlocalizedName(), journalTag);
         }
         tag.setInteger("progress", this.progress);
     }
@@ -69,8 +71,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         	//Not certain this is required... Unsure if networking thing?
             this.specimen = null;
         }
-        if(tag.hasKey(Names.Objects.journal)) {
-            this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.Objects.journal));
+        if(tag.hasKey(AgriCraftItems.journal.getUnlocalizedName())) {
+            this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriCraftItems.journal.getUnlocalizedName()));
         }
         else {
             this.journal = null;
@@ -79,10 +81,10 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     /**
-     * Determines if the seed analyzer contains a seed or trowel in its analyze slot.
+     * Determines if the SEED analyzer contains a SEED or trowel in its analyze slot.
      * A null check on {@link #getSpecimen()} should return the same.
      * 
-     * @return if a seed or trowel is present.
+     * @return if a SEED or trowel is present.
      */
     public final boolean hasSpecimen() {
         return this.hasSeed() || this.hasTrowel();
@@ -90,7 +92,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     /**
      * Retrieves the item in the analyzer's analyze slot. (Does not remove).
-     * May be either a seed or a trowel.
+ May be either a SEED or a trowel.
      * 
      * @return the item in the analyze slot.
      */
@@ -99,9 +101,9 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     /**
-     * Determines if the analyzer has a <em>valid</em> seed in its analyze slot.
+     * Determines if the analyzer has a <em>valid</em> SEED in its analyze slot.
      * 
-     * @return if the analyze slot contains a <em>valid</em> seed.
+     * @return if the analyze slot contains a <em>valid</em> SEED.
      */
     public final boolean hasSeed() {
         return CropPlantHandler.isValidSeed(this.specimen);
@@ -131,9 +133,9 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     /**
-     * Calculates the number of ticks it takes to analyze the seed.
+     * Calculates the number of ticks it takes to analyze the SEED.
      * 
-     * @return ticks to analyze seed.
+     * @return ticks to analyze SEED.
      */
     public final int maxProgress() {
         ItemStack seed;
@@ -172,16 +174,16 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     /**
-     * Determines if a contained specimen has already been analyzed.
+     * Determines if a contained specimen has already been ANALYZED.
      * 
-     * @return if the specimen has been analyzed.
+     * @return if the specimen has been ANALYZED.
      */
     public final boolean isSpecimenAnalyzed() {
         if(this.hasTrowel()) {
             return ((ITrowel) this.specimen.getItem()).isSeedAnalysed(this.specimen);
         }
         if(this.hasSeed()) {
-            return this.specimen.hasTagCompound() && this.specimen.getTagCompound().getBoolean(Names.NBT.analyzed);
+            return this.specimen.hasTagCompound() && this.specimen.getTagCompound().getBoolean(AgriCraftNBT.ANALYZED);
         }
         return false;
     }
@@ -197,7 +199,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         if(this.isAnalyzing()) {
             //increment progress counter
             this.progress=progress<this.maxProgress()?progress+1:this.maxProgress();
-            //if progress is complete analyze the seed
+            //if progress is complete analyze the SEED
             if(progress == this.maxProgress() && !worldObj.isRemote) {
                 this.analyze();
                 change = true;
@@ -211,17 +213,17 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     /**
-     * Analyzes the current seed.
+     * Analyzes the current SEED.
      * 
      * Marked for cleanup.
      */
     public void analyze() {
-        //analyze the seed
+        //analyze the SEED
         if(this.hasSeed()) {
             if (this.specimen.hasTagCompound()) {
                 NBTTagCompound tag = this.specimen.getTagCompound();
-                if (tag.hasKey(Names.NBT.growth) && tag.hasKey(Names.NBT.gain) && tag.hasKey(Names.NBT.strength)) {
-                    tag.setBoolean(Names.NBT.analyzed, true);
+                if (tag.hasKey(AgriCraftNBT.GROWTH) && tag.hasKey(AgriCraftNBT.GAIN) && tag.hasKey(AgriCraftNBT.STRENGTH)) {
+                    tag.setBoolean(AgriCraftNBT.ANALYZED, true);
                 } else {
                     CropPlantHandler.setSeedNBT(tag, (short) 0, (short) 0, (short) 0, true);
                 }
@@ -233,7 +235,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         else if(this.hasTrowel()) {
             ((ITrowel) this.specimen.getItem()).analyze(this.specimen);
         }
-        //register the seed in the journal if there is a journal present
+        //register the SEED in the journal if there is a journal present
         if(this.hasJournal()) {
             ((ItemJournal) journal.getItem()).addEntry(journal, this.hasSeed() ? this.specimen : ((ITrowel) this.specimen.getItem()).getSeed(this.specimen));
         }
@@ -308,7 +310,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         return false;
     }
 
-    //returns the inventory size
+    //returns the INVENTORY SIZE
     @Override
     public int getSizeInventory() {
         return 2;
@@ -348,7 +350,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         return output;
     }
 
-    //gets item stack in the slot when closing the inventory
+    //gets item stack in the slot when closing the INVENTORY
     @Override
     public ItemStack removeStackFromSlot(int slot) {
         slot = slot%2;
@@ -394,13 +396,13 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     /**
-     * Opens the inventory. (Empty method).
+     * Opens the INVENTORY. (Empty method).
      */
     @Override
     public void openInventory(EntityPlayer player) {}
 
     /**
-     * Closes the inventory. (Empty method).
+     * Closes the INVENTORY. (Empty method).
      */
     @Override
     public void closeInventory(EntityPlayer player) {}

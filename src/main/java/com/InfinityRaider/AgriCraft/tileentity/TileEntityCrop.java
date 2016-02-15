@@ -17,7 +17,7 @@ import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
 import net.minecraft.block.Block;
@@ -116,7 +116,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         }
     }
 
-    /** check to see if a seed can be planted */
+    /** check to see if a SEED can be planted */
     @Override
     public boolean canPlant() {
         return !this.hasPlant() && !this.hasWeed() && !this.isCrossCrop();
@@ -203,7 +203,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         return hasPlant() && isMature() && plant.onHarvest(worldObj, pos, worldObj.getBlockState(getPos()), player);
     }
 
-    /** returns an ItemStack holding the seed currently planted, initialized with an NBT tag holding the stats */
+    /** returns an ItemStack holding the SEED currently planted, initialized with an AgriCraftNBT TAG holding the stats */
     @Override
     public ItemStack getSeedStack() {
         if(plant == null) {
@@ -227,7 +227,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         return plant==null?null:new BlockState(plant.getBlock());
     }
 
-    /** spawns weed in the crop */
+    /** spawns WEED in the crop */
     @Override
     public void spawnWeed() {
         this.crossCrop=false;
@@ -235,7 +235,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         this.clearPlant();
     }
 
-    /** spread the weed */
+    /** spread the WEED */
     @Override
     public void spreadWeed() {
         List<TileEntityCrop> neighbours = this.getNeighbours();
@@ -259,7 +259,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         }
     }
 
-    //clear the weed
+    //clear the WEED
     @Override
     public void clearWeed() {updateWeed(0);}
 
@@ -285,10 +285,10 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
                 ItemStack seed = trowel.getSeed(trowelStack);
                 int growthStage = trowel.getGrowthStage(trowelStack);
                 NBTTagCompound tag = seed.getTagCompound();
-                short growth = tag.getShort(Names.NBT.growth);
-                short gain = tag.getShort(Names.NBT.gain);
-                short strength = tag.getShort(Names.NBT.strength);
-                boolean analysed = tag.getBoolean(Names.NBT.analyzed);
+                short growth = tag.getShort(AgriCraftNBT.GROWTH);
+                short gain = tag.getShort(AgriCraftNBT.GAIN);
+                short strength = tag.getShort(AgriCraftNBT.STRENGTH);
+                boolean analysed = tag.getBoolean(AgriCraftNBT.ANALYZED);
                 this.setPlant(growth, gain, strength, analysed, seed.getItem(), seed.getItemDamage());
                 this.setGrowthStage(growthStage);
                 trowel.clearSeed(trowelStack);
@@ -369,12 +369,12 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         stats.writeToNBT(tag);
-        tag.setBoolean(Names.NBT.crossCrop,crossCrop);
-        tag.setBoolean(Names.NBT.weed, weed);
+        tag.setBoolean(AgriCraftNBT.CROSS_CROP,crossCrop);
+        tag.setBoolean(AgriCraftNBT.WEED, weed);
         if(this.plant != null) {
-            tag.setTag(Names.NBT.seed, CropPlantHandler.writePlantToNBT(plant));
+            tag.setTag(AgriCraftNBT.SEED, CropPlantHandler.writePlantToNBT(plant));
             if(getAdditionalCropData() != null) {
-                tag.setTag(Names.NBT.inventory, getAdditionalCropData().writeToNBT());
+                tag.setTag(AgriCraftNBT.INVENTORY, getAdditionalCropData().writeToNBT());
             }
         }
     }
@@ -385,20 +385,20 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         this.stats = PlantStats.readFromNBT(tag);
-        this.crossCrop=tag.getBoolean(Names.NBT.crossCrop);
-        this.weed=tag.getBoolean(Names.NBT.weed);
-        if(tag.hasKey(Names.NBT.seed) && !tag.hasKey(Names.NBT.meta)) {
-            this.plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(Names.NBT.seed));
+        this.crossCrop=tag.getBoolean(AgriCraftNBT.CROSS_CROP);
+        this.weed=tag.getBoolean(AgriCraftNBT.WEED);
+        if(tag.hasKey(AgriCraftNBT.SEED) && !tag.hasKey(AgriCraftNBT.META)) {
+            this.plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
         }
         else {
             this.plant=null;
         }
-        if(tag.hasKey(Names.NBT.inventory) && this.plant != null) {
-            this.data = plant.readCropDataFromNBT(tag.getCompoundTag(Names.NBT.inventory));
+        if(tag.hasKey(AgriCraftNBT.INVENTORY) && this.plant != null) {
+            this.data = plant.readCropDataFromNBT(tag.getCompoundTag(AgriCraftNBT.INVENTORY));
         }
     }
 
-    /** Apply a growth increment */
+    /** Apply a GROWTH increment */
     public void applyGrowthTick() {
         int meta = getGrowthStage();
         if(hasPlant()) {
@@ -422,7 +422,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
     /**
      * @return a list with all neighbours of type <code>TileEntityCrop</code> in the
-     *          NORTH, SOUTH, EAST and WEST direction
+          NORTH, SOUTH, EAST and WEST DIRECTION
      */
     public List<TileEntityCrop> getNeighbours() {
         List<TileEntityCrop> neighbours = new ArrayList<TileEntityCrop>();
@@ -491,15 +491,15 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
     	if(this.hasPlant()) {
-    		//Add the seed name.
+    		//Add the SEED name.
     		information.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + this.getSeedStack().getDisplayName());
-    		//Add the growth.
+    		//Add the GROWTH.
     		if(this.isMature()) {
     			information.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage")+": "+StatCollector.translateToLocal("agricraft_tooltip.mature"));
     		} else {
     			information.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage")+": "+((int) ( (100*(this.getBlockMetadata()+0.00F))/7.00F)+"%" ));
     		}
-    		//Add the analyzed data.
+    		//Add the ANALYZED data.
     		if(this.isAnalyzed()) {
     			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGrowth(), ConfigurationHandler.cropStatCap));
                 information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGain(), ConfigurationHandler.cropStatCap));

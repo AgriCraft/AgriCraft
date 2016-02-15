@@ -2,13 +2,13 @@
 itemGroup.agricraft=AgriCraft
 
 //Items
-item.agricraft:cropsItem.name=Crop Sticks
+item.agricraft:crop_sticks.name=Crop Sticks
 item.agricraft:journal.name=Agricultural Journal
 item.agricraft:trowel.name=Gardening Trowel
-item.agricraft:magnifyingGlass.name=Magnifying Glass
+item.agricraft:magnifying_glass.name=Magnifying Glass
 item.agricraft:debugger.name=Debugger
-item.agricraft:handRake.wood.name=Wooden Hand Rake
-item.agricraft:handRake.iron.name=Iron Hand Rake
+item.agricraft:hand_rake.wood.name=Wooden Hand Rake
+item.agricraft:hand_rake.iron.name=Iron Hand Rake
 item.agricraft:clipper.name=Clipper
 item.agricraft:clipping.name=Clipping
 

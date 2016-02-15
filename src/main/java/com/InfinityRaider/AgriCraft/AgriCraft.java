@@ -21,7 +21,6 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.ArrayList;
-import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * <p>

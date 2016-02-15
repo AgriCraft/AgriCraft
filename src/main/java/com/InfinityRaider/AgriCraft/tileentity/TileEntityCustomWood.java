@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.tileentity;
 
 import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
 import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.renderers.TextureCache;
 import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
 import net.minecraft.block.Block;
@@ -20,18 +20,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 /**
- * This class represents the root tile entity for all AgriCraft custom wood blocks.
+ * This class represents the root tile entity for all AgriCraft custom WOOD blocks.
  * Through this class, the custom woods are remembered for the blocks. *
  */
 public class TileEntityCustomWood extends TileEntityBase implements IDebuggable {
 	
-	/** The default material to use. Currently is wood planks. */
+	/** The default MATERIAL to use. Currently is WOOD planks. */
     public static final Block DEFAULT_MATERIAL = Blocks.planks;
     
     /** The default metadata to use. Currently is set to Oak(0) for Planks. */
     public static final int DEFAULT_META = 0;
 	
-	/** The default icon to use. Currently set to the default material. */
+	/** The default icon to use. Currently set to the default MATERIAL. */
 	public static final SafeIcon DEFAULT_ICON = new SafeIcon(DEFAULT_MATERIAL);
 	
 	/**
@@ -54,15 +54,15 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-    	tag.setString(Names.NBT.material, Block.blockRegistry.getNameForObject(this.getMaterial()).toString());
-        tag.setInteger(Names.NBT.materialMeta, this.getMaterialMeta());
+    	tag.setString(AgriCraftNBT.MATERIAL, Block.blockRegistry.getNameForObject(this.getMaterial()).toString());
+        tag.setInteger(AgriCraftNBT.MATERIAL_META, this.getMaterialMeta());
         super.writeToNBT(tag);
     }
 
     /**
      * Loads the CustomWood entity from a NBTTag, as to load from a savefile.
      * 
-     * @param tag the tag to load the entity data from.
+     * @param tag the TAG to load the entity data from.
      */
     @Override
     public void readFromNBT(NBTTagCompound tag) {
@@ -71,7 +71,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
     }
 
     /**
-     * Tests to see if another CustomWood entity is of the same material.
+     * Tests to see if another CustomWood entity is of the same MATERIAL.
      * 
      * @param tileEntity the CustomWood entity to test.
      * @return if the construction materials for both entities are the same.
@@ -82,21 +82,21 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 
     
     /**
-     * Sets the CustomWood block's material, the material to mimic, from an NBTTag.
+     * Sets the CustomWood block's MATERIAL, the MATERIAL to mimic, from an NBTTag.
      * This function is intended for use internally, for serialization.
      * 
-     * @param tag the tag to set the block's material from.
+     * @param tag the TAG to set the block's MATERIAL from.
      */
     private void setMaterial(NBTTagCompound tag) {
-        if(tag!=null && tag.hasKey(Names.NBT.material) && tag.hasKey(Names.NBT.materialMeta)) {
-            this.setMaterial(tag.getString(Names.NBT.material), tag.getInteger(Names.NBT.materialMeta));
+        if(tag!=null && tag.hasKey(AgriCraftNBT.MATERIAL) && tag.hasKey(AgriCraftNBT.MATERIAL_META)) {
+            this.setMaterial(tag.getString(AgriCraftNBT.MATERIAL), tag.getInteger(AgriCraftNBT.MATERIAL_META));
         }
     }
 
     /**
-     * Sets the CustomWood block's material, the material to mimic, from an ItemStack.
+     * Sets the CustomWood block's MATERIAL, the MATERIAL to mimic, from an ItemStack.
      * 
-     * @param stack the ItemStack to set the block's material from.
+     * @param stack the ItemStack to set the block's MATERIAL from.
      */
     public final void setMaterial(ItemStack stack) {
         if(stack!=null && stack.getItem()!=null && stack.getItem() instanceof ItemBlock) {
@@ -105,10 +105,10 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
     }
 
     /**
-     * Sets the CustomWood block's material, the material to mimic, from the name of the material (block) and its metadata value.
+     * Sets the CustomWood block's MATERIAL, the MATERIAL to mimic, from the name of the MATERIAL (block) and its metadata value.
      * 
-     * @param name the name of the material (block).
-     * @param meta the metadata value of the material (block).
+     * @param name the name of the MATERIAL (block).
+     * @param meta the metadata value of the MATERIAL (block).
      */
     public final void setMaterial(String name, int meta) {
         Block block = Block.getBlockFromName(name);
@@ -116,10 +116,10 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
     }
     
     /**
-     * Sets the CustomWood block's material, the material to mimic, from the name of the material (block) and its metadata value.
+     * Sets the CustomWood block's MATERIAL, the MATERIAL to mimic, from the name of the MATERIAL (block) and its metadata value.
      * 
-     * @param block the name of the material (block).
-     * @param meta the metadata value of the material (block).
+     * @param block the name of the MATERIAL (block).
+     * @param meta the metadata value of the MATERIAL (block).
      */
     public final void setMaterial(Block block, int meta) {
         if(block!=null) {
@@ -129,9 +129,9 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
     }
 
     /**
-     * Retrieves the material the CustomWood is mimicking.
+     * Retrieves the MATERIAL the CustomWood is mimicking.
      * 
-     * @return the material, in Block form.
+     * @return the MATERIAL, in Block form.
      */
     public final Block getMaterial() {
         return this.material==null?DEFAULT_MATERIAL:this.material;
@@ -143,9 +143,9 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
     }
 
     /**
-     * Retrieves the metadata of the material the CustomWood is mimicking.
+     * Retrieves the metadata of the MATERIAL the CustomWood is mimicking.
      * 
-     * @return the metadata of the material.
+     * @return the metadata of the MATERIAL.
      */
     public final int getMaterialMeta() {
         return this.material==null?DEFAULT_META:this.materialMeta;
@@ -156,23 +156,23 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
     }
 
     /**
-     * Retrieves the name of the material the CustomWood is mimicking.
+     * Retrieves the name of the MATERIAL the CustomWood is mimicking.
      * 
-     * @return the name of the material.
+     * @return the name of the MATERIAL.
      */
     public final String getMaterialName() {
         return Block.blockRegistry.getNameForObject(this.getMaterial()).toString();
     }
     
     /**
-     * Generates an NBTTag for the material the CustomWood is mimicking.
+     * Generates an NBTTag for the MATERIAL the CustomWood is mimicking.
      * 
-     * @return an NBTTag for the CustomWood material.
+     * @return an NBTTag for the CustomWood MATERIAL.
      */
     public final NBTTagCompound getMaterialTag() {
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setString(Names.NBT.material, this.getMaterialName());
-        tag.setInteger(Names.NBT.materialMeta, this.materialMeta);
+        tag.setString(AgriCraftNBT.MATERIAL, this.getMaterialName());
+        tag.setInteger(AgriCraftNBT.MATERIAL_META, this.materialMeta);
         return tag;
     }
 

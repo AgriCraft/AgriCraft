@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.gui;
 
 import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.gui.journal.GuiJournal;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
@@ -50,7 +50,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
     public void drawGuiContainerForegroundLayer(int x, int y) {
         String name = StatCollector.translateToLocal("agricraft_gui.seedAnalyzer");
         int white = 4210752;        //the number for white
-        //write name: x coordinate is in the middle, 6 down from the top, and setting color to white
+        //write name: X1 coordinate is in the middle, 6 down from the top, and setting color to white
         this.fontRendererObj.drawString(name, this.xSize/2 - this.fontRendererObj.getStringWidth(name)/2, 6, white);
         this.fontRendererObj.drawString(I18n.format("container.inventory"), 9, this.ySize - 96 + 2, white);
     }
@@ -86,10 +86,10 @@ public class GuiSeedAnalyzer extends GuiContainer {
         if(journal != null) {
             if (journal.hasTagCompound()) {
                 NBTTagCompound tag = journal.getTagCompound();
-                if (tag.hasKey(Names.NBT.discoveredSeeds)) {
-                    NBTTagList list = tag.getTagList(Names.NBT.discoveredSeeds, 10);
+                if (tag.hasKey(AgriCraftNBT.DISCOVERED_SEEDS)) {
+                    NBTTagList list = tag.getTagList(AgriCraftNBT.DISCOVERED_SEEDS, 10);
                     NBTHelper.clearEmptyStacksFromNBT(list);
-                    tag.setTag(Names.NBT.discoveredSeeds, list);
+                    tag.setTag(AgriCraftNBT.DISCOVERED_SEEDS, list);
                 }
             }
             journalOpen = true;

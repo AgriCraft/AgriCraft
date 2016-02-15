@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.tileentity.decoration;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -16,16 +16,16 @@ public class TileEntityFenceGate extends TileEntityCustomWood {
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setBoolean(Names.NBT.flag, zAxis);
-        tag.setShort(Names.NBT.meta, open);
+        tag.setBoolean(AgriCraftNBT.FLAG, zAxis);
+        tag.setShort(AgriCraftNBT.META, open);
     }
 
     //this loads the saved data for the tile entity
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        zAxis = tag.getBoolean(Names.NBT.flag);
-        open = tag.hasKey(Names.NBT.meta)?tag.getShort(Names.NBT.meta):0;
+        zAxis = tag.getBoolean(AgriCraftNBT.FLAG);
+        open = tag.hasKey(AgriCraftNBT.META)?tag.getShort(AgriCraftNBT.META):0;
     }
 
     public boolean isOpen() {

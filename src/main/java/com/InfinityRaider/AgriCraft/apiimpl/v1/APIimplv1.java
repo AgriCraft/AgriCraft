@@ -21,7 +21,7 @@ import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
 import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
@@ -104,7 +104,7 @@ public class APIimplv1 implements APIv1 {
         if (!isHandledByAgricraft(seed)) {
             return null;
         }
-        if (seed.getTagCompound() != null && seed.getTagCompound().hasKey(Names.NBT.growth) && seed.getTagCompound().getBoolean(Names.NBT.analyzed)) {
+        if (seed.getTagCompound() != null && seed.getTagCompound().hasKey(AgriCraftNBT.GROWTH) && seed.getTagCompound().getBoolean(AgriCraftNBT.ANALYZED)) {
             return PlantStats.readFromNBT(seed.getTagCompound());
         } else {
             return new PlantStats(-1, -1, -1);
@@ -391,8 +391,8 @@ public class APIimplv1 implements APIv1 {
                         return false;
                     }
                     NBTTagCompound tag = seed.getTagCompound();
-                    if (tag != null && tag.hasKey(Names.NBT.growth)) {
-                        crop.setPlant(tag.getInteger(Names.NBT.growth), tag.getInteger(Names.NBT.gain), tag.getInteger(Names.NBT.strength), tag.getBoolean(Names.NBT.analyzed), seed.getItem(), seed.getItemDamage());
+                    if (tag != null && tag.hasKey(AgriCraftNBT.GROWTH)) {
+                        crop.setPlant(tag.getInteger(AgriCraftNBT.GROWTH), tag.getInteger(AgriCraftNBT.GAIN), tag.getInteger(AgriCraftNBT.STRENGTH), tag.getBoolean(AgriCraftNBT.ANALYZED), seed.getItem(), seed.getItemDamage());
                     } else {
                         crop.setPlant(Constants.DEFAULT_GROWTH, Constants.DEFAULT_GAIN, Constants.DEFAULT_STRENGTH, false, seed.getItem(), seed.getItemDamage());
                     }
@@ -540,19 +540,19 @@ public class APIimplv1 implements APIv1 {
         if(CropPlantHandler.isValidSeed(seed)) {
             if(seed.hasTagCompound()) {
                 NBTTagCompound tag = seed.getTagCompound();
-                String[] keys = {Names.NBT.growth, Names.NBT.gain, Names.NBT.strength};
+                String[] keys = {AgriCraftNBT.GROWTH, AgriCraftNBT.GAIN, AgriCraftNBT.STRENGTH};
                 for(String key:keys) {
                     if (!tag.hasKey(key)) {
                         tag.setShort(key, (short) 1);
                     }
                 }
-                tag.setBoolean(Names.NBT.analyzed, true);
+                tag.setBoolean(AgriCraftNBT.ANALYZED, true);
             } else {
                 NBTTagCompound tag = new NBTTagCompound();
-                tag.setShort(Names.NBT.growth, (short) 1);
-                tag.setShort(Names.NBT.gain, (short) 1);
-                tag.setShort(Names.NBT.strength, (short) 1);
-                tag.setBoolean(Names.NBT.analyzed, true);
+                tag.setShort(AgriCraftNBT.GROWTH, (short) 1);
+                tag.setShort(AgriCraftNBT.GAIN, (short) 1);
+                tag.setShort(AgriCraftNBT.STRENGTH, (short) 1);
+                tag.setBoolean(AgriCraftNBT.ANALYZED, true);
                 seed.setTagCompound(tag);
             }
         }
