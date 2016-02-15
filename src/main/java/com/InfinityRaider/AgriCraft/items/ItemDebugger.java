@@ -3,6 +3,9 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.entity.EntityVillagerFarmer;
 import com.InfinityRaider.AgriCraft.init.WorldGen;
 import com.InfinityRaider.AgriCraft.utility.DebugHelper;
+import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -31,5 +34,10 @@ public class ItemDebugger extends ItemBase {
         }
         return false;
     }
+	
+	@Override
+	public void registerItemRenderer() {
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
+	}
 	
 }

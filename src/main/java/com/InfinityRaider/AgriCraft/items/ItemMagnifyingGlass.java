@@ -18,8 +18,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class ItemMagnifyingGlass extends ItemBase {
+	
+	// HACK: To account for different model name.
+	private static final ModelResourceLocation[] VARIENTS = {
+		new ModelResourceLocation("agricraft:magnifying_glass", "inventory")
+	};
 	
     public ItemMagnifyingGlass() {
         super(Names.Objects.magnifyingGlass);
@@ -90,5 +98,13 @@ public class ItemMagnifyingGlass extends ItemBase {
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
         list.add(StatCollector.translateToLocal("agricraft_tooltip.magnifyingGlass"));
     }
+	
+	@Override
+	public void registerItemRenderer() {
+		ModelBakery.registerItemVariants(this, VARIENTS);
+		for (int i = 0; i < VARIENTS.length; i++) {
+			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, i, VARIENTS[i]);
+		}
+	}
 
 }

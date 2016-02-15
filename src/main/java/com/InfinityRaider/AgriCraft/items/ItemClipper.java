@@ -12,8 +12,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class ItemClipper extends ItemBase implements IClipper {
+	
     public ItemClipper() {
         super(Names.Objects.clipper);
         this.setMaxStackSize(1);
@@ -44,4 +47,10 @@ public class ItemClipper extends ItemBase implements IClipper {
             list.add("ERROR");
         }
     }
+	
+	@Override
+	public void registerItemRenderer() {
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
+	}
+	
 }

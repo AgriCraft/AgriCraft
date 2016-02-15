@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftRenderable;
-import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.RenderUtil;
 import com.InfinityRaider.AgriCraft.renderers.renderinghacks.IItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -46,7 +45,7 @@ public abstract class AbstractItemRenderer implements IItemRenderer {
 			return;
 		}
 		tess.startDrawingQuads();
-		RenderUtil.getInstance().drawScaledPrism(tess, 8, 0, 0, 8, 16, 16, ((IAgriCraftRenderable) item.getItem()).getIcon());
+		RenderUtil.drawScaledPrism(tess, 0, 0, 0, 0, 16, 16, ((IAgriCraftRenderable) item.getItem()).getIcon());
 		tess.draw();
 	}
 
@@ -75,11 +74,11 @@ public abstract class AbstractItemRenderer implements IItemRenderer {
 		
 		// The translations required are quite odd.
 		// These numbers are pure magic.
-		tessellator.addRotation(45, 0, 1, 0);
+		tessellator.rotate(45, 0, 1, 0);
 		// The items are oddly skewed...
 		tessellator.scale(1, 0.925, 0.8);
 		// z is left-right, y is up-down
-		tessellator.translate(0, -0.175, -0.49);
+		tessellator.translate(0, -0.49, -0.49);
 		
 		// Render the item.
 		renderItemDefault(tessellator, stack);

@@ -25,7 +25,7 @@ public class TessellatorV2 {
     private final Tessellator tessellator ;
     private final WorldRenderer worldRenderer;
 	
-	private Deque<TransformationMatrix> matrixes;
+	private final Deque<TransformationMatrix> matrixes;
 	
 	private TessellatorV2(Tessellator tessellator) {
         this.worldRenderer = tessellator.getWorldRenderer();
@@ -99,6 +99,13 @@ public class TessellatorV2 {
     public void setTranslation(double x, double y, double z) {
         this.matrixes.getFirst().setTranslation(x, y, z);
     }
+	
+	/**
+     *  Sets the rotation relative to the absolute coordinates
+     */
+    public void setRotation(double angle, double x, double y, double z) {
+        this.matrixes.getFirst().setRotation(angle, x, y, z);
+    }
 
     /**
      * Adds a translation to the current coordinate system
@@ -108,16 +115,9 @@ public class TessellatorV2 {
     }
 
     /**
-     *  Sets the rotation relative to the absolute coordinates
-     */
-    public void setRotation(double angle, double x, double y, double z) {
-        this.matrixes.getFirst().setRotation(angle, x, y, z);
-    }
-
-    /**
      *  Rotates around the current coordinate system
      */
-    public void addRotation(double angle, double x, double y, double z) {
+    public void rotate(double angle, double x, double y, double z) {
         this.matrixes.getFirst().multiplyRightWith(new TransformationMatrix(angle, x, y, z));
     }
 

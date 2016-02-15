@@ -5,13 +5,11 @@ import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispat
 import com.InfinityRaider.AgriCraft.renderers.renderinghacks.IItemRenderer;
 import com.InfinityRaider.AgriCraft.renderers.renderinghacks.ISimpleBlockRenderingHandler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,9 +23,6 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEntityBase> implements ISimpleBlockRenderingHandler, IItemRenderer {
-	
-	// TODO: Determine if RenderUtil Changes. Might want to be final field.
-    protected static RenderUtil renderUtil = RenderUtil.getInstance();
 
     private final Block block;
     private final boolean inventory;
@@ -129,11 +124,11 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
 	*/
     private void renderInInventory(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
         TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
+		tessellator.pushMatrix();
 		tessellator.scale(0.5, 0.5, 0.5);
 		tessellator.translate(-1, -.9, 0);
         doInventoryRender(tessellator, block, stack, transformType);
-		tessellator.translate(1, .9, 0);
-		tessellator.scale(2, 2, 2);
+		tessellator.popMatrix();
     }
 
     @SuppressWarnings("deprecation")
@@ -178,9 +173,9 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         float dz = angle > 90 ? -1 : 0;
         if (inverse) {
             tessellator.translate(-dx, 0, -dz);
-            tessellator.addRotation(-angle, 0, 1, 0);
+            tessellator.rotate(-angle, 0, 1, 0);
         } else {
-            tessellator.addRotation(angle, 0, 1, 0);
+            tessellator.rotate(angle, 0, 1, 0);
             tessellator.translate(dx, 0, dz);
         }
     }
@@ -204,65 +199,4 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         return angle;        
     }
 
-    protected void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v) {
-        renderUtil.addScaledVertexWithUV(tessellator, x, y, z, u, v);
-    }
-
-    protected void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v, TextureAtlasSprite icon) {
-        renderUtil.addScaledVertexWithUV(tessellator, x, y, z, u, v, icon);
-    }
-
-    protected void drawScaledFaceDoubleXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, TextureAtlasSprite icon, float z) {
-        renderUtil.drawScaledFaceDoubleXY(tessellator, minX, minY, maxX, maxY, icon, z);
-    }
-
-    protected void drawScaledFaceDoubleXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, TextureAtlasSprite icon, float y) {
-        renderUtil.drawScaledFaceDoubleXZ(tessellator, minX, minZ, maxX, maxZ, icon, y);
-    }
-
-
-    protected void drawScaledFaceDoubleYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, TextureAtlasSprite icon, float x) {
-        renderUtil.drawScaledFaceDoubleYZ(tessellator, minY, minZ, maxY, maxZ, icon, x);
-    }
-
-
-    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, int colorMultiplier, AgriForgeDirection direction) {
-        renderUtil.drawScaledPrism(tessellator, minX, minY, minZ, maxX, maxY, maxZ, icon, colorMultiplier, direction);
-    }
-
-    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon) {
-        renderUtil.drawScaledPrism(tessellator, minX, minY, minZ, maxX, maxY, maxZ, icon);
-    }
-
-    protected void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, int colorMultiplier) {
-        renderUtil.drawScaledPrism(tessellator, minX, minY, minZ, maxX, maxY, maxZ, icon, colorMultiplier);
-    }
-
-    protected void drawScaledFaceFrontXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, TextureAtlasSprite icon, float z, int colorMultiplier) {
-        renderUtil.drawScaledFaceFrontXY(tessellator, minX, minY, maxX, maxY, icon, z, colorMultiplier);
-    }
-
-    protected void drawScaledFaceFrontXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, TextureAtlasSprite icon, float y, int colorMultiplier) {
-        renderUtil.drawScaledFaceFrontXZ(tessellator, minX, minZ, maxX, maxZ, icon, y, colorMultiplier);
-    }
-
-    protected void drawScaledFaceFrontYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, TextureAtlasSprite icon, float x, int colorMultiplier) {
-        renderUtil.drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, icon, x, colorMultiplier);
-    }
-
-    protected void drawScaledFaceBackXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, TextureAtlasSprite icon, float z, int colorMultiplier) {
-        renderUtil.drawScaledFaceBackXY(tessellator, minX, minY, maxX, maxY, icon, z, colorMultiplier);
-    }
-
-    protected void drawScaledFaceBackXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, TextureAtlasSprite icon, float y, int colorMultiplier) {
-        renderUtil.drawScaledFaceBackXZ(tessellator, minX, minZ, maxX, maxZ, icon, y, colorMultiplier);
-    }
-
-    protected void drawScaledFaceBackYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, TextureAtlasSprite icon, float x, int colorMultiplier) {
-        renderUtil.drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, icon, x, colorMultiplier);
-    }
-    
-	protected void drawPlane(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, AgriForgeDirection direction) {
-        renderUtil.drawPlane(tessellator, minX, minY, minZ, maxX, maxY, maxZ, icon, direction);
-	}
 }

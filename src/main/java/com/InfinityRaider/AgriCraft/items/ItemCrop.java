@@ -5,6 +5,9 @@ import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -13,6 +16,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemCrop extends ItemBase {
+	
+	private static final ModelResourceLocation[] VARIENTS = {
+		new ModelResourceLocation("agricraft:crop_sticks", "inventory")
+	};
 
 	public ItemCrop() {
 		super(Names.Objects.crops+"Item");
@@ -44,4 +51,13 @@ public class ItemCrop extends ItemBase {
         }
         return false;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
     }
+	
+	@Override
+	public void registerItemRenderer() {
+		ModelBakery.registerItemVariants(this, VARIENTS);
+		for (int i = 0; i < VARIENTS.length; i++) {
+			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, i, VARIENTS[i]);
+		}
+	}
+	
 }

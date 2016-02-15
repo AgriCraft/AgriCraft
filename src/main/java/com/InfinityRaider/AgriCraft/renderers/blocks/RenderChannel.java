@@ -22,6 +22,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import static com.InfinityRaider.AgriCraft.renderers.RenderUtil.*;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SideOnly(Side.CLIENT)
@@ -144,7 +146,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
         tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
 
         //draw central water levels
-        drawPlane(tessellator, 5, y-0.001f, 5, 11, y-0.001f, 11, icon, AgriForgeDirection.NORTH);
+        drawScaledFaceFrontXZ(tessellator, 5, 5, 11, 11, icon, y-0.001f, COLOR_MULTIPLIER_STANDARD);
         //connect to edges
         this.connectWater(channel, tessellator, AgriForgeDirection.NORTH, y, icon);
         this.connectWater(channel, tessellator, AgriForgeDirection.EAST, y, icon);
@@ -172,6 +174,6 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 	}
 
     protected void drawWaterEdge(TessellatorV2 tessellator, AgriForgeDirection direction, float lvl1, float lvl2, TextureAtlasSprite icon) {
-    	drawPlane(tessellator, 5, lvl1-0.001f, 0, 11, lvl2-0.001f, 5, icon, direction);
+    	drawScaledFaceFrontXZ(tessellator, 5, 0, 11, 5, icon, lvl2-0.001f, COLOR_MULTIPLIER_STANDARD);
     }
 }

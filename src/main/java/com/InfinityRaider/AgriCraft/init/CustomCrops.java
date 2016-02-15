@@ -18,7 +18,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CustomCrops {
 
@@ -126,22 +125,6 @@ public class CustomCrops {
 			if (!success) {
 				LogHelper.info(new StringBuffer("Error when adding grass drop: ").append(errorMsg).append(" (line: ").append(data).append(")"));
 			}
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static void registerRenderers() {
-		if (customSeeds != null) {
-			LogHelper.debug("Starting custom crop renderer registration...");
-			for (ItemModSeed seed : customSeeds) {
-				try {
-					seed.registerItemRenderer();
-					LogHelper.debug("Registered Renderer for: " + seed.getRegistryName());
-				} catch (Exception e) {
-					LogHelper.printStackTrace(e);
-				}
-			}
-			LogHelper.debug("Registered custom crop renderers!");
 		}
 	}
 

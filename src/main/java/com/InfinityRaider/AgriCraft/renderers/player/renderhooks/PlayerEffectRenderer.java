@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 abstract class PlayerEffectRenderer {
-    protected static final RenderUtil renderUtil = RenderUtil.getInstance();
 
     PlayerEffectRenderer() {
 
@@ -41,4 +40,5 @@ abstract class PlayerEffectRenderer {
     protected void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v) {
         tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, u * Constants.UNIT, v * Constants.UNIT);
     }
+	
 }
