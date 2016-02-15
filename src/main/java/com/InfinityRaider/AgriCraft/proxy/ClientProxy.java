@@ -9,6 +9,8 @@ import com.InfinityRaider.AgriCraft.handler.SoundHandler;
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.init.AgriCraftCrops;
 import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
+import com.InfinityRaider.AgriCraft.init.CustomCrops;
+import com.InfinityRaider.AgriCraft.init.ResourceCrops;
 import com.InfinityRaider.AgriCraft.items.ItemBase;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
 import com.InfinityRaider.AgriCraft.reference.Reference;

@@ -113,4 +113,9 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 		this.icon = iconRegistrar.registerIcon("agricraft:blocks/" + name);
 	}
 
+	@Override
+	public EnumWorldBlockLayer getBlockLayer() {
+		return EnumWorldBlockLayer.CUTOUT;
+	}
+
 }
