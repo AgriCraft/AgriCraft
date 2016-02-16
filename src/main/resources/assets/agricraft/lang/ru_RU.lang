@@ -74,13 +74,13 @@ item.agricraft:seedOsmonium.name=Семена осмония
 
 //blocks
 tile.agricraft:crops.name=Жёрдочки
-tile.agricraft:seedAnalyzer.name=Анализатор семян
-tile.agricraft:waterTank.0.name=Деревянный бак
-tile.agricraft:waterTank.1.name=Железный бак
-tile.agricraft:waterChannel.0.name=Деревянный оросительный канал
-tile.agricraft:waterChannel.1.name=Железный оросительный канал
-tile.agricraft:channelValve.0.name=Деревянный клапан
-tile.agricraft:channelValve.1.name=Железный клапан
+tile.agricraft:seed_analyzer.name=Анализатор семян
+tile.agricraft:water_tank.0.name=Деревянный бак
+tile.agricraft:water_tank.1.name=Железный бак
+tile.agricraft:water_channel.0.name=Деревянный оросительный канал
+tile.agricraft:water_channel.1.name=Железный оросительный канал
+tile.agricraft:water_channel_valve.0.name=Деревянный клапан
+tile.agricraft:water_channel_valve.1.name=Железный клапан
 tile.agricraft:sprinkler.name=Разбрызгиватель
 
 tile.agricraft:cropPotato.name=Картофель

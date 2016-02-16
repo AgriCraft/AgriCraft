@@ -43,7 +43,7 @@ public class BlockPeripheral extends BlockTileBase {
 	private TextureAtlasSprite textureInner;
 
 	public BlockPeripheral() {
-		super(Material.iron, Names.Objects.peripheral, false);
+		super(Material.iron, "peripheral", false);
 	}
 
 	@Override

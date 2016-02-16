@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannel;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
@@ -27,7 +26,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 	protected static final float MAX = Constants.UNIT * Constants.THREE_QUARTER;
 
 	public BlockWaterChannel() {
-		super(Names.Objects.channel);
+		super("normal");
 		this.setBlockBounds(MIN, MIN, MIN, MAX, MAX, MAX);
 	}
 

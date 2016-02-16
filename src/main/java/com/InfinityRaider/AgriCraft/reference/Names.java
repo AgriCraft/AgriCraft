@@ -14,26 +14,13 @@ public final class Names {
         public static final String crop = "crop";
         public static final String crops = "crops";
         public static final String farmland = "farmland";
-        public static final String analyzer = "Analyzer";
         public static final String seed = "seed";
-        public static final String seedAnalyzer = seed+analyzer;
-        public static final String waterPad = "waterPad";
-        public static final String waterPadFull = waterPad+"Full";
         public static final String nugget = "nugget";
         public static final String ingot = "ingot";
         public static final String ore = "ore";
-        public static final String tank = "waterTank";
-        public static final String channel = "waterChannel";
-        public static final String channelFull = "waterChannelFull";
-        public static final String valve = "channelValve";
-        public static final String sprinkler = "sprinkler";
-        public static final String seedStorage = "seedStorage";
-        public static final String seedStorageController = "seedStorageController";
         public static final String villager = "villagerFarmer";
-        public static final String peripheral = "peripheral";
         public static final String fence = "fence";
         public static final String fenceGate = "fenceGate";
-        public static final String grate = "grate";
         public static final String leash = "leash";
         public static final String clipping = "clipping";
     }

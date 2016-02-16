@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannelFull;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannelFull;
@@ -18,7 +17,7 @@ import java.util.List;
 public class BlockWaterChannelFull extends AbstractBlockWaterChannel {
 	
     public BlockWaterChannelFull() {
-        super(Names.Objects.channelFull);
+        super("full");
         this.setBlockBounds(0, 0, 0, 1, 1, 1);
     }
 

@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
 import net.minecraft.block.properties.IProperty;
@@ -18,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockSeedStorageController extends BlockCustomWood {
 
 	public BlockSeedStorageController() {
-		super(Names.Objects.seedStorageController, true);
+		super("seed_storage_controller", true);
 	}
 	
     @Override
