@@ -132,7 +132,12 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
 
     @Override
 	public float getFluidHeight() {
-        return MIN+HEIGHT*((float) this.lvl)/(ABSOLUTE_MAX);
+        return getFluidHeight(getFluidLevel());
+    }
+
+    @Override
+    public float getFluidHeight(int lvl) {
+        return MIN+HEIGHT*((float) lvl)/(ABSOLUTE_MAX);
     }
 
     public final void updateNeighbours() {
@@ -207,11 +212,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements IIrrigati
                 else {
                     TileEntityTank tank = (TileEntityTank) component;
                     int Y = tank.getYPosition();
-                    float y_c = Constants.WHOLE * Y + this.getFluidHeight();  //initial channel water y
+                    float y_c = Constants.WHOLE * Y + this.getFluidHeight(updatedLevel);  //initial channel water y
                     float y_t = tank.getFluidHeight();           //initial tank water y
                     float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum y of the channel
                     float y2 = (float) MAX + Constants.WHOLE * Y;  //maximum y of the channel
-                    int V_tot = tank.getFluidLevel() + this.lvl;
+                    int V_tot = tank.getFluidLevel() + updatedLevel;
                     if (y_c != y_t) {
                         //total volume is below the channel connection
                         if (y_t <= y1) {
