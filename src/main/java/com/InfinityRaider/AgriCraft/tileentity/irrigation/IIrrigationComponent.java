@@ -51,13 +51,22 @@ public interface IIrrigationComponent {
 	int getCapacity();
 	
 	/**
-	 * Determines the water height, relative to the bottom of the block, and scaled on the 0 - {@value Constants.WHOLE} interval.
+	 * Determines the water height, relative to the bottom of the block, and scaled on the 0 - 16 interval.
 	 * <p>
 	 * <b>Notice</b>: This method is not to be considered efficient, due to the rounding required.
 	 * </p>
 	 * @return the component's fluid height.
 	 */
 	float getFluidHeight();
+
+	/**
+	 * Determines the water height, relative to the bottom of the block, and scaled on the 0 - 16 interval.
+	 * <p>
+	 * <b>Notice</b>: This method is not to be considered efficient, due to the rounding required.
+	 * </p>
+	 * @return the component's fluid height.
+	 */
+	float getFluidHeight(int lvl);
 	
 	/**
 	 * Sets the irrigation component's contained fluid level.

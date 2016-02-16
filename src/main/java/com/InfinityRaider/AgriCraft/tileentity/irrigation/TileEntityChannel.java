@@ -20,9 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
-
-	public static final int FORGE_DIRECTION_OFFSET = 2;
-
 	public static final AgriForgeDirection[] VALID_DIRECTIONS = new AgriForgeDirection[]{
 		AgriForgeDirection.NORTH,
 		AgriForgeDirection.SOUTH,
@@ -130,10 +127,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 		return this.lvl > 0;
 	}
 
-	@Override
-	public float getFluidHeight() {
-		return MIN + HEIGHT * ((float) this.lvl) / (ABSOLUTE_MAX);
-	}
 
 	public final void updateNeighbours() {
 		if (ticksSinceNeighbourCheck == 0) {
@@ -141,6 +134,17 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 		}
 		ticksSinceNeighbourCheck = (ticksSinceNeighbourCheck + 1) % NEIGHBOUR_CHECK_DELAY;
 	}
+
+	@Override
+	public float getFluidHeight() {
+        return getFluidHeight(getFluidLevel());
+    }
+
+    @Override
+    public float getFluidHeight(int lvl) {
+        return MIN+HEIGHT*((float) lvl)/(ABSOLUTE_MAX);
+    }
+
 
 	public final void findNeighbours() {
 		for (int i = 0; i < VALID_DIRECTIONS.length; i++) {
@@ -166,12 +170,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 		}
 		TileEntity tileEntityAt = this.worldObj.getTileEntity(direction.offset(getPos()));
 		return (tileEntityAt != null) && (tileEntityAt instanceof IIrrigationComponent) && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
-	}
-
-	@SideOnly(Side.SERVER)
-	public boolean hasNeighbour(AgriForgeDirection direction) {
-		int ordinal = direction.ordinal() - FORGE_DIRECTION_OFFSET;
-		return ordinal >= 0 && ordinal < neighbours.length && neighbours[ordinal] != null;
 	}
 
 	public IIrrigationComponent getNeighbor(AgriForgeDirection direction) {
@@ -207,11 +205,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 				else {
 					TileEntityTank tank = (TileEntityTank) component;
 					int Y = tank.getYPosition();
-					float y_c = Constants.WHOLE * Y + this.getFluidHeight();  //initial channel water Y1
+					float y_c = Constants.WHOLE * Y + this.getFluidHeight(updatedLevel);  //initial channel water Y1
 					float y_t = tank.getFluidHeight();           //initial tank water Y1
 					float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum Y1 of the channel
 					float y2 = (float) MAX + Constants.WHOLE * Y;  //maximum Y1 of the channel
-					int V_tot = tank.getFluidLevel() + this.lvl;
+					int V_tot = tank.getFluidLevel() + updatedLevel;
 					if (y_c != y_t) {
 						//total volume is below the channel connection
 						if (y_t <= y1) {
