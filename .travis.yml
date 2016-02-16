@@ -1,3 +1,8 @@
+# Tell Travis which branches to build.
+branches:
+  except:
+    - /^(?i:dev)-.*$/
+
 # Tell Travis this is a Java project.
 language: java
 
