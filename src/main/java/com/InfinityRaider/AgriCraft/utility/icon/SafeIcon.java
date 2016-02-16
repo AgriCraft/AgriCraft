@@ -39,6 +39,10 @@ public final class SafeIcon {
 			this.loadAttempts = 0;
 		}
 		
+		public boolean isLoaded() {
+			return (this.icon == null);
+		}
+		
 		public TextureAtlasSprite getIcon() {
 			
 			if(this.loadAttempts < MAX_ATTEMPTS && this.icon == null) {
@@ -55,7 +59,7 @@ public final class SafeIcon {
 			
 		}
 		
-		private static TextureAtlasSprite getDefault() {
+		public static TextureAtlasSprite getDefault() {
 			return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 		}
 		

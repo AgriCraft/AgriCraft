@@ -428,9 +428,13 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         }
     }
 
+	/**
+	 * TODO: FIXME!
+	 * @return 
+	 */
     @Override
      public String getName() {
-        return Reference.MOD_ID.toLowerCase()+":"+Names.Objects.seedStorage;
+        return Reference.MOD_ID.toLowerCase()+":seed_storage";
     }
 
     @Override

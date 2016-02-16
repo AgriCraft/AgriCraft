@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +21,7 @@ import java.util.List;
 public class BlockWaterPadFull extends AbstractBlockWaterPad {
 	
     public BlockWaterPadFull() {
-        super(Material.water, Names.Objects.waterPadFull);
+        super(Material.water, "full");
     }
 
     @Override

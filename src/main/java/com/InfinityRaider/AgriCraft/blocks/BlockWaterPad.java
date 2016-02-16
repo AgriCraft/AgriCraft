@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -29,7 +28,7 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
     }
 
     protected BlockWaterPad(Material mat) {
-        super(mat, Names.Objects.waterPad);
+        super(mat, "normal");
         this.maxY = Constants.UNIT * (Constants.WHOLE / 2);
     }
 

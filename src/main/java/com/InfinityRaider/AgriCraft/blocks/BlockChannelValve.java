@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderValve;
 import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
@@ -27,7 +26,7 @@ import java.util.List;
 public class BlockChannelValve extends AbstractBlockWaterChannel {
 	
     public BlockChannelValve() {
-        super(Names.Objects.valve);
+        super("valve");
         this.setBlockBounds(4*Constants.UNIT, 0, 4*Constants.UNIT, 12*Constants.UNIT, 1, 12*Constants.UNIT);
     }
 
