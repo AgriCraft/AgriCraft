@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers.particles;
+package com.infinityraider.agricraft.renderers.particles;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;

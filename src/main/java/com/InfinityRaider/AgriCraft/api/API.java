@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.api;
+package com.infinityraider.agricraft.api;
 
 //Huge thanks to HenryLoenwind for his work and patience for this api
 
-import com.InfinityRaider.AgriCraft.api.v0.NoAPI;
+import com.infinityraider.agricraft.api.v0.NoAPI;
 
 /**
  * This is the main entry point for the AgriCraft API.

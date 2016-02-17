@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
-import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
-import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
+import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
+import com.infinityraider.agricraft.tileentity.TileEntityBase;
+import com.infinityraider.agricraft.api.v1.IIconRegistrar;
+import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftRenderable;
+import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
 
 /**
  * The base class for all AgriCraft blocks.

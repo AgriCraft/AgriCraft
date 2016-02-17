@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.tileentity.decoration;
+package com.infinityraider.agricraft.tileentity.decoration;
 
-import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
+import com.infinityraider.agricraft.api.v1.IDebuggable;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;

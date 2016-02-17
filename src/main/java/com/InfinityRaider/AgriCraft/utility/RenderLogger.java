@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.infinityraider.agricraft.utility;
 
 
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderChannel;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 

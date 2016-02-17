@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.farming.growthrequirement;
+package com.infinityraider.agricraft.farming.growthrequirement;
 
-import com.InfinityRaider.AgriCraft.api.v1.*;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.api.v1.*;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.utility.IOHelper;
+import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;

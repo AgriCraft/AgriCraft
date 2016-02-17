@@ -1,12 +1,12 @@
-package com.InfinityRaider.AgriCraft.renderers.blocks;
+package com.infinityraider.agricraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
-import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.utility.icon.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import static com.InfinityRaider.AgriCraft.renderers.RenderUtil.*;
+import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStorage> {

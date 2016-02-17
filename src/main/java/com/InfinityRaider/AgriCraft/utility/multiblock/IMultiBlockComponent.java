@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.utility.multiblock;
+package com.infinityraider.agricraft.utility.multiblock;
 
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
 
 public interface IMultiBlockComponent<M extends IMultiBlockManager<T>, T extends IMultiBlockPartData> {
     /**

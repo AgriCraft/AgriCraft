@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.tileentity.storage;
+package com.infinityraider.agricraft.tileentity.storage;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
+import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

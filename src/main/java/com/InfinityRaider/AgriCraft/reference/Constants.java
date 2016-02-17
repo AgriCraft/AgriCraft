@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.reference;
+package com.infinityraider.agricraft.reference;
 
 /**
  * A class containing the constants and default values used in the coding of the

@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.items.crafting;
+package com.infinityraider.agricraft.items.crafting;
 
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
+import com.infinityraider.agricraft.items.ItemJournal;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;

@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.farming.cropplant;
+package com.infinityraider.agricraft.farming.cropplant;
 
-import com.InfinityRaider.AgriCraft.api.v1.*;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.handler.config.MutationConfig;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
+import com.infinityraider.agricraft.api.v1.*;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.handler.config.MutationConfig;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.reference.AgriCraftProperties;
 
 /**
  * The main class used by TileEntityCrop.

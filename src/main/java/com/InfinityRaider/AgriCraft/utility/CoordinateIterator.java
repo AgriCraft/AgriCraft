@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.infinityraider.agricraft.utility;
 
 public final class CoordinateIterator {
     private boolean x;

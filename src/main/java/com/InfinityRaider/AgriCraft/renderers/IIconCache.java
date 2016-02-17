@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers;
+package com.infinityraider.agricraft.renderers;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

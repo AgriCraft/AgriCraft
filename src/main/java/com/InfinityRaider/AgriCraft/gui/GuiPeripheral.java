@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.gui;
+package com.infinityraider.agricraft.gui;
 
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.tileentity.peripheral.method.IMethod;
-import com.InfinityRaider.AgriCraft.container.ContainerPeripheral;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
-import com.InfinityRaider.AgriCraft.utility.IOHelper;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.tileentity.peripheral.method.IMethod;
+import com.infinityraider.agricraft.container.ContainerPeripheral;
+import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.utility.IOHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiPeripheral extends GuiContainer {
-    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiPeripheral.png");
+    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiPeripheral.png");
 
     public static final int WHITE = 4210752;
 

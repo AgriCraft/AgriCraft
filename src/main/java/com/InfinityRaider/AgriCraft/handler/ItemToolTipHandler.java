@@ -1,12 +1,12 @@
-package com.InfinityRaider.AgriCraft.handler;
+package com.infinityraider.agricraft.handler;
 
-import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
-import com.InfinityRaider.AgriCraft.api.v1.IClipper;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.ItemClipping;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
+import com.infinityraider.agricraft.api.v1.ITrowel;
+import com.infinityraider.agricraft.api.v1.IClipper;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.items.ItemClipping;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.utility.statstringdisplayer.StatStringDisplayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;

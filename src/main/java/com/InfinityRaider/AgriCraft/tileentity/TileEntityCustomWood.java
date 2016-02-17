@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.tileentity;
+package com.infinityraider.agricraft.tileentity;
 
-import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
-import com.InfinityRaider.AgriCraft.blocks.BlockCustomWood;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.renderers.TextureCache;
-import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
+import com.infinityraider.agricraft.api.v1.IDebuggable;
+import com.infinityraider.agricraft.blocks.BlockCustomWood;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.renderers.TextureCache;
+import com.infinityraider.agricraft.utility.icon.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.gui;
+package com.infinityraider.agricraft.gui;
 
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.PlantStats;
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
-import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.tileentity.storage.ISeedStorageControllable;
+import com.infinityraider.agricraft.tileentity.storage.SeedStorageSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;

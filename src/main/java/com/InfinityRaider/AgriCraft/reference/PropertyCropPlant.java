@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.reference;
+package com.infinityraider.agricraft.reference;
 
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import java.util.Collection;
 import java.util.List;
 import net.minecraft.block.properties.PropertyHelper;

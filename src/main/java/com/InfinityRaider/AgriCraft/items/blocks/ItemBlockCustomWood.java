@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.items.blocks;
+package com.infinityraider.agricraft.items.blocks;
 
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftMods;
-import com.InfinityRaider.AgriCraft.utility.NBTHelper;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.reference.AgriCraftMods;
+import com.infinityraider.agricraft.utility.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

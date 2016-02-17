@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.tileentity.irrigation;
+package com.infinityraider.agricraft.tileentity.irrigation;
 
 
-import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.api.v1.IDebuggable;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;

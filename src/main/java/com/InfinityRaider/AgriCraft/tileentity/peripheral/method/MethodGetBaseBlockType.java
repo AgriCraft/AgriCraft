@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 
 public class MethodGetBaseBlockType extends MethodBaseGrowthReq {
     public MethodGetBaseBlockType() {

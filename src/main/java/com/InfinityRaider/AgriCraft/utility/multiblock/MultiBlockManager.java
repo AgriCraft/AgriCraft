@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.utility.multiblock;
+package com.infinityraider.agricraft.utility.multiblock;
 
-import com.InfinityRaider.AgriCraft.utility.CoordinateIterator;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.utility.CoordinateIterator;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;

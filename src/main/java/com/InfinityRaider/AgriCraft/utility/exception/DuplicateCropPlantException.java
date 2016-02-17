@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.utility.exception;
+package com.infinityraider.agricraft.utility.exception;
 
 public final class DuplicateCropPlantException extends Exception {
     public DuplicateCropPlantException() {

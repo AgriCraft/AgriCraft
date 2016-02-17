@@ -21,7 +21,7 @@ sourceCompatibility = mod.version_java
 targetCompatibility = mod.version_java
 version = "${mod.version_major}.${mod.version_minor}.${mod.version_patch}"
 mod.version = version
-group = "${mod.group}.${mod.author}.${mod.id}"
+group = "${mod.group}.${mod.id}"
 archivesBaseName = mod.id
 
 minecraft {
@@ -35,8 +35,17 @@ minecraft {
 	println "	Quikmod"
 	println "#################################################"
 	
-	//replaceIn "${mod.id.toLowerCase()}/${mod.id}Mod.java"
-	replaceIn "reference/Reference.java"
+	// Verify mod id follows proper conventions.
+	assert mod.id == mod.id.toLowerCase();
+	assert mod.id == mod.id.replace(' ', '');
+	assert mod.id == mod.id.replace('.', '');
+	
+	// Verify mod group follows proper conventions.
+	assert mod.group == mod.group.toLowerCase();
+	assert mod.group == mod.group.replace(' ', '');
+	
+	// Replace mod information in reference class.
+	replaceIn mod.reference_class
     mod.each { prop ->
         replace "\${mod.${prop.key}}", prop.value
         println ":" + prop.key.padRight(20) + " = " + prop.value

@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.farming.mutation;
+package com.infinityraider.agricraft.farming.mutation;
 
 
-import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculator;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
+import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 
 import java.util.List;
 

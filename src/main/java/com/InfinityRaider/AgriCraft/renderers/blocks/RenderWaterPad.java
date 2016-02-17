@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.renderers.blocks;
+package com.infinityraider.agricraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockWaterPad;
-import com.InfinityRaider.AgriCraft.blocks.BlockWaterPadFull;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.blocks.BlockWaterPad;
+import com.infinityraider.agricraft.blocks.BlockWaterPadFull;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import static com.InfinityRaider.AgriCraft.renderers.RenderUtil.*;
+import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 
 @SideOnly(Side.CLIENT)
 public class RenderWaterPad extends RenderBlockBase {

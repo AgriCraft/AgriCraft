@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.infinityraider.agricraft.utility;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.infinityraider.agricraft.blocks.BlockModPlant;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.items.ItemModSeed;
+import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -28,7 +28,7 @@ public abstract class RegisterHelper {
     }
 
     public static void registerBlock(Block block, String name, Class<? extends ItemBlock> itemClass) {
-        block.setUnlocalizedName(Reference.MOD_ID.toLowerCase()+':'+name);
+        block.setUnlocalizedName(Reference.MOD_ID+':'+name);
         LogHelper.info("registering " + block.getUnlocalizedName());
         if(itemClass!=null) {
             GameRegistry.registerBlock(block, itemClass, name);
@@ -73,7 +73,7 @@ public abstract class RegisterHelper {
 	}
 
     public static void registerItem(Item item, String name) {
-        item.setUnlocalizedName(Reference.MOD_ID.toLowerCase()+':'+name);
+        item.setUnlocalizedName(Reference.MOD_ID+':'+name);
         LogHelper.info("registering " + item.getUnlocalizedName());
         GameRegistry.registerItem(item, name);
     }

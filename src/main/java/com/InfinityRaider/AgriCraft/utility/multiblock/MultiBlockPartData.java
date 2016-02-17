@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.utility.multiblock;
+package com.infinityraider.agricraft.utility.multiblock;
 
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class MultiBlockPartData implements IMultiBlockPartData {

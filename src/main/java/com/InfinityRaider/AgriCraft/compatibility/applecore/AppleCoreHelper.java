@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.compatibility.applecore;
+package com.infinityraider.agricraft.compatibility.applecore;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftMods;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.blocks.BlockCrop;
+import com.infinityraider.agricraft.compatibility.ModHelper;
+import com.infinityraider.agricraft.reference.AgriCraftMods;
+import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;

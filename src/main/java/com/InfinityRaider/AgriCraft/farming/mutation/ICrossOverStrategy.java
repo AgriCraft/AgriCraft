@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.farming.mutation;
+package com.infinityraider.agricraft.farming.mutation;
 
 /**
  * Base interface for different cross over strategies.

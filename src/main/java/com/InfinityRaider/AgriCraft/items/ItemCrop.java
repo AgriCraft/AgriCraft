@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.items;
+package com.infinityraider.agricraft.items;
 
-import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

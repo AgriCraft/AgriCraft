@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.container;
+package com.infinityraider.agricraft.container;
 
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
+import com.infinityraider.agricraft.items.ItemJournal;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

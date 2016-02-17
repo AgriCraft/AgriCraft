@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.farming.cropplant;
+package com.infinityraider.agricraft.farming.cropplant;
 
-import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;

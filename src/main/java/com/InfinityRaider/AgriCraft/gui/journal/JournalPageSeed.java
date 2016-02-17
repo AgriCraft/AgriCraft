@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.gui.journal;
+package com.infinityraider.agricraft.gui.journal;
 
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
-import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
-import com.InfinityRaider.AgriCraft.gui.Component;
-import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.mutation.Mutation;
+import com.infinityraider.agricraft.farming.mutation.MutationHandler;
+import com.infinityraider.agricraft.gui.Component;
+import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -18,11 +18,11 @@ import java.util.Arrays;
 
 @SideOnly(Side.CLIENT)
 public class JournalPageSeed extends JournalPage {
-    private static final ResourceLocation ICON_FRAME = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalSeedFrame.png");
-    private static final ResourceLocation MUTATION_TEMPLATE = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalMutationTemplate.png");
-    private static final ResourceLocation QUESTION_MARK = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalQuestionMark.png");
-    private static final ResourceLocation BRIGHTNESS_BAR = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalBrightnessBar.png");
-    private static final ResourceLocation BRIGHTNESS_FRAME = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalBrightnessFrame.png");
+    private static final ResourceLocation ICON_FRAME = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalSeedFrame.png");
+    private static final ResourceLocation MUTATION_TEMPLATE = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalMutationTemplate.png");
+    private static final ResourceLocation QUESTION_MARK = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalQuestionMark.png");
+    private static final ResourceLocation BRIGHTNESS_BAR = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalBrightnessBar.png");
+    private static final ResourceLocation BRIGHTNESS_FRAME = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalBrightnessFrame.png");
 
     private ArrayList<ItemStack> discoveredSeeds;
     private int page;
@@ -42,7 +42,7 @@ public class JournalPageSeed extends JournalPage {
 
     @Override
     public ResourceLocation getForeground() {
-        return new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalSeedPage.png");
+        return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalSeedPage.png");
     }
 
     @Override

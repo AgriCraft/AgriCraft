@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.handler.GuiHandler;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedStorage;
-import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
+import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
+import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

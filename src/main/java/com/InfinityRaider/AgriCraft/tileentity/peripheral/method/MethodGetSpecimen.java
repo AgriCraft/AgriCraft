@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
+import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
 import net.minecraft.item.ItemStack;
 
 public class MethodGetSpecimen extends MethodBasePeripheral {

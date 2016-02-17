@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.farming;
+package com.infinityraider.agricraft.farming;
 
 import net.minecraft.item.ItemStack;
 

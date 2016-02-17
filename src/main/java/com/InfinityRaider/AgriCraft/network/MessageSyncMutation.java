@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.network;
+package com.infinityraider.agricraft.network;
 
-import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
-import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
+import com.infinityraider.agricraft.farming.mutation.Mutation;
+import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

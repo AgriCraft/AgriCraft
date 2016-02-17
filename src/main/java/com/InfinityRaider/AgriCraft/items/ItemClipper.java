@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.items;
+package com.infinityraider.agricraft.items;
 
-import com.InfinityRaider.AgriCraft.api.v1.IClipper;
+import com.infinityraider.agricraft.api.v1.IClipper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

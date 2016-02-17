@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.items.blocks;
+package com.infinityraider.agricraft.items.blocks;
 
-import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
-import com.InfinityRaider.AgriCraft.utility.PlayerHelper;
+import com.infinityraider.agricraft.tileentity.decoration.TileEntityGrate;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.utility.PlayerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

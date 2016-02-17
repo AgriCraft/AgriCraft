@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.infinityraider.agricraft.utility;
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.api.v1.BlockWithMeta;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;

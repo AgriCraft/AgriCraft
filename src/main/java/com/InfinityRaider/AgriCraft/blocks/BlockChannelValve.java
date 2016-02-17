@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
-import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderValve;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
+import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
+import com.infinityraider.agricraft.renderers.blocks.RenderValve;
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntityValve;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;

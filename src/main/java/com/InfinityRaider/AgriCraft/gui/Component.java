@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.gui;
+package com.infinityraider.agricraft.gui;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

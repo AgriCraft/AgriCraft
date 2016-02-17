@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.container;
+package com.infinityraider.agricraft.container;
 
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.network.MessageContainerSeedStorage;
-import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
-import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
-import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageController;
-import com.InfinityRaider.AgriCraft.tileentity.storage.SeedStorageSlot;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
+import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.tileentity.storage.ISeedStorageControllable;
+import com.infinityraider.agricraft.tileentity.storage.ISeedStorageController;
+import com.infinityraider.agricraft.tileentity.storage.SeedStorageSlot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;

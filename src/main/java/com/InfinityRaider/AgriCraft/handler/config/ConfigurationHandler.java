@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.handler.config;
+package com.infinityraider.agricraft.handler.config;
 
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.utility.IOHelper;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.mutation.Mutation;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.utility.IOHelper;
+import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -122,7 +122,7 @@ public class ConfigurationHandler {
 
     private static void checkAndCreateConfig(FMLPreInitializationEvent event) {
         if(config == null) {
-            directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
+            directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID+'/';
             config = new Configuration(new File(directory, "Configuration.cfg"));
         }
     }

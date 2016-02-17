@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.gui.journal;
+package com.infinityraider.agricraft.gui.journal;
 
-import com.InfinityRaider.AgriCraft.gui.Component;
-import com.InfinityRaider.AgriCraft.reference.Reference;
+import com.infinityraider.agricraft.gui.Component;
+import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public abstract class JournalPage {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalBackground.png");
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalBackground.png");
 
     /** Gets the background texture */
     public static ResourceLocation getBackground() {

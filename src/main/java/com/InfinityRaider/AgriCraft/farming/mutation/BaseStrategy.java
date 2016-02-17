@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.farming.mutation;
+package com.infinityraider.agricraft.farming.mutation;
 
 
-import com.InfinityRaider.AgriCraft.api.v1.IStatCalculator;
-import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculator;
+import com.infinityraider.agricraft.api.v1.IStatCalculator;
+import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
 
 public abstract class BaseStrategy implements ICrossOverStrategy {
     protected final MutationEngine engine;

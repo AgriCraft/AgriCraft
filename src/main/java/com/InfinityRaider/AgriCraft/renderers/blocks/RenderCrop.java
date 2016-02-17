@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.renderers.blocks;
+package com.infinityraider.agricraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.blocks.BlockCrop;
+import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.PlantRenderer;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -17,8 +17,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static com.InfinityRaider.AgriCraft.renderers.RenderUtil.*;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftProperties;
+import static com.infinityraider.agricraft.renderers.RenderUtil.*;
+import com.infinityraider.agricraft.reference.AgriCraftProperties;
 
 @SideOnly(Side.CLIENT)
 public class RenderCrop extends RenderBlockBase {

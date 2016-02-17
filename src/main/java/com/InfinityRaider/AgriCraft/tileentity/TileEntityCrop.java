@@ -1,24 +1,24 @@
-package com.InfinityRaider.AgriCraft.tileentity;
+package com.infinityraider.agricraft.tileentity;
 
-import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
-import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
-import com.InfinityRaider.AgriCraft.api.v1.IAdditionalCropData;
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
-import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
-import com.InfinityRaider.AgriCraft.api.v1.ICrop;
-import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
-import com.InfinityRaider.AgriCraft.farming.PlantStats;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
-import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
-import com.InfinityRaider.AgriCraft.utility.statstringdisplayer.StatStringDisplayer;
+import com.infinityraider.agricraft.api.v1.IDebuggable;
+import com.infinityraider.agricraft.api.v1.IFertiliser;
+import com.infinityraider.agricraft.api.v1.IAdditionalCropData;
+import com.infinityraider.agricraft.api.v1.ISeedStats;
+import com.infinityraider.agricraft.api.v1.ITrowel;
+import com.infinityraider.agricraft.api.v1.ICrop;
+import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
+import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.blocks.BlockCrop;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
+import com.infinityraider.agricraft.farming.mutation.MutationEngine;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.utility.statstringdisplayer.StatStringDisplayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.reference.AgriCraftProperties;
 
 public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable{
 	

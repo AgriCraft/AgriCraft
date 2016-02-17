@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.farming.mutation;
+package com.infinityraider.agricraft.farming.mutation;
 
-import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
-import com.InfinityRaider.AgriCraft.api.v1.IMutation;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.api.v1.ICropPlant;
+import com.infinityraider.agricraft.api.v1.IMutation;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

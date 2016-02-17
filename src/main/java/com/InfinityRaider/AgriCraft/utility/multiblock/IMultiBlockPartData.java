@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.utility.multiblock;
+package com.infinityraider.agricraft.utility.multiblock;
 
 import net.minecraft.nbt.NBTTagCompound;
 

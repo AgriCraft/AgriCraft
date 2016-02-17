@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.farming.mutation.statcalculator;
+package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 
 public class StatCalculatorNormal extends StatCalculatorBase {
     /** calculates the new stats based on an input stat, the nr of neighbours and a divisor*/

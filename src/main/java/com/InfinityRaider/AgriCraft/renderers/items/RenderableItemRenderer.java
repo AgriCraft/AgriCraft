@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers.items;
+package com.infinityraider.agricraft.renderers.items;
 
 public class RenderableItemRenderer extends AbstractItemRenderer {
 	

@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.renderers.blocks;
+package com.infinityraider.agricraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.renderers.*;
-import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
-import com.InfinityRaider.AgriCraft.renderers.renderinghacks.IItemRenderer;
-import com.InfinityRaider.AgriCraft.renderers.renderinghacks.ISimpleBlockRenderingHandler;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
+import com.infinityraider.agricraft.renderers.*;
+import com.infinityraider.agricraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
+import com.infinityraider.agricraft.renderers.renderinghacks.IItemRenderer;
+import com.infinityraider.agricraft.renderers.renderinghacks.ISimpleBlockRenderingHandler;
+import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.Tessellator;

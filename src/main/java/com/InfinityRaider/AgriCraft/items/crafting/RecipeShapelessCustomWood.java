@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.items.crafting;
+package com.infinityraider.agricraft.items.crafting;
 
 
-import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
+import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;

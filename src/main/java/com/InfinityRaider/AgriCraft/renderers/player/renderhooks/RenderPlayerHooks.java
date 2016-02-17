@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
+package com.infinityraider.agricraft.renderers.player.renderhooks;
 
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.RenderPlayerEvent;

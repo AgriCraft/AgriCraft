@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.api.v1.ITrowel;
+import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-import static com.InfinityRaider.AgriCraft.tileentity.peripheral.method.MethodUtilities.*;
+import static com.infinityraider.agricraft.tileentity.peripheral.method.MethodUtilities.*;
 
 public abstract class MethodBase implements IMethod {
 

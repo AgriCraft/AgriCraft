@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.entity;
+package com.infinityraider.agricraft.entity;
 
-import com.InfinityRaider.AgriCraft.init.WorldGen;
+import com.infinityraider.agricraft.init.WorldGen;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.world.World;
 

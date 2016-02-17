@@ -1,10 +1,10 @@
 /*
  * An intermediate for the water pad.
  */
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderWaterPad;
+import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
+import com.infinityraider.agricraft.renderers.blocks.RenderWaterPad;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.proxy;
+package com.infinityraider.agricraft.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

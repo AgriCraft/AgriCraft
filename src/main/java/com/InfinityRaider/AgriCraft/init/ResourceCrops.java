@@ -1,14 +1,14 @@
-package com.InfinityRaider.AgriCraft.init;
+package com.infinityraider.agricraft.init;
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
-import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.reference.Data;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import com.infinityraider.agricraft.api.v1.BlockWithMeta;
+import com.infinityraider.agricraft.api.v1.RenderMethod;
+import com.infinityraider.agricraft.api.v1.RequirementType;
+import com.infinityraider.agricraft.blocks.BlockModPlant;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.items.ItemModSeed;
+import com.infinityraider.agricraft.reference.Data;
+import com.infinityraider.agricraft.utility.LogHelper;
+import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;

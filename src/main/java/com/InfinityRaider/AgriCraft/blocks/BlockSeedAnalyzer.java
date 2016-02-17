@@ -1,14 +1,14 @@
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
-import com.InfinityRaider.AgriCraft.handler.GuiHandler;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
+import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
+import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
+import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;

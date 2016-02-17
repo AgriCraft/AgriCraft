@@ -1,13 +1,13 @@
-package com.InfinityRaider.AgriCraft.tileentity.irrigation;
+package com.infinityraider.agricraft.tileentity.irrigation;
 
-import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.network.MessageSyncFluidLevel;
-import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.api.v1.IDebuggable;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
+import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;

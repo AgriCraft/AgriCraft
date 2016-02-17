@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.network;
+package com.infinityraider.agricraft.network;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageBase;
-import com.InfinityRaider.AgriCraft.tileentity.storage.ISeedStorageControllable;
+import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
+import com.infinityraider.agricraft.tileentity.storage.ISeedStorageControllable;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

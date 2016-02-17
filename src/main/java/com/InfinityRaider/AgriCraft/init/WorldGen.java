@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.init;
+package com.infinityraider.agricraft.init;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.handler.VillageCreationHandler;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.world.StructureGreenhouse;
-import com.InfinityRaider.AgriCraft.world.StructureGreenhouseIrrigated;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.handler.VillageCreationHandler;
+import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.world.StructureGreenhouse;
+import com.infinityraider.agricraft.world.StructureGreenhouseIrrigated;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 

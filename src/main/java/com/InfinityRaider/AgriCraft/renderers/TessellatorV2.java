@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.renderers;
+package com.infinityraider.agricraft.renderers;
 
-import com.InfinityRaider.AgriCraft.utility.TransformationMatrix;
+import com.infinityraider.agricraft.utility.TransformationMatrix;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import net.minecraft.client.renderer.Tessellator;

@@ -1,12 +1,12 @@
-package com.InfinityRaider.AgriCraft.world;
+package com.infinityraider.agricraft.world;
 
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -275,11 +275,11 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
             }
         }
         //place irrigation channels
-        this.fillWithBlocks(world, boundingBox, 5, 5, 5, 5, 5, 10, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), false);
+        this.fillWithBlocks(world, boundingBox, 5, 5, 5, 5, 5, 10, com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), false);
         for(int z=5;z<=10;z++) {
             this.generateStructureIrrigationChannel(world, boundingBox, 5, 5, z);
         }
-        this.fillWithBlocks(world, boundingBox, 6, 5, 10, 11, 5, 10, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), false);
+        this.fillWithBlocks(world, boundingBox, 6, 5, 10, 11, 5, 10, com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), false);
         for(int x=6;x<=11;x++) {
             this.generateStructureIrrigationChannel(world, boundingBox, x, 5, 10);
         }
@@ -299,7 +299,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterTank.getDefaultState(), 2);
+            world.setBlockState(pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterTank.getDefaultState(), 2);
             TileEntityTank tank = (TileEntityTank) world.getTileEntity(pos);
             if (tank == null) {
                 tank = new TileEntityTank();
@@ -324,7 +324,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), 2);
+            world.setBlockState(pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterChannel.getDefaultState(), 2);
             TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(pos);
             if (channel!=null) {
                 channel.setMaterial(new ItemStack(Blocks.planks, 1, 0));
@@ -343,7 +343,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockSprinkler.getDefaultState(), 2);
+            world.setBlockState(pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockSprinkler.getDefaultState(), 2);
             return true;
         }
         else {

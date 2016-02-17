@@ -1,12 +1,12 @@
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
-import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSprinkler;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntitySprinkler;
+import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
+import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
+import com.infinityraider.agricraft.tileentity.TileEntityBase;
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntitySprinkler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;

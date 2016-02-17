@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.api.v1.BlockWithMeta;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import net.minecraft.item.ItemStack;
 
 public class MethodGetNeededSoil extends MethodBaseGrowthReq {

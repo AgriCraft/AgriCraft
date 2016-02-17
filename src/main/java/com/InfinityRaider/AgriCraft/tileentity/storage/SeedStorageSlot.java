@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.tileentity.storage;
+package com.infinityraider.agricraft.tileentity.storage;
 
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

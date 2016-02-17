@@ -1,5 +1,5 @@
 
-package com.InfinityRaider.AgriCraft.tileentity.irrigation;
+package com.infinityraider.agricraft.tileentity.irrigation;
 
 /**
  * The base for all irrigation components in AgriCraft.

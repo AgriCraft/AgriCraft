@@ -1,5 +1,5 @@
 
-package com.InfinityRaider.AgriCraft.reference;
+package com.infinityraider.agricraft.reference;
 
 /**
  * A class for tracking AgriCraft supported mod ids.

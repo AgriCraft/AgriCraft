@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
+package com.infinityraider.agricraft.renderers.player.renderhooks;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;

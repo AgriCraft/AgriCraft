@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.renderers.blocks;
+package com.infinityraider.agricraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFenceGate;
+import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.tileentity.decoration.TileEntityFenceGate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -16,7 +16,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
-import static com.InfinityRaider.AgriCraft.renderers.RenderUtil.*;
+import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 
 public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceGate> {
     public RenderBlockFenceGate() {

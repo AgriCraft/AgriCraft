@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.renderers.items;
+package com.infinityraider.agricraft.renderers.items;
 
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftRenderable;
-import com.InfinityRaider.AgriCraft.renderers.RenderUtil;
-import com.InfinityRaider.AgriCraft.renderers.renderinghacks.IItemRenderer;
+import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
+import com.infinityraider.agricraft.renderers.RenderUtil;
+import com.infinityraider.agricraft.renderers.renderinghacks.IItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 

@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.infinityraider.agricraft.utility;
 
-import com.InfinityRaider.AgriCraft.api.v1.IDebuggable;
+import com.infinityraider.agricraft.api.v1.IDebuggable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

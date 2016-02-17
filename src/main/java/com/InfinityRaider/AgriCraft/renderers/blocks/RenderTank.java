@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.renderers.blocks;
+package com.infinityraider.agricraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
-import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.utility.icon.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import static com.InfinityRaider.AgriCraft.renderers.RenderUtil.*;
+import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 
 @SideOnly(Side.CLIENT)
 public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
@@ -28,7 +28,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 	private static final SafeIcon WATER_ICON = new SafeIcon(Blocks.waterlily);
 	
     public RenderTank() {
-        super(com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterTank, new TileEntityTank(), true);
+        super(com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterTank, new TileEntityTank(), true);
     }
 
     @Override

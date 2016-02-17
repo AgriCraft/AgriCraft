@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.renderers.blocks;
+package com.infinityraider.agricraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.IIrrigationComponent;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityChannel;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityTank;
-import com.InfinityRaider.AgriCraft.tileentity.irrigation.TileEntityValve;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.tileentity.irrigation.IIrrigationComponent;
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntityValve;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import static com.InfinityRaider.AgriCraft.renderers.RenderUtil.*;
+import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,7 +31,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
     public static AtomicInteger renderCallCounter = new AtomicInteger(0);
 
     public RenderChannel() {
-        this(com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterChannel, new TileEntityChannel());
+        this(com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterChannel, new TileEntityChannel());
     }
 
     protected RenderChannel(Block block, TileEntityChannel channel) {

@@ -1,15 +1,15 @@
-package com.InfinityRaider.AgriCraft.renderers.blocks;
+package com.infinityraider.agricraft.renderers.blocks;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzer;
-import com.InfinityRaider.AgriCraft.renderers.models.ModelSeedAnalyzerBook;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;
+import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzerBook;
+import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -36,8 +36,8 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
 
     public RenderSeedAnalyzer() {
         super(AgriCraftBlocks.blockSeedAnalyzer, new TileEntitySeedAnalyzer(), true);
-        this.texture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/seedAnalyzer.png");
-        this.bookTexture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/seedAnalyzerBook.png");
+        this.texture = new ResourceLocation(Reference.MOD_ID+":textures/blocks/seedAnalyzer.png");
+        this.bookTexture = new ResourceLocation(Reference.MOD_ID+":textures/blocks/seedAnalyzerBook.png");
         this.modelSeedAnalyzer = new ModelSeedAnalyzer();
         this.modelBook = new ModelSeedAnalyzerBook();
         seedAnalyzerDummy = new TileEntitySeedAnalyzer();

@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.api.example;
+package com.infinityraider.agricraft.api.example;
 
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;

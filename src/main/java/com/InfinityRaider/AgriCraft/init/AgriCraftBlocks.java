@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.init;
+package com.infinityraider.agricraft.init;
 
-import com.InfinityRaider.AgriCraft.blocks.*;
-import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftMods;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.blocks.*;
+import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.reference.AgriCraftMods;
+import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.block.Block;
 
 public class AgriCraftBlocks {

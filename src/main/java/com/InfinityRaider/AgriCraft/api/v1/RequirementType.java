@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.api.v1;
+package com.infinityraider.agricraft.api.v1;
 
 public enum RequirementType {
     NONE, BELOW, NEARBY

@@ -1,14 +1,14 @@
-package com.InfinityRaider.AgriCraft.items;
+package com.infinityraider.agricraft.items;
 
-import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
-import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
-import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
+import com.infinityraider.agricraft.api.v1.IIconRegistrar;
+import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.utility.RegisterHelper;
+import com.infinityraider.agricraft.utility.icon.SafeIcon;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftRenderable;
+import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
 
 /**
  * The root Item class for all AgriCraft Items (excluding blockItems).

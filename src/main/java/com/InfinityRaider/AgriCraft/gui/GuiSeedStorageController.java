@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.gui;
+package com.infinityraider.agricraft.gui;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorageController;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorageController;
+import com.infinityraider.agricraft.container.ContainerSeedStorageController;
+import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorageController;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiSeedStorageController extends GuiSeedStorageBase {
-    private static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedStorageController.png");
+    private static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiSeedStorageController.png");
     private static final int sizeX = 250;
     private static final int sizeY = 176;
 

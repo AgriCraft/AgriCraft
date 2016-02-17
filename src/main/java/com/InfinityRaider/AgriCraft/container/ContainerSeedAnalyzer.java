@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.container;
+package com.infinityraider.agricraft.container;
 
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.items.ItemJournal;
+import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;

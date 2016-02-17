@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers.renderinghacks;
+package com.infinityraider.agricraft.renderers.renderinghacks;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
