@@ -31,7 +31,7 @@ public class RenderSprinkler extends RenderBlockBase {
 
     public RenderSprinkler() {
         super(AgriCraftBlocks.blockSprinkler, new TileEntitySprinkler(), true);
-        this.texture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/sprinkler.png");
+        this.texture = new ResourceLocation(Reference.MOD_ID+":textures/blocks/sprinkler.png");
         this.model = new ModelSprinkler();
         this.sprinklerDummy = new TileEntitySprinkler();
     }

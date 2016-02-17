@@ -36,8 +36,8 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
 
     public RenderSeedAnalyzer() {
         super(AgriCraftBlocks.blockSeedAnalyzer, new TileEntitySeedAnalyzer(), true);
-        this.texture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/seedAnalyzer.png");
-        this.bookTexture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/seedAnalyzerBook.png");
+        this.texture = new ResourceLocation(Reference.MOD_ID+":textures/blocks/seedAnalyzer.png");
+        this.bookTexture = new ResourceLocation(Reference.MOD_ID+":textures/blocks/seedAnalyzerBook.png");
         this.modelSeedAnalyzer = new ModelSeedAnalyzer();
         this.modelBook = new ModelSeedAnalyzerBook();
         seedAnalyzerDummy = new TileEntitySeedAnalyzer();

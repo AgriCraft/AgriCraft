@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class JournalPageTitle extends JournalPage {
     @Override
     public ResourceLocation getForeground() {
-        return new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalFrontPage.png");
+        return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalFrontPage.png");
     }
 
     @Override

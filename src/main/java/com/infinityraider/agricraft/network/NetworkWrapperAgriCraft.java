@@ -18,7 +18,7 @@ public abstract class NetworkWrapperAgriCraft {
     public static SimpleNetworkWrapper wrapper;
 
     public static void init() {
-        wrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID.toLowerCase());
+        wrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         initMessages();
     }
 

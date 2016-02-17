@@ -122,7 +122,7 @@ public class ConfigurationHandler {
 
     private static void checkAndCreateConfig(FMLPreInitializationEvent event) {
         if(config == null) {
-            directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID.toLowerCase()+'/';
+            directory = event.getModConfigurationDirectory().toString()+'/'+Reference.MOD_ID+'/';
             config = new Configuration(new File(directory, "Configuration.cfg"));
         }
     }

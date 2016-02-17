@@ -29,7 +29,7 @@ import org.lwjgl.opengl.GL11;
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 
 public class RenderPeripheral extends RenderBlockBase {
-    private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/peripheralProbe.png");
+    private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID+":textures/blocks/peripheralProbe.png");
     private static final ModelBase probeModel = new ModelPeripheralProbe();
 
     public RenderPeripheral() {

@@ -196,7 +196,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerVillagerSkin(int id, String resource) {
-        VillagerRegistry.instance().registerVillagerSkin(id, new ResourceLocation(Reference.MOD_ID.toLowerCase(), resource));
+        VillagerRegistry.instance().registerVillagerSkin(id, new ResourceLocation(Reference.MOD_ID, resource));
     }
 
     @Override

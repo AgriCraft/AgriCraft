@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public abstract class JournalPage {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/journal/GuiJournalBackground.png");
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalBackground.png");
 
     /** Gets the background texture */
     public static ResourceLocation getBackground() {

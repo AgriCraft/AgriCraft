@@ -24,7 +24,7 @@ import java.io.IOException;
 
 @SideOnly(Side.CLIENT)
 public class GuiSeedAnalyzer extends GuiContainer {
-    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiSeedAnalyzer.png");
+    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiSeedAnalyzer.png");
     public TileEntitySeedAnalyzer seedAnalyzer;
 
     private boolean journalOpen;

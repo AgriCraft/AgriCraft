@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiPeripheral extends GuiContainer {
-    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/GuiPeripheral.png");
+    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiPeripheral.png");
 
     public static final int WHITE = 4210752;
 
