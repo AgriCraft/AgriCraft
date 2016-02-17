@@ -131,6 +131,16 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         return mainComponent!=null ? mainComponent.getFluidLevel() : 0;
     }
 
+	/**
+	 * TEMPORARY: Fix to correct build.
+	 * @param lvl
+	 * @return 
+	 */
+	@Override
+	public float getFluidHeight(int lvl) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
     public int getYPosition() {
         return getMultiBlockData().posY();
     }
