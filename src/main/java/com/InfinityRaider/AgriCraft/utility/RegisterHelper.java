@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // I don't know if final or abstract is better...
 public abstract class RegisterHelper {
@@ -48,10 +50,12 @@ public abstract class RegisterHelper {
         }
     }
 	
+	@SideOnly(Side.CLIENT)
 	public static void registerItemRenderer(Item item) {
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static void registerItemRenderer(Item item, String... varients) {
 		ModelResourceLocation[] locations = new ModelResourceLocation[varients.length];
 		for (int i = 0; i < varients.length; i++) {
@@ -60,6 +64,7 @@ public abstract class RegisterHelper {
 		registerItemRender(item, locations);
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static void registerItemRender(Item item, ModelResourceLocation... varients) {
 		ModelBakery.registerItemVariants(item, varients);
 		for (int i = 0; i < varients.length; i++) {

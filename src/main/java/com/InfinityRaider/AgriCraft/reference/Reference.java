@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.reference;
 
 /**
  * The version should be tracked in the base mod class.
+ * Just have to figure out where (and when) to move it...
  *
  * @deprecated
  */

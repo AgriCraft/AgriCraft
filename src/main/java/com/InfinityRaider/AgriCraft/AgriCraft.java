@@ -42,7 +42,7 @@ import java.util.ArrayList;
  * 
  * I've annotated my code heavily, for myself and for possible others who might learn from it.
  * <br>
- * Oh and keep on modding in the free world
+ * Oh and keep on modding in the free world!
  * <p>
  * ~ InfinityRaider
  * </p>
