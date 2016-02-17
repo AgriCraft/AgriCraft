@@ -9,7 +9,6 @@ import com.InfinityRaider.AgriCraft.farming.CropProduce;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftBlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
@@ -31,6 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftProperties;
 
 public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     private IGrowthRequirement growthRequirement;
@@ -150,17 +150,17 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     protected final BlockState createBlockState() {
-        return new BlockState(this, AgriCraftBlockStates.GROWTHSTAGE);
+        return new BlockState(this, AgriCraftProperties.GROWTHSTAGE);
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(AgriCraftBlockStates.GROWTHSTAGE, Math.max(Math.min(0, meta), Constants.MATURE));
+        return getDefaultState().withProperty(AgriCraftProperties.GROWTHSTAGE, Math.max(Math.min(0, meta), Constants.MATURE));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(AgriCraftBlockStates.GROWTHSTAGE);
+        return state.getValue(AgriCraftProperties.GROWTHSTAGE);
     }
 
     @Override
@@ -203,7 +203,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     //growing
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rnd) {
-        int meta = state.getValue(AgriCraftBlockStates.GROWTHSTAGE);
+        int meta = state.getValue(AgriCraftProperties.GROWTHSTAGE);
         if (meta < Constants.MATURE && this.isFertile(world, pos)) {
             //Base growth rate
             int growthRate = (tier > 0 && tier <= Constants.GROWTH_TIER.length)?Constants.GROWTH_TIER[tier]:Constants.GROWTH_TIER[0];
@@ -213,7 +213,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
             float global = 2.0F - ConfigurationHandler.growthMultiplier;
             int newMeta = (rnd.nextDouble() > (growthRate * bonus * global) / 100) ? meta : meta + 1;
             if (newMeta != meta) {
-                world.setBlockState(pos, state.withProperty(AgriCraftBlockStates.GROWTHSTAGE, newMeta), 2);
+                world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, newMeta), 2);
                 CompatibilityHandler.getInstance().announceGrowthTick(world, pos, state);
             }
         }
@@ -222,14 +222,14 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     //check if the plant is mature
     public boolean isMature(World world, BlockPos pos, IBlockState state) {
         state = state == null ? world.getBlockState(pos) : state;
-        return state.getValue(AgriCraftBlockStates.GROWTHSTAGE) >= Constants.MATURE;
+        return state.getValue(AgriCraftProperties.GROWTHSTAGE) >= Constants.MATURE;
     }
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> list = new ArrayList<>();
         list.add(new ItemStack(this.seed, 1, 0));
-        if(state.getValue(AgriCraftBlockStates.GROWTHSTAGE)==7) {
+        if(state.getValue(AgriCraftProperties.GROWTHSTAGE)==7) {
             list.add(this.getRandomFruit(world instanceof World ? ((World) world).rand : new Random()));
         }
         return list;
@@ -237,7 +237,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return state.getValue(AgriCraftBlockStates.GROWTHSTAGE) >= Constants.MATURE ? this.getCrop() : this.getSeed();
+        return state.getValue(AgriCraftProperties.GROWTHSTAGE) >= Constants.MATURE ? this.getCrop() : this.getSeed();
     }
 
     //fruit gain

@@ -25,6 +25,7 @@ public abstract class ItemBase extends Item implements IAgriCraftRenderable {
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setMaxStackSize(64);
 		this.internalName = name;
+		// This is a bad idea...
         RegisterHelper.registerItem(this, name);
 		this.icon = new SafeIcon(this);
     }

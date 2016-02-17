@@ -7,7 +7,7 @@ import net.minecraft.block.properties.PropertyBool;
 /**
  * A class containing AgriCraft block states.
  */
-public interface AgriCraftBlockStates {
+public interface AgriCraftProperties {
 	
 	PropertyBool CROSSCROP = PropertyBool.create("CROSSCROP");
 	PropertyBool WEEDS = PropertyBool.create("WEEDS");

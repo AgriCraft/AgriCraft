@@ -19,7 +19,6 @@ import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculat
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftBlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -40,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftProperties;
 
 public class APIimplv1 implements APIv1 {
     private final int version;
@@ -160,7 +160,7 @@ public class APIimplv1 implements APIv1 {
     public boolean placeCrops(World world, BlockPos pos, ItemStack crops) {
         if (canPlaceCrops(world, pos, crops) && crops.stackSize >= 1) {
             if (!world.isRemote) {
-                world.setBlockState(pos, AgriCraftBlocks.blockCrop.getDefaultState().withProperty(AgriCraftBlockStates.GROWTHSTAGE, 0), 3);
+                world.setBlockState(pos, AgriCraftBlocks.blockCrop.getDefaultState().withProperty(AgriCraftProperties.GROWTHSTAGE, 0), 3);
                 crops.stackSize--;
             }
             return true;
@@ -413,7 +413,7 @@ public class APIimplv1 implements APIv1 {
         if (te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             if(crop.allowHarvest(null)) {
-                crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(AgriCraftBlockStates.GROWTHSTAGE, 2), 2);
+                crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
                 return crop.getPlant().getFruitsOnHarvest(crop.getGain(), world.rand);
             }
         }
