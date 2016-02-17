@@ -1,13 +1,13 @@
 /*
  * Utilities for the computercraft api methods.
  */
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.api.v1.ITrowel;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.items.ItemJournal;
+import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import java.util.List;
 import net.minecraft.item.ItemStack;
 

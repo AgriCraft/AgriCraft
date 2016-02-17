@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.init;
+package com.infinityraider.agricraft.init;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.entity.EntityLeashKnotAgricraft;
-import com.InfinityRaider.AgriCraft.entity.EntityVillagerFarmer;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.entity.EntityLeashKnotAgricraft;
+import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class AgriCraftEntities {

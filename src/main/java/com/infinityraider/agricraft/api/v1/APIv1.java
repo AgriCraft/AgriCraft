@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.api.v1;
+package com.infinityraider.agricraft.api.v1;
 
-import com.InfinityRaider.AgriCraft.api.APIBase;
+import com.infinityraider.agricraft.api.APIBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;

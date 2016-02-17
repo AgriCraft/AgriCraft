@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.handler;
+package com.infinityraider.agricraft.handler;
 
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.world.StructureGreenhouse;
-import com.InfinityRaider.AgriCraft.world.StructureGreenhouseIrrigated;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.world.StructureGreenhouse;
+import com.infinityraider.agricraft.world.StructureGreenhouseIrrigated;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;

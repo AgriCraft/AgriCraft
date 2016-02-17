@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.handler;
+package com.infinityraider.agricraft.handler;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
-import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
-import com.InfinityRaider.AgriCraft.network.MessageSyncMutation;
-import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.farming.mutation.Mutation;
+import com.infinityraider.agricraft.farming.mutation.MutationHandler;
+import com.infinityraider.agricraft.network.MessageSyncMutation;
+import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;

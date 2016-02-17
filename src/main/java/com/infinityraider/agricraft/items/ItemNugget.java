@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.items;
+package com.infinityraider.agricraft.items;
 
-import com.InfinityRaider.AgriCraft.renderers.items.RenderableItemRenderer;
-import com.InfinityRaider.AgriCraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
+import com.infinityraider.agricraft.renderers.items.RenderableItemRenderer;
+import com.infinityraider.agricraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import net.minecraft.creativetab.CreativeTabs;
 
 public class ItemNugget extends ItemBase {

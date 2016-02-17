@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

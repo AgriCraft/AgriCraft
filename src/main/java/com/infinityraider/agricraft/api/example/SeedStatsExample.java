@@ -1,12 +1,12 @@
-package com.InfinityRaider.AgriCraft.api.example;
+package com.infinityraider.agricraft.api.example;
 
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
+import com.infinityraider.agricraft.api.v1.ISeedStats;
 import net.minecraftforge.fml.common.Optional;
 
 /**
  * Example implementation of the ISeedStats interface
  */
-@Optional.Interface(modid = "AgriCraft", iface = "com.InfinityRaider.AgriCraft.api.v1.ISeedStats")
+@Optional.Interface(modid = "AgriCraft", iface = "com.infinityraider.agricraft.api.v1.ISeedStats")
 public class SeedStatsExample implements ISeedStats {
     private short growth;
     private short gain;

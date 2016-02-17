@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.entity;
+package com.infinityraider.agricraft.entity;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockFence;
+import com.infinityraider.agricraft.blocks.BlockFence;
 import net.minecraft.entity.EntityLeashKnot;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;

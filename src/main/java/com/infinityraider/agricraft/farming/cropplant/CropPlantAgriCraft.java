@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.farming.cropplant;
+package com.infinityraider.agricraft.farming.cropplant;
 
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftPlant;
-import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v1.IMutation;
-import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
-import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.IMutation;
+import com.infinityraider.agricraft.api.v1.RenderMethod;
+import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;

@@ -1,12 +1,12 @@
-package com.InfinityRaider.AgriCraft.handler;
+package com.infinityraider.agricraft.handler;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockGrate;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.blocks.BlockGrate;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -100,7 +100,7 @@ public class PlayerInteractEventHandler {
                 if (event.world.isRemote) {
                     denyEvent(event, true);
                 }
-                event.world.setBlockState(event.pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockWaterPad.getDefaultState(), 3);
+                event.world.setBlockState(event.pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterPad.getDefaultState(), 3);
                 if (!event.entityPlayer.capabilities.isCreativeMode) {
                     event.entityPlayer.getCurrentEquippedItem().damageItem(1, event.entityPlayer);
                     event.setResult(Event.Result.ALLOW);

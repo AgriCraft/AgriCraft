@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.api;
+package com.infinityraider.agricraft.api;
 
 /**
  * This is the base interface for all (future) API versions.

@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.handler.config;
+package com.infinityraider.agricraft.handler.config;
 
-import com.InfinityRaider.AgriCraft.api.v1.IMutation;
-import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.api.v1.IMutation;
+import com.infinityraider.agricraft.farming.mutation.Mutation;
+import com.infinityraider.agricraft.utility.LogHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.item.Item;

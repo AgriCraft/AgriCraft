@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;

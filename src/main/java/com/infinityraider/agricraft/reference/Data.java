@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.reference;
+package com.infinityraider.agricraft.reference;
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.RenderMethod;
+import com.infinityraider.agricraft.api.v1.BlockWithMeta;
+import com.infinityraider.agricraft.api.v1.RenderMethod;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;

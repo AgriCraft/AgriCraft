@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.utility.exception;
+package com.infinityraider.agricraft.utility.exception;
 
 public class MissingArgumentsException extends Exception {
     public MissingArgumentsException() {

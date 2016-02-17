@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.tileentity.storage;
+package com.infinityraider.agricraft.tileentity.storage;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

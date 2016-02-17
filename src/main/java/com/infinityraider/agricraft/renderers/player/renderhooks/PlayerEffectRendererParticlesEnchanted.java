@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
+package com.infinityraider.agricraft.renderers.player.renderhooks;
 
-import com.InfinityRaider.AgriCraft.renderers.particles.RuneFX;
+import com.infinityraider.agricraft.renderers.particles.RuneFX;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;

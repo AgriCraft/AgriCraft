@@ -1,18 +1,18 @@
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
 
-import com.InfinityRaider.AgriCraft.api.v1.*;
-import com.InfinityRaider.AgriCraft.compatibility.CompatibilityHandler;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAgriCraftShearable;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.CropProduce;
-import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.ItemModSeed;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
-import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import com.InfinityRaider.AgriCraft.utility.exception.MissingArgumentsException;
+import com.infinityraider.agricraft.api.v1.*;
+import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
+import com.infinityraider.agricraft.farming.cropplant.CropPlantAgriCraftShearable;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.CropProduce;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.items.ItemModSeed;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.utility.LogHelper;
+import com.infinityraider.agricraft.utility.RegisterHelper;
+import com.infinityraider.agricraft.utility.exception.MissingArgumentsException;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.BlockState;
@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.reference.AgriCraftProperties;
 
 public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     private IGrowthRequirement growthRequirement;

@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.gui.journal;
+package com.infinityraider.agricraft.gui.journal;
 
-import com.InfinityRaider.AgriCraft.gui.Component;
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.utility.IOHelper;
+import com.infinityraider.agricraft.gui.Component;
+import com.infinityraider.agricraft.items.ItemJournal;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.utility.IOHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;

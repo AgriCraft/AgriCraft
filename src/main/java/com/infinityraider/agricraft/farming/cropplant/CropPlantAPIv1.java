@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.farming.cropplant;
+package com.infinityraider.agricraft.farming.cropplant;
 
-import com.InfinityRaider.AgriCraft.api.v1.*;
+import com.infinityraider.agricraft.api.v1.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.WorldRenderer;

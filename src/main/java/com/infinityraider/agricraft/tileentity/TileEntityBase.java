@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.tileentity;
+package com.infinityraider.agricraft.tileentity;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockBase;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
-import com.InfinityRaider.AgriCraft.utility.multiblock.IMultiBlockComponent;
+import com.infinityraider.agricraft.blocks.BlockBase;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.utility.multiblock.IMultiBlockComponent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

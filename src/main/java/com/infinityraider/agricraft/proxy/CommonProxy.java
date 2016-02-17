@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.proxy;
+package com.infinityraider.agricraft.proxy;
 
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.handler.PlayerInteractEventHandler;
-import com.InfinityRaider.AgriCraft.handler.PlayerConnectToServerHandler;
-import com.InfinityRaider.AgriCraft.utility.RenderLogger;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
+import com.infinityraider.agricraft.handler.PlayerConnectToServerHandler;
+import com.infinityraider.agricraft.utility.RenderLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;

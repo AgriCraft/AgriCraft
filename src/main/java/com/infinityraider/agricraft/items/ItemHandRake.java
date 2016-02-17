@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.items;
+package com.infinityraider.agricraft.items;
 
-import com.InfinityRaider.AgriCraft.api.v1.ICrop;
-import com.InfinityRaider.AgriCraft.api.v1.IRake;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
-import com.InfinityRaider.AgriCraft.utility.WeightedRandom;
+import com.infinityraider.agricraft.api.v1.ICrop;
+import com.infinityraider.agricraft.api.v1.IRake;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.utility.RegisterHelper;
+import com.infinityraider.agricraft.utility.WeightedRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.reference.AgriCraftProperties;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.

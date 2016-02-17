@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
-import com.InfinityRaider.AgriCraft.farming.PlantStats;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.api.v1.ISeedStats;
+import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
 
 import java.util.ArrayList;
 

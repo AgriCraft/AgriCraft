@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.api.v0;
+package com.infinityraider.agricraft.api.v0;
 
-import com.InfinityRaider.AgriCraft.api.APIBase;
-import com.InfinityRaider.AgriCraft.api.APIStatus;
+import com.infinityraider.agricraft.api.APIBase;
+import com.infinityraider.agricraft.api.APIStatus;
 
 /**
  * Filler object to represent the API until Agricraft had the chance to

@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.infinityraider.agricraft.utility;
 
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;

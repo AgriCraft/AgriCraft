@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.renderers.player.renderhooks;
+package com.infinityraider.agricraft.renderers.player.renderhooks;
 
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
-import com.InfinityRaider.AgriCraft.renderers.particles.DustFX;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.particles.DustFX;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;

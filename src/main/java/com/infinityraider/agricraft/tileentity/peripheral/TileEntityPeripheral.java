@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral;
+package com.infinityraider.agricraft.tileentity.peripheral;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftMods;
-import com.InfinityRaider.AgriCraft.tileentity.peripheral.method.*;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.blocks.BlockCrop;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.reference.AgriCraftMods;
+import com.infinityraider.agricraft.tileentity.peripheral.method.*;
+import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.Optional;

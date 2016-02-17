@@ -1,14 +1,14 @@
-package com.InfinityRaider.AgriCraft.world;
+package com.infinityraider.agricraft.world;
 
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.entity.EntityVillagerFarmer;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.init.WorldGen;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.init.WorldGen;
+import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
@@ -25,7 +25,7 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.reference.AgriCraftProperties;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
     //structure dimensions
@@ -195,7 +195,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         LogHelper.debug("Placing crop at ("+xCoord+","+yCoord+","+zCoord+")");
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockCrop.getDefaultState().withProperty(AgriCraftProperties.GROWTHSTAGE, 0), 2);
+            world.setBlockState(pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockCrop.getDefaultState().withProperty(AgriCraftProperties.GROWTHSTAGE, 0), 2);
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
             if (crop!=null) {
                 if(crosscrop) {
@@ -220,7 +220,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         int zCoord = this.getZWithOffset(x, z);
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-            world.setBlockState(pos, com.InfinityRaider.AgriCraft.init.AgriCraftBlocks.blockSeedAnalyzer.getDefaultState(), 2);
+            world.setBlockState(pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockSeedAnalyzer.getDefaultState(), 2);
             TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(pos);
             if (analyzer!=null) {
                 if(direction!=null) {

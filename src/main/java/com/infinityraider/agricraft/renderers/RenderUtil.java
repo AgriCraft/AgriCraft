@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.renderers;
+package com.infinityraider.agricraft.renderers;
 
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

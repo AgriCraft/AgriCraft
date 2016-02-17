@@ -1,15 +1,15 @@
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.handler.GuiHandler;
-import com.InfinityRaider.AgriCraft.network.MessagePeripheralCheckNeighbours;
-import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
-import com.InfinityRaider.AgriCraft.renderers.blocks.RenderPeripheral;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
-import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
-import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftMods;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
+import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
+import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
+import com.infinityraider.agricraft.tileentity.TileEntityBase;
+import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.api.v1.IIconRegistrar;
+import com.infinityraider.agricraft.reference.AgriCraftMods;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;

@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.api.example;
+package com.infinityraider.agricraft.api.example;
 
-import com.InfinityRaider.AgriCraft.api.API;
-import com.InfinityRaider.AgriCraft.api.APIBase;
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
-import com.InfinityRaider.AgriCraft.api.v1.APIv1;
+import com.infinityraider.agricraft.api.API;
+import com.infinityraider.agricraft.api.APIBase;
+import com.infinityraider.agricraft.api.v1.ISeedStats;
+import com.infinityraider.agricraft.api.v1.APIv1;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 

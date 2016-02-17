@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.network;
+package com.infinityraider.agricraft.network;
 
-import com.InfinityRaider.AgriCraft.AgriCraft;
-import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;

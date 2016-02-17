@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.renderers.items;
+package com.infinityraider.agricraft.renderers.items;
 
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
-import com.InfinityRaider.AgriCraft.items.ItemClipping;
-import com.InfinityRaider.AgriCraft.renderers.RenderUtil;
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.items.ItemClipping;
+import com.infinityraider.agricraft.renderers.RenderUtil;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;

@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.renderers;
+package com.infinityraider.agricraft.renderers;
 
-import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
-import com.InfinityRaider.AgriCraft.reference.Constants;
+import com.infinityraider.agricraft.api.v1.ICropPlant;
+import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.WorldRenderer;

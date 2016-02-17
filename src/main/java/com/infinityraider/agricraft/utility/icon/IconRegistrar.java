@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.utility.icon;
+package com.infinityraider.agricraft.utility.icon;
 
-import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
+import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;

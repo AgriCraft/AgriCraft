@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

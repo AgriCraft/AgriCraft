@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.farming.growthrequirement;
+package com.infinityraider.agricraft.farming.growthrequirement;
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v1.ISoilContainer;
-import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
-import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
+import com.infinityraider.agricraft.api.v1.BlockWithMeta;
+import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.ISoilContainer;
+import com.infinityraider.agricraft.api.v1.RequirementType;
+import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;

@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.renderers.particles;
+package com.infinityraider.agricraft.renderers.particles;
 
 //heavily inspired by the OpenBlocks sprinkler
 

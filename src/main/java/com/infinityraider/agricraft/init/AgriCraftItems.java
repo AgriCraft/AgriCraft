@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.init;
+package com.infinityraider.agricraft.init;
 
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.items.*;
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.items.*;
+import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.item.Item;
 
 public class AgriCraftItems {

@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.handler;
+package com.infinityraider.agricraft.handler;
 
-import com.InfinityRaider.AgriCraft.utility.icon.IconRegistrar;
+import com.infinityraider.agricraft.utility.icon.IconRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.InfinityRaider.AgriCraft.api.v1.IAgriCraftRenderable;
+import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
 
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")

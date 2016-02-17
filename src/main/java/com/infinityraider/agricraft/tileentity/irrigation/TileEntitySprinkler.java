@@ -1,12 +1,12 @@
-package com.InfinityRaider.AgriCraft.tileentity.irrigation;
+package com.infinityraider.agricraft.tileentity.irrigation;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockWaterChannel;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.renderers.particles.LiquidSprayFX;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
-import com.InfinityRaider.AgriCraft.utility.icon.SafeIcon;
+import com.infinityraider.agricraft.blocks.BlockWaterChannel;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.renderers.particles.LiquidSprayFX;
+import com.infinityraider.agricraft.tileentity.TileEntityBase;
+import com.infinityraider.agricraft.utility.icon.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;

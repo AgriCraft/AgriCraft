@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.utility.statstringdisplayer;
+package com.infinityraider.agricraft.utility.statstringdisplayer;
 
 
 import net.minecraftforge.fml.relauncher.Side;

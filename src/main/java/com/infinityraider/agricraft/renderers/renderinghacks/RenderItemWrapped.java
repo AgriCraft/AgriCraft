@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.renderers.renderinghacks;
+package com.infinityraider.agricraft.renderers.renderinghacks;
 
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

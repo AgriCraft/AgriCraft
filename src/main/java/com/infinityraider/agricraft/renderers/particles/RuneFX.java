@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.renderers.particles;
+package com.infinityraider.agricraft.renderers.particles;
 
-import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;

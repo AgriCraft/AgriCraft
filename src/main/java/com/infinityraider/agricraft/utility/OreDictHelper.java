@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.infinityraider.agricraft.utility;
 
-import com.InfinityRaider.AgriCraft.items.ItemBase;
-import com.InfinityRaider.AgriCraft.items.ItemNugget;
-import com.InfinityRaider.AgriCraft.reference.Data;
+import com.infinityraider.agricraft.items.ItemBase;
+import com.infinityraider.agricraft.items.ItemNugget;
+import com.infinityraider.agricraft.reference.Data;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;

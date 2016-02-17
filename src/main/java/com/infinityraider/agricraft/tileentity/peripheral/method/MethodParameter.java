@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.infinityraider.agricraft.tileentity.peripheral.method;
 
 import net.minecraft.util.StatCollector;
 

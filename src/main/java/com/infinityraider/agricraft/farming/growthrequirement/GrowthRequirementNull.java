@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.farming.growthrequirement;
+package com.infinityraider.agricraft.farming.growthrequirement;
 
-import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
-import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
+import com.infinityraider.agricraft.api.v1.BlockWithMeta;
+import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.RequirementType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;

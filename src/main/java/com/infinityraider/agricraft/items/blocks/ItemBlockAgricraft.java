@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.items.blocks;
+package com.infinityraider.agricraft.items.blocks;
 
-import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.creativetab.AgriCraftTab;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 

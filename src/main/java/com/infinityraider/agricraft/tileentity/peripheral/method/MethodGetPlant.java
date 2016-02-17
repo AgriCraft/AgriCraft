@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.tileentity.peripheral.method;
+package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 
 public class MethodGetPlant extends MethodBaseCrop {
     public MethodGetPlant() {

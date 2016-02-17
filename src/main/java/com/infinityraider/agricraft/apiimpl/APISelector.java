@@ -1,9 +1,9 @@
-package com.InfinityRaider.AgriCraft.apiimpl;
+package com.infinityraider.agricraft.apiimpl;
 
-import com.InfinityRaider.AgriCraft.api.API;
-import com.InfinityRaider.AgriCraft.api.APIBase;
-import com.InfinityRaider.AgriCraft.api.APIStatus;
-import com.InfinityRaider.AgriCraft.apiimpl.v1.APIimplv1;
+import com.infinityraider.agricraft.api.API;
+import com.infinityraider.agricraft.api.APIBase;
+import com.infinityraider.agricraft.api.APIStatus;
+import com.infinityraider.agricraft.apiimpl.v1.APIimplv1;
 
 public class APISelector implements APIBase {
 
@@ -20,7 +20,7 @@ public class APISelector implements APIBase {
 		} else {
 			switch(maxVersion) {
 				case 1:
-					return new com.InfinityRaider.AgriCraft.apiimpl.v1.APIimplv1(1, APIStatus.BACKLEVEL_OK);
+					return new com.infinityraider.agricraft.apiimpl.v1.APIimplv1(1, APIStatus.BACKLEVEL_OK);
 				default:
 					return new APIimplv1(1, APIStatus.OK);
 			}

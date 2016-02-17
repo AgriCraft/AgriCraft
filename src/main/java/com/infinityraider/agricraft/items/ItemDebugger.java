@@ -1,8 +1,8 @@
-package com.InfinityRaider.AgriCraft.items;
+package com.infinityraider.agricraft.items;
 
-import com.InfinityRaider.AgriCraft.entity.EntityVillagerFarmer;
-import com.InfinityRaider.AgriCraft.init.WorldGen;
-import com.InfinityRaider.AgriCraft.utility.DebugHelper;
+import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
+import com.infinityraider.agricraft.init.WorldGen;
+import com.infinityraider.agricraft.utility.DebugHelper;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

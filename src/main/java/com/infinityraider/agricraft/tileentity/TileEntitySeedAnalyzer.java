@@ -1,11 +1,11 @@
-package com.InfinityRaider.AgriCraft.tileentity;
+package com.infinityraider.agricraft.tileentity;
 
-import com.InfinityRaider.AgriCraft.api.v1.ITrowel;
-import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
-import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
-import com.InfinityRaider.AgriCraft.items.ItemJournal;
-import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.api.v1.ITrowel;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.items.ItemJournal;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;

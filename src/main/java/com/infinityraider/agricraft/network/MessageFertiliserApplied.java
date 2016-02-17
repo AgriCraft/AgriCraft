@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.network;
+package com.infinityraider.agricraft.network;
 
-import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
+import com.infinityraider.agricraft.api.v1.IFertiliser;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;

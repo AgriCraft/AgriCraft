@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.utility;
+package com.infinityraider.agricraft.utility;
 
 import net.minecraft.util.Vec3;
 

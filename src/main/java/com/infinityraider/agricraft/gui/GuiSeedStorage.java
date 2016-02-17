@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.gui;
+package com.infinityraider.agricraft.gui;
 
-import com.InfinityRaider.AgriCraft.container.ContainerSeedStorage;
-import com.InfinityRaider.AgriCraft.network.MessageGuiSeedStorageClearSeed;
-import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
-import com.InfinityRaider.AgriCraft.reference.Reference;
-import com.InfinityRaider.AgriCraft.tileentity.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.container.ContainerSeedStorage;
+import com.infinityraider.agricraft.network.MessageGuiSeedStorageClearSeed;
+import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;

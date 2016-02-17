@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.container;
+package com.infinityraider.agricraft.container;
 
-import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerPeripheral extends ContainerSeedAnalyzer {

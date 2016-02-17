@@ -1,6 +1,6 @@
-package com.InfinityRaider.AgriCraft.renderers;
+package com.infinityraider.agricraft.renderers;
 
-import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import com.infinityraider.agricraft.utility.LogHelper;
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;

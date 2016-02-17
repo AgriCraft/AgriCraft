@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.reference;
+package com.infinityraider.agricraft.reference;
 
 import net.minecraft.block.properties.PropertyInteger;
 

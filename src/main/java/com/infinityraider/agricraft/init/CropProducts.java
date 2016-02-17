@@ -1,7 +1,7 @@
-package com.InfinityRaider.AgriCraft.init;
+package com.infinityraider.agricraft.init;
 
-import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
-import com.InfinityRaider.AgriCraft.farming.CropProduce;
+import com.infinityraider.agricraft.blocks.BlockModPlant;
+import com.infinityraider.agricraft.farming.CropProduce;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

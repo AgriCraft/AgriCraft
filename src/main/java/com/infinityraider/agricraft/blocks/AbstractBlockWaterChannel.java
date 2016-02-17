@@ -1,7 +1,7 @@
 /*
  * A intermediate for the water channel blocks.
  */
-package com.InfinityRaider.AgriCraft.blocks;
+package com.infinityraider.agricraft.blocks;
 
 import net.minecraft.block.properties.IProperty;
 

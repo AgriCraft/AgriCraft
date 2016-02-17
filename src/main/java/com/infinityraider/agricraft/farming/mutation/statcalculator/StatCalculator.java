@@ -1,10 +1,10 @@
-package com.InfinityRaider.AgriCraft.farming.mutation.statcalculator;
+package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
-import com.InfinityRaider.AgriCraft.api.v1.ISeedStats;
-import com.InfinityRaider.AgriCraft.api.v1.ICrop;
-import com.InfinityRaider.AgriCraft.api.v1.IStatCalculator;
-import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
-import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.api.v1.ISeedStats;
+import com.infinityraider.agricraft.api.v1.ICrop;
+import com.infinityraider.agricraft.api.v1.IStatCalculator;
+import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;

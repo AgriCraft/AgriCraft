@@ -1,4 +1,4 @@
-package com.InfinityRaider.AgriCraft.reference;
+package com.infinityraider.agricraft.reference;
 
 /**
  * The version should be tracked in the base mod class.
@@ -11,6 +11,7 @@ public interface Reference {
 
 	String MOD_NAME = "${mod.name}";
 	String MOD_ID = "${mod.id}";
+	String AUTHOR = "${mod.author}";
 
 	String VER_MAJOR = "${mod.version_major}";
 	String VER_MINOR = "${mod.version_minor}";
@@ -18,9 +19,8 @@ public interface Reference {
 	String MOD_VERSION = "${mod.version}";
 	String VERSION = "${mod.version_minecraft}-${mod.version}";
 
-	String AUTHOR = "${mod.author}";
-	String CLIENT_PROXY_CLASS = "${mod.group}.${mod.author}.${mod.id}.proxy.ClientProxy";
-	String SERVER_PROXY_CLASS = "${mod.group}.${mod.author}.${mod.id}.proxy.ServerProxy";
-	String GUI_FACTORY_CLASS = "${mod.group}.${mod.author}.${mod.id}.gui.GuiFactory";
+	String CLIENT_PROXY_CLASS = "${mod.group}.${mod.id}.proxy.ClientProxy";
+	String SERVER_PROXY_CLASS = "${mod.group}.${mod.id}.proxy.ServerProxy";
+	String GUI_FACTORY_CLASS = "${mod.group}.${mod.id}.gui.GuiFactory";
 
 }
