@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSprinkler;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
@@ -31,7 +30,7 @@ import javax.annotation.Nullable;
 public class BlockSprinkler extends BlockTileBase {
 	
     public BlockSprinkler() {
-    	super(Material.iron, Names.Objects.sprinkler, false);
+    	super(Material.iron, "sprinkler", false);
     	this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setHardness(2.0F);
         this.setResistance(5.0F);

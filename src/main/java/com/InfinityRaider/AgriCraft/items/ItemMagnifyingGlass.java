@@ -17,8 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class ItemMagnifyingGlass extends ItemBase {
 	
@@ -91,10 +89,5 @@ public class ItemMagnifyingGlass extends ItemBase {
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
         list.add(StatCollector.translateToLocal("agricraft_tooltip.magnifyingGlass"));
     }
-	
-	@Override
-	public void registerItemRenderer() {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
-	}
 
 }

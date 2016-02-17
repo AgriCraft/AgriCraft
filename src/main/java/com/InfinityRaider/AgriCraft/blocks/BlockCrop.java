@@ -10,9 +10,7 @@ import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.items.ItemDebugger;
 import com.InfinityRaider.AgriCraft.network.MessageFertiliserApplied;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
-import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderCrop;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
@@ -42,6 +40,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftProperties;
 
 /**
  * The most important block in the mod.
@@ -52,7 +51,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
 
     /** The default constructor for the block. */
     public BlockCrop() {
-        super(Material.plants, Names.Objects.crops, Names.Objects.crop, false);
+        super(Material.plants, TileEntityCrop.NAME, "crop", false);
         this.setTickRandomly(true);
         this.isBlockContainer = true;
         this.setStepSound(soundTypeGrass);
@@ -70,15 +69,15 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState()
-                .withProperty(BlockStates.GROWTHSTAGE, Math.max(Math.min(0, meta), Constants.MATURE))
-                .withProperty(BlockStates.WEEDS, false)
-                .withProperty(BlockStates.CROSSCROP, false)
-                .withProperty(BlockStates.PLANT, CropPlantHandler.NONE);
+                .withProperty(AgriCraftProperties.GROWTHSTAGE, Math.max(Math.min(0, meta), Constants.MATURE))
+                .withProperty(AgriCraftProperties.WEEDS, false)
+                .withProperty(AgriCraftProperties.CROSSCROP, false)
+                .withProperty(AgriCraftProperties.PLANT, CropPlantHandler.NONE);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(BlockStates.GROWTHSTAGE);
+        return state.getValue(AgriCraftProperties.GROWTHSTAGE);
     }
 
     /** This gets the actual state, containing data not contained by metadata */
@@ -86,9 +85,9 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         TileEntity te = world.getTileEntity(pos);
         if(te != null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
-            state.withProperty(BlockStates.WEEDS, crop.hasWeed());
-            state.withProperty(BlockStates.CROSSCROP, crop.isCrossCrop());
-            state.withProperty(BlockStates.PLANT, crop.hasPlant() ? crop.getPlant() : CropPlantHandler.NONE);
+            state.withProperty(AgriCraftProperties.WEEDS, crop.hasWeed());
+            state.withProperty(AgriCraftProperties.CROSSCROP, crop.isCrossCrop());
+            state.withProperty(AgriCraftProperties.PLANT, crop.hasPlant() ? crop.getPlant() : CropPlantHandler.NONE);
         }
         return state;
     }
@@ -152,7 +151,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
                 spawnAsEntity(world, pos, new ItemStack(AgriCraftItems.crops, 1));
                 return false;
             } else if(crop.isMature() && crop.allowHarvest(player)) {
-                crop.getWorld().setBlockState(crop.getPos(), state.withProperty(BlockStates.GROWTHSTAGE, 2), 2);
+                crop.getWorld().setBlockState(crop.getPos(), state.withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
                 ArrayList<ItemStack> drops = crop.getFruits();
                 for (ItemStack drop : drops) {
                     if(drop==null || drop.getItem()==null) {
@@ -392,7 +391,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      */
     @Override
     public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
-        return state.getValue(BlockStates.GROWTHSTAGE) < Constants.MATURE;
+        return state.getValue(AgriCraftProperties.GROWTHSTAGE) < Constants.MATURE;
     }
 
     /**
@@ -412,11 +411,11 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if(crop.hasPlant() || crop.hasWeed()) {
-            int l = state.getValue(BlockStates.GROWTHSTAGE) + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
+            int l = state.getValue(AgriCraftProperties.GROWTHSTAGE) + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
             if (l > Constants.MATURE) {
                 l = Constants.MATURE;
             }
-            world.setBlockState(pos, state.withProperty(BlockStates.GROWTHSTAGE, l), 2);
+            world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, l), 2);
         }
         else if(crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
             crop.crossOver();
@@ -462,7 +461,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      * @return if the crop is done growing.
      */
     public boolean isMature(World world, BlockPos pos) {
-        return world.getBlockState(pos).getValue(BlockStates.GROWTHSTAGE) >= Constants.MATURE;
+        return world.getBlockState(pos).getValue(AgriCraftProperties.GROWTHSTAGE) >= Constants.MATURE;
     }
 
     /**
@@ -480,7 +479,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
             crop.setCrossCrop(false);
             drops.add(new ItemStack(AgriCraftItems.crops, 1));
         } else if (crop.isMature() && crop.allowHarvest(null)) {
-            crop.getWorld().setBlockState(pos, state.withProperty(BlockStates.GROWTHSTAGE, 2), 2);
+            crop.getWorld().setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
             for(ItemStack stack:crop.getFruits()) {
                 if(stack==null || stack.getItem()==null) {
                     continue;
@@ -496,14 +495,14 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         if(!crop.hasPlant()) {
             return;
         }
-        int growthStage = state.getValue(BlockStates.GROWTHSTAGE);
+        int growthStage = state.getValue(AgriCraftProperties.GROWTHSTAGE);
         if(growthStage<=0) {
             return;
         }
         ItemStack clipping = new ItemStack(AgriCraftItems.clipping, 1, 0);
         clipping.setTagCompound(crop.getSeedStack().writeToNBT(new NBTTagCompound()));
         spawnAsEntity(world, pos, clipping);
-        world.setBlockState(pos, state.withProperty(BlockStates.GROWTHSTAGE, growthStage-1), 3);
+        world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, growthStage-1), 3);
     }
 
     /**
@@ -659,7 +658,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
 
     @Override
     protected IProperty[] getPropertyArray() {
-        return new IProperty[] {BlockStates.GROWTHSTAGE, BlockStates.CROSSCROP, BlockStates.WEEDS, BlockStates.PLANT};
+        return new IProperty[] {AgriCraftProperties.GROWTHSTAGE, AgriCraftProperties.CROSSCROP, AgriCraftProperties.WEEDS, AgriCraftProperties.PLANT};
     }
 
     /**

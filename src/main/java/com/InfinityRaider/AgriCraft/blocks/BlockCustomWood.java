@@ -2,12 +2,12 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.TextureCache;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 
 import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftMods;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -58,9 +58,9 @@ public abstract class BlockCustomWood extends BlockTileBase {
 			return woodTypes;
 		}
 		
-		final boolean hasExU = Loader.isModLoaded(Names.Mods.extraUtilities);
+		final boolean hasExU = Loader.isModLoaded(AgriCraftMods.extraUtilities);
 		
-        for(ItemStack plank : OreDictionary.getOres(Names.OreDict.plankWood)) {
+        for(ItemStack plank : OreDictionary.getOres("plankWood")) {
             if(plank.getItem() instanceof ItemBlock) {
 				ItemBlock block = ((ItemBlock) plank.getItem());
                 // Skip the ExU stuff for now as we don't support its textures yet

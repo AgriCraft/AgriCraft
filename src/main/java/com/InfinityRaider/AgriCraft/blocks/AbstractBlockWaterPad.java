@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class AbstractBlockWaterPad extends BlockBase {
 
 	public AbstractBlockWaterPad(Material mat, String internalName) {
-		super(mat, internalName);
+		super(mat, "water_pad_" + internalName);
 		this.setHardness(0.5F);
         this.setStepSound(soundTypeGravel);
 	}

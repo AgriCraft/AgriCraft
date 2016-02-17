@@ -1,6 +1,5 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
@@ -39,7 +38,8 @@ public abstract class BlockTileBase extends BlockBase implements ITileEntityProv
 		this.isMultiBlock = isMultiBlock;
 		TileEntity tile = this.createNewTileEntity(null, 0);
 		assert(tile != null);
-		GameRegistry.registerTileEntity(tile.getClass(), Reference.MOD_ID + ':' + Names.TileEntity.tileEntity + '_' + this.tileName);
+		// TODO: Make lowercase.
+		GameRegistry.registerTileEntity(tile.getClass(), Reference.MOD_ID + ":TileEntity_" + this.tileName);
 	}
 	
 	/**

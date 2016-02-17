@@ -4,7 +4,6 @@ import com.InfinityRaider.AgriCraft.api.v1.*;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.config.MutationConfig;
-import com.InfinityRaider.AgriCraft.reference.BlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
@@ -24,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftProperties;
 
 /**
  * The main class used by TileEntityCrop.
@@ -292,7 +292,7 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
      */
     @Override
     public boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state) {
-        return state.getValue(BlockStates.GROWTHSTAGE) >= Constants.MATURE;
+        return state.getValue(AgriCraftProperties.GROWTHSTAGE) >= Constants.MATURE;
     }
 
     /**

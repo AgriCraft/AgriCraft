@@ -2,8 +2,8 @@ package com.InfinityRaider.AgriCraft.tileentity.peripheral;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftMods;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.method.*;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,9 +16,9 @@ import java.util.HashMap;
 
 
 @Optional.InterfaceList( value = {
-        @Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheral"),
-        @Optional.Interface(modid = Names.Mods.openComputers, iface = "li.cil.oc.api.network.SimpleComponent"),
-        @Optional.Interface(modid = Names.Mods.openComputers, iface = "li.cil.oc.api.network.ManagedPeripheral")
+        @Optional.Interface(modid = AgriCraftMods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheral"),
+        @Optional.Interface(modid = AgriCraftMods.openComputers, iface = "li.cil.oc.api.network.SimpleComponent"),
+        @Optional.Interface(modid = AgriCraftMods.openComputers, iface = "li.cil.oc.api.network.ManagedPeripheral")
 })
 public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     private static IMethod[] methods;
@@ -204,7 +204,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     @Override
-    @Optional.Method(modid = Names.Mods.computerCraft)
+    @Optional.Method(modid = Names.AgriCraftMods.computerCraft)
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
         IMethod calledMethod = methods[method];
         try {
@@ -215,17 +215,17 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     @Override
-    @Optional.Method(modid = Names.Mods.computerCraft)
+    @Optional.Method(modid = Names.AgriCraftMods.computerCraft)
     public void attach(IComputerAccess computer) {
     }
 
     @Override
-    @Optional.Method(modid = Names.Mods.computerCraft)
+    @Optional.Method(modid = Names.AgriCraftMods.computerCraft)
     public void detach(IComputerAccess computer) {
     }
 
     @Override
-    @Optional.Method(modid = Names.Mods.computerCraft)
+    @Optional.Method(modid = Names.AgriCraftMods.computerCraft)
     public boolean equals(IPeripheral other) {
         return other instanceof TileEntityPeripheral;
     }
@@ -246,7 +246,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     @Override
-    @Optional.Method(modid = Names.Mods.openComputers)
+    @Optional.Method(modid = Names.AgriCraftMods.openComputers)
     public Object[] invoke(String method, Context context, Arguments args) throws Exception {
         IMethod calledMethod = null;
         for(IMethod iMethod: methods) {

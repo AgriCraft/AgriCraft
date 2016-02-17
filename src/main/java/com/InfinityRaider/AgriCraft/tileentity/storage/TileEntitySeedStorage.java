@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.network.MessageTileEntitySeedStorage;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.reference.Reference;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCustomWood;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
@@ -428,9 +427,13 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         }
     }
 
+	/**
+	 * TODO: FIXME!
+	 * @return 
+	 */
     @Override
      public String getName() {
-        return Reference.MOD_ID.toLowerCase()+":"+Names.Objects.seedStorage;
+        return Reference.MOD_ID.toLowerCase()+":seed_storage";
     }
 
     @Override

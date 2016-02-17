@@ -2,7 +2,6 @@ package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockGrate;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockGrate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityGrate;
@@ -24,7 +23,7 @@ import java.util.List;
 public class BlockGrate extends BlockCustomWood {
 
 	public BlockGrate() {
-		super(Names.Objects.grate, false);
+		super("grate", false);
 	}
 
     @Override

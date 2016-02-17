@@ -6,7 +6,6 @@ import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.init.AgriCraftItems;
 import com.InfinityRaider.AgriCraft.items.ItemJournal;
 import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -50,7 +49,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         if(this.specimen !=null && this.specimen.getItem()!=null) {
             NBTTagCompound seedTag = new NBTTagCompound();
             this.specimen.writeToNBT(seedTag);
-            tag.setTag(Names.Objects.seed, seedTag);
+            tag.setTag(AgriCraftNBT.SEED, seedTag);
         }
         if(this.journal!=null && this.journal.getItem()!=null) {
             NBTTagCompound journalTag = new NBTTagCompound();
@@ -64,8 +63,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     public void readFromNBT(NBTTagCompound tag) {
     	//Mandatory call to super().
         super.readFromNBT(tag);
-        if(tag.hasKey(Names.Objects.seed)) {
-            this.specimen = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(Names.Objects.seed));
+        if(tag.hasKey(AgriCraftNBT.SEED)) {
+            this.specimen = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
         }
         else {
         	//Not certain this is required... Unsure if networking thing?

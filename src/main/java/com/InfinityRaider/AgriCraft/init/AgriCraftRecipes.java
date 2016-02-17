@@ -9,7 +9,7 @@ import com.InfinityRaider.AgriCraft.items.crafting.RecipeJournal;
 import com.InfinityRaider.AgriCraft.items.crafting.RecipeShapelessCustomWood;
 import com.InfinityRaider.AgriCraft.reference.Data;
 import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftMods;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
@@ -53,7 +53,7 @@ public class AgriCraftRecipes {
         GameRegistry.addShapelessRecipe(new ItemStack(Item.getByNameOrId("AgriCraft:seedCarrot")), new ItemStack(net.minecraft.init.Items.carrot));
         GameRegistry.addShapelessRecipe(new ItemStack(net.minecraft.init.Items.wheat_seeds), new ItemStack(net.minecraft.init.Items.wheat));
         //journal
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftItems.journal, 1), "csc", "sbs", "csc", 'c', AgriCraftItems.crops, 's', Names.OreDict.listAllseed, 'b', net.minecraft.init.Items.writable_book));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftItems.journal, 1), "csc", "sbs", "csc", 'c', AgriCraftItems.crops, 's', "listAllseed", 'b', net.minecraft.init.Items.writable_book));
         GameRegistry.addRecipe(new RecipeJournal());
         //trowel
         if(ConfigurationHandler.enableTrowel && AgriCraftItems.trowel != null) {
@@ -82,10 +82,10 @@ public class AgriCraftRecipes {
         }
         //peripheral
         if(AgriCraftBlocks.blockPeripheral!=null) {
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.computerCraft)) {
+            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.computerCraft)) {
                 //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', AgriCraftBlocks.blockSeedAnalyzer, 'r', net.minecraft.init.AgriCraftItems.comparator, 'c', ComputerCraftHelper.getComputerBlock()));
             }
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(Names.Mods.openComputers)) {
+            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.openComputers)) {
                 //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', AgriCraftBlocks.blockSeedAnalyzer, 'r', net.minecraft.init.AgriCraftItems.comparator, 'c', OpenComputersHelper.getComputerBlock()));
             }
         }
@@ -94,7 +94,7 @@ public class AgriCraftRecipes {
         if (!ConfigurationHandler.disableIrrigation) {
             //change wooden bowl recipe
             RegisterHelper.removeRecipe(new ItemStack(net.minecraft.init.Items.bowl));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.bowl, 4), "w w", " w ", 'w', Names.OreDict.slabWood));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.bowl, 4), "w w", " w ", 'w', "slabWood"));
             //sprinkler
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockSprinkler, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', net.minecraft.init.Blocks.iron_bars, 'c', net.minecraft.init.Items.bucket));
         }

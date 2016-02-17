@@ -10,7 +10,6 @@ import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
@@ -457,7 +456,7 @@ public class CropPlantHandler {
         CompatibilityHandler.getInstance().getCropPlants().forEach(CropPlantHandler::suppressedRegisterPlant);
         
         //Register crops found in the ore dictionary.
-        List<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
+        List<ItemStack> seeds = OreDictionary.getOres("listAllseed");
         seeds.stream().filter(seed -> !isValidSeed(seed) && (seed.getItem() instanceof ItemSeeds)).forEach(seed -> {
             ArrayList<ItemStack> fruits = OreDictHelper.getFruitsFromOreDict(seed);
             if (fruits != null && fruits.size() > 0) {

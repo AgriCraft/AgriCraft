@@ -5,7 +5,6 @@ import com.InfinityRaider.AgriCraft.container.ContainerSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderSeedAnalyzer;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntitySeedAnalyzer;
@@ -32,8 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockSeedAnalyzer extends BlockTileBase {
+	
     public BlockSeedAnalyzer() {
-        super(Material.ground, Names.Objects.seedAnalyzer, false);
+        super(Material.ground, "seed_analyzer", false);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.isBlockContainer = true;
         this.setTickRandomly(false);

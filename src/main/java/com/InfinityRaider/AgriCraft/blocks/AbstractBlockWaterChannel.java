@@ -12,7 +12,7 @@ import net.minecraft.block.properties.IProperty;
 public abstract class AbstractBlockWaterChannel extends BlockCustomWood {
 
 	public AbstractBlockWaterChannel(String internalName) {
-		super(internalName, false);
+		super("water_channel_" + internalName, false);
 	}
 	
 	@Override

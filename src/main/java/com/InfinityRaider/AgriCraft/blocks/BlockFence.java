@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.entity.EntityLeashKnotAgricraft;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFence;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFence;
@@ -26,7 +25,7 @@ import java.util.List;
 public class BlockFence extends BlockCustomWood {
 
 	public BlockFence() {
-		super(Names.Objects.fence, false);
+		super("fence", false);
 	}
 
     @Override

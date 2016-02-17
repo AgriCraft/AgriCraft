@@ -17,18 +17,27 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.io.File;
 import java.util.List;
 
+/**
+ * TODO: Cleanup.
+ * 
+ * This class is a complete and utter mess.
+ * 
+ * This should be moved to a hash-map wrapper.
+ * 
+ */
 public class ConfigurationHandler {
-    public static class Categories {
-        public static final String CATEGORY_AGRICRAFT = "agricraft";
-        public static final String CATEGORY_FARMING = "farming";
-        public static final String CATEGORY_TOOLS = "tools";
-        public static final String CATEGORY_DEBUG = "debug";
-        public static final String CATEGORY_WORLDGEN = "world gen";
-        public static final String CATEGORY_IRRIGATION = "irrigation";
-        public static final String CATEGORY_STORAGE = "storage";
-        public static final String CATEGORY_DECORATION = "decoration";
-        public static final String CATEGORY_COMPATIBILITY = "compatibility";
-        public static final String CATEGORY_CLIENT = "clientside config";
+	
+    public static interface Categories {
+        String CATEGORY_AGRICRAFT = "agricraft";
+        String CATEGORY_FARMING = "farming";
+        String CATEGORY_TOOLS = "tools";
+        String CATEGORY_DEBUG = "debug";
+        String CATEGORY_WORLDGEN = "world gen";
+        String CATEGORY_IRRIGATION = "irrigation";
+        String CATEGORY_STORAGE = "storage";
+        String CATEGORY_DECORATION = "decoration";
+        String CATEGORY_COMPATIBILITY = "compatibility";
+        String CATEGORY_CLIENT = "clientside config";
     }
 
     public static Configuration config;
