@@ -1,7 +1,7 @@
 package com.InfinityRaider.AgriCraft.items.blocks;
 
 import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import com.InfinityRaider.AgriCraft.reference.Names;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftMods;
 import com.InfinityRaider.AgriCraft.utility.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -63,12 +63,12 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
      */
     public void getSubItems(List list) {
         List<ItemStack> registeredMaterials = new ArrayList<>();
-        List<ItemStack> planks = OreDictionary.getOres(Names.OreDict.plankWood);
+        List<ItemStack> planks = OreDictionary.getOres("plankWood");
         for(ItemStack plank:planks) {
             if(plank.getItem() instanceof ItemBlock) {
                 // Skip the ExU stuff for now as we don't support its textures yet
                 // TODO: Find out how ExU generates the colored textures and integrate it
-                if (Loader.isModLoaded(Names.Mods.extraUtilities) && ((ItemBlock) plank.getItem()).block.getClass().getSimpleName().equals("BlockColor"))
+                if (Loader.isModLoaded(AgriCraftMods.extraUtilities) && ((ItemBlock) plank.getItem()).block.getClass().getSimpleName().equals("BlockColor"))
                     continue;
 
                 if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {

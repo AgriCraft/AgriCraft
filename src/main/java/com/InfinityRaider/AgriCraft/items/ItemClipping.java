@@ -88,4 +88,5 @@ public class ItemClipping extends ItemBase {
         ItemStack fruit = plant.getAllFruits().get(0);
         return fruit.getDisplayName() + " " + text;
     }
+	
 }

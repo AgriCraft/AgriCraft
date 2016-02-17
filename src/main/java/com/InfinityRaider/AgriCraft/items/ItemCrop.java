@@ -4,8 +4,6 @@ import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementH
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -45,10 +43,5 @@ public class ItemCrop extends ItemBase {
         }
         return false;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
     }
-	
-	@Override
-	public void registerItemRenderer() {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
-	}
 	
 }

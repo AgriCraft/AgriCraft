@@ -15,7 +15,7 @@ import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
-import com.InfinityRaider.AgriCraft.reference.BlockStates;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftBlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
 import com.InfinityRaider.AgriCraft.utility.AgriForgeDirection;
@@ -40,6 +40,9 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable{
+	
+	public static final String NAME = "crops";
+	
     private PlantStats stats = new PlantStats();
     private boolean crossCrop=false;
     private boolean weed=false;
@@ -103,7 +106,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
     @Override
     public int getGrowthStage() {
-        return worldObj.getBlockState(getPos()).getValue(BlockStates.GROWTHSTAGE);
+        return worldObj.getBlockState(getPos()).getValue(AgriCraftBlockStates.GROWTHSTAGE);
     }
 
     @Override
@@ -111,7 +114,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         if(this.hasPlant() || this.hasWeed()) {
             stage = Math.max(Math.min(stage, Constants.MATURE), 0);
             IBlockState state = worldObj.getBlockState(pos);
-            state.withProperty(BlockStates.GROWTHSTAGE, stage);
+            state.withProperty(AgriCraftBlockStates.GROWTHSTAGE, stage);
             this.worldObj.setBlockState(pos, state, 3);
         }
     }
@@ -455,7 +458,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getPlantIcon(IBlockState state) {
-        return plant.getPrimaryPlantTexture(state.getValue(BlockStates.GROWTHSTAGE));
+        return plant.getPrimaryPlantTexture(state.getValue(AgriCraftBlockStates.GROWTHSTAGE));
     }
 
     @Override

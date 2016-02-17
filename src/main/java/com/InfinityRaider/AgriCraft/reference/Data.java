@@ -7,9 +7,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class Data {
+public interface Data {
+	
     //give data in this order: {String name, Item fruit, int fuitMeta, Block soil, Block base, int baseMeta, int tier, int renderType}
-    public static final Object[][] defaults = {
+    Object[][] defaults = {
             {"Potato", new ItemStack(Items.potato), 1, RenderMethod.HASHTAG},
             {"Carrot", new ItemStack(Items.carrot), 1, RenderMethod.HASHTAG},
             {"Sugarcane", new ItemStack(Items.reeds), new BlockWithMeta(Blocks.sand), 1, RenderMethod.HASHTAG},
@@ -27,7 +28,7 @@ public class Data {
             {"ShroomBrown", new ItemStack(Item.getItemFromBlock(Blocks.brown_mushroom)), new BlockWithMeta(Blocks.mycelium), 2, RenderMethod.HASHTAG, new int[]{0,8}}
     };
 
-    public static final String[] botania = {
+    String[] botania = {
             "BotaniaWhite",
             "BotaniaOrange",
             "BotaniaMagenta",
@@ -46,14 +47,14 @@ public class Data {
             "BotaniaBlack"
     };
 
-    public static final String[] vanillaNuggets = {
+    String[] vanillaNuggets = {
             "Iron",
             "Emerald",
             "Diamond",
             "Quartz",
     };
 
-    public static final String[][] modResources = {
+    String[][] modResources = {
             {"Copper", "Cuprosia"},
             {"Tin", "Petinia"},
             {"Lead", "Plombean"},
@@ -63,4 +64,5 @@ public class Data {
             {"Platinum", "Platiolus"},
             {"Osmium", "Osmonium"}
     };
+
 }

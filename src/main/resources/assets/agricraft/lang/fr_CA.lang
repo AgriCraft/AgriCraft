@@ -102,7 +102,7 @@ tile.agricraft:sprinkler.name=Arroseur
 tile.agricraft:seed_storage.0.name=Stockage de graines
 tile.agricraft:seed_storage_controller.0.name=Contrôleur de stockage de graines
 tile.agricraft:fence.0.name=Barrière
-tile.agricraft:fenceGate.0.name=Portillon
+tile.agricraft:fence_gate.0.name=Portillon
 tile.agricraft:grate.0.name=Grille en bois
 tile.agricraft:peripheral.name=Analyseur de graines contrôlé par ordinateur
 

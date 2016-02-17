@@ -7,9 +7,7 @@ import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.AgriCraftNBT;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,10 +17,7 @@ import net.minecraft.world.World;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
 	
-	private static final ModelResourceLocation[] VARIENTS = {
-		new ModelResourceLocation("agricraft:trowel_empty", "inventory"),
-		new ModelResourceLocation("agricraft:trowel_full", "inventory")
-	};
+	private static final String[] VARIENTS = { "empty", "full" };
 	
     public ItemTrowel() {
         super("trowel");
@@ -135,10 +130,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 	
 	@Override
 	public void registerItemRenderer() {
-		ModelBakery.registerItemVariants(this, VARIENTS);
-		for (int i = 0; i < VARIENTS.length; i++) {
-			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, i, VARIENTS[i]);
-		}
+		RegisterHelper.registerItemRenderer(this, VARIENTS);
 	}
 
 }

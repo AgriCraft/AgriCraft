@@ -14,42 +14,39 @@ package com.InfinityRaider.AgriCraft.reference;
  * 
  * @since 2.0.0
  */
-public final class AgriCraftNBT {
+public interface AgriCraftNBT {
 
-	// Prevent instantiation.
-	private AgriCraftNBT() {}
-
-	public static final String GROWTH = "growth";
-	public static final String GAIN = "gain";
-	public static final String STRENGTH = "strength";
-	public static final String ANALYZED = "analyzed";
-	public static final String CROSS_CROP = "crossCrop";
-	public static final String WEED = "weed";
-	public static final String DISCOVERED_SEEDS = "discoveredSeeds";
-	public static final String CURRENT_PAGE = "currentPage";
-	public static final String WOOD = "wood";
-	public static final String CONNECTED = "nrTanks";
-	public static final String LEVEL = "level";
-	public static final String ID = "id";
-	public static final String META = "meta";
-	public static final String MATERIAL = "material";
-	public static final String MATERIAL_META = "matMeta";
-	public static final String IS_SPRINKLED = "isSprinkled";
-	public static final String POWER = "powerrrr";
-	public static final String INVENTORY = "agricraftInv";
-	public static final String SIZE = "size";
-	public static final String COUNT = "count";
-	public static final String SEED = "seed";
-	public static final String TAG = "tag";
-	public static final String X1 = "agricraftX";
-	public static final String Y1 = "agricraftY";
-	public static final String Z1 = "agricraftZ";
-	public static final String X2 = "agricraftX2";
-	public static final String Y2 = "agricraftY2";
-	public static final String Z2 = "agricraftZ2";
-	public static final String OVERRIDE = "override";
-	public static final String FLAG = "ac_Flag";
-	public static final String DIRECTION = "direction";
-	public static final String MULTI_BLOCK = "agricraft_MultiBlock";
+	String GROWTH = "growth";
+	String GAIN = "gain";
+	String STRENGTH = "strength";
+	String ANALYZED = "analyzed";
+	String CROSS_CROP = "crossCrop";
+	String WEED = "weed";
+	String DISCOVERED_SEEDS = "discoveredSeeds";
+	String CURRENT_PAGE = "currentPage";
+	String WOOD = "wood";
+	String CONNECTED = "nrTanks";
+	String LEVEL = "level";
+	String ID = "id";
+	String META = "meta";
+	String MATERIAL = "material";
+	String MATERIAL_META = "matMeta";
+	String IS_SPRINKLED = "isSprinkled";
+	String POWER = "powerrrr";
+	String INVENTORY = "agricraftInv";
+	String SIZE = "size";
+	String COUNT = "count";
+	String SEED = "seed";
+	String TAG = "tag";
+	String X1 = "agricraftX";
+	String Y1 = "agricraftY";
+	String Z1 = "agricraftZ";
+	String X2 = "agricraftX2";
+	String Y2 = "agricraftY2";
+	String Z2 = "agricraftZ2";
+	String OVERRIDE = "override";
+	String FLAG = "ac_Flag";
+	String DIRECTION = "direction";
+	String MULTI_BLOCK = "agricraft_MultiBlock";
 	
 }

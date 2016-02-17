@@ -2,7 +2,7 @@ package com.InfinityRaider.AgriCraft.renderers.blocks;
 
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.init.AgriCraftBlocks;
-import com.InfinityRaider.AgriCraft.reference.BlockStates;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftBlockStates;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.renderers.PlantRenderer;
 import com.InfinityRaider.AgriCraft.renderers.TessellatorV2;
@@ -45,13 +45,13 @@ public class RenderCrop extends RenderBlockBase {
             }
             else if (crop.hasPlant()) {
                 //render the plant
-                crop.getPlant().renderPlantInCrop(renderer, world, pos, state, state.getValue(BlockStates.GROWTHSTAGE));
+                crop.getPlant().renderPlantInCrop(renderer, world, pos, state, state.getValue(AgriCraftBlockStates.GROWTHSTAGE));
             }
             else if(crop.hasWeed()) {
                 //render weeds
                 tessellator.setBrightness(net.minecraft.init.Blocks.wheat.getMixedBrightnessForBlock(world, pos));
                 tessellator.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
-                PlantRenderer.renderHashTagPattern(tessellator, blockCrop.getWeedTexture(state.getValue(BlockStates.GROWTHSTAGE)), 0);
+                PlantRenderer.renderHashTagPattern(tessellator, blockCrop.getWeedTexture(state.getValue(AgriCraftBlockStates.GROWTHSTAGE)), 0);
             }
         }
         return true;

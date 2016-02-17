@@ -17,8 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class ItemJournal extends ItemBase implements IJournal {
 	
@@ -129,10 +127,5 @@ public class ItemJournal extends ItemBase implements IJournal {
         }
         return seeds;
     }
-	
-	@Override
-	public void registerItemRenderer() {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
-	}
 	
 }

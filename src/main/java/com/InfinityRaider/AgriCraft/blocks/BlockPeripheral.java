@@ -4,12 +4,12 @@ import com.InfinityRaider.AgriCraft.AgriCraft;
 import com.InfinityRaider.AgriCraft.handler.GuiHandler;
 import com.InfinityRaider.AgriCraft.network.MessagePeripheralCheckNeighbours;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderPeripheral;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityBase;
 import com.InfinityRaider.AgriCraft.tileentity.peripheral.TileEntityPeripheral;
 import com.InfinityRaider.AgriCraft.api.v1.IIconRegistrar;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftMods;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-@Optional.Interface(modid = Names.Mods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
+@Optional.Interface(modid = AgriCraftMods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockTileBase {
 
 	@SideOnly(Side.CLIENT)
@@ -69,7 +69,7 @@ public class BlockPeripheral extends BlockTileBase {
 
 	/*
     @Override
-    @Optional.Method(modid = Names.Mods.computerCraft)
+    @Optional.Method(modid = Names.AgriCraftMods.computerCraft)
     public IPeripheral getPeripheral(World world, BlockPos pos, int side) {
         TileEntity te = world.getTileEntity(pos);
         if(te==null || !(te instanceof TileEntityPeripheral)) {

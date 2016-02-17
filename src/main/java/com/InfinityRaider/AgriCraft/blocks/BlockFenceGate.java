@@ -1,7 +1,6 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import com.InfinityRaider.AgriCraft.items.blocks.ItemBlockCustomWood;
-import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockFenceGate;
 import com.InfinityRaider.AgriCraft.tileentity.decoration.TileEntityFenceGate;
@@ -24,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockFenceGate extends BlockCustomWood {
 
 	public BlockFenceGate() {
-		super(Names.Objects.fenceGate, false);
+		super("fence_gate", false);
 	}
 	
     @Override

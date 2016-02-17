@@ -3,7 +3,8 @@ package com.InfinityRaider.AgriCraft.items;
 import com.InfinityRaider.AgriCraft.api.v1.ICrop;
 import com.InfinityRaider.AgriCraft.api.v1.IRake;
 import com.InfinityRaider.AgriCraft.handler.config.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.reference.BlockStates;
+import com.InfinityRaider.AgriCraft.reference.AgriCraftBlockStates;
+import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import com.InfinityRaider.AgriCraft.utility.WeightedRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,9 +22,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.
@@ -34,10 +32,7 @@ public class ItemHandRake extends ItemBase implements IRake {
 	private static final int IRON_VARIANT_META = 1;
 	private static final int[] dropChance = new int[]{10, 25};
 
-	private static final ModelResourceLocation[] VARIENTS = {
-		new ModelResourceLocation("agricraft:hand_rake_wood", "inventory"),
-		new ModelResourceLocation("agricraft:hand_rake_iron", "inventory")
-	};
+	private static final String[] VARIENTS = { "wood", "iron" };
 
 	public ItemHandRake() {
 		super("hand_rake");
@@ -92,7 +87,7 @@ public class ItemHandRake extends ItemBase implements IRake {
 	@Override
 	public boolean removeWeeds(World world, BlockPos pos, IBlockState state, ICrop crop, ItemStack rake) {
 		if (crop.hasWeed()) {
-			int weedGrowthStage = state.getValue(BlockStates.GROWTHSTAGE);
+			int weedGrowthStage = state.getValue(AgriCraftBlockStates.GROWTHSTAGE);
 			int newWeedGrowthStage = calculateGrowthStage(rake.getItemDamage(), weedGrowthStage, world.rand);
 			crop.updateWeed(newWeedGrowthStage);
 			if (ConfigurationHandler.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100) < dropChance[rake.getItemDamage() % dropChance.length]) {
@@ -154,10 +149,7 @@ public class ItemHandRake extends ItemBase implements IRake {
 
 	@Override
 	public void registerItemRenderer() {
-		ModelBakery.registerItemVariants(this, VARIENTS);
-		for (int i = 0; i < VARIENTS.length; i++) {
-			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, i, VARIENTS[i]);
-		}
+		RegisterHelper.registerItemRenderer(this, VARIENTS);
 	}
 
 }
