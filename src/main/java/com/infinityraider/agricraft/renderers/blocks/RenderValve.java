@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityValve;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.icon.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
@@ -24,11 +23,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 @SideOnly(Side.CLIENT)
 public class RenderValve extends RenderChannel {
 	
-	private static final SafeIcon SEPARATOR_ICON = new SafeIcon(Blocks.iron_block);
+	private static final TextureAtlasSprite SEPARATOR_ICON = IconUtil.getIcon(Blocks.iron_block);
 	
     public RenderValve() {
         super(com.infinityraider.agricraft.init.AgriCraftBlocks.blockChannelValve, new TileEntityValve());
@@ -53,10 +53,10 @@ public class RenderValve extends RenderChannel {
         drawScaledPrism(tessellator, 2, 4, 5, 14, 5, 11, icon, cm);
         
         //Render separators.
-        drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, SEPARATOR_ICON.getIcon(), cm);
-        drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, SEPARATOR_ICON.getIcon(), cm);
-        drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, SEPARATOR_ICON.getIcon(), cm);
-        drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.999f, 5.5f, 11, SEPARATOR_ICON.getIcon(), cm);
+        drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, SEPARATOR_ICON, cm);
+        drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, SEPARATOR_ICON, cm);
+        drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, SEPARATOR_ICON, cm);
+        drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.999f, 5.5f, 11, SEPARATOR_ICON, cm);
 
         //render the wooden guide rails along z-axis
         drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon, cm);
@@ -107,11 +107,11 @@ public class RenderValve extends RenderChannel {
 					if (valve.hasNeighbourCheck(dir)) {
 						if (valve.isPowered()) {
 							//Draw closed separator.
-							drawScaledPrism(tessellator, 6, 5, 0, 10, 12, 2, SEPARATOR_ICON.getIcon(), cm, dir);
+							drawScaledPrism(tessellator, 6, 5, 0, 10, 12, 2, SEPARATOR_ICON, cm, dir);
 						} else {
 							//Draw open separator.
-							drawScaledPrism(tessellator, 6, 1, 0, 10, 5.001F, 2, SEPARATOR_ICON.getIcon(), cm, dir);
-							drawScaledPrism(tessellator, 6, 12, 0, 10, 15, 2, SEPARATOR_ICON.getIcon(), cm, dir);
+							drawScaledPrism(tessellator, 6, 1, 0, 10, 5.001F, 2, SEPARATOR_ICON, cm, dir);
+							drawScaledPrism(tessellator, 6, 12, 0, 10, 15, 2, SEPARATOR_ICON, cm, dir);
 						}
 						//Draw rails.
 						drawScaledPrism(tessellator, 4, 0, 0, 6, 16, 2, icon2, cm, dir);

@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.icon.SafeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,11 +23,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStorage> {
 	
-	private static final SafeIcon HANDLE_ICON = new SafeIcon(Blocks.iron_block);
+	private static final TextureAtlasSprite HANDLE_ICON = IconUtil.getIcon(Blocks.iron_block);
 	
     public RenderSeedStorage() {
         super(AgriCraftBlocks.blockSeedStorage, new TileEntitySeedStorage(), true);
@@ -65,7 +65,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
                 drawScaledPrism(tessellator, 1, 1, 15, 15, 15, 16, icon, cm);
                 //drawer
                 drawScaledPrism(tessellator, 1.1F, 1.1F, 1, 14.9F, 14.9F, 2, icon, cm);
-                drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, HANDLE_ICON.getIcon(), cm);    //TODO: find iron block icon
+                drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, HANDLE_ICON, cm);    //TODO: find iron block icon
                 drawScaledPrism(tessellator, 4, 3, 0, 5, 10, 1, icon, cm);
                 drawScaledPrism(tessellator, 11, 3, 0, 12, 10, 1, icon, cm);
                 drawScaledPrism(tessellator, 4, 10, 0, 12, 11, 1, icon, cm);

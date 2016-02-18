@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.renderers.TextureCache;
 import com.infinityraider.agricraft.utility.LogHelper;
-import com.infinityraider.agricraft.utility.icon.SafeIcon;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -35,11 +35,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 * The default metadata to use. Currently is set to Oak(0) for Planks.
 	 */
 	public static final int DEFAULT_META = 0;
-
-	/**
-	 * The default icon to use. Currently set to the default MATERIAL.
-	 */
-	public static final SafeIcon DEFAULT_ICON = new SafeIcon(DEFAULT_MATERIAL);
 
 	/**
 	 * A pointer to the the block the CustomWoodBlock is imitating.
@@ -197,7 +192,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 		this.cacheIcon();
 		if (this.icon == null) {
 			LogHelper.debug("TECW: Icon Defaulted!");
-			return DEFAULT_ICON.getIcon();
+			return IconUtil.getIcon(DEFAULT_MATERIAL);
 		} else {
 			return this.icon;
 		}

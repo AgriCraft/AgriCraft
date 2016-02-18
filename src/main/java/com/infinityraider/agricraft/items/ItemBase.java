@@ -3,20 +3,17 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import com.infinityraider.agricraft.creativetab.AgriCraftTab;
 import com.infinityraider.agricraft.utility.RegisterHelper;
-import com.infinityraider.agricraft.utility.icon.SafeIcon;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 /**
  * The root Item class for all AgriCraft Items (excluding blockItems).
  */
 public abstract class ItemBase extends Item implements IAgriCraftRenderable {
-	
-    @SideOnly(Side.CLIENT)
-    private final SafeIcon icon;
 	
 	public final String internalName;
 	
@@ -27,7 +24,6 @@ public abstract class ItemBase extends Item implements IAgriCraftRenderable {
 		this.internalName = name;
 		// This is a bad idea...
         RegisterHelper.registerItem(this, name);
-		this.icon = new SafeIcon(this);
     }
 
     @SideOnly(Side.CLIENT)
@@ -38,7 +34,7 @@ public abstract class ItemBase extends Item implements IAgriCraftRenderable {
 	@Override
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getIcon() {
-        return icon.getIcon();
+        return IconUtil.getIcon(this);
     }
 
     @Override

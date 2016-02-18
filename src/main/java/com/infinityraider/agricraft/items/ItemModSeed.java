@@ -13,7 +13,7 @@ import com.infinityraider.agricraft.renderers.items.RenderableItemRenderer;
 import com.infinityraider.agricraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.RegisterHelper;
-import com.infinityraider.agricraft.utility.icon.SafeIcon;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -32,8 +32,6 @@ import java.util.List;
 public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	
     @SideOnly(Side.CLIENT)
-    private final SafeIcon icon;
-    @SideOnly(Side.CLIENT)
     private String information;
 
     /** This constructor shouldn't be called from anywhere except from the BlockModPlant public constructor, if you create a new BlockModPlant, its contructor will create the seed for you */
@@ -45,7 +43,6 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         //register seed
         RegisterHelper.registerSeed(this, plant);
-		this.icon = new SafeIcon(this);
     }
 	
 	@SideOnly(Side.CLIENT)
@@ -112,7 +109,8 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 
     @Override
     public TextureAtlasSprite getIcon() {
-        return icon.getIcon();
+		// Maybye not the most efficient...
+        return IconUtil.getIcon(this);
     }
 
     @Override
