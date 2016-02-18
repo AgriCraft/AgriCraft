@@ -11,11 +11,11 @@ public abstract class NBTHelper {
     public static NBTTagCompound getMaterialTag(ItemStack stack) {
         NBTTagCompound tag = null;
         if(stack!=null && stack.getItem()!=null) {
-            String name = Block.blockRegistry.getNameForObject(((ItemBlock) stack.getItem()).block).toString();
-            if(name!=null && !name.equals("")) {
+			Block block = (((ItemBlock) stack.getItem()).block);
+            if(block != null) {
                 tag = new NBTTagCompound();
-                tag.setString(AgriCraftNBT.MATERIAL, name);
-                tag.setInteger(AgriCraftNBT.MATERIAL_META, stack.getItemDamage());
+                tag.setString(AgriCraftNBT.MATERIAL, block.getRegistryName());
+                tag.setInteger(AgriCraftNBT.MATERIAL_META, stack.getMetadata());
             }
         }
         return tag;

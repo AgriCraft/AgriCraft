@@ -62,7 +62,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
             tessellator.translate((float) x, (float) y, (float) z);
         }
         tessellator.setRotation(0, 0, 0, 0);
-        if (tile != null && tile instanceof TileEntityBase) {
+        if (tile instanceof TileEntityBase) {
             if(callFromTESR) {
                 rotateMatrix((TileEntityBase) tile, false);
             } else {
@@ -75,7 +75,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
 
         boolean result = doWorldRender(tessellator, world, x, y, z, pos, block, state, tile, partialTicks, destroyStage, renderer, callFromTESR);
 
-        if (tile != null && tile instanceof TileEntityBase) {
+        if (tile instanceof TileEntityBase) {
             if(callFromTESR) {
                 rotateMatrix((TileEntityBase) tile, true);
             } else {

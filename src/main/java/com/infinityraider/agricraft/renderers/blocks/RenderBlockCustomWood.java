@@ -11,7 +11,8 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> extends RenderBlockBase {
-    protected T teDummy;
+	
+    protected final T teDummy;
 
     protected RenderBlockCustomWood(Block block, T te, boolean inventory) {
         super(block, te, inventory);
@@ -27,4 +28,5 @@ public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> exte
     }
 
     protected abstract void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType);
+	
 }

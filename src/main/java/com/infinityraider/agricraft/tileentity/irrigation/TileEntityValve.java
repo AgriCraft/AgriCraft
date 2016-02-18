@@ -65,7 +65,7 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
         list.add("  - State: "+(this.isPowered()?"closed":"open"));
         list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + Constants.BUCKET_mB / 2);
         list.add("  - FluidHeight: " + this.getFluidHeight());
-        list.add("  - Material: " + this.getMaterialName() + ":" + this.getMaterialMeta()); //Much Nicer.
+        list.add("  - Material: " + this.getMaterial().getRegistryName() + ":" + this.getMaterialMeta()); //Much Nicer.
     }
     
     @Override

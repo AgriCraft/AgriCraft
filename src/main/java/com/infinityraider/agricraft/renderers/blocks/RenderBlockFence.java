@@ -20,64 +20,67 @@ import org.lwjgl.opengl.GL11;
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 
 public class RenderBlockFence extends RenderBlockCustomWood<TileEntityFence> {
-    public RenderBlockFence() {
-        super(AgriCraftBlocks.blockFence, new TileEntityFence(), true);
-    }
 
-    @Override
-    protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
-        TextureAtlasSprite icon = teDummy.getIcon();
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        //disable lighting
-        GL11.glDisable(GL11.GL_LIGHTING);
-        //tell the tessellator to start drawing
-        tessellator.startDrawingQuads();
+	public RenderBlockFence() {
+		super(AgriCraftBlocks.blockFence, new TileEntityFence(), true);
+	}
 
-        drawScaledPrism(tessellator, 6, 0, 0, 10, 16, 4, icon);
-        drawScaledPrism(tessellator, 6, 0, 12, 10, 16, 16, icon);
-        drawScaledPrism(tessellator, 7, 12, 4, 9, 15, 12, icon);
-        drawScaledPrism(tessellator, 7, 5, 4, 9, 8, 12, icon);
+	@Override
+	protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
 
-        tessellator.draw();
-        //enable lighting
-        GL11.glEnable(GL11.GL_LIGHTING);
-    }
+		TextureAtlasSprite icon = teDummy.getIcon();
 
-    @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
-        if(tile==null || !(tile instanceof TileEntityFence)) {
-            return false;
-        }
-        TileEntityFence fence = (TileEntityFence) tile;
-        TextureAtlasSprite icon = fence.getIcon();
-        int cm = block.colorMultiplier(world, pos);
-        drawScaledPrism(tessellator, 6, 0, 6, 10, 16, 10, icon, cm);
-        if(fence.canConnect(AgriForgeDirection.EAST)) {
-            drawScaledPrism(tessellator, 10, 12, 7, 16, 15, 9, icon, cm);
-            drawScaledPrism(tessellator, 10, 6, 7, 16, 9, 9, icon, cm);
-        }
-        if(fence.canConnect(AgriForgeDirection.WEST)) {
-            drawScaledPrism(tessellator, 0, 12, 7, 6, 15, 9, icon, cm);
-            drawScaledPrism(tessellator, 0, 6, 7, 6, 9, 9, icon, cm);
-        }
-        if(fence.canConnect(AgriForgeDirection.SOUTH)) {
-            drawScaledPrism(tessellator, 7, 12, 10, 9, 15, 16, icon, cm);
-            drawScaledPrism(tessellator, 7, 6, 10, 9, 9, 16, icon, cm);
-        }
-        if(fence.canConnect(AgriForgeDirection.NORTH)) {
-            drawScaledPrism(tessellator, 7, 12, 0, 9, 15, 6, icon, cm);
-            drawScaledPrism(tessellator, 7, 6, 0, 9, 9, 6, icon, cm);
-        }
-        return true;
-    }
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+		//disable lighting
+		GL11.glDisable(GL11.GL_LIGHTING);
+		//tell the tessellator to start drawing
+		tessellator.startDrawingQuads();
 
-    @Override
-    public boolean shouldBehaveAsTESR() {
-        return false;
-    }
+		drawScaledPrism(tessellator, 6, 0, 0, 10, 16, 4, icon);
+		drawScaledPrism(tessellator, 6, 0, 12, 10, 16, 16, icon);
+		drawScaledPrism(tessellator, 7, 12, 4, 9, 15, 12, icon);
+		drawScaledPrism(tessellator, 7, 5, 4, 9, 8, 12, icon);
 
-    @Override
-    public boolean shouldBehaveAsISBRH() {
-        return true;
-    }
+		tessellator.draw();
+		//enable lighting
+		GL11.glEnable(GL11.GL_LIGHTING);
+	}
+
+	@Override
+	protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
+		if (tile == null || !(tile instanceof TileEntityFence)) {
+			return false;
+		}
+		TileEntityFence fence = (TileEntityFence) tile;
+		TextureAtlasSprite icon = fence.getIcon();
+		int cm = block.colorMultiplier(world, pos);
+		drawScaledPrism(tessellator, 6, 0, 6, 10, 16, 10, icon, cm);
+		if (fence.canConnect(AgriForgeDirection.EAST)) {
+			drawScaledPrism(tessellator, 10, 12, 7, 16, 15, 9, icon, cm);
+			drawScaledPrism(tessellator, 10, 6, 7, 16, 9, 9, icon, cm);
+		}
+		if (fence.canConnect(AgriForgeDirection.WEST)) {
+			drawScaledPrism(tessellator, 0, 12, 7, 6, 15, 9, icon, cm);
+			drawScaledPrism(tessellator, 0, 6, 7, 6, 9, 9, icon, cm);
+		}
+		if (fence.canConnect(AgriForgeDirection.SOUTH)) {
+			drawScaledPrism(tessellator, 7, 12, 10, 9, 15, 16, icon, cm);
+			drawScaledPrism(tessellator, 7, 6, 10, 9, 9, 16, icon, cm);
+		}
+		if (fence.canConnect(AgriForgeDirection.NORTH)) {
+			drawScaledPrism(tessellator, 7, 12, 0, 9, 15, 6, icon, cm);
+			drawScaledPrism(tessellator, 7, 6, 0, 9, 9, 6, icon, cm);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean shouldBehaveAsTESR() {
+		return false;
+	}
+
+	@Override
+	public boolean shouldBehaveAsISBRH() {
+		return true;
+	}
 }
