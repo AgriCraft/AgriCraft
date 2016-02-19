@@ -122,7 +122,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
 	/**
 	 * TODO: WARNING: HACK
 	*/
-    private void renderInInventory(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
+    private final void renderInInventory(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
         TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
 		tessellator.pushMatrix();
 		tessellator.scale(0.5, 0.5, 0.5);

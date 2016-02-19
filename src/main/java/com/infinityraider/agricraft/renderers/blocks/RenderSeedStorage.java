@@ -28,8 +28,6 @@ import com.infinityraider.agricraft.utility.icon.IconUtil;
 @SideOnly(Side.CLIENT)
 public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStorage> {
 	
-	private static final TextureAtlasSprite HANDLE_ICON = IconUtil.getIcon(Blocks.iron_block);
-	
     public RenderSeedStorage() {
         super(AgriCraftBlocks.blockSeedStorage, new TileEntitySeedStorage(), true);
     }
@@ -65,11 +63,13 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
                 drawScaledPrism(tessellator, 1, 1, 15, 15, 15, 16, icon, cm);
                 //drawer
                 drawScaledPrism(tessellator, 1.1F, 1.1F, 1, 14.9F, 14.9F, 2, icon, cm);
-                drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, HANDLE_ICON, cm);    //TODO: find iron block icon
                 drawScaledPrism(tessellator, 4, 3, 0, 5, 10, 1, icon, cm);
                 drawScaledPrism(tessellator, 11, 3, 0, 12, 10, 1, icon, cm);
                 drawScaledPrism(tessellator, 4, 10, 0, 12, 11, 1, icon, cm);
                 drawScaledPrism(tessellator, 4, 3, 0, 12, 4, 1, icon, cm);
+				//handle
+				final TextureAtlasSprite handleIcon = IconUtil.getIcon(Blocks.iron_block);
+				drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, handleIcon, cm);    //TODO: find iron block icon
                 //trace
                 renderSides(tessellator, storage);
             }

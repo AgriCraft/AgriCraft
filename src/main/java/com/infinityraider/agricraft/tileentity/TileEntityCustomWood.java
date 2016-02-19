@@ -192,7 +192,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 		this.cacheIcon();
 		if (this.icon == null) {
 			LogHelper.debug("TECW: Icon Defaulted!");
-			return IconUtil.getIcon(DEFAULT_MATERIAL);
+			return IconUtil.getIcon(IconUtil.OAK_PLANKS);
 		} else {
 			return this.icon;
 		}

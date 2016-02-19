@@ -1,10 +1,8 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
-import com.infinityraider.agricraft.renderers.models.ModelSprinkler;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntitySprinkler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -15,78 +13,97 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
-import static com.infinityraider.agricraft.renderers.RenderUtil.*;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.init.Blocks;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderSprinkler extends RenderBlockBase {
-    private ResourceLocation texture;
-    private final ModelSprinkler model;
-    private final TileEntitySprinkler sprinklerDummy;
 
-    public RenderSprinkler() {
-        super(AgriCraftBlocks.blockSprinkler, new TileEntitySprinkler(), true);
-        this.texture = new ResourceLocation(Reference.MOD_ID+":textures/blocks/sprinkler.png");
-        this.model = new ModelSprinkler();
-        this.sprinklerDummy = new TileEntitySprinkler();
-    }
+	// Dimensions
+	private static final float MIN_Y = 4.0F;
+	private static final float MAX_Y = 8.0F;
+	private static final float MIN_C = 7.0F;
+	private static final float MAX_C = 9.0F;
+	private static final float BLADE_W = 1.0F;
+	private static final float BLADE_L = 5.0F;
 
-    @Override
-    protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
-        TileEntitySprinkler sprinkler= (TileEntitySprinkler) tile;
-        //render the model
-        GL11.glDisable(GL11.GL_LIGHTING);
-        Minecraft.getMinecraft().renderEngine.bindTexture(this.texture);
-        GL11.glTranslatef(0.5F, 1.5F, 0.5F);
-        float angle = sprinkler.angle;
-        GL11.glRotatef(angle, 0, -1, 0);
-        GL11.glPushMatrix();
-        GL11.glRotatef(180, 0F, 0F, 1F);
-        this.model.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-        GL11.glPopMatrix();
-        GL11.glRotatef(-angle, 0, -1, 0);
-        GL11.glTranslatef(-0.5F, -1.5F, -0.5F);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        renderConnection(tessellator, sprinkler);
-        return true;
-    }
+	// Calculated
+	private static final float BMX_Y = MIN_Y + BLADE_W;
+	private static final float BMX_A = MIN_C - BLADE_L;
+	private static final float BMX_B = MAX_C + BLADE_L;
 
-    @Override
-    protected void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
-        GL11.glTranslatef(0, -0.25F, 0);
-        this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, AgriCraftBlocks.blockSprinkler, null, sprinklerDummy, 0, 0, null, true);
-        GL11.glTranslatef(0, 0.25F, 0);
-    }
+	public RenderSprinkler() {
+		super(AgriCraftBlocks.blockSprinkler, new TileEntitySprinkler(), true);
+	}
 
-    @Override
-    public boolean shouldBehaveAsTESR() {
-        return true;
-    }
+	@Override
+	protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
 
-    @Override
-    public boolean shouldBehaveAsISBRH() {
-        return false;
-    }
+		final TileEntitySprinkler sprinkler = (TileEntitySprinkler) tile;
+		final TextureAtlasSprite icon = IconUtil.getIcon(Blocks.iron_block);
 
-    private void renderConnection(TessellatorV2 tessellator, TileEntitySprinkler sprinkler) {
-        //start GL
-        GL11.glPushMatrix();
-            //disable lighting so the plants render bright
-            GL11.glDisable(GL11.GL_LIGHTING);
-            //bind the texture
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-            tessellator.startDrawingQuads();
-            tessellator.translate(0, 4 * Constants.UNIT, 0);
-            drawScaledPrism(tessellator, 4, 8, 4, 12, 16, 12, sprinkler.getChannelIcon(), net.minecraft.init.Blocks.planks.colorMultiplier(sprinkler.getWorld(), sprinkler.getPos()));
-            tessellator.translate(0, -4 * Constants.UNIT, 0);
-            tessellator.draw();
-            //don't forget to enable lighting again
-            GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glPopMatrix();
-    }
+		// Prep. for render.
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+		GL11.glDisable(GL11.GL_LIGHTING);
+
+		// Rotate
+		tessellator.pushMatrix();
+		if (sprinkler != null) {
+			tessellator.rotate(sprinkler.angle, 0, -1, 0);
+		}
+
+		// Render sprinkler head.
+		if (callFromTESR) {
+			tessellator.startDrawingQuads();
+		}
+
+		// Draw Core
+		RenderUtil.drawScaledPrism(tessellator, MIN_C, MIN_Y, MIN_C, MAX_C, MAX_Y, MAX_C, icon);
+
+		// Draw Blades
+		RenderUtil.drawScaledPrism(tessellator, BMX_A, MIN_Y, MIN_C, BMX_B, BMX_Y, MAX_C, icon);
+		RenderUtil.drawScaledPrism(tessellator, MIN_C, MIN_Y, BMX_A, MAX_C, BMX_Y, BMX_B, icon);
+
+		// Undo Rotate.
+		tessellator.popMatrix();
+
+		// Draw the connector
+		if (sprinkler != null) {
+			RenderUtil.drawScaledPrism(tessellator, 4, 8, 4, 12, 20, 12, sprinkler.getChannelIcon());
+		} else {
+			RenderUtil.drawScaledPrism(tessellator, 4, 8, 4, 12, 16, 12, IconUtil.getIcon(IconUtil.OAK_PLANKS));
+		}
+
+		// Draw
+		if (callFromTESR) {
+			tessellator.draw();
+		}
+		
+		// Clean Up
+		GL11.glEnable(GL11.GL_LIGHTING);
+
+		return true;
+	}
+
+	@Override
+	protected void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
+		this.doWorldRender(tessellator, null, 0, 0, 0, null, block, null, null, 0, 0, null, true);
+	}
+
+	@Override
+	public boolean shouldBehaveAsTESR() {
+		return true;
+	}
+
+	@Override
+	public boolean shouldBehaveAsISBRH() {
+		return true;
+	}
+
 }

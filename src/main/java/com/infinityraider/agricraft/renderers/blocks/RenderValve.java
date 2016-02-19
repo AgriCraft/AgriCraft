@@ -28,8 +28,6 @@ import com.infinityraider.agricraft.utility.icon.IconUtil;
 @SideOnly(Side.CLIENT)
 public class RenderValve extends RenderChannel {
 	
-	private static final TextureAtlasSprite SEPARATOR_ICON = IconUtil.getIcon(Blocks.iron_block);
-	
     public RenderValve() {
         super(com.infinityraider.agricraft.init.AgriCraftBlocks.blockChannelValve, new TileEntityValve());
     }
@@ -37,7 +35,9 @@ public class RenderValve extends RenderChannel {
     @Override
     protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
 		
-        TextureAtlasSprite icon = teDummy.getIcon();
+        final TextureAtlasSprite icon = teDummy.getIcon();
+		final TextureAtlasSprite sicon = IconUtil.getIcon(Blocks.iron_block);
+		
         int cm = teDummy.colorMultiplier();
         //render the iron valves
         float f = Constants.UNIT;
@@ -53,10 +53,10 @@ public class RenderValve extends RenderChannel {
         drawScaledPrism(tessellator, 2, 4, 5, 14, 5, 11, icon, cm);
         
         //Render separators.
-        drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, SEPARATOR_ICON, cm);
-        drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, SEPARATOR_ICON, cm);
-        drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, SEPARATOR_ICON, cm);
-        drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.999f, 5.5f, 11, SEPARATOR_ICON, cm);
+        drawScaledPrism(tessellator, 0.001f, 11.5f, 5, 1.999f, 15.001f, 11, sicon, cm);
+        drawScaledPrism(tessellator, 0.001f, 0.999f, 5, 1.999f, 5.5f, 11, sicon, cm);
+        drawScaledPrism(tessellator, 14.001f, 11.5f, 5, 15.999f, 15.001f, 11, sicon, cm);
+        drawScaledPrism(tessellator, 14.001f, 0.999f, 5, 15.999f, 5.5f, 11, sicon, cm);
 
         //render the wooden guide rails along z-axis
         drawScaledPrism(tessellator, 0, 0, 3.999F, 2, 16, 5.999F, icon, cm);
@@ -100,22 +100,25 @@ public class RenderValve extends RenderChannel {
                     this.drawWater(valve, tessellator);
                 }
 
-                final TextureAtlasSprite icon2 = valve.getIcon();
+				// Fetch icons
+                final TextureAtlasSprite bicon = valve.getIcon();
+				final TextureAtlasSprite sicon = IconUtil.getIcon(Blocks.iron_block);
+				
                 int cm = valve.colorMultiplier();
                 
 				for (AgriForgeDirection dir : TileEntityChannel.VALID_DIRECTIONS) {
 					if (valve.hasNeighbourCheck(dir)) {
 						if (valve.isPowered()) {
 							//Draw closed separator.
-							drawScaledPrism(tessellator, 6, 5, 0, 10, 12, 2, SEPARATOR_ICON, cm, dir);
+							drawScaledPrism(tessellator, 6, 5, 0, 10, 12, 2, sicon, cm, dir);
 						} else {
 							//Draw open separator.
-							drawScaledPrism(tessellator, 6, 1, 0, 10, 5.001F, 2, SEPARATOR_ICON, cm, dir);
-							drawScaledPrism(tessellator, 6, 12, 0, 10, 15, 2, SEPARATOR_ICON, cm, dir);
+							drawScaledPrism(tessellator, 6, 1, 0, 10, 5.001F, 2, sicon, cm, dir);
+							drawScaledPrism(tessellator, 6, 12, 0, 10, 15, 2, sicon, cm, dir);
 						}
 						//Draw rails.
-						drawScaledPrism(tessellator, 4, 0, 0, 6, 16, 2, icon2, cm, dir);
-						drawScaledPrism(tessellator, 10, 0, 0, 12, 16, 2, icon2, cm, dir);
+						drawScaledPrism(tessellator, 4, 0, 0, 6, 16, 2, bicon, cm, dir);
+						drawScaledPrism(tessellator, 10, 0, 0, 12, 16, 2, bicon, cm, dir);
 					}
 				}
             }

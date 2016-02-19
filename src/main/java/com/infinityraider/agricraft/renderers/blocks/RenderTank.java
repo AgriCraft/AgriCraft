@@ -20,12 +20,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
+import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 @SideOnly(Side.CLIENT)
 public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
-	
-	private static final TextureAtlasSprite WATER_ICON = IconUtil.getIcon(Blocks.waterlily);
 	
     public RenderTank() {
         super(com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterTank, new TileEntityTank(), true);
@@ -155,10 +154,11 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
             tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(tank.getWorld(), tank.getPos()));
             tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
             //draw surface
-            addScaledVertexWithUV(tessellator, 0, y, 0, 0, 0, WATER_ICON);
-            addScaledVertexWithUV(tessellator, 0, y, 16, 0, 16, WATER_ICON);
-            addScaledVertexWithUV(tessellator, 16, y, 16, 16, 16, WATER_ICON);
-            addScaledVertexWithUV(tessellator, 16, y, 0, 16, 0, WATER_ICON);
+			final TextureAtlasSprite waterIcon = IconUtil.getIcon(Blocks.waterlily);
+            addScaledVertexWithUV(tessellator, 0, y, 0, 0, 0, waterIcon);
+            addScaledVertexWithUV(tessellator, 0, y, 16, 0, 16, waterIcon);
+            addScaledVertexWithUV(tessellator, 16, y, 16, 16, 16, waterIcon);
+            addScaledVertexWithUV(tessellator, 16, y, 0, 16, 0, waterIcon);
         }
     }
 }

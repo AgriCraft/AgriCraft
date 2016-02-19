@@ -40,12 +40,7 @@ public abstract class ItemBase extends Item implements IAgriCraftRenderable {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegistrar iconRegistrar) {
-        String name = this.getUnlocalizedName();
-        int index = name.indexOf(":");
-        name = index > 0 ? name.substring(index+1) : name;
-        index = name.indexOf(".");
-        name = index > 0 ? name.substring(index+1) : name;
-        iconRegistrar.registerIcon("agricraft:items/"+name);
+        iconRegistrar.registerIcon(this.getRegistryName().replaceFirst(":", ":items/"));
     }
 	
 }
