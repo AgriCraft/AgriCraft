@@ -39,6 +39,9 @@ env:
 # So the cache doesn't get rebuilt every time.
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -f $HOME/.gradle/caches/minecraft/ForgeVersion.json
+  - rm -f $HOME/.gradle/caches/minecraft/ForgeVersion.json.etag
+  - rm -rf $HOME/.gradle/caches/minecraft/deobfedDeps
 
 # Cache libs, as to improve speed.
 cache:
