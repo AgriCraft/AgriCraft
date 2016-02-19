@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 
 /**
  * This class represents the root tile entity for all AgriCraft custom WOOD
@@ -29,11 +30,13 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	/**
 	 * The default MATERIAL to use. Currently is WOOD planks.
 	 */
+	@Nonnull
 	public static final Block DEFAULT_MATERIAL = Blocks.planks;
 
 	/**
 	 * The default metadata to use. Currently is set to Oak(0) for Planks.
 	 */
+	@Nonnull
 	public static final int DEFAULT_META = 0;
 
 	/**
@@ -41,6 +44,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 *
 	 * Defaults to {@link #DEFAULT_MATERIAL}.
 	 */
+	@Nonnull
 	private Block material = DEFAULT_MATERIAL;
 
 	/**
@@ -48,13 +52,18 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 *
 	 * Defaults to {@link #DEFAULT_META}.
 	 */
+	@Nonnull
 	private int materialMeta = DEFAULT_META;
 
 	/**
 	 * Cached icon
 	 */
+	@Nonnull
 	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite icon;
+	private TextureAtlasSprite icon = IconUtil.getDefaultIcon();
+	
+	@Nonnull
+	private boolean isIconCached = true;
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
@@ -127,7 +136,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 */
 	public final void setMaterial(String name, int meta) {
 		Block block = Block.getBlockFromName(name);
-		if(block == Blocks.air) {
+		if (block == Blocks.air) {
 			LogHelper.debug("TECW: Material Defaulted!");
 			this.setMaterial(DEFAULT_MATERIAL, DEFAULT_META);
 		} else {
@@ -146,6 +155,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 		if (block != null) {
 			this.material = block;
 			this.materialMeta = meta;
+			this.isIconCached = false;
 		}
 	}
 
@@ -155,7 +165,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 * @return the MATERIAL, in Block form.
 	 */
 	public final Block getMaterial() {
-		return this.material == null ? DEFAULT_MATERIAL : this.material;
+		return this.material;
 	}
 
 	public final IBlockState getMaterialState() {
@@ -168,7 +178,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 * @return the metadata of the MATERIAL.
 	 */
 	public final int getMaterialMeta() {
-		return this.material == null ? DEFAULT_META : this.materialMeta;
+		return this.materialMeta;
 	}
 
 	public final ItemStack getMaterialStack() {
@@ -190,26 +200,19 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	public final TextureAtlasSprite getIcon() {
 		// GOTCHA! The last rendering issue! Yay!
 		this.cacheIcon();
-		if (this.icon == null) {
-			LogHelper.debug("TECW: Icon Defaulted!");
-			return IconUtil.getIcon(IconUtil.OAK_PLANKS);
-		} else {
-			return this.icon;
-		}
+		return this.icon;
 	}
 
 	private void cacheIcon() {
-		if (this.material == null) {
-			return;
-		}
-		List<TextureAtlasSprite> icons = TextureCache.getInstance().queryIcons(getMaterialState());
-		if (icons.size() > 0) {
-			TextureAtlasSprite fromCache = icons.get(0);
-			if (fromCache != Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()) {
-				this.icon = fromCache;
+		if (!isIconCached) {
+			List<TextureAtlasSprite> icons = TextureCache.getInstance().queryIcons(getMaterialState());
+			if (icons.size() > 0) {
+				TextureAtlasSprite fromCache = icons.get(0);
+				if (fromCache != Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()) {
+					this.icon = fromCache;
+				}
 			}
 		}
-
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.renderers.particles.LiquidSprayFX;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.utility.LogHelper;
+import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
@@ -23,7 +24,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable {
@@ -134,7 +134,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
     public TextureAtlasSprite getChannelIcon() {
 		
         if(this.getWorld() == null) {
-            return IconUtil.getIcon(IconUtil.OAK_PLANKS);
+            return BaseIcons.OAK_PLANKS.getIcon();
         }
 		
 		TileEntity te = getWorld().getTileEntity(getPos().add(0, 1, 0));
@@ -143,7 +143,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 			return ((TileEntityChannel) te).getIcon();
 		}
 		
-		return IconUtil.getIcon(IconUtil.OAK_PLANKS);
+		return BaseIcons.OAK_PLANKS.getIcon();
 		
     }
 

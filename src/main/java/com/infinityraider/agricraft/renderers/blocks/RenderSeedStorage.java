@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -23,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
+import com.infinityraider.agricraft.utility.icon.BaseIcons;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStorage> {
@@ -68,7 +67,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
                 drawScaledPrism(tessellator, 4, 10, 0, 12, 11, 1, icon, cm);
                 drawScaledPrism(tessellator, 4, 3, 0, 12, 4, 1, icon, cm);
 				//handle
-				final TextureAtlasSprite handleIcon = IconUtil.getIcon(Blocks.iron_block);
+				final TextureAtlasSprite handleIcon = BaseIcons.IRON_BLOCK.getIcon();
 				drawScaledPrism(tessellator, 7, 12, 0, 9, 13, 1, handleIcon, cm);    //TODO: find iron block icon
                 //trace
                 renderSides(tessellator, storage);

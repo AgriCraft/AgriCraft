@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
+import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 @SideOnly(Side.CLIENT)
@@ -36,7 +37,7 @@ public class RenderValve extends RenderChannel {
     protected void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
 		
         final TextureAtlasSprite icon = teDummy.getIcon();
-		final TextureAtlasSprite sicon = IconUtil.getIcon(Blocks.iron_block);
+		final TextureAtlasSprite sicon = BaseIcons.IRON_BLOCK.getIcon();
 		
         int cm = teDummy.colorMultiplier();
         //render the iron valves
@@ -102,7 +103,7 @@ public class RenderValve extends RenderChannel {
 
 				// Fetch icons
                 final TextureAtlasSprite bicon = valve.getIcon();
-				final TextureAtlasSprite sicon = IconUtil.getIcon(Blocks.iron_block);
+				final TextureAtlasSprite sicon = BaseIcons.IRON_BLOCK.getIcon();
 				
                 int cm = valve.colorMultiplier();
                 

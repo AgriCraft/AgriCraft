@@ -17,28 +17,20 @@ public final class RenderUtil {
 	private static final float MAX_UV = 16;
 
     private RenderUtil() {}
-	
-	private static float inboundUV(float m) {
-		return (m < MIN_UV) ? MIN_UV : (m > MAX_UV) ? MAX_UV : m;
-	}
 
     /** Tessellates a vertex at the given position using the passed tessellator and texture u and v position */
     public static void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v) {
-		u = inboundUV(u);
-		v = inboundUV(v);
         tessellator.addVertexWithUV(x*UNIT, y*UNIT, z*UNIT, u * UNIT, v * UNIT);
     }
 
     /** Tessellates a vertex at the given position using the passed tessellator, texture u and v position are interpolated using the passed icon */
     public static void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v, TextureAtlasSprite icon) {
-		u = icon.getInterpolatedU(inboundUV(u));
-		v = icon.getInterpolatedV(inboundUV(v));
-        tessellator.addVertexWithUV(x * UNIT, y * UNIT, z * UNIT, u, v);
+        tessellator.addVertexWithUV(x * UNIT, y * UNIT, z * UNIT, icon.getInterpolatedU(u), icon.getInterpolatedV(v));
     }
 
     /** Draws both sides of a face parallel to the XY plane*/
     public static void drawScaledFaceDoubleXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, TextureAtlasSprite icon, float z) {
-        z = z*16.0F;
+        z = z*WHOLE;
         //front
         addScaledVertexWithUV(tessellator, maxX, maxY, z, MAX_UV, MIN_UV, icon);
         addScaledVertexWithUV(tessellator, maxX, minY, z, MAX_UV, MAX_UV, icon);
@@ -53,7 +45,7 @@ public final class RenderUtil {
 
     /** Draws both sides of a face parallel to the XZ plane*/
     public static void drawScaledFaceDoubleXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, TextureAtlasSprite icon, float y) {
-        y = y*16.0F;
+        y = y*WHOLE;
         //front
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, MAX_UV, MAX_UV, icon);
         addScaledVertexWithUV(tessellator, maxX, y, minZ, MAX_UV, MIN_UV, icon);
@@ -68,7 +60,7 @@ public final class RenderUtil {
 
     /** Draws both sides of a face parallel to the YZ plane*/
     public static void drawScaledFaceDoubleYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, TextureAtlasSprite icon, float x) {
-        x = x*16.0F;
+        x = x*WHOLE;
         //front
         addScaledVertexWithUV(tessellator, x, maxY, maxZ, MAX_UV, MIN_UV, icon);
         addScaledVertexWithUV(tessellator, x, minY, maxZ, MAX_UV, MAX_UV, icon);
@@ -94,22 +86,22 @@ public final class RenderUtil {
     /** Draws a prism */
     public static void drawScaledPrism(TessellatorV2 tessellator, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, TextureAtlasSprite icon, int colorMultiplier) {
         //bottom
-        drawScaledFaceBackXZ(tessellator, minX, minZ, maxX, maxZ, icon, minY / 16.0F, colorMultiplier);
+        drawScaledFaceBackXZ(tessellator, minX, minZ, maxX, maxZ, icon, minY * UNIT, colorMultiplier);
         //top
-        drawScaledFaceFrontXZ(tessellator, minX, minZ, maxX, maxZ, icon, maxY / 16.0F, colorMultiplier);
+        drawScaledFaceFrontXZ(tessellator, minX, minZ, maxX, maxZ, icon, maxY * UNIT, colorMultiplier);
         //back
-        drawScaledFaceBackXY(tessellator, minX, minY, maxX, maxY, icon, minZ / 16.0F, colorMultiplier);
+        drawScaledFaceBackXY(tessellator, minX, minY, maxX, maxY, icon, minZ * UNIT, colorMultiplier);
         //front
-        drawScaledFaceFrontXY(tessellator, minX, minY, maxX, maxY, icon, maxZ / 16.0F, colorMultiplier);
+        drawScaledFaceFrontXY(tessellator, minX, minY, maxX, maxY, icon, maxZ * UNIT, colorMultiplier);
         //left
-        drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, icon, minX / 16.0F, colorMultiplier);
+        drawScaledFaceBackYZ(tessellator, minY, minZ, maxY, maxZ, icon, minX * UNIT, colorMultiplier);
         //right
-        drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, icon, maxX / 16.0F, colorMultiplier);
+        drawScaledFaceFrontYZ(tessellator, minY, minZ, maxY, maxZ, icon, maxX * UNIT, colorMultiplier);
     }
 
     /** Draws the front side of a face parallel to the XY plane */
     public static void drawScaledFaceFrontXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, TextureAtlasSprite icon, float z, int colorMultiplier) {
-        z = z*16.0F;
+        z = z*WHOLE;
         float minV = MAX_UV-maxY;
         float maxV = MAX_UV-minY;
         applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.SOUTH);
@@ -121,7 +113,7 @@ public final class RenderUtil {
 
     /** Draws the front side of a face parallel to the XZ plane */
     public static void drawScaledFaceFrontXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, TextureAtlasSprite icon, float y, int colorMultiplier) {
-        y = y*16.0F;
+        y = y*WHOLE;
         applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.UP);
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ, icon);
         addScaledVertexWithUV(tessellator, maxX, y, minZ, maxX, minZ, icon);
@@ -131,7 +123,7 @@ public final class RenderUtil {
 
     /** Draws the front side of a face parallel to the YZ plane */
     public static void drawScaledFaceFrontYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, TextureAtlasSprite icon, float x, int colorMultiplier) {
-        x = x*16.0F;
+        x = x*WHOLE;
         float minV = MAX_UV-maxY;
         float maxV = MAX_UV-minY;
         applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.EAST);
@@ -143,7 +135,7 @@ public final class RenderUtil {
 
     /** Draws the back side of a face parallel to the XY plane */
     public static void drawScaledFaceBackXY(TessellatorV2 tessellator, float minX, float minY, float maxX, float maxY, TextureAtlasSprite icon, float z, int colorMultiplier) {
-        z = z*16.0F;
+        z = z*WHOLE;
         float minV = MAX_UV - maxY;
         float maxV = MAX_UV - minY;
         applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.NORTH);
@@ -155,7 +147,7 @@ public final class RenderUtil {
 
     /** Draws the back side of a face parallel to the XZ plane */
     public static void drawScaledFaceBackXZ(TessellatorV2 tessellator, float minX, float minZ, float maxX, float maxZ, TextureAtlasSprite icon, float y, int colorMultiplier) {
-        y = y*16.0F;
+        y = y*WHOLE;
         applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.DOWN);
         addScaledVertexWithUV(tessellator, maxX, y, maxZ, maxX, maxZ, icon);
         addScaledVertexWithUV(tessellator, minX, y, maxZ, minX, maxZ, icon);
@@ -165,7 +157,7 @@ public final class RenderUtil {
 
     /** Draws the back side of a face parallel to the YZ plane */
     public static void drawScaledFaceBackYZ(TessellatorV2 tessellator, float minY, float minZ, float maxY, float maxZ, TextureAtlasSprite icon, float x, int colorMultiplier) {
-        x = x*16.0F;
+        x = x*WHOLE;
         float minV = MAX_UV - maxY;
         float maxV = MAX_UV - minY;
         applyColorMultiplier(tessellator, colorMultiplier, AgriForgeDirection.WEST);

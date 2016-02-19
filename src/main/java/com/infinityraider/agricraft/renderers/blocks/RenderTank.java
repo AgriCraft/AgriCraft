@@ -21,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 import com.infinityraider.agricraft.utility.LogHelper;
+import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 @SideOnly(Side.CLIENT)
@@ -154,7 +155,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
             tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(tank.getWorld(), tank.getPos()));
             tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
             //draw surface
-			final TextureAtlasSprite waterIcon = IconUtil.getIcon(Blocks.waterlily);
+			final TextureAtlasSprite waterIcon = BaseIcons.WATER_STILL.getIcon();
             addScaledVertexWithUV(tessellator, 0, y, 0, 0, 0, waterIcon);
             addScaledVertexWithUV(tessellator, 0, y, 16, 0, 16, waterIcon);
             addScaledVertexWithUV(tessellator, 16, y, 16, 16, 16, waterIcon);

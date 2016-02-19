@@ -82,7 +82,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
 	private void renderSeed(TessellatorV2 tessellator, TileEntitySeedAnalyzer analyzer) {
 		//grab the texture
 		ItemStack stack = analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId);
-		TextureAtlasSprite icon = IconUtil.getItemIcon(stack); //TODO: find seed icon
+		TextureAtlasSprite icon = IconUtil.getParticleIcon(stack); //TODO: find seed icon
 		if (icon == null) {
 			return;
 		}

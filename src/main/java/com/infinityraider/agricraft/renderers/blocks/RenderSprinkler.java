@@ -1,9 +1,11 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntitySprinkler;
+import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -17,9 +19,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.init.Blocks;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -46,7 +46,7 @@ public class RenderSprinkler extends RenderBlockBase {
 	protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
 
 		final TileEntitySprinkler sprinkler = (TileEntitySprinkler) tile;
-		final TextureAtlasSprite icon = IconUtil.getIcon(Blocks.iron_block);
+		final TextureAtlasSprite icon = BaseIcons.IRON_BLOCK.getIcon();
 
 		// Prep. for render.
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
@@ -75,9 +75,12 @@ public class RenderSprinkler extends RenderBlockBase {
 
 		// Draw the connector
 		if (sprinkler != null) {
-			RenderUtil.drawScaledPrism(tessellator, 4, 8, 4, 12, 20, 12, sprinkler.getChannelIcon());
+			tessellator.pushMatrix();
+			tessellator.translate(0, 4 * Constants.UNIT, 0);
+			RenderUtil.drawScaledPrism(tessellator, 4, 4, 4, 12, 16, 12, sprinkler.getChannelIcon());
+			tessellator.popMatrix();
 		} else {
-			RenderUtil.drawScaledPrism(tessellator, 4, 8, 4, 12, 16, 12, IconUtil.getIcon(IconUtil.OAK_PLANKS));
+			RenderUtil.drawScaledPrism(tessellator, 4, 8, 4, 12, 16, 12, BaseIcons.OAK_PLANKS.getIcon());
 		}
 
 		// Draw
