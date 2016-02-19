@@ -19,6 +19,7 @@ public enum BaseIcons {
 	IRON_BLOCK("minecraft:blocks/iron_block"),
 	DEBUG_ICON("agricraft:items/debugger");
 	
+	@Nonnull
 	public final String location;
 	
 	@Nonnull
@@ -34,9 +35,9 @@ public enum BaseIcons {
 
 	public TextureAtlasSprite getIcon() {
 		if (!isLoaded) {
-			LogHelper.debug("Attempting load of icon for: " + this.name());
+			LogHelper.debug("Load Icon " + this.name() + " STARTED...");
 			isLoaded = attemptLoad();
-			LogHelper.debug("Load " + this.name() + ": " + (isLoaded ? "SUCEEDED!" : "FAILED!"));
+			LogHelper.debug("Load Icon " + this.name() + ": " + (isLoaded ? "SUCEEDED!" : "FAILED!"));
 		}
 		return cachedIcon;
 	}

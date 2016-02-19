@@ -47,11 +47,7 @@ public class RenderSprinkler extends RenderBlockBase {
 
 		final TileEntitySprinkler sprinkler = (TileEntitySprinkler) tile;
 		final TextureAtlasSprite icon = BaseIcons.IRON_BLOCK.getIcon();
-
-		// Prep. for render.
-		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-		GL11.glDisable(GL11.GL_LIGHTING);
-
+		
 		// Rotate
 		tessellator.pushMatrix();
 		if (sprinkler != null) {
@@ -60,6 +56,9 @@ public class RenderSprinkler extends RenderBlockBase {
 
 		// Render sprinkler head.
 		if (callFromTESR) {
+			// Prep. for render.
+			Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+			GL11.glDisable(GL11.GL_LIGHTING);
 			tessellator.startDrawingQuads();
 		}
 
@@ -86,10 +85,9 @@ public class RenderSprinkler extends RenderBlockBase {
 		// Draw
 		if (callFromTESR) {
 			tessellator.draw();
+			// Clean Up
+			GL11.glEnable(GL11.GL_LIGHTING);
 		}
-		
-		// Clean Up
-		GL11.glEnable(GL11.GL_LIGHTING);
 
 		return true;
 	}
