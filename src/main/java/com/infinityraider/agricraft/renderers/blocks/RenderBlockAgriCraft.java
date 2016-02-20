@@ -27,38 +27,38 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<TileEntityBase> implements ISimpleBlockRenderingHandler, IItemRenderer {
 
-    protected RenderBlockAgriCraft(Block block, TileEntityBase te, boolean inventory, boolean tesr, boolean isbrh) {
-        this.registerRenderer(block, te, inventory, tesr, isbrh);
-    }
+	protected RenderBlockAgriCraft(Block block, TileEntityBase te, boolean inventory, boolean tesr, boolean isbrh) {
+		this.registerRenderer(block, te, inventory, tesr, isbrh);
+	}
 
-    private void registerRenderer(Block block, TileEntityBase te, boolean inventory, boolean tesr, boolean isbrh) {
-        if(tesr && te != null) {
-            ClientRegistry.bindTileEntitySpecialRenderer(te.getTileClass(), this);
-        }
-        if(isbrh) {
-            BlockRendererDispatcherWrapped.getInstance().registerBlockRenderingHandler(block, this);
-        }
-		if(inventory) {
-            BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(Item.getItemFromBlock(block), this);
-        }
-    }
+	private void registerRenderer(Block block, TileEntityBase te, boolean inventory, boolean tesr, boolean isbrh) {
+		if (tesr && te != null) {
+			ClientRegistry.bindTileEntitySpecialRenderer(te.getTileClass(), this);
+		}
+		if (isbrh) {
+			BlockRendererDispatcherWrapped.getInstance().registerBlockRenderingHandler(block, this);
+		}
+		if (inventory) {
+			BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(Item.getItemFromBlock(block), this);
+		}
+	}
 
-    /* Call from TESR */
-    @Override
-    public final void renderTileEntityAt(TileEntityBase te, double x, double y, double z, float partialTicks, int destroyStage) {
-        TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
+	/* Call from TESR */
+	@Override
+	public final void renderTileEntityAt(TileEntityBase te, double x, double y, double z, float partialTicks, int destroyStage) {
+		TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
 		tessellator.setBrightness(te.getBlockType().getMixedBrightnessForBlock(te.getWorld(), te.getPos()));
 		GL11.glPushMatrix();
-        GL11.glTranslated(te.xCoord(), te.yCoord(), te.zCoord());
+		GL11.glTranslated(te.xCoord(), te.yCoord(), te.zCoord());
 		GL11.glDisable(GL11.GL_LIGHTING);
 		doRenderTileEntity(tessellator, te);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
-    }
+	}
 
-    /* Call from ISBRH */
+	/* Call from ISBRH */
 	@Override
-    public final boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockPos pos, Block block, IBlockState state, WorldRenderer renderer) {
+	public final boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockPos pos, Block block, IBlockState state, WorldRenderer renderer) {
 		TessellatorV2 tessellator = TessellatorV2.getInstance(renderer);
 		tessellator.setBrightness(block.getMixedBrightnessForBlock(world, pos));
 		tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
@@ -68,37 +68,52 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 
 	/*
 	** TODO: WARNING: HACK
-	*/
+	 */
 	@Override
 	@SuppressWarnings("deprecated")
-    public final void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
-        TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
-		tessellator.reset();
-		tessellator.scale(0.5, 0.5, 0.5);
-		tessellator.translate(-1, -.9, 0);
+	public final void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
+		TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
+		switch (transformType) {
+			case THIRD_PERSON:
+				tessellator.scale(0.25, 0.25, 0.25);
+				tessellator.rotate(180, 0, 1, 0);
+				tessellator.translate(-.5, 0, 0);
+				break;
+			case FIRST_PERSON:
+				tessellator.scale(0.5, 0.5, 0.5);
+				tessellator.translate(0, -0.5, 0);
+				break;
+			default:
+				tessellator.scale(0.5, 0.5, 0.5);
+				tessellator.translate(-1, -.9, 0);
+				break;
+		}
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		tessellator.startDrawingQuads();
-        doInventoryRender(tessellator, stack);
+		doInventoryRender(tessellator, stack);
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_LIGHTING);
-    }
+	}
 
-    protected void doInventoryRender(TessellatorV2 tess, ItemStack item) {
+	protected void doInventoryRender(TessellatorV2 tess, ItemStack item) {
 		LogHelper.debug("Bad inventory render call: " + this.getClass().getCanonicalName());
 	}
-	
+
 	protected void doRenderTileEntity(TessellatorV2 tess, TileEntity te) {
 		LogHelper.debug("Bad tile render call: " + this.getClass().getCanonicalName());
 	}
-	
+
 	protected void doRenderBlock(TessellatorV2 tess, IBlockAccess world, Block block, IBlockState state, BlockPos pos) {
 		LogHelper.debug("Bad block render call: " + this.getClass().getCanonicalName());
 	}
 
-    //HELPER METHODS
-    //--------------
+	//HELPER METHODS
+	//--------------
 	@Override
-	public final boolean shouldRender3D(ItemStack stack) { return true; };
+	public final boolean shouldRender3D(ItemStack stack) {
+		return true;
+	}
+;
 
 }

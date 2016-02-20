@@ -2,18 +2,21 @@ package com.infinityraider.agricraft.renderers.items;
 
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
 import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.renderinghacks.IItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import org.lwjgl.opengl.GL11;
 
 public abstract class AbstractItemRenderer implements IItemRenderer {
 
 	@SuppressWarnings("deprecation")
+	@Override
 	public final void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
 		TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
+		GL11.glDisable(GL11.GL_LIGHTING);
+		tessellator.startDrawingQuads();
 		switch (transformType) {
 			case NONE:
 				renderItemDefault(tessellator, stack);
@@ -36,42 +39,34 @@ public abstract class AbstractItemRenderer implements IItemRenderer {
 			case FIXED:
 				renderItemFixed(tessellator, stack);
 				break;
-
 		}
-	}
-
-	private void drawItemIcon3D(TessellatorV2 tess, ItemStack item) {
-		if (item == null || !(item.getItem() instanceof IAgriCraftRenderable)) {
-			return;
-		}
-		tess.startDrawingQuads();
-		RenderUtil.drawScaledPrism(tess, 0, 0, 0, 0, 16, 16, ((IAgriCraftRenderable) item.getItem()).getIcon());
-		tess.draw();
+		tessellator.draw();
+		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	protected void renderItemDefault(TessellatorV2 tessellator, ItemStack item) {
-		drawItemIcon3D(tessellator, item);
+		if (item.getItem() instanceof IAgriCraftRenderable) {
+			RenderUtil.drawScaledPrism(tessellator, 0, 0, 0, 0, 16, 16, ((IAgriCraftRenderable) item.getItem()).getIcon());
+		}
 	}
 
 	protected void renderItemThirdPerson(TessellatorV2 tessellator, ItemStack item) {
-		drawItemIcon3D(tessellator, item);
+		renderItemDefault(tessellator, item);
 	}
 
 	protected void renderItemFirstPerson(TessellatorV2 tessellator, ItemStack item) {
-		drawItemIcon3D(tessellator, item);
-
+		renderItemDefault(tessellator, item);
 	}
 
 	protected void renderItemHead(TessellatorV2 tessellator, ItemStack item) {
-		drawItemIcon3D(tessellator, item);
+		renderItemDefault(tessellator, item);
 	}
 
 	protected void renderItemGui(TessellatorV2 tessellator, ItemStack stack) {
-		
+
 		// This is awesome.
 		tessellator.pushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		
+
 		// The translations required are quite odd.
 		// These numbers are pure magic.
 		tessellator.rotate(45, 0, 1, 0);
@@ -79,26 +74,25 @@ public abstract class AbstractItemRenderer implements IItemRenderer {
 		tessellator.scale(1, 0.925, 0.8);
 		// z is left-right, y is up-down
 		tessellator.translate(0, -0.49, -0.49);
-		
+
 		// Render the item.
 		renderItemDefault(tessellator, stack);
-		
-		GL11.glEnable(GL11.GL_LIGHTING);
+
 		tessellator.popMatrix();
 
 	}
 
 	protected void renderItemGround(TessellatorV2 tessellator, ItemStack item) {
-		drawItemIcon3D(tessellator, item);
+		renderItemDefault(tessellator, item);
 	}
 
 	protected void renderItemFixed(TessellatorV2 tessellator, ItemStack item) {
-		drawItemIcon3D(tessellator, item);
+		renderItemDefault(tessellator, item);
 	}
 
 	@Override
 	public boolean shouldRender3D(ItemStack stack) {
-		return true;
+		return false;
 	}
 
 }
