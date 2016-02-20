@@ -25,7 +25,7 @@ import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SideOnly(Side.CLIENT)
-public class RenderChannel extends RenderBlockCustomWoodNew<TileEntityChannel> {
+public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 
 	public static AtomicInteger renderCallCounter = new AtomicInteger(0);
 

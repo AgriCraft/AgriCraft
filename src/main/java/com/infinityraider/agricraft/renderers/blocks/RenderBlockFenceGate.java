@@ -13,7 +13,7 @@ import net.minecraft.world.IBlockAccess;
 
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 
-public class RenderBlockFenceGate extends RenderBlockCustomWoodNew<TileEntityFenceGate> {
+public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceGate> {
 
 	public RenderBlockFenceGate() {
 		super(AgriCraftBlocks.blockFenceGate, new TileEntityFenceGate(), true, false, true);

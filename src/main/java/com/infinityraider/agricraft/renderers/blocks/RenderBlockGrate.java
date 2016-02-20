@@ -16,7 +16,7 @@ import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.init.Blocks;
 
-public class RenderBlockGrate extends RenderBlockCustomWoodNew<TileEntityGrate> {
+public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
 
 	public RenderBlockGrate() {
 		super(AgriCraftBlocks.blockGrate, new TileEntityGrate(), true, false, true);

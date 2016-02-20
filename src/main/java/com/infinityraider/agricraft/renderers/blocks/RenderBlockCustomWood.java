@@ -2,31 +2,47 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
+import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> extends RenderBlockBase {
+public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> extends RenderBlockAgriCraft {
 	
     protected final T teDummy;
 
-    protected RenderBlockCustomWood(Block block, T te, boolean inventory) {
-        super(block, te, inventory);
+    protected RenderBlockCustomWood(Block block, T te, boolean inventory, boolean tesr, boolean isbrh) {
+		super(block, te, inventory, tesr, isbrh);
         this.teDummy = te;
     }
 
-    @Override
-    protected final void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
-        teDummy.setMaterial(item);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        renderInInventory(tessellator, block, item, transformType);
-        GL11.glEnable(GL11.GL_LIGHTING);
-    }
+	@Override
+	protected final void doInventoryRender(TessellatorV2 tess, ItemStack item) {
+		this.teDummy.setMaterial(item);
+		this.doInventoryRender(tess, item, this.teDummy.getIcon());
+	}
+	
+	protected abstract void doInventoryRender(TessellatorV2 tess, ItemStack item, TextureAtlasSprite matIcon);
 
-    protected abstract void renderInInventory(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType);
+	@Override
+	protected final void doRenderBlock(TessellatorV2 tess, IBlockAccess world, Block block, IBlockState state, BlockPos pos) {
+		final TileEntity te = world.getTileEntity(pos);
+		if (te instanceof TileEntityCustomWood) {
+			final TileEntityCustomWood cw = (TileEntityCustomWood)te;
+			final TextureAtlasSprite matIcon = cw.getIcon();
+			doRenderBlock(tess, world, block, state, pos, matIcon, block.colorMultiplier(world, pos));
+		} else {
+			LogHelper.debug("Bad blocks being passed to CustomWood Renderer!");
+		}
+	}
+	
+	protected abstract void doRenderBlock(TessellatorV2 tess, IBlockAccess world, Block block, IBlockState state, BlockPos pos, TextureAtlasSprite matIcon, int cm);
 	
 }

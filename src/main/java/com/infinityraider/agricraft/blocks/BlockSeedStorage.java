@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
 import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
 import net.minecraft.block.properties.IProperty;
@@ -84,7 +83,7 @@ public class BlockSeedStorage extends BlockCustomWood {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public RenderBlockBase getRenderer() {
+    public RenderSeedStorage getRenderer() {
         return new RenderSeedStorage();
     }
     

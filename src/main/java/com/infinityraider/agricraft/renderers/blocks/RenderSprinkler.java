@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntitySprinkler;
-import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
