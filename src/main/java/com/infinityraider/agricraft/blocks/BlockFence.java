@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.entity.EntityLeashKnotAgricraft;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockFence;
 import com.infinityraider.agricraft.tileentity.decoration.TileEntityFence;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;

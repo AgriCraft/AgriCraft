@@ -48,16 +48,14 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         private TileEntityTank mainComponent;
 
         @Override
-        public void writeToNBT(NBTTagCompound tag) {
-            super.writeToNBT(tag);
+        protected void writeNBT(NBTTagCompound tag) {
             if (this.fluidLevel > 0) {
                 tag.setInteger(AgriCraftNBT.LEVEL, this.fluidLevel);
             }
         }
 
         @Override
-        public void readFromNBT(NBTTagCompound tag) {
-            super.readFromNBT(tag);
+        protected void readNBT(NBTTagCompound tag) {
             this.fluidLevel = tag.hasKey(AgriCraftNBT.LEVEL) ? tag.getInteger(AgriCraftNBT.LEVEL) : 0;
         }
 

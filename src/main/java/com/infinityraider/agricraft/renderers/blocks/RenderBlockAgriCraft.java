@@ -51,7 +51,9 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 		GL11.glPushMatrix();
 		GL11.glTranslated(te.xCoord(), te.yCoord(), te.zCoord());
 		GL11.glDisable(GL11.GL_LIGHTING);
+		tessellator.startDrawingQuads();
 		doRenderTileEntity(tessellator, te);
+		tessellator.draw();
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 	}
@@ -66,9 +68,9 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 		return true;
 	}
 
-	/*
-	** TODO: WARNING: HACK
-	 */
+	//
+	// TODO: WARNING: HACK
+	//
 	@Override
 	@SuppressWarnings("deprecated")
 	public final void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
@@ -114,6 +116,5 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 	public final boolean shouldRender3D(ItemStack stack) {
 		return true;
 	}
-;
 
 }

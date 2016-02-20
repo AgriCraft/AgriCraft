@@ -20,9 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
-import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 @SideOnly(Side.CLIENT)
 public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {

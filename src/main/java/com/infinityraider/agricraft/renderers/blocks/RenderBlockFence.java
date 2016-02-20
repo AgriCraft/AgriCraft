@@ -13,7 +13,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
-import com.infinityraider.agricraft.utility.LogHelper;
 
 public class RenderBlockFence extends RenderBlockCustomWoodNew<TileEntityFence> {
 

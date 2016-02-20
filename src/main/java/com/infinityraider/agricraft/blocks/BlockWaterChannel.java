@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -113,7 +112,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public RenderBlockBase getRenderer() {
+	public RenderChannel getRenderer() {
 		return new RenderChannel();
 	}
 
