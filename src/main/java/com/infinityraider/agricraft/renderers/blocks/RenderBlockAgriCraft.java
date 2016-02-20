@@ -49,7 +49,7 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 		TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
 		tessellator.setBrightness(te.getBlockType().getMixedBrightnessForBlock(te.getWorld(), te.getPos()));
 		GL11.glPushMatrix();
-		GL11.glTranslated(te.xCoord(), te.yCoord(), te.zCoord());
+		GL11.glTranslated(x, y, z);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		tessellator.startDrawingQuads();
 		doRenderTileEntity(tessellator, te);

@@ -45,10 +45,10 @@ public class RenderSprinkler extends RenderBlockAgriCraft {
 		// Get Core Icon
 		final TextureAtlasSprite coreIcon = BaseIcons.IRON_BLOCK.getIcon();
 		// Draw Core
-		RenderUtil.drawScaledPrism(tess, MIN_C, MIN_Y - 4, MIN_C, MAX_C, MAX_Y - 4, MAX_C, coreIcon);
+		RenderUtil.drawScaledPrism(tess, MIN_C, MIN_Y - 8, MIN_C, MAX_C, MAX_Y - 4, MAX_C, coreIcon);
 		// Draw Blades
-		RenderUtil.drawScaledPrism(tess, BMX_A, MIN_Y - 4, MIN_C, BMX_B, BMX_Y - 4, MAX_C, coreIcon);
-		RenderUtil.drawScaledPrism(tess, MIN_C, MIN_Y - 4, BMX_A, MAX_C, BMX_Y - 4, BMX_B, coreIcon);
+		RenderUtil.drawScaledPrism(tess, BMX_A, MIN_Y - 8, MIN_C, BMX_B, BMX_Y - 8, MAX_C, coreIcon);
+		RenderUtil.drawScaledPrism(tess, MIN_C, MIN_Y - 8, BMX_A, MAX_C, BMX_Y - 8, BMX_B, coreIcon);
 	}
 
 	@Override
