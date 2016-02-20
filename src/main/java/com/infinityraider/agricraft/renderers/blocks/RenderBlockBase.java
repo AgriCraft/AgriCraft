@@ -84,10 +84,7 @@ public abstract class RenderBlockBase extends TileEntitySpecialRenderer<TileEnti
         }
         tessellator.setRotation(0, 0, 0, 0);
         if (callFromTESR) {
-            GL11.glTranslated(-x, -y, -z);
             GL11.glPopMatrix();
-        } else {
-            tessellator.translate((float) -x, (float) -y, (float) -z);
         }
         return result;
     }

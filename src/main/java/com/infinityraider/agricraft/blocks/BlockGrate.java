@@ -38,7 +38,7 @@ public class BlockGrate extends BlockCustomWood {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public RenderBlockBase getRenderer() {
+    public RenderBlockGrate getRenderer() {
         return new RenderBlockGrate();
     }
 

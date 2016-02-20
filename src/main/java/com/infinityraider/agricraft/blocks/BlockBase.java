@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import com.infinityraider.agricraft.utility.RegisterHelper;
@@ -15,6 +14,7 @@ import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
+import com.infinityraider.agricraft.renderers.renderinghacks.ISimpleBlockRenderingHandler;
 
 /**
  * The base class for all AgriCraft blocks.
@@ -38,6 +38,7 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	 * with the {@link RegisterHelper}.
 	 *
 	 * @param mat the {@link Material} the block is comprised of.
+	 * @param internalName the name of the block.
 	 */
 	protected BlockBase(Material mat, String internalName) {
 		this(mat, internalName, DEFAULT_RENDER_TYPE, DEFAULT_BLOCK_LAYER);
@@ -49,6 +50,7 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 		// The following two do not appear to ever be used...
 		this.renderType = renderType;
 		this.blockLayer = blockLayer;
+		this.fullBlock = false;
 		// This might be bad.
 		RegisterHelper.registerBlock(this, this.internalName, this.getItemBlockClass());
 	}
@@ -62,7 +64,7 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	 * @return the block's renderer.
 	 */
 	@SideOnly(Side.CLIENT)
-	public abstract RenderBlockBase getRenderer();
+	public abstract ISimpleBlockRenderingHandler getRenderer();
 
 	/**
 	 * Retrieves the block's ItemBlock class, as a generic class bounded by the

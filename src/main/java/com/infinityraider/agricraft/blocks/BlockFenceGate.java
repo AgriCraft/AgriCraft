@@ -56,7 +56,7 @@ public class BlockFenceGate extends BlockCustomWood {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public RenderBlockBase getRenderer() {
+    public RenderBlockFenceGate getRenderer() {
         return new RenderBlockFenceGate();
     }
 
