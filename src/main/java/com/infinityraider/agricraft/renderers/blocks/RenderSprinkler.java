@@ -65,7 +65,7 @@ public class RenderSprinkler extends RenderBlockAgriCraft {
 		if (te instanceof TileEntitySprinkler) {
 			final TileEntitySprinkler sprinkler = (TileEntitySprinkler) te;
 			final TextureAtlasSprite icon = BaseIcons.IRON_BLOCK.getIcon();
-			tess.rotate(sprinkler.angle, 0, -1, 0);
+			tess.rotateBlock(sprinkler.angle, 0, 1, 0);
 			// Draw Core
 			RenderUtil.drawScaledPrism(tess, MIN_C, MIN_Y, MIN_C, MAX_C, MAX_Y, MAX_C, icon);
 			// Draw Blades

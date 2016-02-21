@@ -18,6 +18,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 
 public class BlockWaterChannel extends AbstractBlockWaterChannel {
 
@@ -114,6 +116,11 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 	@SideOnly(Side.CLIENT)
 	public RenderChannel getRenderer() {
 		return new RenderChannel();
+	}
+	
+	@Override
+	public boolean doesSideBlockRendering(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		return false;
 	}
 
 }

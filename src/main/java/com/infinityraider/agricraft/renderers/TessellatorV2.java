@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.renderers;
 
+import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.TransformationMatrix;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -20,6 +21,9 @@ import java.util.Map;
 @SideOnly(Side.CLIENT)
 public class TessellatorV2 {
 
+	private static final TransformationMatrix MATRIX_BLOCK_CENTER = new TransformationMatrix(.5, .5, .5);
+	private static final TransformationMatrix MATRIX_BLOCK_ORIGIN = new TransformationMatrix(-.5, -.5, -.5);
+
 	private static final Map<WorldRenderer, TessellatorV2> instances = new HashMap<>();
 
 	private final Tessellator tessellator;
@@ -27,33 +31,36 @@ public class TessellatorV2 {
 
 	private final Deque<TransformationMatrix> matrixes;
 
-	private TessellatorV2(Tessellator tessellator) {
-		this.worldRenderer = tessellator.getWorldRenderer();
+	private TessellatorV2(WorldRenderer worldRenderer, Tessellator tessellator) {
+		this.worldRenderer = worldRenderer;
 		this.tessellator = tessellator;
 		this.matrixes = new ArrayDeque<>();
 		this.matrixes.add(new TransformationMatrix());
-		// Leaking...
-		instances.put(worldRenderer, this);
-	}
-
-	private TessellatorV2(WorldRenderer worldRenderer) {
-		this.worldRenderer = worldRenderer;
-		this.tessellator = null;
-		this.matrixes = new ArrayDeque<>();
-		this.matrixes.add(new TransformationMatrix());
-		instances.put(worldRenderer, this);
 	}
 
 	public static TessellatorV2 getInstance() {
-		return getInstance(Tessellator.getInstance()).reset();
-	}
-
-	public static TessellatorV2 getInstance(WorldRenderer renderer) {
-		return instances.containsKey(renderer) ? instances.get(renderer).reset() : new TessellatorV2(renderer);
+		return getInstance(Tessellator.getInstance());
 	}
 
 	public static TessellatorV2 getInstance(Tessellator tessellator) {
-		return instances.containsKey(tessellator.getWorldRenderer()) ? instances.get(tessellator.getWorldRenderer()).reset() : new TessellatorV2(tessellator);
+		final WorldRenderer renderer = tessellator.getWorldRenderer();
+		if (instances.containsKey(renderer)) {
+			return instances.get(renderer).reset();
+		} else {
+			final TessellatorV2 tess = new TessellatorV2(renderer, tessellator);
+			instances.put(renderer, tess);
+			return tess;
+		}
+	}
+
+	public static TessellatorV2 getInstance(WorldRenderer renderer) {
+		if (instances.containsKey(renderer)) {
+			return instances.get(renderer).reset();
+		} else {
+			final TessellatorV2 tess = new TessellatorV2(renderer, null);
+			instances.put(renderer, tess);
+			return tess;
+		}
 	}
 
 	/**
@@ -73,18 +80,16 @@ public class TessellatorV2 {
 	public void draw() {
 		if (tessellator != null) {
 			tessellator.draw();
-		} /*else {
-			this.worldRenderer.finishDrawing();
-		}*/
+		} else {
+			worldRenderer.finishDrawing();
+		}
 	}
 
 	/**
 	 * Sets draw mode in the worldRenderer to draw quads.
 	 */
 	public void startDrawingQuads() {
-		if (tessellator != null) {
-			worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-		}
+		worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 	}
 
 	/**
@@ -127,6 +132,39 @@ public class TessellatorV2 {
 		this.matrixes.getFirst().multiplyRightWith(new TransformationMatrix(angle, x, y, z));
 	}
 
+	/*
+	 * Rotate around block center.
+	 */
+	public void rotateBlock(final double angle, final double x, final double y, final double z) {
+		final TransformationMatrix tm = this.matrixes.getFirst();
+		tm.multiplyRightWith(MATRIX_BLOCK_CENTER);
+		tm.multiplyRightWith(new TransformationMatrix(angle, x, y, z));
+		tm.multiplyRightWith(MATRIX_BLOCK_ORIGIN);
+	}
+
+	/*
+	 * Rotate around block center. 
+	 */
+	public void rotateBlock(final AgriForgeDirection dir) {
+		switch (dir) {
+			case EAST:
+				this.rotateBlock(90, 0, 1, 0);
+				break;
+			case SOUTH:
+				this.rotateBlock(180, 0, 1, 0);
+				break;
+			case WEST:
+				this.rotateBlock(270, 0, 1, 0);
+				break;
+			case UP:
+				this.rotateBlock(90, 1, 0, 0);
+				break;
+			case DOWN:
+				this.rotateBlock(-90, 1, 0, 0);
+				break;
+		}
+	}
+
 	public void scale(double x, double y, double z) {
 		this.matrixes.getFirst().scale(x, y, z);
 	}
@@ -144,7 +182,7 @@ public class TessellatorV2 {
 	}
 
 	public void setBrightness(int value) {
-		light1 = value >> 16 & 65535;
+		light1 = value >> 16 & 65535; // 0b1111111111111111
 		light2 = value & 65535;
 	}
 
@@ -174,7 +212,7 @@ public class TessellatorV2 {
 		this.setColorRGBA_I(red, green, blue, 255);
 	}
 
-	/**
+	/*
 	 * Sets the RGBA values for the color. Also clamps them to 0-255.
 	 */
 	public void setColorRGBA_I(int red, int green, int blue, int alpha) {
@@ -200,6 +238,8 @@ public class TessellatorV2 {
 	public TessellatorV2 reset() {
 		this.matrixes.clear();
 		this.matrixes.push(new TransformationMatrix());
+		this.setColorRGBA_F(1, 1, 1, 1);
+		this.setBrightness(15 << 24);
 		return this;
 	}
 

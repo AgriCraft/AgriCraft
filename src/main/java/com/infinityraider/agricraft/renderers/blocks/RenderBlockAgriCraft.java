@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -48,22 +49,26 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 	public final void renderTileEntityAt(TileEntityBase te, double x, double y, double z, float partialTicks, int destroyStage) {
 		TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
 		tessellator.setBrightness(te.getBlockType().getMixedBrightnessForBlock(te.getWorld(), te.getPos()));
-		GL11.glPushMatrix();
-		GL11.glTranslated(x, y, z);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+		GlStateManager.pushMatrix();
+		GlStateManager.pushAttrib();
+		GlStateManager.translate(x, y, z);
+		GlStateManager.disableLighting();
+		doRotation(tessellator, te);
 		tessellator.startDrawingQuads();
 		doRenderTileEntity(tessellator, te);
 		tessellator.draw();
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glPopMatrix();
+		GlStateManager.popAttrib();
+		GlStateManager.popMatrix();
 	}
 
 	/* Call from ISBRH */
 	@Override
 	public final boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockPos pos, Block block, IBlockState state, WorldRenderer renderer) {
-		TessellatorV2 tessellator = TessellatorV2.getInstance(renderer);
-		tessellator.setBrightness(block.getMixedBrightnessForBlock(world, pos));
+		final TessellatorV2 tessellator = TessellatorV2.getInstance(renderer);
 		tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
+		tessellator.setBrightness(block.getMixedBrightnessForBlock(world, pos));
+		doRotation(tessellator, world.getTileEntity(pos));
 		doRenderBlock(tessellator, world, block, state, pos);
 		return true;
 	}
@@ -115,6 +120,15 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 	@Override
 	public final boolean shouldRender3D(ItemStack stack) {
 		return true;
+	}
+
+	private static void doRotation(TessellatorV2 tess, TileEntity te) {
+		if (te instanceof TileEntityBase) {
+			final TileEntityBase tb = (TileEntityBase) te;
+			if (tb.isRotatable()) {
+				tess.rotateBlock(tb.getOrientation());
+			}
+		}
 	}
 
 }

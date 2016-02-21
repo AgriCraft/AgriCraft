@@ -119,5 +119,10 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	public EnumWorldBlockLayer getBlockLayer() {
 		return DEFAULT_BLOCK_LAYER;
 	}
+	
+	@Override
+	public boolean isVisuallyOpaque() {
+		return false;
+	}
 
 }
