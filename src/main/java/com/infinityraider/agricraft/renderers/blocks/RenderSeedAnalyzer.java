@@ -26,6 +26,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+/*
+ * TODO: Convert to new Renderer.
+ */
 @SideOnly(Side.CLIENT)
 public class RenderSeedAnalyzer extends RenderBlockBase {
 

@@ -3,7 +3,6 @@
  */
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderWaterPad;
 import java.util.List;
 import net.minecraft.block.Block;
@@ -34,7 +33,7 @@ public abstract class AbstractBlockWaterPad extends BlockBase {
 	
 	@Override
     @SideOnly(Side.CLIENT)
-    public RenderBlockBase getRenderer() {
+    public RenderWaterPad getRenderer() {
         return new RenderWaterPad(this);
     }
 	

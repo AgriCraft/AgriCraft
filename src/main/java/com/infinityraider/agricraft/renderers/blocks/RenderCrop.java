@@ -20,6 +20,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 
+/*
+ * TODO: Convert to new Renderer.
+ */
 @SideOnly(Side.CLIENT)
 public class RenderCrop extends RenderBlockBase {
     public RenderCrop() {
