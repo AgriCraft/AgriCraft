@@ -668,9 +668,8 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public RenderBlockBase getRenderer() {
+    public RenderCrop getRenderer() {
         return new RenderCrop();
-        //return null;
     }
 
     @Override

@@ -21,7 +21,7 @@ public abstract class PlantRenderer {
         if(iconA!=null) {
             TessellatorV2 tessellator = TessellatorV2.getInstance(renderer);
             tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(world, pos));
-            tessellator.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
+            tessellator.translate(pos);
             switch (plant.getRenderMethod()) {
                 case CROSSED:
                     renderCrossPattern(tessellator, iconA, 0);

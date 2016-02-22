@@ -66,7 +66,7 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 	@Override
 	public final boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockPos pos, Block block, IBlockState state, WorldRenderer renderer) {
 		final TessellatorV2 tessellator = TessellatorV2.getInstance(renderer);
-		tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
+		tessellator.translate(pos);
 		tessellator.setBrightness(block.getMixedBrightnessForBlock(world, pos));
 		doRotation(tessellator, world.getTileEntity(pos));
 		doRenderBlock(tessellator, world, block, state, pos);
@@ -90,6 +90,8 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 				tessellator.scale(0.5, 0.5, 0.5);
 				tessellator.translate(0, -0.5, 0);
 				break;
+			case GROUND:
+				LogHelper.debug(stack);
 			default:
 				tessellator.scale(0.5, 0.5, 0.5);
 				tessellator.translate(-1, -.9, 0);

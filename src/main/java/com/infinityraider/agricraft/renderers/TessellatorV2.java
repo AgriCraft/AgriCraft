@@ -13,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.util.BlockPos;
 
 /**
  * This class is to have a Tessellator like the one in 1.7.10 It's also extended
@@ -77,6 +78,10 @@ public class TessellatorV2 {
 	int light1;
 	int light2;
 
+	public WorldRenderer getWorldRenderer() {
+		return worldRenderer;
+	}
+
 	public void draw() {
 		if (tessellator != null) {
 			tessellator.draw();
@@ -121,6 +126,10 @@ public class TessellatorV2 {
 	/**
 	 * Adds a translation to the current coordinate system
 	 */
+	public void translate(BlockPos pos) {
+		this.translate(pos.getX(), pos.getY(), pos.getZ());
+	}
+	
 	public void translate(double x, double y, double z) {
 		this.matrixes.getFirst().multiplyRightWith(new TransformationMatrix(x, y, z));
 	}
