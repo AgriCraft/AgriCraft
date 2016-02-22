@@ -1,13 +1,18 @@
 package com.infinityraider.agricraft.renderers.models;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelSeedAnalyzerBook extends ModelBase {
+	
+	private static final ResourceLocation texture = new ResourceLocation("agricraft:textures/blocks/seedAnalyzerBook.png");
+	
 	public ModelSeedAnalyzerBook() {
 		Book = new ModelRenderer(this, 0, 0);
 		Book.addBox(0F, 0F, 0F, 4, 1, 5, 0F);
@@ -19,6 +24,7 @@ public class ModelSeedAnalyzerBook extends ModelBase {
 	}
 	
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		Minecraft.getMinecraft().renderEngine.bindTexture(this.texture);
 		super.render(entity, f, f1, f2, f3, f4, f5);
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		Book.render(f5);

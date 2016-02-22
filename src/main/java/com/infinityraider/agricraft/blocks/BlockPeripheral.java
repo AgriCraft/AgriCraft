@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
@@ -58,7 +57,7 @@ public class BlockPeripheral extends BlockTileBase {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public RenderBlockBase getRenderer() {
+	public RenderPeripheral getRenderer() {
 		return new RenderPeripheral();
 	}
 
@@ -148,9 +147,9 @@ public class BlockPeripheral extends BlockTileBase {
 
 	@Override
 	public void registerIcons() {
-		this.textureTop = IconUtil.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Top");
-		this.textureSide = IconUtil.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Side");
-		this.textureBottom = IconUtil.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Bottom");
-		this.textureInner = IconUtil.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Inner");
+		this.textureTop = IconUtil.registerIcon("agricraft:blocks/peripheralTop");
+		this.textureSide = IconUtil.registerIcon("agricraft:blocks/peripheralSide");
+		this.textureBottom = IconUtil.registerIcon("agricraft:blocks/peripheralBottom");
+		this.textureInner = IconUtil.registerIcon("agricraft:blocks/peripheralInner");
 	}
 }
