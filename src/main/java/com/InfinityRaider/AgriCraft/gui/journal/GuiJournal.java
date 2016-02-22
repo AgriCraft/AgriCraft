@@ -6,6 +6,7 @@ import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
@@ -163,6 +165,7 @@ public class GuiJournal extends GuiScreen {
         drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
     }
 
+    @SuppressWarnings("unchecked")
     private void drawTextComponent(Component<String> component) {
         if(component != null) {
             float scale = component.scale();
@@ -171,12 +174,13 @@ public class GuiJournal extends GuiScreen {
             String text[] = IOHelper.getLinesArrayFromData(component.getComponent());
             GL11.glScalef(scale, scale, scale);
             for (String paragraph : text) {
-                String[] write = IOHelper.getLinesArrayFromData(IOHelper.splitInLines(this.fontRendererObj, paragraph, 95, scale));
-                for (int i = 0; i < write.length; i++) {
-                    String line = write[i];
-                    int xOffset = component.centered() ? -fontRendererObj.getStringWidth(line) / 2 : 0;
+                List<String> split = this.fontRendererObj.listFormattedStringToWidth(paragraph, 200);
+                for(int i = 0; i < split.size(); i++) {
+                    String string = split.get(i);
+                    int xOffset = component.centered() ? -fontRendererObj.getStringWidth(string) / 2 : 0;
                     int yOffset = i * this.fontRendererObj.FONT_HEIGHT;
-                    this.fontRendererObj.drawString(line, (int) (x / scale) + xOffset, (int) (y / scale) + yOffset, 1644054);    //1644054 means black
+                    this.fontRendererObj.drawString(string, (int) (x / scale) + xOffset, (int) (y / scale) + yOffset, 1644054);    //1644054 means black
+
                 }
                 y = y + (int) ((float) this.fontRendererObj.FONT_HEIGHT / scale);
             }
