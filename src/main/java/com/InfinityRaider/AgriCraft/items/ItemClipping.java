@@ -18,6 +18,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemClipping extends ItemAgricraft {
     public ItemClipping() {
         super();
@@ -89,7 +91,8 @@ public class ItemClipping extends ItemAgricraft {
         if(plant == null) {
             return text;
         }
-        ItemStack fruit = plant.getAllFruits().get(0);
-        return fruit.getDisplayName() + " " + text;
+        List<ItemStack> fruits =  plant.getAllFruits();
+        ItemStack fruit = fruits.size() > 0 ? fruits.get(0) : null;
+        return (fruit == null ? "" : fruit.getDisplayName()) + " " + text;
     }
 }
