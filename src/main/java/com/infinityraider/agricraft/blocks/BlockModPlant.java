@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     private IGrowthRequirement growthRequirement;
@@ -312,7 +313,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 	}
 
     @Override
-    public void registerIcons(IIconRegistrar iconRegistrar) {
+    public void registerIcons() {
         icons = new TextureAtlasSprite[4];
         String name = this.getUnlocalizedName();
         int index = name.indexOf(":");
@@ -320,7 +321,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
         index = name.indexOf(".");
         name = index > 0 ? name.substring(index+1) : name;
         for(int i = 1; i <= icons.length; i++) {
-            icons[i-1] = iconRegistrar.registerIcon("agricraft:blocks/"+name+i);
+            icons[i-1] = IconUtil.registerIcon("agricraft:blocks/"+name+i);
         }
     }
 }

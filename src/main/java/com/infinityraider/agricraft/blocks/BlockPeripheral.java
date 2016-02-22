@@ -8,8 +8,8 @@ import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
-import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -147,10 +147,10 @@ public class BlockPeripheral extends BlockTileBase {
 	}
 
 	@Override
-	public void registerIcons(IIconRegistrar iconRegistrar) {
-		this.textureTop = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Top");
-		this.textureSide = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Side");
-		this.textureBottom = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Bottom");
-		this.textureInner = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Inner");
+	public void registerIcons() {
+		this.textureTop = IconUtil.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Top");
+		this.textureSide = IconUtil.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Side");
+		this.textureBottom = IconUtil.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Bottom");
+		this.textureInner = IconUtil.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Inner");
 	}
 }

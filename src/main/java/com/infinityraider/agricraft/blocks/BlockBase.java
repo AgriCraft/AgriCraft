@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
-import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -15,6 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
 import com.infinityraider.agricraft.renderers.renderinghacks.ISimpleBlockRenderingHandler;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 /**
  * The base class for all AgriCraft blocks.
@@ -95,24 +95,20 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 		return DEFAULT_WAILA_STACK;
 	}
 
-	/**
-	 * TODO: Determine if icon ever changes, and switch over to constant field.
-	 *
-	 * @return
-	 */
+	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getIcon() {
 		return icon;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegistrar iconRegistrar) {
+	public void registerIcons() {
 		String name = this.getUnlocalizedName();
 		int index = name.indexOf(":");
 		name = index > 0 ? name.substring(index + 1) : name;
 		index = name.indexOf(".");
 		name = index > 0 ? name.substring(index + 1) : name;
-		this.icon = iconRegistrar.registerIcon("agricraft:blocks/" + name);
+		this.icon = IconUtil.registerIcon("agricraft:blocks/" + name);
 	}
 
 	@Override

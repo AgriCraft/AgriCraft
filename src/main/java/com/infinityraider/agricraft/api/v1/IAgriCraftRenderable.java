@@ -9,11 +9,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public interface IAgriCraftRenderable {
     /**
-     * Called during TextureStitchEvent, only on the client
-     * @param iconRegistrar helper object to register TextureAtlasSprites
+     * Called during TextureStitchEvent, only on the client.
      */
     @SideOnly(Side.CLIENT)
-    void registerIcons(IIconRegistrar iconRegistrar);
+    void registerIcons();
 	
 	@SideOnly(Side.CLIENT)
     public TextureAtlasSprite getIcon();
