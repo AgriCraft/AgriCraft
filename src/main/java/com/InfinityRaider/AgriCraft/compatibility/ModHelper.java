@@ -11,6 +11,7 @@ import com.InfinityRaider.AgriCraft.compatibility.biomesoplenty.BiomesOPlentyHel
 import com.InfinityRaider.AgriCraft.compatibility.bloodmagic.BloodMagicHelper;
 import com.InfinityRaider.AgriCraft.compatibility.bluepower.BluePowerHelper;
 import com.InfinityRaider.AgriCraft.compatibility.botania.BotaniaHelper;
+import com.InfinityRaider.AgriCraft.compatibility.calculator.CalculatorHelper;
 import com.InfinityRaider.AgriCraft.compatibility.chococraft.ChocoCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.computercraft.ComputerCraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.ex_nihilo.ExNihiloHelper;
@@ -22,6 +23,7 @@ import com.InfinityRaider.AgriCraft.compatibility.ganysMods.GanysNetherHelper;
 import com.InfinityRaider.AgriCraft.compatibility.ganysMods.GanysSurfaceHelper;
 import com.InfinityRaider.AgriCraft.compatibility.gardenstuff.GardenStuffHelper;
 import com.InfinityRaider.AgriCraft.compatibility.growthcraft.GrowthCraftRiceHelper;
+import com.InfinityRaider.AgriCraft.compatibility.harderwildlife.HarderWildLifeHelper;
 import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.harvestthenether.HarvestTheNetherHelper;
 import com.InfinityRaider.AgriCraft.compatibility.hungeroverhaul.HungerOverhaulHelper;
@@ -223,6 +225,7 @@ public abstract class ModHelper {
                 BloodMagicHelper.class,
                 BluePowerHelper.class,
                 BotaniaHelper.class,
+                CalculatorHelper.class,
                 ComputerCraftHelper.class,
                 ChocoCraftHelper.class,
                 EtFuturumHelper.class,
@@ -234,6 +237,7 @@ public abstract class ModHelper {
                 GanysSurfaceHelper.class,
                 GardenStuffHelper.class,
                 GrowthCraftRiceHelper.class,
+                HarderWildLifeHelper.class,
                 HarvestcraftHelper.class,
                 HarvestTheNetherHelper.class,
                 HungerOverhaulHelper.class,

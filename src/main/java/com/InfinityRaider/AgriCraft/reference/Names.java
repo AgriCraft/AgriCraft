@@ -92,6 +92,7 @@ public final class Names {
         public static final String bloodMagic = "AWWayofTime";
         public static final String bluePower = "bluepower";
         public static final String botania = "Botania";
+        public static final String calculator = "Calculator";
         public static final String chococraft = "chococraft";
         public static final String computerCraft = "ComputerCraft";
         public static final String etFuturum = "etfuturum";
@@ -102,6 +103,7 @@ public final class Names {
         public static final String ganysSurface = "ganyssurface";
         public static final String gardenStuff = "GardenCore";
         public static final String growthcraft= "Growthcraft";
+        public static final String harderWildLife = "HarderWildlife";
         public static final String harvestcraft = "harvestcraft";
         public static final String harvestTheNether = "harvestthenether";
         public static final String hungerOverhaul= "HungerOverhaul";
