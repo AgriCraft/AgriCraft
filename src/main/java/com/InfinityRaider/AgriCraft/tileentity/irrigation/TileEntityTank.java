@@ -136,21 +136,31 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
      * Maps the current fluid level into the interval [0, {@value #DISCRETE_MAX}]
      */
     public int getDiscreteFluidLevel() {
+        return getDiscreteFluidLevel(getFluidLevel());
+    }
+
+    public int getDiscreteFluidLevel(int lvl) {
         IMultiBlockPartData data = getMultiBlockData();
         float discreteFactor = DISCRETE_MAX / ((float) SINGLE_CAPACITY * data.sizeX() * data.sizeZ());
-        int discreteFluidLevel = Math.round(discreteFactor * getFluidLevel());
+        int discreteFluidLevel = Math.round(discreteFactor * lvl);
         // This is so the fluid shows up over the bottom...
-        if (discreteFluidLevel < 2 && getFluidLevel() > 0) {
+        if (discreteFluidLevel < 2 && lvl > 0) {
             discreteFluidLevel = 2;
         }
         return discreteFluidLevel;
+
     }
     
     @Override
 	public float getFluidHeight() {
     	return this.getDiscreteFluidLevel();
     }
-    
+
+    @Override
+    public float getFluidHeight(int lvl) {
+        return getDiscreteFluidLevel(lvl);
+    }
+
     @Override
 	public int pushFluid(int amount) {
         if(!worldObj.isRemote && this.canAccept() && amount >= 0) {
