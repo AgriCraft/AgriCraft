@@ -29,7 +29,7 @@ public abstract class TileEntityBase extends TileEntity {
      * The orientation of the block.
      * Defaults to AgriForgeDirection.UNKNOWN;
      */
-    private AgriForgeDirection orientation = AgriForgeDirection.UNKNOWN;
+    protected AgriForgeDirection orientation = AgriForgeDirection.UNKNOWN;
 
     public final int xCoord() {
         return this.getPos().getX();

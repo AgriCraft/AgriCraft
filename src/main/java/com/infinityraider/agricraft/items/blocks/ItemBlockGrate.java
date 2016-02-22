@@ -44,12 +44,12 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
             if (side == EnumFacing.UP || side == EnumFacing.DOWN) {
                 AgriForgeDirection dir = PlayerHelper.getPlayerFacing(player);
                 if (dir == AgriForgeDirection.NORTH || dir == AgriForgeDirection.SOUTH) {
-                    setOffsetAndOrientation(grate, hitZ, (short) 0);
+                    setOffsetAndOrientation(grate, hitZ, AgriForgeDirection.NORTH);
                 } else {
-                    setOffsetAndOrientation(grate, hitX, (short) 1);
+                    setOffsetAndOrientation(grate, hitX, AgriForgeDirection.EAST);
                 }
             } else {
-                setOffsetAndOrientation(grate, hitY, (short) 2);
+                setOffsetAndOrientation(grate, hitY, AgriForgeDirection.DOWN);
             }
             return true;
         } else {
@@ -64,8 +64,8 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
      * @param hit the hit location, on the axis matching the orientation.
      * @param orientation the orientation.
      */
-    private static void setOffsetAndOrientation(TileEntityGrate grate, float hit, short orientation) {
-        grate.setOrientationValue(orientation);
+    private static void setOffsetAndOrientation(TileEntityGrate grate, float hit, AgriForgeDirection orientation) {
+        grate.setOrientation(orientation);
         if (hit <= 0.3333F) {
             grate.setOffSet((short) 0);
         } else if (hit <= 0.6666F) {
@@ -75,4 +75,5 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
         }
         grate.calculateBounds();
     }
+
 }
