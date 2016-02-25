@@ -1,9 +1,9 @@
 package com.InfinityRaider.AgriCraft.farming.mutation.statcalculator;
 
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v2.ICrop;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
-import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import net.minecraft.item.Item;
@@ -15,6 +15,11 @@ import java.util.List;
 public abstract  class StatCalculatorBase extends StatCalculator {
     @Override
     public ISeedStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation) {
+        return result == null ? new PlantStats() : calculateStats(result.getItem(), result.getItemDamage(), input, mutation);
+    }
+
+    @Override
+    public ISeedStats calculateStats(Item result, int resultMeta, List<? extends ICrop> input, boolean mutation) {
         ICrop[] parents = filterParents(input);
         int nrParents = parents.length;
         int nrValidParents = 0;
@@ -22,7 +27,7 @@ public abstract  class StatCalculatorBase extends StatCalculator {
         int[] gain = new int[nrParents];
         int[] strength = new int[nrParents];
         for (int i = 0; i < nrParents; i++) {
-            boolean canInherit = canInheritStats(result.getItem(), result.getItemDamage(), parents[i].getSeedStack().getItem(), parents[i].getSeedStack().getItemDamage());
+            boolean canInherit = canInheritStats(result, resultMeta, parents[i].getSeedStack().getItem(), parents[i].getSeedStack().getItemDamage());
             if (canInherit) {
                 nrValidParents = nrValidParents + 1;
             }
@@ -66,7 +71,7 @@ public abstract  class StatCalculatorBase extends StatCalculator {
         }
         boolean b = child==seed && childMeta==seedMeta;
         if(!b) {
-            for(Mutation mutation: MutationHandler.getMutationsFromChild(child, childMeta)) {
+            for(IMutation mutation: MutationHandler.getInstance().getMutationsFromChild(child, childMeta)) {
                 if(mutation!=null) {
                     ItemStack parent1Stack = mutation.getParents()[0];
                     ItemStack parent2Stack = mutation.getParents()[1];

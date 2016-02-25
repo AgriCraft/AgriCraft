@@ -5,13 +5,13 @@ import com.InfinityRaider.AgriCraft.api.v1.IFertiliser;
 import com.InfinityRaider.AgriCraft.api.v2.IAdditionalCropData;
 import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v2.ITrowel;
-import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+import com.InfinityRaider.AgriCraft.api.v3.ICrop;
+import com.InfinityRaider.AgriCraft.api.v3.ICrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.blocks.BlockCrop;
 import com.InfinityRaider.AgriCraft.compatibility.applecore.AppleCoreHelper;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
-import com.InfinityRaider.AgriCraft.farming.mutation.CrossOverResult;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationEngine;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
@@ -216,9 +216,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     /** spread the weed */
     @Override
     public void spreadWeed() {
-        List<TileEntityCrop> neighbours = this.getNeighbours();
-        for(TileEntityCrop crop:neighbours) {
-            if(crop!=null && (!crop.weed) && Math.random()<crop.getWeedSpawnChance()) {
+        List<ICrop> neighbours = this.getNeighbours();
+        for(ICrop crop : neighbours) {
+            if(crop!=null && (!crop.hasWeed()) && Math.random() < this.getWeedSpawnChance(crop)) {
                 crop.spawnWeed();
                 break;
             }
@@ -241,12 +241,12 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public void clearWeed() {updateWeed(0);}
 
     //weed spawn chance
-    private double getWeedSpawnChance() {
+    private double getWeedSpawnChance(ICrop crop) {
         if(this.hasPlant()) {
-            return ConfigurationHandler.weedsWipePlants ? ((double) (10 - getStrength())) / 10 : 0;
+            return ConfigurationHandler.weedsWipePlants ? ((double) (10 - crop.getStrength())) / 10 : 0;
         }
         else {
-            return this.weed ? 0 : 1;
+            return crop.hasWeed() ? 0 : 1;
         }
     }
 
@@ -421,17 +421,18 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     public void  crossOver() {mutationEngine.executeCrossOver();}
 
     /** Called by the mutation engine to apply the result of a cross over */
-    public void applyCrossOverResult(CrossOverResult result) {
+    public void applyCrossOverResult(ICrossOverResult result, ISeedStats stats) {
         crossCrop = false;
-        setPlant(result.getGrowth(), result.getGain(), result.getStrength(), false, result.getSeed(), result.getMeta());
+        setPlant(stats.getGrowth(), stats.getGain(), stats.getStrength(), false, result.getSeed(), result.getMeta());
     }
 
     /**
      * @return a list with all neighbours of type <code>TileEntityCrop</code> in the
      *          NORTH, SOUTH, EAST and WEST direction
      */
-    public List<TileEntityCrop> getNeighbours() {
-        List<TileEntityCrop> neighbours = new ArrayList<TileEntityCrop>();
+    @Override
+    public List<ICrop> getNeighbours() {
+        List<ICrop> neighbours = new ArrayList<ICrop>();
         addNeighbour(neighbours, ForgeDirection.NORTH);
         addNeighbour(neighbours, ForgeDirection.SOUTH);
         addNeighbour(neighbours, ForgeDirection.EAST);
@@ -439,7 +440,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         return neighbours;
     }
 
-    private void addNeighbour(List<TileEntityCrop> neighbours, ForgeDirection direction) {
+    private void addNeighbour(List<ICrop> neighbours, ForgeDirection direction) {
         TileEntity te = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
         if (te == null || !(te instanceof TileEntityCrop)) {
             return;
@@ -448,10 +449,11 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     }
 
     /** @return a list with only mature neighbours of type <code>TileEntityCrop</code> */
-    public List<TileEntityCrop> getMatureNeighbours() {
-        List<TileEntityCrop> neighbours = getNeighbours();
-        for (Iterator<TileEntityCrop> iterator = neighbours.iterator(); iterator.hasNext(); ) {
-            TileEntityCrop crop = iterator.next();
+    @Override
+    public List<ICrop> getMatureNeighbours() {
+        List<ICrop> neighbours = getNeighbours();
+        for (Iterator<ICrop> iterator = neighbours.iterator(); iterator.hasNext(); ) {
+            ICrop crop = iterator.next();
             if (!crop.hasPlant() || !crop.isMature()) {
                 iterator.remove();
             }

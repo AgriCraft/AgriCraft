@@ -1,5 +1,6 @@
 package com.InfinityRaider.AgriCraft.network;
 
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -19,7 +20,7 @@ public class MessageSyncMutation extends MessageAgriCraft {
     public MessageSyncMutation() {
     }
 
-    public MessageSyncMutation(Mutation mutation, boolean last) {
+    public MessageSyncMutation(IMutation mutation, boolean last) {
         this.parent1 = mutation.getParents()[0];
         this.parent2 = mutation.getParents()[1];
         this.result = mutation.getResult();
@@ -27,7 +28,7 @@ public class MessageSyncMutation extends MessageAgriCraft {
         this.last = last;
     }
 
-    private Mutation getMutation() {
+    private IMutation getMutation() {
         return new Mutation(result, parent1, parent2, (int) (100*chance));
     }
 
@@ -52,7 +53,7 @@ public class MessageSyncMutation extends MessageAgriCraft {
     public static class MessageHandler implements IMessageHandler<MessageSyncMutation, IMessage> {
         @Override
         public IMessage onMessage(MessageSyncMutation message, MessageContext ctx) {
-            MutationHandler.syncFromServer(message.getMutation(), message.last);
+            MutationHandler.getInstance().syncFromServer(message.getMutation(), message.last);
             return null;
         }
     }

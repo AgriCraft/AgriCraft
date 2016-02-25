@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.compatibility.minetweaker;
 
-
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
@@ -8,7 +8,6 @@ import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.minecraft.MineTweakerMC;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -54,7 +53,7 @@ public class SeedMutation {
 
         @Override
         public void apply() {
-            MutationHandler.add(mutation);
+            MutationHandler.getInstance().add(mutation);
         }
 
         @Override
@@ -64,7 +63,7 @@ public class SeedMutation {
 
         @Override
         public void undo() {
-            MutationHandler.remove(mutation);
+            MutationHandler.getInstance().remove(mutation);
         }
 
         @Override
@@ -92,7 +91,7 @@ public class SeedMutation {
     private static class RemoveAction implements IUndoableAction {
 
         private final ItemStack result;
-        private List<Mutation> removedMutations = new ArrayList<Mutation>();
+        private List<IMutation> removedMutations = new ArrayList<IMutation>();
 
         public RemoveAction(ItemStack result) {
             this.result = result;
@@ -100,7 +99,7 @@ public class SeedMutation {
 
         @Override
         public void apply() {
-            removedMutations = MutationHandler.removeMutationsByResult(result);
+            removedMutations = MutationHandler.getInstance().removeMutationsByResult(result);
         }
 
         @Override
@@ -110,7 +109,7 @@ public class SeedMutation {
 
         @Override
         public void undo() {
-            MutationHandler.addAll(removedMutations);
+            MutationHandler.getInstance().addAll(removedMutations);
         }
 
         @Override

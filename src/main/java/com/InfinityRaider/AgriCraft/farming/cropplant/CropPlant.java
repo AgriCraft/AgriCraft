@@ -3,7 +3,7 @@ package com.InfinityRaider.AgriCraft.farming.cropplant;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
 import com.InfinityRaider.AgriCraft.api.v2.IAdditionalCropData;
 import com.InfinityRaider.AgriCraft.api.v2.ICrop;
-import com.InfinityRaider.AgriCraft.api.v2.ICropPlant;
+import com.InfinityRaider.AgriCraft.api.v3.ICropPlant;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -50,6 +50,7 @@ public abstract class CropPlant implements ICropPlant {
      * Gets the growth rate for this CropPlant, used in calculations on growth tick
      * @return the growth rate
      */
+    @Override
     public final int getGrowthRate() {
     	int tier = getTier();
     	
@@ -70,6 +71,7 @@ public abstract class CropPlant implements ICropPlant {
      * 
      * @return the tier of the seed.
      */
+    @Override
     public final int getTier() {
         return tier;
     }
@@ -77,6 +79,7 @@ public abstract class CropPlant implements ICropPlant {
     /**
      * Sets the tier for this crop plant
      */
+    @Override
     public final void setTier(int tier) {
         tier = tier >= Constants.GROWTH_TIER.length ? Constants.GROWTH_TIER.length-1 : tier;
         tier = tier <= 0 ? 1 : tier;
@@ -85,11 +88,13 @@ public abstract class CropPlant implements ICropPlant {
     }
 
     /** Gets the spread chance in percent for this plant */
+    @Override
     public final int getSpreadChance() {
         return spreadChance;
     }
 
     /** Sets the spread chance in percent for this plant */
+    @Override
     public final void setSpreadChance(int spreadChance) {
         this.spreadChance = spreadChance;
     }
@@ -97,6 +102,7 @@ public abstract class CropPlant implements ICropPlant {
     /**
      * @return if the plant is blacklisted
      */
+    @Override
     public final boolean isBlackListed() {
         return blackListed;
     }
@@ -105,6 +111,7 @@ public abstract class CropPlant implements ICropPlant {
      * Sets the blacklist status for this plant
      * @param status true if it should be blacklisted, false if not
      */
+    @Override
     public final void setBlackListStatus(boolean status) {
         this.blackListed = status;
     }
@@ -114,7 +121,8 @@ public abstract class CropPlant implements ICropPlant {
      * true means that the seed for this plant can still be planted even though vanilla planting is disabled
      * @return if this ignores the vanilla planting rule or not
      */
-    public final boolean ingoresVanillaPlantingRule() {
+    @Override
+    public final boolean ignoresVanillaPlantingRule() {
         return ignoreVanillaPlantingRule;
     }
 
@@ -123,6 +131,7 @@ public abstract class CropPlant implements ICropPlant {
      * true means that the seed for this plant can still be planted even though vanilla planting is disabled
      * @param value if this ignores the vanilla planting rule or not
      */
+    @Override
     public final void setIgnoreVanillaPlantingRule(boolean value) {
         this.ignoreVanillaPlantingRule = value;
     }

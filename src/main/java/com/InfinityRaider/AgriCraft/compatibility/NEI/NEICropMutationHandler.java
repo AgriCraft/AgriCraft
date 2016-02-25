@@ -5,10 +5,10 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Reference;
@@ -40,7 +40,7 @@ public class NEICropMutationHandler extends AgriCraftNEIHandler {
         RequirementType requiredType;
 
         //constructor
-        public CachedCropMutationRecipe(Mutation mutation) {
+        public CachedCropMutationRecipe(IMutation mutation) {
             ItemStack resultStack = mutation.getResult();
             ItemStack parent1Stack = mutation.getParents()[0];
             ItemStack parent2Stack = mutation.getParents()[1];
@@ -93,8 +93,8 @@ public class NEICropMutationHandler extends AgriCraftNEIHandler {
     @Override
     protected void loadCraftingRecipesDo(String id, Object... results) {
         if(id.equalsIgnoreCase(NEICropMutationHandler.id)) {
-            Mutation[] mutations = MutationHandler.getMutations();
-            for (Mutation mutation:mutations) {
+            IMutation[] mutations = MutationHandler.getInstance().getMutations();
+            for (IMutation mutation:mutations) {
                 ItemStack resultStack = mutation.getResult();
                 ItemStack parent1Stack = mutation.getParents()[0];
                 ItemStack parent2Stack = mutation.getParents()[1];
@@ -116,8 +116,8 @@ public class NEICropMutationHandler extends AgriCraftNEIHandler {
     @Override
     protected void loadCraftingRecipesDo(ItemStack result) {
         if(CropPlantHandler.isValidSeed(result)) {
-            Mutation[] mutations = MutationHandler.getMutationsFromChild(result);
-            for(Mutation mutation:mutations) {
+            IMutation[] mutations = MutationHandler.getInstance().getMutationsFromChild(result);
+            for(IMutation mutation:mutations) {
                 ItemStack parent1Stack = mutation.getParents()[0];
                 ItemStack parent2Stack = mutation.getParents()[1];
                 if (parent1Stack.getItem()!=null && parent2Stack.getItem()!=null) {
@@ -134,8 +134,8 @@ public class NEICropMutationHandler extends AgriCraftNEIHandler {
             return;
         }
         if(CropPlantHandler.isValidSeed(ingredient)) {
-            Mutation[] mutations = MutationHandler.getMutationsFromParent(ingredient);
-            for (Mutation mutation:mutations) {
+            IMutation[] mutations = MutationHandler.getInstance().getMutationsFromParent(ingredient);
+            for (IMutation mutation:mutations) {
                 ItemStack resultStack = mutation.getResult();
                 ItemStack parent1Stack = mutation.getParents()[0];
                 ItemStack parent2Stack = mutation.getParents()[1];
@@ -146,8 +146,8 @@ public class NEICropMutationHandler extends AgriCraftNEIHandler {
         }
         else if(ingredient.getItem() instanceof ItemBlock) {
             BlockWithMeta block = new BlockWithMeta(((ItemBlock) ingredient.getItem()).field_150939_a, ingredient.getItemDamage());
-            Mutation[] mutations = MutationHandler.getMutations();
-            for(Mutation mutation:mutations) {
+            IMutation[] mutations = MutationHandler.getInstance().getMutations();
+            for(IMutation mutation:mutations) {
                 IGrowthRequirement req = CropPlantHandler.getGrowthRequirement(mutation.getResult().getItem(), mutation.getResult().getItemDamage());
                 if(req.isValidSoil(block)) {
                     arecipes.add(new CachedCropMutationRecipe(mutation));

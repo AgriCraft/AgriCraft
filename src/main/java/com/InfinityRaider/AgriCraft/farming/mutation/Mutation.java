@@ -12,6 +12,27 @@ public class Mutation implements IMutation {
     private ItemStack parent2;
     private double chance;
 
+    public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, double chance) {
+        this.result = result;
+        this.parent1 = parent1;
+        this.parent2 = parent2;
+        this.chance = chance;
+    }
+
+    public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
+        this(result, parent1, parent2, 100);
+        CropPlant plant = CropPlantHandler.getPlantFromStack(result);
+        this.chance = plant == null? 0 : ((double) plant.getSpreadChance())/100.0D;
+    }
+
+    //copy constructor
+    public Mutation(IMutation mutation) {
+        this.result = mutation.getResult();
+        this.parent1 = mutation.getParents()[0];
+        this.parent2 = mutation.getParents()[1];
+        this.chance = mutation.getChance();
+    }
+
     public ItemStack getResult() {
         return result.copy();
     }
@@ -33,26 +54,6 @@ public class Mutation implements IMutation {
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, int chance) {
         this(result, parent1, parent2, ((double) chance)/100);
-    }
-
-    public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2, double chance) {
-        this.result = result;
-        this.parent1 = parent1;
-        this.parent2 = parent2;
-        this.chance = chance;
-    }
-
-    public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
-        this(result, parent1, parent2, 100);
-        CropPlant plant = CropPlantHandler.getPlantFromStack(result);
-        this.chance = plant == null? 0 : ((double) plant.getSpreadChance())/100.0D;
-    }
-
-    //copy constructor
-    public Mutation(Mutation mutation) {
-        this.result = mutation.result;
-        this.parent1 = mutation.parent1;
-        this.parent2 = mutation.parent2;
     }
 
     @Override

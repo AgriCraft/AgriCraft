@@ -11,6 +11,7 @@ import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementH
 import com.InfinityRaider.AgriCraft.farming.PlantStats;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAPIv2;
 import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculator;
+import com.InfinityRaider.AgriCraft.farming.mutation.statcalculator.StatCalculatorAPIv2;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
@@ -106,7 +107,7 @@ public class APIimplv2 extends APIimplv1 implements APIv2 {
 
     @Override
     public void setStatCalculator(IStatCalculator calculator) {
-        StatCalculator.setStatCalculator(calculator);
+        StatCalculator.setStatCalculator(new StatCalculatorAPIv2(calculator));
     }
 
     @Override

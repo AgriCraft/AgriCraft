@@ -1,8 +1,11 @@
 package com.InfinityRaider.AgriCraft.farming.mutation;
 
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
+import com.InfinityRaider.AgriCraft.api.v3.ICrop;
+import com.InfinityRaider.AgriCraft.api.v3.IMutationHandler;
+import com.InfinityRaider.AgriCraft.api.v3.IMutationLogic;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
-import com.InfinityRaider.AgriCraft.tileentity.TileEntityCrop;
 import com.InfinityRaider.AgriCraft.utility.IOHelper;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -15,16 +18,24 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class MutationHandler {
+public class MutationHandler implements IMutationHandler {
+    private static final MutationHandler INSTANCE = new MutationHandler();
 
-    private static List<Mutation> mutations;
-    private static boolean isSyncing = false;
+    public static MutationHandler getInstance() {
+        return INSTANCE;
+    }
 
-    public static void init() {
+    private List<IMutation> mutations;
+    private boolean isSyncing = false;
+    private IMutationLogic mutationLogic = MutationLogicAgriCraft.getInstance();
+
+    private MutationHandler() {}
+
+    public  void init() {
         //Read mutations & initialize the mutation arrays
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readMutationData());
         
-        mutations = new ArrayList<Mutation>();
+        mutations = new ArrayList<IMutation>();
         
       //print registered mutations to the log
         LogHelper.info("Registered Mutations:");
@@ -39,10 +50,10 @@ public abstract class MutationHandler {
     }
 
     @SideOnly(Side.CLIENT)
-    public static void syncFromServer(Mutation mutation, boolean finished) {
+    public void syncFromServer(IMutation mutation, boolean finished) {
         if(!isSyncing) {
             LogHelper.info("Receiving mutations from server");
-            mutations = new ArrayList<Mutation>();
+            mutations = new ArrayList<IMutation>();
             isSyncing = true;
         }
         mutations.add(mutation);
@@ -52,7 +63,7 @@ public abstract class MutationHandler {
         }
     }
 
-	private static Mutation readMutation(String input) { //Removed some string concatenation, and de-nested the if statements.
+	private Mutation readMutation(String input) { //Removed some string concatenation, and de-nested the if statements.
 		
 		Mutation mutation = null;
 		String[] data = IOHelper.getData(input);
@@ -100,49 +111,50 @@ public abstract class MutationHandler {
 	}
 
     //gets all the possible crossovers
-    public static Mutation[] getCrossOvers(List<TileEntityCrop> crops) {
-        TileEntityCrop[] parents = MutationHandler.filterParents(crops);
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
+    @Override
+    public IMutation[] getCrossOvers(List<? extends ICrop> crops) {
+        ICrop[] parents = filterParents(crops);
+        ArrayList<IMutation> list = new ArrayList<IMutation>();
         switch (parents.length) {
             case 2:
-                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[1]));
+                list.addAll(getMutationsFromParent(parents[0], parents[1]));
                 break;
             case 3:
-                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[1]));
-                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[2]));
-                list.addAll(MutationHandler.getMutationsFromParent(parents[1], parents[2]));
+                list.addAll(getMutationsFromParent(parents[0], parents[1]));
+                list.addAll(getMutationsFromParent(parents[0], parents[2]));
+                list.addAll(getMutationsFromParent(parents[1], parents[2]));
                 break;
             case 4:
-                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[1]));
-                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[2]));
-                list.addAll(MutationHandler.getMutationsFromParent(parents[0], parents[3]));
-                list.addAll(MutationHandler.getMutationsFromParent(parents[1], parents[2]));
-                list.addAll(MutationHandler.getMutationsFromParent(parents[1], parents[3]));
-                list.addAll(MutationHandler.getMutationsFromParent(parents[2], parents[3]));
+                list.addAll(getMutationsFromParent(parents[0], parents[1]));
+                list.addAll(getMutationsFromParent(parents[0], parents[2]));
+                list.addAll(getMutationsFromParent(parents[0], parents[3]));
+                list.addAll(getMutationsFromParent(parents[1], parents[2]));
+                list.addAll(getMutationsFromParent(parents[1], parents[3]));
+                list.addAll(getMutationsFromParent(parents[2], parents[3]));
                 break;
         }
-        return cleanMutationArray(list.toArray(new Mutation[list.size()]));
+        return cleanMutationArray(list.toArray(new IMutation[list.size()]));
     }
 
     //gets an array of all the possible parents from the array containing all the neighbouring crops
-    private static TileEntityCrop[] filterParents(List<TileEntityCrop> input) {
-        ArrayList<TileEntityCrop> list = new ArrayList<TileEntityCrop>();
-        for(TileEntityCrop crop:input) {
+    private ICrop[] filterParents(List<? extends ICrop> input) {
+        ArrayList<ICrop> list = new ArrayList<ICrop>();
+        for(ICrop crop:input) {
             if (crop != null && crop.isMature()) {
                 list.add(crop);
             }
         }
-        return list.toArray(new TileEntityCrop[list.size()]);
+        return list.toArray(new ICrop[list.size()]);
     }
 
     //finds the product of two parents
-    private static ArrayList<Mutation> getMutationsFromParent(TileEntityCrop parent1, TileEntityCrop parent2) {
+    private ArrayList<IMutation> getMutationsFromParent(ICrop parent1, ICrop parent2) {
         Item seed1 = parent1.getSeedStack().getItem();
         Item seed2 = parent2.getSeedStack().getItem();
         int meta1 = parent1.getSeedStack().getItemDamage();
         int meta2 = parent2.getSeedStack().getItemDamage();
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
-        for (Mutation mutation:mutations) {
+        ArrayList<IMutation> list = new ArrayList<IMutation>();
+        for (IMutation mutation:mutations) {
             ItemStack parent1Stack = mutation.getParents()[0];
             ItemStack parent2Stack = mutation.getParents()[1];
             if ((seed1==parent1Stack.getItem() && seed2==parent2Stack.getItem()) && (meta1==parent1Stack.getItemDamage() && meta2==parent2Stack.getItemDamage())) {
@@ -156,28 +168,30 @@ public abstract class MutationHandler {
     }
 
     //removes null instance from a mutations array
-    private static Mutation[] cleanMutationArray(Mutation[] input) {
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
-        for(Mutation mutation:input) {
+    private IMutation[] cleanMutationArray(IMutation[] input) {
+        ArrayList<IMutation> list = new ArrayList<IMutation>();
+        for(IMutation mutation:input) {
             if (mutation.getResult() != null) {
                 list.add(mutation);
             }
         }
-        return list.toArray(new Mutation[list.size()]);
+        return list.toArray(new IMutation[list.size()]);
     }
 
 
     //public methods to read data from the mutations and parents arrays
 
     //gets all the mutations
-    public static Mutation[] getMutations() {
-        return mutations.toArray(new Mutation[mutations.size()]);
+    @Override
+    public IMutation[] getMutations() {
+        return mutations.toArray(new IMutation[mutations.size()]);
     }
 
     //gets all the mutations this crop can mutate to
-    public static Mutation[] getMutationsFromParent(ItemStack stack) {
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
-        for (Mutation mutation : mutations) {
+    @Override
+    public IMutation[] getMutationsFromParent(ItemStack stack) {
+        ArrayList<IMutation> list = new ArrayList<IMutation>();
+        for (IMutation mutation : mutations) {
             ItemStack parent1Stack = mutation.getParents()[0];
             ItemStack parent2Stack = mutation.getParents()[1];
             if (parent1Stack.getItem() == stack.getItem() && parent1Stack.getItemDamage() == stack.getItemDamage()) {
@@ -191,34 +205,36 @@ public abstract class MutationHandler {
             }
         }
 
-        return list.toArray(new Mutation[list.size()]);
+        return list.toArray(new IMutation[list.size()]);
     }
 
-    public static Mutation[] getMutationsFromChild(Item seed, int meta) {
+    public IMutation[] getMutationsFromChild(Item seed, int meta) {
         return getMutationsFromChild(new ItemStack(seed, 1, meta));
     }
 
     //gets the parents this crop mutates from
-    public static Mutation[] getMutationsFromChild(ItemStack stack) {
-        ArrayList<Mutation> list = new ArrayList<Mutation>();
+    @Override
+    public IMutation[] getMutationsFromChild(ItemStack stack) {
+        ArrayList<IMutation> list = new ArrayList<IMutation>();
         if(CropPlantHandler.isValidSeed(stack)) {
-            for (Mutation mutation:mutations) {
+            for (IMutation mutation:mutations) {
                 if (mutation.getResult().getItem() == stack.getItem() && mutation.getResult().getItemDamage() == stack.getItemDamage()) {
                     list.add(new Mutation(mutation));
                 }
             }
         }
-        return list.toArray(new Mutation[list.size()]);
+        return list.toArray(new IMutation[list.size()]);
     }
 
     /**
      * Removes all mutations where the given parameter is the result of a mutation
      * @return Removed mutations
      */
-    public static List<Mutation> removeMutationsByResult(ItemStack result) {
-        List<Mutation> removedMutations = new ArrayList<Mutation>();
-        for (Iterator<Mutation> iter = mutations.iterator(); iter.hasNext();) {
-            Mutation mutation = iter.next();
+    @Override
+    public List<IMutation> removeMutationsByResult(ItemStack result) {
+        List<IMutation> removedMutations = new ArrayList<IMutation>();
+        for (Iterator<IMutation> iter = mutations.iterator(); iter.hasNext();) {
+           IMutation mutation = iter.next();
             if (mutation.getResult().isItemEqual(result)) {
                 iter.remove();
                 removedMutations.add(mutation);
@@ -228,19 +244,42 @@ public abstract class MutationHandler {
     }
 
     /** Adds the given mutation to the mutations list */
-    public static void add(Mutation mutation) {
+    @Override
+    public void add(IMutation mutation) {
         mutations.add(mutation);
     }
 
     /** Removes the given mutation from the mutations list */
-    public static void remove(Mutation mutation) {
+    @Override
+    public void remove(IMutation mutation) {
         mutations.remove(mutation);
     }
 
     /**
      * Adds all mutations back into the mutation list. Does not perform and validation.
      */
-    public static void addAll(Collection<? extends Mutation> mutationsToAdd) {
+    @Override
+    public void addAll(Collection<? extends IMutation> mutationsToAdd) {
         mutations.addAll(mutationsToAdd);
+    }
+
+    @Override
+    public Mutation createNewMutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
+        return new Mutation(result, parent1, parent2);
+    }
+
+    @Override
+    public Mutation createNewMutation(ItemStack result, ItemStack parent1, ItemStack parent2, double chance) {
+        return new Mutation(result, parent1, parent2, chance);
+    }
+
+    @Override
+    public void setMutationLogic(IMutationLogic logic) {
+        this.mutationLogic = logic;
+    }
+
+    @Override
+    public IMutationLogic getMutationLogic() {
+        return this.mutationLogic;
     }
 }

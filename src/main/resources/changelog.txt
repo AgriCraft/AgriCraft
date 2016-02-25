@@ -3,8 +3,16 @@ Changelog
 1.4.7:
 -ADDED:  Config option to render plants on crop sticks as a TESR (might improve FPS if you have FPS issues with large farms)
 -ADDED:  Config option to disable sounds when interacting with crop sticks (client side only)
+-ADDED:  Compat for Gany's Nether plants
+-ADDED:  Compat for Gany's Surface plants
+-ADDED:  Compat for Et Futurum plants
+-ADDED:  Compat for Calculator plants
+-ADDED:  Compat for Harder Wildlife plants
+-ADDED:  Mutation logic is now exposed to the API and can be changed or overridden
 -CHANGE: Clippings can now be planted on cross crops (similarly to seeds)
 -CHANGE: Removed the compat module for RotaryCraft as Reika will be adding this from his side (you might want to remove all your canola planted on crop sticks before updating)
+-CHANGE: Changed the way strings are split in the gui to have better readability for chinese localizations
+-CHANGE: ICropPlants from other mods registered through the API will now have a higher priority than ICropPlants from other mods registered within Agricraft's code.
 -FIXED:  NPE when scanning the ore dictionary for fruits (Damn you null stacks)
 -FIXED:  Rare NPE when part of a tank multiblock is loaded, while the main component isn't
 -FIXED:  Rare NPE when breaking a tank while raining
@@ -14,6 +22,8 @@ Changelog
 -FIXED:  Sprinkler not spinning when particles are disabled
 -FIXED:  NPE when requesting documentation for the 'isAnalyzed()' method in the peripheral GUI
 -FIXED:  Peripheral dropping a regular seed analyzer
+-FIXED:  A bug where tanks and channels would void/dupe water when setup in certain a configuration
+-FIXED:  Crash where clippings would crash the client if the seed doesn't have any drops.
 
 1.4.6
 -ADDED:  The peripheral should now also work for OpenComputers

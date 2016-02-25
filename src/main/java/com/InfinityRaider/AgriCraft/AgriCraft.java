@@ -103,7 +103,7 @@ public class AgriCraft {
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
-        MutationHandler.init();
+        MutationHandler.getInstance().init();
         NEIHelper.setServerConfigs();
     }
 

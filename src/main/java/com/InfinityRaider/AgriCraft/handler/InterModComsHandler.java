@@ -1,6 +1,6 @@
 package com.InfinityRaider.AgriCraft.handler;
 
-import com.InfinityRaider.AgriCraft.api.v2.ICropPlant;
+import com.InfinityRaider.AgriCraft.api.v3.ICropPlant;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlantAPIv1;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.renderers.player.renderhooks.RenderPlayerHooks;

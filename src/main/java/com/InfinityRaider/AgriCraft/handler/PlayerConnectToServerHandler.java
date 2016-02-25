@@ -1,8 +1,8 @@
 package com.InfinityRaider.AgriCraft.handler;
 
 import com.InfinityRaider.AgriCraft.AgriCraft;
+import com.InfinityRaider.AgriCraft.api.v1.IMutation;
 import com.InfinityRaider.AgriCraft.compatibility.NEI.NEIHelper;
-import com.InfinityRaider.AgriCraft.farming.mutation.Mutation;
 import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncMutation;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
@@ -42,7 +42,7 @@ public class PlayerConnectToServerHandler {
 
     private void syncMutations(EntityPlayerMP player) {
         LogHelper.info("Sending mutations to player: " + player.getDisplayName());
-        Mutation[] mutations = MutationHandler.getMutations();
+        IMutation[] mutations = MutationHandler.getInstance().getMutations();
         for (int i = 0; i < mutations.length; i++) {
             NetworkWrapperAgriCraft.wrapper.sendTo(new MessageSyncMutation(mutations[i], i == mutations.length - 1), player);
         }

@@ -75,7 +75,7 @@ public class PlayerInteractEventHandler {
 
     private static boolean ignoresVanillaPlantingSetting(ItemStack seed) {
         CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
-        return plant != null && plant.ingoresVanillaPlantingRule();
+        return plant != null && plant.ignoresVanillaPlantingRule();
     }
 
     /** Event handler to create water pads */

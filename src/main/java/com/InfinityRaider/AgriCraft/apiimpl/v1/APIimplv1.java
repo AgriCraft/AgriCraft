@@ -474,34 +474,34 @@ public class APIimplv1 implements APIv1 {
 
 	@Override
 	public IMutation[] getRegisteredMutations() {
-		return MutationHandler.getMutations();
+		return MutationHandler.getInstance().getMutations();
 	}
 
 	@Override
 	public IMutation[] getRegisteredMutationsForParent(ItemStack parent) {
-		return MutationHandler.getMutationsFromParent(parent);
+		return MutationHandler.getInstance().getMutationsFromParent(parent);
 	}
 
 	@Override
 	public IMutation[] getRegisteredMutationsForChild(ItemStack child) {
-		return MutationHandler.getMutationsFromChild(child);
+		return MutationHandler.getInstance().getMutationsFromChild(child);
 	}
 
 	@Override
 	public boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
-		MutationHandler.add(new Mutation(result, parent1, parent2));
+		MutationHandler.getInstance().add(new Mutation(result, parent1, parent2));
 		return false;
 	}
 
 	@Override
 	public boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2, double d) {
-		MutationHandler.add(new Mutation(result, parent1, parent2, d));
+		MutationHandler.getInstance().add(new Mutation(result, parent1, parent2, d));
 		return true;
 	}
 
 	@Override
 	public boolean removeMutation(ItemStack result) {
-		MutationHandler.removeMutationsByResult(result);
+		MutationHandler.getInstance().removeMutationsByResult(result);
 		return true;
 	}
 

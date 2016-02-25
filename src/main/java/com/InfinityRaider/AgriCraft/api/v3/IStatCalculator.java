@@ -1,14 +1,12 @@
-package com.InfinityRaider.AgriCraft.api.v2;
+package com.InfinityRaider.AgriCraft.api.v3;
 
-import net.minecraft.item.ItemStack;
+import com.InfinityRaider.AgriCraft.api.v2.*;
+import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+import net.minecraft.item.Item;
 
 import java.util.List;
 
-/**
- * Interface to create custom Stat Calculator logic
- * use API.setStatCalculator(IStatCalculator calculator) to set the active calculator
- */
-public interface IStatCalculator {
+public interface IStatCalculator extends com.InfinityRaider.AgriCraft.api.v2.IStatCalculator {
     /**
      * Calculates the stats for a mutation or spread result
      * @param result an ItemStack containing the seed of the new plant
@@ -16,6 +14,5 @@ public interface IStatCalculator {
      * @param mutation if a mutation occurred, this is false if the plant simply spread to a cross crop
      * @return an ISeedStats object containing the resulting stats
      */
-    @Deprecated
-    ISeedStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation);
+    ISeedStats calculateStats(Item result, int resultMeta, List<? extends ICrop> input, boolean mutation);
 }
