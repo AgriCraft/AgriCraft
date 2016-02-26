@@ -22,6 +22,13 @@ public interface ICrossOverResult {
     int getMeta();
 
     /**
+     * Sets the seed and the meta for this result to the arguments
+     * @param seed the new seed
+     * @param meta the new meta
+     */
+    void setSeedAndMeta(Item seed, int meta);
+
+    /**
      * The value returned from this determines if a mutation was successful.
      * In default Agricraft behaviour this depends on the tier of the resulting seed.
      *
@@ -30,7 +37,19 @@ public interface ICrossOverResult {
     double getChance();
 
     /**
+     * Sets the chance for this result to the argument
+     * @param chance the new chance
+     */
+    void setChance(double chance);
+
+    /**
      * @return an ISeedStats object holding the stats for the new plant obtained through mutation.
      */
     ISeedStats getStats();
+
+    /**
+     * Sets the stats for this result to the argument
+     * @param stats the new stats
+     */
+    void setSeedStats(ISeedStats stats);
 }

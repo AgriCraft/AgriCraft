@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.farming.mutation;
 
 import com.InfinityRaider.AgriCraft.api.v2.ISeedStats;
 import com.InfinityRaider.AgriCraft.api.v3.ICrossOverResult;
+import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import net.minecraft.item.Item;
 
 /**
@@ -9,10 +10,10 @@ import net.minecraft.item.Item;
  * the seed plus meta and the chance to happen.
  */
 public class CrossOverResult implements ICrossOverResult {
-    private final Item seed;
-    private final int meta;
-    private final double chance;
-    private final ISeedStats stats;
+    private Item seed;
+    private int meta;
+    private double chance;
+    private ISeedStats stats;
 
     public CrossOverResult(Item seed, int meta, double chance, ISeedStats stats) {
         this.seed = seed;
@@ -32,11 +33,29 @@ public class CrossOverResult implements ICrossOverResult {
     }
 
     @Override
+    public void setSeedAndMeta(Item seed, int meta) {
+        if(CropPlantHandler.isValidSeed(seed, meta)) {
+            this.seed = seed;
+            this.meta = meta;
+        }
+    }
+
+    @Override
     public double getChance() {
         return chance;
     }
 
+    @Override
+    public void setChance(double chance) {
+        this.chance = chance;
+    }
+
     public ISeedStats getStats() {
         return stats;
+    }
+
+    @Override
+    public void setSeedStats(ISeedStats stats) {
+        this.stats = stats;
     }
 }
