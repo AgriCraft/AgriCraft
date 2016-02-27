@@ -2,7 +2,6 @@ package k4unl.minecraft.Hydraulicraft.api;
 
 import codechicken.multipart.TMultiPart;
 import cpw.mods.fml.common.Loader;
-import k4unl.minecraft.Hydraulicraft.api.recipes.IRecipeHandler;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -17,8 +16,6 @@ public class HCApi {
     }
 
     public static interface IHCApi {
-        IRecipeHandler getRecipeHandler();
-
         ITrolleyRegistrar getTrolleyRegistrar();
 
         IBaseClass getBaseClass(TileEntity target, int maxStorage);
