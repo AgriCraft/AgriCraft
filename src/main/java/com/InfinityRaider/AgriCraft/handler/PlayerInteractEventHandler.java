@@ -85,24 +85,26 @@ public class PlayerInteractEventHandler {
             if (event.world.getBlock(event.x, event.y, event.z) != Blocks.farmland) {
                 return;
             }
-            boolean flag = false;
-            if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSpade) {
-                flag = true;
-            } else if (ModHelper.allowIntegration(Names.Mods.tconstruct) && TinkersConstructHelper.isShovel(event.entityPlayer.getCurrentEquippedItem())) {
-                flag = true;
-            }
-            if (flag) {
-                if (event.world.isRemote) {
-                    denyEvent(event, true);
+            if(!ConfigurationHandler.onlyCreateWaterPadWhileSneaking || event.entityPlayer.isSneaking()) {
+                boolean flag = false;
+                if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemSpade) {
+                    flag = true;
+                } else if (ModHelper.allowIntegration(Names.Mods.tconstruct) && TinkersConstructHelper.isShovel(event.entityPlayer.getCurrentEquippedItem())) {
+                    flag = true;
                 }
-                Block block = event.world.getBlock(event.x, event.y, event.z);
-                event.world.setBlock(event.x, event.y, event.z, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPad, 0, 3);
-                if (!event.entityPlayer.capabilities.isCreativeMode) {
-                    event.entityPlayer.getCurrentEquippedItem().damageItem(1, event.entityPlayer);
-                    event.setResult(Event.Result.ALLOW);
+                if (flag) {
+                    if (event.world.isRemote) {
+                        denyEvent(event, true);
+                    }
+                    Block block = event.world.getBlock(event.x, event.y, event.z);
+                    event.world.setBlock(event.x, event.y, event.z, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPad, 0, 3);
+                    if (!event.entityPlayer.capabilities.isCreativeMode) {
+                        event.entityPlayer.getCurrentEquippedItem().damageItem(1, event.entityPlayer);
+                        event.setResult(Event.Result.ALLOW);
+                    }
+                    event.world.playSoundEffect((double) ((float) event.x + 0.5F), (double) ((float) event.y + 0.5F), (double) ((float) event.z + 0.5F), block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+                    denyEvent(event, false);
                 }
-                event.world.playSoundEffect((double) ((float) event.x + 0.5F), (double) ((float) event.y + 0.5F), (double) ((float) event.z + 0.5F), block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
-                denyEvent(event, false);
             }
         }
     }

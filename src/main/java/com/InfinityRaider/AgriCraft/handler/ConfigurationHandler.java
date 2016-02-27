@@ -46,6 +46,7 @@ public class ConfigurationHandler {
     public static boolean wipeTallGrassDrops;
     public static boolean renderBookInAnalyzer;
     public static boolean registerCropProductsToOreDict;
+    public static boolean onlyCreateWaterPadWhileSneaking;
     //farming
     public static boolean disableVanillaFarming;
     public static double mutationChance;
@@ -143,6 +144,7 @@ public class ConfigurationHandler {
         wipeTallGrassDrops = config.getBoolean("Clear tall grass drops", Categories.CATEGORY_AGRICRAFT, false, "set to true to clear the list of items dropping from tall grass (Will run before adding seeds defined in the grass drops config).");
         renderBookInAnalyzer = config.getBoolean("Render journal in analyzer", Categories.CATEGORY_AGRICRAFT, true, "set to false to not render the journal on the analyzer");
         registerCropProductsToOreDict = config.getBoolean("Register crop products in the ore dict", Categories.CATEGORY_AGRICRAFT, true, "set to false to not register crop products to the ore dictionary if you are experiencing issues with GregTech (note that disabling this will have the side effect that seeds will no longer work with the Phytogenic Insulator");
+        onlyCreateWaterPadWhileSneaking = config.getBoolean("Only create water pad while sneaking", Categories.CATEGORY_AGRICRAFT, false, "set to true to only create water pads while sneaking");
         //farming
         disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", Categories.CATEGORY_FARMING, false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
         mutationChance = (double) config.getFloat("Mutation Chance", Categories.CATEGORY_FARMING, Constants.DEFAULT_MUTATION_CHANCE, 0, 1 , "Define mutation chance (0.0 means no mutations, only spreading and 1.0 means only mutations no spreading");

@@ -9,6 +9,8 @@ Changelog
 -ADDED:  Compat for Calculator plants
 -ADDED:  Compat for Harder Wildlife plants
 -ADDED:  Mutation logic is now exposed to the API and can be changed or overridden
+-ADDED:  Right clicking a water pad with a shovel will now turn it back to dirt
+-ADDED:  A config option to only allow the creation of water pads while sneaking
 -CHANGE: Clippings can now be planted on cross crops (similarly to seeds)
 -CHANGE: Removed the compat module for RotaryCraft as Reika will be adding this from his side (you might want to remove all your canola planted on crop sticks before updating)
 -CHANGE: Changed the way strings are split in the gui to have better readability for chinese localizations

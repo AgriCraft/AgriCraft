@@ -1,5 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
+import com.InfinityRaider.AgriCraft.compatibility.ModHelper;
+import com.InfinityRaider.AgriCraft.compatibility.tconstruct.TinkersConstructHelper;
 import com.InfinityRaider.AgriCraft.reference.Constants;
 import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.renderers.blocks.RenderBlockBase;
@@ -12,6 +14,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -73,6 +76,8 @@ public class BlockWaterPad extends BlockAgriCraft {
             }
             return true;
 
+        } else if (stack.getItem() instanceof ItemSpade || (ModHelper.allowIntegration(Names.Mods.tconstruct) && TinkersConstructHelper.isShovel(stack))) {
+            world.setBlock(x, y, z, Blocks.dirt);
         }
         return false;
     }
