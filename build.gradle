@@ -99,8 +99,20 @@ task apiJar(type: Jar) {
     classifier = 'api'
 }
 
-// Tell build that it needs the API compiled first.
-build.dependsOn apiJar
+//Compile sources jar
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+//Compile deobf jar
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+}
+
+// Tell build that it needs the API, sources jar and deobf jar compiled first.
+build.dependsOn apiJar, sourceJar, deobfJar
 
 // Javadoc
 task mainAgriCraftJavadoc(type: Javadoc) {
