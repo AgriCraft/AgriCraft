@@ -27,6 +27,7 @@ import com.InfinityRaider.AgriCraft.compatibility.harderwildlife.HarderWildLifeH
 import com.InfinityRaider.AgriCraft.compatibility.harvestcraft.HarvestcraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.harvestthenether.HarvestTheNetherHelper;
 import com.InfinityRaider.AgriCraft.compatibility.hungeroverhaul.HungerOverhaulHelper;
+import com.InfinityRaider.AgriCraft.compatibility.hydraulicraft.HydraulicraftHelper;
 import com.InfinityRaider.AgriCraft.compatibility.immersiveengineering.ImmersiveEngineeringHelper;
 import com.InfinityRaider.AgriCraft.compatibility.kitchenmod.KitchenModHelper;
 import com.InfinityRaider.AgriCraft.compatibility.lordoftherings.LordOfTheRingsHelper;
@@ -241,6 +242,7 @@ public abstract class ModHelper {
                 HarvestcraftHelper.class,
                 HarvestTheNetherHelper.class,
                 HungerOverhaulHelper.class,
+                HydraulicraftHelper.class,
                 ImmersiveEngineeringHelper.class,
                 KitchenModHelper.class,
                 LordOfTheRingsHelper.class,

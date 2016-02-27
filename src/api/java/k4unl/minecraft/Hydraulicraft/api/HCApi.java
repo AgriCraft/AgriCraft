@@ -3,7 +3,6 @@ package k4unl.minecraft.Hydraulicraft.api;
 import codechicken.multipart.TMultiPart;
 import cpw.mods.fml.common.Loader;
 import k4unl.minecraft.Hydraulicraft.api.recipes.IRecipeHandler;
-import k4unl.minecraft.Hydraulicraft.lib.config.ModInfo;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -34,7 +33,7 @@ public class HCApi {
      */
     public static void init(IHCApi inst) {
 
-        if (instance == null && Loader.instance().activeModContainer().getModId().equals(ModInfo.ID)) {
+        if (instance == null && Loader.instance().activeModContainer().getModId().equals("HydCraft")) {
             instance = inst;
         } else {
             throw new IllegalStateException("This method should be called from Hydraulicraft only!");

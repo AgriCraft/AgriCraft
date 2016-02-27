@@ -106,7 +106,8 @@ public final class Names {
         public static final String harderWildLife = "HarderWildlife";
         public static final String harvestcraft = "harvestcraft";
         public static final String harvestTheNether = "harvestthenether";
-        public static final String hungerOverhaul= "HungerOverhaul";
+        public static final String hungerOverhaul = "HungerOverhaul";
+        public static final String hydraulicraft = "HydCraft";
         public static final String kitchenMod = "kitchen";
         public static final String lordOfTheRingsMod = "lotr";
         public static final String magicalCrops = "magicalcrops";

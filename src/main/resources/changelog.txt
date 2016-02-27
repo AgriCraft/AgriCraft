@@ -1,6 +1,6 @@
 Changelog
 ---------
-1.4.7:
+1.5.0:
 -ADDED:  Config option to render plants on crop sticks as a TESR (might improve FPS if you have FPS issues with large farms)
 -ADDED:  Config option to disable sounds when interacting with crop sticks (client side only)
 -ADDED:  Compat for Gany's Nether plants
@@ -11,6 +11,7 @@ Changelog
 -ADDED:  Mutation logic is now exposed to the API and can be changed or overridden
 -ADDED:  Right clicking a water pad with a shovel will now turn it back to dirt
 -ADDED:  A config option to only allow the creation of water pads while sneaking
+-ADDED:  Compat for Hydraulicraft harvesters
 -CHANGE: Clippings can now be planted on cross crops (similarly to seeds)
 -CHANGE: Removed the compat module for RotaryCraft as Reika will be adding this from his side (you might want to remove all your canola planted on crop sticks before updating)
 -CHANGE: Changed the way strings are split in the gui to have better readability for chinese localizations
