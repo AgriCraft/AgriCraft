@@ -13,6 +13,7 @@ Changelog
 -CHANGE: Removed the compat module for RotaryCraft as Reika will be adding this from his side (you might want to remove all your canola planted on crop sticks before updating)
 -CHANGE: Changed the way strings are split in the gui to have better readability for chinese localizations
 -CHANGE: ICropPlants from other mods registered through the API will now have a higher priority than ICropPlants from other mods registered within Agricraft's code.
+-CHANGE: Wrote proper javadoc for the ICropPlant API interface
 -FIXED:  NPE when scanning the ore dictionary for fruits (Damn you null stacks)
 -FIXED:  Rare NPE when part of a tank multiblock is loaded, while the main component isn't
 -FIXED:  Rare NPE when breaking a tank while raining

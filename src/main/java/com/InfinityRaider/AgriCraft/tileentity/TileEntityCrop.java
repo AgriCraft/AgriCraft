@@ -112,7 +112,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
                 this.plant = plant;
                 this.stats = new PlantStats(growth, gain, strength, analyzed);
                 this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
-                plant.onSeedPlanted(worldObj, xCoord, yCoord, zCoord);
+                plant.onSeedPlanted(worldObj, xCoord, yCoord, zCoord, this);
                 IAdditionalCropData data = plant.getInitialCropData(worldObj, xCoord, yCoord, zCoord, this);
                 if(data != null) {
                     this.data = data;
@@ -126,6 +126,9 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     @Override
     public void setPlant(int growth, int gain, int strength, boolean analyzed, Item seed, int seedMeta) {
         this.setPlant(growth, gain, strength, analyzed, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
+        if(plant != null) {
+            plant.onSeedPlanted(this.getWorldObj(), xCoord, yCoord, zCoord, this);
+        }
     }
 
     /** clears the plant in the crop */
@@ -137,7 +140,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 3);
         this.markForUpdate();
         if (oldPlant != null) {
-            oldPlant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord);
+            oldPlant.onPlantRemoved(worldObj, xCoord, yCoord, zCoord, this);
         }
         this.data = null;
     }
@@ -183,7 +186,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
 
     /** allow harvesting */
     public boolean allowHarvest(EntityPlayer player) {
-        return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord, player);
+        return hasPlant() && isMature() && plant.onHarvest(worldObj, xCoord, yCoord, zCoord, this, player);
     }
 
     /** returns an ItemStack holding the seed currently planted, initialized with an NBT tag holding the stats */
@@ -406,7 +409,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
         int flag = 2;
         int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
         if(hasPlant()) {
-            flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta) ? 2 : 6;
+            flag = plant.onAllowedGrowthTick(worldObj, xCoord, yCoord, zCoord, meta, this) ? 2 : 6;
         }
         if(ConfigurationHandler.renderCropPlantsAsTESR) {
             flag = 6;

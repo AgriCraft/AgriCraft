@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.farming.cropplant;
 
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v3.ICrop;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.handler.ConfigurationHandler;
 import com.InfinityRaider.AgriCraft.reference.Constants;
@@ -87,7 +88,7 @@ public abstract class CropPlantGeneric extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage, ICrop crop) {
         return true;
     }
 

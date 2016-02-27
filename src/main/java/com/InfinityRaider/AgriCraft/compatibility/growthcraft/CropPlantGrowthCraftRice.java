@@ -2,6 +2,7 @@ package com.InfinityRaider.AgriCraft.compatibility.growthcraft;
 
 import com.InfinityRaider.AgriCraft.api.v1.BlockWithMeta;
 import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v3.ICrop;
 import com.InfinityRaider.AgriCraft.farming.cropplant.CropPlant;
 import com.InfinityRaider.AgriCraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
@@ -80,7 +81,7 @@ public class CropPlantGrowthCraftRice extends CropPlant {
     }
 
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage, ICrop crop) {
         return true;
     }
 

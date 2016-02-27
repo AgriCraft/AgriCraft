@@ -65,12 +65,27 @@ public class CropPlantAPIv1 extends CropPlant {
     }
 
     @Override
+    public boolean onHarvest(World world, int x, int y, int z, com.InfinityRaider.AgriCraft.api.v3.ICrop crop, EntityPlayer player) {
+        return plant.onHarvest(world, x, y, z, player);
+    }
+
+    @Override
     public void onSeedPlanted(World world, int x, int y, int z) {
         plant.onSeedPlanted(world, x, y, z);
     }
 
     @Override
+    public void onSeedPlanted(World world, int x, int y, int z, com.InfinityRaider.AgriCraft.api.v3.ICrop crop) {
+        plant.onSeedPlanted(world, x, y, z);
+    }
+
+    @Override
     public void onPlantRemoved(World world, int x, int y, int z) {
+        plant.onPlantRemoved(world, x, y, z);
+    }
+
+    @Override
+    public void onPlantRemoved(World world, int x, int y, int z, com.InfinityRaider.AgriCraft.api.v3.ICrop crop) {
         plant.onPlantRemoved(world, x, y, z);
     }
 
@@ -93,9 +108,9 @@ public class CropPlantAPIv1 extends CropPlant {
     protected IGrowthRequirement initGrowthRequirement() {
         return GrowthRequirementHandler.getNewBuilder().build();
     }
-    
+
     @Override
-    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage) {
+    public boolean onAllowedGrowthTick(World world, int x, int y, int z, int oldGrowthStage, com.InfinityRaider.AgriCraft.api.v3.ICrop crop) {
         return plant.onAllowedGrowthTick(world, x, y, z, oldGrowthStage);
     }
 
