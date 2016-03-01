@@ -90,11 +90,16 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 				tessellator.scale(0.5, 0.5, 0.5);
 				tessellator.translate(0, -0.5, 0);
 				break;
-			case GROUND:
-				LogHelper.debug(stack);
-			default:
+			case GUI:
 				tessellator.scale(0.5, 0.5, 0.5);
 				tessellator.translate(-1, -.9, 0);
+				break;
+			case GROUND:
+				tessellator.scale(0.5, 0.5, 0.5);
+				tessellator.translate(-0.5, -0.5, -0.5);
+				break;
+			default:
+				tessellator.scale(0.5, 0.5, 0.5);
 				break;
 		}
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);

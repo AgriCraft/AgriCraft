@@ -101,7 +101,7 @@ public final class RenderItemWrapped extends RenderItem {
 	@Override
 	public void renderItem(ItemStack stack, IBakedModel model) {
 		if (stack != null && stack.getItem() != null && isHandled(stack)) {
-			this.renderItem(stack, ItemCameraTransforms.TransformType.NONE);
+			this.renderItem(stack, ItemCameraTransforms.TransformType.GROUND);
 		} else {
 			prevRenderItem.renderItem(stack, model);
 		}
