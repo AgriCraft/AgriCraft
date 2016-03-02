@@ -66,7 +66,9 @@ public final class RenderItemWrapped extends RenderItem {
 	}
 
 	private void renderItemOverride(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
+		GlStateManager.disableLighting();
 		renderingRegistry.getItemRenderer(stack.getItem()).renderItem(stack, transformType);
+		GlStateManager.enableLighting();
 	}
 
 	private boolean isHandled(ItemStack stack) {
@@ -75,7 +77,7 @@ public final class RenderItemWrapped extends RenderItem {
 				&& renderingRegistry.hasRenderingHandler(stack.getItem());
 	}
 
-	/**
+	/*
 	 * Overrides from previous RenderItem instance
 	 */
 	@Override
@@ -100,8 +102,8 @@ public final class RenderItemWrapped extends RenderItem {
 
 	@Override
 	public void renderItem(ItemStack stack, IBakedModel model) {
-		if (stack != null && stack.getItem() != null && isHandled(stack)) {
-			this.renderItem(stack, ItemCameraTransforms.TransformType.GROUND);
+		if (isHandled(stack)) {
+			this.renderItemOverride(stack, ItemCameraTransforms.TransformType.GROUND);
 		} else {
 			prevRenderItem.renderItem(stack, model);
 		}

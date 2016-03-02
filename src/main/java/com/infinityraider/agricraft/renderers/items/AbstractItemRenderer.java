@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.renderinghacks.IItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import org.lwjgl.opengl.GL11;
 
 public abstract class AbstractItemRenderer implements IItemRenderer {
 
@@ -15,7 +14,6 @@ public abstract class AbstractItemRenderer implements IItemRenderer {
 	@Override
 	public final void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
 		TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
-		GL11.glDisable(GL11.GL_LIGHTING);
 		tessellator.startDrawingQuads();
 		switch (transformType) {
 			case NONE:
@@ -34,6 +32,7 @@ public abstract class AbstractItemRenderer implements IItemRenderer {
 				renderItemGui(tessellator, stack);
 				break;
 			case GROUND:
+				tessellator.translate(0, -.25, -.5);
 				renderItemGround(tessellator, stack);
 				break;
 			case FIXED:
@@ -41,7 +40,6 @@ public abstract class AbstractItemRenderer implements IItemRenderer {
 				break;
 		}
 		tessellator.draw();
-		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	protected void renderItemDefault(TessellatorV2 tessellator, ItemStack item) {

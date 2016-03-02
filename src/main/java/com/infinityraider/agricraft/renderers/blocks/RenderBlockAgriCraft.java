@@ -23,7 +23,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<TileEntityBase> implements ISimpleBlockRenderingHandler, IItemRenderer {
@@ -53,7 +52,6 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
 		GlStateManager.translate(x, y, z);
-		GlStateManager.disableLighting();
 		doRotation(tessellator, te);
 		tessellator.startDrawingQuads();
 		doRenderTileEntity(tessellator, te);
@@ -103,11 +101,9 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 				break;
 		}
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-		GL11.glDisable(GL11.GL_LIGHTING);
 		tessellator.startDrawingQuads();
 		doInventoryRender(tessellator, stack);
 		tessellator.draw();
-		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	protected void doInventoryRender(TessellatorV2 tess, ItemStack item) {

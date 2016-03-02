@@ -191,7 +191,7 @@ public class TessellatorV2 {
 	}
 
 	public void setBrightness(int value) {
-		light1 = value >> 16 & 65535; // 0b1111111111111111
+		light1 = value >> 16 & 65535; // 0b1111111111111111 // 0d65535
 		light2 = value & 65535;
 	}
 
