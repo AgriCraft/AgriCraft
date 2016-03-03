@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.renderers.TextureCache;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 
-import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -185,7 +184,7 @@ public abstract class BlockCustomWood extends BlockTileBase {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegistrar iconRegistrar) {
+    public void registerIcons() {
 		// TODO: Determine what is going on here...
 		// This should go elsewhere...
         if(icon == null) {

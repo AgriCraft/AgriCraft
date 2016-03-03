@@ -14,16 +14,14 @@ public class TileEntityFenceGate extends TileEntityCustomWood {
 
     //this saves the data on the tile entity
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
+    protected void writeNBT(NBTTagCompound tag) {
         tag.setBoolean(AgriCraftNBT.FLAG, zAxis);
         tag.setShort(AgriCraftNBT.META, open);
     }
 
     //this loads the saved data for the tile entity
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+    protected void readNBT(NBTTagCompound tag) {
         zAxis = tag.getBoolean(AgriCraftNBT.FLAG);
         open = tag.hasKey(AgriCraftNBT.META)?tag.getShort(AgriCraftNBT.META):0;
     }

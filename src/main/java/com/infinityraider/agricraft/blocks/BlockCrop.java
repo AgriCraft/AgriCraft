@@ -11,11 +11,9 @@ import com.infinityraider.agricraft.items.ItemDebugger;
 import com.infinityraider.agricraft.network.MessageFertiliserApplied;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
-import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
@@ -41,6 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 /**
  * The most important block in the mod.
@@ -668,19 +667,18 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public RenderBlockBase getRenderer() {
+    public RenderCrop getRenderer() {
         return new RenderCrop();
-        //return null;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegistrar iconRegistrar) {
-        super.registerIcons(iconRegistrar);
-        TextureAtlasSprite tex1 = iconRegistrar.registerIcon("agricraft:blocks/cropsWeedTexture1");
-        TextureAtlasSprite tex2 = iconRegistrar.registerIcon("agricraft:blocks/cropsWeedTexture2");
-        TextureAtlasSprite tex3 = iconRegistrar.registerIcon("agricraft:blocks/cropsWeedTexture3");
-        TextureAtlasSprite tex4 = iconRegistrar.registerIcon("agricraft:blocks/cropsWeedTexture4");
+    public void registerIcons() {
+        super.registerIcons();
+        TextureAtlasSprite tex1 = IconUtil.registerIcon("agricraft:blocks/cropsWeedTexture1");
+        TextureAtlasSprite tex2 = IconUtil.registerIcon("agricraft:blocks/cropsWeedTexture2");
+        TextureAtlasSprite tex3 = IconUtil.registerIcon("agricraft:blocks/cropsWeedTexture3");
+        TextureAtlasSprite tex4 = IconUtil.registerIcon("agricraft:blocks/cropsWeedTexture4");
         weedTextures = new TextureAtlasSprite[] {tex1, tex1, tex2, tex2, tex2, tex3, tex3, tex4};
     }
 

@@ -2,9 +2,9 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.api.v1.IIconRegistrar;
+import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -91,7 +91,7 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
     @Override
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getIcon() {
-        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/dirt");
+        return BaseIcons.DIRT.getIcon();
     }
 
     @SideOnly(Side.CLIENT)

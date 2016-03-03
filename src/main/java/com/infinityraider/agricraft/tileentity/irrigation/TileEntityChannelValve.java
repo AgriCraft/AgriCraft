@@ -11,25 +11,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class TileEntityValve extends TileEntityChannel implements IDebuggable{
+public class TileEntityChannelValve extends TileEntityChannel implements IDebuggable{
 	
     private boolean powered = false;
 
-    public TileEntityValve() {
-        super();
-    }
-
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
+    protected final void writeChannelNBT(NBTTagCompound tag) {
         tag.setBoolean(AgriCraftNBT.POWER, powered);
     }
 
     //this loads the saved data for the tile entity
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    protected final void readChannelNBT(NBTTagCompound tag) {
         this.powered = tag.getBoolean(AgriCraftNBT.POWER);
-        super.readFromNBT(tag);
     }
 
     @Override
@@ -44,7 +38,7 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
     }
 
     public void updatePowerStatus() {
-        boolean wasPowered = powered;
+        final boolean wasPowered = powered;
         powered = worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0;
         if (powered != wasPowered) {
             markForUpdate();
@@ -55,6 +49,7 @@ public class TileEntityValve extends TileEntityChannel implements IDebuggable{
     	return powered;
     }
     
+	@Override
     public boolean canAccept() {
     	return super.canAccept() && !powered;
     }

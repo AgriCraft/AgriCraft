@@ -66,11 +66,14 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	private boolean isIconCached = true;
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
+	public final void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
 		tag.setString(AgriCraftNBT.MATERIAL, this.getMaterial().getRegistryName());
 		tag.setInteger(AgriCraftNBT.MATERIAL_META, this.getMaterialMeta());
-		super.writeToNBT(tag);
+		this.writeNBT(tag);
 	}
+	
+	protected void writeNBT(NBTTagCompound tag) {};
 
 	/**
 	 * Loads the CustomWood entity from a NBTTag, as to load from a savefile.
@@ -78,10 +81,13 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 * @param tag the TAG to load the entity data from.
 	 */
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public final void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		this.setMaterial(tag);
+		this.readNBT(tag);
 	}
+	
+	protected void readNBT(NBTTagCompound tag) {};
 
 	/**
 	 * Tests to see if another CustomWood entity is of the same MATERIAL.

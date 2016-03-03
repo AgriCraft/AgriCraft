@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannelFull;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannelFull;
 import net.minecraft.block.state.IBlockState;
@@ -42,7 +41,7 @@ public class BlockWaterChannelFull extends AbstractBlockWaterChannel {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public RenderBlockBase getRenderer() {
+    public RenderChannelFull getRenderer() {
         return new RenderChannelFull();
     }
 

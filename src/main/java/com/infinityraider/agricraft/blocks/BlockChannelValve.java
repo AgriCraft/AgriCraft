@@ -2,9 +2,8 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
-import com.infinityraider.agricraft.renderers.blocks.RenderValve;
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntityValve;
+import com.infinityraider.agricraft.renderers.blocks.RenderChannelValve;
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannelValve;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
@@ -43,6 +42,7 @@ public class BlockChannelValve extends AbstractBlockWaterChannel {
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		super.onBlockPlacedBy(world, pos, state, placer, stack);
         if (!world.isRemote) {
             updatePowerStatus(world, pos);
         }
@@ -50,8 +50,8 @@ public class BlockChannelValve extends AbstractBlockWaterChannel {
 
     private void updatePowerStatus(World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
-        if (te !=null && te instanceof TileEntityValve) {
-            TileEntityValve valve = (TileEntityValve) te;
+        if (te !=null && te instanceof TileEntityChannelValve) {
+            TileEntityChannelValve valve = (TileEntityChannelValve) te;
             valve.updatePowerStatus();
         }
     }
@@ -64,7 +64,7 @@ public class BlockChannelValve extends AbstractBlockWaterChannel {
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new TileEntityValve();
+        return new TileEntityChannelValve();
     }
 
     @Override
@@ -74,8 +74,8 @@ public class BlockChannelValve extends AbstractBlockWaterChannel {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public RenderBlockBase getRenderer() {
-        return new RenderValve();
+    public RenderChannelValve getRenderer() {
+        return new RenderChannelValve();
     }
 
     @Override

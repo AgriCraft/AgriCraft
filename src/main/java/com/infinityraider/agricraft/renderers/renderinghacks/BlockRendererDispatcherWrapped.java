@@ -30,12 +30,13 @@ import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public final class BlockRendererDispatcherWrapped extends BlockRendererDispatcher implements IRenderingRegistry {
+	
     private static BlockRendererDispatcherWrapped INSTANCE;
 
     private final BlockRendererDispatcher prevDispatcher;
 
-    private Map<Block, ISimpleBlockRenderingHandler> blockRenderers;
-    private Map<Item, IItemRenderer> itemRenderers;
+    private final Map<Block, ISimpleBlockRenderingHandler> blockRenderers;
+    private final Map<Item, IItemRenderer> itemRenderers;
 
     public static void init() {
         BlockRendererDispatcher prevDispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();

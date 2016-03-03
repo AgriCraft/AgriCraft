@@ -112,7 +112,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     @Override
     public void setGrowthStage(int stage) {
         if(this.hasPlant() || this.hasWeed()) {
-            stage = Math.max(Math.min(stage, Constants.MATURE), 0);
+            stage &= Constants.MATURE;
             IBlockState state = worldObj.getBlockState(pos);
             state.withProperty(AgriCraftProperties.GROWTHSTAGE, stage);
             this.worldObj.setBlockState(pos, state, 3);

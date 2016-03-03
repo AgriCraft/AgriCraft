@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
+
 	public static final AgriForgeDirection[] VALID_DIRECTIONS = new AgriForgeDirection[]{
 		AgriForgeDirection.NORTH,
 		AgriForgeDirection.SOUTH,
@@ -42,29 +43,29 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	private int lvl;
 	private int lastDiscreteLvl = 0;
 
-	public TileEntityChannel() {
-		super();
-	}
-
 	//this saves the data on the tile entity
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	protected final void writeNBT(NBTTagCompound tag) {
 		if (this.lvl > 0) {
 			tag.setInteger(AgriCraftNBT.LEVEL, this.lvl);
 		}
+		writeChannelNBT(tag);
 	}
+	
+	void writeChannelNBT(NBTTagCompound tag) {};
 
 	//this loads the saved data for the tile entity
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	protected final void readNBT(NBTTagCompound tag) {
 		if (tag.hasKey(AgriCraftNBT.LEVEL)) {
 			this.lvl = tag.getInteger(AgriCraftNBT.LEVEL);
 		} else {
 			this.lvl = 0;
 		}
-		super.readFromNBT(tag);
+		readChannelNBT(tag);
 	}
+	
+	void readChannelNBT(NBTTagCompound tag) {};
 
 	@Override
 	public int getFluidLevel() {
@@ -127,7 +128,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 		return this.lvl > 0;
 	}
 
-
 	public final void updateNeighbours() {
 		if (ticksSinceNeighbourCheck == 0) {
 			findNeighbours();
@@ -137,14 +137,13 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
 	@Override
 	public float getFluidHeight() {
-        return getFluidHeight(getFluidLevel());
-    }
+		return getFluidHeight(getFluidLevel());
+	}
 
-    @Override
-    public float getFluidHeight(int lvl) {
-        return MIN+HEIGHT*((float) lvl)/(ABSOLUTE_MAX);
-    }
-
+	@Override
+	public float getFluidHeight(int lvl) {
+		return MIN + HEIGHT * ((float) lvl) / (ABSOLUTE_MAX);
+	}
 
 	public final void findNeighbours() {
 		for (int i = 0; i < VALID_DIRECTIONS.length; i++) {
@@ -197,7 +196,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 				}
 				//neighbour is a channel: add its volume to the total and increase the COUNT
 				if (component instanceof TileEntityChannel) {
-					if (!(component instanceof TileEntityValve && ((TileEntityValve) component).isPowered())) {
+					if (!(component instanceof TileEntityChannelValve && ((TileEntityChannelValve) component).isPowered())) {
 						totalLvl = totalLvl + ((TileEntityChannel) component).lvl;
 						nr++;
 					}
@@ -246,10 +245,10 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 				for (IIrrigationComponent component : neighbours) {
 					//TODO: cleanup
 					if (component instanceof TileEntityChannel) {
-						if (!(component instanceof TileEntityValve && ((TileEntityValve) component).isPowered())) {
-							int lvl = rest == 0 ? newLvl : newLvl + 1;
+						if (!(component instanceof TileEntityChannelValve && ((TileEntityChannelValve) component).isPowered())) {
+							final int olvl = rest == 0 ? newLvl : newLvl + 1;
 							rest = rest == 0 ? 0 : rest - 1;
-							component.setFluidLevel(lvl);
+							component.setFluidLevel(olvl);
 						}
 					}
 				}

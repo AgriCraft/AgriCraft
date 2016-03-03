@@ -17,7 +17,9 @@ public enum BaseIcons {
 	WATER_FLOW("minecraft:blocks/water_flow"),
 	OAK_PLANKS("minecraft:blocks/planks_oak"),
 	IRON_BLOCK("minecraft:blocks/iron_block"),
-	DEBUG_ICON("agricraft:items/debugger");
+	DEBUG("agricraft:items/debugger"),
+	DIRT("minecraft:blocks/dirt"),
+	VINE("minecraft:blocks/vine");
 	
 	@Nonnull
 	public final String location;

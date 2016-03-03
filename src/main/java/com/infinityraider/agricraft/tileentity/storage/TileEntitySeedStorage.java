@@ -40,8 +40,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
+    protected void writeNBT(NBTTagCompound tag) {
         if(this.lockedSeed!=null) {
             //add the locked SEED
             NBTTagCompound seedTag = new NBTTagCompound();
@@ -75,8 +74,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+    protected void readNBT(NBTTagCompound tag) {
         this.slots = new HashMap<>();
         this.slotsList = new ArrayList<>();
         if (tag.hasKey(AgriCraftNBT.SEED)) {
@@ -160,7 +158,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                     }
                 }
                 if (!success) {
-                    if (this.slots.size() == 0) {
+                    if (this.slots.isEmpty()) {
                         this.setSlotContents(0, stack);
                         success = true;
                     } else {
@@ -282,6 +280,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         return stacks;
     }
 
+	@Override
     public List<SeedStorageSlot> getSlots() {
         if(slotsList == null) {
             slotsList = new ArrayList<>();
@@ -325,7 +324,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public void clearLockedSeed() {
-        if(this.slots.size()==0) {
+        if(this.slots.isEmpty()) {
             this.lockedSeed = null;
             this.lockedSeedMeta = 0;
             this.markForUpdate();

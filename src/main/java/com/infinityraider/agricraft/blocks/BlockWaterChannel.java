@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -19,6 +18,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 
 public class BlockWaterChannel extends AbstractBlockWaterChannel {
 
@@ -113,8 +114,13 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public RenderBlockBase getRenderer() {
+	public RenderChannel getRenderer() {
 		return new RenderChannel();
+	}
+	
+	@Override
+	public boolean doesSideBlockRendering(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		return false;
 	}
 
 }

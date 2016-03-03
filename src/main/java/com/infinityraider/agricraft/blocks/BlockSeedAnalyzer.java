@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.creativetab.AgriCraftTab;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
 import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.api.v1.IIconRegistrar;
@@ -139,7 +138,7 @@ public class BlockSeedAnalyzer extends BlockTileBase {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public RenderBlockBase getRenderer() {
+    public RenderSeedAnalyzer getRenderer() {
         return new RenderSeedAnalyzer();
     }
 

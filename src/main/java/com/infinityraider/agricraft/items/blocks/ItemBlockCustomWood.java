@@ -3,8 +3,8 @@ package com.infinityraider.agricraft.items.blocks;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.utility.NBTHelper;
+import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,11 +36,11 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 
 	@SideOnly(Side.CLIENT)
 	public static TextureAtlasSprite getTextureFromStack(ItemStack stack) {
-		//TODO
-		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+		// TODO: Do something with this...
+		return BaseIcons.OAK_PLANKS.getIcon();
 	}
 
-	/**
+	/*
 	 * Populates the sub-item list.
 	 */
 	@Override
@@ -79,6 +79,10 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 	 * this method final. Some however, has more information they want to add,
 	 * so we add a addMore() method to OVERRIDE in that event.
 	 * </p>
+	 * @param stack
+	 * @param player
+	 * @param list
+	 * @param flag
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -102,6 +106,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 	 * messed up.
 	 *
 	 * @param stack the item in question.
+	 * @return 
 	 */
 	@Override
 	public final String getUnlocalizedName(ItemStack stack) {
@@ -110,6 +115,8 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 
 	/**
 	 * Retrieves metadata, returns what is passed.
+	 * @param meta
+	 * @return 
 	 */
 	@Override
 	public int getMetadata(int meta) {

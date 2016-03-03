@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.api.v1.IAgriCraftSeed;
-import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.blocks.BlockModPlant;
 import com.infinityraider.agricraft.creativetab.AgriCraftTab;
@@ -114,13 +113,13 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
     }
 
     @Override
-    public void registerIcons(IIconRegistrar iconRegistrar) {
+    public void registerIcons() {
         String name = this.getUnlocalizedName();
         int index = name.indexOf(":");
         name = index > 0 ? name.substring(index+1) : name;
         index = name.indexOf(".");
         name = index > 0 ? name.substring(index+1) : name;
-        iconRegistrar.registerIcon("agricraft:items/"+name);
+        IconUtil.registerIcon("agricraft:items/"+name);
     }
 	
 }

@@ -4,12 +4,11 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
 import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
-import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -58,7 +57,7 @@ public class BlockPeripheral extends BlockTileBase {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public RenderBlockBase getRenderer() {
+	public RenderPeripheral getRenderer() {
 		return new RenderPeripheral();
 	}
 
@@ -147,10 +146,10 @@ public class BlockPeripheral extends BlockTileBase {
 	}
 
 	@Override
-	public void registerIcons(IIconRegistrar iconRegistrar) {
-		this.textureTop = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Top");
-		this.textureSide = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Side");
-		this.textureBottom = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Bottom");
-		this.textureInner = iconRegistrar.registerIcon(Block.blockRegistry.getNameForObject(this).toString() + "Inner");
+	public void registerIcons() {
+		this.textureTop = IconUtil.registerIcon("agricraft:blocks/peripheralTop");
+		this.textureSide = IconUtil.registerIcon("agricraft:blocks/peripheralSide");
+		this.textureBottom = IconUtil.registerIcon("agricraft:blocks/peripheralBottom");
+		this.textureInner = IconUtil.registerIcon("agricraft:blocks/peripheralInner");
 	}
 }

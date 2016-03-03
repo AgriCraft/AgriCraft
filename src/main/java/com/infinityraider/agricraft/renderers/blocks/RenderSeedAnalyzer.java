@@ -4,42 +4,34 @@ import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzerBook;
 import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+/*
+ * TODO: Convert to new Renderer.
+ */
 @SideOnly(Side.CLIENT)
-public class RenderSeedAnalyzer extends RenderBlockBase {
+public class RenderSeedAnalyzer extends RenderBlockAgriCraft {
 
-	private final ResourceLocation texture;
-	private final ResourceLocation bookTexture;
 	private final ModelSeedAnalyzer modelSeedAnalyzer;
 	private final ModelSeedAnalyzerBook modelBook;
 	//dummy TileEntity for inventory rendering
 	private final TileEntitySeedAnalyzer seedAnalyzerDummy;
 
 	public RenderSeedAnalyzer() {
-		super(AgriCraftBlocks.blockSeedAnalyzer, new TileEntitySeedAnalyzer(), true);
-		this.texture = new ResourceLocation(Reference.MOD_ID + ":textures/blocks/seedAnalyzer.png");
-		this.bookTexture = new ResourceLocation(Reference.MOD_ID + ":textures/blocks/seedAnalyzerBook.png");
+		super(AgriCraftBlocks.blockSeedAnalyzer, new TileEntitySeedAnalyzer(), true, true, false);
 		this.modelSeedAnalyzer = new ModelSeedAnalyzer();
 		this.modelBook = new ModelSeedAnalyzerBook();
 		seedAnalyzerDummy = new TileEntitySeedAnalyzer();
@@ -47,35 +39,39 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
 	}
 
 	@Override
-	protected void doInventoryRender(TessellatorV2 tessellator, Block block, ItemStack item, ItemCameraTransforms.TransformType transformType) {
+	protected void doInventoryRender(TessellatorV2 tess, ItemStack item) {
 		GL11.glPushMatrix();
 		GL11.glScalef(0.5F, 0.5F, 0.5F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		this.doWorldRender(tessellator, Minecraft.getMinecraft().theWorld, 0, 0, 0, null, AgriCraftBlocks.blockSeedAnalyzer, null, seedAnalyzerDummy, 0, 0, null, false);
+		this.doRenderTileEntity(tess, seedAnalyzerDummy);
 		GL11.glPopMatrix();
 	}
 
+	/**
+	 * Much Hack. Very Bad.
+	 *
+	 * @param tess
+	 * @param te
+	 */
 	@Override
-	protected boolean doWorldRender(TessellatorV2 tessellator, IBlockAccess world, double x, double y, double z, BlockPos pos, Block block, IBlockState state, TileEntity tile, float partialTicks, int destroyStage, WorldRenderer renderer, boolean callFromTESR) {
-		if (!(tile instanceof TileEntitySeedAnalyzer)) {
-			return false;
+	protected void doRenderTileEntity(TessellatorV2 tess, TileEntity te) {
+		if (te instanceof TileEntitySeedAnalyzer) {
+			tess.draw();
+			TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) te;
+			//render the model
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0.5F, 1.5F, 0.5F);
+			GL11.glRotatef(180, 0F, 0F, 1F);
+			this.modelSeedAnalyzer.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+			if (analyzer.hasJournal() && ConfigurationHandler.renderBookInAnalyzer) {
+				this.modelBook.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+			}
+			GL11.glPopMatrix();
+			if (analyzer.hasSeed() || analyzer.hasTrowel()) {
+				renderSeed(tess, analyzer);
+			}
+			tess.startDrawingQuads();
 		}
-		TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) tile;
-		//render the model
-		GL11.glPushMatrix();
-		GL11.glTranslatef(0.5F, 1.5F, 0.5F);
-		Minecraft.getMinecraft().renderEngine.bindTexture(this.texture);
-		GL11.glRotatef(180, 0F, 0F, 1F);
-		this.modelSeedAnalyzer.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		if (analyzer.hasJournal() && ConfigurationHandler.renderBookInAnalyzer) {
-			Minecraft.getMinecraft().renderEngine.bindTexture(this.bookTexture);
-			this.modelBook.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		}
-		GL11.glPopMatrix();
-		if (analyzer.hasSeed() || analyzer.hasTrowel()) {
-			renderSeed(tessellator, analyzer);
-		}
-		return false;
 	}
 
 	//renders the seed
@@ -102,20 +98,29 @@ public class RenderSeedAnalyzer extends RenderBlockBase {
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
         ItemRenderer.renderItemIn2D(tessellator, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), Constants.UNIT);
 		 */
-		
 		GL11.glTranslatef(8 * Constants.UNIT, 0, 0);
 		GL11.glRotatef(-angle, 0.0F, 1.0F, 0.0F);
 		GL11.glScalef(2, 2, 2);
 		GL11.glPopMatrix();
 	}
 
-	@Override
-	public boolean shouldBehaveAsTESR() {
-		return true;
+	private static void renderBase(TessellatorV2 tess) {
+
+		// Get Icons
+		final TextureAtlasSprite trimIcon = BaseIcons.OAK_PLANKS.getIcon();
+		final TextureAtlasSprite baseIcon = BaseIcons.IRON_BLOCK.getIcon();
+
+		// Render Trimming
+		// Forward-Back
+		RenderUtil.drawScaledPrism(tess, 0, 0, 0, 16, 4, 4, trimIcon);
+		RenderUtil.drawScaledPrism(tess, 0, 0, 12, 16, 4, 4, trimIcon);
+		// Left-Right
+		RenderUtil.drawScaledPrism(tess, 0, 0, 4, 4, 4, 12, trimIcon);
+		RenderUtil.drawScaledPrism(tess, 12, 0, 4, 16, 4, 12, trimIcon);
+
+		// Render base
+		RenderUtil.drawScaledPrism(tess, 4, 0, 4, 12, 0, 12, baseIcon);
+
 	}
 
-	@Override
-	public boolean shouldBehaveAsISBRH() {
-		return false;
-	}
 }

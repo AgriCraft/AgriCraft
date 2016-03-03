@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.utility.icon.IconRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -34,7 +33,7 @@ public class TextureStitchHandler {
     @SubscribeEvent
     public void stitchTextures(TextureStitchEvent.Pre event) {
         for (IAgriCraftRenderable iconRegisterable : getIconRegisterables()) {
-            iconRegisterable.registerIcons(IconRegistrar.getInstance());
+            iconRegisterable.registerIcons();
         }
     }
 }

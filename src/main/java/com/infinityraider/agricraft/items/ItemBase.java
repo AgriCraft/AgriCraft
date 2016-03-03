@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import com.infinityraider.agricraft.creativetab.AgriCraftTab;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -39,8 +38,8 @@ public abstract class ItemBase extends Item implements IAgriCraftRenderable {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegistrar iconRegistrar) {
-        iconRegistrar.registerIcon(this.getRegistryName().replaceFirst(":", ":items/"));
+    public void registerIcons() {
+        IconUtil.registerIcon(this.getRegistryName().replaceFirst(":", ":items/"));
     }
 	
 }
