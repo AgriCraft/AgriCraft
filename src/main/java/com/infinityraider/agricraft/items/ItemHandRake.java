@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.api.v1.IRake;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
-import com.infinityraider.agricraft.utility.RegisterHelper;
 import com.infinityraider.agricraft.utility.WeightedRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -32,10 +31,8 @@ public class ItemHandRake extends ItemBase implements IRake {
 	private static final int IRON_VARIANT_META = 1;
 	private static final int[] dropChance = new int[]{10, 25};
 
-	private static final String[] VARIENTS = { "wood", "iron" };
-
 	public ItemHandRake() {
-		super("hand_rake");
+		super("hand_rake", true, "", "iron");
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 	}
@@ -145,11 +142,6 @@ public class ItemHandRake extends ItemBase implements IRake {
 		public int getWeight(ItemStack stack) {
 			return registry.getWeight(stack);
 		}
-	}
-
-	@Override
-	public void registerItemRenderer() {
-		RegisterHelper.registerItemRenderer(this, VARIENTS);
 	}
 
 }

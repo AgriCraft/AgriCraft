@@ -39,6 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.utility.RegisterHelper;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 /**
@@ -63,6 +64,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         this.minZ = this.minX;
         this.maxY = Constants.UNIT*(Constants.WHOLE - 3);
         this.minY = 0;
+		RegisterHelper.hideModel(this, internalName);
     }
 
     @Override

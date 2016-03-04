@@ -4,18 +4,20 @@
 package com.infinityraider.agricraft.models.loaders;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.utility.LogHelper;
 import java.io.IOException;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ItemLayerModel;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
  * @author ryeni
  */
+//@SideOnly(Side.CLIENT)
 public class AgriCraftModelLoaderItem implements ICustomModelLoader {
 	
 	public static final String MODEL_DOMAIN = "agricraftitem:models/item/";

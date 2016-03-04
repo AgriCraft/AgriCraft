@@ -21,7 +21,7 @@ import java.util.List;
 public class ItemJournal extends ItemBase implements IJournal {
 	
     public ItemJournal() {
-        super("journal");
+        super("journal", true);
         this.setMaxStackSize(1);
     }
 

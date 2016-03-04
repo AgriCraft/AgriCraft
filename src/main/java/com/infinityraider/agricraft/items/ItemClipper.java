@@ -15,7 +15,7 @@ import java.util.List;
 public class ItemClipper extends ItemBase implements IClipper {
 	
     public ItemClipper() {
-        super("clipper");
+        super("clipper", true);
         this.setMaxStackSize(1);
     }
 

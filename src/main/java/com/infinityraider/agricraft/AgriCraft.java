@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.*;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.models.loaders.AgriCraftDummyModelLoader;
 import com.infinityraider.agricraft.models.loaders.AgriCraftModelLoaderItem;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
 import com.infinityraider.agricraft.proxy.IProxy;
@@ -79,6 +80,7 @@ public class AgriCraft {
         CompatibilityHandler.getInstance().preInit();
 		if (event.getSide() == Side.CLIENT) {
 			ModelLoaderRegistry.registerLoader(new AgriCraftModelLoaderItem());
+			ModelLoaderRegistry.registerLoader(AgriCraftDummyModelLoader.INSTANCE);
 		}
         LogHelper.debug("Pre-Initialization Complete");
     }

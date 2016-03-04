@@ -21,7 +21,7 @@ import java.util.List;
 public class ItemMagnifyingGlass extends ItemBase {
 	
     public ItemMagnifyingGlass() {
-        super("magnifying_glass");
+        super("magnifying_glass", true);
         this.setMaxStackSize(1);
     }
 

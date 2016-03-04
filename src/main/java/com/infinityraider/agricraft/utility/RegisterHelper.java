@@ -3,6 +3,8 @@ package com.infinityraider.agricraft.utility;
 import com.infinityraider.agricraft.blocks.BlockModPlant;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.items.ItemModSeed;
+import com.infinityraider.agricraft.models.loaders.AgriCraftDummyModelLoader;
+import com.infinityraider.agricraft.models.loaders.StateUnmapper;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -39,16 +41,23 @@ public abstract class RegisterHelper {
     }
 
     public static void registerCrop(BlockModPlant plant, String name) {
-        name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
-        registerBlock(plant, "crop" + name);
+        name = "crop" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+		registerBlock(plant, name);
         if(ConfigurationHandler.registerCropProductsToOreDict) {
             for (ItemStack fruit : plant.products.getAllProducts()) {
-                if (fruit != null && fruit.getItem() != null && !OreDictHelper.hasOreId(fruit, "crop" + name)) {
-                    OreDictionary.registerOre("crop" + name, fruit);
+                if (fruit != null && fruit.getItem() != null && !OreDictHelper.hasOreId(fruit, name)) {
+                    OreDictionary.registerOre(name, fruit);
                 }
             }
         }
     }
+	
+	private static final StateUnmapper UNMAPPER = new StateUnmapper("agricraft:base");
+	
+	public static void hideModel(Block block, String name) {
+		ModelLoader.setCustomStateMapper(block, UNMAPPER);
+		AgriCraftDummyModelLoader.INSTANCE.addModel("agricraft:models/item/" + name);
+	}
 	
 	@SideOnly(Side.CLIENT)
 	public static void registerItemRenderer(Item item, String texture) {
@@ -66,7 +75,7 @@ public abstract class RegisterHelper {
 	public static void registerItemRenderer(Item item, String... varients) {
 		ModelResourceLocation[] locations = new ModelResourceLocation[varients.length];
 		for (int i = 0; i < varients.length; i++) {
-			locations[i] = new ModelResourceLocation(item.getRegistryName() + '_' + varients[i], "inventory");
+			locations[i] = new ModelResourceLocation(item.getRegistryName() + (varients[i].isEmpty() ? "" : ('_' + varients[i])), "inventory");
 		}
 		registerItemRender(item, locations);
 	}
@@ -90,6 +99,8 @@ public abstract class RegisterHelper {
         registerItem(seed, name);
         OreDictionary.registerOre(name, seed);
         OreDictionary.registerOre("listAllseed", seed);
+		AgriCraftDummyModelLoader.INSTANCE.addModel("agricraft:models/item/" + name);
+		hideModel(plant, "crop" + name.substring(4));
     }
 
     public static void removeRecipe(ItemStack stack) {

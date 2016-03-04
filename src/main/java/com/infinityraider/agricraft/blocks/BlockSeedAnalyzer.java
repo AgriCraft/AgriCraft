@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
 import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.api.v1.IIconRegistrar;
+import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -46,6 +47,7 @@ public class BlockSeedAnalyzer extends BlockTileBase {
         this.minZ = this.minX;
         this.maxY = Constants.UNIT * Constants.QUARTER;
         this.minY = 0;
+		RegisterHelper.hideModel(this, internalName);
     }
 
     //creates a new tile entity every time a block of this type is placed

@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 public class ItemClipping extends ItemBase {
 	
     public ItemClipping() {
-        super("clipping");
+        super("clipping", false);
         this.setCreativeTab(null);
     }
 
