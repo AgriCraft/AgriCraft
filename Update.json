@@ -1,0 +1,10 @@
+{
+  "homepage": "http://minecraft.curseforge.com/mc-mods/225635-agricraft/files",
+  "promos": {
+    "1.8.9-latest"     : "2.0.0",
+    "1.8.9-recomended" : "2.0.0"
+  },
+  "1.8.9" : {
+    "2.0.0" : "Updated to Minecraft 1.8.9"
+  }
+}
