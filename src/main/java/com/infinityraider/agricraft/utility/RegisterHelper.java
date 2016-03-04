@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,7 +30,6 @@ public abstract class RegisterHelper {
 
     public static void registerBlock(Block block, String name, Class<? extends ItemBlock> itemClass) {
         block.setUnlocalizedName(Reference.MOD_ID+':'+name);
-        LogHelper.info("registering " + block.getUnlocalizedName());
         if(itemClass!=null) {
             GameRegistry.registerBlock(block, itemClass, name);
         }
@@ -49,6 +49,13 @@ public abstract class RegisterHelper {
             }
         }
     }
+	
+	@SideOnly(Side.CLIENT)
+	public static void registerItemRenderer(Item item, String texture) {
+		final ModelResourceLocation model = new ModelResourceLocation("agricraftitem:" + texture.replace(":", "/"));
+		ModelLoader.setCustomModelResourceLocation(item, 0, model);
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, model);
+	}
 	
 	@SideOnly(Side.CLIENT)
 	public static void registerItemRenderer(Item item) {
@@ -74,7 +81,6 @@ public abstract class RegisterHelper {
 
     public static void registerItem(Item item, String name) {
         item.setUnlocalizedName(Reference.MOD_ID+':'+name);
-        LogHelper.info("registering " + item.getUnlocalizedName());
         GameRegistry.registerItem(item, name);
     }
 

@@ -17,6 +17,7 @@ import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.infinityraider.agricraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.infinityraider.agricraft.utility.LogHelper;
+import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -145,6 +146,9 @@ public class ClientProxy extends CommonProxy {
 			}
 			LogHelper.debug("Registered resource crop renderers!");
 		}
+		
+		// Nuggets
+		OreDictHelper.registerNuggetRenderers();
 
         //villager
         if (!ConfigurationHandler.disableWorldGen && ConfigurationHandler.villagerEnabled) {

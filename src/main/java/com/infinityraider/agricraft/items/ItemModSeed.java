@@ -8,8 +8,6 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.handler.config.MutationConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.renderers.items.RenderableItemRenderer;
-import com.infinityraider.agricraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
@@ -27,11 +25,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	
     @SideOnly(Side.CLIENT)
     private String information;
+	
+	@SideOnly(Side.CLIENT)
+    private final String seedName;
 
     /** This constructor shouldn't be called from anywhere except from the BlockModPlant public constructor, if you create a new BlockModPlant, its contructor will create the seed for you */
     public ItemModSeed(BlockModPlant plant, String information) {
@@ -42,11 +46,12 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         //register seed
         RegisterHelper.registerSeed(this, plant);
+		this.seedName = "seed" + plant.getUnlocalizedName().substring(plant.getUnlocalizedName().indexOf(':')+5);
     }
 	
 	@SideOnly(Side.CLIENT)
     public void registerItemRenderer() {
-        BlockRendererDispatcherWrapped.getInstance().registerItemRenderingHandler(this, RenderableItemRenderer.getInstance());
+		RegisterHelper.registerItemRenderer(this, "agricraft:items/" + seedName);
     }
 
     @Override

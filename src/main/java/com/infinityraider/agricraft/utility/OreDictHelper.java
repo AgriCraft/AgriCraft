@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public abstract class OreDictHelper {
@@ -131,6 +133,15 @@ public abstract class OreDictHelper {
             nuggetMeta.put(oreName, 0);
         }
     }
+	
+	@SideOnly(Side.CLIENT)
+	public static void registerNuggetRenderers() {
+		for (Item e : nuggets.values()) {
+			if (e instanceof ItemNugget) {
+				((ItemNugget) e).registerItemRenderer();
+			}
+		}
+	}
 
     public static ArrayList<ItemStack> getFruitsFromOreDict(ItemStack seed) {
         return getFruitsFromOreDict(seed, true);

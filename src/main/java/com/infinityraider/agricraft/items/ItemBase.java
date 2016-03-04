@@ -8,6 +8,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 
 /**
  * The root Item class for all AgriCraft Items (excluding blockItems).
@@ -27,8 +30,8 @@ public abstract class ItemBase extends Item implements IAgriCraftRenderable {
 
     @SideOnly(Side.CLIENT)
     public void registerItemRenderer() {
-		RegisterHelper.registerItemRenderer(this);
-	}
+		RegisterHelper.registerItemRenderer(this, "agricraft:items/" + internalName);
+    }
 
 	@Override
     @SideOnly(Side.CLIENT)
