@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 public final class CropPlantNone extends CropPlant {
+	
     public static final CropPlantNone NONE = new CropPlantNone();
 
     private CropPlantNone() {}
@@ -27,6 +28,11 @@ public final class CropPlantNone extends CropPlant {
     public ItemStack getSeed() {
         return null;
     }
+
+	@Override
+	public ItemStack getClipping() {
+		return null;
+	}
 
     @Override
     public Block getBlock() {

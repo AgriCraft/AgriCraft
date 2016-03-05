@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.farming.cropplant;
 
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.api.v1.RenderMethod;
+import com.infinityraider.agricraft.items.ItemClipping;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemSeeds;
 import net.minecraftforge.fml.relauncher.Side;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CropPlantOreDict extends CropPlantGeneric {
+	
     public CropPlantOreDict(ItemSeeds seed) {
         super(seed);
     }

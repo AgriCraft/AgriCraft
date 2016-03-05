@@ -51,7 +51,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	
 	@SideOnly(Side.CLIENT)
     public void registerItemRenderer() {
-		RegisterHelper.registerItemRenderer(this, "agricraft:items/" + seedName);
+		RegisterHelper.registerItemRendererTex(this, "agricraft:items/" + seedName);
     }
 
     @Override

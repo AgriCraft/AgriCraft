@@ -25,52 +25,57 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 // I don't know if final or abstract is better...
 public abstract class RegisterHelper {
-	
-    public static void registerBlock(Block block,String name) {
-        RegisterHelper.registerBlock(block, name, null);
-    }
 
-    public static void registerBlock(Block block, String name, Class<? extends ItemBlock> itemClass) {
-        block.setUnlocalizedName(Reference.MOD_ID+':'+name);
-        if(itemClass!=null) {
-            GameRegistry.registerBlock(block, itemClass, name);
-        }
-        else {
-            GameRegistry.registerBlock(block, name);
-        }
-    }
+	public static void registerBlock(Block block, String name) {
+		RegisterHelper.registerBlock(block, name, null);
+	}
 
-    public static void registerCrop(BlockModPlant plant, String name) {
-        name = "crop" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+	public static void registerBlock(Block block, String name, Class<? extends ItemBlock> itemClass) {
+		block.setUnlocalizedName(Reference.MOD_ID + ':' + name);
+		if (itemClass != null) {
+			GameRegistry.registerBlock(block, itemClass, name);
+		} else {
+			GameRegistry.registerBlock(block, name);
+		}
+	}
+
+	public static void registerCrop(BlockModPlant plant, String name) {
+		name = "crop" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
 		registerBlock(plant, name);
-        if(ConfigurationHandler.registerCropProductsToOreDict) {
-            for (ItemStack fruit : plant.products.getAllProducts()) {
-                if (fruit != null && fruit.getItem() != null && !OreDictHelper.hasOreId(fruit, name)) {
-                    OreDictionary.registerOre(name, fruit);
-                }
-            }
-        }
-    }
-	
+		if (ConfigurationHandler.registerCropProductsToOreDict) {
+			for (ItemStack fruit : plant.products.getAllProducts()) {
+				if (fruit != null && fruit.getItem() != null && !OreDictHelper.hasOreId(fruit, name)) {
+					OreDictionary.registerOre(name, fruit);
+				}
+			}
+		}
+	}
+
 	private static final StateUnmapper UNMAPPER = new StateUnmapper("agricraft:base");
-	
+
 	public static void hideModel(Block block, String name) {
 		ModelLoader.setCustomStateMapper(block, UNMAPPER);
 		AgriCraftDummyModelLoader.INSTANCE.addModel("agricraft:models/item/" + name);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
-	public static void registerItemRenderer(Item item, String texture) {
-		final ModelResourceLocation model = new ModelResourceLocation("agricraftitem:" + texture.replace(":", "/"));
+	public static ModelResourceLocation registerItemRendererTex(Item item, String texture) {
+		return registerItemRendererTex(item, "item", texture);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static ModelResourceLocation registerItemRendererTex(Item item, String extension, String texture) {
+		final ModelResourceLocation model = new ModelResourceLocation("agricraft" + extension + ":" + texture.replace(":", "/"));
 		ModelLoader.setCustomModelResourceLocation(item, 0, model);
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, model);
+		return model;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public static void registerItemRenderer(Item item) {
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public static void registerItemRenderer(Item item, String... varients) {
 		ModelResourceLocation[] locations = new ModelResourceLocation[varients.length];
@@ -79,7 +84,7 @@ public abstract class RegisterHelper {
 		}
 		registerItemRender(item, locations);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public static void registerItemRender(Item item, ModelResourceLocation... varients) {
 		ModelBakery.registerItemVariants(item, varients);
@@ -88,30 +93,31 @@ public abstract class RegisterHelper {
 		}
 	}
 
-    public static void registerItem(Item item, String name) {
-        item.setUnlocalizedName(Reference.MOD_ID+':'+name);
-        GameRegistry.registerItem(item, name);
-    }
+	public static void registerItem(Item item, String name) {
+		item.setUnlocalizedName(Reference.MOD_ID + ':' + name);
+		GameRegistry.registerItem(item, name);
+	}
 
 	// TODO: Investigate naming.
-    public static void registerSeed(ItemModSeed seed, BlockModPlant plant) {
-        String name = "seed" + plant.getUnlocalizedName().substring(plant.getUnlocalizedName().indexOf(':')+5);
-        registerItem(seed, name);
-        OreDictionary.registerOre(name, seed);
-        OreDictionary.registerOre("listAllseed", seed);
-		AgriCraftDummyModelLoader.INSTANCE.addModel("agricraft:models/item/" + name);
-		hideModel(plant, "crop" + name.substring(4));
-    }
+	public static void registerSeed(ItemModSeed seed, BlockModPlant plant) {
+		String name = plant.getUnlocalizedName().substring(plant.getUnlocalizedName().indexOf(':') + 5);
+		registerItem(seed, "seed" + name);
+		OreDictionary.registerOre("seed" + name, seed);
+		OreDictionary.registerOre("listAllseed", seed);
+		AgriCraftDummyModelLoader.INSTANCE.addModel("agricraft:models/item/seed" + name);
+		AgriCraftDummyModelLoader.INSTANCE.addModel("agricraft:models/item/clipping_" + name);
+		hideModel(plant, "crop" + name);
+	}
 
-    public static void removeRecipe(ItemStack stack) {
-        ArrayList recipes = (ArrayList) CraftingManager.getInstance().getRecipeList();
-        ItemStack result;
-        for(int i=0;i<recipes.size();i++) {
-            IRecipe recipe = (IRecipe) recipes.get(i);
-            result = recipe.getRecipeOutput();
-            if(result!=null && stack.getItem()==result.getItem() && stack.getItemDamage()==result.getItemDamage()) {
-                recipes.remove(i);
-            }
-        }
-    }
+	public static void removeRecipe(ItemStack stack) {
+		ArrayList recipes = (ArrayList) CraftingManager.getInstance().getRecipeList();
+		ItemStack result;
+		for (int i = 0; i < recipes.size(); i++) {
+			IRecipe recipe = (IRecipe) recipes.get(i);
+			result = recipe.getRecipeOutput();
+			if (result != null && stack.getItem() == result.getItem() && stack.getItemDamage() == result.getItemDamage()) {
+				recipes.remove(i);
+			}
+		}
+	}
 }

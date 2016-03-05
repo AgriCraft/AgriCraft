@@ -13,7 +13,6 @@ public class AgriCraftItems {
     public static Item debugItem;
     public static Item handRake;
     public static Item clipper;
-    public static Item clipping;
 
     public static void init() {
         crops = new ItemCrop();
@@ -29,7 +28,6 @@ public class AgriCraftItems {
         if(ConfigurationHandler.enableClipper) {
             clipper = new ItemClipper();
         }
-        clipping = new ItemClipping();
         LogHelper.debug("Items Registered");
     }
 }

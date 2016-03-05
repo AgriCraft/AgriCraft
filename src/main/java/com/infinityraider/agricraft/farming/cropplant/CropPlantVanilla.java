@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.farming.cropplant;
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.RenderMethod;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.items.ItemClipping;
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -19,9 +20,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CropPlantVanilla extends CropPlant {
-    private BlockCrops plant;
-    private ItemSeeds seed;
-    private String[] textures;
+	
+    private final BlockCrops plant;
+    private final ItemSeeds seed;
+    private final String[] textures;
+	private final ItemClipping clipping;
 
     public CropPlantVanilla(BlockCrops crop, ItemSeeds seed, String textureBase) {
         this.plant = crop;
@@ -30,6 +33,7 @@ public class CropPlantVanilla extends CropPlant {
         for (int i = 0; i < textures.length; i++) {
             textures[i] = "minecraft:blocks/" + textureBase + "_stage_" + i;
         }
+		this.clipping = new ItemClipping(this, textureBase, textures[7]);
     }
 
     @Override
@@ -41,6 +45,11 @@ public class CropPlantVanilla extends CropPlant {
     public ItemStack getSeed() {
         return new ItemStack(seed);
     }
+
+	@Override
+	public ItemStack getClipping() {
+		return new ItemStack(clipping);
+	}
 
     @Override
     public Block getBlock() {
