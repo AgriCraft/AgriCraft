@@ -63,10 +63,10 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     @Override
-    public void tick() {
+    public void update() {
         if(mayAnalyze) {
             if(this.hasSpecimen() && !isSpecimenAnalyzed()) {
-                super.tick();
+                super.update();
             } else {
                 reset();
             }

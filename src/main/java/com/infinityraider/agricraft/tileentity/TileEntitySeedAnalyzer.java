@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -19,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.util.ITickable;
 
 public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
     private static final int[] SLOTS = new int[] {0, 1};
@@ -193,7 +193,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
      * Used to update the progress counter.
      */
     @Override
-    public void tick() {
+    public void update() {
         boolean change = false;
         if(this.isAnalyzing()) {
             //increment progress counter
