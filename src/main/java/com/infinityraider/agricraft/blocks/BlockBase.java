@@ -13,8 +13,8 @@ import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
-import com.infinityraider.agricraft.renderers.renderinghacks.ISimpleBlockRenderingHandler;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
+import com.infinityraider.agricraft.renderers.renderinghacks.IRenderingHandler;
 
 /**
  * The base class for all AgriCraft blocks.
@@ -64,7 +64,7 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	 * @return the block's renderer.
 	 */
 	@SideOnly(Side.CLIENT)
-	public abstract ISimpleBlockRenderingHandler getRenderer();
+	public abstract IRenderingHandler getRenderer();
 
 	/**
 	 * Retrieves the block's ItemBlock class, as a generic class bounded by the

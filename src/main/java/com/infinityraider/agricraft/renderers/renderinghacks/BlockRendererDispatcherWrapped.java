@@ -35,8 +35,8 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
 
     private final BlockRendererDispatcher prevDispatcher;
 
-    private final Map<Block, ISimpleBlockRenderingHandler> blockRenderers;
-    private final Map<Item, IItemRenderer> itemRenderers;
+    private final Map<Block, IRenderingHandler> blockRenderers;
+    private final Map<Item, IRenderingHandler> itemRenderers;
 
     public static void init() {
         BlockRendererDispatcher prevDispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
@@ -58,22 +58,22 @@ public final class BlockRendererDispatcherWrapped extends BlockRendererDispatche
     }
 
     @Override
-    public void registerBlockRenderingHandler(Block block, ISimpleBlockRenderingHandler renderer) {
+    public void registerBlockRenderingHandler(Block block, IRenderingHandler renderer) {
         blockRenderers.put(block, renderer);
     }
 
     @Override
-    public void registerItemRenderingHandler(Item item, IItemRenderer renderer) {
+    public void registerItemRenderingHandler(Item item, IRenderingHandler renderer) {
         itemRenderers.put(item, renderer);
     }
 
     @Override
-    public ISimpleBlockRenderingHandler getRenderingHandler(Block block) {
+    public IRenderingHandler getRenderingHandler(Block block) {
         return blockRenderers.get(block);
     }
 
     @Override
-    public IItemRenderer getItemRenderer(Item item) {
+    public IRenderingHandler getItemRenderer(Item item) {
         return itemRenderers.get(item);
     }
 

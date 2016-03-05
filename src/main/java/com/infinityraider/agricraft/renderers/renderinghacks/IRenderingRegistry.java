@@ -7,15 +7,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface IRenderingRegistry {
-    void registerBlockRenderingHandler(Block block, ISimpleBlockRenderingHandler renderer);
 
-    void registerItemRenderingHandler(Item item, IItemRenderer renderer);
+	void registerBlockRenderingHandler(Block block, IRenderingHandler renderer);
 
-    ISimpleBlockRenderingHandler getRenderingHandler(Block block);
+	void registerItemRenderingHandler(Item item, IRenderingHandler renderer);
 
-    IItemRenderer getItemRenderer(Item item);
+	IRenderingHandler getRenderingHandler(Block block);
 
-    boolean hasRenderingHandler(Block block);
+	IRenderingHandler getItemRenderer(Item item);
 
-    boolean hasRenderingHandler(Item item);
+	boolean hasRenderingHandler(Block block);
+
+	boolean hasRenderingHandler(Item item);
+
 }

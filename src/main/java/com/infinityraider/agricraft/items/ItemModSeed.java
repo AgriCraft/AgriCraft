@@ -25,9 +25,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	
