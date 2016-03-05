@@ -54,8 +54,6 @@ public abstract  class AgriCraftFX extends EntityFX {
         //I'm doing this because else the textures blink and are fucked up and I have no idea how to fix it,
         //if anyone sees this and knows how, let me know please, thanks :D
         TessellatorV2 tessellator = TessellatorV2.getInstance(worldRenderer);
-        tessellator.draw();
-        tessellator.startDrawingQuads();
 
         if(texture != null) {
             float f6 = 0;
@@ -76,8 +74,6 @@ public abstract  class AgriCraftFX extends EntityFX {
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
             super.renderParticle(worldRenderer, entity, partialTicks, f0, f1, f2, f3, f4);
         }
-
-        tessellator.draw();
-        tessellator.startDrawingQuads();
+		
     }
 }

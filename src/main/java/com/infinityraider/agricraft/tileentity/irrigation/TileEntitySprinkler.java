@@ -12,7 +12,6 @@ import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -23,6 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 	
@@ -65,7 +65,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
     }
 
     @Override
-    public void tick() {
+    public void update() {
         if (!worldObj.isRemote) {
             if (this.sprinkle()) {
                 counter = ++counter % ConfigurationHandler.sprinklerGrowthIntervalTicks;
@@ -155,7 +155,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
         counter = (counter+1)%(particleSetting+1);
         if(counter==0) {
             for (int i = 0; i < 4; i++) {
-                float alpha = (this.angle + 90 * i) * ((float) Math.PI) / 180;
+                float alpha = -(this.angle + 90 * i) * ((float) Math.PI) / 180;
                 double xOffset = (4 * Constants.UNIT) * Math.cos(alpha);
                 double zOffset = (4 * Constants.UNIT) * Math.sin(alpha);
                 float radius = 0.3F;
@@ -170,7 +170,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 
     @SideOnly(Side.CLIENT)
     private void spawnLiquidSpray(double xOffset, double zOffset, Vec3 vector) {
-        LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord()+0.5F+xOffset, this.yCoord()+5* Constants.UNIT, this.zCoord()+0.5F+zOffset, 0.3F, 0.7F, vector);
+        LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord()+0.5F+xOffset, this.yCoord()+8*Constants.UNIT, this.zCoord()+0.5F+zOffset, 0.3F, 0.7F, vector);
         Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
     }
 

@@ -115,19 +115,4 @@ public class RenderChannelValve extends RenderChannel {
 		super.renderSide(tess, channel, matIcon, cm, direction);
 	}
 
-	@Override
-	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, AgriForgeDirection direction, float y, TextureAtlasSprite icon) {
-		TileEntityChannelValve valve = (TileEntityChannelValve) channel;
-		// checks if there is a neighboring block that this block can connect to
-		if (channel.hasNeighbourCheck(direction)) {
-			if (valve.isPowered()) {
-				float y2 = valve.getFluidHeight();
-				this.drawWaterEdge(tessellator, direction, y2, y2, icon);
-			} else {
-				super.connectWater(channel, tessellator, direction, y, icon);
-			}
-		}
-
-	}
-
 }

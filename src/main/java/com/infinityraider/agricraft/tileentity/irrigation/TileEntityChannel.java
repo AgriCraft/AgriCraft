@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
@@ -18,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.util.ITickable;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
 
@@ -115,7 +115,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
 	@Override
 	public boolean canConnectTo(IIrrigationComponent component) {
-		return (component instanceof TileEntityTank || component instanceof TileEntityChannel) && this.isSameMaterial((TileEntityCustomWood) component);
+		return (component instanceof TileEntityCustomWood) && this.isSameMaterial((TileEntityCustomWood) component);
 	}
 
 	@Override
@@ -183,7 +183,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
 	//updates the tile entity every tick
 	@Override
-	public void tick() {
+	public void update() {
 		if (!this.worldObj.isRemote) {
 			updateNeighbours();
 			//calculate total fluid lvl and capacity
