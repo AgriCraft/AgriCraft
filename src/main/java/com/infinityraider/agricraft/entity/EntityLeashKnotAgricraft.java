@@ -18,6 +18,7 @@ public class EntityLeashKnotAgricraft extends EntityLeashKnot {
         super(world, pos);
     }
 
+	@Override
     public boolean onValidSurface() {
         return this.worldObj.getBlockState(this.hangingPosition).getBlock() instanceof BlockFence;
     }

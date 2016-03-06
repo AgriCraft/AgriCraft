@@ -15,6 +15,7 @@ public class AppleCoreHelper extends ModHelper {
         super(AgriCraftMods.appleCore);
     }
 
+	@Override
     protected boolean handleGrowthTick() {
         return true;
     }

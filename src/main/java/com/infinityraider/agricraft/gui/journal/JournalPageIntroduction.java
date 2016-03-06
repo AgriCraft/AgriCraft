@@ -24,8 +24,8 @@ public class JournalPageIntroduction extends JournalPage {
 
     @Override
     public ArrayList<Component<String>> getTextComponents() {
-        ArrayList<Component<String>> textComponents = new ArrayList<Component<String>>();
-        textComponents.add(new Component<String>(StatCollector.translateToLocal("agricraft_journal.introduction"), 24, 28, 0.5F));
+        ArrayList<Component<String>> textComponents = new ArrayList<>();
+        textComponents.add(new Component<>(StatCollector.translateToLocal("agricraft_journal.introduction"), 24, 28, 0.5F));
         return textComponents;
     }
 

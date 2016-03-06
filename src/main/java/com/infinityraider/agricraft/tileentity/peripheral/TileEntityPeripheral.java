@@ -149,6 +149,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
         return false;
     }
 
+	@Override
     public String getName() {
         return "agricraft_peripheral";
     }

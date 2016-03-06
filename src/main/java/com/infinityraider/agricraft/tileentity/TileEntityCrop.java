@@ -428,7 +428,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
           NORTH, SOUTH, EAST and WEST DIRECTION
      */
     public List<TileEntityCrop> getNeighbours() {
-        List<TileEntityCrop> neighbours = new ArrayList<TileEntityCrop>();
+        List<TileEntityCrop> neighbours = new ArrayList<>();
         addNeighbour(neighbours, AgriForgeDirection.NORTH);
         addNeighbour(neighbours, AgriForgeDirection.SOUTH);
         addNeighbour(neighbours, AgriForgeDirection.EAST);

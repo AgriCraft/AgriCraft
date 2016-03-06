@@ -60,10 +60,8 @@ public class MutationConfig {
         for(int i = 0 ; i < array.length; i++) {
             array[i] = new SerializableMutation(mutations.get(i));
         }
-        try {
-            Writer writer = new OutputStreamWriter(new FileOutputStream(jsonPath));
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(jsonPath))) {
             gson.toJson(array, writer);
-            writer.close();
         } catch(IOException e) {
             LogHelper.info("Writing default mutations failed");
             LogHelper.printStackTrace(e);

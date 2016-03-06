@@ -26,6 +26,7 @@ public class ItemJournal extends ItemBase implements IJournal {
     }
 
     //this has to return true to make it so the getContainerItem method gets called when this item is used in a recipe
+	@Override
     public boolean hasContainerItem(ItemStack stack) {
         return true;
     }
@@ -81,6 +82,7 @@ public class ItemJournal extends ItemBase implements IJournal {
         return list;
     }
 
+	@Override
     public void addEntry(ItemStack journal, ItemStack newEntry) {
         if(journal==null || journal.getItem()==null || !CropPlantHandler.isValidSeed(newEntry)) {
             return;
@@ -101,6 +103,7 @@ public class ItemJournal extends ItemBase implements IJournal {
         tag.setTag(AgriCraftNBT.DISCOVERED_SEEDS, list);
     }
 
+	@Override
     public boolean isSeedDiscovered(ItemStack journal, ItemStack seed) {
         if(journal==null || journal.getItem()==null || !CropPlantHandler.isValidSeed(seed)) {
             return false;
@@ -108,6 +111,7 @@ public class ItemJournal extends ItemBase implements IJournal {
         return NBTHelper.listContainsStack(getDiscoveredSeedsTaglist(journal), seed);
     }
 
+	@Override
     public ArrayList<ItemStack> getDiscoveredSeeds(ItemStack journal) {
         ArrayList<ItemStack> seeds = new ArrayList<>();
         NBTTagCompound tag = null;

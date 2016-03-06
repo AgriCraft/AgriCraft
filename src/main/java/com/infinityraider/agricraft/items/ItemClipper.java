@@ -32,6 +32,7 @@ public class ItemClipper extends ItemBase implements IClipper {
     public void onClipperUsed(World world, BlockPos pos, IBlockState state, EntityPlayer player) {}
 
     @SideOnly(Side.CLIENT)
+	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
         if (stack == null || stack.getItem() == null) {
             list.add("ERROR");

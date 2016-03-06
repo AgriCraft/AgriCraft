@@ -6,6 +6,7 @@ public class StatCalculatorHardcore extends StatCalculatorBase {
     /**
      * calculates the new stats based on an input stat, the nr of neighbours and a divisor
      */
+	@Override
     protected int calculateStats(int input, int neighbours, int divisor) {
         /*
         1 parent: 3/4 decrement, 1/4 nothing

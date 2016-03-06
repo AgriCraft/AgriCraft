@@ -26,12 +26,13 @@ public class EntityAIClearWeeds extends EntityAIBase {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+	@Override
     public boolean continueExecuting() {
         return this.shouldExecute() && !this.isTaskFinished();
     }
 
     public boolean isTaskFinished() {
-        return (this.weedsToClear==null || this.weedsToClear.size()==0) && this.nextCrop==null;
+        return (this.weedsToClear==null || this.weedsToClear.isEmpty()) && this.nextCrop==null;
     }
 
     /**

@@ -84,6 +84,7 @@ public abstract class CropPlantGeneric extends CropPlant {
         return list;
     }
 
+	@Override
     public boolean canBonemeal() {
         return getTier()<4;
     }

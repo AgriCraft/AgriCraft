@@ -40,5 +40,6 @@ public abstract class StatCalculator implements IStatCalculator {
         result.setStats(stats.getGrowth(), stats.getGain(), stats.getStrength());
     }
 
+	@Override
     public abstract ISeedStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation);
 }

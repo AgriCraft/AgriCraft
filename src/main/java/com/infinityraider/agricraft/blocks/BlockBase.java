@@ -102,6 +102,7 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Override
 	public void registerIcons() {
 		String name = this.getUnlocalizedName();
 		int index = name.indexOf(":");

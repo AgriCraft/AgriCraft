@@ -13,10 +13,12 @@ public class Mutation implements IMutation {
     private ItemStack parent2;
     private double chance;
 
+	@Override
     public ItemStack getResult() {
         return result.copy();
     }
 
+	@Override
     public ItemStack[] getParents() {
         ItemStack[] parents = new ItemStack[2];
         parents[0] = parent1.copy();
@@ -24,10 +26,12 @@ public class Mutation implements IMutation {
         return parents;
     }
 
+	@Override
     public double getChance() {
         return chance;
     }
 
+	@Override
     public void setChance(double d) {
         this.chance = d;
     }

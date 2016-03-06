@@ -7,7 +7,7 @@ public class WeightedRandom<T> {
     private HashMap<T, Integer> entries;
 
     public WeightedRandom() {
-        this.entries = new HashMap<T, Integer>();
+        this.entries = new HashMap<>();
         totalWeight = 0;
     }
 

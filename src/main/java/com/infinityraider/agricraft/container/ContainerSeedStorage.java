@@ -19,6 +19,7 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase {
         this.te = te;
     }
 
+	@Override
     public boolean addSeedToStorage(ItemStack seedStack) {
         return this.te.addStackToInventory(seedStack);
     }

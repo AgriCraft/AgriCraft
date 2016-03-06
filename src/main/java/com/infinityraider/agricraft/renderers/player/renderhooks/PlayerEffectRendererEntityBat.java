@@ -37,7 +37,7 @@ public class PlayerEffectRendererEntityBat extends PlayerEffectRendererEntity {
 
     @Override
     ArrayList<String> getDisplayNames() {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         names.add("chbachman");
         return names;
     }

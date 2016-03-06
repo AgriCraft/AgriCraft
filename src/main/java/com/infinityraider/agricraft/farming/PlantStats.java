@@ -35,14 +35,17 @@ public class PlantStats implements ISeedStats {
         setStrength(strength);
     }
 
+	@Override
     public short getGrowth() {
         return growth;
     }
 
+	@Override
     public short getGain() {
         return gain;
     }
 
+	@Override
     public short getStrength() {
         return strength;
     }

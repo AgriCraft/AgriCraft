@@ -82,6 +82,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     }
 
     /** This gets the actual state, containing data not contained by metadata */
+	@Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if(te != null && te instanceof TileEntityCrop) {
@@ -409,6 +410,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      * Increments the contained plant's GROWTH stage.
      * Called when bonemeal is applied to the block.
      */
+	@Override
     public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if(crop.hasPlant() || crop.hasWeed()) {
@@ -472,7 +474,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      * @return a list of drops from the harvested plant.
      */
     public List<ItemStack> doHarvest(World world, BlockPos pos, IBlockState state, int fortune) {
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> drops = new ArrayList<>();
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if (crop.hasWeed()) {
             crop.clearWeed();   //update is not needed because it is called in the clearWeed() method

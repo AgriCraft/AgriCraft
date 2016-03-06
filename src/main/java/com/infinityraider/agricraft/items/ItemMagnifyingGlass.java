@@ -86,6 +86,7 @@ public class ItemMagnifyingGlass extends ItemBase {
     }
 
     @SideOnly(Side.CLIENT)
+	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
         list.add(StatCollector.translateToLocal("agricraft_tooltip.magnifyingGlass"));
     }
