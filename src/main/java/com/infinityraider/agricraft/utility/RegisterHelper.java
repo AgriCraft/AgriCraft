@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.utility;
 import com.infinityraider.agricraft.blocks.BlockModPlant;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.items.ItemModSeed;
-import com.infinityraider.agricraft.models.loaders.AgriCraftDummyModelLoader;
+import com.infinityraider.agricraft.models.loaders.AgriCraftModelLoader;
 import com.infinityraider.agricraft.models.loaders.StateUnmapper;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.block.Block;
@@ -55,17 +55,17 @@ public abstract class RegisterHelper {
 
 	public static void hideModel(Block block, String name) {
 		ModelLoader.setCustomStateMapper(block, UNMAPPER);
-		AgriCraftDummyModelLoader.INSTANCE.addModel("agricraft:models/item/" + name);
+		AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/" + name);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static ModelResourceLocation registerItemRendererTex(Item item, String texture) {
-		return registerItemRendererTex(item, "item", texture);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static ModelResourceLocation registerItemRendererTex(Item item, String extension, String texture) {
-		final ModelResourceLocation model = new ModelResourceLocation("agricraft" + extension + ":" + texture.replace(":", "/"));
+	public static ModelResourceLocation registerItemRendererTex(Item item, String... textures) {
+		final StringBuilder sb = new StringBuilder("agricraftitem:");
+		for (String e : textures) {
+			sb.append(e.replace(":", "/"));
+			sb.append(".");
+		}
+		final ModelResourceLocation model = new ModelResourceLocation(sb.toString(), "inventory");
 		ModelLoader.setCustomModelResourceLocation(item, 0, model);
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, model);
 		return model;
@@ -104,8 +104,7 @@ public abstract class RegisterHelper {
 		registerItem(seed, "seed" + name);
 		OreDictionary.registerOre("seed" + name, seed);
 		OreDictionary.registerOre("listAllseed", seed);
-		AgriCraftDummyModelLoader.INSTANCE.addModel("agricraft:models/item/seed" + name);
-		AgriCraftDummyModelLoader.INSTANCE.addModel("agricraft:models/item/clipping_" + name);
+		AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/seed" + name);
 		hideModel(plant, "crop" + name);
 	}
 

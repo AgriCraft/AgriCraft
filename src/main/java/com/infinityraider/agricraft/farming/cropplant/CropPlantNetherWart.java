@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.api.v1.RenderMethod;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.items.ItemClipping;
+import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -25,7 +25,6 @@ import java.util.Random;
 public class CropPlantNetherWart extends CropPlant {
 
 	private final String[] textureNames;
-	private final ItemClipping clipping;
 
 	public CropPlantNetherWart() {
 		super();
@@ -33,7 +32,7 @@ public class CropPlantNetherWart extends CropPlant {
 		for (int i = 0; i < textureNames.length; i++) {
 			textureNames[i] = "minecraft:blocks/nether_wart_stage_" + i;
 		}
-		this.clipping = new ItemClipping(this, "nether_wart", "minecraft:blocks/nether_wart_stage_2");
+		AgriCraftItems.clipping.addPlant(this, "minecraft:blocks/nether_wart_stage_2");
 	}
 
 	@Override
@@ -44,11 +43,6 @@ public class CropPlantNetherWart extends CropPlant {
 	@Override
 	public ItemStack getSeed() {
 		return new ItemStack(Items.nether_wart);
-	}
-
-	@Override
-	public ItemStack getClipping() {
-		return new ItemStack(clipping, 1);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.farming.cropplant;
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
-import com.infinityraider.agricraft.items.ItemClipping;
+import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
@@ -25,20 +25,19 @@ public abstract class CropPlantGeneric extends CropPlant {
     private final ItemSeeds seed;
     private final Block plant;
     private ArrayList<ItemStack> fruits;
-	private final ItemClipping clipping;
 
     public CropPlantGeneric(ItemSeeds seed) {
         this.seed = seed;
         this.plant = seed.getPlant(null, null).getBlock();
         this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed(), modSpecificFruits());
-		this.clipping = new ItemClipping(this, this.plant.getRegistryName().replaceFirst(".*:", ""), this.plant.getRegistryName().replaceFirst(":", ":blocks/") + 4);
+		AgriCraftItems.clipping.addPlant(this, this.plant.getRegistryName().replaceFirst(":", ":blocks/") + 4);
     }
 	
 	protected CropPlantGeneric(ItemSeeds seed, String texture) {
 		this.seed = seed;
         this.plant = seed.getPlant(null, null).getBlock();
         this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed(), modSpecificFruits());
-		this.clipping = new ItemClipping(this, this.plant.getRegistryName().replaceFirst(".*:", ""), texture);
+		AgriCraftItems.clipping.addPlant(this, texture);
 	}
 
     protected boolean modSpecificFruits() {
@@ -54,11 +53,6 @@ public abstract class CropPlantGeneric extends CropPlant {
     public ItemStack getSeed() {
         return new ItemStack(seed);
     }
-
-	@Override
-	public ItemStack getClipping() {
-		return new ItemStack(clipping);
-	}
 
     @Override
     public Block getBlock() {

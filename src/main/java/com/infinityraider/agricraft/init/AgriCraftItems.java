@@ -13,8 +13,10 @@ public class AgriCraftItems {
     public static Item debugItem;
     public static Item handRake;
     public static Item clipper;
+	public static ItemClipping clipping;
 
     public static void init() {
+		clipping = new ItemClipping();
         crops = new ItemCrop();
         journal = new ItemJournal();
         magnifyingGlass = new ItemMagnifyingGlass();

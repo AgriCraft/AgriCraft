@@ -35,11 +35,6 @@ public class CropPlantAPIv1 extends CropPlant {
         return plant.getSeed();
     }
 
-	@Override
-	public ItemStack getClipping() {
-		return plant.getClipping();
-	}
-
     @Override
     public Block getBlock() {
         return plant.getBlock();

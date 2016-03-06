@@ -28,9 +28,6 @@ public interface ICropPlant {
 
     /** Gets a stack of the seed for this plant */
     ItemStack getSeed();
-	
-	/** Gets a clipping from the plant. */
-    ItemStack getClipping();
 
     /** Gets a block instance of the crop */
     Block getBlock();

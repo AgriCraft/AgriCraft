@@ -29,11 +29,6 @@ public final class CropPlantNone extends CropPlant {
         return null;
     }
 
-	@Override
-	public ItemStack getClipping() {
-		return null;
-	}
-
     @Override
     public Block getBlock() {
         return null;

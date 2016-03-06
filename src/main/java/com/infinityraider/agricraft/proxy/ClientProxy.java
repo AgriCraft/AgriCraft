@@ -12,7 +12,6 @@ import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.init.CustomCrops;
 import com.infinityraider.agricraft.init.ResourceCrops;
 import com.infinityraider.agricraft.items.ItemBase;
-import com.infinityraider.agricraft.items.ItemClipping;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
@@ -104,7 +103,7 @@ public class ClientProxy extends CommonProxy {
 		}
 		
 		// Clippings
-		ItemClipping.registerClippingRenderers();
+		AgriCraftItems.clipping.registerItemRenderer();
 		
 		/*
 		This method is getting too big... I'm still in favor of having a

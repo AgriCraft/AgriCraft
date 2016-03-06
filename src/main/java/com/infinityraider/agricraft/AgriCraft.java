@@ -10,9 +10,7 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.*;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftItems;
-import com.infinityraider.agricraft.models.loaders.AgriCraftDummyModelLoader;
-import com.infinityraider.agricraft.models.loaders.AgriCraftModelLoaderItem;
-import com.infinityraider.agricraft.models.loaders.AgriCraftModelLoaderItemClipping;
+import com.infinityraider.agricraft.models.loaders.AgriCraftModelLoader;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
@@ -75,14 +73,12 @@ public class AgriCraft {
         proxy.initConfiguration(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
         AgriCraftBlocks.init();
+		AgriCraftItems.init();
         AgriCraftCrops.init();
-        AgriCraftItems.init();
         APISelector.init();
         CompatibilityHandler.getInstance().preInit();
 		if (event.getSide() == Side.CLIENT) {
-			ModelLoaderRegistry.registerLoader(new AgriCraftModelLoaderItem());
-			ModelLoaderRegistry.registerLoader(new AgriCraftModelLoaderItemClipping());
-			ModelLoaderRegistry.registerLoader(AgriCraftDummyModelLoader.INSTANCE);
+			ModelLoaderRegistry.registerLoader(AgriCraftModelLoader.INSTANCE);
 		}
         LogHelper.debug("Pre-Initialization Complete");
     }

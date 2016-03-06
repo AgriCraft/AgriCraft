@@ -1,54 +1,75 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
+import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import com.infinityraider.agricraft.utility.LogHelper;
-import com.infinityraider.agricraft.utility.RegisterHelper;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemClipping extends ItemBase {
-	
-	private static final List<ItemClipping> INSTANCES = Collections.synchronizedList(new ArrayList<>());
 
-	public final ICropPlant plant;
-	public final String texture;
+	public static final String BASE_LOCATION = "agricraftitem:agricraft/items/clipping.";
 
-	public ItemClipping(ICropPlant plant, String plantName, String texture) {
-		super("clipping_" + plantName, false);
-		this.plant = plant;
+	public static final ModelResourceLocation DEFAULT_MODEL = new ModelResourceLocation(BASE_LOCATION + "agricraft/items/debugger.", "inventory");
+	public static final ModelResourceLocation LOCATION = new ModelResourceLocation(new ResourceLocation("agricraft", "clipping"), "inventory");
+
+	private final Map<CropPlant, ModelResourceLocation> textures;
+
+	public ItemClipping() {
+		super("clipping", false);
 		this.setCreativeTab(null);
-		texture = texture == null || texture.isEmpty() ? "agricraft:items/debugger" : texture;
-		this.texture = texture.replaceFirst("_stem[0-9]", "_stem");
-		INSTANCES.add(this);
-		LogHelper.debug("Created Clipping: clipping_" + plantName + " With Texture: " + this.texture);
+		this.textures = new HashMap<>();
 	}
-	
-	@SideOnly(Side.CLIENT)
-	public static final void registerClippingRenderers() {
-		for (ItemClipping e : INSTANCES) {
-			e.registerItemRenderer();
+
+	public final void addPlant(CropPlant crop, String texture) {
+		this.textures.put(crop, getModel(texture));
+		this.textures.put(null, DEFAULT_MODEL);
+	}
+
+	public static final ModelResourceLocation getModel(final String texture) {
+
+		if (texture == null || texture.isEmpty()) {
+			return DEFAULT_MODEL;
 		}
+
+		final StringBuilder sb = new StringBuilder(BASE_LOCATION.length() + texture.length());
+		sb.append(BASE_LOCATION);
+		sb.append(texture.replaceFirst("_stem[0-9]", "_stem").replaceAll(":", "/"));
+		sb.append(".");
+
+		return new ModelResourceLocation(sb.toString(), "inventory");
 	}
 
 	@Override
 	public void registerItemRenderer() {
-		RegisterHelper.registerItemRendererTex(this, "clipping", texture);
+
+		LogHelper.debug("Registering Clipping Renderers...");
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, (stack) -> getModel(stack, null, 0));
+		ModelBakery.registerItemVariants(this, textures.values().toArray(new ModelResourceLocation[textures.values().size()]));
+		LogHelper.debug("Clipping Renderers Registered!");
+
+	}
+
+	@Override
+	public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+		return textures.getOrDefault(toCrop(stack), DEFAULT_MODEL);
 	}
 
 	@Override
@@ -96,17 +117,22 @@ public class ItemClipping extends ItemBase {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		StringBuilder sb = new StringBuilder();
-		if (plant == null) {
-			return StatCollector.translateToLocal("item.agricraft:clipping.name");
+		String text = StatCollector.translateToLocal("item.agricraft:clipping.name");
+		CropPlant plant = toCrop(stack);
+		if (plant == null || plant.getAllFruits() == null || plant.getAllFruits().isEmpty()) {
+			return text;
 		}
-		List<ItemStack> fruits = plant.getAllFruits();
-		if (!fruits.isEmpty()) {
-			sb.append(fruits.get(0).getDisplayName());
+		ItemStack fruit = plant.getAllFruits().get(0);
+		return fruit.getDisplayName() + " " + text;
+	}
+
+	private static CropPlant toCrop(ItemStack stack) {
+		try {
+			ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
+			return CropPlantHandler.getPlantFromStack(seed);
+		} catch (Exception e) {
+			return null;
 		}
-		sb.append(" ");
-		sb.append(StatCollector.translateToLocal("item.agricraft:clipping.name"));
-		return sb.toString();
 	}
 
 }

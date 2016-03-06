@@ -500,7 +500,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         if(growthStage<=0) {
             return;
         }
-        ItemStack clipping = crop.getPlant().getClipping();
+        ItemStack clipping = new ItemStack(AgriCraftItems.clipping, 1, 0);
         clipping.setTagCompound(crop.getSeedStack().writeToNBT(new NBTTagCompound()));
         spawnAsEntity(world, pos, clipping);
         world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, growthStage-1), 3);
