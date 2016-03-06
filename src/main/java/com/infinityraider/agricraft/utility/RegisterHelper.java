@@ -66,8 +66,16 @@ public abstract class RegisterHelper {
 			sb.append(".");
 		}
 		final ModelResourceLocation model = new ModelResourceLocation(sb.toString(), "inventory");
-		ModelLoader.setCustomModelResourceLocation(item, 0, model);
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, model);
+
+		// This way you can easily override the model.
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item,
+				(stack) -> {
+					final ModelResourceLocation loc = item.getModel(stack, null, 0);
+					return loc == null ? model : loc;
+				}
+		);
+		ModelBakery.registerItemVariants(item, model);
+
 		return model;
 	}
 
@@ -99,13 +107,13 @@ public abstract class RegisterHelper {
 	}
 
 	// TODO: Investigate naming.
-	public static void registerSeed(ItemModSeed seed, BlockModPlant plant) {
-		String name = plant.getUnlocalizedName().substring(plant.getUnlocalizedName().indexOf(':') + 5);
-		registerItem(seed, "seed" + name);
-		OreDictionary.registerOre("seed" + name, seed);
+	public static void registerSeed(ItemModSeed seed, BlockModPlant plant, String name) {
+		name = name.startsWith("seed") ? (name) : ("seed" + name);
+		registerItem(seed, name);
+		OreDictionary.registerOre(name, seed);
 		OreDictionary.registerOre("listAllseed", seed);
-		AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/seed" + name);
-		hideModel(plant, "crop" + name);
+		AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/" + name);
+		hideModel(plant, "crop" + name.substring(4));
 	}
 
 	public static void removeRecipe(ItemStack stack) {

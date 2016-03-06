@@ -4,7 +4,6 @@
 package com.infinityraider.agricraft.models.loaders;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.utility.LogHelper;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,7 +33,7 @@ public final class AgriCraftModelLoader implements ICustomModelLoader {
 
 	synchronized public void addDummyModel(String model) {
 		DUMMY_MODELS.add(model);
-		LogHelper.debug("Added: " + model + " to DNR list.");
+		//LogHelper.debug("Added: " + model + " to DNR list.");
 	}
 
 	@Override
