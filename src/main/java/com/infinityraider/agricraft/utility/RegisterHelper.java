@@ -63,7 +63,7 @@ public abstract class RegisterHelper {
 		final StringBuilder sb = new StringBuilder("agricraftitem:");
 		for (String e : textures) {
 			sb.append(e.replace(":", "/"));
-			sb.append(".");
+			sb.append("$");
 		}
 		final ModelResourceLocation model = new ModelResourceLocation(sb.toString(), "inventory");
 

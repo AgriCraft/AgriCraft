@@ -25,9 +25,9 @@ import net.minecraft.world.World;
 
 public class ItemClipping extends ItemBase {
 
-	public static final String BASE_LOCATION = "agricraftitem:agricraft/items/clipping.";
+	public static final String BASE_LOCATION = "agricraftitem:agricraft/items/clipping$";
 
-	public static final ModelResourceLocation DEFAULT_MODEL = new ModelResourceLocation(BASE_LOCATION + "agricraft/items/debugger.", "inventory");
+	public static final ModelResourceLocation DEFAULT_MODEL = new ModelResourceLocation(BASE_LOCATION + "agricraft/items/debugger$", "inventory");
 	public static final ModelResourceLocation LOCATION = new ModelResourceLocation(new ResourceLocation("agricraft", "clipping"), "inventory");
 
 	private final Map<CropPlant, ModelResourceLocation> textures;
@@ -52,7 +52,7 @@ public class ItemClipping extends ItemBase {
 		final StringBuilder sb = new StringBuilder(BASE_LOCATION.length() + texture.length());
 		sb.append(BASE_LOCATION);
 		sb.append(texture.replaceFirst("_stem[0-9]", "_stem").replaceAll(":", "/"));
-		sb.append(".");
+		sb.append("~4~4~12~12$");
 
 		return new ModelResourceLocation(sb.toString(), "inventory");
 	}

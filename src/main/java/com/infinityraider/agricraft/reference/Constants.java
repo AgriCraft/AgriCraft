@@ -7,11 +7,6 @@ package com.infinityraider.agricraft.reference;
 public interface Constants {
 
 	/**
-	 * Whether or not the mod should log render calls.
-	 */
-	boolean LOG_RENDER_CALLS = false;
-
-	/**
 	 * The number of units in a block.
 	 */
 	int WHOLE = 16;
@@ -35,7 +30,7 @@ public interface Constants {
 	 * The value of 1/16 as represented in float form. Pre-calculated as to cut
 	 * back on calculations.
 	 */
-	float UNIT = 1 / (float) WHOLE;
+	float UNIT = 1.0f / WHOLE;
 
 	/**
 	 * The representation of 1 bucket(b) in millibuckets(mB).
@@ -50,7 +45,7 @@ public interface Constants {
 	/**
 	 * The representation of 1/4 a bucket(b) in millibuckets(mB).
 	 */
-	int QUARTER_BUCKET_mB = HALF_BUCKET_mB / 2;
+	int QUARTER_BUCKET_mB = BUCKET_mB / 4;
 
 	/**
 	 * The meta-data value representing a mature crop.
@@ -76,12 +71,12 @@ public interface Constants {
      * Default Plant Stats.
 	 */
 	/**
-	 * The default growth of the crop. Possibly unneeded, should be a
-	 * GROWTH_TIER?
+	 * The default growth of the crop.
 	 *
 	 * Growth = {@value}
 	 */
 	short DEFAULT_GROWTH = 1;
+
 	/**
 	 * The default gain of the crop.
 	 *
@@ -90,6 +85,7 @@ public interface Constants {
 	 * Gain = {@value}
 	 */
 	short DEFAULT_GAIN = 1;
+
 	/**
 	 * The default strength of the crop.
 	 *
@@ -115,5 +111,5 @@ public interface Constants {
 	int nei_Y_seeds = 21;
 	int nei_Y_soil = 47;
 	int nei_Y_base = 68;
-	
+
 }

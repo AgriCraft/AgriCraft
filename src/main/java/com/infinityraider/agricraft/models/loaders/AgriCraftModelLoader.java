@@ -3,7 +3,6 @@
  */
 package com.infinityraider.agricraft.models.loaders;
 
-import com.google.common.collect.ImmutableList;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +10,6 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 /**
@@ -50,16 +48,13 @@ public final class AgriCraftModelLoader implements ICustomModelLoader {
 		}
 
 		// Get the Textures.
-		final String[] tex = modelLocation.toString().substring(MODEL_ITEM.length()).split("\\.");
+		final String[] tex = modelLocation.toString().substring(MODEL_ITEM.length()).split("\\$");
 
 		// Log
 		//LogHelper.debug("Creating Item Model: With Textures: " + Arrays.toString(tex));
+		
 		// Create the model.
-		final ImmutableList.Builder<ResourceLocation> textures = new ImmutableList.Builder<>();
-		for (String e : tex) {
-			textures.add(new ResourceLocation(e.replaceFirst("/", ":")));
-		}
-		final IModel model = new ItemLayerModel(textures.build());
+		final IModel model = new AgriCraftItemModel(tex);
 
 		// Return the model.
 		return model;

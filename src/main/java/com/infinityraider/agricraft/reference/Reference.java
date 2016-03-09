@@ -1,12 +1,9 @@
 package com.infinityraider.agricraft.reference;
 
 /**
- * The version should be tracked in the base mod class.
- * Just have to figure out where (and when) to move it...
+ * This class is fine.
  *
- * @deprecated
  */
-@Deprecated
 public interface Reference {
 
 	String MOD_NAME = "${mod.name}";
