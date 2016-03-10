@@ -369,8 +369,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
     //this saves the data on the tile entity
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
+    public void writeTileNBT(NBTTagCompound tag) {
         stats.writeToNBT(tag);
         tag.setBoolean(AgriCraftNBT.CROSS_CROP,crossCrop);
         tag.setBoolean(AgriCraftNBT.WEED, weed);
@@ -384,9 +383,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
     //this loads the saved data for the tile entity
     @Override
-    @SuppressWarnings("deprecation")
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+    public void readTileNBT(NBTTagCompound tag) {
         this.stats = PlantStats.readFromNBT(tag);
         this.crossCrop=tag.getBoolean(AgriCraftNBT.CROSS_CROP);
         this.weed=tag.getBoolean(AgriCraftNBT.WEED);

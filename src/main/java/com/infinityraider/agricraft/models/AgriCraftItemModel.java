@@ -1,14 +1,13 @@
 /*
  * 
  */
-package com.infinityraider.agricraft.models.loaders;
+package com.infinityraider.agricraft.models;
 
 import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.infinityraider.agricraft.utility.LogHelper;
 import java.util.ArrayList;
 import javax.vecmath.Vector4f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -21,7 +20,6 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.IModelPart;
 import net.minecraftforge.client.model.IModelState;
 import net.minecraftforge.client.model.ItemLayerModel;
-import net.minecraftforge.client.model.ItemTextureQuadConverter;
 import net.minecraftforge.client.model.TRSRTransformation;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 
@@ -52,7 +50,7 @@ public class AgriCraftItemModel implements IModel {
 	@Override
 	public List<ResourceLocation> getTextures() {
 		List<ResourceLocation> tex = new ArrayList<>(this.textures.size());
-		this.textures.forEach((com.infinityraider.agricraft.models.loaders.ItemModelTexture e) -> tex.add(e.texture));
+		this.textures.forEach((com.infinityraider.agricraft.models.ItemModelTexture e) -> tex.add(e.texture));
 		return tex;
 	}
 
@@ -69,7 +67,7 @@ public class AgriCraftItemModel implements IModel {
 
 			for (int i = 1; i < textures.size(); i++) {
 				ItemModelTexture tex = textures.get(i);
-				LogHelper.debug(tex);
+				//LogHelper.debug(tex);
 				TextureAtlasSprite icon = bakedTextureGetter.apply(tex.texture);
 				builder.add(genQuad(format, transform, tex.x1, tex.y1, tex.x2, tex.y2, tex.u1, tex.v1, tex.u2, tex.v2, NORTH_Z_BASE, icon, EnumFacing.NORTH, 0xffffffff));
 				builder.add(genQuad(format, transform, tex.x1, tex.y1, tex.x2, tex.y2, tex.u1, tex.v1, tex.u2, tex.v2, SOUTH_Z_BASE, icon, EnumFacing.SOUTH, 0xffffffff));
@@ -87,7 +85,7 @@ public class AgriCraftItemModel implements IModel {
 
 	
 	
-	/**
+	/*
 	 * The following is all 'Borrowed' from Forge Code...
      */
     public static UnpackedBakedQuad genQuad(VertexFormat format, TRSRTransformation transform, float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2, float z, TextureAtlasSprite sprite, EnumFacing facing, int color)
@@ -162,7 +160,7 @@ public class AgriCraftItemModel implements IModel {
                 case COLOR:
                     float r = ((color >> 16) & 0xFF) / 255f; // red
                     float g = ((color >> 8) & 0xFF) / 255f; // green
-                    float b = ((color >> 0) & 0xFF) / 255f; // blue
+                    float b = ((color /*>> 0*/) & 0xFF) / 255f; // blue
                     float a = ((color >> 24) & 0xFF) / 255f; // alpha
                     builder.put(e, r, g, b, a);
                     break;

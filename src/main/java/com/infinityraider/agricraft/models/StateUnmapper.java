@@ -1,7 +1,7 @@
 /*
  * Holder.
  */
-package com.infinityraider.agricraft.models.loaders;
+package com.infinityraider.agricraft.models;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;

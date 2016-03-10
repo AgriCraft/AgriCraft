@@ -1,7 +1,7 @@
 /*
  * 
  */
-package com.infinityraider.agricraft.models.loaders;
+package com.infinityraider.agricraft.models;
 
 import java.io.IOException;
 import java.util.HashSet;

@@ -1,7 +1,7 @@
 /*
  * 
  */
-package com.infinityraider.agricraft.models.loaders;
+package com.infinityraider.agricraft.models;
 
 import net.minecraft.util.ResourceLocation;
 
