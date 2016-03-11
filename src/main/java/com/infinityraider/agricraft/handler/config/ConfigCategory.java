@@ -13,12 +13,12 @@ public enum ConfigCategory {
 	FARMING("farming"),
 	TOOLS("tools"),
 	DEBUG("debug"),
-	WORLDGEN("world generation"),
+	WORLDGEN("world"),
 	IRRIGATION("irrigation"),
 	STORAGE("storage"),
 	DECORATION("decoration"),
 	COMPATIBILITY("compatibility"),
-	CLIENT("clientside");
+	CLIENT("client");
 	
 	public final String name;
 
