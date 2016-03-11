@@ -104,7 +104,6 @@ public class AgriCraft {
         AgriCraftRecipes.init();
         GrowthRequirementHandler.init();
         CropPlantHandler.init();
-        CropProducts.init();
         WorldGen.init();
         CustomCrops.initGrassSeeds();
         CompatibilityHandler.getInstance().postInit();

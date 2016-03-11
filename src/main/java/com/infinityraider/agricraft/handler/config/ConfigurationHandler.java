@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.handler.config;
 
-import com.infinityraider.agricraft.handler.config.ConfigCategory;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.reference.Constants;
