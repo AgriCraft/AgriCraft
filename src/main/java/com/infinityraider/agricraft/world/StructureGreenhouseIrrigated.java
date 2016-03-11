@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.world;
 
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
@@ -255,7 +256,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.setBlockState(world, Blocks.torch.getDefaultState(), 10, 4, 7, boundingBox);
         this.setBlockState(world, Blocks.torch.getDefaultState(), 13, 4, 7, boundingBox);
         //place crops
-        ArrayList<CropPlant> plants = CropPlantHandler.getPlantsUpToTier(ConfigurationHandler.greenHouseMaxTier);
+        ArrayList<CropPlant> plants = CropPlantHandler.getPlantsUpToTier(AgriCraftConfig.greenHouseMaxTier);
         for(int x=3;x<=7;x++) {
             for(int z=8;z<=12;z++) {
                 this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==5 &&z==10), plants);

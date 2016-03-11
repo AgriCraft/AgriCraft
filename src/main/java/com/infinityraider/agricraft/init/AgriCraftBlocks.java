@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.blocks.*;
 import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfigurable;
 import com.infinityraider.agricraft.handler.config.ConfigCategory;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
@@ -49,16 +50,16 @@ public class AgriCraftBlocks {
 		blockSeedAnalyzer = new BlockSeedAnalyzer();
 		blockWaterPad = new BlockWaterPad();
 		blockWaterPadFull = new BlockWaterPadFull();
-		if (!ConfigurationHandler.disableIrrigation) {
+		if (!AgriCraftConfig.disableIrrigation) {
 			blockWaterTank = new BlockWaterTank();
 			blockWaterChannel = new BlockWaterChannel();
 			blockWaterChannelFull = new BlockWaterChannelFull();
 			blockChannelValve = new BlockChannelValve();
 			blockSprinkler = new BlockSprinkler();
 		}
-		if (!ConfigurationHandler.disableSeedStorage) {
+		if (!AgriCraftConfig.disableSeedStorage) {
 			blockSeedStorage = new BlockSeedStorage();
-			if (!ConfigurationHandler.disableSeedWarehouse) {
+			if (!AgriCraftConfig.disableSeedWarehouse) {
 				//blockSeedStorageController = new BlockSeedStorageController();
 			}
 		}

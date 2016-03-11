@@ -13,6 +13,7 @@ import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.farming.mutation.MutationEngine;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
@@ -69,7 +70,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     }
 
     @Override
-    public short getGrowth() {return this.weed ? (short)ConfigurationHandler.weedGrowthMultiplier : stats.getGrowth();} //Pardon the cast.
+    public short getGrowth() {return this.weed ? (short)AgriCraftConfig.weedGrowthMultiplier : stats.getGrowth();} //Pardon the cast.
 
     @Override
     public short getGain() {return stats.getGain();}
@@ -98,7 +99,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     }
 
     /** get growthrate */
-    public int getGrowthRate() {return this.weed ? ConfigurationHandler.weedGrowthRate : plant.getGrowthRate();}
+    public int getGrowthRate() {return this.weed ? AgriCraftConfig.weedGrowthRate : plant.getGrowthRate();}
 
     /** check to see if there is a plant here */
     @Override
@@ -178,7 +179,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     @Override
     public boolean canBonemeal() {
         if(this.crossCrop) {
-            return ConfigurationHandler.bonemealMutation;
+            return AgriCraftConfig.bonemealMutation;
         }
         if(this.hasPlant() && !this.isMature()) {
             if(!this.isFertile()) {
@@ -269,7 +270,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     //weed spawn chance
     private double getWeedSpawnChance() {
         if(this.hasPlant()) {
-            return ConfigurationHandler.weedsWipePlants ? ((double) (10 - getStrength())) / 10 : 0;
+            return AgriCraftConfig.weedsWipePlants ? ((double) (10 - getStrength())) / 10 : 0;
         }
         else {
             return this.weed ? 0 : 1;
@@ -303,7 +304,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     @Override
     public boolean allowFertiliser(IFertiliser fertiliser) {
         if(this.crossCrop) {
-            return ConfigurationHandler.bonemealMutation && fertiliser.canTriggerMutation();
+            return AgriCraftConfig.bonemealMutation && fertiliser.canTriggerMutation();
         }
         if(this.hasWeed()) {
             return true;
@@ -323,7 +324,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         if(this.hasPlant() || this.hasWeed()) {
             ((BlockCrop) AgriCraftBlocks.blockCrop).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
         }
-        else if(this.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
+        else if(this.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
             this.crossOver();
         }
     }
@@ -501,9 +502,9 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     		}
     		//Add the ANALYZED data.
     		if(this.isAnalyzed()) {
-    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGrowth(), ConfigurationHandler.cropStatCap));
-                information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGain(), ConfigurationHandler.cropStatCap));
-    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getStrength(), ConfigurationHandler.cropStatCap));
+    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGrowth(), AgriCraftConfig.cropStatCap));
+                information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGain(), AgriCraftConfig.cropStatCap));
+    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getStrength(), AgriCraftConfig.cropStatCap));
     		}
     		else {
     			information.add(StatCollector.translateToLocal("agricraft_tooltip.analyzed"));

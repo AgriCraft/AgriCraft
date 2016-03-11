@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.BlockWithMeta;
 import com.infinityraider.agricraft.api.v1.RenderMethod;
 import com.infinityraider.agricraft.api.v1.RequirementType;
 import com.infinityraider.agricraft.blocks.BlockModPlant;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.utility.IOHelper;
@@ -26,7 +27,7 @@ public class CustomCrops {
 
 	@SuppressWarnings("deprecation")
 	public static void init() {
-		if (ConfigurationHandler.customCrops) {
+		if (AgriCraftConfig.customCrops) {
 			String[] cropsRawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readCustomCrops());
 			customCrops = new BlockModPlant[cropsRawData.length];
 			customSeeds = new ItemModSeed[cropsRawData.length];
@@ -65,7 +66,7 @@ public class CustomCrops {
 						try {
 							customCrops[i] = new BlockModPlant(name, fruitStack, soil, RequirementType.BELOW, base, tier, renderType, shearable);
 						} catch (Exception e) {
-							if (ConfigurationHandler.debug) {
+							if (AgriCraftConfig.debug) {
 								LogHelper.printStackTrace(e);
 							}
 							break;
@@ -87,7 +88,7 @@ public class CustomCrops {
 	}
 
 	public static void initGrassSeeds() {
-		if (ConfigurationHandler.wipeTallGrassDrops) {
+		if (AgriCraftConfig.wipeTallGrassDrops) {
 			List seedList = null;
 			boolean error = false;
 			try {

@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,7 +31,7 @@ public abstract  class StatCalculatorBase extends StatCalculator {
             //-1: if neighbour is a non-parent crops and non parent crops do not affect stats, multiplier is -1 (negative values get filtered)
             //0 : if neighbour is a non-parent crop, and non parent crops affect stat gain negatively, multiplier is 0 (0 will reduce the average)
             //1 : if neighbour is parent crop, multiplier is 1
-            int multiplier = canInherit ? 1 : (ConfigurationHandler.otherCropsAffectStatsNegatively ? 0 : -1);
+            int multiplier = canInherit ? 1 : (AgriCraftConfig.otherCropsAffectStatsNegatively ? 0 : -1);
             growth[i] = multiplier * parents[i].getGrowth();
             gain[i] = multiplier * parents[i].getGain();
             strength[i] = multiplier * parents[i].getStrength();
@@ -38,7 +39,7 @@ public abstract  class StatCalculatorBase extends StatCalculator {
         int meanGrowth = getMeanIgnoringNegativeValues(growth);
         int meanGain = getMeanIgnoringNegativeValues(gain);
         int meanStrength = getMeanIgnoringNegativeValues(strength);
-        int divisor = mutation ? ConfigurationHandler.cropStatDivisor : 1;
+        int divisor = mutation ? AgriCraftConfig.cropStatDivisor : 1;
         return new PlantStats(calculateStats(meanGrowth, nrValidParents, divisor), calculateStats(meanGain, nrValidParents, divisor), calculateStats(meanStrength, nrValidParents, divisor));
     }
 
@@ -54,7 +55,7 @@ public abstract  class StatCalculatorBase extends StatCalculator {
     }
 
     protected boolean canInheritStats(Item child, int childMeta, Item seed, int seedMeta) {
-        int validParentId = ConfigurationHandler.validParents;
+        int validParentId = AgriCraftConfig.validParents;
         //1: any crop
         //2: only parent crops and identical crops
         //3: only identical crops

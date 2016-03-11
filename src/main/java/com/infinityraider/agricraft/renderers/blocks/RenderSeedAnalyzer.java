@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
@@ -74,7 +75,7 @@ public class RenderSeedAnalyzer extends RenderBlockAgriCraft {
 					break;
 			}
 			this.modelSeedAnalyzer.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-			if (analyzer.hasJournal() && ConfigurationHandler.renderBookInAnalyzer) {
+			if (analyzer.hasJournal() && AgriCraftConfig.renderBookInAnalyzer) {
 				this.modelBook.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 			}
 			GL11.glPopMatrix();

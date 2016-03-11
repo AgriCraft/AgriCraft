@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.utility.statstringdisplayer;
 
 import com.infinityraider.agricraft.api.v1.IStatStringDisplayer;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -11,7 +12,7 @@ public abstract class StatStringDisplayer implements IStatStringDisplayer {
 
     public static IStatStringDisplayer instance() {
         if(INSTANCE == null) {
-            INSTANCE = getInstance(ConfigurationHandler.statDisplay);
+            INSTANCE = getInstance(AgriCraftConfig.statDisplay);
         }
         return INSTANCE;
     }

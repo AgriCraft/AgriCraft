@@ -23,20 +23,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO: Cleanup.
- *
- * This class is a complete and utter mess.
- *
- * This should be moved to a hash-map wrapper.
- *
+ * A class to handle the loading of the configuration file.
  */
 public class ConfigurationHandler {
-
+	
+	public static Configuration config;
+	private static String directory;
+	
 	private static final Map<Class, List<Field>> configurables = new HashMap<>();
-
-	static {
-		addConfigurable(ConfigurationHandler.class);
-	}
 
 	public static final synchronized void addConfigurable(Class clazz) {
 		if (!configurables.containsKey(clazz)) {
@@ -55,129 +49,44 @@ public class ConfigurationHandler {
 				}
 			}
 			configurables.put(clazz, fields);
-			if (!clazz.equals(ConfigurationHandler.class)) {
+			if (config != null) {
 				loadConfiguration();
 			}
 		}
 	}
 
-	protected static final void handleConfigurable(Field e) {
+	protected static final void handleConfigurable(Field f) {
 
 		//LogHelper.debug("Loading Configurable Field: " + e.getName());
-		final AgriCraftConfigurable anno = e.getAnnotation(AgriCraftConfigurable.class);
+		final AgriCraftConfigurable anno = f.getAnnotation(AgriCraftConfigurable.class);
 		try {
 
-			e.setAccessible(true);
-			Object obj = e.get(null);
+			f.setAccessible(true);
+			Object obj = f.get(null);
 
 			if (obj instanceof String) {
-				e.set(null, config.getString(anno.key(), anno.category().name, (String) obj, anno.comment()));
-				return;
-			}
-			if (!e.getType().isPrimitive()) {
-				LogHelper.debug("Bad Type: " + e.getType().toString());
-			}
-			if (obj instanceof Boolean) {
-				e.setBoolean(null, config.getBoolean(anno.key(), anno.category().name, e.getBoolean(null), anno.comment()));
-				return;
-			}
-
-			float min = Float.parseFloat(anno.min());
-			float max = Float.parseFloat(anno.max());
-
-			if (obj instanceof Integer) {
-				e.setInt(null, config.getInt(anno.key(), anno.category().name, e.getInt(null), (int) min, (int) max, anno.comment()));
+				f.set(null, config.getString(anno.key(), anno.category().name, (String) obj, anno.comment()));
+			} else if (obj instanceof Boolean) {
+				f.set(null, config.getBoolean(anno.key(), anno.category().name, (boolean) obj, anno.comment()));
+			} else if (obj instanceof Integer) {
+				int min = Integer.parseInt(anno.min());
+				int max = Integer.parseInt(anno.max());
+				f.set(null, config.getInt(anno.key(), anno.category().name, (int) obj, min, max, anno.comment()));
 			} else if (obj instanceof Float) {
-				e.setFloat(null, config.getFloat(anno.key(), anno.category().name, e.getFloat(null), min, max, anno.comment()));
-			} else if (obj instanceof Double) {
-				e.setDouble(null, config.getFloat(anno.key(), anno.category().name, (float) e.getDouble(null), min, max, anno.comment()));
+				float min = Float.parseFloat(anno.min());
+				float max = Float.parseFloat(anno.max());
+				f.set(null, config.getFloat(anno.key(), anno.category().name, (float) obj, min, max, anno.comment()));
 			} else {
-				LogHelper.debug("Bad Type: " + e.getType().toString());
+				LogHelper.debug("Bad Type: " + f.getType().toString());
 			}
 
-		} catch (NumberFormatException exception) {
+		} catch (NumberFormatException e) {
 			LogHelper.debug("Invalid parameter bound!");
-		} catch (IllegalAccessException | IllegalArgumentException | SecurityException exception) {
-			LogHelper.printStackTrace(exception);
+		} catch (IllegalAccessException | IllegalArgumentException | SecurityException e) {
+			LogHelper.printStackTrace(e);
 		}
 
 	}
-
-	public static Configuration config;
-	private static String directory;
-	private static Property propGenerateDefaults = new Property("RegenDefaults", "false", Property.Type.BOOLEAN);
-
-	//COMMON
-	//------
-	//debug
-	@AgriCraftConfigurable(
-			category = ConfigCategory.DEBUG,
-			key = "debug",
-			comment = "Set to true to enable debug mode."
-	)
-	public static boolean debug = false;
-
-	// Agricraft
-	public static boolean generateDefaults;
-	public static boolean customCrops;
-	public static int cropsPerCraft;
-	public static int cropStatCap;
-	public static boolean resourcePlants;
-	public static boolean wipeTallGrassDrops;
-	public static boolean renderBookInAnalyzer;
-	public static boolean registerCropProductsToOreDict;
-
-	//farming
-	public static boolean disableVanillaFarming;
-	public static double mutationChance;
-	public static boolean singleSpreadsIncrement;
-	public static int validParents;
-	public static boolean otherCropsAffectStatsNegatively;
-	public static boolean hardCoreStats;
-	public static int cropStatDivisor;
-	public static boolean enableWeeds;
-	public static boolean weedsWipePlants;
-	public static int weedGrowthMultiplier;
-	public static int weedGrowthRate;
-	public static float weedSpawnChance;
-	public static boolean bonemealMutation;
-	public static boolean onlyMatureDropSeeds;
-	public static boolean weedsDestroyCropSticks;
-	public static float growthMultiplier;
-	public static boolean rakingDrops;
-	public static boolean modSpecifDrops;
-
-	//world gen
-	public static boolean disableWorldGen;
-	public static int greenhouseWeight;
-	public static int greenhouseLimit;
-	public static int greenhouseIrrigatedWeight;
-	public static int greenhouseIrrigatedLimit;
-	public static boolean villagerEnabled;
-	public static int greenHouseMaxTier;
-
-	//seed storage
-	public static boolean disableSeedStorage;
-	public static boolean disableSeedWarehouse;
-
-	//irrigation
-	public static boolean disableIrrigation;
-	public static int sprinklerRatePerSecond;
-	public static int sprinklerRatePerHalfSecond;
-	public static int sprinklerGrowthChance;
-	public static float sprinklerGrowthChancePercent;
-	public static int sprinklerGrowthInterval;
-	public static int sprinklerGrowthIntervalTicks = 100;
-	public static boolean placeWater;
-	public static boolean fillFromFlowingWater;
-	public static int channelCapacity;
-
-	//CLIENT
-	//------
-	public static boolean condenseCustomWoodInNei;
-	public static boolean disableParticles;
-	public static String statDisplay;
-	public static boolean disableSounds;
 
 	public static void init(FMLPreInitializationEvent event) {
 		// Check
@@ -199,11 +108,6 @@ public class ConfigurationHandler {
 	public static void initClientConfigs(FMLPreInitializationEvent event) {
 		checkAndCreateConfig(event);
 
-		condenseCustomWoodInNei = config.getBoolean("condense custom wood blocks in NEI", ConfigCategory.CLIENT.name, true, "set to true to condense all entries for custom wood blocks into one entry in NEI");
-		disableParticles = config.getBoolean("Disable particles", ConfigCategory.CLIENT.name, false, "set to true to disable particles for the sprinklers");
-		statDisplay = config.getString("Stat Display", ConfigCategory.CLIENT.name, "NUMBER", "This defines how to display the stats of plants. Possible settings are 'NUMBER': just display a simple number (ex: \"6\"), 'FRACTION': number/maximum (ex: \"6/10\"), 'CHARACTER-'char'': number of characters equal to the stats (ex: CHARACTER-� will give \"������\") and 'KEYWORD-'type'-'keyword'': keyword followed by the type and then the stat, type is any of the previous types (ex: KEYWORD-FRACTION-Rank will give \"Rank: 6/10\") . Invalid entries will default to NUMBER ");
-		disableSounds = config.getBoolean("Disable sounds", ConfigCategory.CLIENT.name, false, "Set to true to disable sounds.");
-
 		if (config.hasChanged()) {
 			config.save();
 		}
@@ -214,57 +118,10 @@ public class ConfigurationHandler {
 		// Annotations
 		LogHelper.debug("Loading configuration values!");
 		configurables.values().forEach((l) -> l.forEach((e) -> handleConfigurable(e)));
-		//agricraft
-		resourcePlants = config.getBoolean("Resource Crops", ConfigCategory.CORE.name, true, "set to true if you wish to enable resource crops");
-		cropsPerCraft = config.getInt("Crops per craft", ConfigCategory.CORE.name, 4, 1, 4, "The number of crops you get per crafting operation");
-		cropStatCap = config.getInt("Crop stat cap", ConfigCategory.CORE.name, 10, 1, 10, "The maximum attainable value of the stats on a crop");
-		propGenerateDefaults = config.get(ConfigCategory.CORE.name, "GenerateDefaults", false, "set to true to regenerate a default mutations file (will turn back to false afterwards)");
-		generateDefaults = propGenerateDefaults.getBoolean();
-		customCrops = config.getBoolean("Custom crops", ConfigCategory.CORE.name, false, "set to true if you wish to create your own crops");
-		wipeTallGrassDrops = config.getBoolean("Clear tall grass drops", ConfigCategory.CORE.name, false, "set to true to clear the list of items dropping from tall grass (Will run before adding seeds defined in the grass drops config).");
-		renderBookInAnalyzer = config.getBoolean("Render journal in analyzer", ConfigCategory.CORE.name, true, "set to false to not render the journal on the analyzer");
-		registerCropProductsToOreDict = config.getBoolean("Register crop products in the ore dict", ConfigCategory.CORE.name, true, "set to false to not register crop products to the ore dictionary if you are experiencing issues with GregTech (note that disabling this will have the side effect that seeds will no longer work with the Phytogenic Insulator");
-		//farming
-		disableVanillaFarming = config.getBoolean("Disable Vanilla Farming", ConfigCategory.FARMING.name, false, "set to true to disable vanilla farming, meaning you can only grow plants on crops");
-		mutationChance = (double) config.getFloat("Mutation Chance", ConfigCategory.FARMING.name, Constants.DEFAULT_MUTATION_CHANCE, 0, 1, "Define mutation chance (0.0 means no mutations, only spreading and 1.0 means only mutations no spreading");
-		singleSpreadsIncrement = config.getBoolean("Single spread stat increase", ConfigCategory.FARMING.name, false, "Set to true to allow crops that spread from one single crop to increase stats");
-		validParents = config.getInt("Valid parents", ConfigCategory.FARMING.name, 2, 1, 3, "What are considered valid parents for stat increasing: 1 = Any. 2 = Mutation parents and identical crops. 3 = Only identical crops");
-		otherCropsAffectStatsNegatively = config.getBoolean("Non parent crops affect stats negatively", ConfigCategory.FARMING.name, true, "True means any crop that is not considered a valid parent will affect stat gain negatively");
-		hardCoreStats = config.getBoolean("Hardcore stats", ConfigCategory.FARMING.name, false, "Set to true to enable hardcore mode for stat increasing: 1 parent: 3/4 decrement, 1/4 nothing.\n 2 parents: 2/4 decrement, 1/4 nothing, 1/4 increment.\n 3 parents: 1/4 decrement, 1/2 nothing, 1/4 increment.\n 4 parents: 1/4 decrement, 1/4 nothing, 1/2 increment.");
-		cropStatDivisor = config.getInt("Crop stat divisor", ConfigCategory.FARMING.name, 2, 1, 3, "On a mutation the stats on the crop will be divided by this number");
-		enableWeeds = config.getBoolean("Enable weeds", ConfigCategory.FARMING.name, true, "set to false if you wish to disable weeds");
-		weedGrowthMultiplier = config.getInt("Weed Growth Multiplier", ConfigCategory.FARMING.name, 2, 1, 2, "Ranges from 1-2 inclusive.");
-		weedGrowthRate = config.getInt("Weed Growth Rate", ConfigCategory.FARMING.name, 50, 10, 50, "The average number of growth ticks for the weed to grow.");
-		weedSpawnChance = config.getFloat("Weed Spawn Chance", ConfigCategory.FARMING.name, 0.15f, 0.05f, 0.95f, "The percent chance of weeds to spawn or spread. At 95% abandon all hope of farming. Range 0.05-0.95.");
-		weedsWipePlants = enableWeeds && config.getBoolean("Weeds can overtake plants", ConfigCategory.FARMING.name, true, "set to false if you don't want weeds to be able to overgrow other plants");
-		bonemealMutation = config.getBoolean("Bonemeal Mutations", ConfigCategory.FARMING.name, false, "set to false if you wish to disable using bonemeal on a cross crop to force a mutation");
-		onlyMatureDropSeeds = config.getBoolean("Only mature crops drop seeds", ConfigCategory.FARMING.name, false, "set this to true to make only mature crops drop seeds (to encourage trowel usage)");
-		weedsDestroyCropSticks = config.getBoolean("Weeds destroy crop sticks", ConfigCategory.FARMING.name, false, "set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage)");
-		growthMultiplier = config.getFloat("Growth rate multiplier", ConfigCategory.FARMING.name, 1.0F, 0.0F, 2.0F, "This is a global growth rate multiplier");
-		rakingDrops = config.getBoolean("Raking weeds drops items", ConfigCategory.FARMING.name, true, "set to false if you wish to disable drops from raking weeds");
-		modSpecifDrops = config.getBoolean("Mod specific drops", ConfigCategory.FARMING.name, true, "set to false to disable mod specific drops, this will (for instance) cause Natura berries to drop from Harvestcraft berry crops");
-		//world gen
-		disableWorldGen = config.getBoolean("Disable World Gen", ConfigCategory.WORLDGEN.name, false, "set to true to disable world gen, no greenhouses will spawn in villages");
-		greenhouseWeight = config.getInt("Greenhouse weight", ConfigCategory.WORLDGEN.name, 10, 0, 100, "The weight for a greenhouse to be generated in a village");
-		greenhouseLimit = config.getInt("Greenhouse limit", ConfigCategory.WORLDGEN.name, 1, 0, 2, "The maximum number of greenhouses per village");
-		greenhouseIrrigatedWeight = config.getInt("Irrigated greenhouse weight", ConfigCategory.WORLDGEN.name, 2, 0, 100, "The weight for an irrigated greenhouse to be generated in a village");
-		greenhouseIrrigatedLimit = config.getInt("Irrigated greenhouse limit", ConfigCategory.WORLDGEN.name, 1, 0, 2, "The maximum number of irrigated greenhouses per village");
-		villagerEnabled = config.getBoolean("Enable villagers", ConfigCategory.WORLDGEN.name, true, "Set to false if you wish to disable villagers spawning in the AgriCraft greenhouses");
-		greenHouseMaxTier = config.getInt("Maximum crop tier", ConfigCategory.WORLDGEN.name, 3, 1, 5, "The maximum tier of plants that will spawn in greenhouses");
-		//storage
-		disableSeedStorage = config.getBoolean("Disable seed storage system", ConfigCategory.STORAGE.name, false, "set to true to disable the seed storage systems");
-		disableSeedWarehouse = config.getBoolean("Disable seed storage warehouses", ConfigCategory.STORAGE.name, false, "set to true to disable the seed storage warehouse blocks");
 		//irrigation
-		disableIrrigation = config.getBoolean("Disable Irrigation", ConfigCategory.IRRIGATION.name, false, "set to true if you want to disable irrigation systems");
-		sprinklerRatePerSecond = config.getInt("Sprinkler water usage", ConfigCategory.IRRIGATION.name, 10, 0, 10000, "Water usage of the sprinkler in mB per second");
-		sprinklerRatePerHalfSecond = Math.round(sprinklerRatePerSecond / 2);
-		sprinklerGrowthChance = config.getInt("Sprinkler growth chance", ConfigCategory.IRRIGATION.name, 20, 0, 100, "Every x seconds each plant in sprinkler range has this chance to growth tick");
-		sprinklerGrowthChancePercent = sprinklerGrowthChance / 100F;
-		sprinklerGrowthInterval = config.getInt("Sprinkler growth interval", ConfigCategory.IRRIGATION.name, 5, 1, 300, "Every x seconds each plant in sprinkler range has y chance to growth tick");
-		sprinklerGrowthIntervalTicks = sprinklerGrowthInterval * 20;
-		placeWater = config.getBoolean("Spawn water after breaking tank", ConfigCategory.IRRIGATION.name, true, "set to false to disable placing a source block when breaking non-empty tanks");
-		fillFromFlowingWater = config.getBoolean("Fill tank from flowing water", ConfigCategory.IRRIGATION.name, false, "set to true to let tanks fill up when water flows above them");
-		channelCapacity = config.getInt("Channel capacity", ConfigCategory.IRRIGATION.name, 500, 100, 2000, "The amount of water in mb that an irrigation channel can hold");
+		AgriCraftConfig.sprinklerRatePerHalfSecond = Math.round(AgriCraftConfig.sprinklerRatePerSecond / 2);
+		AgriCraftConfig.sprinklerGrowthChancePercent = AgriCraftConfig.sprinklerGrowthChance / 100F;
+		AgriCraftConfig.sprinklerGrowthIntervalTicks = AgriCraftConfig.sprinklerGrowthInterval * 20;
 
 		if (config.hasChanged()) {
 			config.save();
@@ -290,10 +147,9 @@ public class ConfigurationHandler {
 	public static List<Mutation> getMutations() {
 		String filePath = directory + "/mutations.json";
 		File file = new File(filePath);
-		if (generateDefaults || !file.exists()) {
+		if (!file.exists()) {
 			List<Mutation> mutations = CropPlantHandler.getDefaultMutations();
 			MutationConfig.getInstance().writeMutations(mutations, filePath);
-			ConfigurationHandler.propGenerateDefaults.setToDefault();
 			config.save();
 			return mutations;
 		} else {

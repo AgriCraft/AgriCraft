@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.utility;
 
 import com.infinityraider.agricraft.blocks.BlockModPlant;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.models.AgriCraftModelLoader;
@@ -42,7 +43,7 @@ public abstract class RegisterHelper {
 	public static void registerCrop(BlockModPlant plant, String name) {
 		name = "crop" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
 		registerBlock(plant, name);
-		if (ConfigurationHandler.registerCropProductsToOreDict) {
+		if (AgriCraftConfig.registerCropProductsToOreDict) {
 			for (ItemStack fruit : plant.products.getAllProducts()) {
 				if (fruit != null && fruit.getItem() != null && !OreDictHelper.hasOreId(fruit, name)) {
 					OreDictionary.registerOre(name, fruit);

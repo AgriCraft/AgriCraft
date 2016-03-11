@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.compatibility.applecore.AppleCoreHelper;
 import com.infinityraider.agricraft.compatibility.waila.WailaHelper;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import net.minecraft.block.state.IBlockState;
@@ -124,7 +125,7 @@ public class CompatibilityHandler {
 		try {
 			helper = clazz.getConstructor().newInstance();
 		} catch (Exception e) {
-			if (ConfigurationHandler.debug) {
+			if (AgriCraftConfig.debug) {
 				e.printStackTrace();
 			}
 		}

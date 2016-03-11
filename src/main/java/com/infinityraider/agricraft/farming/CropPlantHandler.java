@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.cropplant.*;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
@@ -312,7 +313,7 @@ public class CropPlantHandler {
         }
         if(setTag) {
             NBTTagCompound tag = new NBTTagCompound();
-            setSeedNBT(tag, (short) (rand.nextInt(ConfigurationHandler.cropStatCap) / 2 + 1), (short) (rand.nextInt(ConfigurationHandler.cropStatCap) / 2 + 1), (short) (rand.nextInt(ConfigurationHandler.cropStatCap) / 2 + 1), false);
+            setSeedNBT(tag, (short) (rand.nextInt(AgriCraftConfig.cropStatCap) / 2 + 1), (short) (rand.nextInt(AgriCraftConfig.cropStatCap) / 2 + 1), (short) (rand.nextInt(AgriCraftConfig.cropStatCap) / 2 + 1), false);
             seed.setTagCompound(tag);
         }
         return seed;
@@ -328,7 +329,7 @@ public class CropPlantHandler {
      * @return the AgriCraftNBT TAG
      */
     public static NBTTagCompound setSeedNBT(NBTTagCompound tag, short growth, short gain, short strength, boolean analyzed) {
-        short cap = (short) ConfigurationHandler.cropStatCap;
+        short cap = (short) AgriCraftConfig.cropStatCap;
         tag.setShort(AgriCraftNBT.GROWTH, growth==0? Constants.DEFAULT_GROWTH:growth>cap?cap:growth);
         tag.setShort(AgriCraftNBT.GAIN, gain==0?Constants.DEFAULT_GAIN:gain>cap?cap:gain);
         tag.setShort(AgriCraftNBT.STRENGTH, strength==0?Constants.DEFAULT_GAIN:strength>cap?cap:strength);
