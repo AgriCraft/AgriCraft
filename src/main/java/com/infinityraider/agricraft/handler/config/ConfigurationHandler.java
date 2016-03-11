@@ -41,10 +41,10 @@ public class ConfigurationHandler {
 	public static final synchronized void addConfigurable(Class clazz) {
 		if (!configurables.containsKey(clazz)) {
 			List<Field> fields = new ArrayList<>();
-			LogHelper.debug("Registering Configurable: " + clazz.getCanonicalName());
+			//LogHelper.debug("Registering Configurable: " + clazz.getCanonicalName());
 			for (Field f : clazz.getDeclaredFields()) {
 				if (f.getAnnotation(AgriCraftConfigurable.class) != null) {
-					LogHelper.debug("Handling Configurable Field: " + f.getName());
+					//LogHelper.debug("Handling Configurable Field: " + f.getName());
 					if (!Modifier.isStatic(f.getModifiers())) {
 						LogHelper.error("Configurable Field: " + f.getName() + " is not static!");
 					} else if (Modifier.isFinal(f.getModifiers())) {
@@ -63,7 +63,7 @@ public class ConfigurationHandler {
 
 	protected static final void handleConfigurable(Field e) {
 
-		LogHelper.debug("Loading Configurable Field: " + e.getName());
+		//LogHelper.debug("Loading Configurable Field: " + e.getName());
 		final AgriCraftConfigurable anno = e.getAnnotation(AgriCraftConfigurable.class);
 		try {
 
