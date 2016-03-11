@@ -240,7 +240,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         if (te != null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             ItemStack heldItem = player.getCurrentEquippedItem();
-            if (ConfigurationHandler.enableHandRake && crop.hasWeed() && heldItem==null) {
+            if (AgriCraftItems.enableHandRake && crop.hasWeed() && heldItem==null) {
                 //if weeds can only be removed by using a hand rake, nothing should happen
                 return false;
             }

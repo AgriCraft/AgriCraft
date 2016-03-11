@@ -1,12 +1,24 @@
 package com.infinityraider.agricraft.utility;
 
+import com.infinityraider.agricraft.handler.config.AgriCraftConfigurable;
+import com.infinityraider.agricraft.handler.config.ConfigCategory;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class RenderLogger {
 
-	public static final boolean LOG_RENDER_CALLS = false;
+	@AgriCraftConfigurable(
+			category = ConfigCategory.CORE,
+			key = "Log Render Calls",
+			comment = "Set to true if render calls should be logged."
+	)
+	public static boolean LOG_RENDER_CALLS = false;
+	
+	static {
+		ConfigurationHandler.addConfigurable(RenderLogger.class);
+	}
 
 	private long timer = 0;
 

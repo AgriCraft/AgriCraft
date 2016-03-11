@@ -273,12 +273,12 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean isRakeRequiredForWeeding() {
-        return ConfigurationHandler.enableHandRake;
+        return AgriCraftItems.enableHandRake;
     }
 
     @Override
     public boolean removeWeeds(World world, BlockPos pos, boolean byHand) {
-        if (!ConfigurationHandler.enableWeeds || (byHand && ConfigurationHandler.enableHandRake)) {
+        if (!ConfigurationHandler.enableWeeds || (byHand && AgriCraftItems.enableHandRake)) {
             return false;
         }
         TileEntity te = world.getTileEntity(pos);
