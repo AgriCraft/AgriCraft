@@ -38,7 +38,7 @@ public class AgriCraftItemModel implements IModel {
 	public AgriCraftItemModel(String... textures) {
 		this.textures = new ArrayList<>(textures.length);
 		for (String e : textures) {
-			this.textures.add(new ItemModelTexture(e, this));
+			this.textures.add(new ItemModelTexture(e));
 		}
 	}
 

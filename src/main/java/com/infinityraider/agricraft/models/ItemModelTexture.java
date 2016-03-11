@@ -21,10 +21,8 @@ public final class ItemModelTexture {
 	public final float v1;
 	public final float u2;
 	public final float v2;
-	private final AgriCraftItemModel outer;
 
-	public ItemModelTexture(String texture, final AgriCraftItemModel outer) {
-		this.outer = outer;
+	public ItemModelTexture(String texture) {
 		String[] str = texture.split(SEPARATOR);
 		String tex = str.length > 0 ? str[0] : "agricraft:items/debugger";
 		tex = tex.contains(":") ? tex : tex.replaceFirst("/", ":");
@@ -47,8 +45,7 @@ public final class ItemModelTexture {
 		this.v2 = dim[7];
 	}
 
-	public ItemModelTexture(ResourceLocation texture, float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2, final AgriCraftItemModel outer) {
-		this.outer = outer;
+	public ItemModelTexture(ResourceLocation texture, float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2) {
 		this.texture = texture;
 		this.x1 = x1;
 		this.y1 = y1;
