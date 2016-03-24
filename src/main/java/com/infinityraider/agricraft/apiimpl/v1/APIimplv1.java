@@ -25,6 +25,7 @@ import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import com.infinityraider.agricraft.utility.exception.MissingArgumentsException;
 import com.infinityraider.agricraft.utility.statstringdisplayer.StatStringDisplayer;
 import com.google.common.collect.Lists;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -91,7 +92,7 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean isNativePlantingDisabled(ItemStack seed) {
-        return ConfigurationHandler.disableVanillaFarming;
+        return AgriCraftConfig.disableVanillaFarming;
     }
 
     @Override
@@ -185,7 +186,7 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean isWeeds(World world, BlockPos pos) {
-        if (!ConfigurationHandler.enableWeeds) {
+        if (!AgriCraftConfig.enableWeeds) {
             return false;
         }
         TileEntity te = world.getTileEntity(pos);
@@ -273,12 +274,12 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean isRakeRequiredForWeeding() {
-        return ConfigurationHandler.enableHandRake;
+        return AgriCraftItems.enableHandRake;
     }
 
     @Override
     public boolean removeWeeds(World world, BlockPos pos, boolean byHand) {
-        if (!ConfigurationHandler.enableWeeds || (byHand && ConfigurationHandler.enableHandRake)) {
+        if (!AgriCraftConfig.enableWeeds || (byHand && AgriCraftItems.enableHandRake)) {
             return false;
         }
         TileEntity te = world.getTileEntity(pos);
@@ -302,7 +303,7 @@ public class APIimplv1 implements APIv1 {
         if(world.isRemote) {
             return false;
         }
-        if (!ConfigurationHandler.enableWeeds) {
+        if (!AgriCraftConfig.enableWeeds) {
             return false;
         }
         if(rake == null || rake.getItem() == null || !(rake.getItem() instanceof IRake)) {
@@ -532,7 +533,7 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public short getStatCap() {
-        return (short) ConfigurationHandler.cropStatCap;
+        return (short) AgriCraftConfig.cropStatCap;
     }
 
     @Override

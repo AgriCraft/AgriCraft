@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.BlockWithMeta;
 import com.infinityraider.agricraft.api.v1.RenderMethod;
 import com.infinityraider.agricraft.api.v1.RequirementType;
 import com.infinityraider.agricraft.blocks.BlockModPlant;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.reference.Data;
@@ -26,7 +27,7 @@ public class ResourceCrops {
 	public static ArrayList<ItemModSeed> modSeeds;
 
 	public static void init() {
-		if (ConfigurationHandler.resourcePlants) {
+		if (AgriCraftConfig.resourcePlants) {
 			//search oreDict
 			OreDictHelper.getRegisteredOres();
 			//vanilla resources

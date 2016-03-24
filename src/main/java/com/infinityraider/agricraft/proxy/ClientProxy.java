@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.MissingJsonHandler;
 import com.infinityraider.agricraft.handler.TextureStitchHandler;
 import com.infinityraider.agricraft.handler.SoundHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftCrops;
 import com.infinityraider.agricraft.init.AgriCraftItems;
@@ -154,7 +155,7 @@ public class ClientProxy extends CommonProxy {
 		OreDictHelper.registerNuggetRenderers();
 
         //villager
-        if (!ConfigurationHandler.disableWorldGen && ConfigurationHandler.villagerEnabled) {
+        if (!AgriCraftConfig.disableWorldGen && AgriCraftConfig.villagerEnabled) {
             VillagerRegistry.instance().registerVillagerSkin(78943, new ResourceLocation("textures/entity/villager/farmer.png"));  //For now, it uses the texture for the vanilla farmer
         }
 

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tileentity.irrigation;
 
 import com.infinityraider.agricraft.blocks.BlockWaterChannel;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
@@ -66,7 +67,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
     public void update() {
         if (!worldObj.isRemote) {
             if (this.sprinkle()) {
-                counter = ++counter % ConfigurationHandler.sprinklerGrowthIntervalTicks;
+                counter = ++counter % AgriCraftConfig.sprinklerGrowthIntervalTicks;
                 drainWaterFromChannel();
 
                 for (int yOffset = 1; yOffset < 6; yOffset++) {
@@ -87,7 +88,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 
     public boolean canSprinkle() {
         return this.isConnected() && ((TileEntityChannel) this.worldObj.getTileEntity(getPos().add(0, 1, 0))).getFluidLevel()
-                > ConfigurationHandler.sprinklerRatePerHalfSecond;
+                > AgriCraftConfig.sprinklerRatePerHalfSecond;
     }
 
     private boolean sprinkle() {
@@ -111,7 +112,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
                 worldObj.setBlockState(pos, block.getStateFromMeta(7), flag);
             } else if (((block instanceof IPlantable) || (block instanceof IGrowable)) && !farmlandOnly) {
                 // X1 chance to force GROWTH tick on plant every Y1 ticks
-                if (counter == 0 && worldObj.rand.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
+                if (counter == 0 && worldObj.rand.nextDouble() <= AgriCraftConfig.sprinklerGrowthChancePercent) {
                     block.updateTick(this.getWorld(), pos, state, worldObj.rand);
                 }
             }
@@ -122,7 +123,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
     private void drainWaterFromChannel() {
         if (counter % 10 == 0) {
             TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(getPos().add(0, 1, 0));
-            channel.pullFluid(ConfigurationHandler.sprinklerRatePerHalfSecond);
+            channel.pullFluid(AgriCraftConfig.sprinklerRatePerHalfSecond);
         }
     }
 
@@ -145,7 +146,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 
     @SideOnly(Side.CLIENT)
     private void renderLiquidSpray() {
-        if(ConfigurationHandler.disableParticles) {
+        if(AgriCraftConfig.disableParticles) {
             return;
         }
         this.angle = (this.angle+5F)%360;

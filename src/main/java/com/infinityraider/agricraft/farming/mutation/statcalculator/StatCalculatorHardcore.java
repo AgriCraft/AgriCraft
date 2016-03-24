@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 
 public class StatCalculatorHardcore extends StatCalculatorBase {
@@ -14,11 +15,11 @@ public class StatCalculatorHardcore extends StatCalculatorBase {
         3 parents, 1/4 decrement, 2/4 nothing, 1/4 increment
         4 parents: 1/4 decrement, 1/4 nothing, 2/4 increment
         */
-        if(neighbours==1 && ConfigurationHandler.singleSpreadsIncrement) {
+        if(neighbours==1 && AgriCraftConfig.singleSpreadsIncrement) {
             neighbours = 2;
         }
         int newStat = getAction(neighbours).apply(input)/ divisor;
-        return Math.max(1, Math.min(newStat, ConfigurationHandler.cropStatCap));
+        return Math.max(1, Math.min(newStat, AgriCraftConfig.cropStatCap));
     }
 
     private Action getAction(int count) {

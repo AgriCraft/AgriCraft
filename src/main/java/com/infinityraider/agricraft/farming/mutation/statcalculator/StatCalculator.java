@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.api.v1.IStatCalculator;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraft.item.ItemStack;
 
@@ -16,7 +17,7 @@ public abstract class StatCalculator implements IStatCalculator {
 
     public static IStatCalculator getInstance() {
         if(instance == null) {
-            if(ConfigurationHandler.hardCoreStats) {
+            if(AgriCraftConfig.hardCoreStats) {
                 instance = new StatCalculatorHardcore();
             } else {
                 instance = new StatCalculatorNormal();

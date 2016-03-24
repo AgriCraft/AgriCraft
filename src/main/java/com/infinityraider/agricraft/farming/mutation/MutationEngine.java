@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.farming.mutation;
 
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 
@@ -48,7 +49,7 @@ public class MutationEngine {
     }
 
     public ICrossOverStrategy rollStrategy() {
-        boolean spreading = random.nextDouble() > ConfigurationHandler.mutationChance;
+        boolean spreading = random.nextDouble() > AgriCraftConfig.mutationChance;
         return spreading ? new SpreadStrategy(this) : new MutateStrategy(this);
     }
 

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tileentity.irrigation;
 
 import com.infinityraider.agricraft.api.v1.IDebuggable;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
@@ -72,7 +73,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
                     }
                 }
                 Block block = this.worldObj.getBlockState(pos.add(0, 1, 0)).getBlock();
-                if(ConfigurationHandler.fillFromFlowingWater && (block==Blocks.water || block==Blocks.flowing_water)) {
+                if(AgriCraftConfig.fillFromFlowingWater && (block==Blocks.water || block==Blocks.flowing_water)) {
                     this.setFluidLevel(this.getFluidLevel() + 5);
                 }
             }

@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.utility;
 
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraftforge.fml.common.FMLLog;
@@ -39,7 +40,7 @@ public abstract class LogHelper {
      * @param object the object to be logged (interpreted into a string).
      */
     public static void debug(Object object) {
-        if(ConfigurationHandler.debug) {
+        if(AgriCraftConfig.debug) {
             log(Level.INFO, "[AGRI-DEBUG] "+object);
         }
     }
@@ -104,7 +105,7 @@ public abstract class LogHelper {
      * @param e an exception to log.
      */
     public static void printStackTrace(Exception e) {
-    	if(ConfigurationHandler.debug) {
+    	if(AgriCraftConfig.debug) {
             e.printStackTrace();
         }
     }

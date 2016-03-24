@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.api.v1.IRake;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.utility.WeightedRandom;
 import net.minecraft.block.state.IBlockState;
@@ -88,7 +89,7 @@ public class ItemHandRake extends ItemBase implements IRake {
 			int weedGrowthStage = state.getValue(AgriCraftProperties.GROWTHSTAGE);
 			int newWeedGrowthStage = calculateGrowthStage(rake.getItemDamage(), weedGrowthStage, world.rand);
 			crop.updateWeed(newWeedGrowthStage);
-			if (ConfigurationHandler.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100) < dropChance[rake.getItemDamage() % dropChance.length]) {
+			if (AgriCraftConfig.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100) < dropChance[rake.getItemDamage() % dropChance.length]) {
 				ItemStack drop = ItemDropRegistry.instance().getDrop(world.rand);
 				if (drop != null && drop.getItem() != null) {
 					float f = 0.7F;

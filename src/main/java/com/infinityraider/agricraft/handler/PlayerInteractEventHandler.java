@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.blocks.BlockGrate;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
@@ -32,7 +33,7 @@ public class PlayerInteractEventHandler {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             if (event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().stackSize > 0 && event.entityPlayer.getCurrentEquippedItem().getItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof IPlantable) {
                 if (GrowthRequirementHandler.isSoilValid(event.world, event.pos)) {
-                    if (ConfigurationHandler.disableVanillaFarming) {
+                    if (AgriCraftConfig.disableVanillaFarming) {
                         if(!allowVanillaPlanting(event.entityPlayer.getCurrentEquippedItem())) {
                             this.denyEvent(event, false);
                             return;
@@ -53,7 +54,7 @@ public class PlayerInteractEventHandler {
         if(seed == null || seed.getItem() == null) {
             return false;
         }
-        if(ConfigurationHandler.disableVanillaFarming) {
+        if(AgriCraftConfig.disableVanillaFarming) {
             if(ignoresVanillaPlantingSetting(seed)) {
                 return true;
             }

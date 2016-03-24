@@ -247,6 +247,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public void addWailaInformation(List information) {
-		information.add(StatCollector.translateToLocal("agricraft_tooltip.material") + ": " + this.material.getLocalizedName());
+		information.add(StatCollector.translateToLocal("agricraft_tooltip.material") + ": " + new ItemStack(this.material, 1, this.materialMeta).getDisplayName());
 	}
 }

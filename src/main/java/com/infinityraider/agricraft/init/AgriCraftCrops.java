@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.blocks.BlockModPlant;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.reference.Data;
@@ -20,7 +21,7 @@ public class AgriCraftCrops {
             try {
                 plant = new BlockModPlant(data);
             } catch (Exception e) {
-                if(ConfigurationHandler.debug) {
+                if(AgriCraftConfig.debug) {
                     LogHelper.printStackTrace(e);
                 }
                 return;

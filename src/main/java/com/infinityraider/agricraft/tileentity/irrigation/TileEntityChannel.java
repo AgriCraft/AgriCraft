@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tileentity.irrigation;
 
 import com.infinityraider.agricraft.api.v1.IDebuggable;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
@@ -37,7 +38,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	protected static final int MAX = 12;
 	protected static final int HEIGHT = MAX - MIN;
 	protected static final int DISCRETE_MAX = 16;
-	protected static final int ABSOLUTE_MAX = ConfigurationHandler.channelCapacity;
+	protected static final int ABSOLUTE_MAX = AgriCraftConfig.channelCapacity;
 	protected static final float DISCRETE_FACTOR = (float) DISCRETE_MAX / (float) ABSOLUTE_MAX;
 
 	private int lvl;

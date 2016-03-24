@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.world;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
@@ -172,7 +173,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         this.setBlockState(world, Blocks.torch.getDefaultState(), 15, 4, 10, boundingBox);
         this.setBlockState(world, Blocks.torch.getDefaultState(), 8, 4, 2, boundingBox);
         //place crops
-        ArrayList<CropPlant> plants = CropPlantHandler.getPlantsUpToTier(ConfigurationHandler.greenHouseMaxTier);
+        ArrayList<CropPlant> plants = CropPlantHandler.getPlantsUpToTier(AgriCraftConfig.greenHouseMaxTier);
         for(int x=3;x<=7;x++) {
             for(int z=3;z<=7;z++) {
                 this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==0 && x%2==0) || (x==5 &&z==5), plants);
@@ -236,12 +237,12 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 
     @Override
     protected int func_180779_c (int spawned, int defaultId) {
-        return ConfigurationHandler.villagerEnabled ? WorldGen.getVillagerId() : 0;
+        return AgriCraftConfig.villagerEnabled ? WorldGen.getVillagerId() : 0;
     }
 
     @Override
     protected void spawnVillagers(World world, StructureBoundingBox boundingBox, int x, int y, int z, int limit) {
-        if(ConfigurationHandler.villagerEnabled) {
+        if(AgriCraftConfig.villagerEnabled) {
             int nrVillagersSpawned = getNumberOfSpawnedVillagers(world);
             if (nrVillagersSpawned < limit) {
                 for (int i1 = nrVillagersSpawned; i1 < limit; ++i1) {

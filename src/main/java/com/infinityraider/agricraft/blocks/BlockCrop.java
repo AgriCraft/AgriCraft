@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemDebugger;
@@ -106,14 +107,14 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if(crop.hasPlant() || crop.hasWeed()) {
             if (CompatibilityHandler.getInstance().allowGrowthTick(world, pos, this, crop, rnd)) {
-            	if (crop.isMature() && crop.hasWeed() && ConfigurationHandler.enableWeeds){
+            	if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds){
                 	crop.spreadWeed();
                 }
             	else if (crop.isFertile()) {
                     //multiplier from GROWTH stat
                     double growthBonus = 1.0 + crop.getGrowth() / 10.0;
                     //multiplier defined in the config
-                    float global = ConfigurationHandler.growthMultiplier;
+                    float global = AgriCraftConfig.growthMultiplier;
                     //crop dependent base GROWTH rate
                     float growthRate = (float) crop.getGrowthRate();
                     //determine if GROWTH tick should be applied or skipped
@@ -125,7 +126,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
             }
         } else {
             //15% chance to spawn weeds
-            if(ConfigurationHandler.enableWeeds && (Math.random() < ConfigurationHandler.weedSpawnChance)) {
+            if(AgriCraftConfig.enableWeeds && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
                 crop.spawnWeed();
             }
             else if(crop.isCrossCrop()) {
@@ -240,7 +241,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         if (te != null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             ItemStack heldItem = player.getCurrentEquippedItem();
-            if (ConfigurationHandler.enableHandRake && crop.hasWeed() && heldItem==null) {
+            if (AgriCraftItems.enableHandRake && crop.hasWeed() && heldItem==null) {
                 //if weeds can only be removed by using a hand rake, nothing should happen
                 return false;
             }
@@ -364,7 +365,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
                 if (crop.isCrossCrop()) {
                     drops.add(new ItemStack(AgriCraftItems.crops, 2));
                 } else {
-                    if(!(crop.hasWeed() && ConfigurationHandler.weedsDestroyCropSticks)) {
+                    if(!(crop.hasWeed() && AgriCraftConfig.weedsDestroyCropSticks)) {
                         drops.add(new ItemStack(AgriCraftItems.crops, 1));
                     }
                     if (crop.hasPlant()) {
@@ -372,7 +373,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
                             drops.addAll(crop.getFruits());
                             drops.add(crop.getSeedStack());
                         }
-                        else if(!ConfigurationHandler.onlyMatureDropSeeds) {
+                        else if(!AgriCraftConfig.onlyMatureDropSeeds) {
                             drops.add(crop.getSeedStack());
                         }
                     }
@@ -420,7 +421,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
             }
             world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, l), 2);
         }
-        else if(crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
+        else if(crop.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
             crop.crossOver();
         }
     }

@@ -64,7 +64,7 @@ public class AgriCraft {
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS,serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
-
+	
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public static void preInit(FMLPreInitializationEvent event) {
@@ -104,7 +104,6 @@ public class AgriCraft {
         AgriCraftRecipes.init();
         GrowthRequirementHandler.init();
         CropPlantHandler.init();
-        CropProducts.init();
         WorldGen.init();
         CustomCrops.initGrassSeeds();
         CompatibilityHandler.getInstance().postInit();
