@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
+import com.infinityraider.agricraft.utility.RegisterHelper;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -43,6 +44,7 @@ public class BlockPeripheral extends BlockTileBase {
 
 	public BlockPeripheral() {
 		super(Material.iron, "peripheral", false);
+		RegisterHelper.hideModel(this, internalName);
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class ItemDebugger extends ItemBase {
 	
 	public ItemDebugger() {
-		super("debugger");
+		super("debugger", true);
 		this.setMaxStackSize(1);
 	}
 

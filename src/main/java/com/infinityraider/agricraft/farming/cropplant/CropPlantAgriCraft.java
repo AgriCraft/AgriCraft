@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.api.v1.RenderMethod;
+import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,6 +22,7 @@ import java.util.Random;
  * Implementation of the CropPlant class for an IAgriCraftPlant object
  */
 public class CropPlantAgriCraft extends CropPlant {
+	
     IAgriCraftPlant plant;
 
     public CropPlantAgriCraft(IAgriCraftPlant plant) {
@@ -29,6 +31,7 @@ public class CropPlantAgriCraft extends CropPlant {
         this.setTier(plant.getSeed().tier());
         this.setGrowthRequirement(plant.getGrowthRequirement());
         this.setSpreadChance(100/getTier());
+		AgriCraftItems.clipping.addPlant(this, plant.getBlock().getRegistryName().replaceFirst(":", ":blocks/") + 4);
     }
 
     @Override

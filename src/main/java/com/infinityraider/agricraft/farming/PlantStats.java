@@ -2,13 +2,14 @@ package com.infinityraider.agricraft.farming;
 
 import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.ITrowel;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PlantStats implements ISeedStats {
-    private static final short MAX = (short) ConfigurationHandler.cropStatCap;
+    private static final short MAX = (short) AgriCraftConfig.cropStatCap;
     private static final short MIN = 1;
 
     private short growth;
@@ -35,14 +36,17 @@ public class PlantStats implements ISeedStats {
         setStrength(strength);
     }
 
+	@Override
     public short getGrowth() {
         return growth;
     }
 
+	@Override
     public short getGain() {
         return gain;
     }
 
+	@Override
     public short getStrength() {
         return strength;
     }

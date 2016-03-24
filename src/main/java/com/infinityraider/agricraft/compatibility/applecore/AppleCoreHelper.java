@@ -11,19 +11,22 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class AppleCoreHelper extends ModHelper {
-    protected AppleCoreHelper() {
-        super(AgriCraftMods.appleCore);
-    }
 
-    protected boolean handleGrowthTick() {
-        return true;
-    }
+	public AppleCoreHelper() {
+		super(AgriCraftMods.appleCore);
+	}
 
-    @Override
-    protected void announceGrowthTick(World world, BlockPos pos, IBlockState state) {}
+	@Override
+	protected boolean handleGrowthTick() {
+		return true;
+	}
 
-    @Override
-    protected boolean allowGrowthTick(World world, BlockPos pos, BlockCrop block, TileEntityCrop crop, Random rnd) {
-        return true;
-    }
+	@Override
+	protected void announceGrowthTick(World world, BlockPos pos, IBlockState state) {
+	}
+
+	@Override
+	protected boolean allowGrowthTick(World world, BlockPos pos, BlockCrop block, TileEntityCrop crop, Random rnd) {
+		return true;
+	}
 }

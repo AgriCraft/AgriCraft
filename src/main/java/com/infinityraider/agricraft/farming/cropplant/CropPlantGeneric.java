@@ -2,7 +2,9 @@ package com.infinityraider.agricraft.farming.cropplant;
 
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
@@ -20,6 +22,7 @@ import java.util.Random;
  * Generic abstract implementation of the cropPlant, will work for most crops that follow the vanilla item seeds
  */
 public abstract class CropPlantGeneric extends CropPlant {
+	
     private final ItemSeeds seed;
     private final Block plant;
     private ArrayList<ItemStack> fruits;
@@ -28,10 +31,18 @@ public abstract class CropPlantGeneric extends CropPlant {
         this.seed = seed;
         this.plant = seed.getPlant(null, null).getBlock();
         this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed(), modSpecificFruits());
+		AgriCraftItems.clipping.addPlant(this, this.plant.getRegistryName().replaceFirst(":", ":blocks/") + 4);
     }
+	
+	protected CropPlantGeneric(ItemSeeds seed, String texture) {
+		this.seed = seed;
+        this.plant = seed.getPlant(null, null).getBlock();
+        this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed(), modSpecificFruits());
+		AgriCraftItems.clipping.addPlant(this, texture);
+	}
 
     protected boolean modSpecificFruits() {
-        return ConfigurationHandler.modSpecifDrops;
+        return AgriCraftConfig.modSpecificDrops;
     }
 
     @Override
@@ -74,6 +85,7 @@ public abstract class CropPlantGeneric extends CropPlant {
         return list;
     }
 
+	@Override
     public boolean canBonemeal() {
         return getTier()<4;
     }

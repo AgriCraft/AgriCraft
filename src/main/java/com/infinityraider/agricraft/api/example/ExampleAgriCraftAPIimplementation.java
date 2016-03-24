@@ -35,6 +35,7 @@ public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrappe
     /**
      * Method to check if the API is properly wrapped
      */
+	@Override
     public boolean isOk() {
         return ok;
     }
@@ -42,6 +43,7 @@ public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrappe
     /**
      * Example method, this one gets the stats of a crop
      */
+	@Override
     public SeedStatsExample exampleMethodGetSeedStats(World world, BlockPos pos) {
         if(isOk()) {
             ISeedStats stats = api.getStats(world, pos);
@@ -54,6 +56,7 @@ public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrappe
     /**
      * Example method, this one gets the stat cap imposed to agricraft
      */
+	@Override
     public short exampleMethodGetSeedStatsCap() {
         return isOk()?api.getStatCap():super.exampleMethodGetSeedStatsCap();
     }

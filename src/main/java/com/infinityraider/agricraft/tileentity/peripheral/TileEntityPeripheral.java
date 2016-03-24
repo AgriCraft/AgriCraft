@@ -40,14 +40,14 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
+    public void writeTileNBT(NBTTagCompound tag) {
+        super.writeTileNBT(tag);
         tag.setBoolean(AgriCraftNBT.FLAG, mayAnalyze);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+    public void readTileNBT(NBTTagCompound tag) {
+        super.readTileNBT(tag);
         mayAnalyze = tag.hasKey(AgriCraftNBT.FLAG) && tag.getBoolean(AgriCraftNBT.FLAG);
     }
 
@@ -63,10 +63,10 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     @Override
-    public void tick() {
+    public void update() {
         if(mayAnalyze) {
             if(this.hasSpecimen() && !isSpecimenAnalyzed()) {
-                super.tick();
+                super.update();
             } else {
                 reset();
             }
@@ -149,6 +149,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
         return false;
     }
 
+	@Override
     public String getName() {
         return "agricraft_peripheral";
     }

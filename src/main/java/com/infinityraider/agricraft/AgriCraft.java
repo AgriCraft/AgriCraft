@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.*;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.models.AgriCraftModelLoader;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
@@ -21,6 +22,8 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.ArrayList;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * <p>
@@ -48,14 +51,20 @@ import java.util.ArrayList;
  * </p>
  * @author InfinityRaider
  */
-@Mod(modid = Reference.MOD_ID,name = Reference.MOD_NAME,version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
+@Mod(
+		modid = Reference.MOD_ID,
+		name = Reference.MOD_NAME,
+		version = Reference.MOD_VERSION,
+		guiFactory = Reference.GUI_FACTORY_CLASS,
+		updateJSON = Reference.UPDATE_URL
+)
 public class AgriCraft {
     @Mod.Instance(Reference.MOD_ID)
     public static AgriCraft instance;
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS,serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
-
+	
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public static void preInit(FMLPreInitializationEvent event) {
@@ -64,10 +73,13 @@ public class AgriCraft {
         proxy.initConfiguration(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
         AgriCraftBlocks.init();
+		AgriCraftItems.init();
         AgriCraftCrops.init();
-        AgriCraftItems.init();
         APISelector.init();
         CompatibilityHandler.getInstance().preInit();
+		if (event.getSide() == Side.CLIENT) {
+			ModelLoaderRegistry.registerLoader(AgriCraftModelLoader.INSTANCE);
+		}
         LogHelper.debug("Pre-Initialization Complete");
     }
 
@@ -92,7 +104,6 @@ public class AgriCraft {
         AgriCraftRecipes.init();
         GrowthRequirementHandler.init();
         CropPlantHandler.init();
-        CropProducts.init();
         WorldGen.init();
         CustomCrops.initGrassSeeds();
         CompatibilityHandler.getInstance().postInit();

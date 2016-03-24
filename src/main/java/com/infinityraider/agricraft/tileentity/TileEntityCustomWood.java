@@ -66,8 +66,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	private boolean isIconCached = true;
 
 	@Override
-	public final void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public final void writeTileNBT(NBTTagCompound tag) {
 		tag.setString(AgriCraftNBT.MATERIAL, this.getMaterial().getRegistryName());
 		tag.setInteger(AgriCraftNBT.MATERIAL_META, this.getMaterialMeta());
 		this.writeNBT(tag);
@@ -81,8 +80,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 * @param tag the TAG to load the entity data from.
 	 */
 	@Override
-	public final void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
+	public final void readTileNBT(NBTTagCompound tag) {
 		this.setMaterial(tag);
 		this.readNBT(tag);
 	}
@@ -249,6 +247,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public void addWailaInformation(List information) {
-		information.add(StatCollector.translateToLocal("agricraft_tooltip.material") + ": " + this.material.getLocalizedName());
+		information.add(StatCollector.translateToLocal("agricraft_tooltip.material") + ": " + new ItemStack(this.material, 1, this.materialMeta).getDisplayName());
 	}
 }

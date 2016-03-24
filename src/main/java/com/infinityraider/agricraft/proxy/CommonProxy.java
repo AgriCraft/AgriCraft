@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.proxy;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
 import com.infinityraider.agricraft.handler.PlayerConnectToServerHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.RenderLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -31,7 +32,7 @@ public abstract class CommonProxy implements IProxy {
         FMLCommonHandler.instance().bus().register(playerConnectToServerHandler);
         MinecraftForge.EVENT_BUS.register(playerConnectToServerHandler);
 
-        if (ConfigurationHandler.debug) {
+        if (AgriCraftConfig.debug) {
             FMLCommonHandler.instance().bus().register(new RenderLogger());
         }
     }

@@ -254,7 +254,7 @@ public abstract class IOHelper {
                 count++;
             }
         }
-        ArrayList<String> data = new ArrayList<String>(count + 1); // There will be no more than count plus + lines, thereby preventing resizing.
+        ArrayList<String> data = new ArrayList<>(count + 1); // There will be no more than count plus + lines, thereby preventing resizing.
         if (unprocessed.length()>0) {
             for (int i=0;i<count;i++) {
                 String line = (unprocessed.substring(0,unprocessed.indexOf('\n'))).trim();
@@ -275,7 +275,7 @@ public abstract class IOHelper {
 
     //splits a comma seperated string into an array
     public static String[] getData(String input) {
-        ArrayList<String> output = new ArrayList<String>();
+        ArrayList<String> output = new ArrayList<>();
         int start = 0;
         for(int i=0;i<input.length();i++) {
             if(input.charAt(i)==',') {

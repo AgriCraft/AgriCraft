@@ -2,8 +2,6 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.renderers.*;
 import com.infinityraider.agricraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
-import com.infinityraider.agricraft.renderers.renderinghacks.IItemRenderer;
-import com.infinityraider.agricraft.renderers.renderinghacks.ISimpleBlockRenderingHandler;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.block.Block;
@@ -23,9 +21,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.agricraft.renderers.renderinghacks.IRenderingHandler;
 
 @SideOnly(Side.CLIENT)
-public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<TileEntityBase> implements ISimpleBlockRenderingHandler, IItemRenderer {
+public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<TileEntityBase> implements IRenderingHandler {
 
 	protected RenderBlockAgriCraft(Block block, TileEntityBase te, boolean inventory, boolean tesr, boolean isbrh) {
 		this.registerRenderer(block, te, inventory, tesr, isbrh);

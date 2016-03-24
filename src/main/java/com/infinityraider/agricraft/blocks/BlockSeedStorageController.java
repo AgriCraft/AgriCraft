@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
-import com.infinityraider.agricraft.renderers.renderinghacks.ISimpleBlockRenderingHandler;
 import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorageController;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -11,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import com.infinityraider.agricraft.renderers.renderinghacks.IRenderingHandler;
 
 public class BlockSeedStorageController extends BlockCustomWood {
 
@@ -47,7 +47,7 @@ public class BlockSeedStorageController extends BlockCustomWood {
     }
 
 	@Override
-	public ISimpleBlockRenderingHandler getRenderer() {
+	public IRenderingHandler getRenderer() {
 		return null;
 	}
 

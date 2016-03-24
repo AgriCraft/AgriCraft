@@ -1,12 +1,10 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
-import com.infinityraider.agricraft.tileentity.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannelValve;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -29,9 +27,9 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 
 	public static AtomicInteger renderCallCounter = new AtomicInteger(0);
 
-    public RenderChannel() {
-        this(AgriCraftBlocks.blockWaterChannel, new TileEntityChannel());
-    }
+	public RenderChannel() {
+		this(AgriCraftBlocks.blockWaterChannel, new TileEntityChannel());
+	}
 
 	protected RenderChannel(Block block, TileEntityChannel channel) {
 		super(block, channel, true, true, true);
@@ -59,7 +57,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 	protected void doRenderTileEntity(TessellatorV2 tess, TileEntity te) {
 		if (te instanceof TileEntityChannel) {
 			TileEntityChannel channel = (TileEntityChannel) te;
-			if (channel.getDiscreteFluidLevel() > 0) {
+			if (channel.getFluidLevel() > 0) {
 				renderCallCounter.incrementAndGet();
 				this.drawWater(tess, channel);
 			}
@@ -104,7 +102,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 
 		//stolen from Vanilla code
 		final int l = Blocks.water.colorMultiplier(channel.getWorld(), channel.getPos());
-		final float y = channel.getFluidHeight();
+		final float y = channel.getFluidHeight() * Constants.UNIT;
 		final float f = (float) (l >> 16 & 255) / 255.0F;
 		final float f1 = (float) (l >> 8 & 255) / 255.0F;
 		final float f2 = (float) (l & 255) / 255.0F;
@@ -115,35 +113,21 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 		tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
 
 		//draw central water levels
-		drawScaledFaceFrontXZ(tessellator, 5, 5, 11, 11, icon, y - 0.001f, COLOR_MULTIPLIER_STANDARD);
+		drawScaledFaceDoubleXZ(tessellator, 5, 5, 11, 11, icon, y - 0.001f);
 		//connect to edges
-		this.connectWater(channel, tessellator, AgriForgeDirection.NORTH, y, icon);
-		this.connectWater(channel, tessellator, AgriForgeDirection.EAST, y, icon);
-		this.connectWater(channel, tessellator, AgriForgeDirection.SOUTH, y, icon);
-		this.connectWater(channel, tessellator, AgriForgeDirection.WEST, y, icon);
-
-	}
-
-	protected void connectWater(TileEntityChannel channel, TessellatorV2 tessellator, AgriForgeDirection direction, float y, TextureAtlasSprite icon) {
-		// checks if there is a neighboring block that this block can connect to
-		if (channel.hasNeighbourCheck(direction)) {
-			IIrrigationComponent te = channel.getNeighbor(direction);
-			float y2;
-			if (te instanceof TileEntityChannel) {
-				if (te instanceof TileEntityChannelValve && ((TileEntityChannelValve) te).isPowered()) {
-					y2 = y;
-				} else {
-					y2 = (y + te.getFluidHeight()) / 2;
-				}
-			} else {
-				float lvl = (te.getFluidHeight() - 16 * ((TileEntityTank) te).getYPosition());
-				y2 = lvl > 12 ? 12 : lvl < 5 ? (5 - 0.0001F) : lvl;
-			}
-			this.drawWaterEdge(tessellator, direction, y, y2, icon);
+		if (channel.hasNeighbourCheck(AgriForgeDirection.NORTH)) {
+			drawScaledFaceDoubleXZ(tessellator, 5, 0, 11, 5, icon, y - 0.001f);
 		}
+		if (channel.hasNeighbourCheck(AgriForgeDirection.EAST)) {
+			drawScaledFaceDoubleXZ(tessellator, 11, 5, 16, 11, icon, y - 0.001f);
+		}
+		if (channel.hasNeighbourCheck(AgriForgeDirection.SOUTH)) {
+			drawScaledFaceDoubleXZ(tessellator, 5, 11, 11, 16, icon, y - 0.001f);
+		}
+		if (channel.hasNeighbourCheck(AgriForgeDirection.WEST)) {
+			drawScaledFaceDoubleXZ(tessellator, 0, 5, 5, 11, icon, y - 0.001f);
+		}
+
 	}
 
-	protected void drawWaterEdge(TessellatorV2 tessellator, AgriForgeDirection direction, float lvl1, float lvl2, TextureAtlasSprite icon) {
-		drawScaledFaceFrontXZ(tessellator, 5, 0, 11, 5, icon, lvl2 - 0.001f, COLOR_MULTIPLIER_STANDARD);
-	}
 }

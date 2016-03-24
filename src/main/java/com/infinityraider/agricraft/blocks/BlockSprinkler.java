@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntitySprinkler;
+import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -40,6 +41,7 @@ public class BlockSprinkler extends BlockTileBase {
 		this.minZ = this.minX;
 		this.maxY = Constants.UNIT * (Constants.WHOLE + Constants.QUARTER);
 		this.minY = Constants.UNIT * Constants.THREE_QUARTER;
+		RegisterHelper.hideModel(this, this.internalName);
 	}
 
 	@Override

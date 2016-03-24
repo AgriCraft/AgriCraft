@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.api.v1.IRake;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
-import com.infinityraider.agricraft.utility.RegisterHelper;
 import com.infinityraider.agricraft.utility.WeightedRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -32,10 +32,8 @@ public class ItemHandRake extends ItemBase implements IRake {
 	private static final int IRON_VARIANT_META = 1;
 	private static final int[] dropChance = new int[]{10, 25};
 
-	private static final String[] VARIENTS = { "wood", "iron" };
-
 	public ItemHandRake() {
-		super("hand_rake");
+		super("hand_rake", true, "", "iron");
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 	}
@@ -80,6 +78,7 @@ public class ItemHandRake extends ItemBase implements IRake {
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
 		list.add(StatCollector.translateToLocal("agricraft_tooltip.handRake"));
 	}
@@ -90,7 +89,7 @@ public class ItemHandRake extends ItemBase implements IRake {
 			int weedGrowthStage = state.getValue(AgriCraftProperties.GROWTHSTAGE);
 			int newWeedGrowthStage = calculateGrowthStage(rake.getItemDamage(), weedGrowthStage, world.rand);
 			crop.updateWeed(newWeedGrowthStage);
-			if (ConfigurationHandler.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100) < dropChance[rake.getItemDamage() % dropChance.length]) {
+			if (AgriCraftConfig.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100) < dropChance[rake.getItemDamage() % dropChance.length]) {
 				ItemStack drop = ItemDropRegistry.instance().getDrop(world.rand);
 				if (drop != null && drop.getItem() != null) {
 					float f = 0.7F;
@@ -145,11 +144,6 @@ public class ItemHandRake extends ItemBase implements IRake {
 		public int getWeight(ItemStack stack) {
 			return registry.getWeight(stack);
 		}
-	}
-
-	@Override
-	public void registerItemRenderer() {
-		RegisterHelper.registerItemRenderer(this, VARIENTS);
 	}
 
 }

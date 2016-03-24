@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemDebugger;
@@ -39,6 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.utility.RegisterHelper;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 /**
@@ -63,6 +65,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         this.minZ = this.minX;
         this.maxY = Constants.UNIT*(Constants.WHOLE - 3);
         this.minY = 0;
+		RegisterHelper.hideModel(this, internalName);
     }
 
     @Override
@@ -80,6 +83,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     }
 
     /** This gets the actual state, containing data not contained by metadata */
+	@Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if(te != null && te instanceof TileEntityCrop) {
@@ -103,14 +107,14 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if(crop.hasPlant() || crop.hasWeed()) {
             if (CompatibilityHandler.getInstance().allowGrowthTick(world, pos, this, crop, rnd)) {
-            	if (crop.isMature() && crop.hasWeed() && ConfigurationHandler.enableWeeds){
+            	if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds){
                 	crop.spreadWeed();
                 }
             	else if (crop.isFertile()) {
                     //multiplier from GROWTH stat
                     double growthBonus = 1.0 + crop.getGrowth() / 10.0;
                     //multiplier defined in the config
-                    float global = ConfigurationHandler.growthMultiplier;
+                    float global = AgriCraftConfig.growthMultiplier;
                     //crop dependent base GROWTH rate
                     float growthRate = (float) crop.getGrowthRate();
                     //determine if GROWTH tick should be applied or skipped
@@ -122,7 +126,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
             }
         } else {
             //15% chance to spawn weeds
-            if(ConfigurationHandler.enableWeeds && (Math.random() < ConfigurationHandler.weedSpawnChance)) {
+            if(AgriCraftConfig.enableWeeds && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
                 crop.spawnWeed();
             }
             else if(crop.isCrossCrop()) {
@@ -237,7 +241,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         if (te != null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             ItemStack heldItem = player.getCurrentEquippedItem();
-            if (ConfigurationHandler.enableHandRake && crop.hasWeed() && heldItem==null) {
+            if (AgriCraftItems.enableHandRake && crop.hasWeed() && heldItem==null) {
                 //if weeds can only be removed by using a hand rake, nothing should happen
                 return false;
             }
@@ -361,7 +365,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
                 if (crop.isCrossCrop()) {
                     drops.add(new ItemStack(AgriCraftItems.crops, 2));
                 } else {
-                    if(!(crop.hasWeed() && ConfigurationHandler.weedsDestroyCropSticks)) {
+                    if(!(crop.hasWeed() && AgriCraftConfig.weedsDestroyCropSticks)) {
                         drops.add(new ItemStack(AgriCraftItems.crops, 1));
                     }
                     if (crop.hasPlant()) {
@@ -369,7 +373,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
                             drops.addAll(crop.getFruits());
                             drops.add(crop.getSeedStack());
                         }
-                        else if(!ConfigurationHandler.onlyMatureDropSeeds) {
+                        else if(!AgriCraftConfig.onlyMatureDropSeeds) {
                             drops.add(crop.getSeedStack());
                         }
                     }
@@ -407,6 +411,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      * Increments the contained plant's GROWTH stage.
      * Called when bonemeal is applied to the block.
      */
+	@Override
     public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if(crop.hasPlant() || crop.hasWeed()) {
@@ -416,7 +421,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
             }
             world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, l), 2);
         }
-        else if(crop.isCrossCrop() && ConfigurationHandler.bonemealMutation) {
+        else if(crop.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
             crop.crossOver();
         }
     }
@@ -470,7 +475,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      * @return a list of drops from the harvested plant.
      */
     public List<ItemStack> doHarvest(World world, BlockPos pos, IBlockState state, int fortune) {
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> drops = new ArrayList<>();
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if (crop.hasWeed()) {
             crop.clearWeed();   //update is not needed because it is called in the clearWeed() method

@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class ItemCrop extends ItemBase {
 
 	public ItemCrop() {
-		super("crop_sticks");
+		super("crop_sticks", true);
 	}
 
     //I'm overriding this just to be sure

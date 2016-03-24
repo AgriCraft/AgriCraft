@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 public final class CropPlantNone extends CropPlant {
+	
     public static final CropPlantNone NONE = new CropPlantNone();
 
     private CropPlantNone() {}

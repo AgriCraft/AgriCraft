@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.MissingJsonHandler;
 import com.infinityraider.agricraft.handler.TextureStitchHandler;
 import com.infinityraider.agricraft.handler.SoundHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftCrops;
 import com.infinityraider.agricraft.init.AgriCraftItems;
@@ -17,6 +18,7 @@ import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.infinityraider.agricraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.infinityraider.agricraft.utility.LogHelper;
+import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -101,6 +103,9 @@ public class ClientProxy extends CommonProxy {
 			}
 		}
 		
+		// Clippings
+		AgriCraftItems.clipping.registerItemRenderer();
+		
 		/*
 		This method is getting too big... I'm still in favor of having a
 		registerRenderers function in each class...
@@ -145,9 +150,12 @@ public class ClientProxy extends CommonProxy {
 			}
 			LogHelper.debug("Registered resource crop renderers!");
 		}
+		
+		// Nuggets
+		OreDictHelper.registerNuggetRenderers();
 
         //villager
-        if (!ConfigurationHandler.disableWorldGen && ConfigurationHandler.villagerEnabled) {
+        if (!AgriCraftConfig.disableWorldGen && AgriCraftConfig.villagerEnabled) {
             VillagerRegistry.instance().registerVillagerSkin(78943, new ResourceLocation("textures/entity/villager/farmer.png"));  //For now, it uses the texture for the vanilla farmer
         }
 

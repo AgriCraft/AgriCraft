@@ -50,11 +50,9 @@ public abstract class TileEntityBase extends TileEntity {
 
     /**
      * Saves the tile entity to an NBTTag.
-     *
-     * Overriding subclasses should <em>always</em> make a call to Super().
      */
     @Override
-    public void writeToNBT (NBTTagCompound tag){
+    public final void writeToNBT (NBTTagCompound tag){
         super.writeToNBT(tag);
         if (this.orientation != null) {
             tag.setByte(AgriCraftNBT.DIRECTION, (byte) this.orientation.ordinal());
@@ -64,15 +62,16 @@ public abstract class TileEntityBase extends TileEntity {
             ((IMultiBlockComponent) this).getMultiBlockData().writeToNBT(multiBlockTag);
             tag.setTag(AgriCraftNBT.MULTI_BLOCK, multiBlockTag);
         }
+		this.writeTileNBT(tag);
     }
+	
+	protected abstract void writeTileNBT(NBTTagCompound tag);
 
     /**
      * Reads the tile entity from an NBTTag.
-     *
-     * Overriding subclasses should <em>always</em> make a call to Super().
      */
     @Override
-    public void readFromNBT (NBTTagCompound tag){
+    public final void readFromNBT (NBTTagCompound tag){
         super.readFromNBT(tag);
         if (tag.hasKey(AgriCraftNBT.DIRECTION)) {
             this.setOrientation(tag.getByte(AgriCraftNBT.DIRECTION));
@@ -83,7 +82,10 @@ public abstract class TileEntityBase extends TileEntity {
                 ((IMultiBlockComponent) this).getMultiBlockData().readFromNBT(multiBlockTag);
             }
         }
+		this.readTileNBT(tag);
     }
+	
+	protected abstract void readTileNBT(NBTTagCompound tag);
 
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {

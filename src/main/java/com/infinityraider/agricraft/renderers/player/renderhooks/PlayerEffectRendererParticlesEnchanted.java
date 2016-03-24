@@ -51,6 +51,7 @@ public class PlayerEffectRendererParticlesEnchanted extends PlayerEffectRenderer
         return new RuneFX(player.worldObj, x, y, z, 0.01F, vector, texture, f6, f8, f7, f9);
     }
 
+	@Override
     ArrayList<String> getDisplayNames() {
         ArrayList<String> list = new ArrayList<>();
         list.add("Gideonseymour");

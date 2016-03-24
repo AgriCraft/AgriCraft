@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.handler;
 
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.world.StructureGreenhouse;
 import com.infinityraider.agricraft.world.StructureGreenhouseIrrigated;
@@ -17,7 +18,7 @@ public class VillageCreationHandler {
         @Override
         public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int i) {
             //args: structure, weight, max spawns
-            return new StructureVillagePieces.PieceWeight(StructureGreenhouse.class, ConfigurationHandler.greenhouseWeight, ConfigurationHandler.greenhouseLimit);
+            return new StructureVillagePieces.PieceWeight(StructureGreenhouse.class, AgriCraftConfig.greenhouseWeight, AgriCraftConfig.greenhouseLimit);
         }
 
         @Override
@@ -36,7 +37,7 @@ public class VillageCreationHandler {
         @Override
         public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int i) {
             //args: structure, weight, max spawns
-            return new StructureVillagePieces.PieceWeight(StructureGreenhouseIrrigated.class, ConfigurationHandler.greenhouseIrrigatedWeight, ConfigurationHandler.greenhouseIrrigatedLimit);
+            return new StructureVillagePieces.PieceWeight(StructureGreenhouseIrrigated.class, AgriCraftConfig.greenhouseIrrigatedWeight, AgriCraftConfig.greenhouseIrrigatedLimit);
         }
 
         @Override

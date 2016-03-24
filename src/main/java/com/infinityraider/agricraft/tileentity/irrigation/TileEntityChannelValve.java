@@ -27,10 +27,10 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     }
 
     @Override
-    public void tick() {
+    public void update() {
         if(!this.worldObj.isRemote) {
             if(!this.powered) {
-                super.tick();
+                super.update();
             } else {
                 updateNeighbours();
             }

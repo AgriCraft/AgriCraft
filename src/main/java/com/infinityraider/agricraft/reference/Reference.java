@@ -1,12 +1,9 @@
 package com.infinityraider.agricraft.reference;
 
 /**
- * The version should be tracked in the base mod class.
- * Just have to figure out where (and when) to move it...
+ * This class is fine.
  *
- * @deprecated
  */
-@Deprecated
 public interface Reference {
 
 	String MOD_NAME = "${mod.name}";
@@ -22,5 +19,7 @@ public interface Reference {
 	String CLIENT_PROXY_CLASS = "${mod.group}.${mod.id}.proxy.ClientProxy";
 	String SERVER_PROXY_CLASS = "${mod.group}.${mod.id}.proxy.ServerProxy";
 	String GUI_FACTORY_CLASS = "${mod.group}.${mod.id}.gui.GuiFactory";
+	
+	String UPDATE_URL = "${mod.update_url}";
 
 }

@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 
 import com.infinityraider.agricraft.reference.AgriCraftMods;
+import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -44,6 +45,7 @@ public abstract class BlockCustomWood extends BlockTileBase {
         setHarvestLevel("axe", 0);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setStepSound(soundTypeWood);
+		RegisterHelper.hideModel(this, internalName);
     }
 
 	/**

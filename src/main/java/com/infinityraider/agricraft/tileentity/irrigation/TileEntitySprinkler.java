@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tileentity.irrigation;
 
 import com.infinityraider.agricraft.blocks.BlockWaterChannel;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
@@ -12,7 +13,6 @@ import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 	
@@ -32,8 +33,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 
     //this saves the data on the tile entity
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
+    public void writeTileNBT(NBTTagCompound tag) {
         if(this.counter>0) {
             tag.setInteger(AgriCraftNBT.LEVEL, this.counter);
         }
@@ -42,8 +42,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 
     //this loads the saved data for the tile entity
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+    public void readTileNBT(NBTTagCompound tag) {
         if(tag.hasKey(AgriCraftNBT.LEVEL)) {
             this.counter = tag.getInteger(AgriCraftNBT.LEVEL);
         }
@@ -65,10 +64,10 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
     }
 
     @Override
-    public void tick() {
+    public void update() {
         if (!worldObj.isRemote) {
             if (this.sprinkle()) {
-                counter = ++counter % ConfigurationHandler.sprinklerGrowthIntervalTicks;
+                counter = ++counter % AgriCraftConfig.sprinklerGrowthIntervalTicks;
                 drainWaterFromChannel();
 
                 for (int yOffset = 1; yOffset < 6; yOffset++) {
@@ -89,7 +88,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 
     public boolean canSprinkle() {
         return this.isConnected() && ((TileEntityChannel) this.worldObj.getTileEntity(getPos().add(0, 1, 0))).getFluidLevel()
-                > ConfigurationHandler.sprinklerRatePerHalfSecond;
+                > AgriCraftConfig.sprinklerRatePerHalfSecond;
     }
 
     private boolean sprinkle() {
@@ -113,7 +112,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
                 worldObj.setBlockState(pos, block.getStateFromMeta(7), flag);
             } else if (((block instanceof IPlantable) || (block instanceof IGrowable)) && !farmlandOnly) {
                 // X1 chance to force GROWTH tick on plant every Y1 ticks
-                if (counter == 0 && worldObj.rand.nextDouble() <= ConfigurationHandler.sprinklerGrowthChancePercent) {
+                if (counter == 0 && worldObj.rand.nextDouble() <= AgriCraftConfig.sprinklerGrowthChancePercent) {
                     block.updateTick(this.getWorld(), pos, state, worldObj.rand);
                 }
             }
@@ -124,7 +123,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
     private void drainWaterFromChannel() {
         if (counter % 10 == 0) {
             TileEntityChannel channel = (TileEntityChannel) this.worldObj.getTileEntity(getPos().add(0, 1, 0));
-            channel.pullFluid(ConfigurationHandler.sprinklerRatePerHalfSecond);
+            channel.pullFluid(AgriCraftConfig.sprinklerRatePerHalfSecond);
         }
     }
 
@@ -147,7 +146,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 
     @SideOnly(Side.CLIENT)
     private void renderLiquidSpray() {
-        if(ConfigurationHandler.disableParticles) {
+        if(AgriCraftConfig.disableParticles) {
             return;
         }
         this.angle = (this.angle+5F)%360;
@@ -155,7 +154,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
         counter = (counter+1)%(particleSetting+1);
         if(counter==0) {
             for (int i = 0; i < 4; i++) {
-                float alpha = (this.angle + 90 * i) * ((float) Math.PI) / 180;
+                float alpha = -(this.angle + 90 * i) * ((float) Math.PI) / 180;
                 double xOffset = (4 * Constants.UNIT) * Math.cos(alpha);
                 double zOffset = (4 * Constants.UNIT) * Math.sin(alpha);
                 float radius = 0.3F;
@@ -170,7 +169,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 
     @SideOnly(Side.CLIENT)
     private void spawnLiquidSpray(double xOffset, double zOffset, Vec3 vector) {
-        LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord()+0.5F+xOffset, this.yCoord()+5* Constants.UNIT, this.zCoord()+0.5F+zOffset, 0.3F, 0.7F, vector);
+        LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord()+0.5F+xOffset, this.yCoord()+8*Constants.UNIT, this.zCoord()+0.5F+zOffset, 0.3F, 0.7F, vector);
         Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
     }
 

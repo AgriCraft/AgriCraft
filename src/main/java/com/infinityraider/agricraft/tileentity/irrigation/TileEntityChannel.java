@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tileentity.irrigation;
 
 import com.infinityraider.agricraft.api.v1.IDebuggable;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
@@ -8,7 +9,6 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.util.ITickable;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
 
@@ -37,7 +38,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	protected static final int MAX = 12;
 	protected static final int HEIGHT = MAX - MIN;
 	protected static final int DISCRETE_MAX = 16;
-	protected static final int ABSOLUTE_MAX = ConfigurationHandler.channelCapacity;
+	protected static final int ABSOLUTE_MAX = AgriCraftConfig.channelCapacity;
 	protected static final float DISCRETE_FACTOR = (float) DISCRETE_MAX / (float) ABSOLUTE_MAX;
 
 	private int lvl;
@@ -115,7 +116,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
 	@Override
 	public boolean canConnectTo(IIrrigationComponent component) {
-		return (component instanceof TileEntityTank || component instanceof TileEntityChannel) && this.isSameMaterial((TileEntityCustomWood) component);
+		return (component instanceof TileEntityCustomWood) && this.isSameMaterial((TileEntityCustomWood) component);
 	}
 
 	@Override
@@ -183,7 +184,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
 	//updates the tile entity every tick
 	@Override
-	public void tick() {
+	public void update() {
 		if (!this.worldObj.isRemote) {
 			updateNeighbours();
 			//calculate total fluid lvl and capacity

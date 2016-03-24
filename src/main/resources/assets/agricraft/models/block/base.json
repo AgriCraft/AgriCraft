@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "down": "agricraft:items/debugger",
+        "up": "agricraft:items/debugger",
+        "north": "agricraft:items/debugger",
+        "east": "agricraft:items/debugger",
+        "south": "agricraft:items/debugger",
+        "west": "agricraft:items/debugger",
+        "particle": "agricraft:items/debugger"
+    }
+}

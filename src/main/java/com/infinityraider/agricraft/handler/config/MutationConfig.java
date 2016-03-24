@@ -60,10 +60,8 @@ public class MutationConfig {
         for(int i = 0 ; i < array.length; i++) {
             array[i] = new SerializableMutation(mutations.get(i));
         }
-        try {
-            Writer writer = new OutputStreamWriter(new FileOutputStream(jsonPath));
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(jsonPath))) {
             gson.toJson(array, writer);
-            writer.close();
         } catch(IOException e) {
             LogHelper.info("Writing default mutations failed");
             LogHelper.printStackTrace(e);
@@ -91,7 +89,7 @@ public class MutationConfig {
         try {
             defaultMutations.addAll(readMutations(
                     new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("assets/agricraft/vanilla.json"), "UTF-8"))));
-            if(ConfigurationHandler.resourcePlants) {
+            if(AgriCraftConfig.resourcePlants) {
                 defaultMutations.addAll(readMutations(
                         new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("assets/agricraft/agricraft.json"), "UTF-8"))));
             }

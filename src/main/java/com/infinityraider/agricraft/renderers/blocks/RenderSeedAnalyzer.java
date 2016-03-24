@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
@@ -35,7 +36,7 @@ public class RenderSeedAnalyzer extends RenderBlockAgriCraft {
 		this.modelSeedAnalyzer = new ModelSeedAnalyzer();
 		this.modelBook = new ModelSeedAnalyzerBook();
 		seedAnalyzerDummy = new TileEntitySeedAnalyzer();
-		seedAnalyzerDummy.setOrientation(AgriForgeDirection.SOUTH);
+		seedAnalyzerDummy.setOrientation(AgriForgeDirection.NORTH);
 	}
 
 	@Override
@@ -62,8 +63,19 @@ public class RenderSeedAnalyzer extends RenderBlockAgriCraft {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0.5F, 1.5F, 0.5F);
 			GL11.glRotatef(180, 0F, 0F, 1F);
+			switch (analyzer.getOrientation()) {
+				case WEST:
+					GL11.glRotatef(90, 0F, 1F, 0F);
+					break;
+				case SOUTH:
+					GL11.glRotatef(180, 0F, 1F, 0F);
+					break;
+				case EAST:
+					GL11.glRotatef(270, 0F, 1F, 0F);
+					break;
+			}
 			this.modelSeedAnalyzer.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-			if (analyzer.hasJournal() && ConfigurationHandler.renderBookInAnalyzer) {
+			if (analyzer.hasJournal() && AgriCraftConfig.renderBookInAnalyzer) {
 				this.modelBook.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 			}
 			GL11.glPopMatrix();

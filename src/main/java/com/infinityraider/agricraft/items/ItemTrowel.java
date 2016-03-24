@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,10 +16,8 @@ import net.minecraft.world.World;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
 	
-	private static final String[] VARIENTS = { "empty", "full" };
-	
     public ItemTrowel() {
-        super("trowel");
+        super("trowel", true, "", "full");
         this.maxStackSize=1;
     }
 
@@ -127,10 +124,5 @@ public class ItemTrowel extends ItemBase implements ITrowel {
     public ISeedStats getStats(ItemStack trowel) {
         return PlantStats.getStatsFromStack(getSeed(trowel));
     }
-	
-	@Override
-	public void registerItemRenderer() {
-		RegisterHelper.registerItemRenderer(this, VARIENTS);
-	}
 
 }

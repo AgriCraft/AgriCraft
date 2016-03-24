@@ -64,6 +64,7 @@ public class GrowthRequirement implements IGrowthRequirement{
 
     //Methods to check if a seed can grow
     //-----------------------------------
+	@Override
 	public boolean canGrow(World world, BlockPos pos) {
         return this.isValidSoil(world, pos.add(0, -1, 0)) && this.isBrightnessGood(world, pos) && this.isBaseBlockPresent(world, pos);
     }

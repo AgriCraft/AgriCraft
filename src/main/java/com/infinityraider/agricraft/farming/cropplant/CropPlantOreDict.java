@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CropPlantOreDict extends CropPlantGeneric {
+	
     public CropPlantOreDict(ItemSeeds seed) {
         super(seed);
     }

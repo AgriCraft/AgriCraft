@@ -1,6 +1,6 @@
 {
-	"parent": "agricraft:item/base",
+	"parent": "agricraft:item/trowel",
 	"textures": {
-		"layer0": "agricraft:items/trowel_full"
+		"layer1": "agricraft:items/trowel_full"
 	}
 }

@@ -14,7 +14,7 @@ public class CropPlantStem extends CropPlantGeneric {
     private final Block block;
 
     public CropPlantStem(ItemSeeds seed, Block block) {
-        super(seed);
+        super(seed, "minecraft:blocks/pumpkin_stem_disconnected");
         this.block = block;
     }
 

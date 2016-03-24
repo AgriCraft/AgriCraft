@@ -4,6 +4,7 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.renderers.blocks.RenderWaterPad;
+import com.infinityraider.agricraft.utility.RegisterHelper;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -24,6 +25,7 @@ public abstract class AbstractBlockWaterPad extends BlockBase {
 		super(mat, "water_pad_" + internalName);
 		this.setHardness(0.5F);
         this.setStepSound(soundTypeGravel);
+		RegisterHelper.hideModel(this, this.internalName);
 	}
 	
 	@Override
