@@ -93,7 +93,8 @@ public class MutationConfig {
                 defaultMutations.addAll(readMutations(
                         new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("assets/agricraft/agricraft.json"), "UTF-8"))));
             }
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException | NullPointerException e) {
+            // Oh well...
             LogHelper.printStackTrace(e);
         }
     }
