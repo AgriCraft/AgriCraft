@@ -19,6 +19,7 @@ gradle.properties
 
 # Ignore Build Files
 build/
+dist/
 out/
 logs/
 bin/

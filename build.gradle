@@ -99,29 +99,49 @@ processResources {
     }
 }
 
-// Compile the jar for the APIs
-task apiJar(type: Jar) {
-    from sourceSets.main.allSource
-    from sourceSets.main.output
-    include 'com/InfinityRaider/AgriCraft/api/**/*'
-    classifier = 'api'
-}
-
-// Tell build that it needs the API compiled first.
-build.dependsOn apiJar
-
 // Javadoc
-task mainAgriCraftJavadoc(type: Javadoc) {
+task mainJavadoc(type: Javadoc) {
   source = sourceSets.main.allJava
   title = "AgriCraft ${mod.version} Documentation"
   destinationDir = file("${project.docsDir}/mainJavadoc")
   failOnError = false
 }
 
-task apiAgriCraftJavadoc(type: Javadoc) {
+task apiJavadoc(type: Javadoc) {
   source = sourceSets.main.allJava
   include "**/api/**"
   title = "AgriCraft ${mod.version} API Documentation"
   destinationDir = file("${project.docsDir}/apiJavadoc")
   failOnError = false
+}
+
+// Jars
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: mainJavadoc) {
+    classifier = 'javadoc'
+    from "${project.docsDir}/mainJavadoc"
+}
+
+task apiJar(type: Jar) {
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+    include "${mod.group.replace('.', '/')}/${mod.id}/api/**/*"
+    classifier = 'api'
+}
+
+// Tell build that it needs the API compiled first.
+build.dependsOn apiJar
+
+// Collate distribution files.
+task dist(dependsOn: ['build', 'sourcesJar', 'javadocJar']) {
+    description "Generate the dist folder."
+    delete "${projectDir}/dist"
+    copy {
+        from "${buildDir}/libs"
+        into "${projectDir}/dist"
+    }
 }
