@@ -69,12 +69,13 @@ public abstract class RegisterHelper {
 		final ModelResourceLocation model = new ModelResourceLocation(sb.toString(), "inventory");
 
 		// This way you can easily override the model.
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item,
-				(stack) -> {
-					final ModelResourceLocation loc = item.getModel(stack, null, 0);
-					return loc == null ? model : loc;
-				}
-		);
+                // This causes crashes in non-dev enviorments... to be fixed.
+//		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item,
+//				(stack) -> {
+//					final ModelResourceLocation loc = item.getModel(stack, null, 0);
+//					return loc == null ? model : loc;
+//				}
+//		);
 		ModelBakery.registerItemVariants(item, model);
 
 		return model;
