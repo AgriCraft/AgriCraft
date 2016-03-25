@@ -186,7 +186,7 @@ public final class RenderItemWrapped extends RenderItem {
 	public void renderItemAndEffectIntoGUI(final ItemStack stack, int xPosition, int yPosition) {
 		if (stack != null && stack.getItem() != null) {
 			if (isHandled(stack)) {
-				this.zLevel += 50.0F;
+				this.zLevel -= 50.0F;
 				try {
 					this.renderItemIntoGUI(stack, xPosition, yPosition);
 				} catch (Throwable throwable) {
@@ -198,7 +198,7 @@ public final class RenderItemWrapped extends RenderItem {
 					crashreportcategory.addCrashSectionCallable("Item Foil", () -> String.valueOf(stack.hasEffect()));
 					throw new ReportedException(crashreport);
 				}
-				this.zLevel -= 50.0F;
+				this.zLevel += 50.0F;
 			} else {
 				prevRenderItem.renderItemAndEffectIntoGUI(stack, xPosition, yPosition);
 			}
