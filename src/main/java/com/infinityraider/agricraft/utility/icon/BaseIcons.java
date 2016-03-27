@@ -3,6 +3,8 @@ package com.infinityraider.agricraft.utility.icon;
 import com.infinityraider.agricraft.utility.LogHelper;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * An enum for tracking commonly used icons.
@@ -11,6 +13,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
  *
  * @author RlonRyan
  */
+@SideOnly(Side.CLIENT)
 public enum BaseIcons {
 	
 	WATER_STILL("minecraft:blocks/water_still"),

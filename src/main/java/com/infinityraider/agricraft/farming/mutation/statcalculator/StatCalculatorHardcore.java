@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 
 public class StatCalculatorHardcore extends StatCalculatorBase {
     /**

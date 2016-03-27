@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.blocks.BlockModPlant;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.reference.Data;
 import com.infinityraider.agricraft.utility.LogHelper;

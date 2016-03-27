@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.tileentity.irrigation;
 
 import com.infinityraider.agricraft.api.v1.IDebuggable;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
 import com.infinityraider.agricraft.reference.Constants;
@@ -12,7 +11,6 @@ import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.multiblock.*;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -26,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.util.ITickable;
 
 public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
         public static final int SYNC_DELTA = Constants.HALF_BUCKET_mB;
@@ -62,7 +61,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 
         //updates the tile entity every tick
         @Override
-        public void tick() {
+        public void update() {
             if(!this.worldObj.isRemote) {
                 if(this.worldObj.canBlockSeeSky(getPos()) && this.worldObj.isRaining()) {
                     if(!this.hasNeighbour(AgriForgeDirection.UP)) {

@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.handler.VillageCreationHandler;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Reference;

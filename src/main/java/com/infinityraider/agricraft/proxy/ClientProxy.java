@@ -14,6 +14,7 @@ import com.infinityraider.agricraft.init.CustomCrops;
 import com.infinityraider.agricraft.init.ResourceCrops;
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.ItemModSeed;
+import com.infinityraider.agricraft.models.AgriCraftModelLoader;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
 import com.infinityraider.agricraft.renderers.player.renderhooks.RenderPlayerHooks;
@@ -34,8 +35,12 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("unused")
+@SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
     @Override
@@ -211,5 +216,6 @@ public class ClientProxy extends CommonProxy {
     public void initConfiguration(FMLPreInitializationEvent event) {
         super.initConfiguration(event);
         ConfigurationHandler.initClientConfigs(event);
+		ModelLoaderRegistry.registerLoader(AgriCraftModelLoader.INSTANCE);
     }
 }

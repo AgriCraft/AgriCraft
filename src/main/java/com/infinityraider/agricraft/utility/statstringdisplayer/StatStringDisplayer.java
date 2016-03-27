@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.utility.statstringdisplayer;
 
 import com.infinityraider.agricraft.api.v1.IStatStringDisplayer;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

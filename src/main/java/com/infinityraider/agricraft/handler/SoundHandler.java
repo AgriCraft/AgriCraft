@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.handler;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraft.block.Block;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
