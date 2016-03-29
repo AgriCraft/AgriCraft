@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import javax.annotation.Nonnull;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  * This class represents the root tile entity for all AgriCraft custom WOOD
@@ -58,12 +59,22 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	/**
 	 * Cached icon
 	 */
-	@Nonnull
 	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite icon = IconUtil.getDefaultIcon();
+	private TextureAtlasSprite icon;
 	
 	@Nonnull
 	private boolean isIconCached = true;
+
+	public TileEntityCustomWood() {
+		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
+			this.initIcon();
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private final void initIcon() {
+		this.icon = IconUtil.getDefaultIcon();
+	}
 
 	@Override
 	public final void writeTileNBT(NBTTagCompound tag) {

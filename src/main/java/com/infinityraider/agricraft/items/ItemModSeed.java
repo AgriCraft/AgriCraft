@@ -32,7 +32,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	@SideOnly(Side.CLIENT)
 	private String information;
 
-	@SideOnly(Side.CLIENT)
+	//@SideOnly(Side.CLIENT)
 	private final String seedName;
 
 	/**

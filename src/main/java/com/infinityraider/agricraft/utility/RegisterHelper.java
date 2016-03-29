@@ -63,6 +63,9 @@ public abstract class RegisterHelper {
 	public static void hideModelClient(Block block, String name) {
         ModelLoader.setCustomStateMapper(block, new StateUnmapper("agricraft:base"));
         AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/" + name);
+		if (name.startsWith("seed")) {
+			AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/crop" + name.substring(4));
+		}
     }
 
     @SideOnly(Side.CLIENT)
@@ -121,8 +124,7 @@ public abstract class RegisterHelper {
         registerItem(seed, name);
         OreDictionary.registerOre(name, seed);
         OreDictionary.registerOre("listAllseed", seed);
-        AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/" + name);
-        hideModel(plant, "crop" + name.substring(4));
+        hideModel(plant, name);
     }
 
     public static void removeRecipe(ItemStack stack) {

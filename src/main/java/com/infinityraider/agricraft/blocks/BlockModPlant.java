@@ -34,11 +34,13 @@ import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
+	
     private IGrowthRequirement growthRequirement;
     public CropProduce products = new CropProduce();
     private ItemModSeed seed;
     public int tier;
-    @SideOnly(Side.CLIENT)
+	
+    //@SideOnly(Side.CLIENT)
     private RenderMethod renderType;
     @SideOnly(Side.CLIENT)
     private TextureAtlasSprite[] icons;
@@ -308,11 +310,13 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     }
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getIcon() {
 		return this.icons[0];
 	}
 
     @Override
+	@SideOnly(Side.CLIENT)
     public void registerIcons() {
         icons = new TextureAtlasSprite[4];
         String name = this.getUnlocalizedName();
