@@ -101,18 +101,18 @@ processResources {
 
 // Javadoc
 task mainJavadoc(type: Javadoc) {
-  source = sourceSets.main.allJava
-  title = "AgriCraft ${mod.version} Documentation"
-  destinationDir = file("${project.docsDir}/mainJavadoc")
-  failOnError = false
+	source = sourceSets.main.allJava
+	title = "AgriCraft ${mod.version} Documentation"
+	destinationDir = file("${project.docsDir}/mainJavadoc")
+	failOnError = false
 }
 
 task apiJavadoc(type: Javadoc) {
-  source = sourceSets.main.allJava
-  include "**/api/**"
-  title = "AgriCraft ${mod.version} API Documentation"
-  destinationDir = file("${project.docsDir}/apiJavadoc")
-  failOnError = false
+	source = sourceSets.main.allJava
+	include "**/api/**"
+	title = "AgriCraft ${mod.version} API Documentation"
+	destinationDir = file("${project.docsDir}/apiJavadoc")
+	failOnError = false
 }
 
 // Jars
@@ -138,10 +138,12 @@ build.dependsOn apiJar
 
 // Collate distribution files.
 task dist(dependsOn: ['build', 'sourcesJar', 'javadocJar']) {
-    description "Generate the dist folder."
-    delete "${projectDir}/dist"
-    copy {
-        from "${buildDir}/libs"
-        into "${projectDir}/dist"
-    }
+	description "Generate the dist folder."
+	doLast{
+		delete "${projectDir}/dist"
+		copy {
+			from "${buildDir}/libs"
+			into "${projectDir}/dist"
+		}
+	}
 }
