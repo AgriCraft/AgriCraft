@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.farming;
 import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.ITrowel;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

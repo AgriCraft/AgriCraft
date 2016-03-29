@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.*;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftItems;
-import com.infinityraider.agricraft.models.AgriCraftModelLoader;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
@@ -22,8 +21,6 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.ArrayList;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * <p>
@@ -62,7 +59,7 @@ public class AgriCraft {
     @Mod.Instance(Reference.MOD_ID)
     public static AgriCraft instance;
 
-    @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS,serverSide = Reference.SERVER_PROXY_CLASS)
+    @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
 	
     @Mod.EventHandler
@@ -77,9 +74,6 @@ public class AgriCraft {
         AgriCraftCrops.init();
         APISelector.init();
         CompatibilityHandler.getInstance().preInit();
-		if (event.getSide() == Side.CLIENT) {
-			ModelLoaderRegistry.registerLoader(AgriCraftModelLoader.INSTANCE);
-		}
         LogHelper.debug("Pre-Initialization Complete");
     }
 

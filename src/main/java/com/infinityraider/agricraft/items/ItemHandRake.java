@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.api.v1.IRake;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.utility.WeightedRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;

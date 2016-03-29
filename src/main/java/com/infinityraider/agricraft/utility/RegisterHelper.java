@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.utility;
 
 import com.infinityraider.agricraft.blocks.BlockModPlant;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.models.AgriCraftModelLoader;
 import com.infinityraider.agricraft.models.StateUnmapper;
@@ -22,6 +21,7 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -53,11 +53,19 @@ public abstract class RegisterHelper {
         }
     }
 
-    private static final StateUnmapper UNMAPPER = new StateUnmapper("agricraft:base");
-
     public static void hideModel(Block block, String name) {
-        ModelLoader.setCustomStateMapper(block, UNMAPPER);
+        if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
+			hideModelClient(block, name);
+		}
+    }
+	
+	@SideOnly(Side.CLIENT)
+	public static void hideModelClient(Block block, String name) {
+        ModelLoader.setCustomStateMapper(block, new StateUnmapper("agricraft:base"));
         AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/" + name);
+		if (name.startsWith("seed")) {
+			AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/crop" + name.substring(4));
+		}
     }
 
     @SideOnly(Side.CLIENT)
@@ -116,8 +124,7 @@ public abstract class RegisterHelper {
         registerItem(seed, name);
         OreDictionary.registerOre(name, seed);
         OreDictionary.registerOre("listAllseed", seed);
-        AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/" + name);
-        hideModel(plant, "crop" + name.substring(4));
+        hideModel(plant, name);
     }
 
     public static void removeRecipe(ItemStack stack) {

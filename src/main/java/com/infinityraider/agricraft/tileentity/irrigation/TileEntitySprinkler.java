@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.tileentity.irrigation;
 
 import com.infinityraider.agricraft.blocks.BlockWaterChannel;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.renderers.particles.LiquidSprayFX;

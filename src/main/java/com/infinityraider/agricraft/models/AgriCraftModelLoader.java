@@ -11,12 +11,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
  * @author RlonRyan
  */
-//@SideOnly(Side.CLIENT)
+@SideOnly(Side.CLIENT)
 public final class AgriCraftModelLoader implements ICustomModelLoader {
 
 	public static final AgriCraftModelLoader INSTANCE = new AgriCraftModelLoader();

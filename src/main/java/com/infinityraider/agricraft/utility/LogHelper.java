@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.utility;
 
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;

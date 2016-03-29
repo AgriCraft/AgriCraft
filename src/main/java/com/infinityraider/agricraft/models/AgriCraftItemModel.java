@@ -22,11 +22,14 @@ import net.minecraftforge.client.model.IModelState;
 import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.client.model.TRSRTransformation;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
  * @author RlonRyan
  */
+@SideOnly(Side.CLIENT)
 public class AgriCraftItemModel implements IModel {
 
 	// Min. Z

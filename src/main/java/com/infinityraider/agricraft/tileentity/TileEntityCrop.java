@@ -14,7 +14,6 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.farming.mutation.MutationEngine;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;

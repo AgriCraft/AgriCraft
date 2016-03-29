@@ -22,41 +22,64 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemClipping extends ItemBase {
 
-	public static final String BASE_LOCATION = "agricraftitem:agricraft/items/clipping$";
+	@SideOnly(Side.CLIENT)
+	public static final class ItemData {
 
-	public static final ModelResourceLocation DEFAULT_MODEL = new ModelResourceLocation(BASE_LOCATION + "agricraft/items/debugger$", "inventory");
-	public static final ModelResourceLocation LOCATION = new ModelResourceLocation(new ResourceLocation("agricraft", "clipping"), "inventory");
+		private ItemData() {
+		}
 
-	private final Map<CropPlant, ModelResourceLocation> textures;
+		public static final String BASE_LOCATION = "agricraftitem:agricraft/items/clipping$";
+
+		public static final ModelResourceLocation DEFAULT_MODEL = new ModelResourceLocation(BASE_LOCATION + "agricraft/items/debugger$", "inventory");
+		public static final ModelResourceLocation LOCATION = new ModelResourceLocation(new ResourceLocation("agricraft", "clipping"), "inventory");
+
+	}
+
+	@SideOnly(Side.CLIENT)
+	private Map<CropPlant, ModelResourceLocation> textures;
 
 	public ItemClipping() {
 		super("clipping", false);
 		this.setCreativeTab(null);
+		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
+			this.initTextures();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private final void initTextures() {
 		this.textures = new HashMap<>();
 	}
 
 	public final void addPlant(CropPlant crop, String texture) {
-		this.textures.put(crop, getModel(texture));
-		this.textures.put(null, DEFAULT_MODEL);
+		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
+			this.textures.put(crop, getModel(texture));
+			this.textures.put(null, ItemData.DEFAULT_MODEL);
+		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static final ModelResourceLocation getModel(final String texture) {
 
 		if (texture == null || texture.isEmpty()) {
-			return DEFAULT_MODEL;
+			return ItemData.DEFAULT_MODEL;
 		}
 
-		final StringBuilder sb = new StringBuilder(BASE_LOCATION.length() + texture.length());
-		sb.append(BASE_LOCATION);
+		final StringBuilder sb = new StringBuilder(ItemData.BASE_LOCATION.length() + texture.length());
+		sb.append(ItemData.BASE_LOCATION);
 		sb.append(texture.replaceFirst("_stem[0-9]", "_stem").replaceAll(":", "/"));
 		sb.append("~4~4~12~12$");
 
 		return new ModelResourceLocation(sb.toString(), "inventory");
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerItemRenderer() {
 
@@ -67,9 +90,10 @@ public class ItemClipping extends ItemBase {
 
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-		return textures.getOrDefault(toCrop(stack), DEFAULT_MODEL);
+		return textures.getOrDefault(toCrop(stack), ItemData.DEFAULT_MODEL);
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.api.v1.IStatCalculator;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
