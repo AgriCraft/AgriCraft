@@ -129,7 +129,8 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
 
 		EntityItem item = new EntityItem(AgriCraft.proxy.getClientWorld(), 0, 0, 0, seed);
 		item.hoverStart = 0;
-		Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(item, 0, 0, 0, 0, 0);
+		// This was causing issues anyway...
+		//Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(item, 0, 0, 0, 0, 0);
 
 		GL11.glScalef(1F / f, 1F / f, 1F / f);
 		GL11.glRotatef(-a, 0, 1, 0);

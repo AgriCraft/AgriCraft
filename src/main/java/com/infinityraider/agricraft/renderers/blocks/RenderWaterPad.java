@@ -64,11 +64,11 @@ public class RenderWaterPad extends RenderBlockAgriCraft {
 	}
 
 	private void renderBase(TessellatorV2 tessellator, IBlockAccess world, BlockPos pos, boolean full) {
-		
+
 		// Get Icon
 		final TextureAtlasSprite waterIcon = BaseIcons.WATER_STILL.getIcon();
 
-		tessellator.setBrightness(Blocks.farmland.getMixedBrightnessForBlock(world, pos));
+		//tessellator.setBrightness(Blocks.farmland.getMixedBrightnessForBlock(world, pos));
 		tessellator.setColorRGBA_F(1, 1, 1, 1);
 
 		//renderer.setRenderBounds(0, 0, 0, 16 * u, 8 * u, 16 * u);
@@ -79,13 +79,7 @@ public class RenderWaterPad extends RenderBlockAgriCraft {
 			//renderer.setRenderBounds(0, 8 * u, 0, u, 15 * u, 1 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
-			int l = Blocks.water.colorMultiplier(world, pos);
-			float f = (float) (l >> 16 & 255) / 255.0F;
-			float f1 = (float) (l >> 8 & 255) / 255.0F;
-			float f2 = (float) (l & 255) / 255.0F;
-			float f4 = 1.0F;
-			tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
-			tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
+			setupColor(tessellator, world, pos);
 			tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
 			addScaledVertexWithUV(tessellator, 0, 14, 0, 0, 0, waterIcon);
 			addScaledVertexWithUV(tessellator, 0, 14, 1, 0, 1, waterIcon);
@@ -98,13 +92,7 @@ public class RenderWaterPad extends RenderBlockAgriCraft {
 			//renderer.setRenderBounds(15 * u, 8 * u, 0, 16 * u, 15 * u, 1 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
-			int l = Blocks.water.colorMultiplier(world, pos);
-			float f = (float) (l >> 16 & 255) / 255.0F;
-			float f1 = (float) (l >> 8 & 255) / 255.0F;
-			float f2 = (float) (l & 255) / 255.0F;
-			float f4 = 1.0F;
-			tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
-			tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
+			setupColor(tessellator, world, pos);
 			tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
 			addScaledVertexWithUV(tessellator, 15, 14, 0, 15, 0, waterIcon);
 			addScaledVertexWithUV(tessellator, 15, 14, 1, 15, 1, waterIcon);
@@ -117,13 +105,7 @@ public class RenderWaterPad extends RenderBlockAgriCraft {
 			//renderer.setRenderBounds(15 * u, 8 * u, 15 * u, 16 * u, 15 * u, 16 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
-			int l = Blocks.water.colorMultiplier(world, pos);
-			float f = (float) (l >> 16 & 255) / 255.0F;
-			float f1 = (float) (l >> 8 & 255) / 255.0F;
-			float f2 = (float) (l & 255) / 255.0F;
-			float f4 = 1.0F;
-			tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
-			tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
+			setupColor(tessellator, world, pos);
 			tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
 			addScaledVertexWithUV(tessellator, 15, 14, 15, 15, 15, waterIcon);
 			addScaledVertexWithUV(tessellator, 15, 14, 16, 15, 16, waterIcon);
@@ -136,13 +118,7 @@ public class RenderWaterPad extends RenderBlockAgriCraft {
 			//renderer.setRenderBounds(0, 8 * u, 15 * u, u, 15 * u, 16 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
-			int l = Blocks.water.colorMultiplier(world, pos);
-			float f = (float) (l >> 16 & 255) / 255.0F;
-			float f1 = (float) (l >> 8 & 255) / 255.0F;
-			float f2 = (float) (l & 255) / 255.0F;
-			float f4 = 1.0F;
-			tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
-			tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
+			setupColor(tessellator, world, pos);
 			tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
 			addScaledVertexWithUV(tessellator, 0, 14, 15, 0, 15, waterIcon);
 			addScaledVertexWithUV(tessellator, 0, 14, 16, 0, 16, waterIcon);
@@ -153,13 +129,7 @@ public class RenderWaterPad extends RenderBlockAgriCraft {
 
 		//renderer.renderAllFaces = renderAllFaces;
 		if (full) {
-			int l = Blocks.water.colorMultiplier(world, pos);
-			float f = (float) (l >> 16 & 255) / 255.0F;
-			float f1 = (float) (l >> 8 & 255) / 255.0F;
-			float f2 = (float) (l & 255) / 255.0F;
-			float f4 = 1.0F;
-			tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
-			tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
+			setupColor(tessellator, world, pos);
 			tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
 			addScaledVertexWithUV(tessellator, 1, 14, 1, 1, 1, waterIcon);
 			addScaledVertexWithUV(tessellator, 1, 14, 15, 1, 15, waterIcon);
@@ -167,6 +137,16 @@ public class RenderWaterPad extends RenderBlockAgriCraft {
 			addScaledVertexWithUV(tessellator, 15, 14, 1, 15, 1, waterIcon);
 			tessellator.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 		}
+	}
+
+	private static void setupColor(TessellatorV2 tessellator, IBlockAccess world, BlockPos pos) {
+//		int l = Blocks.water.colorMultiplier(world, pos);
+//		float f = (float) (l >> 16 & 255) / 255.0F;
+//		float f1 = (float) (l >> 8 & 255) / 255.0F;
+//		float f2 = (float) (l & 255) / 255.0F;
+//		float f4 = 1.0F;
+//		tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
+//		tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
 	}
 
 	private boolean shouldRenderCorner(IBlockAccess world, BlockPos pos, boolean full, AgriForgeDirection dir1, AgriForgeDirection dir2) {
@@ -199,13 +179,7 @@ public class RenderWaterPad extends RenderBlockAgriCraft {
 			boolean flag = block instanceof BlockWaterPadFull;
 			if (full) {
 				TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: get water icon
-				int l = Blocks.water.colorMultiplier(world, pos);
-				float f = (float) (l >> 16 & 255) / 255.0F;
-				float f1 = (float) (l >> 8 & 255) / 255.0F;
-				float f2 = (float) (l & 255) / 255.0F;
-				float f4 = 1.0F;
-				tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
-				tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
+				setupColor(tessellator, world, pos);
 				tessellator.translate(pos.getX(), pos.getY(), pos.getZ());
 				addScaledVertexWithUV(tessellator, xLower, 14, zLower, xLower, zLower, icon);
 				addScaledVertexWithUV(tessellator, xLower, 14, zUpper, xLower, zUpper, icon);
@@ -217,7 +191,7 @@ public class RenderWaterPad extends RenderBlockAgriCraft {
 				return;
 			}
 		}
-		tessellator.setBrightness(Blocks.farmland.getMixedBrightnessForBlock(world, pos));
+		//tessellator.setBrightness(Blocks.farmland.getMixedBrightnessForBlock(world, pos));
 		tessellator.setColorRGBA_F(1, 1, 1, 1);
 		//boolean renderAllFaces = renderer.renderAllFaces;
 		//renderer.renderAllFaces = true;

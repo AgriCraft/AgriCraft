@@ -7,7 +7,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderEntityItem;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -15,9 +14,6 @@ import net.minecraft.client.renderer.tileentity.RenderItemFrame;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
-import net.minecraft.client.resources.model.IBakedModel;
-import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,6 +29,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.ItemColors;
 
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("deprecation")
@@ -48,7 +48,8 @@ public final class RenderItemWrapped extends RenderItem {
 		prevRenderItem = Minecraft.getMinecraft().getRenderItem();
 		TextureManager textureManager = getTextureManager(prevRenderItem);
 		ModelManager modelManager = getModelManager();
-		INSTANCE = new RenderItemWrapped(textureManager, modelManager);
+		ItemColors colors = getItemColors();
+		INSTANCE = new RenderItemWrapped(textureManager, modelManager, colors);
 		applyRenderItem();
 		resetRenderManagerEntries();
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(INSTANCE);
@@ -60,8 +61,8 @@ public final class RenderItemWrapped extends RenderItem {
 		return INSTANCE;
 	}
 
-	private RenderItemWrapped(TextureManager textureManager, ModelManager modelManager) {
-		super(textureManager, modelManager);
+	private RenderItemWrapped(TextureManager textureManager, ModelManager modelManager, ItemColors colors) {
+		super(textureManager, modelManager, colors);
 		this.textureManager = textureManager;
 	}
 
@@ -81,9 +82,11 @@ public final class RenderItemWrapped extends RenderItem {
 	 * Overrides from previous RenderItem instance
 	 */
 	@Override
-	public void func_175039_a(boolean b) {
-		prevRenderItem.func_175039_a(b);
+	public void isNotRenderingEffectsInGUI(boolean b) {
+		prevRenderItem.isNotRenderingEffectsInGUI(b);
 	}
+	
+	
 
 	@Override
 	public ItemModelMesher getItemModelMesher() {
@@ -124,17 +127,6 @@ public final class RenderItemWrapped extends RenderItem {
 			renderItemOverride(stack, transformType);
 		} else {
 			prevRenderItem.renderItem(stack, transformType);
-		}
-	}
-
-	@Override
-	public void renderItemModelForEntity(ItemStack stack, EntityLivingBase entityToRenderFor, ItemCameraTransforms.TransformType cameraTransformType) {
-		if (stack != null && entityToRenderFor != null) {
-			if (isHandled(stack)) {
-				renderItemOverride(stack, cameraTransformType);
-			} else {
-				prevRenderItem.renderItemModelForEntity(stack, entityToRenderFor, cameraTransformType);
-			}
 		}
 	}
 
@@ -263,6 +255,21 @@ public final class RenderItemWrapped extends RenderItem {
 			}
 		}
 		return ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "aL", "field_175617_aL", "modelManager");
+	}
+	
+	private static ItemColors getItemColors() {
+		for (Field field : Minecraft.class.getDeclaredFields()) {
+			if (field.getType() == ItemColors.class) {
+				field.setAccessible(true);
+				try {
+					return (ItemColors) field.get(Minecraft.getMinecraft());
+				} catch (Exception e) {
+					LogHelper.printStackTrace(e);
+				}
+				field.setAccessible(false);
+			}
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
