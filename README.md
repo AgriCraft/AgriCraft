@@ -1,4 +1,4 @@
-# AgriCraft [![Build Status](https://travis-ci.org/InfinityRaider/AgriCraft.svg?branch=master)](https://travis-ci.org/InfinityRaider/AgriCraft)
+# AgriCraft [1.7.10] [![Build Status](https://travis-ci.org/InfinityRaider/AgriCraft.svg?branch=1.7.10)](https://travis-ci.org/InfinityRaider/AgriCraft)
 
 Agricultural farming extended. 
 
