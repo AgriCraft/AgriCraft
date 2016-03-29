@@ -9,14 +9,14 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,7 +46,7 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 	@Override
 	public final void renderTileEntityAt(TileEntityBase te, double x, double y, double z, float partialTicks, int destroyStage) {
 		TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
-		tessellator.setBrightness(te.getBlockType().getMixedBrightnessForBlock(te.getWorld(), te.getPos()));
+		tessellator.setBrightness(RenderUtil.getMixedBrightness(te.getWorld(), te.getPos(), te.getBlockType()));
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
@@ -61,10 +61,10 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 
 	/* Call from ISBRH */
 	@Override
-	public final boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockPos pos, Block block, IBlockState state, WorldRenderer renderer) {
+	public final boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockPos pos, Block block, IBlockState state, VertexBuffer renderer) {
 		final TessellatorV2 tessellator = TessellatorV2.getInstance(renderer);
 		tessellator.translate(pos);
-		tessellator.setBrightness(block.getMixedBrightnessForBlock(world, pos));
+		tessellator.setBrightness(RenderUtil.getMixedBrightness(world, pos, state, block));
 		doRotation(tessellator, world.getTileEntity(pos));
 		doRenderBlock(tessellator, world, block, state, pos);
 		return true;
@@ -78,12 +78,14 @@ public abstract class RenderBlockAgriCraft extends TileEntitySpecialRenderer<Til
 	public final void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
 		TessellatorV2 tessellator = TessellatorV2.getInstance(Tessellator.getInstance());
 		switch (transformType) {
-			case THIRD_PERSON:
+			case THIRD_PERSON_LEFT_HAND:
+			case THIRD_PERSON_RIGHT_HAND:
 				tessellator.scale(0.25, 0.25, 0.25);
 				tessellator.rotate(180, 0, 1, 0);
 				tessellator.translate(-.5, 0, 0);
 				break;
-			case FIRST_PERSON:
+			case FIRST_PERSON_LEFT_HAND:
+			case FIRST_PERSON_RIGHT_HAND:
 				tessellator.scale(0.5, 0.5, 0.5);
 				tessellator.translate(0, -0.5, 0);
 				break;

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v1;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -140,7 +140,7 @@ public interface ICrop {
     /**
      * @return the Block state for the plant currently planted on this crop
      */
-    BlockState getPlantBlockState();
+    IBlockState getPlantBlockState();
 
     /**
      * Spawns weeds on this crop

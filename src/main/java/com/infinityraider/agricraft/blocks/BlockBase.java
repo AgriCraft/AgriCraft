@@ -5,11 +5,11 @@ import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
@@ -22,11 +22,11 @@ import com.infinityraider.agricraft.renderers.renderinghacks.IRenderingHandler;
 public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 
 	public static final int DEFAULT_RENDER_TYPE = 2;
-	public static final EnumWorldBlockLayer DEFAULT_BLOCK_LAYER = EnumWorldBlockLayer.CUTOUT;
+	public static final BlockRenderLayer DEFAULT_BLOCK_LAYER = BlockRenderLayer.CUTOUT;
 	public static final ItemStack DEFAULT_WAILA_STACK = null;
 
 	public final int renderType;
-	public final EnumWorldBlockLayer blockLayer;
+	public final BlockRenderLayer blockLayer;
 	public final String internalName;
 
 	@SideOnly(Side.CLIENT)
@@ -44,7 +44,7 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 		this(mat, internalName, DEFAULT_RENDER_TYPE, DEFAULT_BLOCK_LAYER);
 	}
 
-	protected BlockBase(Material mat, String internalName, int renderType, EnumWorldBlockLayer blockLayer) {
+	protected BlockBase(Material mat, String internalName, int renderType, BlockRenderLayer blockLayer) {
 		super(mat);
 		this.internalName = internalName;
 		// The following two do not appear to ever be used...
@@ -82,8 +82,8 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	 * @return
 	 */
 	@Override
-	protected final BlockState createBlockState() {
-		return new BlockState(this, getPropertyArray());
+	protected final BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, getPropertyArray());
 	}
 
 	/**
@@ -113,7 +113,7 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	}
 
 	@Override
-	public EnumWorldBlockLayer getBlockLayer() {
+	public BlockRenderLayer getBlockLayer() {
 		return DEFAULT_BLOCK_LAYER;
 	}
 	

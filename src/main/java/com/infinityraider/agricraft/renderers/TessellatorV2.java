@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.utility.TransformationMatrix;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * This class is to have a Tessellator like the one in 1.7.10 It's also extended
@@ -25,14 +25,14 @@ public class TessellatorV2 {
 	private static final TransformationMatrix MATRIX_BLOCK_CENTER = new TransformationMatrix(.5, .5, .5);
 	private static final TransformationMatrix MATRIX_BLOCK_ORIGIN = new TransformationMatrix(-.5, -.5, -.5);
 
-	private static final Map<WorldRenderer, TessellatorV2> instances = new HashMap<>();
+	private static final Map<VertexBuffer, TessellatorV2> instances = new HashMap<>();
 
 	private final Tessellator tessellator;
-	private final WorldRenderer worldRenderer;
+	private final VertexBuffer worldRenderer;
 
 	private final Deque<TransformationMatrix> matrixes;
 
-	private TessellatorV2(WorldRenderer worldRenderer, Tessellator tessellator) {
+	private TessellatorV2(VertexBuffer worldRenderer, Tessellator tessellator) {
 		this.worldRenderer = worldRenderer;
 		this.tessellator = tessellator;
 		this.matrixes = new ArrayDeque<>();
@@ -44,7 +44,7 @@ public class TessellatorV2 {
 	}
 
 	public static TessellatorV2 getInstance(Tessellator tessellator) {
-		final WorldRenderer renderer = tessellator.getWorldRenderer();
+		final VertexBuffer renderer = tessellator.getBuffer();
 		if (instances.containsKey(renderer)) {
 			return instances.get(renderer).reset();
 		} else {
@@ -54,7 +54,7 @@ public class TessellatorV2 {
 		}
 	}
 
-	public static TessellatorV2 getInstance(WorldRenderer renderer) {
+	public static TessellatorV2 getInstance(VertexBuffer renderer) {
 		if (instances.containsKey(renderer)) {
 			return instances.get(renderer).reset();
 		} else {
@@ -78,7 +78,7 @@ public class TessellatorV2 {
 	int light1;
 	int light2;
 
-	public WorldRenderer getWorldRenderer() {
+	public VertexBuffer getVertexBuffer() {
 		return worldRenderer;
 	}
 

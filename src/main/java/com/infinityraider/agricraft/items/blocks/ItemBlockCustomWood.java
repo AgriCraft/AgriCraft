@@ -12,7 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -96,7 +96,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 		} else {
 			material = new ItemStack(Blocks.planks);
 		}
-		list.add(StatCollector.translateToLocal("agricraft_tooltip.material") + ": " + material.getItem().getItemStackDisplayName(material));
+		list.add(I18n.translateToLocal("agricraft_tooltip.material") + ": " + material.getItem().getItemStackDisplayName(material));
 	}
 
 	/**

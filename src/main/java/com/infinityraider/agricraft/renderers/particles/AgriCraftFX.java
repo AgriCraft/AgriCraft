@@ -3,12 +3,12 @@ package com.infinityraider.agricraft.renderers.particles;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,31 +17,24 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract  class AgriCraftFX extends EntityFX {
     protected final ResourceLocation texture;
 
-    protected AgriCraftFX(World world, double x, double y, double z, float scale, float gravity, Vec3 vector, ResourceLocation texture) {
+    protected AgriCraftFX(World world, double x, double y, double z, float scale, float gravity, Vec3d vector, ResourceLocation texture) {
         super(world, x, y, z, 0, 0, 0);
         this.texture = texture;
-        this.lastTickPosX = this.prevPosX = this.posX = x;
-        this.lastTickPosY = this.prevPosY = this.posY = y;
-        this.lastTickPosZ = this.prevPosZ = this.posZ = z;
-        this.particleGravity = gravity;
         this.particleScale = scale;
-        this.motionX = vector.xCoord;
-        this.motionY = vector.yCoord;
-        this.motionZ = vector.zCoord;
+        this.xSpeed = vector.xCoord;
+        this.ySpeed = vector.yCoord;
+        this.zSpeed = vector.zCoord;
     }
 
-    protected AgriCraftFX(World world, double x, double y, double z, float scale, float gravity, Vec3 vector, TextureAtlasSprite icon) {
+    protected AgriCraftFX(World world, double x, double y, double z, float scale, float gravity, Vec3d vector, TextureAtlasSprite icon) {
         super(world, x, y, z, 0, 0, 0);
         this.texture = null;
-        this.setParticleIcon(icon);
-        this.lastTickPosX = this.prevPosX = this.posX = x;
-        this.lastTickPosY = this.prevPosY = this.posY = y;
-        this.lastTickPosZ = this.prevPosZ = this.posZ = z;
+        this.setParticleTexture(icon);
         this.particleGravity = gravity;
         this.particleScale = scale;
-        this.motionX = vector.xCoord;
-        this.motionY = vector.yCoord;
-        this.motionZ = vector.zCoord;
+        this.xSpeed = vector.xCoord;
+        this.ySpeed = vector.yCoord;
+        this.zSpeed = vector.zCoord;
     }
 
     @Override
@@ -50,7 +43,7 @@ public abstract  class AgriCraftFX extends EntityFX {
     }
 
     @Override
-    public void renderParticle(WorldRenderer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
+    public void renderParticle(VertexBuffer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
         //I'm doing this because else the textures blink and are fucked up and I have no idea how to fix it,
         //if anyone sees this and knows how, let me know please, thanks :D
         TessellatorV2 tessellator = TessellatorV2.getInstance(worldRenderer);

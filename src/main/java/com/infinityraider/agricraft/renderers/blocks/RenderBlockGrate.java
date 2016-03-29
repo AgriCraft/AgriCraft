@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.tileentity.decoration.TileEntityGrate;
 import net.minecraft.block.Block;
@@ -8,7 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
@@ -57,7 +58,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
 
 			//vines
 			final TextureAtlasSprite vinesIcon = BaseIcons.VINE.getIcon();
-			int l = Blocks.vine.colorMultiplier(world, pos);
+			int l = RenderUtil.getMixedBrightness(world, pos, Blocks.vine.getDefaultState());
 			float f0 = (float) (l >> 16 & 255) / 255.0F;
 			float f1 = (float) (l >> 8 & 255) / 255.0F;
 			float f2 = (float) (l & 255) / 255.0F;

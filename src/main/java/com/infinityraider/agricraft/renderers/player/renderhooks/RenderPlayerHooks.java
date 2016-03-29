@@ -77,10 +77,10 @@ public final class RenderPlayerHooks {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void RenderPlayerEffects(RenderPlayerEvent.Specials.Post event) {
-        if(activeEffectRenderers.containsKey(event.entityPlayer.getDisplayNameString())) {
-            if(!event.entityPlayer.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer)) {
+        if(activeEffectRenderers.containsKey(event.getEntityPlayer().getDisplayNameString())) {
+            if(!event.getEntityPlayer().isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer)) {
                 GL11.glPushMatrix();
-                activeEffectRenderers.get(event.entityPlayer.getDisplayNameString()).renderEffects(TessellatorV2.getInstance(), event.entityPlayer, event.renderer, event.partialRenderTick);
+                activeEffectRenderers.get(event.getEntityPlayer().getDisplayNameString()).renderEffects(TessellatorV2.getInstance(), event.getEntityPlayer(), event.getRenderer(), event.getPartialRenderTick());
                 GL11.glPopMatrix();
             }
         }

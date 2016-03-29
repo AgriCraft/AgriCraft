@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import net.minecraft.util.StatCollector;
+
+import net.minecraft.util.text.translation.I18n;
 
 public class MethodParameter {
     public static final MethodParameter DIRECTION = new MethodParameter("direction");
@@ -13,10 +14,10 @@ public class MethodParameter {
     }
 
     public String getName() {
-        return StatCollector.translateToLocal("agricraft_arg."+name);
+        return I18n.translateToLocal("agricraft_arg." + name);
     }
 
     public String getDescription() {
-        return StatCollector.translateToLocal("agricraft_description.parameter."+name);
+        return I18n.translateToLocal("agricraft_description.parameter."+name);
     }
 }

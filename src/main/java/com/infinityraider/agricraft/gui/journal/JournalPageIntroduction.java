@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.gui.Component;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,7 +25,7 @@ public class JournalPageIntroduction extends JournalPage {
     @Override
     public ArrayList<Component<String>> getTextComponents() {
         ArrayList<Component<String>> textComponents = new ArrayList<>();
-        textComponents.add(new Component<>(StatCollector.translateToLocal("agricraft_journal.introduction"), 24, 28, 0.5F));
+        textComponents.add(new Component<>(I18n.translateToLocal("agricraft_journal.introduction"), 24, 28, 0.5F));
         return textComponents;
     }
 

@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.api.v1.IDebuggable;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -70,7 +70,7 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     	//Required super call
     	super.addWailaInformation(information);
     	//show status
-        String status = StatCollector.translateToLocal(powered?"agricraft_tooltip.closed":"agricraft_tooltip.open");
-        information.add(StatCollector.translateToLocal("agricraft_tooltip.state")+": "+status);
+        String status = I18n.translateToLocal(powered?"agricraft_tooltip.closed":"agricraft_tooltip.open");
+        information.add(I18n.translateToLocal("agricraft_tooltip.state")+": "+status);
     }
 }

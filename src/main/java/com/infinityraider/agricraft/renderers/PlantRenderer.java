@@ -3,11 +3,10 @@ package com.infinityraider.agricraft.renderers;
 import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -15,12 +14,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
 
-    public static void renderPlant(WorldRenderer renderer, IBlockAccess world, BlockPos pos, IBlockState state, int growthStage, ICropPlant plant) {
+    public static void renderPlant(VertexBuffer renderer, IBlockAccess world, BlockPos pos, int growthStage, ICropPlant plant) {
         TextureAtlasSprite iconA = plant.getPrimaryPlantTexture(growthStage);
         TextureAtlasSprite iconB = plant.getSecondaryPlantTexture(growthStage);
         if(iconA!=null) {
             TessellatorV2 tessellator = TessellatorV2.getInstance(renderer);
-            tessellator.setBrightness(Blocks.wheat.getMixedBrightnessForBlock(world, pos));
+            tessellator.setBrightness(RenderUtil.getMixedBrightness(world, pos, Blocks.wheat.getDefaultState()));
             tessellator.translate(pos);
             switch (plant.getRenderMethod()) {
                 case CROSSED:
@@ -180,7 +179,7 @@ public abstract class PlantRenderer {
 
     public static void renderStemPlant(TessellatorV2 tessellator, IBlockAccess world, BlockPos pos, TextureAtlasSprite vineIcon, TextureAtlasSprite fruitIcon, int growhtStage, Block vine) {
         int translation = growhtStage>=6?0:5-growhtStage;
-        tessellator.setBrightness(vine.getMixedBrightnessForBlock(world, pos));
+        tessellator.setBrightness(RenderUtil.getMixedBrightness(world, pos, Blocks.vine.getDefaultState()));
         int l = vine.getRenderColor(vine.getStateFromMeta(growhtStage));
         float f = (float)(l >> 16 & 255) / 255.0F;
         float f1 = (float)(l >> 8 & 255) / 255.0F;

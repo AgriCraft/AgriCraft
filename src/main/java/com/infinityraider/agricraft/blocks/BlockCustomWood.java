@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,9 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -44,14 +45,13 @@ public abstract class BlockCustomWood extends BlockTileBase {
         this.setResistance(5.0F);
         setHarvestLevel("axe", 0);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
-        this.setStepSound(soundTypeWood);
+        this.setStepSound(SoundType.WOOD);
 		RegisterHelper.hideModel(this, internalName);
     }
 
 	/**
 	 * TODO: Clean up this method.
 	 * This method has already been cleaned some, which helps loading...
-	 * @return 
 	 */
     public static List<ItemStack> getWoodTypes() {
 		
@@ -102,13 +102,13 @@ public abstract class BlockCustomWood extends BlockTileBase {
 
     //override this to delay the removal of the tile entity until after harvestBlock() has been called
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        return !player.capabilities.isCreativeMode || super.removedByPlayer(world, pos, player, willHarvest);
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        return !player.capabilities.isCreativeMode || super.removedByPlayer(state, world, pos, player, willHarvest);
     }
 
     //when the block is harvested
     @Override
-    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
         if((!world.isRemote) && (!player.isSneaking())) {
             if(!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
                 this.dropBlockAsItem(world,pos, state, 0);
@@ -138,16 +138,15 @@ public abstract class BlockCustomWood extends BlockTileBase {
 
     //creative item picking
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
-        IBlockState state = world.getBlockState(pos);
-        ItemStack stack = new ItemStack(this, 1, state.getBlock().getDamageValue(world, pos));
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        ItemStack stack = new ItemStack(this, 1, state.getBlock().getMetaFromState(state));
         this.setTag(world, pos, stack);
         return stack;
     }
 
     //prevent block from being removed by leaves
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
@@ -159,11 +158,11 @@ public abstract class BlockCustomWood extends BlockTileBase {
         }
     }
     @Override
-    public boolean isOpaqueCube() {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
+    public boolean isOpaqueCube(IBlockState state) {return false;}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {return false;}
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {return false;}
 
 	/**
 	 * TODO: What is this?

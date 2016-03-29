@@ -10,7 +10,7 @@ import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.relauncher.Side;
@@ -264,7 +264,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 			if (newDiscreteLvl != lastDiscreteLvl) {
 				lastDiscreteLvl = newDiscreteLvl;
 				IMessage msg = new MessageSyncFluidLevel(this.lvl, this.getPos());
-				NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimensionId(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
+				NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimension(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
 				NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
 			}
 		}
@@ -302,6 +302,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	public void addWailaInformation(List information) {
 		//Required call to super.
 		super.addWailaInformation(information);
-		information.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidLevel() + "/" + ABSOLUTE_MAX);
+		information.add(I18n.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidLevel() + "/" + ABSOLUTE_MAX);
 	}
 }

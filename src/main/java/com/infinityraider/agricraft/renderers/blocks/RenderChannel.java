@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -101,7 +101,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 		final TextureAtlasSprite icon = BaseIcons.WATER_STILL.getIcon();
 
 		//stolen from Vanilla code
-		final int l = Blocks.water.colorMultiplier(channel.getWorld(), channel.getPos());
+		final int l = RenderUtil.getMixedBrightness(channel.getWorld(), channel.getPos(), Blocks.water.getDefaultState());
 		final float y = channel.getFluidHeight() * Constants.UNIT;
 		final float f = (float) (l >> 16 & 255) / 255.0F;
 		final float f1 = (float) (l >> 8 & 255) / 255.0F;
@@ -109,7 +109,7 @@ public class RenderChannel extends RenderBlockCustomWood<TileEntityChannel> {
 		final float f4 = 1.0F;
 
 		//...
-		tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(channel.getWorld(), channel.getPos()));
+		tessellator.setBrightness(l);
 		tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
 
 		//draw central water levels

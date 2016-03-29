@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.compatibility;
 
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.compatibility.applecore.AppleCoreHelper;
-import com.infinityraider.agricraft.compatibility.waila.WailaHelper;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
@@ -11,7 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -98,8 +97,7 @@ public class CompatibilityHandler {
 	@SuppressWarnings("unchecked")
 	private void initCompatModules() {
 		Class[] classes = {
-			AppleCoreHelper.class,
-			WailaHelper.class
+			AppleCoreHelper.class
 		};
 		for (Class clazz : classes) {
 			if (ModHelper.class.isAssignableFrom(clazz)) {

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.utility;
 
-import net.minecraft.util.Vec3;
+
+import net.minecraft.util.math.Vec3d;
 
 public final class TransformationMatrix {
 
@@ -50,7 +51,7 @@ public final class TransformationMatrix {
 	/**
 	 * TransformationMatrix for a translation
 	 */
-	public TransformationMatrix(Vec3 translation) {
+	public TransformationMatrix(Vec3d translation) {
 		this(translation.xCoord, translation.yCoord, translation.zCoord);
 	}
 

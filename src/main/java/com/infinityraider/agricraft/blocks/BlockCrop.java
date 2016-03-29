@@ -17,6 +17,7 @@ import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -29,6 +30,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -48,13 +53,20 @@ import com.infinityraider.agricraft.utility.icon.IconUtil;
 public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     /** The set of textures used to render weeds. */
     private TextureAtlasSprite[] weedTextures;
+    //TODO: get rid of these
+    private float minX;
+    private float minY;
+    private float minZ;
+    private float maxX;
+    private float maxY;
+    private float maxZ;
 
     /** The default constructor for the block. */
     public BlockCrop() {
         super(Material.plants, TileEntityCrop.NAME, "crop", false);
         this.setTickRandomly(true);
         this.isBlockContainer = true;
-        this.setStepSound(soundTypeGrass);
+        this.setStepSound(SoundType.PLANT);
         this.setHardness(0.0F);
         this.disableStats();
         //set the bounding box dimensions
@@ -177,13 +189,14 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      * @param world the World object for this block
      * @param pos the block position
      * @param player the player applying the cross crop
+     * @param cropStack stack containing crop sticks
      */
-    public void setCrossCrop(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+    public void setCrossCrop(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack cropStack) {
         if(!world.isRemote) {
             TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
             if(!crop.hasWeed() && !crop.isCrossCrop() && !crop.hasPlant()) {
                 crop.setCrossCrop(true);
-                player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode?player.getCurrentEquippedItem().stackSize:player.getCurrentEquippedItem().stackSize - 1;
+                cropStack.stackSize = cropStack.stackSize - (player.capabilities.isCreativeMode? 0 : 1);
             }
             else {
                 this.harvest(world, pos, state, player, crop);
@@ -230,7 +243,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      * @return if the right-click was consumed.
      */
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         //only make things happen serverside
         if (world.isRemote) {
             return true;
@@ -239,8 +252,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         TileEntity te = world.getTileEntity(pos);
         if (te != null && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
-            ItemStack heldItem = player.getCurrentEquippedItem();
-            if (AgriCraftItems.enableHandRake && crop.hasWeed() && heldItem==null) {
+            if (AgriCraftItems.enableHandRake && crop.hasWeed() && heldItem == null) {
                 //if weeds can only be removed by using a hand rake, nothing should happen
                 return false;
             }
@@ -266,7 +278,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
             }
             //check to see if the player clicked with crops (crosscrop attempt)
             else if (heldItem.getItem() == AgriCraftItems.crops) {
-                this.setCrossCrop(world, pos, state, player);
+                this.setCrossCrop(world, pos, state, player, heldItem);
             }
             //trowel usage
             else if (heldItem.getItem() instanceof ITrowel) {
@@ -293,7 +305,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
                 IFertiliser fertiliser = (IFertiliser) heldItem.getItem();
                 if (crop.allowFertiliser(fertiliser)) {
                     crop.applyFertiliser(fertiliser, world.rand);
-                    NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertiliserApplied(heldItem, pos), new NetworkRegistry.TargetPoint(world.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), 32));
+                    NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertiliserApplied(heldItem, pos), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
                     if (!player.capabilities.isCreativeMode) {
                         heldItem.stackSize = heldItem.stackSize - 1;
                     }
@@ -312,9 +324,9 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
                 this.harvest(world, pos, state, player, crop);
                 //check to see if clicked with seeds
                 if (CropPlantHandler.isValidSeed(heldItem)) {
-                    if(this.plantSeed(player.getCurrentEquippedItem(), world, pos)) {
+                    if(this.plantSeed(heldItem, world, pos)) {
                         //take one SEED away if the player is not in creative
-                        player.getCurrentEquippedItem().stackSize = player.capabilities.isCreativeMode ? player.getCurrentEquippedItem().stackSize : player.getCurrentEquippedItem().stackSize - 1;
+                        heldItem.stackSize = heldItem.stackSize - (player.capabilities.isCreativeMode ? 0 : 1);
                     }
                 }
             }
@@ -585,8 +597,8 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public Item getItem(World world, BlockPos pos) {
-        return AgriCraftItems.crops;
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return new ItemStack(AgriCraftItems.crops);
     }
 
     /**
@@ -596,7 +608,8 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      * @return null - the crops cannot be collided with.
      */
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState worldIn, World pos, BlockPos state) {
         return null;
     }
 
@@ -607,7 +620,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World world, BlockPos pos) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         return new AxisAlignedBB(pos.getX() + this.minX, pos.getY() + this.minY, pos.getZ() + this.minZ, pos.getX() + this.maxX, pos.getY() + crop.getCropHeight(), pos.getZ() + this.maxZ);
     }
@@ -619,7 +632,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      * @return false - the block is not a normal block.
      */
     @Override
-    public boolean isOpaqueCube() {return false;}
+    public boolean isOpaqueCube(IBlockState state) {return false;}
 
     /**
      * Determines if a side of the block should be rendered, such as one flush with a wall that wouldn't need rendering.
@@ -627,7 +640,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      * @return false - all of the crop's sides need to be rendered.
      */
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
 
     /**
      * Renders the hit effects, such as the flying particles when the block is hit.
@@ -636,7 +649,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {return false;}
+    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {return false;}
 
     /**
      * Tells Minecraft if there should be destroy effects, such as particles.
@@ -709,7 +722,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         }
         ICrop crop = (ICrop) tileEntity;
         if(crop.hasPlant()) {
-            return crop.getPlantBlockState().getBaseState();
+            return crop.getPlantBlockState();
         }
         return world.getBlockState(pos);
     }

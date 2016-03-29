@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.tileentity;
 import com.infinityraider.agricraft.api.v1.IDebuggable;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TextureCache;
 import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
@@ -14,7 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -250,7 +251,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 		if (this.worldObj == null) {
 			return 16777215;
 		} else {
-			return getBlockType().colorMultiplier(worldObj, this.getPos());
+			return RenderUtil.getColorMultiplier(worldObj, this.getPos(), getBlockType());
 		}
 	}
 
@@ -258,6 +259,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public void addWailaInformation(List information) {
-		information.add(StatCollector.translateToLocal("agricraft_tooltip.material") + ": " + new ItemStack(this.material, 1, this.materialMeta).getDisplayName());
+		information.add(I18n.translateToLocal("agricraft_tooltip.material") + ": " + new ItemStack(this.material, 1, this.materialMeta).getDisplayName());
 	}
 }

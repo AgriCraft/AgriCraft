@@ -8,13 +8,13 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -161,6 +161,11 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
      */
     @Override
     public abstract Block getBlock();
+
+    @Override
+    public IBlockState getBlockStateForGrowthStage(int growthStage) {
+        return getBlock().getStateFromMeta(growthStage);
+    }
 
     /**
      * Gets a list of all possible fruit drops from this plant.
@@ -349,8 +354,8 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(WorldRenderer renderer, IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
-        PlantRenderer.renderPlant(renderer, world, pos, state, growthStage, this);
+    public void renderPlantInCrop(VertexBuffer renderer, IBlockAccess world, BlockPos pos, int growthStage) {
+        PlantRenderer.renderPlant(renderer, world, pos, growthStage, this);
     }
 
     @Override

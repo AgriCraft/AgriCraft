@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -48,7 +47,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
     //draw foreground
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
-        String name = StatCollector.translateToLocal("agricraft_gui.seedAnalyzer");
+        String name = net.minecraft.util.text.translation.I18n.translateToLocal("agricraft_gui.seedAnalyzer");
         int white = 4210752;        //the number for white
         //write name: X1 coordinate is in the middle, 6 down from the top, and setting color to white
         this.fontRendererObj.drawString(name, this.xSize/2 - this.fontRendererObj.getStringWidth(name)/2, 6, white);

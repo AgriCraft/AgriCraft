@@ -6,8 +6,8 @@ import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public abstract class MethodBase implements IMethod {
 
 	@Override
 	public final String getDescription() {
-		return StatCollector.translateToLocal("agricraft_description.method." + this.getName());
+		return I18n.translateToLocal("agricraft_description.method." + this.getName());
 	}
 
 	@Override

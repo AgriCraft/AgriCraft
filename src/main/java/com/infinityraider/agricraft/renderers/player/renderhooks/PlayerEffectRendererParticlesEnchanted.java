@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,7 +33,7 @@ public class PlayerEffectRendererParticlesEnchanted extends PlayerEffectRenderer
         double y = player.posY + (Minecraft.getMinecraft().thePlayer==player?0:1);
         double z = player.posZ-0.5F;
 
-        Vec3 vector = new Vec3(0, 0, 0);
+        Vec3d vector = new Vec3d(0, 0, 0);
         double radius = 2*player.worldObj.rand.nextDouble();
         double angle = Math.toRadians(player.worldObj.rand.nextInt(360));
         double height = player.worldObj.rand.nextDouble();

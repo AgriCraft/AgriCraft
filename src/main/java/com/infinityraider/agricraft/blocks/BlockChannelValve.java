@@ -11,9 +11,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -58,7 +58,7 @@ public class BlockChannelValve extends AbstractBlockWaterChannel {
 
     //allows levers to be attached to the block
     @Override
-    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return side!=EnumFacing.UP;
     }
 
@@ -68,7 +68,7 @@ public class BlockChannelValve extends AbstractBlockWaterChannel {
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
     }
 
@@ -92,7 +92,7 @@ public class BlockChannelValve extends AbstractBlockWaterChannel {
         @SideOnly(Side.CLIENT)
         public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
             super.addInformation(stack, player, list, flag);
-            list.add(StatCollector.translateToLocal("agricraft_tooltip.valve"));
+            list.add(I18n.translateToLocal("agricraft_tooltip.valve"));
         }
     }
 

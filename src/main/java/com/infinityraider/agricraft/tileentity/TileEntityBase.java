@@ -10,9 +10,9 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -137,12 +137,12 @@ public abstract class TileEntityBase extends TileEntity {
     public Packet getDescriptionPacket() {
         NBTTagCompound nbtTag = new NBTTagCompound();
         writeToNBT(nbtTag);
-        return new S35PacketUpdateTileEntity(this.getPos(), this.getBlockMetadata(), nbtTag);
+        return new SPacketUpdateTileEntity(this.getPos(), this.getBlockMetadata(), nbtTag);
     }
 
     //read data from packet
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         readFromNBT(pkt.getNbtCompound());
         if(worldObj.isRemote) {
             markForUpdate();
@@ -153,7 +153,7 @@ public abstract class TileEntityBase extends TileEntity {
      * Marks the tile entity for an update.
      */
     public final void markForUpdate() {
-        this.worldObj.markBlockForUpdate(this.getPos());
+
     }
 
     /**

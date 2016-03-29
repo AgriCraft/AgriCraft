@@ -22,7 +22,7 @@ public class MessageGuiSeedStorageClearSeed extends MessageAgriCraft {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.player = this.getPlayerFromByteBuf(buf);
+        this.player = this.readPlayerFromByteBuf(buf);
     }
 
     @Override

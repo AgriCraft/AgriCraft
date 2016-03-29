@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.utility;
 
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 public class Vector {
     private double x;
@@ -17,7 +17,7 @@ public class Vector {
         this.z = z;
     }
 
-    public Vector(Vec3 vec) {
+    public Vector(Vec3d vec) {
         this.x = vec.xCoord;
         this.y = vec.yCoord;
         this.z = vec.zCoord;

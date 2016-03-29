@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -108,7 +108,7 @@ public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
             double sin = Math.sin(yaw);
             double xNew = x*cos - z*sin;
             double zNew = x*sin + z*cos;
-            Vec3 vector = new Vec3(0, 0, 0);
+            Vec3d vector = new Vec3d(0, 0, 0);
             float scale = player.worldObj.rand.nextFloat();
             double radius = 0.3*player.worldObj.rand.nextDouble();
             double angle = Math.toRadians(player.worldObj.rand.nextInt(360));

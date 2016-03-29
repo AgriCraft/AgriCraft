@@ -10,9 +10,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -45,7 +47,7 @@ public class BlockFence extends BlockCustomWood {
 
     //Allow leads to be connected to these fences
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
         return world.isRemote || applyLead(player, world, pos);
     }
 
@@ -112,7 +114,7 @@ public class BlockFence extends BlockCustomWood {
      * Updates the blocks bounds based on its current state. Args: world, pos
      */
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
+    public void setBlockBoundsBasedOnState(IBlockState state, IBlockAccess world, BlockPos pos) {
         boolean flag = this.canConnect(world, pos, AgriForgeDirection.NORTH);
         boolean flag1 = this.canConnect(world, pos, AgriForgeDirection.SOUTH);
         boolean flag2 = this.canConnect(world, pos, AgriForgeDirection.WEST);
@@ -125,14 +127,15 @@ public class BlockFence extends BlockCustomWood {
     }
 
     public boolean canConnect(IBlockAccess world, BlockPos pos, AgriForgeDirection dir) {
-        Block block = world.getBlockState(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ)).getBlock();
+        IBlockState state = world.getBlockState(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
+        Block block = state.getBlock();
         if (block == null) {
             return false;
         }
-        if (block.isAir(world, pos.add(dir.offsetX, dir.offsetY, dir.offsetZ))) {
+        if (block.isAir(state, world, pos.add(dir.offsetX, dir.offsetY, dir.offsetZ))) {
             return false;
         }
-        if (block.isOpaqueCube()) {
+        if (block.isOpaqueCube(state)) {
             return true;
         }
         if ((block instanceof BlockFence) || (block instanceof BlockFenceGate) || (block instanceof BlockWaterTank)) {

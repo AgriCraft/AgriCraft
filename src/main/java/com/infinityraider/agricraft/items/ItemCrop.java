@@ -3,11 +3,17 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -23,10 +29,11 @@ public class ItemCrop extends ItemBase {
 
     //this is called when you right click with this item in hand
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if (!world.isRemote) {
             BlockPos cropPos = pos.add(0, 1, 0);
-            if (GrowthRequirementHandler.isSoilValid(world, pos) && world.getBlockState(cropPos).getBlock().getMaterial()== Material.air && side == EnumFacing.UP) {
+            IBlockState state = world.getBlockState(cropPos);
+            if (GrowthRequirementHandler.isSoilValid(world, pos) && state.getBlock().getMaterial(state)== Material.air && side == EnumFacing.UP) {
                 world.setBlockState(pos.add(0, 1, 0), AgriCraftBlocks.blockCrop.getDefaultState());
                 int use = 1;
                 if(player.isSneaking() && (player.capabilities.isCreativeMode || stack.stackSize>=2)) {
@@ -36,12 +43,13 @@ public class ItemCrop extends ItemBase {
                         use = 2;
                     }
                 }
-                world.playSoundEffect((double)((float) cropPos.getX() + 0.5F), (double)((float) cropPos.getY() + 0.5F), (double)((float) cropPos.getZ() + 0.5F), net.minecraft.init.Blocks.leaves.stepSound.soundName, (net.minecraft.init.Blocks.leaves.stepSound.getVolume() + 1.0F) / 2.0F, net.minecraft.init.Blocks.leaves.stepSound.getFrequency() * 0.8F);
+                SoundType type = Blocks.leaves.getStepSound();
+                world.playSound(null, (double) ((float) cropPos.getX() + 0.5F), (double) ((float) cropPos.getY() + 0.5F), (double) ((float) cropPos.getZ() + 0.5F), type.getPlaceSound(), SoundCategory.PLAYERS, (type.getVolume() + 1.0F) / 4.0F, type.getPitch() * 0.8F);
                 stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - use;
-                return false;
+                return EnumActionResult.PASS;
             }
         }
-        return false;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
+        return EnumActionResult.PASS;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
     }
 	
 }

@@ -6,13 +6,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-
-import java.util.Iterator;
-import java.util.List;
 
 public abstract class MessageAgriCraft implements IMessage {
     protected BlockPos readBlockPosFromByteBuf(ByteBuf buf) {
@@ -26,26 +22,13 @@ public abstract class MessageAgriCraft implements IMessage {
         return buf;
     }
 
-    protected EntityPlayer getPlayerFromByteBuf(ByteBuf buf) {
-        int playerNameLength = buf.readInt();
-        String name = new String(buf.readBytes(playerNameLength).array());
-        List list = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
-        EntityPlayer player = null;
-        Iterator iterator = list.iterator();
-        while (iterator.hasNext() && player==null) {
-            EntityPlayer nextPlayer = (EntityPlayer)iterator.next();
-            if(nextPlayer.getGameProfile().getName().equals(name)) {
-                player = nextPlayer;
-            }
-        }
-        return player;
+    protected EntityPlayer readPlayerFromByteBuf(ByteBuf buf) {
+        Entity entity = readEntityFromByteBuf(buf);
+        return (entity instanceof EntityPlayer)?(EntityPlayer) entity:null;
     }
 
     protected ByteBuf writePlayerToByteBuf(EntityPlayer player, ByteBuf buf) {
-        String playerName = player==null?"null":player.getGameProfile().getName();
-        buf.writeInt(playerName.length());
-        buf.writeBytes(playerName.getBytes());
-        return buf;
+        return writeEntityToByteBuf(buf, player);
     }
 
     protected Item readItemFromByteBuf(ByteBuf buf) {
@@ -75,12 +58,22 @@ public abstract class MessageAgriCraft implements IMessage {
     }
 
     protected Entity readEntityFromByteBuf(ByteBuf buf) {
-        return AgriCraft.proxy.getEntityById(buf.readInt(), buf.readInt());
+        int id = buf.readInt();
+        if(id < 0) {
+            return null;
+        }
+        int dimension = buf.readInt();
+        return AgriCraft.proxy.getEntityById(dimension, id);
     }
 
     protected ByteBuf writeEntityToByteBuf(ByteBuf buf, Entity e) {
-        buf.writeInt(e.worldObj.provider.getDimensionId());
-        buf.writeInt(e.getEntityId());
+        if (e == null) {
+            buf.writeInt(-1);
+            buf.writeInt(0);
+        } else {
+            buf.writeInt(e.getEntityId());
+            buf.writeInt(e.worldObj.provider.getDimension());
+        }
         return buf;
     }
 }

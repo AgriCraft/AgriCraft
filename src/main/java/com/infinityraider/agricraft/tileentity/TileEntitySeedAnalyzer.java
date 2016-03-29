@@ -10,10 +10,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -426,8 +426,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     @Override
-    public IChatComponent getDisplayName() {
-        return new ChatComponentText("container.agricraft:seedAnalyzer");
+    public ITextComponent getDisplayName() {
+        return new TextComponentString("container.agricraft:seedAnalyzer");
     }
 
     @Override
@@ -458,6 +458,6 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
-    	information.add(StatCollector.translateToLocal("agricraft_tooltip.analyzer")+": "+(this.hasSpecimen()?specimen.getDisplayName():StatCollector.translateToLocal("agricraft_tooltip.none")));
+    	information.add(I18n.translateToLocal("agricraft_tooltip.analyzer")+": "+(this.hasSpecimen()?specimen.getDisplayName(): I18n.translateToLocal("agricraft_tooltip.none")));
     }
 }

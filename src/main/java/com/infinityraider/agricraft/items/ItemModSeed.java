@@ -16,7 +16,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.init.Blocks;
@@ -92,28 +94,28 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (world.getBlockState(pos).getBlock() == AgriCraftBlocks.blockCrop) {
 			LogHelper.debug("Trying to plant seed " + stack.getItem().getUnlocalizedName() + " on crops");
-			return true;
+			return EnumActionResult.SUCCESS;
 		}
 		if (CropPlantHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, pos)) {
 			BlockPos blockPosUp = pos.add(0, 1, 0);
 			if (side != EnumFacing.UP) {
-				return false;
+				return EnumActionResult.PASS;
 			} else if (player.canPlayerEdit(pos, side, stack) && player.canPlayerEdit(blockPosUp, side, stack)) {
 				if (world.isAirBlock(blockPosUp)) {
 					world.setBlockState(blockPosUp, this.getPlant().getStateFromMeta(0), 3);
 					--stack.stackSize;
-					return true;
+					return EnumActionResult.SUCCESS;
 				} else {
-					return false;
+					return EnumActionResult.PASS;
 				}
 			} else {
-				return false;
+				return EnumActionResult.PASS;
 			}
 		}
-		return false;
+		return EnumActionResult.PASS;
 	}
 
 	@Override

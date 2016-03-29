@@ -2,7 +2,12 @@ package com.infinityraider.agricraft.renderers;
 
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,6 +22,30 @@ public final class RenderUtil {
 	private static final float MAX_UV = 16;
 
     private RenderUtil() {}
+
+    public static int getMixedBrightness(IBlockAccess world, BlockPos pos, Block block) {
+        return getMixedBrightness(world, pos, world.getBlockState(pos), block);
+    }
+
+    public static int getMixedBrightness(IBlockAccess world, BlockPos pos, IBlockState state) {
+        return getMixedBrightness(world, pos, state, state.getBlock());
+    }
+
+    public static int getMixedBrightness(IBlockAccess world, BlockPos pos, IBlockState state, Block block) {
+        return world.getCombinedLight();
+    }
+
+    public static int getColorMultiplier(IBlockAccess world, BlockPos pos, IBlockState state) {
+        return getColorMultiplier(world, pos, state, state.getBlock());
+    }
+
+    public static int getColorMultiplier(IBlockAccess world, BlockPos pos, Block block) {
+        return getColorMultiplier(world, pos, world.getBlockState(pos), block);
+    }
+
+    public static int getColorMultiplier(IBlockAccess world, BlockPos pos, IBlockState state, Block block) {
+        return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, world, pos, block.getMetaFromState(state));
+    }
 
     /** Tessellates a vertex at the given position using the passed tessellator and texture u and v position */
     public static void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v) {

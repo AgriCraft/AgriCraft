@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.registry.LanguageRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.lang.reflect.Field;
@@ -72,6 +71,7 @@ public class CustomCrops {
 							break;
 						}
 						customSeeds[i] = customCrops[i].getSeed();
+						//TODO: find out how to fix this
 						LanguageRegistry.addName(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1));
 						LanguageRegistry.addName(customSeeds[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds");
 						if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {

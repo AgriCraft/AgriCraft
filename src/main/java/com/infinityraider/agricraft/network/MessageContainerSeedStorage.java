@@ -34,7 +34,7 @@ public class MessageContainerSeedStorage extends MessageAgriCraft {
         this.item = this.readItemFromByteBuf(buf);
         this.meta = buf.readInt();
         this.amount = buf.readInt();
-        this.player = this.getPlayerFromByteBuf(buf);
+        this.player = this.readPlayerFromByteBuf(buf);
         this.slotId = buf.readInt();
     }
 

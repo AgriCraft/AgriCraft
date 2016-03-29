@@ -2,10 +2,10 @@ package com.infinityraider.agricraft.renderers.particles;
 
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,11 +17,10 @@ public class RuneFX extends AgriCraftFX {
     private final float vMin;
     private final float vMax;
 
-    public RuneFX(World world, double x, double y, double z, float gravity, Vec3 vector, ResourceLocation texture, float uMin, float vMin, float uMax, float vMax) {
+    public RuneFX(World world, double x, double y, double z, float gravity, Vec3d vector, ResourceLocation texture, float uMin, float vMin, float uMax, float vMax) {
         super(world, x, y, z, 1.0F, gravity, vector, texture);
         this.particleMaxAge = 100;
         this.setSize(1f, 1f);
-        this.noClip = false;
         this.uMin = uMin;
         this.uMax = uMax;
         this.vMin = vMin;
@@ -29,7 +28,7 @@ public class RuneFX extends AgriCraftFX {
     }
 
     @Override
-    public void renderParticle(WorldRenderer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
+    public void renderParticle(VertexBuffer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
         TessellatorV2 tessellator = TessellatorV2.getInstance(worldRenderer);
         tessellator.draw();
         tessellator.startDrawingQuads();

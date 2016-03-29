@@ -20,15 +20,18 @@ import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.statstringdisplayer.StatStringDisplayer;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -91,7 +94,8 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
         if(status!=this.crossCrop) {
             this.crossCrop = status;
             if(!worldObj.isRemote && crossCrop) {
-                worldObj.playSoundEffect((double)((float) xCoord() + 0.5F), (double)((float) yCoord() + 0.5F), (double)((float) zCoord() + 0.5F), net.minecraft.init.Blocks.planks.stepSound.soundName, (net.minecraft.init.Blocks.leaves.stepSound.getVolume() + 1.0F) / 2.0F, net.minecraft.init.Blocks.leaves.stepSound.getFrequency() * 0.8F);
+                SoundType type = Blocks.planks.getStepSound();
+                worldObj.playSound(null, (double)((float) xCoord() + 0.5F), (double)((float) yCoord() + 0.5F), (double)((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
             }
             this.markForUpdate();
         }
@@ -226,8 +230,8 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     }
 
     @Override
-    public BlockState getPlantBlockState() {
-        return plant==null?null:new BlockState(plant.getBlock());
+    public IBlockState getPlantBlockState() {
+        return plant==null?null:plant.getBlockStateForGrowthStage(this.getGrowthStage());
     }
 
     /** spawns WEED in the crop */
@@ -492,30 +496,30 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     public void addWailaInformation(List information) {
     	if(this.hasPlant()) {
     		//Add the SEED name.
-    		information.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + this.getSeedStack().getDisplayName());
+    		information.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + this.getSeedStack().getDisplayName());
     		//Add the GROWTH.
     		if(this.isMature()) {
-    			information.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage")+": "+StatCollector.translateToLocal("agricraft_tooltip.mature"));
+    			information.add(I18n.translateToLocal("agricraft_tooltip.growthStage")+": "+I18n.translateToLocal("agricraft_tooltip.mature"));
     		} else {
-    			information.add(StatCollector.translateToLocal("agricraft_tooltip.growthStage")+": "+((int) ( (100*(this.getBlockMetadata()+0.00F))/7.00F)+"%" ));
+    			information.add(I18n.translateToLocal("agricraft_tooltip.growthStage")+": "+((int) ( (100*(this.getBlockMetadata()+0.00F))/7.00F)+"%" ));
     		}
     		//Add the ANALYZED data.
     		if(this.isAnalyzed()) {
-    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGrowth(), AgriCraftConfig.cropStatCap));
-                information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGain(), AgriCraftConfig.cropStatCap));
-    			information.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getStrength(), AgriCraftConfig.cropStatCap));
+    			information.add(" - " + I18n.translateToLocal("agricraft_tooltip.growth") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGrowth(), AgriCraftConfig.cropStatCap));
+                information.add(" - " + I18n.translateToLocal("agricraft_tooltip.gain") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGain(), AgriCraftConfig.cropStatCap));
+    			information.add(" - " + I18n.translateToLocal("agricraft_tooltip.strength") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getStrength(), AgriCraftConfig.cropStatCap));
     		}
     		else {
-    			information.add(StatCollector.translateToLocal("agricraft_tooltip.analyzed"));
+    			information.add(I18n.translateToLocal("agricraft_tooltip.analyzed"));
     		}
     		//Add the fertility information.
-    		information.add(StatCollector.translateToLocal(this.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
+    		information.add(I18n.translateToLocal(this.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
     	}
     	else if(this.hasWeed()) {
-    		information.add(StatCollector.translateToLocal("agricraft_tooltip.weeds"));
+    		information.add(I18n.translateToLocal("agricraft_tooltip.weeds"));
     	}
     	else {
-    		information.add(StatCollector.translateToLocal("agricraft_tooltip.empty"));
+    		information.add(I18n.translateToLocal("agricraft_tooltip.empty"));
         }
     }
 }

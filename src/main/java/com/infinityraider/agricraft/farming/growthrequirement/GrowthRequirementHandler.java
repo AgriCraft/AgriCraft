@@ -9,7 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -39,7 +39,7 @@ public class GrowthRequirementHandler {
     public static boolean isSoilValid(World world,BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-        int meta = block.getDamageValue(world, pos);
+        int meta = block.getMetaFromState(state);
         BlockWithMeta soil;
         if (block instanceof ISoilContainer) {
             soil = new BlockWithMeta(((ISoilContainer) block).getSoil(world, pos), ((ISoilContainer) block).getSoilMeta(world, pos));

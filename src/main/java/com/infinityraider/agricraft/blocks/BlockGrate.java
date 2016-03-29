@@ -12,6 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -47,7 +49,7 @@ public class BlockGrate extends BlockCustomWood {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile == null || !(tile instanceof TileEntityGrate)) {
 			return true;
@@ -59,9 +61,9 @@ public class BlockGrate extends BlockCustomWood {
 				spawnAsEntity(world, pos, new ItemStack(Blocks.vine, 1));
 				return true;
 			}
-		} else if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == Item.getItemFromBlock(Blocks.vine)) {
+		} else if (stack != null && stack.getItem() == Item.getItemFromBlock(Blocks.vine)) {
 			if (grate.addVines(front) && !player.capabilities.isCreativeMode) {
-				player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
+				stack.stackSize = stack.stackSize - 1;
 				return true;
 			}
 		}
@@ -113,7 +115,7 @@ public class BlockGrate extends BlockCustomWood {
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
 		return getCollisionBoundingBox(worldIn, pos, null);
 	}
 

@@ -15,12 +15,13 @@ import com.infinityraider.agricraft.utility.RegisterHelper;
 import com.infinityraider.agricraft.utility.exception.MissingArgumentsException;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -152,8 +153,8 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     }
 
     @Override
-    protected final BlockState createBlockState() {
-        return new BlockState(this, AgriCraftProperties.GROWTHSTAGE);
+    protected final BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, AgriCraftProperties.GROWTHSTAGE);
     }
 
     @Override
@@ -284,8 +285,8 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     }
 
     @Override
-    public int getRenderType() {
-        return 3;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override

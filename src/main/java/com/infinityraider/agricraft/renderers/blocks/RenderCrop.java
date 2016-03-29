@@ -4,12 +4,14 @@ import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
+import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,10 +53,10 @@ public class RenderCrop extends RenderBlockAgriCraft {
                 drawScaledPrism(tess, 13, 10, 0, 14, 11, 16, blockCrop.getIcon());
             } else if (crop.hasPlant()) {
                 //render the plant
-                crop.getPlant().renderPlantInCrop(tess.getWorldRenderer(), world, pos, state, state.getValue(AgriCraftProperties.GROWTHSTAGE));
+                crop.getPlant().renderPlantInCrop(tess.getVertexBuffer(), world, pos, state.getValue(AgriCraftProperties.GROWTHSTAGE));
             } else if(crop.hasWeed()) {
                 //render weeds
-                tess.setBrightness(net.minecraft.init.Blocks.wheat.getMixedBrightnessForBlock(world, pos));
+                tess.setBrightness(RenderUtil.getMixedBrightness(world, pos, Blocks.wheat.getDefaultState()));
                 tess.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
                 PlantRenderer.renderHashTagPattern(tess, blockCrop.getWeedTexture(state.getValue(AgriCraftProperties.GROWTHSTAGE)), 0);
             }

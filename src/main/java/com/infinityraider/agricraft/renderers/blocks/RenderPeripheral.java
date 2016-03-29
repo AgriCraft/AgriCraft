@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.renderers.models.ModelPeripheralProbe;
 import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
@@ -16,7 +17,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
@@ -41,7 +42,7 @@ public class RenderPeripheral extends RenderBlockAgriCraft {
 
 	@Override
 	protected void doRenderBlock(TessellatorV2 tess, IBlockAccess world, Block block, IBlockState state, BlockPos pos) {
-		renderBase(tess, block.colorMultiplier(world, pos));
+		renderBase(tess, RenderUtil.getColorMultiplier(world, pos, state, block));
 	}
 
 	@Override

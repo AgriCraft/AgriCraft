@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
+import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.LogHelper;
@@ -8,7 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,7 +38,7 @@ public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> exte
 		if (te instanceof TileEntityCustomWood) {
 			final TileEntityCustomWood cw = (TileEntityCustomWood)te;
 			final TextureAtlasSprite matIcon = cw.getIcon();
-			doRenderBlock(tess, world, block, state, pos, matIcon, block.colorMultiplier(world, pos));
+			doRenderBlock(tess, world, block, state, pos, matIcon, RenderUtil.getMixedBrightness(world, pos, state, block));
 		} else {
 			LogHelper.debug("Bad blocks being passed to CustomWood Renderer!");
 		}
