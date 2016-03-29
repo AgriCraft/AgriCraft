@@ -9,9 +9,15 @@ FTB Thread: [FTB Thread](http://forum.feed-the-beast.com/threads/1-7-10-agricraf
 ## Contact
 I have a Slack channel where you can contact me for support/suggestions which you don't think fit on this issue tracker. Also if you want to discuss something with me, this is the place to be: [Join my Slack](https://join-infinityraider-slack.herokuapp.com)
 
+## Minecraft versions
+Agricraft has releases for Minecraft versions 1.7.10 and onwards, status per Minecraft version is as follows:
+ - 1.7.10: closed, no more issues, pull requests or feature requests are accepted, don't expect releases.
+ - 1.8.9: bugfix: bugfixes are accepted, no guarantee of a new release is granted.
+ - 1.9: Agricraft is currently being ported to 1.9
+
 ## Bug reports
 
-Please report any and all bugs you might encounter while playing with this mod. Suggestions are also welcome.
+Please report any and all bugs you might encounter while playing with this mod (this only applies to versions of Minecraft this mod is currently being developped for). Suggestions are also welcome.
 However before reporting a bug please update to the latest version of the mod to see if it still persists.
 If you want to post bug reports for older versions, make sure to tell me what version you are using and the version of Forge you are using.
 If you report a bug and I request more feedback, the label 'Awaiting reply' will be added, if I have had no response for 5 days after adding that label, the issue will be closed. 
