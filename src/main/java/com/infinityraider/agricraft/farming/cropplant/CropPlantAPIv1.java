@@ -3,12 +3,11 @@ package com.infinityraider.agricraft.farming.cropplant;
 import com.infinityraider.agricraft.api.v1.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -17,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import net.minecraft.client.renderer.VertexBuffer;
 
 public class CropPlantAPIv1 extends CropPlant {
     protected ICropPlant plant;
@@ -123,14 +123,14 @@ public class CropPlantAPIv1 extends CropPlant {
     public String getInformation() {
         return plant.getInformation();
     }
-
+	
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(WorldRenderer renderer, IBlockAccess world, BlockPos pos, IBlockState state, int growthStage) {
+    public void renderPlantInCrop(VertexBuffer buffer, IBlockAccess world, BlockPos pos, int growthStage) {
         if(getRenderMethod() == RenderMethod.CUSTOM) {
-            plant.renderPlantInCrop(renderer, world, pos, state, growthStage);
+			plant.renderPlantInCrop(buffer, world, pos, growthStage);
         } else {
-            super.renderPlantInCrop(renderer, world, pos, state, growthStage);
+            super.renderPlantInCrop(buffer, world, pos, growthStage);
         }
     }
 

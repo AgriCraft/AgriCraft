@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.entity;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.Iterator;

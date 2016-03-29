@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.utility.CoordinateIterator;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData> {

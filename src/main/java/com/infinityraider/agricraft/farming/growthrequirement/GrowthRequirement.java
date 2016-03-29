@@ -8,7 +8,7 @@ import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
@@ -113,7 +113,7 @@ public class GrowthRequirement implements IGrowthRequirement{
     private boolean isBlockAdequate(World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-        int meta = block.getDamageValue(world, pos);
+        int meta = block.getMetaFromState(state);
         if(this.oreDict) {
             return OreDictHelper.isSameOre(block, meta, this.requiredBlock.getBlock(), this.requiredBlock.getMeta());
         }
@@ -131,7 +131,8 @@ public class GrowthRequirement implements IGrowthRequirement{
     @Override
     public boolean isValidSoil(World world, BlockPos pos) {
         Block block = world.getBlockState(pos).getBlock();
-        int meta = block.getDamageValue(world, pos);
+		IBlockState state = world.getBlockState(pos);
+        int meta = block.getMetaFromState(state);
         BlockWithMeta soil = new BlockWithMeta(block, meta);
         if (block instanceof ISoilContainer) {
             soil = new BlockWithMeta(((ISoilContainer) block).getSoil(world, pos), ((ISoilContainer) block).getSoilMeta(world, pos));
