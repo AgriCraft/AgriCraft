@@ -14,11 +14,6 @@ public abstract class AbstractBlockWaterChannel extends BlockCustomWood {
 	public AbstractBlockWaterChannel(String internalName) {
 		super("water_channel_" + internalName, false);
 	}
-	
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
 
 	@Override
 	protected IProperty[] getPropertyArray() {

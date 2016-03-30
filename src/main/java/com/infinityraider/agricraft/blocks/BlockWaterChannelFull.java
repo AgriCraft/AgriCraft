@@ -6,12 +6,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public class BlockWaterChannelFull extends AbstractBlockWaterChannel {
 	
@@ -25,17 +26,16 @@ public class BlockWaterChannelFull extends AbstractBlockWaterChannel {
         return new TileEntityChannelFull();
     }
 
-    @Override
-    public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB boundingBox, List<AxisAlignedBB> list, Entity entity) {
-        AxisAlignedBB axisalignedbb = this.getCollisionBoundingBox(world,pos, state);
-        if (axisalignedbb != null && boundingBox.intersectsWith(axisalignedbb)) {
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
+        AxisAlignedBB axisalignedbb = this.getBoundingBox(state, world, pos);
+        if (axisalignedbb != null && mask.intersectsWith(axisalignedbb)) {
             list.add(axisalignedbb);
         }
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+	@Override
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
         return  new AxisAlignedBB((double) pos.getX() + this.minX, (double) pos.getY() + this.minY, (double) pos.getZ() + this.minZ, (double) pos.getX() + this.maxX, (double) pos.getY() + this.maxY, (double) pos.getZ() + this.maxZ);
     }
 

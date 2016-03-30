@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.creativetab.AgriCraftTab;
-import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
@@ -18,7 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -26,6 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import net.minecraft.entity.EntityLivingBase;
 
 public class BlockSprinkler extends BlockTileBase {
 
@@ -35,12 +35,12 @@ public class BlockSprinkler extends BlockTileBase {
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
 		setHarvestLevel("axe", 0);
-		this.maxX = Constants.UNIT * Constants.THREE_QUARTER;
-		this.minX = Constants.UNIT * Constants.QUARTER;
-		this.maxZ = this.maxX;
-		this.minZ = this.minX;
-		this.maxY = Constants.UNIT * (Constants.WHOLE + Constants.QUARTER);
-		this.minY = Constants.UNIT * Constants.THREE_QUARTER;
+//		this.maxX = Constants.UNIT * Constants.THREE_QUARTER;
+//		this.minX = Constants.UNIT * Constants.QUARTER;
+//		this.maxZ = this.maxX;
+//		this.minZ = this.minX;
+//		this.maxY = Constants.UNIT * (Constants.WHOLE + Constants.QUARTER);
+//		this.minY = Constants.UNIT * Constants.THREE_QUARTER;
 		RegisterHelper.hideModel(this, this.internalName);
 	}
 
@@ -50,18 +50,7 @@ public class BlockSprinkler extends BlockTileBase {
 	}
 
 	@Override
-	public boolean isReplaceable(World world, BlockPos pos) {
-		return false;
-	}
-
-	//prevent block from being removed by leaves
-	@Override
-	public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
-		return false;
-	}
-
-	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
 		if ((!world.isRemote) && (!player.isSneaking())) {
 			if (!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
 				this.dropBlockAsItem(world, pos, state, 0);
@@ -97,23 +86,22 @@ public class BlockSprinkler extends BlockTileBase {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getItem(World world, BlockPos pos) {
-		return Item.getItemFromBlock(this);
+	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
+		return new ItemStack(Item.getItemFromBlock(this));
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return false;
 	}
 
 	@Override
-	public boolean doesSideBlockRendering(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return false;
 	}
 

@@ -75,46 +75,47 @@ public class BlockFence extends BlockCustomWood {
      * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
      * mask.) Parameters: World, pos, mask, list, colliding entity
      */
+	
     @Override
-    public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
-        boolean flag = this.canConnect(world, pos, AgriForgeDirection.NORTH);
-        boolean flag1 = this.canConnect(world, pos, AgriForgeDirection.SOUTH);
-        boolean flag2 = this.canConnect(world, pos, AgriForgeDirection.WEST);
-        boolean flag3 = this.canConnect(world, pos, AgriForgeDirection.EAST);
-        float f = 0.375F;
-        float f1 = 0.625F;
-        float f2 = flag?0.0F:0.375F;
-        float f3 = flag1?1.0F:0.625F;
-        if (flag || flag1) {
-            this.setBlockBounds(f, 0.0F, f2, f1, 1.5F, f3);
-            super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
-        }
-        f2 = 0.375F;
-        f3 = 0.625F;
-        if (flag2) {
-            f = 0.0F;
-        }
-        if (flag3) {
-            f1 = 1.0F;
-        }
-        if (flag2 || flag3 || !flag && !flag1) {
-            this.setBlockBounds(f, 0.0F, f2, f1, 1.5F, f3);
-            super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
-        }
-        if (flag) {
-            f2 = 0.0F;
-        }
-        if (flag1) {
-            f3 = 1.0F;
-        }
-        this.setBlockBounds(f, 0.0F, f2, f1, 1.0F, f3);
-    }
+    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
+		boolean flag = this.canConnect(world, pos, AgriForgeDirection.NORTH);
+		boolean flag1 = this.canConnect(world, pos, AgriForgeDirection.SOUTH);
+		boolean flag2 = this.canConnect(world, pos, AgriForgeDirection.WEST);
+		boolean flag3 = this.canConnect(world, pos, AgriForgeDirection.EAST);
+		float f = 0.375F;
+		float f1 = 0.625F;
+		float f2 = flag?0.0F:0.375F;
+		float f3 = flag1?1.0F:0.625F;
+		if (flag || flag1) {
+			this.setBlockBounds(f, 0.0F, f2, f1, 1.5F, f3);
+			super.addCollisionBoxToList(state, world, pos, mask, list, entity);
+		}
+		f2 = 0.375F;
+		f3 = 0.625F;
+		if (flag2) {
+			f = 0.0F;
+		}
+		if (flag3) {
+			f1 = 1.0F;
+		}
+		if (flag2 || flag3 || !flag && !flag1) {
+			this.setBlockBounds(f, 0.0F, f2, f1, 1.5F, f3);
+			super.addCollisionBoxToList(state, world, pos, mask, list, entity);
+		}
+		if (flag) {
+			f2 = 0.0F;
+		}
+		if (flag1) {
+			f3 = 1.0F;
+		}
+		this.setBlockBounds(f, 0.0F, f2, f1, 1.0F, f3);
+	}
 
     /**
      * Updates the blocks bounds based on its current state. Args: world, pos
      */
     @Override
-    public void setBlockBoundsBasedOnState(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos, IBlockState state) {
         boolean flag = this.canConnect(world, pos, AgriForgeDirection.NORTH);
         boolean flag1 = this.canConnect(world, pos, AgriForgeDirection.SOUTH);
         boolean flag2 = this.canConnect(world, pos, AgriForgeDirection.WEST);

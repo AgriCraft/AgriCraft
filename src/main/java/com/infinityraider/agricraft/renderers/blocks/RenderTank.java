@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -105,6 +105,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 			float y = tank.getFluidHeight() - 0.01F; //-0.0001F to avoid Z-fighting on maximum filled tanks
 			//the texture
 			//stolen from Vanilla code
+			/*
 			int l = Blocks.water.colorMultiplier(tank.getWorld(), tank.getPos());
 			float f = (float) (l >> 16 & 255) / 255.0F;
 			float f1 = (float) (l >> 8 & 255) / 255.0F;
@@ -112,6 +113,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 			float f4 = 1.0F;
 			tessellator.setBrightness(Blocks.water.getMixedBrightnessForBlock(tank.getWorld(), tank.getPos()));
 			tessellator.setColorRGBA_F(f4 * f, f4 * f1, f4 * f2, 0.8F);
+			 */
 			//draw surface
 			final TextureAtlasSprite waterIcon = BaseIcons.WATER_STILL.getIcon();
 			addScaledVertexWithUV(tessellator, 0, y, 0, 0, 0, waterIcon);

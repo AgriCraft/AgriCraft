@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 
@@ -27,13 +27,10 @@ public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
         if(player == null) {
             return true;
         }
-        if(player.getCurrentEquippedItem() == null) {
+        if(player.getHeldItemMainhand() == null || player.getHeldItemMainhand().getItem() == null) {
             return true;
         }
-        if(player.getCurrentEquippedItem().getItem() == null) {
-            return true;
-        }
-        if(!(player.getCurrentEquippedItem().getItem() instanceof ItemShears)) {
+        if(!(player.getHeldItemMainhand().getItem() instanceof ItemShears)) {
             return true;
         }
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
@@ -51,7 +48,7 @@ public class CropPlantAgriCraftShearable extends CropPlantAgriCraft {
                 world.spawnEntityInWorld(entityitem);
             }
         }
-        player.getCurrentEquippedItem().damageItem(1, player);
+        player.getHeldItemMainhand().damageItem(1, player);
         return false;
     }
 }

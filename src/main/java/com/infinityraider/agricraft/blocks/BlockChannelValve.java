@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannelValve;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannelValve;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,9 +33,6 @@ public class BlockChannelValve extends AbstractBlockWaterChannel {
         if (!world.isRemote) {
             super.onNeighborBlockChange(world, pos, state, block);
             updatePowerStatus(world, pos);
-            if(block instanceof BlockLever) {
-                world.markBlockForUpdate(pos);
-            }
         }
     }
 

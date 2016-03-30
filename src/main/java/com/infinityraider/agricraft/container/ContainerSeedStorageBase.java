@@ -179,12 +179,6 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
         }
         return flag;
     }
-
-    //par1: slotIndex
-    //par2: 0 = LMB, 1 = RMB, 2 = MMB
-    //par3: 1 = shift, 3 = MMB
-    @Override
-    public ItemStack slotClick(int slotIndex, int mouseButton, int shiftHeld, EntityPlayer player) {
-        return super.slotClick(slotIndex, mouseButton, shiftHeld, player);
-    }
+	
+	
 }
