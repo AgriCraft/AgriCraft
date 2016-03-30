@@ -17,7 +17,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
@@ -79,6 +81,7 @@ public class BlockPeripheral extends BlockTileBase {
         return (TileEntityPeripheral) te;
     }
 	 */
+
 	//called when the block is broken
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
@@ -90,13 +93,13 @@ public class BlockPeripheral extends BlockTileBase {
 
 	//override this to delay the removal of the tile entity until after harvestBlock() has been called
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		return !player.capabilities.isCreativeMode || super.removedByPlayer(world, pos, player, willHarvest);
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		return !player.capabilities.isCreativeMode || super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 
 	//this gets called when the block is mined
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
 		if (!world.isRemote) {
 			if (!player.capabilities.isCreativeMode) {
 				this.dropBlockAsItem(world, pos, state, 0);
@@ -107,7 +110,7 @@ public class BlockPeripheral extends BlockTileBase {
 
 	//open the gui when the block is activated
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 			return false;
 		}
@@ -120,17 +123,17 @@ public class BlockPeripheral extends BlockTileBase {
 	@Override
 	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
 		IMessage msg = new MessagePeripheralCheckNeighbours(pos);
-		NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), 32);
+		NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32);
 		NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 

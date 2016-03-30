@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
@@ -34,13 +35,21 @@ public abstract class BlockCustomWood extends BlockTileBase {
 	
 	// Should drastically speed up getTypes()
 	private static final List<ItemStack> woodTypes = new ArrayList<>();
+
+    public BlockCustomWood(String internalName, boolean isMultiBlock) {
+        this(internalName, internalName, isMultiBlock, Block.FULL_BLOCK_AABB);
+    }
+
+    public BlockCustomWood(String internalName, String tileName, boolean isMultiBlock) {
+        this(internalName, tileName, isMultiBlock, Block.FULL_BLOCK_AABB);
+    }
 	
-	public BlockCustomWood(String internalName, boolean isMultiBlock) {
-		this(internalName, internalName, isMultiBlock);
+	public BlockCustomWood(String internalName, boolean isMultiBlock, AxisAlignedBB box) {
+		this(internalName, internalName, isMultiBlock, box);
 	}
 	
-    public BlockCustomWood(String internalName, String tileName, boolean isMultiBlock) {
-        super(Material.wood, internalName, tileName, isMultiBlock);
+    public BlockCustomWood(String internalName, String tileName, boolean isMultiBlock, AxisAlignedBB box) {
+        super(Material.wood, internalName, tileName, isMultiBlock, box);
         this.setHardness(2.0F);
         this.setResistance(5.0F);
         setHarvestLevel("axe", 0);

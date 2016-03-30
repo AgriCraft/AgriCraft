@@ -53,29 +53,21 @@ import com.infinityraider.agricraft.utility.icon.IconUtil;
 public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     /** The set of textures used to render weeds. */
     private TextureAtlasSprite[] weedTextures;
-    //TODO: get rid of these
-    private float minX;
-    private float minY;
-    private float minZ;
-    private float maxX;
-    private float maxY;
-    private float maxZ;
 
     /** The default constructor for the block. */
     public BlockCrop() {
-        super(Material.plants, TileEntityCrop.NAME, "crop", false);
+        super(Material.plants, TileEntityCrop.NAME, "crop", false, new AxisAlignedBB(
+                Constants.UNIT*2,
+                0,
+                Constants.UNIT*2,
+                Constants.UNIT*(Constants.WHOLE - 2),
+                Constants.UNIT*(Constants.WHOLE - 3),
+                Constants.UNIT*(Constants.WHOLE - 2)));
         this.setTickRandomly(true);
         this.isBlockContainer = true;
         this.setStepSound(SoundType.PLANT);
         this.setHardness(0.0F);
         this.disableStats();
-        //set the bounding box dimensions
-        this.maxX = Constants.UNIT*(Constants.WHOLE - 2);
-        this.minX = Constants.UNIT*2;
-        this.maxZ = this.maxX;
-        this.minZ = this.minX;
-        this.maxY = Constants.UNIT*(Constants.WHOLE - 3);
-        this.minY = 0;
 		RegisterHelper.hideModel(this, internalName);
     }
 
@@ -622,7 +614,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World world, BlockPos pos) {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
-        return new AxisAlignedBB(pos.getX() + this.minX, pos.getY() + this.minY, pos.getZ() + this.minZ, pos.getX() + this.maxX, pos.getY() + crop.getCropHeight(), pos.getZ() + this.maxZ);
+        return this.getBoundingBox(blockState, world, pos).offset(crop.getPos());
     }
 
     /**

@@ -4,12 +4,14 @@ import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.multiblock.IMultiBlockComponent;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -29,11 +31,19 @@ public abstract class BlockTileBase extends BlockBase implements ITileEntityProv
 	 * @param material the material the block is composed of.
 	 */
 	protected BlockTileBase(Material material, String internalName, boolean isMultiBlock) {
-		this(material, internalName, internalName, isMultiBlock);
+		this(material, internalName, internalName, isMultiBlock, Block.FULL_BLOCK_AABB);
+	}
+
+	protected BlockTileBase(Material material, String internalName, String tileName, boolean isMultiBlock) {
+		this(material, internalName, tileName, isMultiBlock, Block.FULL_BLOCK_AABB);
+	}
+
+	protected BlockTileBase(Material material, String internalName, boolean isMultiBlock, AxisAlignedBB box) {
+		this(material, internalName, internalName, isMultiBlock, box);
 	}
 	
-	protected BlockTileBase(Material material, String internalName, String tileName, boolean isMultiBlock) {
-		super(material, internalName);
+	protected BlockTileBase(Material material, String internalName, String tileName, boolean isMultiBlock, AxisAlignedBB box) {
+		super(material, internalName, box);
 		this.tileName = tileName;
 		this.isMultiBlock = isMultiBlock;
 		TileEntity tile = this.createNewTileEntity(null, 0);

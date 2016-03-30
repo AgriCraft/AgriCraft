@@ -11,7 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -27,8 +27,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 	protected static final float MAX = Constants.UNIT * Constants.THREE_QUARTER;
 
 	public BlockWaterChannel() {
-		super("normal");
-		this.setBlockBounds(MIN, MIN, MIN, MAX, MAX, MAX);
+		super("normal", new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX));
 	}
 
 	@Override
@@ -54,38 +53,43 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 	 * boxes to the list if they intersect the mask.) Parameters: World, pos,
 	 * mask, list, colliding entity
 	 */
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
+	@SideOnly(Side.CLIENT)
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
 		//adjacent boxes
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityChannel) {
 			TileEntityChannel channel = (TileEntityChannel) te;
 			if (channel.hasNeighbourCheck(AgriForgeDirection.EAST)) {
-				this.setBlockBounds(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX);
-				super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
+				AxisAlignedBB box = new AxisAlignedBB(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX);
+				addCollisionBoxToList(pos, mask, list, box);
 			}
 			if (channel.hasNeighbourCheck(AgriForgeDirection.WEST)) {
-				this.setBlockBounds(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX);
-				super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
+				AxisAlignedBB box = new AxisAlignedBB(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX);
+				addCollisionBoxToList(pos, mask, list, box);
 			}
 			if (channel.hasNeighbourCheck(AgriForgeDirection.SOUTH)) {
-				this.setBlockBounds(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE);
-				super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
+				AxisAlignedBB box = new AxisAlignedBB(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE);
+				addCollisionBoxToList(pos, mask, list, box);
 			}
 			if (channel.hasNeighbourCheck(AgriForgeDirection.NORTH)) {
-				this.setBlockBounds(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT);
-				super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
+				AxisAlignedBB box = new AxisAlignedBB(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT);
+				addCollisionBoxToList(pos, mask, list, box);
 			}
 			//central box
-			this.setBlockBounds(MIN, MIN, MIN, MAX, MAX, MAX);
-			super.addCollisionBoxesToList(world, pos, state, mask, list, entity);
+			AxisAlignedBB box = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX);
+			addCollisionBoxToList(pos, mask, list, box);
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+		return getSelectedBoundingBox(state, world, pos);
+	}
+
+	@Override
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
 		TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(pos);
 		AxisAlignedBB minBB = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX);
 		if (channel.hasNeighbourCheck(AgriForgeDirection.EAST)) {
@@ -119,7 +123,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 	}
 	
 	@Override
-	public boolean doesSideBlockRendering(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return false;
 	}
 

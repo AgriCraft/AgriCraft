@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.translation.I18n;
@@ -24,8 +25,7 @@ import java.util.List;
 public class BlockChannelValve extends AbstractBlockWaterChannel {
 	
     public BlockChannelValve() {
-        super("valve");
-        this.setBlockBounds(4*Constants.UNIT, 0, 4*Constants.UNIT, 12*Constants.UNIT, 1, 12*Constants.UNIT);
+        super("valve", new AxisAlignedBB(4*Constants.UNIT, 0, 4*Constants.UNIT, 12*Constants.UNIT, 1, 12*Constants.UNIT));
     }
 
     @Override

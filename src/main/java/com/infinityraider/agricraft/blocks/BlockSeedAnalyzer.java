@@ -19,9 +19,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,20 +35,19 @@ import java.util.List;
 public class BlockSeedAnalyzer extends BlockTileBase {
 	
     public BlockSeedAnalyzer() {
-        super(Material.ground, "seed_analyzer", false);
+        super(Material.ground, "seed_analyzer", false, new AxisAlignedBB(
+                Constants.UNIT,
+                0,
+                Constants.UNIT,
+                Constants.UNIT * (Constants.WHOLE - 1),
+                Constants.UNIT * Constants.QUARTER,
+                Constants.UNIT * (Constants.WHOLE - 1)));
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.isBlockContainer = true;
         this.setTickRandomly(false);
         //set mining statistics
         this.setHardness(1);
         this.setResistance(1);
-        //set the bounding box dimensions
-        this.maxX = Constants.UNIT * (Constants.WHOLE - 1);
-        this.minX = Constants.UNIT;
-        this.maxZ = this.maxX;
-        this.minZ = this.minX;
-        this.maxY = Constants.UNIT * Constants.QUARTER;
-        this.minY = 0;
 		RegisterHelper.hideModel(this, internalName);
     }
 
@@ -67,13 +68,13 @@ public class BlockSeedAnalyzer extends BlockTileBase {
 
     //override this to delay the removal of the tile entity until after harvestBlock() has been called
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        return !player.capabilities.isCreativeMode || super.removedByPlayer(world, pos, player, willHarvest);
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        return !player.capabilities.isCreativeMode || super.removedByPlayer(state, world, pos, player, willHarvest);
     }
 
     //this gets called when the block is mined
     @Override
-    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
         if(!world.isRemote) {
             if(!player.capabilities.isCreativeMode) {
                 this.dropBlockAsItem(world, pos, state, 0);
@@ -101,7 +102,7 @@ public class BlockSeedAnalyzer extends BlockTileBase {
 
     //open the gui when the block is activated
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float fX, float fY, float fZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(player.isSneaking()) {
             return false;
         }
@@ -113,14 +114,14 @@ public class BlockSeedAnalyzer extends BlockTileBase {
 
     //rendering stuff
     @Override
-    public boolean isOpaqueCube() {return false;}
+    public boolean isOpaqueCube(IBlockState state) {return false;}
 
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {return false;}
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {return false;}
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {return false;}        //no particles when this block gets hit
+    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {return false;}        //no particles when this block gets hit
 
     @Override
     @SideOnly(Side.CLIENT)

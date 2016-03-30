@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.block.material.Material;
@@ -10,9 +9,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -29,7 +29,6 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
 
     protected BlockWaterPad(Material mat) {
         super(mat, "normal");
-        this.maxY = Constants.UNIT * (Constants.WHOLE / 2);
     }
 
     @Override
@@ -43,8 +42,7 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float fX, float fY, float fZ) {
-        ItemStack stack = player.getCurrentEquippedItem();
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (stack == null || stack.getItem() == null) {
             return false;
         }
@@ -55,7 +53,7 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
             }
             if (!player.capabilities.isCreativeMode) {
                 player.inventory.addItemStackToInventory(FluidContainerRegistry.drainFluidContainer(stack));
-                player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
+                stack.stackSize = stack.stackSize - 1;
             }
             if (!world.isRemote) {
                 world.setBlockState(pos, this.getDefaultState(), 3);
@@ -76,17 +74,17 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
 
     //creative item picking
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         return new ItemStack(Blocks.dirt);
     }
 
     //render methods
     //--------------
     @Override
-    public boolean isOpaqueCube() {return false;}
+    public boolean isOpaqueCube(IBlockState state) {return false;}
 
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
 
     @Override
     @SideOnly(Side.CLIENT)

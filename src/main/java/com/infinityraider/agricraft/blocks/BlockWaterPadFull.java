@@ -6,9 +6,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -30,9 +32,8 @@ public class BlockWaterPadFull extends AbstractBlockWaterPad {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float fX, float fY, float fZ) {
-        ItemStack stack = player.getCurrentEquippedItem();
-        if (stack == null || stack.getItem() == null) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
+       if (stack == null || stack.getItem() == null) {
             return false;
         }
         if (FluidContainerRegistry.isContainer(stack)) {
@@ -42,7 +43,7 @@ public class BlockWaterPadFull extends AbstractBlockWaterPad {
             }
             if (!player.capabilities.isCreativeMode) {
                 player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, stack));
-                player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
+                stack.stackSize = stack.stackSize - 1;
             }
             if (!world.isRemote) {
                 world.setBlockState(pos, this.getDefaultState(), 3);
@@ -53,7 +54,7 @@ public class BlockWaterPadFull extends AbstractBlockWaterPad {
     }
 
     @Override
-    public boolean isReplaceable(World world, BlockPos pos) {
+    public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
         return false;
     }
 
@@ -71,7 +72,7 @@ public class BlockWaterPadFull extends AbstractBlockWaterPad {
         @SideOnly(Side.CLIENT)
         public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
             super.addInformation(stack, player, list, flag);
-            list.add(StatCollector.translateToLocal("agricraft_tooltip.waterPadWet"));
+            list.add(I18n.translateToLocal("agricraft_tooltip.waterPadWet"));
         }
     }
 }

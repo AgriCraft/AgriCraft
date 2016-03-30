@@ -6,10 +6,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
@@ -28,6 +32,7 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	public final int renderType;
 	public final BlockRenderLayer blockLayer;
 	public final String internalName;
+	private final AxisAlignedBB box;
 
 	@SideOnly(Side.CLIENT)
 	protected TextureAtlasSprite icon;
@@ -40,17 +45,26 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	 * @param mat the {@link Material} the block is comprised of.
 	 * @param internalName the name of the block.
 	 */
+	protected BlockBase(Material mat, String internalName, AxisAlignedBB box) {
+		this(mat, internalName, DEFAULT_RENDER_TYPE, box, DEFAULT_BLOCK_LAYER);
+	}
+
 	protected BlockBase(Material mat, String internalName) {
-		this(mat, internalName, DEFAULT_RENDER_TYPE, DEFAULT_BLOCK_LAYER);
+		this(mat, internalName, DEFAULT_RENDER_TYPE, Block.FULL_BLOCK_AABB, DEFAULT_BLOCK_LAYER);
 	}
 
 	protected BlockBase(Material mat, String internalName, int renderType, BlockRenderLayer blockLayer) {
+		this(mat, internalName, DEFAULT_RENDER_TYPE, Block.FULL_BLOCK_AABB, DEFAULT_BLOCK_LAYER);
+	}
+
+	protected BlockBase(Material mat, String internalName, int renderType, AxisAlignedBB box, BlockRenderLayer blockLayer) {
 		super(mat);
 		this.internalName = internalName;
 		// The following two do not appear to ever be used...
 		this.renderType = renderType;
 		this.blockLayer = blockLayer;
 		this.fullBlock = false;
+		this.box = box;
 		// This might be bad.
 		RegisterHelper.registerBlock(this, this.internalName, this.getItemBlockClass());
 	}
@@ -74,6 +88,11 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	 * desired.
 	 */
 	protected abstract Class<? extends ItemBlock> getItemBlockClass();
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return box;
+	}
 
 	// Pre-Implemented Methods
 	/**
