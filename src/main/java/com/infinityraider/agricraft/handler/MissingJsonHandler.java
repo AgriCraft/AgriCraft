@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.LogHelper;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -21,7 +21,7 @@ public class MissingJsonHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onModelBake(ModelBakeEvent event) {
-        ModelLoader modelLoader = event.modelLoader;
+        ModelLoader modelLoader = event.getModelLoader();
         Set<ModelResourceLocation> missingModels = getMissingModels(modelLoader);
         purgeMissingAgriCraftModels(missingModels);
     }

@@ -25,7 +25,7 @@ public class PlayerConnectToServerHandler {
     @SubscribeEvent
     public void syncMutations(PlayerEvent.PlayerLoggedInEvent event) {
         if(!event.player.worldObj.isRemote) {
-            if(MinecraftServer.getServer().isDedicatedServer()) {
+            if(event.player.getServer().isDedicatedServer()) {
                 //for dedicated server sync to every player
                 syncMutations((EntityPlayerMP) event.player);
             } else {

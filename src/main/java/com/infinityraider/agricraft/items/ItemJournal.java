@@ -10,7 +10,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,8 +41,8 @@ public class ItemJournal extends ItemBase implements IJournal {
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        ItemStack journal = player.getCurrentEquippedItem();
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+        ItemStack journal = player.getHeldItem(hand);
         if(journal.hasTagCompound()) {
             NBTTagCompound tag = journal.getTagCompound();
             if(tag.hasKey(AgriCraftNBT.DISCOVERED_SEEDS)) {
@@ -49,9 +52,9 @@ public class ItemJournal extends ItemBase implements IJournal {
             }
         }
         if(world.isRemote) {
-            player.openGui(AgriCraft.instance, GuiHandler.journalID, world, player.serverPosX, player.serverPosY, player.serverPosZ);
+            player.openGui(AgriCraft.instance, GuiHandler.journalID, world, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
         }
-        return stack;
+        return new ActionResult<>(EnumActionResult.PASS, stack);
     }
 
     @Override
@@ -61,7 +64,7 @@ public class ItemJournal extends ItemBase implements IJournal {
         if(stack.hasTagCompound() && stack.getTagCompound().hasKey(AgriCraftNBT.DISCOVERED_SEEDS)) {
             nr = stack.getTagCompound().getTagList(AgriCraftNBT.DISCOVERED_SEEDS, 10).tagCount();
         }
-        list.add(StatCollector.translateToLocal("agricraft_tooltip.discoveredSeeds")+": "+nr);
+        list.add(I18n.translateToLocal("agricraft_tooltip.discoveredSeeds")+": "+nr);
     }
 
     private NBTTagList getDiscoveredSeedsTaglist(ItemStack journal) {

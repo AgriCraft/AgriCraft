@@ -178,7 +178,7 @@ public class ConfigurationHandler {
 	@SubscribeEvent
 	@SuppressWarnings("unused")
 	public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-		if (event.modID.equals(Reference.MOD_ID)) {
+		if (event.getModID().equals(Reference.MOD_ID)) {
 			loadConfiguration();
 			LogHelper.debug("Configuration reloaded.");
 		}

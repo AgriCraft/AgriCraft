@@ -11,10 +11,9 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -59,13 +58,13 @@ public class GuiPeripheral extends GuiContainer {
     //draw foreground
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
-        String name = StatCollector.translateToLocal("agricraft_gui.peripheral");
+        String name = I18n.translateToLocal("agricraft_gui.peripheral");
         //write name: x coordinate is in the middle, 6 down from the top, and setting color to white
         float scale = 0.8F;
         GL11.glScalef(scale, scale, scale);
         this.fontRendererObj.drawString(name, (int) ((9 + this.xSize / 2 - this.fontRendererObj.getStringWidth(name) / 2) / scale), (int) (6 / scale), WHITE);
         GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
-        this.fontRendererObj.drawString(I18n.format("container.inventory"), 4, this.ySize - 94 + 2, WHITE);
+        this.fontRendererObj.drawString(net.minecraft.client.resources.I18n.format("container.inventory"), 4, this.ySize - 94 + 2, WHITE);
     }
 
     @Override
@@ -119,7 +118,7 @@ public class GuiPeripheral extends GuiContainer {
         if(method != null) {
             drawTexturedModalRect(this.guiLeft, this.guiTop + this.ySize - 4, 0, this.ySize, 252, 70);
             int height = fontRendererObj.FONT_HEIGHT;
-            this.fontRendererObj.drawString(StatCollector.translateToLocal("agricraft_description.peripheralHelp") + ": " + method.getSignature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
+            this.fontRendererObj.drawString(I18n.translateToLocal("agricraft_description.peripheralHelp") + ": " + method.getSignature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
             float scale = 0.9F;
             GL11.glScalef(scale, scale, scale);
             String[] write = IOHelper.getLinesArrayFromData(IOHelper.splitInLines(this.fontRendererObj, method.getDescription(), 230, scale));

@@ -7,10 +7,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,7 +33,7 @@ public class ItemMagnifyingGlass extends ItemBase {
 
     //this is called when you right click with this item in hand
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if(world.isRemote) {
             ArrayList<String> list = new ArrayList<>();
             IBlockState state = world.getBlockState(pos);
@@ -48,17 +50,17 @@ public class ItemMagnifyingGlass extends ItemBase {
                     String seedName = seed.getItem().getItemStackDisplayName(seed);
                     int meta = crop.getGrowthStage();
                     float growthPercentage = ((float) meta)/((float) 7)*100.0F;
-                    list.add(StatCollector.translateToLocal("agricraft_tooltip.cropWithPlant"));
-                    list.add(StatCollector.translateToLocal("agricraft_tooltip.seed") + ": " + seedName);
+                    list.add(I18n.translateToLocal("agricraft_tooltip.cropWithPlant"));
+                    list.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + seedName);
                     if(analyzed) {
-                        list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.growth") + ": " + growth);
-                        list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.gain") + ": " + gain);
-                        list.add(" - " + StatCollector.translateToLocal("agricraft_tooltip.strength") + ": " + strength);
+                        list.add(" - " + I18n.translateToLocal("agricraft_tooltip.growth") + ": " + growth);
+                        list.add(" - " + I18n.translateToLocal("agricraft_tooltip.gain") + ": " + gain);
+                        list.add(" - " + I18n.translateToLocal("agricraft_tooltip.strength") + ": " + strength);
                     }
                     else {
-                        list.add(StatCollector.translateToLocal("agricraft_tooltip.analyzed"));
+                        list.add(I18n.translateToLocal("agricraft_tooltip.analyzed"));
                     }
-                    list.add(StatCollector.translateToLocal(crop.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
+                    list.add(I18n.translateToLocal(crop.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
                     if (growthPercentage < 100.0) {
                         list.add(String.format("Growth : %.0f %%", growthPercentage));
                     } else {
@@ -66,29 +68,29 @@ public class ItemMagnifyingGlass extends ItemBase {
                     }
                 }
                 else if(crop.isCrossCrop()) {
-                    list.add(StatCollector.translateToLocal("agricraft_tooltip.crossCrop"));
+                    list.add(I18n.translateToLocal("agricraft_tooltip.crossCrop"));
                 }
                 else if(crop.hasWeed()) {
-                    list.add(StatCollector.translateToLocal("agricraft_tooltip.weeds"));
+                    list.add(I18n.translateToLocal("agricraft_tooltip.weeds"));
                 }
                 else {
-                    list.add(StatCollector.translateToLocal("agricraft_tooltip.cropWithoutPlant"));
+                    list.add(I18n.translateToLocal("agricraft_tooltip.cropWithoutPlant"));
                 }
             }
             else {
-                list.add(StatCollector.translateToLocal("agricraft_tooltip.notCrop"));
+                list.add(I18n.translateToLocal("agricraft_tooltip.notCrop"));
             }
             for(String msg:list) {
-                player.addChatComponentMessage(new ChatComponentText(msg));
+                player.addChatComponentMessage(new TextComponentString(msg));
             }
         }
-        return true;   //return true so nothing else happens
+        return EnumActionResult.SUCCESS;
     }
 
     @SideOnly(Side.CLIENT)
 	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-        list.add(StatCollector.translateToLocal("agricraft_tooltip.magnifyingGlass"));
+        list.add(I18n.translateToLocal("agricraft_tooltip.magnifyingGlass"));
     }
 
 }

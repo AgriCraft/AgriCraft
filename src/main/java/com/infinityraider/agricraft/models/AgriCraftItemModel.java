@@ -11,17 +11,17 @@ import com.google.common.base.Optional;
 import java.util.ArrayList;
 import javax.vecmath.Vector4f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IFlexibleBakedModel;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelPart;
-import net.minecraftforge.client.model.IModelState;
-import net.minecraftforge.client.model.ItemLayerModel;
-import net.minecraftforge.client.model.TRSRTransformation;
+import net.minecraftforge.client.model.ItemLayerModel;;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
+import net.minecraftforge.common.model.IModelPart;
+import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,8 +31,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class AgriCraftItemModel implements IModel {
-
-	// Min. Z
 	private static final float NORTH_Z_BASE = 7.496f / 16f;
 	private static final float SOUTH_Z_BASE = 8.504f / 16f;
 
@@ -58,16 +56,13 @@ public class AgriCraftItemModel implements IModel {
 	}
 
 	@Override
-	public IFlexibleBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-
+	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 		TRSRTransformation transform = state.apply(Optional.<IModelPart>absent()).or(TRSRTransformation.identity());
 		TextureAtlasSprite base = bakedTextureGetter.apply(textures.get(0).texture);
-
 		if (!textures.isEmpty()) {
-			IFlexibleBakedModel model = (new ItemLayerModel(ImmutableList.of(textures.get(0).texture))).bake(state, format, bakedTextureGetter);
+            IBakedModel model = (new ItemLayerModel(ImmutableList.of(textures.get(0).texture))).bake(state, format, bakedTextureGetter);
 			builder.addAll(model.getGeneralQuads());
-
 			for (int i = 1; i < textures.size(); i++) {
 				ItemModelTexture tex = textures.get(i);
 				//LogHelper.debug(tex);
@@ -76,7 +71,6 @@ public class AgriCraftItemModel implements IModel {
 				builder.add(genQuad(format, transform, tex.x1, tex.y1, tex.x2, tex.y2, tex.u1, tex.v1, tex.u2, tex.v2, SOUTH_Z_BASE, icon, EnumFacing.SOUTH, 0xffffffff));
 			}
 		}
-
 		return new ItemLayerModel.BakedModel(builder.build(), base, format);
 
 	}
@@ -91,8 +85,7 @@ public class AgriCraftItemModel implements IModel {
 	/*
 	 * The following is all 'Borrowed' from Forge Code...
      */
-    public static UnpackedBakedQuad genQuad(VertexFormat format, TRSRTransformation transform, float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2, float z, TextureAtlasSprite sprite, EnumFacing facing, int color)
-    {
+    public static UnpackedBakedQuad genQuad(VertexFormat format, TRSRTransformation transform, float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2, float z, TextureAtlasSprite sprite, EnumFacing facing, int color) {
         u1 = sprite.getInterpolatedU(u1);
         v1 = sprite.getInterpolatedV(v1);
         u2 = sprite.getInterpolatedU(u2);
@@ -112,22 +105,19 @@ public class AgriCraftItemModel implements IModel {
 
     private static UnpackedBakedQuad putQuad(VertexFormat format, TRSRTransformation transform, EnumFacing side, int color,
                                              float x1, float y1, float x2, float y2, float z,
-                                             float u1, float v1, float u2, float v2)
-    {
+                                             float u1, float v1, float u2, float v2) {
         side = side.getOpposite();
         UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
         builder.setQuadTint(-1);
         builder.setQuadOrientation(side);
         builder.setQuadColored();
 
-        if (side == EnumFacing.NORTH)
-        {
+        if (side == EnumFacing.NORTH) {
             putVertex(builder, format, transform, side, x1, y1, z, u1, v2, color);
             putVertex(builder, format, transform, side, x2, y1, z, u2, v2, color);
             putVertex(builder, format, transform, side, x2, y2, z, u2, v1, color);
             putVertex(builder, format, transform, side, x1, y2, z, u1, v1, color);
-        } else
-        {
+        } else {
             putVertex(builder, format, transform, side, x1, y1, z, u1, v2, color);
             putVertex(builder, format, transform, side, x1, y2, z, u1, v1, color);
             putVertex(builder, format, transform, side, x2, y2, z, u2, v1, color);
@@ -137,21 +127,16 @@ public class AgriCraftItemModel implements IModel {
     }
 
     private static void putVertex(UnpackedBakedQuad.Builder builder, VertexFormat format, TRSRTransformation transform, EnumFacing side,
-                                  float x, float y, float z, float u, float v, int color)
-    {
+                                  float x, float y, float z, float u, float v, int color) {
         Vector4f vec = new Vector4f();
-        for (int e = 0; e < format.getElementCount(); e++)
-        {
-            switch (format.getElement(e).getUsage())
-            {
+        for (int e = 0; e < format.getElementCount(); e++) {
+            switch (format.getElement(e).getUsage()) {
                 case POSITION:
-                    if (transform == TRSRTransformation.identity())
-                    {
+                    if (transform == TRSRTransformation.identity()) {
                         builder.put(e, x, y, z, 1);
                     }
                     // only apply the transform if it's not identity
-                    else
-                    {
+                    else {
                         vec.x = x;
                         vec.y = y;
                         vec.z = z;
@@ -168,8 +153,7 @@ public class AgriCraftItemModel implements IModel {
                     builder.put(e, r, g, b, a);
                     break;
                 case UV:
-                    if (format.getElement(e).getIndex() == 0)
-                    {
+                    if (format.getElement(e).getIndex() == 0) {
                         builder.put(e, u, v, 0f, 1f);
                         break;
                     }

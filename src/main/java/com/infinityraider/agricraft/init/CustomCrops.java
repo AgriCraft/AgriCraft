@@ -72,8 +72,8 @@ public class CustomCrops {
 						}
 						customSeeds[i] = customCrops[i].getSeed();
 						//TODO: find out how to fix this
-						LanguageRegistry.addName(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1));
-						LanguageRegistry.addName(customSeeds[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds");
+						//LanguageRegistry.addName(customCrops[i], Character.toUpperCase(name.charAt(0)) + name.substring(1));
+						//LanguageRegistry.addName(customSeeds[i], Character.toUpperCase(name.charAt(0)) + name.substring(1) + " Seeds");
 						if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 							customSeeds[i].setInformation(info);
 						}

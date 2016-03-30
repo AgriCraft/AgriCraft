@@ -15,7 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -66,7 +66,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
                 if(this.worldObj.canBlockSeeSky(getPos()) && this.worldObj.isRaining()) {
                     if(!this.hasNeighbour(AgriForgeDirection.UP)) {
                         BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(getPos());
-                        if(biome!=BiomeGenBase.desert && biome!=BiomeGenBase.desertHills) {
+                        if(biome.getRainfall() > 0) {
                             this.setFluidLevel(this.getFluidLevel() + 1);
                         }
                     }
@@ -82,7 +82,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         public void syncFluidLevel() {
             if(needsSync()) {
                 IMessage msg = new MessageSyncFluidLevel(this.fluidLevel, this.getPos());
-                NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimensionId(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
+                NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimension(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
                 NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
             }
         }
@@ -424,6 +424,6 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
     @SuppressWarnings("unchecked")
     public void addWailaInformation(List information) {
         super.addWailaInformation(information);
-        information.add(StatCollector.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidLevel() + "/" + this.getCapacity());
+        information.add(I18n.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidLevel() + "/" + this.getCapacity());
     }
 }

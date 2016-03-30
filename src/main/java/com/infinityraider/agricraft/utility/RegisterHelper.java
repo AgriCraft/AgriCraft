@@ -7,6 +7,8 @@ import com.infinityraider.agricraft.models.AgriCraftModelLoader;
 import com.infinityraider.agricraft.models.StateUnmapper;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -18,8 +20,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -79,12 +79,9 @@ public abstract class RegisterHelper {
 
         // This way you can easily override the model.
         // This causes crashes in non-dev enviorments... to be fixed.
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, new ItemMeshDefinition() {
-            @Override
-            public ModelResourceLocation getModelLocation(ItemStack is) {
-                final ModelResourceLocation loc = item.getModel(is, null, 0);
-                return loc == null ? model : loc;
-            }
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, is -> {
+            final ModelResourceLocation loc = item.getModel(is, null, 0);
+            return loc == null ? model : loc;
         });
         ModelBakery.registerItemVariants(item, model);
 
