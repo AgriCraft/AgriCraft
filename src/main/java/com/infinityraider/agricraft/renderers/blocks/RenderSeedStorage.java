@@ -46,7 +46,9 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
 		if (te instanceof TileEntitySeedStorage) {
 			TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
 			if (storage.hasLockedSeed()) {
+				tess.draw();
 				drawSeed(storage.getLockedSeed());
+				tess.startDrawingQuads();
 			}
 		}
 	}
