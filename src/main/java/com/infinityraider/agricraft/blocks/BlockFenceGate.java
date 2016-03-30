@@ -11,10 +11,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,9 +24,9 @@ public class BlockFenceGate extends BlockCustomWood {
 	public BlockFenceGate() {
 		super("fence_gate", false);
 	}
-
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         world.playAuxSFXAtEntity(player, 1003, pos, 0);
         if(world.isRemote) {
             return false;
@@ -70,8 +69,8 @@ public class BlockFenceGate extends BlockCustomWood {
         return ItemBlockFenceGate.class;
     }
 
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
         TileEntity tile = world.getTileEntity(pos);
         if(tile==null || !(tile instanceof TileEntityFenceGate)) {
             return null;
@@ -84,7 +83,7 @@ public class BlockFenceGate extends BlockCustomWood {
      * Updates the blocks bounds based on its current state. Args: world, pos
      */
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos, IBlockState state) {
+    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if(tile==null || !(tile instanceof TileEntityFenceGate)) {
             return;

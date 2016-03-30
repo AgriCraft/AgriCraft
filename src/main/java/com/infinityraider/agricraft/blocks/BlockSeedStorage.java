@@ -17,7 +17,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-import net.minecraft.util.EnumHand;
 
 public class BlockSeedStorage extends BlockCustomWood {
 
@@ -30,8 +29,8 @@ public class BlockSeedStorage extends BlockCustomWood {
         return new TileEntitySeedStorage();
     }
 
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float fX, float fY, float fZ) {
         if (!world.isRemote) {
             player.openGui(AgriCraft.instance, GuiHandler.seedStorageID, world, pos.getX(), pos.getY(), pos.getZ());
         }
@@ -67,18 +66,15 @@ public class BlockSeedStorage extends BlockCustomWood {
 
     //render methods
     //--------------
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
 
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
-	}
-
-	@Override
-	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-		return true;
-	}
-    
-	
+    @Override
+    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return true;
+    }
 
     @Override
     protected IProperty[] getPropertyArray() {

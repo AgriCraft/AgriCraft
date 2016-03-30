@@ -12,7 +12,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-import net.minecraft.util.math.AxisAlignedBB;
 
 public class BlockWaterChannelFull extends AbstractBlockWaterChannel {
 	
@@ -26,16 +25,17 @@ public class BlockWaterChannelFull extends AbstractBlockWaterChannel {
         return new TileEntityChannelFull();
     }
 
-	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
-        AxisAlignedBB axisalignedbb = this.getBoundingBox(state, world, pos);
-        if (axisalignedbb != null && mask.intersectsWith(axisalignedbb)) {
+    @Override
+    public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB boundingBox, List<AxisAlignedBB> list, Entity entity) {
+        AxisAlignedBB axisalignedbb = this.getCollisionBoundingBox(world,pos, state);
+        if (axisalignedbb != null && boundingBox.intersectsWith(axisalignedbb)) {
             list.add(axisalignedbb);
         }
     }
 
-	@Override
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
         return  new AxisAlignedBB((double) pos.getX() + this.minX, (double) pos.getY() + this.minY, (double) pos.getZ() + this.minZ, (double) pos.getX() + this.maxX, (double) pos.getY() + this.maxY, (double) pos.getZ() + this.maxZ);
     }
 

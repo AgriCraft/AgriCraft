@@ -29,8 +29,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 
 @Optional.Interface(modid = AgriCraftMods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockTileBase {
@@ -91,14 +89,14 @@ public class BlockPeripheral extends BlockTileBase {
 	}
 
 	//override this to delay the removal of the tile entity until after harvestBlock() has been called
-//	@Override
-//	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-//		return !player.capabilities.isCreativeMode || super.removedByPlayer(world, pos, player, willHarvest);
-//	}
+	@Override
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		return !player.capabilities.isCreativeMode || super.removedByPlayer(world, pos, player, willHarvest);
+	}
 
 	//this gets called when the block is mined
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
 		if (!world.isRemote) {
 			if (!player.capabilities.isCreativeMode) {
 				this.dropBlockAsItem(world, pos, state, 0);
@@ -108,9 +106,8 @@ public class BlockPeripheral extends BlockTileBase {
 	}
 
 	//open the gui when the block is activated
-	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 			return false;
 		}
@@ -123,17 +120,17 @@ public class BlockPeripheral extends BlockTileBase {
 	@Override
 	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
 		IMessage msg = new MessagePeripheralCheckNeighbours(pos);
-		NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32);
+		NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), 32);
 		NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube() {
 		return false;
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 

@@ -15,7 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -159,7 +159,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
                 float radius = 0.3F;
                 for (int j = 0; j <= 4; j++) {
                     float beta = -j * ((float) Math.PI) / (8.0F);
-                    Vec3d vector = new Vec3d(radius * Math.cos(alpha), radius * Math.sin(beta), radius * Math.sin(alpha));
+                    Vec3 vector = new Vec3(radius * Math.cos(alpha), radius * Math.sin(beta), radius * Math.sin(alpha));
                     this.spawnLiquidSpray(xOffset * (4 - j) / 4, zOffset * (4 - j) / 4, vector);
                 }
             }
@@ -167,7 +167,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
     }
 
     @SideOnly(Side.CLIENT)
-    private void spawnLiquidSpray(double xOffset, double zOffset, Vec3d vector) {
+    private void spawnLiquidSpray(double xOffset, double zOffset, Vec3 vector) {
         LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord()+0.5F+xOffset, this.yCoord()+8*Constants.UNIT, this.zCoord()+0.5F+zOffset, 0.3F, 0.7F, vector);
         Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
     }

@@ -87,19 +87,24 @@ public class BlockGrate extends BlockCustomWood {
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos, IBlockState state) {
-		final TileEntity te = world.getTileEntity(pos);
+	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
+		final TileEntity te = worldIn.getTileEntity(pos);
 		if (te instanceof TileEntityGrate) {
 			final TileEntityGrate tg = (TileEntityGrate) te;
 			final double[] b = tg.getBlockBounds();
-			this.setBlockBounds(b[0], b[1], b[2], b[3], b[4], b[5]);
+			this.minX = b[0];
+			this.minY = b[1];
+			this.minZ = b[2];
+			this.maxX = b[3];
+			this.maxY = b[4];
+			this.maxZ = b[5];
 		}
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
 		final double[] b;
-		final TileEntity te = world.getTileEntity(pos);
+		final TileEntity te = worldIn.getTileEntity(pos);
 		if (te instanceof TileEntityGrate) {
 			final TileEntityGrate tg = (TileEntityGrate) te;
 			b = tg.getBlockBounds();
@@ -111,7 +116,7 @@ public class BlockGrate extends BlockCustomWood {
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
-		return getBoundingBox(state, worldIn, pos);
+		return getCollisionBoundingBox(worldIn, pos, null);
 	}
 
 }

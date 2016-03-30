@@ -24,6 +24,7 @@ public abstract class AbstractBlockWaterPad extends BlockBase {
 	public AbstractBlockWaterPad(Material mat, String internalName) {
 		super(mat, "water_pad_" + internalName);
 		this.setHardness(0.5F);
+        this.setStepSound(soundTypeGravel);
 		RegisterHelper.hideModel(this, this.internalName);
 	}
 	

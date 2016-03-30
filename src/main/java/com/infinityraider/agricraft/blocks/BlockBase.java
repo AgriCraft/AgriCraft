@@ -15,13 +15,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 import com.infinityraider.agricraft.renderers.renderinghacks.IRenderingHandler;
-import java.util.List;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 /**
  * The base class for all AgriCraft blocks.
@@ -127,19 +120,6 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	@Override
 	public boolean isVisuallyOpaque() {
 		return false;
-	}
-	
-	public void setBlockBounds(double x1, double y1, double z1, double x2, double y2, double z2) {
-		
-	}
-	
-	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos, IBlockState state) {
-		
-	}
-	
-	@Override
-    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
-		
 	}
 
 }
