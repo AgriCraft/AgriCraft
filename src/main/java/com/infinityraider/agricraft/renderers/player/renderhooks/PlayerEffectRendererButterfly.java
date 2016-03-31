@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.renderers.player.renderhooks;
 
-import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.renderers.particles.DustFX;
+import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -33,7 +34,7 @@ public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
     }
 
     @Override
-    void renderEffects(TessellatorV2 tessellator, EntityPlayer player, RenderPlayer renderer, float partialTick) {
+    void renderEffects(ITessellator tessellator, EntityPlayer player, RenderPlayer renderer, float partialTick) {
         double[] pos = getPosition();
         GL11.glTranslated(pos[0], pos[1], pos[2]);
         renderWings(tessellator);
@@ -49,7 +50,7 @@ public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
         return new double[] {0, -1+dy, 0.5F};
     }
 
-    private void renderWings(TessellatorV2 tessellator) {
+    private void renderWings(ITessellator tessellator) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDisable(GL11.GL_LIGHTING);
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
@@ -75,11 +76,11 @@ public class PlayerEffectRendererButterfly extends PlayerEffectRenderer {
         GL11.glEnable(GL11.GL_LIGHTING);
     }
 
-    private void draw(TessellatorV2 tessellator, float scale) {
+    private void draw(ITessellator tessellator, float scale) {
         //x-, y & z-axis
         //this.drawAxisSystem();
 
-        tessellator.startDrawingQuads();
+        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
 
         //front
         tessellator.addVertexWithUV(0, 0, 0, 0, 1);

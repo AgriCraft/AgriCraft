@@ -2,13 +2,8 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.creativetab.AgriCraftTab;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
-import com.infinityraider.agricraft.renderers.TextureCache;
-import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
-
 import com.infinityraider.agricraft.reference.AgriCraftMods;
-import com.infinityraider.agricraft.utility.RegisterHelper;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
@@ -31,31 +25,18 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
-public abstract class BlockCustomWood extends BlockTileBase {
+public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends BlockBaseTile<T> {
 	
 	// Should drastically speed up getTypes()
 	private static final List<ItemStack> woodTypes = new ArrayList<>();
-
+	
     public BlockCustomWood(String internalName, boolean isMultiBlock) {
-        this(internalName, internalName, isMultiBlock, Block.FULL_BLOCK_AABB);
-    }
-
-    public BlockCustomWood(String internalName, String tileName, boolean isMultiBlock) {
-        this(internalName, tileName, isMultiBlock, Block.FULL_BLOCK_AABB);
-    }
-	
-	public BlockCustomWood(String internalName, boolean isMultiBlock, AxisAlignedBB box) {
-		this(internalName, internalName, isMultiBlock, box);
-	}
-	
-    public BlockCustomWood(String internalName, String tileName, boolean isMultiBlock, AxisAlignedBB box) {
-        super(Material.wood, internalName, tileName, isMultiBlock, box);
+        super(Material.wood, internalName, isMultiBlock);
         this.setHardness(2.0F);
         this.setResistance(5.0F);
         setHarvestLevel("axe", 0);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.setStepSound(SoundType.WOOD);
-		RegisterHelper.hideModel(this, internalName);
     }
 
 	/**
@@ -180,29 +161,4 @@ public abstract class BlockCustomWood extends BlockTileBase {
     protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
     	return ItemBlockCustomWood.class;
     }
-    
-    @Override
-    public ItemStack getWailaStack(BlockBase block, TileEntityBase te) {
-    	if(te != null && te instanceof TileEntityCustomWood) {
-    		ItemStack stack = new ItemStack(block, 1, 0);
-    		stack.setTagCompound(((TileEntityCustomWood) te).getMaterialTag());
-    		return stack;
-    	} else {
-    		return DEFAULT_WAILA_STACK;
-    	}
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons() {
-		// TODO: Determine what is going on here...
-		// This should go elsewhere...
-        if(icon == null) {
-            for(ItemStack stack : BlockCustomWood.getWoodTypes()) {
-                Block block = ((ItemBlock) stack.getItem()).block;
-                TextureCache.getInstance().retrieveIcons(block.getStateFromMeta(stack.getItemDamage()));
-            }
-        }
-    }
-	
 }

@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.renderers.blocks.IBlockRenderingHandler;
 import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorageController;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -9,19 +10,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import com.infinityraider.agricraft.renderers.renderinghacks.IRenderingHandler;
 
-public class BlockSeedStorageController extends BlockCustomWood {
+public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedStorageController> {
 
 	public BlockSeedStorageController() {
 		super("seed_storage_controller", true);
 	}
 	
     @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntitySeedStorageController createNewTileEntity(World world, int meta) {
         return new TileEntitySeedStorageController();
     }
 
@@ -48,8 +49,13 @@ public class BlockSeedStorageController extends BlockCustomWood {
         return new IProperty[0];
     }
 
-	@Override
-	public IRenderingHandler getRenderer() {
+    @Override
+    public AxisAlignedBB getDefaultBoundingBox() {
+        return null;
+    }
+
+    @Override
+	public IBlockRenderingHandler<TileEntitySeedStorageController> getRenderer() {
 		return null;
 	}
 

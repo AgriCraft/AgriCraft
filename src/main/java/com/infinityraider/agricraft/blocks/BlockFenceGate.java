@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockFenceGate extends BlockCustomWood {
+public class BlockFenceGate extends BlockCustomWood<TileEntityFenceGate> {
 
 	public BlockFenceGate() {
 		super("fence_gate", false);
@@ -61,13 +61,18 @@ public class BlockFenceGate extends BlockCustomWood {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntityFenceGate createNewTileEntity(World world, int meta) {
         return new TileEntityFenceGate();
     }
 
     @Override
     protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
         return ItemBlockFenceGate.class;
+    }
+
+    @Override
+    public AxisAlignedBB getDefaultBoundingBox() {
+        return net.minecraft.block.BlockFence.field_185671_f;
     }
 
     @Override
@@ -83,7 +88,9 @@ public class BlockFenceGate extends BlockCustomWood {
             return null;
         }
         TileEntityFenceGate gate = (TileEntityFenceGate) tile;
-        return gate.isOpen()?null:(!gate.isZAxis()?new AxisAlignedBB((double)((float) pos.getX() + 0.375F), (double) pos.getY(), (double) pos.getZ(), (double)((float) pos.getX() + 0.625F), (double)((float) pos.getY() + 1.5F), (double)(pos.getZ() + 1)) : new AxisAlignedBB((double) pos.getX(), (double) pos.getY(), (double)((float) pos.getZ() + 0.375F), (double)(pos.getX() + 1), (double)((float) pos.getY() + 1.5F), (double)((float) pos.getZ() + 0.625F)));
+        return gate.isOpen()?null:(!gate.isZAxis() ?
+                new AxisAlignedBB((double)((float) pos.getX() + 0.375F), (double) pos.getY(), (double) pos.getZ(), (double)((float) pos.getX() + 0.625F), (double)((float) pos.getY() + 1.5F), (double)(pos.getZ() + 1))
+                : new AxisAlignedBB((double) pos.getX(), (double) pos.getY(), (double)((float) pos.getZ() + 0.375F), (double)(pos.getX() + 1), (double)((float) pos.getY() + 1.5F), (double)((float) pos.getZ() + 0.625F)));
     }
 
     public boolean isFenceGateOpen(IBlockAccess world, BlockPos pos) {

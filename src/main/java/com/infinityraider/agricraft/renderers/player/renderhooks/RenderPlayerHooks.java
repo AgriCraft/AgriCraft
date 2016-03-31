@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.player.renderhooks;
 
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -80,7 +80,7 @@ public final class RenderPlayerHooks {
         if(activeEffectRenderers.containsKey(event.getEntityPlayer().getDisplayNameString())) {
             if(!event.getEntityPlayer().isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer)) {
                 GL11.glPushMatrix();
-                activeEffectRenderers.get(event.getEntityPlayer().getDisplayNameString()).renderEffects(TessellatorV2.getInstance(), event.getEntityPlayer(), event.getRenderer(), event.getPartialRenderTick());
+                activeEffectRenderers.get(event.getEntityPlayer().getDisplayNameString()).renderEffects(TessellatorVertexBuffer.getInstance(), event.getEntityPlayer(), event.getRenderer(), event.getPartialRenderTick());
                 GL11.glPopMatrix();
             }
         }

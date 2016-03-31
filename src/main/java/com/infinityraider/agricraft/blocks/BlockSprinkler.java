@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntitySprinkler;
-import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -27,26 +26,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class BlockSprinkler extends BlockTileBase {
+public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
+	public static final AxisAlignedBB BOX = new AxisAlignedBB(
+			Constants.UNIT * Constants.QUARTER,
+			Constants.UNIT * Constants.THREE_QUARTER,
+			Constants.UNIT * Constants.QUARTER,
+			Constants.UNIT * Constants.THREE_QUARTER,
+			Constants.UNIT * (Constants.WHOLE + Constants.QUARTER),
+			Constants.UNIT * Constants.THREE_QUARTER
+	);
 
 	public BlockSprinkler() {
-		super(Material.iron, "sprinkler", false, new AxisAlignedBB(
-				Constants.UNIT * Constants.QUARTER,
-				Constants.UNIT * Constants.THREE_QUARTER,
-				Constants.UNIT * Constants.QUARTER,
-				Constants.UNIT * Constants.THREE_QUARTER,
-				Constants.UNIT * (Constants.WHOLE + Constants.QUARTER),
-				Constants.UNIT * Constants.THREE_QUARTER
-		));
+		super(Material.iron, "sprinkler", false);
 		this.setCreativeTab(AgriCraftTab.agriCraftTab);
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
 		setHarvestLevel("axe", 0);
-		RegisterHelper.hideModel(this, this.internalName);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
+	public TileEntitySprinkler createNewTileEntity(World world, int meta) {
 		return new TileEntitySprinkler();
 	}
 
@@ -132,6 +131,11 @@ public class BlockSprinkler extends BlockTileBase {
 	@Override
 	protected Class<? extends ItemBlock> getItemBlockClass() {
 		return null;
+	}
+
+	@Override
+	public AxisAlignedBB getDefaultBoundingBox() {
+		return BOX;
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -22,10 +22,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 
-public class BlockChannelValve extends AbstractBlockWaterChannel {
-	
+public class BlockChannelValve extends AbstractBlockWaterChannel<TileEntityChannelValve> {
+    public static final AxisAlignedBB BOX = new AxisAlignedBB(4*Constants.UNIT, 0, 4*Constants.UNIT, 12*Constants.UNIT, 1, 12*Constants.UNIT);
+
     public BlockChannelValve() {
-        super("valve", new AxisAlignedBB(4*Constants.UNIT, 0, 4*Constants.UNIT, 12*Constants.UNIT, 1, 12*Constants.UNIT));
+        super("valve");
     }
 
     @Override
@@ -59,7 +60,7 @@ public class BlockChannelValve extends AbstractBlockWaterChannel {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntityChannelValve createNewTileEntity(World world, int meta) {
         return new TileEntityChannelValve();
     }
 
@@ -78,7 +79,12 @@ public class BlockChannelValve extends AbstractBlockWaterChannel {
     protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
     	return ItemBlockValve.class;
     }
-    
+
+    @Override
+    public AxisAlignedBB getDefaultBoundingBox() {
+        return BOX;
+    }
+
     public static class ItemBlockValve extends ItemBlockCustomWood {
         public ItemBlockValve(Block block) {
             super(block);

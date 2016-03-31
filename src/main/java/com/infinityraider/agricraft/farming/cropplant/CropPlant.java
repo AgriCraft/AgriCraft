@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -354,8 +353,8 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(VertexBuffer renderer, IBlockAccess world, BlockPos pos, int growthStage) {
-        PlantRenderer.renderPlant(renderer, world, pos, growthStage, this);
+    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage) {
+        PlantRenderer.renderPlant(world, pos, growthStage, this);
     }
 
     @Override

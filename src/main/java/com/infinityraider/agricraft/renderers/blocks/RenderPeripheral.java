@@ -4,9 +4,8 @@ import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.renderers.RenderUtil;
-import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.renderers.models.ModelPeripheralProbe;
+import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
@@ -16,18 +15,18 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
-import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 
-public class RenderPeripheral extends RenderBlockAgriCraft {
+import javax.annotation.Nullable;
 
+public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 	private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID + ":textures/blocks/peripheralProbe.png");
 	private static final ModelBase probeModel = new ModelPeripheralProbe();
 
@@ -35,28 +34,28 @@ public class RenderPeripheral extends RenderBlockAgriCraft {
 		super(AgriCraftBlocks.blockPeripheral, new TileEntityPeripheral(), true, true, true);
 	}
 
+
+	@Override
+	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
+								 @Nullable TileEntityPeripheral tile, boolean dynamicRender, float partialTick, int destroyStage) {
+		if(tile != null) {
+			if(dynamicRender) {
+				drawSeed(tessellator, tile);
+				performAnimations(tessellator, tile, BaseIcons.DEBUG.getIcon());
+			} else {
+				renderBase(tessellator);
+			}
+		}
+	}
+
+	/*
 	@Override
 	protected void doInventoryRender(TessellatorV2 tess, ItemStack item) {
 		renderBase(tess, COLOR_MULTIPLIER_STANDARD);
 	}
+	*/
 
-	@Override
-	protected void doRenderBlock(TessellatorV2 tess, IBlockAccess world, Block block, IBlockState state, BlockPos pos) {
-		renderBase(tess, RenderUtil.getColorMultiplier(world, pos, state, block));
-	}
-
-	@Override
-	protected void doRenderTileEntity(TessellatorV2 tess, TileEntity te) {
-		if (te instanceof TileEntityPeripheral) {
-			final TileEntityPeripheral peripheral = (TileEntityPeripheral) te;
-			tess.draw();
-			drawSeed(tess, peripheral);
-			performAnimations(tess, peripheral, BaseIcons.DEBUG.getIcon(), COLOR_MULTIPLIER_STANDARD);
-			tess.startDrawingQuads();
-		}
-	}
-
-	private void drawSeed(TessellatorV2 tessellator, TileEntityPeripheral peripheral) {
+	private void drawSeed(ITessellator tessellator, TileEntityPeripheral peripheral) {
 		ItemStack stack = peripheral.getStackInSlot(ContainerSeedAnalyzer.seedSlotId);
 		if (stack == null || stack.getItem() == null) {
 			return;
@@ -83,17 +82,13 @@ public class RenderPeripheral extends RenderBlockAgriCraft {
 
 		//TODO: render the seed
 
-		/*
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-        ItemRenderer.renderItemIn2D(tessellator, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), Constants.UNIT);
-		 */
 		GL11.glRotatef(-angle, 1.0F, 0.0F, 0.0F);
 		GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
 		GL11.glTranslated(-dx, -dy, -dz);
 		GL11.glPopMatrix();
 	}
 
-	private void performAnimations(TessellatorV2 tessellator, TileEntityPeripheral peripheral, TextureAtlasSprite icon, int cm) {
+	private void performAnimations(ITessellator tessellator, TileEntityPeripheral peripheral, TextureAtlasSprite icon) {
 		int maxDoorPos = TileEntityPeripheral.MAX / 2;
 		float unit = Constants.UNIT;
 
@@ -106,10 +101,8 @@ public class RenderPeripheral extends RenderBlockAgriCraft {
 			float doorPosition = (timer >= maxDoorPos ? maxDoorPos : timer) * 4.0F / maxDoorPos;
 			if (doorPosition < 4) {
 				Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-				tessellator.startDrawingQuads();
-				drawScaledPrism(tessellator, 4, 2, 0, 8 - doorPosition, 14, 1, icon, cm);
-				drawScaledPrism(tessellator, 8 + doorPosition, 2, 0, 12, 14, 1, icon, cm);
-				tessellator.draw();
+				tessellator.drawScaledPrism(4, 2, 0, 8 - doorPosition, 14, 1, icon);
+				tessellator.drawScaledPrism(8 + doorPosition, 2, 0, 12, 14, 1, icon);
 			}
 
 			//probe
@@ -147,7 +140,7 @@ public class RenderPeripheral extends RenderBlockAgriCraft {
 		GL11.glPopMatrix();
 	}
 
-	private void renderBase(TessellatorV2 tessellator2, int colorMultiplier) {
+	private void renderBase(ITessellator tessellator) {
 		final TextureAtlasSprite iconTop = IconUtil.getIcon("agricraft:blocks/peripheralTop");
 		final TextureAtlasSprite iconSide = IconUtil.getIcon("agricraft:blocks/peripheralSide");
 		final TextureAtlasSprite iconBottom = IconUtil.getIcon("agricraft:blocks/peripheralBottom");
@@ -155,38 +148,31 @@ public class RenderPeripheral extends RenderBlockAgriCraft {
 		float unit = Constants.UNIT;
 
 		//top
-		drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, iconTop, 1, colorMultiplier);
-		drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, iconTop, 1, colorMultiplier);
+		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.UP, iconTop, 1);
 		//bottom
-		drawScaledFaceFrontXZ(tessellator2, 0, 0, 16, 16, iconBottom, 0, colorMultiplier);
-		drawScaledFaceBackXZ(tessellator2, 0, 0, 16, 16, iconBottom, 0, colorMultiplier);
+		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.DOWN, iconBottom, 0);
 		//front
-		drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, iconSide, 0, colorMultiplier);
-		drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, iconSide, 0, colorMultiplier);
+		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.NORTH, iconSide, 0);
 		//right
-		drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, iconSide, 1, colorMultiplier);
-		drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, iconSide, 1, colorMultiplier);
+		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.EAST, iconSide, 1);
 		//left
-		drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, iconSide, 0, colorMultiplier);
-		drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, iconSide, 0, colorMultiplier);
+		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.WEST, iconSide, 0);
 		//back
-		drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, iconSide, 1, colorMultiplier);
-		drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, iconSide, 1, colorMultiplier);
+		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.SOUTH, iconSide, 1);
 		//inside top
-		drawScaledFaceFrontXZ(tessellator2, 4, 4, 12, 12, iconBottom, 12 * unit, colorMultiplier);
+		tessellator.drawScaledFace(4, 4, 12, 12, EnumFacing.UP, iconBottom, 12 * unit);
 		//inside front
-		drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, iconInside, 4 * unit, colorMultiplier);
-		drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, iconInside, 4 * unit, colorMultiplier);
+		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.NORTH, iconInside, 4 * unit);
 		//inside right
-		drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, iconInside, 12 * unit, colorMultiplier);
-		drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, iconInside, 12 * unit, colorMultiplier);
+		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.EAST, iconInside, 12 * unit);
 		//inside left
-		drawScaledFaceFrontYZ(tessellator2, 0, 0, 16, 16, iconInside, 4 * unit, colorMultiplier);
-		drawScaledFaceBackYZ(tessellator2, 0, 0, 16, 16, iconInside, 4 * unit, colorMultiplier);
+		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.WEST, iconInside, 4 * unit);
 		//inside back
-		drawScaledFaceFrontXY(tessellator2, 0, 0, 16, 16, iconInside, 12 * unit, colorMultiplier);
-		drawScaledFaceBackXY(tessellator2, 0, 0, 16, 16, iconInside, 12 * unit, colorMultiplier);
-
+		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.SOUTH, iconInside, 12 * unit);
 	}
 
+	@Override
+	public TextureAtlasSprite getIcon() {
+		return null;
+	}
 }

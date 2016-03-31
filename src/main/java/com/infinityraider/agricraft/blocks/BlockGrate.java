@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class BlockGrate extends BlockCustomWood {
+public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 
 	public BlockGrate() {
 		super("grate", false);
@@ -33,9 +33,15 @@ public class BlockGrate extends BlockCustomWood {
 	}
 
 	@Override
+	public AxisAlignedBB getDefaultBoundingBox() {
+		return null;
+	}
+
+	@Override
 	protected IProperty[] getPropertyArray() {
 		return new IProperty[0];
 	}
+
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -44,7 +50,7 @@ public class BlockGrate extends BlockCustomWood {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+	public TileEntityGrate createNewTileEntity(World world, int meta) {
 		return new TileEntityGrate();
 	}
 

@@ -7,14 +7,10 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
 import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
-import com.infinityraider.agricraft.api.v1.IIconRegistrar;
-import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -32,28 +28,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockSeedAnalyzer extends BlockTileBase {
+public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
+    public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT, 0, Constants.UNIT, Constants.UNIT * (Constants.WHOLE - 1), Constants.UNIT * Constants.QUARTER, Constants.UNIT * (Constants.WHOLE - 1));
 	
     public BlockSeedAnalyzer() {
-        super(Material.ground, "seed_analyzer", false, new AxisAlignedBB(
-                Constants.UNIT,
-                0,
-                Constants.UNIT,
-                Constants.UNIT * (Constants.WHOLE - 1),
-                Constants.UNIT * Constants.QUARTER,
-                Constants.UNIT * (Constants.WHOLE - 1)));
+        super(Material.ground, "seed_analyzer", false);
         this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.isBlockContainer = true;
         this.setTickRandomly(false);
         //set mining statistics
         this.setHardness(1);
         this.setResistance(1);
-		RegisterHelper.hideModel(this, internalName);
     }
 
     //creates a new tile entity every time a block of this type is placed
     @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntitySeedAnalyzer createNewTileEntity(World world, int meta) {
         return new TileEntitySeedAnalyzer();
     }
 
@@ -151,11 +141,7 @@ public class BlockSeedAnalyzer extends BlockTileBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon() {
-        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/oak_planks");
+    public AxisAlignedBB getDefaultBoundingBox() {
+        return BOX;
     }
-
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegistrar iconRegistrar) {}
 }

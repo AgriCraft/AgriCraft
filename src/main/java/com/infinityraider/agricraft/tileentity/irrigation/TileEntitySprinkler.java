@@ -136,7 +136,8 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable {
 		TileEntity te = getWorld().getTileEntity(getPos().add(0, 1, 0));
 		
 		if (te instanceof TileEntityChannel) {
-			return ((TileEntityChannel) te).getIcon();
+            //TODO: get channel icon
+			return null;
 		}
 		
 		return BaseIcons.OAK_PLANKS.getIcon();

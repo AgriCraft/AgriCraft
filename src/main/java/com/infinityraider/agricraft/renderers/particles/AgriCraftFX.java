@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.renderers.particles;
 
-import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
+import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -46,7 +47,7 @@ public abstract  class AgriCraftFX extends EntityFX {
     public void renderParticle(VertexBuffer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
         //I'm doing this because else the textures blink and are fucked up and I have no idea how to fix it,
         //if anyone sees this and knows how, let me know please, thanks :D
-        TessellatorV2 tessellator = TessellatorV2.getInstance(worldRenderer);
+        ITessellator tessellator = TessellatorVertexBuffer.getInstance(worldRenderer);
 
         if(texture != null) {
             float f6 = 0;
@@ -58,11 +59,11 @@ public abstract  class AgriCraftFX extends EntityFX {
             float f12 = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) f0 - interpPosY);
             float f13 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) f0 - interpPosZ);
             Minecraft.getMinecraft().renderEngine.bindTexture(this.texture);
-            tessellator.setColorRGBA_F(1, 1, 1, 0.5F);
-            tessellator.addVertexWithUV((double) (f11 - f1 * f10 - f4 * f10), (double) (f12 - f2 * f10), (double) (f13 - f3 * f10 - f6 * f10), f7, f9);
-            tessellator.addVertexWithUV((double) (f11 - f1 * f10 + f4 * f10), (double) (f12 + f2 * f10), (double) (f13 - f3 * f10 + f6 * f10), f7, f8);
-            tessellator.addVertexWithUV((double) (f11 + f1 * f10 + f4 * f10), (double) (f12 + f2 * f10), (double) (f13 + f3 * f10 + f6 * f10), f6, f8);
-            tessellator.addVertexWithUV((double) (f11 + f1 * f10 - f4 * f10), (double) (f12 - f2 * f10), (double) (f13 + f3 * f10 - f6 * f10), f6, f9);
+            tessellator.setColorRGBA(1, 1, 1, 0.5F);
+            tessellator.addVertexWithUV((f11 - f1 * f10 - f4 * f10), (f12 - f2 * f10), (f13 - f3 * f10 - f6 * f10), f7, f9);
+            tessellator.addVertexWithUV((f11 - f1 * f10 + f4 * f10), (f12 + f2 * f10), (f13 - f3 * f10 + f6 * f10), f7, f8);
+            tessellator.addVertexWithUV((f11 + f1 * f10 + f4 * f10), (f12 + f2 * f10), (f13 + f3 * f10 + f6 * f10), f6, f8);
+            tessellator.addVertexWithUV((f11 + f1 * f10 - f4 * f10), (f12 - f2 * f10), (f13 + f3 * f10 - f6 * f10), f6, f9);
         } else {
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
             super.renderParticle(worldRenderer, entity, partialTicks, f0, f1, f2, f3, f4);

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannelFull;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -9,35 +9,31 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static com.infinityraider.agricraft.renderers.RenderUtil.*;
-
 @SideOnly(Side.CLIENT)
-public class RenderChannelFull extends RenderChannel {
+public class RenderChannelFull extends RenderChannel<TileEntityChannelFull> {
 
 	public RenderChannelFull() {
 		super(AgriCraftBlocks.blockWaterChannelFull, new TileEntityChannelFull());
 	}
 
 	@Override
-	protected void renderBottom(TessellatorV2 tessellator, TileEntityChannel channel, TextureAtlasSprite matIcon, int cm) {
+	protected void renderBottom(ITessellator tessellator, TextureAtlasSprite matIcon) {
 		//draw bottom
-		drawScaledPrism(tessellator, 0, 0, 0, 16, 5, 16, matIcon, cm);
+		tessellator.drawScaledPrism(0, 0, 0, 16, 5, 16, matIcon);
 		//draw top
-		drawScaledPrism(tessellator, 0, 12, 0, 16, 16, 16, matIcon, cm);
+		tessellator.drawScaledPrism(0, 12, 0, 16, 16, 16, matIcon);
 		//draw four corners
-		drawScaledPrism(tessellator, 0, 5, 0, 5, 12, 5, matIcon, cm);
-		drawScaledPrism(tessellator, 11, 5, 0, 16, 12, 5, matIcon, cm);
-		drawScaledPrism(tessellator, 11, 5, 11, 16, 12, 16, matIcon, cm);
-		drawScaledPrism(tessellator, 0, 5, 11, 5, 12, 16, matIcon, cm);
+		tessellator.drawScaledPrism(0, 5, 0, 5, 12, 5, matIcon);
+		tessellator.drawScaledPrism(11, 5, 0, 16, 12, 5, matIcon);
+		tessellator.drawScaledPrism(11, 5, 11, 16, 12, 16, matIcon);
+		tessellator.drawScaledPrism(0, 5, 11, 5, 12, 16, matIcon);
 
 	}
 
-	//renders one of the four sides of a channel
-	// So tiny!
 	@Override
-	protected void renderSide(TessellatorV2 tessellator, TileEntityChannel channel, TextureAtlasSprite matIcon, int cm, AgriForgeDirection dir) {
+	protected void renderSide(ITessellator tessellator, TileEntityChannel channel, TextureAtlasSprite matIcon, AgriForgeDirection dir) {
 		if (!channel.hasNeighbourCheck(dir)) {
-			drawScaledPrism(tessellator, 5, 5, 0, 11, 12, 5, matIcon, cm, dir);
+			tessellator.drawScaledPrism(5, 5, 0, 11, 12, 5, matIcon);
 		}
 	}
 }

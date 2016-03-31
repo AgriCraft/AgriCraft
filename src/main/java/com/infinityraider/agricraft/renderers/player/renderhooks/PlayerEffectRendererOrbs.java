@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.renderers.player.renderhooks;
 
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +39,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
     }
 
     @Override
-    void renderEffects(TessellatorV2 tessellator, EntityPlayer player, RenderPlayer renderer, float partialTick) {
+    void renderEffects(ITessellator tessellator, EntityPlayer player, RenderPlayer renderer, float partialTick) {
         //rotate the coordinate system to the minecraft (x,y,z) instead of the system attached to the player
         rotateToGeneralCoordinates(player, partialTick);
 
@@ -95,7 +96,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
         tessellator.translate(0, dy, 0);
     }
 
-    private void renderOrb(TessellatorV2 tessellator, float x, float y, float z, int index) {
+    private void renderOrb(ITessellator tessellator, float x, float y, float z, int index) {
         //rescale the size of the orbs and make them smaller towards the end of the trail
         float scale = 0.375F*(1.0F - 0.25F*(index+0.0F)/MAX_BLURS);
 
@@ -106,7 +107,7 @@ public class PlayerEffectRendererOrbs extends PlayerEffectRenderer {
         GL11.glRotatef(Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(Minecraft.getMinecraft().getRenderManager().playerViewX, 1F, 0F, 0F);
 
-        tessellator.startDrawingQuads();
+        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
             //front
             addScaledVertexWithUV(tessellator, scale * (-8), 0, 0, 16, 16);
             addScaledVertexWithUV(tessellator, scale * (8), 0, 0, 0, 16);
