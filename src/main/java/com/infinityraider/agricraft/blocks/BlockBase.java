@@ -24,12 +24,9 @@ import com.infinityraider.agricraft.renderers.renderinghacks.IRenderingHandler;
  * The base class for all AgriCraft blocks.
  */
 public abstract class BlockBase extends Block implements IAgriCraftRenderable {
-
-	public static final int DEFAULT_RENDER_TYPE = 2;
 	public static final BlockRenderLayer DEFAULT_BLOCK_LAYER = BlockRenderLayer.CUTOUT;
 	public static final ItemStack DEFAULT_WAILA_STACK = null;
 
-	public final int renderType;
 	public final BlockRenderLayer blockLayer;
 	public final String internalName;
 	private final AxisAlignedBB box;
@@ -46,22 +43,12 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	 * @param internalName the name of the block.
 	 */
 	protected BlockBase(Material mat, String internalName, AxisAlignedBB box) {
-		this(mat, internalName, DEFAULT_RENDER_TYPE, box, DEFAULT_BLOCK_LAYER);
+		this(mat, internalName, box, DEFAULT_BLOCK_LAYER);
 	}
 
-	protected BlockBase(Material mat, String internalName) {
-		this(mat, internalName, DEFAULT_RENDER_TYPE, Block.FULL_BLOCK_AABB, DEFAULT_BLOCK_LAYER);
-	}
-
-	protected BlockBase(Material mat, String internalName, int renderType, BlockRenderLayer blockLayer) {
-		this(mat, internalName, DEFAULT_RENDER_TYPE, Block.FULL_BLOCK_AABB, DEFAULT_BLOCK_LAYER);
-	}
-
-	protected BlockBase(Material mat, String internalName, int renderType, AxisAlignedBB box, BlockRenderLayer blockLayer) {
+	protected BlockBase(Material mat, String internalName, AxisAlignedBB box, BlockRenderLayer blockLayer) {
 		super(mat);
 		this.internalName = internalName;
-		// The following two do not appear to ever be used...
-		this.renderType = renderType;
 		this.blockLayer = blockLayer;
 		this.fullBlock = false;
 		this.box = box;
