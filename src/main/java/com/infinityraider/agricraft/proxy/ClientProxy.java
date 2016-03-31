@@ -14,18 +14,21 @@ import com.infinityraider.agricraft.init.CustomCrops;
 import com.infinityraider.agricraft.init.ResourceCrops;
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.ItemModSeed;
-import com.infinityraider.agricraft.models.AgriCraftModelLoader;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.renderers.renderinghacks.BlockRendererDispatcherWrapped;
+import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
 import com.infinityraider.agricraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.OreDictHelper;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -35,7 +38,6 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -65,9 +67,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerRenderers() {
-        //apply the wrapped BlockRendererDispatcher
-        BlockRendererDispatcherWrapped.init();
-
         //BLOCKS
         //------
         for(Field field:AgriCraftBlocks.class.getDeclaredFields()) {
@@ -75,7 +74,16 @@ public class ClientProxy extends CommonProxy {
                 try {
                     Object obj = field.get(null);
                     if(obj!=null) {
-                        ((BlockBase) obj).getRenderer();
+                        BlockBase block = (BlockBase) obj;
+                        StateMapperBase stateMapper = new StateMapperBase() {
+                            @Override
+                            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                                return block.getBlockModelResourceLocation();
+                            }
+                        };
+                        ModelLoader.setCustomStateMapper(block, stateMapper);
+                        //register the renderer
+                        BlockRendererRegistry.getInstance().registerCustomBlockRenderer(block);
                     }
                 } catch (IllegalAccessException e) {
                     LogHelper.printStackTrace(e);
@@ -216,6 +224,5 @@ public class ClientProxy extends CommonProxy {
     public void initConfiguration(FMLPreInitializationEvent event) {
         super.initConfiguration(event);
         ConfigurationHandler.initClientConfigs(event);
-		ModelLoaderRegistry.registerLoader(AgriCraftModelLoader.INSTANCE);
     }
 }

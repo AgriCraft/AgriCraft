@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.gui;
 
-import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
+import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
 import com.infinityraider.agricraft.tileentity.peripheral.method.IMethod;
 import com.infinityraider.agricraft.container.ContainerPeripheral;
 import com.infinityraider.agricraft.reference.Reference;
@@ -11,6 +12,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
@@ -96,8 +98,8 @@ public class GuiPeripheral extends GuiContainer {
         this.drawTexturedModalRect(xOffset, yOffset + offset, 0, 253, 5, 1);
         //middle part
         float f = 0.00390625F;
-        TessellatorV2 tessellator = TessellatorV2.getInstance();
-        tessellator.startDrawingQuads();
+        ITessellator tessellator = TessellatorVertexBuffer.getInstance();
+        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
         int xMax = xOffset + 5;
         int yMin = yOffset + offset + 1;
         int yMax = yOffset + length + offset;

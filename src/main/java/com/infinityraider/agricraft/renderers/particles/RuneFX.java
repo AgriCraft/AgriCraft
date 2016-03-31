@@ -1,8 +1,10 @@
 package com.infinityraider.agricraft.renderers.particles;
 
-import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
+import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -29,9 +31,9 @@ public class RuneFX extends AgriCraftFX {
 
     @Override
     public void renderParticle(VertexBuffer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
-        TessellatorV2 tessellator = TessellatorV2.getInstance(worldRenderer);
+        ITessellator tessellator = TessellatorVertexBuffer.getInstance(worldRenderer);
         tessellator.draw();
-        tessellator.startDrawingQuads();
+        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
 
         float f6 = uMin;
         float f7 = uMax;
@@ -43,14 +45,14 @@ public class RuneFX extends AgriCraftFX {
         float f13 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) f0 - interpPosZ);
 
         Minecraft.getMinecraft().renderEngine.bindTexture(this.texture);
-        tessellator.setColorRGBA_F(1, 1, 1, 1);
+        tessellator.setColorRGBA(1, 1, 1, 1);
 
-        tessellator.addVertexWithUV((double) (f11 - f1 * f10 - f4 * f10), (double) (f12 - f2 * f10), (double) (f13 - f3 * f10 - f6 * f10), f7, f9);
-        tessellator.addVertexWithUV((double) (f11 - f1 * f10 + f4 * f10), (double) (f12 + f2 * f10), (double) (f13 - f3 * f10 + f6 * f10), f7, f8);
-        tessellator.addVertexWithUV((double) (f11 + f1 * f10 + f4 * f10), (double) (f12 + f2 * f10), (double) (f13 + f3 * f10 + f6 * f10), f6, f8);
-        tessellator.addVertexWithUV((double) (f11 + f1 * f10 - f4 * f10), (double) (f12 - f2 * f10), (double) (f13 + f3 * f10 - f6 * f10), f6, f9);
+        tessellator.addVertexWithUV((f11 - f1 * f10 - f4 * f10), (f12 - f2 * f10), (f13 - f3 * f10 - f6 * f10), f7, f9);
+        tessellator.addVertexWithUV((f11 - f1 * f10 + f4 * f10), (f12 + f2 * f10), (f13 - f3 * f10 + f6 * f10), f7, f8);
+        tessellator.addVertexWithUV((f11 + f1 * f10 + f4 * f10), (f12 + f2 * f10), (f13 + f3 * f10 + f6 * f10), f6, f8);
+        tessellator.addVertexWithUV((f11 + f1 * f10 - f4 * f10), (f12 - f2 * f10), (f13 + f3 * f10 - f6 * f10), f6, f9);
 
         tessellator.draw();
-        tessellator.startDrawingQuads();
+        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
     }
 }

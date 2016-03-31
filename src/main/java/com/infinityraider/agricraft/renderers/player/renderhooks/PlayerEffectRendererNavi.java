@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.renderers.player.renderhooks;
 
-import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.renderers.particles.DustFX;
+import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -49,7 +50,7 @@ public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
     }
 
     @Override
-    void renderEffects(TessellatorV2 tessellator, EntityPlayer player, RenderPlayer renderer, float partialTick) {
+    void renderEffects(ITessellator tessellator, EntityPlayer player, RenderPlayer renderer, float partialTick) {
         double[] pos = getPosition(player, partialTick);
         GL11.glTranslated(pos[0], pos[1], pos[2]);
         renderWings(tessellator);
@@ -78,7 +79,7 @@ public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
         sphere.draw(f, detail, detail);
     }
 
-    private void renderWings(TessellatorV2 tessellator) {
+    private void renderWings(ITessellator tessellator) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
 
@@ -106,12 +107,12 @@ public class PlayerEffectRendererNavi extends PlayerEffectRenderer {
         GL11.glTranslatef(0, -0.25F, 0);
     }
 
-    private void draw(TessellatorV2 tessellator, float scale) {
+    private void draw(ITessellator tessellator, float scale) {
         //x-, y & z-axis
         //this.drawAxisSystem();
 
         GL11.glRotatef(-0, 1, 0, 1);
-        tessellator.startDrawingQuads();
+        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
 
         //front
         tessellator.addVertexWithUV(0, 0, 0, 0, 1);

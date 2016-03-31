@@ -4,24 +4,22 @@ import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.multiblock.IMultiBlockComponent;
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * The base class for all AgriCraft tile blocks.
  */
-public abstract class BlockTileBase extends BlockBase implements ITileEntityProvider {
-	
+public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<T> implements ITileEntityProvider {
 	public final boolean isMultiBlock;
 	public final String tileName;
 
@@ -30,26 +28,26 @@ public abstract class BlockTileBase extends BlockBase implements ITileEntityProv
 	 *
 	 * @param material the material the block is composed of.
 	 */
-	protected BlockTileBase(Material material, String internalName, boolean isMultiBlock) {
-		this(material, internalName, internalName, isMultiBlock, Block.FULL_BLOCK_AABB);
-	}
-
-	protected BlockTileBase(Material material, String internalName, String tileName, boolean isMultiBlock) {
-		this(material, internalName, tileName, isMultiBlock, Block.FULL_BLOCK_AABB);
-	}
-
-	protected BlockTileBase(Material material, String internalName, boolean isMultiBlock, AxisAlignedBB box) {
-		this(material, internalName, internalName, isMultiBlock, box);
-	}
-	
-	protected BlockTileBase(Material material, String internalName, String tileName, boolean isMultiBlock, AxisAlignedBB box) {
-		super(material, internalName, box);
-		this.tileName = tileName;
+	protected BlockBaseTile(Material material, String internalName, boolean isMultiBlock) {
+		super(material, internalName);
 		this.isMultiBlock = isMultiBlock;
+		this.tileName = Reference.MOD_ID.toLowerCase() + ":tileEntity." + internalName;
 		TileEntity tile = this.createNewTileEntity(null, 0);
 		assert(tile != null);
-		// TODO: Make lowercase.
-		GameRegistry.registerTileEntity(tile.getClass(), Reference.MOD_ID + ":TileEntity_" + this.tileName);
+		GameRegistry.registerTileEntity(tile.getClass(), getTileName());
+	}
+
+	public final String getTileName() {
+		return tileName;
+	}
+
+	@Override
+	public abstract T createNewTileEntity(World worldIn, int meta);
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public final T getTileEntity(IBlockAccess world, BlockPos pos) {
+		return (T) world.getTileEntity(pos);
 	}
 	
 	/**

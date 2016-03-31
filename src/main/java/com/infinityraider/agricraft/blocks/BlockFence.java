@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class BlockFence extends BlockCustomWood {
+public class BlockFence extends BlockCustomWood<TileEntityFence> {
 
 	public BlockFence() {
 		super("fence", false);
@@ -35,13 +35,18 @@ public class BlockFence extends BlockCustomWood {
     }
 
     @Override
+    public AxisAlignedBB getDefaultBoundingBox() {
+        return net.minecraft.block.BlockFence.field_185671_f;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public RenderBlockFence getRenderer() {
         return new RenderBlockFence();
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntityFence createNewTileEntity(World world, int meta) {
         return new TileEntityFence();
     }
 

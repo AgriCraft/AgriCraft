@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.player.renderhooks;
 
-import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -27,7 +27,7 @@ public abstract class PlayerEffectRendererEntity extends PlayerEffectRenderer {
     }
 
     @Override
-    void renderEffects(TessellatorV2 tessellator, EntityPlayer player, RenderPlayer renderer, float tick) {
+    void renderEffects(ITessellator tessellator, EntityPlayer player, RenderPlayer renderer, float tick) {
         entity.prevPosX = entity.posX;
         entity.prevPosY = entity.posY;
         entity.prevPosZ = entity.posZ;

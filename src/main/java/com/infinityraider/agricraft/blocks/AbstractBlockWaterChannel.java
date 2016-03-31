@@ -3,6 +3,7 @@
  */
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -10,16 +11,11 @@ import net.minecraft.util.math.AxisAlignedBB;
  *
  * @author RlonRyan
  */
-public abstract class AbstractBlockWaterChannel extends BlockCustomWood {
+public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> extends BlockCustomWood<T> {
 
 	public AbstractBlockWaterChannel(String internalName) {
 		super("water_channel_" + internalName, false);
 	}
-
-	public AbstractBlockWaterChannel(String internalName, AxisAlignedBB box) {
-		super("water_channel_" + internalName, false, box);
-	}
-
 
 	@Override
 	protected IProperty[] getPropertyArray() {

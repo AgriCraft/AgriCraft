@@ -1,11 +1,12 @@
 package com.infinityraider.agricraft.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -17,14 +18,13 @@ import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockWaterTank extends BlockCustomWood {
-
+public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
 	public BlockWaterTank() {
 		super("water_tank", true);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
+	public TileEntityTank createNewTileEntity(World world, int meta) {
 		return new TileEntityTank();
 	}
 
@@ -97,6 +97,11 @@ public class BlockWaterTank extends BlockCustomWood {
 	@Override
 	protected IProperty[] getPropertyArray() {
 		return new IProperty[0];
+	}
+
+	@Override
+	public AxisAlignedBB getDefaultBoundingBox() {
+		return Block.FULL_BLOCK_AABB;
 	}
 
 	@Override

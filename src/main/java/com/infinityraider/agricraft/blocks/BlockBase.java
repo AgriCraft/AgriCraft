@@ -1,38 +1,33 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.tileentity.TileEntityBase;
+import com.infinityraider.agricraft.blocks.blockstate.BlockStateSpecial;
+import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
+import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
-import com.infinityraider.agricraft.renderers.renderinghacks.IRenderingHandler;
 
 /**
  * The base class for all AgriCraft blocks.
  */
-public abstract class BlockBase extends Block implements IAgriCraftRenderable {
-	public static final BlockRenderLayer DEFAULT_BLOCK_LAYER = BlockRenderLayer.CUTOUT;
+public abstract class BlockBase<T extends TileEntity> extends Block implements ICustomRenderedBlock<T> {
 	public static final ItemStack DEFAULT_WAILA_STACK = null;
 
-	public final BlockRenderLayer blockLayer;
 	public final String internalName;
-	private final AxisAlignedBB box;
-
-	@SideOnly(Side.CLIENT)
-	protected TextureAtlasSprite icon;
 
 	/**
 	 * The default, base constructor for all AgriCraft blocks. This method runs
@@ -42,30 +37,39 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	 * @param mat the {@link Material} the block is comprised of.
 	 * @param internalName the name of the block.
 	 */
-	protected BlockBase(Material mat, String internalName, AxisAlignedBB box) {
-		this(mat, internalName, box, DEFAULT_BLOCK_LAYER);
-	}
-
-	protected BlockBase(Material mat, String internalName, AxisAlignedBB box, BlockRenderLayer blockLayer) {
+	protected BlockBase(Material mat, String internalName) {
 		super(mat);
 		this.internalName = internalName;
-		this.blockLayer = blockLayer;
 		this.fullBlock = false;
-		this.box = box;
-		// This might be bad.
-		RegisterHelper.registerBlock(this, this.internalName, this.getItemBlockClass());
+		this.setCreativeTab(AgriCraftTab.agriCraftTab);
+		RegisterHelper.registerBlock(this, this.getInternalName(), this.getItemBlockClass());
 	}
 
-	// Abstract methods.
-	protected abstract IProperty[] getPropertyArray();
+	public String getInternalName() {
+		return this.internalName;
+	}
+
+	@Override
+	public IBlockStateSpecial<T, ? extends IBlockState> getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return new BlockStateSpecial<>(state, pos, this.getTileEntity(world, pos));
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelResourceLocation getBlockModelResourceLocation() {
+		return new  ModelResourceLocation(Reference.MOD_ID.toLowerCase()+":"+getInternalName());
+
+	}
+
+	@Override
+	protected final BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, getPropertyArray());
+	}
 
 	/**
-	 * Retrieves the block's renderer.
-	 *
-	 * @return the block's renderer.
+	 * @return a property array containing all properties for this block's state
 	 */
-	@SideOnly(Side.CLIENT)
-	public abstract IRenderingHandler getRenderer();
+	protected abstract IProperty[] getPropertyArray();
 
 	/**
 	 * Retrieves the block's ItemBlock class, as a generic class bounded by the
@@ -76,56 +80,18 @@ public abstract class BlockBase extends Block implements IAgriCraftRenderable {
 	 */
 	protected abstract Class<? extends ItemBlock> getItemBlockClass();
 
+	/**
+	 * @return The default bounding box for this block
+	 */
+	public abstract AxisAlignedBB getDefaultBoundingBox();
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return box;
-	}
-
-	// Pre-Implemented Methods
-	/**
-	 * TODO: determine function of this method...
-	 *
-	 * @return
-	 */
-	@Override
-	protected final BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, getPropertyArray());
-	}
-
-	/**
-	 * Retrieves the stack to show in waila.
-	 *
-	 * @param tea tile entity associated with the block, possibly null.
-	 */
-	public ItemStack getWailaStack(BlockBase block, TileEntityBase tea) {
-		return DEFAULT_WAILA_STACK;
+		return getDefaultBoundingBox();
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon() {
-		return icon;
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
 	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons() {
-		String name = this.getUnlocalizedName();
-		int index = name.indexOf(":");
-		name = index > 0 ? name.substring(index + 1) : name;
-		index = name.indexOf(".");
-		name = index > 0 ? name.substring(index + 1) : name;
-		this.icon = IconUtil.registerIcon("agricraft:blocks/" + name);
-	}
-
-	@Override
-	public BlockRenderLayer getBlockLayer() {
-		return DEFAULT_BLOCK_LAYER;
-	}
-	
-	@Override
-	public boolean isVisuallyOpaque() {
-		return false;
-	}
-
 }

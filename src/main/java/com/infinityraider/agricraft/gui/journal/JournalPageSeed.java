@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -112,7 +112,7 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private Component<String> getDescriptionHead() {
-        String text = StatCollector.translateToLocal("agricraft_journal.information") + ": ";
+        String text = I18n.translateToLocal("agricraft_journal.information") + ": ";
         int x = 29;
         int y = 31;
         float scale = 0.5F;
@@ -120,7 +120,7 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private Component<String> getSeedInformation() {
-        String text = StatCollector.translateToLocal(plant.getInformation());
+        String text = I18n.translateToLocal(plant.getInformation());
         int x = 29;
         int y = 38;
         float scale = 0.5F;
@@ -128,7 +128,7 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private Component<String> getTier() {
-        String text = StatCollector.translateToLocal("agricraft_journal.tier") + ": " + plant.getTier();
+        String text = I18n.translateToLocal("agricraft_journal.tier") + ": " + plant.getTier();
         int x = 29;
         int y = 66;
         float scale = 0.5F;
@@ -136,7 +136,7 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private Component<String> getBrightnessTitle() {
-        String text = StatCollector.translateToLocal("agricraft_journal.brightness") + ": ";
+        String text = I18n.translateToLocal("agricraft_journal.brightness") + ": ";
         int x = 29;
         int y = 76;
         float scale = 0.5F;
@@ -144,7 +144,7 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private Component<String> getFruitTitle() {
-        String text = StatCollector.translateToLocal("agricraft_journal.fruits") + ": ";
+        String text = I18n.translateToLocal("agricraft_journal.fruits") + ": ";
         int x = 29;
         int y = 95;
         float scale = 0.5F;
@@ -152,7 +152,7 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private Component<String> getGrowthTitle() {
-        String text = StatCollector.translateToLocal("agricraft_journal.growthStages") + ": ";
+        String text = I18n.translateToLocal("agricraft_journal.growthStages") + ": ";
         int x = 29;
         int y = 122;
         float scale = 0.5F;
@@ -160,7 +160,7 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private ArrayList<Component<String>> getMutationTitles() {
-        String text = StatCollector.translateToLocal("agricraft_journal.mutations") + ": ";
+        String text = I18n.translateToLocal("agricraft_journal.mutations") + ": ";
         int x = 132;
         int y = 13;
         float scale = 0.5F;

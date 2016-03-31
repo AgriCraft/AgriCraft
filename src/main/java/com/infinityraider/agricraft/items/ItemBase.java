@@ -40,7 +40,7 @@ public abstract class ItemBase extends Item implements IAgriCraftRenderable {
 		if (this.isModelVanillia) {
 			RegisterHelper.registerItemRenderer(this, varients);
 		} else {
-			RegisterHelper.registerItemRendererTex(this, "agricraft:items/" + internalName);
+
 		}
 	}
 

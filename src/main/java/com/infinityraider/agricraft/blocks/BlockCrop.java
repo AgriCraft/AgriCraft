@@ -12,7 +12,6 @@ import com.infinityraider.agricraft.network.MessageFertiliserApplied;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
-import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.block.Block;
@@ -44,31 +43,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.utility.RegisterHelper;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 /**
  * The most important block in the mod.
  */
-public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
-    /** The set of textures used to render weeds. */
-    private TextureAtlasSprite[] weedTextures;
+public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowable, IPlantable {
+    public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT*2, 0, Constants.UNIT*2,  Constants.UNIT*(Constants.WHOLE - 2), Constants.UNIT*(Constants.WHOLE - 3), Constants.UNIT*(Constants.WHOLE - 2));
 
     /** The default constructor for the block. */
     public BlockCrop() {
-        super(Material.plants, TileEntityCrop.NAME, "crop", false, new AxisAlignedBB(
-                Constants.UNIT*2,
-                0,
-                Constants.UNIT*2,
-                Constants.UNIT*(Constants.WHOLE - 2),
-                Constants.UNIT*(Constants.WHOLE - 3),
-                Constants.UNIT*(Constants.WHOLE - 2)));
+        super(Material.plants, "crop", false);
         this.setTickRandomly(true);
         this.isBlockContainer = true;
         this.setStepSound(SoundType.PLANT);
         this.setHardness(0.0F);
         this.disableStats();
-		RegisterHelper.hideModel(this, internalName);
     }
 
     @Override
@@ -100,7 +89,7 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
 
     /** Creates a new tile entity every time the block is placed. */
     @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntityCrop createNewTileEntity(World world, int meta) {
         return new TileEntityCrop();
     }
 
@@ -681,19 +670,13 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons() {
-        super.registerIcons();
-        TextureAtlasSprite tex1 = IconUtil.registerIcon("agricraft:blocks/cropsWeedTexture1");
-        TextureAtlasSprite tex2 = IconUtil.registerIcon("agricraft:blocks/cropsWeedTexture2");
-        TextureAtlasSprite tex3 = IconUtil.registerIcon("agricraft:blocks/cropsWeedTexture3");
-        TextureAtlasSprite tex4 = IconUtil.registerIcon("agricraft:blocks/cropsWeedTexture4");
-        weedTextures = new TextureAtlasSprite[] {tex1, tex1, tex2, tex2, tex2, tex3, tex3, tex4};
+    protected Class<? extends ItemBlock> getItemBlockClass() {
+        return null;
     }
 
     @Override
-    protected Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
+    public AxisAlignedBB getDefaultBoundingBox() {
+        return BOX;
     }
 
     /**
@@ -718,15 +701,10 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         }
         return world.getBlockState(pos);
     }
-    
-    @Override
-    public ItemStack getWailaStack(BlockBase block, TileEntityBase tea) {
-    	return new ItemStack(AgriCraftItems.crops, 1, 0);
-    }
 
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getWeedTexture(int growthStage) {
-        growthStage = Math.max(Math.min(weedTextures.length-1, growthStage), 0);
-        return weedTextures[growthStage];
+    public TextureAtlasSprite getWeedTexture(int meta) {
+        //TODO: icon handling
+        return null;
     }
 }

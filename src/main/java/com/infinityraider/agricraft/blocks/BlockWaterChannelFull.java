@@ -13,14 +13,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class BlockWaterChannelFull extends AbstractBlockWaterChannel {
-
+public class BlockWaterChannelFull extends AbstractBlockWaterChannel<TileEntityChannelFull> {
     public BlockWaterChannelFull() {
-        super("full", new AxisAlignedBB(0, 0, 0, 1, 1, 1));
+        super("full");
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntityChannelFull createNewTileEntity(World world, int meta) {
         return new TileEntityChannelFull();
     }
 
@@ -46,5 +45,10 @@ public class BlockWaterChannelFull extends AbstractBlockWaterChannel {
     @SideOnly(Side.CLIENT)
     public RenderChannelFull getRenderer() {
         return new RenderChannelFull();
+    }
+
+    @Override
+    public AxisAlignedBB getDefaultBoundingBox() {
+        return BlockBase.FULL_BLOCK_AABB;
     }
 }

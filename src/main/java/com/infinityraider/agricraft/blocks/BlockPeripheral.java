@@ -8,8 +8,6 @@ import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
-import com.infinityraider.agricraft.utility.RegisterHelper;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -20,6 +18,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
@@ -33,8 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 
 @Optional.Interface(modid = AgriCraftMods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
-public class BlockPeripheral extends BlockTileBase {
-
+public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 	@SideOnly(Side.CLIENT)
 	private TextureAtlasSprite textureTop;
 	@SideOnly(Side.CLIENT)
@@ -46,11 +44,10 @@ public class BlockPeripheral extends BlockTileBase {
 
 	public BlockPeripheral() {
 		super(Material.iron, "peripheral", false);
-		RegisterHelper.hideModel(this, internalName);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
+	public TileEntityPeripheral createNewTileEntity(World world, int meta) {
 		return new TileEntityPeripheral();
 	}
 
@@ -68,6 +65,11 @@ public class BlockPeripheral extends BlockTileBase {
 	@Override
 	protected Class<? extends ItemBlock> getItemBlockClass() {
 		return null;
+	}
+
+	@Override
+	public AxisAlignedBB getDefaultBoundingBox() {
+		return Block.FULL_BLOCK_AABB;
 	}
 
 	/*
@@ -148,13 +150,5 @@ public class BlockPeripheral extends BlockTileBase {
 			return this.textureBottom;
 		}
 		return this.textureSide;
-	}
-
-	@Override
-	public void registerIcons() {
-		this.textureTop = IconUtil.registerIcon("agricraft:blocks/peripheralTop");
-		this.textureSide = IconUtil.registerIcon("agricraft:blocks/peripheralSide");
-		this.textureBottom = IconUtil.registerIcon("agricraft:blocks/peripheralBottom");
-		this.textureInner = IconUtil.registerIcon("agricraft:blocks/peripheralInner");
 	}
 }

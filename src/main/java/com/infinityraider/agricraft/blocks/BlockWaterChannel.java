@@ -21,17 +21,17 @@ import java.util.List;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
-public class BlockWaterChannel extends AbstractBlockWaterChannel {
-
+public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChannel> {
 	protected static final float MIN = Constants.UNIT * Constants.QUARTER;
 	protected static final float MAX = Constants.UNIT * Constants.THREE_QUARTER;
+	public static final AxisAlignedBB BOX = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX);
 
 	public BlockWaterChannel() {
-		super("normal", new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX));
+		super("normal");
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
+	public TileEntityChannel createNewTileEntity(World world, int meta) {
 		return new TileEntityChannel();
 	}
 
@@ -118,8 +118,9 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	@SuppressWarnings("unchecked")
 	public RenderChannel getRenderer() {
-		return new RenderChannel();
+		return new RenderChannel<>();
 	}
 	
 	@Override
@@ -127,4 +128,8 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel {
 		return false;
 	}
 
+	@Override
+	public AxisAlignedBB getDefaultBoundingBox() {
+		return BOX;
+	}
 }

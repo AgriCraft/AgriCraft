@@ -3,8 +3,6 @@ package com.infinityraider.agricraft.utility;
 import com.infinityraider.agricraft.blocks.BlockModPlant;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.ItemModSeed;
-import com.infinityraider.agricraft.models.AgriCraftModelLoader;
-import com.infinityraider.agricraft.models.StateUnmapper;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -19,8 +17,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -52,41 +48,6 @@ public abstract class RegisterHelper {
         }
     }
 
-    public static void hideModel(Block block, String name) {
-        if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
-			hideModelClient(block, name);
-		}
-    }
-	
-	@SideOnly(Side.CLIENT)
-	public static void hideModelClient(Block block, String name) {
-        ModelLoader.setCustomStateMapper(block, new StateUnmapper("agricraft:base"));
-        AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/" + name);
-		if (name.startsWith("seed")) {
-			AgriCraftModelLoader.INSTANCE.addDummyModel("agricraft:models/item/crop" + name.substring(4));
-		}
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static ModelResourceLocation registerItemRendererTex(Item item, String... textures) {
-        final StringBuilder sb = new StringBuilder("agricraftitem:");
-        for (String e : textures) {
-            sb.append(e.replace(":", "/"));
-            sb.append("$");
-        }
-        final ModelResourceLocation model = new ModelResourceLocation(sb.toString(), "inventory");
-
-        // This way you can easily override the model.
-        // This causes crashes in non-dev enviorments... to be fixed.
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, is -> {
-            final ModelResourceLocation loc = item.getModel(is, null, 0);
-            return loc == null ? model : loc;
-        });
-        ModelBakery.registerItemVariants(item, model);
-
-        return model;
-    }
-
     @SideOnly(Side.CLIENT)
     public static void registerItemRenderer(Item item) {
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
@@ -114,13 +75,11 @@ public abstract class RegisterHelper {
         GameRegistry.registerItem(item, name);
     }
 
-    // TODO: Investigate naming.
     public static void registerSeed(ItemModSeed seed, BlockModPlant plant, String name) {
         name = name.startsWith("seed") ? (name) : ("seed" + name);
         registerItem(seed, name);
         OreDictionary.registerOre(name, seed);
         OreDictionary.registerOre("listAllseed", seed);
-        hideModel(plant, name);
     }
 
     public static void removeRecipe(ItemStack stack) {

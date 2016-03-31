@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.player.renderhooks;
 
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.TessellatorV2;
+import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +19,7 @@ abstract class PlayerEffectRenderer {
 
     abstract ArrayList<String> getDisplayNames();
 
-    abstract void renderEffects(TessellatorV2 tessellator, EntityPlayer player, RenderPlayer renderer, float tick);
+    abstract void renderEffects(ITessellator tessellator, EntityPlayer player, RenderPlayer renderer, float tick);
 
     protected void rotateToGeneralCoordinates(EntityPlayer player, float partialTick) {
         float yaw = player.prevRenderYawOffset + (player.renderYawOffset-player.prevRenderYawOffset)*partialTick;
@@ -36,7 +36,7 @@ abstract class PlayerEffectRenderer {
      * @param u u offset for the bound texture
      * @param v v offset for the bound texture
      */
-    protected void addScaledVertexWithUV(TessellatorV2 tessellator, float x, float y, float z, float u, float v) {
+    protected void addScaledVertexWithUV(ITessellator tessellator, float x, float y, float z, float u, float v) {
         tessellator.addVertexWithUV(x * Constants.UNIT, y * Constants.UNIT, z * Constants.UNIT, u * Constants.UNIT, v * Constants.UNIT);
     }
 	

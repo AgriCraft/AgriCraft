@@ -4,12 +4,10 @@ import com.infinityraider.agricraft.api.v1.IDebuggable;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.renderers.RenderUtil;
-import com.infinityraider.agricraft.renderers.TextureCache;
 import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -57,24 +55,14 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	@Nonnull
 	private int materialMeta = DEFAULT_META;
 
-	/**
-	 * Cached icon
-	 */
-	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite icon;
-	
-	@Nonnull
-	private boolean isIconCached = true;
-
 	public TileEntityCustomWood() {
-		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
-			this.initIcon();
-		}
+		super();
 	}
-	
+
+	//TODO: icon handling
 	@SideOnly(Side.CLIENT)
-	private final void initIcon() {
-		this.icon = IconUtil.getDefaultIcon();
+	public TextureAtlasSprite getIcon() {
+		return null;
 	}
 
 	@Override
@@ -171,7 +159,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 		if (block != null) {
 			this.material = block;
 			this.materialMeta = meta;
-			this.isIconCached = false;
 		}
 	}
 
@@ -211,24 +198,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 		tag.setString(AgriCraftNBT.MATERIAL, this.material.getRegistryName());
 		tag.setInteger(AgriCraftNBT.MATERIAL_META, this.materialMeta);
 		return tag;
-	}
-
-	public final TextureAtlasSprite getIcon() {
-		// GOTCHA! The last rendering issue! Yay!
-		this.cacheIcon();
-		return this.icon;
-	}
-
-	private void cacheIcon() {
-		if (!isIconCached) {
-			List<TextureAtlasSprite> icons = TextureCache.getInstance().queryIcons(getMaterialState());
-			if (icons.size() > 0) {
-				TextureAtlasSprite fromCache = icons.get(0);
-				if (fromCache != Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()) {
-					this.icon = fromCache;
-				}
-			}
-		}
 	}
 
 	@Override

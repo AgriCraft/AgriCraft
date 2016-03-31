@@ -126,11 +126,11 @@ public class CropPlantAPIv1 extends CropPlant {
 	
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(VertexBuffer buffer, IBlockAccess world, BlockPos pos, int growthStage) {
+    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage) {
         if(getRenderMethod() == RenderMethod.CUSTOM) {
-			plant.renderPlantInCrop(buffer, world, pos, growthStage);
+			plant.renderPlantInCrop(world, pos, growthStage);
         } else {
-            super.renderPlantInCrop(buffer, world, pos, growthStage);
+            super.renderPlantInCrop(world, pos, growthStage);
         }
     }
 

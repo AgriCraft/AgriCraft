@@ -16,9 +16,9 @@ public interface Reference {
 	String MOD_VERSION = "${mod.version}";
 	String VERSION = "${mod.version_minecraft}-${mod.version}";
 
-	String CLIENT_PROXY_CLASS = "${mod.group}.${mod.id}.proxy.ClientProxy";
-	String SERVER_PROXY_CLASS = "${mod.group}.${mod.id}.proxy.ServerProxy";
-	String GUI_FACTORY_CLASS = "${mod.group}.${mod.id}.gui.GuiFactory";
+	String CLIENT_PROXY_CLASS = "com.infinityraider.agricraft.proxy.ClientProxy";
+	String SERVER_PROXY_CLASS = "com.infinityraider.agricraft.proxy.ServerProxy";
+	String GUI_FACTORY_CLASS = "com.infinityraider.agricraft.gui.GuiFactory";
 	
 	String UPDATE_URL = "${mod.update_url}";
 

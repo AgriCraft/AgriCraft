@@ -1,10 +1,9 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.api.v1.IIconRegistrar;
-import com.infinityraider.agricraft.utility.icon.BaseIcons;
+import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -86,12 +85,11 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
     @Override
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon() {
-        return BaseIcons.DIRT.getIcon();
-    }
-
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegistrar iconRegistrar) {}
+
+    @Override
+    public TileEntityBase getTileEntity(IBlockAccess world, BlockPos pos) {
+        return null;
+    }
 }
