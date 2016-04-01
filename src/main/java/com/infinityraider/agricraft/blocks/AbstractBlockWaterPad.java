@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderWaterPad;
 import java.util.List;
 
-import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -15,9 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,12 +30,6 @@ public abstract class AbstractBlockWaterPad extends BlockBaseNoTile {
 		this.setHardness(0.5F);
         this.setStepSound(Blocks.gravel.getStepSound());
 	}
-
-    @Override
-    public TileEntityBase getTileEntity(IBlockAccess world, BlockPos pos) {
-        return null;
-    }
-
 
     @Override
     public AxisAlignedBB getDefaultBoundingBox() {

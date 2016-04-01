@@ -10,8 +10,6 @@ import com.infinityraider.agricraft.handler.config.MutationConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.RegisterHelper;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemSeeds;
@@ -116,21 +114,4 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 		}
 		return EnumActionResult.PASS;
 	}
-
-	@Override
-	public TextureAtlasSprite getIcon() {
-		// Maybye not the most efficient...
-		return IconUtil.getIcon(this);
-	}
-
-	@Override
-	public void registerIcons() {
-		String name = this.getUnlocalizedName();
-		int index = name.indexOf(":");
-		name = index > 0 ? name.substring(index + 1) : name;
-		index = name.indexOf(".");
-		name = index > 0 ? name.substring(index + 1) : name;
-		IconUtil.registerIcon("agricraft:items/" + name);
-	}
-
 }

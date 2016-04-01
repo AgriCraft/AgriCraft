@@ -7,10 +7,9 @@ import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -100,13 +99,14 @@ public class CropPlantVanilla extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
+    public ResourceLocation getPrimaryPlantTexture(int growthStage) {
         growthStage = Math.max(Math.min(growthStage, textures.length-1), 0);
-        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textures[growthStage]);
+        //TODO: get vanilla textures
+        return null;
     }
 
     @Override
-    public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+    public ResourceLocation getSecondaryPlantTexture(int growthStage) {
         return null;
     }
 

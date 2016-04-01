@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.blocks.BlockBase;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.MissingJsonHandler;
-import com.infinityraider.agricraft.handler.TextureStitchHandler;
 import com.infinityraider.agricraft.handler.SoundHandler;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
@@ -181,9 +180,6 @@ public class ClientProxy extends CommonProxy {
 
         MissingJsonHandler missingJsonHandler = new MissingJsonHandler();
         MinecraftForge.EVENT_BUS.register(missingJsonHandler);
-
-        TextureStitchHandler textureStitchHandler = new TextureStitchHandler();
-        MinecraftForge.EVENT_BUS.register(textureStitchHandler);
 
         ItemToolTipHandler itemToolTipHandler = new ItemToolTipHandler();
         MinecraftForge.EVENT_BUS.register(itemToolTipHandler);

@@ -8,11 +8,10 @@ import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementH
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -105,18 +104,19 @@ public class CropPlantNetherWart extends CropPlant {
 	}
 
 	@Override
-	public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
+	public ResourceLocation getPrimaryPlantTexture(int growthStage) {
 		int index = 0;
 		if (growthStage >= Constants.MATURE) {
 			index = 2;
 		} else if (growthStage > 3) {
 			index = 1;
 		}
-		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureNames[index]);
+		//TODO: get nether wart resource location
+		return null;
 	}
 
 	@Override
-	public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+	public ResourceLocation getSecondaryPlantTexture(int growthStage) {
 		return null;
 	}
 

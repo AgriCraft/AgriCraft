@@ -7,8 +7,8 @@ import com.infinityraider.agricraft.api.v1.RenderMethod;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -96,12 +96,12 @@ public class CropPlantAgriCraft extends CropPlant {
     }
 
     @Override
-    public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
-        return plant.getPlantIcon(growthStage);
+    public ResourceLocation getPrimaryPlantTexture(int growthStage) {
+        return plant.getPlantTexture(growthStage);
     }
 
     @Override
-    public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+    public ResourceLocation getSecondaryPlantTexture(int growthStage) {
         return null;
     }
 

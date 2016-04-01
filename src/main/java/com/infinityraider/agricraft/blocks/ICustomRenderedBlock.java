@@ -26,14 +26,6 @@ public interface ICustomRenderedBlock<T extends TileEntity> {
     IBlockStateSpecial<T, ? extends IBlockState> getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos);
 
     /**
-     * Helper method to get a type specific tile entity, is cleaner than down casting
-     * @param world the world
-     * @param pos the position
-     * @return tile entity for this bock
-     */
-    T getTileEntity(IBlockAccess world, BlockPos pos);
-
-    /**
      * Gets called to create the IBlockRenderingHandler instance to render this block with
      * @return a new IBlockRenderingHandler object for this block
      */

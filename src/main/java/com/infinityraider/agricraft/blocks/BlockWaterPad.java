@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.api.v1.IIconRegistrar;
-import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -87,9 +86,4 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegistrar iconRegistrar) {}
-
-    @Override
-    public TileEntityBase getTileEntity(IBlockAccess world, BlockPos pos) {
-        return null;
-    }
 }

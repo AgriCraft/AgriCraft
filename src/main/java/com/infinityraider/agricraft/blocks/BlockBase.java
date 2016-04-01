@@ -54,8 +54,9 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public IBlockStateSpecial<T, ? extends IBlockState> getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return new BlockStateSpecial<>(state, pos, this.getTileEntity(world, pos));
+		return new BlockStateSpecial<>(state, pos, (T) world.getTileEntity(pos));
 	}
 
 	@Override

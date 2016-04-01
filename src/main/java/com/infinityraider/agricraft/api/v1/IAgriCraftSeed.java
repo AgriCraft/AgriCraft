@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public interface IAgriCraftSeed extends IAgriCraftRenderable, IPlantable {
+public interface IAgriCraftSeed extends IPlantable {
     /** Gets a list of mutations with this seed as result, can be empty but should never be null */
     List<IMutation> getMutations();
 

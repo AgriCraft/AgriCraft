@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.farming.cropplant;
 
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.api.v1.RenderMethod;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemSeeds;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,12 +28,12 @@ public class CropPlantOreDict extends CropPlantGeneric {
     }
 
     @Override
-    public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
+    public ResourceLocation getPrimaryPlantTexture(int growthStage) {
         return null;
     }
 
     @Override
-    public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+    public ResourceLocation getSecondaryPlantTexture(int growthStage) {
         return null;
     }
 

@@ -17,10 +17,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 	
@@ -44,7 +43,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
     //@SideOnly(Side.CLIENT)
     private RenderMethod renderType;
     @SideOnly(Side.CLIENT)
-    private TextureAtlasSprite[] icons;
+    private ResourceLocation[] textures;
 
     /** Parameters can be given in any order, parameters can be: @param args:
      * Arguments can be given in any order, parameters can be:
@@ -296,37 +295,17 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getPlantIcon(int growthStage) {
+    public ResourceLocation getPlantTexture(int growthStage) {
         switch(growthStage) {
             case 0:
-            case 1: return this.icons[0];
+            case 1: return this.textures[0];
             case 2:
             case 3:
-            case 4: return this.icons[1];
+            case 4: return this.textures[1];
             case 5:
-            case 6: return this.icons[2];
-            case 7: return this.icons[3];
+            case 6: return this.textures[2];
+            case 7: return this.textures[3];
         }
-        return this.icons[growthStage%icons.length];
-    }
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon() {
-		return this.icons[0];
-	}
-
-    @Override
-	@SideOnly(Side.CLIENT)
-    public void registerIcons() {
-        icons = new TextureAtlasSprite[4];
-        String name = this.getUnlocalizedName();
-        int index = name.indexOf(":");
-        name = index > 0 ? name.substring(index+1) : name;
-        index = name.indexOf(".");
-        name = index > 0 ? name.substring(index+1) : name;
-        for(int i = 1; i <= icons.length; i++) {
-            icons[i-1] = IconUtil.registerIcon("agricraft:blocks/"+name+i);
-        }
+        return this.textures[growthStage% textures.length];
     }
 }

@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -43,12 +42,6 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<
 
 	@Override
 	public abstract T createNewTileEntity(World worldIn, int meta);
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public final T getTileEntity(IBlockAccess world, BlockPos pos) {
-		return (T) world.getTileEntity(pos);
-	}
 	
 	/**
 	 * Sets the block's orientation based upon the direction the player is

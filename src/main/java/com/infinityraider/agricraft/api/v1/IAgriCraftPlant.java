@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.api.v1;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /** should be implemented in Block class */
-public interface IAgriCraftPlant extends IGrowable, IPlantable, IAgriCraftRenderable {
+public interface IAgriCraftPlant extends IGrowable, IPlantable {
     /** Returns the GowthRequirement for this plant */
     IGrowthRequirement getGrowthRequirement();
 
@@ -40,7 +40,7 @@ public interface IAgriCraftPlant extends IGrowable, IPlantable, IAgriCraftRender
 
     /** Gets the registered TextureAtlasSprite icon for the given growth stage */
     @SideOnly(Side.CLIENT)
-    TextureAtlasSprite getPlantIcon(int growthStage);
+    ResourceLocation getPlantTexture(int growthStage);
 
 
 }
