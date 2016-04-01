@@ -132,7 +132,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
     @Override
     @SideOnly(Side.CLIENT)
     public RenderSeedAnalyzer getRenderer() {
-        return new RenderSeedAnalyzer();
+        return new RenderSeedAnalyzer(this);
     }
 
     @Override

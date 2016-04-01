@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.blocks.BlockFence;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.decoration.TileEntityFence;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -12,8 +12,8 @@ import net.minecraft.world.World;
 
 public class RenderBlockFence extends RenderBlockCustomWood<TileEntityFence> {
 
-	public RenderBlockFence() {
-		super(AgriCraftBlocks.blockFence, new TileEntityFence(), true, false, true);
+	public RenderBlockFence(BlockFence block) {
+		super(block, new TileEntityFence(), true, false, true);
 	}
 
 	/*

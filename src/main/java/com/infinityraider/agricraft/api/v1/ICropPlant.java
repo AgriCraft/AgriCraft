@@ -1,11 +1,14 @@
 package com.infinityraider.agricraft.api.v1;
 
+import com.google.common.base.Function;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -121,24 +124,27 @@ public interface ICropPlant {
     RenderMethod getRenderMethod();
 
     /**
-     * Gets the primary texture to render this plant with as a TextureAtlasSprite, note that this must be on the locationBlocksTextureMap
+     * Gets the primary texture to render this plant with as a ResourceLocation, note that this texture must be stitched on the locationBlocksTextureMap
      * See {@link RenderMethod} for what primary texture should be returned
      */
     @SideOnly(Side.CLIENT)
-    TextureAtlasSprite getPrimaryPlantTexture(int growthStage);
+    ResourceLocation getPrimaryPlantTexture(int growthStage);
 
     /**
-     * Gets the secondary texture to render this plant with as a TextureAtlasSprite, note that this must be on the locationBlocksTextureMap
+     * Gets the secondary texture to render this plant with as a TextureAtlasSprite, note that texture this must stitched be on the locationBlocksTextureMap
      * See {@link RenderMethod}  for what secondary texture should be returned
      */
     @SideOnly(Side.CLIENT)
-    TextureAtlasSprite getSecondaryPlantTexture(int growthStage);
+    ResourceLocation getSecondaryPlantTexture(int growthStage);
 
     /** Gets some information about the plant for the journal */
     @SideOnly(Side.CLIENT)
     String getInformation();
 
-    /** This is called when the plant is rendered, this is never called if returned false on overrideRendering */
+    /**
+     * This is called when the plant is rendered, this is never called if returned false on overrideRendering
+     * Should return a non null list of BakedQuads representing the plant to be rendered on the crop model
+     */
     @SideOnly(Side.CLIENT)
-    void renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage);
+    List<BakedQuad> renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage, Function<ResourceLocation, TextureAtlasSprite> textureToIcon);
 }

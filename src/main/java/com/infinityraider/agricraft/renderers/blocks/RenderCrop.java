@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
@@ -9,6 +8,7 @@ import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,18 +22,24 @@ import javax.annotation.Nullable;
  * TODO: Convert to new Renderer.
  */
 @SideOnly(Side.CLIENT)
-public class RenderCrop extends RenderBlockBase<TileEntityCrop> {	
-    public RenderCrop() {
-        super(AgriCraftBlocks.blockCrop, null, false, false, true);
+public class RenderCrop extends RenderBlockBase<TileEntityCrop> {
+    private final ResourceLocation cropTexture;
+    private final ResourceLocation[] weedTextures;
+
+    public RenderCrop(BlockCrop block) {
+        super(block, null, false, false, true);
+        this.cropTexture = block.getBlockTexture();
+        this.weedTextures = new ResourceLocation[16];
+        for(int i = 0; i < weedTextures.length; i++) {
+            weedTextures[i] = block.getWeedTexture(i);
+        }
     }
 
     @Override
     public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
                                  @Nullable TileEntityCrop crop, boolean dynamicRender, float partialTick, int destroyStage) {
         if(crop != null) {
-            //TODO: get crop icon
-            TextureAtlasSprite icon = null;
-            BlockCrop blockCrop = (BlockCrop) block;
+            TextureAtlasSprite icon = tessellator.getIcon(cropTexture);
             // Draw Vertical Bars
             tessellator.translate(0, -3* Constants.UNIT, 0);
             tessellator.drawScaledPrism(2, 0, 2, 3, 16, 3, icon);
@@ -50,12 +56,12 @@ public class RenderCrop extends RenderBlockBase<TileEntityCrop> {
                 tessellator.drawScaledPrism(13, 10, 0, 14, 11, 16, icon);
             } else if (crop.hasPlant()) {
                 //render the plant
-                crop.getPlant().renderPlantInCrop(world, pos, state.getValue(AgriCraftProperties.GROWTHSTAGE));
+                tessellator.addQuads(crop.getPlant().renderPlantInCrop(world, pos, state.getValue(AgriCraftProperties.GROWTHSTAGE), tessellator));
             } else if(crop.hasWeed()) {
                 //render weeds
                 //tessellator.setBrightness(RenderUtil.getMixedBrightness(world, pos, Blocks.wheat.getDefaultState()));
                 tessellator.setColorRGBA(1.0F, 1.0F, 1.0F, 1.0F);
-                PlantRenderer.renderHashTagPattern(tessellator, blockCrop.getWeedTexture(state.getValue(AgriCraftProperties.GROWTHSTAGE)), 0);
+                PlantRenderer.renderHashTagPattern(tessellator, tessellator.getIcon(weedTextures[state.getValue(AgriCraftProperties.GROWTHSTAGE)]), 0);
             }
         }
     }

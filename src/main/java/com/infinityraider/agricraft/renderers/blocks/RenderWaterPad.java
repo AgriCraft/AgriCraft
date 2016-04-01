@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
+import com.infinityraider.agricraft.blocks.AbstractBlockWaterPad;
 import com.infinityraider.agricraft.blocks.BlockWaterPad;
 import com.infinityraider.agricraft.blocks.BlockWaterPadFull;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
@@ -23,10 +24,11 @@ import javax.annotation.Nullable;
 @SideOnly(Side.CLIENT)
 public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
 
-	public RenderWaterPad(Block block) {
+	public RenderWaterPad(AbstractBlockWaterPad block) {
 		super(block, null, true, false, true);
 	}
 
+	//TODO: rewrite this
 	@Override
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block, 
 								 @Nullable TileEntityBase tile, boolean dynamicRender, float partialTick, int destroyStage) {

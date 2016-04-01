@@ -13,6 +13,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -724,5 +725,11 @@ public abstract class TessellatorAbstractBase implements ITessellator {
     @Override
     public boolean getApplyDiffuseLighting() {
         return this.applyDiffuseLighting;
+    }
+
+    @Nullable
+    @Override
+    public TextureAtlasSprite apply(ResourceLocation input) {
+        return this.getIcon(input);
     }
 }

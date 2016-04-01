@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
+import com.infinityraider.agricraft.blocks.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzerBook;
@@ -30,8 +30,8 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 	private final ModelSeedAnalyzer modelSeedAnalyzer;
 	private final ModelSeedAnalyzerBook modelBook;
 
-	public RenderSeedAnalyzer() {
-		super(AgriCraftBlocks.blockSeedAnalyzer, new TileEntitySeedAnalyzer(), true, true, false);
+	public RenderSeedAnalyzer(BlockSeedAnalyzer block) {
+		super(block, new TileEntitySeedAnalyzer(), true, true, false);
 		this.modelSeedAnalyzer = new ModelSeedAnalyzer();
 		this.modelBook = new ModelSeedAnalyzerBook();
 	}

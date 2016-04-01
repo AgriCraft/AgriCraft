@@ -44,7 +44,7 @@ public class BlockWaterChannelFull extends AbstractBlockWaterChannel<TileEntityC
     @Override
     @SideOnly(Side.CLIENT)
     public RenderChannelFull getRenderer() {
-        return new RenderChannelFull();
+        return new RenderChannelFull(this);
     }
 
     @Override

@@ -107,7 +107,7 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public RenderTank getRenderer() {
-		return new RenderTank();
+		return new RenderTank(this);
 	}
 
 }

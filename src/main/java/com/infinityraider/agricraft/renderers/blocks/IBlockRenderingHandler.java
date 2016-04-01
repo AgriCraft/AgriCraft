@@ -5,12 +5,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public interface IBlockRenderingHandler<T extends TileEntity> {
@@ -23,13 +25,22 @@ public interface IBlockRenderingHandler<T extends TileEntity> {
     Block getBlock();
 
     /**
-     * Gets the TileEntity for this renderer, used for registering this renderer.
-     * The class from this TileEntity is saved and referenced, the object passed is discarded after registering.
-     * This method may return null if there is no tile entity and/or the renderer doesn't have dynamic behaviour
+     * Gets the TileEntity for this renderer (this should be a new TileEntity which is not physically in a World),
+     * it is used for registering this renderer and inventory rendering.
+     * The class from this TileEntity and the object passed are saved and referenced,
+     * The TileEntity is passed to this renderer for inventory rendering, it is not in a world so you can directly change fields to render it
+     * This method may return null if there is no tile entity for this block
      *
      * @return a new TileEntity for this renderer
      */
-    @Nullable T getTileEntity();
+    T getTileEntity();
+
+    /**
+     * Returns a list containing a ResourceLocation for every texture used to render this Block.
+     * Passed textures are stitched to the Minecraft texture map and icons can be retrieved from them.
+     * @return a list of ResourceLocations
+     */
+    List<ResourceLocation> getAllTextures();
 
     /**
      * Called to render the block at a specific place in the world,

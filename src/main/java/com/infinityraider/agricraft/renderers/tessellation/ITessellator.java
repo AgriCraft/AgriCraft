@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.renderers.tessellation;
 
+import com.google.common.base.Function;
 import com.sun.javafx.geom.Vec3f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")
-public interface ITessellator {
+public interface ITessellator extends Function<ResourceLocation, TextureAtlasSprite> {
     /**
      * Method to start constructing quads
      * @param format vertex format
@@ -31,6 +32,12 @@ public interface ITessellator {
      * Method to finalize drawing
      */
     void draw();
+
+    /**
+     * Adds a list of quads to be rendered
+     * @param quads list of quads
+     */
+    void addQuads(List<BakedQuad> quads);
 
     /**
      * Gets the current vertex format the tessellator is drawing with

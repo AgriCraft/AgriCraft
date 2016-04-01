@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.blocks.BlockWaterTank;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -18,8 +18,8 @@ import com.infinityraider.agricraft.utility.icon.BaseIcons;
 @SideOnly(Side.CLIENT)
 public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 
-	public RenderTank() {
-		super(AgriCraftBlocks.blockWaterTank, new TileEntityTank(), true, true, true);
+	public RenderTank(BlockWaterTank block) {
+		super(block, new TileEntityTank(), true, true, true);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 		if(dynamicRender) {
 			drawWater(tank, tessellator);			
 		} else {
-			drawWoodTank(tank, tessellator);
+			drawWoodTank(tank, tessellator, matIcon);
 		}
 	}
 
@@ -39,18 +39,15 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 	}
 	*/
 
-	private void drawWoodTank(TileEntityTank tank, ITessellator tessellator) {
-		this.renderBottom(tank, tessellator);
-		this.renderSide(tank, tessellator, AgriForgeDirection.NORTH);
-		this.renderSide(tank, tessellator, AgriForgeDirection.EAST);
-		this.renderSide(tank, tessellator, AgriForgeDirection.SOUTH);
-		this.renderSide(tank, tessellator, AgriForgeDirection.WEST);
+	private void drawWoodTank(TileEntityTank tank, ITessellator tessellator, TextureAtlasSprite icon) {
+		this.renderBottom(tank, tessellator, icon);
+		this.renderSide(tank, tessellator, AgriForgeDirection.NORTH, icon);
+		this.renderSide(tank, tessellator, AgriForgeDirection.EAST, icon);
+		this.renderSide(tank, tessellator, AgriForgeDirection.SOUTH, icon);
+		this.renderSide(tank, tessellator, AgriForgeDirection.WEST, icon);
 	}
 
-	private void renderBottom(TileEntityTank tank, ITessellator tessellator) {
-		//the texture
-		TextureAtlasSprite icon = tank.getIcon();
-		int cm = tank.colorMultiplier();
+	private void renderBottom(TileEntityTank tank, ITessellator tessellator, TextureAtlasSprite icon) {
 		//bottom
 		boolean bottom = !tank.hasNeighbour(AgriForgeDirection.DOWN);
 		if (bottom) {
@@ -72,9 +69,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 		}
 	}
 
-	private void renderSide(TileEntityTank tank, ITessellator tessellator, AgriForgeDirection dir) {
-		//the texture
-		TextureAtlasSprite icon = tank.getIcon();
+	private void renderSide(TileEntityTank tank, ITessellator tessellator, AgriForgeDirection dir, TextureAtlasSprite icon) {
 		int yMin = tank.hasNeighbour(AgriForgeDirection.DOWN) ? 0 : 1;
 		if ((dir != null) && (dir != AgriForgeDirection.UNKNOWN)) {
 			//connected to a channel

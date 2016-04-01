@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
+import com.infinityraider.agricraft.blocks.BlockPeripheral;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.models.ModelPeripheralProbe;
@@ -30,8 +30,8 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 	private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID + ":textures/blocks/peripheralProbe.png");
 	private static final ModelBase probeModel = new ModelPeripheralProbe();
 
-	public RenderPeripheral() {
-		super(AgriCraftBlocks.blockPeripheral, new TileEntityPeripheral(), true, true, true);
+	public RenderPeripheral(BlockPeripheral block) {
+		super(block, new TileEntityPeripheral(), true, true, true);
 	}
 
 

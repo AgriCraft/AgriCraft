@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +41,7 @@ public class BlockFence extends BlockCustomWood<TileEntityFence> {
     @Override
     @SideOnly(Side.CLIENT)
     public RenderBlockFence getRenderer() {
-        return new RenderBlockFence();
+        return new RenderBlockFence(this);
     }
 
     @Override

@@ -21,7 +21,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -666,7 +665,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
     @Override
     @SideOnly(Side.CLIENT)
     public RenderCrop getRenderer() {
-        return new RenderCrop();
+        return new RenderCrop(this);
     }
 
     @Override
@@ -702,9 +701,31 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
         return world.getBlockState(pos);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getWeedTexture(int meta) {
-        //TODO: icon handling
+    public List<ResourceLocation> getTextures() {
+        List<ResourceLocation> list = new ArrayList<>();
+        list.add(getBlockTexture());
+        for(int i = 0; i < 16; i++) {
+            if(i == 0) {
+                list.add(getWeedTexture(i));
+            } else {
+                ResourceLocation texture = getWeedTexture(i);
+                if(texture != list.get(list.size() - 1)) {
+                    list.add(texture);
+                }
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getWeedTexture(int growthStage) {
+        return null;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getBlockTexture() {
         return null;
     }
 }

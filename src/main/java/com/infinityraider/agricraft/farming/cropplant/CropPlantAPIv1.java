@@ -1,12 +1,15 @@
 package com.infinityraider.agricraft.farming.cropplant;
 
+import com.google.common.base.Function;
 import com.infinityraider.agricraft.api.v1.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -16,7 +19,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import net.minecraft.client.renderer.VertexBuffer;
 
 public class CropPlantAPIv1 extends CropPlant {
     protected ICropPlant plant;
@@ -108,13 +110,13 @@ public class CropPlantAPIv1 extends CropPlant {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getPrimaryPlantTexture(int growthStage) {
+    public ResourceLocation getPrimaryPlantTexture(int growthStage) {
         return plant.getPrimaryPlantTexture(growthStage);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getSecondaryPlantTexture(int growthStage) {
+    public ResourceLocation getSecondaryPlantTexture(int growthStage) {
         return plant.getSecondaryPlantTexture(growthStage);
     }
 
@@ -126,11 +128,11 @@ public class CropPlantAPIv1 extends CropPlant {
 	
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage) {
+    public List<BakedQuad> renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage, Function<ResourceLocation, TextureAtlasSprite> textureToIcon) {
         if(getRenderMethod() == RenderMethod.CUSTOM) {
-			plant.renderPlantInCrop(world, pos, growthStage);
+			return plant.renderPlantInCrop(world, pos, growthStage, textureToIcon);
         } else {
-            super.renderPlantInCrop(world, pos, growthStage);
+            return super.renderPlantInCrop(world, pos, growthStage, textureToIcon);
         }
     }
 

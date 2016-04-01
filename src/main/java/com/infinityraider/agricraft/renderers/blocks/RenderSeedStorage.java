@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.blocks.BlockSeedStorage;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
@@ -19,8 +19,8 @@ import com.infinityraider.agricraft.utility.icon.BaseIcons;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStorage> {
-	public RenderSeedStorage() {
-		super(AgriCraftBlocks.blockSeedStorage, new TileEntitySeedStorage(), true, true, true);
+	public RenderSeedStorage(BlockSeedStorage block) {
+		super(block, new TileEntitySeedStorage(), true, true, true);
 	}
 
 	@Override

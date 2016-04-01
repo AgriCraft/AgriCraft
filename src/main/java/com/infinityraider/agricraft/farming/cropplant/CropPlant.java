@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.farming.cropplant;
 
+import com.google.common.base.Function;
 import com.infinityraider.agricraft.api.v1.*;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
@@ -8,11 +9,13 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -20,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
@@ -325,7 +329,7 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public abstract TextureAtlasSprite getPrimaryPlantTexture(int growthStage);
+    public abstract ResourceLocation getPrimaryPlantTexture(int growthStage);
 
     /**
      * Gets the secondary texture to render this plant with as a TextureAtlasSprite, note that this must be on the locationBlocksTextureMap
@@ -333,7 +337,7 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public abstract TextureAtlasSprite getSecondaryPlantTexture(int growthStage);
+    public abstract ResourceLocation getSecondaryPlantTexture(int growthStage);
 
     /**
      * Retrieves information about the plant for the seed journal.
@@ -353,8 +357,11 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage) {
+    public List<BakedQuad> renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage, Function<ResourceLocation, TextureAtlasSprite> textureToIcon) {
+        //The quads returned from this method are added to the tessellator,
+        // however the plant renderer directly adds them to the tessellator, so an empty list is returned
         PlantRenderer.renderPlant(world, pos, growthStage, this);
+        return Collections.emptyList();
     }
 
     @Override

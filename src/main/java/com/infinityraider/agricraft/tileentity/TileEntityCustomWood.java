@@ -5,21 +5,19 @@ import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.utility.LogHelper;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import javax.annotation.Nonnull;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  * This class represents the root tile entity for all AgriCraft custom WOOD
@@ -61,7 +59,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 
 	//TODO: icon handling
 	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon() {
+	public ResourceLocation getTexture() {
 		return null;
 	}
 

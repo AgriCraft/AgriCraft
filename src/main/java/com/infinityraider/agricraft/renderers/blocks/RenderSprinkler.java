@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.blocks.BlockSprinkler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntitySprinkler;
@@ -31,8 +31,8 @@ public class RenderSprinkler extends RenderBlockBase<TileEntitySprinkler> {
 	private static final float BMX_A = MIN_C - BLADE_L;
 	private static final float BMX_B = MAX_C + BLADE_L;
 
-	public RenderSprinkler() {
-		super(AgriCraftBlocks.blockSprinkler, new TileEntitySprinkler(), true, true, true);
+	public RenderSprinkler(BlockSprinkler block) {
+		super(block, new TileEntitySprinkler(), true, true, true);
 	}
 
 	@Override

@@ -119,7 +119,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public RenderSprinkler getRenderer() {
-		return new RenderSprinkler();
+		return new RenderSprinkler(this);
 	}
 
 	@Override

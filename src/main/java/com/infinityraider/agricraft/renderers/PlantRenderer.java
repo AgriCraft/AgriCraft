@@ -17,10 +17,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class PlantRenderer {
 
     public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, ICropPlant plant) {
-        TextureAtlasSprite iconA = plant.getPrimaryPlantTexture(growthStage);
-        TextureAtlasSprite iconB = plant.getSecondaryPlantTexture(growthStage);
+        ITessellator tessellator = TessellatorBakedQuad.getInstance();
+        TextureAtlasSprite iconA = tessellator.getIcon(plant.getPrimaryPlantTexture(growthStage));
+        TextureAtlasSprite iconB = tessellator.getIcon(plant.getSecondaryPlantTexture(growthStage));
         if(iconA!=null) {
-            ITessellator tessellator = TessellatorBakedQuad.getInstance();
             tessellator.setBrightness(RenderUtil.getMixedBrightness(world, pos, Blocks.wheat.getDefaultState()));
             tessellator.translate(pos);
             switch (plant.getRenderMethod()) {

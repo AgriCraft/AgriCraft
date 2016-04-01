@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.blocks.AbstractBlockWaterChannel;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
@@ -25,12 +25,12 @@ public class RenderChannel<T extends TileEntityChannel> extends RenderBlockCusto
 	public static AtomicInteger renderCallCounter = new AtomicInteger(0);
 
 	@SuppressWarnings("unchecked")
-	protected RenderChannel(Block block, TileEntityChannel channel) {
+	protected RenderChannel(AbstractBlockWaterChannel<T> block, TileEntityChannel channel) {
 		super(block, (T) channel, true, true, true);
 	}
 	
-	public RenderChannel() {
-		this(AgriCraftBlocks.blockWaterChannel, new TileEntityChannel());
+	public RenderChannel(AbstractBlockWaterChannel<T> block) {
+		this(block, new TileEntityChannel());
 	}
 
 	@Override

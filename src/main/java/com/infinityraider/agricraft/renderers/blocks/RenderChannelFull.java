@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.blocks.BlockWaterChannelFull;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannelFull;
@@ -12,8 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderChannelFull extends RenderChannel<TileEntityChannelFull> {
 
-	public RenderChannelFull() {
-		super(AgriCraftBlocks.blockWaterChannelFull, new TileEntityChannelFull());
+	public RenderChannelFull(BlockWaterChannelFull block) {
+		super(block, new TileEntityChannelFull());
 	}
 
 	@Override

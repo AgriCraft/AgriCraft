@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.blocks.BlockFenceGate;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.decoration.TileEntityFenceGate;
 import net.minecraft.block.Block;
@@ -11,18 +11,17 @@ import net.minecraft.world.World;
 
 public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceGate> {
 
-	public RenderBlockFenceGate() {
-		super(AgriCraftBlocks.blockFenceGate, new TileEntityFenceGate(), true, false, true);
+	public RenderBlockFenceGate(BlockFenceGate block) {
+		super(block, new TileEntityFenceGate(), true, false, true);
 	}
 
 	@Override
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
 								 TileEntityFenceGate gate, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite matIcon) {
-		TextureAtlasSprite icon = gate.getIcon();
 		if (gate.isZAxis()) {
-			renderGateZ(tessellator, gate, icon);
+			renderGateZ(tessellator, gate, matIcon);
 		} else {
-			renderGateX(tessellator, gate, icon);
+			renderGateX(tessellator, gate, matIcon);
 		}
 	}
 

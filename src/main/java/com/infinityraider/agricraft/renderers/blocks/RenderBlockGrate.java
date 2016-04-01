@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.blocks.BlockGrate;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.decoration.TileEntityGrate;
@@ -14,16 +14,14 @@ import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
-	public RenderBlockGrate() {
-		super(AgriCraftBlocks.blockGrate, new TileEntityGrate(), true, false, true);
+	public RenderBlockGrate(BlockGrate block) {
+		super(block, new TileEntityGrate(), true, false, true);
 	}
 
 	@Override
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
-								 @Nullable TileEntityGrate grate, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite matIcon) {
+								 TileEntityGrate grate, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite matIcon) {
 		// Setup
 		final float offset = ((float) grate.getOffset() * 7) / 16.0F;
 

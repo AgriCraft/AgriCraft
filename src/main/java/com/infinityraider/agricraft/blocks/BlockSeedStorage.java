@@ -91,7 +91,7 @@ public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
     @Override
     @SideOnly(Side.CLIENT)
     public RenderSeedStorage getRenderer() {
-        return new RenderSeedStorage();
+        return new RenderSeedStorage(this);
     }
     
 }

@@ -72,7 +72,7 @@ public class BlockChannelValve extends AbstractBlockWaterChannel<TileEntityChann
     @Override
     @SideOnly(Side.CLIENT)
     public RenderChannelValve getRenderer() {
-        return new RenderChannelValve();
+        return new RenderChannelValve(this);
     }
 
     @Override

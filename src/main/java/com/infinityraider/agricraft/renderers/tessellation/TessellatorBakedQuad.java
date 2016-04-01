@@ -8,6 +8,7 @@ import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +90,19 @@ public class TessellatorBakedQuad extends TessellatorAbstractBase {
             vertexData.clear();
             this.drawMode = DRAW_MODE_NOT_DRAWING;
             this.textureFunction = null;
+        } else {
+            throw new RuntimeException("NOT CONSTRUCTING VERTICES");
+        }
+    }
+
+    /**
+     * Adds a list of quads to be rendered
+     * @param quads list of quads
+     */
+    @Override
+    public void addQuads(List<BakedQuad> quads) {
+        if(drawMode != DRAW_MODE_NOT_DRAWING) {
+            this.quads.addAll(quads);
         } else {
             throw new RuntimeException("NOT CONSTRUCTING VERTICES");
         }

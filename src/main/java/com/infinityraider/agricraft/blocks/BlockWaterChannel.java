@@ -120,7 +120,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public RenderChannel getRenderer() {
-		return new RenderChannel<>();
+		return new RenderChannel<>(this);
 	}
 	
 	@Override

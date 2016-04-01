@@ -50,7 +50,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 
     @Override
     public Collection<ResourceLocation> getTextures() {
-        return Collections.emptyList();
+        return renderer.getAllTextures();
     }
 
     @Override

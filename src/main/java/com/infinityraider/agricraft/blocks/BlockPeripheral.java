@@ -59,7 +59,7 @@ public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public RenderPeripheral getRenderer() {
-		return new RenderPeripheral();
+		return new RenderPeripheral(this);
 	}
 
 	@Override

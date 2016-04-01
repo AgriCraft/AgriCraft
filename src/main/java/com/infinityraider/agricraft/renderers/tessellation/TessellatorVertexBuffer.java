@@ -86,6 +86,17 @@ public class TessellatorVertexBuffer extends TessellatorAbstractBase {
     }
 
     /**
+     * Adds a list of quads to be rendered
+     * @param quads list of quads
+     */
+    @Override
+    public void addQuads(List<BakedQuad> quads) {
+        for(BakedQuad quad : quads) {
+            buffer.addVertexData(quad.getVertexData());
+        }
+    }
+
+    /**
      * Adds a vertex
      * @param x the x-coordinate for the vertex
      * @param y the y-coordinate for the vertex
