@@ -5,7 +5,10 @@ import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.decoration.TileEntityFenceGate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -17,24 +20,23 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceG
 
 	@Override
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
-								 TileEntityFenceGate gate, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite matIcon) {
+								 TileEntityFenceGate gate, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		if (gate.isZAxis()) {
-			renderGateZ(tessellator, gate, matIcon);
+			renderGateZ(tessellator, gate, icon);
 		} else {
-			renderGateX(tessellator, gate, matIcon);
+			renderGateX(tessellator, gate, icon);
 		}
 	}
 
-	/*
 	@Override
-	protected void doInventoryRender(ITessellator tessellator, ItemStack item, TextureAtlasSprite matIcon) {
-		drawScaledPrism(7, 5, 0, 9, 16, 2, matIcon);
-		drawScaledPrism(7, 5, 14, 9, 16, 16, matIcon);
-		drawScaledPrism(7, 12, 2, 9, 15, 14, matIcon);
-		drawScaledPrism(7, 6, 2, 9, 9, 14, matIcon);
-		drawScaledPrism(7, 9, 6, 9, 12, 10, matIcon);
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityFenceGate tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+		tessellator.drawScaledPrism(7, 5, 0, 9, 16, 2, icon);
+		tessellator.drawScaledPrism(7, 5, 14, 9, 16, 16, icon);
+		tessellator.drawScaledPrism(7, 12, 2, 9, 15, 14, icon);
+		tessellator.drawScaledPrism(7, 6, 2, 9, 9, 14, icon);
+		tessellator.drawScaledPrism(7, 9, 6, 9, 12, 10, icon);
 	}
-	*/
 
 	private void renderGateX(ITessellator tessellator, TileEntityFenceGate gate, TextureAtlasSprite icon) {
 		tessellator.drawScaledPrism(7, 5, 0, 9, 16, 2, icon);

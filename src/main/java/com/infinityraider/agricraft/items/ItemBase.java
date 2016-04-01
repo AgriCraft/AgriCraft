@@ -1,7 +1,10 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.renderers.items.IItemRenderingHandler;
+import com.infinityraider.agricraft.renderers.items.ItemRendererRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -9,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * The root Item class for all AgriCraft Items (excluding blockItems).
  */
-public abstract class ItemBase extends Item {
+public abstract class ItemBase<I extends ItemBase> extends Item implements ICustomRenderedItem<I> {
 
 	public final String internalName;
 
@@ -32,12 +35,24 @@ public abstract class ItemBase extends Item {
 		RegisterHelper.registerItem(this, name);
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IItemRenderingHandler<I> getRenderer() {
+		return null;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelResourceLocation getItemModelResourceLocation() {
+		return new ModelResourceLocation(this.getRegistryName(), "inventory");
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void registerItemRenderer() {
 		if (this.isModelVanillia) {
 			RegisterHelper.registerItemRenderer(this, varients);
 		} else {
-
+			ItemRendererRegistry.getInstance().registerCustomItemRenderer(this);
 		}
 	}
 }

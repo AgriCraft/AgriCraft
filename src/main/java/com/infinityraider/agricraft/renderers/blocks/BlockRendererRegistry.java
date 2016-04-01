@@ -2,11 +2,18 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.blocks.ICustomRenderedBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -53,18 +60,37 @@ public class BlockRendererRegistry implements ICustomModelLoader {
 
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
-    public void registerCustomBlockRenderer(ICustomRenderedBlock block) {
-        IBlockRenderingHandler renderer = block.getRenderer();
-        if(renderer != null) {
+    public void registerCustomBlockRenderer(ICustomRenderedBlock<? extends TileEntity> customRenderedBlock) {
+        if (customRenderedBlock == null || !(customRenderedBlock instanceof Block)) {
+            return;
+        }
+        Block block = (Block) customRenderedBlock;
+        IBlockRenderingHandler renderer = customRenderedBlock.getRenderer();
+        //set custom state mapper
+        StateMapperBase stateMapper = new StateMapperBase() {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                return customRenderedBlock.getBlockModelResourceLocation();
+            }
+        };
+        //register renderers
+        ModelLoader.setCustomStateMapper(block, stateMapper);
+        if (renderer != null) {
             BlockRenderer instance = new BlockRenderer<>(renderer);
-            if(renderer.hasStaticRendering()) {
-                renderers.put(block.getBlockModelResourceLocation(), instance);
+            ModelResourceLocation blockModel = customRenderedBlock.getBlockModelResourceLocation();
+            if (renderer.hasStaticRendering()) {
+                renderers.put(blockModel, instance);
             }
             TileEntity tile = renderer.getTileEntity();
-            if(renderer.hasDynamicRendering() && tile != null) {
+            if (renderer.hasDynamicRendering() && tile != null) {
                 ClientRegistry.bindTileEntitySpecialRenderer(tile.getClass(), instance);
             }
-            blocks.add(block);
+            if (renderer.doInventoryRendering()) {
+                ModelResourceLocation itemModel = new ModelResourceLocation(blockModel.getResourceDomain() + ":" + blockModel.getResourcePath(), "inventory");
+                renderers.put(itemModel, instance);
+                Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), stack -> itemModel);
+            }
         }
+        blocks.add(customRenderedBlock);
     }
 }

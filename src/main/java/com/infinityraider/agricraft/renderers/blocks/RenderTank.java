@@ -6,7 +6,10 @@ import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,20 +27,19 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 
 	@Override
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block, 
-								 TileEntityTank tank, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite matIcon) {
+								 TileEntityTank tank, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		if(dynamicRender) {
 			drawWater(tank, tessellator);			
 		} else {
-			drawWoodTank(tank, tessellator, matIcon);
+			drawWoodTank(tank, tessellator, icon);
 		}
 	}
 
-	/*
 	@Override
-	protected void doInventoryRender(TessellatorV2 tess, ItemStack item, TextureAtlasSprite matIcon) {
-		drawWoodTank(teDummy, tess);
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityTank tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+		drawWoodTank(tile, tessellator, icon);
 	}
-	*/
 
 	private void drawWoodTank(TileEntityTank tank, ITessellator tessellator, TextureAtlasSprite icon) {
 		this.renderBottom(tank, tessellator, icon);

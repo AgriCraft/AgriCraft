@@ -6,7 +6,10 @@ import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.decoration.TileEntityGrate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
@@ -21,7 +24,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
 
 	@Override
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
-								 TileEntityGrate grate, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite matIcon) {
+								 TileEntityGrate grate, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		// Setup
 		final float offset = ((float) grate.getOffset() * 7) / 16.0F;
 
@@ -29,14 +32,14 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
 		tessellator.translate(0, 0, offset);
 
 		// Draw Grate
-		tessellator.drawScaledPrism(1, 0, 0, 3, 16, 2, matIcon);
-		tessellator.drawScaledPrism(5, 0, 0, 7, 16, 2, matIcon);
-		tessellator.drawScaledPrism(9, 0, 0, 11, 16, 2, matIcon);
-		tessellator.drawScaledPrism(13, 0, 0, 15, 16, 2, matIcon);
-		tessellator.drawScaledPrism(0, 1, 0, 16, 3, 2, matIcon);
-		tessellator.drawScaledPrism(0, 5, 0, 16, 7, 2, matIcon);
-		tessellator.drawScaledPrism(0, 9, 0, 16, 11, 2, matIcon);
-		tessellator.drawScaledPrism(0, 13, 0, 16, 15, 2, matIcon);
+		tessellator.drawScaledPrism(1, 0, 0, 3, 16, 2, icon);
+		tessellator.drawScaledPrism(5, 0, 0, 7, 16, 2, icon);
+		tessellator.drawScaledPrism(9, 0, 0, 11, 16, 2, icon);
+		tessellator.drawScaledPrism(13, 0, 0, 15, 16, 2, icon);
+		tessellator.drawScaledPrism(0, 1, 0, 16, 3, 2, icon);
+		tessellator.drawScaledPrism(0, 5, 0, 16, 7, 2, icon);
+		tessellator.drawScaledPrism(0, 9, 0, 16, 11, 2, icon);
+		tessellator.drawScaledPrism(0, 13, 0, 16, 15, 2, icon);
 
 		//vines
 		final TextureAtlasSprite vinesIcon = BaseIcons.VINE.getIcon();
@@ -54,17 +57,16 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
 		}
 	}
 
-	/*
 	@Override
-	protected void doInventoryRender(TessellatorV2 ItemStack item, TextureAtlasSprite matIcon) {
-		drawScaledPrism(7, 0, 1, 9, 16, 3, matIcon);
-		drawScaledPrism(7, 0, 5, 9, 16, 7, matIcon);
-		drawScaledPrism(7, 0, 9, 9, 16, 11, matIcon);
-		drawScaledPrism(7, 0, 13, 9, 16, 15, matIcon);
-		drawScaledPrism(7, 1, 0, 9, 3, 16, matIcon);
-		drawScaledPrism(7, 5, 0, 9, 7, 16, matIcon);
-		drawScaledPrism(7, 9, 0, 9, 11, 16, matIcon);
-		drawScaledPrism(7, 13, 0, 9, 15, 16, matIcon);
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityGrate tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+		tessellator.drawScaledPrism(7, 0, 1, 9, 16, 3, icon);
+		tessellator.drawScaledPrism(7, 0, 5, 9, 16, 7, icon);
+		tessellator.drawScaledPrism(7, 0, 9, 9, 16, 11, icon);
+		tessellator.drawScaledPrism(7, 0, 13, 9, 16, 15, icon);
+		tessellator.drawScaledPrism(7, 1, 0, 9, 3, 16, icon);
+		tessellator.drawScaledPrism(7, 5, 0, 9, 7, 16, icon);
+		tessellator.drawScaledPrism(7, 9, 0, 9, 11, 16, icon);
+		tessellator.drawScaledPrism(7, 13, 0, 9, 15, 16, icon);
 	}
-	*/
 }

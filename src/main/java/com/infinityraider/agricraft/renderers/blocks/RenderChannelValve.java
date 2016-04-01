@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockChannelValve;
+import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannelValve;
@@ -8,7 +9,10 @@ import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,50 +27,48 @@ public class RenderChannelValve extends RenderChannel<TileEntityChannelValve> {
 		super(block, new TileEntityChannelValve());
 	}
 
-	/*
 	@Override
-	protected void doInventoryRender(TessellatorV2 tess, ItemStack item, TextureAtlasSprite matIcon) {
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityChannelValve tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
 
 		final TextureAtlasSprite sepIcon = BaseIcons.IRON_BLOCK.getIcon();
 
 		//Render channel.
-		drawScaledPrism(2, 4, 4, 14, 12, 5, matIcon);
-		drawScaledPrism(2, 4, 11, 14, 12, 12, matIcon);
-		drawScaledPrism(2, 4, 5, 14, 5, 11, matIcon);
+		tessellator.drawScaledPrism(2, 4, 4, 14, 12, 5, icon);
+		tessellator.drawScaledPrism(2, 4, 11, 14, 12, 12, icon);
+		tessellator.drawScaledPrism(2, 4, 5, 14, 5, 11, icon);
 
 		//Render separators.
-		drawScaledPrism(0.001f, 11.5f, 5, 1.999f, 15.001f, 11, sepIcon);
-		drawScaledPrism(0.001f, 0.999f, 5, 1.999f, 5.5f, 11, sepIcon);
-		drawScaledPrism(14.001f, 11.5f, 5, 15.999f, 15.001f, 11, sepIcon);
-		drawScaledPrism(14.001f, 0.999f, 5, 15.999f, 5.5f, 11, sepIcon);
+		tessellator.drawScaledPrism(0.001f, 11.5f, 5, 1.999f, 15.001f, 11, sepIcon);
+		tessellator.drawScaledPrism(0.001f, 0.999f, 5, 1.999f, 5.5f, 11, sepIcon);
+		tessellator.drawScaledPrism(14.001f, 11.5f, 5, 15.999f, 15.001f, 11, sepIcon);
+		tessellator.drawScaledPrism(14.001f, 0.999f, 5, 15.999f, 5.5f, 11, sepIcon);
 
 		//render the wooden guide rails along z-axis
-		drawScaledPrism(0, 0, 3.999F, 2, 16, 5.999F, matIcon);
-		tess.translate(0, 0, 6 * Constants.UNIT);
-		drawScaledPrism(0, 0, 3.999F, 2, 16, 5.999F, matIcon);
-		tess.translate(14 * Constants.UNIT, 0, 0);
-		drawScaledPrism(0, 0, 3.999F, 2, 16, 5.999F, matIcon);
-		tess.translate(0, 0, -6 * Constants.UNIT);
-		drawScaledPrism(0, 0, 3.999F, 2, 16, 5.999F, matIcon);
-		tess.translate(-14 * Constants.UNIT, 0, 0);
-
+		tessellator.drawScaledPrism(0, 0, 3.999F, 2, 16, 5.999F, icon);
+		tessellator.translate(0, 0, 6 * Constants.UNIT);
+		tessellator.drawScaledPrism(0, 0, 3.999F, 2, 16, 5.999F, icon);
+		tessellator.translate(14 * Constants.UNIT, 0, 0);
+		tessellator.drawScaledPrism(0, 0, 3.999F, 2, 16, 5.999F, icon);
+		tessellator.translate(0, 0, -6 * Constants.UNIT);
+		tessellator.drawScaledPrism(0, 0, 3.999F, 2, 16, 5.999F, icon);
+		tessellator.translate(-14 * Constants.UNIT, 0, 0);
 	}
-	*/
 
 	@Override
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
-								 TileEntityChannelValve valve, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite matIcon) {
+								 TileEntityChannelValve valve, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		if(dynamicRender) {
 			this.drawWater(tessellator, valve);
 		} else {
 			// Render Base
-			this.renderWoodChannel(tessellator, valve, matIcon);
+			this.renderWoodChannel(tessellator, valve, icon);
 
 			// Get Separator Icon
 			final TextureAtlasSprite sepIcon = BaseIcons.IRON_BLOCK.getIcon();
 
 			// Draw Separators
-			this.drawSeparators(tessellator, valve, matIcon, sepIcon);
+			this.drawSeparators(tessellator, valve, icon, sepIcon);
 		}
 	}
 

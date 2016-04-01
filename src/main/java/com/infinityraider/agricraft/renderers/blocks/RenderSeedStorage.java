@@ -6,7 +6,9 @@ import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -25,23 +27,22 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
 
 	@Override
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block, 
-								 TileEntitySeedStorage storage, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite matIcon) {
+								 TileEntitySeedStorage storage, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		if(dynamicRender) {
 			if (storage.hasLockedSeed()) {
 				drawSeed(storage.getLockedSeed());
 			}
 		} else {
-			renderSides(tessellator, matIcon);
+			renderSides(tessellator, icon);
 		}
 
 	}
 
-	/*
 	@Override
-	protected void doInventoryRender(TessellatorV2 tess, ItemStack item, TextureAtlasSprite matIcon) {
-		renderSides(matIcon, RenderUtil.COLOR_MULTIPLIER_STANDARD);
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, TileEntitySeedStorage tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+		renderSides(tessellator, icon);
 	}
-	*/
 
 	private void renderSides(ITessellator tessellator, TextureAtlasSprite matIcon) {		
 		//casing

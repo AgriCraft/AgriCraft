@@ -12,8 +12,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -48,12 +50,11 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 		}
 	}
 
-	/*
 	@Override
-	protected void doInventoryRender(TessellatorV2 tess, ItemStack item) {
-		renderBase(tess, COLOR_MULTIPLIER_STANDARD);
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntityPeripheral tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+		renderBase(tessellator);
 	}
-	*/
 
 	private void drawSeed(ITessellator tessellator, TileEntityPeripheral peripheral) {
 		ItemStack stack = peripheral.getStackInSlot(ContainerSeedAnalyzer.seedSlotId);

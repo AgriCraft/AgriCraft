@@ -3,7 +3,10 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -62,6 +65,22 @@ public interface IBlockRenderingHandler<T extends TileEntity> {
      */
     void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z,
                           IBlockState state, Block block, @Nullable T tile, boolean dynamicRender, float partialTick, int destroyStage);
+
+    /**
+     * Called to render the block in an inventory
+     * startDrawing() has already been called on the tessellator object.
+     *
+     * @param tessellator tessellator object to draw quads
+     * @param world the world object
+     * @param state the state of the block
+     * @param block the block
+     * @param tile the tile entity passed from getTileEntity() (can be null if there is no tile entity)
+     * @param stack stack containing this block as an item
+     * @param entity entity holding the stack
+     * @param type camera transform type
+     */
+    void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block,
+                              @Nullable T tile, ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type);
 
     /**
      * Gets the main icon used for this renderer, used for the particle

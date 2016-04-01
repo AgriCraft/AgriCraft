@@ -9,7 +9,11 @@ import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -43,27 +47,25 @@ public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
 		this.renderSide(tessellator, world, pos, full, AgriForgeDirection.WEST);
 	}
 
-	/*
 	@Override
-	protected void doInventoryRender(ITessellator tessellator, ItemStack item) {
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntityBase tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 
 		// Icon
 		final TextureAtlasSprite dirtIcon = BaseIcons.DIRT.getIcon();
 
 		// Draw
-		drawScaledPrism(0, 0, 0, 16, 8, 16, dirtIcon);
-		drawScaledPrism(1, 8, 0, 1, 15, 16, dirtIcon);
-		drawScaledPrism(15, 8, 1, 16, 15, 16, dirtIcon);
-		drawScaledPrism(0, 8, 15, 15, 15, 16, dirtIcon);
-		drawScaledPrism(0, 8, 0, 15, 1, 15, dirtIcon);
+		tessellator.drawScaledPrism(0, 0, 0, 16, 8, 16, dirtIcon);
+		tessellator.drawScaledPrism(1, 8, 0, 1, 15, 16, dirtIcon);
+		tessellator.drawScaledPrism(15, 8, 1, 16, 15, 16, dirtIcon);
+		tessellator.drawScaledPrism(0, 8, 15, 15, 15, 16, dirtIcon);
+		tessellator.drawScaledPrism(0, 8, 0, 15, 1, 15, dirtIcon);
 
 		// Full
-		if (((ItemBlock) item.getItem()).block instanceof BlockWaterPadFull) {
+		if (((ItemBlock) stack.getItem()).block instanceof BlockWaterPadFull) {
 			TextureAtlasSprite waterIcon = BaseIcons.WATER_STILL.getIcon();
-			drawScaledPrism(1, 14, 1, 15, 15, 15, waterIcon);
 		}
 	}
-	*/
 
 	private void renderBase(ITessellator tessellator, IBlockAccess world, BlockPos pos, boolean full) {		
 		// Get Icon

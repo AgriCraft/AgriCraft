@@ -7,7 +7,10 @@ import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,9 +21,6 @@ import com.infinityraider.agricraft.reference.AgriCraftProperties;
 
 import javax.annotation.Nullable;
 
-/*
- * TODO: Convert to new Renderer.
- */
 @SideOnly(Side.CLIENT)
 public class RenderCrop extends RenderBlockBase<TileEntityCrop> {
     private final ResourceLocation cropTexture;
@@ -65,6 +65,10 @@ public class RenderCrop extends RenderBlockBase<TileEntityCrop> {
             }
         }
     }
+
+    @Override
+    public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntityCrop tile,
+                                     ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {}
 
     @Override
     public TextureAtlasSprite getIcon() {

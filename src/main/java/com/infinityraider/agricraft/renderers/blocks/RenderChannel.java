@@ -8,8 +8,11 @@ import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -35,31 +38,30 @@ public class RenderChannel<T extends TileEntityChannel> extends RenderBlockCusto
 
 	@Override
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
-								 TileEntityChannel channel, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite matIcon) {
+								 TileEntityChannel channel, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		if (dynamicRender) {
 			this.drawWater(tessellator, channel);
 		} else {
-			this.renderWoodChannel(tessellator, channel, matIcon);
+			this.renderWoodChannel(tessellator, channel, icon);
 		}
 	}
 
-	/*
 	@Override
-	protected void doInventoryRender(TessellatorV2 ItemStack item, TextureAtlasSprite matIcon) {
-		this.renderBottom(teDummy, matIcon, RenderUtil.COLOR_MULTIPLIER_STANDARD);
-		this.renderSide(teDummy, matIcon, RenderUtil.COLOR_MULTIPLIER_STANDARD, AgriForgeDirection.NORTH);
-		this.renderSide(teDummy, matIcon, RenderUtil.COLOR_MULTIPLIER_STANDARD, AgriForgeDirection.EAST);
-		this.renderSide(teDummy, matIcon, RenderUtil.COLOR_MULTIPLIER_STANDARD, AgriForgeDirection.SOUTH);
-		this.renderSide(teDummy, matIcon, RenderUtil.COLOR_MULTIPLIER_STANDARD, AgriForgeDirection.WEST);
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityChannel tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+		this.renderBottom(tessellator, icon);
+		this.renderSide(tessellator, tile, icon, AgriForgeDirection.NORTH);
+		this.renderSide(tessellator, tile, icon, AgriForgeDirection.EAST);
+		this.renderSide(tessellator, tile, icon, AgriForgeDirection.SOUTH);
+		this.renderSide(tessellator, tile, icon, AgriForgeDirection.WEST);
 	}
-	*/
 
 	protected void renderWoodChannel(ITessellator tessellator, TileEntityChannel channel, TextureAtlasSprite matIcon) {
 		this.renderBottom(tessellator, matIcon);
-		this.renderSide(tessellator,channel, matIcon, AgriForgeDirection.NORTH);
-		this.renderSide(tessellator,channel, matIcon, AgriForgeDirection.EAST);
-		this.renderSide(tessellator,channel, matIcon, AgriForgeDirection.SOUTH);
-		this.renderSide(tessellator,channel, matIcon, AgriForgeDirection.WEST);
+		this.renderSide(tessellator, channel, matIcon, AgriForgeDirection.NORTH);
+		this.renderSide(tessellator, channel, matIcon, AgriForgeDirection.EAST);
+		this.renderSide(tessellator, channel, matIcon, AgriForgeDirection.SOUTH);
+		this.renderSide(tessellator, channel, matIcon, AgriForgeDirection.WEST);
 	}
 
 	protected void renderBottom(ITessellator tessellator, TextureAtlasSprite matIcon) {

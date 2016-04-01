@@ -11,8 +11,10 @@ import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -40,27 +42,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
 								 @Nullable TileEntitySeedAnalyzer analyzer, boolean dynamicRender, float partialTick, int destroyStage) {
 		if (analyzer != null) {
-			tessellator.draw();
-			//render the model
-			GL11.glPushMatrix();
-			GL11.glTranslatef(0.5F, 1.5F, 0.5F);
-			GL11.glRotatef(180, 0F, 0F, 1F);
-			switch (analyzer.getOrientation()) {
-				case WEST:
-					GL11.glRotatef(90, 0F, 1F, 0F);
-					break;
-				case SOUTH:
-					GL11.glRotatef(180, 0F, 1F, 0F);
-					break;
-				case EAST:
-					GL11.glRotatef(270, 0F, 1F, 0F);
-					break;
-			}
-			this.modelSeedAnalyzer.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-			if (analyzer.hasJournal() && AgriCraftConfig.renderBookInAnalyzer) {
-				this.modelBook.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-			}
-			GL11.glPopMatrix();
+			this.renderModel(tessellator, analyzer);
 			if (analyzer.hasSeed() || analyzer.hasTrowel()) {
 				renderSeed(tessellator, analyzer);
 			}
@@ -68,16 +50,43 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 		}
 	}
 
-	/*
 	@Override
-	protected void doInventoryRender(ITessellator tess, ItemStack item) {
-		GL11.glPushMatrix();
-		GL11.glScalef(0.5F, 0.5F, 0.5F);
-		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		this.doRenderTileEntity(tess, seedAnalyzerDummy);
-		GL11.glPopMatrix();
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntitySeedAnalyzer tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+		if(tile != null) {
+			GL11.glPushMatrix();
+			GL11.glScalef(0.5F, 0.5F, 0.5F);
+			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+			this.renderModel(tessellator, tile);
+			GL11.glPopMatrix();
+		}
 	}
-	*/
+
+	private void renderModel(ITessellator tessellator, TileEntitySeedAnalyzer analyzer) {
+		tessellator.draw();
+		//render the model
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0.5F, 1.5F, 0.5F);
+		GL11.glRotatef(180, 0F, 0F, 1F);
+		switch (analyzer.getOrientation()) {
+			case WEST:
+				GL11.glRotatef(90, 0F, 1F, 0F);
+				break;
+			case SOUTH:
+				GL11.glRotatef(180, 0F, 1F, 0F);
+				break;
+			case EAST:
+				GL11.glRotatef(270, 0F, 1F, 0F);
+				break;
+		}
+		this.modelSeedAnalyzer.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		if (analyzer.hasJournal() && AgriCraftConfig.renderBookInAnalyzer) {
+			this.modelBook.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		}
+		GL11.glPopMatrix();
+		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
+
+	}
 
 	//renders the seed
 	private void renderSeed(ITessellator tessellator, TileEntitySeedAnalyzer analyzer) {

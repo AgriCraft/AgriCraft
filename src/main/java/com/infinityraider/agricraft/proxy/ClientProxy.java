@@ -65,6 +65,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void registerRenderers() {
         //BLOCKS
         //------

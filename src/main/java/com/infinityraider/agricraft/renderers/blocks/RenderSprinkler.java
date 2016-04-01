@@ -7,6 +7,9 @@ import com.infinityraider.agricraft.tileentity.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,20 +60,20 @@ public class RenderSprinkler extends RenderBlockBase<TileEntitySprinkler> {
 		}
 	}
 
-	/*
 	@Override
-	protected void doInventoryRender(ITessellator tessellator, ItemStack item) {
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntitySprinkler tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 		// Draw Top
-		RenderUtil.drawScaledPrism(tess, 4, 8, 4, 12, 16, 12, BaseIcons.OAK_PLANKS.getIcon());
+		tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, BaseIcons.OAK_PLANKS.getIcon());
 		// Get Core Icon
 		final TextureAtlasSprite coreIcon = BaseIcons.IRON_BLOCK.getIcon();
 		// Draw Core
-		RenderUtil.drawScaledPrism(tess, MIN_C, MIN_Y - 8, MIN_C, MAX_C, MAX_Y - 4, MAX_C, coreIcon);
+		tessellator.drawScaledPrism(MIN_C, MIN_Y - 8, MIN_C, MAX_C, MAX_Y - 4, MAX_C, coreIcon);
 		// Draw Blades
-		RenderUtil.drawScaledPrism(tess, BMX_A, MIN_Y - 8, MIN_C, BMX_B, BMX_Y - 8, MAX_C, coreIcon);
-		RenderUtil.drawScaledPrism(tess, MIN_C, MIN_Y - 8, BMX_A, MAX_C, BMX_Y - 8, BMX_B, coreIcon);
+		tessellator.drawScaledPrism(BMX_A, MIN_Y - 8, MIN_C, BMX_B, BMX_Y - 8, MAX_C, coreIcon);
+		tessellator.drawScaledPrism(MIN_C, MIN_Y - 8, BMX_A, MAX_C, BMX_Y - 8, BMX_B, coreIcon);
+
 	}
-	*/
 
 	@Override
 	public TextureAtlasSprite getIcon() {

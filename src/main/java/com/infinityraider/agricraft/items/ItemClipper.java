@@ -47,5 +47,4 @@ public class ItemClipper extends ItemBase implements IClipper {
             list.add("ERROR");
         }
     }
-	
 }
