@@ -73,7 +73,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 	}
 
 	protected boolean hasActiveSeed() {
-		return this.activeSeed != null && this.activeSeeds != null;
+		return (this.activeSeed != null && this.activeSeeds != null);
 	}
 
 	protected void getActiveSeed() {
