@@ -46,30 +46,30 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
 		if (te instanceof TileEntitySeedStorage) {
 			TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
 			if (storage.hasLockedSeed()) {
-				drawSeed(storage.getLockedSeed());
+				drawSeed(tess, storage.getLockedSeed(), storage.getOrientation());
 			}
 		}
 	}
 
 	private void renderSides(TessellatorV2 tess, TextureAtlasSprite matIcon, int cm) {
-		
+
 		//casing
 		drawScaledPrism(tess, 0, 0, 0, 16, 1, 16, matIcon, cm);
 		drawScaledPrism(tess, 0, 15, 0, 16, 16, 16, matIcon, cm);
 		drawScaledPrism(tess, 0, 1, 0, 1, 15, 16, matIcon, cm);
 		drawScaledPrism(tess, 15, 1, 0, 16, 15, 16, matIcon, cm);
 		drawScaledPrism(tess, 1, 1, 15, 15, 15, 16, matIcon, cm);
-		
+
 		//drawer
 		drawScaledPrism(tess, 1.1F, 1.1F, 1, 14.9F, 14.9F, 2, matIcon, cm);
 		drawScaledPrism(tess, 4, 3, 0, 5, 10, 1, matIcon, cm);
 		drawScaledPrism(tess, 11, 3, 0, 12, 10, 1, matIcon, cm);
 		drawScaledPrism(tess, 4, 10, 0, 12, 11, 1, matIcon, cm);
 		drawScaledPrism(tess, 4, 3, 0, 12, 4, 1, matIcon, cm);
-		
+
 		//handle
 		drawScaledPrism(tess, 7, 12, 0, 9, 13, 1, BaseIcons.IRON_BLOCK.getIcon(), cm);
-		
+
 		//trace
 		addScaledVertexWithUV(tess, 1, 1, 0.99F, 2, 3, matIcon);
 		addScaledVertexWithUV(tess, 1, 15, 0.99F, 2, 4, matIcon);
@@ -115,26 +115,42 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
 	/**
 	 * Render the seed as TESR
 	 */
-	private void drawSeed(ItemStack seed) {
-		float a = 180;
-		float dx = 8 * Constants.UNIT;
-		float dy = 5 * Constants.UNIT;
-		float dz = 0.99F * Constants.UNIT;
-		float f = 0.75F;
+	private void drawSeed(TessellatorV2 tess, ItemStack seed, AgriForgeDirection side) {
+
+		tess.draw();
+
+		double a = 90;
+
+		switch (side) {
+			default:
+			case NORTH:
+				a *= 0;
+				break;
+			case EAST:
+				a *= 1;
+				break;
+			case SOUTH:
+				a *= 2;
+				break;
+			case WEST:
+				a *= 3;
+				break;
+		}
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef(dx, dy, dz);
-		GL11.glRotatef(a, 0, 1, 0);
-		GL11.glScalef(f, f, f);
+		GL11.glTranslated(.5, .5, .5);
+		GL11.glRotated(a, 0, 1, 0);
+		GL11.glTranslated(-.5, -.5, -.5);
+		GL11.glTranslated(0.5, 0.15, 0);
 
 		EntityItem item = new EntityItem(AgriCraft.proxy.getClientWorld(), 0, 0, 0, seed);
 		item.hoverStart = 0;
 		Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(item, 0, 0, 0, 0, 0);
 
-		GL11.glScalef(1F / f, 1F / f, 1F / f);
-		GL11.glRotatef(-a, 0, 1, 0);
-		GL11.glTranslatef(-dx, -dy, -dz);
 		GL11.glPopMatrix();
+
+		tess.startDrawingQuads();
+
 	}
 
 }

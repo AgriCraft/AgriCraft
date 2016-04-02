@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
@@ -12,7 +13,9 @@ import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.relauncher.Side;
@@ -86,33 +89,26 @@ public class RenderSeedAnalyzer extends RenderBlockAgriCraft {
 	}
 
 	//renders the seed
-	private void renderSeed(TessellatorV2 tessellator, TileEntitySeedAnalyzer analyzer) {
-		//grab the texture
-		ItemStack stack = analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId);
-		TextureAtlasSprite icon = IconUtil.getParticleIcon(stack); //TODO: find seed icon
-		if (icon == null) {
+	private void renderSeed(TessellatorV2 tess, TileEntitySeedAnalyzer analyzer) {
+		
+		if (analyzer.getSpecimen() == null) {
 			return;
 		}
-		//define rotation angle in function of system time
-		float angle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);   //credits to Pahimar
+		
+		double a = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
+		
 		GL11.glPushMatrix();
-		//translate to the desired position
-		GL11.glTranslated(Constants.UNIT * 8, Constants.UNIT * 4, Constants.UNIT * 8);
-		//resize the texture to half the size
-		GL11.glScalef(0.5F, 0.5F, 0.5F);
-		//rotate the renderer
-		GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
-		GL11.glTranslatef(-8 * Constants.UNIT, 0, 0);
+		GL11.glTranslated(.5, .5, .5);
+		GL11.glRotated(a, 0, 1, 0);
+		GL11.glTranslated(-.5, -.5, -.5);
+		GL11.glTranslated(0.5, 0.15, 0.5);
 
-		//TODO: render the seed
-		/*
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-        ItemRenderer.renderItemIn2D(tessellator, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), Constants.UNIT);
-		 */
-		GL11.glTranslatef(8 * Constants.UNIT, 0, 0);
-		GL11.glRotatef(-angle, 0.0F, 1.0F, 0.0F);
-		GL11.glScalef(2, 2, 2);
+		EntityItem item = new EntityItem(AgriCraft.proxy.getClientWorld(), 0, 0, 0, analyzer.getSpecimen());
+		item.hoverStart = 0;
+		Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(item, 0, 0, 0, 0, 0);
+		
 		GL11.glPopMatrix();
+		
 	}
 
 	private static void renderBase(TessellatorV2 tess) {
