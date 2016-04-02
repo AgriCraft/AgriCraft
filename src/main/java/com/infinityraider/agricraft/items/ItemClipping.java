@@ -71,8 +71,6 @@ public class ItemClipping extends ItemBase {
 		if (texture == null || texture.isEmpty()) {
 			return ItemData.DEFAULT_MODEL;
 		}
-		
-		LogHelper.warn("Made it into getModel()!");
 
 		final StringBuilder sb = new StringBuilder(ItemData.BASE_LOCATION.length() + texture.length());
 		sb.append(ItemData.BASE_LOCATION);
