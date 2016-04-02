@@ -12,6 +12,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,11 +66,13 @@ public class ItemClipping extends ItemBase {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static final ModelResourceLocation getModel(final String texture) {
+	public static final ModelResourceLocation getModel(String texture) {
 
 		if (texture == null || texture.isEmpty()) {
 			return ItemData.DEFAULT_MODEL;
 		}
+		
+		LogHelper.warn("Made it into getModel()!");
 
 		final StringBuilder sb = new StringBuilder(ItemData.BASE_LOCATION.length() + texture.length());
 		sb.append(ItemData.BASE_LOCATION);
@@ -84,7 +87,12 @@ public class ItemClipping extends ItemBase {
 	public void registerItemRenderer() {
 
 		LogHelper.debug("Registering Clipping Renderers...");
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, (stack) -> getModel(stack, null, 0));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, new ItemMeshDefinition() {
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
+				return textures.getOrDefault(toCrop(stack), ItemData.DEFAULT_MODEL);
+			}
+		});
 		ModelBakery.registerItemVariants(this, textures.values().toArray(new ModelResourceLocation[textures.values().size()]));
 		LogHelper.debug("Clipping Renderers Registered!");
 

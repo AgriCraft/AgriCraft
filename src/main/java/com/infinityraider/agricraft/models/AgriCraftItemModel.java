@@ -53,7 +53,7 @@ public class AgriCraftItemModel implements IModel {
 	@Override
 	public List<ResourceLocation> getTextures() {
 		List<ResourceLocation> tex = new ArrayList<>(this.textures.size());
-		this.textures.forEach((com.infinityraider.agricraft.models.ItemModelTexture e) -> tex.add(e.texture));
+		this.textures.forEach((ItemModelTexture e) -> tex.add(e.texture));
 		return tex;
 	}
 

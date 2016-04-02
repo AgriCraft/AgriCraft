@@ -1,12 +1,13 @@
 {
-  "homepage": "http://minecraft.curseforge.com/mc-mods/225635-agricraft/files",
-  "promos": {
-    "1.8.9-latest"     : "2.0.0a1",
-    "1.8.9-recomended" : "2.0.0"
-  },
-  "1.8.9" : {
-    "2.0.0" : "Updated to Minecraft 1.8.9",
-	"2.0.0a" : "Initial 1.8.9 alpha release.",
-	"2.0.0a1" : "Corrected server code."
-  }
+	"homepage": "http://minecraft.curseforge.com/mc-mods/225635-agricraft/files",
+	"promos": {
+		"1.8.9-latest": "2.0.0a2",
+		"1.8.9-recomended": "2.0.0a2"
+	},
+	"1.8.9": {
+		"2.0.0a2" : "Corrected plant growth, seed storage crash, clipping crash, and added back analyzer seed rendering.",
+		"2.0.0a1": "Corrected server code.",
+		"2.0.0a": "Initial 1.8.9 alpha release.",
+		"2.0.0": "Updated to Minecraft 1.8.9"
+	}
 }

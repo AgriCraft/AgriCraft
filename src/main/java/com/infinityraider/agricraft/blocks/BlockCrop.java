@@ -415,7 +415,9 @@ public class BlockCrop extends BlockTileBase implements IGrowable, IPlantable {
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if(crop.hasPlant() || crop.hasWeed()) {
             int stage = state.getValue(AgriCraftProperties.GROWTHSTAGE) + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
-            stage &= Constants.MATURE;
+            if (stage > Constants.MATURE) {
+				stage = Constants.MATURE;
+			}
             world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, stage), 2);
         }
         else if(crop.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
