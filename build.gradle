@@ -147,3 +147,12 @@ task dist(dependsOn: ['build', 'sourcesJar', 'javadocJar']) {
 		}
 	}
 }
+
+// Run Stuff
+runClient {
+	if( project.hasProperty('username') && project.hasProperty('password') ) {
+		args "--username=${project.username}"
+		args "--password=${project.password}"
+	}
+
+}
