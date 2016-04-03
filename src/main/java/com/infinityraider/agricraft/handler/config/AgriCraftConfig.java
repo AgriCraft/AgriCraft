@@ -97,19 +97,19 @@ public class AgriCraftConfig {
 	public static boolean rakingDrops = true;
 
 	// World Generation
-	@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Disable World Gen", comment = "Set to true to disable world gen, no greenhouses will spawn in villages.")
-	public static boolean disableWorldGen = false;
-	@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Greenhouse weight", min = "0", max = "100", comment = "The weight for a greenhouse to be generated in a village.")
+	//@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Disable World Gen", comment = "Set to true to disable world gen, no greenhouses will spawn in villages.")
+	public static boolean disableWorldGen = true;
+	//@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Greenhouse weight", min = "0", max = "100", comment = "The weight for a greenhouse to be generated in a village.")
 	public static int greenhouseWeight = 10;
-	@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Greenhouse limit", min = "0", max = "2", comment = "The maximum number of greenhouses per village.")
+	//@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Greenhouse limit", min = "0", max = "2", comment = "The maximum number of greenhouses per village.")
 	public static int greenhouseLimit = 1;
-	@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Irrigated greenhouse weight", min = "0", max = "100", comment = "The weight for an irrigated greenhouse to be generated in a village.")
+	//@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Irrigated greenhouse weight", min = "0", max = "100", comment = "The weight for an irrigated greenhouse to be generated in a village.")
 	public static int greenhouseIrrigatedWeight = 2;
-	@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Irrigated greenhouse limit", min = "0", max = "2", comment = "The maximum number of irrigated greenhouses per village.")
+	//@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Irrigated greenhouse limit", min = "0", max = "2", comment = "The maximum number of irrigated greenhouses per village.")
 	public static int greenhouseIrrigatedLimit = 1;
-	@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Enable villagers", comment = "Set to false if you wish to disable villagers spawning in the AgriCraft greenhouses.")
+	//@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Enable villagers", comment = "Set to false if you wish to disable villagers spawning in the AgriCraft greenhouses.")
 	public static boolean villagerEnabled = true;
-	@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Maximum crop tier", min = "1", max = "5", comment = "The maximum tier of plants that will spawn in greenhouses.")
+	//@AgriCraftConfigurable(category = ConfigCategory.WORLDGEN, key = "Maximum crop tier", min = "1", max = "5", comment = "The maximum tier of plants that will spawn in greenhouses.")
 	public static int greenHouseMaxTier = 3;
 
 	// Client
