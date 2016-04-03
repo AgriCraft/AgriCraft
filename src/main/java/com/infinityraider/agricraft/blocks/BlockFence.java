@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.entity.EntityLeashKnotAgricraft;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockFence;
 import com.infinityraider.agricraft.tileentity.decoration.TileEntityFence;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -8,12 +7,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,32 +37,6 @@ public class BlockFence extends BlockCustomWood {
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntityFence();
-    }
-
-    //Allow leads to be connected to these fences
-    @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return world.isRemote || applyLead(player, world, pos);
-    }
-
-    public boolean applyLead(EntityPlayer player, World world, BlockPos pos) {
-        EntityLeashKnotAgricraft entityleashknot = EntityLeashKnotAgricraft.getKnotForPosition(world, pos);
-        boolean flag = false;
-        double d0 = 7.0D;
-        List list = world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double)pos.getX() - d0, (double) pos.getY() - d0, (double) pos.getZ() - d0, (double) pos.getX() + d0, (double) pos.getY() + d0, (double) pos.getZ() + d0));
-        if (list != null) {
-            for (Object obj : list) {
-                EntityLiving entityliving = (EntityLiving) obj;
-                if (entityliving.getLeashed() && entityliving.getLeashedToEntity() == player) {
-                    if (entityleashknot == null) {
-                        entityleashknot = EntityLeashKnotAgricraft.createKnot(world, pos);
-                    }
-                    entityliving.setLeashedToEntity(entityleashknot, true);
-                    flag = true;
-                }
-            }
-        }
-        return flag;
     }
 
     /**

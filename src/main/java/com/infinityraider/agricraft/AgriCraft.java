@@ -83,7 +83,6 @@ public class AgriCraft {
         LogHelper.debug("Starting Initialization");
         proxy.registerEventHandlers();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-        AgriCraftEntities.init();
         CompatibilityHandler.getInstance().init();
         LogHelper.debug("Initialization Complete");
     }
@@ -98,7 +97,6 @@ public class AgriCraft {
         AgriCraftRecipes.init();
         GrowthRequirementHandler.init();
         CropPlantHandler.init();
-        WorldGen.init();
         CustomCrops.initGrassSeeds();
         CompatibilityHandler.getInstance().postInit();
 		proxy.registerRenderers();
