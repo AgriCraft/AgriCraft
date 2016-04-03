@@ -1,7 +1,7 @@
 /*
  * JEI Integration Category.
  */
-package com.infinityraider.agricraft.compatibility.jei.mutation;
+package com.infinityraider.agricraft.compatibility.jei.produce;
 
 import com.infinityraider.agricraft.compatibility.jei.AgriCraftJEIPlugin;
 import javax.annotation.Nonnull;
@@ -21,17 +21,17 @@ import net.minecraft.util.StatCollector;
  *
  * @author RlonRyan
  */
-public class MutationRecipeCategory implements IRecipeCategory {
+public class ProduceRecipeCategory implements IRecipeCategory {
 
 	private final IDrawableStatic background;
 	private final String localizedName;
 	private final IDrawableStatic overlay;
 
-	public MutationRecipeCategory(IGuiHelper guiHelper) {
+	public ProduceRecipeCategory(IGuiHelper guiHelper) {
 		background = guiHelper.createBlankDrawable(128, 128);
-		localizedName = StatCollector.translateToLocal("agricraft_nei.mutation.title");
+		localizedName = StatCollector.translateToLocal("agricraft_nei.cropProduct.title");
 		overlay = guiHelper.createDrawable(
-				new ResourceLocation("agricraft", "textures/gui/jei/crop_mutation.png"),
+				new ResourceLocation("agricraft", "textures/gui/jei/crop_produce.png"),
 				0, 0, 128, 128
 		);
 	}
@@ -39,7 +39,7 @@ public class MutationRecipeCategory implements IRecipeCategory {
 	@Nonnull
 	@Override
 	public String getUid() {
-		return AgriCraftJEIPlugin.CATEGORY_MUTATION;
+		return AgriCraftJEIPlugin.CATEGORY_PRODUCE;
 	}
 
 	@Nonnull
@@ -69,38 +69,44 @@ public class MutationRecipeCategory implements IRecipeCategory {
 
 	@Override
 	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
-		if (!(recipeWrapper instanceof MutationRecipeWrapper)) {
+		if (!(recipeWrapper instanceof ProduceRecipeWrapper)) {
 			return;
 		}
 
-		MutationRecipeWrapper wrapper = ((MutationRecipeWrapper) recipeWrapper);
+		ProduceRecipeWrapper wrapper = ((ProduceRecipeWrapper) recipeWrapper);
 
 		if (wrapper.getInputs().size() < 1) {
 			return;
 		}
 
 		if (wrapper.getInputs().get(0) instanceof ItemStack) {
-			recipeLayout.getItemStacks().init(0, false, 24, 39);
-			recipeLayout.getItemStacks().set(0, (ItemStack)wrapper.getInputs().get(0));
+			recipeLayout.getItemStacks().init(0, false, 15, 28);
+			recipeLayout.getItemStacks().set(0, (ItemStack) wrapper.getInputs().get(0));
 		}
-
+		
 		if (wrapper.getInputs().size() > 1 && wrapper.getInputs().get(1) instanceof ItemStack) {
-			recipeLayout.getItemStacks().init(1, false, 86, 39);
-			recipeLayout.getItemStacks().set(1, (ItemStack)wrapper.getInputs().get(1));
+			recipeLayout.getItemStacks().init(1, false, 15, 54);
+			recipeLayout.getItemStacks().set(1, (ItemStack) wrapper.getInputs().get(1));
 		}
 		
 		if (wrapper.getInputs().size() > 2 && wrapper.getInputs().get(2) instanceof ItemStack) {
-			recipeLayout.getItemStacks().init(2, false, 55, 65);
+			recipeLayout.getItemStacks().init(2, false, 15, 75);
 			recipeLayout.getItemStacks().set(2, (ItemStack) wrapper.getInputs().get(2));
 		}
-		
-		if (wrapper.getInputs().size() > 3 && wrapper.getInputs().get(3) instanceof ItemStack) {
-			recipeLayout.getItemStacks().init(3, false, 55, 86);
-			recipeLayout.getItemStacks().set(3, (ItemStack) wrapper.getInputs().get(3));
-		}
 
-		recipeLayout.getItemStacks().init(4, false, 55, 39);
-		recipeLayout.getItemStacks().set(4, wrapper.getOutputs().get(0));
+		int index = 2;
+		int x = 60;
+		int y = -6;
+
+		for (Object e : recipeWrapper.getOutputs()) {
+			index++;
+			x += 18;
+			y += 18;
+			if (e instanceof ItemStack) {
+				recipeLayout.getItemStacks().init(index, false, x, y);
+				recipeLayout.getItemStacks().set(index, (ItemStack) e);
+			}
+		}
 	}
 
 }

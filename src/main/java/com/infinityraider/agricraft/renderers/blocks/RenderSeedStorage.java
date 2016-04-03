@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;

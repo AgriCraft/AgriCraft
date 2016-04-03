@@ -1,10 +1,8 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;
@@ -12,7 +10,6 @@ import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzerBook;
 import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.item.EntityItem;

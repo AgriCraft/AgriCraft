@@ -17,7 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  * Implementation of the CropPlant class for an IAgriCraftPlant object

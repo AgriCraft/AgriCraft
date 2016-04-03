@@ -1,12 +1,10 @@
 /*
  * AgriCraft Crop Mutation JEI Recipe Wrapper
  */
-package com.infinityraider.agricraft.compatibility.jei.mutation;
+package com.infinityraider.agricraft.compatibility.jei.produce;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.ICropPlant;
-import com.infinityraider.agricraft.api.v1.IMutation;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import java.util.List;
 import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -19,33 +17,28 @@ import net.minecraftforge.fluids.FluidStack;
  *
  * @author RlonRyan
  */
-public class MutationRecipeWrapper implements IRecipeWrapper {
+public class ProduceRecipeWrapper implements IRecipeWrapper {
 
 	private final List input;
-	private final ItemStack output;
+	private final List<ItemStack> output;
 
-	public MutationRecipeWrapper(IMutation recipe) {
+	public ProduceRecipeWrapper(ICropPlant recipe) {
 		ImmutableList.Builder builder = ImmutableList.builder();
-		for (Object o : recipe.getParents()) {
-			if (o instanceof ItemStack) {
-				builder.add(o);
+
+		builder.add(recipe.getSeed());
+		if (recipe.getGrowthRequirement() != null) {
+			if (recipe.getGrowthRequirement().getSoil() != null) {
+				builder.add(recipe.getGrowthRequirement().getSoil().toStack());
+			} else {
+				builder.add(new ItemStack(Blocks.dirt));
+			}
+			if (recipe.getGrowthRequirement().getRequiredBlock() != null) {
+				builder.add(recipe.getGrowthRequirement().getRequiredBlock().toStack());
 			}
 		}
-		if (recipe.getResult() != null) {
-			ICropPlant plant = CropPlantHandler.getPlantFromStack(recipe.getResult());
-			if (plant.getGrowthRequirement() != null) {
-				if (plant.getGrowthRequirement().getSoil() != null) {
-					builder.add(plant.getGrowthRequirement().getSoil().toStack());
-				} else {
-					builder.add(new ItemStack(Blocks.dirt));
-				}
-				if (plant.getGrowthRequirement().getRequiredBlock() != null) {
-					builder.add(plant.getGrowthRequirement().getRequiredBlock().toStack());
-				}
-			}
-		}
+
 		input = builder.build();
-		output = recipe.getResult();
+		output = recipe.getAllFruits();
 	}
 
 	@Override
@@ -55,7 +48,7 @@ public class MutationRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public List<ItemStack> getOutputs() {
-		return ImmutableList.of(output);
+		return output;
 	}
 
 	@Override
