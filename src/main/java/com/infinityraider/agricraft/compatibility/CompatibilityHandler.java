@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.compatibility;
 
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.compatibility.applecore.AppleCoreHelper;
+import com.infinityraider.agricraft.compatibility.computercraft.ComputerCraftHelper;
 import com.infinityraider.agricraft.compatibility.vanilla.VanillaHelper;
 import com.infinityraider.agricraft.compatibility.waila.WailaHelper;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
@@ -101,6 +102,7 @@ public class CompatibilityHandler {
 		Class[] classes = {
 			VanillaHelper.class,
 			AppleCoreHelper.class,
+			ComputerCraftHelper.class,
 			WailaHelper.class
 		};
 		for (Class clazz : classes) {

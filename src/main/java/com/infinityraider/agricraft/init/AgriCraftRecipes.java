@@ -82,9 +82,6 @@ public class AgriCraftRecipes {
         }
         //peripheral
         if(AgriCraftBlocks.blockPeripheral!=null) {
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.computerCraft)) {
-                //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', AgriCraftBlocks.blockSeedAnalyzer, 'r', net.minecraft.init.AgriCraftItems.comparator, 'c', ComputerCraftHelper.getComputerBlock()));
-            }
             if(CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.openComputers)) {
                 //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', AgriCraftBlocks.blockSeedAnalyzer, 'r', net.minecraft.init.AgriCraftItems.comparator, 'c', OpenComputersHelper.getComputerBlock()));
             }
