@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftRenderable;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
-import com.infinityraider.agricraft.renderers.renderinghacks.IRenderingHandler;
+import com.infinityraider.agricraft.client.renderers.renderinghacks.IRenderingHandler;
 
 /**
  * The base class for all AgriCraft blocks.

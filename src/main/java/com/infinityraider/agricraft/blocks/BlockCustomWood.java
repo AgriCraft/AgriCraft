@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriCraftTab;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
-import com.infinityraider.agricraft.renderers.TextureCache;
+import com.infinityraider.agricraft.client.renderers.TextureCache;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
 

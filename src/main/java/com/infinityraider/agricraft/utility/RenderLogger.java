@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.utility;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfigurable;
 import com.infinityraider.agricraft.handler.config.ConfigCategory;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
-import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
+import com.infinityraider.agricraft.client.renderers.blocks.RenderChannel;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 

@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.handler;
 import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.farming.cropplant.CropPlantAPIv1;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.renderers.player.renderhooks.RenderPlayerHooks;
+import com.infinityraider.agricraft.client.renderers.playereffect.RenderPlayerHooks;
 import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;

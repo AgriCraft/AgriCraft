@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
-import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
+import com.infinityraider.agricraft.client.renderers.blocks.RenderPeripheral;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
 import com.infinityraider.agricraft.reference.AgriCraftMods;

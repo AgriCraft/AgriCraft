@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.tileentity;
 import com.infinityraider.agricraft.api.v1.IDebuggable;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.renderers.TextureCache;
+import com.infinityraider.agricraft.client.renderers.TextureCache;
 import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;

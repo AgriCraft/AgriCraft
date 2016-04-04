@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import com.infinityraider.agricraft.renderers.renderinghacks.IRenderingHandler;
+import com.infinityraider.agricraft.client.renderers.renderinghacks.IRenderingHandler;
 
 public class BlockSeedStorageController extends BlockCustomWood {
 

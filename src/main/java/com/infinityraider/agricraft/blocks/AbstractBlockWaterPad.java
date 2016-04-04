@@ -3,7 +3,7 @@
  */
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.renderers.blocks.RenderWaterPad;
+import com.infinityraider.agricraft.client.renderers.blocks.RenderWaterPad;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import java.util.List;
 import net.minecraft.block.Block;
