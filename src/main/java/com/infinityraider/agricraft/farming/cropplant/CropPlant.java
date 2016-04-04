@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.config.MutationConfig;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.PlantRenderer;
+import com.infinityraider.agricraft.client.renderers.PlantRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.WorldRenderer;

@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import com.infinityraider.agricraft.renderers.blocks.RenderTank;
+import com.infinityraider.agricraft.client.renderers.blocks.RenderTank;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

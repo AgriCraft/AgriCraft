@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.api.v1.IAgriCraftSeed;
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.blocks.BlockModPlant;
-import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriCraftTab;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.handler.config.MutationConfig;

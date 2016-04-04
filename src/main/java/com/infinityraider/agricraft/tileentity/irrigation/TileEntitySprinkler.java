@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.blocks.BlockWaterChannel;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.renderers.particles.LiquidSprayFX;
+import com.infinityraider.agricraft.client.renderers.particles.LiquidSprayFX;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.block.Block;
