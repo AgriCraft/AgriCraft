@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.gui.GuiSeedAnalyzer;
 import com.infinityraider.agricraft.gui.GuiSeedStorage;
 import com.infinityraider.agricraft.gui.GuiSeedStorageController;
 import com.infinityraider.agricraft.gui.journal.GuiJournal;
-import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.tileentity.TileEntityPeripheral;
 import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
 import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorageController;

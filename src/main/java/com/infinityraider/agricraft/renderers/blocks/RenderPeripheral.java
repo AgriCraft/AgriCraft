@@ -1,12 +1,13 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.TessellatorV2;
 import com.infinityraider.agricraft.renderers.models.ModelPeripheralProbe;
-import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.tileentity.TileEntityPeripheral;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -24,6 +25,7 @@ import org.lwjgl.opengl.GL11;
 import static com.infinityraider.agricraft.renderers.RenderUtil.*;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
+import net.minecraft.entity.item.EntityItem;
 
 public class RenderPeripheral extends RenderBlockAgriCraft {
 
@@ -49,28 +51,22 @@ public class RenderPeripheral extends RenderBlockAgriCraft {
 		if (te instanceof TileEntityPeripheral) {
 			final TileEntityPeripheral peripheral = (TileEntityPeripheral) te;
 			tess.draw();
-			drawSeed(tess, peripheral);
-			performAnimations(tess, peripheral, BaseIcons.DEBUG.getIcon(), COLOR_MULTIPLIER_STANDARD);
+			drawSeed(peripheral);
+			//performAnimations(tess, peripheral, BaseIcons.DEBUG.getIcon(), COLOR_MULTIPLIER_STANDARD);
 			tess.startDrawingQuads();
 		}
 	}
 
-	private void drawSeed(TessellatorV2 tessellator, TileEntityPeripheral peripheral) {
+	private void drawSeed(TileEntityPeripheral peripheral) {
 		ItemStack stack = peripheral.getStackInSlot(ContainerSeedAnalyzer.seedSlotId);
 		if (stack == null || stack.getItem() == null) {
 			return;
 		}
 
-		TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: find seed icon
-
-		if (icon == null) {
-			return;
-		}
-
-		float dx = 4 * Constants.UNIT;
-		float dy = 14 * Constants.UNIT;
-		float dz = 4 * Constants.UNIT;
-		float scale = 0.5F;
+		float dx = 0.75f;
+		float dy = 0.85f;
+		float dz = 0.50f;
+		float scale = 0.75F;
 		float angle = 90.0F;
 
 		GL11.glPushMatrix();
@@ -79,16 +75,14 @@ public class RenderPeripheral extends RenderBlockAgriCraft {
 		GL11.glScalef(scale, scale, scale);
 		//rotate the renderer
 		GL11.glRotatef(angle, 1.0F, 0.0F, 0.0F);
+		GL11.glRotatef(90, 0, 0, 1);
 
 		//TODO: render the seed
 
-		/*
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-        ItemRenderer.renderItemIn2D(tessellator, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), Constants.UNIT);
-		 */
-		GL11.glRotatef(-angle, 1.0F, 0.0F, 0.0F);
-		GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
-		GL11.glTranslated(-dx, -dy, -dz);
+		EntityItem item = new EntityItem(AgriCraft.proxy.getClientWorld(), 0, 0, 0, stack.copy().splitStack(1));
+		item.hoverStart = 0;
+		Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(item, 0, 0, 0, 0, 0);
+		
 		GL11.glPopMatrix();
 	}
 

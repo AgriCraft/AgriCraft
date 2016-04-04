@@ -1,15 +1,18 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.creativetab.AgriCraftTab;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
 import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
-import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.tileentity.TileEntityPeripheral;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
+import dan200.computercraft.api.peripheral.IPeripheral;
+import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -31,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 
 @Optional.Interface(modid = AgriCraftMods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
-public class BlockPeripheral extends BlockTileBase {
+public class BlockPeripheral extends BlockTileBase implements IPeripheralProvider {
 
 	@SideOnly(Side.CLIENT)
 	private TextureAtlasSprite textureTop;
@@ -43,7 +46,8 @@ public class BlockPeripheral extends BlockTileBase {
 	private TextureAtlasSprite textureInner;
 
 	public BlockPeripheral() {
-		super(Material.iron, "peripheral", false);
+		super(Material.iron, "peripheral", TileEntityPeripheral.TILE_NAME, false);
+		this.setCreativeTab(AgriCraftTab.agriCraftTab);
 		RegisterHelper.hideModel(this, internalName);
 	}
 
@@ -68,17 +72,16 @@ public class BlockPeripheral extends BlockTileBase {
 		return null;
 	}
 
-	/*
-    @Override
-    @Optional.Method(modid = Names.AgriCraftMods.computerCraft)
-    public IPeripheral getPeripheral(World world, BlockPos pos, int side) {
-        TileEntity te = world.getTileEntity(pos);
-        if(te==null || !(te instanceof TileEntityPeripheral)) {
-            return null;
-        }
-        return (TileEntityPeripheral) te;
-    }
-	 */
+	@Override
+	@Optional.Method(modid = AgriCraftMods.computerCraft)
+	public IPeripheral getPeripheral(World world, BlockPos pos, EnumFacing side) {
+		TileEntity te = world.getTileEntity(pos);
+		if (te == null || !(te instanceof TileEntityPeripheral)) {
+			return null;
+		}
+		return (TileEntityPeripheral) te;
+	}
+
 	//called when the block is broken
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
