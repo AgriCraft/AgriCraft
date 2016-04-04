@@ -1,19 +1,24 @@
-package com.infinityraider.agricraft.farming.cropplant;
+package com.infinityraider.agricraft.compatibility.vanilla;
 
 import com.infinityraider.agricraft.api.v1.RenderMethod;
+import com.infinityraider.agricraft.farming.cropplant.CropPlantGeneric;
 import com.infinityraider.agricraft.reference.Constants;
+import java.util.ArrayList;
+import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSeeds;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class CropPlantStem extends CropPlantGeneric {
+public class CropPlantVanillaStem extends CropPlantGeneric {
+	
     private final Block block;
 
-    public CropPlantStem(ItemSeeds seed, Block block) {
+    public CropPlantVanillaStem(ItemSeeds seed, Block block) {
         super(seed, "minecraft:blocks/pumpkin_stem_disconnected");
         this.block = block;
     }
@@ -58,4 +63,28 @@ public class CropPlantStem extends CropPlantGeneric {
         }
         return "agricraft_journal."+name;
     }
+
+	@Override
+    public ArrayList<ItemStack> getAllFruits() {
+        ArrayList<ItemStack> list = new ArrayList<>();
+        list.add(new ItemStack(block.getItemDropped(block.getStateFromMeta(7), null, 0)));
+        return list;
+    }
+
+    @Override
+    public ItemStack getRandomFruit(Random rand) {
+        return new ItemStack(block.getItemDropped(block.getStateFromMeta(7), rand, 0));
+    }
+
+    @Override
+    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
+        int amount = (int) (Math.ceil((gain + 0.00) / 3));
+        ArrayList<ItemStack> list = new ArrayList<>();
+        while(amount>0) {
+            list.add(getRandomFruit(rand));
+            amount--;
+        }
+        return list;
+    }
+	
 }

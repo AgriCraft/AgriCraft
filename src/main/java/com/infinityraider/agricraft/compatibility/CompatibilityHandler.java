@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.compatibility;
 
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.compatibility.applecore.AppleCoreHelper;
+import com.infinityraider.agricraft.compatibility.vanilla.VanillaHelper;
 import com.infinityraider.agricraft.compatibility.waila.WailaHelper;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
@@ -98,6 +99,7 @@ public class CompatibilityHandler {
 	@SuppressWarnings("unchecked")
 	private void initCompatModules() {
 		Class[] classes = {
+			VanillaHelper.class,
 			AppleCoreHelper.class,
 			WailaHelper.class
 		};

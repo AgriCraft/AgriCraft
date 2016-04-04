@@ -1,9 +1,10 @@
-package com.infinityraider.agricraft.farming.cropplant;
+package com.infinityraider.agricraft.compatibility.vanilla;
 
 import com.infinityraider.agricraft.api.v1.BlockWithMeta;
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.api.v1.RenderMethod;
+import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.reference.Constants;

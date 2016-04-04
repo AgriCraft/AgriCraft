@@ -59,9 +59,9 @@ public class AgriCraftBlocks {
 		}
 		if (!AgriCraftConfig.disableSeedStorage) {
 			blockSeedStorage = new BlockSeedStorage();
-			if (!AgriCraftConfig.disableSeedWarehouse) {
-				//blockSeedStorageController = new BlockSeedStorageController();
-			}
+//			if (!AgriCraftConfig.disableSeedWarehouse) {
+//				blockSeedStorageController = new BlockSeedStorageController();
+//			}
 		}
 		if (CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.computerCraft) || CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.openComputers)) {
 			blockPeripheral = new BlockPeripheral();

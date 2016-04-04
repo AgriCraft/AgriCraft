@@ -10,6 +10,8 @@ package com.infinityraider.agricraft.reference;
  */
 public interface AgriCraftMods {
 
+	String VANILLA = "vanilla";
+	
 	String adventOfAscension = "nevermine";
  	String agriculture = "Agriculture";
  	String ancientWarfare = "AncientWarfare";
