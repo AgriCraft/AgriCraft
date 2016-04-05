@@ -16,8 +16,9 @@ import java.util.List;
 import java.util.Random;
 
 public class ModHelper {
+	
     private final String modId;
-    private boolean enabled;
+    private final boolean enabled;
 
     protected ModHelper(String modId) {
         this.modId = modId;
