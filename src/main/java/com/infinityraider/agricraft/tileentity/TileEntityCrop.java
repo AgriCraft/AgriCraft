@@ -235,10 +235,12 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     /** spawns WEED in the crop */
     @Override
     public void spawnWeed() {
-        this.crossCrop=false;
-        this.weed=true;
-        this.clearPlant();
-    }
+		if( this.getPlant != null && AgriCraftConfig.weedsWipePlants ) {
+			this.crossCrop=false;
+			this.weed=true;
+			this.clearPlant();
+		}
+	}
 
     /** spread the WEED */
     @Override
