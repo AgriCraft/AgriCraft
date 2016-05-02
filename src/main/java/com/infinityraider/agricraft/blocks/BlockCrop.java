@@ -98,7 +98,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
         TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
         if(crop.hasPlant() || crop.hasWeed()) {
             if (CompatibilityHandler.getInstance().allowGrowthTick(world, pos, this, crop, rnd)) {
-            	if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds){
+            	if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds && AgriCraftConfig.weedsWipePlants ){
                 	crop.spreadWeed();
                 }
             	else if (crop.isFertile()) {
