@@ -187,7 +187,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
 
     @Override
     public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
-        return this.tier<=3 && super.func_149851_a(world, x, y, z, isRemote);
+        return this.tier<=3 && super.func_149851_a(world, x, y, z, isRemote) && this.isFertile(world, x, y, z);
     }
 
     //register icons
