@@ -400,7 +400,7 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
      */
     @Override
     public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
-        return world.getBlockMetadata(x, y, z) < Constants.MATURE;
+        return world.getBlockMetadata(x, y, z) < Constants.MATURE && this.isFertile(world, x, y, z);
     }
 
     /**
