@@ -11,8 +11,8 @@ I have a Slack channel where you can contact me for support/suggestions which yo
 
 ## Minecraft versions
 Agricraft has releases for Minecraft versions 1.7.10 and onwards, status per Minecraft version is as follows:
- - 1.7.10: closed, no more issues, pull requests or feature requests are accepted, don't expect releases.
- - 1.8.9: bugfix: bugfixes are accepted, no guarantee of a new release is granted.
+ - 1.7.10: open, one more release to end the 1.7.10 chapter will be done, fixing all bugs from the previous version..
+ - 1.8.9: closed, the 1.8 branch was highly experimental and the rendering is one big hack. Don't expect anything.
  - 1.9: Agricraft is currently being ported to 1.9
 
 ## Bug reports
