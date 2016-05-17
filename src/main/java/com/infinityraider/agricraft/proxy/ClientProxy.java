@@ -14,7 +14,6 @@ import com.infinityraider.agricraft.init.ResourceCrops;
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
-import com.infinityraider.agricraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.block.state.IBlockState;
@@ -182,9 +181,6 @@ public class ClientProxy extends CommonProxy {
 
         ItemToolTipHandler itemToolTipHandler = new ItemToolTipHandler();
         MinecraftForge.EVENT_BUS.register(itemToolTipHandler);
-
-        RenderPlayerHooks renderPlayerHooks = new RenderPlayerHooks();
-        MinecraftForge.EVENT_BUS.register(renderPlayerHooks);
 
         SoundHandler soundHandler = new SoundHandler();
         MinecraftForge.EVENT_BUS.register(soundHandler);
