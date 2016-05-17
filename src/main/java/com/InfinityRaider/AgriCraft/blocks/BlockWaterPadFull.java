@@ -6,6 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -35,7 +36,17 @@ public class BlockWaterPadFull extends BlockWaterPad {
                 return false;
             }
             if (!player.capabilities.isCreativeMode) {
-                player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, stack));
+                if(!player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, stack))) {
+                	if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
+                        float f = 0.7F;
+                        double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                        double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                        double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                        EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, FluidContainerRegistry.fillFluidContainer(waterBucket, stack));
+                        entityitem.delayBeforeCanPickup = 10;
+                        world.spawnEntityInWorld(entityitem);
+                    }
+                };
                 player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
             }
             if (!world.isRemote) {
