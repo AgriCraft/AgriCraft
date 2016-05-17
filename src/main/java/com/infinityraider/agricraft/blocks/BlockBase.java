@@ -68,7 +68,11 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 
 	@Override
 	protected final BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, getPropertyArray());
+		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
+		for(IProperty prop : this.getPropertyArray()) {
+			builder.add(prop);
+		}
+		return builder.build();
 	}
 
 	/**

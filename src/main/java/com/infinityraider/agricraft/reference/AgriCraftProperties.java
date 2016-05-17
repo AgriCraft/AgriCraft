@@ -9,9 +9,9 @@ import net.minecraft.block.properties.PropertyBool;
  */
 public interface AgriCraftProperties {
 	
-	PropertyBool CROSSCROP = PropertyBool.create("CROSSCROP");
-	PropertyBool WEEDS = PropertyBool.create("WEEDS");
+	PropertyBool CROSSCROP = PropertyBool.create("crosscrop");
+	PropertyBool WEEDS = PropertyBool.create("weeds");
     PropertyInteger GROWTHSTAGE = PropertyInteger.create("age", 0, 7);
-    PropertyCropPlant PLANT = PropertyCropPlant.create("PLANT");
+    PropertyCropPlant PLANT = PropertyCropPlant.create("plant");
 
 }

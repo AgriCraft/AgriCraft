@@ -37,7 +37,7 @@ public class PropertyCropPlant extends PropertyHelper<CropPlant> {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Optional<CropPlant> parseValue(String value) {
-		if(value.equals("NONE")) {
+		if(value.equals("none")) {
 			return null;
 		}
 		return Optional.fromNullable(CropPlantHandler.getPlantFromStack(new ItemStack(Item.itemRegistry.getObject(new ResourceLocation(value)))));
@@ -47,9 +47,11 @@ public class PropertyCropPlant extends PropertyHelper<CropPlant> {
 	public String getName(CropPlant value) {
 		ItemStack seed = value.getSeed();
 		if (seed == null) {
-			return "NONE";
+			return "none";
 		}
-		return Item.itemRegistry.getNameForObject(seed.getItem()).toString() + ":" + seed.getItemDamage();
+		int id = Item.getIdFromItem(seed.getItem());
+		int meta = seed.getItemDamage();
+		return "id" + id + "m" + meta;
 	}
 
 }
