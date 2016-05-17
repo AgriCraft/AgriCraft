@@ -64,6 +64,7 @@ dependencies {
     compile "codechicken:CodeChickenLib:${version_codeChickenLib}:dev"
     compile "codechicken:CodeChickenCore:${version_codeChickenCore}:dev"
     compile "codechicken:NotEnoughItems:${version_nei}:dev"
+    compile "codechicken:ForgeMultipart:${version_forgeMultiPart}:dev"
 
     // Core
     compile "mcp.mobius.waila:Waila:1.5.10_1.7.10:dev"
