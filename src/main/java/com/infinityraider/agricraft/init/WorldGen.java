@@ -18,11 +18,14 @@ public class WorldGen {
         if (!AgriCraftConfig.disableWorldGen) {
             //register villagers
             if (AgriCraftConfig.villagerEnabled) {
-                Collection<Integer> usedIds = VillagerRegistry.getRegisteredVillagers();
+                //TODO: find unused ids
+                //Collection<Integer> usedIds = VillagerRegistry.getRegisteredVillagers();
                 int id = 5;
+                /*
                 while (usedIds.contains(id)) {
                     id++;
                 }
+                */
                 registerVillager(id);
             }
 
@@ -43,7 +46,8 @@ public class WorldGen {
     }
 
     private static void registerVillager(int id) {
-        VillagerRegistry.instance().registerVillagerId(id);
+        //TODO: register villager
+        //VillagerRegistry.instance().registerVillagerId(id);
         AgriCraft.proxy.registerVillagerSkin(id, "textures/entities/villager.png");
         villagerId = id;
     }

@@ -32,23 +32,22 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class PlayerInteractEventHandler {
     /** Event handler to disable vanilla farming */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void vanillaSeedPlanting(PlayerInteractEvent event) {
-        if (event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            EntityPlayer player = event.getEntityPlayer();
-            ItemStack stack = player.getActiveItemStack();
-            if (stack != null && stack.stackSize > 0 && stack.getItem() != null && stack.getItem() instanceof IPlantable) {
-                if (GrowthRequirementHandler.isSoilValid(event.getWorld(), event.getPos())) {
-                    if (AgriCraftConfig.disableVanillaFarming) {
-                        if(!allowVanillaPlanting(stack)) {
-                            this.denyEvent(event, false);
-                            return;
-                        }
-                    } if (stack.hasTagCompound()) {
-                        NBTTagCompound tag = (NBTTagCompound) stack.getTagCompound().copy();
-                        if (tag.hasKey(AgriCraftNBT.GROWTH) && tag.hasKey(AgriCraftNBT.GAIN) && tag.hasKey(AgriCraftNBT.STRENGTH)) {
-                            //TODO: place a tile entity storing the SEED's data
-                            this.denyEvent(event, false);
-                        }
+    public void vanillaSeedPlanting(PlayerInteractEvent.RightClickBlock event) {
+        EntityPlayer player = event.getEntityPlayer();
+        ItemStack stack = player.getActiveItemStack();
+        if (stack != null && stack.stackSize > 0 && stack.getItem() != null && stack.getItem() instanceof IPlantable) {
+            if (GrowthRequirementHandler.isSoilValid(event.getWorld(), event.getPos())) {
+                if (AgriCraftConfig.disableVanillaFarming) {
+                    if (!allowVanillaPlanting(stack)) {
+                        this.denyEvent(event, false);
+                        return;
+                    }
+                }
+                if (stack.hasTagCompound()) {
+                    NBTTagCompound tag = (NBTTagCompound) stack.getTagCompound().copy();
+                    if (tag.hasKey(AgriCraftNBT.GROWTH) && tag.hasKey(AgriCraftNBT.GAIN) && tag.hasKey(AgriCraftNBT.STRENGTH)) {
+                        //TODO: place a tile entity storing the SEED's data
+                        this.denyEvent(event, false);
                     }
                 }
             }
@@ -86,66 +85,59 @@ public class PlayerInteractEventHandler {
 
     /** Event handler to create water pads */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void waterPadCreation(PlayerInteractEvent event) {
-        if (event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            IBlockState state = event.getWorld().getBlockState(event.getPos());
-            Block block = state.getBlock();
-            if (block != Blocks.farmland) {
-                return;
-            }
-            boolean flag = false;
-            EntityPlayer player = event.getEntityPlayer();
-            ItemStack stack = player.getActiveItemStack();
-            if (stack != null && stack.getItem() != null && stack.getItem() instanceof ItemSpade) {
-                flag = true;
-            }
+    public void waterPadCreation(PlayerInteractEvent.RightClickBlock event) {
+        IBlockState state = event.getWorld().getBlockState(event.getPos());
+        Block block = state.getBlock();
+        if (block != Blocks.farmland) {
+            return;
+        }
+        boolean flag = false;
+        EntityPlayer player = event.getEntityPlayer();
+        ItemStack stack = player.getActiveItemStack();
+        if (stack != null && stack.getItem() != null && stack.getItem() instanceof ItemSpade) {
+            flag = true;
+        }
             /*
             else if (ModHelper.allowIntegration(Names.Mods.tconstruct) && TinkersConstructHelper.isShovel(event.entityPlayer.getCurrentEquippedItem())) {
                 FLAG = true;
             }
             */
-            if (flag) {
-                if (event.getWorld().isRemote) {
-                    denyEvent(event, true);
-                }
-                event.getWorld().setBlockState(event.getPos(), com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterPad.getDefaultState(), 3);
-                if (!player.capabilities.isCreativeMode) {
-                    stack.damageItem(1, player);
-                    event.setResult(Event.Result.ALLOW);
-                }
-                SoundType sound = block.getStepSound();
-                event.getWorld().playSound(null, (double) ((float) event.getPos().getX() + 0.5F), (double) ((float) event.getPos().getY() + 0.5F), (double) ((float) event.getPos().getZ() + 0.5F), sound.getBreakSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
-                denyEvent(event, false);
+        if (flag) {
+            if (event.getWorld().isRemote) {
+                denyEvent(event, true);
             }
+            event.getWorld().setBlockState(event.getPos(), com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterPad.getDefaultState(), 3);
+            if (!player.capabilities.isCreativeMode) {
+                stack.damageItem(1, player);
+                event.setResult(Event.Result.ALLOW);
+            }
+            SoundType sound = block.getStepSound();
+            event.getWorld().playSound(null, (double) ((float) event.getPos().getX() + 0.5F), (double) ((float) event.getPos().getY() + 0.5F), (double) ((float) event.getPos().getZ() + 0.5F), sound.getBreakSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+            denyEvent(event, false);
         }
     }
 
     /** This is done with an event because else the player will place the vines as a block instead of applying them to the grate */
     @SubscribeEvent
-    public void applyVinesToGrate(PlayerInteractEvent event) {
-        if (event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            ItemStack stack = event.getEntityPlayer().getActiveItemStack();
-            if(stack==null || stack.getItem()==null || stack.getItem()!= Item.getItemFromBlock(Blocks.vine)) {
-                return;
-            }
-            Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-            if(!(block instanceof BlockGrate)) {
-                return;
-            }
-            if(event.getWorld().isRemote) {
-                denyEvent(event, true);
-            } else {
-                block.onBlockActivated(event.getWorld(), event.getPos(), event.getWorld().getBlockState(event.getPos()), event.getEntityPlayer(), EnumHand.MAIN_HAND, stack, event.getFace(), 0, 0, 0);
-            }
+    public void applyVinesToGrate(PlayerInteractEvent.RightClickBlock event) {
+        ItemStack stack = event.getEntityPlayer().getActiveItemStack();
+        if (stack == null || stack.getItem() == null || stack.getItem() != Item.getItemFromBlock(Blocks.vine)) {
+            return;
+        }
+        Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
+        if (!(block instanceof BlockGrate)) {
+            return;
+        }
+        if (event.getWorld().isRemote) {
+            denyEvent(event, true);
+        } else {
+            block.onBlockActivated(event.getWorld(), event.getPos(), event.getWorld().getBlockState(event.getPos()), event.getEntityPlayer(), EnumHand.MAIN_HAND, stack, event.getFace(), 0, 0, 0);
         }
     }
 
-    /** Event handler to deny bonemeal while sneaking on crops that are not allowed to be bonemealed */
+    /** Event handler to deny bonemeal while sneaking on crops that are not allowed to be bone mealed */
     @SubscribeEvent
-    public void denyBonemeal(PlayerInteractEvent event) {
-        if(event.getAction() != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            return;
-        }
+    public void denyBonemeal(PlayerInteractEvent.RightClickBlock event) {
         if(!event.getEntityPlayer().isSneaking()) {
             return;
         }
@@ -161,7 +153,7 @@ public class PlayerInteractEventHandler {
         }
     }
 
-    private void denyEvent(PlayerInteractEvent event, boolean sendToServer) {
+    private void denyEvent(PlayerInteractEvent.RightClickBlock event, boolean sendToServer) {
         //cancel event to prevent the Hunger Overhaul event handler from being called
         event.setResult(Event.Result.DENY);
         event.setUseItem(Event.Result.DENY);

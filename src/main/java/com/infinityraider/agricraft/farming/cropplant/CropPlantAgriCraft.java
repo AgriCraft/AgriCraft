@@ -31,7 +31,7 @@ public class CropPlantAgriCraft extends CropPlant {
         this.setTier(plant.getSeed().tier());
         this.setGrowthRequirement(plant.getGrowthRequirement());
         this.setSpreadChance(100/getTier());
-		AgriCraftItems.clipping.addPlant(this, plant.getBlock().getRegistryName().replaceFirst(":", ":blocks/") + 4);
+		AgriCraftItems.clipping.addPlant(this, plant.getBlock().getRegistryName().toString().replaceFirst(":", ":blocks/") + 4);
     }
 
     @Override

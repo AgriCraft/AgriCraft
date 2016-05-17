@@ -13,7 +13,6 @@ import com.infinityraider.agricraft.init.CustomCrops;
 import com.infinityraider.agricraft.init.ResourceCrops;
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.ItemModSeed;
-import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
 import com.infinityraider.agricraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.infinityraider.agricraft.utility.LogHelper;
@@ -25,7 +24,6 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,7 +31,6 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -169,7 +166,8 @@ public class ClientProxy extends CommonProxy {
 
         //villager
         if (!AgriCraftConfig.disableWorldGen && AgriCraftConfig.villagerEnabled) {
-            VillagerRegistry.instance().registerVillagerSkin(78943, new ResourceLocation("textures/entity/villager/farmer.png"));  //For now, it uses the texture for the vanilla farmer
+            //TODO: register villager skin
+            //VillagerRegistry.instance().registerVillagerSkin(78943, new ResourceLocation("textures/entity/villager/farmer.png"));  //For now, it uses the texture for the vanilla farmer
         }
 
         LogHelper.debug("Renderers registered");
@@ -214,7 +212,8 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerVillagerSkin(int id, String resource) {
-        VillagerRegistry.instance().registerVillagerSkin(id, new ResourceLocation(Reference.MOD_ID, resource));
+        //TODO
+        //VillagerRegistry.instance().registerVillagerSkin(id, new ResourceLocation(Reference.MOD_ID, resource));
     }
 
     @Override

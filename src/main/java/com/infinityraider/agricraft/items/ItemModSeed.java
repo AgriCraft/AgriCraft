@@ -47,7 +47,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 		}
 		this.setCreativeTab(AgriCraftTab.agriCraftTab);
 
-		this.seedName = "seed" + plant.getRegistryName().replaceFirst(".*:crop", "");
+		this.seedName = "seed" + plant.getRegistryName().toString().replaceFirst(".*:crop", "");
 		
 		//register seed
 		RegisterHelper.registerSeed(this, plant, this.seedName);

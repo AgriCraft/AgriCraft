@@ -65,7 +65,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 
 	@Override
 	public final void writeTileNBT(NBTTagCompound tag) {
-		tag.setString(AgriCraftNBT.MATERIAL, this.getMaterial().getRegistryName());
+		tag.setString(AgriCraftNBT.MATERIAL, this.getMaterial().getRegistryName().toString());
 		tag.setInteger(AgriCraftNBT.MATERIAL_META, this.getMaterialMeta());
 		this.writeNBT(tag);
 	}
@@ -193,7 +193,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 */
 	public final NBTTagCompound getMaterialTag() {
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setString(AgriCraftNBT.MATERIAL, this.material.getRegistryName());
+		tag.setString(AgriCraftNBT.MATERIAL, this.material.getRegistryName().toString());
 		tag.setInteger(AgriCraftNBT.MATERIAL_META, this.materialMeta);
 		return tag;
 	}

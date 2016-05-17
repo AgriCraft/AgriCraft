@@ -86,11 +86,11 @@ public final class IconUtil {
 	}
 
 	public static TextureAtlasSprite getIcon(final Block block) {
-		return (block == null) ? getDefaultIcon() : getIcon(block.getRegistryName(), EXPANSION_BLOCK);
+		return (block == null) ? getDefaultIcon() : getIcon(block.getRegistryName().toString(), EXPANSION_BLOCK);
 	}
 
 	public static TextureAtlasSprite getIcon(final Item item) {
-		return (item == null) ? getDefaultIcon() : getIcon(item.getRegistryName(), EXPANSION_ITEM);
+		return (item == null) ? getDefaultIcon() : getIcon(item.getRegistryName().toString(), EXPANSION_ITEM);
 	}
 
 	public static TextureAtlasSprite getParticleIcon(final ItemStack stack) {

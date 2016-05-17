@@ -30,7 +30,7 @@ public abstract class CropPlantGeneric extends CropPlant {
         this.seed = seed;
         this.plant = seed.getPlant(null, null).getBlock();
         this.fruits = OreDictHelper.getFruitsFromOreDict(getSeed(), modSpecificFruits());
-		AgriCraftItems.clipping.addPlant(this, this.plant.getRegistryName().replaceFirst(":", ":blocks/") + 4);
+		AgriCraftItems.clipping.addPlant(this, this.plant.getRegistryName().toString().replaceFirst(":", ":blocks/") + 4);
     }
 	
 	protected CropPlantGeneric(ItemSeeds seed, String texture) {

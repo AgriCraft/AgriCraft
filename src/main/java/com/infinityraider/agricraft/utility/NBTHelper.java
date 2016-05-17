@@ -14,7 +14,7 @@ public abstract class NBTHelper {
 			Block block = (((ItemBlock) stack.getItem()).block);
             if(block != null) {
                 tag = new NBTTagCompound();
-                tag.setString(AgriCraftNBT.MATERIAL, block.getRegistryName());
+                tag.setString(AgriCraftNBT.MATERIAL, block.getRegistryName().toString());
                 tag.setInteger(AgriCraftNBT.MATERIAL_META, stack.getMetadata());
             }
         }
