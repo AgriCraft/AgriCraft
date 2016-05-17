@@ -25,7 +25,7 @@ group = "${mod.group}.${mod.id}"
 archivesBaseName = mod.id
 
 minecraft {
-    version = "${mod.version_minecraft}-${mod.version_forge}-${mod.version_minecraft}"
+    version = "${mod.version_minecraft}-${mod.version_forge}"
     mappings = mod.version_mappings
     runDir = "/run"
     makeObfSourceJar = false
