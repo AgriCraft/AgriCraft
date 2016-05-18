@@ -57,7 +57,8 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 			GL11.glPushMatrix();
 			GL11.glScalef(0.5F, 0.5F, 0.5F);
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-			this.renderModel(tessellator, tile);
+			//TODO: fix this
+			//this.renderModel(tessellator, tile);
 			GL11.glPopMatrix();
 		}
 	}

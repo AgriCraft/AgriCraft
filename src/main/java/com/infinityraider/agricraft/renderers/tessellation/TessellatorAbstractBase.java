@@ -2,13 +2,13 @@ package com.infinityraider.agricraft.renderers.tessellation;
 
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.TransformationMatrix;
-import com.sun.javafx.geom.Vec3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,7 +24,7 @@ public abstract class TessellatorAbstractBase implements ITessellator {
     /** Default color (white) */
     public static final Color STANDARD_COLOR = new Color(255, 255, 255, 255);
     /** Default normal (up) */
-    public static final Vec3f STANDARD_NORMAL = new Vec3f(0, 1, 0);
+    public static final Vec3d STANDARD_NORMAL = new Vec3d(0, 1, 0);
 
     /** Current transformation matrix */
     private final Deque<TransformationMatrix> matrices;
@@ -32,7 +32,7 @@ public abstract class TessellatorAbstractBase implements ITessellator {
     /** Current vertex format */
     private VertexFormat format;
     /** Current normal */
-    private Vec3f normal;
+    private Vec3d normal;
     /** Current color*/
     private Color color;
     /** Current brightness value */
@@ -278,7 +278,7 @@ public abstract class TessellatorAbstractBase implements ITessellator {
             }
             default: return;
         }
-        this.setNormal(new Vec3f(face.getFrontOffsetX(), face.getFrontOffsetY(), face.getFrontOffsetZ()));
+        this.setNormal(new Vec3d(face.getFrontOffsetX(), face.getFrontOffsetY(), face.getFrontOffsetZ()));
         addScaledVertexWithUV(x1, y1, z1, icon, u1, v1, color);
         addScaledVertexWithUV(x2, y2, z2, icon, u2, v2, color);
         addScaledVertexWithUV(x3, y3, z3, icon, u3, v3, color);
@@ -497,7 +497,7 @@ public abstract class TessellatorAbstractBase implements ITessellator {
      */
     @Override
     public TessellatorAbstractBase setNormal(float x, float y, float z) {
-        return this.setNormal(new Vec3f(x, y, z));
+        return this.setNormal(new Vec3d(x, y, z));
     }
 
     /**
@@ -506,7 +506,7 @@ public abstract class TessellatorAbstractBase implements ITessellator {
      * @return this
      */
     @Override
-    public TessellatorAbstractBase setNormal(Vec3f vec) {
+    public TessellatorAbstractBase setNormal(Vec3d vec) {
         this.normal = vec == null ? this.normal : vec;
         return this;
     }
@@ -516,7 +516,7 @@ public abstract class TessellatorAbstractBase implements ITessellator {
      * @return the normal vector
      */
     @Override
-    public Vec3f getNormal() {
+    public Vec3d getNormal() {
         return this.normal;
     }
 

@@ -1,13 +1,13 @@
 package com.infinityraider.agricraft.renderers.tessellation;
 
 import com.google.common.base.Function;
-import com.sun.javafx.geom.Vec3f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -264,13 +264,13 @@ public interface ITessellator extends Function<ResourceLocation, TextureAtlasSpr
      * @param vec the normal vector
      * @return this
      */
-    ITessellator setNormal(Vec3f vec);
+    ITessellator setNormal(Vec3d vec);
 
     /**
      * Gets the current normal for the tessellator
      * @return the normal vector
      */
-    Vec3f getNormal();
+    Vec3d getNormal();
     
     /**
      * Sets the current opaque color multiplier for the quads

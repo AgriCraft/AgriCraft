@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.BlockBase;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.sun.istack.internal.NotNull;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
@@ -58,6 +59,9 @@ public abstract class RenderBlockBase<T extends TileEntityBase> implements IBloc
     }
 
     public final TextureAtlasSprite getIcon(ResourceLocation loc) {
+        if(loc == null) {
+            return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+        }
         return ModelLoader.defaultTextureGetter().apply(loc);
     }
 }

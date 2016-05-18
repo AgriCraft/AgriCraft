@@ -7,7 +7,7 @@ package com.infinityraider.agricraft.reference;
 public interface Reference {
 
 	String MOD_NAME = "${mod.name}";
-	String MOD_ID = "${mod.id}";
+	String MOD_ID = "agricraft";
 	String AUTHOR = "${mod.author}";
 
 	String VER_MAJOR = "${mod.version_major}";
