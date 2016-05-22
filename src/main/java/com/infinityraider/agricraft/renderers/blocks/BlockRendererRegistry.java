@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.blocks.ICustomRenderedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.resources.IResourceManager;
@@ -88,7 +87,7 @@ public class BlockRendererRegistry implements ICustomModelLoader {
             if (renderer.doInventoryRendering()) {
                 ModelResourceLocation itemModel = new ModelResourceLocation(blockModel.getResourceDomain() + ":" + blockModel.getResourcePath(), "inventory");
                 renderers.put(itemModel, instance);
-                Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), stack -> itemModel);
+                ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), stack -> itemModel);
             }
         }
         blocks.add(customRenderedBlock);

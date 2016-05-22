@@ -2,13 +2,13 @@ package com.infinityraider.agricraft.renderers.items;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.items.ICustomRenderedItem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -64,7 +64,7 @@ public class ItemRendererRegistry implements ICustomModelLoader {
         if (renderer != null) {
             ItemRenderer<? extends Item> instance = new ItemRenderer<>(renderer);
             renderers.put(itemModel, instance);
-            Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, stack -> itemModel);
+            ModelLoader.setCustomMeshDefinition(item, stack -> itemModel);
 
         }
         items.add(customRenderedItem);

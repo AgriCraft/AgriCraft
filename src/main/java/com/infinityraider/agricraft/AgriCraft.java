@@ -74,6 +74,7 @@ public class AgriCraft {
         AgriCraftCrops.init();
         APISelector.init();
         CompatibilityHandler.getInstance().preInit();
+        proxy.registerRenderers();
         LogHelper.debug("Pre-Initialization Complete");
     }
 
@@ -101,7 +102,6 @@ public class AgriCraft {
         WorldGen.init();
         CustomCrops.initGrassSeeds();
         CompatibilityHandler.getInstance().postInit();
-		proxy.registerRenderers();
         LogHelper.debug("Post-Initialization Complete");
     }
 

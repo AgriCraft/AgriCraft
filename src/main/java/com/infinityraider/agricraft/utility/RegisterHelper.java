@@ -12,11 +12,11 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -49,11 +49,6 @@ public abstract class RegisterHelper {
     }
 
     @SideOnly(Side.CLIENT)
-    public static void registerItemRenderer(Item item) {
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-    }
-
-    @SideOnly(Side.CLIENT)
     public static void registerItemRenderer(Item item, String... varients) {
         ModelResourceLocation[] locations = new ModelResourceLocation[varients.length];
         for (int i = 0; i < varients.length; i++) {
@@ -66,7 +61,7 @@ public abstract class RegisterHelper {
     public static void registerItemRender(Item item, ModelResourceLocation... varients) {
         ModelBakery.registerItemVariants(item, varients);
         for (int i = 0; i < varients.length; i++) {
-            Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, i, varients[i]);
+            ModelLoader.setCustomModelResourceLocation(item, i, varients[i]);
         }
     }
 
