@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockBase;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
-import com.sun.istack.internal.NotNull;
+import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
@@ -34,7 +34,7 @@ public abstract class RenderBlockBase<T extends TileEntityBase> implements IBloc
     }
 
     @Override
-    @NotNull public T getTileEntity() {
+    @Nonnull public T getTileEntity() {
         return dummy;
     }
 
