@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.blocks;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
-import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
 import com.infinityraider.agricraft.tileentity.TileEntityBase;
 import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
@@ -25,7 +25,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -124,9 +123,8 @@ public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 
 	@Override
 	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-		IMessage msg = new MessagePeripheralCheckNeighbours(pos);
 		NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32);
-		NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
+		NetworkWrapper.getInstance().sendToAllAround(new MessagePeripheralCheckNeighbours(pos), point);
 	}
 
 	@Override

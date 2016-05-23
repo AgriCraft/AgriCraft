@@ -7,10 +7,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageFertiliserApplied extends MessageAgriCraft {
+public class MessageFertiliserApplied extends MessageBase {
     private BlockPos pos;
     private Item fertiliser;
     private int meta;
@@ -25,6 +25,23 @@ public class MessageFertiliserApplied extends MessageAgriCraft {
     }
 
     @Override
+    public Side getMessageHandlerSide() {
+        return Side.CLIENT;
+    }
+
+    @Override
+    protected void processMessage(MessageContext ctx) {
+        if(this.fertiliser!=null && this.fertiliser instanceof IFertiliser) {
+            ((IFertiliser) this.fertiliser).performClientAnimations(this.meta, Minecraft.getMinecraft().thePlayer.worldObj, this.pos);
+        }
+    }
+
+    @Override
+    protected IMessage getReply(MessageContext ctx) {
+        return null;
+    }
+
+    @Override
     public void fromBytes(ByteBuf buf) {
         this.pos = readBlockPosFromByteBuf(buf);
         this.fertiliser = this.readItemFromByteBuf(buf);
@@ -36,15 +53,5 @@ public class MessageFertiliserApplied extends MessageAgriCraft {
         this.writeBlockPosToByteBuf(buf, pos);
         this.writeItemToByteBuf(this.fertiliser, buf);
         buf.writeInt(this.meta);
-    }
-
-    public static class MessageHandler implements IMessageHandler<MessageFertiliserApplied, IMessage> {
-        @Override
-        public IMessage onMessage(MessageFertiliserApplied message, MessageContext ctx) {
-            if(message!=null && message.fertiliser!=null && message.fertiliser instanceof IFertiliser) {
-                ((IFertiliser) message.fertiliser).performClientAnimations(message.meta, Minecraft.getMinecraft().thePlayer.worldObj, message.pos);
-            }
-            return null;
-        }
     }
 }

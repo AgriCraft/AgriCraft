@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.container;
 
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
-import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.tileentity.storage.ISeedStorageControllable;
 import com.infinityraider.agricraft.tileentity.storage.ISeedStorageController;
 import com.infinityraider.agricraft.tileentity.storage.SeedStorageSlot;
@@ -83,7 +83,7 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
         if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
             if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                 //this method is only called form the gui client side, so we need to manually tell the server to execute it there
-                NetworkWrapperAgriCraft.wrapper.sendToServer(new MessageContainerSeedStorage(stack, slotId));
+                NetworkWrapper.getInstance().sendToServer(new MessageContainerSeedStorage(stack, slotId));
             } else {
                 //on the server decrease the size of the stack, where it is synced to the client
                 controllable.decreaseStackSizeInSlot(slotId, stack.stackSize - stackToMove.stackSize);

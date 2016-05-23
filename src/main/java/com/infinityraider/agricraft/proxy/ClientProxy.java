@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -39,6 +40,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
+    @Override
+    public Side getPhysicalSide() {
+        return Side.CLIENT;
+    }
+
+    @Override
+    public Side getEffectiveSide() {
+        return FMLCommonHandler.instance().getEffectiveSide();
+    }
 
     @Override
     public EntityPlayer getClientPlayer() {
@@ -216,5 +226,14 @@ public class ClientProxy extends CommonProxy {
     public void initConfiguration(FMLPreInitializationEvent event) {
         super.initConfiguration(event);
         ConfigurationHandler.initClientConfigs(event);
+    }
+
+    @Override
+    public void queueTask(Runnable task) {
+        if(getEffectiveSide() == Side.CLIENT) {
+            Minecraft.getMinecraft().addScheduledTask(task);
+        } else {
+            FMLClientHandler.instance().getServer().addScheduledTask(task);
+        }
     }
 }

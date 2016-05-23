@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.tileentity.irrigation;
 import com.infinityraider.agricraft.api.v1.IDebuggable;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
-import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
@@ -19,7 +19,6 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -81,9 +80,8 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         @Override
         public void syncFluidLevel() {
             if(needsSync()) {
-                IMessage msg = new MessageSyncFluidLevel(this.fluidLevel, this.getPos());
                 NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimension(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
-                NetworkWrapperAgriCraft.wrapper.sendToAllAround(msg, point);
+                NetworkWrapper.getInstance().sendToAllAround(new MessageSyncFluidLevel(this.fluidLevel, this.getPos()), point);
             }
         }
 

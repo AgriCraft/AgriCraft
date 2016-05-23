@@ -4,11 +4,10 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.infinityraider.agricraft.network.MessageSyncMutation;
-import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.utility.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -43,7 +42,7 @@ public class PlayerConnectToServerHandler {
         LogHelper.info("Sending mutations to player: " + player.getDisplayName());
         Mutation[] mutations = MutationHandler.getMutations();
         for (int i = 0; i < mutations.length; i++) {
-            NetworkWrapperAgriCraft.wrapper.sendTo(new MessageSyncMutation(mutations[i], i == mutations.length - 1), player);
+            NetworkWrapper.getInstance().sendTo(new MessageSyncMutation(mutations[i], i == mutations.length - 1), player);
         }
     }
 }

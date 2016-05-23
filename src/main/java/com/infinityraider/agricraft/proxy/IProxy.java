@@ -5,9 +5,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 @SuppressWarnings("unused")
 public interface IProxy {
+    /** Returns the physical side, is always Side.SERVER on the server and Side.CLIENT on the client */
+    Side getPhysicalSide();
+
+    /** Returns the effective side, on the server, this is always Side.SERVER, on the client it is dependent on the thread */
+    Side getEffectiveSide();
+
     /** Returns the instance of the EntityPlayer on the client, null on the server */
     EntityPlayer getClientPlayer();
 
@@ -40,4 +47,7 @@ public interface IProxy {
 
     /** Initializes the configuration file */
     void initConfiguration(FMLPreInitializationEvent event);
+
+    /** Queue a task */
+    void queueTask(Runnable task);
 }

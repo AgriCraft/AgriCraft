@@ -7,10 +7,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
-public class MessagePeripheralCheckNeighbours extends MessageAgriCraft {
+public class MessagePeripheralCheckNeighbours extends MessageBase {
     private BlockPos pos;
 
     @SuppressWarnings("unused")
@@ -21,6 +21,27 @@ public class MessagePeripheralCheckNeighbours extends MessageAgriCraft {
     }
 
     @Override
+    public Side getMessageHandlerSide() {
+        return Side.CLIENT;
+    }
+
+    @Override
+    protected void processMessage(MessageContext ctx) {
+        World world = AgriCraft.proxy.getClientWorld();
+        if(world != null) {
+            TileEntity te = world.getTileEntity(this.pos);
+            if(te != null && te instanceof TileEntityPeripheral) {
+                ((TileEntityPeripheral) te).checkSides();
+            }
+        }
+    }
+
+    @Override
+    protected IMessage getReply(MessageContext ctx) {
+        return null;
+    }
+
+    @Override
     public void fromBytes(ByteBuf buf) {
         this.pos = readBlockPosFromByteBuf(buf);
     }
@@ -28,19 +49,5 @@ public class MessagePeripheralCheckNeighbours extends MessageAgriCraft {
     @Override
     public void toBytes(ByteBuf buf) {
         this.writeBlockPosToByteBuf(buf, pos);
-    }
-
-    public static class MessageHandler implements IMessageHandler<MessagePeripheralCheckNeighbours, IMessage> {
-        @Override
-        public IMessage onMessage(MessagePeripheralCheckNeighbours message, MessageContext ctx) {
-            World world = AgriCraft.proxy.getClientWorld();
-            if(world != null) {
-                TileEntity te = world.getTileEntity(message.pos);
-                if(te != null && te instanceof TileEntityPeripheral) {
-                    ((TileEntityPeripheral) te).checkSides();
-                }
-            }
-            return null;
-        }
     }
 }

@@ -1,12 +1,26 @@
 package com.infinityraider.agricraft.proxy;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.server.FMLServerHandler;
 
 @SuppressWarnings("unused")
 public class ServerProxy extends CommonProxy {
+    @Override
+    public Side getPhysicalSide() {
+        return Side.SERVER;
+    }
+
+    @Override
+    public Side getEffectiveSide() {
+        return getPhysicalSide();
+    }
+
     @Override
     public EntityPlayer getClientPlayer() {
         return null;
@@ -36,4 +50,9 @@ public class ServerProxy extends CommonProxy {
 
     @Override
     public void registerVillagerSkin(int id, String resource) {}
+
+    @Override
+    public void queueTask(Runnable task) {
+        FMLServerHandler.instance().getServer().addScheduledTask(task);
+    }
 }

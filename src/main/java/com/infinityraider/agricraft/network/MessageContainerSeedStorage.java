@@ -8,10 +8,10 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageContainerSeedStorage extends MessageAgriCraft {
+public class MessageContainerSeedStorage extends MessageBase {
     private Item item;
     private int meta;
     private int amount;
@@ -30,6 +30,25 @@ public class MessageContainerSeedStorage extends MessageAgriCraft {
     }
 
     @Override
+    public Side getMessageHandlerSide() {
+        return Side.SERVER;
+    }
+
+    @Override
+    protected void processMessage(MessageContext ctx) {
+        Container container = player.openContainer;
+        if(container!=null && container instanceof ContainerSeedStorageBase) {
+            ContainerSeedStorageBase storage = (ContainerSeedStorageBase) container;
+            storage.moveStackFromTileEntityToPlayer(slotId, new ItemStack(item, amount, meta));
+        }
+    }
+
+    @Override
+    protected IMessage getReply(MessageContext ctx) {
+        return null;
+    }
+
+    @Override
     public void fromBytes(ByteBuf buf) {
         this.item = this.readItemFromByteBuf(buf);
         this.meta = buf.readInt();
@@ -45,17 +64,5 @@ public class MessageContainerSeedStorage extends MessageAgriCraft {
         buf.writeInt(this.amount);
         this.writePlayerToByteBuf(this.player, buf);
         buf.writeInt(this.slotId);
-    }
-
-    public static class MessageHandler implements IMessageHandler<MessageContainerSeedStorage, IMessage> {
-        @Override
-        public IMessage onMessage(MessageContainerSeedStorage message, MessageContext context) {
-            Container container = message.player.openContainer;
-            if(container!=null && container instanceof ContainerSeedStorageBase) {
-                ContainerSeedStorageBase storage = (ContainerSeedStorageBase) container;
-                storage.moveStackFromTileEntityToPlayer(message.slotId, new ItemStack(message.item, message.amount, message.meta));
-            }
-            return null;
-        }
     }
 }

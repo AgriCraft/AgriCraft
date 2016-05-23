@@ -11,10 +11,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageTileEntitySeedStorage extends MessageAgriCraft {
+public class MessageTileEntitySeedStorage extends MessageBase {
     private BlockPos pos;
     private int slotId;
     private int amount;
@@ -40,10 +40,32 @@ public class MessageTileEntitySeedStorage extends MessageAgriCraft {
         }
     }
 
+    @Override
+    public Side getMessageHandlerSide() {
+        return Side.CLIENT;
+    }
+
+    @Override
+    protected void processMessage(MessageContext ctx) {
+        TileEntity te = FMLClientHandler.instance().getClient().theWorld.getTileEntity(this.pos);
+        if(te != null && te instanceof TileEntitySeedStorage) {
+            TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
+            ItemStack stack = storage.getLockedSeed();
+            stack.stackSize = this.amount;
+            stack.setTagCompound(this.getTag());
+            storage.setSlotContents(this.slotId, stack);
+        }
+    }
+
     private NBTTagCompound getTag() {
         NBTTagCompound tag = new NBTTagCompound();
         CropPlantHandler.setSeedNBT(tag, (short) growth, (short) gain, (short) strength, true);
         return tag;
+    }
+
+    @Override
+    protected IMessage getReply(MessageContext ctx) {
+        return null;
     }
 
     @Override
@@ -67,21 +89,6 @@ public class MessageTileEntitySeedStorage extends MessageAgriCraft {
             buf.writeInt(this.growth);
             buf.writeInt(this.gain);
             buf.writeInt(this.strength);
-        }
-    }
-
-    public static class MessageHandler implements IMessageHandler<MessageTileEntitySeedStorage, IMessage> {
-        @Override
-        public IMessage onMessage(MessageTileEntitySeedStorage message, MessageContext context) {
-            TileEntity te = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.pos);
-            if(te!=null && te instanceof TileEntitySeedStorage) {
-                TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
-                ItemStack stack = storage.getLockedSeed();
-                stack.stackSize = message.amount;
-                stack.setTagCompound(message.getTag());
-                storage.setSlotContents(message.slotId, stack);
-            }
-            return null;
         }
     }
 }

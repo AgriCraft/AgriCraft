@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemDebugger;
 import com.infinityraider.agricraft.network.MessageFertiliserApplied;
-import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
@@ -285,7 +285,9 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
                 IFertiliser fertiliser = (IFertiliser) heldItem.getItem();
                 if (crop.allowFertiliser(fertiliser)) {
                     crop.applyFertiliser(fertiliser, world.rand);
-                    NetworkWrapperAgriCraft.wrapper.sendToAllAround(new MessageFertiliserApplied(heldItem, pos), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
+                    NetworkWrapper.getInstance().sendToAllAround(
+                            new MessageFertiliserApplied(heldItem, pos),
+                            new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
                     if (!player.capabilities.isCreativeMode) {
                         heldItem.stackSize = heldItem.stackSize - 1;
                     }

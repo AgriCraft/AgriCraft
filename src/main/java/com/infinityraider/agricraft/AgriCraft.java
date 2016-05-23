@@ -10,7 +10,7 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.*;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftItems;
-import com.infinityraider.agricraft.network.NetworkWrapperAgriCraft;
+import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.LogHelper;
@@ -66,7 +66,7 @@ public class AgriCraft {
     @SuppressWarnings("unused")
     public static void preInit(FMLPreInitializationEvent event) {
         LogHelper.debug("Starting Pre-Initialization");
-        NetworkWrapperAgriCraft.init();
+        NetworkWrapper.getInstance().initMessages();
         proxy.initConfiguration(event);
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
         AgriCraftBlocks.init();
