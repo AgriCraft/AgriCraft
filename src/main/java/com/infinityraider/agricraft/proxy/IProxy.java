@@ -1,9 +1,16 @@
 package com.infinityraider.agricraft.proxy;
 
+import com.infinityraider.agricraft.handler.PlayerConnectToServerHandler;
+import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
+import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.utility.RenderLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -25,10 +32,14 @@ public interface IProxy {
     World getWorldByDimensionId(int dimension);
 
     /** Returns the entity in that dimension with that id */
-    Entity getEntityById(int dimension, int id);
+	default Entity getEntityById(int dimension, int id) {
+        return getEntityById(getWorldByDimensionId(dimension), id);
+    }
 
     /** Returns the entity in that World object with that id */
-    Entity getEntityById(World world, int id);
+	default Entity getEntityById(World world, int id) {
+        return world.getEntityByID(id);
+    }
 
     /** Registers the renderers on the client, does nothing on the server */
     void registerRenderers();
@@ -40,13 +51,26 @@ public interface IProxy {
     void hideItemInNEI(ItemStack stack);
 
     /** Registers all the needed event handlers to the correct event bus */
-    void registerEventHandlers();
+	default public void registerEventHandlers() {
+        PlayerInteractEventHandler playerInteractEventHandler = new PlayerInteractEventHandler();
+        MinecraftForge.EVENT_BUS.register(playerInteractEventHandler);
+
+        PlayerConnectToServerHandler playerConnectToServerHandler = new PlayerConnectToServerHandler();
+        FMLCommonHandler.instance().bus().register(playerConnectToServerHandler);
+        MinecraftForge.EVENT_BUS.register(playerConnectToServerHandler);
+
+        if (AgriCraftConfig.debug) {
+            FMLCommonHandler.instance().bus().register(new RenderLogger());
+        }
+    }
 
     /** Registers a villager skin on the client, does nothing on the server */
     void registerVillagerSkin(int id, String resource);
 
     /** Initializes the configuration file */
-    void initConfiguration(FMLPreInitializationEvent event);
+	default void initConfiguration(FMLPreInitializationEvent event) {
+        ConfigurationHandler.init(event);
+    }
 
     /** Queue a task */
     void queueTask(Runnable task);

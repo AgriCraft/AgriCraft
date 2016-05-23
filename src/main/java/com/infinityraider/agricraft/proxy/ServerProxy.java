@@ -7,49 +7,56 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.server.FMLServerHandler;
 
 @SuppressWarnings("unused")
-public class ServerProxy extends CommonProxy {
-    @Override
-    public Side getPhysicalSide() {
-        return Side.SERVER;
-    }
+public class ServerProxy implements IProxy {
 
-    @Override
-    public Side getEffectiveSide() {
-        return getPhysicalSide();
-    }
+	@Override
+	public Side getPhysicalSide() {
+		return Side.SERVER;
+	}
 
-    @Override
-    public EntityPlayer getClientPlayer() {
-        return null;
-    }
+	@Override
+	public Side getEffectiveSide() {
+		return getPhysicalSide();
+	}
 
-    @Override
-    public World getClientWorld() {
-        return null;
-    }
+	@Override
+	public EntityPlayer getClientPlayer() {
+		return null;
+	}
 
-    @Override
-    public World getWorldByDimensionId(int dimension) {
-        return FMLServerHandler.instance().getServer().worldServerForDimension(dimension);
-    }
+	@Override
+	public World getClientWorld() {
+		return null;
+	}
 
-    @Override
-    public void registerRenderers() {}
+	@Override
+	public World getWorldByDimensionId(int dimension) {
+		return FMLServerHandler.instance().getServer().worldServerForDimension(dimension);
+	}
 
-    @Override
-    public void initNEI() {}
+	@Override
+	public void registerRenderers() {
+	}
 
-    @Override
-    public void hideItemInNEI(ItemStack stack) {}
+	@Override
+	public void initNEI() {
+	}
 
-    @Override
-    public void registerEventHandlers() {super.registerEventHandlers();}
+	@Override
+	public void hideItemInNEI(ItemStack stack) {
+	}
 
-    @Override
-    public void registerVillagerSkin(int id, String resource) {}
+	@Override
+	public void registerEventHandlers() {
+		IProxy.super.registerEventHandlers();
+	}
 
-    @Override
-    public void queueTask(Runnable task) {
-        FMLServerHandler.instance().getServer().addScheduledTask(task);
-    }
+	@Override
+	public void registerVillagerSkin(int id, String resource) {
+	}
+
+	@Override
+	public void queueTask(Runnable task) {
+		FMLServerHandler.instance().getServer().addScheduledTask(task);
+	}
 }
