@@ -31,6 +31,16 @@ minecraft {
     makeObfSourceJar = false
 	useDepAts = true
 	
+	// Replace mod information in reference class.
+	replaceIn mod.reference_class
+    mod.each { prop ->
+		replace "\${mod.${prop.key}}", prop.value
+		replace "/*^", "\""
+		replace "^*/", "\"; // Default:"
+    }
+}
+
+task modInfo() {
 	println ""
 	println "#################################################"
 	println "	Quikmod"
@@ -45,16 +55,16 @@ minecraft {
 	assert mod.group == mod.group.toLowerCase();
 	assert mod.group == mod.group.replace(' ', '');
 	
-	// Replace mod information in reference class.
-	replaceIn mod.reference_class
-    mod.each { prop ->
-        replace "\${mod.${prop.key}}", prop.value
+	// Print Gradle Information
+	println ":" + "version_gradle".padRight(20) + " = " + GradleVersion.current().version
+	
+	// Print Information Tokens
+	mod.each { prop ->
         println ":" + prop.key.padRight(20) + " = " + prop.value
     }
 	
 	println "#################################################"
 	println ""
-	
 }
 
 repositories {
