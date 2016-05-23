@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.blocks;
 
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.*;
 import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.cropplant.CropPlantAgriCraftShearable;
@@ -10,7 +11,6 @@ import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementH
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.utility.LogHelper;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import com.infinityraider.agricraft.utility.exception.MissingArgumentsException;
 import net.minecraft.block.Block;
@@ -147,7 +147,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
                 CropPlantHandler.registerPlant(new CropPlantAgriCraftShearable(this, shearable));
             }
         } catch (Exception e) {
-            LogHelper.printStackTrace(e);
+            AgriCore.getLogger("AgriCraft").trace(e);
         }
     }
 

@@ -6,14 +6,11 @@ import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
-import com.infinityraider.agricraft.utility.LogHelper;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,7 +31,8 @@ public class ItemClipping extends ItemBase {
 	@SideOnly(Side.CLIENT)
 	public static final class ItemData {
 
-		private ItemData() {}
+		private ItemData() {
+		}
 
 		public static final String BASE_LOCATION = "agricraftitem:agricraft/items/clipping$";
 
@@ -77,11 +75,12 @@ public class ItemClipping extends ItemBase {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerItemRenderer() {
-		LogHelper.debug("Registering Clipping Renderers...");
+		/*
+		AgriCore.getLogger("AgriCraft").debug("Registering Clipping Renderers...");
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, this::getModel);
 		ModelBakery.registerItemVariants(this, textures.values().toArray(new ModelResourceLocation[textures.values().size()]));
-		LogHelper.debug("Clipping Renderers Registered!");
-
+		AgriCore.getLogger("AgriCraft").debug("Clipping Renderers Registered!");
+		 */
 	}
 
 	@SideOnly(Side.CLIENT)

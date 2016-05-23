@@ -8,7 +8,7 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.handler.config.MutationConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -93,7 +93,7 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (world.getBlockState(pos).getBlock() == AgriCraftBlocks.blockCrop) {
-			LogHelper.debug("Trying to plant seed " + stack.getItem().getUnlocalizedName() + " on crops");
+			AgriCore.getLogger("AgriCraft").debug("Trying to plant seed " + stack.getItem().getUnlocalizedName() + " on crops");
 			return EnumActionResult.SUCCESS;
 		}
 		if (CropPlantHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, pos)) {

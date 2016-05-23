@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.IOHelper;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -33,14 +33,14 @@ public class ConfigurationHandler {
 	public static final synchronized void addConfigurable(Class clazz) {
 		if (!configurables.containsKey(clazz)) {
 			List<Field> fields = new ArrayList<>();
-			//LogHelper.debug("Registering Configurable: " + clazz.getCanonicalName());
+			//AgriCore.getLogger("AgriCraft").debug("Registering Configurable: " + clazz.getCanonicalName());
 			for (Field f : clazz.getDeclaredFields()) {
 				if (f.getAnnotation(AgriCraftConfigurable.class) != null) {
-					//LogHelper.debug("Handling Configurable Field: " + f.getName());
+					//AgriCore.getLogger("AgriCraft").debug("Handling Configurable Field: " + f.getName());
 					if (!Modifier.isStatic(f.getModifiers())) {
-						LogHelper.error("Configurable Field: " + f.getName() + " is not static!");
+						AgriCore.getLogger("AgriCraft").error("Configurable Field: " + f.getName() + " is not static!");
 					} else if (Modifier.isFinal(f.getModifiers())) {
-						LogHelper.error("Configurable Field: " + f.getName() + " is final!");
+						AgriCore.getLogger("AgriCraft").error("Configurable Field: " + f.getName() + " is final!");
 					} else {
 						fields.add(f);
 					}
@@ -55,7 +55,7 @@ public class ConfigurationHandler {
 
 	protected static final void handleConfigurable(Field f) {
 
-		//LogHelper.debug("Loading Configurable Field: " + e.getName());
+		//AgriCore.getLogger("AgriCraft").debug("Loading Configurable Field: " + e.getName());
 		final AgriCraftConfigurable anno = f.getAnnotation(AgriCraftConfigurable.class);
 		try {
 
@@ -75,13 +75,13 @@ public class ConfigurationHandler {
 				float max = Float.parseFloat(anno.max());
 				f.set(null, config.getFloat(anno.key(), anno.category().name, (float) obj, min, max, anno.comment()));
 			} else {
-				LogHelper.debug("Bad Type: " + f.getType().toString());
+				AgriCore.getLogger("AgriCraft").debug("Bad Type: " + f.getType().toString());
 			}
 
 		} catch (NumberFormatException e) {
-			LogHelper.debug("Invalid parameter bound!");
+			AgriCore.getLogger("AgriCraft").debug("Invalid parameter bound!");
 		} catch (IllegalAccessException | IllegalArgumentException | SecurityException e) {
-			LogHelper.printStackTrace(e);
+			AgriCore.getLogger("AgriCraft").trace(e);
 		}
 
 	}
@@ -92,7 +92,7 @@ public class ConfigurationHandler {
 		// Load
 		loadConfiguration();
 		// Log
-		LogHelper.debug("Configuration Loaded");
+		AgriCore.getLogger("AgriCraft").debug("Configuration Loaded");
 	}
 
 	private static void checkAndCreateConfig(FMLPreInitializationEvent event) {
@@ -114,7 +114,7 @@ public class ConfigurationHandler {
 	//read values from the config
 	private static void loadConfiguration() {
 		// Annotations
-		LogHelper.debug("Loading configuration values!");
+		AgriCore.getLogger("AgriCraft").debug("Loading configuration values!");
 		configurables.values().forEach((l) -> l.forEach((e) -> handleConfigurable(e)));
 		//irrigation
 		AgriCraftConfig.sprinklerRatePerHalfSecond = Math.round(AgriCraftConfig.sprinklerRatePerSecond / 2);
@@ -180,7 +180,7 @@ public class ConfigurationHandler {
 	public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
 		if (event.getModID().equals(Reference.MOD_ID)) {
 			loadConfiguration();
-			LogHelper.debug("Configuration reloaded.");
+			AgriCore.getLogger("AgriCraft").debug("Configuration reloaded.");
 		}
 	}
 }

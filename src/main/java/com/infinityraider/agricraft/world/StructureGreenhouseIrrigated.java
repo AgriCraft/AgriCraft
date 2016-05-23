@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -308,7 +308,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
             tank.setMaterial(new ItemStack(Blocks.planks, 1, 0));
             if(multiBlockify) {
                 tank.getMultiBlockManager().onBlockPlaced(world, pos, tank);
-                LogHelper.debug("Creating Multiblock at (" + xCoord + ", " + yCoord + ", " + zCoord + ")");
+                AgriCore.getLogger("AgriCraft").debug("Creating Multiblock at (" + xCoord + ", " + yCoord + ", " + zCoord + ")");
             }
             return true;
         }

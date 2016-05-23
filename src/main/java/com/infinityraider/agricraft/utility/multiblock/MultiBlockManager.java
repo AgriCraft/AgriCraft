@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.utility.multiblock;
 
 import com.infinityraider.agricraft.utility.CoordinateIterator;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -108,7 +108,7 @@ public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData>
 
     private int calculateDimensionOffsetBackwards(World world, BlockPos pos, IMultiBlockComponent component, CoordinateIterator it) {
         if (!it.isActive()) {
-            LogHelper.debug("ERROR WHEN ITERATING COORDINATES: ITERATOR NOT ACTIVE");
+            AgriCore.getLogger("AgriCraft").debug("ERROR WHEN ITERATING COORDINATES: ITERATOR NOT ACTIVE");
             return 0;
         }
         IMultiBlockPartData data = component.getMultiBlockData();
@@ -126,7 +126,7 @@ public class MultiBlockManager implements IMultiBlockManager<MultiBlockPartData>
 
     private int calculateDimensionOffsetForwards(World world, BlockPos pos, IMultiBlockComponent component, CoordinateIterator it) {
         if (!it.isActive()) {
-            LogHelper.debug("ERROR WHEN ITERATING COORDINATES: ITERATOR NOT ACTIVE");
+            AgriCore.getLogger("AgriCraft").debug("ERROR WHEN ITERATING COORDINATES: ITERATOR NOT ACTIVE");
             return 0;
         }
         IMultiBlockPartData data = component.getMultiBlockData();

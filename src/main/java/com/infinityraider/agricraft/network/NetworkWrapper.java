@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -72,7 +72,7 @@ public class NetworkWrapper {
             wrapper.registerMessage(new MessageHandler<REQ, REPLY>(), message, nextId, side);
             nextId = nextId + 1;
         } catch (Exception e) {
-            LogHelper.printStackTrace(e);
+            AgriCore.getLogger("AgriCraft").trace(e);
         }
     }
 }

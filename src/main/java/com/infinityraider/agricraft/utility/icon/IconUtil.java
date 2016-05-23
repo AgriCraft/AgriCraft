@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.utility.icon;
 
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -71,8 +71,8 @@ public final class IconUtil {
 			return sprite;
 		} else {
 			final int fail = failCounter.addAndGet(1);
-			LogHelper.debug("Failed to load Icon: " + resourceLocation);
-			LogHelper.debug("Icon load failure #" + fail);
+			AgriCore.getLogger("AgriCraft").debug("Failed to load Icon: " + resourceLocation);
+			AgriCore.getLogger("AgriCraft").debug("Icon load failure #" + fail);
 			return getDefaultIcon();
 		}
 	}
@@ -105,7 +105,7 @@ public final class IconUtil {
 		try {
 			return Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(new ResourceLocation(texturePath));
 		} catch (Exception e) {
-			LogHelper.debug(e.getLocalizedMessage());
+			AgriCore.getLogger("AgriCraft").debug(e.getLocalizedMessage());
 			return getDefaultIcon();
 		}
 	}
@@ -139,7 +139,7 @@ public final class IconUtil {
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			// Shoot
 		} catch (SecurityException e) {
-			LogHelper.debug("Locked out of TextureMap...");
+			AgriCore.getLogger("AgriCraft").debug("Locked out of TextureMap...");
 		}
 		return matches;
 	}

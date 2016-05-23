@@ -8,7 +8,7 @@ import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
@@ -192,7 +192,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         int xCoord = this.getXWithOffset(x, z);
         int yCoord = this.getYWithOffset(y);
         int zCoord = this.getZWithOffset(x, z);
-        LogHelper.debug("Placing crop at ("+xCoord+","+yCoord+","+zCoord+")");
+        AgriCore.getLogger("AgriCraft").debug("Placing crop at ("+xCoord+","+yCoord+","+zCoord+")");
         if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
             BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
             world.setBlockState(pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockCrop.getDefaultState().withProperty(AgriCraftProperties.GROWTHSTAGE, 0), 2);

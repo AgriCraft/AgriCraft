@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.handler.config.AgriCraftConfigurable;
 import com.infinityraider.agricraft.handler.config.ConfigCategory;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.Block;
 
 public class AgriCraftBlocks {
@@ -73,6 +73,6 @@ public class AgriCraftBlocks {
 		if (enableGrates) {
 			blockGrate = new BlockGrate();
 		}
-		LogHelper.debug("Blocks registered");
+		AgriCore.getLogger("AgriCraft").debug("Blocks registered");
 	}
 }

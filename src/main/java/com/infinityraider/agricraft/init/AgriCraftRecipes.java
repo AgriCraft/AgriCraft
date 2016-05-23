@@ -10,7 +10,7 @@ import com.infinityraider.agricraft.items.crafting.RecipeShapelessCustomWood;
 import com.infinityraider.agricraft.reference.Data;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
@@ -128,7 +128,7 @@ public class AgriCraftRecipes {
                     GameRegistry.addRecipe(new ShapelessOreRecipe(nugget, "ingot" + oreName));
                 }
             }
-            LogHelper.debug("Recipes Registered");
+            AgriCore.getLogger("AgriCraft").debug("Recipes Registered");
         }
     }
 
@@ -180,7 +180,7 @@ public class AgriCraftRecipes {
                 (((ItemBlockCustomWood) Item.getItemFromBlock((BlockCustomWood) obj))).getSubItems(woodList);
                 return true;
             } catch(Exception e) {
-                LogHelper.printStackTrace(e);
+                AgriCore.getLogger("AgriCraft").trace(e);
             }
         }
         return false;

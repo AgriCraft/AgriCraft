@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.handler.config;
 
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.item.Item;
@@ -31,7 +31,7 @@ public class MutationConfig {
         try {
             return readMutations(new InputStreamReader(new FileInputStream(jsonPath)));
         } catch (FileNotFoundException e) {
-            LogHelper.printStackTrace(e);
+            AgriCore.getLogger("AgriCraft").trace(e);
             return new ArrayList<>();
         }
     }
@@ -48,8 +48,8 @@ public class MutationConfig {
                 }
             }
         } catch(IOException e) {
-            LogHelper.info("Parsing mutations failed");
-            LogHelper.printStackTrace(e);
+            AgriCore.getLogger("AgriCraft").info("Parsing mutations failed");
+            AgriCore.getLogger("AgriCraft").trace(e);
         }
         return list;
 
@@ -63,8 +63,8 @@ public class MutationConfig {
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(jsonPath))) {
             gson.toJson(array, writer);
         } catch(IOException e) {
-            LogHelper.info("Writing default mutations failed");
-            LogHelper.printStackTrace(e);
+            AgriCore.getLogger("AgriCraft").info("Writing default mutations failed");
+            AgriCore.getLogger("AgriCraft").trace(e);
         }
     }
 
@@ -95,7 +95,7 @@ public class MutationConfig {
             }
         } catch (UnsupportedEncodingException | NullPointerException e) {
             // Oh well...
-            LogHelper.printStackTrace(e);
+            AgriCore.getLogger("AgriCraft").trace(e);
         }
     }
 

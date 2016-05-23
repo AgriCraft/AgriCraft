@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.utility;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfigurable;
 import com.infinityraider.agricraft.handler.config.ConfigCategory;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
@@ -30,7 +31,7 @@ public class RenderLogger {
 				timer = 0;
 
 				int callsPerSecond = RenderChannel.renderCallCounter.getAndSet(0);
-				LogHelper.debug("Calls since previous output: " + callsPerSecond);
+				AgriCore.getLogger("AgriRender").debug("Calls since previous output: " + callsPerSecond);
 			}
 		}
 	}

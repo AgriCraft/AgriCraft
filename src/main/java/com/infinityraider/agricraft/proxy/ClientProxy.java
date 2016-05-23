@@ -14,7 +14,7 @@ import com.infinityraider.agricraft.init.ResourceCrops;
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -92,7 +92,7 @@ public class ClientProxy extends CommonProxy {
                         BlockRendererRegistry.getInstance().registerCustomBlockRenderer(block);
                     }
                 } catch (IllegalAccessException e) {
-                    LogHelper.printStackTrace(e);
+                    AgriCore.getLogger("AgriCraft").trace(e);
                 }
             }
         }
@@ -108,7 +108,7 @@ public class ClientProxy extends CommonProxy {
                         ((ItemBase) obj).registerItemRenderer();
                     }
                 }catch (IllegalAccessException e) {
-                    LogHelper.printStackTrace(e);
+                    AgriCore.getLogger("AgriCraft").trace(e);
                 }
             }
         }
@@ -118,7 +118,7 @@ public class ClientProxy extends CommonProxy {
 			try {
 				seed.registerItemRenderer();
 			} catch (Exception e) {
-				LogHelper.printStackTrace(e);
+				AgriCore.getLogger("AgriCraft").trace(e);
 			}
 		}
 		
@@ -132,42 +132,42 @@ public class ClientProxy extends CommonProxy {
 		
 		// Custom Crops
 		if (CustomCrops.customSeeds != null) {
-			LogHelper.debug("Starting custom crop renderer registration...");
+			AgriCore.getLogger("AgriCraft").debug("Starting custom crop renderer registration...");
 			for (ItemModSeed seed : CustomCrops.customSeeds) {
 				try {
 					seed.registerItemRenderer();
-					LogHelper.debug("Registered Renderer for: " + seed.getRegistryName());
+					AgriCore.getLogger("AgriCraft").debug("Registered Renderer for: " + seed.getRegistryName());
 				} catch (Exception e) {
-					LogHelper.printStackTrace(e);
+					AgriCore.getLogger("AgriCraft").trace(e);
 				}
 			}
-			LogHelper.debug("Registered custom crop renderers!");
+			AgriCore.getLogger("AgriCraft").debug("Registered custom crop renderers!");
 		}
 		
 		// Resource Crops
 		if (ResourceCrops.vanillaSeeds != null) {
-			LogHelper.debug("Starting vanillia crop renderer registration...");
+			AgriCore.getLogger("AgriCraft").debug("Starting vanillia crop renderer registration...");
 			for (ItemModSeed seed : ResourceCrops.vanillaSeeds) {
 				try {
 					seed.registerItemRenderer();
-					LogHelper.info("Registered Renderer for: " + seed.getRegistryName());
+					AgriCore.getLogger("AgriCraft").info("Registered Renderer for: " + seed.getRegistryName());
 				} catch (Exception e) {
-					LogHelper.printStackTrace(e);
+					AgriCore.getLogger("AgriCraft").trace(e);
 				}
 			}
-			LogHelper.debug("Registered vanillia crop renderers!");
+			AgriCore.getLogger("AgriCraft").debug("Registered vanillia crop renderers!");
 		}
 		if (ResourceCrops.modSeeds != null) {
-			LogHelper.debug("Starting resource crop renderer registration...");
+			AgriCore.getLogger("AgriCraft").debug("Starting resource crop renderer registration...");
 			for (ItemModSeed seed : ResourceCrops.modSeeds) {
 				try {
 					seed.registerItemRenderer();
-					LogHelper.info("Registered Renderer for: " + seed.getRegistryName());
+					AgriCore.getLogger("AgriCraft").info("Registered Renderer for: " + seed.getRegistryName());
 				} catch (Exception e) {
-					LogHelper.printStackTrace(e);
+					AgriCore.getLogger("AgriCraft").trace(e);
 				}
 			}
-			LogHelper.debug("Registered resource crop renderers!");
+			AgriCore.getLogger("AgriCraft").debug("Registered resource crop renderers!");
 		}
 		
 		// Nuggets
@@ -179,7 +179,7 @@ public class ClientProxy extends CommonProxy {
             //VillagerRegistry.instance().registerVillagerSkin(78943, new ResourceLocation("textures/entity/villager/farmer.png"));  //For now, it uses the texture for the vanilla farmer
         }
 
-        LogHelper.debug("Renderers registered");
+        AgriCore.getLogger("AgriCraft").debug("Renderers registered");
     }
 
     @Override

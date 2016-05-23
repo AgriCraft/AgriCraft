@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.v1.IDebuggable;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.renderers.RenderUtil;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -103,9 +103,9 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 */
 	public final void setMaterial(ItemStack stack) {
 		if (stack == null) {
-			LogHelper.debug("TECW: Passed null stack!");
+			AgriCore.getLogger("AgriCraft").debug("TECW: Passed null stack!");
 		} else if (!(stack.getItem() instanceof ItemBlock)) {
-			LogHelper.debug("TECW: Passsed wrong stack!");
+			AgriCore.getLogger("AgriCraft").debug("TECW: Passsed wrong stack!");
 		} else {
 			this.setMaterial(stack.getTagCompound());
 		}
@@ -119,11 +119,11 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	 */
 	private void setMaterial(NBTTagCompound tag) {
 		if (tag == null) {
-			LogHelper.debug("TECW: Passed Null Tag!");
+			AgriCore.getLogger("AgriCraft").debug("TECW: Passed Null Tag!");
 		} else if (!tag.hasKey(AgriCraftNBT.MATERIAL)) {
-			LogHelper.debug("TECW: Tag missing material!");
+			AgriCore.getLogger("AgriCraft").debug("TECW: Tag missing material!");
 		} else if (!tag.hasKey(AgriCraftNBT.MATERIAL_META)) {
-			LogHelper.debug("TECW: Tag missing meta!");
+			AgriCore.getLogger("AgriCraft").debug("TECW: Tag missing meta!");
 		} else {
 			this.setMaterial(tag.getString(AgriCraftNBT.MATERIAL), tag.getInteger(AgriCraftNBT.MATERIAL_META));
 		}
@@ -139,7 +139,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	public final void setMaterial(String name, int meta) {
 		Block block = Block.getBlockFromName(name);
 		if (block == Blocks.air) {
-			LogHelper.debug("TECW: Material Defaulted!");
+			AgriCore.getLogger("AgriCraft").debug("TECW: Material Defaulted!");
 			this.setMaterial(DEFAULT_MATERIAL, DEFAULT_META);
 		} else {
 			this.setMaterial(block, meta);

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -43,7 +43,7 @@ public class MissingJsonHandler {
                 try {
                     set = ( Set<ModelResourceLocation>) field.get(loader);
                 } catch(Exception e) {
-                    LogHelper.printStackTrace(e);
+                    AgriCore.getLogger("AgriCraft").trace(e);
                     set = new HashSet<>();
                 }
                 field.setAccessible(false);

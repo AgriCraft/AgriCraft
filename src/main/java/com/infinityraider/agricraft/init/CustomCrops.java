@@ -8,7 +8,7 @@ import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.utility.IOHelper;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
@@ -42,7 +42,7 @@ public class CustomCrops {
 				//cropData[7]: shearable drop (optional)
 				boolean success = cropData.length == 7 || cropData.length == 8;
 				String errorMsg = "Incorrect amount of arguments, arguments should be: (name, fruit:fruitMeta, soil, baseBlock:baseBlockMeta, tier, renderType, information, shearable (optional) )";
-				LogHelper.debug(new StringBuffer("parsing ").append(cropsRawData[i]));
+				AgriCore.getLogger("AgriCraft").debug(new StringBuffer("parsing ").append(cropsRawData[i]));
 				if (success) {
 					ItemStack fruitStack = IOHelper.getStack(cropData[1]);
 					errorMsg = "Invalid fruit";
@@ -66,7 +66,7 @@ public class CustomCrops {
 							customCrops[i] = new BlockModPlant(name, fruitStack, soil, RequirementType.BELOW, base, tier, renderType, shearable);
 						} catch (Exception e) {
 							if (AgriCraftConfig.debug) {
-								LogHelper.printStackTrace(e);
+								AgriCore.getLogger("AgriCraft").trace(e);
 							}
 							break;
 						}
@@ -80,10 +80,10 @@ public class CustomCrops {
 					}
 				}
 				if (!success) {
-					LogHelper.info(new StringBuffer("Error when adding custom crop: ").append(errorMsg).append(" (line: ").append(cropsRawData[i]).append(")"));
+					AgriCore.getLogger("AgriCraft").info(new StringBuffer("Error when adding custom crop: ").append(errorMsg).append(" (line: ").append(cropsRawData[i]).append(")"));
 				}
 			}
-			LogHelper.info("Custom crops registered");
+			AgriCore.getLogger("AgriCraft").info("Custom crops registered");
 		}
 	}
 
@@ -99,10 +99,10 @@ public class CustomCrops {
 				error = true;
 			}
 			if (error) {
-				LogHelper.info("Error when wiping tall grass drops: couldn't get seed list");
+				AgriCore.getLogger("AgriCraft").info("Error when wiping tall grass drops: couldn't get seed list");
 			} else {
 				seedList.clear();
-				LogHelper.info("Wiped seed entries");
+				AgriCore.getLogger("AgriCraft").info("Wiped seed entries");
 			}
 		}
 		String[] rawData = IOHelper.getLinesArrayFromData(ConfigurationHandler.readGrassDrops());
@@ -110,7 +110,7 @@ public class CustomCrops {
 			String[] dropData = IOHelper.getData(data);
 			boolean success = dropData.length == 2;
 			String errorMsg = "Incorrect amount of arguments";
-			LogHelper.debug("parsing " + data);
+			AgriCore.getLogger("AgriCraft").debug("parsing " + data);
 			if (success) {
 				ItemStack seedStack = IOHelper.getStack(dropData[0]);
 				Item drop = seedStack != null ? seedStack.getItem() : null;
@@ -120,11 +120,11 @@ public class CustomCrops {
 					int meta = seedStack.getItemDamage();
 					int weight = Integer.parseInt(dropData[1]);
 					MinecraftForge.addGrassSeed(new ItemStack(drop, 1, meta), weight);
-					LogHelper.info(new StringBuffer("Registered ").append(Item.itemRegistry.getNameForObject(drop)).append(":").append(meta).append(" as a drop from grass (weight: ").append(weight).append(')'));
+					AgriCore.getLogger("AgriCraft").info(new StringBuffer("Registered ").append(Item.itemRegistry.getNameForObject(drop)).append(":").append(meta).append(" as a drop from grass (weight: ").append(weight).append(')'));
 				}
 			}
 			if (!success) {
-				LogHelper.info(new StringBuffer("Error when adding grass drop: ").append(errorMsg).append(" (line: ").append(data).append(")"));
+				AgriCore.getLogger("AgriCraft").info(new StringBuffer("Error when adding grass drop: ").append(errorMsg).append(" (line: ").append(data).append(")"));
 			}
 		}
 	}

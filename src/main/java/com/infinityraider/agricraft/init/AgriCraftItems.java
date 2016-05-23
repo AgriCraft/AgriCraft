@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.handler.config.AgriCraftConfigurable;
 import com.infinityraider.agricraft.handler.config.ConfigCategory;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.items.*;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.item.Item;
 
 public class AgriCraftItems {
@@ -65,6 +65,6 @@ public class AgriCraftItems {
 		if (enableClipper) {
 			clipper = new ItemClipper();
 		}
-		LogHelper.debug("Items Registered");
+		AgriCore.getLogger("AgriCraft").debug("Items Registered");
 	}
 }

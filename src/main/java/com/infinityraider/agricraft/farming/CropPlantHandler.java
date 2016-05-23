@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.utility.IOHelper;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
 import net.minecraft.block.BlockCrops;
@@ -58,7 +58,7 @@ public class CropPlantHandler {
      */
     public static void registerPlant(CropPlant plant) throws DuplicateCropPlantException {
         ItemStack stack = plant.getSeed();
-        LogHelper.debug("Registering plant for " + stack.getUnlocalizedName());
+        AgriCore.getLogger("AgriCraft").debug("Registering plant for " + stack.getUnlocalizedName());
         Item seed = stack.getItem();
         int meta = stack.getItemDamage();
         HashMap<Integer, CropPlant> entryForSeed = cropPlants.get(seed);
@@ -108,8 +108,8 @@ public class CropPlantHandler {
     		registerPlant(plant);
             GrowthRequirementHandler.addSoil(plant.getGrowthRequirement().getSoil());
     	} catch (DuplicateCropPlantException e) {
-    		LogHelper.debug("Unable to register duplicate plant: " + plant.getSeed().getUnlocalizedName());
-    		LogHelper.printStackTrace(e);
+    		AgriCore.getLogger("AgriCraft").debug("Unable to register duplicate plant: " + plant.getSeed().getUnlocalizedName());
+    		AgriCore.getLogger("AgriCraft").trace(e);
     	}
     }
 
@@ -372,7 +372,7 @@ public class CropPlantHandler {
             return;
         }
         cropPlants.get(seed.getItem()).get(seed.getItemDamage()).setBlackListStatus(true);
-        LogHelper.debug("Added seed to blacklist: " + Item.itemRegistry.getNameForObject(seed.getItem()) + ":" + seed.getItemDamage());
+        AgriCore.getLogger("AgriCraft").debug("Added seed to blacklist: " + Item.itemRegistry.getNameForObject(seed.getItem()) + ":" + seed.getItemDamage());
     }
 
     /**
@@ -400,7 +400,7 @@ public class CropPlantHandler {
         else {
             removeFromBlackListArray(seed);
         }
-        LogHelper.debug("Removed seed from blacklist: " + Item.itemRegistry.getNameForObject(seed.getItem()) + ":" + seed.getItemDamage());
+        AgriCore.getLogger("AgriCraft").debug("Removed seed from blacklist: " + Item.itemRegistry.getNameForObject(seed.getItem()) + ":" + seed.getItemDamage());
     }
 
     /** Removes a SEED from the blacklist array */

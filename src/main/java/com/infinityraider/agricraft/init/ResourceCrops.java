@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.blocks.BlockModPlant;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.reference.Data;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -33,7 +33,7 @@ public class ResourceCrops {
 			initVanillaResources();
 			//modded resources
 			initModdedResources();
-			LogHelper.debug("Resource crops registered");
+			AgriCore.getLogger("AgriCraft").debug("Resource crops registered");
 		}
 	}
 
@@ -57,7 +57,7 @@ public class ResourceCrops {
 				vanillaCrops.add(plant);
 				vanillaSeeds.add(plant.getSeed());
 			} catch (Exception e) {
-				LogHelper.printStackTrace(e);
+				AgriCore.getLogger("AgriCraft").trace(e);
 			}
 		}
 	}
@@ -75,7 +75,7 @@ public class ResourceCrops {
 					modCrops.add(plant);
 					modSeeds.add(plant.getSeed());
 				} catch (Exception e) {
-					LogHelper.printStackTrace(e);
+					AgriCore.getLogger("AgriCraft").trace(e);
 				}
 			}
 		}
