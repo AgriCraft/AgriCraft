@@ -12,19 +12,24 @@ import org.apache.logging.log4j.Level;
  * @author RlonRyan
  */
 public class ModLogger implements AgriLogAdapter {
-	
+
 	public void log(Level logLevel, Object source, String format, Object... objects) {
-		FMLLog.log(String.valueOf(source), logLevel, MessageFormat.format(format, objects));
+		try {
+			FMLLog.log(String.valueOf(source), logLevel, MessageFormat.format(format, objects));
+		} catch (IllegalArgumentException ex) {
+			// This is bad...
+			FMLLog.log(String.valueOf(source), logLevel, format);
+		}
 	}
-	
+
 	@Override
 	public void all(Object source, String format, Object... objects) {
-        log(Level.ALL, source, format, objects);
-    }
+		log(Level.ALL, source, format, objects);
+	}
 
 	@Override
 	public void debug(Object source, String format, Object... objects) {
-        log(Level.INFO, source, "[AGRI-DEBUG]: " + format, objects);
+		log(Level.INFO, source, "[AGRI-DEBUG]: " + format, objects);
 	}
 
 	@Override
@@ -51,5 +56,5 @@ public class ModLogger implements AgriLogAdapter {
 	public void severe(Object source, String format, Object... objects) {
 		log(Level.FATAL, source, format, objects);
 	}
-	
+
 }
