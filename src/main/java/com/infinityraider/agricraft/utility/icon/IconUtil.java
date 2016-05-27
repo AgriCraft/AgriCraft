@@ -71,8 +71,8 @@ public final class IconUtil {
 			return sprite;
 		} else {
 			final int fail = failCounter.addAndGet(1);
-			AgriCore.getLogger("AgriCraft").debug("Failed to load Icon: " + resourceLocation);
-			AgriCore.getLogger("AgriCraft").debug("Icon load failure #" + fail);
+			//AgriCore.getLogger("AgriCraft").debug("Failed to load Icon: " + resourceLocation);
+			//AgriCore.getLogger("AgriCraft").debug("Icon load failure #" + fail);
 			return getDefaultIcon();
 		}
 	}

@@ -14,9 +14,6 @@ import com.infinityraider.agricraft.utility.IOHelper;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -438,15 +435,6 @@ public class CropPlantHandler {
      */
     public static void init() {
         //Register vanilla plants. Now with less duplication.
-        OreDictionary.registerOre("seedMelon", Items.melon_seeds);
-        OreDictionary.registerOre("cropMelon", Items.melon);
-        OreDictionary.registerOre("seedPumpkin", Items.pumpkin_seeds);
-        OreDictionary.registerOre("cropPumpkin", Blocks.pumpkin);
-        
-        suppressedRegisterPlant(new CropPlantVanilla((BlockCrops) net.minecraft.init.Blocks.wheat, (ItemSeeds) net.minecraft.init.Items.wheat_seeds, "wheat"));
-        suppressedRegisterPlant(new CropPlantStem((ItemSeeds) Items.melon_seeds, Blocks.melon_block));
-        suppressedRegisterPlant(new CropPlantStem((ItemSeeds) Items.pumpkin_seeds, Blocks.pumpkin));
-        suppressedRegisterPlant(new CropPlantNetherWart());
 
         //Register crops specified through the API.
         plantsToRegister.forEach(CropPlantHandler::suppressedRegisterPlant);

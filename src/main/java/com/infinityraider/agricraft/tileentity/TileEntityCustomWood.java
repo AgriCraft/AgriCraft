@@ -69,7 +69,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 		tag.setInteger(AgriCraftNBT.MATERIAL_META, this.getMaterialMeta());
 		this.writeNBT(tag);
 	}
-	
+
 	protected void writeNBT(NBTTagCompound tag) {};
 
 	/**
@@ -82,7 +82,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 		this.setMaterial(tag);
 		this.readNBT(tag);
 	}
-	
+
 	protected void readNBT(NBTTagCompound tag) {};
 
 	/**
@@ -106,6 +106,8 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 			AgriCore.getLogger("AgriCraft").debug("TECW: Passed null stack!");
 		} else if (!(stack.getItem() instanceof ItemBlock)) {
 			AgriCore.getLogger("AgriCraft").debug("TECW: Passsed wrong stack!");
+		} else if (stack.getTagCompound() == null) {
+			AgriCore.getLogger("AgriCraft").debug("TECW: Stack missing NBT Tag!");
 		} else {
 			this.setMaterial(stack.getTagCompound());
 		}

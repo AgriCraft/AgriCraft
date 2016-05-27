@@ -9,8 +9,6 @@ import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftCrops;
 import com.infinityraider.agricraft.init.AgriCraftItems;
-import com.infinityraider.agricraft.init.CustomCrops;
-import com.infinityraider.agricraft.init.ResourceCrops;
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
@@ -131,44 +129,6 @@ public class ClientProxy implements IProxy {
 		registerRenderers function in each class...
 		 */
 		// Custom Crops
-		if (CustomCrops.customSeeds != null) {
-			AgriCore.getLogger("AgriCraft").debug("Starting custom crop renderer registration...");
-			for (ItemModSeed seed : CustomCrops.customSeeds) {
-				try {
-					seed.registerItemRenderer();
-					AgriCore.getLogger("AgriCraft").debug("Registered Renderer for: " + seed.getRegistryName());
-				} catch (Exception e) {
-					AgriCore.getLogger("AgriCraft").trace(e);
-				}
-			}
-			AgriCore.getLogger("AgriCraft").debug("Registered custom crop renderers!");
-		}
-
-		// Resource Crops
-		if (ResourceCrops.vanillaSeeds != null) {
-			AgriCore.getLogger("AgriCraft").debug("Starting vanillia crop renderer registration...");
-			for (ItemModSeed seed : ResourceCrops.vanillaSeeds) {
-				try {
-					seed.registerItemRenderer();
-					AgriCore.getLogger("AgriCraft").info("Registered Renderer for: " + seed.getRegistryName());
-				} catch (Exception e) {
-					AgriCore.getLogger("AgriCraft").trace(e);
-				}
-			}
-			AgriCore.getLogger("AgriCraft").debug("Registered vanillia crop renderers!");
-		}
-		if (ResourceCrops.modSeeds != null) {
-			AgriCore.getLogger("AgriCraft").debug("Starting resource crop renderer registration...");
-			for (ItemModSeed seed : ResourceCrops.modSeeds) {
-				try {
-					seed.registerItemRenderer();
-					AgriCore.getLogger("AgriCraft").info("Registered Renderer for: " + seed.getRegistryName());
-				} catch (Exception e) {
-					AgriCore.getLogger("AgriCraft").trace(e);
-				}
-			}
-			AgriCore.getLogger("AgriCraft").debug("Registered resource crop renderers!");
-		}
 
 		// Nuggets
 		OreDictHelper.registerNuggetRenderers();

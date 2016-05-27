@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.compatibility;
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.blocks.BlockCrop;
+import com.infinityraider.agricraft.compatibility.json.JsonHelper;
 import com.infinityraider.agricraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.infinityraider.agricraft.compatibility.waila.WailaHelper;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
@@ -118,6 +119,7 @@ public class CompatibilityHandler {
 	@SuppressWarnings("unchecked")
 	private void initCompatModules() {
 		Class[] classes = {
+			JsonHelper.class,
 			ThaumcraftHelper.class,
 			WailaHelper.class
 		};

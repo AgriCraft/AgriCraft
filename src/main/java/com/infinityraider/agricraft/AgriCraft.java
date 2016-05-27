@@ -99,13 +99,10 @@ public class AgriCraft {
 		// Core
 		CoreHandler.postInit(event);
         //Have to do this in postInit because some mods don't register their items/blocks until init
-        ResourceCrops.init();
-        CustomCrops.init();
         AgriCraftRecipes.init();
         GrowthRequirementHandler.init();
         CropPlantHandler.init();
         WorldGen.init();
-        CustomCrops.initGrassSeeds();
         CompatibilityHandler.getInstance().postInit();
         AgriCore.getLogger("AgriCraft").debug("Post-Initialization Complete");
     }
@@ -114,12 +111,8 @@ public class AgriCraft {
     @SuppressWarnings("unused")
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
         MutationHandler.init();
+		CompatibilityHandler.getInstance().serverStart();
         //NEIHelper.setServerConfigs();
-    }
-
-    @Mod.EventHandler
-    @SuppressWarnings("unused")
-    public void onServerStart(FMLServerStartingEvent event) {
     }
 
     @Mod.EventHandler
