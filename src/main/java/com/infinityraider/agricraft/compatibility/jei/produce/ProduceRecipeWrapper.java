@@ -4,7 +4,6 @@
 package com.infinityraider.agricraft.compatibility.jei.produce;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import java.util.List;
 import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -12,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 /**
  *
@@ -22,7 +22,7 @@ public class ProduceRecipeWrapper implements IRecipeWrapper {
 	private final List input;
 	private final List<ItemStack> output;
 
-	public ProduceRecipeWrapper(ICropPlant recipe) {
+	public ProduceRecipeWrapper(IAgriCraftPlant recipe) {
 		ImmutableList.Builder builder = ImmutableList.builder();
 
 		builder.add(recipe.getSeed());

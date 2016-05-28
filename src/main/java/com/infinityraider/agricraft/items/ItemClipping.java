@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
@@ -26,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class ItemClipping extends ItemBase {
 
@@ -42,7 +42,7 @@ public class ItemClipping extends ItemBase {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private Map<ICropPlant, ModelResourceLocation> textures;
+	private Map<IAgriCraftPlant, ModelResourceLocation> textures;
 
 	public ItemClipping() {
 		super("clipping", false);
@@ -57,7 +57,7 @@ public class ItemClipping extends ItemBase {
 		this.textures = new HashMap<>();
 	}
 
-	public final void addPlant(ICropPlant crop, String texture) {
+	public final void addPlant(IAgriCraftPlant crop, String texture) {
 		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
 			this.textures.put(crop, getModel(texture));
 			this.textures.put(null, ItemData.DEFAULT_MODEL);
@@ -135,7 +135,7 @@ public class ItemClipping extends ItemBase {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String text = I18n.translateToLocal("item.agricraft:clipping.name");
-		ICropPlant plant = toCrop(stack);
+		IAgriCraftPlant plant = toCrop(stack);
 		if (plant == null || plant.getAllFruits() == null || plant.getAllFruits().isEmpty()) {
 			return text;
 		}
@@ -143,7 +143,7 @@ public class ItemClipping extends ItemBase {
 		return fruit.getDisplayName() + " " + text;
 	}
 
-	private static ICropPlant toCrop(ItemStack stack) {
+	private static IAgriCraftPlant toCrop(ItemStack stack) {
 		try {
 			ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
 			return CropPlantHandler.getPlantFromStack(seed);

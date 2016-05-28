@@ -41,8 +41,7 @@ public class MutationEngine {
     }
 
     private boolean resultIsValid(CrossOverResult result) {
-        IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(result.getSeed(), result.getMeta());
-
+        IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(result.toStack());
         boolean valid = result.getSeed() != null && CropPlantHandler.isValidSeed(result.toStack());
         return valid && growthReq.canGrow(crop.getWorld(), crop.getPos());
     }

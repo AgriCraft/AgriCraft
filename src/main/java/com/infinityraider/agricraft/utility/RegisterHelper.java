@@ -1,8 +1,7 @@
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.items.ItemModSeed;
+import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -19,6 +18,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 // I don't know if final or abstract is better...
 public abstract class RegisterHelper {
@@ -36,7 +36,7 @@ public abstract class RegisterHelper {
         }
     }
 
-    public static void registerCrop(ICropPlant plant, String name) {
+    public static void registerCrop(IAgriCraftPlant plant, String name) {
         name = "crop" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
         //registerBlock(plant, name);
         if (AgriCraftConfig.registerCropProductsToOreDict) {
@@ -70,7 +70,7 @@ public abstract class RegisterHelper {
         GameRegistry.registerItem(item, name);
     }
 
-    public static void registerSeed(ItemModSeed seed, String name) {
+    public static void registerSeed(ItemAgriCraftSeed seed, String name) {
         name = name.startsWith("seed") ? (name) : ("seed" + name);
         registerItem(seed, name);
         OreDictionary.registerOre(name, seed);

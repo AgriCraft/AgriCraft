@@ -5,6 +5,8 @@ import com.infinityraider.agricraft.api.v1.*;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.config.MutationConfig;
+import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
@@ -32,12 +34,13 @@ import com.infinityraider.agricraft.reference.AgriCraftProperties;
  * Only make one object of this per seed object, and register using {@link CropPlantHandler#registerPlant(CropPlant plant)}
  * ICropPlant is implemented to be able to read data from this class from the API
  */
-public abstract class CropPlant implements ICropPlant {
+public abstract class CropPlant implements IAgriCraftPlant {
     private IGrowthRequirement growthRequirement;
     private int tier;
     private int spreadChance;
     private boolean blackListed;
     private boolean ignoreVanillaPlantingRule;
+	private ItemStack seed;
 
     public CropPlant() {
         this.growthRequirement = initGrowthRequirement();
@@ -137,20 +140,17 @@ public abstract class CropPlant implements ICropPlant {
      */
 
     /**
-     * Gets a stack of the seed for this plant.
-     * 
-     * @return a stack of the plant's seeds.
-     */
-    @Override
-    public abstract ItemStack getSeed();
-
-    /**
      * Gets the block instance for this plant.
      *
      * @return the Block object for this plant.
      */
     @Override
     public abstract Block getBlock();
+
+	@Override
+	public final ItemStack getSeed() {
+		return CropPlantHandler.getSeed(this);
+	}
 
     @Override
     public IBlockState getBlockStateForGrowthStage(int growthStage) {

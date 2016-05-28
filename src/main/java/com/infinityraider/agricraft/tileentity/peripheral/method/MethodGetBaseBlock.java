@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.tileentity.peripheral.method;
 
 import com.infinityraider.agricraft.api.v1.BlockWithMeta;
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import net.minecraft.item.ItemStack;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class MethodGetBaseBlock extends MethodBaseGrowthReq {
     public MethodGetBaseBlock() {
@@ -10,7 +10,7 @@ public class MethodGetBaseBlock extends MethodBaseGrowthReq {
     }
 
     @Override
-    protected Object[] onMethodCalled(ICropPlant plant) {
+    protected Object[] onMethodCalled(IAgriCraftPlant plant) {
         if(plant==null) {
             return null;
         }

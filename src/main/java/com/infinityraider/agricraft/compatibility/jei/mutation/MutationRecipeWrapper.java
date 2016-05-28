@@ -4,7 +4,6 @@
 package com.infinityraider.agricraft.compatibility.jei.mutation;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import java.util.List;
@@ -14,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 /**
  *
@@ -32,7 +32,7 @@ public class MutationRecipeWrapper implements IRecipeWrapper {
 			}
 		}
 		if (recipe.getResult() != null) {
-			ICropPlant plant = CropPlantHandler.getPlantFromStack(recipe.getResult());
+			IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(recipe.getResult());
 			if (plant.getGrowthRequirement() != null) {
 				if (plant.getGrowthRequirement().getSoil() != null) {
 					builder.add(plant.getGrowthRequirement().getSoil().toStack());

@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.BlockWithMeta;
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraft.block.Block;
@@ -16,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 //helper class to read, write and parse data to and from the config files
 public abstract class IOHelper {
@@ -125,7 +125,7 @@ public abstract class IOHelper {
             AgriCore.getLogger("AgriCraft").debug("parsing "+line);
             if(success) {
                 ItemStack seedStack = IOHelper.getStack(data[0]);
-                ICropPlant plant = CropPlantHandler.getPlantFromStack(seedStack);
+                IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(seedStack);
                 success = plant != null;
                 errorMsg = "Invalid seed";
                 if(success) {

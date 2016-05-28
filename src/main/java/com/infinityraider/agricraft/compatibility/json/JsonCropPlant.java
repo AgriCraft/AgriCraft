@@ -33,11 +33,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class JsonCropPlant extends CropPlant {
 
 	public final AgriPlant plant;
-	public final JsonItemSeed seed;
 
 	public JsonCropPlant(AgriPlant plant) {
 		this.plant = plant;
-		this.seed = new JsonItemSeed("seed" + this.plant.getId(), this.plant);
 		this.setGrowthRequirement(this.initGrowthRequirement());
 	}
 
@@ -144,11 +142,6 @@ public class JsonCropPlant extends CropPlant {
 	@Override
 	public Block getBlock() {
 		return null;
-	}
-
-	@Override
-	public ItemStack getSeed() {
-		return new ItemStack(seed);
 	}
 
 	@Override

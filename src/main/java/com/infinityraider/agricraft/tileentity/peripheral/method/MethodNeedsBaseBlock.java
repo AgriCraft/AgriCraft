@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.RequirementType;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class MethodNeedsBaseBlock extends MethodBaseGrowthReq {
 	
@@ -10,7 +10,7 @@ public class MethodNeedsBaseBlock extends MethodBaseGrowthReq {
     }
 
     @Override
-    protected Object[] onMethodCalled(ICropPlant plant) throws MethodException {
+    protected Object[] onMethodCalled(IAgriCraftPlant plant) throws MethodException {
         return new Object[] {plant.getGrowthRequirement().getRequiredType()!= RequirementType.NONE};
     }
 

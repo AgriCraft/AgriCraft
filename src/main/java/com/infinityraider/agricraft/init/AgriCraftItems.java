@@ -48,6 +48,7 @@ public class AgriCraftItems {
 	public static Item handRake;
 	public static Item clipper;
 	public static ItemClipping clipping;
+	public static ItemAgriCraftSeed seed;
 
 	public static void init() {
 		clipping = new ItemClipping();

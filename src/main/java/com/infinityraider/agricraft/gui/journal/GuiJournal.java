@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.renderer.GlStateManager;
 
 @SideOnly(Side.CLIENT)
@@ -24,10 +25,10 @@ public class GuiJournal extends GuiScreen {
 	 * Some dimensions and constants
 	 */
 	private static final int MINIMUM_PAGES = 2;
-	
+
 	private final int xSize;
 	private final int ySize;
-	
+
 	private int guiLeft;
 	private int guiTop;
 
@@ -132,12 +133,15 @@ public class GuiJournal extends GuiScreen {
 			case 1:
 				return new JournalPageIntroduction();
 		}
-		ArrayList<ItemStack> discoveredSeeds = getDiscoveredSeeds();
-		return new JournalPageSeed(discoveredSeeds, currentPageNumber - MINIMUM_PAGES);
+		return new JournalPageSeed(getDiscoveredSeeds(), currentPageNumber - MINIMUM_PAGES);
 	}
 
-	private ArrayList<ItemStack> getDiscoveredSeeds() {
-		return ((ItemJournal) journal.getItem()).getDiscoveredSeeds(journal);
+	private List<ItemStack> getDiscoveredSeeds() {
+		if (journal != null && journal.getItem() instanceof ItemJournal) {
+			return ((ItemJournal) journal.getItem()).getDiscoveredSeeds(journal);
+		} else {
+			return new ArrayList<>();
+		}
 	}
 
 	private int getNumberOfPages() {

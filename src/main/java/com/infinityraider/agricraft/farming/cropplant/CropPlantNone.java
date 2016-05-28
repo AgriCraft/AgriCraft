@@ -30,11 +30,6 @@ public final class CropPlantNone extends CropPlant {
     }
 
     @Override
-    public ItemStack getSeed() {
-        return null;
-    }
-
-    @Override
     public Block getBlock() {
         return null;
     }

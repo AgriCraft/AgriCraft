@@ -10,7 +10,7 @@ import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftCrops;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemBase;
-import com.infinityraider.agricraft.items.ItemModSeed;
+import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.utility.OreDictHelper;
@@ -113,13 +113,13 @@ public class ClientProxy implements IProxy {
 		}
 
 		// Seeds
-		for (ItemModSeed seed : AgriCraftCrops.seeds) {
-			try {
-				seed.registerItemRenderer();
-			} catch (Exception e) {
-				AgriCore.getLogger("AgriCraft").trace(e);
-			}
-		}
+//		for (ItemAgriCraftSeed seed : AgriCraftCrops.seeds) {
+//			try {
+//				seed.registerItemRenderer();
+//			} catch (Exception e) {
+//				AgriCore.getLogger("AgriCraft").trace(e);
+//			}
+//		}
 
 		// Clippings
 		AgriCraftItems.clipping.registerItemRenderer();

@@ -9,7 +9,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -103,12 +102,12 @@ public interface APIv1 extends APIBase {
      * @param seed Stack holding the seed
      * @return an ICropPlant object if the seed is considered a seed for AgriCraft, or null if not
      */
-    ICropPlant getCropPlant(ItemStack seed);
+    IAgriCraftPlant getCropPlant(ItemStack seed);
 
     /**
      * Register a cropPlant for AgriCraft to recognize as a valid plant for crops
      */
-    void registerCropPlant(ICropPlant plant);
+    void registerCropPlant(IAgriCraftPlant plant);
 
     /**
      * Register a default soil that any crop that doesn't require a specific soil can grow on
@@ -230,7 +229,7 @@ public interface APIv1 extends APIBase {
      * @param pos the block position
      * @return an ICropPlant object if there is a seed planted here, or null if not
      */
-    ICropPlant getCropPlant(World world, BlockPos pos);
+    IAgriCraftPlant getCropPlant(World world, BlockPos pos);
 
     /**
      * Checks if the plant that is in crops at the given position can grow. A
@@ -576,6 +575,6 @@ public interface APIv1 extends APIBase {
      * @param journal an ItemStack holding the journal
      * @return an ArrayList containing an ItemStack for every discovered seed (the list may be empty but will never be null)
      */
-    ArrayList<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal);
+    List<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal);
 
 }

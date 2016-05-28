@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.compatibility.jei;
 
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.compatibility.jei.mutation.MutationRecipeCategory;
 import com.infinityraider.agricraft.compatibility.jei.mutation.MutationRecipeHandler;
 import com.infinityraider.agricraft.compatibility.jei.produce.ProduceRecipeCategory;
@@ -13,6 +12,7 @@ import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 @JEIPlugin
 public class AgriCraftJEIPlugin implements IModPlugin {
@@ -38,7 +38,7 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-		for(ICropPlant plant : CropPlantHandler.getPlants()) {
+		for(IAgriCraftPlant plant : CropPlantHandler.getPlants()) {
 			jeiRuntime.getRecipeRegistry().addRecipe(plant);
 		}
 	}

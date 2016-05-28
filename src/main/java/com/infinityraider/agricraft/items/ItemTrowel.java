@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.ITrowel;
 import com.infinityraider.agricraft.farming.PlantStats;
@@ -15,6 +14,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
 	
@@ -69,7 +69,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
             return null;
         }
         NBTTagCompound tag = trowel.getTagCompound();
-        ICropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
+        IAgriCraftPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
         if(plant == null) {
             return null;
         }
@@ -97,7 +97,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         if(this.hasSeed(trowel)) {
             return false;
         }
-        ICropPlant plant = CropPlantHandler.getPlantFromStack(seed);
+        IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(seed);
         if(plant == null) {
             return false;
         }

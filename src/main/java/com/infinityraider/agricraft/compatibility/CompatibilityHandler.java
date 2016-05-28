@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.compatibility;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.compatibility.json.JsonHelper;
 import com.infinityraider.agricraft.compatibility.thaumcraft.ThaumcraftHelper;
@@ -22,6 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class CompatibilityHandler {
 
@@ -108,8 +108,8 @@ public class CompatibilityHandler {
 		return toolCompatModules.get(stack.getItem()).handleRightClick(world, pos, block, crop, player, stack);
 	}
 
-	public List<ICropPlant> getCropPlants() {
-		List<ICropPlant> list = new ArrayList<>();
+	public List<IAgriCraftPlant> getCropPlants() {
+		List<IAgriCraftPlant> list = new ArrayList<>();
 		compatModules.values().stream().filter(ModHelper::isEnabled).forEach(helper -> list.addAll(helper.getCropPlants()));
 		return list;
 	}

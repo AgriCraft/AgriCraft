@@ -48,7 +48,7 @@ public interface ICrop {
     /**
      * @return the ICropPlant instance planted on this crop
      */
-    ICropPlant getPlant();
+    IAgriCraftPlant getPlant();
 
     /**
      * @return the stats for this crop

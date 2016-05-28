@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.api.v1;
 
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This interface is implemented in AgriCraft's agricultural item class for the journal.
@@ -35,5 +35,5 @@ public interface IJournal {
      * @param journal an ItemStack holding the journal
      * @return an ArrayList containing an ItemStack for every discovered seed (the list may be empty but will never be null)
      */
-    ArrayList<ItemStack> getDiscoveredSeeds(ItemStack journal);
+    List<ItemStack> getDiscoveredSeeds(ItemStack journal);
 }

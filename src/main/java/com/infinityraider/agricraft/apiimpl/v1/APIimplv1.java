@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
 import com.infinityraider.agricraft.api.APIStatus;
 import com.infinityraider.agricraft.api.v1.*;
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
@@ -35,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class APIimplv1 implements APIv1 {
     private final int version;
@@ -107,12 +107,12 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public void registerCropPlant(ICropPlant plant) {
+    public void registerCropPlant(IAgriCraftPlant plant) {
         CropPlantHandler.addCropToRegister(plant);
     }
 
     @Override
-    public ICropPlant getCropPlant(ItemStack seed) {
+    public IAgriCraftPlant getCropPlant(ItemStack seed) {
         return CropPlantHandler.getPlantFromStack(seed);
     }
 
@@ -218,7 +218,7 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public ICropPlant getCropPlant(World world, BlockPos pos) {
+    public IAgriCraftPlant getCropPlant(World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if(te==null || !(te instanceof TileEntityCrop)) {
             return null;
@@ -580,7 +580,7 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public ArrayList<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal) {
+    public List<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal) {
         if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
             return new ArrayList<>();
         }
