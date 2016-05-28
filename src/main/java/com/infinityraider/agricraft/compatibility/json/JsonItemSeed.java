@@ -2,13 +2,13 @@ package com.infinityraider.agricraft.compatibility.json;
 
 import com.agricraft.agricore.plant.AgriPlant;
 import com.infinityraider.agricraft.items.*;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.api.v1.IAgriCraftSeed;
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.creativetab.AgriCraftTab;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -19,12 +19,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.EnumPlantType;
 
 public class JsonItemSeed extends ItemBase implements IAgriCraftSeed {
 
@@ -60,7 +57,7 @@ public class JsonItemSeed extends ItemBase implements IAgriCraftSeed {
 	}
 
 	@Override
-	public IAgriCraftPlant getPlant() {
+	public ICropPlant getPlant() {
 		return null;
 	}
 
@@ -93,16 +90,6 @@ public class JsonItemSeed extends ItemBase implements IAgriCraftSeed {
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.PASS;
-	}
-
-	@Override
-	public EnumPlantType getPlantType(IBlockAccess iba, BlockPos bp) {
-		return EnumPlantType.Crop;
-	}
-
-	@Override
-	public IBlockState getPlant(IBlockAccess iba, BlockPos bp) {
-		return null;
 	}
 
 }

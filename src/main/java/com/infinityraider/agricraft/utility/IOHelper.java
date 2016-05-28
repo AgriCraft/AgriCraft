@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.BlockWithMeta;
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
@@ -114,53 +114,6 @@ public abstract class IOHelper {
         return output + '\n' + notProcessed;
     }
 
-    //finds blacklisted crops
-    public static void initSeedBlackList() {
-        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSeedBlackList());
-        for(String line:data) {
-            AgriCore.getLogger("AgriCraft").debug(new StringBuffer("parsing ").append(line));
-            ItemStack seedStack = IOHelper.getStack(line);
-            boolean success = seedStack != null && seedStack.getItem() != null;
-            String errorMsg = "Invalid seed";
-            if(success) {
-                CropPlantHandler.addSeedToBlackList(seedStack);
-            }
-            else {
-                AgriCore.getLogger("AgriCraft").info(new StringBuffer("Error when adding seed to blacklist: ").append(errorMsg).append(" (line: ").append(line).append(")"));
-            }
-        }
-    }
-
-    //initializes the seed tier overrides
-    public static void initSeedTiers() {
-        String[] input = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSeedTiers());
-        AgriCore.getLogger("AgriCraft").debug("reading seed tier overrides");
-        for(String line:input) {
-            String[] data = IOHelper.getData(line);
-            boolean success = data.length==2;
-            String errorMsg = "Incorrect amount of arguments";
-            AgriCore.getLogger("AgriCraft").debug("parsing "+line);
-            if(success) {
-                ItemStack seedStack = IOHelper.getStack(data[0]);
-                CropPlant plant = CropPlantHandler.getPlantFromStack(seedStack);
-                success = plant != null;
-                errorMsg = "Invalid seed";
-                if(success) {
-                    int tier = Integer.parseInt(data[1]);
-                    success = tier>=1 && tier<=5;
-                    errorMsg = "Tier should be between 1 and 5";
-                    if(success) {
-                        plant.setTier(tier);
-                        AgriCore.getLogger("AgriCraft").info(" - " + Item.itemRegistry.getNameForObject(plant.getSeed().getItem()) + ':' + plant.getSeed().getItemDamage() + " - tier: " + tier);
-                    }
-                }
-            }
-            if(!success) {
-                AgriCore.getLogger("AgriCraft").info(new StringBuffer("Error when adding seed tier override: ").append(errorMsg).append(" (line: ").append(line).append(")"));
-            }
-        }
-    }
-
     public static void initSpreadChancesOverrides() {
         //read mutation chance overrides & initialize the arrays
         String[] input = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSpreadChances());
@@ -172,14 +125,14 @@ public abstract class IOHelper {
             AgriCore.getLogger("AgriCraft").debug("parsing "+line);
             if(success) {
                 ItemStack seedStack = IOHelper.getStack(data[0]);
-                CropPlant plant = CropPlantHandler.getPlantFromStack(seedStack);
+                ICropPlant plant = CropPlantHandler.getPlantFromStack(seedStack);
                 success = plant != null;
                 errorMsg = "Invalid seed";
                 if(success) {
                     int chance = Integer.parseInt(data[1]);
                     success = chance>=0 && chance<=100;
                     errorMsg = "Chance should be between 0 and 100";
-                    if(success) {
+                    if(success && plant != null) {
                         plant.setSpreadChance(chance);
                         AgriCore.getLogger("AgriCraft").debug("Set spread chance for " + Item.itemRegistry.getNameForObject(plant.getSeed().getItem()) + ':' + plant.getSeed().getItemDamage() + " to " + chance + '%');
                     }
@@ -190,25 +143,6 @@ public abstract class IOHelper {
             }
         }
         AgriCore.getLogger("AgriCraft").debug("Registered Mutations Chances overrides:");
-    }
-
-    public static void initVannilaPlantingOverrides() {
-        AgriCore.getLogger("AgriCraft").debug("Registered seeds ignoring vanilla planting rule:");
-        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readVanillaOverrides());
-        for(String line:data) {
-            AgriCore.getLogger("AgriCraft").debug(new StringBuffer("parsing ").append(line));
-            ItemStack seedStack = IOHelper.getStack(line);
-            CropPlant plant = CropPlantHandler.getPlantFromStack(seedStack);
-            boolean success = plant != null;
-            String errorMsg = "Invalid seed";
-            if(success) {
-                plant.setIgnoreVanillaPlantingRule(true);
-                AgriCore.getLogger("AgriCraft").debug(Item.itemRegistry.getNameForObject(plant.getSeed().getItem()) + ":" + plant.getSeed().getItemDamage());
-            }
-            else {
-                AgriCore.getLogger("AgriCraft").debug("Error when adding seed to vanilla overrides: " + errorMsg + " (line: " + line + ")");
-            }
-        }
     }
 
     //get the custom crop file contents

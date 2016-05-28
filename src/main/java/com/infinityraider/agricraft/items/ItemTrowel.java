@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.items;
 
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.ITrowel;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
@@ -69,7 +69,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
             return null;
         }
         NBTTagCompound tag = trowel.getTagCompound();
-        CropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
+        ICropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
         if(plant == null) {
             return null;
         }
@@ -97,7 +97,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
         if(this.hasSeed(trowel)) {
             return false;
         }
-        CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
+        ICropPlant plant = CropPlantHandler.getPlantFromStack(seed);
         if(plant == null) {
             return false;
         }

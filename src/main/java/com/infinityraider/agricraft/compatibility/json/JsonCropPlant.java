@@ -42,6 +42,11 @@ public class JsonCropPlant extends CropPlant {
 	}
 
 	@Override
+	public String getPlantName() {
+		return this.plant.getName();
+	}
+
+	@Override
 	public String getInformation() {
 		return this.plant.getDescription().toString();
 	}
@@ -147,7 +152,7 @@ public class JsonCropPlant extends CropPlant {
 	}
 
 	@Override
-	public int tier() {
+	public int getTier() {
 		return this.plant == null ? 1 : this.plant.getTier();
 	}
 

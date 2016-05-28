@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.compatibility;
 
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
@@ -44,7 +45,7 @@ public class ModHelper {
 	/**
 	 * @return a list containing all CropPlant objects for this mod
 	 */
-	protected List<CropPlant> getCropPlants() {
+	protected List<ICropPlant> getCropPlants() {
 		return new ArrayList<>();
 	}
 

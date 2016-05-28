@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tileentity;
 
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.ITrowel;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemJournal;
@@ -142,7 +142,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         }
         
         if (seed != null) {
-            CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
+            ICropPlant plant = CropPlantHandler.getPlantFromStack(seed);
         	return plant==null?0:plant.getTier()*20;
         } else {
         	return 0;

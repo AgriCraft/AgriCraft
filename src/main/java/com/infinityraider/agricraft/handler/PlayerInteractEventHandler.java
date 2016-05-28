@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.handler;
 
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.blocks.BlockGrate;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
@@ -79,8 +79,9 @@ public class PlayerInteractEventHandler {
     }
 
     private static boolean ignoresVanillaPlantingSetting(ItemStack seed) {
-        CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
-        return plant != null && plant.ingoresVanillaPlantingRule();
+		// TODO: REPLACE
+        ICropPlant plant = CropPlantHandler.getPlantFromStack(seed);
+        return true;
     }
 
     /** Event handler to create water pads */

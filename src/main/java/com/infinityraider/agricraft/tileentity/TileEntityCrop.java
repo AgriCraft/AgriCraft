@@ -6,9 +6,9 @@ import com.infinityraider.agricraft.api.v1.IAdditionalCropData;
 import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.ITrowel;
 import com.infinityraider.agricraft.api.v1.ICrop;
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
@@ -47,7 +47,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     private PlantStats stats = new PlantStats();
     private boolean crossCrop=false;
     private boolean weed=false;
-    private CropPlant plant;
+    private ICropPlant plant;
     private IAdditionalCropData data;
 
     private final MutationEngine mutationEngine;
@@ -62,7 +62,9 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     }
 
     @Override
-    public CropPlant getPlant() {return this.hasPlant() ? plant : null;}
+    public ICropPlant getPlant() {
+		return this.hasPlant() ? plant : null;
+	}
 
     @Override
     public ISeedStats getStats() {
@@ -100,7 +102,10 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     }
 
     /** get growthrate */
-    public int getGrowthRate() {return this.weed ? AgriCraftConfig.weedGrowthRate : plant.getGrowthRate();}
+    public int getGrowthRate() {
+		// TODO: update!
+		return AgriCraftConfig.weedGrowthRate;
+	}
 
     /** check to see if there is a plant here */
     @Override
@@ -128,7 +133,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     }
 
     /** sets the plant in the crop */
-    public void setPlant(int growth, int gain, int strength, boolean analyzed, CropPlant plant) {
+    public void setPlant(int growth, int gain, int strength, boolean analyzed, ICropPlant plant) {
         if( (!this.crossCrop) && (!this.hasPlant())) {
             if(plant!=null) {
                 this.plant = plant;
@@ -153,7 +158,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
     /** clears the plant in the crop */
     @Override
     public void clearPlant() {
-        CropPlant oldPlant = getPlant();
+        ICropPlant oldPlant = getPlant();
         this.setGrowthStage(0);
         this.stats = new PlantStats();
         this.plant = null;
@@ -466,7 +471,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
             list.add(" - Seed: " + (this.plant.getSeed().getItem()).getUnlocalizedName());
             list.add(" - Seed class: "+this.plant.getSeed().getItem().getClass().getName());
             list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject((this.plant.getSeed().getItem())) + ":" + this.plant.getSeed().getItemDamage());
-            list.add(" - Tier: "+plant.getTier());
+            list.add(" - Tier: "+ plant.getTier());
             list.add(" - Meta: " + this.getBlockMetadata());
             list.add(" - Growth: " + getGrowth());
             list.add(" - Gain: " + getGain());

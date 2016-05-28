@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
@@ -27,7 +27,7 @@ public class JournalPageSeed extends JournalPage {
     private ArrayList<ItemStack> discoveredSeeds;
     private int page;
 
-    private CropPlant plant;
+    private ICropPlant plant;
 
     private ArrayList<Component<ItemStack>> fruits;
     private ArrayList<Component<ItemStack>> seeds;

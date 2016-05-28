@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.compatibility;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.compatibility.json.JsonHelper;
 import com.infinityraider.agricraft.compatibility.thaumcraft.ThaumcraftHelper;
@@ -107,8 +108,8 @@ public class CompatibilityHandler {
 		return toolCompatModules.get(stack.getItem()).handleRightClick(world, pos, block, crop, player, stack);
 	}
 
-	public List<CropPlant> getCropPlants() {
-		List<CropPlant> list = new ArrayList<>();
+	public List<ICropPlant> getCropPlants() {
+		List<ICropPlant> list = new ArrayList<>();
 		compatModules.values().stream().filter(ModHelper::isEnabled).forEach(helper -> list.addAll(helper.getCropPlants()));
 		return list;
 	}

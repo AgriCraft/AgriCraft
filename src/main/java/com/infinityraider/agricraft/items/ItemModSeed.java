@@ -2,34 +2,33 @@ package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.api.v1.IAgriCraftSeed;
 import com.infinityraider.agricraft.api.v1.IMutation;
-import com.infinityraider.agricraft.blocks.BlockModPlant;
 import com.infinityraider.agricraft.creativetab.AgriCraftTab;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.handler.config.MutationConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.utility.RegisterHelper;
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.item.Item;
 
-public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
+public class ItemModSeed extends Item implements IAgriCraftSeed {
+	
+	private final ICropPlant plant;
 
-	@SideOnly(Side.CLIENT)
+	//@SideOnly(Side.CLIENT)
 	private String information;
 
 	//@SideOnly(Side.CLIENT)
@@ -38,19 +37,17 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	/**
 	 * This constructor shouldn't be called from anywhere except from the
 	 * BlockModPlant public constructor, if you create a new BlockModPlant, its
-	 * contructor will create the seed for you
+	 * constructor will create the seed for you
 	 */
-	public ItemModSeed(BlockModPlant plant, String information) {
-		super(plant, plant.getGrowthRequirement().getSoil() == null ? Blocks.farmland : plant.getGrowthRequirement().getSoil().getBlock());
+	public ItemModSeed(ICropPlant plant, String information) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			this.information = information;
 		}
 		this.setCreativeTab(AgriCraftTab.agriCraftTab);
 
-		this.seedName = "seed" + plant.getRegistryName().toString().replaceFirst(".*:crop", "");
-		
-		//register seed
-		RegisterHelper.registerSeed(this, plant, this.seedName);
+		this.seedName = plant.getSeedName();
+		this.information = information;
+		this.plant = plant;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -70,13 +67,13 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 	}
 
 	@Override
-	public BlockModPlant getPlant() {
-		return (BlockModPlant) (this.getPlant(null, null).getBlock());
+	public ICropPlant getPlant() {
+		return this.plant;
 	}
 
 	@Override
 	public int tier() {
-		return (this.getPlant()).tier;
+		return (this.getPlant()).getTier();
 	}
 
 	@Override
@@ -95,22 +92,6 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed {
 		if (world.getBlockState(pos).getBlock() == AgriCraftBlocks.blockCrop) {
 			AgriCore.getLogger("AgriCraft").debug("Trying to plant seed " + stack.getItem().getUnlocalizedName() + " on crops");
 			return EnumActionResult.SUCCESS;
-		}
-		if (CropPlantHandler.getGrowthRequirement(stack.getItem(), stack.getItemDamage()).isValidSoil(world, pos)) {
-			BlockPos blockPosUp = pos.add(0, 1, 0);
-			if (side != EnumFacing.UP) {
-				return EnumActionResult.PASS;
-			} else if (player.canPlayerEdit(pos, side, stack) && player.canPlayerEdit(blockPosUp, side, stack)) {
-				if (world.isAirBlock(blockPosUp)) {
-					world.setBlockState(blockPosUp, this.getPlant().getStateFromMeta(0), 3);
-					--stack.stackSize;
-					return EnumActionResult.SUCCESS;
-				} else {
-					return EnumActionResult.PASS;
-				}
-			} else {
-				return EnumActionResult.PASS;
-			}
 		}
 		return EnumActionResult.PASS;
 	}

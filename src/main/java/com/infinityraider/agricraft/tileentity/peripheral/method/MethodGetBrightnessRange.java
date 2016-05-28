@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 
 public class MethodGetBrightnessRange extends MethodBaseGrowthReq {
     public MethodGetBrightnessRange() {
@@ -8,7 +8,7 @@ public class MethodGetBrightnessRange extends MethodBaseGrowthReq {
     }
 
     @Override
-    protected Object[] onMethodCalled(CropPlant plant) {
+    protected Object[] onMethodCalled(ICropPlant plant) {
         int[] brightnessRange = plant.getGrowthRequirement().getBrightnessRange();
         return new Object[] {brightnessRange[0], brightnessRange[1]};
     }

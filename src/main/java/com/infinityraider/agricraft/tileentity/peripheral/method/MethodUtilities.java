@@ -3,9 +3,9 @@
  */
 package com.infinityraider.agricraft.tileentity.peripheral.method;
 
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.ITrowel;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import java.util.List;
@@ -24,7 +24,7 @@ public final class MethodUtilities {
 		return ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, seed);
 	}
 
-	public static CropPlant getCropPlant(ItemStack specimen) {
+	public static ICropPlant getCropPlant(ItemStack specimen) {
 		ItemStack seed = specimen;
 		if (specimen == null || specimen.getItem() == null) {
 			return null;
@@ -35,7 +35,7 @@ public final class MethodUtilities {
 		return CropPlantHandler.getPlantFromStack(seed);
 	}
 
-	public static CropPlant getCropPlant(TileEntityCrop crop) {
+	public static ICropPlant getCropPlant(TileEntityCrop crop) {
 		return crop.getPlant();
 	}
 

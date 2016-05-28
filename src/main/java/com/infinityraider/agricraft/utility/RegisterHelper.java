@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.blocks.BlockModPlant;
+import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.reference.Reference;
@@ -36,11 +36,11 @@ public abstract class RegisterHelper {
         }
     }
 
-    public static void registerCrop(BlockModPlant plant, String name) {
+    public static void registerCrop(ICropPlant plant, String name) {
         name = "crop" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-        registerBlock(plant, name);
+        //registerBlock(plant, name);
         if (AgriCraftConfig.registerCropProductsToOreDict) {
-            for (ItemStack fruit : plant.products.getAllProducts()) {
+            for (ItemStack fruit : plant.getAllFruits()) {
                 if (fruit != null && fruit.getItem() != null && !OreDictHelper.hasOreId(fruit, name)) {
                     OreDictionary.registerOre(name, fruit);
                 }
@@ -70,7 +70,7 @@ public abstract class RegisterHelper {
         GameRegistry.registerItem(item, name);
     }
 
-    public static void registerSeed(ItemModSeed seed, BlockModPlant plant, String name) {
+    public static void registerSeed(ItemModSeed seed, String name) {
         name = name.startsWith("seed") ? (name) : ("seed" + name);
         registerItem(seed, name);
         OreDictionary.registerOre(name, seed);

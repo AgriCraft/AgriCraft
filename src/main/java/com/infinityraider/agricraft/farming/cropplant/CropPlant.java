@@ -12,7 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -33,7 +32,7 @@ import com.infinityraider.agricraft.reference.AgriCraftProperties;
  * Only make one object of this per seed object, and register using {@link CropPlantHandler#registerPlant(CropPlant plant)}
  * ICropPlant is implemented to be able to read data from this class from the API
  */
-public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
+public abstract class CropPlant implements ICropPlant {
     private IGrowthRequirement growthRequirement;
     private int tier;
     private int spreadChance;
@@ -43,7 +42,7 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
     public CropPlant() {
         this.growthRequirement = initGrowthRequirement();
         growthRequirement = growthRequirement == null ? GrowthRequirementHandler.getNewBuilder().build() : growthRequirement;
-        this.tier = tier();
+        this.tier = getTier();
         this.spreadChance = 100/getTier();
         this.blackListed = false;
         this.ignoreVanillaPlantingRule = false;
@@ -71,13 +70,13 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
      * Returns the tier of the seed as represented as an integer value, or the overriding value.
      * The overriding value may be set in the configuration files.
      * 
-     * Does not always have same output as {@link #tier()}.
+     * Does not always have same output as {@link #getTier()}.
      * 
      * Should fall within the range of {@link Constants#GROWTH_TIER}.
      * 
      * @return the tier of the seed.
      */
-    public final int getTier() {
+    public int getTier() {
         return tier;
     }
 
@@ -91,7 +90,7 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
     }
 
     /** Gets the spread chance in percent for this plant */
-    public final int getSpreadChance() {
+    public double getSpreadChance() {
         return spreadChance;
     }
 
@@ -136,18 +135,6 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
     /**
      * ICROPPLANT METHODS
      */
-
-    /**
-     * Returns the tier of this plant, called by {@link #getTier()}.
-     * 
-     * Does not always have same output as {@link #getTier()}.
-     * 
-     * Should fall within the range of {@link Constants#GROWTH_TIER}.
-     * 
-     * @return the tier of the seed.
-     */
-    @Override
-    public abstract int tier();
 
     /**
      * Gets a stack of the seed for this plant.
@@ -364,15 +351,4 @@ public abstract class CropPlant implements ICropPlant, Comparable<CropPlant> {
         return Collections.emptyList();
     }
 
-    @Override
-    public int compareTo(CropPlant plant) {
-        ItemStack seedThis = this.getSeed();
-        ItemStack seedOther = plant.getSeed();
-        int idThis = seedThis == null ? 0 : Item.getIdFromItem(seedThis.getItem());
-        int idOther = seedOther == null ? 0 : Item.getIdFromItem(seedOther.getItem());
-        if(idOther == idThis && idThis != 0) {
-            return seedThis.getItemDamage() - seedOther.getItemDamage();
-        }
-        return idThis - idOther;
-    }
 }
