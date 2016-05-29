@@ -28,16 +28,11 @@ public class ItemAgriCraftSeed extends ItemBase {
 	 * constructor will create the seed for you
 	 */
 	private ItemAgriCraftSeed() {
-		super("Seed", true);
+		super("agri_seed", true);
 	}
 
 	public static ItemAgriCraftSeed getInstance() {
 		return instance;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerItemRenderer() {
 	}
 
 	@Override
