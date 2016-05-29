@@ -9,7 +9,6 @@ import com.infinityraider.agricraft.world.StructureGreenhouseIrrigated;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
-import java.util.Collection;
 
 public class WorldGen {
     private static int villagerId;

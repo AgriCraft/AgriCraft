@@ -83,14 +83,6 @@ public class GuiSeedAnalyzer extends GuiContainer {
         }
         ItemStack journal = seedAnalyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId);
         if(journal != null) {
-            if (journal.hasTagCompound()) {
-                NBTTagCompound tag = journal.getTagCompound();
-                if (tag.hasKey(AgriCraftNBT.DISCOVERED_SEEDS)) {
-                    NBTTagList list = tag.getTagList(AgriCraftNBT.DISCOVERED_SEEDS, 10);
-                    NBTHelper.clearEmptyStacksFromNBT(list);
-                    tag.setTag(AgriCraftNBT.DISCOVERED_SEEDS, list);
-                }
-            }
             journalOpen = true;
             guiJournal = new GuiJournal(journal);
             guiJournal.setWorldAndResolution(this.mc, this.width, this.height);

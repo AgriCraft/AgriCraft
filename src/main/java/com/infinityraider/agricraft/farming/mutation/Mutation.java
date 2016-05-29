@@ -1,11 +1,10 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class Mutation implements IMutation {
     private ItemStack result;
@@ -40,7 +39,7 @@ public class Mutation implements IMutation {
         this(mutation.getResult(), mutation.getParents()[0], mutation.getParents()[1], mutation.getChance());
     }
 
-    public Mutation(ICropPlant result, ICropPlant parent1, ICropPlant parent2) {
+    public Mutation(IAgriCraftPlant result, IAgriCraftPlant parent1, IAgriCraftPlant parent2) {
         this(result.getSeed(), parent1.getSeed(), parent2.getSeed());
     }
 
@@ -57,7 +56,7 @@ public class Mutation implements IMutation {
 
     public Mutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
         this(result, parent1, parent2, 100);
-        CropPlant plant = CropPlantHandler.getPlantFromStack(result);
+        IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(result);
         this.chance = plant == null? 0 : ((double) plant.getSpreadChance())/100.0D;
     }
 

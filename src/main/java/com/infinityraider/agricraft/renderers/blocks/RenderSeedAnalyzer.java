@@ -46,7 +46,6 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 			if (analyzer.hasSeed() || analyzer.hasTrowel()) {
 				renderSeed(tessellator, analyzer);
 			}
-			tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
 		}
 	}
 

@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.api.v1.*;
 import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
@@ -146,7 +145,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
                 return false;
             } else if(crop.isMature() && crop.allowHarvest(player)) {
                 crop.getWorld().setBlockState(crop.getPos(), state.withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
-                ArrayList<ItemStack> drops = crop.getFruits();
+                List<ItemStack> drops = crop.getFruits();
                 for (ItemStack drop : drops) {
                     if(drop==null || drop.getItem()==null) {
                         continue;
@@ -247,7 +246,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
                 if(crop.hasPlant()) {
                     this.harvest(world, pos, state, player, crop);
                 } else if (!crop.isCrossCrop() && !crop.hasWeed()) {
-                    CropPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack(Item.itemRegistry.getObject(new ResourceLocation("AgriCraft:seedSugarcane"))));
+                    IAgriCraftPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack(Item.itemRegistry.getObject(new ResourceLocation("AgriCraft:seedSugarcane"))));
                     if (sugarcane != null && sugarcane.getGrowthRequirement().canGrow(world, pos)) {
                         crop.setPlant(1, 1, 1, false, sugarcane);
                         if (!player.capabilities.isCreativeMode) {
@@ -325,7 +324,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
     @Override
     public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
         if(!world.isRemote) {
-            CropPlant plant = ((TileEntityCrop) world.getTileEntity(pos)).getPlant();
+            IAgriCraftPlant plant = ((TileEntityCrop) world.getTileEntity(pos)).getPlant();
             if(!player.capabilities.isCreativeMode) {
                 //drop items if the player is not in creative
                 this.dropBlockAsItem(world, pos, world.getBlockState(pos), 0);

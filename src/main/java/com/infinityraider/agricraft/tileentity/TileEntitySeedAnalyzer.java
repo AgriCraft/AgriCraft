@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.tileentity;
 
 import com.infinityraider.agricraft.api.v1.ITrowel;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemJournal;
@@ -19,6 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.util.ITickable;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
     private static final int[] SLOTS = new int[] {0, 1};
@@ -142,7 +142,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         }
         
         if (seed != null) {
-            CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
+            IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(seed);
         	return plant==null?0:plant.getTier()*20;
         } else {
         	return 0;

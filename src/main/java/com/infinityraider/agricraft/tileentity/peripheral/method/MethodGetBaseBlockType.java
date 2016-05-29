@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class MethodGetBaseBlockType extends MethodBaseGrowthReq {
     public MethodGetBaseBlockType() {
@@ -8,7 +8,7 @@ public class MethodGetBaseBlockType extends MethodBaseGrowthReq {
     }
 
     @Override
-    protected Object[] onMethodCalled(CropPlant plant) {
+    protected Object[] onMethodCalled(IAgriCraftPlant plant) {
         if(plant==null) {
             return null;
         }

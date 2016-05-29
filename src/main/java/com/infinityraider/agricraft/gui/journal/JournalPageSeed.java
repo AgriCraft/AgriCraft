@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class JournalPageSeed extends JournalPage {
@@ -24,15 +25,15 @@ public class JournalPageSeed extends JournalPage {
     private static final ResourceLocation BRIGHTNESS_BAR = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalBrightnessBar.png");
     private static final ResourceLocation BRIGHTNESS_FRAME = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalBrightnessFrame.png");
 
-    private ArrayList<ItemStack> discoveredSeeds;
+    private List<ItemStack> discoveredSeeds;
     private int page;
 
-    private CropPlant plant;
+    private IAgriCraftPlant plant;
 
-    private ArrayList<Component<ItemStack>> fruits;
-    private ArrayList<Component<ItemStack>> seeds;
+    private List<Component<ItemStack>> fruits;
+    private List<Component<ItemStack>> seeds;
 
-    public JournalPageSeed(ArrayList<ItemStack> discoveredSeeds, int page) {
+    public JournalPageSeed(List<ItemStack> discoveredSeeds, int page) {
         this.discoveredSeeds = discoveredSeeds;
         this.page = page;
         this.plant = CropPlantHandler.getPlantFromStack(discoveredSeeds.get(page));
@@ -190,12 +191,12 @@ public class JournalPageSeed extends JournalPage {
         return new Component<>(stack, x, y);
     }
 
-    private ArrayList<Component<ItemStack>> getFruits() {
+    private List<Component<ItemStack>> getFruits() {
         if(this.plant==null) {
             this.plant = CropPlantHandler.getPlantFromStack(discoveredSeeds.get(page));
         }
-        ArrayList<Component<ItemStack>> fruits = new ArrayList<>();
-        ArrayList<ItemStack> allFruits = plant.getAllFruits();
+        List<Component<ItemStack>> fruits = new ArrayList<>();
+        List<ItemStack> allFruits = plant.getAllFruits();
         if(allFruits != null ) {
             for (int i = 0; i < allFruits.size(); i++) {
                 ItemStack stack = allFruits.get(i);
@@ -331,7 +332,7 @@ public class JournalPageSeed extends JournalPage {
         return textures;
     }
 
-    private ArrayList<Component<ResourceLocation>> getFruitIconFrames() {
+    private List<Component<ResourceLocation>> getFruitIconFrames() {
         if(this.fruits==null) {
             this.fruits = getFruits();
         }

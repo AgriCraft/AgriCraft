@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.blocks.BlockGrate;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
@@ -27,6 +26,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 @SuppressWarnings("unused")
 public class PlayerInteractEventHandler {
@@ -79,8 +79,9 @@ public class PlayerInteractEventHandler {
     }
 
     private static boolean ignoresVanillaPlantingSetting(ItemStack seed) {
-        CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
-        return plant != null && plant.ingoresVanillaPlantingRule();
+		// TODO: REPLACE
+        IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(seed);
+        return true;
     }
 
     /** Event handler to create water pads */

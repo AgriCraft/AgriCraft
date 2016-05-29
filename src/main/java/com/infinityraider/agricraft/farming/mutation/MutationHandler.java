@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.farming.mutation;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,23 +23,23 @@ public abstract class MutationHandler {
         mutations = new ArrayList<>();
         mutations.addAll(ConfigurationHandler.getMutations());
          //print registered mutations to the log
-        LogHelper.info("Registered Mutations:");
+        AgriCore.getLogger("AgriCraft").info("Registered Mutations:");
         for(Mutation mutation : mutations) {
-            LogHelper.info(" - " + mutation.getFormula());
+            AgriCore.getLogger("AgriCraft").info(" - " + mutation.getFormula());
         }
     }
 
     @SideOnly(Side.CLIENT)
     public static void syncFromServer(Mutation mutation, boolean finished) {
         if(!isSyncing) {
-            LogHelper.info("Receiving mutations from server");
+            AgriCore.getLogger("AgriCraft").info("Receiving mutations from server");
             mutations = new ArrayList<>();
             isSyncing = true;
         }
         mutations.add(mutation);
         if(finished) {
             isSyncing = false;
-            LogHelper.info("Successfully received mutations from server");
+            AgriCore.getLogger("AgriCraft").info("Successfully received mutations from server");
         }
     }
 

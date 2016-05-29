@@ -1,12 +1,12 @@
 package com.infinityraider.agricraft.tileentity.peripheral.method;
 
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
 
 import static com.infinityraider.agricraft.tileentity.peripheral.method.MethodUtilities.*;
 
 import java.util.ArrayList;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public abstract class MethodBaseGrowthReq extends MethodBase {
 	
@@ -24,7 +24,7 @@ public abstract class MethodBaseGrowthReq extends MethodBase {
         return onMethodCalled(getCropPlant(peripheral.getSpecimen()));
     }
 
-    protected abstract Object[] onMethodCalled(CropPlant plant) throws MethodException;
+    protected abstract Object[] onMethodCalled(IAgriCraftPlant plant) throws MethodException;
 
     @Override
     protected ArrayList<MethodParameter> getParameters() {

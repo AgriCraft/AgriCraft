@@ -9,8 +9,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -104,20 +102,12 @@ public interface APIv1 extends APIBase {
      * @param seed Stack holding the seed
      * @return an ICropPlant object if the seed is considered a seed for AgriCraft, or null if not
      */
-    ICropPlant getCropPlant(ItemStack seed);
+    IAgriCraftPlant getCropPlant(ItemStack seed);
 
     /**
-     * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
+     * Register a cropPlant for AgriCraft to recognize as a valid plant for crops
      */
     void registerCropPlant(IAgriCraftPlant plant);
-
-    /**
-     * Register a growth requirement for this seed,
-     * This will effectively override the IGrowthRequirement previously registered for the given seed
-     *
-     * @return true if the registering was successful
-     */
-    boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement);
 
     /**
      * Register a default soil that any crop that doesn't require a specific soil can grow on
@@ -239,7 +229,7 @@ public interface APIv1 extends APIBase {
      * @param pos the block position
      * @return an ICropPlant object if there is a seed planted here, or null if not
      */
-    ICropPlant getCropPlant(World world, BlockPos pos);
+    IAgriCraftPlant getCropPlant(World world, BlockPos pos);
 
     /**
      * Checks if the plant that is in crops at the given position can grow. A
@@ -513,30 +503,6 @@ public interface APIv1 extends APIBase {
     boolean removeMutation(ItemStack result);
 
     /**
-     * This method creates the block and the seed for a new plant that is fully compatible with agricraft.
-     * This method also registers this block and the item for the seed to the minecraft item/block registry and to the AgriCraft CropPlantHandler.
-     * @param args: Arguments can be given in any order, parameters can be:
-     *               String name (needed)
-     *               ItemStack fruit(needed)
-     *               BlockWithMeta soil (optional, pass this argument before the RequirementType, else it will be interpreted as a baseblock)
-     *               RequirementType (optional)
-     *               BlockWithMeta baseBlock (optional, only if a RequirementType is specified first, else it will be set a a soil)
-     *               int tier (necessary)
-     *               RenderMethod renderType (necessary)
-     *               ItemStack shearDrop (optional, first ItemStack argument will be the regular fruit, second ItemStack argument is the shear drop)
-     * @return
-     * The Block corresponding with the plant, return type will always be instance of Block as well IAgriCraftPlant.
-     * The seed is instance of Item and implements IAgriCraftSeed. It can be obtained by calling getSeed() on the returned object.
-     * This method will return null when not all necessary arguments are given.
-     */
-    IAgriCraftPlant createNewCrop(Object... args);
-
-    /**
-     * Register a cropPlant for AgriCraft to recognise as a valid plant for crops
-     */
-    void registerCropPlant(ICropPlant plant);
-
-    /**
      * Register a  soil that crop sticks can be placed on use this if you have your own ICropPlant which doesn't use IGrowthRequirement
      * @return true if the soil was successfully registered
      */
@@ -609,36 +575,6 @@ public interface APIv1 extends APIBase {
      * @param journal an ItemStack holding the journal
      * @return an ArrayList containing an ItemStack for every discovered seed (the list may be empty but will never be null)
      */
-    ArrayList<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal);
+    List<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal);
 
-    /**
-     * Checks if a seed is BlackListed
-     * @param seed the seed to check
-     * @return if the seed is blacklisted and should not be plantable on crop sticks
-     */
-    boolean isSeedBlackListed(ItemStack seed);
-
-    /**
-     * Adds a seed to the blacklist
-     * @param seed the seed to add to the blacklist
-     */
-    void addToSeedBlackList(ItemStack seed);
-
-    /**
-     * Adds a collection of seeds to the blacklist
-     * @param seeds collection containing all seeds to be added to the blacklist
-     */
-    void addToSeedBlacklist(Collection<? extends ItemStack> seeds);
-
-    /**
-     * Removes a seed from the blacklist
-     * @param seed the seed to be removed from the blacklist
-     */
-    void removeFromSeedBlackList(ItemStack seed);
-
-    /**
-     * Removes a collection of seeds from the blacklist
-     * @param seeds collection containing all seeds to be removed from the blacklist
-     */
-    void removeFromSeedBlacklist(Collection<? extends ItemStack> seeds);
 }

@@ -6,14 +6,11 @@ import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
-import com.infinityraider.agricraft.utility.LogHelper;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -28,13 +25,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class ItemClipping extends ItemBase {
 
 	@SideOnly(Side.CLIENT)
 	public static final class ItemData {
 
-		private ItemData() {}
+		private ItemData() {
+		}
 
 		public static final String BASE_LOCATION = "agricraftitem:agricraft/items/clipping$";
 
@@ -43,7 +42,7 @@ public class ItemClipping extends ItemBase {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private Map<CropPlant, ModelResourceLocation> textures;
+	private Map<IAgriCraftPlant, ModelResourceLocation> textures;
 
 	public ItemClipping() {
 		super("clipping", false);
@@ -58,7 +57,7 @@ public class ItemClipping extends ItemBase {
 		this.textures = new HashMap<>();
 	}
 
-	public final void addPlant(CropPlant crop, String texture) {
+	public final void addPlant(IAgriCraftPlant crop, String texture) {
 		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
 			this.textures.put(crop, getModel(texture));
 			this.textures.put(null, ItemData.DEFAULT_MODEL);
@@ -77,11 +76,12 @@ public class ItemClipping extends ItemBase {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerItemRenderer() {
-		LogHelper.debug("Registering Clipping Renderers...");
+		/*
+		AgriCore.getLogger("AgriCraft").debug("Registering Clipping Renderers...");
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, this::getModel);
 		ModelBakery.registerItemVariants(this, textures.values().toArray(new ModelResourceLocation[textures.values().size()]));
-		LogHelper.debug("Clipping Renderers Registered!");
-
+		AgriCore.getLogger("AgriCraft").debug("Clipping Renderers Registered!");
+		 */
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -135,7 +135,7 @@ public class ItemClipping extends ItemBase {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String text = I18n.translateToLocal("item.agricraft:clipping.name");
-		CropPlant plant = toCrop(stack);
+		IAgriCraftPlant plant = toCrop(stack);
 		if (plant == null || plant.getAllFruits() == null || plant.getAllFruits().isEmpty()) {
 			return text;
 		}
@@ -143,7 +143,7 @@ public class ItemClipping extends ItemBase {
 		return fruit.getDisplayName() + " " + text;
 	}
 
-	private static CropPlant toCrop(ItemStack stack) {
+	private static IAgriCraftPlant toCrop(ItemStack stack) {
 		try {
 			ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
 			return CropPlantHandler.getPlantFromStack(seed);
