@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.*;
@@ -110,9 +109,7 @@ public class AgriCraft {
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
-        MutationHandler.init();
 		CompatibilityHandler.getInstance().serverStart();
-        //NEIHelper.setServerConfigs();
     }
 
     @Mod.EventHandler

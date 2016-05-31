@@ -27,11 +27,12 @@ public class NetworkWrapper {
         this.registerMessage(MessageContainerSeedStorage.class);
         this.registerMessage(MessageGuiSeedStorageClearSeed.class);
         this.registerMessage(MessageTileEntitySeedStorage.class);
-        this.registerMessage(MessageSyncMutation.class);
         this.registerMessage(MessageFertiliserApplied.class);
         this.registerMessage(MessageSyncFluidLevel.class);
         this.registerMessage(MessagePeripheralCheckNeighbours.class);
         this.registerMessage(MessageSendNEISetting.class);
+		this.registerMessage(MessageSyncPlantJson.class);
+		this.registerMessage(MessageSyncMutationJson.class);
     }
 
     public void sendToAll(MessageBase message) {

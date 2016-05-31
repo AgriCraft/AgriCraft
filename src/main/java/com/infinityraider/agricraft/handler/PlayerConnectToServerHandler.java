@@ -1,48 +1,53 @@
 package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.farming.mutation.Mutation;
-import com.infinityraider.agricraft.farming.mutation.MutationHandler;
-import com.infinityraider.agricraft.network.MessageSyncMutation;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.agricraft.agricore.core.AgriCore;
-import net.minecraft.entity.player.EntityPlayer;
+import com.agricraft.agricore.plant.AgriMutation;
+import com.agricraft.agricore.plant.AgriPlant;
+import com.infinityraider.agricraft.network.MessageSyncMutationJson;
+import com.infinityraider.agricraft.network.MessageSyncPlantJson;
+import java.util.List;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 @SuppressWarnings("unused")
 public class PlayerConnectToServerHandler {
-    /** Receive mutations from the server when connecting to the server */
-    @SubscribeEvent
-    public void sendNEIconfig(PlayerEvent.PlayerLoggedInEvent event) {
-        if(!event.player.worldObj.isRemote) {
-            //NEIHelper.sendSettingsToClient((EntityPlayerMP) event.player);
-        }
-    }
 
-    @SubscribeEvent
-    public void syncMutations(PlayerEvent.PlayerLoggedInEvent event) {
-        if(!event.player.worldObj.isRemote) {
-            if(event.player.getServer().isDedicatedServer()) {
-                //for dedicated server sync to every player
-                syncMutations((EntityPlayerMP) event.player);
-            } else {
-                EntityPlayer connecting = event.player;
-                EntityPlayer local = AgriCraft.proxy.getClientPlayer();
-                if(local!=null && local!=connecting) {
-                    //for local LAN, only sync if the connecting player is not the host, because the host will already have the correct mutations
-                    syncMutations((EntityPlayerMP) event.player);
-                }
-            }
-        }
-    }
+	@SubscribeEvent
+	public void onConnect(PlayerEvent.PlayerLoggedInEvent event) {
+		EntityPlayerMP player = (EntityPlayerMP) event.player;
+		if (!player.worldObj.isRemote && player != AgriCraft.proxy.getClientPlayer()) {
+			syncPlants(player);
+			syncMutations(player);
+		}
+	}
 
-    private void syncMutations(EntityPlayerMP player) {
-        AgriCore.getLogger("AgriCraft").info("Sending mutations to player: " + player.getDisplayName());
-        Mutation[] mutations = MutationHandler.getMutations();
-        for (int i = 0; i < mutations.length; i++) {
-            NetworkWrapper.getInstance().sendTo(new MessageSyncMutation(mutations[i], i == mutations.length - 1), player);
-        }
-    }
+	private void syncMutations(EntityPlayerMP player) {
+		AgriCore.getLogger("Agri-Net").info("Sending mutations to player: " + player.getDisplayNameString());
+		List<AgriMutation> mutations = AgriCore.getMutations().getAll();
+		for(int i = 0; i < mutations.size(); i++) {
+			AgriCore.getLogger("Agri-Net").info("Sending mutation: ({0} of {1})", i + 1, mutations.size());
+			NetworkWrapper.getInstance().sendTo(
+					new MessageSyncMutationJson(mutations.get(i), i, mutations.size()),
+					player
+			);
+		}
+		AgriCore.getLogger("Agri-Net").info("Finished sending mutations to player: " + player.getDisplayNameString());
+	}
+
+	private void syncPlants(EntityPlayerMP player) {
+		AgriCore.getLogger("Agri-Net").info("Sending plants to player: " + player.getDisplayNameString());
+		List<AgriPlant> plants = AgriCore.getPlants().getAll();
+		for(int i = 0; i < plants.size(); i++) {
+			AgriCore.getLogger("Agri-Net").info("Sending plant: {0} ({1} of {2})", plants.get(i).getName(), i + 1, plants.size());
+			NetworkWrapper.getInstance().sendTo(
+					new MessageSyncPlantJson(plants.get(i), i, plants.size()),
+					player
+			);
+		}
+		AgriCore.getLogger("Agri-Net").info("Finished sending plants to player: " + player.getDisplayNameString());
+	}
+
 }

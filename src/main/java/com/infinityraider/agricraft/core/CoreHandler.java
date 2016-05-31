@@ -52,10 +52,14 @@ public final class CoreHandler {
 		AgriCore.getLogger("AgriCraft").info("Finished trying to load plants!");
 
 		// See if plants are valid...
+		AgriCore.getCoreLogger().debug("Validated Mutations: {0}", AgriCore.getPlants().getAll().size());
 		AgriCore.getPlants().validate();
+		AgriCore.getCoreLogger().debug("Unvalidated Mutations: {0}", AgriCore.getPlants().getAll().size());
 
 		// See if mutations are valid...
+		AgriCore.getCoreLogger().debug("Unvalidated Mutations: {0}", AgriCore.getMutations().getAll().size());
 		AgriCore.getMutations().validate();
+		AgriCore.getCoreLogger().debug("Validated Mutations: {0}", AgriCore.getMutations().getAll().size());
 		
 		// Save settings!
 		AgriCore.getConfig().save();

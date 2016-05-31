@@ -17,6 +17,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import java.util.*;
 import java.util.stream.Collectors;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.compatibility.jei.AgriCraftJEIPlugin;
+import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 
 public class CropPlantHandler {
@@ -46,6 +48,7 @@ public class CropPlantHandler {
 		AgriCore.getLogger("AgriCraft").debug("Registering plant: " + plant.getPlantName());
 		if (!plants.containsKey(plant.getPlantName())) {
 			plants.put(plant.getPlantName(), plant);
+			AgriCraftJEIPlugin.registerRecipe(plant);
 		} else {
 			throw new DuplicateCropPlantException();
 		}
@@ -175,7 +178,7 @@ public class CropPlantHandler {
 	
 	public static ItemStack getSeed(IAgriCraftPlant plant) {
 		if(plant != null) {
-		ItemStack stack = new ItemStack(ItemAgriCraftSeed.getInstance());
+		ItemStack stack = new ItemStack(AgriCraftItems.seed);
 		stack.setTagCompound(CropPlantHandler.writePlantToNBT(plant));
 		return stack;
 		} else {

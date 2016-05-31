@@ -1,16 +1,11 @@
 package com.infinityraider.agricraft.handler.config;
 
-import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.IOHelper;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * A class to handle the loading of the configuration file.
@@ -32,22 +27,6 @@ public class ConfigurationHandler {
 
 	public static String readGrassDrops() {
 		return IOHelper.readOrWrite(directory, "GrassDrops", IOHelper.getGrassDrops());
-	}
-
-	public static String readCustomCrops() {
-		return IOHelper.readOrWrite(directory, "CustomCrops", IOHelper.getCustomCropInstructions());
-	}
-
-	public static List<Mutation> getMutations() {
-		String filePath = directory + "/mutations.json";
-		File file = new File(filePath);
-		if (!file.exists()) {
-			List<Mutation> mutations = CropPlantHandler.getDefaultMutations();
-			MutationConfig.getInstance().writeMutations(mutations, filePath);
-			return mutations;
-		} else {
-			return MutationConfig.getInstance().readMutations(filePath);
-		}
 	}
 
 	public static String readSpreadChances() {

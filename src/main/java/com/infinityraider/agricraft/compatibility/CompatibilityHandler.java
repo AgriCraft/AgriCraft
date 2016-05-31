@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.compatibility.json.JsonHelper;
 import com.infinityraider.agricraft.compatibility.thaumcraft.ThaumcraftHelper;
 import com.infinityraider.agricraft.compatibility.waila.WailaHelper;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.tileentity.TileEntityCrop;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

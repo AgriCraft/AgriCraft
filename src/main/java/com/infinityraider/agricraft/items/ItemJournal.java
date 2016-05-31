@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.items;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.IJournal;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
@@ -72,9 +71,16 @@ public class ItemJournal extends ItemBase implements IJournal {
 		//check if the journal has AgriCraftNBT and if it doesn't, create a new one
 		if (!journal.hasTagCompound()) {
 			journal.setTagCompound(new NBTTagCompound());
+			return new ArrayList<>();
 		}
+		
 		NBTTagCompound tag = journal.getTagCompound();
-		return Arrays.asList(tag.getString(AgriCraftNBT.DISCOVERED_SEEDS).split(";"));
+		String discovered = tag.getString(AgriCraftNBT.DISCOVERED_SEEDS);
+		if (discovered.isEmpty()) {
+			return new ArrayList<>();
+		} else {
+			return Arrays.asList(discovered.split(";"));
+		}
 	}
 
 	@Override
@@ -88,8 +94,6 @@ public class ItemJournal extends ItemBase implements IJournal {
 			NBTTagCompound tag = journal.getTagCompound();
 			String old = tag.getString(AgriCraftNBT.DISCOVERED_SEEDS);
 			tag.setString(AgriCraftNBT.DISCOVERED_SEEDS, old + id + ";");
-			//AgriCore.getLogger("AgriCraft").debug("Discovered Plants: {0}", getDiscoveredSeedIds(journal));
-			//AgriCore.getLogger("AgriCraft").debug("Plants: {0}", CropPlantHandler.getPlantIds());
 			journal.setTagCompound(tag);
 		}
 	}

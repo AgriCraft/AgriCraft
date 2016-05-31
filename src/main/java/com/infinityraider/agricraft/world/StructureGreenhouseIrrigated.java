@@ -16,7 +16,6 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;

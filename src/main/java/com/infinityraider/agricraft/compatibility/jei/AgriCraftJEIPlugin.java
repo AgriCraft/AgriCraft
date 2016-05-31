@@ -4,21 +4,22 @@ import com.infinityraider.agricraft.compatibility.jei.mutation.MutationRecipeCat
 import com.infinityraider.agricraft.compatibility.jei.mutation.MutationRecipeHandler;
 import com.infinityraider.agricraft.compatibility.jei.produce.ProduceRecipeCategory;
 import com.infinityraider.agricraft.compatibility.jei.produce.ProduceRecipeHandler;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.mutation.MutationHandler;
-import java.util.Arrays;
 import javax.annotation.Nonnull;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import java.util.ArrayList;
+import java.util.List;
 
 @JEIPlugin
 public class AgriCraftJEIPlugin implements IModPlugin {
-	
+
 	public static final String CATEGORY_MUTATION = "agricraft.mutation";
 	public static final String CATEGORY_PRODUCE = "agricraft.produce";
+
+	private static final List<Object> toRegister = new ArrayList<>();
+	private static IJeiRuntime jeiruntime;
 
 	@Override
 	public void register(@Nonnull IModRegistry registry) {
@@ -33,13 +34,22 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 				new ProduceRecipeHandler()
 		);
 
-		registry.addRecipes(Arrays.asList(MutationHandler.getMutations()));
 	}
 
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-		for(IAgriCraftPlant plant : CropPlantHandler.getPlants()) {
-			jeiRuntime.getRecipeRegistry().addRecipe(plant);
+		jeiruntime = jeiRuntime;
+		for (Object o : toRegister) {
+			jeiruntime.getRecipeRegistry().addRecipe(o);
+		}
+		toRegister.clear();
+	}
+	
+	public static void registerRecipe(Object o) {
+		if (jeiruntime != null) {
+			jeiruntime.getRecipeRegistry().addRecipe(o);
+		} else {
+			toRegister.add(o);
 		}
 	}
 

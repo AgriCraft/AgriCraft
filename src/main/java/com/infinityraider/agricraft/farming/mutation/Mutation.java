@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import java.util.Objects;
 
 public class Mutation implements IMutation {
     private ItemStack result;
@@ -69,21 +70,20 @@ public class Mutation implements IMutation {
 
     @Override
     public boolean equals(Object object) {
-        boolean isEqual = false;
         if(object instanceof Mutation) {
             Mutation mutation = (Mutation) object;
             if(this.chance==mutation.chance) {
                 if(this.result.isItemEqual(mutation.result)) {
                     if(this.parent1.isItemEqual(mutation.parent1) && this.parent2.isItemEqual(mutation.parent2)) {
-                        isEqual = true;
+                        return true;
                     }
                     else if(this.parent1.isItemEqual(mutation.parent2) && this.parent2.isItemEqual(mutation.parent1)) {
-                        isEqual = true;
+                        return true;
                     }
                 }
             }
         }
-        return isEqual;
+        return false;
     }
     
     public String getFormula(){

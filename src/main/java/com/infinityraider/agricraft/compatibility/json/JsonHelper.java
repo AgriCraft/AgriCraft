@@ -14,16 +14,10 @@ import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class JsonHelper extends ModHelper {
 
-	private final List<JsonCropPlant> customCrops;
+	private static final List<JsonCropPlant> customCrops = new ArrayList<>();
 
 	public JsonHelper() {
 		super("JSON");
-		this.customCrops = new ArrayList<>();
-	}
-
-	@Override
-	protected void postInit() {
-		initCrops();
 	}
 
 	@Override
@@ -33,18 +27,21 @@ public class JsonHelper extends ModHelper {
 	}
 
 	@Override
+	@SideOnly(Side.SERVER)
 	protected void serverStart() {
+		initCrops();
 		initMutations();
 	}
 
-	public void initCrops() {
+	public static void initCrops() {
+		AgriCore.getPlants().validate();
 		AgriCore.getLogger("AgriCraft").info("Registering Custom Crops!");
 		AgriCore.getPlants().validate();
 		AgriCore.getPlants().getAll().forEach((p) -> {
 			JsonCropPlant c = new JsonCropPlant(p);
 			try {
 				CropPlantHandler.registerPlant(c);
-				this.customCrops.add(c);
+				customCrops.add(c);
 			} catch (DuplicateCropPlantException e) {
 				AgriCore.getLogger("AgriCraft").debug("Duplicate plant: " + p.getName() + "!");
 			}
@@ -52,7 +49,8 @@ public class JsonHelper extends ModHelper {
 		AgriCore.getLogger("AgriCraft").info("Custom crops registered!");
 	}
 
-	public void initMutations() {
+	public static void initMutations() {
+		AgriCore.getMutations().validate();
 		AgriCore.getMutations().getAll().forEach((m) -> {
 			IAgriCraftPlant child = findPlant(m.getChild().getId());
 			IAgriCraftPlant p1 = findPlant(m.getParent1().getId());
@@ -61,19 +59,24 @@ public class JsonHelper extends ModHelper {
 				MutationHandler.add(new Mutation(child.getSeed(), p1.getSeed(), p2.getSeed(), m.getChance()));
 			}
 		});
+		//print registered mutations to the log
+		AgriCore.getLogger("AgriCraft").info("Registered Mutations:");
+		for (Mutation mutation : MutationHandler.getMutations()) {
+			AgriCore.getLogger("AgriCraft").info(" - " + mutation.getFormula());
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void initPlantTextures() {
+	public static void initPlantTextures() {
 		AgriCore.getLogger("AgriCraft").debug("Starting custom plant texture registration...");
-		this.customCrops.forEach((p) -> {
+		customCrops.forEach((p) -> {
 			p.registerIcons();
 		});
 		AgriCore.getLogger("AgriCraft").debug("Registered custom plant textures!");
 	}
 
-	private static final IAgriCraftPlant findPlant(String id) {
-		AgriCore.getLogger("AgriCraft").debug("Looking for plant: " + id);
+	private static IAgriCraftPlant findPlant(String id) {
+		//AgriCore.getLogger("AgriCraft").debug("Looking for plant: " + id);
 		for (IAgriCraftPlant p : CropPlantHandler.getPlants()) {
 			String other;
 			if (p.getBlock() != null) {
@@ -85,11 +88,11 @@ public class JsonHelper extends ModHelper {
 			}
 			//AgriCore.getLogger("AgriCraft").debug("Saw plant: " + other);
 			if (other.equalsIgnoreCase(id)) {
-				AgriCore.getLogger("AgriCraft").debug("Found Plant: " + other + "!");
+				//AgriCore.getLogger("AgriCraft").debug("Found Plant: " + other + "!");
 				return p;
 			}
 		}
-		AgriCore.getLogger("AgriCraft").debug("Couldn't find plant: " + id + "!");
+		//AgriCore.getLogger("AgriCraft").debug("Couldn't find plant: " + id + "!");
 		return null;
 	}
 
