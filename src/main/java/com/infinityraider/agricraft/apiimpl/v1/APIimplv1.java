@@ -17,7 +17,6 @@ import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
-import com.infinityraider.agricraft.utility.statstringdisplayer.StatStringDisplayer;
 import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
 import net.minecraft.block.Block;
@@ -555,12 +554,6 @@ public class APIimplv1 implements APIv1 {
     @Override
     public IGrowthRequirement createDefaultGrowthRequirement() {
         return GrowthRequirementHandler.getNewBuilder().build();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void setStatStringDisplayer(IStatStringDisplayer displayer) {
-        StatStringDisplayer.setStatStringDisplayer(displayer);
     }
 
     @Override

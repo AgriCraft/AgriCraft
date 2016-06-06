@@ -10,6 +10,7 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.reference.Constants;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * AgriCraft Configuration File.
@@ -118,8 +119,8 @@ public class AgriCraftConfig {
 	// Client
 	@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Condense custom wood blocks in NEI", comment = "Set to true to condense all entries for custom wood blocks into one entry in NEI.")
 	public static boolean condenseCustomWoodInNei = true;
-	@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Stat Display", comment = "This defines how to display the stats of plants. Possible settings are 'NUMBER': just display a simple number (ex: \"6\"), 'FRACTION': number/maximum (ex: \"6/10\"), 'CHARACTER-'char'': number of characters equal to the stats (ex: CHARACTER-� will give \"������\") and 'KEYWORD-'type'-'keyword'': keyword followed by the type and then the stat, type is any of the previous types (ex: KEYWORD-FRACTION-Rank will give \"Rank: 6/10\") . Invalid entries will default to NUMBER.")
-	public static String statDisplay = "NUMBER";
+	@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Stat Display", comment = "This defines how to display the stats of plants.")
+	public static String STAT_FORMAT = TextFormatting.GREEN + "- %s: [%d/%d]";
 	@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Disable particles", comment = "Set to true to disable particles for the sprinklers.")
 	public static boolean disableParticles = false;
 	@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Disable sounds", comment = "Set to true to disable sounds.")

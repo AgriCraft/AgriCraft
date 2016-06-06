@@ -548,13 +548,6 @@ public interface APIv1 extends APIBase {
     IGrowthRequirement createDefaultGrowthRequirement();
 
     /**
-     * Method used to set custom stat displaying methods
-     * @param displayer the IStatStringDisplayer Object to be used when displaying stat strings in tooltips
-     */
-    @SideOnly(Side.CLIENT)
-    void setStatStringDisplayer(IStatStringDisplayer displayer);
-
-    /**
      * Checks if a seed is discovered in the journal
      * @param journal an ItemStack holding the journal
      * @param seed an ItemStack containing a seed

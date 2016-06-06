@@ -17,7 +17,6 @@ import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.statstringdisplayer.StatStringDisplayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -39,6 +38,7 @@ import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.utility.PlayerHelper;
 
 public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable {
 
@@ -559,9 +559,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 			}
 			//Add the ANALYZED data.
 			if (this.isAnalyzed()) {
-				information.add(" - " + I18n.translateToLocal("agricraft_tooltip.growth") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGrowth(), AgriCraftConfig.cropStatCap));
-				information.add(" - " + I18n.translateToLocal("agricraft_tooltip.gain") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getGain(), AgriCraftConfig.cropStatCap));
-				information.add(" - " + I18n.translateToLocal("agricraft_tooltip.strength") + ": " + StatStringDisplayer.instance().getStatDisplayString(this.getStrength(), AgriCraftConfig.cropStatCap));
+				PlayerHelper.addStats(information, this.getGrowth(), this.getGain(), this.getStrength());
 			} else {
 				information.add(I18n.translateToLocal("agricraft_tooltip.analyzed"));
 			}
