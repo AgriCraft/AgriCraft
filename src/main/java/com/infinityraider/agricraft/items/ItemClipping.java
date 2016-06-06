@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriCraftTab;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
-import com.infinityraider.agricraft.tileentity.TileEntityCustomWood;
+import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

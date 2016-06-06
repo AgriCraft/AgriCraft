@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft;
 
 import com.infinityraider.agricraft.apiimpl.APISelector;
-import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
+import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;

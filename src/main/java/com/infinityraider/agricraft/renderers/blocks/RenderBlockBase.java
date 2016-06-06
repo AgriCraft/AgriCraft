@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockBase;
-import com.infinityraider.agricraft.tileentity.TileEntityBase;
+import com.infinityraider.agricraft.tiles.TileEntityBase;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

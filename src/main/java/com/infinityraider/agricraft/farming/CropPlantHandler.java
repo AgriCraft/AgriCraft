@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.farming;
 
-import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
+import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.cropplant.*;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import java.util.*;
 import java.util.stream.Collectors;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.compatibility.jei.AgriCraftJEIPlugin;
+import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 

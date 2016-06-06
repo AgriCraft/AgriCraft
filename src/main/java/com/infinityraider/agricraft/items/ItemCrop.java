@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

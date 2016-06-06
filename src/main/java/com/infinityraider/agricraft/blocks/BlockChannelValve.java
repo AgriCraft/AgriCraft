@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.blocks;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannelValve;
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannelValve;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelValve;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;

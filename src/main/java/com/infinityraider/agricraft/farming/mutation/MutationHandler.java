@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.farming.mutation;
 
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
-import com.infinityraider.agricraft.compatibility.jei.AgriCraftJEIPlugin;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

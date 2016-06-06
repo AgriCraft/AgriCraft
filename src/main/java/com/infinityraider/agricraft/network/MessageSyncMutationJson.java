@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.network;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriMutation;
 import com.google.gson.Gson;
-import com.infinityraider.agricraft.compatibility.json.JsonHelper;
+import com.infinityraider.agricraft.compat.json.JsonHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

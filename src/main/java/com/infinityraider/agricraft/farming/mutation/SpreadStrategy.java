@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.farming.mutation;
 
 
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 
 import java.util.List;
 

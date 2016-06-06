@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.api.v1.*;
-import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
+import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.network.MessageFertiliserApplied;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
