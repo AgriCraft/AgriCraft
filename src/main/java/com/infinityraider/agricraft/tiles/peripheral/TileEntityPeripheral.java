@@ -1,10 +1,29 @@
 package com.infinityraider.agricraft.tiles.peripheral;
 
+import com.infinityraider.agricraft.compat.computercraft.method.MethodGetStats;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodGetCurrentSoil;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodGetBrightness;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodHasJournal;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodGetGrowthStage;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodIsCrossCrop;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodGetNeededSoil;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodNeedsBaseBlock;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodHasWeeds;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodException;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodGetSpecimen;
+import com.infinityraider.agricraft.compat.computercraft.method.IMethod;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodHasPlant;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodIsMature;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodGetBaseBlockType;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodAnalyze;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodGetPlant;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodIsAnalyzed;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodGetBrightnessRange;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodGetBaseBlock;
+import com.infinityraider.agricraft.compat.computercraft.method.MethodIsFertile;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.reference.AgriCraftMods;
 import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
-import com.infinityraider.agricraft.tiles.peripheral.method.*;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -14,11 +33,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 
-
 @Optional.InterfaceList( value = {
-        @Optional.Interface(modid = AgriCraftMods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheral"),
-        @Optional.Interface(modid = AgriCraftMods.openComputers, iface = "li.cil.oc.api.network.SimpleComponent"),
-        @Optional.Interface(modid = AgriCraftMods.openComputers, iface = "li.cil.oc.api.network.ManagedPeripheral")
+        @Optional.Interface(modid = "ComputerCraft", iface = "dan200.computercraft.api.peripheral.IPeripheral"),
+        @Optional.Interface(modid = "OpenComputers", iface = "li.cil.oc.api.network.SimpleComponent"),
+        @Optional.Interface(modid = "OpenComputers", iface = "li.cil.oc.api.network.ManagedPeripheral")
 })
 public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     private static IMethod[] methods;

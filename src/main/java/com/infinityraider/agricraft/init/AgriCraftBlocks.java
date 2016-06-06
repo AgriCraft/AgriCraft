@@ -5,7 +5,6 @@ import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.blocks.*;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.reference.AgriCraftMods;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.Block;
 
@@ -62,9 +61,8 @@ public class AgriCraftBlocks {
 				//blockSeedStorageController = new BlockSeedStorageController();
 			}
 		}
-		if (CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.computerCraft) || CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.openComputers)) {
-			blockPeripheral = new BlockPeripheral();
-		}
+		// The following needs to be done elsewhere.
+		// blockPeripheral = new BlockPeripheral();
 		if (enableFences) {
 			blockFence = new BlockFence();
 			blockFenceGate = new BlockFenceGate();

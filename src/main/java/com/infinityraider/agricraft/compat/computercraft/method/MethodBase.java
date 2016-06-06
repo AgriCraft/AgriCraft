@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.tiles.peripheral.method;
+package com.infinityraider.agricraft.compat.computercraft.method;
 
 import com.infinityraider.agricraft.api.v1.ITrowel;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-import static com.infinityraider.agricraft.tiles.peripheral.method.MethodUtilities.*;
+import static com.infinityraider.agricraft.compat.computercraft.method.MethodUtilities.*;
 
 public abstract class MethodBase implements IMethod {
 

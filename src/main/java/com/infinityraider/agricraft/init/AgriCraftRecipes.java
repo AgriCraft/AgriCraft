@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.crafting.RecipeJournal;
 import com.infinityraider.agricraft.items.crafting.RecipeShapelessCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.reference.AgriCraftMods;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.items.ItemNugget;
 import com.infinityraider.agricraft.utility.OreDictHelper;
@@ -81,14 +80,7 @@ public class AgriCraftRecipes {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftItems.clipper, 1, 0), " i ", "scn", " s ", 'i', "ingotIron", 's', "stickWood", 'c', new ItemStack(net.minecraft.init.Items.shears)));
         }
         //peripheral
-        if(AgriCraftBlocks.blockPeripheral!=null) {
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.computerCraft)) {
-                //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', AgriCraftBlocks.blockSeedAnalyzer, 'r', net.minecraft.init.AgriCraftItems.comparator, 'c', ComputerCraftHelper.getComputerBlock()));
-            }
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.openComputers)) {
-                //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', AgriCraftBlocks.blockSeedAnalyzer, 'r', net.minecraft.init.AgriCraftItems.comparator, 'c', OpenComputersHelper.getComputerBlock()));
-            }
-        }
+        // To be done elsewhere.
         //CustomWood recipes
         registerCustomWoodRecipes();
         if (!AgriCraftConfig.disableIrrigation) {

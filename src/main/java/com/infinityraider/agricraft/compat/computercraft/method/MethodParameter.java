@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.tiles.peripheral.method;
+package com.infinityraider.agricraft.compat.computercraft.method;
 
 
 import net.minecraft.util.text.translation.I18n;

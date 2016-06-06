@@ -1,8 +1,8 @@
-package com.infinityraider.agricraft.tiles.peripheral.method;
+package com.infinityraider.agricraft.compat.computercraft.method;
 
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
-import static com.infinityraider.agricraft.tiles.peripheral.method.MethodUtilities.*;
+import static com.infinityraider.agricraft.compat.computercraft.method.MethodUtilities.*;
 
 import java.util.ArrayList;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;

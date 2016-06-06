@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.tiles.peripheral.method;
+package com.infinityraider.agricraft.compat.computercraft.method;
 
 public class MethodException extends Exception {
     private IMethod method;
