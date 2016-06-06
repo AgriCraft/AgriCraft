@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.entity.EntityLeashKnotAgricraft;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockFence;
-import com.infinityraider.agricraft.tileentity.decoration.TileEntityFence;
+import com.infinityraider.agricraft.tiles.decoration.TileEntityFence;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;

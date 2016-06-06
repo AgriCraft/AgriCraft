@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriCraftTab;
 import com.infinityraider.agricraft.renderers.items.IItemRenderingHandler;
 import com.infinityraider.agricraft.renderers.items.ItemRendererRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;

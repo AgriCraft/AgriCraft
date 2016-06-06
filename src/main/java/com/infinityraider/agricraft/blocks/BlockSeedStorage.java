@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.blocks;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
-import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;

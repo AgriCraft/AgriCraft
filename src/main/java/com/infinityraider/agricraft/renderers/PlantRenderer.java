@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.renderers;
 
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.renderers.tessellation.TessellatorBakedQuad;
@@ -12,11 +11,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
 
-    public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, ICropPlant plant) {
+    public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, IAgriCraftPlant plant) {
         ITessellator tessellator = TessellatorBakedQuad.getInstance();
         TextureAtlasSprite iconA = tessellator.getIcon(plant.getPrimaryPlantTexture(growthStage));
         TextureAtlasSprite iconB = tessellator.getIcon(plant.getSecondaryPlantTexture(growthStage));

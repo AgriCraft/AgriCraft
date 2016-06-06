@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
 import com.infinityraider.agricraft.api.v1.*;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.utility.IOHelper;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.Block;
@@ -61,7 +60,8 @@ public class GrowthRequirementHandler {
     private static void registerCustomEntries() {
         //reads custom entries
     	AgriCore.getLogger("AgriCraft").info("Registering soils to whitelist:");
-        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
+		// TODO Decide if to replace!
+        String[] data = new String[]{"minecraft:dirt"};
         String total = " of " + data.length + ".";
         for (String line : data) {
             AgriCore.getLogger("AgriCraft").debug("  Parsing " + line + total);

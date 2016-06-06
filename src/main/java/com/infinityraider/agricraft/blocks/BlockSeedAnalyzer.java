@@ -2,11 +2,11 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
-import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriCraftTab;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
-import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;

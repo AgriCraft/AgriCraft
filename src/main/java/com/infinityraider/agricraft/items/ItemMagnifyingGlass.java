@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

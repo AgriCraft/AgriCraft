@@ -4,13 +4,9 @@ import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
 import com.infinityraider.agricraft.api.APIStatus;
 import com.infinityraider.agricraft.api.v1.*;
-import com.infinityraider.agricraft.api.v1.ICropPlant;
 import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.blocks.BlockModPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.cropplant.CropPlantAPIv1;
-import com.infinityraider.agricraft.farming.cropplant.CropPlantAgriCraft;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
@@ -20,11 +16,9 @@ import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
-import com.infinityraider.agricraft.utility.exception.MissingArgumentsException;
-import com.infinityraider.agricraft.utility.statstringdisplayer.StatStringDisplayer;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.google.common.collect.Lists;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -32,14 +26,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class APIimplv1 implements APIv1 {
     private final int version;
@@ -112,23 +104,13 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public void registerCropPlant(ICropPlant plant) {
-        CropPlantHandler.addCropToRegister(new CropPlantAPIv1(plant));
-    }
-
-    @Override
-    public ICropPlant getCropPlant(ItemStack seed) {
-        return CropPlantHandler.getPlantFromStack(seed);
-    }
-
-    @Override
     public void registerCropPlant(IAgriCraftPlant plant) {
-        CropPlantHandler.addCropToRegister(new CropPlantAgriCraft(plant));
+        CropPlantHandler.addCropToRegister(plant);
     }
 
     @Override
-    public boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement) {
-        return CropPlantHandler.setGrowthRequirement(seed, requirement);
+    public IAgriCraftPlant getCropPlant(ItemStack seed) {
+        return CropPlantHandler.getPlantFromStack(seed);
     }
 
     @Override
@@ -233,7 +215,7 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public ICropPlant getCropPlant(World world, BlockPos pos) {
+    public IAgriCraftPlant getCropPlant(World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if(te==null || !(te instanceof TileEntityCrop)) {
             return null;
@@ -515,16 +497,6 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public IAgriCraftPlant createNewCrop(Object... args) {
-        try {
-            return new BlockModPlant(args);
-        } catch (MissingArgumentsException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
     public boolean registerValidSoil(BlockWithMeta soil) {
         GrowthRequirementHandler.addSoil(soil);
         return true;
@@ -583,12 +555,6 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void setStatStringDisplayer(IStatStringDisplayer displayer) {
-        StatStringDisplayer.setStatStringDisplayer(displayer);
-    }
-
-    @Override
     public boolean isSeedDiscoveredInJournal(ItemStack journal, ItemStack seed) {
         if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
             return false;
@@ -605,35 +571,11 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public ArrayList<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal) {
+    public List<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal) {
         if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
             return new ArrayList<>();
         }
         return ((IJournal) journal.getItem()).getDiscoveredSeeds(journal);
     }
 
-    @Override
-    public boolean isSeedBlackListed(ItemStack seed) {
-        return CropPlantHandler.isSeedBlackListed(seed);
-    }
-
-    @Override
-    public void addToSeedBlackList(ItemStack seed) {
-        CropPlantHandler.addSeedToBlackList(seed);
-    }
-
-    @Override
-    public void addToSeedBlacklist(Collection<? extends ItemStack> seeds) {
-        CropPlantHandler.addAllToSeedBlacklist(seeds);
-    }
-
-    @Override
-    public void removeFromSeedBlackList(ItemStack seed) {
-        CropPlantHandler.removeFromSeedBlackList(seed);
-    }
-
-    @Override
-    public void removeFromSeedBlacklist(Collection<? extends ItemStack> seeds) {
-        CropPlantHandler.removeAllFromSeedBlacklist(seeds);
-    }
 }

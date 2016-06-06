@@ -1,18 +1,13 @@
 package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.blocks.BlockBase;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.MissingJsonHandler;
 import com.infinityraider.agricraft.handler.SoundHandler;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.init.AgriCraftCrops;
 import com.infinityraider.agricraft.init.AgriCraftItems;
-import com.infinityraider.agricraft.init.CustomCrops;
-import com.infinityraider.agricraft.init.ResourceCrops;
 import com.infinityraider.agricraft.items.ItemBase;
-import com.infinityraider.agricraft.items.ItemModSeed;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.utility.OreDictHelper;
@@ -115,13 +110,13 @@ public class ClientProxy implements IProxy {
 		}
 
 		// Seeds
-		for (ItemModSeed seed : AgriCraftCrops.seeds) {
-			try {
-				seed.registerItemRenderer();
-			} catch (Exception e) {
-				AgriCore.getLogger("AgriCraft").trace(e);
-			}
-		}
+//		for (ItemAgriCraftSeed seed : AgriCraftCrops.seeds) {
+//			try {
+//				seed.registerItemRenderer();
+//			} catch (Exception e) {
+//				AgriCore.getLogger("AgriCraft").trace(e);
+//			}
+//		}
 
 		// Clippings
 		AgriCraftItems.clipping.registerItemRenderer();
@@ -131,44 +126,6 @@ public class ClientProxy implements IProxy {
 		registerRenderers function in each class...
 		 */
 		// Custom Crops
-		if (CustomCrops.customSeeds != null) {
-			AgriCore.getLogger("AgriCraft").debug("Starting custom crop renderer registration...");
-			for (ItemModSeed seed : CustomCrops.customSeeds) {
-				try {
-					seed.registerItemRenderer();
-					AgriCore.getLogger("AgriCraft").debug("Registered Renderer for: " + seed.getRegistryName());
-				} catch (Exception e) {
-					AgriCore.getLogger("AgriCraft").trace(e);
-				}
-			}
-			AgriCore.getLogger("AgriCraft").debug("Registered custom crop renderers!");
-		}
-
-		// Resource Crops
-		if (ResourceCrops.vanillaSeeds != null) {
-			AgriCore.getLogger("AgriCraft").debug("Starting vanillia crop renderer registration...");
-			for (ItemModSeed seed : ResourceCrops.vanillaSeeds) {
-				try {
-					seed.registerItemRenderer();
-					AgriCore.getLogger("AgriCraft").info("Registered Renderer for: " + seed.getRegistryName());
-				} catch (Exception e) {
-					AgriCore.getLogger("AgriCraft").trace(e);
-				}
-			}
-			AgriCore.getLogger("AgriCraft").debug("Registered vanillia crop renderers!");
-		}
-		if (ResourceCrops.modSeeds != null) {
-			AgriCore.getLogger("AgriCraft").debug("Starting resource crop renderer registration...");
-			for (ItemModSeed seed : ResourceCrops.modSeeds) {
-				try {
-					seed.registerItemRenderer();
-					AgriCore.getLogger("AgriCraft").info("Registered Renderer for: " + seed.getRegistryName());
-				} catch (Exception e) {
-					AgriCore.getLogger("AgriCraft").trace(e);
-				}
-			}
-			AgriCore.getLogger("AgriCraft").debug("Registered resource crop renderers!");
-		}
 
 		// Nuggets
 		OreDictHelper.registerNuggetRenderers();
@@ -225,7 +182,6 @@ public class ClientProxy implements IProxy {
 	@Override
 	public void initConfiguration(FMLPreInitializationEvent event) {
 		IProxy.super.initConfiguration(event);
-		ConfigurationHandler.initClientConfigs(event);
 	}
 
 	@Override

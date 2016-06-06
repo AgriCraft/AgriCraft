@@ -1,12 +1,11 @@
 package com.infinityraider.agricraft.world;
 
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.WorldGen;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
-import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.BlockFarmland;
@@ -22,10 +21,10 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
     //structure dimensions
@@ -172,7 +171,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
         this.setBlockState(world, Blocks.torch.getDefaultState(), 15, 4, 10, boundingBox);
         this.setBlockState(world, Blocks.torch.getDefaultState(), 8, 4, 2, boundingBox);
         //place crops
-        ArrayList<CropPlant> plants = CropPlantHandler.getPlantsUpToTier(AgriCraftConfig.greenHouseMaxTier);
+        List<IAgriCraftPlant> plants = CropPlantHandler.getPlantsUpToTier(AgriCraftConfig.greenHouseMaxTier);
         for(int x=3;x<=7;x++) {
             for(int z=3;z<=7;z++) {
                 this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==0 && x%2==0) || (x==5 &&z==5), plants);
@@ -188,7 +187,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
     }
 
     //place a crop
-    protected boolean generateStructureCrop(World world, StructureBoundingBox boundingBox, int x, int y, int z, boolean crosscrop, ArrayList<CropPlant> plants) {
+    protected boolean generateStructureCrop(World world, StructureBoundingBox boundingBox, int x, int y, int z, boolean crosscrop, List<IAgriCraftPlant> plants) {
         int xCoord = this.getXWithOffset(x, z);
         int yCoord = this.getYWithOffset(y);
         int zCoord = this.getZWithOffset(x, z);

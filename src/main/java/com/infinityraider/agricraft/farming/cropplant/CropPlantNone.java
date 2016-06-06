@@ -19,14 +19,14 @@ public final class CropPlantNone extends CropPlant {
 
     private CropPlantNone() {}
 
-    @Override
-    public int tier() {
-        return 1;
-    }
+	@Override
+	public String getPlantName() {
+		return "None";
+	}
 
     @Override
-    public ItemStack getSeed() {
-        return null;
+    public int getTier() {
+        return 1;
     }
 
     @Override

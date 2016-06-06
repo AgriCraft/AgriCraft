@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockWaterTank;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.tileentity.storage.SeedStorageSlot;
-import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
+import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

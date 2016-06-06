@@ -1,12 +1,10 @@
 package com.infinityraider.agricraft;
 
 import com.infinityraider.agricraft.apiimpl.APISelector;
-import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
+import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.farming.mutation.MutationHandler;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.*;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
@@ -15,7 +13,6 @@ import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
 import com.agricraft.agricore.core.AgriCore;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -71,7 +68,6 @@ public class AgriCraft {
         AgriCore.getLogger("AgriCraft").debug("Starting Pre-Initialization");
         NetworkWrapper.getInstance().initMessages();
         proxy.initConfiguration(event);
-        FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
         AgriCraftBlocks.init();
 		AgriCraftItems.init();
         AgriCraftCrops.init();
@@ -99,13 +95,10 @@ public class AgriCraft {
 		// Core
 		CoreHandler.postInit(event);
         //Have to do this in postInit because some mods don't register their items/blocks until init
-        ResourceCrops.init();
-        CustomCrops.init();
         AgriCraftRecipes.init();
         GrowthRequirementHandler.init();
         CropPlantHandler.init();
         WorldGen.init();
-        CustomCrops.initGrassSeeds();
         CompatibilityHandler.getInstance().postInit();
         AgriCore.getLogger("AgriCraft").debug("Post-Initialization Complete");
     }
@@ -113,13 +106,7 @@ public class AgriCraft {
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
-        MutationHandler.init();
-        //NEIHelper.setServerConfigs();
-    }
-
-    @Mod.EventHandler
-    @SuppressWarnings("unused")
-    public void onServerStart(FMLServerStartingEvent event) {
+		CompatibilityHandler.getInstance().serverStart();
     }
 
     @Mod.EventHandler

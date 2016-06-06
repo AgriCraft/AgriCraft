@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.farming.mutation;
 
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 
 import java.util.Random;
 
@@ -41,8 +41,7 @@ public class MutationEngine {
     }
 
     private boolean resultIsValid(CrossOverResult result) {
-        IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(result.getSeed(), result.getMeta());
-
+        IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(result.toStack());
         boolean valid = result.getSeed() != null && CropPlantHandler.isValidSeed(result.toStack());
         return valid && growthReq.canGrow(crop.getWorld(), crop.getPos());
     }

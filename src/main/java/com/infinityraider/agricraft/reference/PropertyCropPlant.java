@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.reference;
 
 import com.google.common.base.Optional;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import java.util.Collection;
 import java.util.List;
 import net.minecraft.block.properties.PropertyHelper;
@@ -11,16 +10,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 /**
  * A property for having a crop plant.
  *
  * @author RlonRyan
  */
-public class PropertyCropPlant extends PropertyHelper<CropPlant> {
+public class PropertyCropPlant extends PropertyHelper<IAgriCraftPlant> {
 	
 	protected PropertyCropPlant(String name) {
-		 super(name, CropPlant.class);
+		 super(name, IAgriCraftPlant.class);
 	}
 	
 	public static PropertyCropPlant create(String name) {
@@ -28,15 +28,15 @@ public class PropertyCropPlant extends PropertyHelper<CropPlant> {
 	}
 
 	@Override
-	public Collection<CropPlant> getAllowedValues() {
-		List<CropPlant> list = CropPlantHandler.getPlantsUpToTier(5);
+	public Collection<IAgriCraftPlant> getAllowedValues() {
+		List<IAgriCraftPlant> list = CropPlantHandler.getPlantsUpToTier(5);
 		list.add(CropPlantHandler.NONE);
 		return list;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Optional<CropPlant> parseValue(String value) {
+	public Optional<IAgriCraftPlant> parseValue(String value) {
 		if(value.equals("none")) {
 			return null;
 		}
@@ -44,7 +44,7 @@ public class PropertyCropPlant extends PropertyHelper<CropPlant> {
 	}
 
 	@Override
-	public String getName(CropPlant value) {
+	public String getName(IAgriCraftPlant value) {
 		ItemStack seed = value.getSeed();
 		if (seed == null) {
 			return "none";
