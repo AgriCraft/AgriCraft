@@ -4,7 +4,7 @@
  * This might not be *strictly* cleaner, but it is nicer.
  *
  */
-package com.infinityraider.agricraft.handler.config;
+package com.infinityraider.agricraft.config;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
@@ -120,7 +120,7 @@ public class AgriCraftConfig {
 	@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Condense custom wood blocks in NEI", comment = "Set to true to condense all entries for custom wood blocks into one entry in NEI.")
 	public static boolean condenseCustomWoodInNei = true;
 	@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Stat Display", comment = "This defines how to display the stats of plants.")
-	public static String STAT_FORMAT = TextFormatting.GREEN + "- %s: [%d/%d]";
+	public static String STAT_FORMAT = TextFormatting.GREEN + "- {0}: [{1}/{2}]";
 	@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Disable particles", comment = "Set to true to disable particles for the sprinklers.")
 	public static boolean disableParticles = false;
 	@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Disable sounds", comment = "Set to true to disable sounds.")

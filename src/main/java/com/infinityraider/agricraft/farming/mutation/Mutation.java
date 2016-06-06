@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import java.util.Objects;
 
 public class Mutation implements IMutation {
     private ItemStack result;

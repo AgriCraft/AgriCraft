@@ -2,8 +2,7 @@ package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.handler.PlayerConnectToServerHandler;
 import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.RenderLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,7 +68,7 @@ public interface IProxy {
 
     /** Initializes the configuration file */
 	default void initConfiguration(FMLPreInitializationEvent event) {
-        ConfigurationHandler.init(event);
+        // Move along! Nothing to see here!
     }
 
     /** Queue a task */

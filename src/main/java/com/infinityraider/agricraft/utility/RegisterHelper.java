@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.block.Block;

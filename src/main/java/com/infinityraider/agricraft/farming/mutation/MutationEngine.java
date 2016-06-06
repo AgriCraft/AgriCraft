@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.farming.mutation;
 
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 
 import java.util.Random;

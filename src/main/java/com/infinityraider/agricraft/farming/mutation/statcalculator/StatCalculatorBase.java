@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

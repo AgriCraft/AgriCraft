@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.world;
 
 import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;

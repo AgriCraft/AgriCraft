@@ -4,7 +4,6 @@ import com.google.common.base.Function;
 import com.infinityraider.agricraft.api.v1.*;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.handler.config.MutationConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
 import net.minecraft.block.Block;
@@ -185,6 +184,7 @@ public abstract class CropPlant implements IAgriCraftPlant {
 
     @Override
     public List<IMutation> getDefaultMutations() {
+		/* Deprecated. Left here for reference.
         List<IMutation> list = new ArrayList<>();
         IMutation mutation = MutationConfig.getInstance().getDefaultMutation(this.getSeed());
         if(mutation != null) {
@@ -192,6 +192,8 @@ public abstract class CropPlant implements IAgriCraftPlant {
             list.add(mutation);
         }
         return list;
+		*/
+		return new ArrayList<>();
     }
 
     /**

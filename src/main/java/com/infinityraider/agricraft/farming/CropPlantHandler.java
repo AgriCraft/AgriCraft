@@ -4,10 +4,9 @@ import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.cropplant.*;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.utility.IOHelper;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.infinityraider.agricraft.init.AgriCraftItems;
-import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 
 public class CropPlantHandler {
 
@@ -308,7 +306,8 @@ public class CropPlantHandler {
 //            }
 //        });
 		//Set spread chance overrides
-		IOHelper.initSpreadChancesOverrides();
+		// The following line is made pointless by the JSON mutation files.
+		//IOHelper.initSpreadChancesOverrides();
 
 	}
 }

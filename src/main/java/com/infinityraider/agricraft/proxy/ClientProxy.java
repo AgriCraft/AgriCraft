@@ -1,11 +1,10 @@
 package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.blocks.BlockBase;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.MissingJsonHandler;
 import com.infinityraider.agricraft.handler.SoundHandler;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemBase;
@@ -183,7 +182,6 @@ public class ClientProxy implements IProxy {
 	@Override
 	public void initConfiguration(FMLPreInitializationEvent event) {
 		IProxy.super.initConfiguration(event);
-		ConfigurationHandler.initClientConfigs(event);
 	}
 
 	@Override

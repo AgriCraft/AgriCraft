@@ -2,8 +2,6 @@ package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.BlockWithMeta;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
@@ -15,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 
 //helper class to read, write and parse data to and from the config files
 public abstract class IOHelper {
@@ -112,37 +109,6 @@ public abstract class IOHelper {
             }
         }
         return output + '\n' + notProcessed;
-    }
-
-    public static void initSpreadChancesOverrides() {
-        //read mutation chance overrides & initialize the arrays
-        String[] input = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSpreadChances());
-        AgriCore.getLogger("AgriCraft").debug("reading mutation chance overrides");
-        for(String line:input) {
-            String[] data = IOHelper.getData(line);
-            boolean success = data.length==2;
-            String errorMsg = "Incorrect amount of arguments";
-            AgriCore.getLogger("AgriCraft").debug("parsing "+line);
-            if(success) {
-                ItemStack seedStack = IOHelper.getStack(data[0]);
-                IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(seedStack);
-                success = plant != null;
-                errorMsg = "Invalid seed";
-                if(success) {
-                    int chance = Integer.parseInt(data[1]);
-                    success = chance>=0 && chance<=100;
-                    errorMsg = "Chance should be between 0 and 100";
-                    if(success && plant != null) {
-                        plant.setSpreadChance(chance);
-                        AgriCore.getLogger("AgriCraft").debug("Set spread chance for " + Item.itemRegistry.getNameForObject(plant.getSeed().getItem()) + ':' + plant.getSeed().getItemDamage() + " to " + chance + '%');
-                    }
-                }
-            }
-            if(!success) {
-                AgriCore.getLogger("AgriCraft").debug("Error when adding mutation chance override: " + errorMsg + " (line: " + line + ")");
-            }
-        }
-        AgriCore.getLogger("AgriCraft").debug("Registered Mutations Chances overrides:");
     }
 
     //get the grass drops file contents

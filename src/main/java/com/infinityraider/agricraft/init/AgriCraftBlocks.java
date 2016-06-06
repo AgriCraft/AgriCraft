@@ -4,7 +4,7 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.blocks.*;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.Block;
