@@ -7,10 +7,10 @@ import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.crafting.RecipeJournal;
 import com.infinityraider.agricraft.items.crafting.RecipeShapelessCustomWood;
-import com.infinityraider.agricraft.reference.Data;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.reference.AgriCraftMods;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.items.ItemNugget;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
@@ -116,8 +116,7 @@ public class AgriCraftRecipes {
                 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.quartz, 1), "nnn", "nnn", "nnn", 'n', "nuggetQuartz"));
                 GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(OreDictHelper.getNuggetForName("Quartz"), 9), new ItemStack(net.minecraft.init.Items.quartz, 1)));
             }
-            for (String[] data : Data.modResources) {
-                String oreName = data[0];
+            for (String oreName : ItemNugget.modNuggets) {
                 Item nuggetItem = OreDictHelper.getNuggetForName(oreName);
                 if (nuggetItem != null && nuggetItem instanceof ItemBase) {
                     ItemStack nugget = new ItemStack(nuggetItem, 9, OreDictHelper.getNuggetMetaForName(oreName));

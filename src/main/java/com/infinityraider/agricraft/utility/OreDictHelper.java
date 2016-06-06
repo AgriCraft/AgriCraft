@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.utility;
 
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.ItemNugget;
-import com.infinityraider.agricraft.reference.Data;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -92,15 +91,14 @@ public abstract class OreDictHelper {
     //finds what ores and nuggets are already registered in the ore dictionary
     public static void getRegisteredOres() {
         //Vanilla
-        for (String oreName : Data.vanillaNuggets) {
+        for (String oreName : ItemNugget.vanillaNuggets) {
             getOreBlock(oreName);
             if(oreBlocks.get(oreName)!=null) {
                 getNugget(oreName);
             }
         }
         //Modded
-        for (String[] data : Data.modResources) {
-            String oreName = data[0];
+        for (String oreName : ItemNugget.modNuggets) {
             getOreBlock(oreName);
             if(oreBlocks.get(oreName)!=null) {
                 getNugget(oreName);
