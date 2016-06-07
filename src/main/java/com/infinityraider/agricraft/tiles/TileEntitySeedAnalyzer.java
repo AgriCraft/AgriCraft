@@ -174,11 +174,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return if the specimen has been ANALYZED.
 	 */
 	public final boolean isSpecimenAnalyzed() {
-		if (this.hasTrowel()) {
-			return ((ITrowel) this.specimen.getItem()).isSeedAnalysed(this.specimen);
-		}
-		if (this.hasSeed()) {
-			return this.specimen.hasTagCompound() && this.specimen.getTagCompound().getBoolean(AgriCraftNBT.ANALYZED);
+		if (this.specimen != null) {
+			return new PlantStats(this.specimen).isAnalyzed();
 		}
 		return false;
 	}

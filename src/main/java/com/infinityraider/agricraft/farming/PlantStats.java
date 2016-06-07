@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import static com.infinityraider.agricraft.config.AgriCraftConfig.STAT_FORMAT;
 import static com.infinityraider.agricraft.config.AgriCraftConfig.cropStatCap;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.utility.NBTHelper;
 import java.text.MessageFormat;
 import java.util.List;
@@ -15,6 +14,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PlantStats implements ISeedStats {
+	
+	// Moved here since this class is in control of acess to stats.
+	public static final String NBT_STAT = "agri_stat";
+	
+	// Old Stat NBT Tags
+	public static final String NBT_ANALYZED = "analyzed";
+	public static final String NBT_GROWTH = "growth";
+	public static final String NBT_GAIN = "gain";
+	public static final String NBT_STRENGTH = "strength";
 
 	private static final short MAX = (short) AgriCraftConfig.cropStatCap;
 	private static final short MIN = 1;
@@ -109,20 +117,20 @@ public class PlantStats implements ISeedStats {
 	}
 
 	public final void readFromNBT(@Nonnull NBTTagCompound tag) {
-		if (NBTHelper.hasKey(tag, AgriCraftNBT.GROWTH, AgriCraftNBT.GAIN, AgriCraftNBT.STRENGTH, AgriCraftNBT.ANALYZED)) {
+		if (NBTHelper.hasKey(tag, NBT_GROWTH, NBT_GAIN, NBT_STRENGTH, NBT_ANALYZED)) {
 			this.statcode = AgriStat.encode(
-					tag.getShort(AgriCraftNBT.GROWTH),
-					tag.getShort(AgriCraftNBT.GAIN),
-					tag.getShort(AgriCraftNBT.STRENGTH),
-					tag.getBoolean(AgriCraftNBT.ANALYZED)
+					tag.getShort(NBT_GROWTH),
+					tag.getShort(NBT_GAIN),
+					tag.getShort(NBT_STRENGTH),
+					tag.getBoolean(NBT_ANALYZED)
 			);
-		} else if (NBTHelper.hasKey(tag, AgriCraftNBT.STAT)) {
-			this.statcode = tag.getInteger(AgriCraftNBT.STAT);
+		} else if (NBTHelper.hasKey(tag, NBT_STAT)) {
+			this.statcode = tag.getInteger(NBT_STAT);
 		}
 	}
 
 	public void writeToNBT(@Nonnull NBTTagCompound tag) {
-		tag.setInteger(AgriCraftNBT.STAT, statcode);
+		tag.setInteger(NBT_STAT, statcode);
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.gui;
 
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;
 import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
 import net.minecraft.client.Minecraft;
@@ -205,17 +204,18 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 		super.mouseClicked(x, y, rightClick);
 	}
 
+	// TODO: Update method!
 	private void sortByStat(List<SeedStorageSlot> list) {
 		String stat = null;
 		switch (this.sortStatId) {
 			case buttonIdGrowth:
-				stat = AgriCraftNBT.GROWTH;
+				stat = "growth";
 				break;
 			case buttonIdGain:
-				stat = AgriCraftNBT.GAIN;
+				stat = "gain";
 				break;
 			case buttonIdStrength:
-				stat = AgriCraftNBT.STRENGTH;
+				stat = "strength";
 				break;
 		}
 		if (stat != null && this.activeSeed != null) {

@@ -345,13 +345,11 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 				int growthStage = trowel.getGrowthStage(trowelStack);
 				NBTTagCompound tag = seed.getTagCompound();
 
-				boolean analysed = tag.getBoolean(AgriCraftNBT.ANALYZED);
-
 				this.setPlant(
 						getGrowth(),
 						getGain(),
 						getStrength(),
-						analysed,
+						isAnalyzed(),
 						seed.getItem(),
 						seed.getItemDamage()
 				);

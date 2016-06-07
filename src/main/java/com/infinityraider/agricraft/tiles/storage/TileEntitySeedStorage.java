@@ -96,7 +96,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 					NBTTagCompound stackTag = new NBTTagCompound();
 					PlantStats stats = new PlantStats(slotTag);
 					stats.writeToNBT(stackTag);
-					stackTag.setBoolean(AgriCraftNBT.ANALYZED, true);
 					int id = slotTag.getInteger(AgriCraftNBT.ID);
 					SeedStorageSlot slot = new SeedStorageSlot(stackTag, slotTag.getInteger(AgriCraftNBT.COUNT), id, invId);
 					slots.put(id, slot);

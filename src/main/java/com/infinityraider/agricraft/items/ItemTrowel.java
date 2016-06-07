@@ -44,10 +44,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 
 	@Override
 	public boolean isSeedAnalysed(ItemStack trowel) {
-		if (!this.hasSeed(trowel)) {
-			return false;
-		}
-		return trowel.getTagCompound().hasKey(AgriCraftNBT.ANALYZED) && trowel.getTagCompound().getBoolean(AgriCraftNBT.ANALYZED);
+		return trowel != null && new PlantStats(trowel).isAnalyzed();
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.utility.StackHelper;
 
 public class CropPlantHandler {
 
@@ -89,10 +90,7 @@ public class CropPlantHandler {
 	}
 
 	public static boolean isAnalyzedSeed(ItemStack seedStack) {
-		return isValidSeed(seedStack)
-				&& (seedStack.hasTagCompound())
-				&& (seedStack.getTagCompound().hasKey(AgriCraftNBT.ANALYZED))
-				&& (seedStack.getTagCompound().getBoolean(AgriCraftNBT.ANALYZED));
+		return isValidSeed(seedStack) && new PlantStats(seedStack).isAnalyzed();
 	}
 
 	/**
@@ -235,13 +233,11 @@ public class CropPlantHandler {
 	 * @return an ItemStack containing a random SEED
 	 */
 	public static ItemStack getRandomSeed(Random rand, boolean setTag, List<IAgriCraftPlant> plants) {
-		boolean flag = false;
-		ItemStack seed = null;
-		while (!flag) {
+		ItemStack seed;
+		do {
 			IAgriCraftPlant plant = plants.get(rand.nextInt(plants.size()));
 			seed = plant.getSeed().copy();
-			flag = (seed.getItem() != null);
-		}
+		} while (!StackHelper.isValid(seed));
 		if (setTag) {
 			NBTTagCompound tag = new NBTTagCompound();
 			PlantStats stats = new PlantStats(getRandomStat(rand), getRandomStat(rand), getRandomStat(rand));
