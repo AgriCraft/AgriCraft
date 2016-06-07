@@ -93,13 +93,10 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public ISeedStats getSeedStats(ItemStack seed) {
-        if (!isHandledByAgricraft(seed)) {
-            return null;
-        }
-        if (seed.getTagCompound() != null && seed.getTagCompound().hasKey(AgriCraftNBT.GROWTH) && seed.getTagCompound().getBoolean(AgriCraftNBT.ANALYZED)) {
-            return PlantStats.readFromNBT(seed.getTagCompound());
+        if (isHandledByAgricraft(seed)) {
+            return new PlantStats(seed);
         } else {
-            return new PlantStats(-1, -1, -1);
+			return null;   
         }
     }
 

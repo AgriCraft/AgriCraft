@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.farming.cropplant.*;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
@@ -165,20 +164,20 @@ public class CropPlantHandler {
 	public static List<IAgriCraftPlant> getPlants() {
 		return new ArrayList<>(plants.values());
 	}
-	
+
 	public static IAgriCraftPlant getPlant(String id) {
 		return plants.get(id);
 	}
-	
+
 	public static List<String> getPlantIds() {
 		return new ArrayList<>(plants.keySet());
 	}
-	
+
 	public static ItemStack getSeed(IAgriCraftPlant plant) {
-		if(plant != null) {
-		ItemStack stack = new ItemStack(AgriCraftItems.seed);
-		stack.setTagCompound(CropPlantHandler.writePlantToNBT(plant));
-		return stack;
+		if (plant != null) {
+			ItemStack stack = new ItemStack(AgriCraftItems.seed);
+			stack.setTagCompound(CropPlantHandler.writePlantToNBT(plant));
+			return stack;
 		} else {
 			return null;
 		}
@@ -245,31 +244,15 @@ public class CropPlantHandler {
 		}
 		if (setTag) {
 			NBTTagCompound tag = new NBTTagCompound();
-			setSeedNBT(tag, (short) (rand.nextInt(AgriCraftConfig.cropStatCap) / 2 + 1), (short) (rand.nextInt(AgriCraftConfig.cropStatCap) / 2 + 1), (short) (rand.nextInt(AgriCraftConfig.cropStatCap) / 2 + 1), false);
+			PlantStats stats = new PlantStats(getRandomStat(rand), getRandomStat(rand), getRandomStat(rand));
+			stats.writeToNBT(tag);
 			seed.setTagCompound(tag);
 		}
 		return seed;
 	}
-
-	/**
-	 * Sets the AgriCraftNBT TAG for a SEED to have stats, this method modifies
-	 * the NBTTagCompound it is given to add the needed data and then returns it
-	 * again
-	 *
-	 * @param tag the AgriCraftNBT TAG of the ItemStack, is returned again
-	 * @param growth the GROWTH stat
-	 * @param gain the GAIN stat
-	 * @param strength the STRENGTH stat
-	 * @param analyzed if the SEED is ANALYZED
-	 * @return the AgriCraftNBT TAG
-	 */
-	public static NBTTagCompound setSeedNBT(NBTTagCompound tag, short growth, short gain, short strength, boolean analyzed) {
-		short cap = (short) AgriCraftConfig.cropStatCap;
-		tag.setShort(AgriCraftNBT.GROWTH, growth == 0 ? Constants.DEFAULT_GROWTH : growth > cap ? cap : growth);
-		tag.setShort(AgriCraftNBT.GAIN, gain == 0 ? Constants.DEFAULT_GAIN : gain > cap ? cap : gain);
-		tag.setShort(AgriCraftNBT.STRENGTH, strength == 0 ? Constants.DEFAULT_GAIN : strength > cap ? cap : strength);
-		tag.setBoolean(AgriCraftNBT.ANALYZED, analyzed);
-		return tag;
+	
+	public static int getRandomStat(Random rand) {
+		return rand.nextInt(AgriCraftConfig.cropStatCap) / 2 + 1;
 	}
 
 	public static List<Mutation> getDefaultMutations() {
@@ -308,6 +291,5 @@ public class CropPlantHandler {
 		//Set spread chance overrides
 		// The following line is made pointless by the JSON mutation files.
 		//IOHelper.initSpreadChancesOverrides();
-
 	}
 }

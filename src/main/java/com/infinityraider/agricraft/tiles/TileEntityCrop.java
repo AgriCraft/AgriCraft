@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.utility.PlayerHelper;
 
 public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable {
 
@@ -264,7 +263,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 		}
 		ItemStack seed = plant.getSeed().copy();
 		NBTTagCompound tag = new NBTTagCompound();
-		CropPlantHandler.setSeedNBT(tag, getGrowth(), getGain(), getStrength(), stats.isAnalyzed());
+		this.stats.writeToNBT(tag);
 		seed.setTagCompound(tag);
 		return seed;
 	}
@@ -345,11 +344,18 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 				ItemStack seed = trowel.getSeed(trowelStack);
 				int growthStage = trowel.getGrowthStage(trowelStack);
 				NBTTagCompound tag = seed.getTagCompound();
-				short growth = tag.getShort(AgriCraftNBT.GROWTH);
-				short gain = tag.getShort(AgriCraftNBT.GAIN);
-				short strength = tag.getShort(AgriCraftNBT.STRENGTH);
+
 				boolean analysed = tag.getBoolean(AgriCraftNBT.ANALYZED);
-				this.setPlant(growth, gain, strength, analysed, seed.getItem(), seed.getItemDamage());
+
+				this.setPlant(
+						getGrowth(),
+						getGain(),
+						getStrength(),
+						analysed,
+						seed.getItem(),
+						seed.getItemDamage()
+				);
+
 				this.setGrowthStage(growthStage);
 				trowel.clearSeed(trowelStack);
 			}
@@ -440,7 +446,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	//this loads the saved data for the tile entity
 	@Override
 	public void readTileNBT(NBTTagCompound tag) {
-		this.stats = PlantStats.readFromNBT(tag);
+		this.stats = new PlantStats(tag);
 		this.crossCrop = tag.getBoolean(AgriCraftNBT.CROSS_CROP);
 		this.weed = tag.getBoolean(AgriCraftNBT.WEED);
 		if (tag.hasKey(AgriCraftNBT.SEED) && !tag.hasKey(AgriCraftNBT.META)) {
@@ -559,7 +565,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 			}
 			//Add the ANALYZED data.
 			if (this.isAnalyzed()) {
-				PlayerHelper.addStats(information, this.getGrowth(), this.getGain(), this.getStrength());
+				this.stats.addStats(information);
 			} else {
 				information.add(I18n.translateToLocal("agricraft_tooltip.analyzed"));
 			}

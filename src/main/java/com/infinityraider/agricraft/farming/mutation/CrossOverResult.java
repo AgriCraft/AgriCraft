@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -46,7 +46,8 @@ public class CrossOverResult {
     public ItemStack toStack() {
         ItemStack stack = new ItemStack(seed, 1, meta);
         NBTTagCompound tag = new NBTTagCompound();
-        CropPlantHandler.setSeedNBT(tag, (short) growth, (short) gain, (short) strength, false);
+		PlantStats stats = new PlantStats(growth, gain, strength);
+        stats.writeToNBT(tag);
         stack.setTagCompound(tag);
         return stack;
     }

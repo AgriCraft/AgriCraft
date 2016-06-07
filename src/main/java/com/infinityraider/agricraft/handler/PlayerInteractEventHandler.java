@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.blocks.BlockGrate;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -45,7 +44,7 @@ public class PlayerInteractEventHandler {
                 }
                 if (stack.hasTagCompound()) {
                     NBTTagCompound tag = (NBTTagCompound) stack.getTagCompound().copy();
-                    if (tag.hasKey(AgriCraftNBT.GROWTH) && tag.hasKey(AgriCraftNBT.GAIN) && tag.hasKey(AgriCraftNBT.STRENGTH)) {
+                    if (true) {
                         //TODO: place a tile entity storing the SEED's data
                         this.denyEvent(event, false);
                     }

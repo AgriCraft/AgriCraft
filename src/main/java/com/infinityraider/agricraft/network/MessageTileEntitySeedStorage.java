@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.network;
 
-import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import io.netty.buffer.ByteBuf;
@@ -17,10 +16,8 @@ import net.minecraftforge.fml.relauncher.Side;
 public class MessageTileEntitySeedStorage extends MessageBase {
     private BlockPos pos;
     private int slotId;
-    private int amount;
-    private int growth;
-    private int gain;
-    private int strength;
+	private int amount;
+    private PlantStats stats;
 
     @SuppressWarnings("unused")
     public MessageTileEntitySeedStorage() {}
@@ -30,10 +27,7 @@ public class MessageTileEntitySeedStorage extends MessageBase {
         if(slot!=null) {
             this.slotId = slot.getId();
             this.amount = slot.count;
-            NBTTagCompound tag = slot.getTag();
-            this.growth = tag.getInteger(AgriCraftNBT.GROWTH);
-            this.gain = tag.getInteger(AgriCraftNBT.GAIN);
-            this.strength = tag.getInteger(AgriCraftNBT.STRENGTH);
+			this.stats = new PlantStats(slot.getTag());
         }
         else {
             this.slotId = -1;
@@ -52,15 +46,11 @@ public class MessageTileEntitySeedStorage extends MessageBase {
             TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
             ItemStack stack = storage.getLockedSeed();
             stack.stackSize = this.amount;
-            stack.setTagCompound(this.getTag());
+			NBTTagCompound tag = new NBTTagCompound();
+			this.stats.writeToNBT(tag);
+            stack.setTagCompound(tag);
             storage.setSlotContents(this.slotId, stack);
         }
-    }
-
-    private NBTTagCompound getTag() {
-        NBTTagCompound tag = new NBTTagCompound();
-        CropPlantHandler.setSeedNBT(tag, (short) growth, (short) gain, (short) strength, true);
-        return tag;
     }
 
     @Override
@@ -74,9 +64,7 @@ public class MessageTileEntitySeedStorage extends MessageBase {
         this.slotId = buf.readInt();
         if(this.slotId>=0) {
             this.amount = buf.readInt();
-            this.growth = buf.readInt();
-            this.gain = buf.readInt();
-            this.strength = buf.readInt();
+			this.stats = new PlantStats(buf.readInt());
         }
     }
 
@@ -86,9 +74,7 @@ public class MessageTileEntitySeedStorage extends MessageBase {
         buf.writeInt(this.slotId);
         if(this.slotId>=0) {
             buf.writeInt(this.amount);
-            buf.writeInt(this.growth);
-            buf.writeInt(this.gain);
-            buf.writeInt(this.strength);
+            buf.writeInt(this.stats.getStatCode());
         }
     }
 }

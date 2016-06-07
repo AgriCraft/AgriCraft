@@ -24,7 +24,7 @@ public class MethodGetStats extends MethodBase {
 
     @Override
     protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
-        ISeedStats stats = PlantStats.getStatsFromStack(peripheral.getSpecimen());
+        ISeedStats stats = new PlantStats(peripheral.getSpecimen());
         if(stats==null) {
             return null;
         }

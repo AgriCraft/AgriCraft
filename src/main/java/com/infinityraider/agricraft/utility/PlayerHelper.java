@@ -1,12 +1,6 @@
 package com.infinityraider.agricraft.utility;
 
-import com.agricraft.agricore.core.AgriCore;
-import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
-
-import static com.infinityraider.agricraft.config.AgriCraftConfig.STAT_FORMAT;
-import static com.infinityraider.agricraft.config.AgriCraftConfig.cropStatCap;
-import java.text.MessageFormat;
 
 public abstract class PlayerHelper {
 
@@ -30,16 +24,6 @@ public abstract class PlayerHelper {
 			return AgriForgeDirection.EAST;
 		}
 		return AgriForgeDirection.SOUTH;
-	}
-
-	public static void addStats(List<String> lines, int growth, int gain, int strength) {
-		try {
-			lines.add(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.growth"), growth, cropStatCap));
-			lines.add(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.gain"), gain, cropStatCap));
-			lines.add(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.strength"), strength, cropStatCap));
-		} catch (IllegalArgumentException e) {
-			lines.add("Invalid Stat Format!");
-		}
 	}
 
 }

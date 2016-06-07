@@ -120,10 +120,7 @@ public class ItemClipping extends ItemBase {
 			return EnumActionResult.FAIL;
 		}
 		ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
-		ISeedStats stats = PlantStats.getStatsFromStack(seed);
-		if (stats == null) {
-			return EnumActionResult.PASS;
-		}
+		ISeedStats stats = new PlantStats(seed);
 		if (world.rand.nextInt(10) <= stats.getStrength()) {
 			blockCrop.plantSeed(seed, world, pos);
 		}

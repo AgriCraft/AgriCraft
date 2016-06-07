@@ -1,128 +1,150 @@
 package com.infinityraider.agricraft.farming;
 
+import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.plant.AgriStat;
 import com.infinityraider.agricraft.api.v1.ISeedStats;
-import com.infinityraider.agricraft.api.v1.ITrowel;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
+import static com.infinityraider.agricraft.config.AgriCraftConfig.STAT_FORMAT;
+import static com.infinityraider.agricraft.config.AgriCraftConfig.cropStatCap;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.utility.NBTHelper;
+import java.text.MessageFormat;
+import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PlantStats implements ISeedStats {
-    private static final short MAX = (short) AgriCraftConfig.cropStatCap;
-    private static final short MIN = 1;
 
-    private short growth;
-    private short gain;
-    private short strength;
-    private boolean analyzed;
+	private static final short MAX = (short) AgriCraftConfig.cropStatCap;
+	private static final short MIN = 1;
 
-    public PlantStats() {
-        this(MIN, MIN, MIN);
-    }
+	private int statcode;
 
-    public PlantStats(int growth, int gain, int strength) {
-        this(growth, gain, strength, false);
-    }
+	public PlantStats() {
+		this(1, 1, 1);
+	}
 
-    public PlantStats(int growth, int gain, int strength, boolean analyzed) {
-        this.setStats(growth, gain, strength);
-        this.analyzed = analyzed;
-    }
+	public PlantStats(int growth, int gain, int strength) {
+		this(growth, gain, strength, false);
+	}
 
-    public void setStats(int growth, int gain, int strength) {
-        setGrowth(growth);
-        setGain(gain);
-        setStrength(strength);
-    }
+	public PlantStats(int growth, int gain, int strength, boolean analyzed) {
+		this(AgriStat.encode(growth, gain, strength, analyzed));
+	}
 
-	@Override
-    public short getGrowth() {
-        return growth;
-    }
+	public PlantStats(@Nonnull ItemStack stack) {
+		this(stack.getTagCompound());
+	}
 
-	@Override
-    public short getGain() {
-        return gain;
-    }
+	public PlantStats(NBTTagCompound tag) {
+		this();
+		this.readFromNBT(tag);
+	}
+
+	public PlantStats(int statcode) {
+		this.statcode = statcode;
+	}
+	
+	public int getStatCode() {
+		return statcode;
+	}
 
 	@Override
-    public short getStrength() {
-        return strength;
-    }
+	public short getGrowth() {
+		return (short) AgriStat.getGrowth(statcode);
+	}
 
-    @Override
-    public short getMaxGrowth() {
-        return MAX;
-    }
+	@Override
+	public short getGain() {
+		return (short) AgriStat.getGain(statcode);
+	}
 
-    @Override
-    public short getMaxGain() {
-        return MAX;
-    }
+	@Override
+	public short getStrength() {
+		return (short) AgriStat.getStrength(statcode);
+	}
 
-    @Override
-    public short getMaxStrength() {
-        return MAX;
-    }
+	@Override
+	public short getMaxGrowth() {
+		return MAX;
+	}
 
-    public void setGrowth(int growth) {
-        this.growth = moveIntoBounds(growth);
-    }
+	@Override
+	public short getMaxGain() {
+		return MAX;
+	}
 
-    public void setGain(int gain) {
-        this.gain = moveIntoBounds(gain);
-    }
+	@Override
+	public short getMaxStrength() {
+		return MAX;
+	}
 
-    public void setStrength(int strength) {
-        this.strength = moveIntoBounds(strength);
-    }
+	public void setGrowth(int growth) {
+		this.statcode = AgriStat.setGrowth(statcode, inRange(growth, 0, MAX));
+	}
 
-    private short moveIntoBounds(int stat) {
-        int lowerLimit = Math.max(MIN, stat);
-        return (short) Math.min(MAX, lowerLimit);
-    }
+	public void setGain(int gain) {
+		this.statcode = AgriStat.setGain(statcode, inRange(gain, 0, MAX));
+	}
 
-    public PlantStats copy() {
-        return new PlantStats(getGrowth(), getGain(), getStrength(), analyzed);
-    }
+	public void setStrength(int strength) {
+		this.statcode = AgriStat.setGrowth(statcode, inRange(strength, 0, MAX));
+	}
 
-    public static PlantStats getStatsFromStack(ItemStack stack) {
-        if(stack==null || stack.getItem()==null) {
-            return null;
-        }
-        if(stack.getItem() instanceof ITrowel) {
-            ((ITrowel) stack.getItem()).getStats(stack);
-        }
-        return readFromNBT(stack.getTagCompound());
-    }
+	/**
+	 * Brings an integer into a specified range.
+	 *
+	 * @param value The value to bring into the range.
+	 * @param min The minimum value, inclusive.
+	 * @param max The maximum value, inclusive.
+	 * @return The in-bounded value.
+	 */
+	public static int inRange(int value, int min, int max) {
+		return value < min ? min : value > max ? max : value;
+	}
 
-    public static PlantStats readFromNBT(NBTTagCompound tag) {
-        if(tag !=null && tag.hasKey(AgriCraftNBT.GROWTH) && tag.hasKey(AgriCraftNBT.GAIN) && tag.hasKey(AgriCraftNBT.STRENGTH)) {
-            PlantStats stats = new PlantStats();
-            stats.setGrowth(tag.getShort(AgriCraftNBT.GROWTH));
-            stats.setGain(tag.getShort(AgriCraftNBT.GAIN));
-            stats.setStrength(tag.getShort(AgriCraftNBT.STRENGTH));
-            stats.analyzed=tag.hasKey(AgriCraftNBT.ANALYZED) && tag.getBoolean(AgriCraftNBT.ANALYZED);
-            return stats;
-        }
-        return null;
-    }
+	public PlantStats copy() {
+		return new PlantStats(statcode);
+	}
 
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        tag.setShort(AgriCraftNBT.GROWTH, growth);
-        tag.setShort(AgriCraftNBT.GAIN, gain);
-        tag.setShort(AgriCraftNBT.STRENGTH, strength);
-        tag.setBoolean(AgriCraftNBT.ANALYZED, analyzed);
-        return tag;
-    }
+	public final void readFromNBT(@Nonnull NBTTagCompound tag) {
+		if (NBTHelper.hasKey(tag, AgriCraftNBT.GROWTH, AgriCraftNBT.GAIN, AgriCraftNBT.STRENGTH, AgriCraftNBT.ANALYZED)) {
+			this.statcode = AgriStat.encode(
+					tag.getShort(AgriCraftNBT.GROWTH),
+					tag.getShort(AgriCraftNBT.GAIN),
+					tag.getShort(AgriCraftNBT.STRENGTH),
+					tag.getBoolean(AgriCraftNBT.ANALYZED)
+			);
+		} else if (NBTHelper.hasKey(tag, AgriCraftNBT.STAT)) {
+			this.statcode = tag.getInteger(AgriCraftNBT.STAT);
+		}
+	}
 
-    @Override
-    public boolean isAnalyzed() {
-        return analyzed;
-    }
+	public void writeToNBT(@Nonnull NBTTagCompound tag) {
+		tag.setInteger(AgriCraftNBT.STAT, statcode);
+	}
 
-    @Override
-    public void setAnalyzed(boolean value) {
-        this.analyzed = value;
-    }
+	@Override
+	public boolean isAnalyzed() {
+		return AgriStat.getAnalyzed(statcode);
+	}
+
+	@Override
+	public void setAnalyzed(boolean value) {
+		this.statcode = AgriStat.setAnalyzed(statcode, value);
+	}
+
+	public boolean addStats(List<String> lines) {
+		try {
+			lines.add(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.growth"), getGrowth(), cropStatCap));
+			lines.add(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.gain"), getGain(), cropStatCap));
+			lines.add(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.strength"), getStrength(), cropStatCap));
+			return true;
+		} catch (IllegalArgumentException e) {
+			lines.add("Invalid Stat Format!");
+			return false;
+		}
+	}
+
 }

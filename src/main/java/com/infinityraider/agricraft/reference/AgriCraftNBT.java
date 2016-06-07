@@ -49,4 +49,6 @@ public interface AgriCraftNBT {
 	String DIRECTION = "direction";
 	String MULTI_BLOCK = "agricraft_MultiBlock";
 	
+	String STAT = "agri_stat";
+	
 }

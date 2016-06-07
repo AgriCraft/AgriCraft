@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.tiles.storage;
 
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.farming.PlantStats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,7 +32,8 @@ public class SeedStorageSlot {
     }
 
     private int getTotalStat() {
-        return tag.getInteger(AgriCraftNBT.GROWTH) + tag.getInteger(AgriCraftNBT.GAIN) + tag.getInteger(AgriCraftNBT.STRENGTH);
+		PlantStats stats = new PlantStats(this.tag);
+        return stats.getGrowth() + stats.getGain() + stats.getStrength();
     }
 
     public int getId() {
