@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.farming;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriStat;
-import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import static com.infinityraider.agricraft.config.AgriCraftConfig.STAT_FORMAT;
 import static com.infinityraider.agricraft.config.AgriCraftConfig.cropStatCap;
@@ -12,8 +11,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 
-public class PlantStats implements ISeedStats {
+public class PlantStats implements IAgriCraftStats {
 	
 	// Moved here since this class is in control of acess to stats.
 	public static final String NBT_STAT = "agri_stat";

@@ -2,10 +2,10 @@ package com.infinityraider.agricraft.api.example;
 
 import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
-import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.APIv1;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 
 public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrapper {
     private APIv1 api;
@@ -46,7 +46,7 @@ public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrappe
 	@Override
     public SeedStatsExample exampleMethodGetSeedStats(World world, BlockPos pos) {
         if(isOk()) {
-            ISeedStats stats = api.getStats(world, pos);
+            IAgriCraftStats stats = api.getStats(world, pos);
             return new SeedStatsExample(stats.getGrowth(), stats.getGain(), stats.getStrength(), stats.isAnalyzed());
         } else {
             return super.exampleMethodGetSeedStats(world, pos);

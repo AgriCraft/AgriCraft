@@ -16,5 +16,5 @@ public interface IStatCalculator {
      * @param mutation if a mutation occurred, this is false if the plant simply spread to a cross crop
      * @return an ISeedStats object containing the resulting stats
      */
-    ISeedStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation);
+    IAgriCraftStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation);
 }

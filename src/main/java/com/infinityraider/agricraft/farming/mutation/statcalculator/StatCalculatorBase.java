@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
-import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
@@ -11,10 +10,11 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 
 public abstract  class StatCalculatorBase extends StatCalculator {
     @Override
-    public ISeedStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation) {
+    public IAgriCraftStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation) {
         ICrop[] parents = filterParents(input);
         int nrParents = parents.length;
         int nrValidParents = 0;

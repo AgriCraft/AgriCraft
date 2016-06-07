@@ -1,11 +1,11 @@
 package com.infinityraider.agricraft.compat.computercraft.method;
 
-import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
 
 import java.util.ArrayList;
+import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 
 public class MethodGetStats extends MethodBase {
 	
@@ -18,13 +18,13 @@ public class MethodGetStats extends MethodBase {
         if(!crop.hasPlant() || !crop.isAnalyzed()) {
             return null;
         }
-        ISeedStats stats = crop.getStats();
+        IAgriCraftStats stats = crop.getStats();
         return new Object[] {stats.getGrowth(), stats.getGain(), stats.getStrength()};
     }
 
     @Override
     protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
-        ISeedStats stats = new PlantStats(peripheral.getSpecimen());
+        IAgriCraftStats stats = new PlantStats(peripheral.getSpecimen());
         if(stats==null) {
             return null;
         }

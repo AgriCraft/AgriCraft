@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.tiles;
 import com.infinityraider.agricraft.api.v1.IDebuggable;
 import com.infinityraider.agricraft.api.v1.IFertiliser;
 import com.infinityraider.agricraft.api.v1.IAdditionalCropData;
-import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.ITrowel;
 import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
@@ -38,6 +37,7 @@ import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 
 public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable {
 
@@ -66,7 +66,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	}
 
 	@Override
-	public ISeedStats getStats() {
+	public IAgriCraftStats getStats() {
 		return this.hasPlant() ? stats.copy() : new PlantStats(-1, -1, -1);
 	}
 

@@ -93,7 +93,7 @@ public interface APIv1 extends APIBase {
      * @return An ISeedStats object that describes the given seeds, or null if the
      *         given item was no seed.
      */
-    ISeedStats getSeedStats(ItemStack seed);
+    IAgriCraftStats getSeedStats(ItemStack seed);
 
     /**
      * Gets the ICropPlant object containing all the data AgriCraft knows about this seed
@@ -261,7 +261,7 @@ public interface APIv1 extends APIBase {
      * @param pos the block position
      * @return ISeedStats object holding the stats or null if there is no crop there, or the crop doesn't have a plant
      */
-    ISeedStats getStats(World world, BlockPos pos);
+    IAgriCraftStats getStats(World world, BlockPos pos);
 
     /**
      * Checks if AgriCraft is configured to require rakes to remove weeds.

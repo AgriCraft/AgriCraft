@@ -53,7 +53,7 @@ public interface ICrop {
     /**
      * @return the stats for this crop
      */
-    ISeedStats getStats();
+    IAgriCraftStats getStats();
 
     /**
      * @return the growth stat

@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.ITrowel;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
@@ -14,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
 
@@ -117,7 +117,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 	}
 
 	@Override
-	public ISeedStats getStats(ItemStack trowel) {
+	public IAgriCraftStats getStats(ItemStack trowel) {
 		return new PlantStats(getSeed(trowel));
 	}
 

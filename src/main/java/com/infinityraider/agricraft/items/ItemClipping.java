@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
@@ -25,6 +24,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 
 public class ItemClipping extends ItemBase {
 
@@ -120,7 +120,7 @@ public class ItemClipping extends ItemBase {
 			return EnumActionResult.FAIL;
 		}
 		ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
-		ISeedStats stats = new PlantStats(seed);
+		IAgriCraftStats stats = new PlantStats(seed);
 		if (world.rand.nextInt(10) <= stats.getStrength()) {
 			blockCrop.plantSeed(seed, world, pos);
 		}

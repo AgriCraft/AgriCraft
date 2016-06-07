@@ -25,6 +25,6 @@ public interface ITrowel {
     void clearSeed(ItemStack trowel);
 
     /** Gets the stats from the seed */
-    ISeedStats getStats(ItemStack trowel) ;
+    IAgriCraftStats getStats(ItemStack trowel);
     /** Gets the stats from the seed */
 }

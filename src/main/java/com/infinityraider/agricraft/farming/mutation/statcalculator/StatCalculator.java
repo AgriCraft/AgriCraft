@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
-import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.api.v1.IStatCalculator;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
@@ -8,6 +7,7 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
+import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 
 public abstract class StatCalculator implements IStatCalculator {
     private static IStatCalculator instance;
@@ -36,10 +36,10 @@ public abstract class StatCalculator implements IStatCalculator {
      * @param mutation if this result comes from a mutation or from a spread
      */
     public static void setResultStats(CrossOverResult result, List<? extends ICrop> input, boolean mutation) {
-        ISeedStats stats = instance.calculateStats(result.toStack(), input, mutation);
+        IAgriCraftStats stats = instance.calculateStats(result.toStack(), input, mutation);
         result.setStats(stats.getGrowth(), stats.getGain(), stats.getStrength());
     }
 
 	@Override
-    public abstract ISeedStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation);
+    public abstract IAgriCraftStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation);
 }

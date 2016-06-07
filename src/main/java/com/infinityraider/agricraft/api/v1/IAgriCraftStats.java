@@ -1,6 +1,13 @@
 package com.infinityraider.agricraft.api.v1;
 
-public interface ISeedStats {
+/**
+ * To be deprecated upon switch to using condensed stat codes.
+ * 
+ * But having the stats as an objects presents a nice way to handle them.
+ * 
+ * @author RlonRyan
+ */
+public interface IAgriCraftStats {
     /**
      * @return The growth value of the seed.
      */

@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
 import com.infinityraider.agricraft.api.APIStatus;
 import com.infinityraider.agricraft.api.v1.*;
-import com.infinityraider.agricraft.api.v1.ISeedStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
@@ -30,6 +29,7 @@ import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 
 public class APIimplv1 implements APIv1 {
     private final int version;
@@ -90,7 +90,7 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public ISeedStats getSeedStats(ItemStack seed) {
+    public IAgriCraftStats getSeedStats(ItemStack seed) {
         if (isHandledByAgricraft(seed)) {
             return new PlantStats(seed);
         } else {
@@ -239,7 +239,7 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public ISeedStats getStats(World world, BlockPos pos) {
+    public IAgriCraftStats getStats(World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if(te==null || !(te instanceof TileEntityCrop)) {
             return new PlantStats(-1, -1, -1);
