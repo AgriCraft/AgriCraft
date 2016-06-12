@@ -41,19 +41,6 @@ public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrappe
     }
 
     /**
-     * Example method, this one gets the stats of a crop
-     */
-	@Override
-    public SeedStatsExample exampleMethodGetSeedStats(World world, BlockPos pos) {
-        if(isOk()) {
-            IAgriCraftStats stats = api.getStats(world, pos);
-            return new SeedStatsExample(stats.getGrowth(), stats.getGain(), stats.getStrength(), stats.isAnalyzed());
-        } else {
-            return super.exampleMethodGetSeedStats(world, pos);
-        }
-    }
-
-    /**
      * Example method, this one gets the stat cap imposed to agricraft
      */
 	@Override

@@ -38,14 +38,16 @@ import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
+import javax.annotation.Nonnull;
 
 public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable {
 
 	public static final String NAME = "crops";
 
-	private PlantStats stats = new PlantStats();
 	private boolean crossCrop = false;
 	private boolean weed = false;
+	
+	private @Nonnull IAgriCraftStats stats;
 	private IAgriCraftPlant plant;
 	private IAdditionalCropData data;
 
@@ -68,26 +70,6 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	@Override
 	public IAgriCraftStats getStats() {
 		return this.hasPlant() ? stats.copy() : new PlantStats(-1, -1, -1);
-	}
-
-	@Override
-	public short getGrowth() {
-		return this.weed ? (short) AgriCraftConfig.weedGrowthMultiplier : stats.getGrowth();
-	} //Pardon the cast.
-
-	@Override
-	public short getGain() {
-		return stats.getGain();
-	}
-
-	@Override
-	public short getStrength() {
-		return stats.getStrength();
-	}
-
-	@Override
-	public boolean isAnalyzed() {
-		return stats.isAnalyzed();
 	}
 
 	@Override
@@ -154,11 +136,11 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	/**
 	 * sets the plant in the crop
 	 */
-	public void setPlant(int growth, int gain, int strength, boolean analyzed, IAgriCraftPlant plant) {
+	public void setPlant(@Nonnull IAgriCraftStats stats, IAgriCraftPlant plant) {
 		if ((!this.crossCrop) && (!this.hasPlant())) {
 			if (plant != null) {
 				this.plant = plant;
-				this.stats = new PlantStats(growth, gain, strength, analyzed);
+				this.stats = stats;
 				this.setGrowthStage(0);
 				plant.onSeedPlanted(worldObj, pos);
 				IAdditionalCropData data = plant.getInitialCropData(worldObj, getPos(), this);
@@ -174,8 +156,8 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 * sets the plant in the crop
 	 */
 	@Override
-	public void setPlant(int growth, int gain, int strength, boolean analyzed, Item seed, int seedMeta) {
-		this.setPlant(growth, gain, strength, analyzed, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
+	public void setPlant(@Nonnull IAgriCraftStats stats, Item seed, int seedMeta) {
+		this.setPlant(stats, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
 	}
 
 	/**
@@ -242,7 +224,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 * gets the fruits for this plant
 	 */
 	public List<ItemStack> getFruits() {
-		return plant.getFruitsOnHarvest(getGain(), worldObj.rand);
+		return plant.getFruitsOnHarvest(stats.getGain(), worldObj.rand);
 	}
 
 	/**
@@ -326,7 +308,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	//weed spawn chance
 	private double getWeedSpawnChance() {
 		if (this.hasPlant()) {
-			return AgriCraftConfig.weedsWipePlants ? ((double) (10 - getStrength())) / 10 : 0;
+			return AgriCraftConfig.weedsWipePlants ? ((double) (10 - stats.getStrength())) / 10 : 0;
 		} else {
 			return this.weed ? 0 : 1;
 		}
@@ -346,10 +328,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 				NBTTagCompound tag = seed.getTagCompound();
 
 				this.setPlant(
-						getGrowth(),
-						getGain(),
-						getStrength(),
-						isAnalyzed(),
+						stats,
 						seed.getItem(),
 						seed.getItemDamage()
 				);
@@ -484,7 +463,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 */
 	public void applyCrossOverResult(CrossOverResult result) {
 		crossCrop = false;
-		setPlant(result.getGrowth(), result.getGain(), result.getStrength(), false, result.getSeed(), result.getMeta());
+		setPlant(result.getStats(), result.getSeed(), result.getMeta());
 	}
 
 	/**
@@ -535,9 +514,9 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 			list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject((this.plant.getSeed().getItem())) + ":" + this.plant.getSeed().getItemDamage());
 			list.add(" - Tier: " + plant.getTier());
 			list.add(" - Meta: " + this.getBlockMetadata());
-			list.add(" - Growth: " + getGrowth());
-			list.add(" - Gain: " + getGain());
-			list.add(" - Strength: " + getStrength());
+			list.add(" - Growth: " + stats.getGrowth());
+			list.add(" - Gain: " + stats.getGain());
+			list.add(" - Strength: " + stats.getStrength());
 			list.add(" - Fertile: " + this.isFertile());
 			list.add(" - Mature: " + this.isMature());
 		} else if (this.weed) {
@@ -562,7 +541,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 				information.add(I18n.translateToLocal("agricraft_tooltip.growthStage") + ": " + ((int) ((100 * (this.getBlockMetadata() + 0.00F)) / 7.00F) + "%"));
 			}
 			//Add the ANALYZED data.
-			if (this.isAnalyzed()) {
+			if (this.stats.isAnalyzed()) {
 				this.stats.addStats(information);
 			} else {
 				information.add(I18n.translateToLocal("agricraft_tooltip.analyzed"));

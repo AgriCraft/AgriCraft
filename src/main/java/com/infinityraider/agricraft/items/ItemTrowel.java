@@ -59,7 +59,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 				tag = new NBTTagCompound();
 				stats = new PlantStats();
 			}
-			stats.setAnalyzed(true);
+			stats.analyze();
 			stats.writeToNBT(tag);
 			trowel.setTagCompound(tag);
 		}

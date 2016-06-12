@@ -1,7 +1,9 @@
 package com.infinityraider.agricraft.farming.mutation;
 
+import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import javax.annotation.Nonnull;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,9 +18,7 @@ public class CrossOverResult {
     private final int meta;
     private final double chance;
 
-    private int growth;
-    private int gain;
-    private int strength;
+    private @Nonnull IAgriCraftStats stats = new PlantStats();
 
     public CrossOverResult(Item seed, int meta, double chance) {
         this.seed = seed;
@@ -46,7 +46,6 @@ public class CrossOverResult {
     public ItemStack toStack() {
         ItemStack stack = new ItemStack(seed, 1, meta);
         NBTTagCompound tag = new NBTTagCompound();
-		PlantStats stats = new PlantStats(growth, gain, strength);
         stats.writeToNBT(tag);
         stack.setTagCompound(tag);
         return stack;
@@ -64,21 +63,11 @@ public class CrossOverResult {
         return chance;
     }
 
-    public int getGain() {
-        return gain;
-    }
+    public @Nonnull IAgriCraftStats getStats() {
+		return this.stats;
+	}
 
-    public int getGrowth() {
-        return growth;
-    }
-
-    public int getStrength() {
-        return strength;
-    }
-
-    public void setStats(int growth, int gain, int strength) {
-        this.growth = growth;
-        this.gain = gain;
-        this.strength = strength;
+    public void setStats(@Nonnull IAgriCraftStats stats) {
+        this.stats = stats;
     }
 }

@@ -48,13 +48,6 @@ public class ExampleAgriCraftAPIwrapper {
     }
 
     /**
-     * Example method, this one gets the stats of a crop
-     */
-    public SeedStatsExample exampleMethodGetSeedStats(World world, BlockPos pos) {
-        return new SeedStatsExample((short) -1, (short) -1, (short) -1, false);
-    }
-
-    /**
      * Example method, this one gets the stat cap imposed to agricraft
      */
     public short exampleMethodGetSeedStatsCap() {

@@ -110,7 +110,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 					crop.spreadWeed();
 				} else if (crop.isFertile()) {
 					//multiplier from GROWTH stat
-					double growthBonus = 1.0 + crop.getGrowth() / 10.0;
+					double growthBonus = 1.0 + crop.getStats().getGrowth() / 10.0;
 					//multiplier defined in the config
 					float global = AgriCraftConfig.growthMultiplier;
 					//crop dependent base GROWTH rate
@@ -212,7 +212,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			//get AgriCraftNBT data from the seeds
 			final NBTTagCompound tag = stack.getTagCompound();
 			final PlantStats stats = new PlantStats(tag);
-			crop.setPlant(stats.getGrowth(), stats.getGain(), stats.getStrength(), stats.isAnalyzed(), stack.getItem(), stack.getItemDamage());
+			crop.setPlant(stats, stack.getItem(), stack.getItemDamage());
 			return true;
 		}
 		return false;
@@ -251,7 +251,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				} else if (!crop.isCrossCrop() && !crop.hasWeed()) {
 					IAgriCraftPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack(Item.itemRegistry.getObject(new ResourceLocation("AgriCraft:seedSugarcane"))));
 					if (sugarcane != null && sugarcane.getGrowthRequirement().canGrow(world, pos)) {
-						crop.setPlant(1, 1, 1, false, sugarcane);
+						crop.setPlant(new PlantStats(), sugarcane);
 						if (!player.capabilities.isCreativeMode) {
 							heldItem.stackSize = heldItem.stackSize - 1;
 						}

@@ -36,8 +36,7 @@ public abstract class StatCalculator implements IStatCalculator {
      * @param mutation if this result comes from a mutation or from a spread
      */
     public static void setResultStats(CrossOverResult result, List<? extends ICrop> input, boolean mutation) {
-        IAgriCraftStats stats = instance.calculateStats(result.toStack(), input, mutation);
-        result.setStats(stats.getGrowth(), stats.getGain(), stats.getStrength());
+        result.setStats(instance.calculateStats(result.toStack(), input, mutation));
     }
 
 	@Override

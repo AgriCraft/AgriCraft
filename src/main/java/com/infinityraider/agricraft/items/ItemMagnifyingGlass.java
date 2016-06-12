@@ -42,24 +42,13 @@ public class ItemMagnifyingGlass extends ItemBase {
             if((block != null) && (block instanceof BlockCrop) && (te != null) &&(te instanceof TileEntityCrop)) {
                 TileEntityCrop crop = (TileEntityCrop) te;
                 if(crop.hasPlant()) {
-                    int growth = crop.getGrowth();
-                    int gain = crop.getGain();
-                    int strength = crop.getStrength();
-                    boolean analyzed = crop.isAnalyzed();
                     ItemStack seed = crop.getSeedStack();
                     String seedName = seed.getItem().getItemStackDisplayName(seed);
                     int meta = crop.getGrowthStage();
                     float growthPercentage = ((float) meta)/((float) 7)*100.0F;
                     list.add(I18n.translateToLocal("agricraft_tooltip.cropWithPlant"));
                     list.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + seedName);
-                    if(analyzed) {
-                        list.add(" - " + I18n.translateToLocal("agricraft_tooltip.growth") + ": " + growth);
-                        list.add(" - " + I18n.translateToLocal("agricraft_tooltip.gain") + ": " + gain);
-                        list.add(" - " + I18n.translateToLocal("agricraft_tooltip.strength") + ": " + strength);
-                    }
-                    else {
-                        list.add(I18n.translateToLocal("agricraft_tooltip.analyzed"));
-                    }
+                    crop.getStats().addStats(list);
                     list.add(I18n.translateToLocal(crop.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
                     if (growthPercentage < 100.0) {
                         list.add(String.format("Growth : %.0f %%", growthPercentage));

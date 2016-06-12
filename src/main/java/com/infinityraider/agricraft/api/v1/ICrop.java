@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import javax.annotation.Nonnull;
 
 /** Interface to interact with AgriCraft's crops
  * use API.getCrop(World world, int x, int y, int z) to retrieve the ICrop instance
@@ -56,26 +57,6 @@ public interface ICrop {
     IAgriCraftStats getStats();
 
     /**
-     * @return the growth stat
-     */
-    short getGrowth();
-
-    /**
-     * @return the gain stat
-     */
-    short getGain();
-
-    /**
-     * @return the strength stat
-     */
-    short getStrength();
-
-    /**
-     * @return if this crop is analyzed
-     */
-    boolean isAnalyzed();
-
-    /**
      * @return if there are weeds on this crop
      */
     boolean hasWeed();
@@ -98,14 +79,11 @@ public interface ICrop {
 
     /**
      * Sets the plant onto this crop
-     * @param growth the growth stat for the plant
-     * @param gain the gain stat for the plant
-     * @param strength the strength stat for the plant
-     * @param analyzed if the plant is analyzed
+     * @param stats the stats for the plant.
      * @param seed the seed representing the plant
      * @param seedMeta the metadata for the seed
      */
-    void setPlant(int growth, int gain, int strength, boolean analyzed, Item seed, int seedMeta);
+    void setPlant(@Nonnull IAgriCraftStats stats, Item seed, int seedMeta);
 
     /**
      * Clears the plant from this crop

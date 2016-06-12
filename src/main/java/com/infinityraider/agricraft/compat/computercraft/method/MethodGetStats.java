@@ -15,7 +15,7 @@ public class MethodGetStats extends MethodBase {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
-        if(!crop.hasPlant() || !crop.isAnalyzed()) {
+        if(!crop.hasPlant() || !crop.getStats().isAnalyzed()) {
             return null;
         }
         IAgriCraftStats stats = crop.getStats();

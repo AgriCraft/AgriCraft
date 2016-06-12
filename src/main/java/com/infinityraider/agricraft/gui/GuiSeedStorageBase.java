@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nonnull;
 
 @SideOnly(Side.CLIENT)
 public abstract class GuiSeedStorageBase extends GuiContainer {
@@ -356,12 +357,8 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 		private int id;
 		private int amount;
 
-		public PlantStatsStorage(int id, ItemStack stack) {
-			super();
-			NBTTagCompound tag = stack.getTagCompound();
-			if (tag != null) {
-				this.readFromNBT(tag);
-			}
+		public PlantStatsStorage(int id, @Nonnull ItemStack stack) {
+			super(stack.getTagCompound());
 			this.amount = stack.stackSize;
 			this.id = id;
 		}

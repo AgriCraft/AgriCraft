@@ -44,18 +44,32 @@ public class PlantStats implements IAgriCraftStats {
 	public PlantStats(@Nonnull ItemStack stack) {
 		this(stack.getTagCompound());
 	}
-
-	public PlantStats(NBTTagCompound tag) {
-		this();
-		this.readFromNBT(tag);
-	}
-
+	
 	public PlantStats(int statcode) {
 		this.statcode = statcode;
 	}
+
+	public PlantStats(NBTTagCompound tag) {
+		if (NBTHelper.hasKey(tag, NBT_GROWTH, NBT_GAIN, NBT_STRENGTH, NBT_ANALYZED)) {
+			this.statcode = AgriStat.encode(
+					tag.getShort(NBT_GROWTH),
+					tag.getShort(NBT_GAIN),
+					tag.getShort(NBT_STRENGTH),
+					tag.getBoolean(NBT_ANALYZED)
+			);
+		} else if (NBTHelper.hasKey(tag, NBT_STAT)) {
+			this.statcode = tag.getInteger(NBT_STAT);
+		}
+	}
 	
-	public int getStatCode() {
-		return statcode;
+	@Override
+	public boolean isAnalyzed() {
+		return AgriStat.getAnalyzed(statcode);
+	}
+
+	@Override
+	public void analyze() {
+		this.statcode = AgriStat.setAnalyzed(statcode, true);
 	}
 
 	@Override
@@ -88,18 +102,6 @@ public class PlantStats implements IAgriCraftStats {
 		return MAX;
 	}
 
-	public void setGrowth(int growth) {
-		this.statcode = AgriStat.setGrowth(statcode, inRange(growth, 0, MAX));
-	}
-
-	public void setGain(int gain) {
-		this.statcode = AgriStat.setGain(statcode, inRange(gain, 0, MAX));
-	}
-
-	public void setStrength(int strength) {
-		this.statcode = AgriStat.setGrowth(statcode, inRange(strength, 0, MAX));
-	}
-
 	/**
 	 * Brings an integer into a specified range.
 	 *
@@ -112,35 +114,18 @@ public class PlantStats implements IAgriCraftStats {
 		return value < min ? min : value > max ? max : value;
 	}
 
+	public int getStatCode() {
+		return statcode;
+	}
+
+	@Override
 	public PlantStats copy() {
 		return new PlantStats(statcode);
 	}
 
-	public final void readFromNBT(@Nonnull NBTTagCompound tag) {
-		if (NBTHelper.hasKey(tag, NBT_GROWTH, NBT_GAIN, NBT_STRENGTH, NBT_ANALYZED)) {
-			this.statcode = AgriStat.encode(
-					tag.getShort(NBT_GROWTH),
-					tag.getShort(NBT_GAIN),
-					tag.getShort(NBT_STRENGTH),
-					tag.getBoolean(NBT_ANALYZED)
-			);
-		} else if (NBTHelper.hasKey(tag, NBT_STAT)) {
-			this.statcode = tag.getInteger(NBT_STAT);
-		}
-	}
-
+	@Override
 	public void writeToNBT(@Nonnull NBTTagCompound tag) {
 		tag.setInteger(NBT_STAT, statcode);
-	}
-
-	@Override
-	public boolean isAnalyzed() {
-		return AgriStat.getAnalyzed(statcode);
-	}
-
-	@Override
-	public void setAnalyzed(boolean value) {
-		this.statcode = AgriStat.setAnalyzed(statcode, value);
 	}
 
 	public boolean addStats(List<String> lines) {

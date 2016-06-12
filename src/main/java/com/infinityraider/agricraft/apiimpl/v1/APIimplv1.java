@@ -235,7 +235,7 @@ public class APIimplv1 implements APIv1 {
             return false;
         }
         TileEntityCrop crop = (TileEntityCrop) te;
-        return crop.hasPlant() && crop.isAnalyzed();
+        return crop.hasPlant() && crop.getStats().isAnalyzed();
     }
 
     @Override
@@ -367,8 +367,7 @@ public class APIimplv1 implements APIv1 {
                     if (crop.isCrossCrop() || crop.hasPlant() || crop.hasWeed() || !CropPlantHandler.getGrowthRequirement(seed).canGrow(world, pos)) {
                         return false;
                     }
-                    PlantStats stats = new PlantStats(seed);
-                        crop.setPlant(stats.getGrowth(), stats.getGain(), stats.getStrength(), stats.isAnalyzed(), seed.getItem(), seed.getItemDamage());
+                    crop.setPlant(new PlantStats(seed), seed.getItem(), seed.getItemDamage());
                     seed.stackSize--;
                     return true;
                 }
@@ -387,7 +386,7 @@ public class APIimplv1 implements APIv1 {
             TileEntityCrop crop = (TileEntityCrop) te;
             if(crop.allowHarvest(null)) {
                 crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
-                return crop.getPlant().getFruitsOnHarvest(crop.getGain(), world.rand);
+                return crop.getPlant().getFruitsOnHarvest(crop.getStats().getGain(), world.rand);
             }
         }
         return null;
@@ -510,7 +509,7 @@ public class APIimplv1 implements APIv1 {
                 tag = new NBTTagCompound();
 				stats = new PlantStats();
             }
-			stats.setAnalyzed(true);
+			stats.analyze();
 			stats.writeToNBT(tag);
 			seed.setTagCompound(tag);
         }

@@ -216,7 +216,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 				this.specimen.setTagCompound(new NBTTagCompound());
 			}
 			PlantStats stats = new PlantStats(this.specimen);
-			stats.setAnalyzed(true);
+			stats.analyze();
 			stats.writeToNBT(this.specimen.getTagCompound());
 		} else if (this.hasTrowel()) {
 			((ITrowel) this.specimen.getItem()).analyze(this.specimen);
