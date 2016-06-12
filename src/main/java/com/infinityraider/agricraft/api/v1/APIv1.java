@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 
 /**
  * <h1>This is the AgriCraft API, version 2.</h1>
@@ -50,19 +51,19 @@ public interface APIv1 extends APIBase {
      * @return A list of items that are considered "crops". The list may be
      *         empty, but will never be null.
      */
-    List<ItemStack> getCropsItems();
+    @Nonnull List<ItemStack> getCropsItems();
 
     /**
      * @return A list of items that are considered "rakes" and can be used to
      *         weed. The list may be empty, but will never be null.
      */
-    List<ItemStack> getRakeItems();
+    @Nonnull List<ItemStack> getRakeItems();
 
     /**
      * @return A list of blocks that are placed "crops". The list may be empty,
      *         but will never be null.
      */
-    List<Block> getCropsBlocks();
+    @Nonnull List<Block> getCropsBlocks();
 
     /**
      * Checks if AgriCraft is configured to prevent the given seed to be used in

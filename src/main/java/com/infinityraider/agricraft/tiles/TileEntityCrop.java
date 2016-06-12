@@ -47,7 +47,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	private boolean crossCrop = false;
 	private boolean weed = false;
 	
-	private @Nonnull IAgriCraftStats stats;
+	private @Nonnull IAgriCraftStats stats = new PlantStats();
 	private IAgriCraftPlant plant;
 	private IAdditionalCropData data;
 
@@ -68,8 +68,8 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	}
 
 	@Override
-	public IAgriCraftStats getStats() {
-		return this.hasPlant() ? stats.copy() : new PlantStats(-1, -1, -1);
+	public @Nonnull IAgriCraftStats getStats() {
+		return this.stats;
 	}
 
 	@Override

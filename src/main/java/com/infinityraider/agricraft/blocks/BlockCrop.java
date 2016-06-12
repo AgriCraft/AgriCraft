@@ -210,9 +210,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				return false;
 			}
 			//get AgriCraftNBT data from the seeds
-			final NBTTagCompound tag = stack.getTagCompound();
-			final PlantStats stats = new PlantStats(tag);
-			crop.setPlant(stats, stack.getItem(), stack.getItemDamage());
+			crop.setPlant(new PlantStats(stack), stack.getItem(), stack.getItemDamage());
 			return true;
 		}
 		return false;

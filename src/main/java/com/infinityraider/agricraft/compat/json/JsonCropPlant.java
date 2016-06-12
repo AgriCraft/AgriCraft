@@ -36,7 +36,7 @@ public class JsonCropPlant extends CropPlant {
 
 	public JsonCropPlant(AgriPlant plant) {
 		this.plant = plant;
-		this.setGrowthRequirement(this.initGrowthRequirement());
+		this.setGrowthRequirement(this.initGrowthRequirementJSON());
 	}
 
 	@Override
@@ -89,7 +89,12 @@ public class JsonCropPlant extends CropPlant {
 	}
 
 	@Override
-	protected final IGrowthRequirement initGrowthRequirement() {
+	protected IGrowthRequirement initGrowthRequirement() {
+		// Hack to avert annoying auto-call.
+		return GrowthRequirementHandler.getNewBuilder().build();
+	}
+	
+	protected final IGrowthRequirement initGrowthRequirementJSON() {
 
 		IGrowthRequirementBuilder builder = GrowthRequirementHandler.getNewBuilder();
 

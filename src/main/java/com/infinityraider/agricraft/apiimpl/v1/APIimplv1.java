@@ -242,7 +242,7 @@ public class APIimplv1 implements APIv1 {
     public IAgriCraftStats getStats(World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if(te==null || !(te instanceof TileEntityCrop)) {
-            return new PlantStats(-1, -1, -1);
+            return new PlantStats();
         }
         TileEntityCrop crop = (TileEntityCrop) te;
         return crop.getStats();

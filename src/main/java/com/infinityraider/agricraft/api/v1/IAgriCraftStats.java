@@ -5,9 +5,9 @@ import javax.annotation.Nonnull;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * To be deprecated upon switch to using condensed stat codes.
+ * Interface for representing stats.
  * 
- * But having the stats as an objects presents a nice way to handle them.
+ * It may be preferable to make this an actual class...
  * 
  * @author RlonRyan
  */
@@ -26,35 +26,38 @@ public interface IAgriCraftStats {
     /**
      * @return The growth value of the seed.
      */
-    short getGrowth();
+    byte getGrowth();
 
     /**
      * @return The gain value of the seed.
      */
-    short getGain();
+    byte getGain();
 
     /**
      * @return The strength value of the seed.
      */
-    short getStrength();
+    byte getStrength();
 
     /**
      * @return The maximum growth value a seed of this kind can have.
      */
-    short getMaxGrowth();
+    byte getMaxGrowth();
 
     /**
      * @return The maximum gain value a seed of this kind can have.
      */
-    short getMaxGain();
+    byte getMaxGain();
 
     /**
      * @return The maximum strength value a seed of this kind can have.
      */
-    short getMaxStrength();
+    byte getMaxStrength();
 	
 	/**
 	 * Writes the stat to an NBTTagcompound.
+	 * 
+	 * The major issue here is how to read back from the NBTTag...
+	 * 
 	 * @param tag The tag to serialize to.
 	 */
 	void writeToNBT(@Nonnull NBTTagCompound tag);
@@ -66,11 +69,5 @@ public interface IAgriCraftStats {
 	 * @return If the writing was successful.
 	 */
 	boolean addStats(@Nonnull List<String> lines);
-	
-	/**
-	 * Duplicates the stats.
-	 * @return  A copy of the stat object.
-	 */
-	IAgriCraftStats copy();
 
 }

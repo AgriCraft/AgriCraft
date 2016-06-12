@@ -64,7 +64,12 @@ public class MessageTileEntitySeedStorage extends MessageBase {
         this.slotId = buf.readInt();
         if(this.slotId>=0) {
             this.amount = buf.readInt();
-			this.stats = new PlantStats(buf.readInt());
+			this.stats = new PlantStats(
+					buf.readByte(),
+					buf.readByte(),
+					buf.readByte(),
+					buf.readBoolean()
+			);
         }
     }
 
@@ -74,7 +79,10 @@ public class MessageTileEntitySeedStorage extends MessageBase {
         buf.writeInt(this.slotId);
         if(this.slotId>=0) {
             buf.writeInt(this.amount);
-            buf.writeInt(this.stats.getStatCode());
+			buf.writeByte(this.stats.getGain());
+			buf.writeByte(this.stats.getGrowth());
+			buf.writeByte(this.stats.getStrength());
+			buf.writeBoolean(this.stats.isAnalyzed());
         }
     }
 }

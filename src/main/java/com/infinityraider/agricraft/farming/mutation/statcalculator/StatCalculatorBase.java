@@ -39,7 +39,11 @@ public abstract  class StatCalculatorBase extends StatCalculator {
         int meanGain = getMeanIgnoringNegativeValues(gain);
         int meanStrength = getMeanIgnoringNegativeValues(strength);
         int divisor = mutation ? AgriCraftConfig.cropStatDivisor : 1;
-        return new PlantStats(calculateStats(meanGrowth, nrValidParents, divisor), calculateStats(meanGain, nrValidParents, divisor), calculateStats(meanStrength, nrValidParents, divisor));
+        return new PlantStats(
+				calculateStats(meanGrowth, nrValidParents, divisor),
+				calculateStats(meanGain, nrValidParents, divisor),
+				calculateStats(meanStrength, nrValidParents, divisor)
+		);
     }
 
     //gets an array of all the possible parents from the array containing all the neighbouring crops

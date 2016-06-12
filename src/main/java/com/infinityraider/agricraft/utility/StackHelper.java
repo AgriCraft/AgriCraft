@@ -2,7 +2,9 @@
  */
 package com.infinityraider.agricraft.utility;
 
+import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  *
@@ -45,6 +47,10 @@ public final class StackHelper {
 			return NBTHelper.hasKey(stack.getTagCompound(), keys);
 		}
 		return false;
+	}
+	
+	public static @Nonnull NBTTagCompound getTag(ItemStack stack) {
+		return hasTag(stack) ? stack.getTagCompound() : new NBTTagCompound();
 	}
 
 }
