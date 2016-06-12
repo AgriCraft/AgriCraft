@@ -63,7 +63,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 	}
 
 	private void renderModel(ITessellator tessellator, TileEntitySeedAnalyzer analyzer) {
-		tessellator.draw();
+		//tessellator.draw();
 		//render the model
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.5F, 1.5F, 0.5F);
@@ -84,7 +84,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 			this.modelBook.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		}
 		GL11.glPopMatrix();
-		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
+		//tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
 
 	}
 

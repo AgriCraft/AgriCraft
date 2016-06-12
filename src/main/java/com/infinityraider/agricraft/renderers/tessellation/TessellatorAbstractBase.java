@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.renderers.tessellation;
 
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.TransformationMatrix;
+import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -485,7 +486,11 @@ public abstract class TessellatorAbstractBase implements ITessellator {
      */
     @Override
     public TextureAtlasSprite getIcon(ResourceLocation loc) {
-        return ModelLoader.defaultTextureGetter().apply(loc);
+		if (loc != null) {
+			return ModelLoader.defaultTextureGetter().apply(loc);
+		} else {
+			return IconUtil.getDefaultIcon();
+		}
     }
 
     /**

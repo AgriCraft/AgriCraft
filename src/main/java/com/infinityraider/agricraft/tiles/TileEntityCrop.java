@@ -64,7 +64,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
 	@Override
 	public IAgriCraftPlant getPlant() {
-		return this.hasPlant() ? plant : null;
+		return this.plant;
 	}
 
 	@Override
@@ -514,9 +514,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 			list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject((this.plant.getSeed().getItem())) + ":" + this.plant.getSeed().getItemDamage());
 			list.add(" - Tier: " + plant.getTier());
 			list.add(" - Meta: " + this.getBlockMetadata());
-			list.add(" - Growth: " + stats.getGrowth());
-			list.add(" - Gain: " + stats.getGain());
-			list.add(" - Strength: " + stats.getStrength());
+			this.stats.addStats(list);
 			list.add(" - Fertile: " + this.isFertile());
 			list.add(" - Mature: " + this.isMature());
 		} else if (this.weed) {

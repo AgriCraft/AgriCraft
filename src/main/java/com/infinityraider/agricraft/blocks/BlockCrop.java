@@ -60,6 +60,11 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		this.setHardness(0.0F);
 		this.disableStats();
 	}
+	
+	@Override
+    public AxisAlignedBB getDefaultBoundingBox() {
+        return BOX;
+    }
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
@@ -586,31 +591,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	}
 
 	/**
-	 * Retrieves the block's collision bounding box. Since we want to be able to
-	 * walk through the crops, they should not collide anywhere, and their
-	 * bounding box is therefore null.
-	 *
-	 * @return null - the crops cannot be collided with.
-	 */
-	@Override
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState worldIn, World pos, BlockPos state) {
-		return null;
-	}
-
-	/**
-	 * Retrieves the block's outline box for selections.
-	 *
-	 * @return a bounding box representing the area occupied by the crops.
-	 */
-	@Override
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World world, BlockPos pos) {
-		TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
-		return this.getBoundingBox(blockState, world, pos).offset(crop.getPos());
-	}
-
-	/**
 	 * Determines if the block is a normal block, such as cobblestone. This
 	 * tells Minecraft if crops are not a normal block (meaning no levers can be
 	 * placed on it, it's transparent, ...).
@@ -630,7 +610,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 */
 	@Override
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return true;
+		return false;
 	}
 
 	/**
@@ -689,11 +669,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		return null;
 	}
 
-	@Override
-	public AxisAlignedBB getDefaultBoundingBox() {
-		return BOX;
-	}
-
 	/**
 	 * Retrieves the type of plant growing within the crops.
 	 *
@@ -742,6 +717,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getBlockTexture() {
-		return null;
+		return new ResourceLocation("agricraft:crops");
 	}
 }
