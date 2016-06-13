@@ -35,5 +35,5 @@ public interface IJournal {
      * @param journal an ItemStack holding the journal
      * @return an ArrayList containing an ItemStack for every discovered seed (the list may be empty but will never be null)
      */
-    List<ItemStack> getDiscoveredSeeds(ItemStack journal);
+    List<IAgriCraftPlant> getDiscoveredSeeds(ItemStack journal);
 }

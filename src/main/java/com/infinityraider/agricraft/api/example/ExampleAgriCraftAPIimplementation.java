@@ -3,9 +3,6 @@ package com.infinityraider.agricraft.api.example;
 import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
 import com.infinityraider.agricraft.api.v1.APIv1;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
 
 public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrapper {
     private APIv1 api;

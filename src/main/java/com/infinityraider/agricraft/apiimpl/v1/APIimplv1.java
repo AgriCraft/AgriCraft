@@ -459,26 +459,19 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public IMutation[] getRegisteredMutationsForParent(ItemStack parent) {
+    public IMutation[] getRegisteredMutationsForParent(IAgriCraftPlant parent) {
         return MutationHandler.getMutationsFromParent(parent);
     }
 
     @Override
-    public IMutation[] getRegisteredMutationsForChild(ItemStack child) {
+    public IMutation[] getRegisteredMutationsForChild(IAgriCraftPlant child) {
         return MutationHandler.getMutationsFromChild(child);
     }
 
-    @Override
-    public boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
-        MutationHandler.add(new Mutation(result, parent1, parent2));
-        return false;
-    }
-
-    @Override
-    public boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2, double d) {
-        MutationHandler.add(new Mutation(result, parent1, parent2, d));
-        return true;
-    }
+	@Override
+	public boolean registerMutation(double chance, IGrowthRequirement requirement, IAgriCraftPlant child, IAgriCraftPlant... parents) {
+		return MutationHandler.add(new Mutation(chance, requirement, child, parents));
+	}
 
     @Override
     public boolean removeMutation(ItemStack result) {
@@ -556,7 +549,7 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public List<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal) {
+    public List<IAgriCraftPlant> getDiscoveredSeedsFromJournal(ItemStack journal) {
         if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
             return new ArrayList<>();
         }

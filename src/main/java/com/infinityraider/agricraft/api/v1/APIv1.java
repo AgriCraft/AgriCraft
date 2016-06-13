@@ -466,14 +466,13 @@ public interface APIv1 extends APIBase {
      * Gets a list of all mutations that have this stack as a parent
      * Mutations are populated onServerAboutToStartEvent, so any calls before that will return null
      */
-    IMutation[] getRegisteredMutationsForParent(ItemStack parent);
+    IMutation[] getRegisteredMutationsForParent(IAgriCraftPlant parent);
 
     /**
      * Gets a list of all mutations that have this stack as a child
      * Mutations are populated onServerAboutToStartEvent, so any calls before that will return null
      */
-    IMutation[] getRegisteredMutationsForChild(ItemStack child);
-
+    IMutation[] getRegisteredMutationsForChild(IAgriCraftPlant child);
 
     /**
      * Registers a new mutation: result = parent1 + parent2
@@ -482,17 +481,7 @@ public interface APIv1 extends APIBase {
      * @param parent2 ItemStack containing the other parent for the mutation
      * @return True if successful
      */
-    boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2);
-
-    /**
-     * Registers a new mutation: result = parent1 + parent2
-     * @param result ItemStack containing the resulting seed of the mutation
-     * @param parent1 ItemStack containing one parent for the mutation
-     * @param parent2 ItemStack containing the other parent for the mutation
-     * @param chance the chance for this mutation to occur, default is 0.2D
-     * @return True if successful
-     */
-    boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2, double chance);
+    boolean registerMutation(double chance, IGrowthRequirement requirement, @Nonnull IAgriCraftPlant child, @Nonnull IAgriCraftPlant... parents);
 
     /**
      * Removes all mutations that give this stack as a result
@@ -567,6 +556,6 @@ public interface APIv1 extends APIBase {
      * @param journal an ItemStack holding the journal
      * @return an ArrayList containing an ItemStack for every discovered seed (the list may be empty but will never be null)
      */
-    List<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal);
+    List<IAgriCraftPlant> getDiscoveredSeedsFromJournal(ItemStack journal);
 
 }

@@ -5,7 +5,6 @@ package com.infinityraider.agricraft.compat.jei.mutation;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.IMutation;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import java.util.List;
 import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -14,6 +13,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 
 /**
  *
@@ -26,26 +26,23 @@ public class MutationRecipeWrapper implements IRecipeWrapper {
 
 	public MutationRecipeWrapper(IMutation recipe) {
 		ImmutableList.Builder builder = ImmutableList.builder();
-		for (Object o : recipe.getParents()) {
-			if (o instanceof ItemStack) {
-				builder.add(o);
-			}
+		for (IAgriCraftPlant p : recipe.getParents()) {
+			builder.add(p.getSeed());
 		}
-		if (recipe.getResult() != null) {
-			IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(recipe.getResult());
-			if (plant.getGrowthRequirement() != null) {
-				if (plant.getGrowthRequirement().getSoil() != null) {
-					builder.add(plant.getGrowthRequirement().getSoil().toStack());
-				} else {
-					builder.add(new ItemStack(Blocks.dirt));
-				}
-				if (plant.getGrowthRequirement().getRequiredBlock() != null) {
-					builder.add(plant.getGrowthRequirement().getRequiredBlock().toStack());
-				}
+		IAgriCraftPlant plant = recipe.getChild();
+		IGrowthRequirement rec = recipe.getRequirement() == null ? plant.getGrowthRequirement() : recipe.getRequirement();
+		if (rec != null) {
+			if (rec.getSoil() != null) {
+				builder.add(rec.getSoil().toStack());
+			} else {
+				builder.add(new ItemStack(Blocks.dirt));
+			}
+			if (rec.getRequiredBlock() != null) {
+				builder.add(rec.getRequiredBlock().toStack());
 			}
 		}
 		input = builder.build();
-		output = recipe.getResult();
+		output = recipe.getChild().getSeed();
 	}
 
 	@Override

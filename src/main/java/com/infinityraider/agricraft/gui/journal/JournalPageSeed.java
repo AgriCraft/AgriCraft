@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.gui.journal;
 
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.infinityraider.agricraft.gui.Component;
@@ -25,7 +24,7 @@ public class JournalPageSeed extends JournalPage {
     private static final ResourceLocation BRIGHTNESS_BAR = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalBrightnessBar.png");
     private static final ResourceLocation BRIGHTNESS_FRAME = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalBrightnessFrame.png");
 
-    private List<ItemStack> discoveredSeeds;
+    private List<IAgriCraftPlant> discoveredSeeds;
     private int page;
 
     private IAgriCraftPlant plant;
@@ -33,10 +32,10 @@ public class JournalPageSeed extends JournalPage {
     private List<Component<ItemStack>> fruits;
     private List<Component<ItemStack>> seeds;
 
-    public JournalPageSeed(List<ItemStack> discoveredSeeds, int page) {
+    public JournalPageSeed(List<IAgriCraftPlant> discoveredSeeds, int page) {
         this.discoveredSeeds = discoveredSeeds;
         this.page = page;
-        this.plant = CropPlantHandler.getPlantFromStack(discoveredSeeds.get(page));
+        this.plant = discoveredSeeds.get(page);
         this.fruits = getFruits();
         this.seeds = getSeeds();
     }
@@ -71,7 +70,7 @@ public class JournalPageSeed extends JournalPage {
             if(component.isOverComponent(x, y)) {
                 ItemStack selected = component.getComponent();
                 for(int i=0;i<discoveredSeeds.size();i++) {
-                    ItemStack current = discoveredSeeds.get(i);
+                    ItemStack current = discoveredSeeds.get(i).getSeed();
                     if(selected.getItem()==current.getItem() && selected.getItemDamage()==current.getItemDamage()) {
                         return i-page;
                     }
@@ -193,7 +192,7 @@ public class JournalPageSeed extends JournalPage {
 
     private List<Component<ItemStack>> getFruits() {
         if(this.plant==null) {
-            this.plant = CropPlantHandler.getPlantFromStack(discoveredSeeds.get(page));
+            this.plant = discoveredSeeds.get(page);
         }
         List<Component<ItemStack>> fruits = new ArrayList<>();
         List<ItemStack> allFruits = plant.getAllFruits();
@@ -218,17 +217,17 @@ public class JournalPageSeed extends JournalPage {
         int x = 132;
         for (Mutation mutation : completedMutations) {
             y = y + 20;
-            ItemStack resultStack = mutation.getResult();
-            ItemStack parent1Stack = mutation.getParents()[0];
-            ItemStack parent2Stack = mutation.getParents()[1];
+            ItemStack resultStack = mutation.getChild().getSeed();
+            ItemStack parent1Stack = mutation.getParents()[0].getSeed();
+            ItemStack parent2Stack = mutation.getParents()[1].getSeed();
             seeds.add(new Component<>(parent1Stack, x, y, 16, 16));
             seeds.add(new Component<>(parent2Stack, x + 35, y, 16, 16));
             seeds.add(new Component<>(resultStack, x + 69, y, 16, 16));
         }
         for (Mutation mutation : uncompletedMutations) {
             y = y + 20;
-            ItemStack parent1Stack = mutation.getParents()[0];
-            ItemStack parent2Stack = mutation.getParents()[1];
+            ItemStack parent1Stack = mutation.getParents()[0].getSeed();
+            ItemStack parent2Stack = mutation.getParents()[1].getSeed();
             seeds.add(new Component<>(parent1Stack, x, y, 16, 16));
             seeds.add(new Component<>(parent2Stack, x + 35, y, 16, 16));
         }
@@ -278,29 +277,20 @@ public class JournalPageSeed extends JournalPage {
     }
 
     private boolean isMutationDiscovered(Mutation mutation) {
-        ItemStack resultStack = mutation.getResult();
-        return areParentsDiscovered(mutation) && isSeedDiscovered(resultStack);
+        return areParentsDiscovered(mutation) && isSeedDiscovered(mutation.getChild());
     }
 
     private boolean isMutationHalfDiscovered(Mutation mutation) {
-        ItemStack resultStack = mutation.getResult();
-        return areParentsDiscovered(mutation) && !isSeedDiscovered(resultStack);
+        return areParentsDiscovered(mutation) && !isSeedDiscovered(mutation.getChild());
 
     }
 
     private boolean areParentsDiscovered(Mutation mutation) {
-        ItemStack parent1Stack = mutation.getParents()[0];
-        ItemStack parent2Stack = mutation.getParents()[1];
-        return isSeedDiscovered(parent1Stack) && isSeedDiscovered(parent2Stack);
+		return this.discoveredSeeds.containsAll(Arrays.asList(mutation.getParents()));
     }
 
-    private boolean isSeedDiscovered(ItemStack seed) {
-        for (ItemStack current:discoveredSeeds) {
-            if(current.getItem()==seed.getItem() && current.getItemDamage()==seed.getItemDamage()) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isSeedDiscovered(IAgriCraftPlant seed) {
+        return this.discoveredSeeds.contains(seed);
     }
 
 

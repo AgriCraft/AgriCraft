@@ -1,16 +1,51 @@
 package com.infinityraider.agricraft.api.v1;
 
-import net.minecraft.item.ItemStack;
+import javax.annotation.Nonnull;
 
-/** This interface is for you to read data about a mutation and shouldn't be used to be implemented in your classes */
+/**
+ * An interface representing a mutation, which is a relation between parents and
+ * a child.
+ *
+ * It is reccomended that you do not implement this interface yourself, as it is
+ * provided with the intention of being used as a reference.
+ *
+ * @author AgriCraft
+ * @since v2
+ */
 public interface IMutation {
-    /** returns the result */
-    public ItemStack getResult();
 
-    /** should always return an array of size 2 */
-    public ItemStack[] getParents();
+	/**
+	 * Retrieves the probability of the mutation occurring. Recommended to be
+	 * within the normalized p-value bounds of 0.0 and 1.0.
+	 *
+	 * @return the probability of the mutation occurring.
+	 */
+	double getChance();
 
-    public double getChance();
+	/**
+	 * Gets the plant that results from the completion of the mutation.
+	 *
+	 * @return The child plant generated from the mutation.
+	 */
+	@Nonnull
+	IAgriCraftPlant getChild();
 
-    public void setChance(double d);
+	/**
+	 * Gets a list of the required neighboring plants for the mutation to occur.
+	 * These required plants are also known as <i>parents</i>, which are bred in
+	 * the mutation to produce the <i>child</i>.
+	 *
+	 * @return a list of the parent plants for the mutation.
+	 */
+	@Nonnull
+	IAgriCraftPlant[] getParents();
+
+	/**
+	 * Gets a descriptor representing the conditions required in order for the
+	 * mutation to occur.
+	 *
+	 * @return The required mutation conditions.
+	 */
+	IGrowthRequirement getRequirement();
+
 }

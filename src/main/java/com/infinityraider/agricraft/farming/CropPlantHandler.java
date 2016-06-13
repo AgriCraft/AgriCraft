@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.farming;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.cropplant.*;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.agricraft.agricore.core.AgriCore;
@@ -13,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.infinityraider.agricraft.init.AgriCraftItems;
@@ -249,14 +247,6 @@ public class CropPlantHandler {
 	
 	public static int getRandomStat(Random rand) {
 		return rand.nextInt(AgriCraftConfig.cropStatCap) / 2 + 1;
-	}
-
-	public static List<Mutation> getDefaultMutations() {
-		List<Mutation> list = new ArrayList<>();
-		for (IAgriCraftPlant plant : getPlants()) {
-			list.addAll(plant.getDefaultMutations().stream().map(Mutation::new).collect(Collectors.toList()));
-		}
-		return list;
 	}
 
 	/**

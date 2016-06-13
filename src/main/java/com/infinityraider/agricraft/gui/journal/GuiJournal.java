@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.gui.journal;
 
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.gui.Component;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
@@ -136,7 +137,7 @@ public class GuiJournal extends GuiScreen {
 		return new JournalPageSeed(getDiscoveredSeeds(), currentPageNumber - MINIMUM_PAGES);
 	}
 
-	private List<ItemStack> getDiscoveredSeeds() {
+	private List<IAgriCraftPlant> getDiscoveredSeeds() {
 		if (journal != null && journal.getItem() instanceof ItemJournal) {
 			return ((ItemJournal) journal.getItem()).getDiscoveredSeeds(journal);
 		} else {

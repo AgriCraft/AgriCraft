@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.api.v1.IJournal;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
@@ -108,11 +109,11 @@ public class ItemJournal extends ItemBase implements IJournal {
 	}
 
 	@Override
-	public List<ItemStack> getDiscoveredSeeds(ItemStack journal) {
-		List<ItemStack> list = new ArrayList<>();
+	public List<IAgriCraftPlant> getDiscoveredSeeds(ItemStack journal) {
+		List<IAgriCraftPlant> list = new ArrayList<>();
 		if (journal != null && journal.hasTagCompound()) {
 			for (String id : getDiscoveredSeedIds(journal)) {
-				ItemStack seed = CropPlantHandler.getSeed(CropPlantHandler.getPlant(id));
+				IAgriCraftPlant seed = CropPlantHandler.getPlant(id);
 				if (seed != null) {
 					list.add(seed);
 				}

@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.plant.AgriPlant;
 import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,13 +57,21 @@ public class JsonHelper extends ModHelper {
 			IAgriCraftPlant p1 = findPlant(m.getParent1().getId());
 			IAgriCraftPlant p2 = findPlant(m.getParent2().getId());
 			if (child != null && p1 != null && p2 != null) {
-				MutationHandler.add(new Mutation(child.getSeed(), p1.getSeed(), p2.getSeed(), m.getChance()));
+				MutationHandler.add(new Mutation(m.getChance(), null, child, p1, p2));
 			}
 		});
 		//print registered mutations to the log
 		AgriCore.getLogger("AgriCraft").info("Registered Mutations:");
 		for (Mutation mutation : MutationHandler.getMutations()) {
-			AgriCore.getLogger("AgriCraft").info(" - " + mutation.getFormula());
+			StringBuilder sb = new StringBuilder(" - ");
+			for (int i = 0; i < mutation.getParents().length; i++) {
+				sb.append(mutation.getParents()[i].getPlantName());
+				if (i < mutation.getParents().length - 1) {
+					sb.append(" + ");
+				}
+			}
+			sb.append(" = ").append(mutation.getChild().getPlantName());
+			AgriCore.getLogger("AgriCraft").info(sb.toString());
 		}
 	}
 
