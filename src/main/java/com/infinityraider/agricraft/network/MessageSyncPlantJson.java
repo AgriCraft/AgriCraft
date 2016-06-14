@@ -38,7 +38,7 @@ public class MessageSyncPlantJson extends MessageBase {
 		AgriCore.getLogger("Agri-Net").debug("Recieved Plant {0} ({1} of {2}).", plant.getName(), index + 1, count);
 		AgriCore.getPlants().addPlant(plant);
 		if (this.index == this.count - 1) {
-			JsonHelper.initCrops();
+			JsonHelper.initPlants();
 		}
 	}
 

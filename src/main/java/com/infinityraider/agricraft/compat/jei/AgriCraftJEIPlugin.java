@@ -42,14 +42,15 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 		for (Object o : toRegister) {
 			jeiruntime.getRecipeRegistry().addRecipe(o);
 		}
-		toRegister.clear();
 	}
-	
+
 	public static void registerRecipe(Object o) {
-		if (jeiruntime != null) {
-			jeiruntime.getRecipeRegistry().addRecipe(o);
-		} else {
+		if (!toRegister.contains(o)) {
+			// Maintain a list to prevent duplicate registration.
 			toRegister.add(o);
+			if (jeiruntime != null) {
+				jeiruntime.getRecipeRegistry().addRecipe(o);
+			}
 		}
 	}
 

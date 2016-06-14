@@ -28,15 +28,14 @@ public class JsonHelper extends ModHelper {
 	}
 
 	@Override
-	@SideOnly(Side.SERVER)
 	protected void serverStart() {
-		initCrops();
+		initPlants();
 		initMutations();
 	}
 
-	public static void initCrops() {
+	public static void initPlants() {
 		AgriCore.getPlants().validate();
-		AgriCore.getLogger("AgriCraft").info("Registering Custom Crops!");
+		AgriCore.getLogger("AgriCraft").info("Registering Custom Plants!");
 		AgriCore.getPlants().validate();
 		AgriCore.getPlants().getAll().forEach((p) -> {
 			JsonCropPlant c = new JsonCropPlant(p);
@@ -63,15 +62,7 @@ public class JsonHelper extends ModHelper {
 		//print registered mutations to the log
 		AgriCore.getLogger("AgriCraft").info("Registered Mutations:");
 		for (IMutation mutation : MutationHandler.getMutations()) {
-			StringBuilder sb = new StringBuilder(" - ");
-			for (int i = 0; i < mutation.getParents().length; i++) {
-				sb.append(mutation.getParents()[i].getPlantName());
-				if (i < mutation.getParents().length - 1) {
-					sb.append(" + ");
-				}
-			}
-			sb.append(" = ").append(mutation.getChild().getPlantName());
-			AgriCore.getLogger("AgriCraft").info(sb.toString());
+			AgriCore.getLogger("AgriCraft").info(" - {0}", mutation);
 		}
 	}
 

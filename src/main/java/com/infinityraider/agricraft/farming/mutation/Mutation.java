@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.utility.MathHelper;
+import java.util.Arrays;
 import javax.annotation.Nonnull;
 
 public class Mutation implements IMutation {
@@ -53,10 +54,24 @@ public class Mutation implements IMutation {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < this.parents.length; i++) {
+			sb.append(this.parents[i].getPlantName());
+			if (i < this.parents.length - 1) {
+				sb.append(" + ");
+			}
+		}
+		sb.append(" = ").append(this.child.getPlantName());
+		return sb.toString();
+	}
+
 	public Mutation(double chance, @Nonnull IGrowthRequirement requirement, @Nonnull IAgriCraftPlant child, @Nonnull IAgriCraftPlant... parents) {
 		this.chance = MathHelper.inRange(chance, 0, 1);
 		this.requirement = requirement;
 		this.child = child;
+		Arrays.sort(parents);
 		this.parents = parents;
 	}
 

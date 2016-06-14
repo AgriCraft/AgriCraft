@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.proxy;
 
-import com.infinityraider.agricraft.handler.PlayerConnectToServerHandler;
 import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.RenderLogger;
@@ -13,7 +12,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@SuppressWarnings("unused")
 public interface IProxy {
     /** Returns the physical side, is always Side.SERVER on the server and Side.CLIENT on the client */
     Side getPhysicalSide();
@@ -53,10 +51,6 @@ public interface IProxy {
 	default public void registerEventHandlers() {
         PlayerInteractEventHandler playerInteractEventHandler = new PlayerInteractEventHandler();
         MinecraftForge.EVENT_BUS.register(playerInteractEventHandler);
-
-        PlayerConnectToServerHandler playerConnectToServerHandler = new PlayerConnectToServerHandler();
-        FMLCommonHandler.instance().bus().register(playerConnectToServerHandler);
-        MinecraftForge.EVENT_BUS.register(playerConnectToServerHandler);
 
         if (AgriCraftConfig.debug) {
             FMLCommonHandler.instance().bus().register(new RenderLogger());

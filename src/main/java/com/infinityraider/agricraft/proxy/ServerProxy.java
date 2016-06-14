@@ -1,12 +1,16 @@
 package com.infinityraider.agricraft.proxy;
 
+import com.infinityraider.agricraft.handler.PlayerConnectToServerHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.server.FMLServerHandler;
 
-@SuppressWarnings("unused")
+@SideOnly(Side.SERVER)
 public class ServerProxy implements IProxy {
 
 	@Override
@@ -49,6 +53,10 @@ public class ServerProxy implements IProxy {
 	@Override
 	public void registerEventHandlers() {
 		IProxy.super.registerEventHandlers();
+		
+        PlayerConnectToServerHandler playerConnectToServerHandler = new PlayerConnectToServerHandler();
+        FMLCommonHandler.instance().bus().register(playerConnectToServerHandler);
+        MinecraftForge.EVENT_BUS.register(playerConnectToServerHandler);
 	}
 
 	@Override
