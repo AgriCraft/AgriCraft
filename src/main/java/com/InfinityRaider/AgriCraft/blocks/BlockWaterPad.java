@@ -11,6 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -67,15 +68,32 @@ public class BlockWaterPad extends BlockAgriCraft {
             if (!FluidContainerRegistry.containsFluid(stack, waterBucket)) {
                 return false;
             }
-            if (!player.capabilities.isCreativeMode) {
-                player.inventory.addItemStackToInventory(FluidContainerRegistry.drainFluidContainer(stack));
-                player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
-            }
             if (!world.isRemote) {
+                if (!player.capabilities.isCreativeMode) {
+                    ItemStack copy = stack.copy();
+                    player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
+                    if(player.getCurrentEquippedItem().stackSize == 0) {
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, FluidContainerRegistry.drainFluidContainer(copy));
+                    } else {
+                        ItemStack drained = FluidContainerRegistry.drainFluidContainer(copy);
+                        if (!player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, copy))) {
+                            if (!player.inventory.addItemStackToInventory(drained)) {
+                                if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
+                                    float f = 0.7F;
+                                    double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                                    double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                                    double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                                    EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, drained);
+                                    entityitem.delayBeforeCanPickup = 10;
+                                    world.spawnEntityInWorld(entityitem);
+                                }
+                            }
+                        }
+                    }
+                }
                 world.setBlock(x, y, z, com.InfinityRaider.AgriCraft.init.Blocks.blockWaterPadFull, 7, 3);
             }
-            return true;
-
+            return false;
         } else if (stack.getItem() instanceof ItemSpade || (ModHelper.allowIntegration(Names.Mods.tconstruct) && TinkersConstructHelper.isShovel(stack))) {
             world.setBlock(x, y, z, Blocks.dirt);
         }

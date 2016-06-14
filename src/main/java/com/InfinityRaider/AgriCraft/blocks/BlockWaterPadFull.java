@@ -35,21 +35,24 @@ public class BlockWaterPadFull extends BlockWaterPad {
             if (!FluidContainerRegistry.isEmptyContainer(stack)) {
                 return false;
             }
-            if (!player.capabilities.isCreativeMode) {
-                if(!player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, stack))) {
-                	if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
-                        float f = 0.7F;
-                        double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                        double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                        double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                        EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, FluidContainerRegistry.fillFluidContainer(waterBucket, stack));
-                        entityitem.delayBeforeCanPickup = 10;
-                        world.spawnEntityInWorld(entityitem);
-                    }
-                };
-                player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
-            }
             if (!world.isRemote) {
+                if (!player.capabilities.isCreativeMode) {
+                    ItemStack copy = stack.copy();
+                    player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().stackSize - 1;
+                    if (player.getCurrentEquippedItem().stackSize == 0) {
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, FluidContainerRegistry.fillFluidContainer(waterBucket, copy));
+                    } else if (!player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, copy))) {
+                        if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
+                            float f = 0.7F;
+                            double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                            double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                            double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                            EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, FluidContainerRegistry.fillFluidContainer(waterBucket, copy));
+                            entityitem.delayBeforeCanPickup = 10;
+                            world.spawnEntityInWorld(entityitem);
+                        }
+                    }
+                }
                 world.setBlock(x, y, z, Blocks.blockWaterPad, 0, 3);
             }
             return true;
