@@ -27,6 +27,8 @@ import net.minecraft.item.Item;
  */
 public interface IAgriCraftPlant extends Comparable<IAgriCraftPlant> {
 
+	String getId();
+	
 	String getPlantName();
 	
 	default String getSeedName() {

@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementH
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 import com.infinityraider.agricraft.items.ItemDebugger;
 import com.infinityraider.agricraft.network.MessageFertiliserApplied;
 import com.infinityraider.agricraft.network.NetworkWrapper;
@@ -60,11 +61,11 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		this.setHardness(0.0F);
 		this.disableStats();
 	}
-	
+
 	@Override
-    public AxisAlignedBB getDefaultBoundingBox() {
-        return BOX;
-    }
+	public AxisAlignedBB getDefaultBoundingBox() {
+		return BOX;
+	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
@@ -225,6 +226,8 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 * Handles right-clicks from the player. Allows the player to 'use' the
 	 * block.
 	 *
+	 * TODO: Clean up this horrible mess of a method.
+	 *
 	 * @return if the right-click was consumed.
 	 */
 	@Override
@@ -235,29 +238,19 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		}
 		// When hand rake is enabled and the block has weeds, abandon all hope
 		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityCrop) {
+		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
 			if (AgriCraftItems.enableHandRake && crop.hasWeed() && heldItem == null) {
 				//if weeds can only be removed by using a hand rake, nothing should happen
 				return false;
-			}
-			if (player.isSneaking()) {
+			} else if (player.isSneaking() || heldItem == null || heldItem.getItem() == null) {
 				this.harvest(world, pos, state, player, crop);
-			} else if (heldItem == null || heldItem.getItem() == null) {
-				//harvest operation
-				this.harvest(world, pos, state, player, crop);
-			} else if (heldItem.getItem() == net.minecraft.init.Items.reeds) {
-				//Enables reed planting, temporary code until I code in SEED proxy's
-				//TODO: create SEED proxy handler to plant other things directly onto crops (for example the Ex Nihilo seeds)
-				if (crop.hasPlant()) {
-					this.harvest(world, pos, state, player, crop);
-				} else if (!crop.isCrossCrop() && !crop.hasWeed()) {
-					IAgriCraftPlant sugarcane = CropPlantHandler.getPlantFromStack(new ItemStack(Item.itemRegistry.getObject(new ResourceLocation("AgriCraft:seedSugarcane"))));
-					if (sugarcane != null && sugarcane.getGrowthRequirement().canGrow(world, pos)) {
-						crop.setPlant(new PlantStats(), sugarcane);
-						if (!player.capabilities.isCreativeMode) {
-							heldItem.stackSize = heldItem.stackSize - 1;
-						}
+			} else if (heldItem.getItem() instanceof ItemAgriCraftSeed && !crop.isCrossCrop() && !crop.hasWeed()) {
+				IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(heldItem);
+				if (plant != null && plant.getGrowthRequirement().canGrow(world, pos)) {
+					crop.setPlant(new PlantStats(), plant);
+					if (!player.capabilities.isCreativeMode) {
+						heldItem.stackSize--;
 					}
 				}
 			} //check to see if the player clicked with crops (crosscrop attempt)

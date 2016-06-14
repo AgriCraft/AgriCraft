@@ -71,7 +71,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 			return null;
 		}
 		NBTTagCompound tag = trowel.getTagCompound();
-		IAgriCraftPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
+		IAgriCraftPlant plant = CropPlantHandler.readPlantFromNBT(tag);
 		if (plant == null) {
 			return null;
 		}
@@ -103,7 +103,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 		PlantStats stats = new PlantStats(seed);
 		NBTTagCompound tag = new NBTTagCompound();
 		stats.writeToNBT(tag);
-		tag.setTag(AgriCraftNBT.SEED, CropPlantHandler.writePlantToNBT(plant));
+		CropPlantHandler.writePlantToNBT(tag, plant);
 		tag.setShort(AgriCraftNBT.MATERIAL_META, (short) growthStage);
 		trowel.setTagCompound(tag);
 		trowel.setItemDamage(1);

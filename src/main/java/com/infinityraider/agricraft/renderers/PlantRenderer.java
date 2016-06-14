@@ -12,6 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
@@ -52,15 +53,18 @@ public abstract class PlantRenderer {
     public static void renderHashTagPattern(ITessellator tessellator, TextureAtlasSprite icon, int layer) {
         int minY = 16*layer;
         int maxY = 16*(layer+1);
+		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
         tessellator.drawScaledFaceDouble(0, minY, 16, maxY, EnumFacing.NORTH, icon, 4);
         tessellator.drawScaledFaceDouble(0, minY, 16, maxY, EnumFacing.EAST, icon, 4);
         tessellator.drawScaledFaceDouble(0, minY, 16, maxY, EnumFacing.NORTH, icon, 12);
         tessellator.drawScaledFaceDouble(0, minY, 16, maxY, EnumFacing.EAST, icon, 12);
+		tessellator.draw();
     }
 
     public static void renderCrossPattern(ITessellator tessellator, TextureAtlasSprite icon, int layer) {
         int minY = 12*layer;
         int maxY = 12*(layer+1);
+		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
         tessellator.drawScaledFaceDouble(-2, minY, 10, maxY, EnumFacing.NORTH, icon, 3.999F);
         tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.NORTH, icon, 4.001F);
         tessellator.drawScaledFaceDouble(-2, minY, 10, maxY, EnumFacing.EAST, icon, 3.999F);
@@ -69,6 +73,7 @@ public abstract class PlantRenderer {
         tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.NORTH, icon, 12.001F);
         tessellator.drawScaledFaceDouble(-2, minY, 10, maxY, EnumFacing.EAST, icon, 11.999F);
         tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.EAST, icon, 12.001F);
+		tessellator.draw();
     }
 
     public static void renderStemPlant(ITessellator tessellator, IBlockAccess world, BlockPos pos, TextureAtlasSprite vineIcon, TextureAtlasSprite fruitIcon, int growhtStage, Block vine) {
@@ -81,6 +86,7 @@ public abstract class PlantRenderer {
         float f2 = (float)(l & 255) / 255.0F;
         tessellator.setColorOpaque_F(f, f1, f2);
         */
+		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
         tessellator.translate(0, -Constants.UNIT*2*translation, 0);
         if(growhtStage >= Constants.MATURE) {
             //render the vines
@@ -98,14 +104,17 @@ public abstract class PlantRenderer {
             renderCrossPattern(tessellator, vineIcon, 0);
         }
         tessellator.translate(0, Constants.UNIT * 2 * translation, 0);
+		tessellator.draw();
     }
 
     public static void renderStemPattern(ITessellator tessellator, TextureAtlasSprite icon) {
         int minY = 0;
         int maxY = 12;
+		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
         tessellator.drawScaledFaceDouble(-2, minY, 10, maxY, EnumFacing.NORTH, icon, 4);
         tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.EAST, icon, 4);
         tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.NORTH, icon, 12);
         tessellator.drawScaledFaceDouble(-2, minY, 10, maxY, EnumFacing.EAST, icon, 12);
+		tessellator.draw();
     }
 }

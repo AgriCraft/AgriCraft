@@ -20,6 +20,11 @@ public final class CropPlantNone extends CropPlant {
     private CropPlantNone() {}
 
 	@Override
+	public String getId() {
+		return "none";
+	}
+
+	@Override
 	public String getPlantName() {
 		return "None";
 	}

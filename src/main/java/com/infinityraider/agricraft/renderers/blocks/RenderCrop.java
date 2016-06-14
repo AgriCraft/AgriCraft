@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.PlantRenderer;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.block.Block;
@@ -63,7 +62,7 @@ public class RenderCrop extends RenderBlockBase<TileEntityCrop> {
 				//render weeds
 				//tessellator.setBrightness(RenderUtil.getMixedBrightness(world, pos, Blocks.wheat.getDefaultState()));
 				tessellator.setColorRGBA(1.0F, 1.0F, 1.0F, 1.0F);
-				PlantRenderer.renderHashTagPattern(tessellator, tessellator.getIcon(weedTextures[state.getValue(AgriCraftProperties.GROWTHSTAGE)]), 0);
+				//PlantRenderer.renderHashTagPattern(tessellator, tessellator.getIcon(weedTextures[state.getValue(AgriCraftProperties.GROWTHSTAGE)]), 0);
 			}
 		}
 	}

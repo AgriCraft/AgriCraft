@@ -41,9 +41,9 @@ public class CropPlantHandler {
 	 * registered. This could signal a major issue.
 	 */
 	public static void registerPlant(IAgriCraftPlant plant) throws DuplicateCropPlantException {
-		AgriCore.getLogger("AgriCraft").debug("Registering plant: " + plant.getPlantName());
-		if (!plants.containsKey(plant.getPlantName())) {
-			plants.put(plant.getPlantName(), plant);
+		AgriCore.getLogger("AgriCraft").debug("Registering plant: " + plant.getId());
+		if (!plants.containsKey(plant.getId())) {
+			plants.put(plant.getId(), plant);
 			AgriCraftJEIPlugin.registerRecipe(plant);
 		} else {
 			throw new DuplicateCropPlantException();
@@ -70,7 +70,7 @@ public class CropPlantHandler {
 			registerPlant(plant);
 			GrowthRequirementHandler.addSoil(plant.getGrowthRequirement().getSoil());
 		} catch (DuplicateCropPlantException e) {
-			AgriCore.getLogger("AgriCraft").debug("Unable to register duplicate plant: " + plant.getPlantName());
+			AgriCore.getLogger("AgriCraft").debug("Unable to register duplicate plant: " + plant.getId());
 			AgriCore.getLogger("AgriCraft").trace(e);
 		}
 	}
@@ -109,10 +109,10 @@ public class CropPlantHandler {
 	 * @param plant the plant (or SEED) to write to an NBTTag.
 	 * @return a NBTTagCompound, the serialized representation of the plant.
 	 */
-	public static NBTTagCompound writePlantToNBT(IAgriCraftPlant plant) {
-		final NBTTagCompound tag = new NBTTagCompound();
-		tag.setString(AgriCraftNBT.ID, plant.getPlantName());
-		return tag;
+	public static void writePlantToNBT(NBTTagCompound tag, IAgriCraftPlant plant) {
+		if (plant != null) {
+			tag.setString(AgriCraftNBT.SEED, plant.getId());
+		}
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class CropPlantHandler {
 	 */
 	public static IAgriCraftPlant readPlantFromNBT(NBTTagCompound tag) {
 		if (tag != null) {
-			return plants.get(tag.getString(AgriCraftNBT.ID));
+			return plants.get(tag.getString(AgriCraftNBT.SEED));
 		} else {
 			return null;
 		}
@@ -172,7 +172,9 @@ public class CropPlantHandler {
 	public static ItemStack getSeed(IAgriCraftPlant plant) {
 		if (plant != null) {
 			ItemStack stack = new ItemStack(AgriCraftItems.seed);
-			stack.setTagCompound(CropPlantHandler.writePlantToNBT(plant));
+			NBTTagCompound tag = new NBTTagCompound();
+			writePlantToNBT(tag, plant);
+			stack.setTagCompound(tag);
 			return stack;
 		} else {
 			return null;
@@ -244,7 +246,7 @@ public class CropPlantHandler {
 		}
 		return seed;
 	}
-	
+
 	public static int getRandomStat(Random rand) {
 		return rand.nextInt(AgriCraftConfig.cropStatCap) / 2 + 1;
 	}
@@ -265,17 +267,6 @@ public class CropPlantHandler {
 
 		//Register mod crops.
 		CompatibilityHandler.getInstance().getCropPlants().forEach(CropPlantHandler::suppressedRegisterPlant);
-
-		//Register crops found in the ore dictionary.
-//        List<ItemStack> seeds = OreDictionary.getOres("listAllseed");
-//        seeds.stream().filter(seed -> !isValidSeed(seed) && (seed.getItem() instanceof ItemSeeds)).forEach(seed -> {
-//            ArrayList<ItemStack> fruits = OreDictHelper.getFruitsFromOreDict(seed);
-//            if (fruits != null && fruits.size() > 0) {
-//                suppressedRegisterPlant(new CropPlantOreDict((ItemSeeds) seed.getItem()));
-//            }
-//        });
-		//Set spread chance overrides
-		// The following line is made pointless by the JSON mutation files.
-		//IOHelper.initSpreadChancesOverrides();
 	}
+
 }

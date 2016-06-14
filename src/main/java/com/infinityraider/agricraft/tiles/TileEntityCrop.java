@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.tiles;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.IDebuggable;
 import com.infinityraider.agricraft.api.v1.IFertiliser;
 import com.infinityraider.agricraft.api.v1.IAdditionalCropData;
@@ -46,8 +47,9 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
 	private boolean crossCrop = false;
 	private boolean weed = false;
-	
-	private @Nonnull IAgriCraftStats stats = new PlantStats();
+
+	private @Nonnull
+	IAgriCraftStats stats = new PlantStats();
 	private IAgriCraftPlant plant;
 	private IAdditionalCropData data;
 
@@ -68,7 +70,8 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	}
 
 	@Override
-	public @Nonnull IAgriCraftStats getStats() {
+	public @Nonnull
+	IAgriCraftStats getStats() {
 		return this.stats;
 	}
 
@@ -290,7 +293,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	//clear the WEED
 	@Override
 	public void clearWeed() {
-		if(this.hasWeed()) {
+		if (this.hasWeed()) {
 			this.setGrowthStage(0);
 			this.weed = false;
 		}
@@ -404,12 +407,11 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 		stats.writeToNBT(tag);
 		tag.setBoolean(AgriCraftNBT.CROSS_CROP, crossCrop);
 		tag.setBoolean(AgriCraftNBT.WEED, weed);
-		if (this.plant != null) {
-			tag.setTag(AgriCraftNBT.SEED, CropPlantHandler.writePlantToNBT(plant));
-			if (getAdditionalCropData() != null) {
-				tag.setTag(AgriCraftNBT.INVENTORY, getAdditionalCropData().writeToNBT());
-			}
+		CropPlantHandler.writePlantToNBT(tag, plant);
+		if (getAdditionalCropData() != null) {
+			tag.setTag(AgriCraftNBT.INVENTORY, getAdditionalCropData().writeToNBT());
 		}
+		AgriCore.getLogger("Plant-Tag").debug("Write Tag: {0}", tag);
 	}
 
 	//this loads the saved data for the tile entity
@@ -418,14 +420,11 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 		this.stats = new PlantStats(tag);
 		this.crossCrop = tag.getBoolean(AgriCraftNBT.CROSS_CROP);
 		this.weed = tag.getBoolean(AgriCraftNBT.WEED);
-		if (tag.hasKey(AgriCraftNBT.SEED) && !tag.hasKey(AgriCraftNBT.META)) {
-			this.plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
-		} else {
-			this.plant = null;
-		}
+		this.plant = CropPlantHandler.readPlantFromNBT(tag);
 		if (tag.hasKey(AgriCraftNBT.INVENTORY) && this.plant != null) {
 			this.data = plant.readCropDataFromNBT(tag.getCompoundTag(AgriCraftNBT.INVENTORY));
 		}
+		AgriCore.getLogger("Plant-Tag").debug("Read Tag: {0}", tag);
 	}
 
 	/**
@@ -503,12 +502,13 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 			list.add(" - This is a crosscrop");
 		} else if (this.hasPlant()) {
 			list.add(" - This crop has a plant");
-			list.add(" - Seed: " + (this.plant.getSeed().getItem()).getUnlocalizedName());
-			list.add(" - Seed class: " + this.plant.getSeed().getItem().getClass().getName());
-			list.add(" - RegisterName: " + Item.itemRegistry.getNameForObject((this.plant.getSeed().getItem())) + ":" + this.plant.getSeed().getItemDamage());
+			list.add(" - Plant: " + this.plant.getPlantName());
+			list.add(" - Id: " + this.plant.getId());
 			list.add(" - Tier: " + plant.getTier());
 			list.add(" - Meta: " + this.getBlockMetadata());
-			this.stats.addStats(list);
+			list.add(" - Growth: " + this.stats.getGrowth());
+			list.add(" - Gain: " + this.stats.getGain());
+			list.add(" - Strength: " + this.stats.getStrength());
 			list.add(" - Fertile: " + this.isFertile());
 			list.add(" - Mature: " + this.isMature());
 		} else if (this.weed) {
@@ -525,12 +525,12 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	public void addWailaInformation(List information) {
 		if (this.hasPlant()) {
 			//Add the SEED name.
-			information.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + this.getSeedStack().getDisplayName());
+			information.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + this.plant.getSeedName());
 			//Add the GROWTH.
 			if (this.isMature()) {
 				information.add(I18n.translateToLocal("agricraft_tooltip.growthStage") + ": " + I18n.translateToLocal("agricraft_tooltip.mature"));
 			} else {
-				information.add(I18n.translateToLocal("agricraft_tooltip.growthStage") + ": " + ((int) ((100 * (this.getBlockMetadata() + 0.00F)) / 7.00F) + "%"));
+				information.add(I18n.translateToLocal("agricraft_tooltip.growthStage") + ": " + ((int) (100.0 * this.getBlockMetadata() / Constants.MATURE) + "%"));
 			}
 			//Add the ANALYZED data.
 			if (this.stats.isAnalyzed()) {
