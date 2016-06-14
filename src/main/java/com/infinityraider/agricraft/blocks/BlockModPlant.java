@@ -213,7 +213,7 @@ public class BlockModPlant extends BlockCrops implements IAgriCraftPlant {
             //Bonus for growth stat (because these crops are not planted on crop sticks, growth of 1 is applied)
             double bonus = 1.0 + (1 + 0.00) / 10;
             //Global multiplier as defined in the config
-            float global = 2.0F - AgriCraftConfig.growthMultiplier;
+            float global = AgriCraftConfig.growthMultiplier;
             int newMeta = (rnd.nextDouble() > (growthRate * bonus * global) / 100) ? meta : meta + 1;
             if (newMeta != meta) {
                 world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, newMeta), 2);
