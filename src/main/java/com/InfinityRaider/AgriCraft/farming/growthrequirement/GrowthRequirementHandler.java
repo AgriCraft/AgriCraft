@@ -10,6 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.*;
 
@@ -63,11 +64,15 @@ public class GrowthRequirementHandler {
         String total = " of " + data.length + ".";
         for (String line : data) {
             LogHelper.debug("  Parsing " + line + total);
-            ItemStack stack = IOHelper.getStack(line);
+            ItemStack stack = IOHelper.getStack(line, true);
             Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).field_150939_a : null;
             
             if (block != null) {
-                addDefaultSoil(new BlockWithMeta(block, stack.getItemDamage()));
+                if(stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                    addDefaultSoil(new BlockWithMeta(block));
+                } else {
+                    addDefaultSoil(new BlockWithMeta(block, stack.getItemDamage()));
+                }
             } else {
                 LogHelper.info(" Error when adding block to soil whitelist: Invalid block (line: " + line + ")");
             }

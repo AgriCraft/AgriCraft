@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -123,7 +124,7 @@ public abstract class IOHelper {
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSeedBlackList());
         for(String line:data) {
             LogHelper.debug(new StringBuffer("parsing ").append(line));
-            ItemStack seedStack = IOHelper.getStack(line);
+            ItemStack seedStack = IOHelper.getStack(line, false);
             boolean success = seedStack != null && seedStack.getItem() != null;
             String errorMsg = "Invalid seed";
             if(success) {
@@ -145,7 +146,7 @@ public abstract class IOHelper {
             String errorMsg = "Incorrect amount of arguments";
             LogHelper.debug("parsing "+line);
             if(success) {
-                ItemStack seedStack = IOHelper.getStack(data[0]);
+                ItemStack seedStack = IOHelper.getStack(data[0], false);
                 CropPlant plant = CropPlantHandler.getPlantFromStack(seedStack);
                 success = plant != null;
                 errorMsg = "Invalid seed";
@@ -175,7 +176,7 @@ public abstract class IOHelper {
             String errorMsg = "Incorrect amount of arguments";
             LogHelper.debug("parsing "+line);
             if(success) {
-                ItemStack seedStack = IOHelper.getStack(data[0]);
+                ItemStack seedStack = IOHelper.getStack(data[0], false);
                 CropPlant plant = CropPlantHandler.getPlantFromStack(seedStack);
                 success = plant != null;
                 errorMsg = "Invalid seed";
@@ -196,12 +197,12 @@ public abstract class IOHelper {
         LogHelper.debug("Registered Mutations Chances overrides:");
     }
 
-    public static void initVanilaPlantingOverrides() {
+    public static void initVanillaPlantingOverrides() {
         LogHelper.debug("Registered seeds ignoring vanilla planting rule:");
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readVanillaOverrides());
         for(String line:data) {
             LogHelper.debug(new StringBuffer("parsing ").append(line));
-            ItemStack seedStack = IOHelper.getStack(line);
+            ItemStack seedStack = IOHelper.getStack(line, false);
             CropPlant plant = CropPlantHandler.getPlantFromStack(seedStack);
             boolean success = plant != null;
             String errorMsg = "Invalid seed";
@@ -319,7 +320,7 @@ public abstract class IOHelper {
         return plantingExceptionsInstructions;
     }
 
-    public static String getSoilwhitelistData() {
+    public static String getSoilWhitelistData() {
         return soilWhitelistInstructions;
     }
 
@@ -380,14 +381,15 @@ public abstract class IOHelper {
      * The meta is not required in all cases.
      * 
      * @param input the string representation of the item to get.
+     * @param wildcard if true, the metadata will be set to OreDictionary.WILDCARD_VALUE if no metadata was specified, will be set to 0 if false
      * @return the item as an itemstack, or null.
      */
-    public static ItemStack getStack(String input) {
+    public static ItemStack getStack(String input, boolean wildcard) {
 		String[] data = input.split(":");
 		if (data.length <= 1) {
 			return null;
 		}
-		int meta = data.length==3?Integer.parseInt(data[2]):0;
+		int meta = data.length == 3 ? Integer.parseInt(data[2]) : (wildcard ? OreDictionary.WILDCARD_VALUE : 0);
         ItemStack stack = GameRegistry.findItemStack(data[0], data[1], 1);
         if(stack!=null && stack.getItem()!=null) {
             stack.setItemDamage(meta);

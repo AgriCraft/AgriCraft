@@ -481,6 +481,6 @@ public class CropPlantHandler {
         IOHelper.initSpreadChancesOverrides();
 
         //Set vanilla planting rule overrides
-        IOHelper.initVanilaPlantingOverrides();
+        IOHelper.initVanillaPlantingOverrides();
     }
 }

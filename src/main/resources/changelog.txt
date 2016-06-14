@@ -8,6 +8,7 @@ Changelog
 -FIXED:  Magical crops ignoring bone meal tiering
 -FIXED:  Emptying/filling water pads destroying the bucket if inventory is full
 -FIXED:  Torches can now be placed on agricraft fences
+-FIXED:  In the soil white list, metadata will no longer default to zero if not specified, instead metadata will be ignored
 
 1.5.0:
 -ADDED:  Config option to render plants on crop sticks as a TESR (might improve FPS if you have FPS issues with large farms)

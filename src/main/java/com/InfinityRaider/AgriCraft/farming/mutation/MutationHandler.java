@@ -83,9 +83,9 @@ public class MutationHandler implements IMutationHandler {
 		}
 
 		// read the stacks
-		ItemStack resultStack = IOHelper.getStack(mutationData.substring(0,indexEquals));
-		ItemStack parentStack1 = IOHelper.getStack(mutationData.substring(indexEquals + 1, indexPlus));
-		ItemStack parentStack2 = IOHelper.getStack(mutationData.substring(indexPlus + 1));
+		ItemStack resultStack = IOHelper.getStack(mutationData.substring(0, indexEquals), false);
+		ItemStack parentStack1 = IOHelper.getStack(mutationData.substring(indexEquals + 1, indexPlus), false);
+		ItemStack parentStack2 = IOHelper.getStack(mutationData.substring(indexPlus + 1), false);
 
 		if (!CropPlantHandler.isValidSeed(resultStack)) {
 			LogHelper.info("Error when reading mutation: resulting stack is not correct. (line: " + input + ")");

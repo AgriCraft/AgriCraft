@@ -43,7 +43,7 @@ public class CustomCrops {
                 String errorMsg = "Incorrect amount of arguments, arguments should be: (name, fruit:fruitMeta, soil, baseBlock:baseBlockMeta, tier, renderType, information, shearable (optional) )";
                 LogHelper.debug(new StringBuffer("parsing ").append(cropsRawData[i]));
                 if(success) {
-                    ItemStack fruitStack = IOHelper.getStack(cropData[1]);
+                    ItemStack fruitStack = IOHelper.getStack(cropData[1], false);
                     errorMsg = "Invalid fruit";
                     success = (fruitStack!=null && fruitStack.getItem()!=null) || (cropData[1].equals("null")) ;
                     if(success) {
@@ -57,7 +57,7 @@ public class CustomCrops {
                         //render method
                         RenderMethod renderType = RenderMethod.getRenderMethod(Integer.parseInt(cropData[5]));
                         //shearable
-                        ItemStack shearable = cropData.length>7?IOHelper.getStack(cropData[7]):null;
+                        ItemStack shearable = cropData.length>7?IOHelper.getStack(cropData[7], false):null;
                         shearable = (shearable!=null && shearable.getItem()!=null)?shearable:null;
                         //info
                         String info = cropData[6];
@@ -112,7 +112,7 @@ public class CustomCrops {
             String errorMsg = "Incorrect amount of arguments";
             LogHelper.debug("parsing "+data);
             if(success) {
-                ItemStack seedStack = IOHelper.getStack(dropData[0]);
+                ItemStack seedStack = IOHelper.getStack(dropData[0], false);
                 Item drop = seedStack!=null?seedStack.getItem():null;
                 success = drop!=null;
                 errorMsg = "Invalid fruit";

@@ -255,7 +255,7 @@ public class ConfigurationHandler {
     }
 
     public static String readSoils() {
-        return IOHelper.readOrWrite(directory, "SoilWhitelist", IOHelper.getSoilwhitelistData());
+        return IOHelper.readOrWrite(directory, "SoilWhitelist", IOHelper.getSoilWhitelistData());
     }
 
     @SubscribeEvent
