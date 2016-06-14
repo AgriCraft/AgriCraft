@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.renderers.PlantRenderer;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 import javax.annotation.Nullable;
@@ -57,12 +58,11 @@ public class RenderCrop extends RenderBlockBase<TileEntityCrop> {
 				tessellator.drawScaledPrism(13, 10, 0, 14, 11, 16, icon);
 			} else if (crop.hasPlant()) {
 				//render the plant
-				tessellator.addQuads(crop.getPlant().renderPlantInCrop(world, pos, state.getValue(AgriCraftProperties.GROWTHSTAGE), tessellator));
+				PlantRenderer.renderPlant(world, BlockPos.ORIGIN, crop.getGrowthStage(), crop.getPlant(), tessellator);
 			} else if (crop.hasWeed()) {
 				//render weeds
 				//tessellator.setBrightness(RenderUtil.getMixedBrightness(world, pos, Blocks.wheat.getDefaultState()));
-				tessellator.setColorRGBA(1.0F, 1.0F, 1.0F, 1.0F);
-				//PlantRenderer.renderHashTagPattern(tessellator, tessellator.getIcon(weedTextures[state.getValue(AgriCraftProperties.GROWTHSTAGE)]), 0);
+				PlantRenderer.renderHashTagPattern(tessellator, tessellator.getIcon(weedTextures[state.getValue(AgriCraftProperties.GROWTHSTAGE)]), 0);
 			}
 		}
 	}

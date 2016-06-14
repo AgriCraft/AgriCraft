@@ -129,13 +129,11 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				}
 			}
 		} else //15% chance to spawn weeds
-		{
-			if (AgriCraftConfig.enableWeeds && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
+		 if (AgriCraftConfig.enableWeeds && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
 				crop.spawnWeed();
 			} else if (crop.isCrossCrop()) {
 				crop.crossOver();
 			}
-		}
 	}
 
 	/**
@@ -710,6 +708,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getBlockTexture() {
-		return new ResourceLocation("agricraft:crops");
+		return new ResourceLocation("agricraft:blocks/crops");
 	}
 }

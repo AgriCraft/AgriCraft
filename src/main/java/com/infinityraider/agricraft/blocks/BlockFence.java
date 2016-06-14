@@ -116,4 +116,9 @@ public class BlockFence extends BlockCustomWood<TileEntityFence> {
         }
         return false;
     }
+
+    @Override
+    public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return side == EnumFacing.UP || side == EnumFacing.DOWN;
+    }
 }

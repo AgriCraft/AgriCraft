@@ -93,6 +93,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 				SoundType type = Blocks.planks.getStepSound();
 				worldObj.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
 			}
+			this.markDirty();
 			this.markForUpdate();
 		}
 	}
@@ -247,9 +248,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 			return null;
 		}
 		ItemStack seed = plant.getSeed().copy();
-		NBTTagCompound tag = new NBTTagCompound();
-		this.stats.writeToNBT(tag);
-		seed.setTagCompound(tag);
+		this.stats.writeToNBT(seed.getTagCompound());
 		return seed;
 	}
 
@@ -411,7 +410,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 		if (getAdditionalCropData() != null) {
 			tag.setTag(AgriCraftNBT.INVENTORY, getAdditionalCropData().writeToNBT());
 		}
-		AgriCore.getLogger("Plant-Tag").debug("Write Tag: {0}", tag);
+		//AgriCore.getLogger("Plant-Tag").debug("Write Tag: {0}", tag);
 	}
 
 	//this loads the saved data for the tile entity
@@ -424,7 +423,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 		if (tag.hasKey(AgriCraftNBT.INVENTORY) && this.plant != null) {
 			this.data = plant.readCropDataFromNBT(tag.getCompoundTag(AgriCraftNBT.INVENTORY));
 		}
-		AgriCore.getLogger("Plant-Tag").debug("Read Tag: {0}", tag);
+		//AgriCore.getLogger("Plant-Tag").debug("Read Tag: {0}", tag);
 	}
 
 	/**

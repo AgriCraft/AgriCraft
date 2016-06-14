@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.blocks;
 import com.infinityraider.agricraft.api.v1.IIconRegistrar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -44,16 +45,33 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
         if (stack == null || stack.getItem() == null) {
             return false;
         }
-        if (FluidContainerRegistry.isContainer(stack)) {
-            FluidStack waterBucket = new FluidStack(FluidRegistry.WATER, 1000);
+        if (FluidContainerRegistry.isContainer(stack)) { FluidStack waterBucket = new FluidStack(FluidRegistry.WATER, 1000);
             if (!FluidContainerRegistry.containsFluid(stack, waterBucket)) {
                 return false;
             }
-            if (!player.capabilities.isCreativeMode) {
-                player.inventory.addItemStackToInventory(FluidContainerRegistry.drainFluidContainer(stack));
-                stack.stackSize = stack.stackSize - 1;
-            }
             if (!world.isRemote) {
+                if (!player.capabilities.isCreativeMode) {
+                    ItemStack copy = stack.copy();
+                    player.getActiveItemStack().stackSize = player.getActiveItemStack().stackSize - 1;
+                    if(player.getActiveItemStack().stackSize == 0) {
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, FluidContainerRegistry.drainFluidContainer(copy));
+                    } else {
+                        ItemStack drained = FluidContainerRegistry.drainFluidContainer(copy);
+                        if (!player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, copy))) {
+                            if (!player.inventory.addItemStackToInventory(drained)) {
+                                if (world.getGameRules().getBoolean("doTileDrops") && !world.restoringBlockSnapshots) {
+                                    float f = 0.7F;
+                                    double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                                    double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                                    double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                                    EntityItem entityitem = new EntityItem(world, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, drained);
+                                    entityitem.setPickupDelay(10);
+                                    world.spawnEntityInWorld(entityitem);
+                                }
+                            }
+                        }
+                    }
+                }
                 world.setBlockState(pos, this.getDefaultState(), 3);
             }
             return true;
