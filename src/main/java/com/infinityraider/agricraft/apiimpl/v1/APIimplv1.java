@@ -265,7 +265,7 @@ public class APIimplv1 implements APIv1 {
                 return false;
             }
             if (!world.isRemote) {
-                crop.updateWeed(0);
+                crop.clearWeed();
             }
             return true;
         }

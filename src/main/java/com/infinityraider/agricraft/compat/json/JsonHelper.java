@@ -5,13 +5,13 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.plant.AgriPlant;
 import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.IMutation;
 
 public class JsonHelper extends ModHelper {
 
@@ -62,7 +62,7 @@ public class JsonHelper extends ModHelper {
 		});
 		//print registered mutations to the log
 		AgriCore.getLogger("AgriCraft").info("Registered Mutations:");
-		for (Mutation mutation : MutationHandler.getMutations()) {
+		for (IMutation mutation : MutationHandler.getMutations()) {
 			StringBuilder sb = new StringBuilder(" - ");
 			for (int i = 0; i < mutation.getParents().length; i++) {
 				sb.append(mutation.getParents()[i].getPlantName());

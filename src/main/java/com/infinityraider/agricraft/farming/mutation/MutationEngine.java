@@ -32,7 +32,7 @@ public class MutationEngine {
     public void executeCrossOver() {
         ICrossOverStrategy strategy = rollStrategy();
         CrossOverResult result = strategy.executeStrategy();
-        if (result == null || result.getSeed()==null) {
+        if (result == null) {
             return;
         }
         if (resultIsValid(result) && random.nextDouble() < result.getChance()) {
@@ -42,8 +42,7 @@ public class MutationEngine {
 
     private boolean resultIsValid(CrossOverResult result) {
         IGrowthRequirement growthReq = CropPlantHandler.getGrowthRequirement(result.toStack());
-        boolean valid = result.getSeed() != null && CropPlantHandler.isValidSeed(result.toStack());
-        return valid && growthReq.canGrow(crop.getWorld(), crop.getPos());
+        return growthReq.canGrow(crop.getWorld(), crop.getPos());
     }
 
     public ICrossOverStrategy rollStrategy() {

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.farming.mutation;
 
+import com.infinityraider.agricraft.api.v1.IMutation;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
-import java.util.ArrayList;
 
 public class MutateStrategy extends BaseStrategy {
     public MutateStrategy(MutationEngine mutationEngine) {
@@ -10,8 +10,7 @@ public class MutateStrategy extends BaseStrategy {
 
     @Override
     public CrossOverResult executeStrategy() {
-		// TODO: UN-HACK
-        Mutation[] crossOvers = MutationHandler.getCrossOvers(new ArrayList<>(engine.getCrop().getMatureNeighbours()));
+        IMutation[] crossOvers = MutationHandler.getCrossOvers(engine.getCrop().getMatureNeighbours());
         if (crossOvers.length > 0) {
             int index = engine.getRandom().nextInt(crossOvers.length);
             if (crossOvers[index].getChild().getSeed().getItem() != null) {

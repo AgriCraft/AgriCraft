@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.api.v1;
 
-import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
@@ -16,5 +15,5 @@ public interface IStatCalculator {
      * @param mutation if a mutation occurred, this is false if the plant simply spread to a cross crop
      * @return an ISeedStats object containing the resulting stats
      */
-    IAgriCraftStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation);
+    IAgriCraftStats calculateStats(IAgriCraftPlant child, List<? extends ICrop> input, boolean mutation);
 }

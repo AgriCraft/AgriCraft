@@ -3,21 +3,18 @@ package com.infinityraider.agricraft.farming.mutation.statcalculator;
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.api.v1.IMutation;
 
 public abstract class StatCalculatorBase extends StatCalculator {
 
 	@Override
-	public IAgriCraftStats calculateStats(ItemStack result, List<? extends ICrop> input, boolean mutation) {
+	public IAgriCraftStats calculateStats(IAgriCraftPlant child, List<? extends ICrop> input, boolean mutation) {
 		ICrop[] parents = filterParents(input);
 		int nrParents = parents.length;
 		int nrValidParents = 0;
@@ -25,7 +22,7 @@ public abstract class StatCalculatorBase extends StatCalculator {
 		int[] gain = new int[nrParents];
 		int[] strength = new int[nrParents];
 		for (int i = 0; i < nrParents; i++) {
-			boolean canInherit = canInheritStats(result.getItem(), result.getItemDamage(), parents[i].getSeedStack().getItem(), parents[i].getSeedStack().getItemDamage());
+			boolean canInherit = canInheritStats(child, parents[i].getPlant());
 			if (canInherit) {
 				nrValidParents = nrValidParents + 1;
 			}
@@ -60,29 +57,20 @@ public abstract class StatCalculatorBase extends StatCalculator {
 		return list.toArray(new ICrop[list.size()]);
 	}
 
-	// TODO: UNHACK!
-	protected boolean canInheritStats(Item child, int childMeta, Item seed, int seedMeta) {
+	// TODO: Investigate Config Setting.
+	protected boolean canInheritStats(IAgriCraftPlant child, IAgriCraftPlant parent) {
 		int validParentId = AgriCraftConfig.validParents;
 		//1: any crop
 		//2: only parent crops and identical crops
 		//3: only identical crops
 		if (validParentId == 1) {
 			return true;
+		} else if (child.equals(parent)) {
+			return validParentId == 3;
 		}
-		if (validParentId == 3) {
-			return child == seed && childMeta == seedMeta;
-		}
-		if (child == seed && childMeta == seedMeta) {
-			return false;
-		}
-		IAgriCraftPlant childplant = CropPlantHandler.getPlantFromStack(new ItemStack(child, 0, childMeta));
-		for (Mutation mutation : MutationHandler.getMutationsFromChild(childplant)) {
-			if (mutation != null) {
-				ItemStack parent1Stack = mutation.getParents()[0].getSeed();
-				ItemStack parent2Stack = mutation.getParents()[1].getSeed();
-				if (parent1Stack.getItem() == seed && parent1Stack.getItemDamage() == seedMeta) {
-					return true;
-				} else if (parent2Stack.getItem() == seed && parent2Stack.getItemDamage() == seedMeta) {
+		for (IMutation mutation : MutationHandler.getMutationsFromChild(child)) {
+			for (IAgriCraftPlant p : mutation.getParents()) {
+				if (parent.equals(p)) {
 					return true;
 				}
 			}

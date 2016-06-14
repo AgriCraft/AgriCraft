@@ -89,7 +89,7 @@ public class ItemHandRake extends ItemBase implements IRake {
 		if (crop.hasWeed()) {
 			int weedGrowthStage = state.getValue(AgriCraftProperties.GROWTHSTAGE);
 			int newWeedGrowthStage = calculateGrowthStage(rake.getItemDamage(), weedGrowthStage, world.rand);
-			crop.updateWeed(newWeedGrowthStage);
+			crop.clearWeed();
 			if (AgriCraftConfig.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100) < dropChance[rake.getItemDamage() % dropChance.length]) {
 				ItemStack drop = ItemDropRegistry.instance().getDrop(world.rand);
 				if (drop != null && drop.getItem() != null) {

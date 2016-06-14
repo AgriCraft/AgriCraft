@@ -278,35 +278,27 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 */
 	@Override
 	public void spreadWeed() {
-		List<TileEntityCrop> neighbours = this.getNeighbours();
-		for (TileEntityCrop crop : neighbours) {
-			if (crop != null && (!crop.weed) && Math.random() < crop.getWeedSpawnChance()) {
+		List<ICrop> neighbours = this.getNeighbours();
+		for (ICrop crop : neighbours) {
+			if (crop != null && (!crop.hasWeed()) && Math.random() < crop.getWeedSpawnChance()) {
 				crop.spawnWeed();
 				break;
 			}
 		}
 	}
 
-	@Override
-	public void updateWeed(int growthStage) {
-		if (this.hasWeed()) {
-			growthStage = growthStage > 7 ? 7 : growthStage < 0 ? 0 : growthStage;
-			this.setGrowthStage(growthStage);
-			if (growthStage == 0) {
-				this.weed = false;
-			}
-			markForUpdate();
-		}
-	}
-
 	//clear the WEED
 	@Override
 	public void clearWeed() {
-		updateWeed(0);
+		if(this.hasWeed()) {
+			this.setGrowthStage(0);
+			this.weed = false;
+		}
 	}
 
 	//weed spawn chance
-	private double getWeedSpawnChance() {
+	@Override
+	public double getWeedSpawnChance() {
 		if (this.hasPlant()) {
 			return AgriCraftConfig.weedsWipePlants ? ((double) (10 - stats.getStrength())) / 10 : 0;
 		} else {
@@ -463,15 +455,16 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 */
 	public void applyCrossOverResult(CrossOverResult result) {
 		crossCrop = false;
-		setPlant(result.getStats(), result.getSeed(), result.getMeta());
+		setPlant(result.getStats(), result.getPlant());
 	}
 
 	/**
 	 * @return a list with all neighbours of type <code>TileEntityCrop</code> in
 	 * the NORTH, SOUTH, EAST and WEST DIRECTION
 	 */
-	public List<TileEntityCrop> getNeighbours() {
-		List<TileEntityCrop> neighbours = new ArrayList<>();
+	@Override
+	public List<ICrop> getNeighbours() {
+		List<ICrop> neighbours = new ArrayList<>();
 		addNeighbour(neighbours, AgriForgeDirection.NORTH);
 		addNeighbour(neighbours, AgriForgeDirection.SOUTH);
 		addNeighbour(neighbours, AgriForgeDirection.EAST);
@@ -479,7 +472,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 		return neighbours;
 	}
 
-	private void addNeighbour(List<TileEntityCrop> neighbours, AgriForgeDirection direction) {
+	private void addNeighbour(List<ICrop> neighbours, AgriForgeDirection direction) {
 		TileEntity te = worldObj.getTileEntity(getPos().add(direction.offsetX, direction.offsetY, direction.offsetZ));
 		if (te == null || !(te instanceof TileEntityCrop)) {
 			return;
@@ -491,10 +484,11 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 * @return a list with only mature neighbours of type
 	 * <code>TileEntityCrop</code>
 	 */
-	public List<TileEntityCrop> getMatureNeighbours() {
-		List<TileEntityCrop> neighbours = getNeighbours();
-		for (Iterator<TileEntityCrop> iterator = neighbours.iterator(); iterator.hasNext();) {
-			TileEntityCrop crop = iterator.next();
+	@Override
+	public List<ICrop> getMatureNeighbours() {
+		List<ICrop> neighbours = getNeighbours();
+		for (Iterator<ICrop> iterator = neighbours.iterator(); iterator.hasNext();) {
+			ICrop crop = iterator.next();
 			if (!crop.hasPlant() || !crop.isMature()) {
 				iterator.remove();
 			}

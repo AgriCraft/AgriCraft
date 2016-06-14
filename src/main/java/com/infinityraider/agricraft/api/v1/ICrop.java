@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1;
 
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -127,6 +128,8 @@ public interface ICrop {
 	 * @return the Block state for the plant currently planted on this crop
 	 */
 	IBlockState getPlantBlockState();
+	
+	double getWeedSpawnChance();
 
 	/**
 	 * Spawns weeds on this crop
@@ -137,14 +140,6 @@ public interface ICrop {
 	 * Attempts to spread weeds to neighbouring crops
 	 */
 	void spreadWeed();
-
-	/**
-	 * Updates the growthstage of the weeds on this crop
-	 *
-	 * @param growthStage the growth stage to be applied, should be in [0, 8[. 0
-	 * means clearing weeds
-	 */
-	void updateWeed(int growthStage);
 
 	/**
 	 * Clears weeds from this crop
@@ -188,4 +183,9 @@ public interface ICrop {
 	 * @return Any additional data this crop might hold
 	 */
 	IAdditionalCropData getAdditionalCropData();
+	
+	List<ICrop> getNeighbours();
+	
+	List<ICrop> getMatureNeighbours();
+	
 }
