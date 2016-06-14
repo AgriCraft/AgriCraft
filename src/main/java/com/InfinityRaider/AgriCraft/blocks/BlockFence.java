@@ -53,7 +53,7 @@ public class BlockFence extends BlockCustomWood {
     }
 
     public boolean applyLead(EntityPlayer player, World world, int x, int y, int z) {
-        EntityLeashKnotAgricraft entityleashknot = EntityLeashKnotAgricraft.getKnotForBlock(world, x, y, z);
+        EntityLeashKnotAgricraft leashKnot = EntityLeashKnotAgricraft.getKnotForBlock(world, x, y, z);
         boolean flag = false;
         double d0 = 7.0D;
         List list = world.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox((double)x - d0, (double) y - d0, (double) z - d0, (double)x + d0, (double)y + d0, (double)z + d0));
@@ -61,10 +61,10 @@ public class BlockFence extends BlockCustomWood {
             for (Object obj : list) {
                 EntityLiving entityliving = (EntityLiving) obj;
                 if (entityliving.getLeashed() && entityliving.getLeashedToEntity() == player) {
-                    if (entityleashknot == null) {
-                        entityleashknot = EntityLeashKnotAgricraft.func_110129_a(world, x, y, z);
+                    if (leashKnot == null) {
+                        leashKnot = EntityLeashKnotAgricraft.func_110129_a(world, x, y, z);
                     }
-                    entityliving.setLeashedToEntity(entityleashknot, true);
+                    entityliving.setLeashedToEntity(leashKnot, true);
                     flag = true;
                 }
             }
@@ -146,5 +146,9 @@ public class BlockFence extends BlockCustomWood {
         }
         return false;
     }
-    
+
+    @Override
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection direction) {
+        return (direction == ForgeDirection.UP) || (direction == ForgeDirection.DOWN);
+    }
 }

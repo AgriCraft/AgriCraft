@@ -7,6 +7,7 @@ Changelog
 -FIXED:  Crops growing underground
 -FIXED:  Magical crops ignoring bone meal tiering
 -FIXED:  Emptying/filling water pads destroying the bucket if inventory is full
+-FIXED:  Torches can now be placed on agricraft fences
 
 1.5.0:
 -ADDED:  Config option to render plants on crop sticks as a TESR (might improve FPS if you have FPS issues with large farms)
