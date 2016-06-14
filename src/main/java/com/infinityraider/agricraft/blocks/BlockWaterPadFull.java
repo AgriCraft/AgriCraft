@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -41,11 +42,24 @@ public class BlockWaterPadFull extends AbstractBlockWaterPad {
             if (!FluidContainerRegistry.isEmptyContainer(stack)) {
                 return false;
             }
-            if (!player.capabilities.isCreativeMode) {
-                player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, stack));
-                stack.stackSize = stack.stackSize - 1;
-            }
             if (!world.isRemote) {
+                if (!player.capabilities.isCreativeMode) {
+                    ItemStack copy = stack.copy();
+                    player.getActiveItemStack().stackSize = player.getActiveItemStack().stackSize - 1;
+                    if (player.getActiveItemStack().stackSize == 0) {
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, FluidContainerRegistry.fillFluidContainer(waterBucket, copy));
+                    } else if (!player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, copy))) {
+                        if (world.getGameRules().getBoolean("doTileDrops") && !world.restoringBlockSnapshots) {
+                            float f = 0.7F;
+                            double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                            double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                            double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                            EntityItem entityitem = new EntityItem(world, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, FluidContainerRegistry.fillFluidContainer(waterBucket, copy));
+                            entityitem.setPickupDelay(10);
+                            world.spawnEntityInWorld(entityitem);
+                        }
+                    }
+                }
                 world.setBlockState(pos, this.getDefaultState(), 3);
             }
             return true;
