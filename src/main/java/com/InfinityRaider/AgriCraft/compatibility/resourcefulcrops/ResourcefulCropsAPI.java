@@ -62,12 +62,15 @@ public class ResourcefulCropsAPI extends ResourcefulCropsAPIwrapper {
     }
 
     protected IGrowthRequirement getGrowthRequirement(int meta) {
-        SeedReq seedReq = SeedRegistry.getSeed(meta).getSeedReq();
         IGrowthRequirementBuilder builder = GrowthRequirementHandler.getNewBuilder();
-        builder.brightnessRange(seedReq.getLightLevelMin(), seedReq.getLightLevelMax());
-        BlockStack growthReq = seedReq.getGrowthReq();
-        if(growthReq != null) {
-            builder.requiredBlock(new BlockWithMeta(growthReq.getBlock(), growthReq.getMeta()), RequirementType.BELOW, false);
+        Seed seed = SeedRegistry.getSeed(meta);
+        if(seed != null) {
+            SeedReq seedReq = seed.getSeedReq();
+            builder.brightnessRange(seedReq.getLightLevelMin(), seedReq.getLightLevelMax());
+            BlockStack growthReq = seedReq.getGrowthReq();
+            if (growthReq != null) {
+                builder.requiredBlock(new BlockWithMeta(growthReq.getBlock(), growthReq.getMeta()), RequirementType.BELOW, false);
+            }
         }
         return builder.build();
     }
