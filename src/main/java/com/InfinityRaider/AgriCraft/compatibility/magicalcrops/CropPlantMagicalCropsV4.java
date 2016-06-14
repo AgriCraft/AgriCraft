@@ -48,7 +48,7 @@ public class CropPlantMagicalCropsV4 extends CropPlantGeneric {
 
     @Override
     public boolean canBonemeal() {
-        return !highTier();
+        return getTier() <= 3;
     }
 
     @Override
