@@ -289,7 +289,8 @@ public class TileEntityTank extends TileEntityCustomWood implements IFluidHandle
     public TileEntityTank getMainComponent() {
         if(worldObj.isRemote) {
             IMultiBlockPartData data = this.getMultiBlockData();
-            return (TileEntityTank) worldObj.getTileEntity(xCoord - data.posX(), yCoord - data.posY(), zCoord - data.posZ());
+            TileEntity te = worldObj.getTileEntity(xCoord - data.posX(), yCoord - data.posY(), zCoord - data.posZ());
+            return (te instanceof TileEntityTank) ? (TileEntityTank) te : this;
         }
         if(this.mainComponent == null) {
             IMultiBlockPartData data = this.getMultiBlockData();

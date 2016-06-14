@@ -1,5 +1,8 @@
 Changelog
 ---------
+1.5.1:
+-FIXED:  tank crash
+
 1.5.0:
 -ADDED:  Config option to render plants on crop sticks as a TESR (might improve FPS if you have FPS issues with large farms)
 -ADDED:  Config option to disable sounds when interacting with crop sticks (client side only)

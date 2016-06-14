@@ -451,14 +451,14 @@ public class CropPlantHandler {
         suppressedRegisterPlant(new CropPlantStem((ItemSeeds) Items.pumpkin_seeds, Blocks.pumpkin));
         suppressedRegisterPlant(new CropPlantNetherWart());
 
-        //Register mod crops.
-        ModHelper.initModPlants();
-        
         //Register crops specified through the API.
         for (CropPlant plant : plantsToRegister) {
-        	suppressedRegisterPlant(plant);
+            suppressedRegisterPlant(plant);
         }
         plantsToRegister = null;
+
+        //Register mod crops.
+        ModHelper.initModPlants();
         
         //Register crops found in the ore dictionary.
         ArrayList<ItemStack> seeds = OreDictionary.getOres(Names.OreDict.listAllseed);
