@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.api.v1.RequirementType;
 import com.InfinityRaider.AgriCraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -115,8 +116,13 @@ public class GrowthRequirement implements IGrowthRequirement{
     }
 
     public boolean isBrightnessGood(World world, int x, int y, int z) {
-        int lvl = world.getFullBlockLightValue(x, y+1, z);
-        return lvl<this.maxBrightness && lvl>=this.minBrightness;
+        int lvl = world.getSavedLightValue(EnumSkyBlock.Block, x, y + 1, z);
+        boolean day = world.isDaytime();
+        if(day) {
+            int light_sky = world.getSavedLightValue(EnumSkyBlock.Sky, x, y + 1, z);
+            lvl = Math.max(light_sky, lvl);
+        }
+        return lvl < this.maxBrightness && lvl >= this.minBrightness;
     }
 
     @Override
