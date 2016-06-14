@@ -196,7 +196,7 @@ public abstract class IOHelper {
         LogHelper.debug("Registered Mutations Chances overrides:");
     }
 
-    public static void initVannilaPlantingOverrides() {
+    public static void initVanilaPlantingOverrides() {
         LogHelper.debug("Registered seeds ignoring vanilla planting rule:");
         String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readVanillaOverrides());
         for(String line:data) {
