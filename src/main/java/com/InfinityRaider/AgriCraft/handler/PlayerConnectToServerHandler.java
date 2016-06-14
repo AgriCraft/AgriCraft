@@ -7,6 +7,7 @@ import com.InfinityRaider.AgriCraft.farming.mutation.MutationHandler;
 import com.InfinityRaider.AgriCraft.network.MessageSyncMutation;
 import com.InfinityRaider.AgriCraft.network.NetworkWrapperAgriCraft;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +24,7 @@ public class PlayerConnectToServerHandler {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void syncMutations(PlayerEvent.PlayerLoggedInEvent event) {
         if(!event.player.worldObj.isRemote) {
             if(MinecraftServer.getServer().isDedicatedServer()) {
