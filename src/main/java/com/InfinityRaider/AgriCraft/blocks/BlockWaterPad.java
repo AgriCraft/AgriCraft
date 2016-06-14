@@ -78,7 +78,7 @@ public class BlockWaterPad extends BlockAgriCraft {
                         ItemStack drained = FluidContainerRegistry.drainFluidContainer(copy);
                         if (!player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, copy))) {
                             if (!player.inventory.addItemStackToInventory(drained)) {
-                                if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
+                                if (world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
                                     float f = 0.7F;
                                     double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
                                     double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;

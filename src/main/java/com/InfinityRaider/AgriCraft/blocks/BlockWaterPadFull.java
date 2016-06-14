@@ -42,7 +42,7 @@ public class BlockWaterPadFull extends BlockWaterPad {
                     if (player.getCurrentEquippedItem().stackSize == 0) {
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, FluidContainerRegistry.fillFluidContainer(waterBucket, copy));
                     } else if (!player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, copy))) {
-                        if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
+                        if (world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
                             float f = 0.7F;
                             double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
                             double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
