@@ -40,12 +40,4 @@ public interface IMutation {
 	@Nonnull
 	IAgriCraftPlant[] getParents();
 
-	/**
-	 * Gets a descriptor representing the conditions required in order for the
-	 * mutation to occur.
-	 *
-	 * @return The required mutation conditions.
-	 */
-	IGrowthRequirement getRequirement();
-
 }

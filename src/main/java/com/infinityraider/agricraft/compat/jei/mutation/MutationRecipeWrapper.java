@@ -29,8 +29,9 @@ public class MutationRecipeWrapper implements IRecipeWrapper {
 		for (IAgriCraftPlant p : recipe.getParents()) {
 			builder.add(p.getSeed());
 		}
-		IAgriCraftPlant plant = recipe.getChild();
-		IGrowthRequirement rec = recipe.getRequirement() == null ? plant.getGrowthRequirement() : recipe.getRequirement();
+		
+		IGrowthRequirement rec = recipe.getChild().getGrowthRequirement();
+		
 		if (rec != null) {
 			if (rec.getSoil() != null) {
 				builder.add(rec.getSoil().toStack());
@@ -41,6 +42,7 @@ public class MutationRecipeWrapper implements IRecipeWrapper {
 				builder.add(rec.getRequiredBlock().toStack());
 			}
 		}
+		
 		input = builder.build();
 		output = recipe.getChild().getSeed();
 	}

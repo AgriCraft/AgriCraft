@@ -16,8 +16,6 @@ public class Mutation implements IMutation {
 	@Nonnull
 	private final IAgriCraftPlant[] parents;
 
-	private final IGrowthRequirement requirement;
-
 	@Override
 	public double getChance() {
 		return chance;
@@ -31,11 +29,6 @@ public class Mutation implements IMutation {
 	@Override
 	public IAgriCraftPlant[] getParents() {
 		return parents;
-	}
-
-	@Override
-	public IGrowthRequirement getRequirement() {
-		return requirement;
 	}
 
 	@Override
@@ -69,7 +62,6 @@ public class Mutation implements IMutation {
 
 	public Mutation(double chance, @Nonnull IGrowthRequirement requirement, @Nonnull IAgriCraftPlant child, @Nonnull IAgriCraftPlant... parents) {
 		this.chance = MathHelper.inRange(chance, 0, 1);
-		this.requirement = requirement;
 		this.child = child;
 		Arrays.sort(parents);
 		this.parents = parents;
