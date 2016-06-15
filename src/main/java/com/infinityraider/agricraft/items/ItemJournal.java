@@ -6,11 +6,9 @@ import com.infinityraider.agricraft.api.v1.IJournal;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.utility.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -44,15 +42,6 @@ public class ItemJournal extends ItemBase implements IJournal {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-		ItemStack journal = player.getHeldItem(hand);
-		if (journal.hasTagCompound()) {
-			NBTTagCompound tag = journal.getTagCompound();
-			if (tag.hasKey(AgriCraftNBT.DISCOVERED_SEEDS)) {
-				NBTTagList list = tag.getTagList(AgriCraftNBT.DISCOVERED_SEEDS, 10);
-				NBTHelper.clearEmptyStacksFromNBT(list);
-				tag.setTag(AgriCraftNBT.DISCOVERED_SEEDS, list);
-			}
-		}
 		if (world.isRemote) {
 			player.openGui(AgriCraft.instance, GuiHandler.journalID, world, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
 		}
@@ -90,11 +79,11 @@ public class ItemJournal extends ItemBase implements IJournal {
 			return;
 		}
 		List<String> seeds = getDiscoveredSeedIds(journal);
-		String id = newEntry.getTagCompound().getString(AgriCraftNBT.ID);
-		if (!seeds.contains(id)) {
+		IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(newEntry);
+		if (plant != null && !seeds.contains(plant.getId())) {
 			NBTTagCompound tag = journal.getTagCompound();
 			String old = tag.getString(AgriCraftNBT.DISCOVERED_SEEDS);
-			tag.setString(AgriCraftNBT.DISCOVERED_SEEDS, old + id + ";");
+			tag.setString(AgriCraftNBT.DISCOVERED_SEEDS, old + plant.getId() + ";");
 			journal.setTagCompound(tag);
 		}
 	}
@@ -104,8 +93,8 @@ public class ItemJournal extends ItemBase implements IJournal {
 		if (journal == null || !CropPlantHandler.isValidSeed(seed)) {
 			return false;
 		}
-		final String id = seed.getTagCompound().getString(AgriCraftNBT.ID);
-		return getDiscoveredSeedIds(journal).contains(id);
+		IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(seed);
+		return plant != null && getDiscoveredSeedIds(journal).contains(plant.getId());
 	}
 
 	@Override

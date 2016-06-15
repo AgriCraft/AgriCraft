@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.IDebuggable;
 import com.infinityraider.agricraft.api.v1.IFertiliser;
 import com.infinityraider.agricraft.api.v1.IAdditionalCropData;

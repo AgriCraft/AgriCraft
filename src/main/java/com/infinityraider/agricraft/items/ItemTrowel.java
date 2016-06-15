@@ -39,7 +39,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 		if (trowel == null || trowel.getItem() == null || trowel.getTagCompound() == null) {
 			return false;
 		}
-		return CropPlantHandler.readPlantFromNBT(trowel.getTagCompound().getCompoundTag(AgriCraftNBT.SEED)) != null;
+		return CropPlantHandler.readPlantFromNBT(trowel.getTagCompound()) != null;
 	}
 
 	@Override

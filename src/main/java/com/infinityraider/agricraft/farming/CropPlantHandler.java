@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.cropplant.*;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
@@ -23,6 +22,12 @@ public class CropPlantHandler {
 	 * None object to avoid NPE's with block states
 	 */
 	public static final IAgriCraftPlant NONE = CropPlantNone.NONE;
+	
+	/**
+	 * NBT plant serialization tag.
+	 */
+	public static final String NBT_PLANT_ID = "plant_id";
+	
 	/**
 	 * HashMap containing all plants known to AgriCraft
 	 */
@@ -111,7 +116,7 @@ public class CropPlantHandler {
 	 */
 	public static void writePlantToNBT(NBTTagCompound tag, IAgriCraftPlant plant) {
 		if (plant != null) {
-			tag.setString(AgriCraftNBT.SEED, plant.getId());
+			tag.setString(NBT_PLANT_ID, plant.getId());
 		}
 	}
 
@@ -125,7 +130,7 @@ public class CropPlantHandler {
 	 */
 	public static IAgriCraftPlant readPlantFromNBT(NBTTagCompound tag) {
 		if (tag != null) {
-			return plants.get(tag.getString(AgriCraftNBT.SEED));
+			return plants.get(tag.getString(NBT_PLANT_ID));
 		} else {
 			return null;
 		}

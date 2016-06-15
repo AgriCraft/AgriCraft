@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriMutation;
