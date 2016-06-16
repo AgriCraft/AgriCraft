@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 
 import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.farming.PlantStats;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -53,4 +54,15 @@ public class ItemAgriCraftSeed extends ItemBase {
 		}
 		return EnumActionResult.PASS;
 	}
+	
+	@Override
+	public List<String> getIgnoredNBT() {
+		List<String> tags = super.getIgnoredNBT();
+		tags.add(PlantStats.NBT_ANALYZED);
+		tags.add(PlantStats.NBT_GROWTH);
+		tags.add(PlantStats.NBT_GAIN);
+		tags.add(PlantStats.NBT_STRENGTH);
+		return tags;
+	}
+
 }

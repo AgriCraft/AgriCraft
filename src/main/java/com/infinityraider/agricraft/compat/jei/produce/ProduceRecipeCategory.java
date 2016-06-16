@@ -83,27 +83,35 @@ public class ProduceRecipeCategory implements IRecipeCategory {
 			recipeLayout.getItemStacks().init(0, false, 15, 28);
 			recipeLayout.getItemStacks().set(0, (ItemStack) wrapper.getInputs().get(0));
 		}
-		
+
 		if (wrapper.getInputs().size() > 1 && wrapper.getInputs().get(1) instanceof ItemStack) {
 			recipeLayout.getItemStacks().init(1, false, 15, 54);
 			recipeLayout.getItemStacks().set(1, (ItemStack) wrapper.getInputs().get(1));
 		}
-		
+
 		if (wrapper.getInputs().size() > 2 && wrapper.getInputs().get(2) instanceof ItemStack) {
 			recipeLayout.getItemStacks().init(2, false, 15, 75);
 			recipeLayout.getItemStacks().set(2, (ItemStack) wrapper.getInputs().get(2));
 		}
 
 		int index = 2;
-		int x = 60;
-		int y = -6;
+		final int ax = 74;
+		final int ay = 12;
+		final int dim = 18;
+		final int wid = 54;
+		
+		int dx = -dim;
+		int dy = 0;
 
 		for (Object e : recipeWrapper.getOutputs()) {
 			index++;
-			x += 18;
-			y += 18;
+			dx += dim;
+			if (dx >= wid) {
+				dx = 0;
+				dy += dim;
+			}
 			if (e instanceof ItemStack) {
-				recipeLayout.getItemStacks().init(index, false, x, y);
+				recipeLayout.getItemStacks().init(index, false, ax + dx, ay + dy);
 				recipeLayout.getItemStacks().set(index, (ItemStack) e);
 			}
 		}

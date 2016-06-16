@@ -4,6 +4,9 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.items.*;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
+import com.infinityraider.agricraft.utility.ReflectionHelper;
+import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.item.Item;
 
 public class AgriCraftItems {
@@ -65,6 +68,14 @@ public class AgriCraftItems {
 		if (enableClipper) {
 			clipper = new ItemClipper();
 		}
+		
+		// Register the Items
+		ReflectionHelper.forEachIn(AgriCraftItems.class, ItemBase.class, (ItemBase item) -> {
+			RegisterHelper.registerItem(item, item.internalName);
+			AgriCraftJEIPlugin.registerNbtIgnore(item, item.getIgnoredNBT());
+		});
+		
 		AgriCore.getLogger("AgriCraft").debug("Items Registered");
 	}
+
 }
