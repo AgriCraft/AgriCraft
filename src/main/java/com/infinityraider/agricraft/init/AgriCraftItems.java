@@ -5,7 +5,7 @@ import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.items.*;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
-import com.infinityraider.agricraft.utility.ReflectionHelper;
+import com.agricraft.agricore.util.ReflectionHelper;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.item.Item;
 
@@ -71,6 +71,7 @@ public class AgriCraftItems {
 		
 		// Register the Items
 		ReflectionHelper.forEachIn(AgriCraftItems.class, ItemBase.class, (ItemBase item) -> {
+			AgriCore.getLogger("AgriCraft").debug("Registering Item: {0}", item.internalName);
 			RegisterHelper.registerItem(item, item.internalName);
 			AgriCraftJEIPlugin.registerNbtIgnore(item, item.getIgnoredNBT());
 		});

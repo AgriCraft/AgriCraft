@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.utility.OreDictHelper;
-import com.infinityraider.agricraft.utility.ReflectionHelper;
+import com.agricraft.agricore.util.ReflectionHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
