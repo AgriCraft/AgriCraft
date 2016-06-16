@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.handler.PlayerConnectToServerHandler;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -40,14 +39,6 @@ public class ServerProxy implements IProxy {
 
 	@Override
 	public void registerRenderers() {
-	}
-
-	@Override
-	public void initNEI() {
-	}
-
-	@Override
-	public void hideItemInNEI(ItemStack stack) {
 	}
 
 	@Override

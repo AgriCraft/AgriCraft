@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.RenderLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -40,12 +39,6 @@ public interface IProxy {
 
     /** Registers the renderers on the client, does nothing on the server */
     void registerRenderers();
-
-    /** Initializes the NEI configuration */
-    void initNEI();
-
-    /** Hides an ItemStack from NEI on the client, does nothing on the server */
-    void hideItemInNEI(ItemStack stack);
 
     /** Registers all the needed event handlers to the correct event bus */
 	default public void registerEventHandlers() {

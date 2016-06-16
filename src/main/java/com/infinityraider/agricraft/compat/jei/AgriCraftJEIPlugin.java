@@ -5,9 +5,6 @@ import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeCategory;
 import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeHandler;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeCategory;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeHandler;
-import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.init.AgriCraftItems;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import javax.annotation.Nonnull;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
@@ -18,7 +15,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.util.Pair;
 import mezz.jei.api.IJeiHelpers;
 import net.minecraft.item.Item;
 
@@ -56,8 +52,8 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 	}
 
 	@Override
-	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-		jeiRuntime = jeiRuntime;
+	public void onRuntimeAvailable(IJeiRuntime jeiRuntimeInstance) {
+		jeiRuntime = jeiRuntimeInstance;
 		for (Object o : toRegister) {
 			jeiRuntime.getRecipeRegistry().addRecipe(o);
 		}
@@ -81,11 +77,6 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 	}
 
 	public static void registerNbtIgnore(@Nonnull Item item, @Nonnull String... tags) {
-		AgriCore.getLogger("Agri-JEI").debug(
-				"Registering Item NBT Ignore!\n - Item: {0}\n - Tags: {1}\n",
-				item.getClass().getCanonicalName(),
-				Arrays.toString(tags)
-		);
 		nbtIgnores.put(item, tags);
 		if (jeiHelpers != null) {
 			jeiHelpers.getNbtIgnoreList().ignoreNbtTagNames(item, tags);

@@ -11,24 +11,20 @@ import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.utility.OreDictHelper;
+import com.infinityraider.agricraft.utility.ReflectionHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import java.lang.reflect.Field;
-import java.util.Iterator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -70,52 +66,23 @@ public class ClientProxy implements IProxy {
 	public void registerRenderers() {
 		//BLOCKS
 		//------
-		for (Field field : AgriCraftBlocks.class.getDeclaredFields()) {
-			if (field.getType().isAssignableFrom(BlockBase.class)) {
-				try {
-					Object obj = field.get(null);
-					if (obj != null) {
-						BlockBase block = (BlockBase) obj;
-						StateMapperBase stateMapper = new StateMapperBase() {
-							@Override
-							protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-								return block.getBlockModelResourceLocation();
-							}
-						};
-						ModelLoader.setCustomStateMapper(block, stateMapper);
-						//register the renderer
-						BlockRendererRegistry.getInstance().registerCustomBlockRenderer(block);
-					}
-				} catch (IllegalAccessException e) {
-					AgriCore.getLogger("AgriCraft").trace(e);
+		ReflectionHelper.forEachIn(AgriCraftBlocks.class, BlockBase.class, (block) -> {
+			StateMapperBase stateMapper = new StateMapperBase() {
+				@Override
+				protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+					return block.getBlockModelResourceLocation();
 				}
-			}
-		}
+			};
+			ModelLoader.setCustomStateMapper(block, stateMapper);
+			//register the renderer
+			BlockRendererRegistry.getInstance().registerCustomBlockRenderer(block);
+		});
 
 		//ITEMS
 		//-----
-		for (Field field : AgriCraftItems.class.getDeclaredFields()) {
-			if (field.getType().isAssignableFrom(ItemBase.class)) {
-				try {
-					Object obj = field.get(null);
-					// This is a safer check
-					if (obj instanceof ItemBase) {
-						((ItemBase) obj).registerItemRenderer();
-					}
-				} catch (IllegalAccessException e) {
-					AgriCore.getLogger("AgriCraft").trace(e);
-				}
-			}
-		}
-
-		// Seeds
-//		for (ItemAgriCraftSeed seed : AgriCraftCrops.seeds) {
-//			try {
-//				seed.registerItemRenderer();
-//			} catch (Exception e) {
-//				AgriCore.getLogger("AgriCraft").trace(e);
-//			}
-//		}
+		ReflectionHelper.forEachIn(AgriCraftItems.class, ItemBase.class, (item) -> {
+			item.registerItemRenderer();
+		});
 
 		// Clippings
 		AgriCraftItems.clipping.registerItemRenderer();
@@ -125,7 +92,6 @@ public class ClientProxy implements IProxy {
 		registerRenderers function in each class...
 		 */
 		// Custom Crops
-
 		// Nuggets
 		OreDictHelper.registerNuggetRenderers();
 
@@ -150,26 +116,6 @@ public class ClientProxy implements IProxy {
 
 		SoundHandler soundHandler = new SoundHandler();
 		MinecraftForge.EVENT_BUS.register(soundHandler);
-	}
-
-	@Override
-	public void initNEI() {
-		/*
-        NEIConfig configNEI = new NEIConfig();
-        configNEI.loadConfig();
-		 */
-	}
-
-	@Override
-	public void hideItemInNEI(ItemStack stack) {
-		Iterator mods = Loader.instance().getActiveModList().iterator();
-		ModContainer modContainer;
-		while (mods.hasNext()) {
-			modContainer = (ModContainer) mods.next();
-			if (modContainer.getModId().equalsIgnoreCase("NotEnoughItems")) {
-				//API.hideItem(stack);
-			}
-		}
 	}
 
 	@Override
