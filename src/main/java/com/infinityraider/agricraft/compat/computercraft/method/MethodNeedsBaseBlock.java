@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.compat.computercraft.method;
 
-import com.infinityraider.agricraft.api.v1.RequirementType;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.RequirementType;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 
 public class MethodNeedsBaseBlock extends MethodBaseGrowthReq {
 	

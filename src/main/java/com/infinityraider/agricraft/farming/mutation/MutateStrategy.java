@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.api.v1.IMutation;
+import com.infinityraider.agricraft.api.v3.IMutation;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
 
 public class MutateStrategy extends BaseStrategy {

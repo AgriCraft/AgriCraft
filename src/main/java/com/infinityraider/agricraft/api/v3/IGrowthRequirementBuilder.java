@@ -1,4 +1,6 @@
-package com.infinityraider.agricraft.api.v1;
+package com.infinityraider.agricraft.api.v3;
+
+import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
 
 public interface IGrowthRequirementBuilder {
 

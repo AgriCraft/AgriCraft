@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.api.v1.ITrowel;
-import com.infinityraider.agricraft.api.v1.IClipper;
+import com.infinityraider.agricraft.api.v3.items.ITrowel;
+import com.infinityraider.agricraft.api.v3.items.IClipper;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.items.ItemClipping;

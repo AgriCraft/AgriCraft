@@ -1,15 +1,15 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v1.ICrop;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.ICrop;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
-import com.infinityraider.agricraft.api.v1.IMutation;
+import com.infinityraider.agricraft.api.v3.IAgriCraftStats;
+import com.infinityraider.agricraft.api.v3.IMutation;
 
 public abstract class StatCalculatorBase extends StatCalculator {
 

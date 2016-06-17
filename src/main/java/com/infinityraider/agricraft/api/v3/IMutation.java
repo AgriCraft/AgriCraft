@@ -1,5 +1,6 @@
-package com.infinityraider.agricraft.api.v1;
+package com.infinityraider.agricraft.api.v3;
 
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import javax.annotation.Nonnull;
 
 /**

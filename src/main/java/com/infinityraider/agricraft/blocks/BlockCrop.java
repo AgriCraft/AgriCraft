@@ -1,6 +1,11 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.api.v1.*;
+import com.infinityraider.agricraft.api.v3.items.IClipper;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.IFertiliser;
+import com.infinityraider.agricraft.api.v3.items.ITrowel;
+import com.infinityraider.agricraft.api.v3.items.IRake;
+import com.infinityraider.agricraft.api.v3.ICrop;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;

@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v1;
+package com.infinityraider.agricraft.api.v3;
 
 /**
  * This enum is used to decide how AgriCraft handles the rendering of plants on crop sticks

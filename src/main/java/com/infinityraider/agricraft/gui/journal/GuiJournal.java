@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import com.infinityraider.agricraft.gui.Component;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;

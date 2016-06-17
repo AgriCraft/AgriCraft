@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.farming.cropplant;
 
-import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v1.IMutation;
-import com.infinityraider.agricraft.api.v1.RenderMethod;
+import com.infinityraider.agricraft.api.v3.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v3.IMutation;
+import com.infinityraider.agricraft.api.v3.RenderMethod;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

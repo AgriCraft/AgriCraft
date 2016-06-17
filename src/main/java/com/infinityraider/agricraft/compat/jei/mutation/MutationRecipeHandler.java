@@ -3,7 +3,7 @@
  */
 package com.infinityraider.agricraft.compat.jei.mutation;
 
-import com.infinityraider.agricraft.api.v1.IMutation;
+import com.infinityraider.agricraft.api.v3.IMutation;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeHandler;

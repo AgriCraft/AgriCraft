@@ -4,7 +4,7 @@
 package com.infinityraider.agricraft.compat.jei.mutation;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.v1.IMutation;
+import com.infinityraider.agricraft.api.v3.IMutation;
 import java.util.List;
 import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -12,8 +12,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.IGrowthRequirement;
 
 /**
  *

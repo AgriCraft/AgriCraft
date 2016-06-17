@@ -8,7 +8,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.nbt.NBTTagCompound;
-import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
+import com.infinityraider.agricraft.api.v3.IAgriCraftStats;
 import com.infinityraider.agricraft.utility.MathHelper;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.item.ItemStack;

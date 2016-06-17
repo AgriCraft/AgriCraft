@@ -1,4 +1,5 @@
-package com.infinityraider.agricraft.api.v1;
+package com.infinityraider.agricraft.api.v3;
+import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.init;
 import com.agricraft.agricore.core.AgriCore;
 
 import java.util.ArrayList;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 
 public class AgriCraftCrops {
     public static ArrayList<IAgriCraftPlant> crops;

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.farming.mutation;
 
 
-import com.infinityraider.agricraft.api.v1.IStatCalculator;
+import com.infinityraider.agricraft.api.v3.IStatCalculator;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
 
 public abstract class BaseStrategy implements ICrossOverStrategy {

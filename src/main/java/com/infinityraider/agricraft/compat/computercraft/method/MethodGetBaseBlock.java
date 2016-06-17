@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.compat.computercraft.method;
 
-import com.infinityraider.agricraft.api.v1.BlockWithMeta;
+import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
 import net.minecraft.item.ItemStack;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 
 public class MethodGetBaseBlock extends MethodBaseGrowthReq {
     public MethodGetBaseBlock() {

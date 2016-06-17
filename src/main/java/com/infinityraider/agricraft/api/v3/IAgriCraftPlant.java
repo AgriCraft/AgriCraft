@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v1;
+package com.infinityraider.agricraft.api.v3;
 
 import com.google.common.base.Function;
 import net.minecraft.block.Block;

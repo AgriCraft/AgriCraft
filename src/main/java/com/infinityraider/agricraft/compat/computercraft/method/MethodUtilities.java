@@ -3,13 +3,13 @@
  */
 package com.infinityraider.agricraft.compat.computercraft.method;
 
-import com.infinityraider.agricraft.api.v1.ITrowel;
+import com.infinityraider.agricraft.api.v3.items.ITrowel;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.List;
 import net.minecraft.item.ItemStack;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 
 /**
  *
@@ -21,7 +21,7 @@ public final class MethodUtilities {
 		if (journal == null || journal.getItem() == null || !(journal.getItem() instanceof ItemJournal)) {
 			return false;
 		}
-		return ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, seed);
+		return ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, CropPlantHandler.getPlantFromStack(seed));
 	}
 
 	public static IAgriCraftPlant getCropPlant(ItemStack specimen) {

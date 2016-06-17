@@ -1,7 +1,12 @@
 package com.infinityraider.agricraft.farming.cropplant;
 
+import com.infinityraider.agricraft.api.v3.RenderMethod;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v3.IAdditionalCropData;
+import com.infinityraider.agricraft.api.v3.IMutation;
+import com.infinityraider.agricraft.api.v3.ICrop;
 import com.google.common.base.Function;
-import com.infinityraider.agricraft.api.v1.*;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.reference.Constants;

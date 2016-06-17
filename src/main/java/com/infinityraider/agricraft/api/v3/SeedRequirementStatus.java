@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v1;
+package com.infinityraider.agricraft.api.v3;
 
 public enum SeedRequirementStatus {
 	/**

@@ -24,7 +24,7 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import com.infinityraider.agricraft.farming.PlantStats;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {

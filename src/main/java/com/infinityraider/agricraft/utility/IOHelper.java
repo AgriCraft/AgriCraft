@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.v1.BlockWithMeta;
+import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;

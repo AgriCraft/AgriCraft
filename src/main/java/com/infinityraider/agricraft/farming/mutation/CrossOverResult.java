@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
-import com.infinityraider.agricraft.api.v1.ICrop;
-import com.infinityraider.agricraft.api.v1.IMutation;
+import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.IAgriCraftStats;
+import com.infinityraider.agricraft.api.v3.ICrop;
+import com.infinityraider.agricraft.api.v3.IMutation;
 import com.infinityraider.agricraft.farming.PlantStats;
 import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
