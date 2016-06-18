@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import com.infinityraider.agricraft.api.v3.items.IJournal;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
@@ -20,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 public class ItemJournal extends ItemBase implements IJournal {
 
@@ -74,7 +74,7 @@ public class ItemJournal extends ItemBase implements IJournal {
 	}
 
 	@Override
-	public void addEntry(ItemStack journal, IAgriCraftPlant plant) {
+	public void addEntry(ItemStack journal, IAgriPlant plant) {
 		if (journal != null && journal.getItem() != null && plant != null) {
 			List<String> seeds = getDiscoveredSeedIds(journal);
 			if (!seeds.contains(plant.getId())) {
@@ -87,16 +87,16 @@ public class ItemJournal extends ItemBase implements IJournal {
 	}
 
 	@Override
-	public boolean isSeedDiscovered(ItemStack journal, IAgriCraftPlant plant) {
+	public boolean isSeedDiscovered(ItemStack journal, IAgriPlant plant) {
 		return journal != null && plant != null && getDiscoveredSeedIds(journal).contains(plant.getId());
 	}
 
 	@Override
-	public List<IAgriCraftPlant> getDiscoveredSeeds(ItemStack journal) {
-		List<IAgriCraftPlant> list = new ArrayList<>();
+	public List<IAgriPlant> getDiscoveredSeeds(ItemStack journal) {
+		List<IAgriPlant> list = new ArrayList<>();
 		if (journal != null && journal.hasTagCompound()) {
 			for (String id : getDiscoveredSeedIds(journal)) {
-				IAgriCraftPlant seed = CropPlantHandler.getPlant(id);
+				IAgriPlant seed = CropPlantHandler.getPlant(id);
 				if (seed != null) {
 					list.add(seed);
 				}

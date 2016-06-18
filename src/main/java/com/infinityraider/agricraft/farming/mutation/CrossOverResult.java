@@ -1,13 +1,13 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v3.IAgriCraftStats;
-import com.infinityraider.agricraft.api.v3.ICrop;
-import com.infinityraider.agricraft.api.v3.IMutation;
 import com.infinityraider.agricraft.farming.PlantStats;
 import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriStat;
+import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.core.IAgriMutation;
 
 /**
  * Represents the result of a specific <code>INewSeedStrategy</code> containing
@@ -17,22 +17,22 @@ public class CrossOverResult {
 
     private final double chance;
 
-	private @Nonnull IAgriCraftPlant plant;
-    private @Nonnull IAgriCraftStats stats = new PlantStats();
+	private @Nonnull IAgriPlant plant;
+    private @Nonnull IAgriStat stats = new PlantStats();
 
-    public CrossOverResult(@Nonnull IAgriCraftPlant plant, double chance) {
+    public CrossOverResult(@Nonnull IAgriPlant plant, double chance) {
         this.plant = plant;
         this.chance = chance;
     }
 
     /** Creates a new instance based on the planted seed of the given TE. Does not validate the TE */
-    public static CrossOverResult fromTileEntityCrop(ICrop crop) {
+    public static CrossOverResult fromTileEntityCrop(IAgriCrop crop) {
         double chance = ((double) crop.getPlant().getSpreadChance())/100.0;
         return new CrossOverResult(crop.getPlant(), chance);
     }
 
     /** Creates a new instanced based off the result of the given mutation. Does not validate the mutation object */
-    public static CrossOverResult fromMutation(IMutation mutation) {
+    public static CrossOverResult fromMutation(IAgriMutation mutation) {
         return new CrossOverResult(mutation.getChild(), mutation.getChance());
     }
 
@@ -44,7 +44,7 @@ public class CrossOverResult {
         return stack;
     }
 
-    public @Nonnull IAgriCraftPlant getPlant() {
+    public @Nonnull IAgriPlant getPlant() {
         return plant;
     }
 
@@ -52,11 +52,11 @@ public class CrossOverResult {
         return chance;
     }
 
-    public @Nonnull IAgriCraftStats getStats() {
+    public @Nonnull IAgriStat getStats() {
 		return this.stats;
 	}
 
-    public void setStats(@Nonnull IAgriCraftStats stats) {
+    public void setStats(@Nonnull IAgriStat stats) {
         this.stats = stats;
     }
 }

@@ -1,7 +1,7 @@
-package com.infinityraider.agricraft.api.v3;
+package com.infinityraider.agricraft.api.v3.core;
 
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import javax.annotation.Nonnull;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 /**
  * An interface representing a mutation, which is a relation between parents and
@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
  * @author AgriCraft
  * @since v2
  */
-public interface IMutation {
+public interface IAgriMutation {
 
 	/**
 	 * Retrieves the probability of the mutation occurring. Recommended to be
@@ -29,7 +29,7 @@ public interface IMutation {
 	 * @return The child plant generated from the mutation.
 	 */
 	@Nonnull
-	IAgriCraftPlant getChild();
+	IAgriPlant getChild();
 
 	/**
 	 * Gets a list of the required neighboring plants for the mutation to occur.
@@ -39,6 +39,6 @@ public interface IMutation {
 	 * @return a list of the parent plants for the mutation.
 	 */
 	@Nonnull
-	IAgriCraftPlant[] getParents();
+	IAgriPlant[] getParents();
 
 }

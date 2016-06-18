@@ -18,8 +18,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
 
@@ -142,7 +142,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 		}
 
 		if (seed != null) {
-			IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(seed);
+			IAgriPlant plant = CropPlantHandler.getPlantFromStack(seed);
 			return plant == null ? 0 : plant.getTier() * 20;
 		} else {
 			return 0;
@@ -223,7 +223,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 		}
 		//register the SEED in the journal if there is a journal present
 		if (this.hasJournal()) {
-			IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(this.hasSeed() ? this.specimen : ((ITrowel) this.specimen.getItem()).getSeed(this.specimen));
+			IAgriPlant plant = CropPlantHandler.getPlantFromStack(this.hasSeed() ? this.specimen : ((ITrowel) this.specimen.getItem()).getSeed(this.specimen));
 			((ItemJournal) journal.getItem()).addEntry(journal, plant);
 		}
 	}

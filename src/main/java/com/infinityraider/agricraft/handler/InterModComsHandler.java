@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.relauncher.Side;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 @SuppressWarnings("unused")
 public class InterModComsHandler {
@@ -18,15 +18,15 @@ public class InterModComsHandler {
             if(message.isItemStackMessage()) {
                 try {
                     Class cropPlantClass = Class.forName(message.key);
-                    if(IAgriCraftPlant.class.isAssignableFrom(cropPlantClass)) {
-                        IAgriCraftPlant cropPlant = null;
+                    if(IAgriPlant.class.isAssignableFrom(cropPlantClass)) {
+                        IAgriPlant cropPlant = null;
                         ItemStack seed = message.getItemStackValue();
                         if(seed==null || seed.getItem()==null) {
                             AgriCore.getLogger("AgriCraft").error("[IMC] CropPlant registering errored: ItemStack does not contain an item");
                             continue;
                         }
                         try {
-                            cropPlant = (IAgriCraftPlant) cropPlantClass.getConstructor().newInstance(seed);
+                            cropPlant = (IAgriPlant) cropPlantClass.getConstructor().newInstance(seed);
                         } catch (Exception e) {
                             AgriCore.getLogger("AgriCraft").error("[IMC] CropPlant registering errored: "+message.getStringValue()+" does not have a valid constructor, constructor should be public with ItemStack as parameter");
                         }
@@ -34,7 +34,7 @@ public class InterModComsHandler {
                         //CropPlantHandler.addCropToRegister(new CropPlantAPIv1(cropPlant));
                         AgriCore.getLogger("AgriCraft").error("[IMC] Successfully registered CropPlant for "+seed.getUnlocalizedName());
                     } else {
-                        AgriCore.getLogger("AgriCraft").error("[IMC] CropPlant registering errored: Class "+cropPlantClass.getName()+" does not implement "+IAgriCraftPlant.class.getName());
+                        AgriCore.getLogger("AgriCraft").error("[IMC] CropPlant registering errored: Class "+cropPlantClass.getName()+" does not implement "+IAgriPlant.class.getName());
                     }
                 } catch (ClassNotFoundException e) {
                     AgriCore.getLogger("AgriCraft").error("[IMC] CropPlant registering errored: No class found for "+message.key);

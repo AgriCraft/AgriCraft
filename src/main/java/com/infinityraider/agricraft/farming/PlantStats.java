@@ -8,12 +8,12 @@ import java.text.MessageFormat;
 import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.nbt.NBTTagCompound;
-import com.infinityraider.agricraft.api.v3.IAgriCraftStats;
 import com.infinityraider.agricraft.utility.MathHelper;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.item.ItemStack;
+import com.infinityraider.agricraft.api.v3.core.IAgriStat;
 
-public class PlantStats implements IAgriCraftStats {
+public class PlantStats implements IAgriStat {
 	
 	// Moved here since this class is in control of acess to stats.
 	public static final String NBT_ANALYZED = "analyzed";

@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.network;
 
-import com.infinityraider.agricraft.api.v3.IFertiliser;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
@@ -9,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import com.infinityraider.agricraft.api.v3.core.IAgriFertiliser;
 
 public class MessageFertiliserApplied extends MessageBase {
     private BlockPos pos;
@@ -31,8 +31,8 @@ public class MessageFertiliserApplied extends MessageBase {
 
     @Override
     protected void processMessage(MessageContext ctx) {
-        if(this.fertiliser!=null && this.fertiliser instanceof IFertiliser) {
-            ((IFertiliser) this.fertiliser).performClientAnimations(this.meta, Minecraft.getMinecraft().thePlayer.worldObj, this.pos);
+        if(this.fertiliser!=null && this.fertiliser instanceof IAgriFertiliser) {
+            ((IAgriFertiliser) this.fertiliser).performClientAnimations(this.meta, Minecraft.getMinecraft().thePlayer.worldObj, this.pos);
         }
     }
 

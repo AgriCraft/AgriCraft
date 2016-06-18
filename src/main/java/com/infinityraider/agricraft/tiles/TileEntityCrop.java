@@ -1,10 +1,8 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.api.v3.IDebuggable;
-import com.infinityraider.agricraft.api.v3.IFertiliser;
-import com.infinityraider.agricraft.api.v3.IAdditionalCropData;
+import com.infinityraider.agricraft.api.v3.misc.IDebuggable;
+import com.infinityraider.agricraft.api.v3.misc.IAdditionalCropData;
 import com.infinityraider.agricraft.api.v3.items.ITrowel;
-import com.infinityraider.agricraft.api.v3.ICrop;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
@@ -36,11 +34,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v3.IAgriCraftStats;
 import javax.annotation.Nonnull;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriStat;
+import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.core.IAgriFertiliser;
 
-public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable {
+public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable {
 
 	public static final String NAME = "crops";
 
@@ -48,8 +48,8 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	private boolean weed = false;
 
 	private @Nonnull
-	IAgriCraftStats stats = new PlantStats();
-	private IAgriCraftPlant plant;
+	IAgriStat stats = new PlantStats();
+	private IAgriPlant plant;
 	private IAdditionalCropData data;
 
 	private final MutationEngine mutationEngine;
@@ -64,13 +64,13 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	}
 
 	@Override
-	public IAgriCraftPlant getPlant() {
+	public IAgriPlant getPlant() {
 		return this.plant;
 	}
 
 	@Override
 	public @Nonnull
-	IAgriCraftStats getStats() {
+	IAgriStat getStats() {
 		return this.stats;
 	}
 
@@ -139,7 +139,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	/**
 	 * sets the plant in the crop
 	 */
-	public void setPlant(@Nonnull IAgriCraftStats stats, IAgriCraftPlant plant) {
+	public void setPlant(@Nonnull IAgriStat stats, IAgriPlant plant) {
 		if ((!this.crossCrop) && (!this.hasPlant())) {
 			if (plant != null) {
 				this.plant = plant;
@@ -159,7 +159,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 * sets the plant in the crop
 	 */
 	@Override
-	public void setPlant(@Nonnull IAgriCraftStats stats, Item seed, int seedMeta) {
+	public void setPlant(@Nonnull IAgriStat stats, Item seed, int seedMeta) {
 		this.setPlant(stats, CropPlantHandler.getPlantFromStack(new ItemStack(seed, 1, seedMeta)));
 	}
 
@@ -168,7 +168,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 */
 	@Override
 	public void clearPlant() {
-		IAgriCraftPlant oldPlant = getPlant();
+		IAgriPlant oldPlant = getPlant();
 		this.setGrowthStage(0);
 		this.stats = new PlantStats();
 		this.plant = null;
@@ -279,8 +279,8 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 */
 	@Override
 	public void spreadWeed() {
-		List<ICrop> neighbours = this.getNeighbours();
-		for (ICrop crop : neighbours) {
+		List<IAgriCrop> neighbours = this.getNeighbours();
+		for (IAgriCrop crop : neighbours) {
 			if (crop != null && (!crop.hasWeed()) && Math.random() < crop.getWeedSpawnChance()) {
 				crop.spawnWeed();
 				break;
@@ -334,7 +334,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
 	//is fertilizer allowed
 	@Override
-	public boolean allowFertiliser(IFertiliser fertiliser) {
+	public boolean allowFertiliser(IAgriFertiliser fertiliser) {
 		if (this.crossCrop) {
 			return AgriCraftConfig.bonemealMutation && fertiliser.canTriggerMutation();
 		}
@@ -349,7 +349,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 
 	//when fertiliser is applied
 	@Override
-	public void applyFertiliser(IFertiliser fertiliser, Random rand) {
+	public void applyFertiliser(IAgriFertiliser fertiliser, Random rand) {
 		if (fertiliser.hasSpecialBehaviour()) {
 			fertiliser.onFertiliserApplied(getWorld(), getPos(), rand);
 		}
@@ -460,8 +460,8 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 * the NORTH, SOUTH, EAST and WEST DIRECTION
 	 */
 	@Override
-	public List<ICrop> getNeighbours() {
-		List<ICrop> neighbours = new ArrayList<>();
+	public List<IAgriCrop> getNeighbours() {
+		List<IAgriCrop> neighbours = new ArrayList<>();
 		addNeighbour(neighbours, AgriForgeDirection.NORTH);
 		addNeighbour(neighbours, AgriForgeDirection.SOUTH);
 		addNeighbour(neighbours, AgriForgeDirection.EAST);
@@ -469,7 +469,7 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 		return neighbours;
 	}
 
-	private void addNeighbour(List<ICrop> neighbours, AgriForgeDirection direction) {
+	private void addNeighbour(List<IAgriCrop> neighbours, AgriForgeDirection direction) {
 		TileEntity te = worldObj.getTileEntity(getPos().add(direction.offsetX, direction.offsetY, direction.offsetZ));
 		if (te == null || !(te instanceof TileEntityCrop)) {
 			return;
@@ -482,10 +482,10 @@ public class TileEntityCrop extends TileEntityBase implements ICrop, IDebuggable
 	 * <code>TileEntityCrop</code>
 	 */
 	@Override
-	public List<ICrop> getMatureNeighbours() {
-		List<ICrop> neighbours = getNeighbours();
-		for (Iterator<ICrop> iterator = neighbours.iterator(); iterator.hasNext();) {
-			ICrop crop = iterator.next();
+	public List<IAgriCrop> getMatureNeighbours() {
+		List<IAgriCrop> neighbours = getNeighbours();
+		for (Iterator<IAgriCrop> iterator = neighbours.iterator(); iterator.hasNext();) {
+			IAgriCrop crop = iterator.next();
 			if (!crop.hasPlant() || !crop.isMature()) {
 				iterator.remove();
 			}

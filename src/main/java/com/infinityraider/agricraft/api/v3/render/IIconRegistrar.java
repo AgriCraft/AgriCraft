@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v3;
+package com.infinityraider.agricraft.api.v3.render;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;

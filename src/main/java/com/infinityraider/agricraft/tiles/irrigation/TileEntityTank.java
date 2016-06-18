@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
-import com.infinityraider.agricraft.api.v3.IDebuggable;
+import com.infinityraider.agricraft.api.v3.misc.IDebuggable;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.network.NetworkWrapper;

@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v3.ICrop;
 import com.infinityraider.agricraft.api.v3.items.IRake;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.WeightedRandom;
@@ -23,6 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.
@@ -85,7 +85,7 @@ public class ItemHandRake extends ItemBase implements IRake {
 	}
 
 	@Override
-	public boolean removeWeeds(World world, BlockPos pos, IBlockState state, ICrop crop, ItemStack rake) {
+	public boolean removeWeeds(World world, BlockPos pos, IBlockState state, IAgriCrop crop, ItemStack rake) {
 		if (crop.hasWeed()) {
 			int weedGrowthStage = state.getValue(AgriCraftProperties.GROWTHSTAGE);
 			int newWeedGrowthStage = calculateGrowthStage(rake.getItemDamage(), weedGrowthStage, world.rand);

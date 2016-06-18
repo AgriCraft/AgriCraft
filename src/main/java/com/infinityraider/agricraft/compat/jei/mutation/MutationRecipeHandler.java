@@ -3,22 +3,22 @@
  */
 package com.infinityraider.agricraft.compat.jei.mutation;
 
-import com.infinityraider.agricraft.api.v3.IMutation;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import com.infinityraider.agricraft.api.v3.core.IAgriMutation;
 
 /**
  *
  * @author RlonRyan
  */
-public class MutationRecipeHandler implements IRecipeHandler<IMutation> {
+public class MutationRecipeHandler implements IRecipeHandler<IAgriMutation> {
 
 	@Nonnull
 	@Override
-	public Class<IMutation> getRecipeClass() {
-		return IMutation.class;
+	public Class<IAgriMutation> getRecipeClass() {
+		return IAgriMutation.class;
 	}
 
 	@Nonnull
@@ -29,12 +29,12 @@ public class MutationRecipeHandler implements IRecipeHandler<IMutation> {
 
 	@Nonnull
 	@Override
-	public IRecipeWrapper getRecipeWrapper(@Nonnull IMutation recipe) {
+	public IRecipeWrapper getRecipeWrapper(@Nonnull IAgriMutation recipe) {
 		return new MutationRecipeWrapper(recipe);
 	}
 
 	@Override
-	public boolean isRecipeValid(@Nonnull IMutation recipe) {
+	public boolean isRecipeValid(@Nonnull IAgriMutation recipe) {
 		return recipe.getParents().length > 0;
 	}
 

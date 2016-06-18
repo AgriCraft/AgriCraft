@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v3;
+package com.infinityraider.agricraft.api.v3.core;
 
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * 
  * @author RlonRyan
  */
-public interface IAgriCraftStats {
+public interface IAgriStat {
 	
 	/**
      * @return if the seed stats are analyzed

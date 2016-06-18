@@ -23,8 +23,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v3.IAgriCraftStats;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriStat;
 
 public class ItemClipping extends ItemBase {
 
@@ -41,7 +41,7 @@ public class ItemClipping extends ItemBase {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private Map<IAgriCraftPlant, ModelResourceLocation> textures;
+	private Map<IAgriPlant, ModelResourceLocation> textures;
 
 	public ItemClipping() {
 		super("clipping", false);
@@ -56,7 +56,7 @@ public class ItemClipping extends ItemBase {
 		this.textures = new HashMap<>();
 	}
 
-	public final void addPlant(IAgriCraftPlant crop, String texture) {
+	public final void addPlant(IAgriPlant crop, String texture) {
 		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
 			this.textures.put(crop, getModel(texture));
 			this.textures.put(null, ItemData.DEFAULT_MODEL);
@@ -120,7 +120,7 @@ public class ItemClipping extends ItemBase {
 			return EnumActionResult.FAIL;
 		}
 		ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
-		IAgriCraftStats stats = new PlantStats(seed);
+		IAgriStat stats = new PlantStats(seed);
 		if (world.rand.nextInt(10) <= stats.getStrength()) {
 			blockCrop.plantSeed(seed, world, pos);
 		}
@@ -131,7 +131,7 @@ public class ItemClipping extends ItemBase {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String text = I18n.translateToLocal("item.agricraft:clipping.name");
-		IAgriCraftPlant plant = toCrop(stack);
+		IAgriPlant plant = toCrop(stack);
 		if (plant == null || plant.getAllFruits() == null || plant.getAllFruits().isEmpty()) {
 			return text;
 		}
@@ -139,7 +139,7 @@ public class ItemClipping extends ItemBase {
 		return fruit.getDisplayName() + " " + text;
 	}
 
-	private static IAgriCraftPlant toCrop(ItemStack stack) {
+	private static IAgriPlant toCrop(ItemStack stack) {
 		try {
 			ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
 			return CropPlantHandler.getPlantFromStack(seed);

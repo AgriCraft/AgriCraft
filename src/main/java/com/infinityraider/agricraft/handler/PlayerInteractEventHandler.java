@@ -25,7 +25,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 @SuppressWarnings("unused")
 public class PlayerInteractEventHandler {
@@ -79,7 +79,7 @@ public class PlayerInteractEventHandler {
 
     private static boolean ignoresVanillaPlantingSetting(ItemStack seed) {
 		// TODO: REPLACE
-        IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(seed);
+        IAgriPlant plant = CropPlantHandler.getPlantFromStack(seed);
         return true;
     }
 

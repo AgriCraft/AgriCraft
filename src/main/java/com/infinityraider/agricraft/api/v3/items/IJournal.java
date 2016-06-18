@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.api.v3.items;
 
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 /**
  * This interface is implemented in AgriCraft's agricultural item class for the journal.
@@ -21,7 +21,7 @@ public interface IJournal extends IAgriCraftItem {
      * @param seed an ItemStack containing a seed
      * @return if the seed is discovered in the journal
      */
-    boolean isSeedDiscovered(ItemStack journal, IAgriCraftPlant plant);
+    boolean isSeedDiscovered(ItemStack journal, IAgriPlant plant);
 
     /**
      * This adds an entry the journal, for example when a seed is analyzed in the seed analyzer this method is called.
@@ -29,12 +29,12 @@ public interface IJournal extends IAgriCraftItem {
      * @param journal an ItemStack holding the journal
      * @param seed an ItemStack containing a seed
      */
-    void addEntry(ItemStack journal, IAgriCraftPlant plant);
+    void addEntry(ItemStack journal, IAgriPlant plant);
 
     /**
      * Gets an ArrayList containing all seeds discovered in this journal
      * @param journal an ItemStack holding the journal
      * @return an ArrayList containing an ItemStack for every discovered seed (the list may be empty but will never be null)
      */
-    List<IAgriCraftPlant> getDiscoveredSeeds(ItemStack journal);
+    List<IAgriPlant> getDiscoveredSeeds(ItemStack journal);
 }

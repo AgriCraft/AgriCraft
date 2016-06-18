@@ -3,11 +3,10 @@ package com.infinityraider.agricraft.apiimpl.v3;
 import com.infinityraider.agricraft.api.v3.registry.IPlantRegistry;
 import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.v3.registry.IMutationRegistry;
-import com.infinityraider.agricraft.api.v3.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v3.IStatCalculator;
-import com.infinityraider.agricraft.api.v3.IGrowthRequirementBuilder;
+import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v3.misc.IStatCalculator;
+import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirementBuilder;
 import com.infinityraider.agricraft.api.v3.items.IJournal;
-import com.infinityraider.agricraft.api.v3.ICrop;
 import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
 import com.infinityraider.agricraft.api.APIStatus;
@@ -28,10 +27,11 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v3.IAgriCraftStats;
 import com.infinityraider.agricraft.api.v3.APIv3;
 import com.infinityraider.agricraft.api.v3.registry.IFertilizerRegistry;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriStat;
+import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
 
 public class APIimplv3 implements APIv3 {
 	
@@ -100,11 +100,11 @@ public class APIimplv3 implements APIv3 {
 	
 	@Override
     public boolean isCrop(World world, BlockPos pos) {
-        return world.getTileEntity(pos) instanceof ICrop;
+        return world.getTileEntity(pos) instanceof IAgriCrop;
     }
 
     @Override
-    public IAgriCraftStats getStats(ItemStack seed) {
+    public IAgriStat getStats(ItemStack seed) {
         if (isHandledByAgricraft(seed)) {
             return new PlantStats(seed);
         } else {
@@ -179,10 +179,10 @@ public class APIimplv3 implements APIv3 {
     }
 
     @Override
-    public ICrop getCrop(World world, BlockPos pos) {
+    public IAgriCrop getCrop(World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
-        if(te instanceof ICrop) {
-            return (ICrop) te;
+        if(te instanceof IAgriCrop) {
+            return (IAgriCrop) te;
         }
         return null;
     }
@@ -203,7 +203,7 @@ public class APIimplv3 implements APIv3 {
     }
 
     @Override
-    public boolean isPlantDiscovered(ItemStack journal, IAgriCraftPlant plant) {
+    public boolean isPlantDiscovered(ItemStack journal, IAgriPlant plant) {
         if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
             return false;
         }
@@ -211,7 +211,7 @@ public class APIimplv3 implements APIv3 {
     }
 
     @Override
-    public void setPlantDiscovered(ItemStack journal, IAgriCraftPlant plant, boolean discovered) {
+    public void setPlantDiscovered(ItemStack journal, IAgriPlant plant, boolean discovered) {
         if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
             return;
         }
@@ -219,7 +219,7 @@ public class APIimplv3 implements APIv3 {
     }
 
     @Override
-    public List<IAgriCraftPlant> getPlantsDiscovered(ItemStack journal) {
+    public List<IAgriPlant> getPlantsDiscovered(ItemStack journal) {
         if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
             return new ArrayList<>();
         }

@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
 import static com.infinityraider.agricraft.compat.computercraft.method.MethodUtilities.*;
 
 import java.util.ArrayList;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 public abstract class MethodBaseGrowthReq extends MethodBase {
 	
@@ -23,7 +23,7 @@ public abstract class MethodBaseGrowthReq extends MethodBase {
         return onMethodCalled(getCropPlant(peripheral.getSpecimen()));
     }
 
-    protected abstract Object[] onMethodCalled(IAgriCraftPlant plant) throws MethodException;
+    protected abstract Object[] onMethodCalled(IAgriPlant plant) throws MethodException;
 
     @Override
     protected ArrayList<MethodParameter> getParameters() {

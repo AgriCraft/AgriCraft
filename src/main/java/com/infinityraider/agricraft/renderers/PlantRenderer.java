@@ -11,20 +11,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
 
-    public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, IAgriCraftPlant plant) {
+    public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, IAgriPlant plant) {
 		ITessellator tessellator = TessellatorBakedQuad.getInstance();
 		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
 		renderPlant(world, pos, growthStage, plant, tessellator);
 		tessellator.draw();
 	}
 	
-	public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, IAgriCraftPlant plant, ITessellator tessellator) {
+	public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, IAgriPlant plant, ITessellator tessellator) {
         TextureAtlasSprite iconA = tessellator.getIcon(plant.getPrimaryPlantTexture(growthStage));
         TextureAtlasSprite iconB = tessellator.getIcon(plant.getSecondaryPlantTexture(growthStage));
         if(iconA!=null) {

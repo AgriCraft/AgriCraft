@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v3;
+package com.infinityraider.agricraft.api.v3.misc;
 
 import java.util.List;
 

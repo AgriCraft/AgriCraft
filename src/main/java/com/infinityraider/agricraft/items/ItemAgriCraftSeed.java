@@ -10,12 +10,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 public class ItemAgriCraftSeed extends ItemBase {
 
@@ -30,7 +30,7 @@ public class ItemAgriCraftSeed extends ItemBase {
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (IAgriCraftPlant plant : CropPlantHandler.getPlants()) {
+		for (IAgriPlant plant : CropPlantHandler.getPlants()) {
 			list.add(CropPlantHandler.getSeed(plant));
 		}
 	}
@@ -42,7 +42,7 @@ public class ItemAgriCraftSeed extends ItemBase {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		final IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(stack);
+		final IAgriPlant plant = CropPlantHandler.getPlantFromStack(stack);
 		return (plant == null ? "Generic Seeds" : plant.getSeedName());
 	}
 

@@ -1,5 +1,11 @@
 package com.infinityraider.agricraft.api.v3;
 
+import com.infinityraider.agricraft.api.v3.misc.IStatCalculator;
+import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirementBuilder;
+import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriStat;
 import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.v3.registry.IMutationRegistry;
 import com.infinityraider.agricraft.api.v3.registry.IPlantRegistry;
@@ -87,7 +93,7 @@ public interface APIv3 extends APIBase {
 	 * @return An ISeedStats object that describes the given seeds, or null if
 	 * the given item was no seed.
 	 */
-	IAgriCraftStats getStats(ItemStack seed);
+	IAgriStat getStats(ItemStack seed);
 
 	/**
 	 * Register a default soil that any crop that doesn't require a specific
@@ -117,7 +123,7 @@ public interface APIv3 extends APIBase {
 	 * @param pos the location of the crop.
 	 * @return the crop at the location or null if not found.
 	 */
-	ICrop getCrop(World world, BlockPos pos);
+	IAgriCrop getCrop(World world, BlockPos pos);
 
 	/**
 	 * Checks if AgriCraft is configured to require rakes to remove weeds.
@@ -214,7 +220,7 @@ public interface APIv3 extends APIBase {
 	 * @param seed an ItemStack containing a seed
 	 * @return if the seed is discovered in the journal
 	 */
-	boolean isPlantDiscovered(ItemStack journal, IAgriCraftPlant plant);
+	boolean isPlantDiscovered(ItemStack journal, IAgriPlant plant);
 
 	/**
 	 * This adds an entry the journal, for example when a seed is analyzed in
@@ -225,7 +231,7 @@ public interface APIv3 extends APIBase {
 	 * @param plant the plant to discover.
 	 * @param isDiscovered whether or not the plant is discovered.
 	 */
-	void setPlantDiscovered(ItemStack journal, IAgriCraftPlant plant, boolean isDiscovered);
+	void setPlantDiscovered(ItemStack journal, IAgriPlant plant, boolean isDiscovered);
 
 	/**
 	 * Gets an ArrayList containing all seeds discovered in this journal
@@ -234,6 +240,6 @@ public interface APIv3 extends APIBase {
 	 * @return an ArrayList containing an ItemStack for every discovered seed
 	 * (the list may be empty but will never be null)
 	 */
-	List<IAgriCraftPlant> getPlantsDiscovered(ItemStack journal);
+	List<IAgriPlant> getPlantsDiscovered(ItemStack journal);
 
 }

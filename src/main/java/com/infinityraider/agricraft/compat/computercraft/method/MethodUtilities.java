@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.List;
 import net.minecraft.item.ItemStack;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 /**
  *
@@ -24,7 +24,7 @@ public final class MethodUtilities {
 		return ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, CropPlantHandler.getPlantFromStack(seed));
 	}
 
-	public static IAgriCraftPlant getCropPlant(ItemStack specimen) {
+	public static IAgriPlant getCropPlant(ItemStack specimen) {
 		ItemStack seed = specimen;
 		if (specimen == null || specimen.getItem() == null) {
 			return null;
@@ -35,7 +35,7 @@ public final class MethodUtilities {
 		return CropPlantHandler.getPlantFromStack(seed);
 	}
 
-	public static IAgriCraftPlant getCropPlant(TileEntityCrop crop) {
+	public static IAgriPlant getCropPlant(TileEntityCrop crop) {
 		return crop.getPlant();
 	}
 

@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.api.v3.items;
 
-import com.infinityraider.agricraft.api.v3.ICrop;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
 
 /**
  * Implement in tools that should have rake functionality
@@ -20,5 +20,5 @@ public interface IRake {
      * @param rake the ItemStack containing this tool
      * @return true to prevent further processing
      */
-    boolean removeWeeds(World world, BlockPos pos, IBlockState state, ICrop crop, ItemStack rake);
+    boolean removeWeeds(World world, BlockPos pos, IBlockState state, IAgriCrop crop, ItemStack rake);
 }

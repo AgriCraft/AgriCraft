@@ -4,7 +4,6 @@
 package com.infinityraider.agricraft.compat.jei.mutation;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.v3.IMutation;
 import java.util.List;
 import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -12,8 +11,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v3.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriMutation;
 
 /**
  *
@@ -24,9 +24,9 @@ public class MutationRecipeWrapper implements IRecipeWrapper {
 	private final List input;
 	private final ItemStack output;
 
-	public MutationRecipeWrapper(IMutation recipe) {
+	public MutationRecipeWrapper(IAgriMutation recipe) {
 		ImmutableList.Builder builder = ImmutableList.builder();
-		for (IAgriCraftPlant p : recipe.getParents()) {
+		for (IAgriPlant p : recipe.getParents()) {
 			builder.add(p.getSeed());
 		}
 		

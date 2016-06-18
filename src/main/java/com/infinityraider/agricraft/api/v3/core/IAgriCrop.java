@@ -1,5 +1,6 @@
-package com.infinityraider.agricraft.api.v3;
+package com.infinityraider.agricraft.api.v3.core;
 
+import com.infinityraider.agricraft.api.v3.misc.IAdditionalCropData;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +19,7 @@ import javax.annotation.Nonnull;
  * To retrieve the ICrop instance use:
  * {@code API.getCrop(World world, int x, int y, int z)}
  */
-public interface ICrop {
+public interface IAgriCrop {
 
 	/**
 	 * @return the x coordinate for this crop
@@ -55,12 +56,12 @@ public interface ICrop {
 	/**
 	 * @return the ICropPlant instance planted on this crop
 	 */
-	IAgriCraftPlant getPlant();
+	IAgriPlant getPlant();
 
 	/**
 	 * @return the stats for this crop
 	 */
-	IAgriCraftStats getStats();
+	IAgriStat getStats();
 
 	/**
 	 * @return if there are weeds on this crop
@@ -92,7 +93,7 @@ public interface ICrop {
 	 * @param seed the seed representing the plant
 	 * @param seedMeta the metadata for the seed
 	 */
-	void setPlant(@Nonnull IAgriCraftStats stats, Item seed, int seedMeta);
+	void setPlant(@Nonnull IAgriStat stats, Item seed, int seedMeta);
 
 	/**
 	 * Clears the plant from this crop
@@ -152,7 +153,7 @@ public interface ICrop {
 	 * @param fertiliser the fertilizer to be checked
 	 * @return if the fertilizer may be applied
 	 */
-	boolean allowFertiliser(IFertiliser fertiliser);
+	boolean allowFertiliser(IAgriFertiliser fertiliser);
 
 	/**
 	 * Apply fertilizer to this crop
@@ -160,7 +161,7 @@ public interface ICrop {
 	 * @param fertiliser the fertilizer to be applied
 	 * @param rand a Random object
 	 */
-	void applyFertiliser(IFertiliser fertiliser, Random rand);
+	void applyFertiliser(IAgriFertiliser fertiliser, Random rand);
 
 	/**
 	 * Harvests this crop
@@ -184,8 +185,8 @@ public interface ICrop {
 	 */
 	IAdditionalCropData getAdditionalCropData();
 	
-	List<ICrop> getNeighbours();
+	List<IAgriCrop> getNeighbours();
 	
-	List<ICrop> getMatureNeighbours();
+	List<IAgriCrop> getMatureNeighbours();
 	
 }

@@ -2,7 +2,6 @@
  */
 package com.infinityraider.agricraft.apiimpl.v3;
 
-import com.infinityraider.agricraft.api.v3.IFertiliser;
 import com.infinityraider.agricraft.api.v3.registry.IFertilizerRegistry;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
@@ -13,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import com.infinityraider.agricraft.api.v3.core.IAgriFertiliser;
 
 /**
  *
@@ -30,7 +30,7 @@ public class FertilizerRegistry implements IFertilizerRegistry {
         if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
             return true;
         }
-        if (fertilizer.getItem() instanceof IFertiliser) {
+        if (fertilizer.getItem() instanceof IAgriFertiliser) {
             return true;
         }
         return false;
@@ -46,8 +46,8 @@ public class FertilizerRegistry implements IFertilizerRegistry {
             TileEntityCrop crop = (TileEntityCrop) te;
             if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
                 return crop.canBonemeal();
-            } else if (fertilizer.getItem() instanceof IFertiliser) {
-                return crop.allowFertiliser((IFertiliser) fertilizer.getItem());
+            } else if (fertilizer.getItem() instanceof IAgriFertiliser) {
+                return crop.allowFertiliser((IAgriFertiliser) fertilizer.getItem());
             }
         }
         return false;
@@ -63,8 +63,8 @@ public class FertilizerRegistry implements IFertilizerRegistry {
             fertilizer.stackSize--;
             world.playAuxSFX(2005, pos, 0);
             return true;
-        } else if (fertilizer.getItem() instanceof IFertiliser) {
-            ((TileEntityCrop) world.getTileEntity(pos)).applyFertiliser((IFertiliser) fertilizer.getItem(), world.rand);
+        } else if (fertilizer.getItem() instanceof IAgriFertiliser) {
+            ((TileEntityCrop) world.getTileEntity(pos)).applyFertiliser((IAgriFertiliser) fertilizer.getItem(), world.rand);
             fertilizer.stackSize--;
             world.playAuxSFX(2005, pos, 0);
             return true;

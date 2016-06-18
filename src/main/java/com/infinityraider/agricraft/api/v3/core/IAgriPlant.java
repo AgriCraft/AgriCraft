@@ -1,6 +1,9 @@
-package com.infinityraider.agricraft.api.v3;
+package com.infinityraider.agricraft.api.v3.core;
 
 import com.google.common.base.Function;
+import com.infinityraider.agricraft.api.v3.misc.IAdditionalCropData;
+import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v3.render.RenderMethod;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -25,7 +28,7 @@ import net.minecraft.item.Item;
  * wrapped by the api. Meaning if you query the ICropPlant object you
  * registered, it will return a different object.
  */
-public interface IAgriCraftPlant extends Comparable<IAgriCraftPlant> {
+public interface IAgriPlant extends Comparable<IAgriPlant> {
 
 	String getId();
 	
@@ -113,7 +116,7 @@ public interface IAgriCraftPlant extends Comparable<IAgriCraftPlant> {
 	 * @return initial IAdditionalCropData object (can be null if you don't need
 	 * additional data)
 	 */
-	IAdditionalCropData getInitialCropData(World world, BlockPos pos, ICrop crop);
+	IAdditionalCropData getInitialCropData(World world, BlockPos pos, IAgriCrop crop);
 
 	/**
 	 * If this CropPlant should track additional data, this method will be
@@ -134,7 +137,7 @@ public interface IAgriCraftPlant extends Comparable<IAgriCraftPlant> {
 	 * @param crop the ICrop instance of the TileEntity (is the same object as
 	 * the TileEntity, but is for convenience)
 	 */
-	void onValidate(World world, BlockPos pos, ICrop crop);
+	void onValidate(World world, BlockPos pos, IAgriCrop crop);
 
 	/**
 	 * Called when the TileEntity with this plant has its invalidate() method
@@ -145,7 +148,7 @@ public interface IAgriCraftPlant extends Comparable<IAgriCraftPlant> {
 	 * @param crop the ICrop instance of the TileEntity (is the same object as
 	 * the TileEntity, but is for convenience)
 	 */
-	void onInvalidate(World world, BlockPos pos, ICrop crop);
+	void onInvalidate(World world, BlockPos pos, IAgriCrop crop);
 
 	/**
 	 * Called when the TileEntity with this plant has its onChunkUnload() method
@@ -156,7 +159,7 @@ public interface IAgriCraftPlant extends Comparable<IAgriCraftPlant> {
 	 * @param crop the ICrop instance of the TileEntity (is the same object as
 	 * the TileEntity, but is for convenience)
 	 */
-	void onChunkUnload(World world, BlockPos pos, ICrop crop);
+	void onChunkUnload(World world, BlockPos pos, IAgriCrop crop);
 
 	/**
 	 * Gets the growth requirement for this plant, this is used to check if the
@@ -170,7 +173,7 @@ public interface IAgriCraftPlant extends Comparable<IAgriCraftPlant> {
 	 */
 	IGrowthRequirement getGrowthRequirement();
 
-	List<IMutation> getDefaultMutations();
+	List<IAgriMutation> getDefaultMutations();
 
 	/**
 	 * When a growth thick is allowed for this plant
@@ -226,7 +229,7 @@ public interface IAgriCraftPlant extends Comparable<IAgriCraftPlant> {
 	List<BakedQuad> renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage, Function<ResourceLocation, TextureAtlasSprite> textureToIcon);
 
 	@Override
-	default int compareTo(IAgriCraftPlant plant) {
+	default int compareTo(IAgriPlant plant) {
 		ItemStack seedThis = this.getSeed();
 		ItemStack seedOther = plant.getSeed();
 		int idThis = seedThis == null ? 0 : Item.getIdFromItem(seedThis.getItem());

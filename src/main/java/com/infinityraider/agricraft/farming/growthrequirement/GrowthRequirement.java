@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
 import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
-import com.infinityraider.agricraft.api.v3.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v3.ISoilContainer;
-import com.infinityraider.agricraft.api.v3.RequirementType;
+import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v3.misc.ISoilContainer;
+import com.infinityraider.agricraft.api.v3.requirment.RequirementType;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

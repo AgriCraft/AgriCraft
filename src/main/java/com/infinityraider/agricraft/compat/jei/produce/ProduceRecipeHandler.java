@@ -7,18 +7,18 @@ import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 /**
  *
  * @author RlonRyan
  */
-public class ProduceRecipeHandler implements IRecipeHandler<IAgriCraftPlant> {
+public class ProduceRecipeHandler implements IRecipeHandler<IAgriPlant> {
 
 	@Nonnull
 	@Override
-	public Class<IAgriCraftPlant> getRecipeClass() {
-		return IAgriCraftPlant.class;
+	public Class<IAgriPlant> getRecipeClass() {
+		return IAgriPlant.class;
 	}
 
 	@Nonnull
@@ -29,12 +29,12 @@ public class ProduceRecipeHandler implements IRecipeHandler<IAgriCraftPlant> {
 
 	@Nonnull
 	@Override
-	public IRecipeWrapper getRecipeWrapper(@Nonnull IAgriCraftPlant recipe) {
+	public IRecipeWrapper getRecipeWrapper(@Nonnull IAgriPlant recipe) {
 		return new ProduceRecipeWrapper(recipe);
 	}
 
 	@Override
-	public boolean isRecipeValid(@Nonnull IAgriCraftPlant recipe) {
+	public boolean isRecipeValid(@Nonnull IAgriPlant recipe) {
 		return recipe.getAllFruits() != null;
 	}
 

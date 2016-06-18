@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v3.items;
 
-import com.infinityraider.agricraft.api.v3.IAgriCraftStats;
 import net.minecraft.item.ItemStack;
+import com.infinityraider.agricraft.api.v3.core.IAgriStat;
 
 public interface ITrowel {
 
@@ -44,6 +44,6 @@ public interface ITrowel {
 	/**
 	 * Gets the stats from the seed
 	 */
-	IAgriCraftStats getStats(ItemStack trowel);
+	IAgriStat getStats(ItemStack trowel);
 
 }

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 
-import com.infinityraider.agricraft.api.v3.IDebuggable;
+import com.infinityraider.agricraft.api.v3.misc.IDebuggable;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;

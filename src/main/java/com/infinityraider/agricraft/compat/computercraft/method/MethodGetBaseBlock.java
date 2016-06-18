@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.compat.computercraft.method;
 
 import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
 import net.minecraft.item.ItemStack;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 public class MethodGetBaseBlock extends MethodBaseGrowthReq {
     public MethodGetBaseBlock() {
@@ -10,7 +10,7 @@ public class MethodGetBaseBlock extends MethodBaseGrowthReq {
     }
 
     @Override
-    protected Object[] onMethodCalled(IAgriCraftPlant plant) {
+    protected Object[] onMethodCalled(IAgriPlant plant) {
         if(plant==null) {
             return null;
         }

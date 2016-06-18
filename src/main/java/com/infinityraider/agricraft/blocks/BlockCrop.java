@@ -1,11 +1,8 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.api.v3.items.IClipper;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v3.IFertiliser;
 import com.infinityraider.agricraft.api.v3.items.ITrowel;
 import com.infinityraider.agricraft.api.v3.items.IRake;
-import com.infinityraider.agricraft.api.v3.ICrop;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
@@ -47,6 +44,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.core.IAgriFertiliser;
 
 /**
  * The most important block in the mod.
@@ -249,7 +249,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} else if (player.isSneaking() || heldItem == null || heldItem.getItem() == null) {
 				this.harvest(world, pos, state, player, crop);
 			} else if (heldItem.getItem() instanceof ItemAgriCraftSeed && !crop.isCrossCrop() && !crop.hasWeed()) {
-				IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(heldItem);
+				IAgriPlant plant = CropPlantHandler.getPlantFromStack(heldItem);
 				if (plant != null && plant.getGrowthRequirement().canGrow(world, pos)) {
 					crop.setPlant(new PlantStats(), plant);
 					if (!player.capabilities.isCreativeMode) {
@@ -276,8 +276,8 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
 				return !crop.canBonemeal();
 			} //fertiliser
-			else if (heldItem.getItem() instanceof IFertiliser) {
-				IFertiliser fertiliser = (IFertiliser) heldItem.getItem();
+			else if (heldItem.getItem() instanceof IAgriFertiliser) {
+				IAgriFertiliser fertiliser = (IAgriFertiliser) heldItem.getItem();
 				if (crop.allowFertiliser(fertiliser)) {
 					crop.applyFertiliser(fertiliser, world.rand);
 					NetworkWrapper.getInstance().sendToAllAround(
@@ -318,7 +318,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	@Override
 	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
 		if (!world.isRemote) {
-			IAgriCraftPlant plant = ((TileEntityCrop) world.getTileEntity(pos)).getPlant();
+			IAgriPlant plant = ((TileEntityCrop) world.getTileEntity(pos)).getPlant();
 			if (!player.capabilities.isCreativeMode) {
 				//drop items if the player is not in creative
 				this.dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
@@ -678,10 +678,10 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	@Override
 	public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity == null || !(tileEntity instanceof ICrop)) {
+		if (tileEntity == null || !(tileEntity instanceof IAgriCrop)) {
 			return world.getBlockState(pos);
 		}
-		ICrop crop = (ICrop) tileEntity;
+		IAgriCrop crop = (IAgriCrop) tileEntity;
 		if (crop.hasPlant()) {
 			return crop.getPlantBlockState();
 		}

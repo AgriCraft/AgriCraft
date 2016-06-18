@@ -1,5 +1,12 @@
-package com.infinityraider.agricraft.api.v3;
+package com.infinityraider.agricraft.api.v3.requirment;
 
+/**
+ * Status codes for seed planting interactions.
+ * 
+ * This class may be a good idea, but it is currently unused!
+ * 
+ * @author The AgriCraft Team
+ */
 public enum SeedRequirementStatus {
 	/**
 	 * The seed can be planted here.

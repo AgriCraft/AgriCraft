@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v3;
+package com.infinityraider.agricraft.api.v3.core;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public interface IFertiliser {
+public interface IAgriFertiliser {
     /** return true if this fertiliser is allowed to speed up growth of a crop of this tier */
     boolean isFertiliserAllowed(int tier);
 

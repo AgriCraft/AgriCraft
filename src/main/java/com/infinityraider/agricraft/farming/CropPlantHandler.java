@@ -5,23 +5,23 @@ import com.infinityraider.agricraft.farming.cropplant.*;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.v3.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.*;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.utility.StackHelper;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 public class CropPlantHandler {
 
 	/**
 	 * None object to avoid NPE's with block states
 	 */
-	public static final IAgriCraftPlant NONE = CropPlantNone.NONE;
+	public static final IAgriPlant NONE = CropPlantNone.NONE;
 	
 	/**
 	 * NBT plant serialization tag.
@@ -31,12 +31,12 @@ public class CropPlantHandler {
 	/**
 	 * HashMap containing all plants known to AgriCraft
 	 */
-	private static final HashMap<String, IAgriCraftPlant> plants = new HashMap<>();
+	private static final HashMap<String, IAgriPlant> plants = new HashMap<>();
 	/**
 	 * Queue to store plants registered via the API before the cropPlants
 	 * HashMap has been initialized
 	 */
-	private static ArrayList<IAgriCraftPlant> plantsToRegister = new ArrayList<>();
+	private static ArrayList<IAgriPlant> plantsToRegister = new ArrayList<>();
 
 	/**
 	 * Registers the plant into the cropPlants HashMap.
@@ -45,7 +45,7 @@ public class CropPlantHandler {
 	 * @throws DuplicateCropPlantException thrown if the plant has already been
 	 * registered. This could signal a major issue.
 	 */
-	public static void registerPlant(IAgriCraftPlant plant) throws DuplicateCropPlantException {
+	public static void registerPlant(IAgriPlant plant) throws DuplicateCropPlantException {
 		AgriCore.getLogger("AgriCraft").debug("Registering plant: " + plant.getId());
 		if (!plants.containsKey(plant.getId())) {
 			plants.put(plant.getId(), plant);
@@ -70,7 +70,7 @@ public class CropPlantHandler {
 	 *
 	 * @param plant the plant to be registered.
 	 */
-	private static void suppressedRegisterPlant(IAgriCraftPlant plant) {
+	private static void suppressedRegisterPlant(IAgriPlant plant) {
 		try {
 			registerPlant(plant);
 			GrowthRequirementHandler.addSoil(plant.getGrowthRequirement().getSoil());
@@ -86,7 +86,7 @@ public class CropPlantHandler {
 	 *
 	 * @param plant the plant to be registered.
 	 */
-	public static void addCropToRegister(IAgriCraftPlant plant) {
+	public static void addCropToRegister(IAgriPlant plant) {
 		if (plantsToRegister != null) {
 			plantsToRegister.add(plant);
 		}
@@ -114,7 +114,7 @@ public class CropPlantHandler {
 	 * @param plant the plant (or SEED) to write to an NBTTag.
 	 * @return a NBTTagCompound, the serialized representation of the plant.
 	 */
-	public static void writePlantToNBT(NBTTagCompound tag, IAgriCraftPlant plant) {
+	public static void writePlantToNBT(NBTTagCompound tag, IAgriPlant plant) {
 		if (plant != null) {
 			tag.setString(NBT_PLANT_ID, plant.getId());
 		}
@@ -128,7 +128,7 @@ public class CropPlantHandler {
 	 * @param tag the serialized version of the plant.
 	 * @return the deserialized plant.
 	 */
-	public static IAgriCraftPlant readPlantFromNBT(NBTTagCompound tag) {
+	public static IAgriPlant readPlantFromNBT(NBTTagCompound tag) {
 		if (tag != null) {
 			return plants.get(tag.getString(NBT_PLANT_ID));
 		} else {
@@ -143,7 +143,7 @@ public class CropPlantHandler {
 	 * @return the plant in the stack, or null, if the stack does not contain a
 	 * valid plant.
 	 */
-	public static IAgriCraftPlant getPlantFromStack(ItemStack stack) {
+	public static IAgriPlant getPlantFromStack(ItemStack stack) {
 		if (stack != null) {
 			return readPlantFromNBT(stack.getTagCompound());
 		} else {
@@ -152,7 +152,7 @@ public class CropPlantHandler {
 	}
 
 	public static IGrowthRequirement getGrowthRequirement(ItemStack stack) {
-		final IAgriCraftPlant plant = getPlantFromStack(stack);
+		final IAgriPlant plant = getPlantFromStack(stack);
 		return plant == null ? GrowthRequirementHandler.NULL : plant.getGrowthRequirement();
 	}
 
@@ -162,11 +162,11 @@ public class CropPlantHandler {
 	 * @return the registered plants, taken from the internal HashMap, and
 	 * placed into an ArrayList.
 	 */
-	public static List<IAgriCraftPlant> getPlants() {
+	public static List<IAgriPlant> getPlants() {
 		return new ArrayList<>(plants.values());
 	}
 
-	public static IAgriCraftPlant getPlant(String id) {
+	public static IAgriPlant getPlant(String id) {
 		return plants.get(id);
 	}
 
@@ -174,7 +174,7 @@ public class CropPlantHandler {
 		return new ArrayList<>(plants.keySet());
 	}
 
-	public static ItemStack getSeed(IAgriCraftPlant plant) {
+	public static ItemStack getSeed(IAgriPlant plant) {
 		if (plant != null) {
 			ItemStack stack = new ItemStack(AgriCraftItems.seed);
 			NBTTagCompound tag = new NBTTagCompound();
@@ -193,9 +193,9 @@ public class CropPlantHandler {
 	 * @param tier the inclusive tier cap.
 	 * @return the registered plants within the provided range.
 	 */
-	public static List<IAgriCraftPlant> getPlantsUpToTier(int tier) {
-		List<IAgriCraftPlant> result = new ArrayList<>(plants.values().size());
-		for (IAgriCraftPlant plant : plants.values()) {
+	public static List<IAgriPlant> getPlantsUpToTier(int tier) {
+		List<IAgriPlant> result = new ArrayList<>(plants.values().size());
+		for (IAgriPlant plant : plants.values()) {
 			if (plant.getTier() <= tier) {
 				result.add(plant);
 			}
@@ -237,10 +237,10 @@ public class CropPlantHandler {
 	 * @param plants List of plants to grab a random SEED from
 	 * @return an ItemStack containing a random SEED
 	 */
-	public static ItemStack getRandomSeed(Random rand, boolean setTag, List<IAgriCraftPlant> plants) {
+	public static ItemStack getRandomSeed(Random rand, boolean setTag, List<IAgriPlant> plants) {
 		ItemStack seed;
 		do {
-			IAgriCraftPlant plant = plants.get(rand.nextInt(plants.size()));
+			IAgriPlant plant = plants.get(rand.nextInt(plants.size()));
 			seed = plant.getSeed().copy();
 		} while (!StackHelper.isValid(seed));
 		if (setTag) {

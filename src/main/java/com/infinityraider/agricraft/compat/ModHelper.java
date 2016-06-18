@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 public class ModHelper {
 
@@ -44,7 +44,7 @@ public class ModHelper {
 	/**
 	 * @return a list containing all CropPlant objects for this mod
 	 */
-	protected List<IAgriCraftPlant> getCropPlants() {
+	protected List<IAgriPlant> getCropPlants() {
 		return new ArrayList<>();
 	}
 

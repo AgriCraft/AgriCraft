@@ -2,9 +2,9 @@
  */
 package com.infinityraider.agricraft.api.v3.registry;
 
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
 import java.util.List;
 import net.minecraft.item.ItemStack;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
 
 /**
  * An interface for managing AgriCraft plants.
@@ -15,13 +15,13 @@ public interface IPlantRegistry {
 	
 	boolean isPlant(ItemStack seed);
 	
-	boolean isPlant(IAgriCraftPlant plant);
+	boolean isPlant(IAgriPlant plant);
 
-	boolean addPlant(IAgriCraftPlant plant);
+	boolean addPlant(IAgriPlant plant);
 	
-	IAgriCraftPlant getPlant(ItemStack seed);
+	IAgriPlant getPlant(ItemStack seed);
 	
-	List<IAgriCraftPlant> getPlants();
+	List<IAgriPlant> getPlants();
 	
 	List<String> getPlantIds();
 

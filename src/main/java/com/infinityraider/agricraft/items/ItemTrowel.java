@@ -12,8 +12,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import com.infinityraider.agricraft.api.v3.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v3.IAgriCraftStats;
+import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.core.IAgriStat;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
 
@@ -71,7 +71,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 			return null;
 		}
 		NBTTagCompound tag = trowel.getTagCompound();
-		IAgriCraftPlant plant = CropPlantHandler.readPlantFromNBT(tag);
+		IAgriPlant plant = CropPlantHandler.readPlantFromNBT(tag);
 		if (plant == null) {
 			return null;
 		}
@@ -96,7 +96,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 		if (this.hasSeed(trowel)) {
 			return false;
 		}
-		IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(seed);
+		IAgriPlant plant = CropPlantHandler.getPlantFromStack(seed);
 		if (plant == null) {
 			return false;
 		}
@@ -117,7 +117,7 @@ public class ItemTrowel extends ItemBase implements ITrowel {
 	}
 
 	@Override
-	public IAgriCraftStats getStats(ItemStack trowel) {
+	public IAgriStat getStats(ItemStack trowel) {
 		return new PlantStats(getSeed(trowel));
 	}
 
