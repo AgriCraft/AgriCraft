@@ -187,6 +187,31 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		this.data = null;
 		return oldPlant;
 	}
+	
+	// =========================================================================
+	// IStatAcceptor Methods
+	// =========================================================================
+	@Override
+	public boolean acceptsStat(IAgriStat stat) {
+		return true;
+	}
+
+	@Override
+	public boolean setStat(IAgriStat stat) {
+		if (stat != null) {
+			this.stats = stat;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public IAgriStat removeStat() {
+		IAgriStat old = this.stats;
+		this.stats = new PlantStats();
+		return old;
+	}
 
 	/*
 	 * check if the crop is fertile
@@ -238,20 +263,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	 */
 	public boolean allowHarvest(EntityPlayer player) {
 		return hasPlant() && isMature() && plant.onHarvest(worldObj, pos, worldObj.getBlockState(getPos()), player);
-	}
-
-	/*
-	 * returns an ItemStack holding the SEED currently planted, initialized with
-	 * an AgriCraftNBT TAG holding the stats
-	 */
-	@Override
-	public ItemStack getSeedStack() {
-		if (plant == null) {
-			return null;
-		}
-		ItemStack seed = plant.getSeed().copy();
-		this.stats.writeToNBT(seed.getTagCompound());
-		return seed;
 	}
 
 	// =========================================================================
@@ -312,7 +323,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	public void onTrowelUsed(ITrowel trowel, ItemStack trowelStack) {
 		if (this.hasPlant()) {
 			if (!trowel.hasSeed(trowelStack)) {
-				trowel.setSeed(trowelStack, this.getSeedStack(), getGrowthStage());
+				trowel.setSeed(trowelStack, this.getSeed(), getGrowthStage());
 				this.removePlant();
 			}
 		} else if (!this.hasWeed() && !this.crossCrop) {

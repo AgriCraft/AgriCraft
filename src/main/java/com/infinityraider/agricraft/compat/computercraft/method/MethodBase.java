@@ -109,7 +109,7 @@ public abstract class MethodBase implements IMethod {
 			if (!hasJournal) {
 				throw new MethodException(this, "Journal is missing");
 			}
-			if (!isSeedDiscovered(journal, crop.getSeedStack())) {
+			if (!isSeedDiscovered(journal, crop.getSeed())) {
 				throw new MethodException(this, "No information about this seed in the journal");
 			}
 		}

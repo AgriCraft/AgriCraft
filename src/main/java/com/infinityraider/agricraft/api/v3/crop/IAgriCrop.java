@@ -3,14 +3,14 @@ package com.infinityraider.agricraft.api.v3.crop;
 import com.infinityraider.agricraft.api.v3.fertiliser.IFertilizable;
 import com.infinityraider.agricraft.api.v3.plant.IPlantAcceptor;
 import com.infinityraider.agricraft.api.v3.plant.IPlantProvider;
+import com.infinityraider.agricraft.api.v3.seed.ISeedAcceptor;
+import com.infinityraider.agricraft.api.v3.seed.ISeedProvider;
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nullable;
 import net.minecraft.util.math.BlockPos;
-import com.infinityraider.agricraft.api.v3.stat.IStatProvider;
 import com.infinityraider.agricraft.api.v3.weed.IWeedable;
 
 /**
@@ -19,7 +19,7 @@ import com.infinityraider.agricraft.api.v3.weed.IWeedable;
  * To retrieve the ICrop instance use:
  * {@code API.getCrop(World world, int x, int y, int z)}
  */
-public interface IAgriCrop extends IPlantProvider, IPlantAcceptor, IStatProvider, IWeedable, IFertilizable {
+public interface IAgriCrop extends ISeedProvider, ISeedAcceptor, IWeedable, IFertilizable {
 
 	/**
 	 * Retrieves the location of the crop instance.
@@ -64,19 +64,9 @@ public interface IAgriCrop extends IPlantProvider, IPlantAcceptor, IStatProvider
 	boolean isFertile();
 
 	/**
-	 * @return if bonemeal can be applied to this crop
-	 */
-	boolean canBonemeal();
-
-	/**
 	 * @return if this crop is fully grown
 	 */
 	boolean isMature();
-
-	/**
-	 * @return an ItemStack containing the seed planted on this crop
-	 */
-	ItemStack getSeedStack();
 
 	/**
 	 * Harvests this crop

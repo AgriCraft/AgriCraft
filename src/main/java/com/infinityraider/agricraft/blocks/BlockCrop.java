@@ -358,9 +358,9 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 					if (crop.hasPlant()) {
 						if (crop.isMature()) {
 							drops.addAll(crop.getFruits());
-							drops.add(crop.getSeedStack());
+							drops.add(crop.getSeed());
 						} else if (!AgriCraftConfig.onlyMatureDropSeeds) {
-							drops.add(crop.getSeedStack());
+							drops.add(crop.getSeed());
 						}
 					}
 				}
@@ -497,7 +497,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			return;
 		}
 		ItemStack clipping = new ItemStack(AgriCraftItems.clipping, 1, 0);
-		clipping.setTagCompound(crop.getSeedStack().writeToNBT(new NBTTagCompound()));
+		clipping.setTagCompound(crop.getSeed().writeToNBT(new NBTTagCompound()));
 		spawnAsEntity(world, pos, clipping);
 		world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, growthStage - 1), 3);
 	}
@@ -528,8 +528,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				items.add(new ItemStack(AgriCraftItems.crops, 1));
 			}
 			if (crop.hasPlant()) {
-				ItemStack seedStack = crop.getSeedStack().copy();
-				items.add(seedStack);
+				items.add(crop.getSeed());
 				if (crop.isMature()) {
 					items.addAll(crop.getFruits());
 				}
@@ -563,7 +562,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 					if (crop.isMature()) {
 						drops.addAll(crop.getFruits());
 					}
-					drops.add(crop.getSeedStack());
+					drops.add(crop.getSeed());
 					for (ItemStack drop : drops) {
 						spawnAsEntity(world, pos, drop);
 					}

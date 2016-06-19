@@ -42,12 +42,11 @@ public class ItemMagnifyingGlass extends ItemBase {
             if((block != null) && (block instanceof BlockCrop) && (te != null) &&(te instanceof TileEntityCrop)) {
                 TileEntityCrop crop = (TileEntityCrop) te;
                 if(crop.hasPlant()) {
-                    ItemStack seed = crop.getSeedStack();
-                    String seedName = seed.getItem().getItemStackDisplayName(seed);
+                    ItemStack seed = crop.getSeed();
                     int meta = crop.getGrowthStage();
                     float growthPercentage = ((float) meta)/((float) 7)*100.0F;
                     list.add(I18n.translateToLocal("agricraft_tooltip.cropWithPlant"));
-                    list.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + seedName);
+                    list.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + crop.getPlant().getSeedName());
                     crop.getStat().addStats(list);
                     list.add(I18n.translateToLocal(crop.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
                     if (growthPercentage < 100.0) {

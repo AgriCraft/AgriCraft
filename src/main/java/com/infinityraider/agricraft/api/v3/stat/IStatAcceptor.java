@@ -29,8 +29,8 @@ public interface IStatAcceptor {
 	/**
 	 * Clears the AgriStat associated with the instance.
 	 * 
-	 * @return if the stat was successfully cleared.
+	 * @return the stat removed from the instance, or null.
 	 */
-	boolean clearStat();
+	IAgriStat removeStat();
 	
 }
