@@ -3,7 +3,13 @@ package com.infinityraider.agricraft.api.v1.items;
 import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
-public interface ITrowel {
+/**
+ * An Interface for trowel objects. Likely will be modified, so that the trowel
+ * instead drops something like the clippings. Probably will wind up being a marker interface instead.
+ *
+ * @author RlonRyan
+ */
+public interface ITrowel extends IAgriCraftItem {
 
 	/**
 	 * Return true if this trowel is currently carrying a plant

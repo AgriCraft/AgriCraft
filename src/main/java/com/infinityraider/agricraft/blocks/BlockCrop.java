@@ -248,6 +248,9 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				return false;
 			} else if (player.isSneaking() || heldItem == null || heldItem.getItem() == null) {
 				this.harvest(world, pos, state, player, crop);
+			} else if (heldItem.getItem() instanceof IRake || heldItem.getItem() instanceof IClipper) {
+				// Allow the rake or clipper to do its thing.
+				return false;
 			} else if (heldItem.getItem() instanceof ItemAgriCraftSeed && !crop.isCrossCrop() && !crop.hasWeed()) {
 				IAgriPlant plant = CropPlantHandler.getPlantFromStack(heldItem);
 				if (plant != null && plant.getGrowthRequirement().canGrow(world, pos)) {
@@ -263,16 +266,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} //trowel usage
 			else if (heldItem.getItem() instanceof ITrowel) {
 				crop.onTrowelUsed((ITrowel) heldItem.getItem(), heldItem);
-			} //clipper usage
-			else if (heldItem.getItem() instanceof IClipper) {
-				this.onClipperUsed(world, pos, state, crop);
-				((IClipper) heldItem.getItem()).onClipperUsed(world, pos, state, player);
-			} else if (heldItem.getItem() instanceof IRake) {
-				if (crop.hasPlant()) {
-					return this.upRoot(world, pos);
-				} else if (crop.hasWeed()) {
-					((IRake) heldItem.getItem()).removeWeeds(world, pos, state, crop, heldItem);
-				}
 			} //check to see if the player wants and is allowed to use bonemeal
 			else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
 				return !crop.canBonemeal();
@@ -484,24 +477,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			}
 		}
 		return drops;
-	}
-
-	/**
-	 * Performs the needed action when this crop is clipped: check if there is a
-	 * valid plant, drop a clipping and decrement the GROWTH stage
-	 */
-	public void onClipperUsed(World world, BlockPos pos, IBlockState state, TileEntityCrop crop) {
-		if (!crop.hasPlant()) {
-			return;
-		}
-		int growthStage = state.getValue(AgriCraftProperties.GROWTHSTAGE);
-		if (growthStage <= 0) {
-			return;
-		}
-		ItemStack clipping = new ItemStack(AgriCraftItems.clipping, 1, 0);
-		clipping.setTagCompound(crop.getSeed().writeToNBT(new NBTTagCompound()));
-		spawnAsEntity(world, pos, clipping);
-		world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, growthStage - 1), 3);
 	}
 
 	/**
