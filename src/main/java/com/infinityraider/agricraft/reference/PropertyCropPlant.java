@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 /**
  * A property for having a crop plant.

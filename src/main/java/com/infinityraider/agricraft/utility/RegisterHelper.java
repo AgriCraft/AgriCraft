@@ -18,7 +18,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 // I don't know if final or abstract is better...
 public abstract class RegisterHelper {

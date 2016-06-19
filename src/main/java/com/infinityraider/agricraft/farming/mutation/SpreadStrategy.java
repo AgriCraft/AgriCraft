@@ -4,7 +4,7 @@ package com.infinityraider.agricraft.farming.mutation;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
 
 import java.util.List;
-import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 
 public class SpreadStrategy extends BaseStrategy {
     public SpreadStrategy(MutationEngine mutationEngine) {

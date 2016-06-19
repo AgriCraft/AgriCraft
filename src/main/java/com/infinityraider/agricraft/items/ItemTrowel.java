@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v3.items.ITrowel;
+import com.infinityraider.agricraft.api.v1.items.ITrowel;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
@@ -12,8 +12,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
 

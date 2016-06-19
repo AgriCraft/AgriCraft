@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.compat.computercraft.method;
 
-import com.infinityraider.agricraft.api.v3.items.ITrowel;
+import com.infinityraider.agricraft.api.v1.items.ITrowel;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;

@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
 import static com.infinityraider.agricraft.compat.computercraft.method.MethodUtilities.*;
 
 import java.util.ArrayList;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 public abstract class MethodBaseGrowthReq extends MethodBase {
 	

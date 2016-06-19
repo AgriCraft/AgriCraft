@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.api.v3.items.ITrowel;
+import com.infinityraider.agricraft.api.v1.items.ITrowel;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemJournal;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
 

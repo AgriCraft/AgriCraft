@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v3.items.IJournal;
+import com.infinityraider.agricraft.api.v1.items.IJournal;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 public class ItemJournal extends ItemBase implements IJournal {
 

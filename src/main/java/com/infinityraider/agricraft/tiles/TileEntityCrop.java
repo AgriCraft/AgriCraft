@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.api.v3.misc.IDebuggable;
-import com.infinityraider.agricraft.api.v3.crop.IAdditionalCropData;
-import com.infinityraider.agricraft.api.v3.items.ITrowel;
+import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
+import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
+import com.infinityraider.agricraft.api.v1.items.ITrowel;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
@@ -33,10 +33,10 @@ import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v3.fertiliser.IAgriFertiliser;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.fertiliser.IAgriFertiliser;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable {
 

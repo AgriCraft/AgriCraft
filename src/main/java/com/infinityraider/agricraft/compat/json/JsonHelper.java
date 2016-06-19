@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 
 public class JsonHelper extends ModHelper {
 

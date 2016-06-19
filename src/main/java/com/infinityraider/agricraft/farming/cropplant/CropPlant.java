@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.farming.cropplant;
 
-import com.infinityraider.agricraft.api.v3.render.RenderMethod;
-import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v3.crop.IAdditionalCropData;
+import com.infinityraider.agricraft.api.v1.render.RenderMethod;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
 import com.google.common.base.Function;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
@@ -27,9 +27,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 
 /**
  * The main class used by TileEntityCrop.

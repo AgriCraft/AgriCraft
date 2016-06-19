@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;

@@ -8,7 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-import com.infinityraider.agricraft.api.v3.fertiliser.IAgriFertiliser;
+import com.infinityraider.agricraft.api.v1.fertiliser.IAgriFertiliser;
 
 public class MessageFertiliserApplied extends MessageBase {
     private BlockPos pos;

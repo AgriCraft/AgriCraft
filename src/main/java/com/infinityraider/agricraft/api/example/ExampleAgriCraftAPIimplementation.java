@@ -2,10 +2,10 @@ package com.infinityraider.agricraft.api.example;
 
 import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
-import com.infinityraider.agricraft.api.v3.APIv3;
+import com.infinityraider.agricraft.api.v1.APIv1;
 
 public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrapper {
-    private APIv3 api;
+    private APIv1 api;
     private boolean ok;
 
     /**
@@ -14,8 +14,8 @@ public class ExampleAgriCraftAPIimplementation extends ExampleAgriCraftAPIwrappe
     protected ExampleAgriCraftAPIimplementation() {
         super();
         APIBase apiObj = API.getAPI(1);
-        if(apiObj != null && (apiObj instanceof APIv3)) {
-            api = (APIv3) apiObj;
+        if(apiObj != null && (apiObj instanceof APIv1)) {
+            api = (APIv1) apiObj;
             ok = api.getStatus().isOK();
         } else {
             ok = false;

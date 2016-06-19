@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.api.v3.misc.IDebuggable;
+import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.renderers.RenderUtil;

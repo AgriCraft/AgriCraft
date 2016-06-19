@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.api.v3.items.IClipper;
-import com.infinityraider.agricraft.api.v3.items.ITrowel;
-import com.infinityraider.agricraft.api.v3.items.IRake;
+import com.infinityraider.agricraft.api.v1.items.IClipper;
+import com.infinityraider.agricraft.api.v1.items.ITrowel;
+import com.infinityraider.agricraft.api.v1.items.IRake;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
@@ -44,9 +44,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v3.fertiliser.IAgriFertiliser;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.fertiliser.IAgriFertiliser;
 
 /**
  * The most important block in the mod.

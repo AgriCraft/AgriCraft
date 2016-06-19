@@ -6,10 +6,10 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 
 public abstract class StatCalculatorBase extends StatCalculator {
 

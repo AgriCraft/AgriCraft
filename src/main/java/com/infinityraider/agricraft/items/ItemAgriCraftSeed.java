@@ -15,7 +15,7 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 public class ItemAgriCraftSeed extends ItemBase {
 

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.farming.cropplant;
 
-import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v3.render.RenderMethod;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.render.RenderMethod;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 
 public final class CropPlantNone extends CropPlant {
 	

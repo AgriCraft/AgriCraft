@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
 
 import java.util.ArrayList;
-import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
 public class MethodGetStats extends MethodBase {
 	

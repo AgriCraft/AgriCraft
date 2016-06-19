@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.tiles.storage;
 
-import com.infinityraider.agricraft.api.v3.misc.IDebuggable;
+import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;

@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 
 public abstract class MutationHandler {
 

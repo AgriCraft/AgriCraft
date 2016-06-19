@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.farming.cropplant.*;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,7 +14,7 @@ import java.util.*;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.utility.StackHelper;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 public class CropPlantHandler {
 

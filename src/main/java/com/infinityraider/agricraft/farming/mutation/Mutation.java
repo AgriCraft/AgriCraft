@@ -1,11 +1,11 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.utility.MathHelper;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 
 public class Mutation implements IAgriMutation {
 

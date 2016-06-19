@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.compat.computercraft.method;
 
-import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 public class MethodGetBaseBlockType extends MethodBaseGrowthReq {
     public MethodGetBaseBlockType() {
