@@ -14,7 +14,7 @@ import java.util.*;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.utility.StackHelper;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
 
 public class CropPlantHandler {
 

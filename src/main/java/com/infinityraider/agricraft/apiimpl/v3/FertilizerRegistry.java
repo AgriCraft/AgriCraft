@@ -2,7 +2,7 @@
  */
 package com.infinityraider.agricraft.apiimpl.v3;
 
-import com.infinityraider.agricraft.api.v3.registry.IFertilizerRegistry;
+import com.infinityraider.agricraft.api.v3.fertiliser.IFertilizerRegistry;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import com.infinityraider.agricraft.api.v3.core.IAgriFertiliser;
+import com.infinityraider.agricraft.api.v3.fertiliser.IAgriFertiliser;
 
 /**
  *
@@ -47,7 +47,7 @@ public class FertilizerRegistry implements IFertilizerRegistry {
             if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
                 return crop.canBonemeal();
             } else if (fertilizer.getItem() instanceof IAgriFertiliser) {
-                return crop.allowFertiliser((IAgriFertiliser) fertilizer.getItem());
+                return crop.acceptsFertiliser((IAgriFertiliser) fertilizer.getItem());
             }
         }
         return false;

@@ -2,12 +2,12 @@
  */
 package com.infinityraider.agricraft.apiimpl.v3;
 
-import com.infinityraider.agricraft.api.v3.registry.IPlantRegistry;
+import com.infinityraider.agricraft.api.v3.plant.IPlantRegistry;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
 import java.util.List;
 import net.minecraft.item.ItemStack;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
 
 /**
  *

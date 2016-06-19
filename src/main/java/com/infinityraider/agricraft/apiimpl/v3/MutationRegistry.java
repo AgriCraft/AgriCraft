@@ -3,13 +3,13 @@
 package com.infinityraider.agricraft.apiimpl.v3;
 
 import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v3.registry.IMutationRegistry;
+import com.infinityraider.agricraft.api.v3.mutation.IMutationRegistry;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import java.util.Arrays;
 import java.util.List;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriMutation;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
 
 /**
  *

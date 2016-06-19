@@ -12,8 +12,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriMutation;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
 
 /**
  *

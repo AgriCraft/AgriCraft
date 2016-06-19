@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.List;
 import net.minecraft.item.ItemStack;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
 
 /**
  *

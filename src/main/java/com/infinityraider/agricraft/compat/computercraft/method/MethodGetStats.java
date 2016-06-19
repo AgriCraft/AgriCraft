@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
 
 import java.util.ArrayList;
-import com.infinityraider.agricraft.api.v3.core.IAgriStat;
+import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
 
 public class MethodGetStats extends MethodBase {
 	
@@ -15,10 +15,10 @@ public class MethodGetStats extends MethodBase {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
-        if(!crop.hasPlant() || !crop.getStats().isAnalyzed()) {
+        if(!crop.hasPlant() || !crop.getStat().isAnalyzed()) {
             return null;
         }
-        IAgriStat stats = crop.getStats();
+        IAgriStat stats = crop.getStat();
         return new Object[] {stats.getGrowth(), stats.getGain(), stats.getStrength()};
     }
 

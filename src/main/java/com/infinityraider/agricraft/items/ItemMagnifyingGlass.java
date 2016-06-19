@@ -48,7 +48,7 @@ public class ItemMagnifyingGlass extends ItemBase {
                     float growthPercentage = ((float) meta)/((float) 7)*100.0F;
                     list.add(I18n.translateToLocal("agricraft_tooltip.cropWithPlant"));
                     list.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + seedName);
-                    crop.getStats().addStats(list);
+                    crop.getStat().addStats(list);
                     list.add(I18n.translateToLocal(crop.isFertile()?"agricraft_tooltip.fertile":"agricraft_tooltip.notFertile"));
                     if (growthPercentage < 100.0) {
                         list.add(String.format("Growth : %.0f %%", growthPercentage));

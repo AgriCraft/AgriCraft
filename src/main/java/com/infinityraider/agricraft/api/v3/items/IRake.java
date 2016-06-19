@@ -4,7 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
 
 /**
  * Implement in tools that should have rake functionality

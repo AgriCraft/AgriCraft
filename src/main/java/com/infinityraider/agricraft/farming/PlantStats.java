@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.utility.MathHelper;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.item.ItemStack;
-import com.infinityraider.agricraft.api.v3.core.IAgriStat;
+import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
 
 public class PlantStats implements IAgriStat {
 	

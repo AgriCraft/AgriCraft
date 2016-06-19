@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.

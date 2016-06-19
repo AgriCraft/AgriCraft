@@ -1,6 +1,6 @@
 /*
  */
-package com.infinityraider.agricraft.api.v3.registry;
+package com.infinityraider.agricraft.api.v3.fertiliser;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;

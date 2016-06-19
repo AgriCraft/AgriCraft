@@ -1,7 +1,7 @@
-package com.infinityraider.agricraft.api.v3.core;
+package com.infinityraider.agricraft.api.v3.mutation;
 
 import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
 
 /**
  * An interface representing a mutation, which is a relation between parents and

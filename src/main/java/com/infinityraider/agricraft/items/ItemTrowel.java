@@ -12,8 +12,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriStat;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
 
 public class ItemTrowel extends ItemBase implements ITrowel {
 

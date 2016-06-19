@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
 
 public class ItemJournal extends ItemBase implements IJournal {
 

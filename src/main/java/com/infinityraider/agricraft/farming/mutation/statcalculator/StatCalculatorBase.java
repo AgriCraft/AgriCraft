@@ -6,10 +6,10 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriStat;
-import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
-import com.infinityraider.agricraft.api.v3.core.IAgriMutation;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
 
 public abstract class StatCalculatorBase extends StatCalculator {
 
@@ -31,9 +31,9 @@ public abstract class StatCalculatorBase extends StatCalculator {
 			//0 : if neighbour is a non-parent crop, and non parent crops affect stat gain negatively, multiplier is 0 (0 will reduce the average)
 			//1 : if neighbour is parent crop, multiplier is 1
 			int multiplier = canInherit ? 1 : (AgriCraftConfig.otherCropsAffectStatsNegatively ? 0 : -1);
-			growth[i] = multiplier * parents[i].getStats().getGrowth();
-			gain[i] = multiplier * parents[i].getStats().getGain();
-			strength[i] = multiplier * parents[i].getStats().getStrength();
+			growth[i] = multiplier * parents[i].getStat().getGrowth();
+			gain[i] = multiplier * parents[i].getStat().getGain();
+			strength[i] = multiplier * parents[i].getStat().getStrength();
 		}
 		int meanGrowth = getMeanIgnoringNegativeValues(growth);
 		int meanGain = getMeanIgnoringNegativeValues(gain);

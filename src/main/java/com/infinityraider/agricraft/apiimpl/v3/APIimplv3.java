@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.apiimpl.v3;
 
-import com.infinityraider.agricraft.api.v3.registry.IPlantRegistry;
+import com.infinityraider.agricraft.api.v3.plant.IPlantRegistry;
 import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
-import com.infinityraider.agricraft.api.v3.registry.IMutationRegistry;
+import com.infinityraider.agricraft.api.v3.mutation.IMutationRegistry;
 import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v3.misc.IStatCalculator;
+import com.infinityraider.agricraft.api.v3.stat.IStatCalculator;
 import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirementBuilder;
 import com.infinityraider.agricraft.api.v3.items.IJournal;
 import com.infinityraider.agricraft.api.API;
@@ -28,10 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v3.APIv3;
-import com.infinityraider.agricraft.api.v3.registry.IFertilizerRegistry;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriStat;
-import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.fertiliser.IFertilizerRegistry;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
 
 public class APIimplv3 implements APIv3 {
 	
@@ -132,7 +132,7 @@ public class APIimplv3 implements APIv3 {
             TileEntityCrop crop = (TileEntityCrop) te;
             if(crop.allowHarvest(null)) {
                 crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
-                return crop.getPlant().getFruitsOnHarvest(crop.getStats().getGain(), world.rand);
+                return crop.getPlant().getFruitsOnHarvest(crop.getStat().getGain(), world.rand);
             }
         }
         return null;

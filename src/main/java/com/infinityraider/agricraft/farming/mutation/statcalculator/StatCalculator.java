@@ -1,13 +1,13 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
-import com.infinityraider.agricraft.api.v3.misc.IStatCalculator;
+import com.infinityraider.agricraft.api.v3.stat.IStatCalculator;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 
 import java.util.List;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriStat;
-import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
 
 public abstract class StatCalculator implements IStatCalculator {
     private static IStatCalculator instance;

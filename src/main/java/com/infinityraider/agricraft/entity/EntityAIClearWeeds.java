@@ -7,8 +7,10 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class EntityAIClearWeeds extends EntityAIBase {
+	
     private static final int range = 8;
     private EntityVillagerFarmer villager;
     private ArrayList<TileEntityCrop> weedsToClear;

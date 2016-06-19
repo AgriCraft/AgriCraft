@@ -4,10 +4,10 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriStat;
-import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
-import com.infinityraider.agricraft.api.v3.core.IAgriMutation;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
 
 /**
  * Represents the result of a specific <code>INewSeedStrategy</code> containing

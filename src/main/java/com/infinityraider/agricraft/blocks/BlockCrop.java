@@ -44,9 +44,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
-import com.infinityraider.agricraft.api.v3.core.IAgriFertiliser;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.fertiliser.IAgriFertiliser;
 
 /**
  * The most important block in the mod.
@@ -113,32 +113,31 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 * Randomly called to apply GROWTH ticks
 	 */
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rnd) {
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 		if (crop.hasPlant() || crop.hasWeed()) {
-			if (CompatibilityHandler.getInstance().allowGrowthTick(world, pos, this, crop, rnd)) {
+			if (CompatibilityHandler.getInstance().allowGrowthTick(world, pos, this, crop, rand)) {
 				if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds) {
-					crop.spreadWeed();
+					crop.spreadWeed(rand);
 				} else if (crop.isFertile()) {
 					//multiplier from GROWTH stat
-					double growthBonus = 1.0 + crop.getStats().getGrowth() / 10.0;
+					double growthBonus = 1.0 + crop.getStat().getGrowth() / 10.0;
 					//multiplier defined in the config
 					float global = AgriCraftConfig.growthMultiplier;
 					//crop dependent base GROWTH rate
 					float growthRate = (float) crop.getGrowthRate();
 					//determine if GROWTH tick should be applied or skipped
-					boolean shouldGrow = (rnd.nextDouble() <= (growthRate * growthBonus * global) / 100);
+					boolean shouldGrow = (rand.nextDouble() <= (growthRate * growthBonus * global) / 100);
 					if (shouldGrow) {
 						crop.applyGrowthTick();
 					}
 				}
 			}
-		} else //15% chance to spawn weeds
-		 if (AgriCraftConfig.enableWeeds && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
-				crop.spawnWeed();
-			} else if (crop.isCrossCrop()) {
-				crop.crossOver();
-			}
+		} else if (AgriCraftConfig.enableWeeds) {
+			crop.spawnWeed(rand);
+		} else if (crop.isCrossCrop() && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
+			crop.crossOver();
+		}
 	}
 
 	/**
@@ -219,7 +218,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				return false;
 			}
 			//get AgriCraftNBT data from the seeds
-			crop.setPlant(new PlantStats(stack), stack.getItem(), stack.getItemDamage());
+			crop.setPlant(new PlantStats(stack), CropPlantHandler.getPlantFromStack(stack));
 			return true;
 		}
 		return false;
@@ -278,7 +277,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} //fertiliser
 			else if (heldItem.getItem() instanceof IAgriFertiliser) {
 				IAgriFertiliser fertiliser = (IAgriFertiliser) heldItem.getItem();
-				if (crop.allowFertiliser(fertiliser)) {
+				if (crop.acceptsFertiliser(fertiliser)) {
 					crop.applyFertiliser(fertiliser, world.rand);
 					NetworkWrapper.getInstance().sendToAllAround(
 							new MessageFertiliserApplied(heldItem, pos),
@@ -569,7 +568,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 						spawnAsEntity(world, pos, drop);
 					}
 				}
-				crop.clearPlant();
+				crop.removePlant();
 			}
 		}
 		return false;
@@ -682,9 +681,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			return world.getBlockState(pos);
 		}
 		IAgriCrop crop = (IAgriCrop) tileEntity;
-		if (crop.hasPlant()) {
-			return crop.getPlantBlockState();
-		}
 		return world.getBlockState(pos);
 	}
 

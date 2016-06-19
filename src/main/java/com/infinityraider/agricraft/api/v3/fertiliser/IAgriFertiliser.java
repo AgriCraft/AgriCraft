@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v3.core;
+package com.infinityraider.agricraft.api.v3.fertiliser;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

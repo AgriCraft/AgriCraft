@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v3.items;
 
 import net.minecraft.item.ItemStack;
-import com.infinityraider.agricraft.api.v3.core.IAgriStat;
+import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
 
 public interface ITrowel {
 

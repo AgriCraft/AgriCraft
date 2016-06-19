@@ -1,9 +1,9 @@
-package com.infinityraider.agricraft.api.v3.misc;
+package com.infinityraider.agricraft.api.v3.stat;
 
 
-import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriStat;
+import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
 import java.util.List;
 
 /**

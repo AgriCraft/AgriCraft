@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v3.core;
+package com.infinityraider.agricraft.api.v3.stat;
 
 import java.util.List;
 import javax.annotation.Nonnull;

@@ -1,12 +1,12 @@
 /*
  */
-package com.infinityraider.agricraft.api.v3.registry;
+package com.infinityraider.agricraft.api.v3.mutation;
 
 import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
 import java.util.List;
 import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriMutation;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
 
 /**
  * An interface for managing mutations.

@@ -1,10 +1,10 @@
 /*
  */
-package com.infinityraider.agricraft.api.v3.registry;
+package com.infinityraider.agricraft.api.v3.plant;
 
 import java.util.List;
 import net.minecraft.item.ItemStack;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
 
 /**
  * An interface for managing AgriCraft plants.

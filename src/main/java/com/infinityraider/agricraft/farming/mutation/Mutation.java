@@ -4,8 +4,8 @@ import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.utility.MathHelper;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriMutation;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
 
 public class Mutation implements IAgriMutation {
 

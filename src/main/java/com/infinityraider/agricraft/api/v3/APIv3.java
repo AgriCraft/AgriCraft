@@ -1,16 +1,16 @@
 package com.infinityraider.agricraft.api.v3;
 
-import com.infinityraider.agricraft.api.v3.misc.IStatCalculator;
+import com.infinityraider.agricraft.api.v3.stat.IStatCalculator;
 import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirementBuilder;
-import com.infinityraider.agricraft.api.v3.core.IAgriCrop;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
-import com.infinityraider.agricraft.api.v3.core.IAgriStat;
+import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
-import com.infinityraider.agricraft.api.v3.registry.IMutationRegistry;
-import com.infinityraider.agricraft.api.v3.registry.IPlantRegistry;
+import com.infinityraider.agricraft.api.v3.mutation.IMutationRegistry;
+import com.infinityraider.agricraft.api.v3.plant.IPlantRegistry;
 import com.infinityraider.agricraft.api.APIBase;
-import com.infinityraider.agricraft.api.v3.registry.IFertilizerRegistry;
+import com.infinityraider.agricraft.api.v3.fertiliser.IFertilizerRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

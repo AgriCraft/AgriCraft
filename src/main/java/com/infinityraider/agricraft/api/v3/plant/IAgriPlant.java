@@ -1,7 +1,9 @@
-package com.infinityraider.agricraft.api.v3.core;
+package com.infinityraider.agricraft.api.v3.plant;
 
+import com.infinityraider.agricraft.api.v3.mutation.IAgriMutation;
 import com.google.common.base.Function;
-import com.infinityraider.agricraft.api.v3.misc.IAdditionalCropData;
+import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.api.v3.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v3.render.RenderMethod;
 import net.minecraft.block.Block;

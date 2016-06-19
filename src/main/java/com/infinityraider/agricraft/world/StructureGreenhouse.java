@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.api.v3.core.IAgriPlant;
+import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	//structure dimensions
@@ -212,8 +212,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 									(int) Math.ceil(Math.random() * 7),
 									(int) Math.ceil(Math.random() * 7),
 									false),
-							seed.getItem(),
-							seed.getItemDamage()
+							CropPlantHandler.getPlantFromStack(seed)
 					);
 				}
 			}

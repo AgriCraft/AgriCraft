@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v3.misc;
+package com.infinityraider.agricraft.api.v3.crop;
 
 import net.minecraft.nbt.NBTTagCompound;
 
