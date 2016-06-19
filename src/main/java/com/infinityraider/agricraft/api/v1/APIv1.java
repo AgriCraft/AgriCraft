@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
-import com.infinityraider.agricraft.api.v1.fertiliser.IFertiliserRegistry;
+import com.infinityraider.agricraft.api.v1.fertilizer.IFertilizerRegistry;
 
 /**
  * AgriCraft API.
@@ -61,11 +61,11 @@ public interface APIv1 extends APIBase {
 	IPlantRegistry getPlantRegistry();
 	
 	/**
-	 * Retrieves the fertiliser registry for managing plants.
+	 * Retrieves the fertilizer registry for managing plants.
 	 *
 	 * @return the instance of IFertilizerRegistry associated with this mod.
 	 */
-	IFertiliserRegistry getFertiliserRegistry();
+	IFertilizerRegistry getFertilizerRegistry();
 
 	/**
 	 * Checks if AgriCraft is configured to prevent the given seed to be used in

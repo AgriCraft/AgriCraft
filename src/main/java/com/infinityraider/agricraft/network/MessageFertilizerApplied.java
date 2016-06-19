@@ -8,20 +8,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-import com.infinityraider.agricraft.api.v1.fertiliser.IAgriFertiliser;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 
-public class MessageFertiliserApplied extends MessageBase {
+public class MessageFertilizerApplied extends MessageBase {
     private BlockPos pos;
-    private Item fertiliser;
+    private Item fertilizer;
     private int meta;
 
     @SuppressWarnings("unused")
-    public MessageFertiliserApplied() {}
+    public MessageFertilizerApplied() {}
 
-    public MessageFertiliserApplied(ItemStack fertiliser, BlockPos pos) {
+    public MessageFertilizerApplied(ItemStack fertilizer, BlockPos pos) {
         this.pos = pos;
-        this.fertiliser = fertiliser.getItem();
-        this.meta = fertiliser.getItemDamage();
+        this.fertilizer = fertilizer.getItem();
+        this.meta = fertilizer.getItemDamage();
     }
 
     @Override
@@ -31,8 +31,8 @@ public class MessageFertiliserApplied extends MessageBase {
 
     @Override
     protected void processMessage(MessageContext ctx) {
-        if(this.fertiliser!=null && this.fertiliser instanceof IAgriFertiliser) {
-            ((IAgriFertiliser) this.fertiliser).performClientAnimations(this.meta, Minecraft.getMinecraft().thePlayer.worldObj, this.pos);
+        if(this.fertilizer!=null && this.fertilizer instanceof IAgriFertilizer) {
+            ((IAgriFertilizer) this.fertilizer).performClientAnimations(this.meta, Minecraft.getMinecraft().thePlayer.worldObj, this.pos);
         }
     }
 
@@ -44,14 +44,14 @@ public class MessageFertiliserApplied extends MessageBase {
     @Override
     public void fromBytes(ByteBuf buf) {
         this.pos = readBlockPosFromByteBuf(buf);
-        this.fertiliser = this.readItemFromByteBuf(buf);
+        this.fertilizer = this.readItemFromByteBuf(buf);
         this.meta = buf.readInt();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         this.writeBlockPosToByteBuf(buf, pos);
-        this.writeItemToByteBuf(this.fertiliser, buf);
+        this.writeItemToByteBuf(this.fertilizer, buf);
         buf.writeInt(this.meta);
     }
 }

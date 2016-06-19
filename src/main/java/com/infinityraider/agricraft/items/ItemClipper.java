@@ -3,8 +3,6 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.items.IClipper;
 import com.infinityraider.agricraft.init.AgriCraftItems;
-import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;

@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 import com.infinityraider.agricraft.items.ItemDebugger;
-import com.infinityraider.agricraft.network.MessageFertiliserApplied;
+import com.infinityraider.agricraft.network.MessageFertilizerApplied;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
@@ -27,7 +27,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -46,7 +45,7 @@ import java.util.*;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.fertiliser.IAgriFertiliser;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 
 /**
  * The most important block in the mod.
@@ -269,13 +268,13 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} //check to see if the player wants and is allowed to use bonemeal
 			else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
 				return !crop.canBonemeal();
-			} //fertiliser
-			else if (heldItem.getItem() instanceof IAgriFertiliser) {
-				IAgriFertiliser fertiliser = (IAgriFertiliser) heldItem.getItem();
-				if (crop.acceptsFertiliser(fertiliser)) {
-					crop.applyFertiliser(fertiliser, world.rand);
+			} //fertilizer
+			else if (heldItem.getItem() instanceof IAgriFertilizer) {
+				IAgriFertilizer fertilizer = (IAgriFertilizer) heldItem.getItem();
+				if (crop.acceptsFertilizer(fertilizer)) {
+					crop.applyFertilizer(fertilizer, world.rand);
 					NetworkWrapper.getInstance().sendToAllAround(
-							new MessageFertiliserApplied(heldItem, pos),
+							new MessageFertilizerApplied(heldItem, pos),
 							new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
 					if (!player.capabilities.isCreativeMode) {
 						heldItem.stackSize = heldItem.stackSize - 1;

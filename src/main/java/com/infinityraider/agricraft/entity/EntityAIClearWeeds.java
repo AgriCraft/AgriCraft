@@ -7,7 +7,6 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 public class EntityAIClearWeeds extends EntityAIBase {
 	

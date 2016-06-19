@@ -36,7 +36,7 @@ import javax.annotation.Nonnull;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.fertiliser.IAgriFertiliser;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable {
 
@@ -313,24 +313,24 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	// IFertilizable Methods
 	// =========================================================================
 	@Override
-	public boolean acceptsFertiliser(IAgriFertiliser fertiliser) {
+	public boolean acceptsFertilizer(IAgriFertilizer fertilizer) {
 		if (this.crossCrop) {
-			return AgriCraftConfig.bonemealMutation && fertiliser.canTriggerMutation();
+			return AgriCraftConfig.bonemealMutation && fertilizer.canTriggerMutation();
 		}
 		if (this.hasWeed()) {
 			return true;
 		}
 		if (this.hasPlant()) {
-			return fertiliser.isFertiliserAllowed(plant.getTier());
+			return fertilizer.isFertilizerAllowed(plant.getTier());
 		}
 		return false;
 	}
 
-	//when fertiliser is applied
+	//when fertilizer is applied
 	@Override
-	public boolean applyFertiliser(IAgriFertiliser fertiliser, Random rand) {
-		if (fertiliser.hasSpecialBehaviour()) {
-			fertiliser.onFertiliserApplied(getWorld(), getPos(), rand);
+	public boolean applyFertilizer(IAgriFertilizer fertilizer, Random rand) {
+		if (fertilizer.hasSpecialBehaviour()) {
+			fertilizer.onFertilizerApplied(getWorld(), getPos(), rand);
 			return true;
 		}
 		if (this.hasPlant() || this.hasWeed()) {

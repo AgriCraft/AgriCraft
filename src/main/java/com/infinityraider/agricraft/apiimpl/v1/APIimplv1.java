@@ -30,8 +30,8 @@ import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.fertiliser.IFertiliserRegistry;
 import com.infinityraider.agricraft.api.v1.APIv1;
+import com.infinityraider.agricraft.api.v1.fertilizer.IFertilizerRegistry;
 
 public class APIimplv1 implements APIv1 {
 	
@@ -40,13 +40,13 @@ public class APIimplv1 implements APIv1 {
     private final APIStatus status;
 	private final IMutationRegistry mutationRegistry;
 	private final IPlantRegistry plantRegistry;
-	private final IFertiliserRegistry fertiliserRegistry;
+	private final IFertilizerRegistry fertilizerRegistry;
 
     public APIimplv1(APIStatus status) {
         this.status = status;
 		this.mutationRegistry = new MutationRegistry();
 		this.plantRegistry = new PlantRegistry();
-		this.fertiliserRegistry = new FertilizerRegistry();
+		this.fertilizerRegistry = new FertilizerRegistry();
     }
 
     @Override
@@ -84,8 +84,8 @@ public class APIimplv1 implements APIv1 {
 	}
 
 	@Override
-	public IFertiliserRegistry getFertiliserRegistry() {
-		return fertiliserRegistry;
+	public IFertilizerRegistry getFertilizerRegistry() {
+		return fertilizerRegistry;
 	}
 
     @Override

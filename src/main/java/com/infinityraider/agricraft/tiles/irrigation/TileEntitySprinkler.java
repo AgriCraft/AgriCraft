@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
-import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationAcceptor;
 import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.blocks.BlockWaterChannel;
 import com.infinityraider.agricraft.config.AgriCraftConfig;

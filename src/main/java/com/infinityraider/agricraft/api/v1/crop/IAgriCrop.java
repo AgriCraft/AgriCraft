@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraft.util.math.BlockPos;
 import com.infinityraider.agricraft.api.v1.misc.IWeedable;
-import com.infinityraider.agricraft.api.v1.fertiliser.IFertilisable;
+import com.infinityraider.agricraft.api.v1.fertilizer.IFertilizable;
 
 /**
  * Interface to interact with AgriCraft's crops.
@@ -16,7 +16,7 @@ import com.infinityraider.agricraft.api.v1.fertiliser.IFertilisable;
  * To retrieve the ICrop instance use:
  * {@code API.getCrop(World world, int x, int y, int z)}
  */
-public interface IAgriCrop extends ISeedProvider, ISeedAcceptor, IWeedable, IFertilisable, IHarvestable {
+public interface IAgriCrop extends ISeedProvider, ISeedAcceptor, IWeedable, IFertilizable, IHarvestable {
 
 	/**
 	 * Retrieves the location of the crop instance.
