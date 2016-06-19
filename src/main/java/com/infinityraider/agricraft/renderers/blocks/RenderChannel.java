@@ -88,7 +88,7 @@ public class RenderChannel<T extends TileEntityChannel> extends RenderBlockCusto
 	}
 
 	protected void drawWater(ITessellator tessellator, TileEntityChannel channel) {
-		if (channel.getFluidLevel() > 0) {
+		if (channel.getFluidAmount(0) > 0) {
 			renderCallCounter.incrementAndGet();
 		} else {
 			return;

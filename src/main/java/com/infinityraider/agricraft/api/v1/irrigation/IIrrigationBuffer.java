@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.tiles.irrigation;
+package com.infinityraider.agricraft.api.v1.irrigation;
 
 public interface IIrrigationBuffer extends IIrrigationComponent {
     /**

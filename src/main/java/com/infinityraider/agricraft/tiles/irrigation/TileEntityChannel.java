@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
+import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
+import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
@@ -16,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
@@ -67,7 +70,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	void readChannelNBT(NBTTagCompound tag) {};
 
 	@Override
-	public int getFluidLevel() {
+	public int getFluidAmount(int y) {
 		return this.lvl;
 	}
 
@@ -85,11 +88,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	}
 
 	@Override
-	public int pushFluid(int amount) {
-		if (!worldObj.isRemote && amount >= 0 && this.canAccept()) {
-			int room = this.getCapacity() - this.getFluidLevel();
+	public int acceptFluid(int y, int amount, boolean partial) {
+		if (!worldObj.isRemote && amount >= 0 && this.canAcceptFluid(0, amount, partial)) {
+			int room = this.getCapacity() - this.getFluidAmount(0);
 			if (room >= amount) {
-				this.setFluidLevel(this.getFluidLevel() + amount);
+				this.setFluidLevel(this.getFluidAmount(0) + amount);
 				amount = 0;
 			} else if (room > 0) {
 				this.setFluidLevel(this.getCapacity());
@@ -100,31 +103,17 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	}
 
 	@Override
-	public int pullFluid(int amount) {
-		if (!worldObj.isRemote && amount >= 0 && this.canProvide()) {
-			if (amount <= this.getFluidLevel()) {
-				this.setFluidLevel(this.getFluidLevel() - amount);
-			} else {
-				amount = this.getFluidLevel();
-				this.setFluidLevel(0);
-			}
-		}
-		return amount;
-	}
-
-	@Override
-	public boolean canConnectTo(IIrrigationComponent component) {
+	public boolean canConnectTo(EnumFacing side, IConnectable component) {
 		return (component instanceof TileEntityCustomWood) && this.isSameMaterial((TileEntityCustomWood) component);
 	}
 
 	@Override
-	public boolean canAccept() {
-		return this.lvl < ABSOLUTE_MAX;
-	}
-
-	@Override
-	public boolean canProvide() {
-		return this.lvl > 0;
+	public boolean canAcceptFluid(int y, int amount, boolean partial) {
+		if (this.lvl + amount >= this.getCapacity()) {
+			return true;
+		} else {
+			return partial;
+		}
 	}
 
 	public final void updateNeighbours() {
@@ -135,8 +124,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	}
 
 	@Override
-	public float getFluidHeight() {
-		return getFluidHeight(getFluidLevel());
+	public int getFluidHeight() {
+		return (int)getFluidHeight(getFluidAmount(0));
 	}
 
 	@Override
@@ -152,7 +141,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 				neighbours[i] = null;
 			} else {
 				IIrrigationComponent neighbour = (IIrrigationComponent) te;
-				neighbours[i] = (neighbour.canConnectTo(this) || this.canConnectTo(neighbour)) ? neighbour : null;
+				neighbours[i] = (neighbour.canConnectTo(dir.getEnumFacing().getOpposite(), this) || this.canConnectTo(dir.getEnumFacing().getOpposite(), neighbour)) ? neighbour : null;
 			}
 		}
 		ticksSinceNeighbourCheck = 0;
@@ -188,7 +177,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 			//calculate total fluid lvl and capacity
 			int totalLvl = 0;
 			int nr = 1;
-			int updatedLevel = this.getFluidLevel();
+			int updatedLevel = this.getFluidAmount(0);
 			for (IIrrigationComponent component : neighbours) {
 				if (component == null) {
 					continue;
@@ -207,7 +196,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 					float y_t = tank.getFluidHeight();           //initial tank water Y1
 					float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum Y1 of the channel
 					float y2 = (float) MAX + Constants.WHOLE * Y;  //maximum Y1 of the channel
-					int V_tot = tank.getFluidLevel() + updatedLevel;
+					int V_tot = tank.getFluidAmount(0) + updatedLevel;
 					if (y_c != y_t) {
 						//total volume is below the channel connection
 						if (y_t <= y1) {
@@ -284,7 +273,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	public void addDebugInfo(List<String> list) {
 		list.add("CHANNEL:");
 		super.addDebugInfo(list);
-		list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + ABSOLUTE_MAX);
+		list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
 		list.add("  - FluidHeight: " + this.getFluidHeight());
 		list.add("  - Connections: ");
 		for (AgriForgeDirection dir : VALID_DIRECTIONS) {
@@ -300,6 +289,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	public void addWailaInformation(List information) {
 		//Required call to super.
 		super.addWailaInformation(information);
-		information.add(I18n.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidLevel() + "/" + ABSOLUTE_MAX);
+		information.add(I18n.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
 	}
 }
