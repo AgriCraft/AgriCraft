@@ -61,11 +61,11 @@ public interface APIv3 extends APIBase {
 	IPlantRegistry getPlantRegistry();
 	
 	/**
-	 * Retrieves the fertilizer registry for managing plants.
+	 * Retrieves the fertiliser registry for managing plants.
 	 *
 	 * @return the instance of IFertilizerRegistry associated with this mod.
 	 */
-	IFertiliserRegistry getFertilizerRegistry();
+	IFertiliserRegistry getFertiliserRegistry();
 
 	/**
 	 * Checks if AgriCraft is configured to prevent the given seed to be used in

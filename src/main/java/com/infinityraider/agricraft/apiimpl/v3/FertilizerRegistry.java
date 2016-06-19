@@ -23,49 +23,49 @@ public class FertilizerRegistry implements IFertiliserRegistry {
 	private static Random rand = new Random();
 
 	@Override
-    public boolean isSupportedFertiliser(ItemStack fertilizer) {
-        if (fertilizer == null || fertilizer.getItem() == null) {
+    public boolean isSupportedFertiliser(ItemStack fertiliser) {
+        if (fertiliser == null || fertiliser.getItem() == null) {
             return false;
         }
-        if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
+        if (fertiliser.getItem() == net.minecraft.init.Items.dye && fertiliser.getItemDamage() == 15) {
             return true;
         }
-        if (fertilizer.getItem() instanceof IAgriFertiliser) {
+        if (fertiliser.getItem() instanceof IAgriFertiliser) {
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean isValidFertiliser(World world, BlockPos pos, ItemStack fertilizer) {
-        if (fertilizer == null || fertilizer.getItem() == null) {
+    public boolean isValidFertiliser(World world, BlockPos pos, ItemStack fertiliser) {
+        if (fertiliser == null || fertiliser.getItem() == null) {
             return false;
         }
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
-            if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
+            if (fertiliser.getItem() == net.minecraft.init.Items.dye && fertiliser.getItemDamage() == 15) {
                 return crop.canBonemeal();
-            } else if (fertilizer.getItem() instanceof IAgriFertiliser) {
-                return crop.acceptsFertiliser((IAgriFertiliser) fertilizer.getItem());
+            } else if (fertiliser.getItem() instanceof IAgriFertiliser) {
+                return crop.acceptsFertiliser((IAgriFertiliser) fertiliser.getItem());
             }
         }
         return false;
     }
 
     @Override
-    public boolean applyFertiliser(World world, BlockPos pos, IBlockState state, ItemStack fertilizer) {
-        if (world.isRemote || !isValidFertiliser(world, pos, fertilizer)) {
+    public boolean applyFertiliser(World world, BlockPos pos, IBlockState state, ItemStack fertiliser) {
+        if (world.isRemote || !isValidFertiliser(world, pos, fertiliser)) {
             return false;
         }
-        if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
+        if (fertiliser.getItem() == net.minecraft.init.Items.dye && fertiliser.getItemDamage() == 15) {
             ((BlockCrop) AgriCraftBlocks.blockCrop).grow(world, rand, pos, state);
-            fertilizer.stackSize--;
+            fertiliser.stackSize--;
             world.playAuxSFX(2005, pos, 0);
             return true;
-        } else if (fertilizer.getItem() instanceof IAgriFertiliser) {
-            ((TileEntityCrop) world.getTileEntity(pos)).applyFertiliser((IAgriFertiliser) fertilizer.getItem(), world.rand);
-            fertilizer.stackSize--;
+        } else if (fertiliser.getItem() instanceof IAgriFertiliser) {
+            ((TileEntityCrop) world.getTileEntity(pos)).applyFertiliser((IAgriFertiliser) fertiliser.getItem(), world.rand);
+            fertiliser.stackSize--;
             world.playAuxSFX(2005, pos, 0);
             return true;
         }

@@ -40,13 +40,13 @@ public class APIimplv3 implements APIv3 {
     private final APIStatus status;
 	private final IMutationRegistry mutationRegistry;
 	private final IPlantRegistry plantRegistry;
-	private final IFertiliserRegistry fertilizerRegistry;
+	private final IFertiliserRegistry fertiliserRegistry;
 
     public APIimplv3(APIStatus status) {
         this.status = status;
 		this.mutationRegistry = new MutationRegistry();
 		this.plantRegistry = new PlantRegistry();
-		this.fertilizerRegistry = new FertilizerRegistry();
+		this.fertiliserRegistry = new FertilizerRegistry();
     }
 
     @Override
@@ -84,8 +84,8 @@ public class APIimplv3 implements APIv3 {
 	}
 
 	@Override
-	public IFertiliserRegistry getFertilizerRegistry() {
-		return fertilizerRegistry;
+	public IFertiliserRegistry getFertiliserRegistry() {
+		return fertiliserRegistry;
 	}
 
     @Override
