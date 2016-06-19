@@ -1,17 +1,14 @@
 package com.infinityraider.agricraft.api.v3.crop;
 
-import com.infinityraider.agricraft.api.v3.fertiliser.IFertilizable;
-import com.infinityraider.agricraft.api.v3.plant.IPlantAcceptor;
-import com.infinityraider.agricraft.api.v3.plant.IPlantProvider;
+import com.infinityraider.agricraft.api.v3.misc.IHarvestable;
 import com.infinityraider.agricraft.api.v3.seed.ISeedAcceptor;
 import com.infinityraider.agricraft.api.v3.seed.ISeedProvider;
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-import javax.annotation.Nullable;
 import net.minecraft.util.math.BlockPos;
-import com.infinityraider.agricraft.api.v3.weed.IWeedable;
+import com.infinityraider.agricraft.api.v3.misc.IWeedable;
+import com.infinityraider.agricraft.api.v3.fertiliser.IFertilisable;
 
 /**
  * Interface to interact with AgriCraft's crops.
@@ -19,7 +16,7 @@ import com.infinityraider.agricraft.api.v3.weed.IWeedable;
  * To retrieve the ICrop instance use:
  * {@code API.getCrop(World world, int x, int y, int z)}
  */
-public interface IAgriCrop extends ISeedProvider, ISeedAcceptor, IWeedable, IFertilizable {
+public interface IAgriCrop extends ISeedProvider, ISeedAcceptor, IWeedable, IFertilisable, IHarvestable {
 
 	/**
 	 * Retrieves the location of the crop instance.
@@ -53,12 +50,6 @@ public interface IAgriCrop extends ISeedProvider, ISeedAcceptor, IWeedable, IFer
 	void setCrossCrop(boolean status);
 
 	/**
-	 * @return if a plant can be planted here, meaning the crop is empty and is
-	 * not a cross crop
-	 */
-	boolean canPlant();
-
-	/**
 	 * @return if this crop is fertile and thus can grow
 	 */
 	boolean isFertile();
@@ -67,15 +58,6 @@ public interface IAgriCrop extends ISeedProvider, ISeedAcceptor, IWeedable, IFer
 	 * @return if this crop is fully grown
 	 */
 	boolean isMature();
-
-	/**
-	 * Harvests this crop
-	 *
-	 * @param player the player which harvests the crop, may be null if it is
-	 * harvested by automation
-	 * @return if the harvest was successful
-	 */
-	boolean harvest(@Nullable EntityPlayer player);
 
 	/**
 	 * Utility method to get access to the TileEntity fields and methods for the

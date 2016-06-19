@@ -1,6 +1,6 @@
 /*
  */
-package com.infinityraider.agricraft.api.v3.weed;
+package com.infinityraider.agricraft.api.v3.misc;
 
 import java.util.Random;
 

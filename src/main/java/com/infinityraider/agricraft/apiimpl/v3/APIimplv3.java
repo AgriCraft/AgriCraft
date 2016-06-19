@@ -28,10 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v3.APIv3;
-import com.infinityraider.agricraft.api.v3.fertiliser.IFertilizerRegistry;
 import com.infinityraider.agricraft.api.v3.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v3.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v3.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v3.fertiliser.IFertiliserRegistry;
 
 public class APIimplv3 implements APIv3 {
 	
@@ -40,7 +40,7 @@ public class APIimplv3 implements APIv3 {
     private final APIStatus status;
 	private final IMutationRegistry mutationRegistry;
 	private final IPlantRegistry plantRegistry;
-	private final IFertilizerRegistry fertilizerRegistry;
+	private final IFertiliserRegistry fertilizerRegistry;
 
     public APIimplv3(APIStatus status) {
         this.status = status;
@@ -84,7 +84,7 @@ public class APIimplv3 implements APIv3 {
 	}
 
 	@Override
-	public IFertilizerRegistry getFertilizerRegistry() {
+	public IFertiliserRegistry getFertilizerRegistry() {
 		return fertilizerRegistry;
 	}
 
@@ -130,7 +130,7 @@ public class APIimplv3 implements APIv3 {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
-            if(crop.allowHarvest(null)) {
+            if(crop.canHarvest()) {
                 crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
                 return crop.getPlant().getFruitsOnHarvest(crop.getStat().getGain(), world.rand);
             }

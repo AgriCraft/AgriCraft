@@ -132,29 +132,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		}
 	}
 
-	/*
-	 * check to see if a SEED can be planted
-	 */
-	@Override
-	public boolean canPlant() {
-		return !this.hasPlant() && !this.hasWeed() && !this.isCrossCrop();
-	}
-
-	/*
-	 * sets the plant in the crop
-	 */
-	public void setPlant(@Nonnull IAgriStat stats, IAgriPlant plant) {
-		if (setPlant(plant)) {
-			this.stats = stats;
-		}
-	}
-
 	// =========================================================================
 	// IPlantAcceptor Methods
 	// =========================================================================
 	@Override
 	public boolean acceptsPlant(IAgriPlant plant) {
-		return !this.hasPlant();
+		return plant != null && !this.hasPlant() && !this.hasWeed() && !this.isCrossCrop();
 	}
 
 	@Override
@@ -251,20 +234,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		return getGrowthStage() >= Constants.MATURE;
 	}
 
-	/*
-	 * gets the fruits for this plant
-	 */
-	public List<ItemStack> getFruits() {
-		return plant.getFruitsOnHarvest(stats.getGain(), worldObj.rand);
-	}
-
-	/*
-	 * allow harvesting
-	 */
-	public boolean allowHarvest(EntityPlayer player) {
-		return hasPlant() && isMature() && plant.onHarvest(worldObj, pos, worldObj.getBlockState(getPos()), player);
-	}
-
 	// =========================================================================
 	// IWeedable Methods
 	// =========================================================================
@@ -332,10 +301,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 				int growthStage = trowel.getGrowthStage(trowelStack);
 				NBTTagCompound tag = seed.getTagCompound();
 
-				this.setPlant(
-						stats,
-						CropPlantHandler.getPlantFromStack(seed)
-				);
+				this.setPlant(CropPlantHandler.getPlantFromStack(seed));
 
 				this.setGrowthStage(growthStage);
 				trowel.clearSeed(trowelStack);
@@ -376,12 +342,30 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		}
 		return false;
 	}
-
+	
+	// =========================================================================
+	// IHarvestable methods.
+	// =========================================================================
+	@Override
+	public boolean canHarvest() {
+		return hasPlant() && isMature();
+	}
+	
 	@Override
 	public boolean harvest(@Nullable EntityPlayer player) {
+		// TODO: Correct horrible hack.
+		// This is a terrible, aweful method of doing this.
 		return ((BlockCrop) getWorld().getBlockState(pos).getBlock()).harvest(getWorld(), getPos(), getWorld().getBlockState(getPos()), player, this);
 	}
+	
+	@Override
+	public List<ItemStack> getFruits() {
+		return plant.getFruitsOnHarvest(stats.getGain(), worldObj.rand);
+	}
 
+	// =========================================================================
+	// Other
+	// =========================================================================
 	@Override
 	public TileEntity getTileEntity() {
 		return this;
@@ -469,7 +453,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	 */
 	public void applyCrossOverResult(CrossOverResult result) {
 		crossCrop = false;
-		setPlant(result.getStats(), result.getPlant());
+		this.setSeed(result.toStack());
 	}
 
 	/**

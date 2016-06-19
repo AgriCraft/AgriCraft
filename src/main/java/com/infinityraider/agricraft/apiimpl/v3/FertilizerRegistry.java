@@ -2,7 +2,6 @@
  */
 package com.infinityraider.agricraft.apiimpl.v3;
 
-import com.infinityraider.agricraft.api.v3.fertiliser.IFertilizerRegistry;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
@@ -13,17 +12,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import com.infinityraider.agricraft.api.v3.fertiliser.IAgriFertiliser;
+import com.infinityraider.agricraft.api.v3.fertiliser.IFertiliserRegistry;
 
 /**
  *
  * @author RlonRyan
  */
-public class FertilizerRegistry implements IFertilizerRegistry {
+public class FertilizerRegistry implements IFertiliserRegistry {
 	
 	private static Random rand = new Random();
 
 	@Override
-    public boolean isSupportedFertilizer(ItemStack fertilizer) {
+    public boolean isSupportedFertiliser(ItemStack fertilizer) {
         if (fertilizer == null || fertilizer.getItem() == null) {
             return false;
         }
@@ -37,7 +37,7 @@ public class FertilizerRegistry implements IFertilizerRegistry {
     }
 
     @Override
-    public boolean isValidFertilizer(World world, BlockPos pos, ItemStack fertilizer) {
+    public boolean isValidFertiliser(World world, BlockPos pos, ItemStack fertilizer) {
         if (fertilizer == null || fertilizer.getItem() == null) {
             return false;
         }
@@ -54,8 +54,8 @@ public class FertilizerRegistry implements IFertilizerRegistry {
     }
 
     @Override
-    public boolean applyFertilizer(World world, BlockPos pos, IBlockState state, ItemStack fertilizer) {
-        if (world.isRemote || !isValidFertilizer(world, pos, fertilizer)) {
+    public boolean applyFertiliser(World world, BlockPos pos, IBlockState state, ItemStack fertilizer) {
+        if (world.isRemote || !isValidFertiliser(world, pos, fertilizer)) {
             return false;
         }
         if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {

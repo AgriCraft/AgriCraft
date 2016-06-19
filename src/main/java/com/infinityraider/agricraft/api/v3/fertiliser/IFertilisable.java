@@ -9,7 +9,7 @@ import java.util.Random;
  *
  * @author RlonRyan
  */
-public interface IFertilizable {
+public interface IFertilisable {
 	
 	/**
 	 * Determines if the crop may be fertilized using bonemeal.

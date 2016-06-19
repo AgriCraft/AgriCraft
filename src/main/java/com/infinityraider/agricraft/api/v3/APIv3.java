@@ -10,12 +10,12 @@ import com.infinityraider.agricraft.api.v3.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.v3.mutation.IMutationRegistry;
 import com.infinityraider.agricraft.api.v3.plant.IPlantRegistry;
 import com.infinityraider.agricraft.api.APIBase;
-import com.infinityraider.agricraft.api.v3.fertiliser.IFertilizerRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
+import com.infinityraider.agricraft.api.v3.fertiliser.IFertiliserRegistry;
 
 /**
  * AgriCraft API.
@@ -65,7 +65,7 @@ public interface APIv3 extends APIBase {
 	 *
 	 * @return the instance of IFertilizerRegistry associated with this mod.
 	 */
-	IFertilizerRegistry getFertilizerRegistry();
+	IFertiliserRegistry getFertilizerRegistry();
 
 	/**
 	 * Checks if AgriCraft is configured to prevent the given seed to be used in

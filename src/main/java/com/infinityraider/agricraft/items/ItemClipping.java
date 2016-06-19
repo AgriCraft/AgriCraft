@@ -116,7 +116,7 @@ public class ItemClipping extends ItemBase {
 		if (crop.isCrossCrop()) {
 			blockCrop.harvest(world, pos, state, player, crop);
 		}
-		if (!crop.canPlant()) {
+		if (!crop.acceptsSeed(stack)) {
 			return EnumActionResult.FAIL;
 		}
 		ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());

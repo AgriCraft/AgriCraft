@@ -12,7 +12,7 @@ import net.minecraft.world.World;
  *
  * @author The AgriCraft Team.
  */
-public interface IFertilizerRegistry {
+public interface IFertiliserRegistry {
 
 	/**
 	 * Checks if the given item is any form of supported fertilizer (e.g. bone
@@ -27,7 +27,7 @@ public interface IFertilizerRegistry {
 	 * @return True if AgriCraft knows how to handle the given item as
 	 * fertilizer.
 	 */
-	boolean isSupportedFertilizer(ItemStack fertilizer);
+	boolean isSupportedFertiliser(ItemStack fertilizer);
 
 	/**
 	 * Checks if the given fertilizer is valid for the plant in the crop at the
@@ -39,7 +39,7 @@ public interface IFertilizerRegistry {
 	 * @return True if the item is a valid fertilizer and can be applied, false
 	 * otherwise.
 	 */
-	boolean isValidFertilizer(World world, BlockPos pos, ItemStack fertilizer);
+	boolean isValidFertiliser(World world, BlockPos pos, ItemStack fertilizer);
 
 	/**
 	 * Tries to apply the given fertilizer to the plant in the crop at the given
@@ -58,6 +58,6 @@ public interface IFertilizerRegistry {
 	 * modified on success!
 	 * @return True if the fertilizer was applied successfully, false otherwise.
 	 */
-	boolean applyFertilizer(World world, BlockPos pos, IBlockState state, ItemStack fertilizer);
+	boolean applyFertiliser(World world, BlockPos pos, IBlockState state, ItemStack fertilizer);
 
 }
