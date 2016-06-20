@@ -247,7 +247,11 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				return false;
 			} else if (player.isSneaking() || heldItem == null || heldItem.getItem() == null) {
 				this.harvest(world, pos, state, player, crop);
-			} else if (heldItem.getItem() instanceof IRake || heldItem.getItem() instanceof IClipper) {
+			} else if (
+					heldItem.getItem() instanceof IRake ||
+					heldItem.getItem() instanceof IClipper ||
+					heldItem.getItem() instanceof ItemDebugger
+					) {
 				// Allow the rake or clipper to do its thing.
 				return false;
 			} else if (heldItem.getItem() instanceof ItemAgriCraftSeed && !crop.isCrossCrop() && !crop.hasWeed()) {
@@ -280,9 +284,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 						heldItem.stackSize = heldItem.stackSize - 1;
 					}
 				}
-				return false;
-			} //allow the debugger to be used
-			else if (heldItem.getItem() instanceof ItemDebugger) {
 				return false;
 			} //mod interaction
 			else if (CompatibilityHandler.getInstance().isRightClickHandled(heldItem.getItem())) {

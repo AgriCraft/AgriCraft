@@ -6,6 +6,8 @@ import net.minecraft.block.properties.PropertyBool;
 
 /**
  * A class containing AgriCraft block states.
+ * 
+ * These are useless since the crop block far exceeds 16 combinations.
  */
 public interface AgriCraftProperties {
 	

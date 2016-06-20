@@ -13,7 +13,6 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,8 +26,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
@@ -37,11 +34,14 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.utility.MathHelper;
+import com.infinityraider.agricraft.utility.multiblock.WorldHelper;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable {
 
 	public static final String NAME = "crops";
 
+	private int stage = 0;
 	private boolean crossCrop = false;
 	private boolean weed = false;
 
@@ -117,17 +117,21 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		return AgriCraftConfig.weedGrowthRate;
 	}
 
+	// =========================================================================
+	// Growthstage
+	// =========================================================================
 	@Override
 	public int getGrowthStage() {
+		// For the sole purpose of compatability.
 		return worldObj.getBlockState(getPos()).getValue(AgriCraftProperties.GROWTHSTAGE);
 	}
 
 	@Override
 	public void setGrowthStage(int stage) {
 		if (this.hasPlant() || this.hasWeed()) {
-			stage &= Constants.MATURE;
+			stage = MathHelper.inRange(stage, 0, Constants.MATURE);
 			IBlockState state = worldObj.getBlockState(pos);
-			state.withProperty(AgriCraftProperties.GROWTHSTAGE, stage);
+			state = state.withProperty(AgriCraftProperties.GROWTHSTAGE, stage);
 			this.worldObj.setBlockState(pos, state, 3);
 		}
 	}
@@ -400,6 +404,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		}
 	}
 
+	// =========================================================================
+	// NBT
+	// =========================================================================
 	//this saves the data on the tile entity
 	@Override
 	public void writeTileNBT(NBTTagCompound tag) {
@@ -462,20 +469,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	 */
 	@Override
 	public List<IAgriCrop> getNeighbours() {
-		List<IAgriCrop> neighbours = new ArrayList<>();
-		addNeighbour(neighbours, AgriForgeDirection.NORTH);
-		addNeighbour(neighbours, AgriForgeDirection.SOUTH);
-		addNeighbour(neighbours, AgriForgeDirection.EAST);
-		addNeighbour(neighbours, AgriForgeDirection.WEST);
-		return neighbours;
-	}
-
-	private void addNeighbour(List<IAgriCrop> neighbours, AgriForgeDirection direction) {
-		TileEntity te = worldObj.getTileEntity(getPos().add(direction.offsetX, direction.offsetY, direction.offsetZ));
-		if (te == null || !(te instanceof TileEntityCrop)) {
-			return;
-		}
-		neighbours.add((TileEntityCrop) te);
+		return WorldHelper.getTileNeighbors(worldObj, pos, IAgriCrop.class);
 	}
 
 	/**
@@ -485,12 +479,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	@Override
 	public List<IAgriCrop> getMatureNeighbours() {
 		List<IAgriCrop> neighbours = getNeighbours();
-		for (Iterator<IAgriCrop> iterator = neighbours.iterator(); iterator.hasNext();) {
-			IAgriCrop crop = iterator.next();
-			if (!crop.hasPlant() || !crop.isMature()) {
-				iterator.remove();
-			}
-		}
+		neighbours.removeIf((p) -> {
+			return !(p.hasPlant() && p.isMature());
+		});
 		return neighbours;
 	}
 

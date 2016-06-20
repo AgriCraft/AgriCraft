@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-import static net.minecraft.block.Block.spawnAsEntity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -32,15 +32,18 @@ public class ItemClipper extends ItemBase implements IClipper {
 
 	//this is called when you right click with this item in hand
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public EnumActionResult onItemUse(ItemStack item, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitx, float hity, float hitz) {
+		if (world.isRemote) {
+			return EnumActionResult.SUCCESS;
+		}
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof IAgriCrop) {
 			IAgriCrop crop = (IAgriCrop) te;
 			if (crop.hasPlant() && crop.getGrowthStage() > 1) {
 				crop.setGrowthStage(crop.getGrowthStage() - 1);
-				ItemStack clipping = new ItemStack(AgriCraftItems.clipping, 1, 0);
+				ItemStack clipping = new ItemStack(AgriCraftItems.clipping);
 				clipping.setTagCompound(crop.getSeed().writeToNBT(new NBTTagCompound()));
-				spawnAsEntity(world, pos, clipping);
+				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), clipping));
 				return EnumActionResult.SUCCESS;
 			}
 			return EnumActionResult.FAIL;
@@ -51,15 +54,7 @@ public class ItemClipper extends ItemBase implements IClipper {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-		if (stack == null || stack.getItem() == null) {
-			list.add("ERROR");
-			return;
-		}
-		if (stack.getItem() instanceof ItemClipping) {
-			stack = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
-		}
-		if (stack == null || stack.getItem() == null) {
-			list.add("ERROR");
-		}
+		// Nothing to see here...
 	}
+
 }
