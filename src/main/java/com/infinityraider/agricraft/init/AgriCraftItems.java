@@ -6,8 +6,10 @@ import com.infinityraider.agricraft.items.*;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.agricraft.agricore.util.ReflectionHelper;
+import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class AgriCraftItems {
 
@@ -45,7 +47,7 @@ public class AgriCraftItems {
 
 	public static Item crops;
 	public static Item journal;
-	public static Item trowel;
+	public static ItemTrowel trowel;
 	public static Item magnifyingGlass;
 	public static Item debugItem;
 	public static Item handRake;
@@ -61,6 +63,7 @@ public class AgriCraftItems {
 		debugItem = new ItemDebugger();
 		if (enableTrowel) {
 			trowel = new ItemTrowel();
+			SeedRegistry.getInstance().addSeedHandler(new ItemStack(trowel), trowel);
 		}
 		if (enableHandRake) {
 			handRake = new ItemHandRake();
@@ -68,6 +71,9 @@ public class AgriCraftItems {
 		if (enableClipper) {
 			clipper = new ItemClipper();
 		}
+		
+		// Register seed handler.
+		SeedRegistry.getInstance().addSeedHandler(new ItemStack(seed), seed);
 		
 		// Register the Items
 		ReflectionHelper.forEachIn(AgriCraftItems.class, ItemBase.class, (ItemBase item) -> {

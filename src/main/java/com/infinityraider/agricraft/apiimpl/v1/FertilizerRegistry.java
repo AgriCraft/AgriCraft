@@ -21,29 +21,31 @@ import net.minecraft.init.Items;
  */
 public class FertilizerRegistry implements IFertilizerRegistry {
 
-	public static final FertilizerRegistry INSTANCE = new FertilizerRegistry();
-
 	private final Map<ItemWithMeta, IAgriFertilizer> fertilizers;
 
-	private FertilizerRegistry() {
+	public FertilizerRegistry() {
 		this.fertilizers = new HashMap<>();
 		this.fertilizers.put(new ItemWithMeta(Items.dye, 15), new BonemealWrapper());
+	}
+	
+	public static IFertilizerRegistry getInstance() {
+		return APIimplv1.getInstance().getFertilizerRegistry();
 	}
 
 	@Override
 	public boolean isFertilizer(ItemStack stack) {
-		return fertilizers.containsKey(new ItemWithMeta(stack.getItem(), stack.getMetadata()));
+		return fertilizers.containsKey(new ItemWithMeta(stack));
 	}
 
 	@Override
 	public IAgriFertilizer getFertilizer(ItemStack stack) {
-		return fertilizers.get(new ItemWithMeta(stack.getItem(), stack.getMetadata()));
+		return fertilizers.get(new ItemWithMeta(stack));
 	}
 
 	@Override
 	public boolean registerFertilizer(ItemStack stack, IAgriFertilizer fertilizer) {
 		if (stack != null && fertilizer != null) {
-			fertilizers.put(new ItemWithMeta(stack.getItem(), stack.getMetadata()), fertilizer);
+			fertilizers.put(new ItemWithMeta(stack), fertilizer);
 			return true;
 		} else {
 			return false;
@@ -52,7 +54,7 @@ public class FertilizerRegistry implements IFertilizerRegistry {
 
 	@Override
 	public boolean unregisterFertilizer(ItemStack stack) {
-		return stack != null && fertilizers.remove(new ItemWithMeta(stack.getItem(), stack.getMetadata())) != null;
+		return stack != null && fertilizers.remove(new ItemWithMeta(stack)) != null;
 	}
 
 	private static class BonemealWrapper implements IAgriFertilizer {

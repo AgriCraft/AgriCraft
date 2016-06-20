@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
-import com.infinityraider.agricraft.api.v1.items.ITrowel;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
@@ -41,7 +40,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
 	public static final String NAME = "crops";
 
-	private int stage = 0;
 	private boolean crossCrop = false;
 	private boolean weed = false;
 
@@ -123,7 +121,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	@Override
 	public int getGrowthStage() {
 		// For the sole purpose of compatability.
-		return worldObj.getBlockState(getPos()).getValue(AgriCraftProperties.GROWTHSTAGE);
+		return this.stats.getMeta();
 	}
 
 	@Override
@@ -133,6 +131,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 			IBlockState state = worldObj.getBlockState(pos);
 			state = state.withProperty(AgriCraftProperties.GROWTHSTAGE, stage);
 			this.worldObj.setBlockState(pos, state, 3);
+			this.stats.setMeta(stage);
 		}
 	}
 
@@ -165,7 +164,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	public IAgriPlant removePlant() {
 		IAgriPlant oldPlant = getPlant();
 		this.setGrowthStage(0);
-		this.stats = new PlantStats();
 		this.plant = null;
 		this.markForUpdate();
 		if (oldPlant != null) {
@@ -272,30 +270,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 			return true;
 		} else {
 			return false;
-		}
-	}
-
-	// =========================================================================
-	// Trowel Code
-	// =========================================================================
-	//trowel usage
-	public void onTrowelUsed(ITrowel trowel, ItemStack trowelStack) {
-		if (this.hasPlant()) {
-			if (!trowel.hasSeed(trowelStack)) {
-				trowel.setSeed(trowelStack, this.getSeed(), getGrowthStage());
-				this.removePlant();
-			}
-		} else if (!this.hasWeed() && !this.crossCrop) {
-			if (trowel.hasSeed(trowelStack)) {
-				ItemStack seed = trowel.getSeed(trowelStack);
-				int growthStage = trowel.getGrowthStage(trowelStack);
-				NBTTagCompound tag = seed.getTagCompound();
-
-				this.setPlant(CropPlantHandler.getPlantFromStack(seed));
-
-				this.setGrowthStage(growthStage);
-				trowel.clearSeed(trowelStack);
-			}
 		}
 	}
 

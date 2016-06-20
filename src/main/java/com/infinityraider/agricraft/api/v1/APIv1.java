@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirementBuilder;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.v1.mutation.IMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IPlantRegistry;
@@ -16,6 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 import com.infinityraider.agricraft.api.v1.fertilizer.IFertilizerRegistry;
+import com.infinityraider.agricraft.api.v1.seed.ISeedRegistry;
 
 /**
  * AgriCraft API.
@@ -47,18 +47,25 @@ public interface APIv1 extends APIBase {
 	boolean isActive(World world);
 
 	/**
-	 * Retrieves the mutation registry for managing mutations.
+	 * Retrieves the seed registry for managing seeds.
 	 *
-	 * @return the instance of IMutationRegistry associated with this mod.
+	 * @return the instance of ISeedRegistry associated with this mod.
 	 */
-	IMutationRegistry getMutationRegistry();
-
+	ISeedRegistry getSeedRegistry();
+	
 	/**
 	 * Retrieves the plant registry for managing plants.
 	 *
 	 * @return the instance of IPlantRegistry associated with this mod.
 	 */
 	IPlantRegistry getPlantRegistry();
+	
+	/**
+	 * Retrieves the mutation registry for managing mutations.
+	 *
+	 * @return the instance of IMutationRegistry associated with this mod.
+	 */
+	IMutationRegistry getMutationRegistry();
 	
 	/**
 	 * Retrieves the fertilizer registry for managing plants.
@@ -76,24 +83,6 @@ public interface APIv1 extends APIBase {
 	 * @return True if the seed must be handled by AgriCraft.
 	 */
 	boolean isNativePlantingDisabled(ItemStack seed);
-
-	/**
-	 * Checks if the given seed can be handled by AgriCraft, i.e. can be planted
-	 * in crops.
-	 *
-	 * @param seed Any ItemStack that is a seed.
-	 * @return True if the seed can be planted in crops.
-	 */
-	boolean isHandledByAgricraft(ItemStack seed);
-
-	/**
-	 * Gives the statistics for the given seeds.
-	 *
-	 * @param seed Any ItemStack that is a seed.
-	 * @return An ISeedStats object that describes the given seeds, or null if
-	 * the given item was no seed.
-	 */
-	IAgriStat getStats(ItemStack seed);
 
 	/**
 	 * Register a default soil that any crop that doesn't require a specific

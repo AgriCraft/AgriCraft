@@ -28,24 +28,35 @@ import java.util.ArrayList;
 import java.util.List;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.APIv1;
 import com.infinityraider.agricraft.api.v1.fertilizer.IFertilizerRegistry;
+import com.infinityraider.agricraft.api.v1.seed.ISeedRegistry;
 
 public class APIimplv1 implements APIv1 {
 	
     public static final int API_VERSION = 1;
 	
+	private static final APIv1 INSTANCE = new APIimplv1(APIStatus.OK);
+	
     private final APIStatus status;
-	private final IMutationRegistry mutationRegistry;
+	
+	private final ISeedRegistry seedRegistry;
 	private final IPlantRegistry plantRegistry;
+	private final IMutationRegistry mutationRegistry;
+	private final IFertilizerRegistry fertilizerRegistry;
 
-    public APIimplv1(APIStatus status) {
+    private APIimplv1(APIStatus status) {
         this.status = status;
-		this.mutationRegistry = new MutationRegistry();
+		this.seedRegistry = new SeedRegistry();
 		this.plantRegistry = new PlantRegistry();
+		this.mutationRegistry = new MutationRegistry();
+		this.fertilizerRegistry = new FertilizerRegistry();
     }
+	
+	public static APIv1 getInstance() {
+		return INSTANCE;
+	}
 
     @Override
     public APIBase getAPI(int maxVersion) {
@@ -72,42 +83,33 @@ public class APIimplv1 implements APIv1 {
     }
 
 	@Override
-	public IMutationRegistry getMutationRegistry() {
-		return mutationRegistry;
+	public ISeedRegistry getSeedRegistry() {
+		return seedRegistry;
 	}
 	
 	@Override
 	public IPlantRegistry getPlantRegistry() {
 		return plantRegistry;
 	}
+	
+	@Override
+	public IMutationRegistry getMutationRegistry() {
+		return mutationRegistry;
+	}
 
 	@Override
 	public IFertilizerRegistry getFertilizerRegistry() {
-		return FertilizerRegistry.INSTANCE;
+		return fertilizerRegistry;
 	}
 
     @Override
     public boolean isNativePlantingDisabled(ItemStack seed) {
         return AgriCraftConfig.disableVanillaFarming;
     }
-
-    @Override
-    public boolean isHandledByAgricraft(ItemStack seed) {
-        return CropPlantHandler.isValidSeed(seed);
-    }
 	
 	@Override
     public boolean isCrop(World world, BlockPos pos) {
         return world.getTileEntity(pos) instanceof IAgriCrop;
-    }
-
-    @Override
-    public IAgriStat getStats(ItemStack seed) {
-        if (isHandledByAgricraft(seed)) {
-            return new PlantStats(seed);
-        } else {
-			return null;   
-        }
     }
 
     @Override

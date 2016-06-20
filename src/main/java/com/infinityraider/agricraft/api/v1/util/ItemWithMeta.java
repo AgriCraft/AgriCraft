@@ -9,6 +9,10 @@ public class ItemWithMeta {
 
     private final Item item;
     private final int meta;
+	
+	public ItemWithMeta(ItemStack stack) {
+		this(stack.getItem(), stack.getMetadata());
+	}
 
     public ItemWithMeta(Item item, int meta) {
         this.item = item;

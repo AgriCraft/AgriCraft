@@ -16,6 +16,12 @@ import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
+/**
+ * To be moved to the API Implementation.
+ * @author The AgriCraft Team
+ * @deprecated
+ */
+@Deprecated
 public class CropPlantHandler {
 
 	/**

@@ -26,6 +26,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
+/**
+ * Class representing clipping items.
+ * 
+ * @todo Convert to conform with new API.
+ * @author The AgriCraft Team
+ */
 public class ItemClipping extends ItemBase {
 
 	@SideOnly(Side.CLIENT)

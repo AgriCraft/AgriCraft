@@ -7,22 +7,23 @@ import com.infinityraider.agricraft.apiimpl.v1.APIimplv1;
 
 public class APISelector implements APIBase {
 
-	private APISelector() {}
-	
+	private APISelector() {
+	}
+
 	public static void init() {
 		API.setAPI(new APISelector());
 	}
-	
+
 	@Override
 	public APIBase getAPI(int maxVersion) {
 		if (maxVersion <= 0) {
 			return this;
 		} else {
-			switch(maxVersion) {
+			switch (maxVersion) {
 				case 1:
-					return new com.infinityraider.agricraft.apiimpl.v1.APIimplv1(APIStatus.BACKLEVEL_OK);
+					return APIimplv1.getInstance();
 				default:
-					return new APIimplv1(APIStatus.OK);
+					return APIimplv1.getInstance();
 			}
 		}
 	}

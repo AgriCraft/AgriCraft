@@ -248,12 +248,13 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} else if (
 					heldItem.getItem() instanceof IRake ||
 					heldItem.getItem() instanceof IClipper ||
+					heldItem.getItem() instanceof ITrowel || 
 					heldItem.getItem() instanceof ItemDebugger
 					) {
 				// Allow the rake or clipper to do its thing.
 				return false;
-			} else if (FertilizerRegistry.INSTANCE.isFertilizer(heldItem)) {
-				IAgriFertilizer fert = FertilizerRegistry.INSTANCE.getFertilizer(heldItem);
+			} else if (FertilizerRegistry.getInstance().isFertilizer(heldItem)) {
+				IAgriFertilizer fert = FertilizerRegistry.getInstance().getFertilizer(heldItem);
 				return fert == null ? false : fert.applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
 			} else if (heldItem.getItem() instanceof ItemAgriCraftSeed && !crop.isCrossCrop() && !crop.hasWeed()) {
 				IAgriPlant plant = CropPlantHandler.getPlantFromStack(heldItem);
@@ -267,9 +268,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} //check to see if the player clicked with crops (crosscrop attempt)
 			else if (heldItem.getItem() == AgriCraftItems.crops) {
 				this.setCrossCrop(world, pos, state, player, heldItem);
-			} //trowel usage
-			else if (heldItem.getItem() instanceof ITrowel) {
-				crop.onTrowelUsed((ITrowel) heldItem.getItem(), heldItem);
 			} //mod interaction
 			else if (CompatibilityHandler.getInstance().isRightClickHandled(heldItem.getItem())) {
 				return CompatibilityHandler.getInstance().handleRightClick(world, pos, this, crop, player, heldItem);
@@ -338,9 +336,9 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 					if (crop.hasPlant()) {
 						if (crop.isMature()) {
 							drops.addAll(crop.getFruits());
-							drops.add(crop.getSeed());
+							drops.add(crop.getSeed().toStack());
 						} else if (!AgriCraftConfig.onlyMatureDropSeeds) {
-							drops.add(crop.getSeed());
+							drops.add(crop.getSeed().toStack());
 						}
 					}
 				}
@@ -490,7 +488,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				items.add(new ItemStack(AgriCraftItems.crops, 1));
 			}
 			if (crop.hasPlant()) {
-				items.add(crop.getSeed());
+				items.add(crop.getSeed().toStack());
 				if (crop.isMature()) {
 					items.addAll(crop.getFruits());
 				}
@@ -524,7 +522,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 					if (crop.isMature()) {
 						drops.addAll(crop.getFruits());
 					}
-					drops.add(crop.getSeed());
+					drops.add(crop.getSeed().toStack());
 					for (ItemStack drop : drops) {
 						spawnAsEntity(world, pos, drop);
 					}

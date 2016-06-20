@@ -1,7 +1,5 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.api.v1.items.ITrowel;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
@@ -18,8 +16,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 
 public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
 
@@ -82,7 +80,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return if a SEED or trowel is present.
 	 */
 	public final boolean hasSpecimen() {
-		return this.hasSeed() || this.hasTrowel();
+		return this.hasSeed();
 	}
 
 	/**
@@ -101,22 +99,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return if the analyze slot contains a <em>valid</em> SEED.
 	 */
 	public final boolean hasSeed() {
-		return CropPlantHandler.isValidSeed(this.specimen);
-	}
-
-	/**
-	 * Determines if the analyzer has a trowel with a plant in its analyze slot.
-	 *
-	 * @return if the analyze slot contains a trowel with a plant.
-	 */
-	public final boolean hasTrowel() {
-		if (this.specimen == null || this.specimen.getItem() == null) {
-			return false;
-		}
-		if (this.specimen.getItem() instanceof ITrowel) {
-			return ((ITrowel) specimen.getItem()).hasSeed(this.specimen);
-		}
-		return false;
+		return SeedRegistry.getInstance().isSeed(specimen);
 	}
 
 	public final void setProgress(int value) {
@@ -133,17 +116,9 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return ticks to analyze SEED.
 	 */
 	public final int maxProgress() {
-		ItemStack seed;
-
-		if (this.hasTrowel()) {
-			seed = ((ITrowel) specimen.getItem()).getSeed(specimen);
-		} else {
-			seed = this.specimen;
-		}
-
-		if (seed != null) {
-			IAgriPlant plant = CropPlantHandler.getPlantFromStack(seed);
-			return plant == null ? 0 : plant.getTier() * 20;
+		if (this.specimen != null) {
+			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
+			return seed == null ? 0 : seed.getPlant().getTier() * 20;
 		} else {
 			return 0;
 		}
@@ -156,16 +131,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return if the stack is valid.
 	 */
 	public static boolean isValid(ItemStack stack) {
-		if (stack == null || stack.getItem() == null) {
-			return false;
-		}
-		if (stack.getItem() instanceof ITrowel) {
-			return ((ITrowel) stack.getItem()).hasSeed(stack);
-		}
-		if (!CropPlantHandler.isValidSeed(stack)) {
-			return false;
-		}
-		return true;
+		return SeedRegistry.getInstance().isSeed(stack);
 	}
 
 	/**
@@ -175,7 +141,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 */
 	public final boolean isSpecimenAnalyzed() {
 		if (this.specimen != null) {
-			return new PlantStats(this.specimen).isAnalyzed();
+			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
+			return seed != null && seed.getStat().isAnalyzed();
 		}
 		return false;
 	}
@@ -212,19 +179,12 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	public void analyze() {
 		//analyze the SEED
 		if (this.hasSeed()) {
-			if (!this.specimen.hasTagCompound()) {
-				this.specimen.setTagCompound(new NBTTagCompound());
+			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
+			seed.getStat().analyze();
+			seed.getStat().writeToNBT(this.specimen.getTagCompound());
+			if (this.hasJournal()) {
+				((ItemJournal) journal.getItem()).addEntry(journal, seed.getPlant());
 			}
-			PlantStats stats = new PlantStats(this.specimen);
-			stats.analyze();
-			stats.writeToNBT(this.specimen.getTagCompound());
-		} else if (this.hasTrowel()) {
-			((ITrowel) this.specimen.getItem()).analyze(this.specimen);
-		}
-		//register the SEED in the journal if there is a journal present
-		if (this.hasJournal()) {
-			IAgriPlant plant = CropPlantHandler.getPlantFromStack(this.hasSeed() ? this.specimen : ((ITrowel) this.specimen.getItem()).getSeed(this.specimen));
-			((ItemJournal) journal.getItem()).addEntry(journal, plant);
 		}
 	}
 

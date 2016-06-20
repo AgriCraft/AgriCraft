@@ -2,9 +2,8 @@ package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.api.v1.items.ITrowel;
 import com.infinityraider.agricraft.api.v1.items.IClipper;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.items.ItemClipping;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
@@ -23,27 +22,11 @@ public class ItemToolTipHandler {
 	@SubscribeEvent
 	public void addSeedStatsTooltip(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
-
-		// Test if stack is good.
-		if (StackHelper.isValid(ItemClipping.class, stack)) {
-			if (StackHelper.hasTag(stack)) {
-				stack = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
-			} else {
-				// Passed bad clipping item.
-				return;
-			}
-		}
-
-		// Abort if stack is bad.
-		if (!StackHelper.isValid(stack)) {
-			return;
-		}
-
 		// Add Seed Information.
-		if (CropPlantHandler.isValidSeed(stack) && stack.hasTagCompound()) {
-			PlantStats stats = new PlantStats(stack.getTagCompound());
-			if (stats.isAnalyzed()) {
-				stats.addStats(event.getToolTip());
+		if (stack != null) {
+			AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+			if (seed != null && seed.getStat().isAnalyzed()) {
+				seed.getStat().addStats(event.getToolTip());
 			} else {
 				event.getToolTip().add(" " + I18n.translateToLocal("agricraft_tooltip.unidentified"));
 			}
@@ -56,11 +39,10 @@ public class ItemToolTipHandler {
 	@SubscribeEvent
 	public void addTrowelTooltip(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
-		if (StackHelper.isValid(ITrowel.class, stack)) {
-			ITrowel trowel = (ITrowel) stack.getItem();
-			if (trowel.hasSeed(stack)) {
-				ItemStack seed = trowel.getSeed(stack);
-				event.getToolTip().add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + seed.getItem().getItemStackDisplayName(seed));
+		if (stack != null && stack.getItem() instanceof ITrowel) {
+			AgriSeed seed = SeedRegistry.getInstance().getSeed(event.getItemStack());
+			if (seed != null) {
+				event.getToolTip().add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + seed.getPlant().getSeedName());
 			} else {
 				event.getToolTip().add(I18n.translateToLocal("agricraft_tooltip.trowel"));
 			}

@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.api.v1.plant.IPlantRegistry;
 import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
 import java.util.List;
-import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 /**
@@ -14,10 +13,9 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
  * @author RlonRyan
  */
 public class PlantRegistry implements IPlantRegistry {
-
-	@Override
-	public boolean isPlant(ItemStack seed) {
-		return CropPlantHandler.isValidSeed(seed);
+	
+	public static IPlantRegistry getInstance() {
+		return APIimplv1.getInstance().getPlantRegistry();
 	}
 
 	@Override
@@ -33,11 +31,6 @@ public class PlantRegistry implements IPlantRegistry {
 		} catch (DuplicateCropPlantException e) {
 			return false;
 		}
-	}
-
-	@Override
-	public IAgriPlant getPlant(ItemStack seed) {
-		return CropPlantHandler.getPlantFromStack(seed);
 	}
 
 	@Override

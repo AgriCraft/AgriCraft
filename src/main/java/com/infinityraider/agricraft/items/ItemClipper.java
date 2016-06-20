@@ -42,7 +42,7 @@ public class ItemClipper extends ItemBase implements IClipper {
 			if (crop.hasPlant() && crop.getGrowthStage() > 1) {
 				crop.setGrowthStage(crop.getGrowthStage() - 1);
 				ItemStack clipping = new ItemStack(AgriCraftItems.clipping);
-				clipping.setTagCompound(crop.getSeed().writeToNBT(new NBTTagCompound()));
+				clipping.setTagCompound(crop.getSeed().toStack().writeToNBT(new NBTTagCompound()));
 				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), clipping));
 				return EnumActionResult.SUCCESS;
 			}

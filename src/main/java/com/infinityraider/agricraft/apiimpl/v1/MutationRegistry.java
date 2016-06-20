@@ -16,6 +16,10 @@ import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
  * @author RlonRyan
  */
 public class MutationRegistry implements IMutationRegistry {
+	
+	public static IMutationRegistry getInstance() {
+		return APIimplv1.getInstance().getMutationRegistry();
+	}
 
 	@Override
 	public List<IAgriMutation> getRegisteredMutations() {

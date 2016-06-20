@@ -16,8 +16,11 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.seed.ISeedHandler;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 
-public class ItemAgriCraftSeed extends ItemBase {
+public class ItemAgriCraftSeed extends ItemBase implements ISeedHandler {
 
 	/**
 	 * This constructor shouldn't be called from anywhere except from the
@@ -63,6 +66,22 @@ public class ItemAgriCraftSeed extends ItemBase {
 		tags.add(PlantStats.NBT_GAIN);
 		tags.add(PlantStats.NBT_STRENGTH);
 		return tags;
+	}
+
+	@Override
+	public boolean isValid(ItemStack stack) {
+		return stack != null && stack.getItem() instanceof ItemAgriCraftSeed;
+	}
+
+	@Override
+	public AgriSeed getSeed(ItemStack stack) {
+		IAgriPlant plant = CropPlantHandler.getPlantFromStack(stack);
+		IAgriStat stat = new PlantStats(stack);
+		if (plant != null) {
+			return new AgriSeed(plant, stat);
+		} else {
+			return null;
+		}
 	}
 
 }
