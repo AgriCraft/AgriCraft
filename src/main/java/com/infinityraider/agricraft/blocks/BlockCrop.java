@@ -11,8 +11,6 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 import com.infinityraider.agricraft.items.ItemDebugger;
-import com.infinityraider.agricraft.network.MessageFertilizerApplied;
-import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
@@ -37,7 +35,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -46,6 +43,7 @@ import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.apiimpl.v1.FertilizerRegistry;
 
 /**
  * The most important block in the mod.
@@ -254,6 +252,9 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 					) {
 				// Allow the rake or clipper to do its thing.
 				return false;
+			} else if (FertilizerRegistry.INSTANCE.isFertilizer(heldItem)) {
+				IAgriFertilizer fert = FertilizerRegistry.INSTANCE.getFertilizer(heldItem);
+				return fert == null ? false : fert.applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
 			} else if (heldItem.getItem() instanceof ItemAgriCraftSeed && !crop.isCrossCrop() && !crop.hasWeed()) {
 				IAgriPlant plant = CropPlantHandler.getPlantFromStack(heldItem);
 				if (plant != null && plant.getGrowthRequirement().canGrow(world, pos)) {
@@ -269,22 +270,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} //trowel usage
 			else if (heldItem.getItem() instanceof ITrowel) {
 				crop.onTrowelUsed((ITrowel) heldItem.getItem(), heldItem);
-			} //check to see if the player wants and is allowed to use bonemeal
-			else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
-				return !crop.canBonemeal();
-			} //fertilizer
-			else if (heldItem.getItem() instanceof IAgriFertilizer) {
-				IAgriFertilizer fertilizer = (IAgriFertilizer) heldItem.getItem();
-				if (crop.acceptsFertilizer(fertilizer)) {
-					crop.applyFertilizer(fertilizer, world.rand);
-					NetworkWrapper.getInstance().sendToAllAround(
-							new MessageFertilizerApplied(heldItem, pos),
-							new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
-					if (!player.capabilities.isCreativeMode) {
-						heldItem.stackSize = heldItem.stackSize - 1;
-					}
-				}
-				return false;
 			} //mod interaction
 			else if (CompatibilityHandler.getInstance().isRightClickHandled(heldItem.getItem())) {
 				return CompatibilityHandler.getInstance().handleRightClick(world, pos, this, crop, player, heldItem);

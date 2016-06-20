@@ -40,13 +40,11 @@ public class APIimplv1 implements APIv1 {
     private final APIStatus status;
 	private final IMutationRegistry mutationRegistry;
 	private final IPlantRegistry plantRegistry;
-	private final IFertilizerRegistry fertilizerRegistry;
 
     public APIimplv1(APIStatus status) {
         this.status = status;
 		this.mutationRegistry = new MutationRegistry();
 		this.plantRegistry = new PlantRegistry();
-		this.fertilizerRegistry = new FertilizerRegistry();
     }
 
     @Override
@@ -85,7 +83,7 @@ public class APIimplv1 implements APIv1 {
 
 	@Override
 	public IFertilizerRegistry getFertilizerRegistry() {
-		return fertilizerRegistry;
+		return FertilizerRegistry.INSTANCE;
 	}
 
     @Override

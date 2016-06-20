@@ -2,10 +2,7 @@
  */
 package com.infinityraider.agricraft.api.v1.fertilizer;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 /**
  * An interface for managing fertilizers supported by AgriCraft.
@@ -27,37 +24,25 @@ public interface IFertilizerRegistry {
 	 * @return True if AgriCraft knows how to handle the given item as
 	 * fertilizer.
 	 */
-	boolean isSupportedFertilizer(ItemStack fertilizer);
-
+	boolean isFertilizer(ItemStack fertilizer);
+	
+	IAgriFertilizer getFertilizer(ItemStack fertilizer);
+	
 	/**
-	 * Checks if the given fertilizer is valid for the plant in the crop at the
-	 * given position.
-	 *
-	 * @param world World object
-	 * @param pos the block position
-	 * @param fertilizer Any item, preferable one that is a fertilizer.
-	 * @return True if the item is a valid fertilizer and can be applied, false
-	 * otherwise.
+	 * Maps an ItemStack to a fertilizer instance.
+	 * 
+	 * @param stack the item stack to use as a fertilizer.
+	 * @param fertilizer the IAgriFertilizer instance to associate with the item stack.
+	 * @return 
 	 */
-	boolean isValidFertilizer(World world, BlockPos pos, ItemStack fertilizer);
-
+	boolean registerFertilizer(ItemStack stack, IAgriFertilizer fertilizer);
+	
 	/**
-	 * Tries to apply the given fertilizer to the plant in the crop at the given
-	 * position. On success the item stack's size will be decreased (and may be
-	 * 0). All world interaction will be handled by this method.
-	 *
-	 * <p>
-	 * Note: The return value does not state if the plant was effected by the
-	 * fertilizer, only if it was applied.
-	 * </p>
-	 *
-	 * @param world World object
-	 * @param pos the block position
-	 * @param state the block state
-	 * @param fertilizer Any item, preferable one that is a fertilizer. Will be
-	 * modified on success!
-	 * @return True if the fertilizer was applied successfully, false otherwise.
+	 * Unregisters a fertilizer from the registry.
+	 * 
+	 * @param stack the stack to stop using as a fertilizer.
+	 * @return if the fertilizer was successfully unregistered.
 	 */
-	boolean applyFertilizer(World world, BlockPos pos, IBlockState state, ItemStack fertilizer);
+	boolean unregisterFertilizer(ItemStack stack);
 
 }

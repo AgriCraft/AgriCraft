@@ -1,6 +1,6 @@
 /*
  */
-package com.infinityraider.agricraft.utility.multiblock;
+package com.infinityraider.agricraft.utility;
 
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import java.util.ArrayList;

@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.farming.mutation.MutationEngine;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.block.SoundType;
@@ -34,8 +33,9 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.utility.MathHelper;
-import com.infinityraider.agricraft.utility.multiblock.WorldHelper;
+import com.infinityraider.agricraft.utility.WorldHelper;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable {
 
@@ -216,20 +216,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		return hasPlant() ? plant.getHeight(getBlockMetadata()) : Constants.UNIT * 13;
 	}
 
-	/*
-	 * check if bonemeal can be applied
-	 */
-	@Override
-	public boolean canBonemeal() {
-		if (this.crossCrop) {
-			return AgriCraftConfig.bonemealMutation;
-		} else if (this.hasPlant() && !this.isMature()) {
-			return this.isFertile() && plant.canBonemeal();
-		} else {
-			return false;
-		}
-	}
-
 	/**
 	 * check the block if the plant is mature
 	 */
@@ -329,18 +315,14 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		}
 		return false;
 	}
-
+	
 	//when fertilizer is applied
 	@Override
-	public boolean applyFertilizer(IAgriFertilizer fertilizer, Random rand) {
-		if (fertilizer.hasSpecialBehaviour()) {
-			fertilizer.onFertilizerApplied(getWorld(), getPos(), rand);
-			return true;
-		}
-		if (this.hasPlant() || this.hasWeed()) {
+	public boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
+		if (this.getGrowthStage() < Constants.MATURE && (this.hasPlant() || this.hasWeed())) {
 			((BlockCrop) AgriCraftBlocks.blockCrop).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
 			return true;
-		} else if (this.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
+		} else if (fertilizer.canTriggerMutation() && this.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
 			this.crossOver();
 			return true;
 		}
