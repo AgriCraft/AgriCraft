@@ -120,8 +120,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	// =========================================================================
 	@Override
 	public int getGrowthStage() {
-		// For the sole purpose of compatability.
-		return this.stats.getMeta();
+		return this.getBlockMetadata();
 	}
 
 	@Override
@@ -132,6 +131,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 			state = state.withProperty(AgriCraftProperties.GROWTHSTAGE, stage);
 			this.worldObj.setBlockState(pos, state, 3);
 			this.stats.setMeta(stage);
+			this.markForUpdate();
 		}
 	}
 
@@ -450,7 +450,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 			list.add(" - This crop has a plant");
 			list.add(" - Plant: " + this.plant.getPlantName());
 			list.add(" - Id: " + this.plant.getId());
+			list.add(" - Texture: " + this.plant.getPrimaryPlantTexture(this.getGrowthStage()).toString());
 			list.add(" - Tier: " + plant.getTier());
+			list.add(" - Stage: " + this.getGrowthStage());
 			list.add(" - Meta: " + this.getBlockMetadata());
 			list.add(" - Growth: " + this.stats.getGrowth());
 			list.add(" - Gain: " + this.stats.getGain());
