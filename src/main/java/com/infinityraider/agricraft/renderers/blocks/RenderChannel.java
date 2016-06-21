@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.blocks.AbstractBlockWaterChannel;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -88,7 +88,7 @@ public class RenderChannel<T extends TileEntityChannel> extends RenderBlockCusto
 	}
 
 	protected void drawWater(ITessellator tessellator, TileEntityChannel channel) {
-		if (channel.getFluidLevel() > 0) {
+		if (channel.getFluidAmount(0) > 0) {
 			renderCallCounter.incrementAndGet();
 		} else {
 			return;

@@ -2,18 +2,14 @@ package com.infinityraider.agricraft.gui;
 
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.gui.journal.GuiJournal;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
-import com.infinityraider.agricraft.utility.NBTHelper;
+import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -83,14 +79,6 @@ public class GuiSeedAnalyzer extends GuiContainer {
         }
         ItemStack journal = seedAnalyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId);
         if(journal != null) {
-            if (journal.hasTagCompound()) {
-                NBTTagCompound tag = journal.getTagCompound();
-                if (tag.hasKey(AgriCraftNBT.DISCOVERED_SEEDS)) {
-                    NBTTagList list = tag.getTagList(AgriCraftNBT.DISCOVERED_SEEDS, 10);
-                    NBTHelper.clearEmptyStacksFromNBT(list);
-                    tag.setTag(AgriCraftNBT.DISCOVERED_SEEDS, list);
-                }
-            }
             journalOpen = true;
             guiJournal = new GuiJournal(journal);
             guiJournal.setWorldAndResolution(this.mc, this.width, this.height);

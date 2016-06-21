@@ -1,10 +1,13 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
-import net.minecraft.item.Item;
+import com.infinityraider.agricraft.farming.PlantStats;
+import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 
 /**
  * Represents the result of a specific <code>INewSeedStrategy</code> containing
@@ -12,72 +15,48 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public class CrossOverResult {
 
-    private final Item seed;
-    private final int meta;
     private final double chance;
 
-    private int growth;
-    private int gain;
-    private int strength;
+	private @Nonnull IAgriPlant plant;
+    private @Nonnull IAgriStat stats = new PlantStats();
 
-    public CrossOverResult(Item seed, int meta, double chance) {
-        this.seed = seed;
-        this.meta = meta;
+    public CrossOverResult(@Nonnull IAgriPlant plant, double chance) {
+        this.plant = plant;
         this.chance = chance;
     }
 
     /** Creates a new instance based on the planted seed of the given TE. Does not validate the TE */
-    public static CrossOverResult fromTileEntityCrop(TileEntityCrop crop) {
-        Item seed = crop.getSeedStack().getItem();
-        int meta = crop.getSeedStack().getItemDamage();
+    public static CrossOverResult fromTileEntityCrop(IAgriCrop crop) {
         double chance = ((double) crop.getPlant().getSpreadChance())/100.0;
-
-        return new CrossOverResult(seed, meta, chance);
+        return new CrossOverResult(crop.getPlant(), chance);
     }
 
     /** Creates a new instanced based off the result of the given mutation. Does not validate the mutation object */
-    public static CrossOverResult fromMutation(Mutation mutation) {
-        Item seed = mutation.getResult().getItem();
-        int meta = mutation.getResult().getItemDamage();
-
-        return new CrossOverResult(seed, meta, mutation.getChance());
+    public static CrossOverResult fromMutation(IAgriMutation mutation) {
+        return new CrossOverResult(mutation.getChild(), mutation.getChance());
     }
 
     public ItemStack toStack() {
-        ItemStack stack = new ItemStack(seed, 1, meta);
+        ItemStack stack = plant.getSeed();
         NBTTagCompound tag = new NBTTagCompound();
-        CropPlantHandler.setSeedNBT(tag, (short) growth, (short) gain, (short) strength, false);
+        stats.writeToNBT(tag);
         stack.setTagCompound(tag);
         return stack;
     }
 
-    public Item getSeed() {
-        return seed;
-    }
-
-    public int getMeta() {
-        return meta;
+    public @Nonnull IAgriPlant getPlant() {
+        return plant;
     }
 
     public double getChance() {
         return chance;
     }
 
-    public int getGain() {
-        return gain;
-    }
+    public @Nonnull IAgriStat getStats() {
+		return this.stats;
+	}
 
-    public int getGrowth() {
-        return growth;
-    }
-
-    public int getStrength() {
-        return strength;
-    }
-
-    public void setStats(int growth, int gain, int strength) {
-        this.growth = growth;
-        this.gain = gain;
-        this.strength = strength;
+    public void setStats(@Nonnull IAgriStat stats) {
+        this.stats = stats;
     }
 }

@@ -30,7 +30,7 @@ minecraft {
     runDir = "/run/${mod.version_minecraft}"
     makeObfSourceJar = false
 	useDepAts = true
-	
+
 	// Replace mod information in reference class.
 	replaceIn mod.reference_class
     mod.each { prop ->
@@ -45,24 +45,24 @@ task modInfo() {
 	println "#################################################"
 	println "	Quikmod"
 	println "#################################################"
-	
+
 	// Verify mod id follows proper conventions.
 	assert mod.id == mod.id.toLowerCase();
 	assert mod.id == mod.id.replace(' ', '');
 	assert mod.id == mod.id.replace('.', '');
-	
+
 	// Verify mod group follows proper conventions.
 	assert mod.group == mod.group.toLowerCase();
 	assert mod.group == mod.group.replace(' ', '');
-	
+
 	// Print Gradle Information
 	println ":" + "version_gradle".padRight(20) + " = " + GradleVersion.current().version
-	
+
 	// Print Information Tokens
 	mod.each { prop ->
         println ":" + prop.key.padRight(20) + " = " + prop.value
     }
-	
+
 	println "#################################################"
 	println ""
 }
@@ -95,6 +95,7 @@ dependencies {
     //compile "codechicken:CodeChickenLib:1.8-1.1.2.139:dev"
     //compile "codechicken:CodeChickenCore:1.8-1.0.5.34:dev"
     //compile "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
+	compile project(':lib/AgriCore')
     compile "mcp.mobius.waila:Waila:1.7.0-B2_1.9:dev"
 	deobfCompile "mezz.jei:jei_1.9:3.3.3.197"
 }

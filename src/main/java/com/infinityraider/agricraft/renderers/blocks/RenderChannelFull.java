@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockWaterChannelFull;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannelFull;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelFull;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;

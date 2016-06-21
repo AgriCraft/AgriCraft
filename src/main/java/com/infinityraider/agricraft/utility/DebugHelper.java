@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.api.v1.IDebuggable;
+import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -25,7 +26,7 @@ public abstract class DebugHelper {
      */
     public static void debug(EntityPlayer player, World world, BlockPos pos) {
         for(String dataLine:getDebugData(world, pos)) {
-            LogHelper.debug(dataLine);
+            AgriCore.getLogger("AgriCraft").debug(dataLine);
             player.addChatComponentMessage(new TextComponentString(dataLine));
         }
     }

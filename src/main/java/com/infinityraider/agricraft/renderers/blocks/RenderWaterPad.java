@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.blocks.AbstractBlockWaterPad;
 import com.infinityraider.agricraft.blocks.BlockWaterPad;
 import com.infinityraider.agricraft.blocks.BlockWaterPadFull;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.tileentity.TileEntityBase;
+import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

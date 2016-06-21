@@ -1,58 +1,63 @@
 package com.infinityraider.agricraft.apiimpl.v1;
 
+import com.infinityraider.agricraft.api.v1.plant.IPlantRegistry;
+import com.infinityraider.agricraft.api.v1.util.BlockWithMeta;
+import com.infinityraider.agricraft.api.v1.mutation.IMutationRegistry;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.stat.IStatCalculator;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirementBuilder;
+import com.infinityraider.agricraft.api.v1.items.IJournal;
 import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
 import com.infinityraider.agricraft.api.APIStatus;
-import com.infinityraider.agricraft.api.v1.*;
-import com.infinityraider.agricraft.api.v1.ICropPlant;
-import com.infinityraider.agricraft.api.v1.ISeedStats;
-import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.blocks.BlockModPlant;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.farming.cropplant.CropPlantAPIv1;
-import com.infinityraider.agricraft.farming.cropplant.CropPlantAgriCraft;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.farming.mutation.Mutation;
-import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftItems;
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
-import com.infinityraider.agricraft.utility.exception.MissingArgumentsException;
-import com.infinityraider.agricraft.utility.statstringdisplayer.StatStringDisplayer;
-import com.google.common.collect.Lists;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.APIv1;
+import com.infinityraider.agricraft.api.v1.fertilizer.IFertilizerRegistry;
+import com.infinityraider.agricraft.api.v1.seed.ISeedRegistry;
 
 public class APIimplv1 implements APIv1 {
-    private final int version;
+	
+    public static final int API_VERSION = 1;
+	
+	private static final APIv1 INSTANCE = new APIimplv1(APIStatus.OK);
+	
     private final APIStatus status;
+	
+	private final ISeedRegistry seedRegistry;
+	private final IPlantRegistry plantRegistry;
+	private final IMutationRegistry mutationRegistry;
+	private final IFertilizerRegistry fertilizerRegistry;
 
-    public APIimplv1(int version, APIStatus status) {
-        this.version = version;
+    private APIimplv1(APIStatus status) {
         this.status = status;
+		this.seedRegistry = new SeedRegistry();
+		this.plantRegistry = new PlantRegistry();
+		this.mutationRegistry = new MutationRegistry();
+		this.fertilizerRegistry = new FertilizerRegistry();
     }
+	
+	public static APIv1 getInstance() {
+		return INSTANCE;
+	}
 
     @Override
     public APIBase getAPI(int maxVersion) {
-        if (maxVersion == version && status == APIStatus.OK) {
+        if (maxVersion == API_VERSION && status == APIStatus.OK) {
             return this;
         } else {
             return API.getAPI(maxVersion);
@@ -66,7 +71,7 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public int getVersion() {
-        return version;
+        return API_VERSION;
     }
 
     @Override
@@ -74,61 +79,34 @@ public class APIimplv1 implements APIv1 {
         return true;
     }
 
-    @Override
-    public List<ItemStack> getCropsItems() {
-        return Lists.newArrayList(new ItemStack(AgriCraftItems.crops));
-    }
+	@Override
+	public ISeedRegistry getSeedRegistry() {
+		return seedRegistry;
+	}
+	
+	@Override
+	public IPlantRegistry getPlantRegistry() {
+		return plantRegistry;
+	}
+	
+	@Override
+	public IMutationRegistry getMutationRegistry() {
+		return mutationRegistry;
+	}
 
-    @Override
-    public List<ItemStack> getRakeItems() {
-        return Lists.newArrayList(new ItemStack(AgriCraftItems.handRake, 1, 0), new ItemStack(AgriCraftItems.handRake, 1, 1));
-    }
-
-    @Override
-    public List<Block> getCropsBlocks() {
-        return Lists.newArrayList((Block) AgriCraftBlocks.blockCrop);
-    }
+	@Override
+	public IFertilizerRegistry getFertilizerRegistry() {
+		return fertilizerRegistry;
+	}
 
     @Override
     public boolean isNativePlantingDisabled(ItemStack seed) {
         return AgriCraftConfig.disableVanillaFarming;
     }
-
-    @Override
-    public boolean isHandledByAgricraft(ItemStack seed) {
-        return CropPlantHandler.isValidSeed(seed);
-    }
-
-    @Override
-    public ISeedStats getSeedStats(ItemStack seed) {
-        if (!isHandledByAgricraft(seed)) {
-            return null;
-        }
-        if (seed.getTagCompound() != null && seed.getTagCompound().hasKey(AgriCraftNBT.GROWTH) && seed.getTagCompound().getBoolean(AgriCraftNBT.ANALYZED)) {
-            return PlantStats.readFromNBT(seed.getTagCompound());
-        } else {
-            return new PlantStats(-1, -1, -1);
-        }
-    }
-
-    @Override
-    public void registerCropPlant(ICropPlant plant) {
-        CropPlantHandler.addCropToRegister(new CropPlantAPIv1(plant));
-    }
-
-    @Override
-    public ICropPlant getCropPlant(ItemStack seed) {
-        return CropPlantHandler.getPlantFromStack(seed);
-    }
-
-    @Override
-    public void registerCropPlant(IAgriCraftPlant plant) {
-        CropPlantHandler.addCropToRegister(new CropPlantAgriCraft(plant));
-    }
-
-    @Override
-    public boolean registerGrowthRequirement(ItemWithMeta seed, IGrowthRequirement requirement) {
-        return CropPlantHandler.setGrowthRequirement(seed, requirement);
+	
+	@Override
+    public boolean isCrop(World world, BlockPos pos) {
+        return world.getTileEntity(pos) instanceof IAgriCrop;
     }
 
     @Override
@@ -137,271 +115,8 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public IGrowthRequirement getGrowthRequirement(ItemStack seed) {
-        if(!CropPlantHandler.isValidSeed(seed)) {
-            return null;
-        }
-        return CropPlantHandler.getGrowthRequirement(seed);
-    }
-
-    @Override
-    public boolean canPlaceCrops(World world, BlockPos pos, ItemStack crops) {
-        if (crops == null || crops.getItem() == null || crops.getItem() != AgriCraftItems.crops) {
-            return false;
-        } else if (GrowthRequirementHandler.isSoilValid(world, pos.add(0, -1, 0)) && world.isAirBlock(pos)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    @Override
-    public boolean placeCrops(World world, BlockPos pos, ItemStack crops) {
-        if (canPlaceCrops(world, pos, crops) && crops.stackSize >= 1) {
-            if (!world.isRemote) {
-                world.setBlockState(pos, AgriCraftBlocks.blockCrop.getDefaultState().withProperty(AgriCraftProperties.GROWTHSTAGE, 0), 3);
-                crops.stackSize--;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isCrops(World world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock() == AgriCraftBlocks.blockCrop;
-    }
-
-    @Override
-    public boolean isMature(World world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) te;
-            return crop.hasPlant() && crop.isMature();
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isWeeds(World world, BlockPos pos) {
-        if (!AgriCraftConfig.enableWeeds) {
-            return false;
-        }
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) te;
-            return crop.hasWeed();
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isEmpty(World world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) te;
-            return !(crop.isCrossCrop() || crop.hasWeed() || crop.hasPlant());
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isCrossCrops(World world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) te;
-            return crop.isCrossCrop();
-        }
-        return false;
-    }
-
-    @Override
-    public ItemStack getPlantedSeed(World world, BlockPos pos) {
-        if(!isCrops(world, pos)) {
-            return null;
-        }
-        return ((TileEntityCrop) world.getTileEntity(pos)).getSeedStack();
-    }
-
-    @Override
-    public Block getPlantedBlock(World world, BlockPos pos) {
-        if(!isCrops(world, pos)) {
-            return null;
-        }
-        return ((TileEntityCrop) world.getTileEntity(pos)).getPlantBlock();
-    }
-
-    @Override
-    public ICropPlant getCropPlant(World world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if(te==null || !(te instanceof TileEntityCrop)) {
-            return null;
-        }
-        return ((TileEntityCrop) te).getPlant();
-    }
-
-    @Override
-    public boolean canGrow(World world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) te;
-            return crop.hasPlant() && crop.isFertile();
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isAnalyzed(World world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if(te==null || !(te instanceof TileEntityCrop)) {
-            return false;
-        }
-        TileEntityCrop crop = (TileEntityCrop) te;
-        return crop.hasPlant() && crop.isAnalyzed();
-    }
-
-    @Override
-    public ISeedStats getStats(World world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if(te==null || !(te instanceof TileEntityCrop)) {
-            return new PlantStats(-1, -1, -1);
-        }
-        TileEntityCrop crop = (TileEntityCrop) te;
-        return crop.getStats();
-    }
-
-    @Override
     public boolean isRakeRequiredForWeeding() {
         return AgriCraftItems.enableHandRake;
-    }
-
-    @Override
-    public boolean removeWeeds(World world, BlockPos pos, boolean byHand) {
-        if (!AgriCraftConfig.enableWeeds || (byHand && AgriCraftItems.enableHandRake)) {
-            return false;
-        }
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) te;
-            if (!crop.hasWeed()) {
-                return false;
-            }
-            if (!world.isRemote) {
-                crop.updateWeed(0);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    private static final Random random = new Random();
-
-    @Override
-    public boolean removeWeeds(World world, BlockPos pos, ItemStack rake) {
-        if(world.isRemote) {
-            return false;
-        }
-        if (!AgriCraftConfig.enableWeeds) {
-            return false;
-        }
-        if(rake == null || rake.getItem() == null || !(rake.getItem() instanceof IRake)) {
-            return false;
-        }
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) te;
-            if (!crop.hasWeed()) {
-                return false;
-            }
-            return ((IRake) rake.getItem()).removeWeeds(world, pos, world.getBlockState(pos), crop, rake);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean placeCrossCrops(World world, BlockPos pos, ItemStack crops) {
-        if (world.isRemote) {
-            return false;
-        }
-        if (crops == null || crops.getItem() == null || crops.getItem() != AgriCraftItems.crops || crops.stackSize < 1) {
-            return false;
-        }
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) te;
-            if(!crop.hasWeed() && !crop.isCrossCrop() && !crop.hasPlant()) {
-                crop.setCrossCrop(true);
-                crops.stackSize--;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public ItemStack removeCrossCrops(World world, BlockPos pos) {
-        if (world.isRemote) {
-            return null;
-        }
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) te;
-            if(crop.isCrossCrop()) {
-                crop.setCrossCrop(false);
-                return new ItemStack(AgriCraftItems.crops, 1);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public SeedRequirementStatus canApplySeeds(World world, BlockPos pos, ItemStack seed) {
-        if (CropPlantHandler.isValidSeed(seed)) {
-            TileEntity te = world.getTileEntity(pos);
-            if (te instanceof TileEntityCrop) {
-                TileEntityCrop crop = (TileEntityCrop) te;
-                if (crop.isCrossCrop() || crop.hasPlant() || crop.hasWeed()) {
-                    return SeedRequirementStatus.BAD_LOCATION;
-                }
-                IGrowthRequirement growthRequirement = CropPlantHandler.getGrowthRequirement(seed);
-                if(!growthRequirement.isValidSoil(world, pos.add(0, -1, 0))) {
-                    return SeedRequirementStatus.WRONG_SOIL;
-                }
-                if (!growthRequirement.canGrow(world, pos)) {
-                    return SeedRequirementStatus.MISSING_REQUIREMENTS;
-                }
-                return SeedRequirementStatus.CAN_APPLY;
-            } else {
-                return SeedRequirementStatus.BAD_LOCATION;
-            }
-        } else {
-            return SeedRequirementStatus.BAD_SEED;
-        }
-    }
-
-    @Override
-    public boolean applySeeds(World world, BlockPos pos, ItemStack seed) {
-        if(!world.isRemote) {
-            if (CropPlantHandler.isValidSeed(seed)) {
-                TileEntity te = world.getTileEntity(pos);
-                if (te instanceof TileEntityCrop) {
-                    TileEntityCrop crop = (TileEntityCrop) te;
-                    if (crop.isCrossCrop() || crop.hasPlant() || crop.hasWeed() || !CropPlantHandler.getGrowthRequirement(seed).canGrow(world, pos)) {
-                        return false;
-                    }
-                    NBTTagCompound tag = seed.getTagCompound();
-                    if (tag != null && tag.hasKey(AgriCraftNBT.GROWTH)) {
-                        crop.setPlant(tag.getInteger(AgriCraftNBT.GROWTH), tag.getInteger(AgriCraftNBT.GAIN), tag.getInteger(AgriCraftNBT.STRENGTH), tag.getBoolean(AgriCraftNBT.ANALYZED), seed.getItem(), seed.getItemDamage());
-                    } else {
-                        crop.setPlant(Constants.DEFAULT_GROWTH, Constants.DEFAULT_GAIN, Constants.DEFAULT_STRENGTH, false, seed.getItem(), seed.getItemDamage());
-                    }
-                    seed.stackSize--;
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     @Override
@@ -412,9 +127,9 @@ public class APIimplv1 implements APIv1 {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
-            if(crop.allowHarvest(null)) {
+            if(crop.canHarvest()) {
                 crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
-                return crop.getPlant().getFruitsOnHarvest(crop.getGain(), world.rand);
+                return crop.getPlant().getFruitsOnHarvest(crop.getStat().getGain(), world.rand);
             }
         }
         return null;
@@ -422,106 +137,13 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public List<ItemStack> destroy(World world, BlockPos pos) {
-        if (world.isRemote || !isCrops(world, pos)) {
+        if (world.isRemote || !isCrop(world, pos)) {
             return null;
         }
         List<ItemStack> result = AgriCraftBlocks.blockCrop.getDrops(world, pos, world.getBlockState(pos), 0);
         world.setBlockToAir(pos);
         world.removeTileEntity(pos);
         return result;
-    }
-
-    @Override
-    public boolean isSupportedFertilizer(ItemStack fertilizer) {
-        if (fertilizer == null || fertilizer.getItem() == null) {
-            return false;
-        }
-        if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
-            return true;
-        }
-        if (fertilizer.getItem() instanceof IFertiliser) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isValidFertilizer(World world, BlockPos pos, ItemStack fertilizer) {
-        if (fertilizer == null || fertilizer.getItem() == null) {
-            return false;
-        }
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrop) {
-            TileEntityCrop crop = (TileEntityCrop) te;
-            if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
-                return crop.canBonemeal();
-            } else if (fertilizer.getItem() instanceof IFertiliser) {
-                return crop.allowFertiliser((IFertiliser) fertilizer.getItem());
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean applyFertilizer(World world, BlockPos pos, IBlockState state, ItemStack fertilizer) {
-        if (world.isRemote || !isValidFertilizer(world, pos, fertilizer)) {
-            return false;
-        }
-        if (fertilizer.getItem() == net.minecraft.init.Items.dye && fertilizer.getItemDamage() == 15) {
-            ((BlockCrop) AgriCraftBlocks.blockCrop).grow(world, random, pos, state);
-            fertilizer.stackSize--;
-            world.playAuxSFX(2005, pos, 0);
-            return true;
-        } else if (fertilizer.getItem() instanceof IFertiliser) {
-            ((TileEntityCrop) world.getTileEntity(pos)).applyFertiliser((IFertiliser) fertilizer.getItem(), world.rand);
-            fertilizer.stackSize--;
-            world.playAuxSFX(2005, pos, 0);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public IMutation[] getRegisteredMutations() {
-        return MutationHandler.getMutations();
-    }
-
-    @Override
-    public IMutation[] getRegisteredMutationsForParent(ItemStack parent) {
-        return MutationHandler.getMutationsFromParent(parent);
-    }
-
-    @Override
-    public IMutation[] getRegisteredMutationsForChild(ItemStack child) {
-        return MutationHandler.getMutationsFromChild(child);
-    }
-
-    @Override
-    public boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2) {
-        MutationHandler.add(new Mutation(result, parent1, parent2));
-        return false;
-    }
-
-    @Override
-    public boolean registerMutation(ItemStack result, ItemStack parent1, ItemStack parent2, double d) {
-        MutationHandler.add(new Mutation(result, parent1, parent2, d));
-        return true;
-    }
-
-    @Override
-    public boolean removeMutation(ItemStack result) {
-        MutationHandler.removeMutationsByResult(result);
-        return true;
-    }
-
-    @Override
-    public IAgriCraftPlant createNewCrop(Object... args) {
-        try {
-            return new BlockModPlant(args);
-        } catch (MissingArgumentsException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     @Override
@@ -536,33 +158,10 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public void analyze(ItemStack seed) {
-        if(CropPlantHandler.isValidSeed(seed)) {
-            if(seed.hasTagCompound()) {
-                NBTTagCompound tag = seed.getTagCompound();
-                String[] keys = {AgriCraftNBT.GROWTH, AgriCraftNBT.GAIN, AgriCraftNBT.STRENGTH};
-                for(String key:keys) {
-                    if (!tag.hasKey(key)) {
-                        tag.setShort(key, (short) 1);
-                    }
-                }
-                tag.setBoolean(AgriCraftNBT.ANALYZED, true);
-            } else {
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setShort(AgriCraftNBT.GROWTH, (short) 1);
-                tag.setShort(AgriCraftNBT.GAIN, (short) 1);
-                tag.setShort(AgriCraftNBT.STRENGTH, (short) 1);
-                tag.setBoolean(AgriCraftNBT.ANALYZED, true);
-                seed.setTagCompound(tag);
-            }
-        }
-    }
-
-    @Override
-    public ICrop getCrop(World world, BlockPos pos) {
+    public IAgriCrop getCrop(World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
-        if(te instanceof ICrop) {
-            return (ICrop) te;
+        if(te instanceof IAgriCrop) {
+            return (IAgriCrop) te;
         }
         return null;
     }
@@ -583,57 +182,27 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void setStatStringDisplayer(IStatStringDisplayer displayer) {
-        StatStringDisplayer.setStatStringDisplayer(displayer);
-    }
-
-    @Override
-    public boolean isSeedDiscoveredInJournal(ItemStack journal, ItemStack seed) {
+    public boolean isPlantDiscovered(ItemStack journal, IAgriPlant plant) {
         if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
             return false;
         }
-        return ((IJournal) journal.getItem()).isSeedDiscovered(journal, seed);
+        return ((IJournal) journal.getItem()).isSeedDiscovered(journal, plant);
     }
 
     @Override
-    public void addEntryToJournal(ItemStack journal, ItemStack seed) {
+    public void setPlantDiscovered(ItemStack journal, IAgriPlant plant, boolean discovered) {
         if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
             return;
         }
-        ((IJournal) journal.getItem()).addEntry(journal, seed);
+        ((IJournal) journal.getItem()).addEntry(journal, plant);
     }
 
     @Override
-    public ArrayList<ItemStack> getDiscoveredSeedsFromJournal(ItemStack journal) {
+    public List<IAgriPlant> getPlantsDiscovered(ItemStack journal) {
         if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
             return new ArrayList<>();
         }
         return ((IJournal) journal.getItem()).getDiscoveredSeeds(journal);
     }
 
-    @Override
-    public boolean isSeedBlackListed(ItemStack seed) {
-        return CropPlantHandler.isSeedBlackListed(seed);
-    }
-
-    @Override
-    public void addToSeedBlackList(ItemStack seed) {
-        CropPlantHandler.addSeedToBlackList(seed);
-    }
-
-    @Override
-    public void addToSeedBlacklist(Collection<? extends ItemStack> seeds) {
-        CropPlantHandler.addAllToSeedBlacklist(seeds);
-    }
-
-    @Override
-    public void removeFromSeedBlackList(ItemStack seed) {
-        CropPlantHandler.removeFromSeedBlackList(seed);
-    }
-
-    @Override
-    public void removeFromSeedBlacklist(Collection<? extends ItemStack> seeds) {
-        CropPlantHandler.removeAllFromSeedBlacklist(seeds);
-    }
 }

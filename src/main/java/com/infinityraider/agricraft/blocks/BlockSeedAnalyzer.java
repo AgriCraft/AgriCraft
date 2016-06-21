@@ -2,11 +2,11 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
-import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriCraftTab;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
-import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -29,119 +29,128 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
-    public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT, 0, Constants.UNIT, Constants.UNIT * (Constants.WHOLE - 1), Constants.UNIT * Constants.QUARTER, Constants.UNIT * (Constants.WHOLE - 1));
-	
-    public BlockSeedAnalyzer() {
-        super(Material.ground, "seed_analyzer", false);
-        this.setCreativeTab(AgriCraftTab.agriCraftTab);
-        this.isBlockContainer = true;
-        this.setTickRandomly(false);
-        //set mining statistics
-        this.setHardness(1);
-        this.setResistance(1);
-    }
 
-    //creates a new tile entity every time a block of this type is placed
-    @Override
-    public TileEntitySeedAnalyzer createNewTileEntity(World world, int meta) {
-        return new TileEntitySeedAnalyzer();
-    }
+	public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT, 0, Constants.UNIT, Constants.UNIT * (Constants.WHOLE - 1), Constants.UNIT * Constants.QUARTER, Constants.UNIT * (Constants.WHOLE - 1));
 
-    //called when the block is broken
-     @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state) {
-         if(!world.isRemote) {
-             world.removeTileEntity(pos);
-             world.setBlockToAir(pos);
-         }
-    }
+	public BlockSeedAnalyzer() {
+		super(Material.ground, "seed_analyzer", false);
+		this.setCreativeTab(AgriCraftTab.agriCraftTab);
+		this.isBlockContainer = true;
+		this.setTickRandomly(false);
+		//set mining statistics
+		this.setHardness(1);
+		this.setResistance(1);
+	}
 
-    //override this to delay the removal of the tile entity until after harvestBlock() has been called
-    @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        return !player.capabilities.isCreativeMode || super.removedByPlayer(state, world, pos, player, willHarvest);
-    }
+	//creates a new tile entity every time a block of this type is placed
+	@Override
+	public TileEntitySeedAnalyzer createNewTileEntity(World world, int meta) {
+		return new TileEntitySeedAnalyzer();
+	}
 
-    //this gets called when the block is mined
-    @Override
-    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
-        if(!world.isRemote) {
-            if(!player.capabilities.isCreativeMode) {
-                this.dropBlockAsItem(world, pos, state, 0);
-            }
-            this.breakBlock(world, pos, state);
-        }
-    }
+	//called when the block is broken
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		if (!world.isRemote) {
+			world.removeTileEntity(pos);
+			world.setBlockToAir(pos);
+		}
+	}
 
-    //get a list with items dropped by the the crop
-    @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        ArrayList<ItemStack> items = new ArrayList<>();
-        items.add(new ItemStack(this, 1, 0));
-        if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntitySeedAnalyzer) {
-            TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(pos);
-            if(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId)!=null) {
-                items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId));
-            }
-            if(analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId)!=null) {
-                items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId));
-            }
-        }
-        return items;
-    }
+	//override this to delay the removal of the tile entity until after harvestBlock() has been called
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		return !player.capabilities.isCreativeMode || super.removedByPlayer(state, world, pos, player, willHarvest);
+	}
 
-    //open the gui when the block is activated
-    @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(player.isSneaking()) {
-            return false;
-        }
-        if(!world.isRemote) {
-            player.openGui(AgriCraft.instance, GuiHandler.seedAnalyzerID, world, pos.getX(), pos.getY(), pos.getZ());
-        }
-        return true;
-    }
+	//this gets called when the block is mined
+	@Override
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+		if (!world.isRemote) {
+			if (!player.capabilities.isCreativeMode) {
+				this.dropBlockAsItem(world, pos, state, 0);
+			}
+			this.breakBlock(world, pos, state);
+		}
+	}
 
-    //rendering stuff
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {return false;}
+	//get a list with items dropped by the the crop
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		ArrayList<ItemStack> items = new ArrayList<>();
+		items.add(new ItemStack(this, 1, 0));
+		if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntitySeedAnalyzer) {
+			TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(pos);
+			if (analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId) != null) {
+				items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId));
+			}
+			if (analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId) != null) {
+				items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId));
+			}
+		}
+		return items;
+	}
 
-    @Override
-    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {return false;}
+	//open the gui when the block is activated
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (player.isSneaking()) {
+			return false;
+		}
+		if (!world.isRemote) {
+			player.openGui(AgriCraft.instance, GuiHandler.seedAnalyzerID, world, pos.getX(), pos.getY(), pos.getZ());
+		}
+		return true;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {return false;}        //no particles when this block gets hit
+	//rendering stuff
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {return false;}     //no particles when destroyed
+	@Override
+	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
+	}
 
-    @Override
-    public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
-        super.onBlockEventReceived(world,pos, state, id, data);
-        TileEntity tileEntity = world.getTileEntity(pos);
-        return (tileEntity!=null)&&(tileEntity.receiveClientEvent(id,data));
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
+		return false;
+	}        //no particles when this block gets hit
 
-    @Override
-    protected IProperty[] getPropertyArray() {
-        return new IProperty[0];
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+		return false;
+	}     //no particles when destroyed
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public RenderSeedAnalyzer getRenderer() {
-        return new RenderSeedAnalyzer(this);
-    }
+	@Override
+	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
+		super.onBlockEventReceived(world, pos, state, id, data);
+		TileEntity tileEntity = world.getTileEntity(pos);
+		return (tileEntity != null) && (tileEntity.receiveClientEvent(id, data));
+	}
 
-    @Override
-    protected Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
-    }
+	@Override
+	protected IProperty[] getPropertyArray() {
+		return new IProperty[0];
+	}
 
-    @Override
-    public AxisAlignedBB getDefaultBoundingBox() {
-        return BOX;
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public RenderSeedAnalyzer getRenderer() {
+		return new RenderSeedAnalyzer(this);
+	}
+
+	@Override
+	protected Class<? extends ItemBlock> getItemBlockClass() {
+		return null;
+	}
+
+	@Override
+	public AxisAlignedBB getDefaultBoundingBox() {
+		return BOX;
+	}
 }

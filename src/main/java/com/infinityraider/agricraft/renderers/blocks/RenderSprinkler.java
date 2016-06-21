@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.BlockSprinkler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntitySprinkler;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

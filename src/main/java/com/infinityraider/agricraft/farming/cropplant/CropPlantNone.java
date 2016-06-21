@@ -1,8 +1,7 @@
 package com.infinityraider.agricraft.farming.cropplant;
 
-import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v1.IMutation;
-import com.infinityraider.agricraft.api.v1.RenderMethod;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.render.RenderMethod;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +11,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 
 public final class CropPlantNone extends CropPlant {
 	
@@ -19,14 +19,19 @@ public final class CropPlantNone extends CropPlant {
 
     private CropPlantNone() {}
 
-    @Override
-    public int tier() {
-        return 1;
-    }
+	@Override
+	public String getId() {
+		return "none";
+	}
+
+	@Override
+	public String getPlantName() {
+		return "None";
+	}
 
     @Override
-    public ItemStack getSeed() {
-        return null;
+    public int getTier() {
+        return 1;
     }
 
     @Override
@@ -55,7 +60,7 @@ public final class CropPlantNone extends CropPlant {
     }
 
     @Override
-    public List<IMutation> getDefaultMutations() {
+    public List<IAgriMutation> getDefaultMutations() {
         return new ArrayList<>();
     }
 

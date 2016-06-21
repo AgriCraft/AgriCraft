@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockFenceGate;
-import com.infinityraider.agricraft.tileentity.decoration.TileEntityFenceGate;
+import com.infinityraider.agricraft.tiles.decoration.TileEntityFenceGate;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.PlayerHelper;
 import net.minecraft.block.Block;

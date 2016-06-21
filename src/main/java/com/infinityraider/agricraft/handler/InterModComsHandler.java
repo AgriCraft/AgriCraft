@@ -1,15 +1,13 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.api.v1.ICropPlant;
-import com.infinityraider.agricraft.farming.cropplant.CropPlantAPIv1;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.renderers.player.renderhooks.RenderPlayerHooks;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.relauncher.Side;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 @SuppressWarnings("unused")
 public class InterModComsHandler {
@@ -20,25 +18,26 @@ public class InterModComsHandler {
             if(message.isItemStackMessage()) {
                 try {
                     Class cropPlantClass = Class.forName(message.key);
-                    if(ICropPlant.class.isAssignableFrom(cropPlantClass)) {
-                        ICropPlant cropPlant = null;
+                    if(IAgriPlant.class.isAssignableFrom(cropPlantClass)) {
+                        IAgriPlant cropPlant = null;
                         ItemStack seed = message.getItemStackValue();
                         if(seed==null || seed.getItem()==null) {
-                            LogHelper.error("[IMC] CropPlant registering errored: ItemStack does not contain an item");
+                            AgriCore.getLogger("AgriCraft").error("[IMC] CropPlant registering errored: ItemStack does not contain an item");
                             continue;
                         }
                         try {
-                            cropPlant = (ICropPlant) cropPlantClass.getConstructor().newInstance(seed);
+                            cropPlant = (IAgriPlant) cropPlantClass.getConstructor().newInstance(seed);
                         } catch (Exception e) {
-                            LogHelper.error("[IMC] CropPlant registering errored: "+message.getStringValue()+" does not have a valid constructor, constructor should be public with ItemStack as parameter");
+                            AgriCore.getLogger("AgriCraft").error("[IMC] CropPlant registering errored: "+message.getStringValue()+" does not have a valid constructor, constructor should be public with ItemStack as parameter");
                         }
-                        CropPlantHandler.addCropToRegister(new CropPlantAPIv1(cropPlant));
-                        LogHelper.error("[IMC] Successfully registered CropPlant for "+seed.getUnlocalizedName());
+						// TODO: REPLACE!
+                        //CropPlantHandler.addCropToRegister(new CropPlantAPIv1(cropPlant));
+                        AgriCore.getLogger("AgriCraft").error("[IMC] Successfully registered CropPlant for "+seed.getUnlocalizedName());
                     } else {
-                        LogHelper.error("[IMC] CropPlant registering errored: Class "+cropPlantClass.getName()+" does not implement "+ICropPlant.class.getName());
+                        AgriCore.getLogger("AgriCraft").error("[IMC] CropPlant registering errored: Class "+cropPlantClass.getName()+" does not implement "+IAgriPlant.class.getName());
                     }
                 } catch (ClassNotFoundException e) {
-                    LogHelper.error("[IMC] CropPlant registering errored: No class found for "+message.key);
+                    AgriCore.getLogger("AgriCraft").error("[IMC] CropPlant registering errored: No class found for "+message.key);
                 }
             }
             else if (message.key.equals("renderHooks")) {

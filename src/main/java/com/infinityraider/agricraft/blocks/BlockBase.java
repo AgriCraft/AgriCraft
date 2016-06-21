@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.blocks.blockstate.BlockStateSpecial;
 import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
-import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriCraftTab;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;

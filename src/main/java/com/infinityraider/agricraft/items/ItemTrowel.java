@@ -1,130 +1,90 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.ISeedStats;
-import com.infinityraider.agricraft.api.v1.ITrowel;
-import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.items.ITrowel;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import com.infinityraider.agricraft.api.v1.seed.ISeedHandler;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
-public class ItemTrowel extends ItemBase implements ITrowel {
-	
-    public ItemTrowel() {
-        super("trowel", true, "", "full");
-        this.maxStackSize=1;
-    }
+public class ItemTrowel extends ItemBase implements ITrowel, ISeedHandler {
 
-    //I'm overriding this just to be sure
-    @Override
-    public boolean canItemEditBlocks() {return true;}
+	public ItemTrowel() {
+		super("trowel", true, "", "full");
+		this.maxStackSize = 1;
+	}
 
-    //this is called when you right click with this item in hand
-    @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-        return EnumActionResult.PASS;   //return PASS or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
-    }
-	
-    @Override
-    public boolean hasSeed(ItemStack trowel) {
-        if(trowel==null || trowel.getItem()==null || trowel.getTagCompound()==null) {
-            return false;
-        }
-        return CropPlantHandler.readPlantFromNBT(trowel.getTagCompound().getCompoundTag(AgriCraftNBT.SEED)) != null;
-    }
+	//I'm overriding this just to be sure
+	@Override
+	public boolean canItemEditBlocks() {
+		return true;
+	}
 
-    @Override
-    public boolean isSeedAnalysed(ItemStack trowel) {
-        if(!this.hasSeed(trowel)) {
-            return false;
-        }
-        return trowel.getTagCompound().hasKey(AgriCraftNBT.ANALYZED) && trowel.getTagCompound().getBoolean(AgriCraftNBT.ANALYZED);
-    }
+	// this is called when you right click with this item in hand
+	@Override
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitx, float hity, float hitz) {
+		if (world.isRemote) {
+			return EnumActionResult.PASS;
+		}
+		TileEntity te = world.getTileEntity(pos);
+		if (te instanceof IAgriCrop) {
+			IAgriCrop crop = (IAgriCrop) te;
+			AgriSeed seed = getSeed(stack);
+			if (seed == null && crop.hasPlant()) {
+				seed = crop.removeSeed();
+				if (seed != null) {
+					NBTTagCompound tag = new NBTTagCompound();
+					tag.setString(AgriCraftNBT.SEED, seed.getPlant().getId());
+					seed.getStat().writeToNBT(tag);
+					stack.setTagCompound(tag);
+					stack.setItemDamage(1);
+					return EnumActionResult.SUCCESS;
+				} else {
+					return EnumActionResult.FAIL;
+				}
+			} else if (seed != null && !crop.hasPlant()) {
+				if (crop.setSeed(seed)) {
+					stack.setTagCompound(new NBTTagCompound());
+					stack.setItemDamage(0);
+					return EnumActionResult.SUCCESS;
+				} else {
+					return EnumActionResult.FAIL;
+				}
+			}
+		}
+		return EnumActionResult.PASS;
+	}
 
-    @Override
-    public void analyze(ItemStack trowel) {
-        if(this.hasSeed(trowel)) {
-            if(trowel.hasTagCompound()) {
-                NBTTagCompound tag = trowel.getTagCompound();
-                tag.setBoolean(AgriCraftNBT.ANALYZED, true);
-            } else {
-                NBTTagCompound tag = new NBTTagCompound();
-                CropPlantHandler.setSeedNBT(tag, (short) 1, (short) 1, (short) 1, true);
-                trowel.setTagCompound(tag);
-            }
-        }
-    }
+	// Holder
+	@Override
+	public boolean isValid(ItemStack stack) {
+		return stack != null && stack.getItem() instanceof ItemTrowel;
+	}
 
-    @Override
-    public ItemStack getSeed(ItemStack trowel) {
-        if(!this.hasSeed(trowel)) {
-            return null;
-        }
-        NBTTagCompound tag = trowel.getTagCompound();
-        CropPlant plant = CropPlantHandler.readPlantFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
-        if(plant == null) {
-            return null;
-        }
-        short growth = tag.getShort(AgriCraftNBT.GROWTH);
-        short gain = tag.getShort(AgriCraftNBT.GAIN);
-        short strength = tag.getShort(AgriCraftNBT.STRENGTH);
-        boolean analysed = tag.getBoolean(AgriCraftNBT.ANALYZED);
-        NBTTagCompound seedTag = new NBTTagCompound();
-        CropPlantHandler.setSeedNBT(seedTag, growth, gain, strength, analysed);
-        ItemStack seed = plant.getSeed();
-        seed.setTagCompound(seedTag);
-        return seed;
-    }
-
-    @Override
-    public int getGrowthStage(ItemStack trowel) {
-        if(!this.hasSeed(trowel)) {
-            return -1;
-        }
-        return trowel.getTagCompound().getShort(AgriCraftNBT.MATERIAL_META);
-    }
-
-    @Override
-    public boolean setSeed(ItemStack trowel, ItemStack seed, int growthStage) {
-        if(this.hasSeed(trowel)) {
-            return false;
-        }
-        CropPlant plant = CropPlantHandler.getPlantFromStack(seed);
-        if(plant == null) {
-            return false;
-        }
-        NBTTagCompound seedTag = seed.getTagCompound();
-        boolean initialised = seedTag!=null;
-        short growth = (initialised && seedTag.hasKey(AgriCraftNBT.GROWTH))?seedTag.getShort(AgriCraftNBT.GROWTH): Constants.DEFAULT_GROWTH;
-        short gain = (initialised && seedTag.hasKey(AgriCraftNBT.GAIN))?seedTag.getShort(AgriCraftNBT.GAIN): Constants.DEFAULT_GAIN;
-        short strength = (initialised && seedTag.hasKey(AgriCraftNBT.STRENGTH))?seedTag.getShort(AgriCraftNBT.STRENGTH): Constants.DEFAULT_STRENGTH;
-        boolean analysed = (initialised && seedTag.hasKey(AgriCraftNBT.ANALYZED)) && seedTag.getBoolean(AgriCraftNBT.ANALYZED);
-        NBTTagCompound tag = new NBTTagCompound();
-        CropPlantHandler.setSeedNBT(tag, growth, gain, strength, analysed);
-        tag.setTag(AgriCraftNBT.SEED, CropPlantHandler.writePlantToNBT(plant));
-        tag.setShort(AgriCraftNBT.MATERIAL_META, (short) growthStage);
-        trowel.setTagCompound(tag);
-        trowel.setItemDamage(1);
-        return true;
-    }
-
-    @Override
-    public void clearSeed(ItemStack trowel) {
-        trowel.setTagCompound(null);
-        trowel.setItemDamage(0);
-    }
-
-    @Override
-    public ISeedStats getStats(ItemStack trowel) {
-        return PlantStats.getStatsFromStack(getSeed(trowel));
-    }
+	@Override
+	public AgriSeed getSeed(ItemStack stack) {
+		if (!stack.hasTagCompound()) {
+			return null;
+		}
+		IAgriPlant plant = PlantRegistry.getInstance().getPlant(stack.getTagCompound().getString(AgriCraftNBT.SEED));
+		IAgriStat stat = new PlantStats(stack);
+		if (plant != null) {
+			return new AgriSeed(plant, stat);
+		} else {
+			return null;
+		}
+	}
 
 }

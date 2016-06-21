@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -22,6 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
 public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChannel> {
+
 	protected static final float MIN = Constants.UNIT * Constants.QUARTER;
 	protected static final float MAX = Constants.UNIT * Constants.THREE_QUARTER;
 	public static final AxisAlignedBB BOX = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX);
@@ -90,19 +91,22 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
-		TileEntityChannel channel = (TileEntityChannel) world.getTileEntity(pos);
 		AxisAlignedBB minBB = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX);
-		if (channel.hasNeighbourCheck(AgriForgeDirection.EAST)) {
-			minBB.addCoord(1, MAX, minBB.maxZ);
-		}
-		if (channel.hasNeighbourCheck(AgriForgeDirection.WEST)) {
-			minBB.addCoord(0, MIN, minBB.minZ);
-		}
-		if (channel.hasNeighbourCheck(AgriForgeDirection.SOUTH)) {
-			minBB.addCoord(minBB.maxX, MAX, 1);
-		}
-		if (channel.hasNeighbourCheck(AgriForgeDirection.NORTH)) {
-			minBB.addCoord(minBB.minX, MIN, 0);
+		TileEntity te = world.getTileEntity(pos);
+		if (te instanceof TileEntityChannel) {
+			TileEntityChannel channel = (TileEntityChannel) te;
+			if (channel.hasNeighbourCheck(AgriForgeDirection.EAST)) {
+				minBB.addCoord(1, MAX, minBB.maxZ);
+			}
+			if (channel.hasNeighbourCheck(AgriForgeDirection.WEST)) {
+				minBB.addCoord(0, MIN, minBB.minZ);
+			}
+			if (channel.hasNeighbourCheck(AgriForgeDirection.SOUTH)) {
+				minBB.addCoord(minBB.maxX, MAX, 1);
+			}
+			if (channel.hasNeighbourCheck(AgriForgeDirection.NORTH)) {
+				minBB.addCoord(minBB.minX, MIN, 0);
+			}
 		}
 		return minBB.offset(pos.getX(), pos.getY(), pos.getZ());
 	}
@@ -115,14 +119,13 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 
 	//render methods
 	//--------------
-
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public RenderChannel getRenderer() {
 		return new RenderChannel<>(this);
 	}
-	
+
 	@Override
 	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return false;

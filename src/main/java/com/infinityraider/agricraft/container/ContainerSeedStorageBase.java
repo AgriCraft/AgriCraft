@@ -1,11 +1,12 @@
 package com.infinityraider.agricraft.container;
 
-import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
 import com.infinityraider.agricraft.network.NetworkWrapper;
-import com.infinityraider.agricraft.tileentity.storage.ISeedStorageControllable;
-import com.infinityraider.agricraft.tileentity.storage.ISeedStorageController;
-import com.infinityraider.agricraft.tileentity.storage.SeedStorageSlot;
+import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;
+import com.infinityraider.agricraft.tiles.storage.ISeedStorageController;
+import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -18,167 +19,170 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.List;
 
 public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
-    public ContainerSeedStorageBase(InventoryPlayer inventory, int xOffset, int yOffset) {
-        super(inventory, xOffset, yOffset);
-    }
 
-    /**
-     * tries to add a stack to the storage, return true on success
-     */
-    public abstract boolean addSeedToStorage(ItemStack stack);
+	public ContainerSeedStorageBase(InventoryPlayer inventory, int xOffset, int yOffset) {
+		super(inventory, xOffset, yOffset);
+	}
 
-    /**
-     * Gets a list off all the different kinds of seeds in the storage
-     */
-    public abstract List<ItemStack> getSeedEntries();
+	/**
+	 * tries to add a stack to the storage, return true on success
+	 */
+	public abstract boolean addSeedToStorage(ItemStack stack);
 
-    /**
-     * Gets a list off all the slots corresponding to this seed and meta
-     */
-    public abstract List<SeedStorageSlot> getSeedSlots(Item seed, int meta);
+	/**
+	 * Gets a list off all the different kinds of seeds in the storage
+	 */
+	public abstract List<ItemStack> getSeedEntries();
 
-    /**
-     * Gets a list off all the slots corresponding to this seed and meta
-     */
-    public abstract TileEntity getTileEntity();
+	/**
+	 * Gets a list off all the slots corresponding to this seed and meta
+	 */
+	public abstract List<SeedStorageSlot> getSeedSlots(Item seed, int meta);
 
-    public ISeedStorageControllable getControllable(ItemStack stack) {
-        TileEntity te = this.getTileEntity();
-        ISeedStorageControllable controllable = null;
-        if(te != null) {
-            if (te instanceof ISeedStorageController) {
-                controllable = ((ISeedStorageController) te).getControllable(stack);
-            } else if (te instanceof ISeedStorageControllable) {
-                controllable = (ISeedStorageControllable) te;
-            }
-        }
-        return controllable;
-    }
+	/**
+	 * Gets a list off all the slots corresponding to this seed and meta
+	 */
+	public abstract TileEntity getTileEntity();
 
-    /**
-     * returns a list if itemStacks, for each slot.
-     */
-    @Override
-    public List<ItemStack> getInventory() {
-        return super.getInventory();
-    }
+	public ISeedStorageControllable getControllable(ItemStack stack) {
+		TileEntity te = this.getTileEntity();
+		ISeedStorageControllable controllable = null;
+		if (te != null) {
+			if (te instanceof ISeedStorageController) {
+				controllable = ((ISeedStorageController) te).getControllable(stack);
+			} else if (te instanceof ISeedStorageControllable) {
+				controllable = (ISeedStorageControllable) te;
+			}
+		}
+		return controllable;
+	}
 
-    /**
-     * Tries to move an item stack form the correct tile entity to the player's inventory
-     */
-    public void moveStackFromTileEntityToPlayer(int slotId, ItemStack stack) {
-        ISeedStorageControllable controllable = this.getControllable(stack);
-        if (controllable == null) {
-            return;
-        }
-        ItemStack stackToMove = controllable.getStackForSlotId(slotId);
-        if (stack == null) {
-            return;
-        }
-        if(stackToMove==null || stackToMove.getItem()==null) {
-            return;
-        }
-        stackToMove.stackSize = stack.stackSize > stackToMove.stackSize ? stackToMove.stackSize : stack.stackSize;
-        stackToMove.setTagCompound(controllable.getStackForSlotId(slotId).getTagCompound());
-        if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
-            if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-                //this method is only called form the gui client side, so we need to manually tell the server to execute it there
-                NetworkWrapper.getInstance().sendToServer(new MessageContainerSeedStorage(stack, slotId));
-            } else {
-                //on the server decrease the size of the stack, where it is synced to the client
-                controllable.decreaseStackSizeInSlot(slotId, stack.stackSize - stackToMove.stackSize);
-            }
-        }
-    }
+	/**
+	 * returns a list if itemStacks, for each slot.
+	 */
+	@Override
+	public List<ItemStack> getInventory() {
+		return super.getInventory();
+	}
 
-    /**
-     * Handles shift clicking in the inventory, return the stack that was transferred
-     */
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int clickedSlot) {
-        ItemStack originalStackInSlot = null;
-        Slot slot = this.inventorySlots.get(clickedSlot);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack notMergedStack = slot.getStack();
-            originalStackInSlot = notMergedStack.copy();
-            //try to move item from the player's inventory into the container
-            if (CropPlantHandler.isAnalyzedSeed(notMergedStack)) {
-                ISeedStorageControllable controllable = this.getControllable(notMergedStack);
-                if (controllable != null && controllable.hasLockedSeed()) {
-                    ItemStack locked = controllable.getLockedSeed();
-                    if (notMergedStack.getItem() != locked.getItem() || notMergedStack.getItemDamage() != locked.getItemDamage()) {
-                        return null;
-                    }
-                }
-                if (this.addSeedToStorage(notMergedStack)) {
-                    notMergedStack.stackSize = 0;
-                } else {
-                    return null;
-                }
-            }
-            if (notMergedStack.stackSize == 0) {
-                slot.putStack(null);
-            } else {
-                slot.onSlotChanged();
-            }
-            if (notMergedStack.stackSize == originalStackInSlot.stackSize) {
-                return null;
-            }
-            slot.onPickupFromSlot(player, notMergedStack);
-        }
-        return originalStackInSlot;
-    }
+	/**
+	 * Tries to move an item stack form the correct tile entity to the player's
+	 * inventory
+	 */
+	public void moveStackFromTileEntityToPlayer(int slotId, ItemStack stack) {
+		ISeedStorageControllable controllable = this.getControllable(stack);
+		if (controllable == null) {
+			return;
+		}
+		ItemStack stackToMove = controllable.getStackForSlotId(slotId);
+		if (stack == null) {
+			return;
+		}
+		if (stackToMove == null || stackToMove.getItem() == null) {
+			return;
+		}
+		stackToMove.stackSize = stack.stackSize > stackToMove.stackSize ? stackToMove.stackSize : stack.stackSize;
+		stackToMove.setTagCompound(controllable.getStackForSlotId(slotId).getTagCompound());
+		if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+				//this method is only called form the gui client side, so we need to manually tell the server to execute it there
+				NetworkWrapper.getInstance().sendToServer(new MessageContainerSeedStorage(stack, slotId));
+			} else {
+				//on the server decrease the size of the stack, where it is synced to the client
+				controllable.decreaseStackSizeInSlot(slotId, stack.stackSize - stackToMove.stackSize);
+			}
+		}
+	}
 
-    /**
-     * Tries to merge an itemstack into a range of slots, return true if the stack was (partly) merged
-     */
-    @Override
-    protected boolean mergeItemStack(ItemStack stack, int startSlot, int endSlot, boolean iterateBackwards) {
-        boolean flag = false;
-        int k = iterateBackwards?endSlot - 1:startSlot;
-        Slot currentSlot;
-        ItemStack currentStack;
-        //look for identical stacks to merge with
-        while (stack.stackSize > 0 && (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot)) {
-            currentSlot = this.inventorySlots.get(k);
-            currentStack = currentSlot.getStack();
-            if (currentStack != null && currentStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == currentStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, currentStack)) {
-                int l = currentStack.stackSize + stack.stackSize;
-                //total stacksize is smaller than the limit: merge entire stack into this stack
-                if (l <= stack.getMaxStackSize()) {
-                    stack.stackSize = 0;
-                    currentStack.stackSize = l;
-                    currentSlot.onSlotChanged();
-                    flag = true;
-                }
-                //total stacksize exceeds the limit: merge part of the stack into this stack
-                else if (currentStack.stackSize < stack.getMaxStackSize()) {
-                    stack.stackSize -= stack.getMaxStackSize() - currentStack.stackSize;
-                    currentStack.stackSize = stack.getMaxStackSize();
-                    currentSlot.onSlotChanged();
-                    flag = true;
-                }
-            }
-            k = iterateBackwards?k-1:k+1;
-        }
-        //couldn't completely merge stack with an existing slot, find the first empty slot to put the rest of the stack in
-        if (stack.stackSize > 0) {
-            k = iterateBackwards?endSlot-1:startSlot;
-            while (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot) {
-                currentSlot = this.inventorySlots.get(k);
-                currentStack = currentSlot.getStack();
-                if (currentStack == null) {
-                    currentSlot.putStack(stack.copy());
-                    currentSlot.onSlotChanged();
-                    stack.stackSize = 0;
-                    flag = true;
-                    break;
-                }
-                k = iterateBackwards?k-1:k+1;
-            }
-        }
-        return flag;
-    }
-	
-	
+	/**
+	 * Handles shift clicking in the inventory, return the stack that was
+	 * transferred
+	 */
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int clickedSlot) {
+		ItemStack originalStackInSlot = null;
+		Slot slot = this.inventorySlots.get(clickedSlot);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack notMergedStack = slot.getStack();
+			originalStackInSlot = notMergedStack.copy();
+			//try to move item from the player's inventory into the container
+			AgriSeed seed = SeedRegistry.getInstance().getSeed(notMergedStack);
+			if (seed != null && seed.getStat().isAnalyzed()) {
+				ISeedStorageControllable controllable = this.getControllable(notMergedStack);
+				if (controllable != null && controllable.hasLockedSeed()) {
+					ItemStack locked = controllable.getLockedSeed();
+					if (notMergedStack.getItem() != locked.getItem() || notMergedStack.getItemDamage() != locked.getItemDamage()) {
+						return null;
+					}
+				}
+				if (this.addSeedToStorage(notMergedStack)) {
+					notMergedStack.stackSize = 0;
+				} else {
+					return null;
+				}
+			}
+			if (notMergedStack.stackSize == 0) {
+				slot.putStack(null);
+			} else {
+				slot.onSlotChanged();
+			}
+			if (notMergedStack.stackSize == originalStackInSlot.stackSize) {
+				return null;
+			}
+			slot.onPickupFromSlot(player, notMergedStack);
+		}
+		return originalStackInSlot;
+	}
+
+	/**
+	 * Tries to merge an itemstack into a range of slots, return true if the
+	 * stack was (partly) merged
+	 */
+	@Override
+	protected boolean mergeItemStack(ItemStack stack, int startSlot, int endSlot, boolean iterateBackwards) {
+		boolean flag = false;
+		int k = iterateBackwards ? endSlot - 1 : startSlot;
+		Slot currentSlot;
+		ItemStack currentStack;
+		//look for identical stacks to merge with
+		while (stack.stackSize > 0 && (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot)) {
+			currentSlot = this.inventorySlots.get(k);
+			currentStack = currentSlot.getStack();
+			if (currentStack != null && currentStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == currentStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, currentStack)) {
+				int l = currentStack.stackSize + stack.stackSize;
+				//total stacksize is smaller than the limit: merge entire stack into this stack
+				if (l <= stack.getMaxStackSize()) {
+					stack.stackSize = 0;
+					currentStack.stackSize = l;
+					currentSlot.onSlotChanged();
+					flag = true;
+				} //total stacksize exceeds the limit: merge part of the stack into this stack
+				else if (currentStack.stackSize < stack.getMaxStackSize()) {
+					stack.stackSize -= stack.getMaxStackSize() - currentStack.stackSize;
+					currentStack.stackSize = stack.getMaxStackSize();
+					currentSlot.onSlotChanged();
+					flag = true;
+				}
+			}
+			k = iterateBackwards ? k - 1 : k + 1;
+		}
+		//couldn't completely merge stack with an existing slot, find the first empty slot to put the rest of the stack in
+		if (stack.stackSize > 0) {
+			k = iterateBackwards ? endSlot - 1 : startSlot;
+			while (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot) {
+				currentSlot = this.inventorySlots.get(k);
+				currentStack = currentSlot.getStack();
+				if (currentStack == null) {
+					currentSlot.putStack(stack.copy());
+					currentSlot.onSlotChanged();
+					stack.stackSize = 0;
+					flag = true;
+					break;
+				}
+				k = iterateBackwards ? k - 1 : k + 1;
+			}
+		}
+		return flag;
+	}
+
 }

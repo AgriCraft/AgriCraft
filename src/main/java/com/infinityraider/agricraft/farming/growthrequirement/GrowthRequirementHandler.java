@@ -1,9 +1,12 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
-import com.infinityraider.agricraft.api.v1.*;
-import com.infinityraider.agricraft.handler.config.ConfigurationHandler;
+import com.infinityraider.agricraft.api.v1.util.BlockWithMeta;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.misc.ISoilContainer;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirementBuilder;
+import com.infinityraider.agricraft.api.v1.requirment.RequirementType;
 import com.infinityraider.agricraft.utility.IOHelper;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -60,24 +63,25 @@ public class GrowthRequirementHandler {
 
     private static void registerCustomEntries() {
         //reads custom entries
-    	LogHelper.info("Registering soils to whitelist:");
-        String[] data = IOHelper.getLinesArrayFromData(ConfigurationHandler.readSoils());
+    	AgriCore.getLogger("AgriCraft").info("Registering soils to whitelist:");
+		// TODO Decide if to replace!
+        String[] data = new String[]{"minecraft:dirt"};
         String total = " of " + data.length + ".";
         for (String line : data) {
-            LogHelper.debug("  Parsing " + line + total);
+            AgriCore.getLogger("AgriCraft").debug("  Parsing " + line + total);
             ItemStack stack = IOHelper.getStack(line);
             Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).block : null;
             
             if (block != null) {
                 addDefaultSoil(new BlockWithMeta(block, stack.getItemDamage()));
             } else {
-                LogHelper.info(" Error when adding block to soil whitelist: Invalid block (line: " + line + ")");
+                AgriCore.getLogger("AgriCraft").info(" Error when adding block to soil whitelist: Invalid block (line: " + line + ")");
             }
         }
         
-        LogHelper.info("Completed soil whitelist:");
+        AgriCore.getLogger("AgriCraft").info("Completed soil whitelist:");
         for (BlockWithMeta soil : soils) {
-            LogHelper.info(" - " + Block.blockRegistry.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
+            AgriCore.getLogger("AgriCraft").info(" - " + Block.blockRegistry.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
         }
     }
 

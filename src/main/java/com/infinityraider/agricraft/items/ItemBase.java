@@ -1,9 +1,11 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.creativetab.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriCraftTab;
 import com.infinityraider.agricraft.renderers.items.IItemRenderingHandler;
 import com.infinityraider.agricraft.renderers.items.ItemRendererRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,8 +33,6 @@ public abstract class ItemBase<I extends ItemBase> extends Item implements ICust
 		} else {
 			this.varients = varients;
 		}
-		// This is a bad idea...
-		RegisterHelper.registerItem(this, name);
 	}
 
 	@Override
@@ -55,4 +55,10 @@ public abstract class ItemBase<I extends ItemBase> extends Item implements ICust
 			ItemRendererRegistry.getInstance().registerCustomItemRenderer(this);
 		}
 	}
+	
+	public List<String> getIgnoredNBT() {
+		// Ain't nothing to see here!
+		return new ArrayList<>();
+	}
+
 }

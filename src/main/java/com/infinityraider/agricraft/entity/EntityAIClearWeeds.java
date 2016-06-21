@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.entity;
 
-import com.infinityraider.agricraft.tileentity.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class EntityAIClearWeeds extends EntityAIBase {
+	
     private static final int range = 8;
     private EntityVillagerFarmer villager;
     private ArrayList<TileEntityCrop> weedsToClear;

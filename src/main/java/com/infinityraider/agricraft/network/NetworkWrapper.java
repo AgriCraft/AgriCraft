@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -27,11 +27,12 @@ public class NetworkWrapper {
         this.registerMessage(MessageContainerSeedStorage.class);
         this.registerMessage(MessageGuiSeedStorageClearSeed.class);
         this.registerMessage(MessageTileEntitySeedStorage.class);
-        this.registerMessage(MessageSyncMutation.class);
-        this.registerMessage(MessageFertiliserApplied.class);
+        this.registerMessage(MessageFertilizerApplied.class);
         this.registerMessage(MessageSyncFluidLevel.class);
         this.registerMessage(MessagePeripheralCheckNeighbours.class);
         this.registerMessage(MessageSendNEISetting.class);
+		this.registerMessage(MessageSyncPlantJson.class);
+		this.registerMessage(MessageSyncMutationJson.class);
     }
 
     public void sendToAll(MessageBase message) {
@@ -72,7 +73,7 @@ public class NetworkWrapper {
             wrapper.registerMessage(new MessageHandler<REQ, REPLY>(), message, nextId, side);
             nextId = nextId + 1;
         } catch (Exception e) {
-            LogHelper.printStackTrace(e);
+            AgriCore.getLogger("AgriCraft").trace(e);
         }
     }
 }

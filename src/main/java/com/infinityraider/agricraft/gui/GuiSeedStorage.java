@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.container.ContainerSeedStorage;
 import com.infinityraider.agricraft.network.MessageGuiSeedStorageClearSeed;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.tileentity.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;

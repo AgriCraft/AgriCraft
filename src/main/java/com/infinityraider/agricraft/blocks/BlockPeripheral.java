@@ -5,9 +5,8 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
-import com.infinityraider.agricraft.tileentity.TileEntityBase;
-import com.infinityraider.agricraft.tileentity.peripheral.TileEntityPeripheral;
-import com.infinityraider.agricraft.reference.AgriCraftMods;
+import com.infinityraider.agricraft.tiles.TileEntityBase;
+import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -30,7 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-@Optional.Interface(modid = AgriCraftMods.computerCraft, iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
+@Optional.Interface(modid = "ComputerCraft", iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 	@SideOnly(Side.CLIENT)
 	private TextureAtlasSprite textureTop;

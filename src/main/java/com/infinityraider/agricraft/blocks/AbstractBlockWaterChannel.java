@@ -3,9 +3,8 @@
  */
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.tileentity.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.util.math.AxisAlignedBB;
 
 /**
  *

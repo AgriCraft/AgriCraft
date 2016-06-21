@@ -1,16 +1,14 @@
 package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.compatibility.CompatibilityHandler;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.crafting.RecipeJournal;
 import com.infinityraider.agricraft.items.crafting.RecipeShapelessCustomWood;
-import com.infinityraider.agricraft.reference.Data;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
-import com.infinityraider.agricraft.reference.AgriCraftMods;
-import com.infinityraider.agricraft.utility.LogHelper;
+import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.items.ItemNugget;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
@@ -48,10 +46,6 @@ public class AgriCraftRecipes {
         }
         //seed analyzer
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockSeedAnalyzer, 1), "sgs", " bs", "pwp", 's', "stickWood", 'g', "paneGlass", 'b', net.minecraft.init.Blocks.stone_slab, 'p', "plankWood", 'w', "slabWood"));
-        //seeds
-        GameRegistry.addShapelessRecipe(new ItemStack(Item.getByNameOrId("AgriCraft:seedPotato")), new ItemStack(net.minecraft.init.Items.potato));
-        GameRegistry.addShapelessRecipe(new ItemStack(Item.getByNameOrId("AgriCraft:seedCarrot")), new ItemStack(net.minecraft.init.Items.carrot));
-        GameRegistry.addShapelessRecipe(new ItemStack(net.minecraft.init.Items.wheat_seeds), new ItemStack(net.minecraft.init.Items.wheat));
         //journal
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftItems.journal, 1), "csc", "sbs", "csc", 'c', AgriCraftItems.crops, 's', "listAllseed", 'b', net.minecraft.init.Items.writable_book));
         GameRegistry.addRecipe(new RecipeJournal());
@@ -81,14 +75,7 @@ public class AgriCraftRecipes {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftItems.clipper, 1, 0), " i ", "scn", " s ", 'i', "ingotIron", 's', "stickWood", 'c', new ItemStack(net.minecraft.init.Items.shears)));
         }
         //peripheral
-        if(AgriCraftBlocks.blockPeripheral!=null) {
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.computerCraft)) {
-                //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', AgriCraftBlocks.blockSeedAnalyzer, 'r', net.minecraft.init.AgriCraftItems.comparator, 'c', ComputerCraftHelper.getComputerBlock()));
-            }
-            if(CompatibilityHandler.getInstance().isCompatibilityEnabled(AgriCraftMods.openComputers)) {
-                //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockPeripheral, 1), "iai", "rcr", "iri", 'i', "ingotIron", 'a', AgriCraftBlocks.blockSeedAnalyzer, 'r', net.minecraft.init.AgriCraftItems.comparator, 'c', OpenComputersHelper.getComputerBlock()));
-            }
-        }
+        // To be done elsewhere.
         //CustomWood recipes
         registerCustomWoodRecipes();
         if (!AgriCraftConfig.disableIrrigation) {
@@ -116,8 +103,7 @@ public class AgriCraftRecipes {
                 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(net.minecraft.init.Items.quartz, 1), "nnn", "nnn", "nnn", 'n', "nuggetQuartz"));
                 GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(OreDictHelper.getNuggetForName("Quartz"), 9), new ItemStack(net.minecraft.init.Items.quartz, 1)));
             }
-            for (String[] data : Data.modResources) {
-                String oreName = data[0];
+            for (String oreName : ItemNugget.modNuggets) {
                 Item nuggetItem = OreDictHelper.getNuggetForName(oreName);
                 if (nuggetItem != null && nuggetItem instanceof ItemBase) {
                     ItemStack nugget = new ItemStack(nuggetItem, 9, OreDictHelper.getNuggetMetaForName(oreName));
@@ -128,7 +114,7 @@ public class AgriCraftRecipes {
                     GameRegistry.addRecipe(new ShapelessOreRecipe(nugget, "ingot" + oreName));
                 }
             }
-            LogHelper.debug("Recipes Registered");
+            AgriCore.getLogger("AgriCraft").debug("Recipes Registered");
         }
     }
 
@@ -180,7 +166,7 @@ public class AgriCraftRecipes {
                 (((ItemBlockCustomWood) Item.getItemFromBlock((BlockCustomWood) obj))).getSubItems(woodList);
                 return true;
             } catch(Exception e) {
-                LogHelper.printStackTrace(e);
+                AgriCore.getLogger("AgriCraft").trace(e);
             }
         }
         return false;

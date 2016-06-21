@@ -2,18 +2,17 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
-import com.infinityraider.agricraft.handler.config.AgriCraftConfig;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzerBook;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.tileentity.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -43,10 +42,9 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 								 @Nullable TileEntitySeedAnalyzer analyzer, boolean dynamicRender, float partialTick, int destroyStage) {
 		if (analyzer != null) {
 			this.renderModel(tessellator, analyzer);
-			if (analyzer.hasSeed() || analyzer.hasTrowel()) {
+			if (analyzer.hasSpecimen()) {
 				renderSeed(tessellator, analyzer);
 			}
-			tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
 		}
 	}
 
@@ -64,7 +62,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 	}
 
 	private void renderModel(ITessellator tessellator, TileEntitySeedAnalyzer analyzer) {
-		tessellator.draw();
+		//tessellator.draw();
 		//render the model
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.5F, 1.5F, 0.5F);
@@ -85,7 +83,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 			this.modelBook.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		}
 		GL11.glPopMatrix();
-		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
+		//tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
 
 	}
 

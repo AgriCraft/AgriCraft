@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * 
  */
 package com.infinityraider.agricraft.reference;
 
@@ -16,10 +14,6 @@ package com.infinityraider.agricraft.reference;
  */
 public interface AgriCraftNBT {
 
-	String GROWTH = "growth";
-	String GAIN = "gain";
-	String STRENGTH = "strength";
-	String ANALYZED = "analyzed";
 	String CROSS_CROP = "crossCrop";
 	String WEED = "weed";
 	String DISCOVERED_SEEDS = "discoveredSeeds";
