@@ -25,10 +25,12 @@ public class ItemToolTipHandler {
 		// Add Seed Information.
 		if (stack != null) {
 			AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
-			if (seed != null && seed.getStat().isAnalyzed()) {
-				seed.getStat().addStats(event.getToolTip());
-			} else {
-				event.getToolTip().add(" " + I18n.translateToLocal("agricraft_tooltip.unidentified"));
+			if (seed != null) {
+				if (seed.getStat().isAnalyzed()) {
+					seed.getStat().addStats(event.getToolTip());
+				} else {
+					event.getToolTip().add(" " + I18n.translateToLocal("agricraft_tooltip.unidentified"));
+				}
 			}
 		}
 	}
