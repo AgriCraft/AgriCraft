@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class EntityAIClearWeeds extends EntityAIBase {
+	
     private static final int range = 8;
     private EntityVillagerFarmer villager;
     private ArrayList<TileEntityCrop> weedsToClear;

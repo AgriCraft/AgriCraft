@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.world;
 
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
@@ -18,7 +17,8 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 public class StructureGreenhouseIrrigated extends StructureGreenhouse {
     //structure dimensions
     private static final int xSize = 17;
@@ -254,7 +254,8 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.setBlockState(world, Blocks.torch.getDefaultState(), 10, 4, 7, boundingBox);
         this.setBlockState(world, Blocks.torch.getDefaultState(), 13, 4, 7, boundingBox);
         //place crops
-        List<IAgriCraftPlant> plants = CropPlantHandler.getPlantsUpToTier(AgriCraftConfig.greenHouseMaxTier);
+        List<IAgriPlant> plants = PlantRegistry.getInstance().getPlants();
+		plants.removeIf((p) -> { return p.getTier() > AgriCraftConfig.greenHouseMaxTier; });
         for(int x=3;x<=7;x++) {
             for(int z=8;z<=12;z++) {
                 this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==5 &&z==10), plants);

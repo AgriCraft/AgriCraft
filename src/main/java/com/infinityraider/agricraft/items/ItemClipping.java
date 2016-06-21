@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,9 +22,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 
+/**
+ * Class representing clipping items.
+ *
+ * @todo Convert to conform with new API.
+ * @author The AgriCraft Team
+ */
 public class ItemClipping extends ItemBase {
 
 	@SideOnly(Side.CLIENT)
@@ -41,7 +48,7 @@ public class ItemClipping extends ItemBase {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private Map<IAgriCraftPlant, ModelResourceLocation> textures;
+	private Map<IAgriPlant, ModelResourceLocation> textures;
 
 	public ItemClipping() {
 		super("clipping", false);
@@ -56,7 +63,7 @@ public class ItemClipping extends ItemBase {
 		this.textures = new HashMap<>();
 	}
 
-	public final void addPlant(IAgriCraftPlant crop, String texture) {
+	public final void addPlant(IAgriPlant crop, String texture) {
 		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
 			this.textures.put(crop, getModel(texture));
 			this.textures.put(null, ItemData.DEFAULT_MODEL);
@@ -85,7 +92,12 @@ public class ItemClipping extends ItemBase {
 
 	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getModel(ItemStack stack) {
-		return textures.getOrDefault(toCrop(stack), ItemData.DEFAULT_MODEL);
+		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		if (seed != null) {
+			return textures.getOrDefault(seed.getPlant(), ItemData.DEFAULT_MODEL);
+		} else {
+			return ItemData.DEFAULT_MODEL;
+		}
 	}
 
 	@Override
@@ -116,11 +128,11 @@ public class ItemClipping extends ItemBase {
 		if (crop.isCrossCrop()) {
 			blockCrop.harvest(world, pos, state, player, crop);
 		}
-		if (!crop.canPlant()) {
+		if (!crop.acceptsSeed(stack)) {
 			return EnumActionResult.FAIL;
 		}
 		ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
-		IAgriCraftStats stats = new PlantStats(seed);
+		IAgriStat stats = new PlantStats(seed);
 		if (world.rand.nextInt(10) <= stats.getStrength()) {
 			blockCrop.plantSeed(seed, world, pos);
 		}
@@ -131,21 +143,12 @@ public class ItemClipping extends ItemBase {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String text = I18n.translateToLocal("item.agricraft:clipping.name");
-		IAgriCraftPlant plant = toCrop(stack);
-		if (plant == null || plant.getAllFruits() == null || plant.getAllFruits().isEmpty()) {
+		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		if (seed == null || seed.getPlant().getAllFruits() == null || seed.getPlant().getAllFruits().isEmpty()) {
 			return text;
 		}
-		ItemStack fruit = plant.getAllFruits().get(0);
+		ItemStack fruit = seed.getPlant().getAllFruits().get(0);
 		return fruit.getDisplayName() + " " + text;
-	}
-
-	private static IAgriCraftPlant toCrop(ItemStack stack) {
-		try {
-			ItemStack seed = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
-			return CropPlantHandler.getPlantFromStack(seed);
-		} catch (Exception e) {
-			return null;
-		}
 	}
 
 }

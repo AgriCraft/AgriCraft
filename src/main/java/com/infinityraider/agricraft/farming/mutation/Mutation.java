@@ -1,20 +1,19 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.api.v1.IMutation;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v1.IGrowthRequirement;
 import com.infinityraider.agricraft.utility.MathHelper;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 
-public class Mutation implements IMutation {
+public class Mutation implements IAgriMutation {
 
 	private final double chance;
 
 	@Nonnull
-	private final IAgriCraftPlant child;
+	private final IAgriPlant child;
 	@Nonnull
-	private final IAgriCraftPlant[] parents;
+	private final IAgriPlant[] parents;
 
 	@Override
 	public double getChance() {
@@ -22,12 +21,12 @@ public class Mutation implements IMutation {
 	}
 
 	@Override
-	public IAgriCraftPlant getChild() {
+	public IAgriPlant getChild() {
 		return child;
 	}
 
 	@Override
-	public IAgriCraftPlant[] getParents() {
+	public IAgriPlant[] getParents() {
 		return parents;
 	}
 
@@ -60,7 +59,7 @@ public class Mutation implements IMutation {
 		return sb.toString();
 	}
 
-	public Mutation(double chance, @Nonnull IGrowthRequirement requirement, @Nonnull IAgriCraftPlant child, @Nonnull IAgriCraftPlant... parents) {
+	public Mutation(double chance, @Nonnull IAgriPlant child, @Nonnull IAgriPlant... parents) {
 		this.chance = MathHelper.inRange(chance, 0, 1);
 		this.child = child;
 		Arrays.sort(parents);

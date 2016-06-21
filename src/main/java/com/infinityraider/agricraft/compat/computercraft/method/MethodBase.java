@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.compat.computercraft.method;
 
-import com.infinityraider.agricraft.api.v1.ITrowel;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -93,9 +92,6 @@ public abstract class MethodBase implements IMethod {
 			}
 			ItemStack specimen = peripheral.getSpecimen();
 			ItemStack seed = specimen.copy();
-			if (specimen.getItem() instanceof ITrowel) {
-				seed = ((ITrowel) specimen.getItem()).getSeed(specimen);
-			}
 			if (!isSeedDiscovered(journal, seed)) {
 				throw new MethodException(this, "No information about this seed in the journal");
 			}
@@ -109,7 +105,7 @@ public abstract class MethodBase implements IMethod {
 			if (!hasJournal) {
 				throw new MethodException(this, "Journal is missing");
 			}
-			if (!isSeedDiscovered(journal, crop.getSeedStack())) {
+			if (!isSeedDiscovered(journal, crop.getSeed().toStack())) {
 				throw new MethodException(this, "No information about this seed in the journal");
 			}
 		}

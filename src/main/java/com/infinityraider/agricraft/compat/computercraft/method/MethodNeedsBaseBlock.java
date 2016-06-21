@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.compat.computercraft.method;
 
-import com.infinityraider.agricraft.api.v1.RequirementType;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.requirment.RequirementType;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 public class MethodNeedsBaseBlock extends MethodBaseGrowthReq {
 	
@@ -10,7 +10,7 @@ public class MethodNeedsBaseBlock extends MethodBaseGrowthReq {
     }
 
     @Override
-    protected Object[] onMethodCalled(IAgriCraftPlant plant) throws MethodException {
+    protected Object[] onMethodCalled(IAgriPlant plant) throws MethodException {
         return new Object[] {plant.getGrowthRequirement().getRequiredType()!= RequirementType.NONE};
     }
 

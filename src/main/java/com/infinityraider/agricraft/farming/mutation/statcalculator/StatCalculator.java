@@ -1,13 +1,13 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v1.ICrop;
-import com.infinityraider.agricraft.api.v1.IStatCalculator;
+import com.infinityraider.agricraft.api.v1.stat.IStatCalculator;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 
 import java.util.List;
-import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 
 public abstract class StatCalculator implements IStatCalculator {
     private static IStatCalculator instance;
@@ -35,10 +35,10 @@ public abstract class StatCalculator implements IStatCalculator {
      * @param input A list with all the neighbouring crops, any neighbouring crop is in this list (with or without plant, mature or not, with weeds or not, ...)
      * @param mutation if this result comes from a mutation or from a spread
      */
-    public static void setResultStats(CrossOverResult result, List<? extends ICrop> input, boolean mutation) {
+    public static void setResultStats(CrossOverResult result, List<? extends IAgriCrop> input, boolean mutation) {
         result.setStats(instance.calculateStats(result.getPlant(), input, mutation));
     }
 
 	@Override
-    public abstract IAgriCraftStats calculateStats(IAgriCraftPlant child, List<? extends ICrop> input, boolean mutation);
+    public abstract IAgriStat calculateStats(IAgriPlant child, List<? extends IAgriCrop> input, boolean mutation);
 }

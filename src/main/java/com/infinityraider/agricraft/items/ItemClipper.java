@@ -1,7 +1,8 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.IClipper;
-import net.minecraft.block.state.IBlockState;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.items.IClipper;
+import com.infinityraider.agricraft.init.AgriCraftItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -13,38 +14,47 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
 public class ItemClipper extends ItemBase implements IClipper {
-	
-    public ItemClipper() {
-        super("clipper", true);
-        this.setMaxStackSize(1);
-    }
 
-    @Override
-    public boolean canItemEditBlocks() {return true;}
+	public ItemClipper() {
+		super("clipper", true);
+		this.setMaxStackSize(1);
+	}
 
-    //this is called when you right click with this item in hand
-    @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-        return EnumActionResult.PASS;   //return PASS or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
-    }
-
-    @Override
-    public void onClipperUsed(World world, BlockPos pos, IBlockState state, EntityPlayer player) {}
-
-    @SideOnly(Side.CLIENT)
 	@Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-        if (stack == null || stack.getItem() == null) {
-            list.add("ERROR");
-            return;
-        }
-        if (stack.getItem() instanceof ItemClipping) {
-            stack = ItemStack.loadItemStackFromNBT(stack.getTagCompound());
-        }
-        if (stack == null || stack.getItem() == null) {
-            list.add("ERROR");
-        }
-    }
+	public boolean canItemEditBlocks() {
+		return true;
+	}
+
+	//this is called when you right click with this item in hand
+	@Override
+	public EnumActionResult onItemUse(ItemStack item, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitx, float hity, float hitz) {
+		if (world.isRemote) {
+			return EnumActionResult.SUCCESS;
+		}
+		TileEntity te = world.getTileEntity(pos);
+		if (te instanceof IAgriCrop) {
+			IAgriCrop crop = (IAgriCrop) te;
+			if (crop.hasPlant() && crop.getGrowthStage() > 1) {
+				crop.setGrowthStage(crop.getGrowthStage() - 1);
+				ItemStack clipping = new ItemStack(AgriCraftItems.clipping);
+				clipping.setTagCompound(crop.getSeed().toStack().writeToNBT(new NBTTagCompound()));
+				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), clipping));
+				return EnumActionResult.SUCCESS;
+			}
+			return EnumActionResult.FAIL;
+		}
+		return EnumActionResult.PASS;   //return PASS or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
+		// Nothing to see here...
+	}
+
 }

@@ -1,21 +1,21 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v1.ICrop;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.infinityraider.agricraft.api.v1.IAgriCraftStats;
-import com.infinityraider.agricraft.api.v1.IMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 
 public abstract class StatCalculatorBase extends StatCalculator {
 
 	@Override
-	public IAgriCraftStats calculateStats(IAgriCraftPlant child, List<? extends ICrop> input, boolean mutation) {
-		ICrop[] parents = filterParents(input);
+	public IAgriStat calculateStats(IAgriPlant child, List<? extends IAgriCrop> input, boolean mutation) {
+		IAgriCrop[] parents = filterParents(input);
 		int nrParents = parents.length;
 		int nrValidParents = 0;
 		int[] growth = new int[nrParents];
@@ -31,9 +31,9 @@ public abstract class StatCalculatorBase extends StatCalculator {
 			//0 : if neighbour is a non-parent crop, and non parent crops affect stat gain negatively, multiplier is 0 (0 will reduce the average)
 			//1 : if neighbour is parent crop, multiplier is 1
 			int multiplier = canInherit ? 1 : (AgriCraftConfig.otherCropsAffectStatsNegatively ? 0 : -1);
-			growth[i] = multiplier * parents[i].getStats().getGrowth();
-			gain[i] = multiplier * parents[i].getStats().getGain();
-			strength[i] = multiplier * parents[i].getStats().getStrength();
+			growth[i] = multiplier * parents[i].getStat().getGrowth();
+			gain[i] = multiplier * parents[i].getStat().getGain();
+			strength[i] = multiplier * parents[i].getStat().getStrength();
 		}
 		int meanGrowth = getMeanIgnoringNegativeValues(growth);
 		int meanGain = getMeanIgnoringNegativeValues(gain);
@@ -47,18 +47,18 @@ public abstract class StatCalculatorBase extends StatCalculator {
 	}
 
 	//gets an array of all the possible parents from the array containing all the neighbouring crops
-	protected ICrop[] filterParents(List<? extends ICrop> input) {
-		ArrayList<ICrop> list = new ArrayList<>();
-		for (ICrop crop : input) {
+	protected IAgriCrop[] filterParents(List<? extends IAgriCrop> input) {
+		ArrayList<IAgriCrop> list = new ArrayList<>();
+		for (IAgriCrop crop : input) {
 			if (crop != null && crop.isMature()) {
 				list.add(crop);
 			}
 		}
-		return list.toArray(new ICrop[list.size()]);
+		return list.toArray(new IAgriCrop[list.size()]);
 	}
 
 	// TODO: Investigate Config Setting.
-	protected boolean canInheritStats(IAgriCraftPlant child, IAgriCraftPlant parent) {
+	protected boolean canInheritStats(IAgriPlant child, IAgriPlant parent) {
 		int validParentId = AgriCraftConfig.validParents;
 		//1: any crop
 		//2: only parent crops and identical crops
@@ -68,8 +68,8 @@ public abstract class StatCalculatorBase extends StatCalculator {
 		} else if (child.equals(parent)) {
 			return validParentId == 3;
 		}
-		for (IMutation mutation : MutationHandler.getMutationsFromChild(child)) {
-			for (IAgriCraftPlant p : mutation.getParents()) {
+		for (IAgriMutation mutation : MutationHandler.getMutationsFromChild(child)) {
+			for (IAgriPlant p : mutation.getParents()) {
 				if (parent.equals(p)) {
 					return true;
 				}

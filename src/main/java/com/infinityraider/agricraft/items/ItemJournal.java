@@ -1,9 +1,7 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.api.v1.IJournal;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.api.v1.items.IJournal;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +18,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 
 public class ItemJournal extends ItemBase implements IJournal {
 
@@ -63,7 +63,7 @@ public class ItemJournal extends ItemBase implements IJournal {
 			journal.setTagCompound(new NBTTagCompound());
 			return new ArrayList<>();
 		}
-		
+
 		NBTTagCompound tag = journal.getTagCompound();
 		String discovered = tag.getString(AgriCraftNBT.DISCOVERED_SEEDS);
 		if (discovered.isEmpty()) {
@@ -74,37 +74,31 @@ public class ItemJournal extends ItemBase implements IJournal {
 	}
 
 	@Override
-	public void addEntry(ItemStack journal, ItemStack newEntry) {
-		if (journal == null || journal.getItem() == null || !CropPlantHandler.isValidSeed(newEntry)) {
-			return;
-		}
-		List<String> seeds = getDiscoveredSeedIds(journal);
-		IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(newEntry);
-		if (plant != null && !seeds.contains(plant.getId())) {
-			NBTTagCompound tag = journal.getTagCompound();
-			String old = tag.getString(AgriCraftNBT.DISCOVERED_SEEDS);
-			tag.setString(AgriCraftNBT.DISCOVERED_SEEDS, old + plant.getId() + ";");
-			journal.setTagCompound(tag);
+	public void addEntry(ItemStack journal, IAgriPlant plant) {
+		if (journal != null && journal.getItem() != null && plant != null) {
+			List<String> seeds = getDiscoveredSeedIds(journal);
+			if (!seeds.contains(plant.getId())) {
+				NBTTagCompound tag = journal.getTagCompound();
+				String old = tag.getString(AgriCraftNBT.DISCOVERED_SEEDS);
+				tag.setString(AgriCraftNBT.DISCOVERED_SEEDS, old + plant.getId() + ";");
+				journal.setTagCompound(tag);
+			}
 		}
 	}
 
 	@Override
-	public boolean isSeedDiscovered(ItemStack journal, ItemStack seed) {
-		if (journal == null || !CropPlantHandler.isValidSeed(seed)) {
-			return false;
-		}
-		IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(seed);
-		return plant != null && getDiscoveredSeedIds(journal).contains(plant.getId());
+	public boolean isSeedDiscovered(ItemStack journal, IAgriPlant plant) {
+		return journal != null && plant != null && getDiscoveredSeedIds(journal).contains(plant.getId());
 	}
 
 	@Override
-	public List<IAgriCraftPlant> getDiscoveredSeeds(ItemStack journal) {
-		List<IAgriCraftPlant> list = new ArrayList<>();
+	public List<IAgriPlant> getDiscoveredSeeds(ItemStack journal) {
+		List<IAgriPlant> list = new ArrayList<>();
 		if (journal != null && journal.hasTagCompound()) {
 			for (String id : getDiscoveredSeedIds(journal)) {
-				IAgriCraftPlant seed = CropPlantHandler.getPlant(id);
-				if (seed != null) {
-					list.add(seed);
+				IAgriPlant plant = PlantRegistry.getInstance().getPlant(id);
+				if (plant != null) {
+					list.add(plant);
 				}
 			}
 		}

@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.compat.jei;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeCategory;
 import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeHandler;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeCategory;
@@ -12,7 +11,6 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

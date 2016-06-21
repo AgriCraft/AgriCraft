@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 
-import com.infinityraider.agricraft.api.v1.IDebuggable;
+import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
@@ -50,15 +50,15 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     }
     
 	@Override
-    public boolean canAccept() {
-    	return super.canAccept() && !powered;
+    public boolean canAcceptFluid(int y, int amount, boolean partial) {
+    	return !powered && super.canAcceptFluid(y, amount, partial);
     }
 
     @Override
     public void addDebugInfo(List<String> list) {
         list.add("VALVE");
         list.add("  - State: "+(this.isPowered()?"closed":"open"));
-        list.add("  - FluidLevel: " + this.getFluidLevel() + "/" + Constants.BUCKET_mB / 2);
+        list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + Constants.BUCKET_mB / 2);
         list.add("  - FluidHeight: " + this.getFluidHeight());
         list.add("  - Material: " + this.getMaterial().getRegistryName() + ":" + this.getMaterialMeta()); //Much Nicer.
     }

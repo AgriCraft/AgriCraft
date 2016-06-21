@@ -1,7 +1,8 @@
 package com.infinityraider.agricraft.tiles.storage;
 
-import com.infinityraider.agricraft.api.v1.IDebuggable;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
 import com.infinityraider.agricraft.network.NetworkWrapper;
@@ -146,7 +147,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 	@Override
 	public boolean addStackToInventory(ItemStack stack) {
 		boolean success = false;
-		if (!CropPlantHandler.isAnalyzedSeed(stack)) {
+		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		if (seed == null || !seed.getStat().isAnalyzed()) {
 			return false;
 		}
 		if (!this.worldObj.isRemote) {
@@ -231,7 +233,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 	}
 
 	private boolean isValidForSlot(int realSlot, ItemStack stack) {
-		if (!CropPlantHandler.isAnalyzedSeed(stack)) {
+		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		if (seed == null || !seed.getStat().isAnalyzed()) {
 			return false;
 		}
 		if (this.hasLockedSeed()) {
@@ -489,7 +492,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if (!CropPlantHandler.isAnalyzedSeed(stack)) {
+		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		if (seed == null || !seed.getStat().isAnalyzed()) {
 			return false;
 		}
 		if (this.hasLockedSeed()) {

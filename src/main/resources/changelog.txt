@@ -202,7 +202,7 @@ Changelog
 1.2.2
 -ADDED:  TConstruct scythes can be used for aoe harvesting (right click on crops to aoe harvest)
 -ADDED:  Cactus and mushroom crops
--ADDED:  Configurable instant-growth for magical fertiliser
+-ADDED:  Configurable instant-growth for magical fertilizer
 -ADDED:  Crops for botania's petals
 -ADDED:  Growth rate configuration for sprinkler
 -ADDED:  The option to set the soil for a custom crop (this will require you to add one argument to all your custom crops)
@@ -230,7 +230,7 @@ Changelog
 -Added option to clear all registered seed drops
 -Added support for Chococraft gysahls
 -Added a config to override seed tiers
--Made Magic Fertiliser from Magical Crops work on tier 4 & 5 crops (can be disabled in the config)
+-Made Magic Fertilizer from Magical Crops work on tier 4 & 5 crops (can be disabled in the config)
 -Botania Horn of the Wild will no longer wipe crops away, instead it will clear them
 -Added a config option to disable weeds from taking over plants (they will still spread to nearby empty crops)
 -Added Minetweaker support for various aspects of AgriCraft. Check the GitHub wiki for documentation.

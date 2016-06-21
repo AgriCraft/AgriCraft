@@ -1,10 +1,8 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.ICrop;
-import com.infinityraider.agricraft.api.v1.IRake;
+import com.infinityraider.agricraft.api.v1.items.IRake;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.WeightedRandom;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +20,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.api.v1.misc.IWeedable;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.
@@ -41,21 +40,28 @@ public class ItemHandRake extends ItemBase implements IRake {
 
 	@Override
 	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-		return EnumActionResult.PASS;
-	}
-
-	/**
-	 * Calculates the new weed growth age depending on the used tool variant
-	 *
-	 * @return 0, if iron variant is used, otherwise a random value of the
-	 * interval [0, currentWeedMeta]
-	 */
-	private int calculateGrowthStage(int toolMeta, int currentWeedMeta, Random random) {
-		if (toolMeta == IRON_VARIANT_META) {
-			return 0;
+		TileEntity te = world.getTileEntity(pos);
+		if (te instanceof IWeedable) {
+			IWeedable tile = (IWeedable) te;
+			if (tile.hasWeed()) {
+				tile.clearWeed();
+				if (AgriCraftConfig.rakingDrops && world.rand.nextInt(100) < dropChance[stack.getItemDamage() % dropChance.length]) {
+					ItemStack drop = ItemDropRegistry.instance().getDrop(world.rand);
+					if (drop != null && drop.getItem() != null) {
+						float f = 0.7F;
+						double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+						double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+						double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+						EntityItem entityitem = new EntityItem(world, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, drop);
+						entityitem.setPickupDelay(10);
+						world.spawnEntityInWorld(entityitem);
+					}
+				}
+				return EnumActionResult.SUCCESS;
+			}
+			return EnumActionResult.FAIL;
 		}
-
-		return Math.max(random.nextInt(currentWeedMeta / 2 + 1) - 1, 0) + currentWeedMeta / 2;
+		return EnumActionResult.PASS;
 	}
 
 	@Override
@@ -82,29 +88,6 @@ public class ItemHandRake extends ItemBase implements IRake {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
 		list.add(I18n.translateToLocal("agricraft_tooltip.handRake"));
-	}
-
-	@Override
-	public boolean removeWeeds(World world, BlockPos pos, IBlockState state, ICrop crop, ItemStack rake) {
-		if (crop.hasWeed()) {
-			int weedGrowthStage = state.getValue(AgriCraftProperties.GROWTHSTAGE);
-			int newWeedGrowthStage = calculateGrowthStage(rake.getItemDamage(), weedGrowthStage, world.rand);
-			crop.clearWeed();
-			if (AgriCraftConfig.rakingDrops && !crop.hasWeed() && world.rand.nextInt(100) < dropChance[rake.getItemDamage() % dropChance.length]) {
-				ItemStack drop = ItemDropRegistry.instance().getDrop(world.rand);
-				if (drop != null && drop.getItem() != null) {
-					float f = 0.7F;
-					double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-					double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-					double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-					EntityItem entityitem = new EntityItem(world, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, drop);
-					entityitem.setPickupDelay(10);
-					world.spawnEntityInWorld(entityitem);
-				}
-			}
-			return true;
-		}
-		return false;
 	}
 
 	public static final class ItemDropRegistry {

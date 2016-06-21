@@ -9,6 +9,6 @@ public class MethodGetPlant extends MethodBaseCrop {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) {
-        return new Object[] {crop.getSeedStack().getDisplayName()};
+        return new Object[] {crop.getPlant().getSeedName()};
     }
 }

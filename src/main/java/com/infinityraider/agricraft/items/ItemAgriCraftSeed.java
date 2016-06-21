@@ -10,14 +10,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.seed.ISeedHandler;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import net.minecraft.nbt.NBTTagCompound;
 
-public class ItemAgriCraftSeed extends ItemBase {
+public class ItemAgriCraftSeed extends ItemBase implements ISeedHandler {
 
 	/**
 	 * This constructor shouldn't be called from anywhere except from the
@@ -30,8 +36,12 @@ public class ItemAgriCraftSeed extends ItemBase {
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (IAgriCraftPlant plant : CropPlantHandler.getPlants()) {
-			list.add(CropPlantHandler.getSeed(plant));
+		for (IAgriPlant plant : PlantRegistry.getInstance().getPlants()) {
+			ItemStack stack = new ItemStack(item);
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setString(AgriCraftNBT.SEED, plant.getId());
+			stack.setTagCompound(tag);
+			list.add(stack);
 		}
 	}
 
@@ -42,8 +52,8 @@ public class ItemAgriCraftSeed extends ItemBase {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		final IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(stack);
-		return (plant == null ? "Generic Seeds" : plant.getSeedName());
+		final AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		return (seed == null ? "Generic Seeds" : seed.getPlant().getSeedName());
 	}
 
 	@Override
@@ -54,7 +64,7 @@ public class ItemAgriCraftSeed extends ItemBase {
 		}
 		return EnumActionResult.PASS;
 	}
-	
+
 	@Override
 	public List<String> getIgnoredNBT() {
 		List<String> tags = super.getIgnoredNBT();
@@ -62,7 +72,26 @@ public class ItemAgriCraftSeed extends ItemBase {
 		tags.add(PlantStats.NBT_GROWTH);
 		tags.add(PlantStats.NBT_GAIN);
 		tags.add(PlantStats.NBT_STRENGTH);
+		tags.add(PlantStats.NBT_META);
 		return tags;
+	}
+
+	@Override
+	public boolean isValid(ItemStack stack) {
+		return stack != null && stack.getItem() instanceof ItemAgriCraftSeed;
+	}
+
+	@Override
+	public AgriSeed getSeed(ItemStack stack) {
+		if (stack != null && stack.hasTagCompound()) {
+			NBTTagCompound tag = stack.getTagCompound();
+			IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriCraftNBT.SEED));
+			IAgriStat stat = new PlantStats(tag);
+			if (plant != null) {
+				return new AgriSeed(plant, stat);
+			}
+		}
+		return null;
 	}
 
 }

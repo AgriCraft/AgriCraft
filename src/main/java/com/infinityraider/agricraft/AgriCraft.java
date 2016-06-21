@@ -3,7 +3,6 @@ package com.infinityraider.agricraft;
 import com.infinityraider.agricraft.apiimpl.APISelector;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.core.CoreHandler;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.*;
@@ -13,6 +12,7 @@ import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -97,7 +97,7 @@ public class AgriCraft {
         //Have to do this in postInit because some mods don't register their items/blocks until init
         AgriCraftRecipes.init();
         GrowthRequirementHandler.init();
-        CropPlantHandler.init();
+        CompatibilityHandler.getInstance().getCropPlants().forEach(PlantRegistry.getInstance()::addPlant);
         WorldGen.init();
         CompatibilityHandler.getInstance().postInit();
         AgriCore.getLogger("AgriCraft").debug("Post-Initialization Complete");

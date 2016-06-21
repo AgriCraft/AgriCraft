@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 /**
  *
@@ -22,7 +22,7 @@ public class ProduceRecipeWrapper implements IRecipeWrapper {
 	private final List input;
 	private final List<ItemStack> output;
 
-	public ProduceRecipeWrapper(IAgriCraftPlant recipe) {
+	public ProduceRecipeWrapper(IAgriPlant recipe) {
 		ImmutableList.Builder builder = ImmutableList.builder();
 
 		builder.add(recipe.getSeed());

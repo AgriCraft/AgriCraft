@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.compat.computercraft.method;
 
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 public class MethodGetBrightnessRange extends MethodBaseGrowthReq {
     public MethodGetBrightnessRange() {
@@ -8,7 +8,7 @@ public class MethodGetBrightnessRange extends MethodBaseGrowthReq {
     }
 
     @Override
-    protected Object[] onMethodCalled(IAgriCraftPlant plant) {
+    protected Object[] onMethodCalled(IAgriPlant plant) {
         int[] brightnessRange = plant.getGrowthRequirement().getBrightnessRange();
         return new Object[] {brightnessRange[0], brightnessRange[1]};
     }

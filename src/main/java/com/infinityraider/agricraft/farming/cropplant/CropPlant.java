@@ -1,8 +1,10 @@
 package com.infinityraider.agricraft.farming.cropplant;
 
+import com.infinityraider.agricraft.api.v1.render.RenderMethod;
+import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
 import com.google.common.base.Function;
-import com.infinityraider.agricraft.api.v1.*;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.utility.SeedHelper;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
@@ -25,19 +27,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
+import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.reference.AgriCraftNBT;
 
 /**
  * The main class used by TileEntityCrop.
- * Only make one object of this per seed object, and register using {@link CropPlantHandler#registerPlant(CropPlant plant)}
+ * Only make one object of this per seed object, and register using {@link SeedHelper#registerPlant(CropPlant)}
  * ICropPlant is implemented to be able to read data from this class from the API
  */
-public abstract class CropPlant implements IAgriCraftPlant {
+public abstract class CropPlant implements IAgriPlant {
     private IGrowthRequirement growthRequirement;
     private int tier;
     private int spreadChance;
     private boolean blackListed;
     private boolean ignoreVanillaPlantingRule;
-	private ItemStack seed;
 
     public CropPlant() {
         this.growthRequirement = initGrowthRequirement();
@@ -146,7 +152,11 @@ public abstract class CropPlant implements IAgriCraftPlant {
 
 	@Override
 	public final ItemStack getSeed() {
-		return CropPlantHandler.getSeed(this);
+		ItemStack stack = new ItemStack(AgriCraftItems.seed);
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setString(AgriCraftNBT.SEED, this.getId());
+		stack.setTagCompound(tag);
+		return stack;
 	}
 
     @Override
@@ -183,7 +193,7 @@ public abstract class CropPlant implements IAgriCraftPlant {
     public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
 
     @Override
-    public List<IMutation> getDefaultMutations() {
+    public List<IAgriMutation> getDefaultMutations() {
 		/* Deprecated. Left here for reference.
         List<IMutation> list = new ArrayList<>();
         IMutation mutation = MutationConfig.getInstance().getDefaultMutation(this.getSeed());
@@ -238,7 +248,7 @@ public abstract class CropPlant implements IAgriCraftPlant {
     public abstract boolean canBonemeal();
 
     @Override
-    public IAdditionalCropData getInitialCropData(World world, BlockPos pos, ICrop crop) {
+    public IAdditionalCropData getInitialCropData(World world, BlockPos pos, IAgriCrop crop) {
         return null;
     }
 
@@ -248,13 +258,13 @@ public abstract class CropPlant implements IAgriCraftPlant {
     }
 
     @Override
-    public void onValidate(World world, BlockPos pos, ICrop crop) {}
+    public void onValidate(World world, BlockPos pos, IAgriCrop crop) {}
 
     @Override
-    public void onInvalidate(World world, BlockPos pos, ICrop crop) {}
+    public void onInvalidate(World world, BlockPos pos, IAgriCrop crop) {}
 
     @Override
-    public void onChunkUnload(World world, BlockPos pos, ICrop crop) {}
+    public void onChunkUnload(World world, BlockPos pos, IAgriCrop crop) {}
 
     public final void setGrowthRequirement(IGrowthRequirement growthRequirement) {
         this.growthRequirement = growthRequirement;

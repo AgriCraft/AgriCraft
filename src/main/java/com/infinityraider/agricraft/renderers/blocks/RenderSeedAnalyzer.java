@@ -42,7 +42,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<TileEntitySeedAnalyzer> 
 								 @Nullable TileEntitySeedAnalyzer analyzer, boolean dynamicRender, float partialTick, int destroyStage) {
 		if (analyzer != null) {
 			this.renderModel(tessellator, analyzer);
-			if (analyzer.hasSeed() || analyzer.hasTrowel()) {
+			if (analyzer.hasSpecimen()) {
 				renderSeed(tessellator, analyzer);
 			}
 		}

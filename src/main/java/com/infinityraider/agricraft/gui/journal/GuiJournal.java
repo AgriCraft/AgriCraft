@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.api.v1.IAgriCraftPlant;
 import com.infinityraider.agricraft.gui.Component;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
@@ -18,6 +17,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.renderer.GlStateManager;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 @SideOnly(Side.CLIENT)
 public class GuiJournal extends GuiScreen {
@@ -137,7 +137,7 @@ public class GuiJournal extends GuiScreen {
 		return new JournalPageSeed(getDiscoveredSeeds(), currentPageNumber - MINIMUM_PAGES);
 	}
 
-	private List<IAgriCraftPlant> getDiscoveredSeeds() {
+	private List<IAgriPlant> getDiscoveredSeeds() {
 		if (journal != null && journal.getItem() instanceof ItemJournal) {
 			return ((ItemJournal) journal.getItem()).getDiscoveredSeeds(journal);
 		} else {

@@ -1,16 +1,14 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.api.v1.*;
+import com.infinityraider.agricraft.api.v1.items.IClipper;
+import com.infinityraider.agricraft.api.v1.items.ITrowel;
+import com.infinityraider.agricraft.api.v1.items.IRake;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 import com.infinityraider.agricraft.items.ItemDebugger;
-import com.infinityraider.agricraft.network.MessageFertiliserApplied;
-import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
@@ -25,7 +23,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -36,12 +33,19 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.v1.FertilizerRegistry;
+import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.items.ItemCrop;
+import com.infinityraider.agricraft.reference.PropertyCropPlant;
 
 /**
  * The most important block in the mod.
@@ -60,6 +64,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		this.setStepSound(SoundType.PLANT);
 		this.setHardness(0.0F);
 		this.disableStats();
+		this.setCreativeTab(null);
 	}
 
 	@Override
@@ -73,7 +78,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				.withProperty(AgriCraftProperties.GROWTHSTAGE, Math.max(Math.min(0, meta), Constants.MATURE))
 				.withProperty(AgriCraftProperties.WEEDS, false)
 				.withProperty(AgriCraftProperties.CROSSCROP, false)
-				.withProperty(AgriCraftProperties.PLANT, CropPlantHandler.NONE);
+				.withProperty(AgriCraftProperties.PLANT, PropertyCropPlant.NONE);
 	}
 
 	@Override
@@ -91,7 +96,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			TileEntityCrop crop = (TileEntityCrop) te;
 			state.withProperty(AgriCraftProperties.WEEDS, crop.hasWeed());
 			state.withProperty(AgriCraftProperties.CROSSCROP, crop.isCrossCrop());
-			state.withProperty(AgriCraftProperties.PLANT, crop.hasPlant() ? crop.getPlant() : CropPlantHandler.NONE);
+			state.withProperty(AgriCraftProperties.PLANT, crop.hasPlant() ? crop.getPlant() : PropertyCropPlant.NONE);
 		}
 		return state;
 	}
@@ -108,32 +113,31 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 * Randomly called to apply GROWTH ticks
 	 */
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rnd) {
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 		if (crop.hasPlant() || crop.hasWeed()) {
-			if (CompatibilityHandler.getInstance().allowGrowthTick(world, pos, this, crop, rnd)) {
+			if (CompatibilityHandler.getInstance().allowGrowthTick(world, pos, this, crop, rand)) {
 				if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds) {
-					crop.spreadWeed();
+					crop.spreadWeed(rand);
 				} else if (crop.isFertile()) {
 					//multiplier from GROWTH stat
-					double growthBonus = 1.0 + crop.getStats().getGrowth() / 10.0;
+					double growthBonus = 1.0 + crop.getStat().getGrowth() / 10.0;
 					//multiplier defined in the config
 					float global = AgriCraftConfig.growthMultiplier;
 					//crop dependent base GROWTH rate
 					float growthRate = (float) crop.getGrowthRate();
 					//determine if GROWTH tick should be applied or skipped
-					boolean shouldGrow = (rnd.nextDouble() <= (growthRate * growthBonus * global) / 100);
+					boolean shouldGrow = (rand.nextDouble() <= (growthRate * growthBonus * global) / 100);
 					if (shouldGrow) {
 						crop.applyGrowthTick();
 					}
 				}
 			}
-		} else //15% chance to spawn weeds
-		 if (AgriCraftConfig.enableWeeds && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
-				crop.spawnWeed();
-			} else if (crop.isCrossCrop()) {
-				crop.crossOver();
-			}
+		} else if (AgriCraftConfig.enableWeeds) {
+			crop.spawnWeed(rand);
+		} else if (crop.isCrossCrop() && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
+			crop.crossOver();
+		}
 	}
 
 	/**
@@ -155,7 +159,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				crop.setCrossCrop(false);
 				spawnAsEntity(world, pos, new ItemStack(AgriCraftItems.crops, 1));
 				return false;
-			} else if (crop.isMature() && crop.allowHarvest(player)) {
+			} else if (crop.canHarvest()) {
 				crop.getWorld().setBlockState(crop.getPos(), state.withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
 				List<ItemStack> drops = crop.getFruits();
 				for (ItemStack drop : drops) {
@@ -206,15 +210,16 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		if (!world.isRemote) {
 			TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 			//is the cropEmpty a crosscrop or does it already have a plant
-			if (crop.isCrossCrop() || crop.hasPlant() || !(CropPlantHandler.isValidSeed(stack))) {
+			if (crop.isCrossCrop() || crop.hasPlant()) {
 				return false;
 			}
 			//the SEED can be planted here
-			if (!CropPlantHandler.getGrowthRequirement(stack).isValidSoil(world, pos.add(0, -1, 0))) {
+			AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+			if (seed == null || !seed.getPlant().getGrowthRequirement().isValidSoil(world, pos.add(0, -1, 0))) {
 				return false;
 			}
 			//get AgriCraftNBT data from the seeds
-			crop.setPlant(new PlantStats(stack), stack.getItem(), stack.getItemDamage());
+			crop.setSeed(stack);
 			return true;
 		}
 		return false;
@@ -243,49 +248,27 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				return false;
 			} else if (player.isSneaking() || heldItem == null || heldItem.getItem() == null) {
 				this.harvest(world, pos, state, player, crop);
+			} else if (
+					heldItem.getItem() instanceof IRake ||
+					heldItem.getItem() instanceof IClipper ||
+					heldItem.getItem() instanceof ITrowel || 
+					heldItem.getItem() instanceof ItemDebugger
+					) {
+				// Allow the rake or clipper to do its thing.
+				return false;
+			} else if (FertilizerRegistry.getInstance().isFertilizer(heldItem)) {
+				IAgriFertilizer fert = FertilizerRegistry.getInstance().getFertilizer(heldItem);
+				return fert == null ? false : fert.applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
 			} else if (heldItem.getItem() instanceof ItemAgriCraftSeed && !crop.isCrossCrop() && !crop.hasWeed()) {
-				IAgriCraftPlant plant = CropPlantHandler.getPlantFromStack(heldItem);
-				if (plant != null && plant.getGrowthRequirement().canGrow(world, pos)) {
-					crop.setPlant(new PlantStats(), plant);
-					if (!player.capabilities.isCreativeMode) {
+				AgriSeed seed = SeedRegistry.getInstance().getSeed(heldItem);
+				if (seed != null && seed.getPlant().getGrowthRequirement().canGrow(world, pos)) {
+					if (crop.setSeed(seed) && !player.capabilities.isCreativeMode) {
 						heldItem.stackSize--;
 					}
 				}
 			} //check to see if the player clicked with crops (crosscrop attempt)
 			else if (heldItem.getItem() == AgriCraftItems.crops) {
 				this.setCrossCrop(world, pos, state, player, heldItem);
-			} //trowel usage
-			else if (heldItem.getItem() instanceof ITrowel) {
-				crop.onTrowelUsed((ITrowel) heldItem.getItem(), heldItem);
-			} //clipper usage
-			else if (heldItem.getItem() instanceof IClipper) {
-				this.onClipperUsed(world, pos, state, crop);
-				((IClipper) heldItem.getItem()).onClipperUsed(world, pos, state, player);
-			} else if (heldItem.getItem() instanceof IRake) {
-				if (crop.hasPlant()) {
-					return this.upRoot(world, pos);
-				} else if (crop.hasWeed()) {
-					((IRake) heldItem.getItem()).removeWeeds(world, pos, state, crop, heldItem);
-				}
-			} //check to see if the player wants and is allowed to use bonemeal
-			else if (heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
-				return !crop.canBonemeal();
-			} //fertiliser
-			else if (heldItem.getItem() instanceof IFertiliser) {
-				IFertiliser fertiliser = (IFertiliser) heldItem.getItem();
-				if (crop.allowFertiliser(fertiliser)) {
-					crop.applyFertiliser(fertiliser, world.rand);
-					NetworkWrapper.getInstance().sendToAllAround(
-							new MessageFertiliserApplied(heldItem, pos),
-							new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
-					if (!player.capabilities.isCreativeMode) {
-						heldItem.stackSize = heldItem.stackSize - 1;
-					}
-				}
-				return false;
-			} //allow the debugger to be used
-			else if (heldItem.getItem() instanceof ItemDebugger) {
-				return false;
 			} //mod interaction
 			else if (CompatibilityHandler.getInstance().isRightClickHandled(heldItem.getItem())) {
 				return CompatibilityHandler.getInstance().handleRightClick(world, pos, this, crop, player, heldItem);
@@ -293,7 +276,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				//harvest operation
 				this.harvest(world, pos, state, player, crop);
 				//check to see if clicked with seeds
-				if (CropPlantHandler.isValidSeed(heldItem)) {
+				if (SeedRegistry.getInstance().isSeed(heldItem)) {
 					if (this.plantSeed(heldItem, world, pos)) {
 						//take one SEED away if the player is not in creative
 						heldItem.stackSize = heldItem.stackSize - (player.capabilities.isCreativeMode ? 0 : 1);
@@ -313,7 +296,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	@Override
 	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
 		if (!world.isRemote) {
-			IAgriCraftPlant plant = ((TileEntityCrop) world.getTileEntity(pos)).getPlant();
+			IAgriPlant plant = ((TileEntityCrop) world.getTileEntity(pos)).getPlant();
 			if (!player.capabilities.isCreativeMode) {
 				//drop items if the player is not in creative
 				this.dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
@@ -354,9 +337,9 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 					if (crop.hasPlant()) {
 						if (crop.isMature()) {
 							drops.addAll(crop.getFruits());
-							drops.add(crop.getSeedStack());
+							drops.add(crop.getSeed().toStack());
 						} else if (!AgriCraftConfig.onlyMatureDropSeeds) {
-							drops.add(crop.getSeedStack());
+							drops.add(crop.getSeed().toStack());
 						}
 					}
 				}
@@ -468,7 +451,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		} else if (crop.isCrossCrop()) {
 			crop.setCrossCrop(false);
 			drops.add(new ItemStack(AgriCraftItems.crops, 1));
-		} else if (crop.isMature() && crop.allowHarvest(null)) {
+		} else if (crop.canHarvest()) {
 			crop.getWorld().setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
 			for (ItemStack stack : crop.getFruits()) {
 				if (stack == null || stack.getItem() == null) {
@@ -478,24 +461,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			}
 		}
 		return drops;
-	}
-
-	/**
-	 * Performs the needed action when this crop is clipped: check if there is a
-	 * valid plant, drop a clipping and decrement the GROWTH stage
-	 */
-	public void onClipperUsed(World world, BlockPos pos, IBlockState state, TileEntityCrop crop) {
-		if (!crop.hasPlant()) {
-			return;
-		}
-		int growthStage = state.getValue(AgriCraftProperties.GROWTHSTAGE);
-		if (growthStage <= 0) {
-			return;
-		}
-		ItemStack clipping = new ItemStack(AgriCraftItems.clipping, 1, 0);
-		clipping.setTagCompound(crop.getSeedStack().writeToNBT(new NBTTagCompound()));
-		spawnAsEntity(world, pos, clipping);
-		world.setBlockState(pos, state.withProperty(AgriCraftProperties.GROWTHSTAGE, growthStage - 1), 3);
 	}
 
 	/**
@@ -524,8 +489,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				items.add(new ItemStack(AgriCraftItems.crops, 1));
 			}
 			if (crop.hasPlant()) {
-				ItemStack seedStack = crop.getSeedStack().copy();
-				items.add(seedStack);
+				items.add(crop.getSeed().toStack());
 				if (crop.isMature()) {
 					items.addAll(crop.getFruits());
 				}
@@ -559,12 +523,12 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 					if (crop.isMature()) {
 						drops.addAll(crop.getFruits());
 					}
-					drops.add(crop.getSeedStack());
+					drops.add(crop.getSeed().toStack());
 					for (ItemStack drop : drops) {
 						spawnAsEntity(world, pos, drop);
 					}
 				}
-				crop.clearPlant();
+				crop.removePlant();
 			}
 		}
 		return false;
@@ -673,12 +637,8 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	@Override
 	public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity == null || !(tileEntity instanceof ICrop)) {
+		if (tileEntity == null || !(tileEntity instanceof IAgriCrop)) {
 			return world.getBlockState(pos);
-		}
-		ICrop crop = (ICrop) tileEntity;
-		if (crop.hasPlant()) {
-			return crop.getPlantBlockState();
 		}
 		return world.getBlockState(pos);
 	}
