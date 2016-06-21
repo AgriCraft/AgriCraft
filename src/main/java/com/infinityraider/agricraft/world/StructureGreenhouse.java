@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.world;
 
 import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
+import com.infinityraider.agricraft.utility.SeedHelper;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
@@ -11,7 +11,6 @@ import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -24,8 +23,8 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	//structure dimensions
@@ -176,7 +175,8 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 		this.setBlockState(world, Blocks.torch.getDefaultState(), 15, 4, 10, boundingBox);
 		this.setBlockState(world, Blocks.torch.getDefaultState(), 8, 4, 2, boundingBox);
 		//place crops
-		List<IAgriPlant> plants = CropPlantHandler.getPlantsUpToTier(AgriCraftConfig.greenHouseMaxTier);
+		List<IAgriPlant> plants = PlantRegistry.getInstance().getPlants();
+		plants.removeIf((p) -> { return p.getTier() > AgriCraftConfig.greenHouseMaxTier; });
 		for (int x = 3; x <= 7; x++) {
 			for (int z = 3; z <= 7; z++) {
 				this.generateStructureCrop(world, boundingBox, x, 2, z, (z % 2 == 0 && x % 2 == 0) || (x == 5 && z == 5), plants);
@@ -205,15 +205,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 				if (crosscrop) {
 					crop.setCrossCrop(true);
 				} else {
-					ItemStack seed = CropPlantHandler.getRandomSeed(world.rand, false, plants);
-					crop.setStat(
-							new PlantStats(
-									(int) Math.ceil(Math.random() * 7),
-									(int) Math.ceil(Math.random() * 7),
-									(int) Math.ceil(Math.random() * 7),
-									false)
-					);
-					crop.setPlant(CropPlantHandler.getPlantFromStack(seed));
+					crop.setSeed(SeedHelper.getRandomSeed(world.rand, false, plants));
 				}
 			}
 			return true;

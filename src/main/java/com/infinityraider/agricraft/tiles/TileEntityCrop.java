@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.farming.mutation.MutationEngine;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
@@ -32,6 +31,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.utility.MathHelper;
 import com.infinityraider.agricraft.utility.WorldHelper;
@@ -172,7 +172,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		this.data = null;
 		return oldPlant;
 	}
-	
+
 	// =========================================================================
 	// IStatAcceptor Methods
 	// =========================================================================
@@ -289,7 +289,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		}
 		return false;
 	}
-	
+
 	//when fertilizer is applied
 	@Override
 	public boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
@@ -302,7 +302,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		}
 		return false;
 	}
-	
+
 	// =========================================================================
 	// IHarvestable methods.
 	// =========================================================================
@@ -310,14 +310,14 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	public boolean canHarvest() {
 		return hasPlant() && isMature();
 	}
-	
+
 	@Override
 	public boolean harvest(@Nullable EntityPlayer player) {
 		// TODO: Correct horrible hack.
 		// This is a terrible, aweful method of doing this.
 		return ((BlockCrop) getWorld().getBlockState(pos).getBlock()).harvest(getWorld(), getPos(), getWorld().getBlockState(getPos()), player, this);
 	}
-	
+
 	@Override
 	public List<ItemStack> getFruits() {
 		return plant.getFruitsOnHarvest(stats.getGain(), worldObj.rand);
@@ -369,7 +369,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		stats.writeToNBT(tag);
 		tag.setBoolean(AgriCraftNBT.CROSS_CROP, crossCrop);
 		tag.setBoolean(AgriCraftNBT.WEED, weed);
-		CropPlantHandler.writePlantToNBT(tag, plant);
+		if (plant != null) {
+			tag.setString(AgriCraftNBT.SEED, plant.getId());
+		}
 		if (getAdditionalCropData() != null) {
 			tag.setTag(AgriCraftNBT.INVENTORY, getAdditionalCropData().writeToNBT());
 		}
@@ -382,7 +384,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		this.stats = new PlantStats(tag);
 		this.crossCrop = tag.getBoolean(AgriCraftNBT.CROSS_CROP);
 		this.weed = tag.getBoolean(AgriCraftNBT.WEED);
-		this.plant = CropPlantHandler.readPlantFromNBT(tag);
+		this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriCraftNBT.SEED));
 		if (tag.hasKey(AgriCraftNBT.INVENTORY) && this.plant != null) {
 			this.data = plant.readCropDataFromNBT(tag.getCompoundTag(AgriCraftNBT.INVENTORY));
 		}

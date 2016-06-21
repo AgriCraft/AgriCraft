@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.blocks.BlockGrate;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
@@ -25,7 +24,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 
 @SuppressWarnings("unused")
 public class PlayerInteractEventHandler {
@@ -64,7 +63,7 @@ public class PlayerInteractEventHandler {
 			if (ignoresVanillaPlantingSetting(seed)) {
 				return true;
 			}
-			if (CropPlantHandler.isValidSeed(seed)) {
+			if (SeedRegistry.getInstance().isSeed(seed)) {
 				return false;
 			}
 			if (seed.getItem() == Items.potato) {
@@ -82,7 +81,6 @@ public class PlayerInteractEventHandler {
 
 	private static boolean ignoresVanillaPlantingSetting(ItemStack seed) {
 		// TODO: REPLACE
-		IAgriPlant plant = CropPlantHandler.getPlantFromStack(seed);
 		return true;
 	}
 

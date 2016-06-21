@@ -12,8 +12,12 @@ import java.util.List;
 public interface IPlantRegistry {
 	
 	boolean isPlant(IAgriPlant plant);
+	
+	IAgriPlant getPlant(String id);
 
 	boolean addPlant(IAgriPlant plant);
+	
+	boolean removePlant(IAgriPlant plant);
 	
 	List<IAgriPlant> getPlants();
 	

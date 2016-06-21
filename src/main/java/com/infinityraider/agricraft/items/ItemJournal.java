@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.items.IJournal;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 
 public class ItemJournal extends ItemBase implements IJournal {
 
@@ -96,9 +96,9 @@ public class ItemJournal extends ItemBase implements IJournal {
 		List<IAgriPlant> list = new ArrayList<>();
 		if (journal != null && journal.hasTagCompound()) {
 			for (String id : getDiscoveredSeedIds(journal)) {
-				IAgriPlant seed = CropPlantHandler.getPlant(id);
-				if (seed != null) {
-					list.add(seed);
+				IAgriPlant plant = PlantRegistry.getInstance().getPlant(id);
+				if (plant != null) {
+					list.add(plant);
 				}
 			}
 		}

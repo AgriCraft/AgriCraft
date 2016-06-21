@@ -3,10 +3,12 @@
 package com.infinityraider.agricraft.apiimpl.v1;
 
 import com.infinityraider.agricraft.api.v1.plant.IPlantRegistry;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
-import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
 import java.util.List;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -14,33 +16,50 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
  */
 public class PlantRegistry implements IPlantRegistry {
 	
+	private final Map<String, IAgriPlant> plants;
+
+	public PlantRegistry() {
+		this.plants = new HashMap<>();
+	}
+	
 	public static IPlantRegistry getInstance() {
 		return APIimplv1.getInstance().getPlantRegistry();
 	}
 
 	@Override
 	public boolean isPlant(IAgriPlant plant) {
-		return CropPlantHandler.getPlantIds().contains(plant.getId());
+		return this.plants.containsKey(plant.getId());
+	}
+
+	@Override
+	public IAgriPlant getPlant(String id) {
+		return this.plants.get(id);
 	}
 
 	@Override
 	public boolean addPlant(IAgriPlant plant) {
-		try {
-			CropPlantHandler.registerPlant(plant);
+		if (!this.plants.containsKey(plant.getId())) {
+			this.plants.put(plant.getId(), plant);
+			AgriCraftJEIPlugin.registerRecipe(plant);
 			return true;
-		} catch (DuplicateCropPlantException e) {
+		} else {
 			return false;
 		}
 	}
 
 	@Override
+	public boolean removePlant(IAgriPlant plant) {
+		return this.plants.remove(plant.getId()) != null;
+	}
+
+	@Override
 	public List<IAgriPlant> getPlants() {
-		return CropPlantHandler.getPlants();
+		return new ArrayList<>(this.plants.values());
 	}
 
 	@Override
 	public List<String> getPlantIds() {
-		return CropPlantHandler.getPlantIds();
+		return new ArrayList<>(this.plants.keySet());
 	}
 	
 }

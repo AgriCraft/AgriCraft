@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.utility.MathHelper;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
@@ -60,7 +59,7 @@ public class Mutation implements IAgriMutation {
 		return sb.toString();
 	}
 
-	public Mutation(double chance, @Nonnull IGrowthRequirement requirement, @Nonnull IAgriPlant child, @Nonnull IAgriPlant... parents) {
+	public Mutation(double chance, @Nonnull IAgriPlant child, @Nonnull IAgriPlant... parents) {
 		this.chance = MathHelper.inRange(chance, 0, 1);
 		this.child = child;
 		Arrays.sort(parents);

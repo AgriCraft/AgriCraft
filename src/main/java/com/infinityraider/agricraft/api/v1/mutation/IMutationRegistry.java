@@ -43,7 +43,7 @@ public interface IMutationRegistry {
 	 * @param parent2 ItemStack containing the other parent for the mutation
 	 * @return True if successful
 	 */
-	boolean addMutation(double chance, IGrowthRequirement requirement, @Nonnull IAgriPlant child, @Nonnull IAgriPlant... parents);
+	boolean addMutation(double chance, @Nonnull IAgriPlant child, @Nonnull IAgriPlant... parents);
 
 	/**
 	 * Removes all mutations that give this stack as a result

@@ -10,16 +10,13 @@ import com.infinityraider.agricraft.api.v1.items.IJournal;
 import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
 import com.infinityraider.agricraft.api.APIStatus;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -158,24 +155,6 @@ public class APIimplv1 implements APIv1 {
     @Override
     public short getStatCap() {
         return (short) AgriCraftConfig.cropStatCap;
-    }
-
-    @Override
-    public void analyze(ItemStack seed) {
-        if(CropPlantHandler.isValidSeed(seed)) {
-			NBTTagCompound tag;
-			PlantStats stats;
-            if(seed.hasTagCompound()) {
-				tag = seed.getTagCompound();
-				stats = new PlantStats(tag);
-            } else {
-                tag = new NBTTagCompound();
-				stats = new PlantStats();
-            }
-			stats.analyze();
-			stats.writeToNBT(tag);
-			seed.setTagCompound(tag);
-        }
     }
 
     @Override

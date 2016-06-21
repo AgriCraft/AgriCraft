@@ -3,7 +3,6 @@
  */
 package com.infinityraider.agricraft.compat.computercraft.method;
 
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.List;
@@ -22,7 +21,8 @@ public final class MethodUtilities {
 		if (journal == null || journal.getItem() == null || !(journal.getItem() instanceof ItemJournal)) {
 			return false;
 		}
-		return ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, CropPlantHandler.getPlantFromStack(seed));
+		AgriSeed s = SeedRegistry.getInstance().getSeed(seed);
+		return s != null && ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, s.getPlant());
 	}
 
 	public static IAgriPlant getCropPlant(ItemStack specimen) {

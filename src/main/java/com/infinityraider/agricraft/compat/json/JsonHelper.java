@@ -1,17 +1,16 @@
 package com.infinityraider.agricraft.compat.json;
 
 import com.infinityraider.agricraft.compat.ModHelper;
-import com.infinityraider.agricraft.farming.CropPlantHandler;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.utility.exception.DuplicateCropPlantException;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
+import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 
 public class JsonHelper extends ModHelper {
 
@@ -39,12 +38,8 @@ public class JsonHelper extends ModHelper {
 		AgriCore.getPlants().validate();
 		AgriCore.getPlants().getAll().forEach((p) -> {
 			JsonCropPlant c = new JsonCropPlant(p);
-			try {
-				CropPlantHandler.registerPlant(c);
-				customCrops.add(c);
-			} catch (DuplicateCropPlantException e) {
-				AgriCore.getLogger("AgriCraft").debug("Duplicate plant: " + p.getName() + "!");
-			}
+			PlantRegistry.getInstance().addPlant(c);
+			customCrops.add(c);
 		});
 		AgriCore.getLogger("AgriCraft").info("Custom crops registered!");
 	}
@@ -56,7 +51,7 @@ public class JsonHelper extends ModHelper {
 			IAgriPlant p1 = findPlant(m.getParent1().getId());
 			IAgriPlant p2 = findPlant(m.getParent2().getId());
 			if (child != null && p1 != null && p2 != null) {
-				MutationHandler.add(new Mutation(m.getChance(), null, child, p1, p2));
+				MutationHandler.add(new Mutation(m.getChance(), child, p1, p2));
 			}
 		});
 		//print registered mutations to the log
@@ -77,7 +72,7 @@ public class JsonHelper extends ModHelper {
 
 	private static IAgriPlant findPlant(String id) {
 		//AgriCore.getLogger("AgriCraft").debug("Looking for plant: " + id);
-		for (IAgriPlant p : CropPlantHandler.getPlants()) {
+		for (IAgriPlant p : PlantRegistry.getInstance().getPlants()) {
 			String other;
 			if (p.getBlock() != null) {
 				other = p.getBlock().getUnlocalizedName().replaceAll(".*:crop", "");

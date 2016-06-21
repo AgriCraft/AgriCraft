@@ -37,8 +37,8 @@ public class MutationRegistry implements IMutationRegistry {
 	}
 
 	@Override
-	public boolean addMutation(double chance, IGrowthRequirement requirement, IAgriPlant child, IAgriPlant... parents) {
-		return MutationHandler.add(new Mutation(chance, requirement, child, parents));
+	public boolean addMutation(double chance, IAgriPlant child, IAgriPlant... parents) {
+		return MutationHandler.add(new Mutation(chance, child, parents));
 	}
 
 	@Override

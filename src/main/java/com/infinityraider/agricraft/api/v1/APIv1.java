@@ -173,13 +173,6 @@ public interface APIv1 extends APIBase {
 	short getStatCap();
 
 	/**
-	 * Analyzes the seed in the stack
-	 *
-	 * @param seed the stack
-	 */
-	void analyze(ItemStack seed);
-
-	/**
 	 * Method used to set custom stat calculation logic
 	 *
 	 * @param calculator the IStatCalculator Object to be used when calculating

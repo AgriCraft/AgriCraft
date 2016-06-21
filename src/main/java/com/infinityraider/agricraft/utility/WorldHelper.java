@@ -2,7 +2,6 @@
  */
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.tileentity.TileEntity;
@@ -24,7 +23,7 @@ public class WorldHelper {
 		List<T> neighbours = new ArrayList<>();
 		for (AgriForgeDirection dir : dirs) {
 			TileEntity te = world.getTileEntity(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
-			if (type.isAssignableFrom(te.getClass())) {
+			if (te != null && type.isAssignableFrom(te.getClass())) {
 				neighbours.add(type.cast(te));
 			}
 		}
