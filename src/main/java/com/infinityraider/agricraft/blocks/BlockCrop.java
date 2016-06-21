@@ -44,6 +44,7 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.FertilizerRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.items.ItemCrop;
 import com.infinityraider.agricraft.reference.PropertyCropPlant;
 
 /**
@@ -63,6 +64,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		this.setStepSound(SoundType.PLANT);
 		this.setHardness(0.0F);
 		this.disableStats();
+		this.setCreativeTab(null);
 	}
 
 	@Override
@@ -638,7 +640,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		if (tileEntity == null || !(tileEntity instanceof IAgriCrop)) {
 			return world.getBlockState(pos);
 		}
-		IAgriCrop crop = (IAgriCrop) tileEntity;
 		return world.getBlockState(pos);
 	}
 
