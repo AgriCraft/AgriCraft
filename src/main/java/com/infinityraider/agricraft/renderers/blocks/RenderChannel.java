@@ -76,6 +76,8 @@ public class RenderChannel<T extends TileEntityChannel> extends RenderBlockCusto
 
 	//renders one of the four sides of a channel
 	protected void renderSide(ITessellator tessellator, TileEntityChannel channel, TextureAtlasSprite matIcon, AgriForgeDirection dir) {
+		tessellator.pushMatrix();
+		RenderUtil.rotateBlock(tessellator, dir);
 		if (channel.hasNeighbourCheck(dir)) {
 			// extend bottom plane and side edges
 			tessellator.drawScaledPrism(4, 4, 0, 12, 5, 4, matIcon);
@@ -85,6 +87,7 @@ public class RenderChannel<T extends TileEntityChannel> extends RenderBlockCusto
 			// draw an edge
 			tessellator.drawScaledPrism(4, 4, 4, 12, 12, 5, matIcon);
 		}
+		tessellator.popMatrix();
 	}
 
 	protected void drawWater(ITessellator tessellator, TileEntityChannel channel) {

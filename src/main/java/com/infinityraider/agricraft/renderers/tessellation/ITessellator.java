@@ -408,5 +408,10 @@ public interface ITessellator extends Function<ResourceLocation, TextureAtlasSpr
      * @return the diffuse lighting setting
      */
     boolean getApplyDiffuseLighting();
+	
+	void pushMatrix();
+	
+	void popMatrix();
+	
 }
 

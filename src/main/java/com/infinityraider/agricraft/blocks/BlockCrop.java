@@ -44,7 +44,6 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.FertilizerRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
-import com.infinityraider.agricraft.items.ItemCrop;
 import com.infinityraider.agricraft.reference.PropertyCropPlant;
 
 /**

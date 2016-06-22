@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockWaterTank;
+import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -74,6 +75,8 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 	private void renderSide(TileEntityTank tank, ITessellator tessellator, AgriForgeDirection dir, TextureAtlasSprite icon) {
 		int yMin = tank.hasNeighbour(AgriForgeDirection.DOWN) ? 0 : 1;
 		if ((dir != null) && (dir != AgriForgeDirection.UNKNOWN)) {
+			tessellator.pushMatrix();
+			RenderUtil.rotateBlock(tessellator, dir);
 			//connected to a channel
 			if (tank.isConnectedToChannel(dir)) {
 				tessellator.drawScaledPrism(2, yMin, 0, 14, 5, 2, icon);
@@ -84,6 +87,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 			else if (!tank.hasNeighbour(dir)) {
 				tessellator.drawScaledPrism(2, yMin, 0, 14, 16, 2, icon);
 			}
+			tessellator.popMatrix();
 		}
 	}
 

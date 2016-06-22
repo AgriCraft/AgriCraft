@@ -20,7 +20,6 @@ import com.infinityraider.agricraft.renderers.PlantRenderer;
 import com.infinityraider.agricraft.utility.icon.IconUtil;
 
 import javax.annotation.Nullable;
-import net.minecraft.client.renderer.GlStateManager;
 
 @SideOnly(Side.CLIENT)
 public class RenderCrop extends RenderBlockBase<TileEntityCrop> {
@@ -43,13 +42,13 @@ public class RenderCrop extends RenderBlockBase<TileEntityCrop> {
 		if (crop != null) {
 			TextureAtlasSprite icon = tessellator.getIcon(cropTexture);
 			// Draw Vertical Bars
-			GlStateManager.pushMatrix();
+			tessellator.pushMatrix();
 			tessellator.translate(0, -3 * Constants.UNIT, 0);
 			tessellator.drawScaledPrism(2, 0, 2, 3, 16, 3, icon);
 			tessellator.drawScaledPrism(13, 0, 2, 14, 16, 3, icon);
 			tessellator.drawScaledPrism(13, 0, 13, 14, 16, 14, icon);
 			tessellator.drawScaledPrism(2, 0, 13, 3, 16, 14, icon);
-			GlStateManager.popMatrix();
+			tessellator.popMatrix();
 
 			// Draw Horizontal Bars
 			if (crop.isCrossCrop()) {
