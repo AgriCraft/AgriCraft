@@ -2,12 +2,9 @@ package com.infinityraider.agricraft.gui.journal;
 
 import com.infinityraider.agricraft.gui.Component;
 import com.infinityraider.agricraft.items.ItemJournal;
-import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
 import com.infinityraider.agricraft.utility.IOHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -183,20 +180,18 @@ public class GuiJournal extends GuiScreen {
 
 	private void drawTextureComponent(Component<ResourceLocation> component) {
 		if (component != null) {
-			ResourceLocation texture = component.getComponent();
-			int xSize = component.xSize();
-			int ySize = component.ySize();
-			int x = guiLeft + component.xOffset();
-			int y = guiTop + component.yOffset();
-			ITessellator tessellator = TessellatorVertexBuffer.getInstance();
-			Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-			GL11.glColor3f(1, 1, 1);
-			tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
-			tessellator.addVertexWithUV(x, y + ySize, this.zLevel, 0, 16);
-			tessellator.addVertexWithUV(x + xSize, y + ySize, this.zLevel, 16, 16);
-			tessellator.addVertexWithUV(x + xSize, y, this.zLevel, 16, 0);
-			tessellator.addVertexWithUV(x, y, this.zLevel, 0, 0);
-			tessellator.draw();
+			GL11.glColor4f(1, 1, 1, 1);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(component.getComponent());
+			drawModalRectWithCustomSizedTexture(
+					guiLeft + component.xOffset(),
+					guiTop + component.yOffset(),
+					0,
+					0,
+					component.xSize(),
+					component.ySize(),
+					component.xSize(),
+					component.ySize()
+			);
 		}
 	}
 
