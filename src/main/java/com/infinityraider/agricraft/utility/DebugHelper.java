@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -11,6 +10,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
 
 /**
  * A class to aid in the management of debug data.
@@ -52,8 +52,8 @@ public abstract class DebugHelper {
         
         TileEntity tile = world.getTileEntity(pos);
         
-        if(tile!=null && tile instanceof IDebuggable) {
-            ((IDebuggable) tile).addDebugInfo(debugData);
+        if(tile!=null && tile instanceof IAgriDebuggable) {
+            ((IAgriDebuggable) tile).addDebugInfo(debugData);
         }
         else {
             debugData.add("Block: "+ Block.blockRegistry.getNameForObject(world.getBlockState(pos).getBlock()));

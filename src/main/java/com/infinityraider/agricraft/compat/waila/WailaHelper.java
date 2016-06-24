@@ -1,6 +1,9 @@
 package com.infinityraider.agricraft.compat.waila;
 
+import com.infinityraider.agricraft.blocks.BlockBase;
 import com.infinityraider.agricraft.compat.ModHelper;
+import mcp.mobius.waila.api.IWailaDataProvider;
+import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 public class WailaHelper extends ModHelper {
@@ -9,10 +12,16 @@ public class WailaHelper extends ModHelper {
 		super("Waila");
 	}
 	
-	
     @Override
     protected void init() {
-        FMLInterModComms.sendMessage("Waila", "register", "com.infinityraider.agricraft.compatibility.waila.WailaRegistry.initWaila");
+        FMLInterModComms.sendMessage("Waila", "register", "com.infinityraider.agricraft.compat.waila.WailaHelper.initWaila");
     }
+	
+	public static void initWaila(IWailaRegistrar registry) {
+		//All blocks.
+		IWailaDataProvider agriProvider = new AgriWailaAdapter();
+		registry.registerStackProvider(agriProvider, BlockBase.class);
+		registry.registerBodyProvider(agriProvider, BlockBase.class);
+	}
 
 }

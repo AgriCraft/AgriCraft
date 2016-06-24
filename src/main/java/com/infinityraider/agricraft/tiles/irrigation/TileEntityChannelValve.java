@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 
-import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,8 +9,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
 
-public class TileEntityChannelValve extends TileEntityChannel implements IDebuggable{
+public class TileEntityChannelValve extends TileEntityChannel implements IAgriDebuggable{
 	
     private boolean powered = false;
 
@@ -66,9 +66,9 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
-    public void addWailaInformation(List information) {
+    public void addDisplayInfo(List information) {
     	//Required super call
-    	super.addWailaInformation(information);
+    	super.addDisplayInfo(information);
     	//show status
         String status = I18n.translateToLocal(powered?"agricraft_tooltip.closed":"agricraft_tooltip.open");
         information.add(I18n.translateToLocal("agricraft_tooltip.state")+": "+status);

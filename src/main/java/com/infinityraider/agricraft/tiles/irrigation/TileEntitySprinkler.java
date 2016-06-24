@@ -234,7 +234,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addWailaInformation(List information) {
+	public void addDisplayInfo(List information) {
 		//Nothing to add here. Move along!
 	}
 }

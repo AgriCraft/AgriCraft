@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
-import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.network.NetworkWrapper;
@@ -26,8 +25,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.util.ITickable;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
 
-public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
+public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IAgriDebuggable {
 
 	public static final int SYNC_DELTA = Constants.HALF_BUCKET_mB;
 
@@ -421,8 +421,8 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
-	public void addWailaInformation(List information) {
-		super.addWailaInformation(information);
+	public void addDisplayInfo(List information) {
+		super.addDisplayInfo(information);
 		information.add(I18n.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + this.getCapacity());
 	}
 }

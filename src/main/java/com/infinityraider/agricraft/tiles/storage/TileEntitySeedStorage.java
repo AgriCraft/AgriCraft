@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.tiles.storage;
 
-import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
@@ -27,8 +26,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
 
-public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable, ISidedInventory {
+public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IAgriDebuggable, ISidedInventory {
 
 	private Item lockedSeed;
 	private int lockedSeedMeta;
@@ -137,9 +137,9 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
-	public void addWailaInformation(List information) {
+	public void addDisplayInfo(List information) {
 		information.add(I18n.translateToLocal("agricraft_tooltip.storage") + ": " + (this.hasLockedSeed() ? getLockedSeed().getDisplayName() : I18n.translateToLocal("agricraft_tooltip.none")));
-		super.addWailaInformation(information);
+		super.addDisplayInfo(information);
 	}
 
 	//SEED STORAGE METHODS

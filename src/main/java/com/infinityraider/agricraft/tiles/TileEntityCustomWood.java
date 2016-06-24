@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.renderers.RenderUtil;
@@ -18,12 +17,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import javax.annotation.Nonnull;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
 
 /**
  * This class represents the root tile entity for all AgriCraft custom WOOD
  * blocks. Through this class, the custom woods are remembered for the blocks. *
  */
-public class TileEntityCustomWood extends TileEntityBase implements IDebuggable {
+public class TileEntityCustomWood extends TileEntityBase implements IAgriDebuggable {
 
 	/**
 	 * The default MATERIAL to use. Currently is WOOD planks.
@@ -227,7 +227,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IDebuggable 
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
-	public void addWailaInformation(List information) {
+	public void addDisplayInfo(List information) {
 		information.add(I18n.translateToLocal("agricraft_tooltip.material") + ": " + new ItemStack(this.material, 1, this.materialMeta).getDisplayName());
 	}
 }

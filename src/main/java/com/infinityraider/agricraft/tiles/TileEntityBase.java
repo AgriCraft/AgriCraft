@@ -15,16 +15,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 
 /**
  * The root class for all AgriCraft TileEntities.
  */
-public abstract class TileEntityBase extends TileEntity {
+public abstract class TileEntityBase extends TileEntity implements IAgriDisplayable {
     /**
      * The orientation of the block.
      * Defaults to AgriForgeDirection.UNKNOWN;
@@ -155,15 +153,6 @@ public abstract class TileEntityBase extends TileEntity {
     public final void markForUpdate() {
 
     }
-
-    /**
-     * Add the waila information to a list.
-     * I reccomend a call to the super method where applicable.
-     *
-     * @param information the list to add to.
-     */
-    @SideOnly(Side.CLIENT)
-    public abstract void addWailaInformation(List information);
 
     private boolean isMultiBlock() {
         return this instanceof IMultiBlockComponent;

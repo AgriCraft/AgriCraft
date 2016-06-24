@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.api.v1.misc.IDebuggable;
 import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
@@ -35,8 +34,9 @@ import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.init.AgriCraftBlocks;
 import com.infinityraider.agricraft.utility.MathHelper;
 import com.infinityraider.agricraft.utility.WorldHelper;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
 
-public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable {
+public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDebuggable {
 
 	public static final String NAME = "crops";
 
@@ -472,7 +472,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
-	public void addWailaInformation(List information) {
+	public void addDisplayInfo(List information) {
 		if (this.hasPlant()) {
 			//Add the SEED name.
 			information.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + this.plant.getSeedName());

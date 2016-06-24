@@ -1,5 +1,8 @@
 package com.infinityraider.agricraft.renderers;
 
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.renderers.tessellation.TessellatorAbstractBase;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -16,6 +19,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class RenderUtil {
 
 	public static final int COLOR_MULTIPLIER_STANDARD = 16777215;
+
+	@AgriConfigurable(key = "Draw Rendering Axes", category = AgriConfigCategory.DEBUG, comment = "If the AgriCraft renderer should render reference axes.")
+	private static boolean debugAxis = false;
+	
+	static {
+		AgriCore.getConfig().addConfigurable(RenderUtil.class);
+	}
 
 	private RenderUtil() {
 	}
@@ -133,14 +143,16 @@ public final class RenderUtil {
 	}
 
 	public static void drawAxis(ITessellator tess) {
-		int prevc = tess.getColor();
-		tess.setColorRGBA(255, 0, 0, 125);
-		tess.drawScaledPrism(0, 0, 0, 16f, 1f, 1f, BaseIcons.IRON_BLOCK.getIcon());
-		tess.setColorRGBA(0, 255, 0, 125);
-		tess.drawScaledPrism(0, 0, 0, 1f, 16f, 1f, BaseIcons.IRON_BLOCK.getIcon());
-		tess.setColorRGBA(0, 0, 255, 125);
-		tess.drawScaledPrism(0, 0, 0, 1f, 1f, 16f, BaseIcons.IRON_BLOCK.getIcon());
-		tess.setColor(prevc);
+		if (debugAxis) {
+			int prevc = tess.getColor();
+			tess.setColorRGBA(255, 0, 0, 125);
+			tess.drawScaledPrism(0, 0, 0, 16f, 1f, 1f, BaseIcons.IRON_BLOCK.getIcon());
+			tess.setColorRGBA(0, 255, 0, 125);
+			tess.drawScaledPrism(0, 0, 0, 1f, 16f, 1f, BaseIcons.IRON_BLOCK.getIcon());
+			tess.setColorRGBA(0, 0, 255, 125);
+			tess.drawScaledPrism(0, 0, 0, 1f, 1f, 16f, BaseIcons.IRON_BLOCK.getIcon());
+			tess.setColor(prevc);
+		}
 	}
 
 }

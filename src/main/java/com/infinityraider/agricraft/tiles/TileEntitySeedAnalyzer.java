@@ -418,7 +418,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
-	public void addWailaInformation(List information) {
+	public void addDisplayInfo(List information) {
 		information.add(I18n.translateToLocal("agricraft_tooltip.analyzer") + ": " + (this.hasSpecimen() ? specimen.getDisplayName() : I18n.translateToLocal("agricraft_tooltip.none")));
 	}
 }
