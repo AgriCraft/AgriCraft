@@ -70,7 +70,6 @@ public class AgriCraft {
         proxy.initConfiguration(event);
         AgriCraftBlocks.init();
 		AgriCraftItems.init();
-        AgriCraftCrops.init();
         APISelector.init();
         CompatibilityHandler.getInstance().preInit();
         proxy.registerRenderers();

@@ -87,14 +87,6 @@ public class ClientProxy implements IProxy {
 		// Clippings
 		AgriCraftItems.clipping.registerItemRenderer();
 
-		/*
-		This method is getting too big... I'm still in favor of having a
-		registerRenderers function in each class...
-		 */
-		// Custom Crops
-		// Nuggets
-		OreDictHelper.registerNuggetRenderers();
-
 		//villager
 		if (!AgriCraftConfig.disableWorldGen && AgriCraftConfig.villagerEnabled) {
 			//TODO: register villager skin

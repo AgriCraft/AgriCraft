@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.ItemNugget;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -12,8 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public abstract class OreDictHelper {
@@ -21,23 +18,12 @@ public abstract class OreDictHelper {
     private static final Map<String, Block> oreBlocks = new HashMap<>();
     private static final Map<String, Integer> oreBlockMeta = new HashMap<>();
 
-    private static final Map<String, Item> nuggets = new HashMap<>();
-    private static final Map<String, Integer> nuggetMeta = new HashMap<>();
-
     public static Block getOreBlockForName(String name) {
         return oreBlocks.get(name);
     }
 
     public static int getOreMetaForName(String name) {
         return oreBlockMeta.get(name);
-    }
-
-    public static Item getNuggetForName(String name) {
-        return nuggets.get(name);
-    }
-
-    public static int getNuggetMetaForName(String name) {
-        return nuggetMeta.get(name);
     }
 
     //checks if an itemstack has this ore dictionary entry
@@ -79,67 +65,25 @@ public abstract class OreDictHelper {
     }
 
     //finds the ingot for a nugget ore dictionary entry
-    public static ItemStack getIngot(String ore) {
+    public static ItemStack getIngot(String ingotName) {
         ItemStack ingot = null;
-        List<ItemStack> entries = OreDictionary.getOres("ingot" + ore);
+        List<ItemStack> entries = OreDictionary.getOres(ingotName);
         if (entries.size() > 0 && entries.get(0).getItem() != null) {
             ingot = entries.get(0);
         }
         return ingot;
     }
 
-    //finds what ores and nuggets are already registered in the ore dictionary
-    public static void getRegisteredOres() {
-        //Vanilla
-        for (String oreName : ItemNugget.vanillaNuggets) {
-            getOreBlock(oreName);
-            if(oreBlocks.get(oreName)!=null) {
-                getNugget(oreName);
-            }
-        }
-        //Modded
-        for (String oreName : ItemNugget.modNuggets) {
-            getOreBlock(oreName);
-            if(oreBlocks.get(oreName)!=null) {
-                getNugget(oreName);
-            }
-        }
-    }
-
-    private static void getOreBlock(String oreName) {
-        for (ItemStack itemStack : OreDictionary.getOres("ore"+oreName)) {
+    private static void getOreBlock(ItemNugget.NuggetType type) {
+        for (ItemStack itemStack : OreDictionary.getOres(type.ore)) {
             if (itemStack.getItem() instanceof ItemBlock) {
                 ItemBlock block = (ItemBlock) itemStack.getItem();
-
-                oreBlocks.put(oreName, block.block);
-                oreBlockMeta.put(oreName, itemStack.getItemDamage());
+                oreBlocks.put(type.name(), block.block);
+                oreBlockMeta.put(type.name(), itemStack.getItemDamage());
                 break;
             }
         }
     }
-
-    private static void getNugget(String oreName) {
-        List<ItemStack> nuggets = OreDictionary.getOres("nugget" + oreName);
-        if (!nuggets.isEmpty()) {
-            Item nugget = nuggets.get(0).getItem();
-            OreDictHelper.nuggets.put(oreName, nugget);
-            nuggetMeta.put(oreName, nuggets.get(0).getItemDamage());
-        } else {
-            ItemBase nugget = new ItemNugget(oreName);
-            OreDictionary.registerOre("nugget"+oreName, nugget);
-            OreDictHelper.nuggets.put(oreName, nugget);
-            nuggetMeta.put(oreName, 0);
-        }
-    }
-	
-	@SideOnly(Side.CLIENT)
-	public static void registerNuggetRenderers() {
-		for (Item e : nuggets.values()) {
-			if (e instanceof ItemNugget) {
-				((ItemNugget) e).registerItemRenderer();
-			}
-		}
-	}
 
     public static ArrayList<ItemStack> getFruitsFromOreDict(ItemStack seed) {
         return getFruitsFromOreDict(seed, true);
