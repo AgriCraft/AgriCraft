@@ -1,42 +1,49 @@
-# AgriCraft [![Build Status][build]][build-link] ![branch][branch] ![minecraft][minecraft]
+# AgriCraft [![build]][build-link] ![branch][] ![minecraft][] [![curse]][curse-link]
 
 Agricultural farming extended.
 
-CurseForge: [CurseForge](http://minecraft.curseforge.com/mc-mods/225635-agricraft)
+## Contact [![slack]][slack-link]
+I have a Slack channel where you can contact me for support/suggestions which you don't think fit on this issue tracker. Also if you want to discuss something with me, this is the place to be!
 
-FTB Thread: [FTB Thread](http://forum.feed-the-beast.com/threads/1-7-10-agricraft.50964/)
+## Supported Versions
+AgriCraft has releases for Minecraft versions 1.7.10 and onwards, status per Minecraft version is as follows:
 
-## Contact
-I have a Slack channel where you can contact me for support/suggestions which you don't think fit on this issue tracker. Also if you want to discuss something with me, this is the place to be: [Join my Slack](https://join-infinityraider-slack.herokuapp.com)
+| Version  | Notes
+|----------|:----------
+|![1.7.10] | One more release to end the 1.7.10 chapter will be done, fixing all bugs from the previous version.
+|![1.8]    | The 1.8 branch was highly experimental and the rendering is one big hack. Don't expect anything.
+|![1.9]    | Skipped 1.9, as it was an incredibly short-lived release.
+|![1.10]   | Port in progress.
 
-## Minecraft versions
-Agricraft has releases for Minecraft versions 1.7.10 and onwards, status per Minecraft version is as follows:
- - 1.7.10: open, one more release to end the 1.7.10 chapter will be done, fixing all bugs from the previous version..
- - 1.8.9: closed, the 1.8 branch was highly experimental and the rendering is one big hack. Don't expect anything.
- - 1.9: Agricraft is currently being ported to 1.9
+## Bug Reports [![bug]][bug-link]
 
-## Bug reports
-
-Please report any and all bugs you might encounter while playing with this mod (this only applies to versions of Minecraft this mod is currently being developped for). Suggestions are also welcome.
+Please report any and all bugs you might encounter while playing with this mod (this only applies to versions of Minecraft this mod is currently being developed for). Suggestions are also welcome.
 However before reporting a bug please update to the latest version of the mod to see if it still persists.
 If you want to post bug reports for older versions, make sure to tell me what version you are using and the version of Forge you are using.
 If you report a bug and I request more feedback, the label 'Awaiting reply' will be added, if I have had no response for 5 days after adding that label, the issue will be closed.
 
 
-## Technical Documentation
+## Technical Documentation [![wiki]][wiki-link]
 
-AgriCraft internals (such as MineTweaker3 integration) are documented here in the GitHub Wiki
-([Link](https://github.com/InfinityRaider/AgriCraft/wiki)). Reason is that
+AgriCraft is documented in the official GitHub wiki. Note that
 this kind of information is, most of the time, only needed by pack creators and not the average user.
 
+[build-link]:https://travis-ci.org/InfinityRaider/AgriCraft
+[build]:https://travis-ci.org/InfinityRaider/AgriCraft.svg?branch=master "Travis-CI Build Status"
+[branch]:https://img.shields.io/badge/branch-master-aaaaff.svg "GitHub Branch"
+[minecraft]:https://img.shields.io/badge/minecraft-1.10-blue.svg "Minecraft Version"
+[curse-link]:http://minecraft.curseforge.com/mc-mods/225635-AgriCraft
+[curse]:https://img.shields.io/badge/curse-AgriCraft-dd602a.svg "CurseForge"
+[slack-link]:https://InfinityRaider.slack.com/ "InfinityRaider Slack"
+[slack]:https://img.shields.io/badge/slack-InfinityRaider-ff69b4.svg "InfinityRaider Slack"
 
-## MineTweaker3 support
+[bug-link]:https://www.github.com/InfinityRaider/AgriCraft/issues
+[bug]:https://img.shields.io/badge/issue-bug-aa1111.svg
 
-MineTweaker3 integration is currently in development. If you need support for specific modifications head over
-to the FTB Thread and leave us a message. Alternatively you can leave an issue in the GitHub tracker. Make sure though, that the
-requested feature is not currently in development by checking the GitHub Wiki and / or the GitHub issue tracker.
+[wiki-link]:https://www.github.com/InfinityRaider/AgriCraft/wiki
+[wiki]:https://img.shields.io/badge/wiki-AgriCraft-lightgray.svg "AgriCraft GitHub Wiki"
 
-[build-link]: https://travis-ci.org/InfinityRaider/AgriCraft
-[build]: https://travis-ci.org/InfinityRaider/AgriCraft.svg?branch=master "Build Status"
-[branch]: https://img.shields.io/badge/branch-master-orange.svg "GitHub Branch"
-[minecraft]: https://img.shields.io/badge/minecraft-1.10-blue.svg "Minecraft Version"
+[1.7.10]:https://img.shields.io/badge/1.7.10-open-green.svg
+[1.8]:https://img.shields.io/badge/1.8-closed-red.svg
+[1.9]:https://img.shields.io/badge/1.9-closed-red.svg
+[1.10]:https://img.shields.io/badge/1.10-wip-yellow.svg
