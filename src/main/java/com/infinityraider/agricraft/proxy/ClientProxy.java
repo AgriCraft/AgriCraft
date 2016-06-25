@@ -10,8 +10,8 @@ import com.infinityraider.agricraft.init.AgriCraftItems;
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.utility.OreDictHelper;
 import com.agricraft.agricore.util.ReflectionHelper;
+import com.infinityraider.agricraft.renderers.dynmodels.AgriCraftModelLoader;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,6 +20,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -64,6 +65,10 @@ public class ClientProxy implements IProxy {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void registerRenderers() {
+
+		// Init Model Loader
+		ModelLoaderRegistry.registerLoader(AgriCraftModelLoader.INSTANCE);
+
 		//BLOCKS
 		//------
 		ReflectionHelper.forEachIn(AgriCraftBlocks.class, BlockBase.class, (block) -> {

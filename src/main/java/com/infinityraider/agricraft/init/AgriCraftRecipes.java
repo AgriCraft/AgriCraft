@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.crafting.RecipeJournal;
 import com.infinityraider.agricraft.items.crafting.RecipeShapelessCustomWood;
@@ -29,7 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class AgriCraftRecipes {
 

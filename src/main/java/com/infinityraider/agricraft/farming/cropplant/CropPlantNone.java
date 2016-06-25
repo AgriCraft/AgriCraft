@@ -94,6 +94,11 @@ public final class CropPlantNone extends CropPlant {
         return null;
     }
 
+	@Override
+	public ResourceLocation getSeedTexture() {
+		return new ResourceLocation("agricraft:items/seed_unknown");
+	}
+
     @Override
     public String getInformation() {
         return null;

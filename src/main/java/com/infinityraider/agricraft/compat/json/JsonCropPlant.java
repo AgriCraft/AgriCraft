@@ -190,6 +190,11 @@ public class JsonCropPlant extends CropPlant {
 		return null;
 	}
 
+	@Override
+	public ResourceLocation getSeedTexture() {
+		return new ResourceLocation(plant.getTexture().getSeedTexture());
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void registerIcons() {
 		for (String tex : this.plant.getTexture().getPlantTextures()) {

@@ -82,7 +82,7 @@ public class AgriCraft {
         AgriCore.getLogger("AgriCraft").debug("Starting Initialization");
         proxy.registerEventHandlers();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-        AgriCraftEntities.init();
+		AgriCraftEntities.init();
         CompatibilityHandler.getInstance().init();
         AgriCore.getLogger("AgriCraft").debug("Initialization Complete");
     }

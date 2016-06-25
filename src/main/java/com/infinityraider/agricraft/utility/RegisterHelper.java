@@ -47,6 +47,16 @@ public abstract class RegisterHelper {
             }
         }
     }
+	
+	@SideOnly(Side.CLIENT)
+    public static ModelResourceLocation getItemModel(String... textures) {
+        final StringBuilder sb = new StringBuilder("agricraftitem:");
+        for (String e : textures) {
+            sb.append(e.replace(":", "/"));
+            sb.append("$");
+        }
+        return new ModelResourceLocation(sb.toString(), "inventory");
+    }
 
     @SideOnly(Side.CLIENT)
     public static void registerItemRenderer(Item item, String... varients) {

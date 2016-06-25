@@ -215,6 +215,9 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 	 */
 	@SideOnly(Side.CLIENT)
 	ResourceLocation getSecondaryPlantTexture(int growthStage);
+	
+	@SideOnly(Side.CLIENT)
+	ResourceLocation getSeedTexture();
 
 	/**
 	 * Gets some information about the plant for the journal

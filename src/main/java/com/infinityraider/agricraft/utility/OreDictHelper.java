@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.utility;
 
 import com.infinityraider.agricraft.items.ItemNugget;
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
