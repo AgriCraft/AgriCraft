@@ -35,3 +35,6 @@ libs/
 AgriCraft_Dependencies.rar
 dependencies.zip
 *.bak
+
+# Ignore 1.9+ Files
+lib/
