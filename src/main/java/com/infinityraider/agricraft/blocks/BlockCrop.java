@@ -12,13 +12,11 @@ import com.infinityraider.agricraft.items.ItemDebugger;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
-import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -45,6 +43,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.FertilizerRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.reference.PropertyCropPlant;
+import net.minecraft.client.particle.ParticleManager;
 
 /**
  * The most important block in the mod.
@@ -57,10 +56,10 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 * The default constructor for the block.
 	 */
 	public BlockCrop() {
-		super(Material.plants, "crop", false);
+		super(Material.PLANTS, "crop", false);
 		this.setTickRandomly(true);
 		this.isBlockContainer = true;
-		this.setStepSound(SoundType.PLANT);
+		this.setSoundType(SoundType.PLANT);
 		this.setHardness(0.0F);
 		this.disableStats();
 		this.setCreativeTab(null);
@@ -391,21 +390,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	}
 
 	/**
-	 * Handles changes in the crops neighbors. Used to detect if the crops had
-	 * the soil stolen from under them and they should now break.
-	 */
-	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-		//check if crops can stay
-		if (!this.canBlockStay(world, pos)) {
-			//the crop will be destroyed
-			this.dropBlockAsItem(world, pos, state, 0);
-			world.setBlockToAir(pos);
-			world.removeTileEntity(pos);
-		}
-	}
-
-	/**
 	 * Tests to see if the crop is still on valid soil.
 	 *
 	 * @return if the crop is placed in a valid location.
@@ -573,9 +557,10 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 *
 	 * @return false - the block is one-shot and needs no hit particles.
 	 */
+	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
+    @SideOnly(value = Side.CLIENT)
+	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
 		return false;
 	}
 
@@ -584,23 +569,26 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 *
 	 * @return false - there are no destroy particles.
 	 */
+	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.EffectRenderer effectRenderer) {
+    @SideOnly(value = Side.CLIENT)
+	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
 		return false;
 	}
 
 	/**
 	 * Handles the block receiving events.
-	 *
+	 * @todo TODO!!! FIXME!
 	 * @return if the event was received properly.
 	 */
+	/*
 	@Override
 	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int param) {
 		super.onBlockEventReceived(world, pos, state, id, param);
 		TileEntity tileEntity = world.getTileEntity(pos);
 		return (tileEntity != null) && (tileEntity.receiveClientEvent(id, param));
 	}
+	*/
 
 	@Override
 	protected IProperty[] getPropertyArray() {

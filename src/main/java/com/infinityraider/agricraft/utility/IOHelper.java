@@ -17,7 +17,7 @@ import java.util.ArrayList;
 //helper class to read, write and parse data to and from the config files
 public abstract class IOHelper {
     public static String getModId(ItemStack stack) {
-        String name = Item.itemRegistry.getNameForObject(stack.getItem()).getResourcePath();
+        String name = Item.REGISTRY.getNameForObject(stack.getItem()).getResourcePath();
         int split = name.indexOf(':');
         if(split>=0) {
             name = name.substring(0, split);

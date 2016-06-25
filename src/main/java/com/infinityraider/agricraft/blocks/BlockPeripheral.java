@@ -41,7 +41,7 @@ public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 	private TextureAtlasSprite textureInner;
 
 	public BlockPeripheral() {
-		super(Material.iron, "peripheral", false);
+		super(Material.IRON, "peripheral", false);
 	}
 
 	@Override
@@ -121,8 +121,8 @@ public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-		NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32);
+	public void onNeighborChange(IBlockAccess iba, BlockPos pos, BlockPos neighbor) {
+		NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(iba.getWorldType().getWorldTypeID(), pos.getX(), pos.getY(), pos.getZ(), 32);
 		NetworkWrapper.getInstance().sendToAllAround(new MessagePeripheralCheckNeighbours(pos), point);
 	}
 

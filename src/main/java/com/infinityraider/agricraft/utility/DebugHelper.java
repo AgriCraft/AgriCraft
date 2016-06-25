@@ -56,7 +56,7 @@ public abstract class DebugHelper {
             ((IAgriDebuggable) tile).addDebugInfo(debugData);
         }
         else {
-            debugData.add("Block: "+ Block.blockRegistry.getNameForObject(world.getBlockState(pos).getBlock()));
+            debugData.add("Block: "+ Block.REGISTRY.getNameForObject(world.getBlockState(pos).getBlock()));
         }
         
         debugData.add(" ");

@@ -14,7 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.client.CPacketPlayerBlockPlacement;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
@@ -66,13 +65,13 @@ public class PlayerInteractEventHandler {
 			if (SeedRegistry.getInstance().isSeed(seed)) {
 				return false;
 			}
-			if (seed.getItem() == Items.potato) {
+			if (seed.getItem() == Items.POTATO) {
 				return false;
 			}
-			if (seed.getItem() == Items.carrot) {
+			if (seed.getItem() == Items.CARROT) {
 				return false;
 			}
-			if (seed.getItem() == Items.reeds) {
+			if (seed.getItem() == Items.REEDS) {
 				return false;
 			}
 		}
@@ -91,7 +90,7 @@ public class PlayerInteractEventHandler {
 	public void waterPadCreation(PlayerInteractEvent.RightClickBlock event) {
 		IBlockState state = event.getWorld().getBlockState(event.getPos());
 		Block block = state.getBlock();
-		if (block != Blocks.farmland) {
+		if (block != Blocks.FARMLAND) {
 			return;
 		}
 		boolean flag = false;
@@ -114,7 +113,7 @@ public class PlayerInteractEventHandler {
 				stack.damageItem(1, player);
 				event.setResult(Event.Result.ALLOW);
 			}
-			SoundType sound = block.getStepSound();
+			SoundType sound = block.getSoundType();
 			event.getWorld().playSound(null, (double) ((float) event.getPos().getX() + 0.5F), (double) ((float) event.getPos().getY() + 0.5F), (double) ((float) event.getPos().getZ() + 0.5F), sound.getBreakSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 			denyEvent(event, false);
 		}
@@ -127,7 +126,7 @@ public class PlayerInteractEventHandler {
 	@SubscribeEvent
 	public void applyVinesToGrate(PlayerInteractEvent.RightClickBlock event) {
 		ItemStack stack = event.getEntityPlayer().getActiveItemStack();
-		if (stack == null || stack.getItem() == null || stack.getItem() != Item.getItemFromBlock(Blocks.vine)) {
+		if (stack == null || stack.getItem() == null || stack.getItem() != Item.getItemFromBlock(Blocks.VINE)) {
 			return;
 		}
 		Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
@@ -151,7 +150,7 @@ public class PlayerInteractEventHandler {
 			return;
 		}
 		ItemStack heldItem = event.getEntityPlayer().getActiveItemStack();
-		if (heldItem != null && heldItem.getItem() == net.minecraft.init.Items.dye && heldItem.getItemDamage() == 15) {
+		if (heldItem != null && heldItem.getItem() == Items.DYE && heldItem.getItemDamage() == 15) {
 			TileEntity te = event.getWorld().getTileEntity(event.getPos());
 			if (te != null && (te instanceof TileEntityCrop)) {
 				TileEntityCrop crop = (TileEntityCrop) te;
@@ -166,8 +165,9 @@ public class PlayerInteractEventHandler {
 		event.setUseItem(Event.Result.DENY);
 		event.setUseBlock(Event.Result.DENY);
 		if (sendToServer && event.getWorld().isRemote) {
+			// TODO!!!
 			//send the right click to the server manually (cancelling the event will prevent the client from telling the server a right click happened, and nothing will happen, but we still want stuff to happen)
-			FMLClientHandler.instance().getClientPlayerEntity().sendQueue.addToSendQueue(new CPacketPlayerBlockPlacement());
+			//FMLClientHandler.instance().getClientPlayerEntity().sendQueue.addToSendQueue(new CPacketPlayerBlockPlacement());
 		}
 		event.setCanceled(true);
 	}

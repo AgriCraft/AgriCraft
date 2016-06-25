@@ -1,6 +1,6 @@
-# AgriCraft [![Build Status](https://travis-ci.org/InfinityRaider/AgriCraft.svg?branch=master)](https://travis-ci.org/InfinityRaider/AgriCraft)
+# AgriCraft [![Build Status][build]][build-link] ![branch][branch] ![minecraft][minecraft]
 
-Agricultural farming extended. 
+Agricultural farming extended.
 
 CurseForge: [CurseForge](http://minecraft.curseforge.com/mc-mods/225635-agricraft)
 
@@ -20,7 +20,7 @@ Agricraft has releases for Minecraft versions 1.7.10 and onwards, status per Min
 Please report any and all bugs you might encounter while playing with this mod (this only applies to versions of Minecraft this mod is currently being developped for). Suggestions are also welcome.
 However before reporting a bug please update to the latest version of the mod to see if it still persists.
 If you want to post bug reports for older versions, make sure to tell me what version you are using and the version of Forge you are using.
-If you report a bug and I request more feedback, the label 'Awaiting reply' will be added, if I have had no response for 5 days after adding that label, the issue will be closed. 
+If you report a bug and I request more feedback, the label 'Awaiting reply' will be added, if I have had no response for 5 days after adding that label, the issue will be closed.
 
 
 ## Technical Documentation
@@ -36,4 +36,7 @@ MineTweaker3 integration is currently in development. If you need support for sp
 to the FTB Thread and leave us a message. Alternatively you can leave an issue in the GitHub tracker. Make sure though, that the
 requested feature is not currently in development by checking the GitHub Wiki and / or the GitHub issue tracker.
 
-
+[build-link]: https://travis-ci.org/InfinityRaider/AgriCraft
+[build]: https://travis-ci.org/InfinityRaider/AgriCraft.svg?branch=master "Build Status"
+[branch]: https://img.shields.io/badge/branch-master-orange.svg "GitHub Branch"
+[minecraft]: https://img.shields.io/badge/minecraft-1.10-blue.svg "Minecraft Version"

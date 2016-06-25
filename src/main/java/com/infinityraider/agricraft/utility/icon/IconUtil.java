@@ -56,7 +56,7 @@ public final class IconUtil {
 			this.width = 16;
 			this.height = 16;
 			this.framesTextureData = new ArrayList<>(1);
-			this.framesTextureData.add(new int[][] {TextureUtil.missingTextureData});
+			this.framesTextureData.add(new int[][] {TextureUtil.MISSING_TEXTURE_DATA});
 		}
 
 	}

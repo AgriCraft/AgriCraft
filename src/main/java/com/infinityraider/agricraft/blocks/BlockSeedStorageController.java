@@ -37,12 +37,13 @@ public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedSt
         return true;
     }
 
+	/* TODO!!!
     @Override
     public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
         super.onBlockEventReceived(world, pos, state, id, data);
         TileEntity tileentity = world.getTileEntity(pos);
         return tileentity != null && tileentity.receiveClientEvent(id, data);
-    }
+    }*/
 
     @Override
     protected IProperty[] getPropertyArray() {

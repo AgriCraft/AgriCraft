@@ -42,11 +42,11 @@ public abstract class MessageBase<REPLY extends IMessage> implements IMessage {
     protected Item readItemFromByteBuf(ByteBuf buf) {
         int itemNameLength = buf.readInt();
         String itemName = new String(buf.readBytes(itemNameLength).array());
-        return  Item.itemRegistry.getObject(new ResourceLocation(itemName));
+        return  Item.REGISTRY.getObject(new ResourceLocation(itemName));
     }
 
     protected void writeItemToByteBuf(Item item, ByteBuf buf) {
-        String itemName = item==null?"null":Item.itemRegistry.getNameForObject(item).toString();
+        String itemName = item==null?"null":Item.REGISTRY.getNameForObject(item).toString();
         buf.writeInt(itemName.length());
         buf.writeBytes(itemName.getBytes());
     }

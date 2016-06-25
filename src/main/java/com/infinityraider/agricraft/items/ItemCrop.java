@@ -33,10 +33,10 @@ public class ItemCrop extends ItemBase {
 		if (!world.isRemote) {
 			BlockPos cropPos = pos.add(0, 1, 0);
 			IBlockState state = world.getBlockState(cropPos);
-			if (state.getBlock().getMaterial(state) == Material.air && GrowthRequirementHandler.isSoilValid(world, pos) && side == EnumFacing.UP) {
+			if (state.getBlock().getMaterial(state) == Material.AIR && GrowthRequirementHandler.isSoilValid(world, pos) && side == EnumFacing.UP) {
 				world.setBlockState(pos.add(0, 1, 0), AgriCraftBlocks.blockCrop.getDefaultState());
 				int use = 1;
-				SoundType type = Blocks.leaves.getStepSound();
+				SoundType type = Blocks.LEAVES.getSoundType();
 				world.playSound(null, (double) ((float) cropPos.getX() + 0.5F), (double) ((float) cropPos.getY() + 0.5F), (double) ((float) cropPos.getZ() + 0.5F), type.getPlaceSound(), SoundCategory.PLAYERS, (type.getVolume() + 1.0F) / 4.0F, type.getPitch() * 0.8F);
 				stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - use;
 				return EnumActionResult.SUCCESS;

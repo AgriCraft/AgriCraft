@@ -9,12 +9,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,7 +30,7 @@ public class BlockFenceGate extends BlockCustomWood<TileEntityFenceGate> {
 	
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        world.playAuxSFXAtEntity(player, 1003, pos, 0);
+		world.playSound(player, pos, SoundEvents.BLOCK_FENCE_GATE_OPEN, SoundCategory.AMBIENT, 1003, 0);
         if(world.isRemote) {
             return false;
         }
@@ -72,7 +74,7 @@ public class BlockFenceGate extends BlockCustomWood<TileEntityFenceGate> {
 
     @Override
     public AxisAlignedBB getDefaultBoundingBox() {
-        return net.minecraft.block.BlockFence.field_185671_f;
+        return net.minecraft.block.BlockFence.PILLAR_AABB;
     }
 
     @Override

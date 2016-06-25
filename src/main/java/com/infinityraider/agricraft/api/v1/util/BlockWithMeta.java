@@ -43,7 +43,7 @@ public class BlockWithMeta {
 
     @Override
     public String toString() {
-        return Block.blockRegistry.getNameForObject(this.block)+":"+this.meta;
+        return Block.REGISTRY.getNameForObject(this.block)+":"+this.meta;
     }
 
     @Override

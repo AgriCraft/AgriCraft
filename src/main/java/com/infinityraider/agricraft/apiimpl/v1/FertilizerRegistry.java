@@ -25,7 +25,7 @@ public class FertilizerRegistry implements IFertilizerRegistry {
 
 	public FertilizerRegistry() {
 		this.fertilizers = new HashMap<>();
-		this.fertilizers.put(new ItemWithMeta(Items.dye, 15), new BonemealWrapper());
+		this.fertilizers.put(new ItemWithMeta(Items.DYE, 15), new BonemealWrapper());
 	}
 	
 	public static IFertilizerRegistry getInstance() {

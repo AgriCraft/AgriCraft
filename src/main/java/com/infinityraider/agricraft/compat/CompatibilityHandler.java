@@ -5,7 +5,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.compat.json.JsonHelper;
 import com.infinityraider.agricraft.compat.thaumcraft.ThaumcraftHelper;
-import com.infinityraider.agricraft.compat.waila.WailaHelper;
+//import com.infinityraider.agricraft.compat.waila.WailaHelper;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -120,8 +120,8 @@ public class CompatibilityHandler {
 	private void initCompatModules() {
 		Class[] classes = {
 			JsonHelper.class,
-			ThaumcraftHelper.class,
-			WailaHelper.class
+			ThaumcraftHelper.class//,
+			//WailaHelper.class
 		};
 		for (Class clazz : classes) {
 			if (ModHelper.class.isAssignableFrom(clazz)) {

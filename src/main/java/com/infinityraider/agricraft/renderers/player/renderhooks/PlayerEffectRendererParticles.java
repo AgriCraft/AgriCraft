@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.renderers.player.renderhooks;
 
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -22,7 +22,7 @@ public abstract class PlayerEffectRendererParticles extends PlayerEffectRenderer
 
     protected abstract short getSpawnDelay();
 
-    protected abstract EntityFX getParticle(EntityPlayer player, float partialTick);
+    protected abstract Particle getParticle(EntityPlayer player, float partialTick);
 
     @Override
     void renderEffects(ITessellator tessellator, EntityPlayer player, RenderPlayer renderer, float partialTick) {

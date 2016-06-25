@@ -60,7 +60,7 @@ public class ItemNugget extends ItemBase {
 
 	public ItemNugget() {
 		super("agri_nugget", true, NuggetType.getNuggets());
-		this.setCreativeTab(CreativeTabs.tabMaterials);
+		this.setCreativeTab(CreativeTabs.MATERIALS);
 	}
 
 	@Override

@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -27,13 +26,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.init.Blocks;
 
 public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 
 	public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT, 0, Constants.UNIT, Constants.UNIT * (Constants.WHOLE - 1), Constants.UNIT * Constants.QUARTER, Constants.UNIT * (Constants.WHOLE - 1));
 
 	public BlockSeedAnalyzer() {
-		super(Material.ground, "seed_analyzer", false);
+		super(Material.GROUND, "seed_analyzer", false);
 		this.setCreativeTab(AgriCraftTab.agriCraftTab);
 		this.isBlockContainer = true;
 		this.setTickRandomly(false);
@@ -115,23 +116,22 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
+	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
 		return false;
-	}        //no particles when this block gets hit
+	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
 		return false;
-	}     //no particles when destroyed
-
+	}
+	
+	/* TODO!!! 
 	@Override
 	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
 		super.onBlockEventReceived(world, pos, state, id, data);
 		TileEntity tileEntity = world.getTileEntity(pos);
 		return (tileEntity != null) && (tileEntity.receiveClientEvent(id, data));
-	}
+	}*/
 
 	@Override
 	protected IProperty[] getPropertyArray() {

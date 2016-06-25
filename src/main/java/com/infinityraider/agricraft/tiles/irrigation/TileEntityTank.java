@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.translation.I18n;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -71,14 +71,14 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 		if (!this.worldObj.isRemote) {
 			if (this.worldObj.canBlockSeeSky(getPos()) && this.worldObj.isRaining()) {
 				if (!this.hasNeighbour(AgriForgeDirection.UP)) {
-					BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(getPos());
+					Biome biome = this.worldObj.getBiomeGenForCoords(getPos());
 					if (biome.getRainfall() > 0) {
 						this.setFluidLevel(this.getFluidAmount(0) + 1);
 					}
 				}
 			}
 			Block block = this.worldObj.getBlockState(pos.add(0, 1, 0)).getBlock();
-			if (AgriCraftConfig.fillFromFlowingWater && (block == Blocks.water || block == Blocks.flowing_water)) {
+			if (AgriCraftConfig.fillFromFlowingWater && (block == Blocks.WATER || block == Blocks.FLOWING_WATER)) {
 				this.setFluidLevel(this.getFluidAmount(0) + 5);
 			}
 		}

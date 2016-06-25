@@ -64,10 +64,10 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 		boolean front = grate.isPlayerInFront(player);
 		if (player.isSneaking()) {
 			if (grate.removeVines(front)) {
-				spawnAsEntity(world, pos, new ItemStack(Blocks.vine, 1));
+				spawnAsEntity(world, pos, new ItemStack(Blocks.VINE, 1));
 				return true;
 			}
-		} else if (stack != null && stack.getItem() == Item.getItemFromBlock(Blocks.vine)) {
+		} else if (stack != null && stack.getItem() == Item.getItemFromBlock(Blocks.VINE)) {
 			if (grate.addVines(front) && !player.capabilities.isCreativeMode) {
 				stack.stackSize = stack.stackSize - 1;
 				return true;
@@ -86,7 +86,7 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 			stackSize = grate.hasVines(true) ? stackSize + 1 : stackSize;
 			stackSize = grate.hasVines(false) ? stackSize + 1 : stackSize;
 			if (stackSize > 0) {
-				items.add(new ItemStack(Blocks.vine, stackSize));
+				items.add(new ItemStack(Blocks.VINE, stackSize));
 			}
 		}
 		return items;

@@ -21,81 +21,80 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-
 public class BlockChannelValve extends AbstractBlockWaterChannel<TileEntityChannelValve> {
-    public static final AxisAlignedBB BOX = new AxisAlignedBB(4*Constants.UNIT, 0, 4*Constants.UNIT, 12*Constants.UNIT, 1, 12*Constants.UNIT);
 
-    public BlockChannelValve() {
-        super("valve");
-    }
+	public static final AxisAlignedBB BOX = new AxisAlignedBB(4 * Constants.UNIT, 0, 4 * Constants.UNIT, 12 * Constants.UNIT, 1, 12 * Constants.UNIT);
 
-    @Override
-    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
-        if (!world.isRemote) {
-            super.onNeighborBlockChange(world, pos, state, block);
-            updatePowerStatus(world, pos);
-        }
-    }
+	public BlockChannelValve() {
+		super("valve");
+	}
 
-    @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	@Override
+	public void onNeighborChange(IBlockAccess iba, BlockPos pos1, BlockPos pos2) {
+		super.onNeighborChange(iba, pos1, pos2);
+		updatePowerStatus(iba, pos1);
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(world, pos, state, placer, stack);
-        if (!world.isRemote) {
-            updatePowerStatus(world, pos);
-        }
-    }
+		if (!world.isRemote) {
+			updatePowerStatus(world, pos);
+		}
+	}
 
-    private void updatePowerStatus(World world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te !=null && te instanceof TileEntityChannelValve) {
-            TileEntityChannelValve valve = (TileEntityChannelValve) te;
-            valve.updatePowerStatus();
-        }
-    }
+	private void updatePowerStatus(IBlockAccess iba, BlockPos pos) {
+		TileEntity te = iba.getTileEntity(pos);
+		if (te != null && te instanceof TileEntityChannelValve) {
+			TileEntityChannelValve valve = (TileEntityChannelValve) te;
+			valve.updatePowerStatus();
+		}
+	}
 
-    //allows levers to be attached to the block
-    @Override
-    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return side!=EnumFacing.UP;
-    }
+	//allows levers to be attached to the block
+	@Override
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return side != EnumFacing.UP;
+	}
 
-    @Override
-    public TileEntityChannelValve createNewTileEntity(World world, int meta) {
-        return new TileEntityChannelValve();
-    }
+	@Override
+	public TileEntityChannelValve createNewTileEntity(World world, int meta) {
+		return new TileEntityChannelValve();
+	}
 
-    @Override
-    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return true;
-    }
+	@Override
+	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return true;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public RenderChannelValve getRenderer() {
-        return new RenderChannelValve(this);
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public RenderChannelValve getRenderer() {
+		return new RenderChannelValve(this);
+	}
 
-    @Override
-    protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
-    	return ItemBlockValve.class;
-    }
+	@Override
+	protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+		return ItemBlockValve.class;
+	}
 
-    @Override
-    public AxisAlignedBB getDefaultBoundingBox() {
-        return BOX;
-    }
+	@Override
+	public AxisAlignedBB getDefaultBoundingBox() {
+		return BOX;
+	}
 
-    public static class ItemBlockValve extends ItemBlockCustomWood {
-        public ItemBlockValve(Block block) {
-            super(block);
-        }
+	public static class ItemBlockValve extends ItemBlockCustomWood {
 
-        @Override
-        @SideOnly(Side.CLIENT)
-        public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-            super.addInformation(stack, player, list, flag);
-            list.add(I18n.translateToLocal("agricraft_tooltip.valve"));
-        }
-    }
+		public ItemBlockValve(Block block) {
+			super(block);
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
+			super.addInformation(stack, player, list, flag);
+			list.add(I18n.translateToLocal("agricraft_tooltip.valve"));
+		}
+	}
 
 }

@@ -99,7 +99,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		if (status != this.crossCrop) {
 			this.crossCrop = status;
 			if (!worldObj.isRemote && crossCrop) {
-				SoundType type = Blocks.planks.getStepSound();
+				SoundType type = Blocks.PLANKS.getSoundType();
 				worldObj.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
 			}
 			this.markDirty();

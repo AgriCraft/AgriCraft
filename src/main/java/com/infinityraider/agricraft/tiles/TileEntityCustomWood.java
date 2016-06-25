@@ -29,7 +29,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 	 * The default MATERIAL to use. Currently is WOOD planks.
 	 */
 	@Nonnull
-	public static final Block DEFAULT_MATERIAL = Blocks.planks;
+	public static final Block DEFAULT_MATERIAL = Blocks.PLANKS;
 
 	/**
 	 * The default metadata to use. Currently is set to Oak(0) for Planks.
@@ -140,7 +140,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 	 */
 	public final void setMaterial(String name, int meta) {
 		Block block = Block.getBlockFromName(name);
-		if (block == Blocks.air) {
+		if (block == Blocks.AIR) {
 			AgriCore.getLogger("AgriCraft").debug("TECW: Material Defaulted!");
 			this.setMaterial(DEFAULT_MATERIAL, DEFAULT_META);
 		} else {

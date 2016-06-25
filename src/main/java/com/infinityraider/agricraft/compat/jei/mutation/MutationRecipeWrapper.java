@@ -36,7 +36,7 @@ public class MutationRecipeWrapper implements IRecipeWrapper {
 			if (rec.getSoil() != null) {
 				builder.add(rec.getSoil().toStack());
 			} else {
-				builder.add(new ItemStack(Blocks.dirt));
+				builder.add(new ItemStack(Blocks.DIRT));
 			}
 			if (rec.getRequiredBlock() != null) {
 				builder.add(rec.getRequiredBlock().toStack());

@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.renderers.player.renderhooks;
 
 import com.infinityraider.agricraft.renderers.particles.RuneFX;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -28,7 +28,7 @@ public class PlayerEffectRendererParticlesEnchanted extends PlayerEffectRenderer
     }
 
     @Override
-    protected EntityFX getParticle(EntityPlayer player, float partialTick) {
+    protected Particle getParticle(EntityPlayer player, float partialTick) {
         double x = player.posX-0.5F;
         double y = player.posY + (Minecraft.getMinecraft().thePlayer==player?0:1);
         double z = player.posZ-0.5F;

@@ -37,17 +37,19 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
-		TileEntity te = world.getTileEntity(pos);
+	public void onNeighborChange(IBlockAccess iba, BlockPos pos, BlockPos neighbor) {
+		TileEntity te = iba.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityChannel) {
 			((TileEntityChannel) te).findNeighbours();
 		}
 	}
 
+	/* TODO!!!
 	@Override
 	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
 		return world.getTileEntity(pos) != null && world.getTileEntity(pos).receiveClientEvent(id, data);
 	}
+	*/
 
 	/**
 	 * Adds all intersecting collision boxes to a list. (Be sure to only add

@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.init.Blocks;
 
 public class BlockFence extends BlockCustomWood<TileEntityFence> {
 
@@ -35,7 +36,7 @@ public class BlockFence extends BlockCustomWood<TileEntityFence> {
 
     @Override
     public AxisAlignedBB getDefaultBoundingBox() {
-        return net.minecraft.block.BlockFence.field_185671_f;
+        return net.minecraft.block.BlockFence.PILLAR_AABB;
     }
 
     @Override
@@ -81,18 +82,18 @@ public class BlockFence extends BlockCustomWood<TileEntityFence> {
      */
     @Override
     public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
-        addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.field_185671_f);
+        addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.PILLAR_AABB);
         if (this.canConnect(world, pos, AgriForgeDirection.NORTH)) {
-            addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.field_185668_C);
+            addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.NORTH_AABB);
         }
         if (this.canConnect(world, pos, AgriForgeDirection.EAST)) {
-            addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.field_185669_D);
+            addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.EAST_AABB);
         }
         if (this.canConnect(world, pos, AgriForgeDirection.SOUTH)) {
-            addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.field_185672_g);
+            addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.SOUTH_AABB);
         }
         if (this.canConnect(world, pos, AgriForgeDirection.WEST)) {
-            addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.field_185667_B);
+            addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.WEST_AABB);
         }
     }
 

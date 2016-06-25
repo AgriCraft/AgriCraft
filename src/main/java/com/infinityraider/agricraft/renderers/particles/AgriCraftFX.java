@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.renderers.particles;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -15,16 +15,16 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract  class AgriCraftFX extends EntityFX {
+public abstract  class AgriCraftFX extends Particle {
     protected final ResourceLocation texture;
 
     protected AgriCraftFX(World world, double x, double y, double z, float scale, float gravity, Vec3d vector, ResourceLocation texture) {
         super(world, x, y, z, 0, 0, 0);
         this.texture = texture;
         this.particleScale = scale;
-        this.xSpeed = vector.xCoord;
-        this.ySpeed = vector.yCoord;
-        this.zSpeed = vector.zCoord;
+        this.motionX = vector.xCoord;
+        this.motionY = vector.yCoord;
+        this.motionZ = vector.zCoord;
     }
 
     protected AgriCraftFX(World world, double x, double y, double z, float scale, float gravity, Vec3d vector, TextureAtlasSprite icon) {
@@ -33,9 +33,9 @@ public abstract  class AgriCraftFX extends EntityFX {
         this.setParticleTexture(icon);
         this.particleGravity = gravity;
         this.particleScale = scale;
-        this.xSpeed = vector.xCoord;
-        this.ySpeed = vector.yCoord;
-        this.zSpeed = vector.zCoord;
+        this.motionX = vector.xCoord;
+        this.motionY = vector.yCoord;
+        this.motionZ = vector.zCoord;
     }
 
     @Override
@@ -65,7 +65,7 @@ public abstract  class AgriCraftFX extends EntityFX {
             tessellator.addVertexWithUV((f11 + f1 * f10 + f4 * f10), (f12 + f2 * f10), (f13 + f3 * f10 + f6 * f10), f6, f8);
             tessellator.addVertexWithUV((f11 + f1 * f10 - f4 * f10), (f12 - f2 * f10), (f13 + f3 * f10 - f6 * f10), f6, f9);
         } else {
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             super.renderParticle(worldRenderer, entity, partialTicks, f0, f1, f2, f3, f4);
         }
 		

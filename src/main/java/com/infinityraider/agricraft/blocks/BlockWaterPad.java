@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockWaterPad extends AbstractBlockWaterPad {
 	
 	public BlockWaterPad() {
-        this(Material.ground);
+        this(Material.GROUND);
     }
 
     protected BlockWaterPad(Material mat) {
@@ -83,7 +83,7 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
     @Override
     public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float f, int i) {
         if(!world.isRemote) {
-            ItemStack drop = new ItemStack(Blocks.dirt, 1);
+            ItemStack drop = new ItemStack(Blocks.DIRT, 1);
             spawnAsEntity(world, pos, drop);
         }
     }
@@ -91,7 +91,7 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
     //creative item picking
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return new ItemStack(Blocks.dirt);
+        return new ItemStack(Blocks.DIRT);
     }
 
     //render methods

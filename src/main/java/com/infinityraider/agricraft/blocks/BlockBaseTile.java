@@ -75,11 +75,4 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<
 		world.removeTileEntity(pos);
 	}
 
-	@Override
-	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
-		super.onBlockEventReceived(world, pos, state, id, data);
-		TileEntity tileentity = world.getTileEntity(pos);
-		return tileentity != null && tileentity.receiveClientEvent(id, data);
-	}
-
 }

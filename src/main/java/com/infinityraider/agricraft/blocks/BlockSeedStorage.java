@@ -39,12 +39,12 @@ public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
         return true;
     }
 
+	/* TODO!!!
     @Override
     public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
         TileEntity tileentity = world.getTileEntity(pos);
         return tileentity != null && tileentity.receiveClientEvent(id, data);
-
-    }
+    } */
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {

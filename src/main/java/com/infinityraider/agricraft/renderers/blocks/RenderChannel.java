@@ -101,7 +101,7 @@ public class RenderChannel<T extends TileEntityChannel> extends RenderBlockCusto
 		final TextureAtlasSprite icon = BaseIcons.WATER_STILL.getIcon();
 
 		//stolen from Vanilla code
-		final int l = RenderUtil.getMixedBrightness(channel.getWorld(), channel.getPos(), Blocks.water.getDefaultState());
+		final int l = RenderUtil.getMixedBrightness(channel.getWorld(), channel.getPos(), Blocks.WATER.getDefaultState());
 		final float y = channel.getFluidHeight() * Constants.UNIT;
 		final float f = (float) (l >> 16 & 255) / 255.0F;
 		final float f1 = (float) (l >> 8 & 255) / 255.0F;

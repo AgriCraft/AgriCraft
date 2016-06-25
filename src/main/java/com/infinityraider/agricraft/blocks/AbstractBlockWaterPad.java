@@ -28,7 +28,7 @@ public abstract class AbstractBlockWaterPad extends BlockBaseNoTile {
 	public AbstractBlockWaterPad(Material mat, String internalName) {
 		super(mat, "water_pad_" + internalName);
 		this.setHardness(0.5F);
-        this.setStepSound(Blocks.gravel.getStepSound());
+        this.setSoundType(Blocks.GRAVEL.getSoundType());
 	}
 
     @Override

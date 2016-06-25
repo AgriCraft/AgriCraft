@@ -97,9 +97,9 @@ public class ItemHandRake extends ItemBase implements IRake {
 		private final WeightedRandom<ItemStack> registry;
 
 		static {
-			instance().registerDrop(new ItemStack(Blocks.tallgrass, 1, 1), 20);
-			instance().registerDrop(new ItemStack(Blocks.tallgrass, 1, 2), 10);
-			instance().registerDrop(new ItemStack(Blocks.double_plant, 1, 2), 10);
+			instance().registerDrop(new ItemStack(Blocks.TALLGRASS, 1, 1), 20);
+			instance().registerDrop(new ItemStack(Blocks.TALLGRASS, 1, 2), 10);
+			instance().registerDrop(new ItemStack(Blocks.DOUBLE_PLANT, 1, 2), 10);
 		}
 
 		private ItemDropRegistry() {

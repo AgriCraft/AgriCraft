@@ -94,7 +94,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 			int meta = tag.getInteger(AgriCraftNBT.MATERIAL_META);
 			material = new ItemStack(Block.getBlockFromName(name), 1, meta);
 		} else {
-			material = new ItemStack(Blocks.planks);
+			material = new ItemStack(Blocks.PLANKS);
 		}
 		list.add(I18n.translateToLocal("agricraft_tooltip.material") + ": " + material.getItem().getItemStackDisplayName(material));
 	}

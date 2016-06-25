@@ -25,6 +25,7 @@ import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	//structure dimensions
@@ -41,7 +42,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	@SuppressWarnings("unused")
 	public StructureGreenhouse(StructureVillagePieces.Start villagePiece, int nr, Random rand, StructureBoundingBox structureBoundingBox, EnumFacing coordBaseMode) {
 		super();
-		this.func_186164_a(coordBaseMode);
+		this.setCoordBaseMode(coordBaseMode);
 		this.boundingBox = structureBoundingBox;
 	}
 	//public method to build the component
@@ -63,117 +64,117 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 			this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + 7, 0);
 		}
 		//cobblestone base
-		this.fillWithBlocks(world, boundingBox, 0, 0, 0, xSize - 1, 0, zSize - 1, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);   //args: (world, boundingBox, minX, minY, MinZ, maxX, maxY, maxZ, placeBlock, replaceBlock, doReplace)
+		this.fillWithBlocks(world, boundingBox, 0, 0, 0, xSize - 1, 0, zSize - 1, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);   //args: (world, boundingBox, minX, minY, MinZ, maxX, maxY, maxZ, placeBlock, replaceBlock, doReplace)
 		//ring of gravel
-		this.fillWithBlocks(world, boundingBox, 0, 1, 0, xSize - 1, 1, 0, Blocks.gravel.getDefaultState(), Blocks.gravel.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 0, 1, 0, 0, 1, zSize - 1, Blocks.gravel.getDefaultState(), Blocks.gravel.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 0, 1, zSize - 1, xSize - 1, 1, zSize - 1, Blocks.gravel.getDefaultState(), Blocks.gravel.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, xSize - 1, 1, 0, xSize - 1, 1, zSize - 1, Blocks.gravel.getDefaultState(), Blocks.gravel.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 0, 1, 0, xSize - 1, 1, 0, Blocks.GRAVEL.getDefaultState(), Blocks.GRAVEL.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 0, 1, 0, 0, 1, zSize - 1, Blocks.GRAVEL.getDefaultState(), Blocks.GRAVEL.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 0, 1, zSize - 1, xSize - 1, 1, zSize - 1, Blocks.GRAVEL.getDefaultState(), Blocks.GRAVEL.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, xSize - 1, 1, 0, xSize - 1, 1, zSize - 1, Blocks.GRAVEL.getDefaultState(), Blocks.GRAVEL.getDefaultState(), false);
 		//cobble foundations
-		this.fillWithBlocks(world, boundingBox, 1, 1, 1, 1, 1, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 1, 1, 6, 1, 1, 9, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 15, 1, 1, 15, 1, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 15, 1, 6, 15, 1, 9, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.setBlockState(world, Blocks.cobblestone.getDefaultState(), 2, 1, 1, boundingBox);
-		this.setBlockState(world, Blocks.cobblestone.getDefaultState(), 8, 1, 1, boundingBox);
-		this.setBlockState(world, Blocks.cobblestone.getDefaultState(), 14, 1, 5, boundingBox);
-		this.setBlockState(world, Blocks.cobblestone.getDefaultState(), 2, 1, 9, boundingBox);
-		this.setBlockState(world, Blocks.cobblestone.getDefaultState(), 8, 1, 9, boundingBox);
-		this.setBlockState(world, Blocks.cobblestone.getDefaultState(), 14, 1, 9, boundingBox);
+		this.fillWithBlocks(world, boundingBox, 1, 1, 1, 1, 1, 4, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 1, 1, 6, 1, 1, 9, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 15, 1, 1, 15, 1, 4, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 15, 1, 6, 15, 1, 9, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.setBlockState(world, Blocks.COBBLESTONE.getDefaultState(), 2, 1, 1, boundingBox);
+		this.setBlockState(world, Blocks.COBBLESTONE.getDefaultState(), 8, 1, 1, boundingBox);
+		this.setBlockState(world, Blocks.COBBLESTONE.getDefaultState(), 14, 1, 5, boundingBox);
+		this.setBlockState(world, Blocks.COBBLESTONE.getDefaultState(), 2, 1, 9, boundingBox);
+		this.setBlockState(world, Blocks.COBBLESTONE.getDefaultState(), 8, 1, 9, boundingBox);
+		this.setBlockState(world, Blocks.COBBLESTONE.getDefaultState(), 14, 1, 9, boundingBox);
 		//place slabs
-		this.setBlockState(world, Blocks.double_stone_slab.getDefaultState(), 1, 1, 5, boundingBox);
-		this.setBlockState(world, Blocks.double_stone_slab.getDefaultState(), 15, 1, 5, boundingBox);
-		this.fillWithBlocks(world, boundingBox, 2, 1, 2, 2, 1, 8, Blocks.double_stone_slab.getDefaultState(), Blocks.double_stone_slab.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 8, 1, 2, 8, 1, 8, Blocks.double_stone_slab.getDefaultState(), Blocks.double_stone_slab.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 14, 1, 2, 14, 1, 8, Blocks.double_stone_slab.getDefaultState(), Blocks.double_stone_slab.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 2, 1, 2, 14, 1, 2, Blocks.double_stone_slab.getDefaultState(), Blocks.double_stone_slab.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 2, 1, 8, 14, 1, 8, Blocks.double_stone_slab.getDefaultState(), Blocks.double_stone_slab.getDefaultState(), false);
+		this.setBlockState(world, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), 1, 1, 5, boundingBox);
+		this.setBlockState(world, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), 15, 1, 5, boundingBox);
+		this.fillWithBlocks(world, boundingBox, 2, 1, 2, 2, 1, 8, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), Blocks.DOUBLE_STONE_SLAB.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 8, 1, 2, 8, 1, 8, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), Blocks.DOUBLE_STONE_SLAB.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 14, 1, 2, 14, 1, 8, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), Blocks.DOUBLE_STONE_SLAB.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 2, 1, 2, 14, 1, 2, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), Blocks.DOUBLE_STONE_SLAB.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 2, 1, 8, 14, 1, 8, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), Blocks.DOUBLE_STONE_SLAB.getDefaultState(), false);
 		//place water
-		this.fillWithBlocks(world, boundingBox, 3, 1, 1, 7, 1, 1, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 9, 1, 1, 10, 1, 1, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 3, 1, 9, 7, 1, 9, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 9, 1, 9, 13, 1, 9, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
-		this.setBlockState(world, Blocks.water.getDefaultState(), 13, 1, 6, boundingBox);
+		this.fillWithBlocks(world, boundingBox, 3, 1, 1, 7, 1, 1, Blocks.WATER.getDefaultState(), Blocks.WATER.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 9, 1, 1, 10, 1, 1, Blocks.WATER.getDefaultState(), Blocks.WATER.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 3, 1, 9, 7, 1, 9, Blocks.WATER.getDefaultState(), Blocks.WATER.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 9, 1, 9, 13, 1, 9, Blocks.WATER.getDefaultState(), Blocks.WATER.getDefaultState(), false);
+		this.setBlockState(world, Blocks.WATER.getDefaultState(), 13, 1, 6, boundingBox);
 		//place farmland
-		this.fillWithBlocks(world, boundingBox, 3, 1, 3, 7, 1, 7, Blocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7), Blocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7), false);
-		this.fillWithBlocks(world, boundingBox, 9, 1, 3, 13, 1, 7, Blocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7), Blocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7), false);
+		this.fillWithBlocks(world, boundingBox, 3, 1, 3, 7, 1, 7, Blocks.FARMLAND.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7), Blocks.FARMLAND.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7), false);
+		this.fillWithBlocks(world, boundingBox, 9, 1, 3, 13, 1, 7, Blocks.FARMLAND.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7), Blocks.FARMLAND.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7), false);
 		//place standing logs
-		this.fillWithBlocks(world, boundingBox, 1, 2, 1, 1, 6, 1, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 8, 2, 1, 8, 6, 1, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 15, 2, 1, 15, 6, 1, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 1, 2, 4, 1, 5, 4, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 15, 2, 4, 15, 5, 4, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 1, 2, 6, 1, 5, 6, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 15, 2, 6, 15, 5, 6, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 1, 2, 9, 1, 6, 9, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 8, 2, 9, 8, 6, 9, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 15, 2, 9, 15, 6, 9, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 1, 2, 1, 1, 6, 1, Blocks.LOG.getDefaultState(), Blocks.LOG.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 8, 2, 1, 8, 6, 1, Blocks.LOG.getDefaultState(), Blocks.LOG.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 15, 2, 1, 15, 6, 1, Blocks.LOG.getDefaultState(), Blocks.LOG.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 1, 2, 4, 1, 5, 4, Blocks.LOG.getDefaultState(), Blocks.LOG.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 15, 2, 4, 15, 5, 4, Blocks.LOG.getDefaultState(), Blocks.LOG.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 1, 2, 6, 1, 5, 6, Blocks.LOG.getDefaultState(), Blocks.LOG.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 15, 2, 6, 15, 5, 6, Blocks.LOG.getDefaultState(), Blocks.LOG.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 1, 2, 9, 1, 6, 9, Blocks.LOG.getDefaultState(), Blocks.LOG.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 8, 2, 9, 8, 6, 9, Blocks.LOG.getDefaultState(), Blocks.LOG.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 15, 2, 9, 15, 6, 9, Blocks.LOG.getDefaultState(), Blocks.LOG.getDefaultState(), false);
 		//logs along x-axis
-		this.fillWithBlocks(world, boundingBox, 2, 6, 1, 7, 6, 1, Blocks.log.getStateFromMeta(4), Blocks.log.getStateFromMeta(4), false);
-		this.fillWithBlocks(world, boundingBox, 9, 6, 1, 14, 6, 1, Blocks.log.getStateFromMeta(4), Blocks.log.getStateFromMeta(4), false);
-		this.fillWithBlocks(world, boundingBox, 2, 6, 9, 7, 6, 9, Blocks.log.getStateFromMeta(4), Blocks.log.getStateFromMeta(4), false);
-		this.fillWithBlocks(world, boundingBox, 9, 6, 9, 14, 6, 9, Blocks.log.getStateFromMeta(4), Blocks.log.getStateFromMeta(4), false);
+		this.fillWithBlocks(world, boundingBox, 2, 6, 1, 7, 6, 1, Blocks.LOG.getStateFromMeta(4), Blocks.LOG.getStateFromMeta(4), false);
+		this.fillWithBlocks(world, boundingBox, 9, 6, 1, 14, 6, 1, Blocks.LOG.getStateFromMeta(4), Blocks.LOG.getStateFromMeta(4), false);
+		this.fillWithBlocks(world, boundingBox, 2, 6, 9, 7, 6, 9, Blocks.LOG.getStateFromMeta(4), Blocks.LOG.getStateFromMeta(4), false);
+		this.fillWithBlocks(world, boundingBox, 9, 6, 9, 14, 6, 9, Blocks.LOG.getStateFromMeta(4), Blocks.LOG.getStateFromMeta(4), false);
 		//logs along z-axis
-		this.fillWithBlocks(world, boundingBox, 1, 6, 2, 1, 6, 8, Blocks.log.getStateFromMeta(8), Blocks.log.getStateFromMeta(8), false);
-		this.fillWithBlocks(world, boundingBox, 8, 6, 2, 8, 6, 8, Blocks.log.getStateFromMeta(8), Blocks.log.getStateFromMeta(8), false);
-		this.fillWithBlocks(world, boundingBox, 15, 6, 2, 15, 6, 8, Blocks.log.getStateFromMeta(8), Blocks.log.getStateFromMeta(8), false);
-		this.setBlockState(world, Blocks.log.getStateFromMeta(8), 1, 4, 5, boundingBox);
-		this.setBlockState(world, Blocks.log.getStateFromMeta(8), 15, 4, 5, boundingBox);
+		this.fillWithBlocks(world, boundingBox, 1, 6, 2, 1, 6, 8, Blocks.LOG.getStateFromMeta(8), Blocks.LOG.getStateFromMeta(8), false);
+		this.fillWithBlocks(world, boundingBox, 8, 6, 2, 8, 6, 8, Blocks.LOG.getStateFromMeta(8), Blocks.LOG.getStateFromMeta(8), false);
+		this.fillWithBlocks(world, boundingBox, 15, 6, 2, 15, 6, 8, Blocks.LOG.getStateFromMeta(8), Blocks.LOG.getStateFromMeta(8), false);
+		this.setBlockState(world, Blocks.LOG.getStateFromMeta(8), 1, 4, 5, boundingBox);
+		this.setBlockState(world, Blocks.LOG.getStateFromMeta(8), 15, 4, 5, boundingBox);
 		//cobble walls
-		this.fillWithBlocks(world, boundingBox, 2, 2, 1, 7, 2, 1, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 9, 2, 1, 14, 2, 1, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 1, 2, 2, 1, 2, 3, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 1, 2, 7, 1, 2, 8, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 15, 2, 2, 15, 2, 3, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 15, 2, 7, 15, 2, 8, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 2, 2, 9, 7, 2, 9, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 9, 2, 9, 14, 2, 9, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 2, 2, 1, 7, 2, 1, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 9, 2, 1, 14, 2, 1, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 1, 2, 2, 1, 2, 3, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 1, 2, 7, 1, 2, 8, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 15, 2, 2, 15, 2, 3, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 15, 2, 7, 15, 2, 8, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 2, 2, 9, 7, 2, 9, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 9, 2, 9, 14, 2, 9, Blocks.COBBLESTONE.getDefaultState(), Blocks.COBBLESTONE.getDefaultState(), false);
 		//place glass
-		this.fillWithBlocks(world, boundingBox, 1, 3, 2, 1, 5, 3, Blocks.glass.getDefaultState(), Blocks.glass.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 1, 3, 7, 1, 5, 8, Blocks.glass.getDefaultState(), Blocks.glass.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 15, 3, 2, 15, 5, 3, Blocks.glass.getDefaultState(), Blocks.glass.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 15, 3, 7, 15, 5, 8, Blocks.glass.getDefaultState(), Blocks.glass.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 2, 3, 1, 7, 5, 1, Blocks.glass.getDefaultState(), Blocks.glass.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 9, 3, 1, 14, 5, 1, Blocks.glass.getDefaultState(), Blocks.glass.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 2, 3, 9, 7, 5, 9, Blocks.glass.getDefaultState(), Blocks.glass.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 9, 3, 9, 14, 5, 9, Blocks.glass.getDefaultState(), Blocks.glass.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 2, 6, 2, 7, 6, 8, Blocks.glass.getDefaultState(), Blocks.glass.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 9, 6, 2, 14, 6, 8, Blocks.glass.getDefaultState(), Blocks.glass.getDefaultState(), false);
-		this.setBlockState(world, Blocks.glass.getDefaultState(), 1, 5, 5, boundingBox);
-		this.setBlockState(world, Blocks.glass.getDefaultState(), 15, 5, 5, boundingBox);
+		this.fillWithBlocks(world, boundingBox, 1, 3, 2, 1, 5, 3, Blocks.GLASS.getDefaultState(), Blocks.GLASS.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 1, 3, 7, 1, 5, 8, Blocks.GLASS.getDefaultState(), Blocks.GLASS.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 15, 3, 2, 15, 5, 3, Blocks.GLASS.getDefaultState(), Blocks.GLASS.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 15, 3, 7, 15, 5, 8, Blocks.GLASS.getDefaultState(), Blocks.GLASS.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 2, 3, 1, 7, 5, 1, Blocks.GLASS.getDefaultState(), Blocks.GLASS.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 9, 3, 1, 14, 5, 1, Blocks.GLASS.getDefaultState(), Blocks.GLASS.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 2, 3, 9, 7, 5, 9, Blocks.GLASS.getDefaultState(), Blocks.GLASS.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 9, 3, 9, 14, 5, 9, Blocks.GLASS.getDefaultState(), Blocks.GLASS.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 2, 6, 2, 7, 6, 8, Blocks.GLASS.getDefaultState(), Blocks.GLASS.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 9, 6, 2, 14, 6, 8, Blocks.GLASS.getDefaultState(), Blocks.GLASS.getDefaultState(), false);
+		this.setBlockState(world, Blocks.GLASS.getDefaultState(), 1, 5, 5, boundingBox);
+		this.setBlockState(world, Blocks.GLASS.getDefaultState(), 15, 5, 5, boundingBox);
 		//place doors
-		this.setBlockState(world, Blocks.oak_door.getStateFromMeta(0), 1, 2, 5, boundingBox);
-		this.setBlockState(world, Blocks.oak_door.getStateFromMeta(8), 1, 3, 5, boundingBox);
-		this.setBlockState(world, Blocks.oak_door.getStateFromMeta(2), 15, 2, 5, boundingBox);
-		this.setBlockState(world, Blocks.oak_door.getStateFromMeta(8), 15, 3, 5, boundingBox);
+		this.setBlockState(world, Blocks.OAK_DOOR.getStateFromMeta(0), 1, 2, 5, boundingBox);
+		this.setBlockState(world, Blocks.OAK_DOOR.getStateFromMeta(8), 1, 3, 5, boundingBox);
+		this.setBlockState(world, Blocks.OAK_DOOR.getStateFromMeta(2), 15, 2, 5, boundingBox);
+		this.setBlockState(world, Blocks.OAK_DOOR.getStateFromMeta(8), 15, 3, 5, boundingBox);
 		//place air blocks
-		this.fillWithBlocks(world, boundingBox, 0, 2, 0, 0, 9, 10, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 16, 2, 0, 16, 9, 10, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 0, 2, 0, 16, 9, 0, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 0, 2, 10, 16, 9, 10, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 2, 2, 2, 14, 5, 8, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-		this.fillWithBlocks(world, boundingBox, 1, 7, 1, 14, 9, 8, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 0, 2, 0, 0, 9, 10, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 16, 2, 0, 16, 9, 10, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 0, 2, 0, 16, 9, 0, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 0, 2, 10, 16, 9, 10, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 2, 2, 2, 14, 5, 8, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
+		this.fillWithBlocks(world, boundingBox, 1, 7, 1, 14, 9, 8, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
 		//place torches
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 0, 4, 1, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 0, 4, 4, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 0, 4, 6, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 0, 4, 9, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 14, 4, 4, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 14, 4, 6, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 1, 4, 0, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 8, 4, 0, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 15, 4, 0, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 8, 4, 8, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 16, 4, 1, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 16, 4, 4, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 16, 4, 6, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 16, 4, 9, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 2, 4, 4, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 2, 4, 6, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 1, 4, 10, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 8, 4, 10, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 15, 4, 10, boundingBox);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 8, 4, 2, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 0, 4, 1, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 0, 4, 4, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 0, 4, 6, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 0, 4, 9, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 14, 4, 4, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 14, 4, 6, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 1, 4, 0, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 8, 4, 0, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 15, 4, 0, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 8, 4, 8, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 16, 4, 1, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 16, 4, 4, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 16, 4, 6, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 16, 4, 9, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 2, 4, 4, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 2, 4, 6, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 1, 4, 10, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 8, 4, 10, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 15, 4, 10, boundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 8, 4, 2, boundingBox);
 		//place crops
 		List<IAgriPlant> plants = PlantRegistry.getInstance().getPlants();
 		plants.removeIf((p) -> { return p.getTier() > AgriCraftConfig.greenHouseMaxTier; });
@@ -235,7 +236,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	}
 
 	@Override
-	protected int func_180779_c(int spawned, int defaultId) {
+	protected int chooseProfession(int villagersSpawnedIn, int currentVillagerProfession) {
 		return AgriCraftConfig.villagerEnabled ? WorldGen.getVillagerId() : 0;
 	}
 
@@ -253,7 +254,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 						break;
 					}
 					++nrVillagersSpawned;
-					EntityVillager entityvillager = new EntityVillagerFarmer(world, this.func_180779_c(nrVillagersSpawned, i1));
+					EntityVillager entityvillager = new EntityVillagerFarmer(world, this.chooseProfession(nrVillagersSpawned, i1));
 					entityvillager.setLocationAndAngles((double) j1 + 0.5D, (double) k1 + 1, (double) l1 + 0.5D, 0.0F, 0.0F);
 					world.spawnEntityInWorld(entityvillager);
 				}

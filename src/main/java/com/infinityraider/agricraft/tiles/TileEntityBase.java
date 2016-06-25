@@ -49,19 +49,20 @@ public abstract class TileEntityBase extends TileEntity implements IAgriDisplaya
     /**
      * Saves the tile entity to an NBTTag.
      */
-    @Override
-    public final void writeToNBT (NBTTagCompound tag){
-        super.writeToNBT(tag);
-        if (this.orientation != null) {
-            tag.setByte(AgriCraftNBT.DIRECTION, (byte) this.orientation.ordinal());
-        }
-        if(this.isMultiBlock()) {
-            NBTTagCompound multiBlockTag = new NBTTagCompound();
-            ((IMultiBlockComponent) this).getMultiBlockData().writeToNBT(multiBlockTag);
-            tag.setTag(AgriCraftNBT.MULTI_BLOCK, multiBlockTag);
-        }
+	@Override
+	public final NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		if (this.orientation != null) {
+			tag.setByte(AgriCraftNBT.DIRECTION, (byte) this.orientation.ordinal());
+		}
+		if(this.isMultiBlock()) {
+			NBTTagCompound multiBlockTag = new NBTTagCompound();
+			((IMultiBlockComponent) this).getMultiBlockData().writeToNBT(multiBlockTag);
+			tag.setTag(AgriCraftNBT.MULTI_BLOCK, multiBlockTag);
+		}
 		this.writeTileNBT(tag);
-    }
+		return tag;
+	}
 	
 	protected abstract void writeTileNBT(NBTTagCompound tag);
 
@@ -132,7 +133,7 @@ public abstract class TileEntityBase extends TileEntity implements IAgriDisplaya
     }
 
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbtTag = new NBTTagCompound();
         writeToNBT(nbtTag);
         return new SPacketUpdateTileEntity(this.getPos(), this.getBlockMetadata(), nbtTag);

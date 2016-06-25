@@ -24,7 +24,7 @@ import java.util.List;
 public class BlockWaterPadFull extends AbstractBlockWaterPad {
 	
     public BlockWaterPadFull() {
-        super(Material.water, "full");
+        super(Material.WATER, "full");
     }
 
     @Override

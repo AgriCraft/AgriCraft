@@ -58,7 +58,7 @@ public class GrowthRequirementHandler {
     }
 
     private static void registerSoils() {
-        addDefaultSoil(new BlockWithMeta(Blocks.farmland));
+        addDefaultSoil(new BlockWithMeta(Blocks.FARMLAND));
     }
 
     private static void registerCustomEntries() {
@@ -81,7 +81,7 @@ public class GrowthRequirementHandler {
         
         AgriCore.getLogger("AgriCraft").info("Completed soil whitelist:");
         for (BlockWithMeta soil : soils) {
-            AgriCore.getLogger("AgriCraft").info(" - " + Block.blockRegistry.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
+            AgriCore.getLogger("AgriCraft").info(" - " + Block.REGISTRY.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
         }
     }
 

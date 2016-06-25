@@ -30,12 +30,12 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 	private static final List<ItemStack> woodTypes = new ArrayList<>();
 
 	public BlockCustomWood(String internalName, boolean isMultiBlock) {
-		super(Material.wood, internalName, isMultiBlock);
+		super(Material.WOOD, internalName, isMultiBlock);
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
 		setHarvestLevel("axe", 0);
 		this.setCreativeTab(AgriCraftTab.agriCraftTab);
-		this.setStepSound(SoundType.WOOD);
+		this.setSoundType(SoundType.WOOD);
 	}
 
 	/**

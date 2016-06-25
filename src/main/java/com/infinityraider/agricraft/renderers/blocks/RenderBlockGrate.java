@@ -43,7 +43,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
 
 		//vines
 		final TextureAtlasSprite vinesIcon = BaseIcons.VINE.getIcon();
-		int l = RenderUtil.getMixedBrightness(world, pos, Blocks.vine.getDefaultState());
+		int l = RenderUtil.getMixedBrightness(world, pos, Blocks.VINE.getDefaultState());
 		float f0 = (float) (l >> 16 & 255) / 255.0F;
 		float f1 = (float) (l >> 8 & 255) / 255.0F;
 		float f2 = (float) (l & 255) / 255.0F;

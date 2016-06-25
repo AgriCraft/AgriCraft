@@ -37,7 +37,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 	);
 
 	public BlockSprinkler() {
-		super(Material.iron, "sprinkler", false);
+		super(Material.IRON, "sprinkler", false);
 		this.setCreativeTab(AgriCraftTab.agriCraftTab);
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
@@ -79,17 +79,6 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 		}
 	}
 
-	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
-		//check if crops can stay
-		if (!this.canBlockStay(world, pos)) {
-			//the crop will be destroyed
-			this.dropBlockAsItem(world, pos, state, 0);
-			world.setBlockToAir(pos);
-			world.removeTileEntity(pos);
-		}
-	}
-
 	//see if the block can stay
 	public boolean canBlockStay(World world, BlockPos pos) {
 		return (world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockWaterChannel);
@@ -125,7 +114,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
-		return world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockWaterChannel && state.getBlock().getMaterial(state) == Material.air;
+		return world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockWaterChannel && state.getBlock().getMaterial(state) == Material.AIR;
 	}
 
 	@Override

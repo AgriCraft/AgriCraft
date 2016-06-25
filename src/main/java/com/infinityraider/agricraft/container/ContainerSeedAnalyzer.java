@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,9 +36,9 @@ public class ContainerSeedAnalyzer extends ContainerAgricraft {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        for (ICrafting crafter : this.crafters) {
+        for (IContainerListener listener : this.listeners) {
             if (this.progress != this.seedAnalyzer.getProgress()) {
-                crafter.sendProgressBarUpdate(this, 0, this.seedAnalyzer.getProgress());
+                listener.sendProgressBarUpdate(this, 0, this.seedAnalyzer.getProgress());
             }
         }
         this.progress = this.seedAnalyzer.getProgress();

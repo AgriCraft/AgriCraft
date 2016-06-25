@@ -76,7 +76,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 		Block block = state.getBlock();
 		IBlockState extendedState = block.getExtendedState(state, world, pos);
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		tessellator.pushMatrix();
 		tessellator.translate(x, y, z);

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.items.crafting;
 
 import com.infinityraider.agricraft.items.ItemJournal;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -22,7 +23,7 @@ public class RecipeJournal implements IRecipe {
                         return false;
                     }
                 }
-                else if(stackAtIndex.getItem()==net.minecraft.init.Items.writable_book) {
+                else if(stackAtIndex.getItem()==Items.WRITABLE_BOOK) {
                     if(book==null) {
                         book = stackAtIndex;
                     }

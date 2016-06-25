@@ -101,7 +101,7 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 			//doors
 			float doorPosition = (timer >= maxDoorPos ? maxDoorPos : timer) * 4.0F / maxDoorPos;
 			if (doorPosition < 4) {
-				Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+				Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				tessellator.drawScaledPrism(4, 2, 0, 8 - doorPosition, 14, 1, icon);
 				tessellator.drawScaledPrism(8 + doorPosition, 2, 0, 12, 14, 1, icon);
 			}

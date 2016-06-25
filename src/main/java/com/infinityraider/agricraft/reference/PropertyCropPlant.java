@@ -48,7 +48,7 @@ public class PropertyCropPlant extends PropertyHelper<IAgriPlant> {
 		if(value.equals("none")) {
 			return null;
 		}
-		ItemStack stack = new ItemStack(Item.itemRegistry.getObject(new ResourceLocation(value)));
+		ItemStack stack = new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(value)));
 		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
 		if(seed != null) {
 			return Optional.of(seed.getPlant());
