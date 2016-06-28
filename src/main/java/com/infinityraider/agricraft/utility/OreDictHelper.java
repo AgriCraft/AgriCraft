@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.items.ItemNugget;
+import com.infinityraider.agricraft.reference.AgriNuggetType;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -73,7 +73,7 @@ public abstract class OreDictHelper {
         return ingot;
     }
 
-    private static void getOreBlock(ItemNugget.NuggetType type) {
+    private static void getOreBlock(AgriNuggetType type) {
         for (ItemStack itemStack : OreDictionary.getOres(type.ore)) {
             if (itemStack.getItem() instanceof ItemBlock) {
                 ItemBlock block = (ItemBlock) itemStack.getItem();

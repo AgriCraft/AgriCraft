@@ -8,10 +8,12 @@ package com.infinityraider.agricraft.reference;
 /**
  * Class for tracking AgriCraftNBT names.
  * 
- * This is fine, as these are never supposed to change, across all classes.
+ * <s>This is fine, as these are never supposed to change, across all classes.</s>
+ * Edit: This class leads to too much confusion, and classes loading the wrong things, without permission.
  * 
  * @since 2.0.0
  */
+@Deprecated
 public interface AgriCraftNBT {
 
 	String CROSS_CROP = "crossCrop";

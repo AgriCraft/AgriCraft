@@ -21,7 +21,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-import net.minecraft.init.Blocks;
 
 public class BlockFence extends BlockCustomWood<TileEntityFence> {
 

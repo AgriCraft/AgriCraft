@@ -8,7 +8,7 @@ import com.infinityraider.agricraft.items.crafting.RecipeShapelessCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.ReflectionHelper;
-import com.infinityraider.agricraft.items.ItemNugget;
+import com.infinityraider.agricraft.reference.AgriNuggetType;
 import com.infinityraider.agricraft.utility.OreDictHelper;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
@@ -92,7 +92,7 @@ public class AgriCraftRecipes {
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriCraftBlocks.blockSprinkler, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', Blocks.IRON_BARS, 'c', Items.BUCKET));
 		}
 		//fruits
-		for (ItemNugget.NuggetType type : ItemNugget.NuggetType.values()) {
+		for (AgriNuggetType type : AgriNuggetType.values()) {
 			ItemStack nugget = new ItemStack(AgriCraftItems.nugget, 9, type.ordinal());
 			ItemStack ingot = OreDictHelper.getIngot(type.ingot);
 			AgriCore.getLogger("AgriCraft").debug("Registering Nugget: {0} For: {1}", type.nugget, type.ingot);

@@ -25,7 +25,6 @@ import java.util.Random;
 import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	//structure dimensions
