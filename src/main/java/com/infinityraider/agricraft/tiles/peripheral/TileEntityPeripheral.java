@@ -22,7 +22,6 @@ import com.infinityraider.agricraft.compat.computercraft.method.MethodGetBrightn
 import com.infinityraider.agricraft.compat.computercraft.method.MethodGetBaseBlock;
 import com.infinityraider.agricraft.compat.computercraft.method.MethodIsFertile;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 @Optional.InterfaceList( value = {
         @Optional.Interface(modid = "ComputerCraft", iface = "dan200.computercraft.api.peripheral.IPeripheral"),
@@ -60,13 +60,13 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     @Override
     public void writeTileNBT(NBTTagCompound tag) {
         super.writeTileNBT(tag);
-        tag.setBoolean(AgriCraftNBT.FLAG, mayAnalyze);
+        tag.setBoolean(AgriNBT.FLAG, mayAnalyze);
     }
 
     @Override
     public void readTileNBT(NBTTagCompound tag) {
         super.readTileNBT(tag);
-        mayAnalyze = tag.hasKey(AgriCraftNBT.FLAG) && tag.getBoolean(AgriCraftNBT.FLAG);
+        mayAnalyze = tag.hasKey(AgriNBT.FLAG) && tag.getBoolean(AgriNBT.FLAG);
     }
 
     private void initMethods() {

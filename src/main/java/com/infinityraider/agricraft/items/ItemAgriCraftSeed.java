@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.init.AgriBlocks;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,8 +20,8 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class ItemAgriCraftSeed extends ItemBase implements ISeedHandler {
 
@@ -39,7 +39,7 @@ public class ItemAgriCraftSeed extends ItemBase implements ISeedHandler {
 		for (IAgriPlant plant : PlantRegistry.getInstance().getPlants()) {
 			ItemStack stack = new ItemStack(item);
 			NBTTagCompound tag = new NBTTagCompound();
-			tag.setString(AgriCraftNBT.SEED, plant.getId());
+			tag.setString(AgriNBT.SEED, plant.getId());
 			stack.setTagCompound(tag);
 			list.add(stack);
 		}
@@ -58,7 +58,7 @@ public class ItemAgriCraftSeed extends ItemBase implements ISeedHandler {
 
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (world.getBlockState(pos).getBlock() == AgriCraftBlocks.blockCrop) {
+		if (world.getBlockState(pos).getBlock() == AgriBlocks.blockCrop) {
 			AgriCore.getLogger("AgriCraft").debug("Trying to plant seed " + stack.getItem().getUnlocalizedName() + " on crops");
 			return EnumActionResult.SUCCESS;
 		}
@@ -85,7 +85,7 @@ public class ItemAgriCraftSeed extends ItemBase implements ISeedHandler {
 	public AgriSeed getSeed(ItemStack stack) {
 		if (stack != null && stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
-			IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriCraftNBT.SEED));
+			IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
 			IAgriStat stat = new PlantStats(tag);
 			if (plant != null) {
 				return new AgriSeed(plant, stat);

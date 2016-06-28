@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.items.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.utility.NBTHelper;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
 import net.minecraft.block.Block;
@@ -17,6 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 /**
  * The root item for all CustomWood blocks.
@@ -88,10 +88,10 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
 		ItemStack material;
-		if (stack.getItemDamage() == 0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(AgriCraftNBT.MATERIAL) && stack.getTagCompound().hasKey(AgriCraftNBT.MATERIAL_META)) {
+		if (stack.getItemDamage() == 0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(AgriNBT.MATERIAL) && stack.getTagCompound().hasKey(AgriNBT.MATERIAL_META)) {
 			NBTTagCompound tag = stack.getTagCompound();
-			String name = tag.getString(AgriCraftNBT.MATERIAL);
-			int meta = tag.getInteger(AgriCraftNBT.MATERIAL_META);
+			String name = tag.getString(AgriNBT.MATERIAL);
+			int meta = tag.getInteger(AgriNBT.MATERIAL_META);
 			material = new ItemStack(Block.getBlockFromName(name), 1, meta);
 		} else {
 			material = new ItemStack(Blocks.PLANKS);

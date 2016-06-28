@@ -5,8 +5,8 @@ import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.MissingJsonHandler;
 import com.infinityraider.agricraft.handler.SoundHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
 import com.agricraft.agricore.core.AgriCore;
@@ -71,7 +71,7 @@ public class ClientProxy implements IProxy {
 
 		//BLOCKS
 		//------
-		ReflectionHelper.forEachIn(AgriCraftBlocks.class, BlockBase.class, (block) -> {
+		ReflectionHelper.forEachIn(AgriBlocks.class, BlockBase.class, (block) -> {
 			StateMapperBase stateMapper = new StateMapperBase() {
 				@Override
 				protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
@@ -85,12 +85,12 @@ public class ClientProxy implements IProxy {
 
 		//ITEMS
 		//-----
-		ReflectionHelper.forEachIn(AgriCraftItems.class, ItemBase.class, (item) -> {
+		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (item) -> {
 			item.registerItemRenderer();
 		});
 
 		// Clippings
-		AgriCraftItems.clipping.registerItemRenderer();
+		AgriItems.clipping.registerItemRenderer();
 
 		//villager
 		if (!AgriCraftConfig.disableWorldGen && AgriCraftConfig.villagerEnabled) {

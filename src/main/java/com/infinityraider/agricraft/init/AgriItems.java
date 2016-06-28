@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class AgriCraftItems {
+public class AgriItems {
 
 	@AgriConfigurable(
 			category = AgriConfigCategory.TOOLS,
@@ -42,7 +42,7 @@ public class AgriCraftItems {
 	public static boolean enableClipper = true;
 	
 	static {
-		AgriCore.getConfig().addConfigurable(AgriCraftItems.class);
+		AgriCore.getConfig().addConfigurable(AgriItems.class);
 	}
 
 	public static Item crops;
@@ -77,7 +77,7 @@ public class AgriCraftItems {
 		SeedRegistry.getInstance().addSeedHandler(new ItemStack(seed), seed);
 		
 		// Register the Items
-		ReflectionHelper.forEachIn(AgriCraftItems.class, ItemBase.class, (ItemBase item) -> {
+		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (ItemBase item) -> {
 			AgriCore.getLogger("AgriCraft").debug("Registering Item: {0}", item.internalName);
 			RegisterHelper.registerItem(item, item.internalName);
 			AgriCraftJEIPlugin.registerNbtIgnore(item, item.getIgnoredNBT());

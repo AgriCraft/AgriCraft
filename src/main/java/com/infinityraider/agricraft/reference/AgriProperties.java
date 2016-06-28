@@ -12,7 +12,7 @@ import net.minecraft.block.properties.PropertyBool;
  * @deprecated Deprecated until a better way of using these properties is determined.
  */
 @Deprecated
-public interface AgriCraftProperties {
+public interface AgriProperties {
 	
 	PropertyBool CROSSCROP = PropertyBool.create("crosscrop");
 	PropertyBool WEEDS = PropertyBool.create("weeds");

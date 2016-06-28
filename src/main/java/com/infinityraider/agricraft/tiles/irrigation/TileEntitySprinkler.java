@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.blocks.BlockWaterChannel;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.renderers.particles.LiquidSprayFX;
 import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.utility.icon.BaseIcons;
@@ -26,6 +25,7 @@ import java.util.List;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable, IIrrigationComponent {
 
@@ -40,22 +40,22 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 	@Override
 	public void writeTileNBT(NBTTagCompound tag) {
 		if (this.counter > 0) {
-			tag.setInteger(AgriCraftNBT.LEVEL, this.counter);
+			tag.setInteger(AgriNBT.LEVEL, this.counter);
 		}
-		tag.setBoolean(AgriCraftNBT.IS_SPRINKLED, isSprinkled);
+		tag.setBoolean(AgriNBT.IS_SPRINKLED, isSprinkled);
 	}
 
 	//this loads the saved data for the tile entity
 	@Override
 	public void readTileNBT(NBTTagCompound tag) {
-		if (tag.hasKey(AgriCraftNBT.LEVEL)) {
-			this.counter = tag.getInteger(AgriCraftNBT.LEVEL);
+		if (tag.hasKey(AgriNBT.LEVEL)) {
+			this.counter = tag.getInteger(AgriNBT.LEVEL);
 		} else {
 			this.counter = 0;
 		}
 
-		if (tag.hasKey(AgriCraftNBT.IS_SPRINKLED)) {
-			this.isSprinkled = tag.getBoolean(AgriCraftNBT.IS_SPRINKLED);
+		if (tag.hasKey(AgriNBT.IS_SPRINKLED)) {
+			this.isSprinkled = tag.getBoolean(AgriNBT.IS_SPRINKLED);
 		} else {
 			this.isSprinkled = false;
 		}

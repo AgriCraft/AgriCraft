@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -26,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IAgriDebuggable {
 
@@ -56,13 +56,13 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	@Override
 	protected void writeNBT(NBTTagCompound tag) {
 		if (this.fluidLevel > 0) {
-			tag.setInteger(AgriCraftNBT.LEVEL, this.fluidLevel);
+			tag.setInteger(AgriNBT.LEVEL, this.fluidLevel);
 		}
 	}
 
 	@Override
 	protected void readNBT(NBTTagCompound tag) {
-		this.fluidLevel = tag.hasKey(AgriCraftNBT.LEVEL) ? tag.getInteger(AgriCraftNBT.LEVEL) : 0;
+		this.fluidLevel = tag.hasKey(AgriNBT.LEVEL) ? tag.getInteger(AgriNBT.LEVEL) : 0;
 	}
 
 	//updates the tile entity every tick

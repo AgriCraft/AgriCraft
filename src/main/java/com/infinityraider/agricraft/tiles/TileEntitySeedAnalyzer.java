@@ -1,8 +1,7 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemJournal;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -18,6 +17,7 @@ import java.util.List;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
 
@@ -47,26 +47,26 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 		if (this.specimen != null && this.specimen.getItem() != null) {
 			NBTTagCompound seedTag = new NBTTagCompound();
 			this.specimen.writeToNBT(seedTag);
-			tag.setTag(AgriCraftNBT.SEED, seedTag);
+			tag.setTag(AgriNBT.SEED, seedTag);
 		}
 		if (this.journal != null && this.journal.getItem() != null) {
 			NBTTagCompound journalTag = new NBTTagCompound();
 			this.journal.writeToNBT(journalTag);
-			tag.setTag(AgriCraftItems.journal.getUnlocalizedName(), journalTag);
+			tag.setTag(AgriItems.journal.getUnlocalizedName(), journalTag);
 		}
 		tag.setInteger("progress", this.progress);
 	}
 
 	@Override
 	public void readTileNBT(NBTTagCompound tag) {
-		if (tag.hasKey(AgriCraftNBT.SEED)) {
-			this.specimen = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
+		if (tag.hasKey(AgriNBT.SEED)) {
+			this.specimen = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriNBT.SEED));
 		} else {
 			//Not certain this is required... Unsure if networking thing?
 			this.specimen = null;
 		}
-		if (tag.hasKey(AgriCraftItems.journal.getUnlocalizedName())) {
-			this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriCraftItems.journal.getUnlocalizedName()));
+		if (tag.hasKey(AgriItems.journal.getUnlocalizedName())) {
+			this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriItems.journal.getUnlocalizedName()));
 		} else {
 			this.journal = null;
 		}

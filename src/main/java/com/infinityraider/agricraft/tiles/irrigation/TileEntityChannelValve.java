@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.tiles.irrigation;
 
 
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
@@ -10,6 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntityChannelValve extends TileEntityChannel implements IAgriDebuggable{
 	
@@ -17,13 +17,13 @@ public class TileEntityChannelValve extends TileEntityChannel implements IAgriDe
 
     @Override
     protected final void writeChannelNBT(NBTTagCompound tag) {
-        tag.setBoolean(AgriCraftNBT.POWER, powered);
+        tag.setBoolean(AgriNBT.POWER, powered);
     }
 
     //this loads the saved data for the tile entity
     @Override
     protected final void readChannelNBT(NBTTagCompound tag) {
-        this.powered = tag.getBoolean(AgriCraftNBT.POWER);
+        this.powered = tag.getBoolean(AgriNBT.POWER);
     }
 
     @Override

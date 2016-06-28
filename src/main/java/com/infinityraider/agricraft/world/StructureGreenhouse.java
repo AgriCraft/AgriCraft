@@ -22,9 +22,9 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import com.infinityraider.agricraft.reference.AgriProperties;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	//structure dimensions
@@ -199,7 +199,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 		AgriCore.getLogger("AgriCraft").debug("Placing crop at (" + xCoord + "," + yCoord + "," + zCoord + ")");
 		if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
 			BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-			world.setBlockState(pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockCrop.getDefaultState().withProperty(AgriCraftProperties.GROWTHSTAGE, 0), 2);
+			world.setBlockState(pos, com.infinityraider.agricraft.init.AgriBlocks.blockCrop.getDefaultState().withProperty(AgriProperties.GROWTHSTAGE, 0), 2);
 			TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 			if (crop != null) {
 				if (crosscrop) {
@@ -221,7 +221,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 		int zCoord = this.getZWithOffset(x, z);
 		if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
 			BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-			world.setBlockState(pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockSeedAnalyzer.getDefaultState(), 2);
+			world.setBlockState(pos, com.infinityraider.agricraft.init.AgriBlocks.blockSeedAnalyzer.getDefaultState(), 2);
 			TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(pos);
 			if (analyzer != null) {
 				if (direction != null) {

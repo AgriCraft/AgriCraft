@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.utility.multiblock;
 
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class MultiBlockPartData implements IMultiBlockPartData {
     private int posX;
@@ -57,22 +57,22 @@ public class MultiBlockPartData implements IMultiBlockPartData {
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        tag.setInteger(AgriCraftNBT.X1, posX());
-        tag.setInteger(AgriCraftNBT.Y1, posY());
-        tag.setInteger(AgriCraftNBT.Z1, posZ());
-        tag.setInteger(AgriCraftNBT.X2, sizeX());
-        tag.setInteger(AgriCraftNBT.Y2, sizeY());
-        tag.setInteger(AgriCraftNBT.Z2, sizeZ());
+        tag.setInteger(AgriNBT.X1, posX());
+        tag.setInteger(AgriNBT.Y1, posY());
+        tag.setInteger(AgriNBT.Z1, posZ());
+        tag.setInteger(AgriNBT.X2, sizeX());
+        tag.setInteger(AgriNBT.Y2, sizeY());
+        tag.setInteger(AgriNBT.Z2, sizeZ());
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        this.posX = tag.getInteger(AgriCraftNBT.X1);
-        this.posY = tag.getInteger(AgriCraftNBT.Y1);
-        this.posZ = tag.getInteger(AgriCraftNBT.Z1);
-        this.sizeX = tag.getInteger(AgriCraftNBT.X2);
-        this.sizeY = tag.getInteger(AgriCraftNBT.Y2);
-        this.sizeZ = tag.getInteger(AgriCraftNBT.Z2);
+        this.posX = tag.getInteger(AgriNBT.X1);
+        this.posY = tag.getInteger(AgriNBT.Y1);
+        this.posZ = tag.getInteger(AgriNBT.Z1);
+        this.sizeX = tag.getInteger(AgriNBT.X2);
+        this.sizeY = tag.getInteger(AgriNBT.Y2);
+        this.sizeZ = tag.getInteger(AgriNBT.Z2);
     }
 
     @Override

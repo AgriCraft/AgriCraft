@@ -6,8 +6,8 @@ import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.*;
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
@@ -68,8 +68,8 @@ public class AgriCraft {
         AgriCore.getLogger("AgriCraft").debug("Starting Pre-Initialization");
         NetworkWrapper.getInstance().initMessages();
         proxy.initConfiguration(event);
-        AgriCraftBlocks.init();
-		AgriCraftItems.init();
+        AgriBlocks.init();
+		AgriItems.init();
         APISelector.init();
         CompatibilityHandler.getInstance().preInit();
         proxy.registerRenderers();
@@ -82,7 +82,7 @@ public class AgriCraft {
         AgriCore.getLogger("AgriCraft").debug("Starting Initialization");
         proxy.registerEventHandlers();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-		AgriCraftEntities.init();
+		AgriEntities.init();
         CompatibilityHandler.getInstance().init();
         AgriCore.getLogger("AgriCraft").debug("Initialization Complete");
     }
@@ -94,7 +94,7 @@ public class AgriCraft {
 		// Core
 		CoreHandler.postInit(event);
         //Have to do this in postInit because some mods don't register their items/blocks until init
-        AgriCraftRecipes.init();
+        AgriRecipes.init();
         GrowthRequirementHandler.init();
         CompatibilityHandler.getInstance().getCropPlants().forEach(PlantRegistry.getInstance()::addPlant);
         WorldGen.init();

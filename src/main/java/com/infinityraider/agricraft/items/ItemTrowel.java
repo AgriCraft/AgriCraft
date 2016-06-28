@@ -15,9 +15,9 @@ import com.infinityraider.agricraft.api.v1.seed.ISeedHandler;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class ItemTrowel extends ItemBase implements ITrowel, ISeedHandler {
 
@@ -46,7 +46,7 @@ public class ItemTrowel extends ItemBase implements ITrowel, ISeedHandler {
 				seed = crop.removeSeed();
 				if (seed != null) {
 					NBTTagCompound tag = new NBTTagCompound();
-					tag.setString(AgriCraftNBT.SEED, seed.getPlant().getId());
+					tag.setString(AgriNBT.SEED, seed.getPlant().getId());
 					seed.getStat().writeToNBT(tag);
 					stack.setTagCompound(tag);
 					stack.setItemDamage(1);
@@ -78,7 +78,7 @@ public class ItemTrowel extends ItemBase implements ITrowel, ISeedHandler {
 		if (!stack.hasTagCompound()) {
 			return null;
 		}
-		IAgriPlant plant = PlantRegistry.getInstance().getPlant(stack.getTagCompound().getString(AgriCraftNBT.SEED));
+		IAgriPlant plant = PlantRegistry.getInstance().getPlant(stack.getTagCompound().getString(AgriNBT.SEED));
 		IAgriStat stat = new PlantStats(stack);
 		if (plant != null) {
 			return new AgriSeed(plant, stat);

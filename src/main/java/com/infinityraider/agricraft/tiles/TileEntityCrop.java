@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.farming.mutation.MutationEngine;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,17 +23,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import javax.annotation.Nonnull;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
+import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.utility.MathHelper;
 import com.infinityraider.agricraft.utility.WorldHelper;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDebuggable {
 
@@ -128,7 +128,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		if (this.hasPlant() || this.hasWeed()) {
 			stage = MathHelper.inRange(stage, 0, Constants.MATURE);
 			IBlockState state = worldObj.getBlockState(pos);
-			state = state.withProperty(AgriCraftProperties.GROWTHSTAGE, stage);
+			state = state.withProperty(AgriProperties.GROWTHSTAGE, stage);
 			this.worldObj.setBlockState(pos, state, 3);
 			this.stats.setMeta(stage);
 			this.markForUpdate();
@@ -294,7 +294,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	@Override
 	public boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
 		if (this.getGrowthStage() < Constants.MATURE && (this.hasPlant() || this.hasWeed())) {
-			((BlockCrop) AgriCraftBlocks.blockCrop).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
+			((BlockCrop) AgriBlocks.blockCrop).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
 			return true;
 		} else if (fertilizer.canTriggerMutation() && this.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
 			this.crossOver();
@@ -367,13 +367,13 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	@Override
 	public void writeTileNBT(NBTTagCompound tag) {
 		stats.writeToNBT(tag);
-		tag.setBoolean(AgriCraftNBT.CROSS_CROP, crossCrop);
-		tag.setBoolean(AgriCraftNBT.WEED, weed);
+		tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
+		tag.setBoolean(AgriNBT.WEED, weed);
 		if (plant != null) {
-			tag.setString(AgriCraftNBT.SEED, plant.getId());
+			tag.setString(AgriNBT.SEED, plant.getId());
 		}
 		if (getAdditionalCropData() != null) {
-			tag.setTag(AgriCraftNBT.INVENTORY, getAdditionalCropData().writeToNBT());
+			tag.setTag(AgriNBT.INVENTORY, getAdditionalCropData().writeToNBT());
 		}
 		//AgriCore.getLogger("Plant-Tag").debug("Write Tag: {0}", tag);
 	}
@@ -382,11 +382,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	@Override
 	public void readTileNBT(NBTTagCompound tag) {
 		this.stats = new PlantStats(tag);
-		this.crossCrop = tag.getBoolean(AgriCraftNBT.CROSS_CROP);
-		this.weed = tag.getBoolean(AgriCraftNBT.WEED);
-		this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriCraftNBT.SEED));
-		if (tag.hasKey(AgriCraftNBT.INVENTORY) && this.plant != null) {
-			this.data = plant.readCropDataFromNBT(tag.getCompoundTag(AgriCraftNBT.INVENTORY));
+		this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
+		this.weed = tag.getBoolean(AgriNBT.WEED);
+		this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
+		if (tag.hasKey(AgriNBT.INVENTORY) && this.plant != null) {
+			this.data = plant.readCropDataFromNBT(tag.getCompoundTag(AgriNBT.INVENTORY));
 		}
 		//AgriCore.getLogger("Plant-Tag").debug("Read Tag: {0}", tag);
 	}

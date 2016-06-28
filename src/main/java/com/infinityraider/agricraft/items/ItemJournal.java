@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.items.IJournal;
 import com.infinityraider.agricraft.handler.GuiHandler;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class ItemJournal extends ItemBase implements IJournal {
 
@@ -65,7 +65,7 @@ public class ItemJournal extends ItemBase implements IJournal {
 		}
 
 		NBTTagCompound tag = journal.getTagCompound();
-		String discovered = tag.getString(AgriCraftNBT.DISCOVERED_SEEDS);
+		String discovered = tag.getString(AgriNBT.DISCOVERED_SEEDS);
 		if (discovered.isEmpty()) {
 			return new ArrayList<>();
 		} else {
@@ -79,8 +79,8 @@ public class ItemJournal extends ItemBase implements IJournal {
 			List<String> seeds = getDiscoveredSeedIds(journal);
 			if (!seeds.contains(plant.getId())) {
 				NBTTagCompound tag = journal.getTagCompound();
-				String old = tag.getString(AgriCraftNBT.DISCOVERED_SEEDS);
-				tag.setString(AgriCraftNBT.DISCOVERED_SEEDS, old + plant.getId() + ";");
+				String old = tag.getString(AgriNBT.DISCOVERED_SEEDS);
+				tag.setString(AgriNBT.DISCOVERED_SEEDS, old + plant.getId() + ";");
 				journal.setTagCompound(tag);
 			}
 		}

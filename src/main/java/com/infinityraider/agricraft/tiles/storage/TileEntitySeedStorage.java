@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
 import com.infinityraider.agricraft.network.NetworkWrapper;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.NBTHelper;
@@ -27,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IAgriDebuggable, ISidedInventory {
 
@@ -53,7 +53,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 			NBTTagCompound seedTag = new NBTTagCompound();
 			ItemStack seedStack = new ItemStack(lockedSeed, 1, lockedSeedMeta);
 			seedStack.writeToNBT(seedTag);
-			tag.setTag(AgriCraftNBT.SEED, seedTag);
+			tag.setTag(AgriNBT.SEED, seedTag);
 			if (this.slots != null) {
 				//add the slots
 				NBTTagList tagList = new NBTTagList();
@@ -63,15 +63,15 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 						NBTTagCompound stackTag = slot.getTag();
 						//tag
 						NBTTagCompound slotTag = new NBTTagCompound();
-						slotTag.setInteger(AgriCraftNBT.COUNT, slot.count);
+						slotTag.setInteger(AgriNBT.COUNT, slot.count);
 						PlantStats stats = new PlantStats(stackTag);
 						stats.writeToNBT(slotTag);
-						slotTag.setInteger(AgriCraftNBT.ID, slot.getId());
+						slotTag.setInteger(AgriNBT.ID, slot.getId());
 						//add the TAG to the list
 						tagList.appendTag(slotTag);
 					}
 				}
-				tag.setTag(AgriCraftNBT.INVENTORY, tagList);
+				tag.setTag(AgriNBT.INVENTORY, tagList);
 			}
 		}
 		if (this.hasController()) {
@@ -83,22 +83,22 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 	protected void readNBT(NBTTagCompound tag) {
 		this.slots = new HashMap<>();
 		this.slotsList = new ArrayList<>();
-		if (tag.hasKey(AgriCraftNBT.SEED)) {
+		if (tag.hasKey(AgriNBT.SEED)) {
 			//read the locked SEED
-			ItemStack seedStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
+			ItemStack seedStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriNBT.SEED));
 			this.lockedSeed = seedStack.getItem();
 			this.lockedSeedMeta = seedStack.getItemDamage();
-			if (tag.hasKey(AgriCraftNBT.INVENTORY)) {
+			if (tag.hasKey(AgriNBT.INVENTORY)) {
 				//read the slots
-				NBTTagList tagList = tag.getTagList(AgriCraftNBT.INVENTORY, 10);
+				NBTTagList tagList = tag.getTagList(AgriNBT.INVENTORY, 10);
 				int invId = this.getControllableID();
 				for (int i = 0; i < tagList.tagCount(); i++) {
 					NBTTagCompound slotTag = tagList.getCompoundTagAt(i);
 					NBTTagCompound stackTag = new NBTTagCompound();
 					PlantStats stats = new PlantStats(slotTag);
 					stats.writeToNBT(stackTag);
-					int id = slotTag.getInteger(AgriCraftNBT.ID);
-					SeedStorageSlot slot = new SeedStorageSlot(stackTag, slotTag.getInteger(AgriCraftNBT.COUNT), id, invId);
+					int id = slotTag.getInteger(AgriNBT.ID);
+					SeedStorageSlot slot = new SeedStorageSlot(stackTag, slotTag.getInteger(AgriNBT.COUNT), id, invId);
 					slots.put(id, slot);
 					slotsList.add(slot);
 				}

@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.items.IClipper;
-import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.init.AgriItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -41,7 +41,7 @@ public class ItemClipper extends ItemBase implements IClipper {
 			IAgriCrop crop = (IAgriCrop) te;
 			if (crop.hasPlant() && crop.getGrowthStage() > 1) {
 				crop.setGrowthStage(crop.getGrowthStage() - 1);
-				ItemStack clipping = new ItemStack(AgriCraftItems.clipping);
+				ItemStack clipping = new ItemStack(AgriItems.clipping);
 				clipping.setTagCompound(crop.getSeed().toStack().writeToNBT(new NBTTagCompound()));
 				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), clipping));
 				return EnumActionResult.SUCCESS;

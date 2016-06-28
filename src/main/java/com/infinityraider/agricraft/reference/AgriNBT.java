@@ -14,7 +14,7 @@ package com.infinityraider.agricraft.reference;
  * @since 2.0.0
  */
 @Deprecated
-public interface AgriCraftNBT {
+public interface AgriNBT {
 
 	String CROSS_CROP = "crossCrop";
 	String WEED = "weed";

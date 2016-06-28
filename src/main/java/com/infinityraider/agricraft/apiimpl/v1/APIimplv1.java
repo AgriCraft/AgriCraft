@@ -12,8 +12,8 @@ import com.infinityraider.agricraft.api.APIBase;
 import com.infinityraider.agricraft.api.APIStatus;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import net.minecraft.item.ItemStack;
@@ -23,12 +23,12 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.APIv1;
 import com.infinityraider.agricraft.api.v1.fertilizer.IFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.seed.ISeedRegistry;
+import com.infinityraider.agricraft.reference.AgriProperties;
 
 public class APIimplv1 implements APIv1 {
 	
@@ -116,7 +116,7 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean isRakeRequiredForWeeding() {
-        return AgriCraftItems.enableHandRake;
+        return AgriItems.enableHandRake;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class APIimplv1 implements APIv1 {
         if (te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             if(crop.canHarvest()) {
-                crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(AgriCraftProperties.GROWTHSTAGE, 2), 2);
+                crop.getWorld().setBlockState(pos, world.getBlockState(pos).withProperty(AgriProperties.GROWTHSTAGE, 2), 2);
                 return crop.getPlant().getFruitsOnHarvest(crop.getStat().getGain(), world.rand);
             }
         }
@@ -140,7 +140,7 @@ public class APIimplv1 implements APIv1 {
         if (world.isRemote || !isCrop(world, pos)) {
             return null;
         }
-        List<ItemStack> result = AgriCraftBlocks.blockCrop.getDrops(world, pos, world.getBlockState(pos), 0);
+        List<ItemStack> result = AgriBlocks.blockCrop.getDrops(world, pos, world.getBlockState(pos), 0);
         world.setBlockToAir(pos);
         world.removeTileEntity(pos);
         return result;

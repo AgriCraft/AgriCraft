@@ -107,7 +107,7 @@ public class PlayerInteractEventHandler {
 			if (event.getWorld().isRemote) {
 				denyEvent(event, true);
 			}
-			event.getWorld().setBlockState(event.getPos(), com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterPad.getDefaultState(), 3);
+			event.getWorld().setBlockState(event.getPos(), com.infinityraider.agricraft.init.AgriBlocks.blockWaterPad.getDefaultState(), 3);
 			if (!player.capabilities.isCreativeMode) {
 				stack.damageItem(1, player);
 				event.setResult(Event.Result.ALLOW);

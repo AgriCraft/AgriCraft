@@ -26,12 +26,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
-import com.infinityraider.agricraft.init.AgriCraftItems;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
+import com.infinityraider.agricraft.init.AgriItems;
+import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
 
 /**
  * The main class used by TileEntityCrop.
@@ -152,9 +152,9 @@ public abstract class CropPlant implements IAgriPlant {
 
 	@Override
 	public final ItemStack getSeed() {
-		ItemStack stack = new ItemStack(AgriCraftItems.seed);
+		ItemStack stack = new ItemStack(AgriItems.seed);
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setString(AgriCraftNBT.SEED, this.getId());
+		tag.setString(AgriNBT.SEED, this.getId());
 		stack.setTagCompound(tag);
 		return stack;
 	}
@@ -297,7 +297,7 @@ public abstract class CropPlant implements IAgriPlant {
      */
     @Override
     public boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state) {
-        return state.getValue(AgriCraftProperties.GROWTHSTAGE) >= Constants.MATURE;
+        return state.getValue(AgriProperties.GROWTHSTAGE) >= Constants.MATURE;
     }
 
     /**

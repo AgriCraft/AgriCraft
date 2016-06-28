@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.Block;
 
-public class AgriCraftBlocks {
+public class AgriBlocks {
 	
 	@AgriConfigurable(
 			category = AgriConfigCategory.DECORATION,
@@ -23,7 +23,7 @@ public class AgriCraftBlocks {
 	public static boolean enableGrates = true;
 	
 	static {
-		AgriCore.getConfig().addConfigurable(AgriCraftBlocks.class);
+		AgriCore.getConfig().addConfigurable(AgriBlocks.class);
 	}
 
 	public static Block blockCrop;

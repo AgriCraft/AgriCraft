@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.blocks.BlockBase;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.multiblock.IMultiBlockComponent;
 import net.minecraft.block.state.IBlockState;
@@ -17,6 +16,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 /**
  * The root class for all AgriCraft TileEntities.
@@ -52,12 +52,12 @@ public abstract class TileEntityBase extends TileEntity implements IAgriDisplaya
 	public final NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		if (this.orientation != null) {
-			tag.setByte(AgriCraftNBT.DIRECTION, (byte) this.orientation.ordinal());
+			tag.setByte(AgriNBT.DIRECTION, (byte) this.orientation.ordinal());
 		}
 		if(this.isMultiBlock()) {
 			NBTTagCompound multiBlockTag = new NBTTagCompound();
 			((IMultiBlockComponent) this).getMultiBlockData().writeToNBT(multiBlockTag);
-			tag.setTag(AgriCraftNBT.MULTI_BLOCK, multiBlockTag);
+			tag.setTag(AgriNBT.MULTI_BLOCK, multiBlockTag);
 		}
 		this.writeTileNBT(tag);
 		return tag;
@@ -71,12 +71,12 @@ public abstract class TileEntityBase extends TileEntity implements IAgriDisplaya
     @Override
     public final void readFromNBT (NBTTagCompound tag){
         super.readFromNBT(tag);
-        if (tag.hasKey(AgriCraftNBT.DIRECTION)) {
-            this.setOrientation(tag.getByte(AgriCraftNBT.DIRECTION));
+        if (tag.hasKey(AgriNBT.DIRECTION)) {
+            this.setOrientation(tag.getByte(AgriNBT.DIRECTION));
         }
         if(this.isMultiBlock()) {
-            if(tag.hasKey(AgriCraftNBT.MULTI_BLOCK)) {
-                NBTTagCompound multiBlockTag = tag.getCompoundTag(AgriCraftNBT.MULTI_BLOCK);
+            if(tag.hasKey(AgriNBT.MULTI_BLOCK)) {
+                NBTTagCompound multiBlockTag = tag.getCompoundTag(AgriNBT.MULTI_BLOCK);
                 ((IMultiBlockComponent) this).getMultiBlockData().readFromNBT(multiBlockTag);
             }
         }
