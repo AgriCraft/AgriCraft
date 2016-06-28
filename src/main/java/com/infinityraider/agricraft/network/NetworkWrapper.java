@@ -33,6 +33,8 @@ public class NetworkWrapper {
         this.registerMessage(MessageSendNEISetting.class);
 		this.registerMessage(MessageSyncPlantJson.class);
 		this.registerMessage(MessageSyncMutationJson.class);
+		this.registerMessage(MessageSyncRecipeJson.class);
+		this.registerMessage(MessageSyncItemJson.class);
     }
 
     public void sendToAll(MessageBase message) {

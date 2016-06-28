@@ -7,6 +7,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.agricraft.agricore.util.ReflectionHelper;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.compat.json.JsonItem;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -55,6 +56,7 @@ public class AgriCraftItems {
 	public static ItemClipping clipping;
 	public static final ItemAgriCraftSeed seed = new ItemAgriCraftSeed();
 	public static final ItemNugget nugget = new ItemNugget();
+	public static final JsonItem item = new JsonItem();
 
 	public static void init() {
 		clipping = new ItemClipping();
