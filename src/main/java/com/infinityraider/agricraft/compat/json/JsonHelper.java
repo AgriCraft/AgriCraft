@@ -30,6 +30,8 @@ public class JsonHelper extends ModHelper {
 	protected void serverStart() {
 		initPlants();
 		initMutations();
+		initRecipes();
+		initItems();
 	}
 
 	public static void initPlants() {
@@ -59,6 +61,14 @@ public class JsonHelper extends ModHelper {
 		for (IAgriMutation mutation : MutationHandler.getMutations()) {
 			AgriCore.getLogger("AgriCraft").info(" - {0}", mutation);
 		}
+	}
+	
+	public static void initRecipes() {
+		AgriCore.getRecipes().validate();
+	}
+	
+	public static void initItems() {
+		AgriCore.getItems().validate();
 	}
 
 	@SideOnly(Side.CLIENT)
