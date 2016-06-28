@@ -48,7 +48,11 @@ public final class CoreHandler {
 
 		// Load the core!
 		AgriCore.getLogger("AgriCraft").info("Attempting to load plants!");
-		AgriLoader.loadManifest(configDir.resolve("plants/manifest.json"), AgriCore.getPlants(), AgriCore.getMutations());
+		AgriLoader.loadManifest(
+				configDir.resolve("plants/manifest.json"),
+				AgriCore.getPlants(),
+				AgriCore.getMutations()
+		);
 		AgriCore.getLogger("AgriCraft").info("Finished trying to load plants!");
 
 		// See if plants are valid...

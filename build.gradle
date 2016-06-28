@@ -167,9 +167,9 @@ task dist(dependsOn: ['build', 'sourcesJar', 'javadocJar']) {
 
 // Run Stuff
 runClient {
-	if( project.hasProperty('username') && project.hasProperty('password') ) {
-		args "--username=${project.username}"
-		args "--password=${project.password}"
+	if( project.hasProperty('minecraft_username') && project.hasProperty('minecraft_password') ) {
+		args "--username=${project.minecraft_username}"
+		args "--password=${project.minecraft_password}"
 	}
 
 }
