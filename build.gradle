@@ -171,5 +171,4 @@ runClient {
 		args "--username=${project.minecraft_username}"
 		args "--password=${project.minecraft_password}"
 	}
-
 }

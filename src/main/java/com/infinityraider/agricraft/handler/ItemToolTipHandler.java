@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,7 +29,7 @@ public class ItemToolTipHandler {
 				if (seed.getStat().isAnalyzed()) {
 					seed.getStat().addStats(event.getToolTip());
 				} else {
-					event.getToolTip().add(" " + I18n.translateToLocal("agricraft_tooltip.unidentified"));
+					event.getToolTip().add(" " + AgriCore.getTranslator().translate("agricraft_tooltip.unidentified"));
 				}
 			}
 		}
@@ -44,9 +44,9 @@ public class ItemToolTipHandler {
 		if (stack != null && stack.getItem() instanceof ITrowel) {
 			AgriSeed seed = SeedRegistry.getInstance().getSeed(event.getItemStack());
 			if (seed != null) {
-				event.getToolTip().add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + seed.getPlant().getSeedName());
+				event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + seed.getPlant().getSeedName());
 			} else {
-				event.getToolTip().add(I18n.translateToLocal("agricraft_tooltip.trowel"));
+				event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.trowel"));
 			}
 		}
 	}
@@ -58,9 +58,9 @@ public class ItemToolTipHandler {
 	public void addClipperTooltip(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
 		if (StackHelper.isValid(IClipper.class, stack)) {
-			event.getToolTip().add(I18n.translateToLocal("agricraft_tooltip.clipper1"));
-			event.getToolTip().add(I18n.translateToLocal("agricraft_tooltip.clipper2"));
-			event.getToolTip().add(I18n.translateToLocal("agricraft_tooltip.clipper3"));
+			event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.clipper1"));
+			event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.clipper2"));
+			event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.clipper3"));
 		}
 	}
 

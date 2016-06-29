@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.items;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
@@ -17,7 +18,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -142,13 +142,9 @@ public class ItemClipping extends ItemBase {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		String text = I18n.translateToLocal("item.agricraft:clipping.name");
+		String text = AgriCore.getTranslator().translate("item.agricraft:clipping.name");
 		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
-		if (seed == null || seed.getPlant().getAllFruits() == null || seed.getPlant().getAllFruits().isEmpty()) {
-			return text;
-		}
-		ItemStack fruit = seed.getPlant().getAllFruits().get(0);
-		return fruit.getDisplayName() + " " + text;
+		return (seed == null ? "Generic" : seed.getPlant().getPlantName()) + " " + text;
 	}
 
 }

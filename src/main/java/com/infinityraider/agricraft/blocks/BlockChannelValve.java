@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -93,7 +93,7 @@ public class BlockChannelValve extends AbstractBlockWaterChannel<TileEntityChann
 		@SideOnly(Side.CLIENT)
 		public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
 			super.addInformation(stack, player, list, flag);
-			list.add(I18n.translateToLocal("agricraft_tooltip.valve"));
+			list.add(AgriCore.getTranslator().translate("agricraft_tooltip.valve"));
 		}
 	}
 

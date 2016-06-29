@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -60,7 +60,7 @@ public class GuiPeripheral extends GuiContainer {
     //draw foreground
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y) {
-        String name = I18n.translateToLocal("agricraft_gui.peripheral");
+        String name = AgriCore.getTranslator().translate("agricraft_gui.peripheral");
         //write name: x coordinate is in the middle, 6 down from the top, and setting color to white
         float scale = 0.8F;
         GL11.glScalef(scale, scale, scale);
@@ -120,7 +120,7 @@ public class GuiPeripheral extends GuiContainer {
         if(method != null) {
             drawTexturedModalRect(this.guiLeft, this.guiTop + this.ySize - 4, 0, this.ySize, 252, 70);
             int height = fontRendererObj.FONT_HEIGHT;
-            this.fontRendererObj.drawString(I18n.translateToLocal("agricraft_description.peripheralHelp") + ": " + method.getSignature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
+            this.fontRendererObj.drawString(AgriCore.getTranslator().translate("agricraft_description.peripheralHelp") + ": " + method.getSignature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
             float scale = 0.9F;
             GL11.glScalef(scale, scale, scale);
             String[] write = IOHelper.getLinesArrayFromData(IOHelper.splitInLines(this.fontRendererObj, method.getDescription(), 230, scale));

@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -475,25 +475,25 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	public void addDisplayInfo(List information) {
 		if (this.hasPlant()) {
 			//Add the SEED name.
-			information.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + this.plant.getSeedName());
+			information.add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + this.plant.getSeedName());
 			//Add the GROWTH.
 			if (this.isMature()) {
-				information.add(I18n.translateToLocal("agricraft_tooltip.growthStage") + ": " + I18n.translateToLocal("agricraft_tooltip.mature"));
+				information.add(AgriCore.getTranslator().translate("agricraft_tooltip.growthStage") + ": " + AgriCore.getTranslator().translate("agricraft_tooltip.mature"));
 			} else {
-				information.add(I18n.translateToLocal("agricraft_tooltip.growthStage") + ": " + ((int) (100.0 * this.getBlockMetadata() / Constants.MATURE) + "%"));
+				information.add(AgriCore.getTranslator().translate("agricraft_tooltip.growthStage") + ": " + ((int) (100.0 * this.getBlockMetadata() / Constants.MATURE) + "%"));
 			}
 			//Add the ANALYZED data.
 			if (this.stats.isAnalyzed()) {
 				this.stats.addStats(information);
 			} else {
-				information.add(I18n.translateToLocal("agricraft_tooltip.analyzed"));
+				information.add(AgriCore.getTranslator().translate("agricraft_tooltip.analyzed"));
 			}
 			//Add the fertility information.
-			information.add(I18n.translateToLocal(this.isFertile() ? "agricraft_tooltip.fertile" : "agricraft_tooltip.notFertile"));
+			information.add(AgriCore.getTranslator().translate(this.isFertile() ? "agricraft_tooltip.fertile" : "agricraft_tooltip.notFertile"));
 		} else if (this.hasWeed()) {
-			information.add(I18n.translateToLocal("agricraft_tooltip.weeds"));
+			information.add(AgriCore.getTranslator().translate("agricraft_tooltip.weeds"));
 		} else {
-			information.add(I18n.translateToLocal("agricraft_tooltip.empty"));
+			information.add(AgriCore.getTranslator().translate("agricraft_tooltip.empty"));
 		}
 	}
 }

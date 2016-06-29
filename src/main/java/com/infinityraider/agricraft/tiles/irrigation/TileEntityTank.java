@@ -15,7 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -423,6 +423,6 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	@SuppressWarnings("unchecked")
 	public void addDisplayInfo(List information) {
 		super.addDisplayInfo(information);
-		information.add(I18n.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + this.getCapacity());
+		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + this.getCapacity());
 	}
 }

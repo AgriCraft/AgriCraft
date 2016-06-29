@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.compat.computercraft.method;
 
 
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 
 public class MethodParameter {
     public static final MethodParameter DIRECTION = new MethodParameter("direction");
@@ -14,10 +14,10 @@ public class MethodParameter {
     }
 
     public String getName() {
-        return I18n.translateToLocal("agricraft_arg." + name);
+        return AgriCore.getTranslator().translate("agricraft_arg." + name);
     }
 
     public String getDescription() {
-        return I18n.translateToLocal("agricraft_description.parameter."+name);
+        return AgriCore.getTranslator().translate("agricraft_description.parameter."+name);
     }
 }

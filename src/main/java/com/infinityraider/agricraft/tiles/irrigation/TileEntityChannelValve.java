@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -70,7 +70,7 @@ public class TileEntityChannelValve extends TileEntityChannel implements IAgriDe
     	//Required super call
     	super.addDisplayInfo(information);
     	//show status
-        String status = I18n.translateToLocal(powered?"agricraft_tooltip.closed":"agricraft_tooltip.open");
-        information.add(I18n.translateToLocal("agricraft_tooltip.state")+": "+status);
+        String status = AgriCore.getTranslator().translate(powered?"agricraft_tooltip.closed":"agricraft_tooltip.open");
+        information.add(AgriCore.getTranslator().translate("agricraft_tooltip.state")+": "+status);
     }
 }
