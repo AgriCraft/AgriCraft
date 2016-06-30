@@ -44,6 +44,7 @@ import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.reference.PropertyCropPlant;
 import net.minecraft.client.particle.ParticleManager;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import net.minecraft.block.Block;
 
 /**
  * The most important block in the mod.
@@ -90,7 +91,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityCrop) {
+		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
 			state.withProperty(AgriProperties.WEEDS, crop.hasWeed());
 			state.withProperty(AgriProperties.CROSSCROP, crop.isCrossCrop());
@@ -299,11 +300,11 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				//drop items if the player is not in creative
 				this.dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
 			}
-			world.setBlockToAir(pos);
-			world.removeTileEntity(pos);
 			if (plant != null) {
 				plant.onPlantRemoved(world, pos);
 			}
+			world.removeTileEntity(pos);
+			world.setBlockToAir(pos);
 		}
 	}
 
@@ -388,13 +389,25 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			crop.crossOver();
 		}
 	}
+	
+	/*
+	 * Handles changes in the crop's neighbors.
+	 */
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+		if (!this.canBlockStay(worldIn, pos)) {
+			this.dropBlockAsItem(worldIn, pos, state, 0);
+			worldIn.removeTileEntity(pos);
+			worldIn.setBlockToAir(pos);
+		}
+	}
 
 	/**
 	 * Tests to see if the crop is still on valid soil.
 	 *
 	 * @return if the crop is placed in a valid location.
 	 */
-	public boolean canBlockStay(World world, BlockPos pos) {
+	public boolean canBlockStay(IBlockAccess world, BlockPos pos) {
 		return GrowthRequirementHandler.isSoilValid(world, pos.add(0, -1, 0));
 	}
 
@@ -650,7 +663,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getWeedTexture(int growthStage) {
-		return null;
+		return new ResourceLocation("agricraft:blocks/weed_" + growthStage);
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -13,9 +13,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.util.*;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * Holds all the default soils and soil.
@@ -39,7 +39,7 @@ public class GrowthRequirementHandler {
 
     //Methods for fertile soils
     //-------------------------
-    public static boolean isSoilValid(World world,BlockPos pos) {
+    public static boolean isSoilValid(IBlockAccess world,BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         int meta = block.getMetaFromState(state);

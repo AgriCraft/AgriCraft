@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import net.minecraft.block.Block;
 
 public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 	public static final AxisAlignedBB BOX = new AxisAlignedBB(
@@ -75,6 +76,15 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 		if (!world.isRemote) {
 			ItemStack drop = new ItemStack(this, 1);
 			spawnAsEntity(world, pos, drop);
+		}
+	}
+
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
+		if (!this.canBlockStay(world, pos)) {
+			this.dropBlockAsItem(world, pos, state, 0);
+			world.removeTileEntity(pos);
+			world.setBlockToAir(pos);
 		}
 	}
 
