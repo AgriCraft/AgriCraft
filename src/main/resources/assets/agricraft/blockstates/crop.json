@@ -1,0 +1,7 @@
+{
+	"variants": {
+		"normal": {
+			"model": "agricraft:crop_base"
+		}
+	}
+}

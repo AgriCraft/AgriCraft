@@ -1,0 +1,60 @@
+{
+	"textures": {
+      "crops": "agricraft:blocks/crop",
+	  "particle": "agricraft:blocks/crop"
+    },
+    "elements": [
+        {
+            "name": "stick_1",
+            "from": [ 0.0, 11.0, 2.0 ],
+            "to": [ 16.0, 12.0, 3.0 ],
+            "faces": {
+                "north": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "east": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 1.0 ] },
+                "south": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "west": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 1.0 ] },
+                "up": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "down": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] }
+            }
+        },
+        {
+            "name": "stick_2",
+            "from": [ 0.0, 11.0, 13.0 ],
+            "to": [ 16.0, 12.0, 14.0 ],
+            "faces": {
+                "north": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "east": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 1.0 ] },
+                "south": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "west": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 1.0 ] },
+                "up": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "down": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] }
+            }
+        },
+        {
+            "name": "stick_3",
+            "from": [ 2.0, 11.0, 0.0 ],
+            "to": [ 3.0, 12.0, 16.0 ],
+            "faces": {
+                "north": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 1.0 ] },
+                "east": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "south": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 1.0 ] },
+                "west": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "up": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+                "down": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "stick_4",
+            "from": [ 13.0, 11.0, 0.0 ],
+            "to": [ 14.0, 12.0, 16.0 ],
+            "faces": {
+                "north": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 1.0 ] },
+                "east": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "south": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 1.0 ] },
+                "west": { "texture": "crops", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "up": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+                "down": { "texture": "crops", "uv": [ 0.0, 0.0, 1.0, 16.0 ] }
+            }
+        }
+    ]
+}
