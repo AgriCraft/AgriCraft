@@ -29,6 +29,7 @@ import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 
 public class APIimplv1 implements APIv1 {
 	
@@ -38,6 +39,7 @@ public class APIimplv1 implements APIv1 {
 	
     private final APIStatus status;
 	
+	private final IAgriStatRegistry statRegistry;
 	private final IAgriSeedRegistry seedRegistry;
 	private final IAgriPlantRegistry plantRegistry;
 	private final IAgriMutationRegistry mutationRegistry;
@@ -45,6 +47,7 @@ public class APIimplv1 implements APIv1 {
 
     private APIimplv1(APIStatus status) {
         this.status = status;
+		this.statRegistry = new StatRegistry();
 		this.seedRegistry = new SeedRegistry();
 		this.plantRegistry = new PlantRegistry();
 		this.mutationRegistry = new MutationRegistry();
@@ -78,6 +81,11 @@ public class APIimplv1 implements APIv1 {
     public boolean isActive(World world) {
         return true;
     }
+	
+	@Override
+	public IAgriStatRegistry getStatRegistry() {
+		return statRegistry;
+	}
 
 	@Override
 	public IAgriSeedRegistry getSeedRegistry() {

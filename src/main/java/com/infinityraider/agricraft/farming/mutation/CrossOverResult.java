@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
+import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 
 /**
  * Represents the result of a specific <code>INewSeedStrategy</code> containing
@@ -39,7 +40,7 @@ public class CrossOverResult {
     public ItemStack toStack() {
         ItemStack stack = plant.getSeed();
         NBTTagCompound tag = new NBTTagCompound();
-        stats.writeToNBT(tag);
+        StatRegistry.getInstance().setStat(tag, stats);
         stack.setTagCompound(tag);
         return stack;
     }

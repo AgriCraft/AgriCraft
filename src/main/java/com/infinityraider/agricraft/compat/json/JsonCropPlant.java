@@ -14,7 +14,7 @@ import com.infinityraider.agricraft.api.v1.requirment.RequirementType;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
+import com.infinityraider.agricraft.utility.IconUtil;
 import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.block.Block;

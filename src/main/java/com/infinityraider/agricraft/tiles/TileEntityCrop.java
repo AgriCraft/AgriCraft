@@ -30,9 +30,10 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.init.AgriBlocks;
-import com.infinityraider.agricraft.utility.MathHelper;
+import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.utility.WorldHelper;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
 
@@ -366,7 +367,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	//this saves the data on the tile entity
 	@Override
 	public void writeTileNBT(NBTTagCompound tag) {
-		stats.writeToNBT(tag);
+		StatRegistry.getInstance().setStat(tag, stats);
 		tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
 		tag.setBoolean(AgriNBT.WEED, weed);
 		if (plant != null) {
@@ -381,7 +382,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	//this loads the saved data for the tile entity
 	@Override
 	public void readTileNBT(NBTTagCompound tag) {
-		this.stats = new PlantStats(tag);
+		this.stats = StatRegistry.getInstance().getStat(tag);
 		this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
 		this.weed = tag.getBoolean(AgriNBT.WEED);
 		this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));

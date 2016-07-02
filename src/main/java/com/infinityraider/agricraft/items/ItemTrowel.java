@@ -12,12 +12,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
-import com.infinityraider.agricraft.farming.PlantStats;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedHandler;
+import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
+import com.infinityraider.agricraft.utility.StackHelper;
 
 public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IAgriSeedHandler {
 
@@ -47,7 +48,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IAgriSeedHa
 				if (seed != null) {
 					NBTTagCompound tag = new NBTTagCompound();
 					tag.setString(AgriNBT.SEED, seed.getPlant().getId());
-					seed.getStat().writeToNBT(tag);
+					StatRegistry.getInstance().setStat(tag, seed.getStat());
 					stack.setTagCompound(tag);
 					stack.setItemDamage(1);
 					return EnumActionResult.SUCCESS;
@@ -75,11 +76,9 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IAgriSeedHa
 
 	@Override
 	public AgriSeed getSeed(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
-			return null;
-		}
-		IAgriPlant plant = PlantRegistry.getInstance().getPlant(stack.getTagCompound().getString(AgriNBT.SEED));
-		IAgriStat stat = new PlantStats(stack);
+		NBTTagCompound tag = StackHelper.getTag(stack);
+		IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
+		IAgriStat stat = StatRegistry.getInstance().getStat(tag);
 		if (plant != null) {
 			return new AgriSeed(plant, stat);
 		} else {

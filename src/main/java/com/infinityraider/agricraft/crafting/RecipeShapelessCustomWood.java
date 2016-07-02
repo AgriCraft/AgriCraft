@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.items.crafting;
+package com.infinityraider.agricraft.crafting;
 
 
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;

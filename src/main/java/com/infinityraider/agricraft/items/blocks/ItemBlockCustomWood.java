@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.items.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.utility.NBTHelper;
-import com.infinityraider.agricraft.utility.icon.BaseIcons;
+import com.infinityraider.agricraft.utility.BaseIcons;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;

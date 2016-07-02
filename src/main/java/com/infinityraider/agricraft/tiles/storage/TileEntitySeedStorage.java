@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.tiles.storage;
 
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
-import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Reference;
@@ -26,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IAgriDebuggable, ISidedInventory {
@@ -64,8 +65,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 						//tag
 						NBTTagCompound slotTag = new NBTTagCompound();
 						slotTag.setInteger(AgriNBT.COUNT, slot.count);
-						PlantStats stats = new PlantStats(stackTag);
-						stats.writeToNBT(slotTag);
+						IAgriStat stats = StatRegistry.getInstance().getStat(tag);
+						StatRegistry.getInstance().setStat(slotTag, stats);
 						slotTag.setInteger(AgriNBT.ID, slot.getId());
 						//add the TAG to the list
 						tagList.appendTag(slotTag);
@@ -95,8 +96,8 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 				for (int i = 0; i < tagList.tagCount(); i++) {
 					NBTTagCompound slotTag = tagList.getCompoundTagAt(i);
 					NBTTagCompound stackTag = new NBTTagCompound();
-					PlantStats stats = new PlantStats(slotTag);
-					stats.writeToNBT(stackTag);
+					IAgriStat stats = StatRegistry.getInstance().getStat(tag);
+					StatRegistry.getInstance().setStat(stackTag, stats);
 					int id = slotTag.getInteger(AgriNBT.ID);
 					SeedStorageSlot slot = new SeedStorageSlot(stackTag, slotTag.getInteger(AgriNBT.COUNT), id, invId);
 					slots.put(id, slot);

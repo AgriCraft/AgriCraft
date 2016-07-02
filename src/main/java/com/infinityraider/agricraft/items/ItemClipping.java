@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.farming.PlantStats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -19,6 +18,7 @@ import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedHandler;
+import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 
 /**
  * Class representing clipping items.
@@ -71,7 +71,7 @@ public class ItemClipping extends ItemBase implements IAgriSeedHandler {
 		if (stack != null && stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
 			IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(NBT_CLIPPING_ID));
-			IAgriStat stat = new PlantStats(tag);
+			IAgriStat stat = StatRegistry.getInstance().getStat(tag);
 			if (plant != null) {
 				return new AgriSeed(plant, stat);
 			}
@@ -82,7 +82,7 @@ public class ItemClipping extends ItemBase implements IAgriSeedHandler {
 	public ItemStack getClipping(AgriSeed seed, int amount) {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(NBT_CLIPPING_ID, seed.getPlant().getId());
-		seed.getStat().writeToNBT(tag);
+		StatRegistry.getInstance().setStat(tag, seed.getStat());
 		ItemStack stack = new ItemStack(this);
 		stack.setTagCompound(tag);
 		return stack;

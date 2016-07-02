@@ -23,8 +23,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
-import com.infinityraider.agricraft.utility.icon.BaseIcons;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
+import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.agricraft.utility.IconUtil;
 
 import javax.annotation.Nullable;
 

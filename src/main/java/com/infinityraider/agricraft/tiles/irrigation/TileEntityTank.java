@@ -1,5 +1,9 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
+import com.infinityraider.agricraft.multiblock.MultiBlockManager;
+import com.infinityraider.agricraft.multiblock.IMultiBlockComponent;
+import com.infinityraider.agricraft.multiblock.IMultiBlockPartData;
+import com.infinityraider.agricraft.multiblock.MultiBlockPartData;
 import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
@@ -9,7 +13,6 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.multiblock.*;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;

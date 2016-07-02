@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.utility.icon;
+package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.core.AgriCore;
 import javax.annotation.Nonnull;

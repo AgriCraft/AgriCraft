@@ -17,6 +17,7 @@ import java.util.List;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.utility.StackHelper;
 
@@ -182,7 +183,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 		if (this.hasSeed()) {
 			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
 			seed = seed.withStat(seed.getStat().withAnalyzed(true));
-			seed.getStat().writeToNBT(StackHelper.getTag(specimen));
+			StatRegistry.getInstance().setStat(StackHelper.getTag(specimen), seed.getStat());
 			if (this.hasJournal()) {
 				((ItemJournal) journal.getItem()).addEntry(journal, seed.getPlant());
 			}

@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.utility.multiblock;
+package com.infinityraider.agricraft.multiblock;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

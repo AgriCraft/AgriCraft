@@ -6,22 +6,11 @@ import static com.infinityraider.agricraft.config.AgriCraftConfig.STAT_FORMAT;
 import static com.infinityraider.agricraft.config.AgriCraftConfig.cropStatCap;
 import java.text.MessageFormat;
 import java.util.List;
-import javax.annotation.Nonnull;
-import net.minecraft.nbt.NBTTagCompound;
-import com.infinityraider.agricraft.utility.MathHelper;
-import com.infinityraider.agricraft.utility.StackHelper;
-import net.minecraft.item.ItemStack;
+import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.reference.Constants;
 
 public class PlantStats implements IAgriStat {
-	
-	// Moved here since this class is in control of acess to stats.
-	public static final String NBT_ANALYZED = "analyzed";
-	public static final String NBT_GROWTH = "growth";
-	public static final String NBT_GAIN = "gain";
-	public static final String NBT_STRENGTH = "strength";
-	public static final String NBT_META = "meta";
 
 	private static final byte MAX = (byte) AgriCraftConfig.cropStatCap;
 	private static final byte MIN = 1;
@@ -34,20 +23,6 @@ public class PlantStats implements IAgriStat {
 
 	public PlantStats() {
 		this(MIN, MIN, MIN, false);
-	}
-	
-	public PlantStats(ItemStack stack) {
-		this(StackHelper.getTag(stack));
-	}
-	
-	public PlantStats(@Nonnull NBTTagCompound tag) {
-		this(
-				tag.getByte(NBT_GAIN),
-				tag.getByte(NBT_GROWTH),
-				tag.getByte(NBT_STRENGTH),
-				tag.getBoolean(NBT_ANALYZED),
-				tag.getByte(NBT_META)
-		);
 	}
 	
 	public PlantStats(int growth, int gain, int strength) {
@@ -134,16 +109,6 @@ public class PlantStats implements IAgriStat {
 	@Override
 	public byte getMaxStrength() {
 		return MAX;
-	}
-
-	@Override
-	public boolean writeToNBT(@Nonnull NBTTagCompound tag) {
-		tag.setBoolean(NBT_ANALYZED, analyzed);
-		tag.setByte(NBT_GAIN, gain);
-		tag.setByte(NBT_GROWTH, growth);
-		tag.setByte(NBT_STRENGTH, strength);
-		tag.setByte(NBT_META, meta);
-		return true;
 	}
 
 	public boolean addStats(List<String> lines) {

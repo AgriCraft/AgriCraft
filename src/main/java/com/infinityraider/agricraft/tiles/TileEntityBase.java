@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.blocks.BlockBase;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.multiblock.IMultiBlockComponent;
+import com.infinityraider.agricraft.multiblock.IMultiBlockComponent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

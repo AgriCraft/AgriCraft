@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.api.v1.stat;
 
 import java.util.List;
 import javax.annotation.Nonnull;
-import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Interface for representing stats. Stats are immutable objects, to aid in overall safety.
@@ -92,16 +91,6 @@ public interface IAgriStat {
 	 * @return the new stat.
 	 */
 	IAgriStat withStrength(int strength);
-
-	/**
-	 * Writes the stat to an NBTTagcompound.
-	 *
-	 * The major issue here is how to read back from the NBTTag...
-	 *
-	 * @param tag The tag to serialize to.
-	 * @return if transcription was successful.
-	 */
-	boolean writeToNBT(@Nonnull NBTTagCompound tag);
 
 	/**
 	 * Writes the stat for display.

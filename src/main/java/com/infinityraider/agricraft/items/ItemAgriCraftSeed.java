@@ -10,7 +10,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import com.infinityraider.agricraft.farming.PlantStats;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -21,8 +20,10 @@ import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedHandler;
+import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
+import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.farming.PlantStatsHandler;
 
 public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 
@@ -37,10 +38,12 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+		final PlantStats baseStat = new PlantStats();
 		for (IAgriPlant plant : PlantRegistry.getInstance().getPlants()) {
 			ItemStack stack = new ItemStack(item);
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setString(AgriNBT.SEED, plant.getId());
+			StatRegistry.getInstance().setStat(tag, baseStat);
 			stack.setTagCompound(tag);
 			list.add(stack);
 		}
@@ -69,11 +72,11 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 	@Override
 	public List<String> getIgnoredNBT() {
 		List<String> tags = super.getIgnoredNBT();
-		tags.add(PlantStats.NBT_ANALYZED);
-		tags.add(PlantStats.NBT_GROWTH);
-		tags.add(PlantStats.NBT_GAIN);
-		tags.add(PlantStats.NBT_STRENGTH);
-		tags.add(PlantStats.NBT_META);
+		tags.add(PlantStatsHandler.NBT_ANALYZED);
+		tags.add(PlantStatsHandler.NBT_GROWTH);
+		tags.add(PlantStatsHandler.NBT_GAIN);
+		tags.add(PlantStatsHandler.NBT_STRENGTH);
+		tags.add(PlantStatsHandler.NBT_META);
 		return tags;
 	}
 
@@ -87,8 +90,8 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 		if (stack != null && stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
 			IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
-			IAgriStat stat = new PlantStats(tag);
-			if (plant != null) {
+			IAgriStat stat = StatRegistry.getInstance().getStat(tag);
+			if (plant != null && stat != null) {
 				return new AgriSeed(plant, stat);
 			}
 		}

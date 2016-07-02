@@ -16,6 +16,7 @@ import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 
 /**
  * AgriCraft API.
@@ -45,6 +46,13 @@ public interface APIv1 extends APIBase {
 	 * @param world An optional world
 	 */
 	boolean isActive(World world);
+	
+	/**
+	 * Retrieves the stat registry for managing stats.
+	 *
+	 * @return the instance of IStatRegistry associated with this mod.
+	 */
+	IAgriStatRegistry getStatRegistry();
 
 	/**
 	 * Retrieves the seed registry for managing seeds.

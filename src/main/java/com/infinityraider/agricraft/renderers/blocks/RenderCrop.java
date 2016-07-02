@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.block.Block;
@@ -17,7 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.infinityraider.agricraft.renderers.PlantRenderer;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
+import com.infinityraider.agricraft.utility.IconUtil;
 
 import javax.annotation.Nullable;
 

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public abstract class OreDictHelper {
+public class OreDictHelper {
 
     private static final Map<String, Block> oreBlocks = new HashMap<>();
     private static final Map<String, Integer> oreBlockMeta = new HashMap<>();

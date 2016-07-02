@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.renderers.tessellation;
 
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.TransformationMatrix;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
+import com.infinityraider.agricraft.utility.IconUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;

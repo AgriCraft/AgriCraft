@@ -4,6 +4,8 @@ package com.infinityraider.agricraft.api.v1.seed;
 
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
+import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -14,33 +16,39 @@ import net.minecraft.item.ItemStack;
  */
 public class AgriSeed {
 
+	@Nonnull
 	private final IAgriPlant plant;
+	@Nonnull
 	private final IAgriStat stat;
 
-	public AgriSeed(IAgriPlant plant, IAgriStat stat) {
+	public AgriSeed(@Nonnull IAgriPlant plant, @Nonnull IAgriStat stat) {
 		this.plant = plant;
 		this.stat = stat;
 	}
 
+	@Nonnull
 	public IAgriPlant getPlant() {
 		return this.plant;
 	}
 
+	@Nonnull
 	public IAgriStat getStat() {
 		return this.stat;
 	}
 	
-	public AgriSeed withPlant(IAgriPlant plant) {
+	@Nonnull
+	public AgriSeed withPlant(@Nonnull IAgriPlant plant) {
 		return new AgriSeed(plant, stat);
 	}
 	
-	public AgriSeed withStat(IAgriStat stat) {
+	@Nonnull
+	public AgriSeed withStat(@Nonnull IAgriStat stat) {
 		return new AgriSeed(plant, stat);
 	}
 
 	public ItemStack toStack() {
 		ItemStack stack = this.plant.getSeed();
-		this.stat.writeToNBT(stack.getTagCompound());
+		StatRegistry.getInstance().setStat(stack.getTagCompound(), stat);
 		return stack;
 	}
 

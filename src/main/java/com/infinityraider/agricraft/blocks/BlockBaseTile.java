@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.blocks;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.multiblock.IMultiBlockComponent;
+import com.infinityraider.agricraft.multiblock.IMultiBlockComponent;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

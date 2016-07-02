@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.utility.multiblock;
+package com.infinityraider.agricraft.multiblock;
 
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 
