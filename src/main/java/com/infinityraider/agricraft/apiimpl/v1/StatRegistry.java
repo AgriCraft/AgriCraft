@@ -31,19 +31,24 @@ public class StatRegistry implements IAgriStatRegistry {
 	}
 
 	@Override
-	public boolean addStatHandler(String id, IAgriStatHandler handler) {
-		this.handlers.put(id, handler);
+	public boolean addStatHandler(Class<? extends IAgriStat> clazz, IAgriStatHandler handler) {
+		this.handlers.put(clazz.getCanonicalName(), handler);
 		return true;
 	}
 
 	@Override
-	public boolean removeStatHandler(String id) {
-		return this.handlers.remove(id) != null;
+	public boolean removeStatHandler(Class<? extends IAgriStat> clazz) {
+		return this.handlers.remove(clazz.getCanonicalName()) != null;
 	}
 
 	@Override
-	public IAgriStatHandler getStatHandler(String id) {
-		return this.handlers.get(id);
+	public IAgriStatHandler getStatHandler(NBTTagCompound tag) {
+		return this.handlers.get(tag.getString(NBT_STAT_ID));
+	}
+
+	@Override
+	public IAgriStatHandler getStatHandler(Class<? extends IAgriStat> clazz) {
+		return this.handlers.get(clazz.getCanonicalName());
 	}
 
 }

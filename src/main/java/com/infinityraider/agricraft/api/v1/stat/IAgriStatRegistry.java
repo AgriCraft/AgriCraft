@@ -16,33 +16,19 @@ public interface IAgriStatRegistry {
 		return isHandled(tag.getString(NBT_STAT_ID));
 	}
 	
+	default boolean isHandled(Class<? extends IAgriStat> clazz) {
+		return isHandled(clazz.getCanonicalName());
+	}
+	
 	boolean isHandled(String id);
 	
-	default boolean addStatHandler(Class<? extends IAgriStat> clazz, IAgriStatHandler handler) {
-		return addStatHandler(clazz.getCanonicalName(), handler);
-	}
+	boolean addStatHandler(Class<? extends IAgriStat> clazz, IAgriStatHandler handler);
 	
-	boolean addStatHandler(String id, IAgriStatHandler handler);
+	boolean removeStatHandler(Class<? extends IAgriStat> clazz);
 	
-	default boolean removeStatHandler(Class<? extends IAgriStat> clazz) {
-		return removeStatHandler(clazz.getCanonicalName());
-	}
+	IAgriStatHandler getStatHandler(NBTTagCompound tag);
 	
-	boolean removeStatHandler(String id);
-	
-	default IAgriStatHandler getStatHandler(NBTTagCompound tag) {
-		return getStatHandler(tag.getString(NBT_STAT_ID));
-	}
-	
-	default IAgriStatHandler getStatHandler(IAgriStat stat) {
-		return getStatHandler(stat.getClass());
-	}
-	
-	default IAgriStatHandler getStatHandler(Class<? extends IAgriStat> clazz) {
-		return getStatHandler(clazz.getCanonicalName());
-	}
-	
-	IAgriStatHandler getStatHandler(String id);
+	IAgriStatHandler getStatHandler(Class<? extends IAgriStat> clazz);
 	
 	default boolean hasStat(NBTTagCompound tag) {
 		IAgriStatHandler handler = getStatHandler(tag);
