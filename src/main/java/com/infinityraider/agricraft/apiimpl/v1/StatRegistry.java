@@ -14,8 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
  * @author RlonRyan
  */
 public class StatRegistry implements IAgriStatRegistry {
-	
-	public static final String NBT_STAT_ID = "agri_stat_id";
 
 	private final Map<String, IAgriStatHandler> handlers;
 
@@ -28,46 +26,24 @@ public class StatRegistry implements IAgriStatRegistry {
 	}
 
 	@Override
-	public boolean isHandled(NBTTagCompound tag) {
-		return handlers.containsKey(tag.getString(NBT_STAT_ID));
+	public boolean isHandled(String id) {
+		return this.handlers.containsKey(id);
 	}
 
 	@Override
-	public boolean isHandled(Class<? extends IAgriStat> clazz) {
-		return handlers.containsKey(clazz.getCanonicalName());
-	}
-
-	@Override
-	public boolean addStatHandler(Class<? extends IAgriStat> clazz, IAgriStatHandler handler) {
-		handlers.put(clazz.getCanonicalName(), handler);
+	public boolean addStatHandler(String id, IAgriStatHandler handler) {
+		this.handlers.put(id, handler);
 		return true;
 	}
 
 	@Override
-	public boolean removeStatHandler(Class<? extends IAgriStat> clazz) {
-		return handlers.remove(clazz.getCanonicalName()) != null;
+	public boolean removeStatHandler(String id) {
+		return this.handlers.remove(id) != null;
 	}
 
 	@Override
-	public IAgriStatHandler getStatHandler(NBTTagCompound tag) {
-		return handlers.get(tag.getString(NBT_STAT_ID));
-	}
-
-	@Override
-	public IAgriStatHandler getStatHandler(Class<? extends IAgriStat> clazz) {
-		return handlers.get(clazz.getCanonicalName());
-	}
-
-	@Override
-	public boolean setStat(NBTTagCompound tag, IAgriStat stat) {
-		IAgriStatHandler handler = getStatHandler(stat.getClass());
-		if (handler != null) {
-			tag.setString(NBT_STAT_ID, stat.getClass().getCanonicalName());
-			handler.setStat(tag, stat);
-			return true;
-		} else {
-			return false;
-		}
+	public IAgriStatHandler getStatHandler(String id) {
+		return this.handlers.get(id);
 	}
 
 }

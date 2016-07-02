@@ -21,9 +21,9 @@ import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedHandler;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.farming.PlantStatsHandler;
 
 public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 
@@ -43,7 +43,7 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 			ItemStack stack = new ItemStack(item);
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setString(AgriNBT.SEED, plant.getId());
-			StatRegistry.getInstance().setStat(tag, baseStat);
+			baseStat.writeToNBT(tag);
 			stack.setTagCompound(tag);
 			list.add(stack);
 		}
@@ -72,11 +72,12 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 	@Override
 	public List<String> getIgnoredNBT() {
 		List<String> tags = super.getIgnoredNBT();
-		tags.add(PlantStatsHandler.NBT_ANALYZED);
-		tags.add(PlantStatsHandler.NBT_GROWTH);
-		tags.add(PlantStatsHandler.NBT_GAIN);
-		tags.add(PlantStatsHandler.NBT_STRENGTH);
-		tags.add(PlantStatsHandler.NBT_META);
+		tags.add(IAgriStatRegistry.NBT_STAT_ID);
+		tags.add(PlantStats.NBT_ANALYZED);
+		tags.add(PlantStats.NBT_GROWTH);
+		tags.add(PlantStats.NBT_GAIN);
+		tags.add(PlantStats.NBT_STRENGTH);
+		tags.add(PlantStats.NBT_META);
 		return tags;
 	}
 

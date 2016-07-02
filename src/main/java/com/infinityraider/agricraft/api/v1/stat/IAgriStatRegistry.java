@@ -10,21 +10,39 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public interface IAgriStatRegistry {
 	
-	boolean isHandled(NBTTagCompound tag);
+	String NBT_STAT_ID = "agri_stat_id";
 	
-	boolean isHandled(Class<? extends IAgriStat> clazz);
+	default boolean isHandled(NBTTagCompound tag) {
+		return isHandled(tag.getString(NBT_STAT_ID));
+	}
 	
-	boolean addStatHandler(Class<? extends IAgriStat> clazz, IAgriStatHandler handler);
+	boolean isHandled(String id);
 	
-	boolean removeStatHandler(Class<? extends IAgriStat> clazz);
+	default boolean addStatHandler(Class<? extends IAgriStat> clazz, IAgriStatHandler handler) {
+		return addStatHandler(clazz.getCanonicalName(), handler);
+	}
 	
-	IAgriStatHandler getStatHandler(NBTTagCompound tag);
+	boolean addStatHandler(String id, IAgriStatHandler handler);
+	
+	default boolean removeStatHandler(Class<? extends IAgriStat> clazz) {
+		return removeStatHandler(clazz.getCanonicalName());
+	}
+	
+	boolean removeStatHandler(String id);
+	
+	default IAgriStatHandler getStatHandler(NBTTagCompound tag) {
+		return getStatHandler(tag.getString(NBT_STAT_ID));
+	}
 	
 	default IAgriStatHandler getStatHandler(IAgriStat stat) {
 		return getStatHandler(stat.getClass());
 	}
 	
-	IAgriStatHandler getStatHandler(Class<? extends IAgriStat> clazz);
+	default IAgriStatHandler getStatHandler(Class<? extends IAgriStat> clazz) {
+		return getStatHandler(clazz.getCanonicalName());
+	}
+	
+	IAgriStatHandler getStatHandler(String id);
 	
 	default boolean hasStat(NBTTagCompound tag) {
 		IAgriStatHandler handler = getStatHandler(tag);
@@ -35,7 +53,5 @@ public interface IAgriStatRegistry {
 		IAgriStatHandler handler = getStatHandler(tag);
 		return handler == null ? null : handler.getStat(tag);
 	}
-	
-	boolean setStat(NBTTagCompound tag, IAgriStat stat);
 	
 }

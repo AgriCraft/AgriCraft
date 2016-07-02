@@ -40,7 +40,7 @@ public class CrossOverResult {
     public ItemStack toStack() {
         ItemStack stack = plant.getSeed();
         NBTTagCompound tag = new NBTTagCompound();
-        StatRegistry.getInstance().setStat(tag, stats);
+		this.stats.writeToNBT(tag);
         stack.setTagCompound(tag);
         return stack;
     }

@@ -367,7 +367,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	//this saves the data on the tile entity
 	@Override
 	public void writeTileNBT(NBTTagCompound tag) {
-		StatRegistry.getInstance().setStat(tag, stats);
+		this.stats.writeToNBT(tag);
 		tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
 		tag.setBoolean(AgriNBT.WEED, weed);
 		if (plant != null) {

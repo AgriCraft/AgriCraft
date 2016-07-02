@@ -50,7 +50,7 @@ public class MessageTileEntitySeedStorage extends MessageBase {
 			ItemStack stack = storage.getLockedSeed();
 			stack.stackSize = this.amount;
 			NBTTagCompound tag = new NBTTagCompound();
-			StatRegistry.getInstance().setStat(tag, stats);
+			stats.writeToNBT(tag);
 			stack.setTagCompound(tag);
 			storage.setSlotContents(this.slotId, stack);
 		}
@@ -79,7 +79,7 @@ public class MessageTileEntitySeedStorage extends MessageBase {
 		if (this.slotId >= 0) {
 			buf.writeInt(this.amount);
 			NBTTagCompound tag = new NBTTagCompound();
-			StatRegistry.getInstance().setStat(tag, stats);
+			stats.writeToNBT(tag);
 			ByteBufUtils.writeTag(buf, tag);
 		}
 	}

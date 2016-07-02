@@ -72,7 +72,7 @@ public class ItemClipping extends ItemBase implements IAgriSeedHandler {
 			NBTTagCompound tag = stack.getTagCompound();
 			IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(NBT_CLIPPING_ID));
 			IAgriStat stat = StatRegistry.getInstance().getStat(tag);
-			if (plant != null) {
+			if (plant != null && stat != null) {
 				return new AgriSeed(plant, stat);
 			}
 		}
@@ -82,7 +82,7 @@ public class ItemClipping extends ItemBase implements IAgriSeedHandler {
 	public ItemStack getClipping(AgriSeed seed, int amount) {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(NBT_CLIPPING_ID, seed.getPlant().getId());
-		StatRegistry.getInstance().setStat(tag, seed.getStat());
+		seed.getStat().writeToNBT(tag);
 		ItemStack stack = new ItemStack(this);
 		stack.setTagCompound(tag);
 		return stack;

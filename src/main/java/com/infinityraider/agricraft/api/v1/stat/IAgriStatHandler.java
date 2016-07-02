@@ -14,6 +14,4 @@ public interface IAgriStatHandler {
 	
 	IAgriStat getStat(NBTTagCompound tag);
 	
-	boolean setStat(NBTTagCompound tag, IAgriStat stat);
-	
 }

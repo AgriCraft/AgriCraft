@@ -15,7 +15,6 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.farming.PlantStatsHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -71,7 +70,7 @@ public class AgriCraft {
         AgriCore.getLogger("AgriCraft").debug("Starting Pre-Initialization");
         NetworkWrapper.getInstance().initMessages();
         proxy.initConfiguration(event);
-		StatRegistry.getInstance().addStatHandler(PlantStats.class, new PlantStatsHandler());
+		StatRegistry.getInstance().addStatHandler(PlantStats.class, new PlantStats());
         AgriBlocks.init();
 		AgriItems.init();
         APISelector.init();

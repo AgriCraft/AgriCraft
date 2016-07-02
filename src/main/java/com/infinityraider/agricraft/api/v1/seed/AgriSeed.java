@@ -48,7 +48,7 @@ public class AgriSeed {
 
 	public ItemStack toStack() {
 		ItemStack stack = this.plant.getSeed();
-		StatRegistry.getInstance().setStat(stack.getTagCompound(), stat);
+		this.stat.writeToNBT(stack.getTagCompound());
 		return stack;
 	}
 

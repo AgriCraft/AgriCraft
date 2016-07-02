@@ -8,9 +8,19 @@ import java.text.MessageFormat;
 import java.util.List;
 import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatHandler;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.utility.NBTHelper;
+import net.minecraft.nbt.NBTTagCompound;
 
-public class PlantStats implements IAgriStat {
+public class PlantStats implements IAgriStat, IAgriStatHandler {
+	
+	public static final String NBT_ANALYZED = "agri_analyzed";
+	public static final String NBT_GROWTH = "agri_growth";
+	public static final String NBT_GAIN = "agri_gain";
+	public static final String NBT_STRENGTH = "agri_strength";
+	public static final String NBT_META = "agri_meta";
 
 	private static final byte MAX = (byte) AgriCraftConfig.cropStatCap;
 	private static final byte MIN = 1;
@@ -110,6 +120,16 @@ public class PlantStats implements IAgriStat {
 	public byte getMaxStrength() {
 		return MAX;
 	}
+	
+	public boolean writeToNBT(NBTTagCompound tag) {
+		tag.setString(IAgriStatRegistry.NBT_STAT_ID, this.getId());
+		tag.setBoolean(NBT_ANALYZED, analyzed);
+		tag.setByte(NBT_GAIN, gain);
+		tag.setByte(NBT_GROWTH, growth);
+		tag.setByte(NBT_STRENGTH, strength);
+		tag.setByte(NBT_META, meta);
+		return true;
+	}
 
 	public boolean addStats(List<String> lines) {
 		try {
@@ -121,6 +141,22 @@ public class PlantStats implements IAgriStat {
 			lines.add("Invalid Stat Format!");
 			return false;
 		}
+	}
+	
+	@Override
+	public boolean isValid(NBTTagCompound tag) {
+		return NBTHelper.hasKey(tag, NBT_ANALYZED, NBT_GROWTH, NBT_GAIN, NBT_STRENGTH, NBT_META);
+	}
+
+	@Override
+	public IAgriStat getStat(NBTTagCompound tag) {
+		return new PlantStats(
+				tag.getByte(NBT_GAIN),
+				tag.getByte(NBT_GROWTH),
+				tag.getByte(NBT_STRENGTH),
+				tag.getBoolean(NBT_ANALYZED),
+				tag.getByte(NBT_META)
+		);
 	}
 
 }

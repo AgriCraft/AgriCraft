@@ -66,7 +66,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 						NBTTagCompound slotTag = new NBTTagCompound();
 						slotTag.setInteger(AgriNBT.COUNT, slot.count);
 						IAgriStat stats = StatRegistry.getInstance().getStat(tag);
-						StatRegistry.getInstance().setStat(slotTag, stats);
+						stats.writeToNBT(slotTag);
 						slotTag.setInteger(AgriNBT.ID, slot.getId());
 						//add the TAG to the list
 						tagList.appendTag(slotTag);
@@ -97,7 +97,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 					NBTTagCompound slotTag = tagList.getCompoundTagAt(i);
 					NBTTagCompound stackTag = new NBTTagCompound();
 					IAgriStat stats = StatRegistry.getInstance().getStat(tag);
-					StatRegistry.getInstance().setStat(stackTag, stats);
+					stats.writeToNBT(stackTag);
 					int id = slotTag.getInteger(AgriNBT.ID);
 					SeedStorageSlot slot = new SeedStorageSlot(stackTag, slotTag.getInteger(AgriNBT.COUNT), id, invId);
 					slots.put(id, slot);

@@ -183,7 +183,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 		if (this.hasSeed()) {
 			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
 			seed = seed.withStat(seed.getStat().withAnalyzed(true));
-			StatRegistry.getInstance().setStat(StackHelper.getTag(specimen), seed.getStat());
+			seed.getStat().writeToNBT(StackHelper.getTag(specimen));
 			if (this.hasJournal()) {
 				((ItemJournal) journal.getItem()).addEntry(journal, seed.getPlant());
 			}

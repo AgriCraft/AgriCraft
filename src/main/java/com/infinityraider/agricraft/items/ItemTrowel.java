@@ -48,7 +48,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IAgriSeedHa
 				if (seed != null) {
 					NBTTagCompound tag = new NBTTagCompound();
 					tag.setString(AgriNBT.SEED, seed.getPlant().getId());
-					StatRegistry.getInstance().setStat(tag, seed.getStat());
+					seed.getStat().writeToNBT(tag);
 					stack.setTagCompound(tag);
 					stack.setItemDamage(1);
 					return EnumActionResult.SUCCESS;
@@ -79,7 +79,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IAgriSeedHa
 		NBTTagCompound tag = StackHelper.getTag(stack);
 		IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
 		IAgriStat stat = StatRegistry.getInstance().getStat(tag);
-		if (plant != null) {
+		if (plant != null && stat != null) {
 			return new AgriSeed(plant, stat);
 		} else {
 			return null;

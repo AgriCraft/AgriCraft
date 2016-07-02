@@ -280,7 +280,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 				//draw the SEED icon
 				ItemStack stack = new ItemStack(activeSeed, element.amount, activeMeta);
 				NBTTagCompound tag = new NBTTagCompound();
-				StatRegistry.getInstance().setStat(tag, element.getStat());
+				element.getStat().writeToNBT(tag);
 				stack.setTagCompound(tag);
 				itemRender.renderItemIntoGUI(stack, component.xOffset(), component.yOffset());
 				itemRender.renderItemOverlayIntoGUI(fontRendererObj, stack, component.xOffset(), component.yOffset(), "" + stack.stackSize);
@@ -334,7 +334,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 					StorageElement element = component.getComponent();
 					ItemStack stack = new ItemStack(activeSeed, element.amount, activeMeta);
 					NBTTagCompound tag = new NBTTagCompound();
-					StatRegistry.getInstance().setStat(tag, element.getStat());
+					element.getStat().writeToNBT(tag);
 					stack.setTagCompound(tag);
 					List toolTip = stack.getTooltip(Minecraft.getMinecraft().thePlayer, true);
 					drawHoveringText(toolTip, x - this.guiLeft, y - this.guiTop, fontRendererObj);
