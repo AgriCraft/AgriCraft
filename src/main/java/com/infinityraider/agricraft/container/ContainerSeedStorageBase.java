@@ -106,7 +106,7 @@ public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
 			ItemStack notMergedStack = slot.getStack();
 			originalStackInSlot = notMergedStack.copy();
 			//try to move item from the player's inventory into the container
-			AgriSeed seed = SeedRegistry.getInstance().getSeed(notMergedStack);
+			AgriSeed seed = SeedRegistry.getInstance().getValue(notMergedStack);
 			if (seed != null && seed.getStat().isAnalyzed()) {
 				ISeedStorageControllable controllable = this.getControllable(notMergedStack);
 				if (controllable != null && controllable.hasLockedSeed()) {

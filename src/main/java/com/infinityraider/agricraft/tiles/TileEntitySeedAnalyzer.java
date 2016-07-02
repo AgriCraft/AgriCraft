@@ -17,7 +17,6 @@ import java.util.List;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
-import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.utility.StackHelper;
 
@@ -101,7 +100,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return if the analyze slot contains a <em>valid</em> SEED.
 	 */
 	public final boolean hasSeed() {
-		return SeedRegistry.getInstance().isSeed(specimen);
+		return SeedRegistry.getInstance().isValid(specimen);
 	}
 
 	public final void setProgress(int value) {
@@ -119,7 +118,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 */
 	public final int maxProgress() {
 		if (this.specimen != null) {
-			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
+			AgriSeed seed = SeedRegistry.getInstance().getValue(specimen);
 			return seed == null ? 0 : seed.getPlant().getTier() * 20;
 		} else {
 			return 0;
@@ -133,7 +132,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return if the stack is valid.
 	 */
 	public static boolean isValid(ItemStack stack) {
-		return SeedRegistry.getInstance().isSeed(stack);
+		return SeedRegistry.getInstance().isValid(stack);
 	}
 
 	/**
@@ -143,7 +142,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 */
 	public final boolean isSpecimenAnalyzed() {
 		if (this.specimen != null) {
-			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
+			AgriSeed seed = SeedRegistry.getInstance().getValue(specimen);
 			return seed != null && seed.getStat().isAnalyzed();
 		}
 		return false;
@@ -181,7 +180,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	public void analyze() {
 		//analyze the SEED
 		if (this.hasSeed()) {
-			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
+			AgriSeed seed = SeedRegistry.getInstance().getValue(specimen);
 			seed = seed.withStat(seed.getStat().withAnalyzed(true));
 			seed.getStat().writeToNBT(StackHelper.getTag(specimen));
 			if (this.hasJournal()) {

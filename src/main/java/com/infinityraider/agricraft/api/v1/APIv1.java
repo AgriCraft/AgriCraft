@@ -14,9 +14,10 @@ import java.util.List;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
-import com.infinityraider.agricraft.api.v1.seed.IAgriSeedRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import com.infinityraider.agricraft.api.v1.handler.IAgriHandlerRegistry;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
 /**
  * AgriCraft API.
@@ -52,14 +53,14 @@ public interface APIv1 extends APIBase {
 	 *
 	 * @return the instance of IStatRegistry associated with this mod.
 	 */
-	IAgriStatRegistry getStatRegistry();
+	IAgriHandlerRegistry<IAgriStat> getStatRegistry();
 
 	/**
 	 * Retrieves the seed registry for managing seeds.
 	 *
 	 * @return the instance of ISeedRegistry associated with this mod.
 	 */
-	IAgriSeedRegistry getSeedRegistry();
+	IAgriHandlerRegistry<AgriSeed> getSeedRegistry();
 	
 	/**
 	 * Retrieves the plant registry for managing plants.

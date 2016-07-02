@@ -25,7 +25,7 @@ public class MethodGetStats extends MethodBase {
 
     @Override
     protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
-        IAgriStat stats = StatRegistry.getInstance().getStat(StackHelper.getTag(peripheral.getSpecimen()));
+        IAgriStat stats = StatRegistry.getInstance().getValue(StackHelper.getTag(peripheral.getSpecimen()));
         return stats == null ? null : new Object[] {stats.getGrowth(), stats.getGain(), stats.getStrength()};
     }
 

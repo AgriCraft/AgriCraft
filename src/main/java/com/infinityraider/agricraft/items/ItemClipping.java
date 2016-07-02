@@ -12,13 +12,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.nbt.NBTTagCompound;
-import com.infinityraider.agricraft.api.v1.seed.IAgriSeedHandler;
-import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 /**
  * Class representing clipping items.
@@ -26,9 +23,7 @@ import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
  * @todo Convert to conform with new API.
  * @author The AgriCraft Team
  */
-public class ItemClipping extends ItemBase implements IAgriSeedHandler {
-	
-	public static final String NBT_CLIPPING_ID = "agri_clipping_id";
+public class ItemClipping extends ItemBase {
 
 	public ItemClipping() {
 		super("clipping", true);
@@ -43,7 +38,7 @@ public class ItemClipping extends ItemBase implements IAgriSeedHandler {
 			return EnumActionResult.PASS;
 		}
 		IAgriCrop crop = (IAgriCrop) te;
-		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
 		if (!crop.acceptsSeed(stack) || seed == null) {
 			return EnumActionResult.FAIL;
 		}
@@ -57,31 +52,13 @@ public class ItemClipping extends ItemBase implements IAgriSeedHandler {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String text = AgriCore.getTranslator().translate("item.agricraft:clipping.name");
-		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
 		return (seed == null ? "Generic" : seed.getPlant().getPlantName()) + " " + text;
-	}
-	
-	@Override
-	public boolean isValid(ItemStack stack) {
-		return stack != null && stack.getItem() instanceof ItemClipping;
-	}
-
-	@Override
-	public AgriSeed getSeed(ItemStack stack) {
-		if (stack != null && stack.hasTagCompound()) {
-			NBTTagCompound tag = stack.getTagCompound();
-			IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(NBT_CLIPPING_ID));
-			IAgriStat stat = StatRegistry.getInstance().getStat(tag);
-			if (plant != null && stat != null) {
-				return new AgriSeed(plant, stat);
-			}
-		}
-		return null;
 	}
 	
 	public ItemStack getClipping(AgriSeed seed, int amount) {
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setString(NBT_CLIPPING_ID, seed.getPlant().getId());
+		tag.setString(AgriNBT.SEED, seed.getPlant().getId());
 		seed.getStat().writeToNBT(tag);
 		ItemStack stack = new ItemStack(this);
 		stack.setTagCompound(tag);

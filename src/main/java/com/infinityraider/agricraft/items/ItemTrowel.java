@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -10,17 +9,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.api.v1.seed.IAgriSeedHandler;
-import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
-import com.infinityraider.agricraft.utility.StackHelper;
+import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 
-public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IAgriSeedHandler {
+public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 
 	public ItemTrowel() {
 		super("trowel", true, "", "full");
@@ -42,7 +37,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IAgriSeedHa
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof IAgriCrop) {
 			IAgriCrop crop = (IAgriCrop) te;
-			AgriSeed seed = getSeed(stack);
+			AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
 			if (seed == null && crop.hasPlant()) {
 				seed = crop.removeSeed();
 				if (seed != null) {
@@ -66,24 +61,6 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IAgriSeedHa
 			}
 		}
 		return EnumActionResult.PASS;
-	}
-
-	// Holder
-	@Override
-	public boolean isValid(ItemStack stack) {
-		return stack != null && stack.getItem() instanceof ItemTrowel;
-	}
-
-	@Override
-	public AgriSeed getSeed(ItemStack stack) {
-		NBTTagCompound tag = StackHelper.getTag(stack);
-		IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
-		IAgriStat stat = StatRegistry.getInstance().getStat(tag);
-		if (plant != null && stat != null) {
-			return new AgriSeed(plant, stat);
-		} else {
-			return null;
-		}
 	}
 
 }

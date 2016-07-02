@@ -74,7 +74,7 @@ public class AgriCraft {
         AgriCore.getLogger("AgriCraft").debug("Starting Pre-Initialization");
         NetworkWrapper.getInstance().initMessages();
         proxy.initConfiguration(event);
-		StatRegistry.getInstance().addStatHandler(PlantStats.class, new PlantStats());
+		StatRegistry.getInstance().addHandler(new PlantStats());
         AgriBlocks.init();
 		AgriItems.init();
         APISelector.init();

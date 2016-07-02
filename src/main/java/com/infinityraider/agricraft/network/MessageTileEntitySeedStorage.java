@@ -31,7 +31,7 @@ public class MessageTileEntitySeedStorage extends MessageBase {
 		if (slot != null) {
 			this.slotId = slot.getId();
 			this.amount = slot.count;
-			this.stats = StatRegistry.getInstance().getStat(slot.getTag());
+			this.stats = StatRegistry.getInstance().getValue(slot.getTag());
 		} else {
 			this.slotId = -1;
 		}
@@ -68,7 +68,7 @@ public class MessageTileEntitySeedStorage extends MessageBase {
 		if (this.slotId >= 0) {
 			this.amount = buf.readInt();
 			NBTTagCompound tag = ByteBufUtils.readTag(buf);
-			this.stats = StatRegistry.getInstance().getStat(tag);
+			this.stats = StatRegistry.getInstance().getValue(tag);
 		}
 	}
 

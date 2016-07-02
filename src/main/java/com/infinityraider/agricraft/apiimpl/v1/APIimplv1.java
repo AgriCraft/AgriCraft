@@ -27,9 +27,10 @@ import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
-import com.infinityraider.agricraft.api.v1.seed.IAgriSeedRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import com.infinityraider.agricraft.api.v1.handler.IAgriHandlerRegistry;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
 public class APIimplv1 implements APIv1 {
 	
@@ -39,16 +40,16 @@ public class APIimplv1 implements APIv1 {
 	
     private final APIStatus status;
 	
-	private final IAgriStatRegistry statRegistry;
-	private final IAgriSeedRegistry seedRegistry;
+	private final IAgriHandlerRegistry<IAgriStat> statRegistry;
+	private final IAgriHandlerRegistry<AgriSeed> seedRegistry;
 	private final IAgriPlantRegistry plantRegistry;
 	private final IAgriMutationRegistry mutationRegistry;
 	private final IAgriFertilizerRegistry fertilizerRegistry;
 
     private APIimplv1(APIStatus status) {
         this.status = status;
-		this.statRegistry = new StatRegistry();
-		this.seedRegistry = new SeedRegistry();
+		this.statRegistry = new HandlerRegistry<>();
+		this.seedRegistry = new HandlerRegistry<>();
 		this.plantRegistry = new PlantRegistry();
 		this.mutationRegistry = new MutationRegistry();
 		this.fertilizerRegistry = new FertilizerRegistry();
@@ -83,12 +84,12 @@ public class APIimplv1 implements APIv1 {
     }
 	
 	@Override
-	public IAgriStatRegistry getStatRegistry() {
+	public IAgriHandlerRegistry<IAgriStat> getStatRegistry() {
 		return statRegistry;
 	}
 
 	@Override
-	public IAgriSeedRegistry getSeedRegistry() {
+	public IAgriHandlerRegistry<AgriSeed> getSeedRegistry() {
 		return seedRegistry;
 	}
 	

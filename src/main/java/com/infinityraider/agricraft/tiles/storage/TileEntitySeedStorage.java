@@ -65,7 +65,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 						//tag
 						NBTTagCompound slotTag = new NBTTagCompound();
 						slotTag.setInteger(AgriNBT.COUNT, slot.count);
-						IAgriStat stats = StatRegistry.getInstance().getStat(tag);
+						IAgriStat stats = StatRegistry.getInstance().getValue(tag);
 						stats.writeToNBT(slotTag);
 						slotTag.setInteger(AgriNBT.ID, slot.getId());
 						//add the TAG to the list
@@ -96,7 +96,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 				for (int i = 0; i < tagList.tagCount(); i++) {
 					NBTTagCompound slotTag = tagList.getCompoundTagAt(i);
 					NBTTagCompound stackTag = new NBTTagCompound();
-					IAgriStat stats = StatRegistry.getInstance().getStat(tag);
+					IAgriStat stats = StatRegistry.getInstance().getValue(tag);
 					stats.writeToNBT(stackTag);
 					int id = slotTag.getInteger(AgriNBT.ID);
 					SeedStorageSlot slot = new SeedStorageSlot(stackTag, slotTag.getInteger(AgriNBT.COUNT), id, invId);
@@ -148,7 +148,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 	@Override
 	public boolean addStackToInventory(ItemStack stack) {
 		boolean success = false;
-		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
 		if (seed == null || !seed.getStat().isAnalyzed()) {
 			return false;
 		}
@@ -234,7 +234,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 	}
 
 	private boolean isValidForSlot(int realSlot, ItemStack stack) {
-		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
 		if (seed == null || !seed.getStat().isAnalyzed()) {
 			return false;
 		}
@@ -493,7 +493,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
 		if (seed == null || !seed.getStat().isAnalyzed()) {
 			return false;
 		}

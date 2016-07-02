@@ -4,7 +4,6 @@ package com.infinityraider.agricraft.api.v1.seed;
 
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 

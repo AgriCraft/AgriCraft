@@ -33,7 +33,7 @@ public class SeedStorageSlot {
     }
 
     private int getTotalStat() {
-		IAgriStat stats = StatRegistry.getInstance().getStat(this.tag);
+		IAgriStat stats = StatRegistry.getInstance().getValue(this.tag);
         return stats.getGrowth() + stats.getGain() + stats.getStrength();
     }
 

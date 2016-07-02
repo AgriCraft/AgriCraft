@@ -25,7 +25,7 @@ public interface IAgriSeedAcceptor extends IAgriPlantAcceptor, IAgriStatAcceptor
 	default boolean acceptsSeed(ItemStack stack) {
 		// Hardcoded, since ok.
 		APIv1 api = (APIv1)API.getAPI(3);
-		return acceptsSeed(api.getSeedRegistry().getSeed(stack));
+		return acceptsSeed(api.getSeedRegistry().getValue(stack));
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public interface IAgriSeedAcceptor extends IAgriPlantAcceptor, IAgriStatAcceptor
 	default boolean setSeed(ItemStack stack) {
 		// Hardcoded, since ok.
 		APIv1 api = (APIv1)API.getAPI(3);
-		return setSeed(api.getSeedRegistry().getSeed(stack));
+		return setSeed(api.getSeedRegistry().getValue(stack));
 	}
 	
 	/**

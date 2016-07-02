@@ -61,7 +61,7 @@ public class PlayerInteractEventHandler {
 			if (ignoresVanillaPlantingSetting(seed)) {
 				return true;
 			}
-			if (SeedRegistry.getInstance().isSeed(seed)) {
+			if (SeedRegistry.getInstance().isValid(seed)) {
 				return false;
 			}
 			if (seed.getItem() == Items.POTATO) {

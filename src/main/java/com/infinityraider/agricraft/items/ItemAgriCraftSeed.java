@@ -20,12 +20,12 @@ import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.api.v1.seed.IAgriSeedHandler;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.api.v1.handler.IAgriHandler;
+import com.infinityraider.agricraft.utility.NBTHelper;
 
-public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
+public class ItemAgriCraftSeed extends ItemBase implements IAgriHandler<AgriSeed> {
 
 	/**
 	 * This constructor shouldn't be called from anywhere except from the
@@ -56,7 +56,7 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		final AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
+		final AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
 		return (seed == null ? "Generic Seeds" : seed.getPlant().getSeedName());
 	}
 
@@ -72,7 +72,6 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 	@Override
 	public List<String> getIgnoredNBT() {
 		List<String> tags = super.getIgnoredNBT();
-		tags.add(IAgriStatRegistry.NBT_STAT_ID);
 		tags.add(PlantStats.NBT_ANALYZED);
 		tags.add(PlantStats.NBT_GROWTH);
 		tags.add(PlantStats.NBT_GAIN);
@@ -82,21 +81,19 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 	}
 
 	@Override
-	public boolean isValid(ItemStack stack) {
-		return stack != null && stack.getItem() instanceof ItemAgriCraftSeed;
+	public boolean isValid(NBTTagCompound tag) {
+		return tag.hasKey(AgriNBT.SEED) && StatRegistry.getInstance().isValid(tag);
 	}
 
 	@Override
-	public AgriSeed getSeed(ItemStack stack) {
-		if (stack != null && stack.hasTagCompound()) {
-			NBTTagCompound tag = stack.getTagCompound();
-			IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
-			IAgriStat stat = StatRegistry.getInstance().getStat(tag);
-			if (plant != null && stat != null) {
-				return new AgriSeed(plant, stat);
-			}
+	public AgriSeed getValue(NBTTagCompound tag) {
+		IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
+		IAgriStat stat = StatRegistry.getInstance().getValue(tag);
+		if (plant != null && stat != null) {
+			return new AgriSeed(plant, stat);
+		} else {
+			return null;
 		}
-		return null;
 	}
 
 }

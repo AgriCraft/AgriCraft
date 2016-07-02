@@ -61,7 +61,7 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
 
 	/**
 	 * Utility method to get access to the TileEntity fields and methods for the
-	 * crop
+	 * crop.
 	 *
 	 * @return the TileEntity implementing ICrop
 	 */

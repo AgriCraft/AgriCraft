@@ -21,13 +21,13 @@ public final class MethodUtilities {
 		if (journal == null || journal.getItem() == null || !(journal.getItem() instanceof ItemJournal)) {
 			return false;
 		}
-		AgriSeed s = SeedRegistry.getInstance().getSeed(seed);
+		AgriSeed s = SeedRegistry.getInstance().getValue(seed);
 		return s != null && ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, s.getPlant());
 	}
 
 	public static IAgriPlant getCropPlant(ItemStack specimen) {
 		if (specimen != null || specimen.getItem() != null) {
-			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
+			AgriSeed seed = SeedRegistry.getInstance().getValue(specimen);
 			if (seed != null) {
 				return seed.getPlant();
 			}

@@ -1,7 +1,5 @@
 package com.infinityraider.agricraft.compat;
 
-import com.agricraft.agricore.config.AgriConfigCategory;
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.block.state.IBlockState;
@@ -13,7 +11,6 @@ import net.minecraft.world.World;
 import java.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

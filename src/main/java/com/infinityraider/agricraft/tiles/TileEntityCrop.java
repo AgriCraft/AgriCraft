@@ -379,7 +379,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	//this loads the saved data for the tile entity
 	@Override
 	public void readTileNBT(NBTTagCompound tag) {
-		this.stats = StatRegistry.getInstance().getStat(tag);
+		this.stats = StatRegistry.getInstance().getValue(tag);
 		this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
 		this.weed = tag.getBoolean(AgriNBT.WEED);
 		this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));

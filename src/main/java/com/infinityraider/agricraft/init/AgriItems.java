@@ -9,7 +9,6 @@ import com.agricraft.agricore.util.ReflectionHelper;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 public class AgriItems {
 
@@ -63,7 +62,6 @@ public class AgriItems {
 		debugItem = new ItemDebugger();
 		if (enableTrowel) {
 			trowel = new ItemTrowel();
-			SeedRegistry.getInstance().addSeedHandler(new ItemStack(trowel), trowel);
 		}
 		if (enableHandRake) {
 			handRake = new ItemHandRake();
@@ -73,8 +71,7 @@ public class AgriItems {
 		}
 		
 		// Register seed handler.
-		SeedRegistry.getInstance().addSeedHandler(new ItemStack(seed), seed);
-		SeedRegistry.getInstance().addSeedHandler(new ItemStack(clipping), clipping);
+		SeedRegistry.getInstance().addHandler(seed);
 		
 		// Register the Items
 		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (ItemBase item) -> {
