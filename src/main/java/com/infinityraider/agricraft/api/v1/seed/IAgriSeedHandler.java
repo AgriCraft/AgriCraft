@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author RlonRyan
  */
-public interface ISeedHandler {
+public interface IAgriSeedHandler {
 	
 	boolean isValid(ItemStack stack);
 	

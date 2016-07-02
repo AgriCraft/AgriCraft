@@ -7,7 +7,7 @@ package com.infinityraider.agricraft.api.v1.stat;
  *
  * @author RlonRyan
  */
-public interface IStatProvider {
+public interface IAgriStatProvider {
 
 	/**
 	 * Determines if the object currently has an associated AgriStat.

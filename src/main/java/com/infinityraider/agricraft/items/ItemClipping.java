@@ -13,12 +13,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.seed.ISeedHandler;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.nbt.NBTTagCompound;
+import com.infinityraider.agricraft.api.v1.seed.IAgriSeedHandler;
 
 /**
  * Class representing clipping items.
@@ -26,7 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * @todo Convert to conform with new API.
  * @author The AgriCraft Team
  */
-public class ItemClipping extends ItemBase implements ISeedHandler {
+public class ItemClipping extends ItemBase implements IAgriSeedHandler {
 	
 	public static final String NBT_CLIPPING_ID = "agri_clipping_id";
 

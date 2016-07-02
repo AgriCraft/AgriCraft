@@ -6,7 +6,7 @@ package com.infinityraider.agricraft.api.v1.plant;
  *
  * @author RlonRyan
  */
-public interface IPlantAcceptor {
+public interface IAgriPlantAcceptor {
 	
 	/**
 	 * Determines if an AgriPlant is valid for this specific instance.

@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author RlonRyan
  */
-public interface IHarvestable {
+public interface IAgriHarvestable {
 	
 	/**
 	 * Determines if the object can currently be harvested or not.

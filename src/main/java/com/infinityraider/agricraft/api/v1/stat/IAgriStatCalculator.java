@@ -10,7 +10,7 @@ import java.util.List;
  * Interface to create custom Stat Calculator logic
  * use API.setStatCalculator(IStatCalculator calculator) to set the active calculator
  */
-public interface IStatCalculator {
+public interface IAgriStatCalculator {
     /**
      * Calculates the stats for a mutation or spread result
      * @param result an ItemStack containing the seed of the new plant

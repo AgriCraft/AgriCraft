@@ -3,16 +3,16 @@
 package com.infinityraider.agricraft.api.v1.seed;
 
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.plant.IPlantProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v1.stat.IStatProvider;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 
 /**
  * A class for objects containing seeds.
  *
  * @author RlonRyan
  */
-public interface ISeedProvider extends IPlantProvider, IStatProvider {
+public interface IAgriSeedProvider extends IAgriPlantProvider, IAgriStatProvider {
 
 	/**
 	 * Determines if the object currently has an associated seed.

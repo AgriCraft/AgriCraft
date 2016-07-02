@@ -8,23 +8,23 @@ import net.minecraft.item.ItemStack;
  *
  * @author RlonRyan
  */
-public interface ISeedRegistry {
+public interface IAgriSeedRegistry {
 	
 	boolean isHandled(ItemStack stack);
 	
-	boolean addSeedHandler(ItemStack stack, ISeedHandler handler);
+	boolean addSeedHandler(ItemStack stack, IAgriSeedHandler handler);
 	
 	boolean removeSeedHandler(ItemStack stack);
 	
-	ISeedHandler getSeedHandler(ItemStack stack);
+	IAgriSeedHandler getSeedHandler(ItemStack stack);
 	
 	default boolean isSeed(ItemStack stack) {
-		ISeedHandler handler = getSeedHandler(stack);
+		IAgriSeedHandler handler = getSeedHandler(stack);
 		return handler != null && handler.isValid(stack);
 	}
 	
 	default AgriSeed getSeed(ItemStack stack) {
-		ISeedHandler handler = getSeedHandler(stack);
+		IAgriSeedHandler handler = getSeedHandler(stack);
 		return handler == null ? null : handler.getSeed(stack);
 	}
 	

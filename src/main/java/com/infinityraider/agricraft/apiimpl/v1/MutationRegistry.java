@@ -2,21 +2,21 @@
  */
 package com.infinityraider.agricraft.apiimpl.v1;
 
-import com.infinityraider.agricraft.api.v1.mutation.IMutationRegistry;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import java.util.Arrays;
 import java.util.List;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
 
 /**
  *
  * @author RlonRyan
  */
-public class MutationRegistry implements IMutationRegistry {
+public class MutationRegistry implements IAgriMutationRegistry {
 	
-	public static IMutationRegistry getInstance() {
+	public static IAgriMutationRegistry getInstance() {
 		return APIimplv1.getInstance().getMutationRegistry();
 	}
 

@@ -9,7 +9,7 @@ import java.util.Random;
  *
  * @author RlonRyan
  */
-public interface IFertilizable {
+public interface IAgriFertilizable {
 
 	/**
 	 * Checks if a certain fertilizer may be applied to this crop

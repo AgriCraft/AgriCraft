@@ -10,7 +10,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import com.infinityraider.agricraft.api.v1.seed.ISeedHandler;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
@@ -18,8 +17,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.v1.seed.IAgriSeedHandler;
 
-public class ItemTrowel extends ItemBase implements IAgriTrowelItem, ISeedHandler {
+public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IAgriSeedHandler {
 
 	public ItemTrowel() {
 		super("trowel", true, "", "full");

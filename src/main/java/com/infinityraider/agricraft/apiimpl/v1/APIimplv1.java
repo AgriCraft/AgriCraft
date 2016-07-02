@@ -1,10 +1,7 @@
 package com.infinityraider.agricraft.apiimpl.v1;
 
-import com.infinityraider.agricraft.api.v1.plant.IPlantRegistry;
 import com.infinityraider.agricraft.api.v1.util.BlockWithMeta;
-import com.infinityraider.agricraft.api.v1.mutation.IMutationRegistry;
 import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v1.stat.IStatCalculator;
 import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirementBuilder;
 import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
@@ -25,10 +22,13 @@ import java.util.List;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.APIv1;
-import com.infinityraider.agricraft.api.v1.fertilizer.IFertilizerRegistry;
-import com.infinityraider.agricraft.api.v1.seed.ISeedRegistry;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
+import com.infinityraider.agricraft.api.v1.seed.IAgriSeedRegistry;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
 
 public class APIimplv1 implements APIv1 {
 	
@@ -38,10 +38,10 @@ public class APIimplv1 implements APIv1 {
 	
     private final APIStatus status;
 	
-	private final ISeedRegistry seedRegistry;
-	private final IPlantRegistry plantRegistry;
-	private final IMutationRegistry mutationRegistry;
-	private final IFertilizerRegistry fertilizerRegistry;
+	private final IAgriSeedRegistry seedRegistry;
+	private final IAgriPlantRegistry plantRegistry;
+	private final IAgriMutationRegistry mutationRegistry;
+	private final IAgriFertilizerRegistry fertilizerRegistry;
 
     private APIimplv1(APIStatus status) {
         this.status = status;
@@ -80,22 +80,22 @@ public class APIimplv1 implements APIv1 {
     }
 
 	@Override
-	public ISeedRegistry getSeedRegistry() {
+	public IAgriSeedRegistry getSeedRegistry() {
 		return seedRegistry;
 	}
 	
 	@Override
-	public IPlantRegistry getPlantRegistry() {
+	public IAgriPlantRegistry getPlantRegistry() {
 		return plantRegistry;
 	}
 	
 	@Override
-	public IMutationRegistry getMutationRegistry() {
+	public IAgriMutationRegistry getMutationRegistry() {
 		return mutationRegistry;
 	}
 
 	@Override
-	public IFertilizerRegistry getFertilizerRegistry() {
+	public IAgriFertilizerRegistry getFertilizerRegistry() {
 		return fertilizerRegistry;
 	}
 
@@ -167,7 +167,7 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public void setStatCalculator(IStatCalculator calculator) {
+    public void setStatCalculator(IAgriStatCalculator calculator) {
         StatCalculator.setStatCalculator(calculator);
     }
 

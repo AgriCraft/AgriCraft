@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author The AgriCraft Team.
  */
-public interface IFertilizerRegistry {
+public interface IAgriFertilizerRegistry {
 
 	/**
 	 * Checks if the given item is any form of supported fertilizer (e.g. bone

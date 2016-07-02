@@ -6,7 +6,7 @@ package com.infinityraider.agricraft.api.v1.stat;
  *
  * @author RlonRyan
  */
-public interface IStatAcceptor {
+public interface IAgriStatAcceptor {
 	
 	
 	/**

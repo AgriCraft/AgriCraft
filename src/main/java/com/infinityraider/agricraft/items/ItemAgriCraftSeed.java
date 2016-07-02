@@ -15,7 +15,6 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.seed.ISeedHandler;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
@@ -23,8 +22,9 @@ import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.utility.StackHelper;
+import com.infinityraider.agricraft.api.v1.seed.IAgriSeedHandler;
 
-public class ItemAgriCraftSeed extends ItemBase implements ISeedHandler {
+public class ItemAgriCraftSeed extends ItemBase implements IAgriSeedHandler {
 
 	/**
 	 * This constructor shouldn't be called from anywhere except from the

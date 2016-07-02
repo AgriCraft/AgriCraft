@@ -2,19 +2,19 @@
  */
 package com.infinityraider.agricraft.apiimpl.v1;
 
-import com.infinityraider.agricraft.api.v1.plant.IPlantRegistry;
 import java.util.List;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
 
 /**
  *
  * @author RlonRyan
  */
-public class PlantRegistry implements IPlantRegistry {
+public class PlantRegistry implements IAgriPlantRegistry {
 	
 	private final Map<String, IAgriPlant> plants;
 
@@ -22,7 +22,7 @@ public class PlantRegistry implements IPlantRegistry {
 		this.plants = new HashMap<>();
 	}
 	
-	public static IPlantRegistry getInstance() {
+	public static IAgriPlantRegistry getInstance() {
 		return APIimplv1.getInstance().getPlantRegistry();
 	}
 

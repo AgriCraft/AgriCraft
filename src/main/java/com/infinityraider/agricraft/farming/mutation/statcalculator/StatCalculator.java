@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
-import com.infinityraider.agricraft.api.v1.stat.IStatCalculator;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 
@@ -8,13 +7,14 @@ import java.util.List;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
 
-public abstract class StatCalculator implements IStatCalculator {
-    private static IStatCalculator instance;
+public abstract class StatCalculator implements IAgriStatCalculator {
+    private static IAgriStatCalculator instance;
 
     protected StatCalculator() {}
 
-    public static IStatCalculator getInstance() {
+    public static IAgriStatCalculator getInstance() {
         if(instance == null) {
             if(AgriCraftConfig.hardCoreStats) {
                 instance = new StatCalculatorHardcore();
@@ -25,7 +25,7 @@ public abstract class StatCalculator implements IStatCalculator {
         return instance;
     }
 
-    public static void setStatCalculator(IStatCalculator calculator) {
+    public static void setStatCalculator(IAgriStatCalculator calculator) {
         instance = calculator;
     }
 

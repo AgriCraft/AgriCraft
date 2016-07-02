@@ -3,18 +3,18 @@
 package com.infinityraider.agricraft.api.v1.seed;
 
 import com.infinityraider.agricraft.api.API;
-import com.infinityraider.agricraft.api.v1.plant.IPlantAcceptor;
-import com.infinityraider.agricraft.api.v1.stat.IStatAcceptor;
 import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.v1.APIv1;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlantAcceptor;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatAcceptor;
 
 /**
  *
  * @author RlonRyan
  */
-public interface ISeedAcceptor extends IPlantAcceptor, IStatAcceptor {
+public interface IAgriSeedAcceptor extends IAgriPlantAcceptor, IAgriStatAcceptor {
 	
 	/**
 	 * Determines if an seed is valid for this specific instance.

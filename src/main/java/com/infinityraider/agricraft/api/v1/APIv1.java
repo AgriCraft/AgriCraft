@@ -1,21 +1,21 @@
 package com.infinityraider.agricraft.api.v1;
 
-import com.infinityraider.agricraft.api.v1.stat.IStatCalculator;
 import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirementBuilder;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.util.BlockWithMeta;
-import com.infinityraider.agricraft.api.v1.mutation.IMutationRegistry;
-import com.infinityraider.agricraft.api.v1.plant.IPlantRegistry;
 import com.infinityraider.agricraft.api.APIBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
-import com.infinityraider.agricraft.api.v1.fertilizer.IFertilizerRegistry;
-import com.infinityraider.agricraft.api.v1.seed.ISeedRegistry;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
+import com.infinityraider.agricraft.api.v1.seed.IAgriSeedRegistry;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
 
 /**
  * AgriCraft API.
@@ -51,28 +51,28 @@ public interface APIv1 extends APIBase {
 	 *
 	 * @return the instance of ISeedRegistry associated with this mod.
 	 */
-	ISeedRegistry getSeedRegistry();
+	IAgriSeedRegistry getSeedRegistry();
 	
 	/**
 	 * Retrieves the plant registry for managing plants.
 	 *
 	 * @return the instance of IPlantRegistry associated with this mod.
 	 */
-	IPlantRegistry getPlantRegistry();
+	IAgriPlantRegistry getPlantRegistry();
 	
 	/**
 	 * Retrieves the mutation registry for managing mutations.
 	 *
 	 * @return the instance of IMutationRegistry associated with this mod.
 	 */
-	IMutationRegistry getMutationRegistry();
+	IAgriMutationRegistry getMutationRegistry();
 	
 	/**
 	 * Retrieves the fertilizer registry for managing plants.
 	 *
 	 * @return the instance of IFertilizerRegistry associated with this mod.
 	 */
-	IFertilizerRegistry getFertilizerRegistry();
+	IAgriFertilizerRegistry getFertilizerRegistry();
 
 	/**
 	 * Checks if AgriCraft is configured to prevent the given seed to be used in
@@ -178,7 +178,7 @@ public interface APIv1 extends APIBase {
 	 * @param calculator the IStatCalculator Object to be used when calculating
 	 * stats
 	 */
-	void setStatCalculator(IStatCalculator calculator);
+	void setStatCalculator(IAgriStatCalculator calculator);
 
 	/**
 	 * Gets a new IGrowthRequirementBuilder object used to create new

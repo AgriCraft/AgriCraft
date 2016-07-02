@@ -12,7 +12,7 @@ import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
  * 
  * @author AgriCraft Team
  */
-public interface IMutationRegistry {
+public interface IAgriMutationRegistry {
 	
 	/**
 	 * Gets a list of all mutations currently registered Mutations are populated

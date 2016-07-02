@@ -27,7 +27,7 @@ public interface IAgriFertilizer {
 	 * this is called when the fertilizer is used on a crop, this only is called
 	 * if true is returned from hasSpecialBehaviour
 	 */
-	boolean applyFertilizer(EntityPlayer player, World world, BlockPos pos, IFertilizable target, ItemStack stack, Random random);
+	boolean applyFertilizer(EntityPlayer player, World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random);
 
 	/**
 	 * this is called on the client when the fertilizer is applied, can be used

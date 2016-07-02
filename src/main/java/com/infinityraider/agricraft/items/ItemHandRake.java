@@ -19,9 +19,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.api.v1.misc.IWeedable;
 import net.minecraft.tileentity.TileEntity;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.misc.IAgriWeedable;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.
@@ -41,8 +41,8 @@ public class ItemHandRake extends ItemBase implements IAgriRakeItem {
 	@Override
 	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		TileEntity te = world.getTileEntity(pos);
-		if (te instanceof IWeedable) {
-			IWeedable tile = (IWeedable) te;
+		if (te instanceof IAgriWeedable) {
+			IAgriWeedable tile = (IAgriWeedable) te;
 			if (tile.hasWeed()) {
 				tile.clearWeed();
 				if (AgriCraftConfig.rakingDrops && world.rand.nextInt(100) < dropChance[stack.getItemDamage() % dropChance.length]) {

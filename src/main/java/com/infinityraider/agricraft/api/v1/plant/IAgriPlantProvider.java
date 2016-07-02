@@ -7,7 +7,7 @@ package com.infinityraider.agricraft.api.v1.plant;
  * 
  * @author RlonRyan
  */
-public interface IPlantProvider {
+public interface IAgriPlantProvider {
 	
 	/**
 	 * Determines if the object currently has an associated AgriPlant.

@@ -9,7 +9,7 @@ import java.util.Random;
  *
  * @author RlonRyan
  */
-public interface IWeedable {
+public interface IAgriWeedable {
 	
 	/**
 	 * Determines the chance of the object generating a weed, at random.

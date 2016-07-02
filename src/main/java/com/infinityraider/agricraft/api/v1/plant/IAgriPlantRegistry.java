@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author AgriCraft Team
  */
-public interface IPlantRegistry {
+public interface IAgriPlantRegistry {
 	
 	boolean isPlant(IAgriPlant plant);
 	
