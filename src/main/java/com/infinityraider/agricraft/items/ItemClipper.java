@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.items.IClipper;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.init.AgriItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,10 +15,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 
-public class ItemClipper extends ItemBase implements IClipper {
+public class ItemClipper extends ItemBase implements IAgriClipperItem {
 
 	public ItemClipper() {
 		super("clipper", true);
@@ -41,9 +41,9 @@ public class ItemClipper extends ItemBase implements IClipper {
 			IAgriCrop crop = (IAgriCrop) te;
 			if (crop.hasPlant() && crop.getGrowthStage() > 1) {
 				crop.setGrowthStage(crop.getGrowthStage() - 1);
-				ItemStack clipping = new ItemStack(AgriItems.clipping);
-				clipping.setTagCompound(crop.getSeed().toStack().writeToNBT(new NBTTagCompound()));
-				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), clipping));
+				AgriSeed seed = crop.getSeed();
+				seed = seed.withStat(seed.getStat().withMeta(1));
+				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), AgriItems.clipping.getClipping(seed, 1)));
 				return EnumActionResult.SUCCESS;
 			}
 			return EnumActionResult.FAIL;

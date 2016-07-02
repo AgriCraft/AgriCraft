@@ -53,7 +53,8 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 	int getTier();
 
 	/**
-	 * Gets a stack of the seed for this plant
+	 * Gets a stack of the seed for this plant.
+	 * @return the plant's seed.
 	 */
 	ItemStack getSeed();
 

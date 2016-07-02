@@ -5,9 +5,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Interface for representing stats.
- *
- * It may be preferable to make this an actual class...
+ * Interface for representing stats. Stats are immutable objects, to aid in overall safety.
  *
  * @author RlonRyan
  */
@@ -17,11 +15,6 @@ public interface IAgriStat {
 	 * @return if the seed stats are analyzed
 	 */
 	boolean isAnalyzed();
-
-	/**
-	 * Analyzes the stats.
-	 */
-	void analyze();
 
 	/**
 	 * The meta value for the object. Placed here so that seeds may store an
@@ -62,11 +55,43 @@ public interface IAgriStat {
 	byte getMaxStrength();
 	
 	/**
+	 * Sets the analyzed parameter.
+	 * 
+	 * @param analyzed
+	 * @return the new stat.
+	 */
+	IAgriStat withAnalyzed(boolean analyzed);
+	
+	/**
 	 * Sets the meta value.
 	 * 
 	 * @param meta the meta value.
+	 * @return the new stat.
 	 */
-	void setMeta(int meta);
+	IAgriStat withMeta(int meta);
+	
+	/**
+	 * Sets the growth stat.
+	 * 
+	 * @param growth
+	 * @return the new stat.
+	 */
+	IAgriStat withGrowth(int growth);
+	
+	/**
+	 * Sets the gain stat.
+	 * 
+	 * @param gain
+	 * @return the new stat.
+	 */
+	IAgriStat withGain(int gain);
+	
+	/**
+	 * Sets the strength stat.
+	 * @param strength
+	 * @return the new stat.
+	 */
+	IAgriStat withStrength(int strength);
 
 	/**
 	 * Writes the stat to an NBTTagcompound.
@@ -74,8 +99,9 @@ public interface IAgriStat {
 	 * The major issue here is how to read back from the NBTTag...
 	 *
 	 * @param tag The tag to serialize to.
+	 * @return if transcription was successful.
 	 */
-	void writeToNBT(@Nonnull NBTTagCompound tag);
+	boolean writeToNBT(@Nonnull NBTTagCompound tag);
 
 	/**
 	 * Writes the stat for display.

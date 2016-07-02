@@ -9,11 +9,11 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.farming.PlantStats;
 
 /**
- * A helper class for working with seeds.
+ * A helper class for working with generation.
  *
  * @author RlonRyan
  */
-public class SeedHelper {
+public class WorldGenerationHelper {
 
 	/**
 	 * Gets a random SEED from a list of plants

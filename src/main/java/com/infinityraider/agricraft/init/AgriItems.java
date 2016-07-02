@@ -52,12 +52,11 @@ public class AgriItems {
 	public static Item debugItem;
 	public static Item handRake;
 	public static Item clipper;
-	public static ItemClipping clipping;
+	public static final ItemClipping clipping = new ItemClipping();
 	public static final ItemAgriCraftSeed seed = new ItemAgriCraftSeed();
 	public static final ItemNugget nugget = new ItemNugget();
 
 	public static void init() {
-		clipping = new ItemClipping();
 		crops = new ItemCrop();
 		journal = new ItemJournal();
 		magnifyingGlass = new ItemMagnifyingGlass();
@@ -75,6 +74,7 @@ public class AgriItems {
 		
 		// Register seed handler.
 		SeedRegistry.getInstance().addSeedHandler(new ItemStack(seed), seed);
+		SeedRegistry.getInstance().addSeedHandler(new ItemStack(clipping), clipping);
 		
 		// Register the Items
 		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (ItemBase item) -> {

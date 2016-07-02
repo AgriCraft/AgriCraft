@@ -130,7 +130,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 			IBlockState state = worldObj.getBlockState(pos);
 			state = state.withProperty(AgriProperties.GROWTHSTAGE, stage);
 			this.worldObj.setBlockState(pos, state, 3);
-			this.stats.setMeta(stage);
+			this.stats = this.stats.withMeta(stage);
 			this.markForUpdate();
 		}
 	}

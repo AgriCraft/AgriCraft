@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.items.IRake;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.WeightedRandom;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,11 +21,12 @@ import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.api.v1.misc.IWeedable;
 import net.minecraft.tileentity.TileEntity;
+import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.
  */
-public class ItemHandRake extends ItemBase implements IRake {
+public class ItemHandRake extends ItemBase implements IAgriRakeItem {
 
 	private static final int WOOD_VARIANT_META = 0;
 	private static final int IRON_VARIANT_META = 1;

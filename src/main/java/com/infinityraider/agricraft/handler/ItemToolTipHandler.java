@@ -1,7 +1,5 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.api.v1.items.ITrowel;
-import com.infinityraider.agricraft.api.v1.items.IClipper;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;
@@ -11,13 +9,17 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")
 public class ItemToolTipHandler {
 
 	/**
-	 * Adds tooltips for SEED stats
+	 * Adds tooltips for SEED stats.
+	 * 
+	 * @param event
 	 */
 	@SubscribeEvent
 	public void addSeedStatsTooltip(ItemTooltipEvent event) {
@@ -36,12 +38,14 @@ public class ItemToolTipHandler {
 	}
 
 	/**
-	 * Adds tooltips to items that are trowels (implementing ITrowel)
+	 * Adds tooltips to items that are trowels (implementing ITrowel).
+	 * 
+	 * @param event
 	 */
 	@SubscribeEvent
 	public void addTrowelTooltip(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
-		if (stack != null && stack.getItem() instanceof ITrowel) {
+		if (stack != null && stack.getItem() instanceof IAgriTrowelItem) {
 			AgriSeed seed = SeedRegistry.getInstance().getSeed(event.getItemStack());
 			if (seed != null) {
 				event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + seed.getPlant().getSeedName());
@@ -52,12 +56,14 @@ public class ItemToolTipHandler {
 	}
 
 	/**
-	 * Adds tooltips to items that are clippers (implementing IClipper)
+	 * Adds tooltips to items that are clippers (implementing IClipper).
+	 * 
+	 * @param event
 	 */
 	@SubscribeEvent
 	public void addClipperTooltip(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
-		if (StackHelper.isValid(IClipper.class, stack)) {
+		if (StackHelper.isValid(stack, IAgriClipperItem.class)) {
 			event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.clipper1"));
 			event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.clipper2"));
 			event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.clipper3"));

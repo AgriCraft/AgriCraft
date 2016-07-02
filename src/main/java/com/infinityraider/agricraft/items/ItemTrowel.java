@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.items.ITrowel;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,8 +17,9 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 
-public class ItemTrowel extends ItemBase implements ITrowel, ISeedHandler {
+public class ItemTrowel extends ItemBase implements IAgriTrowelItem, ISeedHandler {
 
 	public ItemTrowel() {
 		super("trowel", true, "", "full");

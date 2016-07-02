@@ -26,11 +26,11 @@ public class PlantStats implements IAgriStat {
 	private static final byte MAX = (byte) AgriCraftConfig.cropStatCap;
 	private static final byte MIN = 1;
 
-	private byte meta;
-	private byte growth;
-	private byte gain;
-	private byte strength;
-	private boolean analyzed;
+	private final byte meta;
+	private final byte growth;
+	private final byte gain;
+	private final byte strength;
+	private final boolean analyzed;
 
 	public PlantStats() {
 		this(MIN, MIN, MIN, false);
@@ -77,10 +77,10 @@ public class PlantStats implements IAgriStat {
 	}
 
 	@Override
-	public void analyze() {
-		this.analyzed = true;
+	public byte getMeta() {
+		return meta;
 	}
-
+	
 	@Override
 	public byte getGrowth() {
 		return growth;
@@ -97,13 +97,28 @@ public class PlantStats implements IAgriStat {
 	}
 
 	@Override
-	public byte getMeta() {
-		return meta;
+	public IAgriStat withAnalyzed(boolean analyzed) {
+		return new PlantStats(growth, gain, strength, analyzed, meta);
+	}
+	
+	@Override
+	public IAgriStat withMeta(int meta) {
+		return new PlantStats(growth, gain, strength, analyzed, meta);
 	}
 
 	@Override
-	public void setMeta(int meta) {
-		this.meta = (byte)meta;
+	public IAgriStat withGrowth(int growth) {
+		return new PlantStats(growth, gain, strength, analyzed, meta);
+	}
+
+	@Override
+	public IAgriStat withGain(int gain) {
+		return new PlantStats(growth, gain, strength, analyzed, meta);
+	}
+
+	@Override
+	public IAgriStat withStrength(int strength) {
+		return new PlantStats(growth, gain, strength, analyzed, meta);
 	}
 
 	@Override
@@ -122,12 +137,13 @@ public class PlantStats implements IAgriStat {
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound tag) {
+	public boolean writeToNBT(@Nonnull NBTTagCompound tag) {
 		tag.setBoolean(NBT_ANALYZED, analyzed);
 		tag.setByte(NBT_GAIN, gain);
 		tag.setByte(NBT_GROWTH, growth);
 		tag.setByte(NBT_STRENGTH, strength);
 		tag.setByte(NBT_META, meta);
+		return true;
 	}
 
 	public boolean addStats(List<String> lines) {

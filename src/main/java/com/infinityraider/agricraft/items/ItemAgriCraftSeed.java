@@ -22,6 +22,7 @@ import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.utility.StackHelper;
 
 public class ItemAgriCraftSeed extends ItemBase implements ISeedHandler {
 

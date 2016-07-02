@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.world;
 
 import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
-import com.infinityraider.agricraft.utility.SeedHelper;
+import com.infinityraider.agricraft.utility.WorldGenerationHelper;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
@@ -205,7 +205,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 				if (crosscrop) {
 					crop.setCrossCrop(true);
 				} else {
-					crop.setSeed(SeedHelper.getRandomSeed(world.rand, false, plants));
+					crop.setSeed(WorldGenerationHelper.getRandomSeed(world.rand, false, plants));
 				}
 			}
 			return true;

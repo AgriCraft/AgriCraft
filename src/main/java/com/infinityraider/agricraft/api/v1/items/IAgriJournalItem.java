@@ -14,7 +14,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
  *
  * If, for some reason you do not wish to interact with this interface, you can also use methods provided by APIv2
  */
-public interface IJournal extends IAgriCraftItem {
+public interface IAgriJournalItem extends IAgriCraftItem {
     /**
      * Checks if a seed is discovered in the journal
      * @param journal an ItemStack holding the journal

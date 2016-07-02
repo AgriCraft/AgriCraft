@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.api.v1.mutation.IMutationRegistry;
 import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.stat.IStatCalculator;
 import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirementBuilder;
-import com.infinityraider.agricraft.api.v1.items.IJournal;
 import com.infinityraider.agricraft.api.API;
 import com.infinityraider.agricraft.api.APIBase;
 import com.infinityraider.agricraft.api.APIStatus;
@@ -29,6 +28,7 @@ import com.infinityraider.agricraft.api.v1.APIv1;
 import com.infinityraider.agricraft.api.v1.fertilizer.IFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.seed.ISeedRegistry;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 
 public class APIimplv1 implements APIv1 {
 	
@@ -183,26 +183,26 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean isPlantDiscovered(ItemStack journal, IAgriPlant plant) {
-        if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
+        if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IAgriJournalItem)) {
             return false;
         }
-        return ((IJournal) journal.getItem()).isSeedDiscovered(journal, plant);
+        return ((IAgriJournalItem) journal.getItem()).isSeedDiscovered(journal, plant);
     }
 
     @Override
     public void setPlantDiscovered(ItemStack journal, IAgriPlant plant, boolean discovered) {
-        if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
+        if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IAgriJournalItem)) {
             return;
         }
-        ((IJournal) journal.getItem()).addEntry(journal, plant);
+        ((IAgriJournalItem) journal.getItem()).addEntry(journal, plant);
     }
 
     @Override
     public List<IAgriPlant> getPlantsDiscovered(ItemStack journal) {
-        if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IJournal)) {
+        if(journal == null || journal.getItem() == null || !(journal.getItem() instanceof IAgriJournalItem)) {
             return new ArrayList<>();
         }
-        return ((IJournal) journal.getItem()).getDiscoveredSeeds(journal);
+        return ((IAgriJournalItem) journal.getItem()).getDiscoveredSeeds(journal);
     }
 
 }

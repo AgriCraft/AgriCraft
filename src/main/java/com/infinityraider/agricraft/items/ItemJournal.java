@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.items.IJournal;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,8 +19,9 @@ import java.util.List;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 
-public class ItemJournal extends ItemBase implements IJournal {
+public class ItemJournal extends ItemBase implements IAgriJournalItem {
 
 	public ItemJournal() {
 		super("journal", true);

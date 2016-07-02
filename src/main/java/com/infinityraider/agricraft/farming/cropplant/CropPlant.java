@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.api.v1.render.RenderMethod;
 import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
 import com.google.common.base.Function;
-import com.infinityraider.agricraft.utility.SeedHelper;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
@@ -35,7 +34,7 @@ import com.infinityraider.agricraft.reference.AgriProperties;
 
 /**
  * The main class used by TileEntityCrop.
- * Only make one object of this per seed object, and register using {@link SeedHelper#registerPlant(CropPlant)}
+ * Only make one object of this per seed object, and register using the plant registry.
  * ICropPlant is implemented to be able to read data from this class from the API
  */
 public abstract class CropPlant implements IAgriPlant {

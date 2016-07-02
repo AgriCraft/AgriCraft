@@ -1,8 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.api.v1.items.IClipper;
-import com.infinityraider.agricraft.api.v1.items.ITrowel;
-import com.infinityraider.agricraft.api.v1.items.IRake;
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.compat.CompatibilityHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
@@ -45,11 +43,21 @@ import com.infinityraider.agricraft.reference.PropertyCropPlant;
 import net.minecraft.client.particle.ParticleManager;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import net.minecraft.block.Block;
+import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 
 /**
  * The most important block in the mod.
  */
 public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowable, IPlantable {
+	
+	public static final Class[] ITEM_EXCLUDES = new Class[]{
+		IAgriRakeItem.class,
+		IAgriClipperItem.class,
+		IAgriTrowelItem.class,
+		ItemDebugger.class
+	};
 
 	public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT * 2, 0, Constants.UNIT * 2, Constants.UNIT * (Constants.WHOLE - 2), Constants.UNIT * (Constants.WHOLE - 3), Constants.UNIT * (Constants.WHOLE - 2));
 
@@ -95,7 +103,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			TileEntityCrop crop = (TileEntityCrop) te;
 			state.withProperty(AgriProperties.WEEDS, crop.hasWeed());
 			state.withProperty(AgriProperties.CROSSCROP, crop.isCrossCrop());
-			state.withProperty(AgriProperties.PLANT, crop.hasPlant() ? crop.getPlant() : PropertyCropPlant.NONE);
+			state.withProperty(AgriProperties.PLANT, PropertyCropPlant.NONE);
 		}
 		return state;
 	}
@@ -247,13 +255,8 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				return false;
 			} else if (player.isSneaking() || heldItem == null || heldItem.getItem() == null) {
 				this.harvest(world, pos, state, player, crop);
-			} else if (
-					heldItem.getItem() instanceof IRake ||
-					heldItem.getItem() instanceof IClipper ||
-					heldItem.getItem() instanceof ITrowel || 
-					heldItem.getItem() instanceof ItemDebugger
-					) {
-				// Allow the rake or clipper to do its thing.
+			} else if ( TypeHelper.isAnyType(heldItem.getItem(), ITEM_EXCLUDES) ) {
+				// Allow the excludes to do their things.
 				return false;
 			} else if (FertilizerRegistry.getInstance().isFertilizer(heldItem)) {
 				IAgriFertilizer fert = FertilizerRegistry.getInstance().getFertilizer(heldItem);

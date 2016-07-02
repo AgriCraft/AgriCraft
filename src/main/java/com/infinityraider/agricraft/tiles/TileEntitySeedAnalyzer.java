@@ -18,6 +18,7 @@ import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.utility.StackHelper;
 
 public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
 
@@ -180,8 +181,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 		//analyze the SEED
 		if (this.hasSeed()) {
 			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
-			seed.getStat().analyze();
-			seed.getStat().writeToNBT(this.specimen.getTagCompound());
+			seed = seed.withStat(seed.getStat().withAnalyzed(true));
+			seed.getStat().writeToNBT(StackHelper.getTag(specimen));
 			if (this.hasJournal()) {
 				((ItemJournal) journal.getItem()).addEntry(journal, seed.getPlant());
 			}
@@ -347,6 +348,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
 	/**
 	 * Opens the INVENTORY. (Empty method).
+	 * 
+	 * @param player
 	 */
 	@Override
 	public void openInventory(EntityPlayer player) {
@@ -354,6 +357,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
 	/**
 	 * Closes the INVENTORY. (Empty method).
+	 * 
+	 * @param player
 	 */
 	@Override
 	public void closeInventory(EntityPlayer player) {
@@ -361,6 +366,10 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
 	/**
 	 * Checks if a stack is valid for a slot.
+	 * 
+	 * @param slot
+	 * @param stack
+	 * @return if the item is valid.
 	 */
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
