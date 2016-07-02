@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
-import com.infinityraider.agricraft.compat.CompatibilityHandler;
+import com.infinityraider.agricraft.compat.AgriCompatHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
@@ -104,7 +104,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 				worldObj.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
 			}
 			this.markDirty();
-			this.markForUpdate();
 		}
 	}
 
@@ -148,7 +147,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	public boolean setPlant(IAgriPlant plant) {
 		if ((!this.crossCrop) && (!this.hasPlant()) && (plant != null)) {
 			this.plant = plant;
-			this.setGrowthStage(0);
 			plant.onSeedPlanted(worldObj, pos);
 			IAdditionalCropData new_data = plant.getInitialCropData(worldObj, getPos(), this);
 			if (new_data != null) {
@@ -166,7 +164,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		IAgriPlant oldPlant = getPlant();
 		this.setGrowthStage(0);
 		this.plant = null;
-		this.markForUpdate();
 		if (oldPlant != null) {
 			oldPlant.onPlantRemoved(worldObj, pos);
 		}
@@ -403,7 +400,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		IBlockState state = getWorld().getBlockState(getPos());
 		if (hasWeed() || !plant.isMature(getWorld(), pos, state)) {
 			setGrowthStage(meta + 1);
-			CompatibilityHandler.getInstance().announceGrowthTick(getWorld(), getPos(), state);
+			AgriCompatHandler.getInstance().announceGrowthTick(getWorld(), getPos(), state);
 		}
 	}
 

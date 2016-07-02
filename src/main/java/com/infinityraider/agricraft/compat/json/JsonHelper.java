@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.compat.json;
 
-import com.infinityraider.agricraft.compat.ModHelper;
+import com.infinityraider.agricraft.compat.AgriCompatModule;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.agricraft.agricore.core.AgriCore;
@@ -12,7 +12,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 
-public class JsonHelper extends ModHelper {
+public class JsonHelper extends AgriCompatModule {
 
 	private static final List<JsonCropPlant> customCrops = new ArrayList<>();
 

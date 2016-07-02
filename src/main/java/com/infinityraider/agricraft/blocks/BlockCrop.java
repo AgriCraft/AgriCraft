@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.compat.CompatibilityHandler;
+import com.infinityraider.agricraft.compat.AgriCompatHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriItems;
@@ -123,7 +123,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 		if (crop.hasPlant() || crop.hasWeed()) {
-			if (CompatibilityHandler.getInstance().allowGrowthTick(world, pos, this, crop, rand)) {
+			if (AgriCompatHandler.getInstance().allowGrowthTick(world, pos, this, crop, rand)) {
 				if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds) {
 					crop.spreadWeed(rand);
 				} else if (crop.isFertile()) {
@@ -267,13 +267,15 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 					if (crop.setSeed(seed) && !player.capabilities.isCreativeMode) {
 						heldItem.stackSize--;
 					}
+					return true;
 				}
+				return false;
 			} //check to see if the player clicked with crops (crosscrop attempt)
 			else if (heldItem.getItem() == AgriItems.crops) {
 				this.setCrossCrop(world, pos, state, player, heldItem);
 			} //mod interaction
-			else if (CompatibilityHandler.getInstance().isRightClickHandled(heldItem.getItem())) {
-				return CompatibilityHandler.getInstance().handleRightClick(world, pos, this, crop, player, heldItem);
+			else if (AgriCompatHandler.getInstance().isRightClickHandled(heldItem.getItem())) {
+				return AgriCompatHandler.getInstance().handleRightClick(world, pos, this, crop, player, heldItem);
 			} else {
 				//harvest operation
 				this.harvest(world, pos, state, player, crop);
@@ -591,20 +593,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
 		return false;
 	}
-
-	/**
-	 * Handles the block receiving events.
-	 * @todo TODO!!! FIXME!
-	 * @return if the event was received properly.
-	 */
-	/*
-	@Override
-	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int param) {
-		super.onBlockEventReceived(world, pos, state, id, param);
-		TileEntity tileEntity = world.getTileEntity(pos);
-		return (tileEntity != null) && (tileEntity.receiveClientEvent(id, param));
-	}
-	*/
 
 	@Override
 	protected IProperty[] getPropertyArray() {

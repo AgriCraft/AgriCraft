@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  * The base class for all AgriCraft tile blocks.
  */
 public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<T> implements ITileEntityProvider {
+
 	public final boolean isMultiBlock;
 	public final String tileName;
 
@@ -32,7 +33,7 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<
 		this.isMultiBlock = isMultiBlock;
 		this.tileName = Reference.MOD_ID.toLowerCase() + ":tileEntity." + internalName;
 		TileEntity tile = this.createNewTileEntity(null, 0);
-		assert(tile != null);
+		assert (tile != null);
 		GameRegistry.registerTileEntity(tile.getClass(), getTileName());
 	}
 
@@ -42,7 +43,7 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<
 
 	@Override
 	public abstract T createNewTileEntity(World worldIn, int meta);
-	
+
 	/**
 	 * Sets the block's orientation based upon the direction the player is
 	 * looking when the block is placed.
@@ -73,6 +74,13 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<
 		}
 		super.breakBlock(world, pos, state);
 		world.removeTileEntity(pos);
+	}
+
+	@Override
+	public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id, int data) {
+		super.eventReceived(state, world, pos, id, data);
+		TileEntity tileentity = world.getTileEntity(pos);
+		return tileentity != null && tileentity.receiveClientEvent(id, data);
 	}
 
 }

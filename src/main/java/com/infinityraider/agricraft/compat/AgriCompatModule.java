@@ -1,5 +1,9 @@
 package com.infinityraider.agricraft.compat;
 
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
+import com.agricraft.agricore.config.AgriConfigurableInstance;
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.block.state.IBlockState;
@@ -17,14 +21,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
-public class ModHelper {
+public class AgriCompatModule implements AgriConfigurableInstance {
 
 	private final String modId;
-	protected boolean enabled;
+	@AgriConfigurable(key = "${mod_id}", category = AgriConfigCategory.COMPATIBILITY, comment = "Enable AgriCraft compatibility for ${mod_id}.")
+	protected boolean enabled = true;
 	
-	protected ModHelper(String modId) {
+	protected AgriCompatModule(String modId) {
 		this.modId = modId;
-		this.enabled = CompatibilityHandler.getCompatConfigEnabled(modId);
 	}
 
 	/**
@@ -101,11 +105,12 @@ public class ModHelper {
 	protected boolean allowGrowthTick(World world, BlockPos pos, BlockCrop block, TileEntityCrop crop, Random rnd) {
 		return true;
 	}
-
+	
 	/**
-	 * Called during ForgeModLoader's pre-init phase
+	 * Called on add to compatibility handler.
 	 */
-	protected void preInit() {
+	protected void onRegisterModule() {
+		AgriCore.getConfig().addConfigurable(this);
 	}
 
 	/**
@@ -136,6 +141,11 @@ public class ModHelper {
 	
 	public boolean shouldLoad() {
 		return true;
+	}
+
+	@Override
+	public String resolve(String input) {
+		return input.replaceAll("\\$\\{mod_id\\}", this.getModId());
 	}
 
 }

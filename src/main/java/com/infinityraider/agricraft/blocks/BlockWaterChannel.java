@@ -43,13 +43,6 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 		}
 	}
 
-	/* TODO!!!
-	@Override
-	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
-		return world.getTileEntity(pos) != null && world.getTileEntity(pos).receiveClientEvent(id, data);
-	}
-	*/
-
 	/**
 	 * Adds all intersecting collision boxes to a list. (Be sure to only add
 	 * boxes to the list if they intersect the mask.) Parameters: World, pos,

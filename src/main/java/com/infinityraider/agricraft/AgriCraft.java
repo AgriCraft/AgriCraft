@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft;
 
 import com.infinityraider.agricraft.apiimpl.APISelector;
-import com.infinityraider.agricraft.compat.CompatibilityHandler;
+import com.infinityraider.agricraft.compat.AgriCompatHandler;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
@@ -14,6 +14,9 @@ import com.infinityraider.agricraft.reference.Reference;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
+import com.infinityraider.agricraft.compat.json.JsonHelper;
+import com.infinityraider.agricraft.compat.thaumcraft.ThaumcraftHelper;
+import com.infinityraider.agricraft.compat.waila.WailaHelper;
 import com.infinityraider.agricraft.farming.PlantStats;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -21,6 +24,7 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.ArrayList;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * <p>
@@ -74,7 +78,10 @@ public class AgriCraft {
         AgriBlocks.init();
 		AgriItems.init();
         APISelector.init();
-        CompatibilityHandler.getInstance().preInit();
+		MinecraftForge.EVENT_BUS.register(AgriCompatHandler.getInstance());
+		AgriCompatHandler.getInstance().register(new JsonHelper());
+		AgriCompatHandler.getInstance().register(new ThaumcraftHelper());
+		AgriCompatHandler.getInstance().register(new WailaHelper());
         proxy.registerRenderers();
         AgriCore.getLogger("AgriCraft").debug("Pre-Initialization Complete");
     }
@@ -86,7 +93,7 @@ public class AgriCraft {
         proxy.registerEventHandlers();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		AgriEntities.init();
-        CompatibilityHandler.getInstance().init();
+        AgriCompatHandler.getInstance().init();
         AgriCore.getLogger("AgriCraft").debug("Initialization Complete");
     }
 
@@ -99,16 +106,16 @@ public class AgriCraft {
         //Have to do this in postInit because some mods don't register their items/blocks until init
         AgriRecipes.init();
         GrowthRequirementHandler.init();
-        CompatibilityHandler.getInstance().getCropPlants().forEach(PlantRegistry.getInstance()::addPlant);
+        AgriCompatHandler.getInstance().getCropPlants().forEach(PlantRegistry.getInstance()::addPlant);
         WorldGen.init();
-        CompatibilityHandler.getInstance().postInit();
+        AgriCompatHandler.getInstance().postInit();
         AgriCore.getLogger("AgriCraft").debug("Post-Initialization Complete");
     }
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
-		CompatibilityHandler.getInstance().serverStart();
+		AgriCompatHandler.getInstance().serverStart();
     }
 
     @Mod.EventHandler

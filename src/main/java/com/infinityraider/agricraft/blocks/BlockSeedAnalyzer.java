@@ -123,14 +123,6 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
 		return false;
 	}
-	
-	/* TODO!!! 
-	@Override
-	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
-		super.onBlockEventReceived(world, pos, state, id, data);
-		TileEntity tileEntity = world.getTileEntity(pos);
-		return (tileEntity != null) && (tileEntity.receiveClientEvent(id, data));
-	}*/
 
 	@Override
 	protected IProperty[] getPropertyArray() {
