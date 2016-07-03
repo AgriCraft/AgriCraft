@@ -6,18 +6,18 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.APIBase;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
-import com.infinityraider.agricraft.api.v1.handler.IAgriHandlerRegistry;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.registry.IAgriAdapterRegistry;
 
 /**
  * AgriCraft API.
@@ -53,14 +53,14 @@ public interface APIv1 extends APIBase {
 	 *
 	 * @return the instance of IStatRegistry associated with this mod.
 	 */
-	IAgriHandlerRegistry<IAgriStat> getStatRegistry();
+	IAgriAdapterRegistry<IAgriStat> getStatRegistry();
 
 	/**
 	 * Retrieves the seed registry for managing seeds.
 	 *
 	 * @return the instance of ISeedRegistry associated with this mod.
 	 */
-	IAgriHandlerRegistry<AgriSeed> getSeedRegistry();
+	IAgriAdapterRegistry<AgriSeed> getSeedRegistry();
 	
 	/**
 	 * Retrieves the plant registry for managing plants.
@@ -81,7 +81,7 @@ public interface APIv1 extends APIBase {
 	 *
 	 * @return the instance of IFertilizerRegistry associated with this mod.
 	 */
-	IAgriFertilizerRegistry getFertilizerRegistry();
+	IAgriAdapterRegistry<IAgriFertilizer> getFertilizerRegistry();
 
 	/**
 	 * Checks if AgriCraft is configured to prevent the given seed to be used in

@@ -7,57 +7,27 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.util.ItemWithMeta;
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
+import com.infinityraider.agricraft.api.v1.registry.IAgriAdapterRegistry;
 
 /**
  *
  * @author RlonRyan
  */
-public class FertilizerRegistry implements IAgriFertilizerRegistry {
+public class FertilizerRegistry {
 
-	private final Map<ItemWithMeta, IAgriFertilizer> fertilizers;
-
-	public FertilizerRegistry() {
-		this.fertilizers = new HashMap<>();
-		this.fertilizers.put(new ItemWithMeta(Items.DYE, 15), new BonemealWrapper());
-	}
-	
-	public static IAgriFertilizerRegistry getInstance() {
+	public static IAgriAdapterRegistry<IAgriFertilizer> getInstance() {
 		return APIimplv1.getInstance().getFertilizerRegistry();
 	}
 
-	@Override
-	public boolean isFertilizer(ItemStack stack) {
-		return fertilizers.containsKey(new ItemWithMeta(stack));
-	}
+	public static class BonemealWrapper implements IAgriFertilizer {
 
-	@Override
-	public IAgriFertilizer getFertilizer(ItemStack stack) {
-		return fertilizers.get(new ItemWithMeta(stack));
-	}
-
-	@Override
-	public boolean registerFertilizer(ItemStack stack, IAgriFertilizer fertilizer) {
-		if (stack != null && fertilizer != null) {
-			fertilizers.put(new ItemWithMeta(stack), fertilizer);
-			return true;
-		} else {
-			return false;
+		@Override
+		public boolean accepts(ItemStack stack) {
+			return stack.getItem() == Items.DYE && stack.getMetadata() == 15;
 		}
-	}
-
-	@Override
-	public boolean unregisterFertilizer(ItemStack stack) {
-		return stack != null && fertilizers.remove(new ItemWithMeta(stack)) != null;
-	}
-
-	private static class BonemealWrapper implements IAgriFertilizer {
 
 		@Override
 		public boolean isFertilizerAllowed(int tier) {

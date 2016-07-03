@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.fertilizer;
 
+import com.infinityraider.agricraft.api.v1.registry.IAgriAdapter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -8,8 +9,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
-public interface IAgriFertilizer {
+public interface IAgriFertilizer extends IAgriAdapter<IAgriFertilizer> {
 
 	/**
 	 * return true if this fertilizer is allowed to speed up growth of a crop of
@@ -35,5 +37,20 @@ public interface IAgriFertilizer {
 	 */
 	@SideOnly(Side.CLIENT)
 	void performClientAnimations(int meta, World world, BlockPos pos);
+
+	@Override
+	default boolean accepts(NBTTagCompound tag) {
+		return false;
+	}
+
+	@Override
+	default IAgriFertilizer getValue(ItemStack stack) {
+		return this.accepts(stack) ? this : null;
+	}
+
+	@Override
+	default IAgriFertilizer getValue(NBTTagCompound tag) {
+		return this.accepts(tag) ? this : null;
+	}
 
 }

@@ -258,8 +258,8 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} else if ( TypeHelper.isAnyType(heldItem.getItem(), ITEM_EXCLUDES) ) {
 				// Allow the excludes to do their things.
 				return false;
-			} else if (FertilizerRegistry.getInstance().isFertilizer(heldItem)) {
-				IAgriFertilizer fert = FertilizerRegistry.getInstance().getFertilizer(heldItem);
+			} else if (FertilizerRegistry.getInstance().hasAdapter(heldItem)) {
+				IAgriFertilizer fert = FertilizerRegistry.getInstance().getValue(heldItem);
 				return fert == null ? false : fert.applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
 			} else if (heldItem.getItem() instanceof ItemAgriCraftSeed && !crop.isCrossCrop() && !crop.hasWeed()) {
 				AgriSeed seed = SeedRegistry.getInstance().getValue(heldItem);
@@ -280,7 +280,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				//harvest operation
 				this.harvest(world, pos, state, player, crop);
 				//check to see if clicked with seeds
-				if (SeedRegistry.getInstance().isValid(heldItem)) {
+				if (SeedRegistry.getInstance().hasAdapter(heldItem)) {
 					if (this.plantSeed(heldItem, world, pos)) {
 						//take one SEED away if the player is not in creative
 						heldItem.stackSize = heldItem.stackSize - (player.capabilities.isCreativeMode ? 0 : 1);

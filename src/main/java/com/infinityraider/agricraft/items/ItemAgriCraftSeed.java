@@ -22,10 +22,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.api.v1.handler.IAgriHandler;
-import com.infinityraider.agricraft.utility.NBTHelper;
+import com.infinityraider.agricraft.api.v1.registry.IAgriAdapter;
 
-public class ItemAgriCraftSeed extends ItemBase implements IAgriHandler<AgriSeed> {
+public class ItemAgriCraftSeed extends ItemBase implements IAgriAdapter<AgriSeed> {
 
 	/**
 	 * This constructor shouldn't be called from anywhere except from the
@@ -81,8 +80,8 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriHandler<AgriSeed
 	}
 
 	@Override
-	public boolean isValid(NBTTagCompound tag) {
-		return tag.hasKey(AgriNBT.SEED) && StatRegistry.getInstance().isValid(tag);
+	public boolean accepts(NBTTagCompound tag) {
+		return tag.hasKey(AgriNBT.SEED) && StatRegistry.getInstance().hasAdapter(tag);
 	}
 
 	@Override

@@ -22,15 +22,15 @@ import java.util.List;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.APIv1;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
-import com.infinityraider.agricraft.api.v1.handler.IAgriHandlerRegistry;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.registry.IAgriAdapterRegistry;
 
 public class APIimplv1 implements APIv1 {
 	
@@ -40,19 +40,21 @@ public class APIimplv1 implements APIv1 {
 	
     private final APIStatus status;
 	
-	private final IAgriHandlerRegistry<IAgriStat> statRegistry;
-	private final IAgriHandlerRegistry<AgriSeed> seedRegistry;
+	
+	private final IAgriAdapterRegistry<IAgriFertilizer> fertilizerRegistry;
+	private final IAgriAdapterRegistry<IAgriStat> statRegistry;
+	private final IAgriAdapterRegistry<AgriSeed> seedRegistry;
 	private final IAgriPlantRegistry plantRegistry;
 	private final IAgriMutationRegistry mutationRegistry;
-	private final IAgriFertilizerRegistry fertilizerRegistry;
 
     private APIimplv1(APIStatus status) {
         this.status = status;
-		this.statRegistry = new HandlerRegistry<>();
-		this.seedRegistry = new HandlerRegistry<>();
+		this.fertilizerRegistry = new AdapterRegistry<>();
+		this.statRegistry = new AdapterRegistry<>();
+		this.seedRegistry = new AdapterRegistry<>();
 		this.plantRegistry = new PlantRegistry();
 		this.mutationRegistry = new MutationRegistry();
-		this.fertilizerRegistry = new FertilizerRegistry();
+		this.fertilizerRegistry.registerAdapter(new FertilizerRegistry.BonemealWrapper());
     }
 	
 	public static APIv1 getInstance() {
@@ -84,12 +86,12 @@ public class APIimplv1 implements APIv1 {
     }
 	
 	@Override
-	public IAgriHandlerRegistry<IAgriStat> getStatRegistry() {
+	public IAgriAdapterRegistry<IAgriStat> getStatRegistry() {
 		return statRegistry;
 	}
 
 	@Override
-	public IAgriHandlerRegistry<AgriSeed> getSeedRegistry() {
+	public IAgriAdapterRegistry<AgriSeed> getSeedRegistry() {
 		return seedRegistry;
 	}
 	
@@ -104,7 +106,7 @@ public class APIimplv1 implements APIv1 {
 	}
 
 	@Override
-	public IAgriFertilizerRegistry getFertilizerRegistry() {
+	public IAgriAdapterRegistry<IAgriFertilizer> getFertilizerRegistry() {
 		return fertilizerRegistry;
 	}
 

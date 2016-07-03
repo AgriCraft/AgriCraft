@@ -2,7 +2,7 @@
  */
 package com.infinityraider.agricraft.apiimpl.v1;
 
-import com.infinityraider.agricraft.api.v1.handler.IAgriHandlerRegistry;
+import com.infinityraider.agricraft.api.v1.registry.IAgriAdapterRegistry;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 
 /**
@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
  */
 public class SeedRegistry {
 	
-	public static IAgriHandlerRegistry<AgriSeed> getInstance() {
+	public static IAgriAdapterRegistry<AgriSeed> getInstance() {
 		return APIimplv1.getInstance().getSeedRegistry();
 	}
 

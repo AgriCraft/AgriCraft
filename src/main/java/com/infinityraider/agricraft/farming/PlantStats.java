@@ -7,13 +7,14 @@ import static com.infinityraider.agricraft.config.AgriCraftConfig.cropStatCap;
 import java.text.MessageFormat;
 import java.util.List;
 import com.agricraft.agricore.util.MathHelper;
-import com.infinityraider.agricraft.api.v1.handler.IAgriHandler;
+import com.infinityraider.agricraft.api.v1.registry.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.NBTHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class PlantStats implements IAgriStat, IAgriHandler<IAgriStat> {
+public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
 	
 	public static final String NBT_ANALYZED = "agri_analyzed";
 	public static final String NBT_GROWTH = "agri_growth";
@@ -142,7 +143,7 @@ public class PlantStats implements IAgriStat, IAgriHandler<IAgriStat> {
 	}
 	
 	@Override
-	public boolean isValid(NBTTagCompound tag) {
+	public boolean accepts(NBTTagCompound tag) {
 		return NBTHelper.hasKey(tag, NBT_ANALYZED, NBT_GROWTH, NBT_GAIN, NBT_STRENGTH, NBT_META);
 	}
 

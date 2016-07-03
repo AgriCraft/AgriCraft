@@ -100,7 +100,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return if the analyze slot contains a <em>valid</em> SEED.
 	 */
 	public final boolean hasSeed() {
-		return SeedRegistry.getInstance().isValid(specimen);
+		return SeedRegistry.getInstance().hasAdapter(specimen);
 	}
 
 	public final void setProgress(int value) {
@@ -132,7 +132,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return if the stack is valid.
 	 */
 	public static boolean isValid(ItemStack stack) {
-		return SeedRegistry.getInstance().isValid(stack);
+		return SeedRegistry.getInstance().hasAdapter(stack);
 	}
 
 	/**

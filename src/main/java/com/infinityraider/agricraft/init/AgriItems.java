@@ -71,7 +71,7 @@ public class AgriItems {
 		}
 		
 		// Register seed handler.
-		SeedRegistry.getInstance().addHandler(seed);
+		SeedRegistry.getInstance().registerAdapter(seed);
 		
 		// Register the Items
 		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (ItemBase item) -> {
