@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.agricraft.utility.IconUtil;
+import com.infinityraider.agricraft.utility.IconHelper;
 
 import javax.annotation.Nullable;
 
@@ -142,10 +142,10 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 	}
 
 	private void renderBase(ITessellator tessellator) {
-		final TextureAtlasSprite iconTop = IconUtil.getIcon("agricraft:blocks/peripheralTop");
-		final TextureAtlasSprite iconSide = IconUtil.getIcon("agricraft:blocks/peripheralSide");
-		final TextureAtlasSprite iconBottom = IconUtil.getIcon("agricraft:blocks/peripheralBottom");
-		final TextureAtlasSprite iconInside = IconUtil.getIcon("agricraft:blocks/peripheralInner");
+		final TextureAtlasSprite iconTop = IconHelper.getIcon("agricraft:blocks/peripheralTop");
+		final TextureAtlasSprite iconSide = IconHelper.getIcon("agricraft:blocks/peripheralSide");
+		final TextureAtlasSprite iconBottom = IconHelper.getIcon("agricraft:blocks/peripheralBottom");
+		final TextureAtlasSprite iconInside = IconHelper.getIcon("agricraft:blocks/peripheralInner");
 		float unit = Constants.UNIT;
 
 		//top

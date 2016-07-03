@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.minecraft.item.Item;
 
 
 public class OreDictHelper {
@@ -89,7 +90,7 @@ public class OreDictHelper {
     }
 
     public static ArrayList<ItemStack> getFruitsFromOreDict(ItemStack seed, boolean sameMod) {
-        String seedModId = IOHelper.getModId(seed);
+        String seedModId = getModId(seed);
         ArrayList<ItemStack> fruits = new ArrayList<>();
 
         for(int id:OreDictionary.getOreIDs(seed)) {
@@ -100,7 +101,7 @@ public class OreDictHelper {
                     if(stack==null || stack.getItem()==null) {
                         continue;
                     }
-                    String stackModId = IOHelper.getModId(stack);
+                    String stackModId = getModId(stack);
                     if((!sameMod) || stackModId.equals(seedModId)) {
                         fruits.add(stack);
                     }
@@ -110,4 +111,14 @@ public class OreDictHelper {
 
         return fruits;
     }
+	
+	private static String getModId(ItemStack stack) {
+        String name = Item.REGISTRY.getNameForObject(stack.getItem()).getResourcePath();
+        int split = name.indexOf(':');
+        if(split>=0) {
+            name = name.substring(0, split);
+        }
+        return name;
+    }
+	
 }

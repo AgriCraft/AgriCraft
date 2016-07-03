@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.infinityraider.agricraft.renderers.PlantRenderer;
-import com.infinityraider.agricraft.utility.IconUtil;
+import com.infinityraider.agricraft.utility.IconHelper;
 
 import javax.annotation.Nullable;
 
@@ -54,6 +54,6 @@ public class RenderCrop extends RenderBlockBase<TileEntityCrop> {
 
 	@Override
 	public TextureAtlasSprite getIcon() {
-		return IconUtil.getDefaultIcon();
+		return IconHelper.getDefaultIcon();
 	}
 }

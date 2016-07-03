@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.items.blocks;
 
-import com.infinityraider.agricraft.tabs.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 
@@ -21,7 +21,7 @@ public class ItemBlockAgricraft extends ItemBlock {
      */
     public ItemBlockAgricraft(Block block) {
         super(block);
-        this.setCreativeTab(AgriCraftTab.agriCraftTab);
+        this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
     }
 
 }

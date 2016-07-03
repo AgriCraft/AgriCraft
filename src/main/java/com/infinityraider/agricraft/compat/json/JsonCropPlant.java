@@ -14,7 +14,7 @@ import com.infinityraider.agricraft.api.v1.requirment.RequirementType;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.utility.IconUtil;
+import com.infinityraider.agricraft.utility.IconHelper;
 import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.block.Block;
@@ -199,7 +199,7 @@ public class JsonCropPlant extends CropPlant {
 	public void registerIcons() {
 		for (String tex : this.plant.getTexture().getPlantTextures()) {
 			AgriCore.getLogger("AgriCraft").debug("Registering: " + tex);
-			IconUtil.registerIcon(tex);
+			IconHelper.registerIcon(tex);
 		}
 	}
 

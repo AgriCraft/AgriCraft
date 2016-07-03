@@ -11,8 +11,6 @@ import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.NBTHelper;
-import com.infinityraider.agricraft.utility.StackHelper;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {

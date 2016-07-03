@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.tabs.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.renderers.items.IItemRenderingHandler;
 import com.infinityraider.agricraft.renderers.items.ItemRendererRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;
@@ -24,7 +24,7 @@ public abstract class ItemBase<I extends ItemBase> extends Item implements ICust
 
 	public ItemBase(String name, boolean isModelVanillia, String... varients) {
 		super();
-		this.setCreativeTab(AgriCraftTab.agriCraftTab);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		this.setMaxStackSize(64);
 		this.internalName = name;
 		this.isModelVanillia = isModelVanillia;

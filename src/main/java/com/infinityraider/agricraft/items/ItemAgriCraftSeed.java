@@ -23,8 +23,8 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.NBTHelper;
-import com.infinityraider.agricraft.utility.StackHelper;
 
 public class ItemAgriCraftSeed extends ItemBase implements IAgriAdapter<AgriSeed> {
 
@@ -35,6 +35,7 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriAdapter<AgriSeed
 	 */
 	public ItemAgriCraftSeed() {
 		super("agri_seed", true);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT_SEED);
 	}
 
 	@Override

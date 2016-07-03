@@ -34,7 +34,7 @@ public enum BaseIcons {
 
 	private BaseIcons(String location) {
 		this.location = location;
-		this.cachedIcon = IconUtil.getDefaultIcon();
+		this.cachedIcon = IconHelper.getDefaultIcon();
 		this.isLoaded = false;
 	}
 
@@ -48,8 +48,8 @@ public enum BaseIcons {
 	}
 	
 	private boolean attemptLoad() {
-		cachedIcon = IconUtil.getIcon(location);
-		return (cachedIcon != IconUtil.getDefaultIcon());
+		cachedIcon = IconHelper.getIcon(location);
+		return (cachedIcon != IconHelper.getDefaultIcon());
 	}
 
 }

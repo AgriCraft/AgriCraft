@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.api.v1.fertilizer;
 
-import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;

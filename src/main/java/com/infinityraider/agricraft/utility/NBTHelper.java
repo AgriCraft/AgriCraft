@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class NBTHelper {

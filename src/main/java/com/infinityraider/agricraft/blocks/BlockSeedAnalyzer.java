@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
-import com.infinityraider.agricraft.tabs.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
@@ -34,7 +34,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 
 	public BlockSeedAnalyzer() {
 		super(Material.GROUND, "seed_analyzer", false);
-		this.setCreativeTab(AgriCraftTab.agriCraftTab);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		this.isBlockContainer = true;
 		this.setTickRandomly(false);
 		//set mining statistics

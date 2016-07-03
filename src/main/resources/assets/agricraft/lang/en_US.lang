@@ -1,5 +1,6 @@
 //Creative Tabs
 itemGroup.agricraft=AgriCraft
+itemGroup.agricraft_seeds=AgriCraft Seeds
 
 //Items
 item.agricraft:crop_sticks.name=Crop Sticks

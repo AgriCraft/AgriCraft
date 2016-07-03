@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.blocks.blockstate.BlockStateSpecial;
 import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
-import com.infinityraider.agricraft.tabs.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
@@ -45,7 +45,7 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 		super(mat);
 		this.internalName = internalName;
 		this.fullBlock = false;
-		this.setCreativeTab(AgriCraftTab.agriCraftTab);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		RegisterHelper.registerBlock(this, this.getInternalName(), this.getItemBlockClass());
 	}
 

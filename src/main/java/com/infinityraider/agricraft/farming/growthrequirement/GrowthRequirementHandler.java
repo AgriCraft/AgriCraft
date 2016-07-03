@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.misc.ISoilContainer;
 import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirementBuilder;
 import com.infinityraider.agricraft.api.v1.requirment.RequirementType;
-import com.infinityraider.agricraft.utility.IOHelper;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -69,7 +68,7 @@ public class GrowthRequirementHandler {
         String total = " of " + data.length + ".";
         for (String line : data) {
             AgriCore.getLogger("AgriCraft").debug("  Parsing " + line + total);
-            ItemStack stack = IOHelper.getStack(line);
+            ItemStack stack = (ItemStack)AgriCore.getConverter().toStack(line);
             Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).block : null;
             
             if (block != null) {

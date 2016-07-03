@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.tabs.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
 import com.infinityraider.agricraft.tiles.TileEntityBase;
@@ -38,7 +38,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 
 	public BlockSprinkler() {
 		super(Material.IRON, "sprinkler", false);
-		this.setCreativeTab(AgriCraftTab.agriCraftTab);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
 		setHarvestLevel("axe", 0);

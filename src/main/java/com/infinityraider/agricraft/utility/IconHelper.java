@@ -29,7 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author RlonRyan
  */
 @SideOnly(Side.CLIENT)
-public final class IconUtil {
+public final class IconHelper {
 	
 	public static final String EXPANSION_POINT = ":";
 	public static final String EXPANSION_BLOCK = ":blocks/";
@@ -40,7 +40,7 @@ public final class IconUtil {
 	
 	private static final AtomicInteger failCounter = new AtomicInteger();
 
-	private IconUtil() {
+	private IconHelper() {
 		// NOP
 	}
 
