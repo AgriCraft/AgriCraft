@@ -3,6 +3,7 @@
 package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.util.TypeHelper;
+import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 

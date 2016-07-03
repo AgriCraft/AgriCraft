@@ -30,7 +30,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v1.registry.IAgriAdapterRegistry;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterRegistry;
 
 public class APIimplv1 implements APIv1 {
 	
@@ -39,7 +39,6 @@ public class APIimplv1 implements APIv1 {
 	private static final APIv1 INSTANCE = new APIimplv1(APIStatus.OK);
 	
     private final APIStatus status;
-	
 	
 	private final IAgriAdapterRegistry<IAgriFertilizer> fertilizerRegistry;
 	private final IAgriAdapterRegistry<IAgriStat> statRegistry;

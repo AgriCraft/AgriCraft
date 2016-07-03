@@ -2,7 +2,7 @@
  */
 package com.infinityraider.agricraft.apiimpl.v1;
 
-import com.infinityraider.agricraft.api.v1.registry.IAgriAdapterRegistry;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
 /**

@@ -2,35 +2,25 @@
  */
 package com.infinityraider.agricraft.apiimpl.v1;
 
-import net.minecraft.item.ItemStack;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import com.infinityraider.agricraft.api.v1.registry.IAgriAdapter;
-import com.infinityraider.agricraft.api.v1.registry.IAgriAdapterRegistry;
-import net.minecraft.nbt.NBTTagCompound;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterRegistry;
 
 /**
+ * A basic AdapterRegistry implementation.
  *
  * @author RlonRyan
+ * @param <T> the type being adapted to.
  */
 public class AdapterRegistry<T> implements IAgriAdapterRegistry<T> {
 
 	private final Deque<IAgriAdapter<T>> adapters = new ArrayDeque<>();
-
-	@Override
-	public boolean hasAdapter(ItemStack stack) {
-		for (IAgriAdapter<T> adapter : adapters) {
-			if (adapter.accepts(stack)) {
-				return true;
-			}
-		}
-		return false;
-	}
 	
 	@Override
-	public boolean hasAdapter(NBTTagCompound tag) {
+	public boolean hasAdapter(Object obj) {
 		for (IAgriAdapter<T> adapter : adapters) {
-			if (adapter.accepts(tag)) {
+			if (adapter.accepts(obj)) {
 				return true;
 			}
 		}
@@ -41,21 +31,11 @@ public class AdapterRegistry<T> implements IAgriAdapterRegistry<T> {
 	public boolean hasAdapter(IAgriAdapter<T> adapter) {
 		return this.adapters.contains(adapter);
 	}
-
-	@Override
-	public IAgriAdapter<T> getAdapter(ItemStack stack) {
-		for (IAgriAdapter<T> adapter : adapters) {
-			if (adapter.accepts(stack)) {
-				return adapter;
-			}
-		}
-		return null;
-	}
 	
 	@Override
-	public IAgriAdapter<T> getAdapter(NBTTagCompound tag) {
+	public IAgriAdapter<T> getAdapter(Object obj) {
 		for (IAgriAdapter<T> adapter : adapters) {
-			if (adapter.accepts(tag)) {
+			if (adapter.accepts(obj)) {
 				return adapter;
 			}
 		}

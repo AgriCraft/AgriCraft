@@ -17,7 +17,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v1.registry.IAgriAdapterRegistry;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterRegistry;
 
 /**
  * AgriCraft API.

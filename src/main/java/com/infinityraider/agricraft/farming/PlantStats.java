@@ -7,15 +7,16 @@ import static com.infinityraider.agricraft.config.AgriCraftConfig.cropStatCap;
 import java.text.MessageFormat;
 import java.util.List;
 import com.agricraft.agricore.util.MathHelper;
-import com.infinityraider.agricraft.api.v1.registry.IAgriAdapter;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.NBTHelper;
+import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
-	
+
 	public static final String NBT_ANALYZED = "agri_analyzed";
 	public static final String NBT_GROWTH = "agri_growth";
 	public static final String NBT_GAIN = "agri_gain";
@@ -34,28 +35,27 @@ public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
 	public PlantStats() {
 		this(MIN, MIN, MIN, false);
 	}
-	
+
 	public PlantStats(int growth, int gain, int strength) {
 		this(growth, gain, strength, false, 0);
 	}
-	
-	
+
 	public PlantStats(int growth, int gain, int strength, int meta) {
 		this(growth, gain, strength, false, meta);
 	}
-	
+
 	public PlantStats(int growth, int gain, int strength, boolean analyzed) {
 		this(growth, gain, strength, analyzed, 0);
 	}
 
 	public PlantStats(int growth, int gain, int strength, boolean analyzed, int meta) {
-		this.growth = (byte)MathHelper.inRange(growth, MIN, MAX);
-		this.gain = (byte)MathHelper.inRange(gain, MIN, MAX);
-		this.strength = (byte)MathHelper.inRange(strength, MIN, MAX);
+		this.growth = (byte) MathHelper.inRange(growth, MIN, MAX);
+		this.gain = (byte) MathHelper.inRange(gain, MIN, MAX);
+		this.strength = (byte) MathHelper.inRange(strength, MIN, MAX);
 		this.analyzed = analyzed;
-		this.meta = (byte)MathHelper.inRange(meta, 0, Constants.MATURE);
+		this.meta = (byte) MathHelper.inRange(meta, 0, Constants.MATURE);
 	}
-	
+
 	@Override
 	public boolean isAnalyzed() {
 		return this.analyzed;
@@ -65,7 +65,7 @@ public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
 	public byte getMeta() {
 		return meta;
 	}
-	
+
 	@Override
 	public byte getGrowth() {
 		return growth;
@@ -85,7 +85,7 @@ public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
 	public IAgriStat withAnalyzed(boolean analyzed) {
 		return new PlantStats(growth, gain, strength, analyzed, meta);
 	}
-	
+
 	@Override
 	public IAgriStat withMeta(int meta) {
 		return new PlantStats(growth, gain, strength, analyzed, meta);
@@ -120,7 +120,7 @@ public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
 	public byte getMaxStrength() {
 		return MAX;
 	}
-	
+
 	public boolean writeToNBT(NBTTagCompound tag) {
 		tag.setBoolean(NBT_ANALYZED, analyzed);
 		tag.setByte(NBT_GAIN, gain);
@@ -141,15 +141,17 @@ public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
 			return false;
 		}
 	}
-	
+
 	@Override
-	public boolean accepts(NBTTagCompound tag) {
-		return NBTHelper.hasKey(tag, NBT_ANALYZED, NBT_GROWTH, NBT_GAIN, NBT_STRENGTH, NBT_META);
+	public boolean accepts(Object obj) {
+		NBTTagCompound tag = NBTHelper.asTag(obj);
+		return tag != null && NBTHelper.hasKey(tag, NBT_ANALYZED, NBT_GROWTH, NBT_GAIN, NBT_STRENGTH, NBT_META);
 	}
 
 	@Override
-	public IAgriStat getValue(NBTTagCompound tag) {
-		return new PlantStats(
+	public IAgriStat getValue(Object obj) {
+		NBTTagCompound tag = NBTHelper.asTag(obj);
+		return tag == null ? null : new PlantStats(
 				tag.getByte(NBT_GAIN),
 				tag.getByte(NBT_GROWTH),
 				tag.getByte(NBT_STRENGTH),

@@ -22,7 +22,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.api.v1.registry.IAgriAdapter;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
+import com.infinityraider.agricraft.utility.NBTHelper;
+import com.infinityraider.agricraft.utility.StackHelper;
 
 public class ItemAgriCraftSeed extends ItemBase implements IAgriAdapter<AgriSeed> {
 
@@ -80,12 +82,17 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriAdapter<AgriSeed
 	}
 
 	@Override
-	public boolean accepts(NBTTagCompound tag) {
-		return tag.hasKey(AgriNBT.SEED) && StatRegistry.getInstance().hasAdapter(tag);
+	public boolean accepts(Object obj) {
+		NBTTagCompound tag = NBTHelper.asTag(obj);
+		return tag != null && tag.hasKey(AgriNBT.SEED) && StatRegistry.getInstance().hasAdapter(tag);
 	}
 
 	@Override
-	public AgriSeed getValue(NBTTagCompound tag) {
+	public AgriSeed getValue(Object obj) {
+		NBTTagCompound tag = NBTHelper.asTag(obj);
+		if (tag == null) {
+			return null;
+		}
 		IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
 		IAgriStat stat = StatRegistry.getInstance().getValue(tag);
 		if (plant != null && stat != null) {
