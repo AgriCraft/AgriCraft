@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.items;
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.DebugHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -57,10 +58,6 @@ public class ItemDebugger extends ItemBase {
 			 */
 		}
 		return EnumActionResult.PASS;
-	}
-
-	static {
-		AgriCore.getConfig().addConfigurable(ItemDebugger.class);
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.blocks.blockstate.BlockStateSpecial;
-import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
+import com.infinityraider.agricraft.renderers.blocks.ICustomRenderedBlock;
 import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.RegisterHelper;
@@ -12,8 +11,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -28,7 +25,7 @@ import java.util.List;
 /**
  * The base class for all AgriCraft blocks.
  */
-public abstract class BlockBase<T extends TileEntity> extends Block implements ICustomRenderedBlock<T> {
+public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 
 	private final String internalName;
 
@@ -53,12 +50,6 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 
 	public String getInternalName() {
 		return this.internalName;
-	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public IBlockStateSpecial<T, ? extends IBlockState> getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return new BlockStateSpecial<>(state, pos, (T) world.getTileEntity(pos));
 	}
 
 	@Override

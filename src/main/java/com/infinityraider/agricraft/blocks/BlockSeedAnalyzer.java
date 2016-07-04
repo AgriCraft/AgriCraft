@@ -1,9 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.agricraft.agricore.config.AgriConfigCategory;
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.handler.GuiHandler;

@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.blocks.ICustomRenderedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -31,8 +30,8 @@ public class BlockRendererRegistry implements ICustomModelLoader {
         return INSTANCE;
     }
 
-    private final Map<ResourceLocation, BlockRenderer<? extends TileEntity>> renderers;
-    private final List<ICustomRenderedBlock<? extends TileEntity>> blocks;
+    private final Map<ResourceLocation, BlockRenderer> renderers;
+    private final List<ICustomRenderedBlock> blocks;
 
     private BlockRendererRegistry() {
         this.renderers = new HashMap<>();
@@ -53,13 +52,13 @@ public class BlockRendererRegistry implements ICustomModelLoader {
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {}
 
-    public List<ICustomRenderedBlock<? extends TileEntity>> getRegisteredBlocks() {
+    public List<ICustomRenderedBlock> getRegisteredBlocks() {
         return ImmutableList.copyOf(blocks);
     }
 
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
-    public void registerCustomBlockRenderer(ICustomRenderedBlock<? extends TileEntity> customRenderedBlock) {
+    public void registerCustomBlockRenderer(ICustomRenderedBlock customRenderedBlock) {
         if (customRenderedBlock == null || !(customRenderedBlock instanceof Block)) {
             return;
         }

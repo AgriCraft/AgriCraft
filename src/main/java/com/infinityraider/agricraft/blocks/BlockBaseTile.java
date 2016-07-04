@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.renderers.blocks.ICustomRenderedBlockWithTile;
 import com.infinityraider.agricraft.blocks.blockstate.BlockStateSpecial;
 import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
 import com.infinityraider.agricraft.reference.Reference;
@@ -9,7 +10,6 @@ import com.infinityraider.agricraft.multiblock.IMultiBlockComponent;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -17,14 +17,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * The base class for all AgriCraft tile blocks.
  */
-public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase implements ITileEntityProvider {
+public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase implements ITileEntityProvider, ICustomRenderedBlockWithTile<T> {
 
 	public final boolean isMultiBlock;
 	public final String tileName;
@@ -84,6 +81,12 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase 
 		super.eventReceived(state, world, pos, id, data);
 		TileEntity tileentity = world.getTileEntity(pos);
 		return tileentity != null && tileentity.receiveClientEvent(id, data);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public IBlockStateSpecial<T, ? extends IBlockState> getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return new BlockStateSpecial<>(state, pos, (T) world.getTileEntity(pos));
 	}
 
 }

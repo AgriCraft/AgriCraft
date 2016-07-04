@@ -14,13 +14,13 @@ import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockBase<T extends TileEntityBase> implements IBlockRenderingHandler<T> {
-    private final BlockBase<T> block;
+    private final BlockBase block;
     private final T dummy;
     private final boolean inv;
     private final boolean statRender;
     private final boolean dynRender;
 
-    protected RenderBlockBase(BlockBase<T> block, T te, boolean inv, boolean statRender, boolean dynRender) {
+    protected RenderBlockBase(BlockBase block, T te, boolean inv, boolean statRender, boolean dynRender) {
         this.block = block;
         this.dummy = te;
         this.inv = inv;
@@ -29,7 +29,7 @@ public abstract class RenderBlockBase<T extends TileEntityBase> implements IBloc
     }
 
     @Override
-    public BlockBase<T> getBlock() {
+    public BlockBase getBlock() {
         return block;
     }
 
