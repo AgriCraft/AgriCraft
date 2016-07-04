@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockFenceGate;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityFenceGate;
@@ -68,7 +69,7 @@ public class BlockFenceGate extends BlockCustomWood<TileEntityFenceGate> {
     }
 
     @Override
-    protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+    public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
         return ItemBlockFenceGate.class;
     }
 
@@ -117,4 +118,10 @@ public class BlockFenceGate extends BlockCustomWood<TileEntityFenceGate> {
             }
         }
     }
+	
+	@Override
+	public boolean isEnabled() {
+		return AgriCraftConfig.enableFences;
+	}
+
 }

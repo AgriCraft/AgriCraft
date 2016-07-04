@@ -46,7 +46,10 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 		this.internalName = internalName;
 		this.fullBlock = false;
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
-		RegisterHelper.registerBlock(this, this.getInternalName(), this.getItemBlockClass());
+	}
+	
+	public boolean isEnabled() {
+		return true;
 	}
 
 	public String getInternalName() {
@@ -87,7 +90,7 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 	 * @return the block's class, may be null if no specific ItemBlock class is
 	 * desired.
 	 */
-	protected abstract Class<? extends ItemBlock> getItemBlockClass();
+	public abstract Class<? extends ItemBlock> getItemBlockClass();
 
 	/**
 	 * @return The default bounding box for this block

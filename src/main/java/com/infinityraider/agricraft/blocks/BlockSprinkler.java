@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
@@ -27,6 +28,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 
 public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
+
 	public static final AxisAlignedBB BOX = new AxisAlignedBB(
 			Constants.UNIT * Constants.QUARTER,
 			Constants.UNIT * Constants.THREE_QUARTER,
@@ -127,7 +129,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 	}
 
 	@Override
-	protected Class<? extends ItemBlock> getItemBlockClass() {
+	public Class<? extends ItemBlock> getItemBlockClass() {
 		return null;
 	}
 
@@ -143,6 +145,11 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 			return ((TileEntityChannel) channel).getTexture(state, side);
 		}
 		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return !AgriCraftConfig.disableIrrigation;
 	}
 
 }

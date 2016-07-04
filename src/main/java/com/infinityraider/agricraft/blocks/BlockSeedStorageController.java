@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.renderers.blocks.IBlockRenderingHandler;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorageController;
@@ -49,6 +50,11 @@ public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedSt
     @Override
 	public IBlockRenderingHandler<TileEntitySeedStorageController> getRenderer() {
 		return null;
+	}
+	
+	@Override
+	public boolean isEnabled() {
+		return AgriCraftConfig.disableSeedWarehouse;
 	}
 
 }

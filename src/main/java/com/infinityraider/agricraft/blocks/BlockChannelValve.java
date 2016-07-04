@@ -74,7 +74,7 @@ public class BlockChannelValve extends AbstractBlockWaterChannel<TileEntityChann
 	}
 
 	@Override
-	protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+	public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
 		return ItemBlockValve.class;
 	}
 

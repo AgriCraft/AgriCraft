@@ -32,9 +32,6 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<
 		super(material, internalName);
 		this.isMultiBlock = isMultiBlock;
 		this.tileName = Reference.MOD_ID.toLowerCase() + ":tileEntity." + internalName;
-		TileEntity tile = this.createNewTileEntity(null, 0);
-		assert (tile != null);
-		GameRegistry.registerTileEntity(tile.getClass(), getTileName());
 	}
 
 	public final String getTileName() {

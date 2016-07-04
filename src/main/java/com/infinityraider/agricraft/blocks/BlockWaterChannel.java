@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
@@ -129,4 +130,10 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 	public AxisAlignedBB getDefaultBoundingBox() {
 		return BOX;
 	}
+
+	@Override
+	public boolean isEnabled() {
+		return !AgriCraftConfig.disableIrrigation;
+	}
+
 }

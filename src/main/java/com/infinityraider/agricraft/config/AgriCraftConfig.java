@@ -131,6 +131,12 @@ public class AgriCraftConfig {
 	public static boolean disableSeedStorage = false;
 	@AgriConfigurable(category = AgriConfigCategory.STORAGE, key = "Disable seed storage warehouses", comment = "Set to true to disable the seed storage warehouse blocks.")
 	public static boolean disableSeedWarehouse = false;
+	
+	// Decoration
+	@AgriConfigurable(category = AgriConfigCategory.DECORATION, key = "Enable Fences", comment = "Set to false to disable the decorative custom wood fences.")
+	public static boolean enableFences = true;
+	@AgriConfigurable(category = AgriConfigCategory.DECORATION, key = "Enable Grates", comment = "Set to false to disable the decorative custom wood grates.")
+	public static boolean enableGrates = true;
 
 	// Add to Configurator
 	static {

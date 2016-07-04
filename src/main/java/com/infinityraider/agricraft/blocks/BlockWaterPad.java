@@ -31,7 +31,7 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
     }
 
     @Override
-    protected Class<? extends ItemBlock> getItemBlockClass() {
+    public Class<? extends ItemBlock> getItemBlockClass() {
         return ItemBlockWaterPad.class;
     }
 

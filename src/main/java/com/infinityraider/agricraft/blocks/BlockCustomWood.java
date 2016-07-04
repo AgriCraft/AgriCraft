@@ -154,7 +154,7 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 	 * TODO: What is this?
 	 */
 	@Override
-	protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+	public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
 		return ItemBlockCustomWood.class;
 	}
 }

@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.entity.EntityLeashKnotAgricraft;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockFence;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityFence;
@@ -75,7 +76,7 @@ public class BlockFence extends BlockCustomWood<TileEntityFence> {
         return flag;
     }
 
-    /**
+    /*
      * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
      * mask.) Parameters: World, pos, mask, list, colliding entity
      */
@@ -111,14 +112,17 @@ public class BlockFence extends BlockCustomWood<TileEntityFence> {
         if ((block instanceof BlockFence) || (block instanceof BlockFenceGate) || (block instanceof BlockWaterTank)) {
             return true;
         }
-        if ((block instanceof net.minecraft.block.BlockFence) || (block instanceof net.minecraft.block.BlockFenceGate)) {
-            return true;
-        }
-        return false;
+        return (block instanceof net.minecraft.block.BlockFence) || (block instanceof net.minecraft.block.BlockFenceGate);
     }
 
     @Override
     public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
         return side == EnumFacing.UP || side == EnumFacing.DOWN;
     }
+	
+	@Override
+	public boolean isEnabled() {
+		return AgriCraftConfig.enableFences;
+	}
+
 }
