@@ -292,7 +292,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	@Override
 	public boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
 		if (this.getGrowthStage() < Constants.MATURE && (this.hasPlant() || this.hasWeed())) {
-			((BlockCrop) AgriBlocks.blockCrop).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
+			((BlockCrop) AgriBlocks.CROP).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
 			return true;
 		} else if (fertilizer.canTriggerMutation() && this.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
 			this.crossOver();

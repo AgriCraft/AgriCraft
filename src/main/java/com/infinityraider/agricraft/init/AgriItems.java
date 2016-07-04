@@ -35,7 +35,7 @@ public class AgriItems {
 		// Configure the Items
 		logger.debug("Starting Item Configuration...");
 		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (ItemBase item) -> {
-			logger.debug("Configuring Item: {0}", item.internalName);
+			logger.debug("Configuring Item: {0}", item.getInternalName());
 			AgriCore.getConfig().addConfigurable(item);
 		});
 		logger.debug("Finished Item Configuration!");
@@ -44,8 +44,8 @@ public class AgriItems {
 		logger.debug("Starting Item Registration...");
 		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (ItemBase item) -> {
 			if (item.isEnabled()) {
-				logger.debug("Registering Item: {0}", item.internalName);
-				RegisterHelper.registerItem(item, item.internalName);
+				logger.debug("Registering Item: {0}", item.getInternalName());
+				RegisterHelper.registerItem(item, item.getInternalName());
 				AgriCraftJEIPlugin.registerNbtIgnore(item, item.getIgnoredNBT());
 			}
 		});

@@ -15,12 +15,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * The root Item class for all AgriCraft Items (excluding blockItems).
  */
 public abstract class ItemBase<I extends ItemBase> extends Item implements ICustomRenderedItem<I> {
-
-	public final String internalName;
-
-	public final boolean isModelVanillia;
 	
 	protected final String[] varients;
+	
+	private final String internalName;
+	private final boolean isModelVanillia;
 
 	public ItemBase(String name, boolean isModelVanillia, String... varients) {
 		super();
@@ -33,6 +32,10 @@ public abstract class ItemBase<I extends ItemBase> extends Item implements ICust
 		} else {
 			this.varients = varients;
 		}
+	}
+
+	public String getInternalName() {
+		return internalName;
 	}
 
 	@Override

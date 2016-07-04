@@ -10,22 +10,33 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class AgriBlocks {
 
-	public static final BlockBase blockCrop = new BlockCrop();
-	public static final BlockBase blockSeedAnalyzer = new BlockSeedAnalyzer();
-	public static final BlockBase blockWaterPad = new BlockWaterPad();
-	public static final BlockBase blockWaterPadFull = new BlockWaterPadFull();
-	public static final BlockBase blockWaterTank = new BlockWaterTank();
-	public static final BlockBase blockWaterChannel = new BlockWaterChannel();
-	public static final BlockBase blockWaterChannelFull = new BlockWaterChannelFull();
-	public static final BlockBase blockChannelValve = new BlockChannelValve();
-	public static final BlockBase blockSprinkler = new BlockSprinkler();
-	public static final BlockBase blockSeedStorage = new BlockSeedStorage();
-	//public static final BlockBase blockSeedStorageController = new BlockSeedStorageController();
+	// Crops
+	public static final BlockBase CROP = new BlockCrop();
+	
+	// Analyzers
+	public static final BlockBase SEED_ANALYZER = new BlockSeedAnalyzer();
 	// The following is to be done elsewhere...
-	//public static final BlockBase blockPeripheral = new BlockPeripheral();
-	public static final BlockBase blockFence = new BlockFence();
-	public static final BlockBase blockFenceGate = new BlockFenceGate();
-	public static final BlockBase blockGrate = new BlockGrate();
+	//public static final BlockBase PERIPHERAL = new BlockPeripheral();
+	
+	// Water Pads
+	public static final BlockBase WATER_PAD = new BlockWaterPad();
+	public static final BlockBase WATER_PAD_FULL = new BlockWaterPadFull();
+	
+	// Irrigation
+	public static final BlockBase TANK = new BlockWaterTank();
+	public static final BlockBase CHANNEL = new BlockWaterChannel();
+	public static final BlockBase CHANNEL_FULL = new BlockWaterChannelFull();
+	public static final BlockBase CHANNEL_VALVE = new BlockChannelValve();
+	public static final BlockBase SPRINKLER = new BlockSprinkler();
+	
+	// Seed Storage
+	public static final BlockBase SEED_STORAGE = new BlockSeedStorage();
+	//public static final BlockBase SEED_STORAGE_CONTROLLER = new BlockSeedStorageController();
+	
+	// Decoration
+	public static final BlockBase FENCE = new BlockFence();
+	public static final BlockBase FENCE_GATE = new BlockFenceGate();
+	public static final BlockBase GRATE = new BlockGrate();
 
 	public static void init() {
 
@@ -38,7 +49,7 @@ public class AgriBlocks {
 		// Configure the Blocks
 		logger.debug("Starting Block Configuration...");
 		ReflectionHelper.forEachIn(AgriBlocks.class, BlockBase.class, (BlockBase block) -> {
-			logger.debug("Configuring Block: {0}", block.internalName);
+			logger.debug("Configuring Block: {0}", block.getInternalName());
 			AgriCore.getConfig().addConfigurable(block);
 		});
 		logger.debug("Finished Block Configuration!");

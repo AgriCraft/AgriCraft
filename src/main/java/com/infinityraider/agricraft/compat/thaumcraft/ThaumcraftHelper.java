@@ -19,7 +19,7 @@ public class ThaumcraftHelper extends AgriCompatModule {
 		// Fix Golems
         FMLInterModComms.sendMessage(this.getModId(),
 				"harvestClickableCrop",
-				new ItemStack(AgriBlocks.blockCrop, 1, Constants.MATURE)
+				new ItemStack(AgriBlocks.CROP, 1, Constants.MATURE)
 		);
 
     }

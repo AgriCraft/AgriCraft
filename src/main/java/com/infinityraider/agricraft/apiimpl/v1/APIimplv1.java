@@ -150,7 +150,7 @@ public class APIimplv1 implements APIv1 {
         if (world.isRemote || !isCrop(world, pos)) {
             return null;
         }
-        List<ItemStack> result = AgriBlocks.blockCrop.getDrops(world, pos, world.getBlockState(pos), 0);
+        List<ItemStack> result = AgriBlocks.CROP.getDrops(world, pos, world.getBlockState(pos), 0);
         world.setBlockToAir(pos);
         world.removeTileEntity(pos);
         return result;

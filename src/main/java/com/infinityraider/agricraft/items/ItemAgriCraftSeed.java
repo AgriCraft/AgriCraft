@@ -64,7 +64,7 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriAdapter<AgriSeed
 
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (world.getBlockState(pos).getBlock() == AgriBlocks.blockCrop) {
+		if (world.getBlockState(pos).getBlock() == AgriBlocks.CROP) {
 			AgriCore.getLogger("AgriCraft").debug("Trying to plant seed " + stack.getItem().getUnlocalizedName() + " on crops");
 			return EnumActionResult.SUCCESS;
 		}

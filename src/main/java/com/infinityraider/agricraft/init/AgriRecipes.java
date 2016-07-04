@@ -51,7 +51,7 @@ public class AgriRecipes {
 			GameRegistry.addShapelessRecipe(new ItemStack(Items.STICK, 4 / AgriCraftConfig.cropsPerCraft), new ItemStack(AgriItems.CROPS));
 		}
 		//seed analyzer
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriBlocks.blockSeedAnalyzer, 1), "sgs", " bs", "pwp", 's', "stickWood", 'g', "paneGlass", 'b', Blocks.STONE_SLAB, 'p', "plankWood", 'w', "slabWood"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriBlocks.SEED_ANALYZER, 1), "sgs", " bs", "pwp", 's', "stickWood", 'g', "paneGlass", 'b', Blocks.STONE_SLAB, 'p', "plankWood", 'w', "slabWood"));
 		//journal
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.JOURNAL, 1), "csc", "sbs", "csc", 'c', AgriItems.CROPS, 's', "listAllseed", 'b', Items.WRITABLE_BOOK));
 		GameRegistry.addRecipe(new RecipeJournal());
@@ -71,8 +71,8 @@ public class AgriRecipes {
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', Blocks.ACACIA_FENCE, 's', "stickWood"));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', Blocks.JUNGLE_FENCE, 's', "stickWood"));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', Blocks.DARK_OAK_FENCE, 's', "stickWood"));
-			if (AgriCraftConfig.enableFences && AgriBlocks.blockFence != null) {
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', AgriBlocks.blockFence, 's', "stickWood"));
+			if (AgriCraftConfig.enableFences && AgriBlocks.FENCE != null) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', AgriBlocks.FENCE, 's', "stickWood"));
 			}
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 1), "fs", 'f', Blocks.IRON_BARS, 's', "stickWood"));
 		}
@@ -89,7 +89,7 @@ public class AgriRecipes {
 			RegisterHelper.removeRecipe(new ItemStack(Items.BOWL));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BOWL, 4), "w w", " w ", 'w', "slabWood"));
 			//sprinkler
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriBlocks.blockSprinkler, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', Blocks.IRON_BARS, 'c', Items.BUCKET));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriBlocks.SPRINKLER, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', Blocks.IRON_BARS, 'c', Items.BUCKET));
 		}
 		//fruits
 		for (AgriNuggetType type : AgriNuggetType.values()) {
@@ -108,30 +108,30 @@ public class AgriRecipes {
 	private static void registerCustomWoodRecipes() {
 		initWoodList();
 		if (!AgriCraftConfig.disableIrrigation) {
-			ItemStack channel = new ItemStack(AgriBlocks.blockWaterChannel, 1);
-			ItemStack channelFull = new ItemStack(AgriBlocks.blockWaterChannelFull, 1);
+			ItemStack channel = new ItemStack(AgriBlocks.CHANNEL, 1);
+			ItemStack channelFull = new ItemStack(AgriBlocks.CHANNEL_FULL, 1);
 
-			registerCustomWoodRecipe(AgriBlocks.blockWaterTank, 1, true, "w w", "w w", "www", 'w', REFERENCE);
-			registerCustomWoodRecipe(AgriBlocks.blockWaterChannel, 6, true, "w w", " w ", 'w', REFERENCE);
-			registerCustomWoodRecipe(AgriBlocks.blockWaterChannelFull, 1, false, channel, channel, channel, channel);
-			registerCustomWoodRecipe(AgriBlocks.blockWaterChannel, 4, false, channelFull);
-			registerCustomWoodRecipe(AgriBlocks.blockChannelValve, 1, false, new ItemStack(Items.IRON_INGOT, 1), new ItemStack(Blocks.LEVER, 1), channel);
+			registerCustomWoodRecipe(AgriBlocks.TANK, 1, true, "w w", "w w", "www", 'w', REFERENCE);
+			registerCustomWoodRecipe(AgriBlocks.CHANNEL, 6, true, "w w", " w ", 'w', REFERENCE);
+			registerCustomWoodRecipe(AgriBlocks.CHANNEL_FULL, 1, false, channel, channel, channel, channel);
+			registerCustomWoodRecipe(AgriBlocks.CHANNEL, 4, false, channelFull);
+			registerCustomWoodRecipe(AgriBlocks.CHANNEL_VALVE, 1, false, new ItemStack(Items.IRON_INGOT, 1), new ItemStack(Blocks.LEVER, 1), channel);
 		}
 		if (!AgriCraftConfig.disableSeedStorage) {
-			registerCustomWoodRecipe(AgriBlocks.blockSeedStorage, 1, true, "wiw", "wcw", "wcw", 'w', REFERENCE, 'i', Items.IRON_INGOT, 'c', Blocks.CHEST);
+			registerCustomWoodRecipe(AgriBlocks.SEED_STORAGE, 1, true, "wiw", "wcw", "wcw", 'w', REFERENCE, 'i', Items.IRON_INGOT, 'c', Blocks.CHEST);
 		}
 		if (AgriCraftConfig.enableFences) {
-			ItemStack fence = new ItemStack(AgriBlocks.blockFence, 1);
-			registerCustomWoodRecipe(AgriBlocks.blockFence, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.OAK_FENCE);
-			registerCustomWoodRecipe(AgriBlocks.blockFence, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.BIRCH_FENCE);
-			registerCustomWoodRecipe(AgriBlocks.blockFence, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.JUNGLE_FENCE);
-			registerCustomWoodRecipe(AgriBlocks.blockFence, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.SPRUCE_FENCE);
-			registerCustomWoodRecipe(AgriBlocks.blockFence, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.ACACIA_FENCE);
-			registerCustomWoodRecipe(AgriBlocks.blockFence, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.DARK_OAK_FENCE);
-			registerCustomWoodRecipe(AgriBlocks.blockFenceGate, 1, true, "fwf", 'w', REFERENCE, 'f', fence);
+			ItemStack fence = new ItemStack(AgriBlocks.FENCE, 1);
+			registerCustomWoodRecipe(AgriBlocks.FENCE, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.OAK_FENCE);
+			registerCustomWoodRecipe(AgriBlocks.FENCE, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.BIRCH_FENCE);
+			registerCustomWoodRecipe(AgriBlocks.FENCE, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.JUNGLE_FENCE);
+			registerCustomWoodRecipe(AgriBlocks.FENCE, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.SPRUCE_FENCE);
+			registerCustomWoodRecipe(AgriBlocks.FENCE, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.ACACIA_FENCE);
+			registerCustomWoodRecipe(AgriBlocks.FENCE, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.DARK_OAK_FENCE);
+			registerCustomWoodRecipe(AgriBlocks.FENCE_GATE, 1, true, "fwf", 'w', REFERENCE, 'f', fence);
 		}
 		if (AgriCraftConfig.enableGrates) {
-			registerCustomWoodRecipe(AgriBlocks.blockGrate, 8, true, "w w", " w ", "w w", 'w', REFERENCE);
+			registerCustomWoodRecipe(AgriBlocks.GRATE, 8, true, "w w", " w ", "w w", 'w', REFERENCE);
 		}
 	}
 

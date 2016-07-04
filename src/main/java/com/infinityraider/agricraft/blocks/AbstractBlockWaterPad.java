@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * @author rlonryan
  */
-public abstract class AbstractBlockWaterPad extends BlockBaseNoTile {
+public abstract class AbstractBlockWaterPad extends BlockBase {
     public static final AxisAlignedBB BOX = new AxisAlignedBB(0, 0, 0, 1, Constants.UNIT * (Constants.WHOLE / 2), 1);
 
 	public AbstractBlockWaterPad(Material mat, String internalName) {

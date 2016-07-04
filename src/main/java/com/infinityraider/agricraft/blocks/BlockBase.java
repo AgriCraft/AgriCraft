@@ -29,9 +29,8 @@ import java.util.List;
  * The base class for all AgriCraft blocks.
  */
 public abstract class BlockBase<T extends TileEntity> extends Block implements ICustomRenderedBlock<T> {
-	public static final ItemStack DEFAULT_WAILA_STACK = null;
 
-	public final String internalName;
+	private final String internalName;
 
 	/**
 	 * The default, base constructor for all AgriCraft blocks. This method runs
@@ -55,7 +54,7 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 	public String getInternalName() {
 		return this.internalName;
 	}
-
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	public IBlockStateSpecial<T, ? extends IBlockState> getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
@@ -66,7 +65,6 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getBlockModelResourceLocation() {
 		return new  ModelResourceLocation(Reference.MOD_ID.toLowerCase()+":"+getInternalName());
-
 	}
 
 	@Override
