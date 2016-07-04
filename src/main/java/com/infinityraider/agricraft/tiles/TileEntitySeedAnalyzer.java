@@ -53,7 +53,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 		if (this.journal != null && this.journal.getItem() != null) {
 			NBTTagCompound journalTag = new NBTTagCompound();
 			this.journal.writeToNBT(journalTag);
-			tag.setTag(AgriItems.journal.getUnlocalizedName(), journalTag);
+			tag.setTag(AgriItems.JOURNAL.getUnlocalizedName(), journalTag);
 		}
 		tag.setInteger("progress", this.progress);
 	}
@@ -66,8 +66,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 			//Not certain this is required... Unsure if networking thing?
 			this.specimen = null;
 		}
-		if (tag.hasKey(AgriItems.journal.getUnlocalizedName())) {
-			this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriItems.journal.getUnlocalizedName()));
+		if (tag.hasKey(AgriItems.JOURNAL.getUnlocalizedName())) {
+			this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriItems.JOURNAL.getUnlocalizedName()));
 		} else {
 			this.journal = null;
 		}

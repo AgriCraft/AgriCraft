@@ -90,7 +90,7 @@ public class ClientProxy implements IProxy {
 		});
 
 		// Clippings
-		AgriItems.clipping.registerItemRenderer();
+		AgriItems.AGRI_CLIPPING.registerItemRenderer();
 
 		//villager
 		if (!AgriCraftConfig.disableWorldGen && AgriCraftConfig.villagerEnabled) {

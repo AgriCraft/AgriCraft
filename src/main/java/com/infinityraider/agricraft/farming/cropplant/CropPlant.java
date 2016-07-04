@@ -151,7 +151,7 @@ public abstract class CropPlant implements IAgriPlant {
 
 	@Override
 	public final ItemStack getSeed() {
-		ItemStack stack = new ItemStack(AgriItems.seed);
+		ItemStack stack = new ItemStack(AgriItems.AGRI_SEED);
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(AgriNBT.SEED, this.getId());
 		stack.setTagCompound(tag);

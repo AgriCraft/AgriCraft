@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.items;
 
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.init.AgriItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -19,6 +20,13 @@ import net.minecraft.tileentity.TileEntity;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 
 public class ItemClipper extends ItemBase implements IAgriClipperItem {
+	
+	@AgriConfigurable(
+			category = AgriConfigCategory.TOOLS,
+			key = "Enable Clipper",
+			comment = "Set to false to disable the Clipper."
+	)
+	public static boolean enableClipper = true;
 
 	public ItemClipper() {
 		super("clipper", true);
@@ -43,7 +51,7 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem {
 				crop.setGrowthStage(crop.getGrowthStage() - 1);
 				AgriSeed seed = crop.getSeed();
 				seed = seed.withStat(seed.getStat().withMeta(1));
-				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), AgriItems.clipping.getClipping(seed, 1)));
+				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), ItemClipping.getClipping(seed, 1)));
 				return EnumActionResult.SUCCESS;
 			}
 			return EnumActionResult.FAIL;
@@ -55,6 +63,11 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
 		// Nothing to see here...
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enableClipper;
 	}
 
 }

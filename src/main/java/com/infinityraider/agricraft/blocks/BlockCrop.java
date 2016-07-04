@@ -164,7 +164,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				return false;
 			} else if (crop.isCrossCrop()) {
 				crop.setCrossCrop(false);
-				spawnAsEntity(world, pos, new ItemStack(AgriItems.crops, 1));
+				spawnAsEntity(world, pos, new ItemStack(AgriItems.CROPS, 1));
 				return false;
 			} else if (crop.canHarvest()) {
 				crop.getWorld().setBlockState(crop.getPos(), state.withProperty(AgriProperties.GROWTHSTAGE, 2), 2);
@@ -250,7 +250,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			if (AgriItems.enableHandRake && crop.hasWeed() && heldItem == null) {
+			if (AgriItems.HAND_RAKE.isEnabled() && crop.hasWeed() && heldItem == null) {
 				//if weeds can only be removed by using a hand rake, nothing should happen
 				return false;
 			} else if (player.isSneaking() || heldItem == null || heldItem.getItem() == null) {
@@ -271,7 +271,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				}
 				return false;
 			} //check to see if the player clicked with crops (crosscrop attempt)
-			else if (heldItem.getItem() == AgriItems.crops) {
+			else if (heldItem.getItem() == AgriItems.CROPS) {
 				this.setCrossCrop(world, pos, state, player, heldItem);
 			} //mod interaction
 			else if (AgriCompatHandler.getInstance().isRightClickHandled(heldItem.getItem())) {
@@ -333,10 +333,10 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			if (crop != null) {
 				ArrayList<ItemStack> drops = new ArrayList<>();
 				if (crop.isCrossCrop()) {
-					drops.add(new ItemStack(AgriItems.crops, 2));
+					drops.add(new ItemStack(AgriItems.CROPS, 2));
 				} else {
 					if (!(crop.hasWeed() && AgriCraftConfig.weedsDestroyCropSticks)) {
-						drops.add(new ItemStack(AgriItems.crops, 1));
+						drops.add(new ItemStack(AgriItems.CROPS, 1));
 					}
 					if (crop.hasPlant()) {
 						if (crop.isMature()) {
@@ -451,7 +451,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			crop.clearWeed();   //update is not needed because it is called in the clearWeed() method
 		} else if (crop.isCrossCrop()) {
 			crop.setCrossCrop(false);
-			drops.add(new ItemStack(AgriItems.crops, 1));
+			drops.add(new ItemStack(AgriItems.CROPS, 1));
 		} else if (crop.canHarvest()) {
 			crop.getWorld().setBlockState(pos, state.withProperty(AgriProperties.GROWTHSTAGE, 2), 2);
 			for (ItemStack stack : crop.getFruits()) {
@@ -471,7 +471,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 */
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return AgriItems.crops;
+		return AgriItems.CROPS;
 	}
 
 	/**
@@ -485,9 +485,9 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 			if (crop.isCrossCrop()) {
-				items.add(new ItemStack(AgriItems.crops, 2));
+				items.add(new ItemStack(AgriItems.CROPS, 2));
 			} else {
-				items.add(new ItemStack(AgriItems.crops, 1));
+				items.add(new ItemStack(AgriItems.CROPS, 1));
 			}
 			if (crop.hasPlant()) {
 				items.add(crop.getSeed().toStack());
@@ -543,7 +543,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		return new ItemStack(AgriItems.crops);
+		return new ItemStack(AgriItems.CROPS);
 	}
 
 	/**

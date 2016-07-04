@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.items;
 
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.WeightedRandom;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,6 +29,13 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriWeedable;
  * Tool to uproot weeds. Comes in a wooden and iron variant.
  */
 public class ItemHandRake extends ItemBase implements IAgriRakeItem {
+	
+	@AgriConfigurable(
+			category = AgriConfigCategory.TOOLS,
+			key = "Enable Hand Rake",
+			comment = "Set to false to disable the Hand Rake."
+	)
+	public static boolean enableHandRake = true;
 
 	private static final int WOOD_VARIANT_META = 0;
 	private static final int IRON_VARIANT_META = 1;
@@ -88,6 +97,11 @@ public class ItemHandRake extends ItemBase implements IAgriRakeItem {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
 		list.add(AgriCore.getTranslator().translate("agricraft_tooltip.handRake"));
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enableHandRake;
 	}
 
 	public static final class ItemDropRegistry {

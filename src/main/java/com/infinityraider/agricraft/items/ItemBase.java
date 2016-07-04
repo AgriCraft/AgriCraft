@@ -60,5 +60,9 @@ public abstract class ItemBase<I extends ItemBase> extends Item implements ICust
 		// Ain't nothing to see here!
 		return new ArrayList<>();
 	}
+	
+	public boolean isEnabled() {
+		return true;
+	}
 
 }

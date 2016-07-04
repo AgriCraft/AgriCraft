@@ -1,86 +1,59 @@
 package com.infinityraider.agricraft.init;
 
-import com.agricraft.agricore.config.AgriConfigCategory;
-import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.items.*;
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.log.AgriLogger;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.agricraft.agricore.util.ReflectionHelper;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;
-import net.minecraft.item.Item;
 
 public class AgriItems {
 
-	@AgriConfigurable(
-			category = AgriConfigCategory.TOOLS,
-			key = "Enable Hand Rake",
-			comment = "Set to false to disable the Hand Rake."
-	)
-	public static boolean enableHandRake = true;
-
-	@AgriConfigurable(
-			category = AgriConfigCategory.TOOLS,
-			key = "Enable Trowel",
-			comment = "Set to false to disable the Trowel."
-	)
-	public static boolean enableTrowel = true;
-
-	@AgriConfigurable(
-			category = AgriConfigCategory.TOOLS,
-			key = "Enable Magnifying Glass",
-			comment = "Set to false to disable the Magnifying Glass."
-	)
-	public static boolean enableMagnifyingGlass = true;
-
-	@AgriConfigurable(
-			category = AgriConfigCategory.TOOLS,
-			key = "Enable Clipper",
-			comment = "Set to false to disable the Clipper."
-	)
-	public static boolean enableClipper = true;
-	
-	static {
-		AgriCore.getConfig().addConfigurable(AgriItems.class);
-	}
-
-	public static Item crops;
-	public static Item journal;
-	public static ItemTrowel trowel;
-	public static Item magnifyingGlass;
-	public static Item debugItem;
-	public static Item handRake;
-	public static Item clipper;
-	public static final ItemClipping clipping = new ItemClipping();
-	public static final ItemAgriCraftSeed seed = new ItemAgriCraftSeed();
-	public static final ItemNugget nugget = new ItemNugget();
+	public static final ItemBase CROPS = new ItemCrop();
+	public static final ItemBase JOURNAL = new ItemJournal();
+	public static final ItemBase TROWEL = new ItemTrowel();
+	public static final ItemBase DEBUGGER = new ItemDebugger();
+	public static final ItemBase HAND_RAKE = new ItemHandRake();
+	public static final ItemBase CLIPPER = new ItemClipper();
+	public static final ItemBase AGRI_CLIPPING = new ItemClipping();
+	public static final ItemBase AGRI_SEED = new ItemAgriCraftSeed();
+	public static final ItemBase AGRI_NUGGET = new ItemNugget();
+	public static final ItemBase MAGNIFYING_GLASS = new ItemMagnifyingGlass();
 
 	public static void init() {
-		crops = new ItemCrop();
-		journal = new ItemJournal();
-		magnifyingGlass = new ItemMagnifyingGlass();
-		debugItem = new ItemDebugger();
-		if (enableTrowel) {
-			trowel = new ItemTrowel();
-		}
-		if (enableHandRake) {
-			handRake = new ItemHandRake();
-		}
-		if (enableClipper) {
-			clipper = new ItemClipper();
-		}
-		
+
+		// Fetch the logger
+		final AgriLogger logger = AgriCore.getLogger("AgriCraft-Items");
+
+		// Notify Log
+		logger.debug("Starting Item Initialization...");
+
 		// Register seed handler.
-		SeedRegistry.getInstance().registerAdapter(seed);
-		
-		// Register the Items
+		SeedRegistry.getInstance().registerAdapter((ItemAgriCraftSeed) AGRI_SEED);
+
+		// Configure the Items
+		logger.debug("Starting Item Configuration...");
 		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (ItemBase item) -> {
-			AgriCore.getLogger("AgriCraft").debug("Registering Item: {0}", item.internalName);
-			RegisterHelper.registerItem(item, item.internalName);
-			AgriCraftJEIPlugin.registerNbtIgnore(item, item.getIgnoredNBT());
+			logger.debug("Configuring Item: {0}", item.internalName);
+			AgriCore.getConfig().addConfigurable(item);
 		});
-		
-		AgriCore.getLogger("AgriCraft").debug("Items Registered");
+		logger.debug("Finished Item Configuration!");
+
+		// Register the Items
+		logger.debug("Starting Item Registration...");
+		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (ItemBase item) -> {
+			if (item.isEnabled()) {
+				logger.debug("Registering Item: {0}", item.internalName);
+				RegisterHelper.registerItem(item, item.internalName);
+				AgriCraftJEIPlugin.registerNbtIgnore(item, item.getIgnoredNBT());
+			}
+		});
+		logger.debug("Finished Item Registration!");
+
+		// Notify Log
+		AgriCore.getLogger("AgriCraft").debug("Finished Item Initialization!");
+
 	}
 
 }

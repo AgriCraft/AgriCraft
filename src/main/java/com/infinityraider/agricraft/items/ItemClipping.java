@@ -12,6 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -55,11 +56,11 @@ public class ItemClipping extends ItemBase {
 		return (seed == null ? "Generic" : seed.getPlant().getPlantName()) + " " + text;
 	}
 	
-	public ItemStack getClipping(AgriSeed seed, int amount) {
+	public static ItemStack getClipping(AgriSeed seed, int amount) {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(AgriNBT.SEED, seed.getPlant().getId());
 		seed.getStat().writeToNBT(tag);
-		ItemStack stack = new ItemStack(this);
+		ItemStack stack = new ItemStack(AgriItems.AGRI_CLIPPING);
 		stack.setTagCompound(tag);
 		return stack;
 	}

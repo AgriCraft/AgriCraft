@@ -45,7 +45,7 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 				new ProduceRecipeHandler()
 		);
 		
-		registry.addRecipeCategoryCraftingItem(new ItemStack(AgriItems.crops), CATEGORY_MUTATION, CATEGORY_PRODUCE);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(AgriItems.CROPS), CATEGORY_MUTATION, CATEGORY_PRODUCE);
 
 		for (Map.Entry<Item, String[]> nbt : nbtIgnores.entrySet()) {
 			jeiHelpers.getNbtIgnoreList().ignoreNbtTagNames(nbt.getKey(), nbt.getValue());

@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.items;
 
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -20,6 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemMagnifyingGlass extends ItemBase {
+	
+	@AgriConfigurable(
+			category = AgriConfigCategory.TOOLS,
+			key = "Enable Magnifying Glass",
+			comment = "Set to false to disable the Magnifying Glass."
+	)
+	public static boolean enableMagnifyingGlass = true;
 
 	public ItemMagnifyingGlass() {
 		super("magnifying_glass", true);
@@ -57,6 +66,11 @@ public class ItemMagnifyingGlass extends ItemBase {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
 		list.add(AgriCore.getTranslator().translate("agricraft_tooltip.magnifyingGlass"));
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enableMagnifyingGlass;
 	}
 
 }

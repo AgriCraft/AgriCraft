@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.items;
 
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +18,13 @@ import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
 
 public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
+	
+	@AgriConfigurable(
+			category = AgriConfigCategory.TOOLS,
+			key = "Enable Trowel",
+			comment = "Set to false to disable the Trowel."
+	)
+	public static boolean enableTrowel = true;
 
 	public ItemTrowel() {
 		super("trowel", true, "", "full");
@@ -61,6 +70,11 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 			}
 		}
 		return EnumActionResult.PASS;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enableTrowel;
 	}
 
 }

@@ -126,7 +126,7 @@ public class APIimplv1 implements APIv1 {
 
     @Override
     public boolean isRakeRequiredForWeeding() {
-        return AgriItems.enableHandRake;
+        return AgriItems.HAND_RAKE.isEnabled();
     }
 
     @Override

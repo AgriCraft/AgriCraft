@@ -44,41 +44,41 @@ public class AgriRecipes {
 
 	public static void init() {
 		//crop item
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.crops, AgriCraftConfig.cropsPerCraft), "ss", "ss", 's', "stickWood"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.CROPS, AgriCraftConfig.cropsPerCraft), "ss", "ss", 's', "stickWood"));
 		if (AgriCraftConfig.cropsPerCraft == 3) {
-			GameRegistry.addShapelessRecipe(new ItemStack(Items.STICK, 6 / AgriCraftConfig.cropsPerCraft), new ItemStack(AgriItems.crops), new ItemStack(AgriItems.crops));
+			GameRegistry.addShapelessRecipe(new ItemStack(Items.STICK, 6 / AgriCraftConfig.cropsPerCraft), new ItemStack(AgriItems.CROPS), new ItemStack(AgriItems.CROPS));
 		} else {
-			GameRegistry.addShapelessRecipe(new ItemStack(Items.STICK, 4 / AgriCraftConfig.cropsPerCraft), new ItemStack(AgriItems.crops));
+			GameRegistry.addShapelessRecipe(new ItemStack(Items.STICK, 4 / AgriCraftConfig.cropsPerCraft), new ItemStack(AgriItems.CROPS));
 		}
 		//seed analyzer
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriBlocks.blockSeedAnalyzer, 1), "sgs", " bs", "pwp", 's', "stickWood", 'g', "paneGlass", 'b', Blocks.STONE_SLAB, 'p', "plankWood", 'w', "slabWood"));
 		//journal
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.journal, 1), "csc", "sbs", "csc", 'c', AgriItems.crops, 's', "listAllseed", 'b', Items.WRITABLE_BOOK));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.JOURNAL, 1), "csc", "sbs", "csc", 'c', AgriItems.CROPS, 's', "listAllseed", 'b', Items.WRITABLE_BOOK));
 		GameRegistry.addRecipe(new RecipeJournal());
 		//trowel
-		if (AgriItems.enableTrowel && AgriItems.trowel != null) {
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.trowel, 1, 0), "  s", "ii ", 's', "stickWood", 'i', "ingotIron"));
+		if (AgriItems.TROWEL.isEnabled()) {
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.TROWEL, 1, 0), "  s", "ii ", 's', "stickWood", 'i', "ingotIron"));
 		}
 		//magnifying glass
-		if (AgriItems.enableMagnifyingGlass && AgriItems.magnifyingGlass != null) {
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.magnifyingGlass, 1, 0), "sgs", " s ", " s ", 's', "stickWood", 'g', "paneGlass"));
+		if (AgriItems.MAGNIFYING_GLASS.isEnabled()) {
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.MAGNIFYING_GLASS, 1, 0), "sgs", " s ", " s ", 's', "stickWood", 'g', "paneGlass"));
 		}
 		//hand rakes
-		if (AgriItems.enableHandRake && AgriItems.handRake != null) {
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.handRake, 1, 0), "fs", 'f', Blocks.OAK_FENCE, 's', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.handRake, 1, 0), "fs", 'f', Blocks.BIRCH_FENCE, 's', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.handRake, 1, 0), "fs", 'f', Blocks.SPRUCE_FENCE, 's', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.handRake, 1, 0), "fs", 'f', Blocks.ACACIA_FENCE, 's', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.handRake, 1, 0), "fs", 'f', Blocks.JUNGLE_FENCE, 's', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.handRake, 1, 0), "fs", 'f', Blocks.DARK_OAK_FENCE, 's', "stickWood"));
+		if (AgriItems.HAND_RAKE.isEnabled()) {
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', Blocks.OAK_FENCE, 's', "stickWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', Blocks.BIRCH_FENCE, 's', "stickWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', Blocks.SPRUCE_FENCE, 's', "stickWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', Blocks.ACACIA_FENCE, 's', "stickWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', Blocks.JUNGLE_FENCE, 's', "stickWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', Blocks.DARK_OAK_FENCE, 's', "stickWood"));
 			if (AgriBlocks.enableFences && AgriBlocks.blockFence != null) {
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.handRake, 1, 0), "fs", 'f', AgriBlocks.blockFence, 's', "stickWood"));
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 0), "fs", 'f', AgriBlocks.blockFence, 's', "stickWood"));
 			}
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.handRake, 1, 1), "fs", 'f', Blocks.IRON_BARS, 's', "stickWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.HAND_RAKE, 1, 1), "fs", 'f', Blocks.IRON_BARS, 's', "stickWood"));
 		}
 		//clipper
-		if (AgriItems.enableClipper && AgriItems.clipper != null) {
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.clipper, 1, 0), " i ", "scn", " s ", 'i', "ingotIron", 's', "stickWood", 'c', new ItemStack(Items.SHEARS)));
+		if (AgriItems.CLIPPER.isEnabled()) {
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.CLIPPER, 1, 0), " i ", "scn", " s ", 'i', "ingotIron", 's', "stickWood", 'c', new ItemStack(Items.SHEARS)));
 		}
 		//peripheral
 		// To be done elsewhere.
@@ -93,7 +93,7 @@ public class AgriRecipes {
 		}
 		//fruits
 		for (AgriNuggetType type : AgriNuggetType.values()) {
-			ItemStack nugget = new ItemStack(AgriItems.nugget, 9, type.ordinal());
+			ItemStack nugget = new ItemStack(AgriItems.AGRI_NUGGET, 9, type.ordinal());
 			ItemStack ingot = OreDictHelper.getIngot(type.ingot);
 			AgriCore.getLogger("AgriCraft").debug("Registering Nugget: {0} For: {1}", type.nugget, type.ingot);
 			if (ingot != null) {

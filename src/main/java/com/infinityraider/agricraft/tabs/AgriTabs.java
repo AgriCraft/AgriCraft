@@ -10,14 +10,14 @@ public class AgriTabs {
 	public static final CreativeTabs TAB_AGRICRAFT = new CreativeTabs(Reference.MOD_ID) {
 		@Override
 		public Item getTabIconItem() {
-			return AgriItems.debugItem;
+			return AgriItems.DEBUGGER;
 		}
 	};
 	
 	public static final CreativeTabs TAB_AGRICRAFT_SEED = new CreativeTabs(Reference.MOD_ID + "_seeds") {
 		@Override
 		public Item getTabIconItem() {
-			return AgriItems.seed;
+			return AgriItems.AGRI_SEED;
 		}
 	};
 	
