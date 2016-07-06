@@ -2,12 +2,10 @@
  */
 package com.infinityraider.agricraft.api.seed;
 
-import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.plant.IAgriPlantAcceptor;
 import com.infinityraider.agricraft.api.stat.IAgriStatAcceptor;
-import com.infinityraider.agricraft.api.AgriAPI;
 
 /**
  *

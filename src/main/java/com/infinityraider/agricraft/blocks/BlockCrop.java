@@ -45,7 +45,6 @@ import net.minecraft.block.Block;
 import com.infinityraider.agricraft.api.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.apiimpl.AgriApiImpl;
 
 /**
  * The most important block in the mod.

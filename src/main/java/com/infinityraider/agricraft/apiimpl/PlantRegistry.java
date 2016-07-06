@@ -16,6 +16,8 @@ import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
  */
 public class PlantRegistry implements IAgriPlantRegistry {
 	
+	private static final IAgriPlantRegistry INSTANCE = new PlantRegistry();
+	
 	private final Map<String, IAgriPlant> plants;
 
 	public PlantRegistry() {
@@ -23,7 +25,7 @@ public class PlantRegistry implements IAgriPlantRegistry {
 	}
 	
 	public static IAgriPlantRegistry getInstance() {
-		return AgriApiImpl.getInstance().getPlantRegistry();
+		return INSTANCE;
 	}
 
 	@Override

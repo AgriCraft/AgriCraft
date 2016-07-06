@@ -11,8 +11,10 @@ import com.infinityraider.agricraft.api.seed.AgriSeed;
  */
 public class SeedRegistry {
 	
+	private static final IAgriAdapterRegistry<AgriSeed> INSTANCE = new AdapterRegistry<>();
+	
 	public static IAgriAdapterRegistry<AgriSeed> getInstance() {
-		return AgriApiImpl.getInstance().getSeedRegistry();
+		return INSTANCE;
 	}
 
 }

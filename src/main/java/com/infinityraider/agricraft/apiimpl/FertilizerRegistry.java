@@ -19,8 +19,14 @@ import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
  */
 public class FertilizerRegistry {
 	
+	private static final IAgriAdapterRegistry<IAgriFertilizer> INSTANCE = new AdapterRegistry<>();
+	
+	static {
+		INSTANCE.registerAdapter(new BonemealWrapper());
+	}
+	
 	public static IAgriAdapterRegistry<IAgriFertilizer> getInstance() {
-		return AgriApiImpl.getInstance().getFertilizerRegistry();
+		return INSTANCE;
 	}
 	
 	public static class BonemealWrapper implements IAgriFertilizer, IAgriAdapter<IAgriFertilizer> {
