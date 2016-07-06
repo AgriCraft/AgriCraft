@@ -2,6 +2,8 @@
  */
 package com.infinityraider.agricraft.utility;
 
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
 import java.util.List;
@@ -28,21 +30,28 @@ public class ModelErrorSuppressor {
 			"agricraftitem"
 	);
 
+	@AgriConfigurable(key = "Suppress Model Errors", category = AgriConfigCategory.DEBUG, comment = "Set to true to prevent any annoying AgriCraft model loading errors from spamming the log.")
+	private static boolean supressErrors = true;
+
 	@SubscribeEvent
 	public void onModelBakePost(ModelBakeEvent event) {
+		if (supressErrors) {
+			Map<ResourceLocation, Exception> modelErrors = (Map<ResourceLocation, Exception>) ReflectionHelper.getPrivateValue(ModelLoader.class, event.getModelLoader(), "loadingExceptions");
+			Set<ModelResourceLocation> missingVariants = (Set<ModelResourceLocation>) ReflectionHelper.getPrivateValue(ModelLoader.class, event.getModelLoader(), "missingVariants");
 
-		Map<ResourceLocation, Exception> modelErrors = (Map<ResourceLocation, Exception>) ReflectionHelper.getPrivateValue(ModelLoader.class, event.getModelLoader(), "loadingExceptions");
-		Set<ModelResourceLocation> missingVariants = (Set<ModelResourceLocation>) ReflectionHelper.getPrivateValue(ModelLoader.class, event.getModelLoader(), "missingVariants");
+			List<ResourceLocation> errored = modelErrors.keySet().stream().filter((r) -> IGNORES.contains(r.getResourceDomain())).collect(Collectors.toList());
+			List<ResourceLocation> missing = missingVariants.stream().filter((r) -> IGNORES.contains(r.getResourceDomain())).collect(Collectors.toList());
 
-		List<ResourceLocation> errored = modelErrors.keySet().stream().filter((r) -> IGNORES.contains(r.getResourceDomain())).collect(Collectors.toList());
-		List<ResourceLocation> missing = missingVariants.stream().filter((r) -> IGNORES.contains(r.getResourceDomain())).collect(Collectors.toList());
-		
-		errored.forEach(modelErrors::remove);
-		missing.forEach(missingVariants::remove);
+			errored.forEach(modelErrors::remove);
+			missing.forEach(missingVariants::remove);
 
-		AgriCore.getLogger("AgriCraft").info("Suppressed {0} Model Loading Errors!", errored.size());
-		AgriCore.getLogger("AgriCraft").info("Suppressed {0} Missing Model Varients!", missing.size());
+			AgriCore.getLogger("AgriCraft").info("Suppressed {0} Model Loading Errors!", errored.size());
+			AgriCore.getLogger("AgriCraft").info("Suppressed {0} Missing Model Variants!", missing.size());
+		}
+	}
 
+	static {
+		AgriCore.getConfig().addConfigurable(ModelErrorSuppressor.class);
 	}
 
 }

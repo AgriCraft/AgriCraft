@@ -8,11 +8,11 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 /**
  * An interface for managing mutations.
- * 
+ *
  * @author AgriCraft Team
  */
 public interface IAgriMutationRegistry {
-	
+
 	/**
 	 * Gets a list of all mutations currently registered Mutations are populated
 	 * onServerAboutToStartEvent, so any calls before that will return null
@@ -36,12 +36,13 @@ public interface IAgriMutationRegistry {
 	/**
 	 * Registers a new mutation: result = parent1 + parent2
 	 *
-	 * @param result ItemStack containing the resulting seed of the mutation
-	 * @param parent1 ItemStack containing one parent for the mutation
-	 * @param parent2 ItemStack containing the other parent for the mutation
+	 * @param chance the chance of the mutation occurring as a normalized
+	 * p-value.
+	 * @param childId PlantID for the child plant;
+	 * @param parentIds PlantIDs for the parent plants.
 	 * @return True if successful
 	 */
-	boolean addMutation(double chance, @Nonnull IAgriPlant child, @Nonnull IAgriPlant... parents);
+	boolean addMutation(double chance, @Nonnull String childId, @Nonnull String... parentIds);
 
 	/**
 	 * Removes all mutations that give this stack as a result
@@ -51,5 +52,5 @@ public interface IAgriMutationRegistry {
 	 * @return True if successful
 	 */
 	boolean removeMutation(IAgriPlant result);
-	
+
 }

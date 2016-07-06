@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
-import com.infinityraider.agricraft.compat.AgriCompatHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
@@ -400,7 +399,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		IBlockState state = getWorld().getBlockState(getPos());
 		if (hasWeed() || !plant.isMature(getWorld(), pos, state)) {
 			setGrowthStage(meta + 1);
-			AgriCompatHandler.getInstance().announceGrowthTick(getWorld(), getPos(), state);
+			/* TODO: Annouce Growth Tick Via API! */
 		}
 	}
 

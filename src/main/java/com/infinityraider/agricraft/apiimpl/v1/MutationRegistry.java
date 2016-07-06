@@ -36,7 +36,18 @@ public class MutationRegistry implements IAgriMutationRegistry {
 	}
 
 	@Override
-	public boolean addMutation(double chance, IAgriPlant child, IAgriPlant... parents) {
+	public boolean addMutation(double chance, String childId, String... parentIds) {
+		IAgriPlant child = PlantRegistry.getInstance().getPlant(childId);
+		if (child == null) {
+			return false;
+		}
+		IAgriPlant[] parents = new IAgriPlant[parentIds.length];
+		for (int i = 0; i < parentIds.length; i++) {
+			parents[i] = PlantRegistry.getInstance().getPlant(parentIds[i]);
+			if (parents[i] == null) {
+				return false;
+			}
+		}
 		return MutationHandler.add(new Mutation(chance, child, parents));
 	}
 

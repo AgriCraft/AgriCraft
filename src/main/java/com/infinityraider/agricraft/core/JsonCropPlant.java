@@ -1,7 +1,7 @@
 /*
  * Vanilla Crop Class.
  */
-package com.infinityraider.agricraft.compat.json;
+package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;

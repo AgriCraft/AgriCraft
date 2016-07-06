@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.compat.AgriCompatHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriItems;
@@ -46,6 +45,7 @@ import net.minecraft.block.Block;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.apiimpl.v1.APIimplv1;
 
 /**
  * The most important block in the mod.
@@ -123,7 +123,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 		if (crop.hasPlant() || crop.hasWeed()) {
-			if (AgriCompatHandler.getInstance().allowGrowthTick(world, pos, this, crop, rand)) {
+			if (/* TODO!!! APIimplv1.getInstance().allowGrowthTick() */ true) {
 				if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds) {
 					crop.spreadWeed(rand);
 				} else if (crop.isFertile()) {
@@ -273,9 +273,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} //check to see if the player clicked with crops (crosscrop attempt)
 			else if (heldItem.getItem() == AgriItems.CROPS) {
 				this.setCrossCrop(world, pos, state, player, heldItem);
-			} //mod interaction
-			else if (AgriCompatHandler.getInstance().isRightClickHandled(heldItem.getItem())) {
-				return AgriCompatHandler.getInstance().handleRightClick(world, pos, this, crop, player, heldItem);
 			} else {
 				//harvest operation
 				this.harvest(world, pos, state, player, crop);
