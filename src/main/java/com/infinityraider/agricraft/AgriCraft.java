@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft;
 
-import com.infinityraider.agricraft.apiimpl.APISelector;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
@@ -11,8 +10,10 @@ import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.apiimpl.v1.PluginHandler;
-import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
+import com.infinityraider.agricraft.api.AgriAPI;
+import com.infinityraider.agricraft.apiimpl.AgriApiImpl;
+import com.infinityraider.agricraft.apiimpl.PluginHandler;
+import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -20,8 +21,6 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.ArrayList;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  * <p>
@@ -57,6 +56,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 		updateJSON = Reference.UPDATE_URL
 )
 public class AgriCraft {
+	
     @Mod.Instance(Reference.MOD_ID)
     public static AgriCraft instance;
 
@@ -74,7 +74,6 @@ public class AgriCraft {
 		StatRegistry.getInstance().registerAdapter(new PlantStats());
         AgriBlocks.init();
 		AgriItems.init();
-        APISelector.init();
 		PluginHandler.preInit(event);
         proxy.registerRenderers();
         AgriCore.getLogger("AgriCraft").debug("Pre-Initialization Complete");

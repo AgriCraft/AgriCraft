@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.container;
 
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;

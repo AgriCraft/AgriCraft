@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
+import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
@@ -23,16 +23,17 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.utility.WorldHelper;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
-import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
+import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
 
@@ -415,7 +416,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	 */
 	public void applyCrossOverResult(CrossOverResult result) {
 		crossCrop = false;
-		this.setSeed(result.toStack());
+		this.setSeed(new AgriSeed(result.getPlant(), result.getStats()));
 	}
 
 	/**

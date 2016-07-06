@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.compat.waila;
 
-import com.infinityraider.agricraft.api.v1.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.IAgriPlugin;
+import com.infinityraider.agricraft.api.AgriPlugin;
+import com.infinityraider.agricraft.api.IAgriPlugin;
 import com.infinityraider.agricraft.blocks.BlockBase;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
@@ -16,7 +16,7 @@ public class WailaPlugin implements IAgriPlugin {
 	}
 	
     @Override
-    public void init() {
+    public void initPlugin() {
         FMLInterModComms.sendMessage("Waila", "register", this.getClass().getCanonicalName() + ".initWaila");
     }
 	

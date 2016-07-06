@@ -32,20 +32,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.v1.FertilizerRegistry;
-import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.FertilizerRegistry;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.reference.PropertyCropPlant;
 import net.minecraft.client.particle.ParticleManager;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import net.minecraft.block.Block;
-import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.apiimpl.v1.APIimplv1;
+import com.infinityraider.agricraft.api.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.apiimpl.AgriApiImpl;
 
 /**
  * The most important block in the mod.
@@ -226,7 +226,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				return false;
 			}
 			//get AgriCraftNBT data from the seeds
-			crop.setSeed(stack);
+			crop.setSeed(seed);
 			return true;
 		}
 		return false;

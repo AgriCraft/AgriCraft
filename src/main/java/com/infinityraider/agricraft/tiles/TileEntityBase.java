@@ -15,7 +15,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
 /**

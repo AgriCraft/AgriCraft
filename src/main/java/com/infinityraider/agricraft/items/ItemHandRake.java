@@ -22,8 +22,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
 import net.minecraft.tileentity.TileEntity;
-import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.v1.misc.IAgriWeedable;
+import com.infinityraider.agricraft.api.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.misc.IAgriWeedable;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.

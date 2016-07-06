@@ -4,8 +4,8 @@ import com.google.common.base.Optional;
 import java.util.Collection;
 import java.util.List;
 import net.minecraft.block.properties.PropertyHelper;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.farming.cropplant.CropPlantNone;
 
 /**

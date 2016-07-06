@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.item.ItemStack;
 import com.agricraft.agricore.core.AgriCore;
@@ -9,8 +9,8 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
 
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")

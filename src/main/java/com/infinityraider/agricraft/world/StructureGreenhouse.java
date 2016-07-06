@@ -22,8 +22,8 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.reference.AgriProperties;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {

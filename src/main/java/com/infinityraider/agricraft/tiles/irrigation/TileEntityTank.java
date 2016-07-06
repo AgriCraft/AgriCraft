@@ -4,8 +4,8 @@ import com.infinityraider.agricraft.multiblock.MultiBlockManager;
 import com.infinityraider.agricraft.multiblock.IMultiBlockComponent;
 import com.infinityraider.agricraft.multiblock.IMultiBlockPartData;
 import com.infinityraider.agricraft.multiblock.MultiBlockPartData;
-import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
-import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
+import com.infinityraider.agricraft.api.irrigation.IConnectable;
+import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.network.NetworkWrapper;
@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IAgriDebuggable {

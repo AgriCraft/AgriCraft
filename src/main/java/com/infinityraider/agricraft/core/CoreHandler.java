@@ -10,9 +10,9 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import com.agricraft.agricore.config.AgriConfigAdapter;
-import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
-import com.infinityraider.agricraft.apiimpl.v1.MutationRegistry;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.apiimpl.MutationRegistry;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 
 public final class CoreHandler {

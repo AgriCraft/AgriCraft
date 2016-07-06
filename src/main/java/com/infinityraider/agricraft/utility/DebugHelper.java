@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 
 /**
  * A class to aid in the management of debug data.

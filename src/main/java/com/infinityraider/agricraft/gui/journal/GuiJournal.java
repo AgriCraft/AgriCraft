@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.renderer.GlStateManager;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 
 @SideOnly(Side.CLIENT)
 public class GuiJournal extends GuiScreen {
