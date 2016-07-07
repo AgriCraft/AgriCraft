@@ -61,7 +61,7 @@ public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 	}
 
 	@Override
-	protected Class<? extends ItemBlock> getItemBlockClass() {
+	public Class<? extends ItemBlock> getItemBlockClass() {
 		return null;
 	}
 

@@ -1,17 +1,16 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
-import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
-import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
+import com.infinityraider.agricraft.api.irrigation.IConnectable;
+import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,7 +18,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IAgriDebuggable {
 
@@ -49,7 +49,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	@Override
 	protected final void writeNBT(NBTTagCompound tag) {
 		if (this.lvl > 0) {
-			tag.setInteger(AgriCraftNBT.LEVEL, this.lvl);
+			tag.setInteger(AgriNBT.LEVEL, this.lvl);
 		}
 		writeChannelNBT(tag);
 	}
@@ -59,8 +59,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	//this loads the saved data for the tile entity
 	@Override
 	protected final void readNBT(NBTTagCompound tag) {
-		if (tag.hasKey(AgriCraftNBT.LEVEL)) {
-			this.lvl = tag.getInteger(AgriCraftNBT.LEVEL);
+		if (tag.hasKey(AgriNBT.LEVEL)) {
+			this.lvl = tag.getInteger(AgriNBT.LEVEL);
 		} else {
 			this.lvl = 0;
 		}
@@ -289,6 +289,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	public void addDisplayInfo(List information) {
 		//Required call to super.
 		super.addDisplayInfo(information);
-		information.add(I18n.translateToLocal("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
+		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
 	}
 }

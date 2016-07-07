@@ -7,9 +7,9 @@ import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.List;
 import net.minecraft.item.ItemStack;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 
 /**
  *
@@ -21,13 +21,13 @@ public final class MethodUtilities {
 		if (journal == null || journal.getItem() == null || !(journal.getItem() instanceof ItemJournal)) {
 			return false;
 		}
-		AgriSeed s = SeedRegistry.getInstance().getSeed(seed);
+		AgriSeed s = SeedRegistry.getInstance().getValue(seed);
 		return s != null && ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, s.getPlant());
 	}
 
 	public static IAgriPlant getCropPlant(ItemStack specimen) {
 		if (specimen != null || specimen.getItem() != null) {
-			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
+			AgriSeed seed = SeedRegistry.getInstance().getValue(specimen);
 			if (seed != null) {
 				return seed.getPlant();
 			}

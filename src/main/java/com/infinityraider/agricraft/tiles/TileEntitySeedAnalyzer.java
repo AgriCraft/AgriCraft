@@ -1,8 +1,7 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemJournal;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -10,14 +9,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
+import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.utility.StackHelper;
 
 public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
 
@@ -47,26 +48,26 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 		if (this.specimen != null && this.specimen.getItem() != null) {
 			NBTTagCompound seedTag = new NBTTagCompound();
 			this.specimen.writeToNBT(seedTag);
-			tag.setTag(AgriCraftNBT.SEED, seedTag);
+			tag.setTag(AgriNBT.SEED, seedTag);
 		}
 		if (this.journal != null && this.journal.getItem() != null) {
 			NBTTagCompound journalTag = new NBTTagCompound();
 			this.journal.writeToNBT(journalTag);
-			tag.setTag(AgriCraftItems.journal.getUnlocalizedName(), journalTag);
+			tag.setTag(AgriItems.JOURNAL.getUnlocalizedName(), journalTag);
 		}
 		tag.setInteger("progress", this.progress);
 	}
 
 	@Override
 	public void readTileNBT(NBTTagCompound tag) {
-		if (tag.hasKey(AgriCraftNBT.SEED)) {
-			this.specimen = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriCraftNBT.SEED));
+		if (tag.hasKey(AgriNBT.SEED)) {
+			this.specimen = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriNBT.SEED));
 		} else {
 			//Not certain this is required... Unsure if networking thing?
 			this.specimen = null;
 		}
-		if (tag.hasKey(AgriCraftItems.journal.getUnlocalizedName())) {
-			this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriCraftItems.journal.getUnlocalizedName()));
+		if (tag.hasKey(AgriItems.JOURNAL.getUnlocalizedName())) {
+			this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriItems.JOURNAL.getUnlocalizedName()));
 		} else {
 			this.journal = null;
 		}
@@ -99,7 +100,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return if the analyze slot contains a <em>valid</em> SEED.
 	 */
 	public final boolean hasSeed() {
-		return SeedRegistry.getInstance().isSeed(specimen);
+		return SeedRegistry.getInstance().hasAdapter(specimen);
 	}
 
 	public final void setProgress(int value) {
@@ -117,7 +118,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 */
 	public final int maxProgress() {
 		if (this.specimen != null) {
-			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
+			AgriSeed seed = SeedRegistry.getInstance().getValue(specimen);
 			return seed == null ? 0 : seed.getPlant().getTier() * 20;
 		} else {
 			return 0;
@@ -131,7 +132,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 * @return if the stack is valid.
 	 */
 	public static boolean isValid(ItemStack stack) {
-		return SeedRegistry.getInstance().isSeed(stack);
+		return SeedRegistry.getInstance().hasAdapter(stack);
 	}
 
 	/**
@@ -141,7 +142,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	 */
 	public final boolean isSpecimenAnalyzed() {
 		if (this.specimen != null) {
-			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
+			AgriSeed seed = SeedRegistry.getInstance().getValue(specimen);
 			return seed != null && seed.getStat().isAnalyzed();
 		}
 		return false;
@@ -179,9 +180,9 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	public void analyze() {
 		//analyze the SEED
 		if (this.hasSeed()) {
-			AgriSeed seed = SeedRegistry.getInstance().getSeed(specimen);
-			seed.getStat().analyze();
-			seed.getStat().writeToNBT(this.specimen.getTagCompound());
+			AgriSeed seed = SeedRegistry.getInstance().getValue(specimen);
+			seed = seed.withStat(seed.getStat().withAnalyzed(true));
+			seed.getStat().writeToNBT(StackHelper.getTag(specimen));
 			if (this.hasJournal()) {
 				((ItemJournal) journal.getItem()).addEntry(journal, seed.getPlant());
 			}
@@ -347,6 +348,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
 	/**
 	 * Opens the INVENTORY. (Empty method).
+	 * 
+	 * @param player
 	 */
 	@Override
 	public void openInventory(EntityPlayer player) {
@@ -354,6 +357,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
 	/**
 	 * Closes the INVENTORY. (Empty method).
+	 * 
+	 * @param player
 	 */
 	@Override
 	public void closeInventory(EntityPlayer player) {
@@ -361,6 +366,10 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
 	/**
 	 * Checks if a stack is valid for a slot.
+	 * 
+	 * @param slot
+	 * @param stack
+	 * @return if the item is valid.
 	 */
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
@@ -419,6 +428,6 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public void addDisplayInfo(List information) {
-		information.add(I18n.translateToLocal("agricraft_tooltip.analyzer") + ": " + (this.hasSpecimen() ? specimen.getDisplayName() : I18n.translateToLocal("agricraft_tooltip.none")));
+		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.analyzer") + ": " + (this.hasSpecimen() ? specimen.getDisplayName() : AgriCore.getTranslator().translate("agricraft_tooltip.none")));
 	}
 }

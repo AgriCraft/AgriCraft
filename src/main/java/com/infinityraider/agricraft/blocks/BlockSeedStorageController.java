@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.renderers.blocks.IBlockRenderingHandler;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorageController;
@@ -8,7 +9,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -37,14 +37,6 @@ public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedSt
         return true;
     }
 
-	/* TODO!!!
-    @Override
-    public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
-        super.onBlockEventReceived(world, pos, state, id, data);
-        TileEntity tileentity = world.getTileEntity(pos);
-        return tileentity != null && tileentity.receiveClientEvent(id, data);
-    }*/
-
     @Override
     protected IProperty[] getPropertyArray() {
         return new IProperty[0];
@@ -58,6 +50,11 @@ public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedSt
     @Override
 	public IBlockRenderingHandler<TileEntitySeedStorageController> getRenderer() {
 		return null;
+	}
+	
+	@Override
+	public boolean isEnabled() {
+		return AgriCraftConfig.disableSeedWarehouse;
 	}
 
 }

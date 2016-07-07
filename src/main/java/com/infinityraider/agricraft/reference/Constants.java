@@ -104,12 +104,4 @@ public interface Constants {
 	 */
 	float DEFAULT_MUTATION_CHANCE = 0.2F;
 
-	//constants for positioning item textures on the NEI recipe
-	int nei_X_parent1 = 44;
-	int nei_X_parent2 = 106;
-	int nei_X_result = 75;
-	int nei_Y_seeds = 21;
-	int nei_Y_soil = 47;
-	int nei_Y_base = 68;
-
 }

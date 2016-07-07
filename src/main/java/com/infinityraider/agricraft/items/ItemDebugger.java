@@ -59,8 +59,4 @@ public class ItemDebugger extends ItemBase {
 		return EnumActionResult.PASS;
 	}
 
-	static {
-		AgriCore.getConfig().addConfigurable(ItemDebugger.class);
-	}
-
 }

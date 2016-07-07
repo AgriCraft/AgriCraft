@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.blocks.ItemBlockGrate;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockGrate;
@@ -28,7 +29,7 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 	}
 
 	@Override
-	protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+	public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
 		return ItemBlockGrate.class;
 	}
 
@@ -41,7 +42,6 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 	protected IProperty[] getPropertyArray() {
 		return new IProperty[0];
 	}
-
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -110,4 +110,10 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 		}
 		return new AxisAlignedBB(b[0] + pos.getX(), b[1] + pos.getY(), b[2] + pos.getZ(), b[3] + pos.getX(), b[4] + pos.getY(), b[5] + pos.getZ());
 	}
+
+	@Override
+	public boolean isEnabled() {
+		return AgriCraftConfig.enableGrates;
+	}
+
 }

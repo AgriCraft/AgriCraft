@@ -2,7 +2,7 @@
  */
 package com.infinityraider.agricraft.utility;
 
-import javax.annotation.Nonnull;
+import com.agricraft.agricore.util.TypeHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -12,19 +12,10 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public final class StackHelper {
 
-	public static boolean isValid(Class itemClass, ItemStack... stacks) {
-		for (ItemStack stack : stacks) {
-			if (!isValid(itemClass, stack)) {
-				return false;
-			}
-		}
-		return true;
+	public static boolean isValid(ItemStack stack) {
+		return stack != null && stack.getItem() != null;
 	}
-
-	public static boolean isValid(Class itemClass, ItemStack stack) {
-		return stack != null && itemClass.isInstance(stack.getItem());
-	}
-
+	
 	public static boolean isValid(ItemStack... stacks) {
 		for (ItemStack stack : stacks) {
 			if (!isValid(stack)) {
@@ -33,24 +24,27 @@ public final class StackHelper {
 		}
 		return true;
 	}
-
-	public static boolean isValid(ItemStack stack) {
-		return stack != null && stack.getItem() != null;
+	
+	public static boolean isValid(ItemStack stack, Class... itemClasses) {
+		return isValid(stack) && TypeHelper.isAllTypes(stack.getItem(), itemClasses);
 	}
 
 	public static boolean hasTag(ItemStack stack) {
-		return stack != null && stack.hasTagCompound();
+		return isValid(stack) && stack.hasTagCompound();
 	}
 
 	public static boolean hasKey(ItemStack stack, String... keys) {
-		if (hasTag(stack)) {
-			return NBTHelper.hasKey(stack.getTagCompound(), keys);
-		}
-		return false;
+		return hasTag(stack) && NBTHelper.hasKey(stack.getTagCompound(), keys);
 	}
 	
-	public static @Nonnull NBTTagCompound getTag(ItemStack stack) {
-		return hasTag(stack) ? stack.getTagCompound() : new NBTTagCompound();
+	public static NBTTagCompound getTag(ItemStack stack) {
+		if (hasTag(stack)) {
+			return stack.getTagCompound();
+		} else {
+			NBTTagCompound tag = new NBTTagCompound();
+			stack.setTagCompound(tag);
+			return tag;
+		}
 	}
 
 }

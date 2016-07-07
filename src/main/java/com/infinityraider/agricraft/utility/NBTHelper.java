@@ -1,11 +1,12 @@
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import com.infinityraider.agricraft.reference.AgriNBT;
+import javax.annotation.Nullable;
 
 public abstract class NBTHelper {
 
@@ -15,8 +16,8 @@ public abstract class NBTHelper {
 			Block block = (((ItemBlock) stack.getItem()).block);
 			if (block != null) {
 				tag = new NBTTagCompound();
-				tag.setString(AgriCraftNBT.MATERIAL, block.getRegistryName().toString());
-				tag.setInteger(AgriCraftNBT.MATERIAL_META, stack.getMetadata());
+				tag.setString(AgriNBT.MATERIAL, block.getRegistryName().toString());
+				tag.setInteger(AgriNBT.MATERIAL_META, stack.getMetadata());
 			}
 		}
 		return tag;
@@ -46,15 +47,15 @@ public abstract class NBTHelper {
 	}
 
 	public static void addCoordsToNBT(int x, int y, int z, NBTTagCompound tag) {
-		tag.setInteger(AgriCraftNBT.X1, x);
-		tag.setInteger(AgriCraftNBT.Y1, y);
-		tag.setInteger(AgriCraftNBT.Z1, z);
+		tag.setInteger(AgriNBT.X1, x);
+		tag.setInteger(AgriNBT.Y1, y);
+		tag.setInteger(AgriNBT.Z1, z);
 	}
 
 	public static int[] getCoordsFromNBT(NBTTagCompound tag) {
 		int[] coords = null;
-		if (tag.hasKey(AgriCraftNBT.X1) && tag.hasKey(AgriCraftNBT.Y1) && tag.hasKey(AgriCraftNBT.Z1)) {
-			coords = new int[]{tag.getInteger(AgriCraftNBT.X1), tag.getInteger(AgriCraftNBT.Y1), tag.getInteger(AgriCraftNBT.Z1)};
+		if (tag.hasKey(AgriNBT.X1) && tag.hasKey(AgriNBT.Y1) && tag.hasKey(AgriNBT.Z1)) {
+			coords = new int[]{tag.getInteger(AgriNBT.X1), tag.getInteger(AgriNBT.Y1), tag.getInteger(AgriNBT.Z1)};
 		}
 		return coords;
 	}
@@ -115,6 +116,17 @@ public abstract class NBTHelper {
 			}
 		}
 		return true;
+	}
+	
+	@Nullable
+	public static NBTTagCompound asTag(Object obj) {
+		if (obj instanceof ItemStack) {
+			return ((ItemStack) obj).getTagCompound();
+		} else if (obj instanceof NBTTagCompound) {
+			return (NBTTagCompound) obj;
+		} else {
+			return null;
+		}
 	}
 	
 }

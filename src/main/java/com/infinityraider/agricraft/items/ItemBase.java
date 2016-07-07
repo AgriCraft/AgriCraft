@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.tabs.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.renderers.items.IItemRenderingHandler;
 import com.infinityraider.agricraft.renderers.items.ItemRendererRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;
@@ -15,16 +15,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * The root Item class for all AgriCraft Items (excluding blockItems).
  */
 public abstract class ItemBase<I extends ItemBase> extends Item implements ICustomRenderedItem<I> {
-
-	public final String internalName;
-
-	public final boolean isModelVanillia;
 	
 	protected final String[] varients;
+	
+	private final String internalName;
+	private final boolean isModelVanillia;
 
 	public ItemBase(String name, boolean isModelVanillia, String... varients) {
 		super();
-		this.setCreativeTab(AgriCraftTab.agriCraftTab);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		this.setMaxStackSize(64);
 		this.internalName = name;
 		this.isModelVanillia = isModelVanillia;
@@ -33,6 +32,10 @@ public abstract class ItemBase<I extends ItemBase> extends Item implements ICust
 		} else {
 			this.varients = varients;
 		}
+	}
+
+	public String getInternalName() {
+		return internalName;
 	}
 
 	@Override
@@ -59,6 +62,10 @@ public abstract class ItemBase<I extends ItemBase> extends Item implements ICust
 	public List<String> getIgnoredNBT() {
 		// Ain't nothing to see here!
 		return new ArrayList<>();
+	}
+	
+	public boolean isEnabled() {
+		return true;
 	}
 
 }

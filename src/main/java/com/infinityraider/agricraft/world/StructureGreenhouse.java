@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.world;
 
 import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
-import com.infinityraider.agricraft.utility.SeedHelper;
+import com.infinityraider.agricraft.utility.WorldGenerationHelper;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
@@ -22,10 +22,9 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.reference.AgriCraftProperties;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.reference.AgriProperties;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	//structure dimensions
@@ -200,13 +199,13 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 		AgriCore.getLogger("AgriCraft").debug("Placing crop at (" + xCoord + "," + yCoord + "," + zCoord + ")");
 		if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
 			BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-			world.setBlockState(pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockCrop.getDefaultState().withProperty(AgriCraftProperties.GROWTHSTAGE, 0), 2);
+			world.setBlockState(pos, com.infinityraider.agricraft.init.AgriBlocks.CROP.getDefaultState().withProperty(AgriProperties.GROWTHSTAGE, 0), 2);
 			TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 			if (crop != null) {
 				if (crosscrop) {
 					crop.setCrossCrop(true);
 				} else {
-					crop.setSeed(SeedHelper.getRandomSeed(world.rand, false, plants));
+					crop.setSeed(WorldGenerationHelper.getRandomSeed(world.rand, false, plants));
 				}
 			}
 			return true;
@@ -222,7 +221,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 		int zCoord = this.getZWithOffset(x, z);
 		if (boundingBox.isVecInside(new Vec3i(xCoord, yCoord, zCoord))) {
 			BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
-			world.setBlockState(pos, com.infinityraider.agricraft.init.AgriCraftBlocks.blockSeedAnalyzer.getDefaultState(), 2);
+			world.setBlockState(pos, com.infinityraider.agricraft.init.AgriBlocks.SEED_ANALYZER.getDefaultState(), 2);
 			TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(pos);
 			if (analyzer != null) {
 				if (direction != null) {

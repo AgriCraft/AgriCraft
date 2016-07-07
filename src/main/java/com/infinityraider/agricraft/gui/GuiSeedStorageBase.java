@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.gui;
 
-import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;
 import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
@@ -12,7 +11,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.apiimpl.StatRegistry;
+import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -55,7 +57,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 	private final int setActiveSeedButtonOffset_Y;
 	private final int seedSlotButtonOffset_X;
 	private final int seedSlotButtonOffset_Y;
-	protected List<Component<PlantStatsStorage>> activeSeeds;
+	protected List<Component<StorageElement>> activeSeeds;
 	protected List<Component<ItemStack>> setActiveSeedButtons;
 
 	public GuiSeedStorageBase(ContainerSeedStorageBase container, int maxVertSlots, int maxHorSlots, int sortButtonX, int sortButtonY, int setActiveSeedButtonsX, int setActiveSeedButtonsY, int seedSlotsX, int seedSlotsY) {
@@ -99,9 +101,9 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 		this.buttonList.clear();
 		int buttonWidth = 60;
 		int buttonHeight = 12;
-		this.buttonList.add(new GuiButton(buttonIdGrowth, this.guiLeft + sortButtonX, this.guiTop + sortButtonY, buttonWidth, buttonHeight, I18n.translateToLocal("agricraft_tooltip.growth")));
-		this.buttonList.add(new GuiButton(buttonIdGain, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + buttonHeight + 1, buttonWidth, buttonHeight, I18n.translateToLocal("agricraft_tooltip.gain")));
-		this.buttonList.add(new GuiButton(buttonIdStrength, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + 2 * (buttonHeight + 1), buttonWidth, buttonHeight, I18n.translateToLocal("agricraft_tooltip.strength")));
+		this.buttonList.add(new GuiButton(buttonIdGrowth, this.guiLeft + sortButtonX, this.guiTop + sortButtonY, buttonWidth, buttonHeight, AgriCore.getTranslator().translate("agricraft_tooltip.growth")));
+		this.buttonList.add(new GuiButton(buttonIdGain, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + buttonHeight + 1, buttonWidth, buttonHeight, AgriCore.getTranslator().translate("agricraft_tooltip.gain")));
+		this.buttonList.add(new GuiButton(buttonIdStrength, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + 2 * (buttonHeight + 1), buttonWidth, buttonHeight, AgriCore.getTranslator().translate("agricraft_tooltip.strength")));
 		this.buttonList.add(new GuiButton(buttonIdLeftEnd, this.guiLeft + sortButtonX, this.guiTop + sortButtonY + 3 * (buttonHeight + 1), -1 + (buttonWidth) / 4, buttonHeight, "<<"));
 		this.buttonList.add(new GuiButton(buttonIdScrollLeft, this.guiLeft + sortButtonX + (buttonWidth) / 4, this.guiTop + sortButtonY + 3 * (buttonHeight + 1), -1 + (buttonWidth) / 4, buttonHeight, "<"));
 		this.buttonList.add(new GuiButton(buttonIdScrollRight, this.guiLeft + sortButtonX + 1 + 2 * (buttonWidth) / 4, this.guiTop + sortButtonY + 3 * (buttonHeight + 1), -1 + (buttonWidth) / 4, buttonHeight, ">"));
@@ -131,7 +133,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 			this.sortByStat(list);
 			for (int i = scrollPositionHorizontal; i < Math.min(list.size(), scrollPositionHorizontal + maxHorSlots); i++) {
 				SeedStorageSlot slot = list.get(i);
-				PlantStatsStorage stats = new PlantStatsStorage(slot.getId(), slot.getStack(this.activeSeed, this.activeMeta));
+				StorageElement stats = new StorageElement(slot.getId(), slot.getStack(this.activeSeed, this.activeMeta));
 				activeSeeds.add(new Component<>(stats, this.guiLeft + seedSlotButtonOffset_X + (i - scrollPositionHorizontal) * 16, this.guiTop + seedSlotButtonOffset_Y, 16, 16));
 			}
 		}
@@ -192,9 +194,9 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 		}
 		//click to get SEED out of the storage
 		if (this.hasActiveSeed()) {
-			for (Component<PlantStatsStorage> component : activeSeeds) {
+			for (Component<StorageElement> component : activeSeeds) {
 				if (component.isOverComponent(x, y)) {
-					PlantStatsStorage stats = component.getComponent();
+					StorageElement stats = component.getComponent();
 					int stackSize = isShiftKeyDown() ? 64 : 1;
 					this.container.moveStackFromTileEntityToPlayer(stats.id, new ItemStack(activeSeed, stackSize, activeMeta));
 					this.updateScreen();
@@ -272,13 +274,13 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 		int textureSize = 256;
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		for (int i = 0; i < this.activeSeeds.size(); i++) {
-			Component<PlantStatsStorage> component = activeSeeds.get(i);
+			Component<StorageElement> component = activeSeeds.get(i);
 			if (component != null && component.getComponent() != null) {
-				PlantStatsStorage stats = component.getComponent();
+				StorageElement element = component.getComponent();
 				//draw the SEED icon
-				ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
+				ItemStack stack = new ItemStack(activeSeed, element.amount, activeMeta);
 				NBTTagCompound tag = new NBTTagCompound();
-				stats.writeToNBT(tag);
+				element.getStat().writeToNBT(tag);
 				stack.setTagCompound(tag);
 				itemRender.renderItemIntoGUI(stack, component.xOffset(), component.yOffset());
 				itemRender.renderItemOverlayIntoGUI(fontRendererObj, stack, component.xOffset(), component.yOffset(), "" + stack.stackSize);
@@ -286,9 +288,9 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 				Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 				GL11.glDisable(GL11.GL_LIGHTING);
 				// Unpack Stats
-				short growth = stats.getGrowth();
-                short gain = stats.getGain();
-                short strength = stats.getStrength();
+				short growth = element.getStat().getGrowth();
+                short gain = element.getStat().getGain();
+                short strength = element.getStat().getStrength();
 				// Write Stats
 				this.drawTexturedModalRect(this.guiLeft + xOffset + (i * 16) + 1, this.guiTop + yOffset - growth, 0, textureSize - growth, 3, growth);
 				this.drawTexturedModalRect(this.guiLeft + xOffset + i * 16 + 6, this.guiTop + yOffset - gain, 0, textureSize - gain, 3, gain);
@@ -325,14 +327,14 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 		if (!this.hasActiveSeed()) {
 			return;
 		}
-		for (Component<PlantStatsStorage> component : this.activeSeeds) {
+		for (Component<StorageElement> component : this.activeSeeds) {
 			if (component != null && component.getComponent() != null) {
 				//tooltip
 				if (component.isOverComponent(x, y)) {
-					PlantStatsStorage stats = component.getComponent();
-					ItemStack stack = new ItemStack(activeSeed, stats.amount, activeMeta);
+					StorageElement element = component.getComponent();
+					ItemStack stack = new ItemStack(activeSeed, element.amount, activeMeta);
 					NBTTagCompound tag = new NBTTagCompound();
-					stats.writeToNBT(tag);
+					element.getStat().writeToNBT(tag);
 					stack.setTagCompound(tag);
 					List toolTip = stack.getTooltip(Minecraft.getMinecraft().thePlayer, true);
 					drawHoveringText(toolTip, x - this.guiLeft, y - this.guiTop, fontRendererObj);
@@ -352,13 +354,14 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 		return false;
 	}
 
-	protected static class PlantStatsStorage extends PlantStats {
+	protected static class StorageElement {
 
-		private int id;
-		private int amount;
+		private final IAgriStat stats;
+		private final int id;
+		private final int amount;
 
-		public PlantStatsStorage(int id, @Nonnull ItemStack stack) {
-			super(stack.getTagCompound());
+		public StorageElement(int id, @Nonnull ItemStack stack) {
+			this.stats = StatRegistry.getInstance().getValue(StackHelper.getTag(stack));
 			this.amount = stack.stackSize;
 			this.id = id;
 		}
@@ -370,5 +373,11 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 		public int amount() {
 			return amount;
 		}
+		
+		public IAgriStat getStat() {
+			return stats;
+		}
+		
 	}
+
 }

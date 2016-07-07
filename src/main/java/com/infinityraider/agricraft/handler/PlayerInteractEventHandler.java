@@ -19,11 +19,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 
 @SuppressWarnings("unused")
 public class PlayerInteractEventHandler {
@@ -62,7 +61,7 @@ public class PlayerInteractEventHandler {
 			if (ignoresVanillaPlantingSetting(seed)) {
 				return true;
 			}
-			if (SeedRegistry.getInstance().isSeed(seed)) {
+			if (SeedRegistry.getInstance().hasAdapter(seed)) {
 				return false;
 			}
 			if (seed.getItem() == Items.POTATO) {
@@ -108,7 +107,7 @@ public class PlayerInteractEventHandler {
 			if (event.getWorld().isRemote) {
 				denyEvent(event, true);
 			}
-			event.getWorld().setBlockState(event.getPos(), com.infinityraider.agricraft.init.AgriCraftBlocks.blockWaterPad.getDefaultState(), 3);
+			event.getWorld().setBlockState(event.getPos(), com.infinityraider.agricraft.init.AgriBlocks.WATER_PAD.getDefaultState(), 3);
 			if (!player.capabilities.isCreativeMode) {
 				stack.damageItem(1, player);
 				event.setResult(Event.Result.ALLOW);

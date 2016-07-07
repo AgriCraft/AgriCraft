@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.tabs.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import net.minecraft.block.SoundType;
@@ -34,7 +34,7 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
 		setHarvestLevel("axe", 0);
-		this.setCreativeTab(AgriCraftTab.agriCraftTab);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		this.setSoundType(SoundType.WOOD);
 	}
 
@@ -154,7 +154,7 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 	 * TODO: What is this?
 	 */
 	@Override
-	protected Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+	public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
 		return ItemBlockCustomWood.class;
 	}
 }

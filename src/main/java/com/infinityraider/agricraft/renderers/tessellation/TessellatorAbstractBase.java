@@ -1,23 +1,22 @@
 package com.infinityraider.agricraft.renderers.tessellation;
 
 import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.utility.IconHelper;
 import com.infinityraider.agricraft.utility.TransformationMatrix;
-import com.infinityraider.agricraft.utility.icon.IconUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import net.minecraft.util.math.Vec3d;
 
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")
@@ -127,28 +126,8 @@ public abstract class TessellatorAbstractBase implements ITessellator {
 	 * @param u u value for the vertex
 	 * @param v v value for the vertex
 	 */
-	@Override
 	public void addVertexWithUV(float x, float y, float z, float u, float v) {
 		this.addVertexWithUV(x, y, z, u, v, getColor());
-	}
-
-	/**
-	 * Adds a vertex
-	 *
-	 * @param x the x-coordinate for the vertex
-	 * @param y the y-coordinate for the vertex
-	 * @param z the z-coordinate for the vertex
-	 * @param icon the icon
-	 * @param u u value for the vertex
-	 * @param v v value for the vertex
-	 * @param color color modifier
-	 */
-	@Override
-	public void addVertexWithUV(float x, float y, float z, TextureAtlasSprite icon, float u, float v, int color) {
-		if (icon == null) {
-			icon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
-		}
-		this.addVertexWithUV(x, y, z, icon.getInterpolatedU(u), icon.getInterpolatedU(v), color);
 	}
 
 	/**
@@ -167,6 +146,24 @@ public abstract class TessellatorAbstractBase implements ITessellator {
 	}
 
 	/**
+	 * Adds a vertex
+	 *
+	 * @param x the x-coordinate for the vertex
+	 * @param y the y-coordinate for the vertex
+	 * @param z the z-coordinate for the vertex
+	 * @param icon the icon
+	 * @param u u value for the vertex
+	 * @param v v value for the vertex
+	 */
+	@Override
+	public void addVertexWithUV(float x, float y, float z, TextureAtlasSprite icon, float u, float v, int color) {
+		if (icon == null) {
+			icon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+		}
+		this.addVertexWithUV(x, y, z, icon.getInterpolatedU(u), icon.getInterpolatedV(v), getColor());
+	}
+
+	/**
 	 * Adds a vertex scaled by 1/16th of a block
 	 *
 	 * @param x the x-coordinate for the vertex
@@ -178,7 +175,7 @@ public abstract class TessellatorAbstractBase implements ITessellator {
 	 */
 	@Override
 	public void addScaledVertexWithUV(float x, float y, float z, TextureAtlasSprite icon, float u, float v) {
-		addScaledVertexWithUV(x, y, z, icon, u, v, getColor());
+		this.addScaledVertexWithUV(x, y, z, icon, u, v, getColor());
 	}
 
 	/**
@@ -554,7 +551,7 @@ public abstract class TessellatorAbstractBase implements ITessellator {
 		if (loc != null) {
 			return ModelLoader.defaultTextureGetter().apply(loc);
 		} else {
-			return IconUtil.getDefaultIcon();
+			return IconHelper.getDefaultIcon();
 		}
 	}
 
@@ -815,12 +812,6 @@ public abstract class TessellatorAbstractBase implements ITessellator {
 	@Override
 	public boolean getApplyDiffuseLighting() {
 		return this.applyDiffuseLighting;
-	}
-
-	@Nullable
-	@Override
-	public TextureAtlasSprite apply(ResourceLocation input) {
-		return this.getIcon(input);
 	}
 
 	@Override

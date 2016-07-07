@@ -96,7 +96,7 @@ dependencies {
     //compile "codechicken:CodeChickenCore:1.8-1.0.5.34:dev"
     //compile "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
 	compile project(':lib/AgriCore')
-    //compile "mcp.mobius.waila:Waila:1.7.0-B2_1.9:dev"
+  compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
 	deobfCompile "mezz.jei:jei_1.10:3.7.0.218"
 }
 
@@ -167,9 +167,8 @@ task dist(dependsOn: ['build', 'sourcesJar', 'javadocJar']) {
 
 // Run Stuff
 runClient {
-	if( project.hasProperty('username') && project.hasProperty('password') ) {
-		args "--username=${project.username}"
-		args "--password=${project.password}"
+	if( project.hasProperty('minecraft_username') && project.hasProperty('minecraft_password') ) {
+		args "--username=${project.minecraft_username}"
+		args "--password=${project.minecraft_password}"
 	}
-
 }

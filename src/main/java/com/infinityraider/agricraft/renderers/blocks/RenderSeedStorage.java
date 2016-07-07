@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import com.infinityraider.agricraft.utility.icon.BaseIcons;
+import com.infinityraider.agricraft.utility.BaseIcons;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStorage> {

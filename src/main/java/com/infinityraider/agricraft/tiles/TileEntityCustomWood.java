@@ -1,9 +1,7 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.renderers.RenderUtil;
-import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -11,13 +9,14 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 /**
  * This class represents the root tile entity for all AgriCraft custom WOOD
@@ -65,8 +64,8 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 
 	@Override
 	public final void writeTileNBT(NBTTagCompound tag) {
-		tag.setString(AgriCraftNBT.MATERIAL, this.getMaterial().getRegistryName().toString());
-		tag.setInteger(AgriCraftNBT.MATERIAL_META, this.getMaterialMeta());
+		tag.setString(AgriNBT.MATERIAL, this.getMaterial().getRegistryName().toString());
+		tag.setInteger(AgriNBT.MATERIAL_META, this.getMaterialMeta());
 		this.writeNBT(tag);
 	}
 
@@ -122,12 +121,12 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 	private void setMaterial(NBTTagCompound tag) {
 		if (tag == null) {
 			AgriCore.getLogger("AgriCraft").debug("TECW: Passed Null Tag!");
-		} else if (!tag.hasKey(AgriCraftNBT.MATERIAL)) {
+		} else if (!tag.hasKey(AgriNBT.MATERIAL)) {
 			AgriCore.getLogger("AgriCraft").debug("TECW: Tag missing material!");
-		} else if (!tag.hasKey(AgriCraftNBT.MATERIAL_META)) {
+		} else if (!tag.hasKey(AgriNBT.MATERIAL_META)) {
 			AgriCore.getLogger("AgriCraft").debug("TECW: Tag missing meta!");
 		} else {
-			this.setMaterial(tag.getString(AgriCraftNBT.MATERIAL), tag.getInteger(AgriCraftNBT.MATERIAL_META));
+			this.setMaterial(tag.getString(AgriNBT.MATERIAL), tag.getInteger(AgriNBT.MATERIAL_META));
 		}
 	}
 
@@ -195,8 +194,8 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 	 */
 	public final NBTTagCompound getMaterialTag() {
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setString(AgriCraftNBT.MATERIAL, this.material.getRegistryName().toString());
-		tag.setInteger(AgriCraftNBT.MATERIAL_META, this.materialMeta);
+		tag.setString(AgriNBT.MATERIAL, this.material.getRegistryName().toString());
+		tag.setInteger(AgriNBT.MATERIAL_META, this.materialMeta);
 		return tag;
 	}
 
@@ -228,6 +227,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public void addDisplayInfo(List information) {
-		information.add(I18n.translateToLocal("agricraft_tooltip.material") + ": " + new ItemStack(this.material, 1, this.materialMeta).getDisplayName());
+		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.material") + ": " + new ItemStack(this.material, 1, this.materialMeta).getDisplayName());
 	}
 }

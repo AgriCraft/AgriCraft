@@ -1,9 +1,12 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.renderers.blocks.ICustomRenderedBlockWithTile;
+import com.infinityraider.agricraft.blocks.blockstate.BlockStateSpecial;
+import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.multiblock.IMultiBlockComponent;
+import com.infinityraider.agricraft.multiblock.IMultiBlockComponent;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,13 +15,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * The base class for all AgriCraft tile blocks.
  */
-public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<T> implements ITileEntityProvider {
+public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase implements ITileEntityProvider, ICustomRenderedBlockWithTile<T> {
+
 	public final boolean isMultiBlock;
 	public final String tileName;
 
@@ -31,9 +35,6 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<
 		super(material, internalName);
 		this.isMultiBlock = isMultiBlock;
 		this.tileName = Reference.MOD_ID.toLowerCase() + ":tileEntity." + internalName;
-		TileEntity tile = this.createNewTileEntity(null, 0);
-		assert(tile != null);
-		GameRegistry.registerTileEntity(tile.getClass(), getTileName());
 	}
 
 	public final String getTileName() {
@@ -42,7 +43,7 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<
 
 	@Override
 	public abstract T createNewTileEntity(World worldIn, int meta);
-	
+
 	/**
 	 * Sets the block's orientation based upon the direction the player is
 	 * looking when the block is placed.
@@ -73,6 +74,19 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase<
 		}
 		super.breakBlock(world, pos, state);
 		world.removeTileEntity(pos);
+	}
+
+	@Override
+	public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id, int data) {
+		super.eventReceived(state, world, pos, id, data);
+		TileEntity tileentity = world.getTileEntity(pos);
+		return tileentity != null && tileentity.receiveClientEvent(id, data);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public IBlockStateSpecial<T, ? extends IBlockState> getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return new BlockStateSpecial<>(state, pos, (T) world.getTileEntity(pos));
 	}
 
 }

@@ -1,12 +1,12 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.tabs.AgriCraftTab;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
 import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -25,8 +25,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import net.minecraft.block.Block;
 
 public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
+
 	public static final AxisAlignedBB BOX = new AxisAlignedBB(
 			Constants.UNIT * Constants.QUARTER,
 			Constants.UNIT * Constants.THREE_QUARTER,
@@ -38,7 +40,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 
 	public BlockSprinkler() {
 		super(Material.IRON, "sprinkler", false);
-		this.setCreativeTab(AgriCraftTab.agriCraftTab);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
 		setHarvestLevel("axe", 0);
@@ -76,6 +78,15 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 		if (!world.isRemote) {
 			ItemStack drop = new ItemStack(this, 1);
 			spawnAsEntity(world, pos, drop);
+		}
+	}
+
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
+		if (!this.canBlockStay(world, pos)) {
+			this.dropBlockAsItem(world, pos, state, 0);
+			world.removeTileEntity(pos);
+			world.setBlockToAir(pos);
 		}
 	}
 
@@ -118,7 +129,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 	}
 
 	@Override
-	protected Class<? extends ItemBlock> getItemBlockClass() {
+	public Class<? extends ItemBlock> getItemBlockClass() {
 		return null;
 	}
 
@@ -134,6 +145,11 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 			return ((TileEntityChannel) channel).getTexture(state, side);
 		}
 		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return !AgriCraftConfig.disableIrrigation;
 	}
 
 }

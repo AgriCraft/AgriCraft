@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.api.v1.render.IIconRegistrar;
+import com.infinityraider.agricraft.api.render.IIconRegistrar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -31,7 +31,7 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
     }
 
     @Override
-    protected Class<? extends ItemBlock> getItemBlockClass() {
+    public Class<? extends ItemBlock> getItemBlockClass() {
         return ItemBlockWaterPad.class;
     }
 

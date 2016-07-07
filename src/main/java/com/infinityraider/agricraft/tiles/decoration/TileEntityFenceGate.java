@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.tiles.decoration;
 
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import net.minecraft.nbt.NBTTagCompound;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntityFenceGate extends TileEntityCustomWood {
     private boolean zAxis;
@@ -15,15 +15,15 @@ public class TileEntityFenceGate extends TileEntityCustomWood {
     //this saves the data on the tile entity
     @Override
     protected void writeNBT(NBTTagCompound tag) {
-        tag.setBoolean(AgriCraftNBT.FLAG, zAxis);
-        tag.setShort(AgriCraftNBT.META, open);
+        tag.setBoolean(AgriNBT.FLAG, zAxis);
+        tag.setShort(AgriNBT.META, open);
     }
 
     //this loads the saved data for the tile entity
     @Override
     protected void readNBT(NBTTagCompound tag) {
-        zAxis = tag.getBoolean(AgriCraftNBT.FLAG);
-        open = tag.hasKey(AgriCraftNBT.META)?tag.getShort(AgriCraftNBT.META):0;
+        zAxis = tag.getBoolean(AgriNBT.FLAG);
+        open = tag.hasKey(AgriNBT.META)?tag.getShort(AgriNBT.META):0;
     }
 
     public boolean isOpen() {

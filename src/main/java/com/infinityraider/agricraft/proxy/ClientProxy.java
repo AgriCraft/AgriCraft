@@ -5,13 +5,14 @@ import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.MissingJsonHandler;
 import com.infinityraider.agricraft.handler.SoundHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemBase;
 import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.ReflectionHelper;
 import com.infinityraider.agricraft.renderers.dynmodels.AgriCraftModelLoader;
+import com.infinityraider.agricraft.utility.ModelErrorSuppressor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -71,7 +72,7 @@ public class ClientProxy implements IProxy {
 
 		//BLOCKS
 		//------
-		ReflectionHelper.forEachIn(AgriCraftBlocks.class, BlockBase.class, (block) -> {
+		ReflectionHelper.forEachIn(AgriBlocks.class, BlockBase.class, (block) -> {
 			StateMapperBase stateMapper = new StateMapperBase() {
 				@Override
 				protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
@@ -85,12 +86,12 @@ public class ClientProxy implements IProxy {
 
 		//ITEMS
 		//-----
-		ReflectionHelper.forEachIn(AgriCraftItems.class, ItemBase.class, (item) -> {
+		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (item) -> {
 			item.registerItemRenderer();
 		});
 
 		// Clippings
-		AgriCraftItems.clipping.registerItemRenderer();
+		AgriItems.AGRI_CLIPPING.registerItemRenderer();
 
 		//villager
 		if (!AgriCraftConfig.disableWorldGen && AgriCraftConfig.villagerEnabled) {
@@ -124,6 +125,7 @@ public class ClientProxy implements IProxy {
 	@Override
 	public void initConfiguration(FMLPreInitializationEvent event) {
 		IProxy.super.initConfiguration(event);
+		MinecraftForge.EVENT_BUS.register(new ModelErrorSuppressor());
 	}
 
 	@Override

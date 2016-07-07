@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.items.IClipper;
-import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -15,10 +16,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import com.infinityraider.agricraft.api.items.IAgriClipperItem;
 
-public class ItemClipper extends ItemBase implements IClipper {
+public class ItemClipper extends ItemBase implements IAgriClipperItem {
+	
+	@AgriConfigurable(
+			category = AgriConfigCategory.TOOLS,
+			key = "Enable Clipper",
+			comment = "Set to false to disable the Clipper."
+	)
+	public static boolean enableClipper = true;
 
 	public ItemClipper() {
 		super("clipper", true);
@@ -41,9 +49,9 @@ public class ItemClipper extends ItemBase implements IClipper {
 			IAgriCrop crop = (IAgriCrop) te;
 			if (crop.hasPlant() && crop.getGrowthStage() > 1) {
 				crop.setGrowthStage(crop.getGrowthStage() - 1);
-				ItemStack clipping = new ItemStack(AgriCraftItems.clipping);
-				clipping.setTagCompound(crop.getSeed().toStack().writeToNBT(new NBTTagCompound()));
-				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), clipping));
+				AgriSeed seed = crop.getSeed();
+				seed = seed.withStat(seed.getStat().withMeta(1));
+				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), ItemClipping.getClipping(seed, 1)));
 				return EnumActionResult.SUCCESS;
 			}
 			return EnumActionResult.FAIL;
@@ -55,6 +63,11 @@ public class ItemClipper extends ItemBase implements IClipper {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
 		// Nothing to see here...
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enableClipper;
 	}
 
 }

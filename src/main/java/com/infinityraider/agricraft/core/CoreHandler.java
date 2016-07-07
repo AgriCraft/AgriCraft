@@ -10,6 +10,10 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import com.agricraft.agricore.config.AgriConfigAdapter;
+import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.apiimpl.MutationRegistry;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 
 public final class CoreHandler {
 
@@ -48,7 +52,11 @@ public final class CoreHandler {
 
 		// Load the core!
 		AgriCore.getLogger("AgriCraft").info("Attempting to load plants!");
-		AgriLoader.loadManifest(configDir.resolve("plants/manifest.json"), AgriCore.getPlants(), AgriCore.getMutations());
+		AgriLoader.loadManifest(
+				configDir.resolve("plants/manifest.json"),
+				AgriCore.getPlants(),
+				AgriCore.getMutations()
+		);
 		AgriCore.getLogger("AgriCraft").info("Finished trying to load plants!");
 
 		// See if plants are valid...
@@ -63,7 +71,36 @@ public final class CoreHandler {
 		
 		// Save settings!
 		AgriCore.getConfig().save();
+		
+		// Load JSON Stuff
+		initPlants();
+		initMutations();
 
+	}
+	
+	public static void initPlants() {
+		AgriCore.getLogger("AgriCraft").info("Registering Custom Plants!");
+		AgriCore.getPlants().validate();
+		AgriCore.getPlants().getAll().forEach((p) -> {
+			PlantRegistry.getInstance().addPlant(new JsonCropPlant(p));
+		});
+		AgriCore.getLogger("AgriCraft").info("Custom crops registered!");
+	}
+
+	public static void initMutations() {
+		AgriCore.getMutations().getAll().forEach((m) -> {
+			MutationRegistry.getInstance().addMutation(
+					m.getChance(),
+					m.getChild().getId(),
+					m.getParent1().getId(),
+					m.getParent2().getId()
+			);
+		});
+		//print registered mutations to the log
+		AgriCore.getLogger("AgriCraft").info("Registered Mutations:");
+		for (IAgriMutation mutation : MutationHandler.getMutations()) {
+			AgriCore.getLogger("AgriCraft").info(" - {0}", mutation);
+		}
 	}
 
 }

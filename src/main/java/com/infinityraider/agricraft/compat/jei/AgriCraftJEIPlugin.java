@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeCategory;
 import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeHandler;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeCategory;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeHandler;
-import com.infinityraider.agricraft.init.AgriCraftItems;
+import com.infinityraider.agricraft.init.AgriItems;
 import javax.annotation.Nonnull;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
@@ -45,7 +45,7 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 				new ProduceRecipeHandler()
 		);
 		
-		registry.addRecipeCategoryCraftingItem(new ItemStack(AgriCraftItems.crops), CATEGORY_MUTATION, CATEGORY_PRODUCE);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(AgriItems.CROPS), CATEGORY_MUTATION, CATEGORY_PRODUCE);
 
 		for (Map.Entry<Item, String[]> nbt : nbtIgnores.entrySet()) {
 			jeiHelpers.getNbtIgnoreList().ignoreNbtTagNames(nbt.getKey(), nbt.getValue());

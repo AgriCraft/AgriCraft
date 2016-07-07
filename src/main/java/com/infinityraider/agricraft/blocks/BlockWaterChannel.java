@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -43,13 +43,6 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 			((TileEntityChannel) te).findNeighbours();
 		}
 	}
-
-	/* TODO!!!
-	@Override
-	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
-		return world.getTileEntity(pos) != null && world.getTileEntity(pos).receiveClientEvent(id, data);
-	}
-	*/
 
 	/**
 	 * Adds all intersecting collision boxes to a list. (Be sure to only add
@@ -137,4 +130,10 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 	public AxisAlignedBB getDefaultBoundingBox() {
 		return BOX;
 	}
+
+	@Override
+	public boolean isEnabled() {
+		return !AgriCraftConfig.disableIrrigation;
+	}
+
 }

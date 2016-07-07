@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class Vector {
     private double x;
@@ -30,19 +30,19 @@ public class Vector {
 	}
 
     public Vector(NBTTagCompound tag) throws UnknownPositionException {
-        if(!tag.hasKey(AgriCraftNBT.X1)) {throw new UnknownPositionException();}
-        if(!tag.hasKey(AgriCraftNBT.Y1)) {throw new UnknownPositionException();}
-        if(!tag.hasKey(AgriCraftNBT.Z1)) {throw new UnknownPositionException();}
-        this.x = tag.getDouble(AgriCraftNBT.X1);
-        this.y = tag.getDouble(AgriCraftNBT.Y1);
-        this.z = tag.getDouble(AgriCraftNBT.Z1);
+        if(!tag.hasKey(AgriNBT.X1)) {throw new UnknownPositionException();}
+        if(!tag.hasKey(AgriNBT.Y1)) {throw new UnknownPositionException();}
+        if(!tag.hasKey(AgriNBT.Z1)) {throw new UnknownPositionException();}
+        this.x = tag.getDouble(AgriNBT.X1);
+        this.y = tag.getDouble(AgriNBT.Y1);
+        this.z = tag.getDouble(AgriNBT.Z1);
     }
 
     public NBTTagCompound writeToNBT() {
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setDouble(AgriCraftNBT.X1, x);
-        tag.setDouble(AgriCraftNBT.Y1, y);
-        tag.setDouble(AgriCraftNBT.Z1, z);
+        tag.setDouble(AgriNBT.X1, x);
+        tag.setDouble(AgriNBT.Y1, y);
+        tag.setDouble(AgriNBT.Z1, z);
         return tag;
     }
 

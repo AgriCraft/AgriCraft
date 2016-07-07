@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.tiles.decoration;
 
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,7 +8,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebuggable {
 
@@ -36,16 +36,16 @@ public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebugg
 
 	@Override
 	protected void writeNBT(NBTTagCompound tag) {
-		tag.setShort(AgriCraftNBT.META, (short) offset);
-		tag.setShort(AgriCraftNBT.WEED, (short) vines);
+		tag.setShort(AgriNBT.META, (short) offset);
+		tag.setShort(AgriNBT.WEED, (short) vines);
 	}
 
 	//this loads the saved data for the tile entity
 	@Override
 	protected void readNBT(NBTTagCompound tag) {
-		this.offset = tag.getShort(AgriCraftNBT.META);
+		this.offset = tag.getShort(AgriNBT.META);
 		calculateBounds();
-		this.vines = tag.getShort(AgriCraftNBT.WEED);
+		this.vines = tag.getShort(AgriNBT.WEED);
 	}
 
 	public void calculateBounds() {

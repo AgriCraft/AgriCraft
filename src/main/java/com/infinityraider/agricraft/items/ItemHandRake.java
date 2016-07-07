@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.api.v1.items.IRake;
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.WeightedRandom;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,20 +14,28 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.api.v1.misc.IWeedable;
 import net.minecraft.tileentity.TileEntity;
+import com.infinityraider.agricraft.api.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.misc.IAgriWeedable;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.
  */
-public class ItemHandRake extends ItemBase implements IRake {
+public class ItemHandRake extends ItemBase implements IAgriRakeItem {
+	
+	@AgriConfigurable(
+			category = AgriConfigCategory.TOOLS,
+			key = "Enable Hand Rake",
+			comment = "Set to false to disable the Hand Rake."
+	)
+	public static boolean enableHandRake = true;
 
 	private static final int WOOD_VARIANT_META = 0;
 	private static final int IRON_VARIANT_META = 1;
@@ -41,8 +50,8 @@ public class ItemHandRake extends ItemBase implements IRake {
 	@Override
 	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		TileEntity te = world.getTileEntity(pos);
-		if (te instanceof IWeedable) {
-			IWeedable tile = (IWeedable) te;
+		if (te instanceof IAgriWeedable) {
+			IAgriWeedable tile = (IAgriWeedable) te;
 			if (tile.hasWeed()) {
 				tile.clearWeed();
 				if (AgriCraftConfig.rakingDrops && world.rand.nextInt(100) < dropChance[stack.getItemDamage() % dropChance.length]) {
@@ -87,7 +96,12 @@ public class ItemHandRake extends ItemBase implements IRake {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-		list.add(I18n.translateToLocal("agricraft_tooltip.handRake"));
+		list.add(AgriCore.getTranslator().translate("agricraft_tooltip.handRake"));
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enableHandRake;
 	}
 
 	public static final class ItemDropRegistry {

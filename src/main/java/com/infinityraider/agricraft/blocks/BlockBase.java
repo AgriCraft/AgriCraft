@@ -1,8 +1,7 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.blocks.blockstate.BlockStateSpecial;
-import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
-import com.infinityraider.agricraft.tabs.AgriCraftTab;
+import com.infinityraider.agricraft.renderers.blocks.ICustomRenderedBlock;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
@@ -12,8 +11,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -28,10 +25,9 @@ import java.util.List;
 /**
  * The base class for all AgriCraft blocks.
  */
-public abstract class BlockBase<T extends TileEntity> extends Block implements ICustomRenderedBlock<T> {
-	public static final ItemStack DEFAULT_WAILA_STACK = null;
+public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 
-	public final String internalName;
+	private final String internalName;
 
 	/**
 	 * The default, base constructor for all AgriCraft blocks. This method runs
@@ -45,8 +41,11 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 		super(mat);
 		this.internalName = internalName;
 		this.fullBlock = false;
-		this.setCreativeTab(AgriCraftTab.agriCraftTab);
-		RegisterHelper.registerBlock(this, this.getInternalName(), this.getItemBlockClass());
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
+	}
+	
+	public boolean isEnabled() {
+		return true;
 	}
 
 	public String getInternalName() {
@@ -54,16 +53,9 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public IBlockStateSpecial<T, ? extends IBlockState> getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return new BlockStateSpecial<>(state, pos, (T) world.getTileEntity(pos));
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getBlockModelResourceLocation() {
 		return new  ModelResourceLocation(Reference.MOD_ID.toLowerCase()+":"+getInternalName());
-
 	}
 
 	@Override
@@ -87,7 +79,7 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 	 * @return the block's class, may be null if no specific ItemBlock class is
 	 * desired.
 	 */
-	protected abstract Class<? extends ItemBlock> getItemBlockClass();
+	public abstract Class<? extends ItemBlock> getItemBlockClass();
 
 	/**
 	 * @return The default bounding box for this block

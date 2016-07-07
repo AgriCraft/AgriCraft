@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
-import com.infinityraider.agricraft.tabs.AgriCraftTab;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
@@ -27,7 +27,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.init.Blocks;
 
 public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 
@@ -35,7 +34,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 
 	public BlockSeedAnalyzer() {
 		super(Material.GROUND, "seed_analyzer", false);
-		this.setCreativeTab(AgriCraftTab.agriCraftTab);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		this.isBlockContainer = true;
 		this.setTickRandomly(false);
 		//set mining statistics
@@ -124,14 +123,6 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
 		return false;
 	}
-	
-	/* TODO!!! 
-	@Override
-	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
-		super.onBlockEventReceived(world, pos, state, id, data);
-		TileEntity tileEntity = world.getTileEntity(pos);
-		return (tileEntity != null) && (tileEntity.receiveClientEvent(id, data));
-	}*/
 
 	@Override
 	protected IProperty[] getPropertyArray() {
@@ -145,7 +136,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 	}
 
 	@Override
-	protected Class<? extends ItemBlock> getItemBlockClass() {
+	public Class<? extends ItemBlock> getItemBlockClass() {
 		return null;
 	}
 
@@ -153,4 +144,5 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 	public AxisAlignedBB getDefaultBoundingBox() {
 		return BOX;
 	}
+
 }

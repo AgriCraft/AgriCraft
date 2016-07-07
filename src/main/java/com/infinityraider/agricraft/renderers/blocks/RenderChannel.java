@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.infinityraider.agricraft.utility.icon.BaseIcons;
+import com.infinityraider.agricraft.utility.BaseIcons;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

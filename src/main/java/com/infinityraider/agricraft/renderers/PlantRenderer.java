@@ -11,7 +11,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {

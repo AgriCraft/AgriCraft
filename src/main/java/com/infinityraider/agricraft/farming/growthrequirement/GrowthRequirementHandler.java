@@ -1,11 +1,10 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
-import com.infinityraider.agricraft.api.v1.util.BlockWithMeta;
-import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v1.misc.ISoilContainer;
-import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirementBuilder;
-import com.infinityraider.agricraft.api.v1.requirment.RequirementType;
-import com.infinityraider.agricraft.utility.IOHelper;
+import com.infinityraider.agricraft.api.util.BlockWithMeta;
+import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.misc.ISoilContainer;
+import com.infinityraider.agricraft.api.requirment.IGrowthRequirementBuilder;
+import com.infinityraider.agricraft.api.requirment.RequirementType;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -13,9 +12,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.util.*;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * Holds all the default soils and soil.
@@ -39,7 +38,7 @@ public class GrowthRequirementHandler {
 
     //Methods for fertile soils
     //-------------------------
-    public static boolean isSoilValid(World world,BlockPos pos) {
+    public static boolean isSoilValid(IBlockAccess world,BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         int meta = block.getMetaFromState(state);
@@ -69,7 +68,7 @@ public class GrowthRequirementHandler {
         String total = " of " + data.length + ".";
         for (String line : data) {
             AgriCore.getLogger("AgriCraft").debug("  Parsing " + line + total);
-            ItemStack stack = IOHelper.getStack(line);
+            ItemStack stack = (ItemStack)AgriCore.getConverter().toStack(line);
             Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).block : null;
             
             if (block != null) {

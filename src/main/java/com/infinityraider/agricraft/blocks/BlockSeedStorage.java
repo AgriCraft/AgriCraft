@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
@@ -38,13 +39,6 @@ public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
         }
         return true;
     }
-
-	/* TODO!!!
-    @Override
-    public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int id, int data) {
-        TileEntity tileentity = world.getTileEntity(pos);
-        return tileentity != null && tileentity.receiveClientEvent(id, data);
-    } */
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
@@ -93,5 +87,10 @@ public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
     public RenderSeedStorage getRenderer() {
         return new RenderSeedStorage(this);
     }
+	
+	@Override
+	public boolean isEnabled() {
+		return !AgriCraftConfig.disableSeedStorage;
+	}
     
 }

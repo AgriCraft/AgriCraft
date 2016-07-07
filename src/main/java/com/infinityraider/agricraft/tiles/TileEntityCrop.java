@@ -1,14 +1,12 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
-import com.infinityraider.agricraft.compat.CompatibilityHandler;
+import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.farming.mutation.MutationEngine;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.AgriCraftNBT;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,24 +15,27 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.reference.AgriCraftProperties;
 import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
-import com.infinityraider.agricraft.init.AgriCraftBlocks;
-import com.infinityraider.agricraft.utility.MathHelper;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.init.AgriBlocks;
+import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.utility.WorldHelper;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.StatRegistry;
+import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDebuggable {
 
@@ -103,7 +104,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 				worldObj.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
 			}
 			this.markDirty();
-			this.markForUpdate();
 		}
 	}
 
@@ -128,9 +128,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		if (this.hasPlant() || this.hasWeed()) {
 			stage = MathHelper.inRange(stage, 0, Constants.MATURE);
 			IBlockState state = worldObj.getBlockState(pos);
-			state = state.withProperty(AgriCraftProperties.GROWTHSTAGE, stage);
+			state = state.withProperty(AgriProperties.GROWTHSTAGE, stage);
 			this.worldObj.setBlockState(pos, state, 3);
-			this.stats.setMeta(stage);
+			this.stats = this.stats.withMeta(stage);
 			this.markForUpdate();
 		}
 	}
@@ -147,7 +147,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	public boolean setPlant(IAgriPlant plant) {
 		if ((!this.crossCrop) && (!this.hasPlant()) && (plant != null)) {
 			this.plant = plant;
-			this.setGrowthStage(0);
 			plant.onSeedPlanted(worldObj, pos);
 			IAdditionalCropData new_data = plant.getInitialCropData(worldObj, getPos(), this);
 			if (new_data != null) {
@@ -165,7 +164,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		IAgriPlant oldPlant = getPlant();
 		this.setGrowthStage(0);
 		this.plant = null;
-		this.markForUpdate();
 		if (oldPlant != null) {
 			oldPlant.onPlantRemoved(worldObj, pos);
 		}
@@ -294,7 +292,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	@Override
 	public boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
 		if (this.getGrowthStage() < Constants.MATURE && (this.hasPlant() || this.hasWeed())) {
-			((BlockCrop) AgriCraftBlocks.blockCrop).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
+			((BlockCrop) AgriBlocks.CROP).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
 			return true;
 		} else if (fertilizer.canTriggerMutation() && this.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
 			this.crossOver();
@@ -366,14 +364,14 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	//this saves the data on the tile entity
 	@Override
 	public void writeTileNBT(NBTTagCompound tag) {
-		stats.writeToNBT(tag);
-		tag.setBoolean(AgriCraftNBT.CROSS_CROP, crossCrop);
-		tag.setBoolean(AgriCraftNBT.WEED, weed);
+		this.stats.writeToNBT(tag);
+		tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
+		tag.setBoolean(AgriNBT.WEED, weed);
 		if (plant != null) {
-			tag.setString(AgriCraftNBT.SEED, plant.getId());
+			tag.setString(AgriNBT.SEED, plant.getId());
 		}
 		if (getAdditionalCropData() != null) {
-			tag.setTag(AgriCraftNBT.INVENTORY, getAdditionalCropData().writeToNBT());
+			tag.setTag(AgriNBT.INVENTORY, getAdditionalCropData().writeToNBT());
 		}
 		//AgriCore.getLogger("Plant-Tag").debug("Write Tag: {0}", tag);
 	}
@@ -381,12 +379,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	//this loads the saved data for the tile entity
 	@Override
 	public void readTileNBT(NBTTagCompound tag) {
-		this.stats = new PlantStats(tag);
-		this.crossCrop = tag.getBoolean(AgriCraftNBT.CROSS_CROP);
-		this.weed = tag.getBoolean(AgriCraftNBT.WEED);
-		this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriCraftNBT.SEED));
-		if (tag.hasKey(AgriCraftNBT.INVENTORY) && this.plant != null) {
-			this.data = plant.readCropDataFromNBT(tag.getCompoundTag(AgriCraftNBT.INVENTORY));
+		this.stats = StatRegistry.getInstance().getValue(tag);
+		this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
+		this.weed = tag.getBoolean(AgriNBT.WEED);
+		this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
+		if (tag.hasKey(AgriNBT.INVENTORY) && this.plant != null) {
+			this.data = plant.readCropDataFromNBT(tag.getCompoundTag(AgriNBT.INVENTORY));
 		}
 		//AgriCore.getLogger("Plant-Tag").debug("Read Tag: {0}", tag);
 	}
@@ -402,7 +400,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		IBlockState state = getWorld().getBlockState(getPos());
 		if (hasWeed() || !plant.isMature(getWorld(), pos, state)) {
 			setGrowthStage(meta + 1);
-			CompatibilityHandler.getInstance().announceGrowthTick(getWorld(), getPos(), state);
+			/* TODO: Annouce Growth Tick Via API! */
 		}
 	}
 
@@ -418,7 +416,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	 */
 	public void applyCrossOverResult(CrossOverResult result) {
 		crossCrop = false;
-		this.setSeed(result.toStack());
+		this.setSeed(new AgriSeed(result.getPlant(), result.getStats()));
 	}
 
 	/**
@@ -475,25 +473,25 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	public void addDisplayInfo(List information) {
 		if (this.hasPlant()) {
 			//Add the SEED name.
-			information.add(I18n.translateToLocal("agricraft_tooltip.seed") + ": " + this.plant.getSeedName());
+			information.add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + this.plant.getSeedName());
 			//Add the GROWTH.
 			if (this.isMature()) {
-				information.add(I18n.translateToLocal("agricraft_tooltip.growthStage") + ": " + I18n.translateToLocal("agricraft_tooltip.mature"));
+				information.add(AgriCore.getTranslator().translate("agricraft_tooltip.growthStage") + ": " + AgriCore.getTranslator().translate("agricraft_tooltip.mature"));
 			} else {
-				information.add(I18n.translateToLocal("agricraft_tooltip.growthStage") + ": " + ((int) (100.0 * this.getBlockMetadata() / Constants.MATURE) + "%"));
+				information.add(AgriCore.getTranslator().translate("agricraft_tooltip.growthStage") + ": " + ((int) (100.0 * this.getBlockMetadata() / Constants.MATURE) + "%"));
 			}
 			//Add the ANALYZED data.
 			if (this.stats.isAnalyzed()) {
 				this.stats.addStats(information);
 			} else {
-				information.add(I18n.translateToLocal("agricraft_tooltip.analyzed"));
+				information.add(AgriCore.getTranslator().translate("agricraft_tooltip.analyzed"));
 			}
 			//Add the fertility information.
-			information.add(I18n.translateToLocal(this.isFertile() ? "agricraft_tooltip.fertile" : "agricraft_tooltip.notFertile"));
+			information.add(AgriCore.getTranslator().translate(this.isFertile() ? "agricraft_tooltip.fertile" : "agricraft_tooltip.notFertile"));
 		} else if (this.hasWeed()) {
-			information.add(I18n.translateToLocal("agricraft_tooltip.weeds"));
+			information.add(AgriCore.getTranslator().translate("agricraft_tooltip.weeds"));
 		} else {
-			information.add(I18n.translateToLocal("agricraft_tooltip.empty"));
+			information.add(AgriCore.getTranslator().translate("agricraft_tooltip.empty"));
 		}
 	}
 }

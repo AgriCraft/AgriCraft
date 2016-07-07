@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.gui.journal;
 
 import com.infinityraider.agricraft.gui.Component;
 import com.infinityraider.agricraft.items.ItemJournal;
-import com.infinityraider.agricraft.utility.IOHelper;
+import com.infinityraider.agricraft.utility.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.renderer.GlStateManager;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 
 @SideOnly(Side.CLIENT)
 public class GuiJournal extends GuiScreen {
@@ -162,10 +162,10 @@ public class GuiJournal extends GuiScreen {
 			float scale = component.scale();
 			int x = this.guiLeft + component.xOffset();
 			int y = this.guiTop + component.yOffset();
-			String text[] = IOHelper.getLinesArrayFromData(component.getComponent());
+			String text[] = GuiHelper.getLinesArrayFromData(component.getComponent());
 			GL11.glScalef(scale, scale, scale);
 			for (String paragraph : text) {
-				String[] write = IOHelper.getLinesArrayFromData(IOHelper.splitInLines(this.fontRendererObj, paragraph, 95, scale));
+				String[] write = GuiHelper.getLinesArrayFromData(GuiHelper.splitInLines(this.fontRendererObj, paragraph, 95, scale));
 				for (int i = 0; i < write.length; i++) {
 					String line = write[i];
 					int xOffset = component.centered() ? -fontRendererObj.getStringWidth(line) / 2 : 0;

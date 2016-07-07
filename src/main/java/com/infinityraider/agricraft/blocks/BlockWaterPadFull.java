@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.translation.I18n;
+import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -73,7 +73,7 @@ public class BlockWaterPadFull extends AbstractBlockWaterPad {
     }
 
     @Override
-    protected Class<? extends ItemBlock> getItemBlockClass() {
+    public Class<? extends ItemBlock> getItemBlockClass() {
         return ItemBlockWaterPadFull.class;
     }
 
@@ -86,7 +86,7 @@ public class BlockWaterPadFull extends AbstractBlockWaterPad {
         @SideOnly(Side.CLIENT)
         public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
             super.addInformation(stack, player, list, flag);
-            list.add(I18n.translateToLocal("agricraft_tooltip.waterPadWet"));
+            list.add(AgriCore.getTranslator().translate("agricraft_tooltip.waterPadWet"));
         }
     }
 }

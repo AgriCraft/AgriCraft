@@ -4,15 +4,8 @@ import com.google.common.base.Optional;
 import java.util.Collection;
 import java.util.List;
 import net.minecraft.block.properties.PropertyHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
-import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.farming.cropplant.CropPlantNone;
 
 /**
@@ -43,29 +36,13 @@ public class PropertyCropPlant extends PropertyHelper<IAgriPlant> {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public Optional<IAgriPlant> parseValue(String value) {
-		if(value.equals("none")) {
-			return null;
-		}
-		ItemStack stack = new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(value)));
-		AgriSeed seed = SeedRegistry.getInstance().getSeed(stack);
-		if(seed != null) {
-			return Optional.of(seed.getPlant());
-		} else {
-			return null;
-		}
+		return Optional.fromNullable(PlantRegistry.getInstance().getPlant(value));
 	}
 
 	@Override
 	public String getName(IAgriPlant value) {
-		ItemStack seed = value.getSeed();
-		if (seed == null) {
-			return "none";
-		}
-		int id = Item.getIdFromItem(seed.getItem());
-		int meta = seed.getItemDamage();
-		return "id" + id + "m" + meta;
+		return value.getId();
 	}
 
 }
