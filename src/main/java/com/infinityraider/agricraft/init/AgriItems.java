@@ -5,7 +5,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.log.AgriLogger;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.agricraft.agricore.util.ReflectionHelper;
-import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 
 public class AgriItems {

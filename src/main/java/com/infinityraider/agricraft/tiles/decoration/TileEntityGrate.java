@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebuggable {

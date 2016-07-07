@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.compat.AgriCompatHandler;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriItems;
@@ -33,19 +32,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.v1.FertilizerRegistry;
-import com.infinityraider.agricraft.apiimpl.v1.SeedRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.FertilizerRegistry;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.reference.PropertyCropPlant;
 import net.minecraft.client.particle.ParticleManager;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import net.minecraft.block.Block;
-import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
 
 /**
  * The most important block in the mod.
@@ -123,7 +122,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 		if (crop.hasPlant() || crop.hasWeed()) {
-			if (AgriCompatHandler.getInstance().allowGrowthTick(world, pos, this, crop, rand)) {
+			if (/* TODO!!! APIimplv1.getInstance().allowGrowthTick() */ true) {
 				if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds) {
 					crop.spreadWeed(rand);
 				} else if (crop.isFertile()) {
@@ -226,7 +225,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				return false;
 			}
 			//get AgriCraftNBT data from the seeds
-			crop.setSeed(stack);
+			crop.setSeed(seed);
 			return true;
 		}
 		return false;
@@ -273,9 +272,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} //check to see if the player clicked with crops (crosscrop attempt)
 			else if (heldItem.getItem() == AgriItems.CROPS) {
 				this.setCrossCrop(world, pos, state, player, heldItem);
-			} //mod interaction
-			else if (AgriCompatHandler.getInstance().isRightClickHandled(heldItem.getItem())) {
-				return AgriCompatHandler.getInstance().handleRightClick(world, pos, this, crop, player, heldItem);
 			} else {
 				//harvest operation
 				this.harvest(world, pos, state, player, crop);

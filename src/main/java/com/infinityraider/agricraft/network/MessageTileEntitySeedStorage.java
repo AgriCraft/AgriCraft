@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.network;
 
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.apiimpl.v1.StatRegistry;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import io.netty.buffer.ByteBuf;

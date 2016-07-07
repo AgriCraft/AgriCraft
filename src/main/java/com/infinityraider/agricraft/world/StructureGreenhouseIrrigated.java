@@ -17,8 +17,8 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 public class StructureGreenhouseIrrigated extends StructureGreenhouse {
     //structure dimensions
     private static final int xSize = 17;

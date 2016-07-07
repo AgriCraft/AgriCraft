@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
-import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
-import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
+import com.infinityraider.agricraft.api.irrigation.IConnectable;
+import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.network.NetworkWrapper;
@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDebuggable;
+import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IAgriDebuggable {

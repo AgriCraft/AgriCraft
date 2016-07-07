@@ -16,10 +16,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.v1.PlantRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.items.IAgriJournalItem;
 
 public class ItemJournal extends ItemBase implements IAgriJournalItem {
 

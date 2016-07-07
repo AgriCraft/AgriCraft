@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

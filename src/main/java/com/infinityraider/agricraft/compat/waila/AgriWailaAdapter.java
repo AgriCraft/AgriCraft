@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 import net.minecraft.util.math.BlockPos;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import net.minecraft.block.Block;
 
 public class AgriWailaAdapter implements IWailaDataProvider {

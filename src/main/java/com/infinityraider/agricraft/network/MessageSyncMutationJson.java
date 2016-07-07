@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.network;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriMutation;
 import com.google.gson.Gson;
-import com.infinityraider.agricraft.compat.json.JsonHelper;
+import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -17,7 +17,7 @@ public class MessageSyncMutationJson extends MessageBase {
 	private AgriMutation mutation;
 	private int index;
 	private int count;
-	
+
 	public MessageSyncMutationJson() {
 		// Nothing to see here...
 	}
@@ -36,10 +36,12 @@ public class MessageSyncMutationJson extends MessageBase {
 	@Override
 	protected void processMessage(MessageContext ctx) {
 		AgriCore.getLogger("Agri-Net").debug("Recieved Mutation: ({0} of {1})", index + 1, count);
-		AgriCore.getMutations().addMutation(mutation);
-		if (this.index == this.count - 1) {
-			JsonHelper.initMutations();
-		}
+		MutationRegistry.getInstance().addMutation(
+				mutation.getChance(),
+				mutation.getChild().getId(),
+				mutation.getParent1().getId(),
+				mutation.getParent2().getId()
+		);
 	}
 
 	@Override

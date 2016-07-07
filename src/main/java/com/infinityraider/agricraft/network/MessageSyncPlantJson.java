@@ -3,7 +3,8 @@ package com.infinityraider.agricraft.network;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.google.gson.Gson;
-import com.infinityraider.agricraft.compat.json.JsonHelper;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.core.JsonCropPlant;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -36,10 +37,7 @@ public class MessageSyncPlantJson extends MessageBase {
 	@Override
 	protected void processMessage(MessageContext ctx) {
 		AgriCore.getLogger("Agri-Net").debug("Recieved Plant {0} ({1} of {2}).", plant.getName(), index + 1, count);
-		AgriCore.getPlants().addPlant(plant);
-		if (this.index == this.count - 1) {
-			JsonHelper.initPlants();
-		}
+		PlantRegistry.getInstance().addPlant(new JsonCropPlant(plant));
 	}
 
 	@Override

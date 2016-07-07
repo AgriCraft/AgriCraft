@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.farming.cropplant;
 
-import com.infinityraider.agricraft.api.v1.render.RenderMethod;
-import com.infinityraider.agricraft.api.v1.requirment.IGrowthRequirement;
-import com.infinityraider.agricraft.api.v1.crop.IAdditionalCropData;
+import com.infinityraider.agricraft.api.render.RenderMethod;
+import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.google.common.base.Function;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.reference.Constants;
@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
