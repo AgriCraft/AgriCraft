@@ -14,6 +14,8 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class CoreHandler {
 
@@ -68,16 +70,16 @@ public final class CoreHandler {
 		AgriCore.getCoreLogger().debug("Unvalidated Mutations: {0}", AgriCore.getMutations().getAll().size());
 		AgriCore.getMutations().validate();
 		AgriCore.getCoreLogger().debug("Validated Mutations: {0}", AgriCore.getMutations().getAll().size());
-		
+
 		// Save settings!
 		AgriCore.getConfig().save();
-		
+
 		// Load JSON Stuff
 		initPlants();
 		initMutations();
 
 	}
-	
+
 	public static void initPlants() {
 		AgriCore.getLogger("AgriCraft").info("Registering Custom Plants!");
 		AgriCore.getPlants().validate();
@@ -101,6 +103,17 @@ public final class CoreHandler {
 		for (IAgriMutation mutation : MutationHandler.getMutations()) {
 			AgriCore.getLogger("AgriCraft").info(" - {0}", mutation);
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void initPlantTextures() {
+		AgriCore.getLogger("AgriCraft").debug("Starting custom plant texture registration...");
+		PlantRegistry.getInstance().getPlants().forEach((p) -> {
+			if (p instanceof JsonCropPlant) {
+				((JsonCropPlant) p).registerIcons();
+			}
+		});
+		AgriCore.getLogger("AgriCraft").debug("Registered custom plant textures!");
 	}
 
 }

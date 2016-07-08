@@ -19,6 +19,11 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.ArrayList;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * <p>
@@ -67,6 +72,7 @@ public class AgriCraft {
 		// Core
 		CoreHandler.preinit(event);
         AgriCore.getLogger("AgriCraft").debug("Starting Pre-Initialization");
+		MinecraftForge.EVENT_BUS.register(instance);
         NetworkWrapper.getInstance().initMessages();
         proxy.initConfiguration(event);
 		StatRegistry.getInstance().registerAdapter(new PlantStats());
@@ -116,5 +122,11 @@ public class AgriCraft {
             }
         }
     }
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onTextureStitch(TextureStitchEvent e) {
+		CoreHandler.initPlantTextures();
+	}
 
 }
