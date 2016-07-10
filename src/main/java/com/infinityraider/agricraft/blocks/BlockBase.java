@@ -21,6 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collections;
 import java.util.List;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 
 /**
  * The base class for all AgriCraft blocks.
@@ -59,18 +61,24 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 	}
 
 	@Override
-	protected final BlockStateContainer createBlockState() {
-		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
-		for(IProperty prop : this.getPropertyArray()) {
-			builder.add(prop);
-		}
-		return builder.build();
+	protected BlockStateContainer createBlockState() {
+		return new ExtendedBlockState(this, getPropertyArray(), getUnlistedPropertyArray());
 	}
+
 
 	/**
 	 * @return a property array containing all properties for this block's state
 	 */
-	protected abstract IProperty[] getPropertyArray();
+	public IProperty[] getPropertyArray() {
+		return new IProperty[]{};
+	}
+	
+	/**
+	 * @return a property array containing all properties for this block's state
+	 */
+	public IUnlistedProperty[] getUnlistedPropertyArray() {
+		return new IUnlistedProperty[]{};
+	}
 
 	/**
 	 * Retrieves the block's ItemBlock class, as a generic class bounded by the
@@ -100,4 +108,5 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 	public List<ResourceLocation> getTextures() {
 		return Collections.emptyList();
 	}
+	
 }

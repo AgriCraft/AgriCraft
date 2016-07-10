@@ -1,8 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.renderers.blocks.ICustomRenderedBlockWithTile;
-import com.infinityraider.agricraft.blocks.blockstate.BlockStateSpecial;
-import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
@@ -15,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -82,11 +79,10 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase 
 		TileEntity tileentity = world.getTileEntity(pos);
 		return tileentity != null && tileentity.receiveClientEvent(id, data);
 	}
-	
+
 	@Override
-	@SuppressWarnings("unchecked")
-	public IBlockStateSpecial<T, ? extends IBlockState> getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return new BlockStateSpecial<>(state, pos, (T) world.getTileEntity(pos));
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
 	}
 
 }

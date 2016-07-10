@@ -85,7 +85,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 
 		this.renderer.renderWorldBlock(tessellator, world, pos, x, y, z, extendedState, block, te, true, partialTicks, destroyStage);
 
-		tessellator.popMatrix();
+		//tessellator.popMatrix();
 		tessellator.draw();
 
 	}

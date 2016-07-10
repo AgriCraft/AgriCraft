@@ -591,7 +591,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	}
 
 	@Override
-	protected IProperty[] getPropertyArray() {
+	public IProperty[] getPropertyArray() {
 		return new IProperty[]{AgriProperties.GROWTHSTAGE, AgriProperties.CROSSCROP, AgriProperties.WEEDS, AgriProperties.PLANT};
 	}
 

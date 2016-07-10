@@ -9,7 +9,6 @@ import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,11 +46,6 @@ public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 	@Override
 	public TileEntityPeripheral createNewTileEntity(World world, int meta) {
 		return new TileEntityPeripheral();
-	}
-
-	@Override
-	protected IProperty[] getPropertyArray() {
-		return new IProperty[0];
 	}
 
 	@Override

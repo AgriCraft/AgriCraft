@@ -4,11 +4,12 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.blocks.IBlockRenderingHandler;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
 import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -26,7 +27,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 
@@ -105,6 +112,11 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 
 	//rendering stuff
 	@Override
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
@@ -125,14 +137,11 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 	}
 
 	@Override
-	protected IProperty[] getPropertyArray() {
-		return new IProperty[0];
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
-	public RenderSeedAnalyzer getRenderer() {
-		return new RenderSeedAnalyzer(this);
+	public IBlockRenderingHandler getRenderer() {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySeedAnalyzer.class, new RenderSeedAnalyzer());
+		return null;
 	}
 
 	@Override
@@ -143,6 +152,36 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 	@Override
 	public AxisAlignedBB getDefaultBoundingBox() {
 		return BOX;
+	}
+
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return getActualState(state, world, pos);
+	}
+
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity te = world.getTileEntity(pos);
+		if (te instanceof TileEntitySeedAnalyzer) {
+			TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) te;
+			state = state
+					.withProperty(AgriProperties.FACING, analyzer.getOrientation().getEnumFacing())
+					.withProperty(AgriProperties.JOURNAL, analyzer.hasJournal());
+		}
+		return state;
+	}
+
+	@Override
+	public IProperty[] getPropertyArray() {
+		return new IProperty[]{
+			AgriProperties.FACING,
+			AgriProperties.JOURNAL
+		};
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return 0;
 	}
 
 }

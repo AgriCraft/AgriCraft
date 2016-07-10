@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -92,11 +91,6 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
 			}
 		}
 		return update;
-	}
-
-	@Override
-	protected IProperty[] getPropertyArray() {
-		return new IProperty[0];
 	}
 
 	@Override

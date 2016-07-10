@@ -1,0 +1,38 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "agricraft:seed_analyzer.obj",
+		"transform": "forge:default-block",
+		"textures": {}
+	},
+	"variants": {
+		"normal": [{}],
+		"inventory": [{}],
+		"journal": {
+			"true": {
+				"submodel": "agricraft:seed_analyzer_book.obj"
+			},
+			"false": {
+			}
+		},
+		"facing": {
+			"down": {
+				"x": 90
+			},
+			"up": {
+				"x": 270
+			},
+			"north": {
+			},
+			"south": {
+				"y": 180
+			},
+			"west": {
+				"y": 270
+			},
+			"east": {
+				"y": 90
+			}
+		}
+	}
+}

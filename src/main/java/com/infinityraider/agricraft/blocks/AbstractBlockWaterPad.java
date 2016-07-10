@@ -9,7 +9,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -34,11 +33,6 @@ public abstract class AbstractBlockWaterPad extends BlockBase {
     @Override
     public AxisAlignedBB getDefaultBoundingBox() {
         return BOX;
-    }
-	
-	@Override
-    protected IProperty[] getPropertyArray() {
-        return new IProperty[0];
     }
 	
 	@Override

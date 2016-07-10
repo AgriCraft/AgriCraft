@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.renderers.blocks.RenderBlockFence;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityFence;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -28,11 +27,6 @@ public class BlockFence extends BlockCustomWood<TileEntityFence> {
 	public BlockFence() {
 		super("fence", false);
 	}
-
-    @Override
-    protected IProperty[] getPropertyArray() {
-        return new IProperty[0];
-    }
 
     @Override
     public AxisAlignedBB getDefaultBoundingBox() {

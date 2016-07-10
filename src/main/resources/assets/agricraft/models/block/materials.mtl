@@ -1,0 +1,5 @@
+newmtl debug
+map_Kd agricraft:items/debugger
+
+newmtl seed_analyzer
+map_Kd agricraft:blocks/seed_analyzer

@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -70,11 +69,6 @@ public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
     @Override
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
-    }
-
-    @Override
-    protected IProperty[] getPropertyArray() {
-        return new IProperty[0];
     }
 
     @Override

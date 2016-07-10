@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.tiles.decoration.TileEntityFenceGate;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.infinityraider.agricraft.utility.PlayerHelper;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -50,11 +49,6 @@ public class BlockFenceGate extends BlockCustomWood<TileEntityFenceGate> {
             }
         }
         return true;
-    }
-
-    @Override
-    protected IProperty[] getPropertyArray() {
-        return new IProperty[0];
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.blocks.ItemBlockGrate;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockGrate;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -36,11 +35,6 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 	@Override
 	public AxisAlignedBB getDefaultBoundingBox() {
 		return null;
-	}
-
-	@Override
-	protected IProperty[] getPropertyArray() {
-		return new IProperty[0];
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -109,11 +108,6 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 	@Override
 	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return false;
-	}
-
-	@Override
-	protected IProperty[] getPropertyArray() {
-		return new IProperty[0];
 	}
 
 	@Override
