@@ -1,50 +1,56 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.FertilizerRegistry;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
 import com.infinityraider.agricraft.items.ItemDebugger;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.blocks.IBlockRenderingHandler;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.*;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.FertilizerRegistry;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
-import com.infinityraider.agricraft.reference.PropertyCropPlant;
-import net.minecraft.client.particle.ParticleManager;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import net.minecraft.block.Block;
-import com.infinityraider.agricraft.api.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
 
 /**
  * The most important block in the mod.
@@ -69,8 +75,14 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		this.isBlockContainer = true;
 		this.setSoundType(SoundType.PLANT);
 		this.setHardness(0.0F);
-		this.disableStats();
+		//this.disableStats();
 		this.setCreativeTab(null);
+		this.setDefaultState(this.blockState.getBaseState()
+				.withProperty(AgriProperties.PLANT, false)
+				.withProperty(AgriProperties.WEEDS, false)
+				.withProperty(AgriProperties.CROSSCROP, false)
+				.withProperty(AgriProperties.GROWTHSTAGE, 0)
+		);
 	}
 
 	@Override
@@ -80,31 +92,12 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState()
-				.withProperty(AgriProperties.GROWTHSTAGE, Math.max(Math.min(0, meta), Constants.MATURE))
-				.withProperty(AgriProperties.WEEDS, false)
-				.withProperty(AgriProperties.CROSSCROP, false)
-				.withProperty(AgriProperties.PLANT, PropertyCropPlant.NONE);
+		return getDefaultState().withProperty(AgriProperties.GROWTHSTAGE, Math.max(Math.min(0, meta), Constants.MATURE));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(AgriProperties.GROWTHSTAGE);
-	}
-
-	/**
-	 * This gets the actual state, containing data not contained by metadata
-	 */
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileEntity te = world.getTileEntity(pos);
-		if (te instanceof TileEntityCrop) {
-			TileEntityCrop crop = (TileEntityCrop) te;
-			state.withProperty(AgriProperties.WEEDS, crop.hasWeed());
-			state.withProperty(AgriProperties.CROSSCROP, crop.isCrossCrop());
-			state.withProperty(AgriProperties.PLANT, PropertyCropPlant.NONE);
-		}
-		return state;
 	}
 
 	/**
@@ -327,7 +320,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		if (!world.isRemote) {
 			TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 			if (crop != null) {
-				ArrayList<ItemStack> drops = new ArrayList<>();
+				List<ItemStack> drops = new ArrayList<>();
 				if (crop.isCrossCrop()) {
 					drops.add(new ItemStack(AgriItems.CROPS, 2));
 				} else {
@@ -602,8 +595,14 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public RenderCrop getRenderer() {
-		return new RenderCrop(this);
+	public IBlockRenderingHandler getRenderer() {
+		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(
+				AgriProperties.GROWTHSTAGE,
+				AgriProperties.WEEDS,
+				AgriProperties.PLANT
+		).build());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrop.class, new RenderCrop());
+		return null;
 	}
 
 	@Override
@@ -623,10 +622,8 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 
 	@Override
 	public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
-		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity == null || !(tileEntity instanceof IAgriCrop)) {
-			return world.getBlockState(pos);
-		}
+		// TODO: Fix propertycropplant
+		// TileEntity tileEntity = world.getTileEntity(pos);
 		return world.getBlockState(pos);
 	}
 
@@ -645,7 +642,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				}
 			}
 		}
-		return Collections.emptyList();
+		return list;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -657,4 +654,10 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	public ResourceLocation getBlockTexture() {
 		return new ResourceLocation("agricraft:blocks/crops");
 	}
+
+	@Override
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
+	
 }

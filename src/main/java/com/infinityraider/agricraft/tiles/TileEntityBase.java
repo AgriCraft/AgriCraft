@@ -130,10 +130,10 @@ public abstract class TileEntityBase extends TileEntity implements IAgriDisplaya
 		this.setOrientation(AgriForgeDirection.getOrientation(orientation));
 	}
 
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.getPos(), this.getBlockMetadata(), this.getUpdateTag());
-    }
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(this.getPos(), this.getBlockMetadata(), this.getUpdateTag());
+	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
@@ -151,21 +151,29 @@ public abstract class TileEntityBase extends TileEntity implements IAgriDisplaya
 	/**
 	 * Marks the tile entity for an update.
 	 */
-	public final void markForUpdate() {
+	public void markForUpdate() {
+		this.updateState();
 		this.worldObj.markBlockRangeForRenderUpdate(pos, pos);
 		this.markDirty();
+	}
+
+	public IBlockState getState(IBlockState state) {
+		return state;
+	}
+
+	public final void updateState() {
+		if (!this.worldObj.isRemote) {
+			this.worldObj.setBlockState(pos, this.getState(this.worldObj.getBlockState(pos)), 3);
+		}
 	}
 
 	private boolean isMultiBlock() {
 		return this instanceof IMultiBlockComponent;
 	}
 
-	public Class getTileClass() {
-		return this.getClass();
-	}
-
 	public TextureAtlasSprite getTexture(IBlockState state, @Nullable EnumFacing side) {
 		//TODO
 		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 	}
+
 }

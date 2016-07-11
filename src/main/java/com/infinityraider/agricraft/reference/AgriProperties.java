@@ -19,7 +19,7 @@ public interface AgriProperties {
 	
 	PropertyBool CROSSCROP = PropertyBool.create("crosscrop");
 	PropertyBool WEEDS = PropertyBool.create("weeds");
+	PropertyBool PLANT = PropertyBool.create("plant");
     PropertyInteger GROWTHSTAGE = PropertyInteger.create("age", 0, 7);
-	PropertyCropPlant PLANT = PropertyCropPlant.create("plant");
 
 }

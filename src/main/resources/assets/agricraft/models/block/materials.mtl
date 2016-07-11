@@ -3,3 +3,9 @@ map_Kd agricraft:items/debugger
 
 newmtl seed_analyzer
 map_Kd agricraft:blocks/seed_analyzer
+
+newmtl probe
+map_Kd agricraft:blocks/peripheral_probe
+
+newmtl crop
+map_Kd agricraft:blocks/crop

@@ -60,7 +60,7 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
+	protected final BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this, getPropertyArray(), getUnlistedPropertyArray());
 	}
 

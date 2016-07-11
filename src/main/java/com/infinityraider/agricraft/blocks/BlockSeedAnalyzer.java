@@ -160,18 +160,6 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileEntity te = world.getTileEntity(pos);
-		if (te instanceof TileEntitySeedAnalyzer) {
-			TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) te;
-			state = state
-					.withProperty(AgriProperties.FACING, analyzer.getOrientation().getEnumFacing())
-					.withProperty(AgriProperties.JOURNAL, analyzer.hasJournal());
-		}
-		return state;
-	}
-
-	@Override
 	public IProperty[] getPropertyArray() {
 		return new IProperty[]{
 			AgriProperties.FACING,

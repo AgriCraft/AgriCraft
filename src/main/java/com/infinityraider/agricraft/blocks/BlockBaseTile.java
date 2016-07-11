@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -85,4 +86,14 @@ public abstract class BlockBaseTile<T extends TileEntityBase> extends BlockBase 
 		return true;
 	}
 
+	@Override
+	public final IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity te = world.getTileEntity(pos);
+		if (te instanceof TileEntityBase) {
+			return ((TileEntityBase) te).getState(state);
+		} else {
+			return state;
+		}
+	}
+	
 }

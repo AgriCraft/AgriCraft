@@ -18,7 +18,9 @@ import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.utility.StackHelper;
+import net.minecraft.block.state.IBlockState;
 
 public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
 
@@ -422,6 +424,13 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 	@Override
 	public boolean isRotatable() {
 		return true;
+	}
+	
+	@Override
+	public IBlockState getState(IBlockState state) {
+		return state
+					.withProperty(AgriProperties.FACING, this.orientation.getEnumFacing())
+					.withProperty(AgriProperties.JOURNAL, this.hasJournal());
 	}
 
 	@Override

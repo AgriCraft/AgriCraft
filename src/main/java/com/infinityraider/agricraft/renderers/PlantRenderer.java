@@ -1,8 +1,11 @@
 package com.infinityraider.agricraft.renderers;
 
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.renderers.tessellation.TessellatorBakedQuad;
+import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
@@ -16,8 +19,16 @@ import com.infinityraider.agricraft.api.plant.IAgriPlant;
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
 
+	@AgriConfigurable(key = "Flip Plants", category = AgriConfigCategory.CLIENT, comment = "Set to true to flip rendered plants upside down, in the case of upside-down plants.")
+	public static boolean FLIP_PLANT = true;
+
+	static {
+		AgriCore.getConfig().addConfigurable(PlantRenderer.class);
+	}
+
 	public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, IAgriPlant plant) {
-		ITessellator tessellator = TessellatorBakedQuad.getInstance();
+		ITessellator tessellator = TessellatorVertexBuffer.getInstance();
+		tessellator.setColorRGBA(255, 255, 255, 255);
 		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
 		renderPlant(world, pos, growthStage, plant, tessellator);
 		tessellator.draw();
@@ -26,6 +37,14 @@ public abstract class PlantRenderer {
 	public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, IAgriPlant plant, ITessellator tessellator) {
 		TextureAtlasSprite iconA = tessellator.getIcon(plant.getPrimaryPlantTexture(growthStage));
 		TextureAtlasSprite iconB = tessellator.getIcon(plant.getSecondaryPlantTexture(growthStage));
+		tessellator.pushMatrix();
+
+		// Correct inverted crops.
+		if (FLIP_PLANT) {
+			tessellator.rotate(180, 1, 0, 0);
+			tessellator.translate(0, -1, -1);
+		}
+
 		if (iconA != null) {
 			tessellator.translate(pos);
 			switch (plant.getRenderMethod()) {
@@ -52,6 +71,7 @@ public abstract class PlantRenderer {
 					break;
 			}
 		}
+		tessellator.popMatrix();
 	}
 
 	public static void renderHashTagPattern(ITessellator tessellator, TextureAtlasSprite icon, int layer) {
@@ -104,4 +124,5 @@ public abstract class PlantRenderer {
 		tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.NORTH, icon, 12);
 		tessellator.drawScaledFaceDouble(-2, minY, 10, maxY, EnumFacing.EAST, icon, 12);
 	}
+
 }
