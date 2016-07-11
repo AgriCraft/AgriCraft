@@ -7,7 +7,9 @@
 	},
 	"variants": {
 		"normal": [{}],
-		"inventory": [{}],
+		"inventory": [{
+				"submodel": "agricraft:seed_analyzer_book.obj"
+			}],
 		"journal": {
 			"true": {
 				"submodel": "agricraft:seed_analyzer_book.obj"
@@ -16,23 +18,19 @@
 			}
 		},
 		"facing": {
-			"down": {
-				"x": 90
-			},
-			"up": {
-				"x": 270
-			},
 			"north": {
 			},
 			"south": {
 				"y": 180
 			},
 			"west": {
-				"y": 270
+				"y": 90
 			},
 			"east": {
-				"y": 90
-			}
+				"y": 270
+			},
+			"down": {},
+			"up": {}
 		}
 	}
 }

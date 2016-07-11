@@ -14,14 +14,10 @@ import com.agricraft.agricore.util.ReflectionHelper;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.dynmodels.AgriCraftModelLoader;
 import com.infinityraider.agricraft.utility.ModelErrorSuppressor;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.b3d.B3DLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
@@ -72,7 +68,7 @@ public class ClientProxy implements IProxy {
 
 		// Init Model Loader
 		ModelLoaderRegistry.registerLoader(AgriCraftModelLoader.INSTANCE);
-		
+
 		// Init OBJ Loader
 		OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
 		B3DLoader.INSTANCE.addDomain(Reference.MOD_ID);
@@ -80,15 +76,7 @@ public class ClientProxy implements IProxy {
 		//BLOCKS
 		//------
 		ReflectionHelper.forEachIn(AgriBlocks.class, BlockBase.class, (block) -> {
-			StateMapperBase stateMapper = new StateMapperBase() {
-				@Override
-				protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-					return block.getBlockModelResourceLocation();
-				}
-			};
-			ModelLoader.setCustomStateMapper(block, stateMapper);
-			//register the renderer
-			BlockRendererRegistry.getInstance().registerCustomBlockRenderer(block);
+				BlockRendererRegistry.getInstance().registerCustomBlockRenderer(block);
 		});
 
 		//ITEMS

@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.renderers.blocks.ICustomRenderedBlock;
 import com.infinityraider.agricraft.tabs.AgriTabs;
-import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -57,7 +56,7 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getBlockModelResourceLocation() {
-		return new  ModelResourceLocation(Reference.MOD_ID.toLowerCase()+":"+getInternalName());
+		return new  ModelResourceLocation("agricraft:"+getInternalName());
 	}
 
 	@Override

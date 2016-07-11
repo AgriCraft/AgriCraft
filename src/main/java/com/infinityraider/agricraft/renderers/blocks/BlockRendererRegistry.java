@@ -64,6 +64,9 @@ public class BlockRendererRegistry implements ICustomModelLoader {
         }
         Block block = (Block) customRenderedBlock;
         IBlockRenderingHandler renderer = customRenderedBlock.getRenderer();
+		if (renderer == null) {
+			return;
+		}
         //set custom state mapper
         StateMapperBase stateMapper = new StateMapperBase() {
             @Override

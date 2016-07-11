@@ -152,6 +152,7 @@ public abstract class TileEntityBase extends TileEntity implements IAgriDisplaya
 	 * Marks the tile entity for an update.
 	 */
 	public final void markForUpdate() {
+		this.worldObj.markBlockRangeForRenderUpdate(pos, pos);
 		this.markDirty();
 	}
 
