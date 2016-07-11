@@ -2,7 +2,8 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
-import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
+import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.utility.DebugHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -24,6 +25,13 @@ public class ItemDebugger extends ItemBase {
 	)
 	private static int radius = 10;
 
+	@AgriConfigurable(
+			category = AgriConfigCategory.DEBUG,
+			key = "Enable Debugger Grass Breaker",
+			comment = "Enable debugger use as grass clearing tool."
+	)
+	private static boolean enableGrassBreaker = true;
+
 	public ItemDebugger() {
 		super("debugger", true);
 		this.setMaxStackSize(1);
@@ -35,28 +43,33 @@ public class ItemDebugger extends ItemBase {
 			DebugHelper.debug(player, world, pos);
 			return EnumActionResult.SUCCESS;
 		} else if (!world.isRemote) {
-			AgriCore.getCoreLogger().debug("\nCenter: {0}\nRadius: {1}", pos, radius);
+			clearGrass(world, pos);
+			return EnumActionResult.SUCCESS;
+		}
+		return EnumActionResult.PASS;
+	}
+
+	public static void clearGrass(World world, BlockPos pos) {
+		if (enableGrassBreaker && !world.isRemote) {
 			pos = pos.toImmutable();
 			for (int x = -radius; x < radius; x++) {
 				for (int z = -radius; z < radius; z++) {
 					BlockPos loc = pos.add(x, 0, z);
 					Block block = world.getBlockState(loc).getBlock();
 					if (block instanceof BlockBush) {
-						AgriCore.getCoreLogger().debug("Block at {0}: {1}", loc, block);
 						world.destroyBlock(loc, false);
 					}
 				}
 			}
-			return EnumActionResult.SUCCESS;
-			/*
-			if(!world.isRemote) {
-                EntityVillager entityvillager = new EntityVillagerFarmer(world, WorldGen.getVillagerId());
-                entityvillager.setLocationAndAngles((double) pos.getX() + 0.5D, (double) pos.getY() + 1, (double) pos.getZ() + 0.5D, 0.0F, 0.0F);
-                world.spawnEntityInWorld(entityvillager);
-            }
-			 */
 		}
-		return EnumActionResult.PASS;
+	}
+
+	public static void spawnFarmer(World world, BlockPos pos) {
+		if (!world.isRemote) {
+			EntityVillagerFarmer entityvillager = new EntityVillagerFarmer(world, WorldGen.getVillagerId());
+			entityvillager.setLocationAndAngles((double) pos.getX() + 0.5D, (double) pos.getY() + 1, (double) pos.getZ() + 0.5D, 0.0F, 0.0F);
+			world.spawnEntityInWorld(entityvillager);
+		}
 	}
 
 }

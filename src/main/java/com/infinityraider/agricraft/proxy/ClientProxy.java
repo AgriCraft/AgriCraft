@@ -85,9 +85,6 @@ public class ClientProxy implements IProxy {
 			item.registerItemRenderer();
 		});
 
-		// Clippings
-		AgriItems.AGRI_CLIPPING.registerItemRenderer();
-
 		//villager
 		if (!AgriCraftConfig.disableWorldGen && AgriCraftConfig.villagerEnabled) {
 			//TODO: register villager skin

@@ -22,6 +22,7 @@ import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
@@ -56,7 +57,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * The most important block in the mod.
  */
 public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowable, IPlantable {
-	
+
 	public static final Class[] ITEM_EXCLUDES = new Class[]{
 		IAgriRakeItem.class,
 		IAgriClipperItem.class,
@@ -115,7 +116,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
 		if (crop.hasPlant() || crop.hasWeed()) {
-			if (/* TODO!!! APIimplv1.getInstance().allowGrowthTick() */ true) {
+			if (/* TODO!!! APIimplv1.getInstance().allowGrowthTick() */true) {
 				if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds) {
 					crop.spreadWeed(rand);
 				} else if (crop.isFertile()) {
@@ -247,7 +248,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 				return false;
 			} else if (player.isSneaking() || heldItem == null || heldItem.getItem() == null) {
 				this.harvest(world, pos, state, player, crop);
-			} else if ( TypeHelper.isAnyType(heldItem.getItem(), ITEM_EXCLUDES) ) {
+			} else if (TypeHelper.isAnyType(heldItem.getItem(), ITEM_EXCLUDES)) {
 				// Allow the excludes to do their things.
 				return false;
 			} else if (FertilizerRegistry.getInstance().hasAdapter(heldItem)) {
@@ -383,7 +384,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			crop.crossOver();
 		}
 	}
-	
+
 	/*
 	 * Handles changes in the crop's neighbors.
 	 */
@@ -564,9 +565,8 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 *
 	 * @return false - the block is one-shot and needs no hit particles.
 	 */
-	
 	@Override
-    @SideOnly(value = Side.CLIENT)
+	@SideOnly(value = Side.CLIENT)
 	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
 		return false;
 	}
@@ -576,16 +576,20 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	 *
 	 * @return false - there are no destroy particles.
 	 */
-	
 	@Override
-    @SideOnly(value = Side.CLIENT)
+	@SideOnly(value = Side.CLIENT)
 	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
 		return false;
 	}
 
 	@Override
-	public IProperty[] getPropertyArray() {
-		return new IProperty[]{AgriProperties.GROWTHSTAGE, AgriProperties.CROSSCROP, AgriProperties.WEEDS, AgriProperties.PLANT};
+	public Set<IProperty> getProperties() {
+		return TypeHelper.addAll(super.getProperties(),
+				AgriProperties.PLANT,
+				AgriProperties.WEEDS,
+				AgriProperties.CROSSCROP,
+				AgriProperties.GROWTHSTAGE
+		);
 	}
 
 	/**
@@ -659,5 +663,5 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
-	
+
 }

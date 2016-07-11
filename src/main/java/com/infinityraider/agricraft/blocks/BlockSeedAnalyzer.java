@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.tabs.AgriTabs;
@@ -27,6 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -155,21 +157,11 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 	}
 
 	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return getActualState(state, world, pos);
-	}
-
-	@Override
-	public IProperty[] getPropertyArray() {
-		return new IProperty[]{
-			AgriProperties.FACING,
-			AgriProperties.JOURNAL
-		};
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return 0;
+	public Set<IProperty> getProperties() {
+		return TypeHelper.addAll(super.getProperties(),
+				AgriProperties.FACING,
+				AgriProperties.JOURNAL
+		);
 	}
 
 }

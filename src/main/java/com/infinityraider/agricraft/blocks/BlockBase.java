@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.renderers.blocks.ICustomRenderedBlock;
 import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.RegisterHelper;
@@ -19,7 +20,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
@@ -61,22 +64,31 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 
 	@Override
 	protected final BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(this, getPropertyArray(), getUnlistedPropertyArray());
+		return new ExtendedBlockState(
+				this,
+				TypeHelper.asArray(this.getProperties(), IProperty.class), 
+				TypeHelper.asArray(this.getUnlistedProperties(), IUnlistedProperty.class)
+		);
 	}
 
 
 	/**
 	 * @return a property array containing all properties for this block's state
 	 */
-	public IProperty[] getPropertyArray() {
-		return new IProperty[]{};
+	public Set<IProperty> getProperties() {
+		return new HashSet<>();
 	}
 	
 	/**
 	 * @return a property array containing all properties for this block's state
 	 */
-	public IUnlistedProperty[] getUnlistedPropertyArray() {
-		return new IUnlistedProperty[]{};
+	public Set<IUnlistedProperty> getUnlistedProperties() {
+		return new HashSet<>();
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return 0;
 	}
 
 	/**
