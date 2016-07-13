@@ -96,7 +96,7 @@ dependencies {
     //compile "codechicken:CodeChickenCore:1.8-1.0.5.34:dev"
     //compile "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
 	compile project(':lib/AgriCore')
-  compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
+	compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
 	deobfCompile "mezz.jei:jei_1.10:3.7.0.218"
 }
 
@@ -114,6 +114,12 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
 		exclude 'mcmod.info'
     }
+	
+	from('lib/AgriPlants') {
+		include '**/*.json'
+		into 'plants'
+	}
+	
 }
 
 // Javadoc

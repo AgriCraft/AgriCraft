@@ -14,12 +14,14 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
+import java.nio.file.Paths;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class CoreHandler {
 
 	private static Path configDir;
+	private static Path plantDir;
 	private static Configuration config;
 
 	private CoreHandler() {
@@ -32,6 +34,10 @@ public final class CoreHandler {
 	public static Path getConfigDir() {
 		return configDir;
 	}
+	
+	public static Path getPlantDir() {
+		return plantDir;
+	}
 
 	@EventHandler
 	public static void preinit(FMLPreInitializationEvent event) {
@@ -39,6 +45,9 @@ public final class CoreHandler {
 		// Setup Config.
 		configDir = event.getSuggestedConfigurationFile().getParentFile().toPath().resolve(Reference.MOD_ID);
 		config = new Configuration(configDir.resolve("config.cfg").toFile());
+		
+		// Setup Plant Dir.
+		plantDir = configDir.resolve("plants");
 
 		// Setup Provider
 		AgriConfigAdapter provider = new ModProvider(config);
@@ -46,6 +55,10 @@ public final class CoreHandler {
 
 		// Initialize AgriCore
 		AgriCore.init(new ModLogger(), new ModTranslator(), new ModValidator(), new ModConverter(), provider);
+		
+		// Transfer Defaults
+		//JsonCopier.listJarPlants();
+		JsonCopier.copyPlants(configDir);
 
 	}
 
@@ -55,7 +68,7 @@ public final class CoreHandler {
 		// Load the core!
 		AgriCore.getLogger("AgriCraft").info("Attempting to load plants!");
 		AgriLoader.loadManifest(
-				configDir.resolve("plants/manifest.json"),
+				plantDir.resolve("manifest.json"),
 				AgriCore.getPlants(),
 				AgriCore.getMutations()
 		);
