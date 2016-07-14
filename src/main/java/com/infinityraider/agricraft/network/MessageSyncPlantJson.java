@@ -36,7 +36,7 @@ public class MessageSyncPlantJson extends MessageBase {
 
 	@Override
 	protected void processMessage(MessageContext ctx) {
-		AgriCore.getLogger("Agri-Net").debug("Recieved Plant {0} ({1} of {2}).", plant.getName(), index + 1, count);
+		AgriCore.getLogger("Agri-Net").debug("Recieved Plant {0} ({1} of {2}).", plant.getPlantName(), index + 1, count);
 		PlantRegistry.getInstance().addPlant(new JsonCropPlant(plant));
 	}
 

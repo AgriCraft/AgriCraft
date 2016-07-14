@@ -100,7 +100,7 @@ public class JournalPageSeed extends JournalPage {
 	}
 
 	private Component<String> getTitle() {
-		String text = plant.getSeed().getDisplayName();
+		String text = plant.getSeedName();
 		int x = 82;
 		int y = 17;
 		float scale = 0.8F;

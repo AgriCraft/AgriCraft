@@ -40,7 +40,7 @@ public class PlayerConnectToServerHandler {
 		AgriCore.getLogger("Agri-Net").info("Sending plants to player: " + player.getDisplayNameString());
 		List<AgriPlant> plants = AgriCore.getPlants().getAll();
 		for (int i = 0; i < plants.size(); i++) {
-			AgriCore.getLogger("Agri-Net").info("Sending plant: {0} ({1} of {2})", plants.get(i).getName(), i + 1, plants.size());
+			AgriCore.getLogger("Agri-Net").info("Sending plant: {0} ({1} of {2})", plants.get(i).getPlantName(), i + 1, plants.size());
 			NetworkWrapper.getInstance().sendTo(
 					new MessageSyncPlantJson(plants.get(i), i, plants.size()),
 					player

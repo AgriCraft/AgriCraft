@@ -46,7 +46,12 @@ public class JsonCropPlant extends CropPlant {
 
 	@Override
 	public String getPlantName() {
-		return this.plant.getName();
+		return this.plant.getPlantName();
+	}
+
+	@Override
+	public String getSeedName() {
+		return this.plant.getSeedName();
 	}
 
 	@Override
