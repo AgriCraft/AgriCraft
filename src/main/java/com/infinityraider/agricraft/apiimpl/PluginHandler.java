@@ -29,7 +29,7 @@ public final class PluginHandler {
 	}
 	
 	public static void init() {
-		plugins.forEach(IAgriPlugin::initPlugin);
+		plugins.stream().filter(IAgriPlugin::isEnabled).forEach(IAgriPlugin::initPlugin);
 	}
 	
 	public static void postInit() {
@@ -77,9 +77,9 @@ public final class PluginHandler {
 			try {
 				T instance = Class.forName(asmData.getClassName()).asSubclass(type).newInstance();
 				instances.add(instance);
-			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+			} catch (ClassNotFoundException | NoClassDefFoundError | IllegalAccessException | InstantiationException e) {
 				AgriCore.getLogger("AgriCraft-Plugins").debug(
-						"\nFailed to load class: {0}!\n\tFor annotation: {1}!\n\tAs Instanceof: {2}!",
+						"%nFailed to load AgriPlugin%n\tOf class: {0}!%n\tFor annotation: {1}!%n\tAs Instanceof: {2}!",
 						asmData.getClassName(),
 						anno.getCanonicalName(),
 						type.getCanonicalName()

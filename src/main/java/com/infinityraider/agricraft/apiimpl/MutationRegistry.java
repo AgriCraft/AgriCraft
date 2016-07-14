@@ -23,7 +23,7 @@ public class MutationRegistry implements IAgriMutationRegistry {
 	}
 
 	@Override
-	public List<IAgriMutation> getRegisteredMutations() {
+	public List<IAgriMutation> getMutations() {
 		return Arrays.asList(MutationHandler.getMutations());
 	}
 

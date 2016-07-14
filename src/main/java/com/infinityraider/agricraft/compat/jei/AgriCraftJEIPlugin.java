@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.compat.jei;
 
+import com.infinityraider.agricraft.apiimpl.MutationRegistry;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeCategory;
 import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeHandler;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeCategory;
@@ -44,7 +46,7 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 				new MutationRecipeHandler(),
 				new ProduceRecipeHandler()
 		);
-		
+
 		registry.addRecipeCategoryCraftingItem(new ItemStack(AgriItems.CROPS), CATEGORY_MUTATION, CATEGORY_PRODUCE);
 
 		for (Map.Entry<Item, String[]> nbt : nbtIgnores.entrySet()) {
@@ -56,33 +58,8 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntimeInstance) {
 		jeiRuntime = jeiRuntimeInstance;
-		for (Object o : toRegister) {
-			jeiRuntime.getRecipeRegistry().addRecipe(o);
-		}
-	}
-
-	public static void registerRecipe(@Nonnull Object o) {
-		if (!toRegister.contains(o)) {
-			// Maintain a list to prevent duplicate registration.
-			toRegister.add(o);
-			if (jeiRuntime != null) {
-				jeiRuntime.getRecipeRegistry().addRecipe(o);
-			}
-		}
-	}
-
-	// Todo: Determine what to do in case of duplicate entry.
-	public static void registerNbtIgnore(@Nonnull Item item, @Nonnull List<String> tags) {
-		if (!tags.isEmpty()) {
-			registerNbtIgnore(item, tags.toArray(new String[tags.size()]));
-		}
-	}
-
-	public static void registerNbtIgnore(@Nonnull Item item, @Nonnull String... tags) {
-		nbtIgnores.put(item, tags);
-		if (jeiHelpers != null) {
-			jeiHelpers.getNbtIgnoreList().ignoreNbtTagNames(item, tags);
-		}
+		PlantRegistry.getInstance().getPlants().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
+		MutationRegistry.getInstance().getMutations().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
 	}
 
 }

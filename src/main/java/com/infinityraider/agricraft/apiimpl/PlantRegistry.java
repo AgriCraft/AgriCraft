@@ -4,7 +4,6 @@ package com.infinityraider.agricraft.apiimpl;
 
 import java.util.List;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +41,6 @@ public class PlantRegistry implements IAgriPlantRegistry {
 	public boolean addPlant(IAgriPlant plant) {
 		if (!this.plants.containsKey(plant.getId())) {
 			this.plants.put(plant.getId(), plant);
-			AgriCraftJEIPlugin.registerRecipe(plant);
 			return true;
 		} else {
 			return false;

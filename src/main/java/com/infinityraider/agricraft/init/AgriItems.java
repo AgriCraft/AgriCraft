@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.init;
 import com.infinityraider.agricraft.items.*;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.log.AgriLogger;
-import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.agricraft.agricore.util.ReflectionHelper;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;
@@ -46,7 +45,6 @@ public class AgriItems {
 			if (item.isEnabled()) {
 				logger.debug("Registering Item: {0}", item.getInternalName());
 				RegisterHelper.registerItem(item, item.getInternalName());
-				AgriCraftJEIPlugin.registerNbtIgnore(item, item.getIgnoredNBT());
 			}
 		});
 		logger.debug("Finished Item Registration!");
