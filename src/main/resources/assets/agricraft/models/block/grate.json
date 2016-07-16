@@ -1,0 +1,111 @@
+{
+    "textures": {
+		"particle": "#wood"
+    },
+    "elements": [
+        {
+            "name": "Cube",
+            "from": [ 1.0, 0.0, 0.0 ], 
+            "to": [ 3.0, 16.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "east": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "south": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "west": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "up": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "down": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 5.0, 0.0, 0.0 ], 
+            "to": [ 7.0, 16.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "east": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "south": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "west": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "up": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "down": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 9.0, 0.0, 0.0 ], 
+            "to": [ 11.0, 16.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "east": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "south": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "west": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "up": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "down": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 13.0, 0.0, 0.0 ], 
+            "to": [ 15.0, 16.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "east": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "south": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "west": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "up": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "down": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 0.0, 1.0, 0.0 ], 
+            "to": [ 16.0, 3.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "east": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "south": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "west": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "up": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "down": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 0.0, 5.0, 0.0 ], 
+            "to": [ 16.0, 7.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "east": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "south": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "west": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "up": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "down": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 0.0, 9.0, 0.0 ], 
+            "to": [ 16.0, 11.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "east": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "south": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "west": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "up": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "down": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 0.0, 13.0, 0.0 ], 
+            "to": [ 16.0, 15.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "east": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "south": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "west": { "texture": "#wood", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "up": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] },
+                "down": { "texture": "#wood", "uv": [ 0.0, 0.0, 16.0, 2.0 ] }
+            }
+        }
+    ]
+}

@@ -17,6 +17,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.WoodType;
 
 /**
  * This class represents the root tile entity for all AgriCraft custom WOOD
@@ -59,7 +60,7 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 	//TODO: icon handling
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getTexture() {
-		return null;
+		return new ResourceLocation(WoodType.getType(materialMeta).getTexture());
 	}
 
 	@Override

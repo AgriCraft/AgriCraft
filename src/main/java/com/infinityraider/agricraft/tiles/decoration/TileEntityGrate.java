@@ -10,12 +10,17 @@ import net.minecraft.util.math.AxisAlignedBB;
 import java.util.List;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.reference.WoodType;
+import com.infinityraider.agricraft.utility.AxisPosition;
+import net.minecraft.block.state.IBlockState;
 
 public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebuggable {
 
 	private static final double WIDTH = 2 * Constants.UNIT;
 	private static final double LENGTH = 1;
-	private static final double[] OFFSETS = new double[]{ // The compiler does these calculations at compile time so no need to worry.
+	private static final double[] OFFSETS = new double[]{
+	// The compiler does these calculations at compile time so no need to worry.
 		0 * 7 * Constants.UNIT, //offset 0
 		1 * 7 * Constants.UNIT, //offset 1
 		2 * 7 * Constants.UNIT, //offset 2
@@ -140,4 +145,14 @@ public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebugg
 		list.add(" - y: " + bounds[1] + " - " + bounds[4]);
 		list.add(" - z: " + bounds[2] + " - " + bounds[5]);
 	}
+	
+	// Blockstate
+	@Override
+	public IBlockState getState(IBlockState state) {
+		return state
+				.withProperty(AgriProperties.WOOD_TYPE, WoodType.getType(this.getMaterialMeta()))
+				.withProperty(AgriProperties.AXIS_POS, AxisPosition.convert(orientation.axis, offset))
+				.withProperty(AgriProperties.VINES, this.vines);
+	}
+	
 }

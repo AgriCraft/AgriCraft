@@ -1,10 +1,13 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.blocks.ItemBlockGrate;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockGrate;
+import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.renderers.blocks.IBlockRenderingHandler;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
+import com.infinityraider.agricraft.utility.AxisPosition;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -18,13 +21,20 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import java.util.List;
+import java.util.Set;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 
 	public BlockGrate() {
 		super("grate", false);
+		this.fullBlock = false;
+		this.setDefaultState(this.blockState.getBaseState()
+				.withProperty(AgriProperties.AXIS_POS, AxisPosition.Z_MID)
+		);
 	}
 
 	@Override
@@ -34,13 +44,14 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 
 	@Override
 	public AxisAlignedBB getDefaultBoundingBox() {
-		return null;
+		return new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public RenderBlockGrate getRenderer() {
-		return new RenderBlockGrate(this);
+	public IBlockRenderingHandler getRenderer() {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+		return null;
 	}
 
 	@Override
@@ -86,12 +97,15 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 		return items;
 	}
 
+	/*
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
 		return getSelectedBoundingBox(state, world, pos);
 	}
+	*/
 
+	/*
 	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
 		final double[] b;
@@ -104,10 +118,25 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 		}
 		return new AxisAlignedBB(b[0] + pos.getX(), b[1] + pos.getY(), b[2] + pos.getZ(), b[3] + pos.getX(), b[4] + pos.getY(), b[5] + pos.getZ());
 	}
+	*/
 
 	@Override
 	public boolean isEnabled() {
 		return AgriCraftConfig.enableGrates;
+	}
+
+	@Override
+	public Set<IProperty> getProperties() {
+		return TypeHelper.addAll(super.getProperties(),
+				AgriProperties.WOOD_TYPE,
+				AgriProperties.AXIS_POS,
+				AgriProperties.VINES
+		);
+	}
+
+	@Override
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 
 }

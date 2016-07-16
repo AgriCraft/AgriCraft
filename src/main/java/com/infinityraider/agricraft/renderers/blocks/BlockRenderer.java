@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuff
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -69,7 +68,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 
 	@Override
 	public void renderTileEntityAt(T te, double x, double y, double z, float partialTicks, int destroyStage) {
-		ITessellator tessellator = TessellatorVertexBuffer.getInstance(Tessellator.getInstance());
+		ITessellator tessellator = TessellatorVertexBuffer.getInstance();
 		World world = te.getWorld();
 		BlockPos pos = te.getPos();
 		IBlockState state = world.getBlockState(pos);

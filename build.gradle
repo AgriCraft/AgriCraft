@@ -115,6 +115,19 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
 		exclude 'mcmod.info'
+		exclude '**/blockstates/*.json'
+    }
+	
+	String auto = "${projectDir}/src/main/resources/assets/agricraft/auto"
+	String axis_pos = new File("${auto}/axis_pos.json").text
+	String wood_type = new File("${auto}/wood_type.json").text
+	
+	from(sourceSets.main.resources.srcDirs) {
+		include '**/blockstates/*.json'
+		filter { String line -> line\
+				.replace('"${axis_pos}"', axis_pos)\
+				.replace('"${wood_type}"', wood_type)
+		}
     }
 	
 	from('lib/AgriPlants') {

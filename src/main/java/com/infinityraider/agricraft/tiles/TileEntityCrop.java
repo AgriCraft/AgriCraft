@@ -30,12 +30,12 @@ import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.agricraft.agricore.util.MathHelper;
-import com.infinityraider.agricraft.utility.WorldHelper;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.utility.WorldHelper;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDebuggable {
 

@@ -78,7 +78,7 @@ public final class IconHelper {
 	}
 	
 	private static TextureAtlasSprite getIcon(final String path, final String expansion) {
-		return getIcon(path.replaceFirst(EXPANSION_POINT, expansion));
+		return getIcon(path, expansion, "");
 	}
 	
 	private static TextureAtlasSprite getIcon(final String path, final String expansion, final String postfix) {
@@ -138,6 +138,7 @@ public final class IconHelper {
 			}
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			// Shoot
+			AgriCore.getLogger("AgriCraft").debug("Something strange is going on with the Minecraft TextureMap!");
 		} catch (SecurityException e) {
 			AgriCore.getLogger("AgriCraft").debug("Locked out of TextureMap...");
 		}

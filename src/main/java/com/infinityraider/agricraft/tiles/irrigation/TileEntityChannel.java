@@ -20,6 +20,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.utility.WorldHelper;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IAgriDebuggable {
 
@@ -223,6 +224,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 						}
 					}
 				}
+			}
+			// Handle Sprinklers
+			TileEntitySprinkler spr = WorldHelper.getTile(worldObj, this.pos.add(0, 1, 0), TileEntitySprinkler.class);
+			if (spr != null) {
+				updatedLevel = spr.acceptFluid(1000, updatedLevel, true);
 			}
 			//equalize water LEVEL over all neighbouring channels
 			totalLvl = totalLvl + updatedLevel;

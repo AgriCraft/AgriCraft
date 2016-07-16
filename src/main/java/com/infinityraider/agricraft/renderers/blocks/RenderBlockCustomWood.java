@@ -4,9 +4,11 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
+import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.agricraft.utility.IconHelper;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,8 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
 
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> extends RenderBlockBase<T> {
@@ -54,8 +54,8 @@ public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> exte
 
 	public TextureAtlasSprite getIcon(TileEntityCustomWood tile) {
 		if(tile == null) {
-			return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+			return BaseIcons.OAK_PLANKS.getIcon();
 		}
-		return getIcon(tile.getTexture());
+		return IconHelper.getIcon(tile.getTexture().toString());
 	}
 }
