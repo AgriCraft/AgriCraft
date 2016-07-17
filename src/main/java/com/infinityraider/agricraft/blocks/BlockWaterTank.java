@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.agricraft.agricore.util.TypeHelper;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,13 +15,27 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import com.infinityraider.agricraft.renderers.blocks.RenderTank;
+import com.infinityraider.agricraft.renderers.blocks.RenderWaterTank;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
+import java.util.Set;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
 	public BlockWaterTank() {
 		super("water_tank", true);
+		this.setDefaultState(this.blockState.getBaseState()
+				.withProperty(AgriProperties.NORTH, 0)
+				.withProperty(AgriProperties.EAST, 0)
+				.withProperty(AgriProperties.SOUTH, 0)
+				.withProperty(AgriProperties.WEST, 0)
+		);
 	}
 
 	@Override
@@ -101,7 +117,27 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public RenderTank getRenderer() {
-		return new RenderTank(this);
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(this), this::getItemLocation);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new RenderWaterTank());
+		return null;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public ModelResourceLocation getItemLocation(ItemStack stack) {
+		return new ModelResourceLocation("agricraft:water_tank", this.getDefaultState().toString());
+	}
+
+	@Override
+	public Set<IProperty> getProperties() {
+		return TypeHelper.addAll(
+				super.getProperties(),
+				AgriProperties.WOOD_TYPE,
+				AgriProperties.NORTH,
+				AgriProperties.EAST,
+				AgriProperties.SOUTH,
+				AgriProperties.WEST
+		);
 	}
 
 }

@@ -53,7 +53,7 @@ public class RenderSprinkler extends RenderBlockBase<TileEntitySprinkler> {
 				// Draw Blades
 				tessellator.drawScaledPrism(BMX_A, MIN_Y, MIN_C, BMX_B, BMX_Y, MAX_C, icon);
 				tessellator.drawScaledPrism(MIN_C, MIN_Y, BMX_A, MAX_C, BMX_Y, BMX_B, icon);
-			} else {
+			//} else {
 				tessellator.translate(0, 4 * Constants.UNIT, 0);
 				tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, sprinkler.getChannelIcon());
 			}

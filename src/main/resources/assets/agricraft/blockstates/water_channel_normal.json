@@ -1,0 +1,93 @@
+{
+	"parent": "agricraft:wood_base",
+	"forge_marker": 1,
+	"defaults": {
+		"model": "agricraft:water_channel_normal_base",
+		"transform": "forge:default-block",
+		"textures": {
+			"wood": "minecraft:blocks/planks_oak",
+			"particle": "#wood"
+		}
+	},
+	"variants": {
+		"normal": [{}],
+		"inventory": [{}],
+		"wood_type": "${wood_type}",
+		"north": {
+			"0": {
+				"submodel": {
+					"wall_n": {
+						"model": "agricraft:water_channel_normal_wall",
+						"y": 0
+					}
+				}
+			},
+			"1": {
+				"submodel": {
+					"wall_n": {
+						"model": "agricraft:water_channel_normal_connector",
+						"y": 0
+					}
+				}
+			},
+			"2": {}
+		},
+		"east": {
+			"0": {
+				"submodel": {
+					"wall_e": {
+						"model": "agricraft:water_channel_normal_wall",
+						"y": 90
+					}
+				}
+			},
+			"1": {
+				"submodel": {
+					"wall_e": {
+						"model": "agricraft:water_channel_normal_connector",
+						"y": 90
+					}
+				}
+			},
+			"2": {}
+		},
+		"south": {
+			"0": {
+				"submodel": {
+					"wall_s": {
+						"model": "agricraft:water_channel_normal_wall",
+						"y": 180
+					}
+				}
+			},
+			"1": {
+				"submodel": {
+					"wall_s": {
+						"model": "agricraft:water_channel_normal_connector",
+						"y": 180
+					}
+				}
+			},
+			"2": {}
+		},
+		"west": {
+			"0": {
+				"submodel": {
+					"wall_w": {
+						"model": "agricraft:water_channel_normal_wall",
+						"y": 270
+					}
+				}
+			},
+			"1": {
+				"submodel": {
+					"wall_w": {
+						"model": "agricraft:water_channel_normal_connector",
+						"y": 270
+					}
+				}
+			},
+			"2": {}
+		}
+	}
+}

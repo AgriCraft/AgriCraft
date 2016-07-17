@@ -29,6 +29,9 @@ import java.util.List;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.reference.WoodType;
+import net.minecraft.block.state.IBlockState;
 
 public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IAgriDebuggable {
 
@@ -428,4 +431,25 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 		super.addDisplayInfo(information);
 		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + this.getCapacity());
 	}
+
+	@Override
+	public IBlockState getState(IBlockState state) {
+		return state
+				.withProperty(AgriProperties.WOOD_TYPE, WoodType.getType(this.getMaterialMeta()))
+				.withProperty(AgriProperties.NORTH, getCode(AgriForgeDirection.NORTH))
+				.withProperty(AgriProperties.EAST, getCode(AgriForgeDirection.EAST))
+				.withProperty(AgriProperties.SOUTH, getCode(AgriForgeDirection.SOUTH))
+				.withProperty(AgriProperties.WEST, getCode(AgriForgeDirection.WEST));
+	}
+	
+	public int getCode(AgriForgeDirection dir) {
+		if(this.isConnectedToChannel(dir)) {
+			return 1;
+		} else if(this.hasNeighbour(dir)) {
+			return 2;
+		} else {
+			return 0;
+		}
+	}
+
 }

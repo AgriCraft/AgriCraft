@@ -20,7 +20,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.reference.WoodType;
 import com.infinityraider.agricraft.utility.WorldHelper;
+import net.minecraft.block.state.IBlockState;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IAgriDebuggable {
 
@@ -54,8 +57,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 		}
 		writeChannelNBT(tag);
 	}
-	
-	void writeChannelNBT(NBTTagCompound tag) {};
+
+	void writeChannelNBT(NBTTagCompound tag) {
+	}
+
+	;
 
 	//this loads the saved data for the tile entity
 	@Override
@@ -67,8 +73,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 		}
 		readChannelNBT(tag);
 	}
-	
-	void readChannelNBT(NBTTagCompound tag) {};
+
+	void readChannelNBT(NBTTagCompound tag) {
+	}
+
+	;
 
 	@Override
 	public int getFluidAmount(int y) {
@@ -126,7 +135,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
 	@Override
 	public int getFluidHeight() {
-		return (int)getFluidHeight(getFluidAmount(0));
+		return (int) getFluidHeight(getFluidAmount(0));
 	}
 
 	@Override
@@ -297,4 +306,23 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 		super.addDisplayInfo(information);
 		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
 	}
+
+	@Override
+	public IBlockState getState(IBlockState state) {
+		return state
+				.withProperty(AgriProperties.WOOD_TYPE, WoodType.getType(this.getMaterialMeta()))
+				.withProperty(AgriProperties.NORTH, getCode(AgriForgeDirection.NORTH))
+				.withProperty(AgriProperties.EAST, getCode(AgriForgeDirection.EAST))
+				.withProperty(AgriProperties.SOUTH, getCode(AgriForgeDirection.SOUTH))
+				.withProperty(AgriProperties.WEST, getCode(AgriForgeDirection.WEST));
+	}
+
+	public int getCode(AgriForgeDirection dir) {
+		if (this.hasNeighbourCheck(dir)) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
 }

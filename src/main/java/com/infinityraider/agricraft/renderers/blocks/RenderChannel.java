@@ -41,7 +41,7 @@ public class RenderChannel<T extends TileEntityChannel> extends RenderBlockCusto
 								 TileEntityChannel channel, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		if (dynamicRender) {
 			this.drawWater(tessellator, channel);
-		} else {
+		//} else {
 			this.renderWoodChannel(tessellator, channel, icon);
 		}
 	}

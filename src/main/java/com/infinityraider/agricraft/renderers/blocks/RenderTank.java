@@ -31,7 +31,7 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 								 TileEntityTank tank, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		if(dynamicRender) {
 			drawWater(tank, tessellator);			
-		} else {
+		} else { // Temp since ISBRH isn't working
 			drawWoodTank(tank, tessellator, icon);
 		}
 	}
