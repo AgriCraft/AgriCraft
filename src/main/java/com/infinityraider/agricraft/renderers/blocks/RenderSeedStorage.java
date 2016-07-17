@@ -26,13 +26,13 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
 	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block, 
+	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block, 
 								 TileEntitySeedStorage storage, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		if(dynamicRender) {
 			if (storage.hasLockedSeed()) {
 				drawSeed(storage.getLockedSeed());
 			}
-		} else {
+		//} else {
 			renderSides(tessellator, icon);
 		}
 

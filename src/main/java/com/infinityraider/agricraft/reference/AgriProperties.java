@@ -34,5 +34,8 @@ public interface AgriProperties {
 	PropertyInteger EAST = PropertyInteger.create("east", 0, 2);
 	PropertyInteger SOUTH = PropertyInteger.create("south", 0, 2);
 	PropertyInteger WEST = PropertyInteger.create("west", 0, 2);
+	
+	PropertyInteger UP = PropertyInteger.create("up", 0, 2);
+	PropertyInteger DOWN = PropertyInteger.create("down", 0, 2);
 
 }

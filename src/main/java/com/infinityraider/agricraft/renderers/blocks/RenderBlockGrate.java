@@ -23,7 +23,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
 	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
+	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block,
 								 TileEntityGrate grate, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		// Setup
 		final float offset = ((float) grate.getOffset() * 7) / 16.0F;

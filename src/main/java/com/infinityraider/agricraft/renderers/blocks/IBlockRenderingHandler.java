@@ -53,9 +53,6 @@ public interface IBlockRenderingHandler<T extends TileEntity> {
      * @param tessellator tessellator object to draw quads
      * @param world the world for the block
      * @param pos the position for the block
-     * @param x the precise x-position of the block (only relevant for TESR calls)
-     * @param y the precise y-position of the block (only relevant for TESR calls)
-     * @param z the precise z-position of the block (only relevant for TESR calls)
      * @param state the state of the block
      * @param block the block
      * @param tile the tile entity (can be null if there is no tile entity)
@@ -63,8 +60,11 @@ public interface IBlockRenderingHandler<T extends TileEntity> {
      * @param partialTick partial tick, only useful for dynamic rendering
      * @param destroyStage destroy stage, only useful for dynamic rendering
      */
-    void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z,
-                          IBlockState state, Block block, @Nullable T tile, boolean dynamicRender, float partialTick, int destroyStage);
+    void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block, @Nullable T tile, boolean dynamicRender, float partialTick, int destroyStage);
+	
+	default void renderDynamic(ITessellator tess, T te, float partialTicks, int destroyStage) {};
+	
+	default void renderStatic(ITessellator tess, T te, IBlockState state) {};
 
     /**
      * Called to render the block in an inventory

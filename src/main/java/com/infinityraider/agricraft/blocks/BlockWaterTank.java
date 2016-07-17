@@ -15,15 +15,9 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import com.infinityraider.agricraft.renderers.blocks.RenderTank;
-import com.infinityraider.agricraft.renderers.blocks.RenderWaterTank;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
 import java.util.Set;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -117,15 +111,7 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public RenderTank getRenderer() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(this), this::getItemLocation);
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new RenderWaterTank());
-		return null;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public ModelResourceLocation getItemLocation(ItemStack stack) {
-		return new ModelResourceLocation("agricraft:water_tank", this.getDefaultState().toString());
+		return new RenderTank(this);
 	}
 
 	@Override
@@ -136,7 +122,8 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
 				AgriProperties.NORTH,
 				AgriProperties.EAST,
 				AgriProperties.SOUTH,
-				AgriProperties.WEST
+				AgriProperties.WEST,
+				AgriProperties.DOWN
 		);
 	}
 

@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockWaterChannelFull;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelFull;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -31,8 +30,8 @@ public class RenderChannelFull extends RenderChannel<TileEntityChannelFull> {
 	}
 
 	@Override
-	protected void renderSide(ITessellator tessellator, TileEntityChannel channel, TextureAtlasSprite matIcon, AgriForgeDirection dir) {
-		if (!channel.hasNeighbourCheck(dir)) {
+	protected void renderSideRotated(ITessellator tessellator, TileEntityChannelFull channel, AgriForgeDirection dir, int code, TextureAtlasSprite matIcon) {
+		if (code == 0) {
 			tessellator.drawScaledPrism(5, 5, 0, 11, 12, 5, matIcon);
 		}
 	}

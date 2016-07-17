@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.blocks.ItemBlockGrate;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.IBlockRenderingHandler;
+import com.infinityraider.agricraft.renderers.blocks.RenderBlockGrate;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.utility.AxisPosition;
 import net.minecraft.block.state.IBlockState;
@@ -24,8 +25,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 
@@ -50,8 +49,7 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IBlockRenderingHandler getRenderer() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-		return null;
+		return new RenderBlockGrate(this);
 	}
 
 	@Override

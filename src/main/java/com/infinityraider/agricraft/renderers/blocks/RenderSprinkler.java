@@ -39,7 +39,7 @@ public class RenderSprinkler extends RenderBlockBase<TileEntitySprinkler> {
 	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
+	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block,
 								 @Nullable TileEntitySprinkler sprinkler, boolean dynamicRender, float partialTick, int destroyStage) {
 		if(sprinkler != null) {
 			if(dynamicRender) {

@@ -1,8 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
@@ -20,12 +18,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-import java.util.Set;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChannel> {
 
@@ -124,8 +118,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public RenderChannel getRenderer() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-		return null;
+		return new RenderChannel(this);
 	}
 
 	@Override

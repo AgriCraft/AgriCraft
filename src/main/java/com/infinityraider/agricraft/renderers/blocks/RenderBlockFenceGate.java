@@ -19,7 +19,7 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceG
 	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
+	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block,
 								 TileEntityFenceGate gate, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
 		if (gate.isZAxis()) {
 			renderGateZ(tessellator, gate, icon);

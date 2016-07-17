@@ -34,7 +34,7 @@ public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
 
 	//TODO: rewrite this
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block, 
+	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block, 
 								 @Nullable TileEntityBase tile, boolean dynamicRender, float partialTick, int destroyStage) {
 		// Check Full
 		final boolean full = block instanceof BlockWaterPadFull;

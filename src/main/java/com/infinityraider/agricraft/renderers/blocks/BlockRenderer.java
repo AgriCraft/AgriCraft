@@ -81,8 +81,11 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 		tessellator.translate(x, y, z);
 		tessellator.setColorRGBA(255, 255, 255, 255);
 		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
+		
+		this.renderer.renderStatic(tessellator, te, state);
+		this.renderer.renderDynamic(tessellator, te, partialTicks, destroyStage);
 
-		this.renderer.renderWorldBlock(tessellator, world, pos, x, y, z, extendedState, block, te, true, partialTicks, destroyStage);
+		this.renderer.renderWorldBlock(tessellator, world, pos, extendedState, block, te, true, partialTicks, destroyStage);
 
 		//tessellator.popMatrix();
 		tessellator.draw();
@@ -117,7 +120,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 
 				tessellator.startDrawingQuads(this.format);
 
-				this.renderer.renderWorldBlock(tessellator, world, pos, pos.getX(), pos.getY(), pos.getZ(), extendedState, block, tile, false, 1, 0);
+				this.renderer.renderWorldBlock(tessellator, world, pos, extendedState, block, tile, false, 1, 0);
 
 				list = tessellator.getQuads();
 				tessellator.draw();

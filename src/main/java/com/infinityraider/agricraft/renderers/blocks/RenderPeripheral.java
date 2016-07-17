@@ -38,13 +38,13 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block,
+	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block,
 								 @Nullable TileEntityPeripheral tile, boolean dynamicRender, float partialTick, int destroyStage) {
 		if(tile != null) {
 			if(dynamicRender) {
 				drawSeed(tessellator, tile);
 				performAnimations(tessellator, tile, BaseIcons.DEBUG.getIcon());
-			} else {
+			//} else {
 				renderBase(tessellator);
 			}
 		}
