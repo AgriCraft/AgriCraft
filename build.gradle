@@ -140,7 +140,9 @@ processResources {
 // Add Packages
 jar {
     configurations.shade.each { artifact ->
-		from (zipTree(artifact))
+		from (zipTree(artifact)) {
+			exclude 'META-INF', 'META-INF/**'
+		}
 	}
 }
 
