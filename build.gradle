@@ -126,7 +126,7 @@ processResources {
 
 // Add Packages
 jar {
-    configurations.shade.each { artifact ->
+    configurations.shade.copyRecursive().setTransitive(false).each { artifact ->
 		from (zipTree(artifact)) {
 			exclude 'META-INF', 'META-INF/**'
 		}
