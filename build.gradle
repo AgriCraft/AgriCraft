@@ -99,7 +99,7 @@ dependencies {
     // Mods (For auto-import)
 	shade project(':lib/AgriCore')
 	compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-	deobfCompile "mezz.jei:jei_1.10:3.7.0.218"
+	deobfCompile "mezz.jei:jei_1.10.2:3.7.6.231"
 }
 
 processResources {
