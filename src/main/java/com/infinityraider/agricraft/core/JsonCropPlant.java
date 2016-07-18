@@ -203,7 +203,7 @@ public class JsonCropPlant extends CropPlant {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons() {
 		for (String tex : this.plant.getTexture().getPlantTextures()) {
-			AgriCore.getLogger("AgriCraft").debug("Registering: " + tex);
+			//AgriCore.getLogger("AgriCraft").debug("Registering: " + tex);
 			IconHelper.registerIcon(tex);
 		}
 	}

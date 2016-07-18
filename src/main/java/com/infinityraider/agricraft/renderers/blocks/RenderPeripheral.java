@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
@@ -29,6 +28,7 @@ import com.infinityraider.agricraft.utility.IconHelper;
 import javax.annotation.Nullable;
 
 public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
+
 	private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID + ":textures/blocks/peripheralProbe.png");
 	private static final ModelBase probeModel = new ModelPeripheralProbe();
 
@@ -36,23 +36,20 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 		super(block, new TileEntityPeripheral(), true, true, true);
 	}
 
+	@Override
+	public void renderDynamic(ITessellator tess, TileEntityPeripheral te, float partialTicks, int destroyStage) {
+		drawSeed(tess, te);
+		performAnimations(tess, te, BaseIcons.DEBUG.getIcon());
+	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block,
-								 @Nullable TileEntityPeripheral tile, boolean dynamicRender, float partialTick, int destroyStage) {
-		if(tile != null) {
-			if(dynamicRender) {
-				drawSeed(tessellator, tile);
-				performAnimations(tessellator, tile, BaseIcons.DEBUG.getIcon());
-			//} else {
-				renderBase(tessellator);
-			}
-		}
+	public void renderStatic(ITessellator tess, TileEntityPeripheral te, IBlockState state) {
+		this.renderBase(tess);
 	}
 
 	@Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntityPeripheral tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 		renderBase(tessellator);
 	}
 
@@ -82,7 +79,6 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 		GL11.glRotatef(angle, 1.0F, 0.0F, 0.0F);
 
 		//TODO: render the seed
-
 		GL11.glRotatef(-angle, 1.0F, 0.0F, 0.0F);
 		GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
 		GL11.glTranslated(-dx, -dy, -dz);

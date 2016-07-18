@@ -58,7 +58,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 
 	@Override
 	public BakedBlockModel<T> bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		return new BakedBlockModel<>(format, renderer, bakedTextureGetter, renderer.doInventoryRendering());
+		return new BakedBlockModel<>(format, renderer, bakedTextureGetter, renderer.hasInventoryRendering());
 	}
 
 	@Override
@@ -84,8 +84,6 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 		
 		this.renderer.renderStatic(tessellator, te, state);
 		this.renderer.renderDynamic(tessellator, te, partialTicks, destroyStage);
-
-		this.renderer.renderWorldBlock(tessellator, world, pos, extendedState, block, te, true, partialTicks, destroyStage);
 
 		//tessellator.popMatrix();
 		tessellator.draw();
@@ -119,8 +117,8 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 				ITessellator tessellator = TessellatorBakedQuad.getInstance().setTextureFunction(this.textures);
 
 				tessellator.startDrawingQuads(this.format);
-
-				this.renderer.renderWorldBlock(tessellator, world, pos, extendedState, block, tile, false, 1, 0);
+				
+				renderer.renderStatic(tessellator, tile, state);
 
 				list = tessellator.getQuads();
 				tessellator.draw();
@@ -137,7 +135,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 
 		@Override
 		public boolean isGui3d() {
-			return renderer.doInventoryRendering();
+			return renderer.hasInventoryRendering();
 		}
 
 		@Override

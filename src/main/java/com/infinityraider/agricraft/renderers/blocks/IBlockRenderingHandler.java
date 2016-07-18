@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -44,23 +43,6 @@ public interface IBlockRenderingHandler<T extends TileEntity> {
      * @return a list of ResourceLocations
      */
     List<ResourceLocation> getAllTextures();
-
-    /**
-     * Called to render the block at a specific place in the world,
-     * startDrawing() has already been called on the tessellator object.
-     * The tessellator is also translated to the block's position
-     *
-     * @param tessellator tessellator object to draw quads
-     * @param world the world for the block
-     * @param pos the position for the block
-     * @param state the state of the block
-     * @param block the block
-     * @param tile the tile entity (can be null if there is no tile entity)
-     * @param dynamicRender true if called from a TESR, false if not, can be useful if the block has both dynamic and static rendering
-     * @param partialTick partial tick, only useful for dynamic rendering
-     * @param destroyStage destroy stage, only useful for dynamic rendering
-     */
-    void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block, @Nullable T tile, boolean dynamicRender, float partialTick, int destroyStage);
 	
 	default void renderDynamic(ITessellator tess, T te, float partialTicks, int destroyStage) {};
 	
@@ -89,10 +71,10 @@ public interface IBlockRenderingHandler<T extends TileEntity> {
     TextureAtlasSprite getIcon();
 
     /**
-     * Checks if this should have 3D rendering in inventories
+     * Checks if this handles inventory rendering.
      * @return true to have 3D inventory rendering
      */
-    boolean doInventoryRendering();
+    boolean hasInventoryRendering();
 
     /**
      * Return true from here to have this renderer have dynamic behaviour,

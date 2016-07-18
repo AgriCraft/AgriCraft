@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceGate> {
@@ -19,17 +18,16 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceG
 	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block,
-								 TileEntityFenceGate gate, boolean dynamicRender, float partialTick, int destroyStage, TextureAtlasSprite icon) {
+	protected void renderStaticWood(ITessellator tess, TileEntityFenceGate gate, IBlockState state, TextureAtlasSprite sprite) {
 		if (gate.isZAxis()) {
-			renderGateZ(tessellator, gate, icon);
+			renderGateZ(tess, gate, sprite);
 		} else {
-			renderGateX(tessellator, gate, icon);
+			renderGateX(tess, gate, sprite);
 		}
 	}
 
 	@Override
-	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityFenceGate tile,
+	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityFenceGate tile,
 									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
 		tessellator.drawScaledPrism(7, 5, 0, 9, 16, 2, icon);
 		tessellator.drawScaledPrism(7, 5, 14, 9, 16, 16, icon);

@@ -86,7 +86,7 @@ public class BlockRendererRegistry implements ICustomModelLoader {
             if (renderer.hasDynamicRendering() && tile != null) {
                 ClientRegistry.bindTileEntitySpecialRenderer(tile.getClass(), instance);
             }
-            if (renderer.doInventoryRendering()) {
+            if (renderer.hasInventoryRendering()) {
                 ModelResourceLocation itemModel = new ModelResourceLocation(blockModel.getResourceDomain() + ":" + blockModel.getResourcePath(), "inventory");
                 renderers.put(itemModel, instance);
                 ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), stack -> itemModel);

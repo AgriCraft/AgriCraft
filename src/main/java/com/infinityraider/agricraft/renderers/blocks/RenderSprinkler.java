@@ -10,7 +10,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -21,6 +20,7 @@ import javax.annotation.Nullable;
 
 @SideOnly(Side.CLIENT)
 public class RenderSprinkler extends RenderBlockBase<TileEntitySprinkler> {
+
 	// Dimensions
 	private static final float MIN_Y = 8.0F;
 	private static final float MAX_Y = 12.0F;
@@ -39,30 +39,28 @@ public class RenderSprinkler extends RenderBlockBase<TileEntitySprinkler> {
 	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, Block block,
-								 @Nullable TileEntitySprinkler sprinkler, boolean dynamicRender, float partialTick, int destroyStage) {
-		if(sprinkler != null) {
-			if(dynamicRender) {
-				tessellator.translate(0.5F, 0, 0.5F);
-				tessellator.rotate(sprinkler.angle, 0, 1, 0);
-				tessellator.translate(-0.5F, 0, -0.5F);
+	public void renderStatic(ITessellator tess, TileEntitySprinkler te, IBlockState state) {
+		tess.translate(0, 4 * Constants.UNIT, 0);
+		tess.drawScaledPrism(4, 8, 4, 12, 16, 12, te.getChannelIcon());
+	}
 
-				final TextureAtlasSprite icon = BaseIcons.IRON_BLOCK.getIcon();
-				// Draw Core
-				tessellator.drawScaledPrism(MIN_C, MIN_Y, MIN_C, MAX_C, MAX_Y, MAX_C, icon);
-				// Draw Blades
-				tessellator.drawScaledPrism(BMX_A, MIN_Y, MIN_C, BMX_B, BMX_Y, MAX_C, icon);
-				tessellator.drawScaledPrism(MIN_C, MIN_Y, BMX_A, MAX_C, BMX_Y, BMX_B, icon);
-			//} else {
-				tessellator.translate(0, 4 * Constants.UNIT, 0);
-				tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, sprinkler.getChannelIcon());
-			}
-		}
+	@Override
+	public void renderDynamic(ITessellator tess, TileEntitySprinkler te, float partialTicks, int destroyStage) {
+		tess.translate(0.5F, 0, 0.5F);
+		tess.rotate(te.angle, 0, 1, 0);
+		tess.translate(-0.5F, 0, -0.5F);
+
+		final TextureAtlasSprite icon = BaseIcons.IRON_BLOCK.getIcon();
+		// Draw Core
+		tess.drawScaledPrism(MIN_C, MIN_Y, MIN_C, MAX_C, MAX_Y, MAX_C, icon);
+		// Draw Blades
+		tess.drawScaledPrism(BMX_A, MIN_Y, MIN_C, BMX_B, BMX_Y, MAX_C, icon);
+		tess.drawScaledPrism(MIN_C, MIN_Y, BMX_A, MAX_C, BMX_Y, BMX_B, icon);
 	}
 
 	@Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntitySprinkler tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 		// Draw Top
 		tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, BaseIcons.OAK_PLANKS.getIcon());
 		// Get Core Icon
