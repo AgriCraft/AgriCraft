@@ -1,5 +1,16 @@
 package com.infinityraider.agricraft.init;
 
+import com.infinityraider.agricraft.blocks.pad.BlockWaterPadFull;
+import com.infinityraider.agricraft.blocks.pad.BlockWaterPad;
+import com.infinityraider.agricraft.blocks.analyzer.BlockSeedAnalyzer;
+import com.infinityraider.agricraft.blocks.storage.BlockSeedStorage;
+import com.infinityraider.agricraft.blocks.decoration.BlockFenceGate;
+import com.infinityraider.agricraft.blocks.decoration.BlockGrate;
+import com.infinityraider.agricraft.blocks.decoration.BlockFence;
+import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
+import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
+import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
+import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
 import com.infinityraider.agricraft.blocks.*;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.log.AgriLogger;
@@ -15,8 +26,6 @@ public class AgriBlocks {
 	
 	// Analyzers
 	public static final BlockBase SEED_ANALYZER = new BlockSeedAnalyzer();
-	// The following is to be done elsewhere...
-	//public static final BlockBase PERIPHERAL = new BlockPeripheral();
 	
 	// Water Pads
 	public static final BlockBase WATER_PAD = new BlockWaterPad();
@@ -26,7 +35,7 @@ public class AgriBlocks {
 	public static final BlockBase TANK = new BlockWaterTank();
 	public static final BlockBase CHANNEL = new BlockWaterChannel();
 	public static final BlockBase CHANNEL_FULL = new BlockWaterChannelFull();
-	public static final BlockBase CHANNEL_VALVE = new BlockChannelValve();
+	public static final BlockBase CHANNEL_VALVE = new BlockWaterChannelValve();
 	public static final BlockBase SPRINKLER = new BlockSprinkler();
 	
 	// Seed Storage

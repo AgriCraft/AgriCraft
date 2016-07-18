@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.BlockFenceGate;
+import com.infinityraider.agricraft.blocks.decoration.BlockFenceGate;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityFenceGate;
 import net.minecraft.block.Block;

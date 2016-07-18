@@ -17,6 +17,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.WoodType;
 
 /**
@@ -70,7 +71,10 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 		this.writeNBT(tag);
 	}
 
-	protected void writeNBT(NBTTagCompound tag) {};
+	protected void writeNBT(NBTTagCompound tag) {
+	}
+
+	;
 
 	/**
 	 * Loads the CustomWood entity from a NBTTag, as to load from a savefile.
@@ -83,7 +87,10 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 		this.readNBT(tag);
 	}
 
-	protected void readNBT(NBTTagCompound tag) {};
+	protected void readNBT(NBTTagCompound tag) {
+	}
+
+	;
 
 	/**
 	 * Tests to see if another CustomWood entity is of the same MATERIAL.
@@ -230,4 +237,14 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 	public void addDisplayInfo(List information) {
 		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.material") + ": " + new ItemStack(this.material, 1, this.materialMeta).getDisplayName());
 	}
+
+	@Override
+	public final IBlockState getState(IBlockState state) {
+		return getStateWood(state).withProperty(AgriProperties.WOOD_TYPE, WoodType.getType(materialMeta));
+	}
+
+	protected IBlockState getStateWood(IBlockState state) {
+		return state;
+	}
+
 }

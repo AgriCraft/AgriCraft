@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.BlockChannelValve;
+import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelValve;
@@ -21,7 +21,7 @@ import com.infinityraider.agricraft.utility.BaseIcons;
 @SideOnly(Side.CLIENT)
 public class RenderChannelValve extends RenderChannel<TileEntityChannelValve> {
 
-	public RenderChannelValve(BlockChannelValve block) {
+	public RenderChannelValve(BlockWaterChannelValve block) {
 		super(block, new TileEntityChannelValve());
 	}
 

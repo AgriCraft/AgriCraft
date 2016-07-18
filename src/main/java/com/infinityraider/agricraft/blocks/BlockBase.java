@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
@@ -47,43 +48,45 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 		this.fullBlock = false;
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
-	
+
 	public boolean isEnabled() {
 		return true;
 	}
 
-	public String getInternalName() {
+	public final String getInternalName() {
 		return this.internalName;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getBlockModelResourceLocation() {
-		return new  ModelResourceLocation("agricraft:"+getInternalName());
+		return new ModelResourceLocation("agricraft:" + getInternalName());
 	}
 
 	@Override
 	protected final BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(
-				this,
-				TypeHelper.asArray(this.getProperties(), IProperty.class), 
-				TypeHelper.asArray(this.getUnlistedProperties(), IUnlistedProperty.class)
+		Set<IProperty> properties = new HashSet<>();
+		Set<IUnlistedProperty> unlisted = new HashSet<>();
+		this.addProperties(properties);
+		this.addUnlistedProperties(unlisted);
+		return new ExtendedBlockState(this,
+				TypeHelper.asArray(properties, IProperty.class),
+				TypeHelper.asArray(unlisted, IUnlistedProperty.class)
 		);
 	}
 
+	/**
+	 * Adds IProperties to the block.
+	 * Called to create a block state.
+	 */
+	public void addProperties(Set<IProperty> properties) {
+	}
 
 	/**
-	 * @return a property array containing all properties for this block's state
+	 * Adds IUnlistedProperties to the block.
+	 * Called to create the block state.
 	 */
-	public Set<IProperty> getProperties() {
-		return new HashSet<>();
-	}
-	
-	/**
-	 * @return a property array containing all properties for this block's state
-	 */
-	public Set<IUnlistedProperty> getUnlistedProperties() {
-		return new HashSet<>();
+	public void addUnlistedProperties(Set<IUnlistedProperty> properties) {
 	}
 
 	@Override
@@ -103,6 +106,7 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 	/**
 	 * @return The default bounding box for this block
 	 */
+	@Nonnull
 	public abstract AxisAlignedBB getDefaultBoundingBox();
 
 	@Override
@@ -119,5 +123,5 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 	public List<ResourceLocation> getTextures() {
 		return Collections.emptyList();
 	}
-	
+
 }

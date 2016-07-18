@@ -433,7 +433,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	}
 
 	@Override
-	public IBlockState getState(IBlockState state) {
+	public IBlockState getStateWood(IBlockState state) {
 		return state
 				.withProperty(AgriProperties.WOOD_TYPE, WoodType.getType(this.getMaterialMeta()))
 				.withProperty(AgriProperties.NORTH, getCode(AgriForgeDirection.NORTH))

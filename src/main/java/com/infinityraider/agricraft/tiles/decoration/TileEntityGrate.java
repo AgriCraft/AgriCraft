@@ -148,7 +148,7 @@ public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebugg
 	
 	// Blockstate
 	@Override
-	public IBlockState getState(IBlockState state) {
+	public IBlockState getStateWood(IBlockState state) {
 		return state
 				.withProperty(AgriProperties.WOOD_TYPE, WoodType.getType(this.getMaterialMeta()))
 				.withProperty(AgriProperties.AXIS_POS, AxisPosition.convert(orientation.axis, offset))

@@ -12,9 +12,7 @@ import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import mezz.jei.api.IJeiHelpers;
 import net.minecraft.item.Item;
@@ -26,7 +24,6 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 	public static final String CATEGORY_MUTATION = "agricraft.mutation";
 	public static final String CATEGORY_PRODUCE = "agricraft.produce";
 
-	private static final List<Object> toRegister = new ArrayList<>();
 	private static final Map<Item, String[]> nbtIgnores = new HashMap<>();
 
 	private static IJeiRuntime jeiRuntime;

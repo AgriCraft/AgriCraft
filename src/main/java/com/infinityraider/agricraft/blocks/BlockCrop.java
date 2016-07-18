@@ -583,13 +583,11 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	}
 
 	@Override
-	public Set<IProperty> getProperties() {
-		return TypeHelper.addAll(super.getProperties(),
-				AgriProperties.PLANT,
-				AgriProperties.WEEDS,
-				AgriProperties.CROSSCROP,
-				AgriProperties.GROWTHSTAGE
-		);
+	public void addProperties(Set<IProperty> properties) {
+		properties.add(AgriProperties.PLANT);
+		properties.add(AgriProperties.WEEDS);
+		properties.add(AgriProperties.CROSSCROP);
+		properties.add(AgriProperties.GROWTHSTAGE);
 	}
 
 	/**

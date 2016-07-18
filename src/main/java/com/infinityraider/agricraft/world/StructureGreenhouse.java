@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.utility.WorldGenerationHelper;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
-import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.block.BlockFarmland;

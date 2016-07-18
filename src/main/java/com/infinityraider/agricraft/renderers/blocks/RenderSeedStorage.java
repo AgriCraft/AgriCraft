@@ -1,20 +1,16 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.BlockSeedStorage;
+import com.infinityraider.agricraft.blocks.storage.BlockSeedStorage;
 import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
 
@@ -35,12 +31,6 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
 		if (te.hasLockedSeed()) {
 			drawSeed(te.getLockedSeed());
 		}
-	}
-
-	@Override
-	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, Block block, TileEntitySeedStorage tile,
-			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
-		renderSides(tessellator, icon);
 	}
 
 	private void renderSides(ITessellator tessellator, TextureAtlasSprite matIcon) {
@@ -81,16 +71,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
 		float dy = 5 * Constants.UNIT;
 		float dz = 0.99F * Constants.UNIT;
 		float f = 0.75F;
-
-		GL11.glPushMatrix();
-		GL11.glTranslatef(dx, dy, dz);
-		GL11.glRotatef(a, 0, 1, 0);
-		GL11.glScalef(f, f, f);
-
-		//TODO: render item
-		GL11.glScalef(1F / f, 1F / f, 1F / f);
-		GL11.glRotatef(-a, 0, 1, 0);
-		GL11.glTranslatef(-dx, -dy, -dz);
-		GL11.glPopMatrix();
+		
+		RenderUtil.renderItemStack(seed, dx, dy, dz, f, false);
 	}
 }

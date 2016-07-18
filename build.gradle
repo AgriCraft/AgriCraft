@@ -69,24 +69,28 @@ task modInfo() {
 
 repositories {
     maven {
-        name = "chickenbones"
-        url = "http://chickenbones.net/maven/"
+        name "chickenbones"
+        url  "http://chickenbones.net/maven/"
     }
     maven {
         name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven/"
+        url  "http://mobiusstrip.eu/maven/"
     }
     maven {
-        name = "sponge"
-        url = "http://repo.spongepowered.org/maven/"
+        name "sponge"
+        url  "http://repo.spongepowered.org/maven/"
     }
 	maven {
-        name = "sk89q"
-        url = "http://maven.sk89q.com/repo/"
+        name "sk89q"
+        url  "http://maven.sk89q.com/repo/"
     }
 	maven {
-		name = "JEI"
+		name "JEI"
 		url "http://dvs1.progwml6.com/files/maven"
+	}
+	 maven { 
+		name "OpenComputers"
+		url  "http://maven.cil.li/"
 	}
 }
 

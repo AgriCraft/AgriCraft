@@ -308,13 +308,17 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	}
 
 	@Override
-	public IBlockState getState(IBlockState state) {
-		return state
+	public final IBlockState getStateWood(IBlockState state) {
+		return getStateChannel(state)
 				.withProperty(AgriProperties.WOOD_TYPE, WoodType.getType(this.getMaterialMeta()))
 				.withProperty(AgriProperties.NORTH, getCode(AgriForgeDirection.NORTH))
 				.withProperty(AgriProperties.EAST, getCode(AgriForgeDirection.EAST))
 				.withProperty(AgriProperties.SOUTH, getCode(AgriForgeDirection.SOUTH))
 				.withProperty(AgriProperties.WEST, getCode(AgriForgeDirection.WEST));
+	}
+	
+	protected IBlockState getStateChannel(IBlockState state) {
+		return state;
 	}
 
 	public int getCode(AgriForgeDirection dir) {

@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.BlockFence;
+import com.infinityraider.agricraft.blocks.decoration.BlockFence;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityFence;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
