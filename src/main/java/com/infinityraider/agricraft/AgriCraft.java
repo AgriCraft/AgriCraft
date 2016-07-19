@@ -126,7 +126,7 @@ public class AgriCraft {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onTextureStitch(TextureStitchEvent e) {
-		CoreHandler.initPlantTextures();
+		CoreHandler.preLoadTextures(e.getMap()::registerSprite);
 	}
 
 }

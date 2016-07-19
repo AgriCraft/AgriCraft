@@ -30,11 +30,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * @author RlonRyan
  */
-public class JsonCropPlant extends CropPlant {
+public class JsonPlant extends CropPlant {
 
 	public final AgriPlant plant;
 
-	public JsonCropPlant(AgriPlant plant) {
+	public JsonPlant(AgriPlant plant) {
 		this.plant = plant;
 		this.setGrowthRequirement(this.initGrowthRequirementJSON());
 	}

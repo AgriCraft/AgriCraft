@@ -54,6 +54,11 @@ public class MutationRegistry implements IAgriMutationRegistry {
 	}
 
 	@Override
+	public boolean addMutation(IAgriMutation mutation) {
+		return MutationHandler.add(mutation);
+	}
+
+	@Override
 	public boolean removeMutation(IAgriPlant result) {
 		MutationHandler.removeMutationsByResult(result.getSeed());
         return true;

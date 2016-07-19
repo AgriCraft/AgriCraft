@@ -10,22 +10,27 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import com.agricraft.agricore.config.AgriConfigAdapter;
+import com.agricraft.agricore.registry.AgriPlants;
 import com.agricraft.agricore.util.ResourceHelper;
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.farming.mutation.MutationHandler;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class CoreHandler {
 
 	public static final Pattern JSON_FILE_PATTERN = Pattern.compile(".*\\.json", Pattern.CASE_INSENSITIVE);
-	public static final Pattern AGRI_FOLDER_PATTERN = Pattern.compile("plants/.*", Pattern.CASE_INSENSITIVE);
+	public static final Pattern AGRI_FOLDER_PATTERN = Pattern.compile("plants/defaults/.*", Pattern.CASE_INSENSITIVE);
 
 	private static Path configDir;
 	private static Path plantDir;
+	private static Path defaultDir;
 	private static Configuration config;
 
 	private CoreHandler() {
@@ -52,6 +57,7 @@ public final class CoreHandler {
 
 		// Setup Plant Dir.
 		plantDir = configDir.resolve("plants");
+		defaultDir = plantDir.resolve("defaults");
 
 		// Setup Provider
 		AgriConfigAdapter provider = new ModProvider(config);
@@ -74,7 +80,7 @@ public final class CoreHandler {
 		// Load the core!
 		AgriCore.getLogger("AgriCraft").info("Attempting to load plants!");
 		AgriLoader.loadDirectory(
-				plantDir,
+				defaultDir,
 				AgriCore.getPlants(),
 				AgriCore.getMutations()
 		);
@@ -102,37 +108,32 @@ public final class CoreHandler {
 	public static void initPlants() {
 		AgriCore.getLogger("AgriCraft").info("Registering Custom Plants!");
 		AgriCore.getPlants().validate();
-		AgriCore.getPlants().getAll().forEach((p) -> {
-			PlantRegistry.getInstance().addPlant(new JsonCropPlant(p));
-		});
+		AgriCore.getPlants().getAll().stream()
+				.map(JsonPlant::new)
+				.forEach(PlantRegistry.getInstance()::addPlant);
 		AgriCore.getLogger("AgriCraft").info("Custom crops registered!");
 	}
 
 	public static void initMutations() {
-		AgriCore.getMutations().getAll().forEach((m) -> {
-			MutationRegistry.getInstance().addMutation(
-					m.getChance(),
-					m.getChild().getId(),
-					m.getParent1().getId(),
-					m.getParent2().getId()
-			);
-		});
+		AgriCore.getMutations().getAll().stream()
+				.map(JsonMutation::new)
+				.forEach(MutationRegistry.getInstance()::addMutation);
 		//print registered mutations to the log
 		AgriCore.getLogger("AgriCraft").info("Registered Mutations:");
 		for (IAgriMutation mutation : MutationHandler.getMutations()) {
 			AgriCore.getLogger("AgriCraft").info(" - {0}", mutation);
 		}
 	}
-
+	
 	@SideOnly(Side.CLIENT)
-	public static void initPlantTextures() {
-		AgriCore.getLogger("AgriCraft").debug("Starting custom plant texture registration...");
-		PlantRegistry.getInstance().getPlants().forEach((p) -> {
-			if (p instanceof JsonCropPlant) {
-				((JsonCropPlant) p).registerIcons();
-			}
-		});
-		AgriCore.getLogger("AgriCraft").debug("Registered custom plant textures!");
+	public static void preLoadTextures(Consumer<ResourceLocation> register) {
+		final AgriPlants preloaded = new AgriPlants();
+		AgriLoader.loadDirectory(plantDir, preloaded);
+		preloaded.getAll().stream()
+				.flatMap(p -> p.getTexture().getAllTextures().stream())
+				.filter(TypeHelper::isNonNull)
+				.map(ResourceLocation::new)
+				.forEach(register);
 	}
 
 }
