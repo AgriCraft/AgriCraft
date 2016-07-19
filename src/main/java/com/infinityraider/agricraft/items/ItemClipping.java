@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,13 @@ import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.items.IAutoRenderedItem;
+import com.infinityraider.agricraft.renderers.items.ItemModelTexture;
+import java.util.List;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Class representing clipping items.
@@ -23,10 +31,10 @@ import com.infinityraider.agricraft.reference.AgriNBT;
  * @todo Convert to conform with new API.
  * @author The AgriCraft Team
  */
-public class ItemClipping extends ItemBase {
+public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 
 	public ItemClipping() {
-		super("clipping", true);
+		super("clipping", false);
 		this.setCreativeTab(null);
 	}
 
@@ -55,7 +63,7 @@ public class ItemClipping extends ItemBase {
 		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
 		return (seed == null ? "Generic" : seed.getPlant().getPlantName()) + " " + text;
 	}
-	
+
 	public static ItemStack getClipping(AgriSeed seed, int amount) {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(AgriNBT.SEED, seed.getPlant().getId());
@@ -63,6 +71,37 @@ public class ItemClipping extends ItemBase {
 		ItemStack stack = new ItemStack(AgriItems.AGRI_CLIPPING);
 		stack.setTagCompound(tag);
 		return stack;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getModelId(ItemStack stack) {
+		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
+		return seed == null ? "" : seed.getPlant().getId();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getBaseTexture(ItemStack stack) {
+		return "agricraft:items/clipping";
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public List<ItemModelTexture> getOverlayTextures(ItemStack stack) {
+		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
+		ResourceLocation tex = (seed == null) ? new ResourceLocation("agricraft:items/debugger") : seed.getPlant().getPrimaryPlantTexture(Constants.MATURE);
+		return TypeHelper.asList(
+				new ItemModelTexture(tex, 4, 4, 12, 12, 0, 0, 16, 16)
+		);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public List<ResourceLocation> getAllTextures() {
+		return TypeHelper.asList(
+				new ResourceLocation("agricraft:items/clipping")
+		);
 	}
 
 }

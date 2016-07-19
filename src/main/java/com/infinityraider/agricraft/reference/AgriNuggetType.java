@@ -7,7 +7,20 @@ package com.infinityraider.agricraft.reference;
  * @author RlonRyan
  */
 public enum AgriNuggetType {
-	Emerald("gemEmerald", "oreEmerald"), Diamond("gemDiamond", "oreDiamond"), Quartz("quartz", "quartz"), Iron, Copper, Tin, Lead, Silver, Aluminum, Nickel, Platinum, Osmium;
+
+	Emerald("gemEmerald", "oreEmerald"),
+	Diamond("gemDiamond", "oreDiamond"),
+	Quartz("quartz", "quartz"),
+	Iron,
+	Copper,
+	Tin,
+	Lead,
+	Silver,
+	Aluminum,
+	Nickel,
+	Platinum,
+	Osmium;
+
 	public final String nugget;
 	public final String ingot;
 	public final String ore;
@@ -34,5 +47,5 @@ public enum AgriNuggetType {
 		}
 		return nuggets;
 	}
-	
+
 }

@@ -12,7 +12,9 @@ import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -22,10 +24,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
  */
 public final class PluginHandler {
 
-	private static List<IAgriPlugin> plugins = new ArrayList<>();
+	private static Deque<IAgriPlugin> plugins = new ConcurrentLinkedDeque<>();
 
 	public static void preInit(FMLPreInitializationEvent event) {
-		plugins = getInstances(event.getAsmData(), AgriPlugin.class, IAgriPlugin.class);
+		plugins.addAll(getInstances(event.getAsmData(), AgriPlugin.class, IAgriPlugin.class));
 	}
 	
 	public static void init() {

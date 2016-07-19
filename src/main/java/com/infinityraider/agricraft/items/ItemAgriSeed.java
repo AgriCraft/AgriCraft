@@ -23,18 +23,23 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
+import com.infinityraider.agricraft.renderers.items.IAutoRenderedItem;
 import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.NBTHelper;
+import java.util.ArrayList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemAgriCraftSeed extends ItemBase implements IAgriAdapter<AgriSeed> {
+public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IAutoRenderedItem {
 
 	/**
 	 * This constructor shouldn't be called from anywhere except from the
 	 * BlockModPlant public constructor, if you create a new BlockModPlant, its
 	 * constructor will create the seed for you
 	 */
-	public ItemAgriCraftSeed() {
-		super("agri_seed", true);
+	public ItemAgriSeed() {
+		super("agri_seed", false);
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT_SEED);
 	}
 
@@ -101,6 +106,32 @@ public class ItemAgriCraftSeed extends ItemBase implements IAgriAdapter<AgriSeed
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getModelId(ItemStack stack) {
+		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
+		return seed == null ? "" : seed.getPlant().getId();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getBaseTexture(ItemStack stack) {
+		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
+		return seed == null ? "agricraft:items/seed_unknown" : seed.getPlant().getSeedTexture().toString();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public List<ResourceLocation> getAllTextures() {
+		final List<IAgriPlant> plants = PlantRegistry.getInstance().getPlants();
+		final List<ResourceLocation> textures = new ArrayList<>(plants.size());
+		textures.add(new ResourceLocation("agricraft:items/seed_unknown"));
+		for (IAgriPlant p : PlantRegistry.getInstance().getPlants()) {
+			textures.add(p.getSeedTexture());
+		}
+		return textures;
 	}
 
 }

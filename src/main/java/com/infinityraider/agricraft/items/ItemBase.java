@@ -1,12 +1,11 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.tabs.AgriTabs;
-import com.infinityraider.agricraft.renderers.items.IItemRenderingHandler;
+import com.infinityraider.agricraft.renderers.items.IAutoRenderedItem;
 import com.infinityraider.agricraft.renderers.items.ItemRendererRegistry;
+import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * The root Item class for all AgriCraft Items (excluding blockItems).
  */
-public abstract class ItemBase<I extends ItemBase> extends Item implements ICustomRenderedItem<I> {
+public abstract class ItemBase<I extends ItemBase> extends Item {
 	
 	protected final String[] varients;
 	
@@ -38,24 +37,12 @@ public abstract class ItemBase<I extends ItemBase> extends Item implements ICust
 		return internalName;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IItemRenderingHandler<I> getRenderer() {
-		return null;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ModelResourceLocation getItemModelResourceLocation() {
-		return new ModelResourceLocation(this.getRegistryName(), "inventory");
-	}
-
 	@SideOnly(Side.CLIENT)
 	public void registerItemRenderer() {
-		if (this.isModelVanillia) {
+		if (this instanceof IAutoRenderedItem) {
+			ItemRendererRegistry.getInstance().registerCustomItemRendererAuto((Item & IAutoRenderedItem)this);
+		} else if (this.isModelVanillia) {
 			RegisterHelper.registerItemRenderer(this, varients);
-		} else {
-			ItemRendererRegistry.getInstance().registerCustomItemRenderer(this);
 		}
 	}
 	

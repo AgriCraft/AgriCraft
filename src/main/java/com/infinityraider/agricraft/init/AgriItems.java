@@ -16,7 +16,7 @@ public class AgriItems {
 	public static final ItemBase HAND_RAKE = new ItemHandRake();
 	public static final ItemBase CLIPPER = new ItemClipper();
 	public static final ItemBase AGRI_CLIPPING = new ItemClipping();
-	public static final ItemBase AGRI_SEED = new ItemAgriCraftSeed();
+	public static final ItemBase AGRI_SEED = new ItemAgriSeed();
 	public static final ItemBase AGRI_NUGGET = new ItemNugget();
 	public static final ItemBase MAGNIFYING_GLASS = new ItemMagnifyingGlass();
 
@@ -29,7 +29,7 @@ public class AgriItems {
 		logger.debug("Starting Item Initialization...");
 
 		// Register seed handler.
-		SeedRegistry.getInstance().registerAdapter((ItemAgriCraftSeed) AGRI_SEED);
+		SeedRegistry.getInstance().registerAdapter((ItemAgriSeed) AGRI_SEED);
 
 		// Configure the Items
 		logger.debug("Starting Item Configuration...");

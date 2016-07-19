@@ -1,17 +1,14 @@
 /*
  * 
  */
-package com.infinityraider.agricraft.renderers.dynmodels;
+package com.infinityraider.agricraft.renderers.items;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
  * @author RlonRyan
  */
-@SideOnly(Side.CLIENT)
 public final class ItemModelTexture {
 	
 	public static final String SEPARATOR = "~";

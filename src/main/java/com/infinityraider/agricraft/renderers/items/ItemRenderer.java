@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -32,10 +31,11 @@ import java.util.Collections;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class ItemRenderer<I extends Item> implements IModel {
-    private final IItemRenderingHandler<I> renderer;
+public class ItemRenderer implements IModel {
+	
+    private final IItemRenderingHandler renderer;
 
-    public ItemRenderer(IItemRenderingHandler<I> renderer) {
+    public ItemRenderer(IItemRenderingHandler renderer) {
         this.renderer = renderer;
     }
 
@@ -50,8 +50,8 @@ public class ItemRenderer<I extends Item> implements IModel {
     }
 
     @Override
-    public BakedSuperModel<I> bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-        return new BakedSuperModel<>(format, renderer, bakedTextureGetter);
+    public BakedSuperModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+        return new BakedSuperModel(format, renderer, bakedTextureGetter);
     }
 
     @Override
@@ -59,12 +59,12 @@ public class ItemRenderer<I extends Item> implements IModel {
         return TRSRTransformation.identity();
     }
 
-    public static class BakedSuperModel<I extends Item> implements IBakedModel {
+    public static class BakedSuperModel implements IBakedModel {
         private final VertexFormat format;
-        private final IItemRenderingHandler<I> renderer;
+        private final IItemRenderingHandler renderer;
         private final Function<ResourceLocation, TextureAtlasSprite> textures;
 
-        private BakedSuperModel(VertexFormat format, IItemRenderingHandler<I> renderer, Function<ResourceLocation, TextureAtlasSprite> textures) {
+        private BakedSuperModel(VertexFormat format, IItemRenderingHandler renderer, Function<ResourceLocation, TextureAtlasSprite> textures) {
             this.format = format;
             this.renderer = renderer;
             this.textures = textures;
@@ -102,17 +102,17 @@ public class ItemRenderer<I extends Item> implements IModel {
         }
 
         @Override
-        public ItemOverride<I> getOverrides() {
-            return new ItemOverride<>(format, renderer, textures);
+        public ItemOverride getOverrides() {
+            return new ItemOverride(format, renderer, textures);
         }
     }
 
-    public static class ItemOverride<I extends Item> extends ItemOverrideList {
+    public static class ItemOverride extends ItemOverrideList {
         private final VertexFormat format;
-        private final IItemRenderingHandler<I> renderer;
+        private final IItemRenderingHandler renderer;
         private final Function<ResourceLocation, TextureAtlasSprite> textures;
 
-        private ItemOverride(VertexFormat format, IItemRenderingHandler<I> renderer, Function<ResourceLocation, TextureAtlasSprite> textures) {
+        private ItemOverride(VertexFormat format, IItemRenderingHandler renderer, Function<ResourceLocation, TextureAtlasSprite> textures) {
             super((ImmutableList.of()));
             this.format = format;
             this.renderer = renderer;
@@ -120,22 +120,22 @@ public class ItemRenderer<I extends Item> implements IModel {
         }
 
         @Override
-        public BakedItemModel<I> handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
-            return new BakedItemModel<>(format, textures, world, stack, entity, renderer);
+        public BakedItemModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+            return new BakedItemModel(format, textures, world, stack, entity, renderer);
         }
     }
 
-    public static class BakedItemModel<I extends Item> implements IBakedModel, IPerspectiveAwareModel {
+    public static class BakedItemModel implements IBakedModel, IPerspectiveAwareModel {
         private final VertexFormat format;
         private final Function<ResourceLocation, TextureAtlasSprite> textures;
-        private final IItemRenderingHandler<I> renderer;
+        private final IItemRenderingHandler renderer;
         private final ItemStack stack;
         private final World world;
         private final EntityLivingBase entity;
         private ItemCameraTransforms.TransformType transformType;
 
         private BakedItemModel(VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> textures, World world, ItemStack stack,
-                               EntityLivingBase entity, IItemRenderingHandler<I> renderer) {
+                               EntityLivingBase entity, IItemRenderingHandler renderer) {
             this.format = format;
             this.textures = textures;
             this.world = world;
@@ -158,7 +158,7 @@ public class ItemRenderer<I extends Item> implements IModel {
 
                 tessellator.startDrawingQuads(format);
 
-                this.renderer.renderItem(tessellator, world, renderer.getItem(), stack, entity, transformType);
+                this.renderer.renderItem(tessellator, world, stack, entity, transformType);
 
                 list = tessellator.getQuads();
                 tessellator.draw();

@@ -12,7 +12,7 @@ import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.ReflectionHelper;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.renderers.dynmodels.AgriCraftModelLoader;
+import com.infinityraider.agricraft.renderers.items.ItemRendererRegistry;
 import com.infinityraider.agricraft.utility.ModelErrorSuppressor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -67,7 +67,7 @@ public class ClientProxy implements IProxy {
 	public void registerRenderers() {
 
 		// Init Model Loader
-		ModelLoaderRegistry.registerLoader(AgriCraftModelLoader.INSTANCE);
+		ModelLoaderRegistry.registerLoader(ItemRendererRegistry.getInstance());
 
 		// Init OBJ Loader
 		OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);

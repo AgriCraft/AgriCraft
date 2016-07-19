@@ -12,7 +12,7 @@ import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
-import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
+import com.infinityraider.agricraft.items.ItemAgriSeed;
 import com.infinityraider.agricraft.items.ItemDebugger;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
@@ -254,7 +254,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 			} else if (FertilizerRegistry.getInstance().hasAdapter(heldItem)) {
 				IAgriFertilizer fert = FertilizerRegistry.getInstance().getValue(heldItem);
 				return fert == null ? false : fert.applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
-			} else if (heldItem.getItem() instanceof ItemAgriCraftSeed && !crop.isCrossCrop() && !crop.hasWeed()) {
+			} else if (heldItem.getItem() instanceof ItemAgriSeed && !crop.isCrossCrop() && !crop.hasWeed()) {
 				AgriSeed seed = SeedRegistry.getInstance().getValue(heldItem);
 				if (seed != null && seed.getPlant().getGrowthRequirement().canGrow(world, pos)) {
 					if (crop.setSeed(seed) && !player.capabilities.isCreativeMode) {
