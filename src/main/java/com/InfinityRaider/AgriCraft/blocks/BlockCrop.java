@@ -46,6 +46,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.shadowmage.ancientwarfare.api.IAncientWarfareFarmable;
+import powercrystals.minefactoryreloaded.api.FertilizerType;
+import powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 import vazkii.botania.api.item.IHornHarvestable;
 
 import java.util.ArrayList;
@@ -57,9 +59,10 @@ import java.util.Random;
  */
 @Optional.InterfaceList(value = {
         @Optional.Interface(modid = Names.Mods.botania, iface = "vazkii.botania.api.item.IHornHarvestable"),
-        @Optional.Interface(modid = Names.Mods.ancientWarfare, iface = "net.shadowmage.ancientwarfare.api.IAncientWarfareFarmable")
+        @Optional.Interface(modid = Names.Mods.ancientWarfare, iface = "net.shadowmage.ancientwarfare.api.IAncientWarfareFarmable"),
+        @Optional.Interface(modid = Names.Mods.mfr, iface = "powercrystals.minefactoryreloaded.api.IFactoryFertilizable")
 })
-public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPlantable, IHornHarvestable, IAncientWarfareFarmable {
+public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPlantable, IHornHarvestable, IAncientWarfareFarmable, IFactoryFertilizable {
     /** The set of icons used to render weeds. */
     @SideOnly(Side.CLIENT)
     private IIcon[] weedIcons;
@@ -821,5 +824,45 @@ public class BlockCrop extends BlockContainerAgriCraft implements IGrowable, IPl
                 stack.attemptDamageItem(1, world.rand);
             }
         }
+    }
+
+    @Override
+    @Optional.Method(modid = Names.Mods.mfr)
+    public Block getPlant() {
+        return this;
+    }
+
+    @Override
+    @Optional.Method(modid = Names.Mods.mfr)
+    public boolean canFertilize(World world, int x, int y, int z, FertilizerType type) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if(te == null || !(te instanceof TileEntityCrop)) {
+            return false;
+        }
+        TileEntityCrop crop = (TileEntityCrop) te;
+        if(this.isMature(world, x, y, z) || !crop.isFertile()) {
+            return false;
+        }
+        if(crop.isCrossCrop()) {
+            return ConfigurationHandler.bonemealMutation && type != FertilizerType.None;
+        }
+        if(!crop.hasPlant()) {
+            return false;
+        }
+        switch(type) {
+            case GrowPlant: return crop.canBonemeal();
+            case GrowMagicalCrop: return true;
+            default: return false;
+        }
+    }
+
+    @Override
+    @Optional.Method(modid = Names.Mods.mfr)
+    public boolean fertilize(World world, Random rand, int x, int y, int z, FertilizerType type) {
+        boolean success = this.canFertilize(world, x, y, z, type);
+        if(success) {
+            this.func_149853_b(world, rand, x, y, z);
+        }
+        return success;
     }
 }

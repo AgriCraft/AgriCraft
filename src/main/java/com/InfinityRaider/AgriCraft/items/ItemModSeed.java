@@ -5,19 +5,25 @@ import com.InfinityRaider.AgriCraft.blocks.BlockModPlant;
 import com.InfinityRaider.AgriCraft.creativetab.AgriCraftTab;
 import com.InfinityRaider.AgriCraft.farming.CropPlantHandler;
 import com.InfinityRaider.AgriCraft.init.Blocks;
+import com.InfinityRaider.AgriCraft.reference.Names;
 import com.InfinityRaider.AgriCraft.utility.LogHelper;
 import com.InfinityRaider.AgriCraft.utility.RegisterHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import powercrystals.minefactoryreloaded.api.IFactoryPlantable;
+import powercrystals.minefactoryreloaded.api.ReplacementBlock;
 
-public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
+@Optional.Interface(modid = Names.Mods.mfr, iface = "powercrystals.minefactoryreloaded.api.IFactoryPlantable")
+public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed, IFactoryPlantable {
     @SideOnly(Side.CLIENT)
     private String information;
 
@@ -86,5 +92,41 @@ public class ItemModSeed extends ItemSeeds implements IAgriCraftSeed{
     public void registerIcons(IIconRegister reg) {
         LogHelper.debug("registering icon for: " + this.getUnlocalizedName());
         itemIcon = reg.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.')+1));
+    }
+
+    @Override
+    @Optional.Method(modid = Names.Mods.mfr)
+    public Item getSeed() {
+        return this;
+    }
+
+    @Override
+    @Optional.Method(modid = Names.Mods.mfr)
+    public boolean canBePlanted(ItemStack stack, boolean forFermenting) {
+        return false;
+    }
+
+    @Override
+    @Optional.Method(modid = Names.Mods.mfr)
+    public ReplacementBlock getPlantedBlock(World world, int x, int y, int z, ItemStack stack) {
+        return null;
+    }
+
+    @Override
+    @Optional.Method(modid = Names.Mods.mfr)
+    public boolean canBePlantedHere(World world, int x, int y, int z, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    @Optional.Method(modid = Names.Mods.mfr)
+    public void prePlant(World world, int x, int y, int z, ItemStack stack) {
+
+    }
+
+    @Override
+    @Optional.Method(modid = Names.Mods.mfr)
+    public void postPlant(World world, int x, int y, int z, ItemStack stack) {
+
     }
 }
