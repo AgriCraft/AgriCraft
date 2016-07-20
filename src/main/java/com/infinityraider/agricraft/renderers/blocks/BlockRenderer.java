@@ -1,12 +1,9 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
 import com.infinityraider.agricraft.renderers.AgriTransform;
 import com.infinityraider.agricraft.renderers.items.BakedAgriItemSuperModel;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.renderers.tessellation.TessellatorBakedQuad;
 import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -17,7 +14,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,12 +22,10 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.vecmath.Matrix4f;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRenderer<T> implements IModel {
@@ -88,30 +82,6 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 
 		private BakedBlockModel(VertexFormat format, IBlockRenderingHandler<T> renderer, Function<ResourceLocation, TextureAtlasSprite> textures) {
 			super(format, renderer, textures);
-		}
-
-		/*
-		TODO!
-		*/
-		@Override
-		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-			List<BakedQuad> list;
-			if (side == null && (state instanceof IBlockStateSpecial)) {
-				World world = Minecraft.getMinecraft().theWorld;
-				T tile = ((IBlockStateSpecial<T, ? extends IBlockState>) state).getTileEntity(world);
-				TessellatorBakedQuad tessellator = TessellatorBakedQuad.getInstance();
-				tessellator.setTextureFunction(this.textures);
-
-				tessellator.startDrawingQuads(this.format);
-
-				renderer.renderStatic(tessellator, tile, state);
-
-				list = tessellator.getQuads();
-				tessellator.draw();
-			} else {
-				list = ImmutableList.of();
-			}
-			return list;
 		}
 
 		@Override

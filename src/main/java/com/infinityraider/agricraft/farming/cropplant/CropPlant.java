@@ -28,6 +28,7 @@ import java.util.Random;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
@@ -154,6 +155,7 @@ public abstract class CropPlant implements IAgriPlant {
 		ItemStack stack = new ItemStack(AgriItems.AGRI_SEED);
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(AgriNBT.SEED, this.getId());
+		new PlantStats().writeToNBT(tag);
 		stack.setTagCompound(tag);
 		return stack;
 	}
