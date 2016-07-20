@@ -25,15 +25,15 @@ public abstract class RenderBlockCustomWood<T extends TileEntityCustomWood> exte
 
 	@Override
 	public final void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable T tile,
-			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+			ItemStack stack, EntityLivingBase entity) {
 		if (tile != null) {
 			tile.setMaterial(stack);
-			this.renderInventoryBlockWood(tessellator, world, state, block, tile, stack, entity, type, getIcon(tile));
+			this.renderInventoryBlockWood(tessellator, world, state, block, tile, stack, entity, getIcon(tile));
 		}
 	}
 
 	public void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, Block block, T tile,
-			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+			ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
 		renderStatic(tess, tile, tile.getState(block.getDefaultState()));
 	}
 

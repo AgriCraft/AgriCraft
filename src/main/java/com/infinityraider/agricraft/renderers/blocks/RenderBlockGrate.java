@@ -57,7 +57,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<TileEntityGrate> {
 
 	@Override
 	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityGrate tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+									 ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
 		tessellator.drawScaledPrism(7, 0, 1, 9, 16, 3, icon);
 		tessellator.drawScaledPrism(7, 0, 5, 9, 16, 7, icon);
 		tessellator.drawScaledPrism(7, 0, 9, 9, 16, 11, icon);

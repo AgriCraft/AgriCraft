@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.renderers.items;
 
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -31,6 +30,6 @@ public interface IItemRenderingHandler {
      * @param entity entity holding the stack
      * @param type camera transform type
      */
-    void renderItem(ITessellator tessellator, World world, ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type);
+    void renderItem(ITessellator tessellator, World world, ItemStack stack, EntityLivingBase entity);
 
 }

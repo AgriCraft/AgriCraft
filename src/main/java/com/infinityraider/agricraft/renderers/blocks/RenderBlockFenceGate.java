@@ -28,7 +28,7 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<TileEntityFenceG
 
 	@Override
 	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityFenceGate tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+									 ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
 		tessellator.drawScaledPrism(7, 5, 0, 9, 16, 2, icon);
 		tessellator.drawScaledPrism(7, 5, 14, 9, 16, 16, icon);
 		tessellator.drawScaledPrism(7, 12, 2, 9, 15, 14, icon);

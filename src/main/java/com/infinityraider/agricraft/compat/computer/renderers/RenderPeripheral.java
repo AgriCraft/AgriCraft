@@ -50,7 +50,7 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 
 	@Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntityPeripheral tile,
-			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+			ItemStack stack, EntityLivingBase entity) {
 		renderBase(tessellator);
 	}
 

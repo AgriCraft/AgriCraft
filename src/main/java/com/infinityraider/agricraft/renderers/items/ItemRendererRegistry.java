@@ -1,5 +1,9 @@
 package com.infinityraider.agricraft.renderers.items;
 
+import com.infinityraider.agricraft.renderers.items.IAutoRenderedItem;
+import com.infinityraider.agricraft.renderers.items.IItemRenderingHandler;
+import com.infinityraider.agricraft.renderers.items.RenderItemAuto;
+import com.infinityraider.agricraft.renderers.items.ItemRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.Item;

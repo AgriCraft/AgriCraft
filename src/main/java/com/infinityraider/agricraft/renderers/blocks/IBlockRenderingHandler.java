@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
+import com.infinityraider.agricraft.renderers.items.IItemRenderingHandler;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +18,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public interface IBlockRenderingHandler<T extends TileEntity> {
+public interface IBlockRenderingHandler<T extends TileEntity> extends IItemRenderingHandler {
     /**
      * Gets the block tied to this renderer, used for registering this renderer.
      * A pointer to the Block is saved and referenced.
@@ -62,7 +63,12 @@ public interface IBlockRenderingHandler<T extends TileEntity> {
      * @param type camera transform type
      */
     void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block,
-                              @Nullable T tile, ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type);
+                              @Nullable T tile, ItemStack stack, EntityLivingBase entity);
+
+	@Override
+	default public void renderItem(ITessellator tessellator, World world, ItemStack stack, EntityLivingBase entity) {
+		this.renderInventoryBlock(tessellator, world, this.getBlock().getDefaultState(), this.getBlock(), this.getTileEntity(), stack, entity);
+	}
 
     /**
      * Gets the main icon used for this renderer, used for the particle

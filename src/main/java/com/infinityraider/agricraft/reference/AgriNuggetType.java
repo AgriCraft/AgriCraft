@@ -21,6 +21,7 @@ public enum AgriNuggetType {
 	Platinum,
 	Osmium;
 
+	public final String texture;
 	public final String nugget;
 	public final String ingot;
 	public final String ore;
@@ -29,23 +30,18 @@ public enum AgriNuggetType {
 		this.nugget = "nugget_" + this.name().toLowerCase();
 		this.ingot = "ingot" + this.name();
 		this.ore = "ore" + this.name();
+		this.texture = "agricraft:items/" + this.nugget;
 	}
 
 	private AgriNuggetType(String ingot, String ore) {
 		this.nugget = "nugget_" + this.name().toLowerCase();
 		this.ingot = ingot;
 		this.ore = ore;
+		this.texture = "agricraft:items/" + this.nugget;
 	}
-	private static String[] nuggets;
-
-	public static String[] getNuggets() {
-		if (nuggets == null) {
-			nuggets = new String[AgriNuggetType.values().length];
-			for (int i = 0; i < AgriNuggetType.values().length; i++) {
-				nuggets[i] = AgriNuggetType.values()[i].nugget;
-			}
-		}
-		return nuggets;
+	
+	public static AgriNuggetType getNugget(int i) {
+		return values()[i % values().length];
 	}
 
 }

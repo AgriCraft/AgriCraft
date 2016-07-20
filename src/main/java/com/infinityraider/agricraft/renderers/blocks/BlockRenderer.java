@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
+import com.infinityraider.agricraft.renderers.AgriTransform;
 import com.infinityraider.agricraft.renderers.RenderUtil;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.renderers.tessellation.TessellatorBakedQuad;
@@ -73,7 +74,6 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 		BlockPos pos = te.getPos();
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		IBlockState extendedState = block.getExtendedState(state, world, pos);
 
 		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
@@ -81,7 +81,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 		tessellator.translate(x, y, z);
 		tessellator.setColorRGBA(255, 255, 255, 255);
 		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
-		
+
 		this.renderer.renderStatic(tessellator, te, state);
 		this.renderer.renderDynamic(tessellator, te, partialTicks, destroyStage);
 
@@ -117,7 +117,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 				ITessellator tessellator = TessellatorBakedQuad.getInstance().setTextureFunction(this.textures);
 
 				tessellator.startDrawingQuads(this.format);
-				
+
 				renderer.renderStatic(tessellator, tile, state);
 
 				list = tessellator.getQuads();
@@ -190,7 +190,6 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 		private final ItemStack stack;
 		private final World world;
 		private final EntityLivingBase entity;
-		private ItemCameraTransforms.TransformType transformType;
 		private final VertexFormat format;
 		private final Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter;
 
@@ -201,16 +200,8 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 			this.stack = stack;
 			this.entity = entity;
 			this.renderer = renderer;
-			this.transformType = ItemCameraTransforms.TransformType.NONE;
 			this.format = format;
 			this.bakedTextureGetter = bakedTextureGetter;
-		}
-
-		private BakedItemModel<T> setTransformType(ItemCameraTransforms.TransformType type) {
-			if (type != null) {
-				this.transformType = type;
-			}
-			return this;
 		}
 
 		@Override
@@ -221,18 +212,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 
 				tessellator.startDrawingQuads(format);
 
-				switch (this.transformType) {
-					case GUI:
-						RenderUtil.rotateBlockInventory(tessellator);
-						break;
-					case GROUND:
-						tessellator.translate(0.365, 0.4, 0.365);
-						tessellator.scale(0.25, 0.25, 0.25);
-						RenderUtil.drawAxis(tessellator);
-						break;
-				}
-
-				this.renderer.renderInventoryBlock(tessellator, world, state, block, tile, stack, entity, transformType);
+				this.renderer.renderInventoryBlock(tessellator, world, state, block, tile, stack, entity);
 
 				list = tessellator.getQuads();
 				tessellator.draw();
@@ -273,8 +253,9 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 		}
 
 		@Override
-		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
-			return new ImmutablePair<>(this.setTransformType(cameraTransformType), null);
+		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType transform) {
+			return Pair.of(this, AgriTransform.getBlockMatrix(transform));
 		}
+
 	}
 }
