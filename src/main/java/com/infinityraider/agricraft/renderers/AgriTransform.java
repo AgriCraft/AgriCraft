@@ -4,7 +4,6 @@ package com.infinityraider.agricraft.renderers;
 
 import com.google.common.collect.ImmutableMap;
 import javax.vecmath.Matrix4f;
-import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -51,12 +50,12 @@ public class AgriTransform {
 	}
 
 	private static TRSRTransformation get(float tx, float ty, float tz, float ax, float ay, float az, float s) {
-		return TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+		return new TRSRTransformation(
 				new Vector3f(tx / 16, ty / 16, tz / 16),
 				TRSRTransformation.quatFromXYZDegrees(new Vector3f(ax, ay, az)),
 				new Vector3f(s, s, s),
 				null
-		));
+		);
 	}
 
 	private static TRSRTransformation leftify(TRSRTransformation transform) {
@@ -69,7 +68,7 @@ public class AgriTransform {
 		if (BLOCK.containsKey(type)) {
 			return BLOCK.get(type).getMatrix();
 		}  else {
-			return new Matrix4f();
+			return TRSRTransformation.identity().getMatrix();
 		}
 	}
 
@@ -77,7 +76,7 @@ public class AgriTransform {
 		if (ITEM.containsKey(type)) {
 			return ITEM.get(type).getMatrix();
 		} else {
-			return new Matrix4f();
+			return TRSRTransformation.identity().getMatrix();
 		}
 	}
 

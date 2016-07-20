@@ -2,12 +2,8 @@
  */
 package com.infinityraider.agricraft.renderers.items;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.renderers.AgriTransform;
-import com.infinityraider.agricraft.renderers.items.IItemRenderingHandler;
-import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.renderers.tessellation.TessellatorBakedQuad;
 import java.util.List;
 import javax.vecmath.Matrix4f;
@@ -30,22 +26,18 @@ import org.apache.commons.lang3.tuple.Pair;
  *
  * @author RlonRyan
  */
-public class BakedAgriItemModel implements IBakedModel {
+public class BakedAgriItemModel implements IPerspectiveAwareModel {
 	
-	private final VertexFormat format;
-	private final Function<ResourceLocation, TextureAtlasSprite> textures;
-	private final IItemRenderingHandler renderer;
+	private final BakedAgriItemSuperModel parent;
 	private final ItemStack stack;
 	private final World world;
 	private final EntityLivingBase entity;
 
-	public BakedAgriItemModel(VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> textures, World world, ItemStack stack, EntityLivingBase entity, IItemRenderingHandler renderer) {
-		this.format = format;
-		this.textures = textures;
+	public BakedAgriItemModel(BakedAgriItemSuperModel parent, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> textures, World world, ItemStack stack, EntityLivingBase entity, IItemRenderingHandler renderer) {
+		this.parent = parent;
 		this.world = world;
 		this.stack = stack;
 		this.entity = entity;
-		this.renderer = renderer;
 	}
 
 	@Override
@@ -53,9 +45,9 @@ public class BakedAgriItemModel implements IBakedModel {
 		List<BakedQuad> list;
 		if (side == null) {
 			final TessellatorBakedQuad tessellator = TessellatorBakedQuad.getInstance();
-			tessellator.setTextureFunction(textures);
-			tessellator.startDrawingQuads(format);
-			this.renderer.renderItem(tessellator, world, stack, entity);
+			tessellator.setTextureFunction(this.parent.textures);
+			tessellator.startDrawingQuads(this.parent.format);
+			this.parent.renderer.renderItem(tessellator, world, stack, entity);
 			list = tessellator.getQuads();
 			tessellator.draw();
 		} else {
@@ -93,5 +85,10 @@ public class BakedAgriItemModel implements IBakedModel {
 	public ItemOverrideList getOverrides() {
 		return null;
 	}
-	
+
+	@Override
+	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType type) {
+		return Pair.of(this, this.parent.handlePerspective(type));
+	}
+
 }

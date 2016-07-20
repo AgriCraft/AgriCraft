@@ -12,7 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -28,13 +27,13 @@ import org.apache.commons.lang3.tuple.Pair;
  *
  * @author RlonRyan
  */
-public class BakedAgriItemSuperModel implements IBakedModel, IItemOverriden, IPerspectiveAwareModel {
+public class BakedAgriItemSuperModel<T extends IItemRenderingHandler> implements IBakedModel, IItemOverriden {
 
-	private final VertexFormat format;
-	private final IItemRenderingHandler renderer;
-	private final Function<ResourceLocation, TextureAtlasSprite> textures;
+	protected final VertexFormat format;
+	protected final T renderer;
+	protected final Function<ResourceLocation, TextureAtlasSprite> textures;
 
-	public BakedAgriItemSuperModel(VertexFormat format, IItemRenderingHandler renderer, Function<ResourceLocation, TextureAtlasSprite> textures) {
+	public BakedAgriItemSuperModel(VertexFormat format, T renderer, Function<ResourceLocation, TextureAtlasSprite> textures) {
 		this.format = format;
 		this.renderer = renderer;
 		this.textures = textures;
@@ -70,14 +69,13 @@ public class BakedAgriItemSuperModel implements IBakedModel, IItemOverriden, IPe
 		return ItemCameraTransforms.DEFAULT;
 	}
 	
-	@Override
-	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType transform) {
-		return Pair.of(this, AgriTransform.getItemMatrix(transform));
+	public Matrix4f handlePerspective(ItemCameraTransforms.TransformType transform) {
+		return AgriTransform.getItemMatrix(transform);
 	}
 	
 	@Override
 	public final BakedAgriItemModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
-		return new BakedAgriItemModel(format, textures, world, stack, entity, renderer);
+		return new BakedAgriItemModel(this, format, textures, world, stack, entity, renderer);
 	}
 
 	@Override

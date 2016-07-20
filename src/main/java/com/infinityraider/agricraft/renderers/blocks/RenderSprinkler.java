@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.BaseIcons;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
