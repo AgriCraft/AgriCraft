@@ -2,10 +2,10 @@ package com.infinityraider.agricraft.gui;
 
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
-import com.infinityraider.agricraft.compat.computercraft.method.IMethod;
+import com.infinityraider.agricraft.compat.computer.methods.IMethod;
 import com.infinityraider.agricraft.container.ContainerPeripheral;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.tiles.peripheral.TileEntityPeripheral;
+import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.utility.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

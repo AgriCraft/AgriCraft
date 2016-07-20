@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.network;
 
+import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
+import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
 import com.infinityraider.agricraft.reference.Reference;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.entity.player.EntityPlayerMP;

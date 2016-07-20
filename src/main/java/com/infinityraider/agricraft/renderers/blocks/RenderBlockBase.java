@@ -44,7 +44,7 @@ public abstract class RenderBlockBase<T extends TileEntityBase> implements IBloc
     }
 
     @Override
-    public boolean doInventoryRendering() {
+    public boolean hasInventoryRendering() {
         return inv;
     }
 

@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -128,7 +127,6 @@ public abstract class MutationHandler {
 		boolean result = false;
 		if (mutation != null && !mutations.contains(mutation)) {
 			result = mutations.add(mutation);
-			AgriCraftJEIPlugin.registerRecipe(mutation);
 		}
 		return result;
 	}

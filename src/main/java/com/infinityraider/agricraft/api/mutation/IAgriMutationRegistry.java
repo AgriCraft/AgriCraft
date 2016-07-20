@@ -17,7 +17,7 @@ public interface IAgriMutationRegistry {
 	 * Gets a list of all mutations currently registered Mutations are populated
 	 * onServerAboutToStartEvent, so any calls before that will return null
 	 */
-	List<IAgriMutation> getRegisteredMutations();
+	List<IAgriMutation> getMutations();
 
 	/**
 	 * Gets a list of all mutations that have this stack as a parent Mutations
@@ -43,6 +43,8 @@ public interface IAgriMutationRegistry {
 	 * @return True if successful
 	 */
 	boolean addMutation(double chance, @Nonnull String childId, @Nonnull String... parentIds);
+	
+	boolean addMutation(IAgriMutation mutation);
 
 	/**
 	 * Removes all mutations that give this stack as a result

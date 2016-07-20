@@ -33,19 +33,27 @@ import net.minecraft.item.Item;
 public interface IAgriPlant extends Comparable<IAgriPlant> {
 
 	String getId();
-	
+
 	String getPlantName();
-	
+
 	default String getSeedName() {
 		return getPlantName() + " Seeds";
 	}
-	
+
 	// TODO
 	default double getSpreadChance() {
 		return 0.5;
 	}
-	
-	default void setSpreadChance(double chance) {}
+
+	/**
+	 * Determines the normalized p-value representing the chance this plant has
+	 * to drop from harvested grasses.
+	 *
+	 * @return The chance of this plant being dropped.
+	 */
+	default double getGrassDropChance() {
+		return 0;
+	}
 
 	/**
 	 * Gets the tier of this plant, can be overridden trough the configs
@@ -54,6 +62,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 
 	/**
 	 * Gets a stack of the seed for this plant.
+	 *
 	 * @return the plant's seed.
 	 */
 	ItemStack getSeed();
@@ -66,7 +75,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 	/**
 	 * Gets the blockstate for the block with the current growthstage
 	 * (growtstage goes from 0 for sprout to 7 for mature)
-     *
+	 *
 	 */
 	IBlockState getBlockStateForGrowthStage(int growthstage);
 
@@ -216,7 +225,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 	 */
 	@SideOnly(Side.CLIENT)
 	ResourceLocation getSecondaryPlantTexture(int growthStage);
-	
+
 	@SideOnly(Side.CLIENT)
 	ResourceLocation getSeedTexture();
 

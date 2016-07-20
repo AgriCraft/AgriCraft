@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.renderers.blocks.ICustomRenderedBlock;
 import com.infinityraider.agricraft.tabs.AgriTabs;
-import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -20,7 +20,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import javax.annotation.Nonnull;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 
 /**
  * The base class for all AgriCraft blocks.
@@ -43,34 +48,51 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 		this.fullBlock = false;
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
-	
+
 	public boolean isEnabled() {
 		return true;
 	}
 
-	public String getInternalName() {
+	public final String getInternalName() {
 		return this.internalName;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getBlockModelResourceLocation() {
-		return new  ModelResourceLocation(Reference.MOD_ID.toLowerCase()+":"+getInternalName());
+		return new ModelResourceLocation("agricraft:" + getInternalName());
 	}
 
 	@Override
 	protected final BlockStateContainer createBlockState() {
-		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
-		for(IProperty prop : this.getPropertyArray()) {
-			builder.add(prop);
-		}
-		return builder.build();
+		Set<IProperty> properties = new HashSet<>();
+		Set<IUnlistedProperty> unlisted = new HashSet<>();
+		this.addProperties(properties);
+		this.addUnlistedProperties(unlisted);
+		return new ExtendedBlockState(this,
+				TypeHelper.asArray(properties, IProperty.class),
+				TypeHelper.asArray(unlisted, IUnlistedProperty.class)
+		);
 	}
 
 	/**
-	 * @return a property array containing all properties for this block's state
+	 * Adds IProperties to the block.
+	 * Called to create a block state.
 	 */
-	protected abstract IProperty[] getPropertyArray();
+	public void addProperties(Set<IProperty> properties) {
+	}
+
+	/**
+	 * Adds IUnlistedProperties to the block.
+	 * Called to create the block state.
+	 */
+	public void addUnlistedProperties(Set<IUnlistedProperty> properties) {
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return 0;
+	}
 
 	/**
 	 * Retrieves the block's ItemBlock class, as a generic class bounded by the
@@ -84,6 +106,7 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 	/**
 	 * @return The default bounding box for this block
 	 */
+	@Nonnull
 	public abstract AxisAlignedBB getDefaultBoundingBox();
 
 	@Override
@@ -100,4 +123,5 @@ public abstract class BlockBase extends Block implements ICustomRenderedBlock {
 	public List<ResourceLocation> getTextures() {
 		return Collections.emptyList();
 	}
+
 }

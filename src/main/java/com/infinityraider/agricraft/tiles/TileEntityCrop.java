@@ -30,12 +30,12 @@ import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.agricraft.agricore.util.MathHelper;
-import com.infinityraider.agricraft.utility.WorldHelper;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.utility.WorldHelper;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDebuggable {
 
@@ -103,7 +103,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 				SoundType type = Blocks.PLANKS.getSoundType();
 				worldObj.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
 			}
-			this.markDirty();
+			this.markForUpdate();
 		}
 	}
 
@@ -113,6 +113,18 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	public int getGrowthRate() {
 		// TODO: update!
 		return AgriCraftConfig.weedGrowthRate;
+	}
+
+	// =========================================================================
+	// Blockstate
+	// ========================================================================+
+	@Override
+	public IBlockState getState(IBlockState state) {
+		return state
+				.withProperty(AgriProperties.PLANT, this.hasPlant())
+				.withProperty(AgriProperties.WEEDS, this.hasWeed())
+				.withProperty(AgriProperties.CROSSCROP, this.crossCrop)
+				.withProperty(AgriProperties.GROWTHSTAGE, (int) this.stats.getMeta());
 	}
 
 	// =========================================================================
@@ -127,9 +139,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	public void setGrowthStage(int stage) {
 		if (this.hasPlant() || this.hasWeed()) {
 			stage = MathHelper.inRange(stage, 0, Constants.MATURE);
-			IBlockState state = worldObj.getBlockState(pos);
-			state = state.withProperty(AgriProperties.GROWTHSTAGE, stage);
-			this.worldObj.setBlockState(pos, state, 3);
 			this.stats = this.stats.withMeta(stage);
 			this.markForUpdate();
 		}

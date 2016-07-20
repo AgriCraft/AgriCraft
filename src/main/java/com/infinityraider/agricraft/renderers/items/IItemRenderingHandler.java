@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.renderers.items;
 import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -13,11 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public interface IItemRenderingHandler<I extends Item> {
-    /**
-     * @return The item this handler should handle rendering for
-     */
-    I getItem();
+public interface IItemRenderingHandler {
 
     /**
      * Returns a list containing a ResourceLocation for every texture used to render this Item.
@@ -36,7 +31,6 @@ public interface IItemRenderingHandler<I extends Item> {
      * @param entity entity holding the stack
      * @param type camera transform type
      */
-    void renderItem(ITessellator tessellator, World world, I item,
-                    ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type);
+    void renderItem(ITessellator tessellator, World world, ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type);
 
 }

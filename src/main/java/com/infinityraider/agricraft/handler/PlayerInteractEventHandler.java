@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.blocks.BlockGrate;
+import com.infinityraider.agricraft.blocks.decoration.BlockGrate;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;

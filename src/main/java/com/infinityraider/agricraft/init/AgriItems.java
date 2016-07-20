@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.init;
 import com.infinityraider.agricraft.items.*;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.log.AgriLogger;
-import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import com.agricraft.agricore.util.ReflectionHelper;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.utility.RegisterHelper;
@@ -17,7 +16,7 @@ public class AgriItems {
 	public static final ItemBase HAND_RAKE = new ItemHandRake();
 	public static final ItemBase CLIPPER = new ItemClipper();
 	public static final ItemBase AGRI_CLIPPING = new ItemClipping();
-	public static final ItemBase AGRI_SEED = new ItemAgriCraftSeed();
+	public static final ItemBase AGRI_SEED = new ItemAgriSeed();
 	public static final ItemBase AGRI_NUGGET = new ItemNugget();
 	public static final ItemBase MAGNIFYING_GLASS = new ItemMagnifyingGlass();
 
@@ -30,7 +29,7 @@ public class AgriItems {
 		logger.debug("Starting Item Initialization...");
 
 		// Register seed handler.
-		SeedRegistry.getInstance().registerAdapter((ItemAgriCraftSeed) AGRI_SEED);
+		SeedRegistry.getInstance().registerAdapter((ItemAgriSeed) AGRI_SEED);
 
 		// Configure the Items
 		logger.debug("Starting Item Configuration...");
@@ -46,7 +45,6 @@ public class AgriItems {
 			if (item.isEnabled()) {
 				logger.debug("Registering Item: {0}", item.getInternalName());
 				RegisterHelper.registerItem(item, item.getInternalName());
-				AgriCraftJEIPlugin.registerNbtIgnore(item, item.getIgnoredNBT());
 			}
 		});
 		logger.debug("Finished Item Registration!");

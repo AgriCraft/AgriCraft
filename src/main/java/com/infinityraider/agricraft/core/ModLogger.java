@@ -34,7 +34,7 @@ public class ModLogger implements AgriLogAdapter {
 
 	@Override
 	public void trace(Object source, Exception e) {
-		debug(source, "{0}", e);
+		debug(source, e.getLocalizedMessage());
 	}
 
 	@Override

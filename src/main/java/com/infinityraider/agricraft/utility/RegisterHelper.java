@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.utility;
 
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.items.ItemAgriCraftSeed;
+import com.infinityraider.agricraft.items.ItemAgriSeed;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -80,7 +80,7 @@ public abstract class RegisterHelper {
         GameRegistry.registerItem(item, name);
     }
 
-    public static void registerSeed(ItemAgriCraftSeed seed, String name) {
+    public static void registerSeed(ItemAgriSeed seed, String name) {
         name = name.startsWith("seed") ? (name) : ("seed" + name);
         registerItem(seed, name);
         OreDictionary.registerOre(name, seed);

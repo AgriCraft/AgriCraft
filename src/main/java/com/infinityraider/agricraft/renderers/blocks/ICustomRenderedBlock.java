@@ -21,7 +21,7 @@ public interface ICustomRenderedBlock {
     IBlockRenderingHandler getRenderer();
 	
 	/**
-     * Gets an array of ResourceLocations used for the model of this block, all block states for this block will use this as key in the model registry
+     * Gets a unique ModelResourceLocations used for the model of this block, all block states for this block will use this as key in the model registry
      * @return a unique ModelResourceLocation for this block
      */
 	@SideOnly(Side.CLIENT)

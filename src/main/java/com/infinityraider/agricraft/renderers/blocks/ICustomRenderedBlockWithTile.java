@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.blockstate.IBlockStateSpecial;
 import com.infinityraider.agricraft.renderers.blocks.IBlockRenderingHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -21,9 +20,8 @@ public interface ICustomRenderedBlockWithTile<T extends TileEntity> extends ICus
      * @param pos the block's position in the world
      * @return a special block state containing the tile entity and the position
      */
-    @SuppressWarnings("unused")
 	@SideOnly(Side.CLIENT)
-    IBlockStateSpecial<T, ? extends IBlockState> getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos);
+    IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos);
 	
 	/**
      * Gets called to create the IBlockRenderingHandler instance to render this block with

@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;
 
 /**
- *
+ * Todo: Rework!
  * @author RlonRyan
  */
 public class MutationRegistry implements IAgriMutationRegistry {
@@ -23,7 +23,7 @@ public class MutationRegistry implements IAgriMutationRegistry {
 	}
 
 	@Override
-	public List<IAgriMutation> getRegisteredMutations() {
+	public List<IAgriMutation> getMutations() {
 		return Arrays.asList(MutationHandler.getMutations());
 	}
 
@@ -51,6 +51,11 @@ public class MutationRegistry implements IAgriMutationRegistry {
 			}
 		}
 		return MutationHandler.add(new Mutation(chance, child, parents));
+	}
+
+	@Override
+	public boolean addMutation(IAgriMutation mutation) {
+		return MutationHandler.add(mutation);
 	}
 
 	@Override

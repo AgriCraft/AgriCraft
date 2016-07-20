@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.container;
 
-import com.infinityraider.agricraft.tiles.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

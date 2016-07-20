@@ -69,35 +69,41 @@ task modInfo() {
 
 repositories {
     maven {
-        name = "chickenbones"
-        url = "http://chickenbones.net/maven/"
+        name "chickenbones"
+        url  "http://chickenbones.net/maven/"
     }
     maven {
         name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven/"
+        url  "http://mobiusstrip.eu/maven/"
     }
     maven {
-        name = "sponge"
-        url = "http://repo.spongepowered.org/maven/"
+        name "sponge"
+        url  "http://repo.spongepowered.org/maven/"
     }
 	maven {
-        name = "sk89q"
-        url = "http://maven.sk89q.com/repo/"
+        name "sk89q"
+        url  "http://maven.sk89q.com/repo/"
     }
 	maven {
-		name = "JEI"
+		name "JEI"
 		url "http://dvs1.progwml6.com/files/maven"
 	}
+	 maven { 
+		name "OpenComputers"
+		url  "http://maven.cil.li/"
+	}
+}
+
+configurations {
+	shade
+	compile.extendsFrom shade
 }
 
 dependencies {
     // Mods (For auto-import)
-    //compile "codechicken:CodeChickenLib:1.8-1.1.2.139:dev"
-    //compile "codechicken:CodeChickenCore:1.8-1.0.5.34:dev"
-    //compile "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
-	compile project(':lib/AgriCore')
-  compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-	deobfCompile "mezz.jei:jei_1.10:3.7.0.218"
+	shade project(':lib/AgriCore')
+	compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
+	deobfCompile "mezz.jei:jei_1.10.2:3.7.6.231"
 }
 
 processResources {
@@ -114,6 +120,21 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
 		exclude 'mcmod.info'
     }
+	
+	from('lib/AgriPlants') {
+		include '**/*.json'
+		into 'plants/defaults'
+	}
+	
+}
+
+// Add Packages
+jar {
+    configurations.shade.copyRecursive().setTransitive(false).each { artifact ->
+		from (zipTree(artifact)) {
+			exclude 'META-INF', 'META-INF/**'
+		}
+	}
 }
 
 // Javadoc

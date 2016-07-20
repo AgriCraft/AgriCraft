@@ -12,7 +12,9 @@ import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -22,14 +24,14 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
  */
 public final class PluginHandler {
 
-	private static List<IAgriPlugin> plugins = new ArrayList<>();
+	private static Deque<IAgriPlugin> plugins = new ConcurrentLinkedDeque<>();
 
 	public static void preInit(FMLPreInitializationEvent event) {
-		plugins = getInstances(event.getAsmData(), AgriPlugin.class, IAgriPlugin.class);
+		plugins.addAll(getInstances(event.getAsmData(), AgriPlugin.class, IAgriPlugin.class));
 	}
 	
 	public static void init() {
-		plugins.forEach(IAgriPlugin::initPlugin);
+		plugins.stream().filter(IAgriPlugin::isEnabled).forEach(IAgriPlugin::initPlugin);
 	}
 	
 	public static void postInit() {
@@ -77,9 +79,9 @@ public final class PluginHandler {
 			try {
 				T instance = Class.forName(asmData.getClassName()).asSubclass(type).newInstance();
 				instances.add(instance);
-			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+			} catch (ClassNotFoundException | NoClassDefFoundError | IllegalAccessException | InstantiationException e) {
 				AgriCore.getLogger("AgriCraft-Plugins").debug(
-						"\nFailed to load class: {0}!\n\tFor annotation: {1}!\n\tAs Instanceof: {2}!",
+						"%nFailed to load AgriPlugin%n\tOf class: {0}!%n\tFor annotation: {1}!%n\tAs Instanceof: {2}!",
 						asmData.getClassName(),
 						anno.getCanonicalName(),
 						type.getCanonicalName()

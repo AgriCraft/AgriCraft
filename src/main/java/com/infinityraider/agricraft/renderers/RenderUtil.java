@@ -10,6 +10,10 @@ import com.infinityraider.agricraft.utility.BaseIcons;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,7 +26,7 @@ public final class RenderUtil {
 
 	@AgriConfigurable(key = "Draw Rendering Axes", category = AgriConfigCategory.DEBUG, comment = "If the AgriCraft renderer should render reference axes.")
 	private static boolean debugAxis = false;
-	
+
 	static {
 		AgriCore.getConfig().addConfigurable(RenderUtil.class);
 	}
@@ -153,6 +157,37 @@ public final class RenderUtil {
 			tess.drawScaledPrism(0, 0, 0, 1f, 1f, 16f, BaseIcons.IRON_BLOCK.getIcon());
 			tess.setColor(prevc);
 		}
+	}
+
+	public static void renderItemStack(ItemStack stack, double x, double y, double z, double scale, boolean rotate) {
+
+		// Save Settings
+		GlStateManager.pushAttrib();
+		GlStateManager.pushMatrix();
+
+		// Fix Lighting
+		RenderHelper.enableStandardItemLighting();
+		GlStateManager.enableLighting();
+
+		// Translate to correct spot
+		GlStateManager.translate(x, y, z);
+
+		// Scale to correct Size
+		GlStateManager.scale(scale, scale, scale);
+
+		// Rotate Item as function of system time.
+		if (rotate) {
+			double angle = (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL); //credits to Pahimar
+			GlStateManager.rotate((float) angle, 0, 1, 0);
+		}
+
+		// Draw the item.
+		Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.GROUND);
+
+		// Restore Settings.
+		GlStateManager.popMatrix();
+		GlStateManager.popAttrib();
+
 	}
 
 }

@@ -10,28 +10,29 @@ import net.minecraft.util.EnumFacing;
  */
 public enum AgriForgeDirection {
     /** -Y */
-    DOWN(0, -1, 0, EnumFacing.DOWN),
+    DOWN(0, -1, 0, EnumFacing.DOWN, Axis.Y),
 
     /** +Y */
-    UP(0, 1, 0, EnumFacing.UP),
+    UP(0, 1, 0, EnumFacing.UP, Axis.Y),
 
     /** -Z */
-    NORTH(0, 0, -1, EnumFacing.NORTH),
+    NORTH(0, 0, -1, EnumFacing.NORTH, Axis.Z),
 
     /** +Z */
-    SOUTH(0, 0, 1, EnumFacing.SOUTH),
+    SOUTH(0, 0, 1, EnumFacing.SOUTH, Axis.Z),
 
     /** -X */
-    WEST(-1, 0, 0, EnumFacing.WEST),
+    WEST(-1, 0, 0, EnumFacing.WEST, Axis.X),
 
     /** +X */
-    EAST(1, 0, 0, EnumFacing.EAST),
+    EAST(1, 0, 0, EnumFacing.EAST, Axis.X),
 
     /**
      * Used only by getOrientation, for invalid inputs
      */
-    UNKNOWN(0, 0, 0, null);
+    UNKNOWN(0, 0, 0, null, Axis.X);
 
+	public final Axis axis;
     public final int offsetX;
     public final int offsetY;
     public final int offsetZ;
@@ -51,12 +52,13 @@ public enum AgriForgeDirection {
             {0, 1, 2, 3, 4, 5, 6},
     };
 
-    private AgriForgeDirection(int x, int y, int z, EnumFacing enumFacing) {
+    private AgriForgeDirection(int x, int y, int z, EnumFacing enumFacing, Axis axis) {
         offsetX = x;
         offsetY = y;
         offsetZ = z;
         this.enumFacing = enumFacing;
         flag = 1 << ordinal();
+		this.axis = axis;
     }
 
     public static AgriForgeDirection getOrientation(int id) {
@@ -92,4 +94,6 @@ public enum AgriForgeDirection {
     public BlockPos offset(BlockPos pos) {
         return pos.add(this.offsetX, this.offsetY, this.offsetZ);
     }
+	
+	
 }

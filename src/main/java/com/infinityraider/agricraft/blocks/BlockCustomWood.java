@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -23,6 +24,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import net.minecraft.block.properties.IProperty;
 
 public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends BlockBaseTile<T> {
 
@@ -157,4 +160,14 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 	public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
 		return ItemBlockCustomWood.class;
 	}
+
+	@Override
+	public final void addProperties(Set<IProperty> properties) {
+		addPropertiesWood(properties);
+		properties.add(AgriProperties.WOOD_TYPE);
+	}
+
+	protected void addPropertiesWood(Set<IProperty> properties) {
+	}
+
 }

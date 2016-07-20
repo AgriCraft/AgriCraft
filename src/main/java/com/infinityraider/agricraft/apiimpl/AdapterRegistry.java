@@ -2,10 +2,10 @@
  */
 package com.infinityraider.agricraft.apiimpl;
 
-import java.util.ArrayDeque;
 import java.util.Deque;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * A basic AdapterRegistry implementation.
@@ -15,16 +15,11 @@ import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
  */
 public class AdapterRegistry<T> implements IAgriAdapterRegistry<T> {
 
-	private final Deque<IAgriAdapter<T>> adapters = new ArrayDeque<>();
+	private final Deque<IAgriAdapter<T>> adapters = new ConcurrentLinkedDeque<>();
 	
 	@Override
 	public boolean hasAdapter(Object obj) {
-		for (IAgriAdapter<T> adapter : adapters) {
-			if (adapter.accepts(obj)) {
-				return true;
-			}
-		}
-		return false;
+		return adapters.stream().anyMatch(a -> a.accepts(obj));
 	}
 
 	@Override
