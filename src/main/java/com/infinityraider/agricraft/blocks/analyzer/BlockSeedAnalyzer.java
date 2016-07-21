@@ -107,7 +107,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> {
 			return false;
 		}
 		if (!world.isRemote) {
-			player.openGui(AgriCraft.instance, GuiHandler.seedAnalyzerID, world, pos.getX(), pos.getY(), pos.getZ());
+			player.openGui(AgriCraft.instance, GuiHandler.ANALYZER_GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
 		}
 		return true;
 	}

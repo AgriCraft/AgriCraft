@@ -43,7 +43,7 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if (world.isRemote) {
-			player.openGui(AgriCraft.instance, GuiHandler.journalID, world, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
+			player.openGui(AgriCraft.instance, GuiHandler.JOURNAL_GUI_ID, world, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
 		}
 		return new ActionResult<>(EnumActionResult.PASS, stack);
 	}

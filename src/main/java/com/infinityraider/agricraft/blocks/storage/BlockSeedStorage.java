@@ -35,7 +35,7 @@ public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
-            player.openGui(AgriCraft.instance, GuiHandler.seedStorageID, world, pos.getX(), pos.getY(), pos.getZ());
+            player.openGui(AgriCraft.instance, GuiHandler.SEED_STORAGE_GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }

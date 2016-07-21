@@ -32,7 +32,7 @@ public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedSt
             return false;
         }
         if(!world.isRemote) {
-            player.openGui(AgriCraft.instance, GuiHandler.seedStorageControllerID, world, pos.getX(), pos.getY(), pos.getZ());
+            player.openGui(AgriCraft.instance, GuiHandler.SEED_CONTROLLER_GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }

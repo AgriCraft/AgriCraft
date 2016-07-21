@@ -110,7 +110,7 @@ public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 			return false;
 		}
 		if (!world.isRemote) {
-			player.openGui(AgriCraft.instance, GuiHandler.peripheralID, world, pos.getX(), pos.getY(), pos.getZ());
+			player.openGui(AgriCraft.instance, GuiHandler.PERIPHERAL_GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
 		}
 		return true;
 	}
