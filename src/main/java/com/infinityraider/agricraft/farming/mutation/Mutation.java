@@ -5,6 +5,7 @@ import java.util.Arrays;
 import javax.annotation.Nonnull;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import java.util.List;
 
 public class Mutation implements IAgriMutation {
 
@@ -13,7 +14,7 @@ public class Mutation implements IAgriMutation {
 	@Nonnull
 	private final IAgriPlant child;
 	@Nonnull
-	private final IAgriPlant[] parents;
+	private final List<IAgriPlant> parents;
 
 	@Override
 	public double getChance() {
@@ -26,22 +27,15 @@ public class Mutation implements IAgriMutation {
 	}
 
 	@Override
-	public IAgriPlant[] getParents() {
+	public List<IAgriPlant> getParents() {
 		return parents;
 	}
 
 	@Override
 	public boolean equals(Object object) {
-		if (object instanceof Mutation) {
-			Mutation other = (Mutation) object;
-			if (this.chance == other.chance && this.child.equals(other.child) && this.parents.length == other.parents.length) {
-				for (int i = 0; i < this.parents.length; i++) {
-					if (!this.parents[i].equals(other.parents[i])) {
-						return false;
-					}
-				}
-				return true;
-			}
+		if (object instanceof IAgriMutation) {
+			IAgriMutation other = (IAgriMutation) object;
+			return other.hasChild(this.child) && other.hasParent(this.parents);
 		}
 		return false;
 	}
@@ -49,20 +43,21 @@ public class Mutation implements IAgriMutation {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < this.parents.length; i++) {
-			sb.append(this.parents[i].getPlantName());
-			if (i < this.parents.length - 1) {
-				sb.append(" + ");
-			}
+		for (IAgriPlant p : this.parents) {
+			sb.append(p.getPlantName()).append(" + ");
 		}
-		sb.append(" = ").append(this.child.getPlantName());
+		sb.replace(sb.length() - 3, sb.length(), " = ");
+		sb.append(this.child.getPlantName());
 		return sb.toString();
 	}
 
 	public Mutation(double chance, @Nonnull IAgriPlant child, @Nonnull IAgriPlant... parents) {
+		this(chance, child, Arrays.asList(parents));
+	}
+	
+	public Mutation(double chance, IAgriPlant child, List<IAgriPlant> parents) {
 		this.chance = MathHelper.inRange(chance, 0, 1);
 		this.child = child;
-		Arrays.sort(parents);
 		this.parents = parents;
 	}
 

@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks.pad;
 
-import com.infinityraider.agricraft.api.render.IIconRegistrar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -17,8 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWaterPad extends AbstractBlockWaterPad {
 	
@@ -102,6 +99,4 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
     @Override
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
 
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegistrar iconRegistrar) {}
 }

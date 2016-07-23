@@ -42,7 +42,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	public static final String NAME = "crops";
 
 	private boolean crossCrop = false;
-	private boolean weed = false;
 
 	private @Nonnull
 	IAgriStat stats = new PlantStats();
@@ -122,7 +121,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	public IBlockState getState(IBlockState state) {
 		return state
 				.withProperty(AgriProperties.PLANT, this.hasPlant())
-				.withProperty(AgriProperties.WEEDS, this.hasWeed())
 				.withProperty(AgriProperties.CROSSCROP, this.crossCrop)
 				.withProperty(AgriProperties.GROWTHSTAGE, (int) this.stats.getMeta());
 	}
@@ -137,7 +135,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 
 	@Override
 	public void setGrowthStage(int stage) {
-		if (this.hasPlant() || this.hasWeed()) {
+		if (this.hasPlant()) {
 			stage = MathHelper.inRange(stage, 0, Constants.MATURE);
 			this.stats = this.stats.withMeta(stage);
 			this.markForUpdate();
@@ -149,7 +147,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	// =========================================================================
 	@Override
 	public boolean acceptsPlant(IAgriPlant plant) {
-		return plant != null && !this.hasPlant() && !this.hasWeed() && !this.isCrossCrop();
+		return plant != null && !this.hasPlant() && !this.isCrossCrop();
 	}
 
 	@Override
@@ -210,7 +208,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	 */
 	@Override
 	public boolean isFertile() {
-		return this.weed || worldObj.isAirBlock(this.getPos().add(0, 1, 0)) && plant.getGrowthRequirement().canGrow(this.worldObj, pos);
+		return worldObj.isAirBlock(this.getPos().add(0, 1, 0)) && plant.getGrowthRequirement().canGrow(this.worldObj, pos);
 	}
 
 	/*
@@ -233,36 +231,26 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	// IWeedable Methods
 	// =========================================================================
 	@Override
-	public double getWeedSpawnChance() {
-		if (this.hasPlant()) {
-			return AgriCraftConfig.weedsWipePlants ? ((double) (10 - stats.getStrength())) / 10 : 0;
-		} else {
-			return this.weed ? 0 : 1;
+	public boolean spawn(Random rand) {
+		if (!hasPlant()) {
+			AgriCore.getLogger("AgriCraft").debug("Attempting to spawn plant!");
+			for (IAgriPlant p : PlantRegistry.getInstance().getPlants()) {
+				if (p.getSpawnChance() > rand.nextDouble()) {
+					this.setPlant(p);
+					AgriCore.getLogger("AgriCraft").debug("Spawned plant: {0}!", this.plant.getId());
+					return true;
+				}
+			}
 		}
+		AgriCore.getLogger("AgriCraft").debug("Failed to spawn plant!");
+		return false;
 	}
 
 	@Override
-	public boolean hasWeed() {
-		return weed;
-	}
-
-	@Override
-	public boolean spawnWeed(Random rand) {
-		if (!weed && rand.nextDouble() < getWeedSpawnChance()) {
-			this.crossCrop = false;
-			this.weed = true;
-			this.removePlant();
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public boolean spreadWeed(Random rand) {
-		List<IAgriCrop> neighbours = this.getNeighbours();
-		for (IAgriCrop crop : neighbours) {
-			if (crop != null && crop.spawnWeed(rand)) {
+	public boolean spread(Random rand) {
+		for (IAgriCrop crop : this.getNeighbours()) {
+			if (crop.getStat().getStrength() < this.getStat().getStrength()) {
+				crop.setPlant(plant);
 				return true;
 			}
 		}
@@ -271,9 +259,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 
 	@Override
 	public boolean clearWeed() {
-		if (this.hasWeed()) {
-			this.setGrowthStage(0);
-			this.weed = false;
+		if (this.plant != null && this.plant.isWeedable()) {
+			this.removePlant();
 			return true;
 		} else {
 			return false;
@@ -300,10 +287,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	//when fertilizer is applied
 	@Override
 	public boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
-		if (this.getGrowthStage() < Constants.MATURE && (this.hasPlant() || this.hasWeed())) {
+		if (this.hasPlant() && this.getGrowthStage() < Constants.MATURE) {
 			((BlockCrop) AgriBlocks.CROP).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
 			return true;
-		} else if (fertilizer.canTriggerMutation() && this.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
+		} else if (AgriCraftConfig.bonemealMutation && fertilizer.canTriggerMutation() && this.isCrossCrop()) {
 			this.crossOver();
 			return true;
 		}
@@ -375,7 +362,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	public void writeTileNBT(NBTTagCompound tag) {
 		this.stats.writeToNBT(tag);
 		tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
-		tag.setBoolean(AgriNBT.WEED, weed);
 		if (plant != null) {
 			tag.setString(AgriNBT.SEED, plant.getId());
 		}
@@ -390,7 +376,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	public void readTileNBT(NBTTagCompound tag) {
 		this.stats = StatRegistry.getInstance().getValue(tag);
 		this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
-		this.weed = tag.getBoolean(AgriNBT.WEED);
 		this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
 		if (tag.hasKey(AgriNBT.INVENTORY) && this.plant != null) {
 			this.data = plant.readCropDataFromNBT(tag.getCompoundTag(AgriNBT.INVENTORY));
@@ -409,7 +394,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		IBlockState state = getWorld().getBlockState(getPos());
 		if (hasWeed() || !plant.isMature(getWorld(), pos, state)) {
 			setGrowthStage(meta + 1);
-			/* TODO: Annouce Growth Tick Via API! */
+			/* TODO: Announce Growth Tick Via API! */
 		}
 	}
 
@@ -456,7 +441,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		if (this.crossCrop) {
 			list.add(" - This is a crosscrop");
 		} else if (this.hasPlant()) {
-			list.add(" - This crop has a plant");
+			if (this.plant.isWeedable()) {
+				list.add(" - This crop has weeds");
+			} else {
+				list.add(" - This crop has a plant");
+			}
 			list.add(" - Plant: " + this.plant.getPlantName());
 			list.add(" - Id: " + this.plant.getId());
 			list.add(" - Texture: " + this.plant.getPrimaryPlantTexture(this.getGrowthStage()).toString());
@@ -468,9 +457,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 			list.add(" - Strength: " + this.stats.getStrength());
 			list.add(" - Fertile: " + this.isFertile());
 			list.add(" - Mature: " + this.isMature());
-		} else if (this.weed) {
-			list.add(" - This crop has weeds");
-			list.add(" - Meta: " + this.getBlockMetadata());
 		} else {
 			list.add(" - This crop has no plant");
 		}

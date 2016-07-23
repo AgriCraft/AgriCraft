@@ -3,20 +3,23 @@
 package com.infinityraider.agricraft.apiimpl;
 
 import com.infinityraider.agricraft.farming.mutation.Mutation;
-import com.infinityraider.agricraft.farming.mutation.MutationHandler;
-import java.util.Arrays;
 import java.util.List;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
- * Todo: Rework!
- * @author RlonRyan
+ * 
+ * @author The AgriCraft Team
  */
 public class MutationRegistry implements IAgriMutationRegistry {
 	
 	private static final IAgriMutationRegistry INSTANCE = new MutationRegistry();
+	
+	private final List<IAgriMutation> mutations = new ArrayList<>();
 	
 	public static IAgriMutationRegistry getInstance() {
 		return INSTANCE;
@@ -24,17 +27,28 @@ public class MutationRegistry implements IAgriMutationRegistry {
 
 	@Override
 	public List<IAgriMutation> getMutations() {
-		return Arrays.asList(MutationHandler.getMutations());
+		return new ArrayList<>(this.mutations);
 	}
 
 	@Override
 	public List<IAgriMutation> getMutationsForParent(IAgriPlant parent) {
-		return Arrays.asList(MutationHandler.getMutationsFromParent(parent));
+		return this.mutations.stream()
+				.filter(m -> m.hasParent(parent))
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<IAgriMutation> getMutationsForParent(Collection<IAgriPlant> parents) {
+		return this.mutations.stream()
+				.filter(m -> m.hasParent(parents))
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public List<IAgriMutation> getMutationsForChild(IAgriPlant child) {
-		return Arrays.asList(MutationHandler.getMutationsFromChild(child));
+		return this.mutations.stream()
+				.filter(m -> m.hasChild(child))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -50,20 +64,24 @@ public class MutationRegistry implements IAgriMutationRegistry {
 				return false;
 			}
 		}
-		return MutationHandler.add(new Mutation(chance, child, parents));
+		return this.mutations.add(new Mutation(chance, child, parents));
 	}
 
 	@Override
 	public boolean addMutation(IAgriMutation mutation) {
-		return MutationHandler.add(mutation);
+		return this.mutations.contains(mutation) ? false : this.mutations.add(mutation);
 	}
 
 	@Override
 	public boolean removeMutation(IAgriPlant result) {
-		MutationHandler.removeMutationsByResult(result.getSeed());
-        return true;
+		return this.mutations.removeIf(m -> m.getChild().equals(result));
 	}
-	
-	
+
+	@Override
+	public List<IAgriMutation> getPossibleMutations(Collection<IAgriPlant> parents) {
+		return this.mutations.stream()
+				.filter(m -> m.areParentsIn(parents))
+				.collect(Collectors.toList());
+	}
 	
 }

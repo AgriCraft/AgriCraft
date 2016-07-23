@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.api.misc.IAgriHarvestable;
 import com.infinityraider.agricraft.api.misc.IAgriWeedable;
 import com.infinityraider.agricraft.api.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.seed.IAgriSeedProvider;
+import java.util.Random;
 
 /**
  * Interface to interact with AgriCraft's crops.
@@ -58,6 +59,29 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
 	 * @return if this crop is fully grown
 	 */
 	boolean isMature();
+	
+	default boolean spawn(Random rand) {
+		return false;
+	}
+	
+	default boolean spread(Random rand) {
+		return false;
+	}
+
+	@Override
+	default boolean hasWeed() {
+		return this.hasPlant() && this.getPlant().isWeedable();
+	}
+	
+	@Override
+	default boolean clearWeed() {
+		if (this.hasWeed()) {
+			this.removePlant();
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	/**
 	 * Utility method to get access to the TileEntity fields and methods for the

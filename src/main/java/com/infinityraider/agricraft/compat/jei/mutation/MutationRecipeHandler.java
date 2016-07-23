@@ -41,7 +41,7 @@ public class MutationRecipeHandler implements IRecipeHandler<IAgriMutation> {
 
 	@Override
 	public boolean isRecipeValid(@Nonnull IAgriMutation recipe) {
-		return recipe.getParents().length > 0;
+		return !recipe.getParents().isEmpty();
 	}
 
 }

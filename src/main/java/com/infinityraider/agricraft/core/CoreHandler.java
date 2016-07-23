@@ -16,7 +16,6 @@ import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
-import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import net.minecraft.util.ResourceLocation;
@@ -120,13 +119,13 @@ public final class CoreHandler {
 				.forEach(MutationRegistry.getInstance()::addMutation);
 		//print registered mutations to the log
 		AgriCore.getLogger("AgriCraft").info("Registered Mutations:");
-		for (IAgriMutation mutation : MutationHandler.getMutations()) {
+		for (IAgriMutation mutation : MutationRegistry.getInstance().getMutations()) {
 			AgriCore.getLogger("AgriCraft").info(" - {0}", mutation);
 		}
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static void preLoadTextures(Consumer<ResourceLocation> register) {
+	public static void loadTextures(Consumer<ResourceLocation> register) {
 		final AgriPlants preloaded = new AgriPlants();
 		AgriLoader.loadDirectory(plantDir, preloaded);
 		preloaded.getAll().stream()

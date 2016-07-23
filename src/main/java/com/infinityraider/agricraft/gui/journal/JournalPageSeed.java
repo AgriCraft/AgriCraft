@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.infinityraider.agricraft.gui.Component;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.client.Minecraft;
@@ -15,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.apiimpl.MutationRegistry;
+import java.util.stream.Collectors;
 
 @SideOnly(Side.CLIENT)
 public class JournalPageSeed extends JournalPage {
@@ -215,16 +216,16 @@ public class JournalPageSeed extends JournalPage {
 		for (IAgriMutation mutation : completedMutations) {
 			y = y + 20;
 			ItemStack resultStack = mutation.getChild().getSeed();
-			ItemStack parent1Stack = mutation.getParents()[0].getSeed();
-			ItemStack parent2Stack = mutation.getParents()[1].getSeed();
+			ItemStack parent1Stack = mutation.getParents().get(0).getSeed();
+			ItemStack parent2Stack = mutation.getParents().get(1).getSeed();
 			seeds.add(new Component<>(parent1Stack, x, y, 16, 16));
 			seeds.add(new Component<>(parent2Stack, x + 35, y, 16, 16));
 			seeds.add(new Component<>(resultStack, x + 69, y, 16, 16));
 		}
 		for (IAgriMutation mutation : uncompletedMutations) {
 			y = y + 20;
-			ItemStack parent1Stack = mutation.getParents()[0].getSeed();
-			ItemStack parent2Stack = mutation.getParents()[1].getSeed();
+			ItemStack parent1Stack = mutation.getParents().get(0).getSeed();
+			ItemStack parent2Stack = mutation.getParents().get(1).getSeed();
 			seeds.add(new Component<>(parent1Stack, x, y, 16, 16));
 			seeds.add(new Component<>(parent2Stack, x + 35, y, 16, 16));
 		}
@@ -238,39 +239,21 @@ public class JournalPageSeed extends JournalPage {
 	}
 
 	private List<IAgriMutation> getDiscoveredParentMutations() {
-		ArrayList<IAgriMutation> allMutations = new ArrayList<>();
-		ArrayList<IAgriMutation> mutations = new ArrayList<>();
-		allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromParent(discoveredSeeds.get(page))));
-		for (IAgriMutation mutation : allMutations) {
-			if (isMutationDiscovered(mutation)) {
-				mutations.add(mutation);
-			}
-		}
-		return mutations;
+		return MutationRegistry.getInstance().getMutationsForParent(discoveredSeeds.get(page)).stream()
+				.filter(this::isMutationDiscovered)
+				.collect(Collectors.toList());
 	}
 
 	private List<IAgriMutation> getDiscoveredChildMutations() {
-		ArrayList<IAgriMutation> allMutations = new ArrayList<>();
-		ArrayList<IAgriMutation> mutations = new ArrayList<>();
-		allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromChild(discoveredSeeds.get(page))));
-		for (IAgriMutation mutation : allMutations) {
-			if (isMutationDiscovered(mutation)) {
-				mutations.add(mutation);
-			}
-		}
-		return mutations;
+		return MutationRegistry.getInstance().getMutationsForChild(discoveredSeeds.get(page)).stream()
+				.filter(this::isMutationDiscovered)
+				.collect(Collectors.toList());
 	}
 
 	private List<IAgriMutation> getUncompleteMutations() {
-		ArrayList<IAgriMutation> allMutations = new ArrayList<>();
-		ArrayList<IAgriMutation> mutations = new ArrayList<>();
-		allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromParent(discoveredSeeds.get(page))));
-		for (IAgriMutation mutation : allMutations) {
-			if (isMutationHalfDiscovered(mutation)) {
-				mutations.add(mutation);
-			}
-		}
-		return mutations;
+		return MutationRegistry.getInstance().getMutationsForParent(discoveredSeeds.get(page)).stream()
+				.filter(this::isMutationHalfDiscovered)
+				.collect(Collectors.toList());
 	}
 
 	private boolean isMutationDiscovered(IAgriMutation mutation) {

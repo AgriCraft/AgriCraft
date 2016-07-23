@@ -80,7 +80,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 		this.setCreativeTab(null);
 		this.setDefaultState(this.blockState.getBaseState()
 				.withProperty(AgriProperties.PLANT, false)
-				.withProperty(AgriProperties.WEEDS, false)
 				.withProperty(AgriProperties.CROSSCROP, false)
 				.withProperty(AgriProperties.GROWTHSTAGE, 0)
 		);
@@ -115,28 +114,26 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
-		if (crop.hasPlant() || crop.hasWeed()) {
-			if (/* TODO!!! APIimplv1.getInstance().allowGrowthTick() */true) {
-				if (crop.isMature() && crop.hasWeed() && AgriCraftConfig.enableWeeds) {
-					crop.spreadWeed(rand);
-				} else if (crop.isFertile()) {
-					//multiplier from GROWTH stat
-					double growthBonus = 1.0 + crop.getStat().getGrowth() / 10.0;
-					//multiplier defined in the config
-					float global = AgriCraftConfig.growthMultiplier;
-					//crop dependent base GROWTH rate
-					float growthRate = (float) crop.getGrowthRate();
-					//determine if GROWTH tick should be applied or skipped
-					boolean shouldGrow = (rand.nextDouble() <= (growthRate * growthBonus * global) / 100);
-					if (shouldGrow) {
-						crop.applyGrowthTick();
-					}
+		if (crop.hasPlant()) {
+			if (crop.isMature()) {
+				crop.spread(rand);
+			} else if (crop.isFertile()) {
+				//multiplier from GROWTH stat
+				double growthBonus = 1.0 + crop.getStat().getGrowth() / 10.0;
+				//multiplier defined in the config
+				float global = AgriCraftConfig.growthMultiplier;
+				//crop dependent base GROWTH rate
+				float growthRate = (float) crop.getGrowthRate();
+				//determine if GROWTH tick should be applied or skipped
+				boolean shouldGrow = (rand.nextDouble() <= (growthRate * growthBonus * global) / 100);
+				if (shouldGrow) {
+					crop.applyGrowthTick();
 				}
 			}
-		} else if (AgriCraftConfig.enableWeeds) {
-			crop.spawnWeed(rand);
 		} else if (crop.isCrossCrop() && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
 			crop.crossOver();
+		} else {
+			crop.spawn(rand);
 		}
 	}
 
@@ -585,7 +582,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	@Override
 	public void addProperties(Set<IProperty> properties) {
 		properties.add(AgriProperties.PLANT);
-		properties.add(AgriProperties.WEEDS);
 		properties.add(AgriProperties.CROSSCROP);
 		properties.add(AgriProperties.GROWTHSTAGE);
 	}
@@ -600,7 +596,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IGrowabl
 	public IBlockRenderingHandler getRenderer() {
 		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(
 				AgriProperties.GROWTHSTAGE,
-				AgriProperties.WEEDS,
 				AgriProperties.PLANT
 		).build());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrop.class, new RenderCrop());

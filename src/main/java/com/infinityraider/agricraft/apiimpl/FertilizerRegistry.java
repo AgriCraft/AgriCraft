@@ -41,7 +41,7 @@ public class FertilizerRegistry {
 
 		@Override
 		public boolean canTriggerMutation() {
-			return false;
+			return true;
 		}
 
 		@Override

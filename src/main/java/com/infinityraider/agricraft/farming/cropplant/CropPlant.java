@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -39,17 +38,14 @@ import com.infinityraider.agricraft.reference.AgriProperties;
  * ICropPlant is implemented to be able to read data from this class from the API
  */
 public abstract class CropPlant implements IAgriPlant {
+	
     private IGrowthRequirement growthRequirement;
-    private int tier;
-    private int spreadChance;
     private boolean blackListed;
     private boolean ignoreVanillaPlantingRule;
 
     public CropPlant() {
         this.growthRequirement = initGrowthRequirement();
         growthRequirement = growthRequirement == null ? GrowthRequirementHandler.getNewBuilder().build() : growthRequirement;
-        this.tier = getTier();
-        this.spreadChance = 100/getTier();
         this.blackListed = false;
         this.ignoreVanillaPlantingRule = false;
     }
@@ -83,26 +79,12 @@ public abstract class CropPlant implements IAgriPlant {
      * @return the tier of the seed.
      */
     public int getTier() {
-        return tier;
-    }
-
-    /**
-     * Sets the tier for this crop plant
-     */
-    public final void setTier(int tier) {
-        tier = tier >= Constants.GROWTH_TIER.length ? Constants.GROWTH_TIER.length-1 : tier;
-        tier = tier <= 0 ? 1 : tier;
-        this.tier = tier;
+        return 1;
     }
 
     /** Gets the spread chance in percent for this plant */
     public double getSpreadChance() {
-        return spreadChance;
-    }
-
-    /** Sets the spread chance in percent for this plant */
-    public final void setSpreadChance(int spreadChance) {
-        this.spreadChance = spreadChance;
+        return 1 / getTier();
     }
 
     /**
@@ -192,20 +174,6 @@ public abstract class CropPlant implements IAgriPlant {
      */
     @Override
     public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
-
-    @Override
-    public List<IAgriMutation> getDefaultMutations() {
-		/* Deprecated. Left here for reference.
-        List<IMutation> list = new ArrayList<>();
-        IMutation mutation = MutationConfig.getInstance().getDefaultMutation(this.getSeed());
-        if(mutation != null) {
-            mutation.setChance(((double) this.getSpreadChance())/100.0D);
-            list.add(mutation);
-        }
-        return list;
-		*/
-		return new ArrayList<>();
-    }
 
     /**
      * Gets called right before a harvest attempt, player may be null if harvested by automation.

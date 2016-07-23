@@ -60,6 +60,26 @@ public class JsonPlant extends CropPlant {
 	}
 
 	@Override
+	public boolean isWeedable() {
+		return this.plant.isWeedable();
+	}
+
+	@Override
+	public boolean isAgressive() {
+		return this.plant.isAgressive();
+	}
+
+	@Override
+	public double getSpreadChance() {
+		return this.plant.getSpreadChance();
+	}
+
+	@Override
+	public double getSpawnChance() {
+		return this.plant.getSpawnChance();
+	}
+
+	@Override
 	public ArrayList<ItemStack> getAllFruits() {
 		ArrayList<ItemStack> fruits = new ArrayList<>();
 		for (AgriProduct p : this.plant.getProducts().getAll()) {
