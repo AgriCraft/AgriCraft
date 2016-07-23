@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.gui;
 
+import com.infinityraider.agricraft.gui.component.Component;
 import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;
 import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;

@@ -1,14 +1,12 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.gui.Component;
 import com.infinityraider.agricraft.reference.Reference;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.gui.component.ComponentText;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class JournalPageIntroduction extends JournalPage {
@@ -18,25 +16,8 @@ public class JournalPageIntroduction extends JournalPage {
     }
 
     @Override
-    public ArrayList<String> getTooltip(int x, int y) {
-        return null;
-    }
-
-    @Override
-    public ArrayList<Component<String>> getTextComponents() {
-        ArrayList<Component<String>> textComponents = new ArrayList<>();
-        textComponents.add(new Component<>(AgriCore.getTranslator().translate("agricraft_journal.introduction"), 24, 28, 0.5F));
-        return textComponents;
-    }
-
-    @Override
-    public ArrayList<Component<ItemStack>> getItemComponents() {
-        return null;
-    }
-
-    @Override
-    public ArrayList<Component<ResourceLocation>> getTextureComponents() {
-        return null;
+    public void addTextComponents(List<ComponentText> components) {
+        components.add(new ComponentText("agricraft_journal.introduction", 24, 28, 0.5F, false));
     }
 
     @Override

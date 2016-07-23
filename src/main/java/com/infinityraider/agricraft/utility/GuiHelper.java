@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.utility;
 
 import net.minecraft.client.gui.FontRenderer;
 import java.util.ArrayList;
+import java.util.List;
 
 //helper class to read, write and parse data to and from the config files
 public abstract class GuiHelper {
@@ -15,7 +16,7 @@ public abstract class GuiHelper {
      * @param scale the scale of the text to the width.
      * @return the string split up into lines by the '\n' character.
      */
-    public static String splitInLines(FontRenderer fontRendererObj, String input, float maxWidth, float scale) {
+    public static String splitInLines(FontRenderer fontRendererObj, String input, double maxWidth, double scale) {
         maxWidth = maxWidth / scale;
         String notProcessed = input;
         String output = "";
@@ -40,7 +41,7 @@ public abstract class GuiHelper {
     }
 
     //turns the raw data string into an array (each array element is a line from the string)
-    public static String[] getLinesArrayFromData(String input) {
+    public static List<String> getLinesFromData(String input) {
         int count = 0;
         String unprocessed = input;
         for (int i=0;i<unprocessed.length();i++) {
@@ -48,7 +49,7 @@ public abstract class GuiHelper {
                 count++;
             }
         }
-        ArrayList<String> data = new ArrayList<>(count + 1); // There will be no more than count plus + lines, thereby preventing resizing.
+        List<String> data = new ArrayList<>(count + 1); // There will be no more than count plus + lines, thereby preventing resizing.
         if (unprocessed.length()>0) {
             for (int i=0;i<count;i++) {
                 String line = (unprocessed.substring(0,unprocessed.indexOf('\n'))).trim();
@@ -64,7 +65,7 @@ public abstract class GuiHelper {
         if (unprocessed.length()>0 && unprocessed.charAt(0)!='#') {
             data.add(unprocessed);
         }
-        return data.toArray(new String[data.size()]);
+        return data;
     }
 
     // Grass Drops to be Moved to AgriCore

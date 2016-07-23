@@ -1,10 +1,8 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.gui.Component;
+import com.infinityraider.agricraft.gui.component.Component;
 import com.infinityraider.agricraft.items.ItemJournal;
-import com.infinityraider.agricraft.utility.GuiHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,9 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.renderer.GlStateManager;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.gui.GuiBase;
+import com.infinityraider.agricraft.gui.component.ComponentItem;
+import com.infinityraider.agricraft.gui.component.ComponentText;
+import com.infinityraider.agricraft.gui.component.ComponentTexture;
+import com.infinityraider.agricraft.gui.component.IComponent;
 
 @SideOnly(Side.CLIENT)
-public class GuiJournal extends GuiScreen {
+public class GuiJournal extends GuiBase {
 
 	/**
 	 * Some dimensions and constants
@@ -39,9 +42,10 @@ public class GuiJournal extends GuiScreen {
 	/**
 	 * Stuff to render
 	 */
-	ArrayList<Component<String>> textComponents;
-	ArrayList<Component<ResourceLocation>> textureComponents;
-	ArrayList<Component<ItemStack>> itemComponents;
+	final List<IComponent> components = new ArrayList<>();
+	final List<ComponentText> textComponents = new ArrayList<>();
+	List<ComponentTexture> textureComponents = new ArrayList<>();
+	List<ComponentItem> itemComponents = new ArrayList<>();
 
 	private final ItemStack journal;
 
@@ -59,9 +63,22 @@ public class GuiJournal extends GuiScreen {
 		this.guiLeft = (this.width - this.xSize) / 2;
 		this.guiTop = (this.height - 16 - this.ySize) / 2;
 		currentPage = getCurrentPage();
-		textComponents = currentPage.getTextComponents();
-		textureComponents = currentPage.getTextureComponents();
-		itemComponents = currentPage.getItemComponents();
+		textComponents.clear();
+		currentPage.addTextComponents(textComponents);
+		textureComponents.clear();
+		currentPage.addTextureComponents(textureComponents);
+		itemComponents.clear();
+		currentPage.addItemComponents(itemComponents);
+	}
+
+	@Override
+	public int getAnchorX() {
+		return this.guiLeft;
+	}
+
+	@Override
+	public int getAnchorY() {
+		return this.guiTop;
 	}
 
 	@Override
@@ -71,30 +88,17 @@ public class GuiJournal extends GuiScreen {
 		//draw foreground
 		drawTexture(currentPage.getForeground());
 		//draw text components
-		if (textComponents != null) {
-			for (Component<String> textComponent : textComponents) {
-				drawTextComponent(textComponent);
-			}
-		}
+		textComponents.forEach(c -> c.renderComponent(this));
 		//draw icon components
-		if (textureComponents != null) {
-			for (Component<ResourceLocation> iconComponent : textureComponents) {
-				drawTextureComponent(iconComponent);
-			}
-		}
+		textureComponents.forEach(c -> c.renderComponent(this));
 		//draw item components
-		if (itemComponents != null) {
-			for (Component<ItemStack> itemComponent : itemComponents) {
-				drawItemComponent(itemComponent);
-			}
-		}
+		itemComponents.forEach(c -> c.renderComponent(this));
 		//draw navigation arrows
 		drawNavigationArrows(x, y);
 		//draw tooltip
-		ArrayList<String> toolTip = currentPage.getTooltip(x - this.guiLeft, y - this.guiTop);
-		if (toolTip != null) {
-			this.drawTooltip(toolTip, x, y);
-		}
+		List<String> toolTip = new ArrayList<>();
+		currentPage.addTooltip(x - this.guiLeft, y - this.guiTop, toolTip);
+		this.drawTooltip(toolTip, x, y);
 	}
 
 	@Override
@@ -157,53 +161,6 @@ public class GuiJournal extends GuiScreen {
 		drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 	}
 
-	private void drawTextComponent(Component<String> component) {
-		if (component != null) {
-			float scale = component.scale();
-			int x = this.guiLeft + component.xOffset();
-			int y = this.guiTop + component.yOffset();
-			String text[] = GuiHelper.getLinesArrayFromData(component.getComponent());
-			GL11.glScalef(scale, scale, scale);
-			for (String paragraph : text) {
-				String[] write = GuiHelper.getLinesArrayFromData(GuiHelper.splitInLines(this.fontRendererObj, paragraph, 95, scale));
-				for (int i = 0; i < write.length; i++) {
-					String line = write[i];
-					int xOffset = component.centered() ? -fontRendererObj.getStringWidth(line) / 2 : 0;
-					int yOffset = i * this.fontRendererObj.FONT_HEIGHT;
-					this.fontRendererObj.drawString(line, (int) (x / scale) + xOffset, (int) (y / scale) + yOffset, 1644054);    //1644054 means black
-				}
-				y = y + (int) ((float) this.fontRendererObj.FONT_HEIGHT / scale);
-			}
-			GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
-		}
-	}
-
-	private void drawTextureComponent(Component<ResourceLocation> component) {
-		if (component != null) {
-			GL11.glColor4f(1, 1, 1, 1);
-			Minecraft.getMinecraft().getTextureManager().bindTexture(component.getComponent());
-			drawModalRectWithCustomSizedTexture(
-					guiLeft + component.xOffset(),
-					guiTop + component.yOffset(),
-					0,
-					0,
-					component.xSize(),
-					component.ySize(),
-					component.xSize(),
-					component.ySize()
-			);
-		}
-	}
-
-	private void drawItemComponent(Component<ItemStack> component) {
-		if (component != null) {
-			int x = this.guiLeft + component.xOffset();
-			int y = this.guiTop + component.yOffset();
-			ItemStack stack = component.getComponent();
-			itemRender.renderItemIntoGUI(stack, x, y);
-		}
-	}
-
 	private void drawNavigationArrows(int x, int y) {
 		GlStateManager.pushAttrib();
 		if (y > this.guiTop + 172 && y <= this.guiTop + 172 + 16) {
@@ -220,7 +177,7 @@ public class GuiJournal extends GuiScreen {
 		GlStateManager.popAttrib();
 	}
 
-	private void drawTooltip(ArrayList<String> toolTip, int x, int y) {
+	private void drawTooltip(List<String> toolTip, int x, int y) {
 		drawHoveringText(toolTip, x, y, fontRendererObj);
 	}
 
