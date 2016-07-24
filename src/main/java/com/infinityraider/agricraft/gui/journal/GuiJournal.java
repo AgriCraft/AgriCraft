@@ -1,23 +1,19 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.gui.component.Component;
 import com.infinityraider.agricraft.items.ItemJournal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.renderer.GlStateManager;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.gui.GuiBase;
-import com.infinityraider.agricraft.gui.component.ComponentItem;
-import com.infinityraider.agricraft.gui.component.ComponentText;
-import com.infinityraider.agricraft.gui.component.ComponentTexture;
 import com.infinityraider.agricraft.gui.component.IComponent;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiJournal extends GuiBase {
@@ -43,9 +39,6 @@ public class GuiJournal extends GuiBase {
 	 * Stuff to render
 	 */
 	final List<IComponent> components = new ArrayList<>();
-	final List<ComponentText> textComponents = new ArrayList<>();
-	List<ComponentTexture> textureComponents = new ArrayList<>();
-	List<ComponentItem> itemComponents = new ArrayList<>();
 
 	private final ItemStack journal;
 
@@ -63,12 +56,8 @@ public class GuiJournal extends GuiBase {
 		this.guiLeft = (this.width - this.xSize) / 2;
 		this.guiTop = (this.height - 16 - this.ySize) / 2;
 		currentPage = getCurrentPage();
-		textComponents.clear();
-		currentPage.addTextComponents(textComponents);
-		textureComponents.clear();
-		currentPage.addTextureComponents(textureComponents);
-		itemComponents.clear();
-		currentPage.addItemComponents(itemComponents);
+		this.components.clear();
+		currentPage.addComponents(components);
 	}
 
 	@Override
@@ -87,18 +76,26 @@ public class GuiJournal extends GuiBase {
 		drawBackground(0);
 		//draw foreground
 		drawTexture(currentPage.getForeground());
-		//draw text components
-		textComponents.forEach(c -> c.renderComponent(this));
-		//draw icon components
-		textureComponents.forEach(c -> c.renderComponent(this));
-		//draw item components
-		itemComponents.forEach(c -> c.renderComponent(this));
 		//draw navigation arrows
 		drawNavigationArrows(x, y);
 		//draw tooltip
+		final int mouseX = x - this.guiLeft;
+		final int mouseY = y - this.guiTop;
 		List<String> toolTip = new ArrayList<>();
-		currentPage.addTooltip(x - this.guiLeft, y - this.guiTop, toolTip);
-		this.drawTooltip(toolTip, x, y);
+		GlStateManager.pushMatrix();
+		GlStateManager.pushAttrib();
+		GlStateManager.translate(this.guiLeft, this.guiTop, 0);
+		components.stream()
+				// Render Components
+				.peek(c -> c.renderComponent(this))
+				// Filter ToolTips
+				.filter(c -> c.isOverComponent(mouseX, mouseY))
+				// Add ToolTips
+				.forEach(c -> c.addToolTip(toolTip, Minecraft.getMinecraft().thePlayer));
+		currentPage.addTooltip(mouseX, mouseY, toolTip);
+		GlStateManager.popAttrib();
+		this.drawTooltip(toolTip, mouseX, mouseY);
+		GlStateManager.popMatrix();
 	}
 
 	@Override
@@ -156,9 +153,11 @@ public class GuiJournal extends GuiBase {
 	}
 
 	private void drawTexture(ResourceLocation texture) {
-		GL11.glColor4f(1F, 1F, 1F, 1F);
+		GlStateManager.pushAttrib();
+		GlStateManager.color(1, 1, 1, 1);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+		GlStateManager.popAttrib();
 	}
 
 	private void drawNavigationArrows(int x, int y) {
@@ -166,11 +165,9 @@ public class GuiJournal extends GuiBase {
 		if (y > this.guiTop + 172 && y <= this.guiTop + 172 + 16) {
 			if (x > this.guiLeft + 221 && x <= this.guiLeft + 221 + 16) {
 				Minecraft.getMinecraft().getTextureManager().bindTexture(JournalPage.getBackground());
-				GL11.glColor3f(1, 1, 1);
 				drawTexturedModalRect(this.guiLeft + 223, this.guiTop + 178, 224, 239, 32, 17);
 			} else if (x > this.guiLeft + 19 && x <= this.guiLeft + 19 + 16 && this.currentPageNumber > 0) {
 				Minecraft.getMinecraft().getTextureManager().bindTexture(JournalPage.getBackground());
-				GL11.glColor3f(1, 1, 1);
 				drawTexturedModalRect(this.guiLeft + 1, this.guiTop + 178, 0, 239, 32, 17);
 			}
 		}
@@ -185,4 +182,5 @@ public class GuiJournal extends GuiBase {
 	public boolean doesGuiPauseGame() {
 		return false;
 	}
+
 }

@@ -35,7 +35,7 @@ import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.utility.WorldHelper;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDebuggable {
 
@@ -237,7 +237,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 			for (IAgriPlant p : PlantRegistry.getInstance().getPlants()) {
 				if (p.getSpawnChance() > rand.nextDouble()) {
 					this.setPlant(p);
-					AgriCore.getLogger("AgriCraft").debug("Spawned plant: {0}!", this.plant.getId());
+					AgriCore.getLogger("AgriCraft").debug("Spawned plant: {0}!", p.getId());
 					return true;
 				}
 			}
@@ -419,7 +419,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	 */
 	@Override
 	public List<IAgriCrop> getNeighbours() {
-		return WorldHelper.getTileNeighbors(worldObj, pos, IAgriCrop.class);
+		AgriCore.getLogger("AgriCraft").debug("Fetching Neighbors!");
+		return AgriWorldHelper.getTileNeighbors(worldObj, pos, IAgriCrop.class);
 	}
 
 	/**

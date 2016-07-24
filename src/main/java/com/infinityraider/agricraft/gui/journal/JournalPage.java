@@ -1,12 +1,7 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.gui.component.Component;
-import com.infinityraider.agricraft.gui.component.ComponentItem;
-import com.infinityraider.agricraft.gui.component.ComponentText;
-import com.infinityraider.agricraft.gui.component.ComponentTexture;
+import com.infinityraider.agricraft.gui.component.IComponent;
 import com.infinityraider.agricraft.reference.Reference;
-import java.util.ArrayList;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -39,19 +34,7 @@ public abstract class JournalPage {
 	/**
 	 * Gets a list of text components to render on this page
 	 */
-	public void addTextComponents(List<ComponentText> components) {
-	}
-
-	/**
-	 * Gets a list of item components to render on this page
-	 */
-	public void addItemComponents(List<ComponentItem> components) {
-	}
-
-	/**
-	 * Gets a list of texture components to render on this page
-	 */
-	public void addTextureComponents(List<ComponentTexture> components) {
+	public void addComponents(List<IComponent> components) {
 	}
 
 	/**

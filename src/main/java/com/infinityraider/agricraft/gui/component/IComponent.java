@@ -3,47 +3,35 @@
 package com.infinityraider.agricraft.gui.component;
 
 import com.infinityraider.agricraft.gui.GuiBase;
+import java.awt.Rectangle;
 import java.util.List;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
  * @author RlonRyan
  */
+@SideOnly(Side.CLIENT)
 public interface IComponent<T> {
 	
 	T getComponent();
 	
-	int getX();
-	
-	int getY();
-	
-	int getWidth();
-	
-	int getHeight();
-	
-	double getScale();
-	
-	boolean isCentered();
+	Rectangle getBounds();
 	
 	void renderComponent(GuiBase gui);
 	
 	default boolean isOverComponent(int x, int y) {
-		x = (int) (x / this.getScale());
-		y = (int) (y / this.getScale());
-		if (this.getWidth() < 0 || this.getHeight() < 0) {
-			return false;
-		}
-		if (this.getX() <= x && this.getX() + this.getWidth() > x) {
-			if (this.getY() <= y && this.getY() + this.getHeight() > y) {
-				return true;
-			}
-		}
-		return false;
+		return this.getBounds().contains(x, y);
 	}
 	
-	default void addToolTip(List<String> toolTip) {
+	default void addToolTip(List<String> toolTip, EntityPlayer player) {
 		// NOPE
-		
+	}
+	
+	default boolean onClick(EntityPlayer player) {
+		return false;
 	}
 	
 }
