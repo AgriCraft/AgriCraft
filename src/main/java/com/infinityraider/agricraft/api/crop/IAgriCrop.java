@@ -69,13 +69,13 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
 	}
 
 	@Override
-	default boolean hasWeed() {
+	default boolean canWeed() {
 		return this.hasPlant() && this.getPlant().isWeedable();
 	}
 	
 	@Override
 	default boolean clearWeed() {
-		if (this.hasWeed()) {
+		if (this.canWeed()) {
 			this.removePlant();
 			return true;
 		} else {

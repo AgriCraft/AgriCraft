@@ -52,7 +52,7 @@ public class ItemHandRake extends ItemBase implements IAgriRakeItem {
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof IAgriWeedable) {
 			IAgriWeedable tile = (IAgriWeedable) te;
-			if (tile.hasWeed()) {
+			if (tile.canWeed()) {
 				tile.clearWeed();
 				if (AgriCraftConfig.rakingDrops && world.rand.nextInt(100) < dropChance[stack.getItemDamage() % dropChance.length]) {
 					ItemStack drop = ItemDropRegistry.instance().getDrop(world.rand);

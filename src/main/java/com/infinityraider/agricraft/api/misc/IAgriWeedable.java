@@ -10,11 +10,11 @@ package com.infinityraider.agricraft.api.misc;
 public interface IAgriWeedable {
 	
 	/**
-	 * Determines if the instance is currently overrun with nasty weeds.
+	 * Determines if the instance is currently overrun with nasty weeds, and may be weeded.
 	 * 
-	 * @return if the instance has weeds in it.
+	 * @return if the instance has weeds in it, and can be weeded.
 	 */
-	boolean hasWeed();
+	boolean canWeed();
 
 	/**
 	 * Clears weeds from the instance.

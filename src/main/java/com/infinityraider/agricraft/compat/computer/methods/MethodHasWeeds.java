@@ -9,6 +9,6 @@ public class MethodHasWeeds extends MethodBaseCrop {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) {
-        return new Object[] {crop.hasWeed()};
+        return new Object[] {crop.canWeed()};
     }
 }
