@@ -14,9 +14,4 @@ public class JournalPageContents extends JournalPage {
 		return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalTableOfContents.png");
 	}
 
-	@Override
-	public int getPagesToBrowseOnMouseClick(int x, int y) {
-		return 0;
-	}
-
 }

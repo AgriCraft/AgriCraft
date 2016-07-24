@@ -15,7 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
-import com.infinityraider.agricraft.gui.component.ComponentStack;
+import com.infinityraider.agricraft.gui.component.GuiComponent;
+import com.infinityraider.agricraft.gui.component.GuiComponentBuilder;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -60,7 +61,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 	private final int seedSlotButtonOffset_X;
 	private final int seedSlotButtonOffset_Y;
 	protected List<Component<StorageElement>> activeSeeds;
-	protected List<ComponentStack> setActiveSeedButtons;
+	protected List<GuiComponent<ItemStack>> setActiveSeedButtons;
 
 	public GuiSeedStorageBase(ContainerSeedStorageBase container, int maxVertSlots, int maxHorSlots, int sortButtonX, int sortButtonY, int setActiveSeedButtonsX, int setActiveSeedButtonsY, int seedSlotsX, int seedSlotsY) {
 		super(container);
@@ -122,7 +123,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 			for (int i = 0; i < list.size(); i++) {
 				int xOffset = this.setActiveSeedButtonOffset_X + (16 * i) % 64;
 				int yOffset = this.setActiveSeedButtonOffset_Y + 16 * (i / 4);
-				this.setActiveSeedButtons.add(new ComponentStack(list.get(i), xOffset, yOffset, false));
+				this.setActiveSeedButtons.add(new GuiComponentBuilder<>(list.get(i), xOffset, yOffset, 16, 16).build());
 			}
 		}
 	}
@@ -187,8 +188,8 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 	protected void mouseClicked(int x, int y, int rightClick) throws IOException {
 		//set active SEED button clicked
 		if (this.setActiveSeedButtons != null) {
-			for (ComponentStack component : setActiveSeedButtons) {
-				if (component.isOverComponent(guiLeft + x, guiTop + y)) {
+			for (GuiComponent<ItemStack> component : setActiveSeedButtons) {
+				if (component.contains(guiLeft + x, guiTop + y)) {
 					this.setActiveSeed(component.getComponent());
 					return;
 				}

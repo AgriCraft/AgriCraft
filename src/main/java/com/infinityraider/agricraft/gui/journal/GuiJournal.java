@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.gui.journal;
 
+import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.items.ItemJournal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -12,11 +13,15 @@ import java.util.List;
 import net.minecraft.client.renderer.GlStateManager;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.gui.GuiBase;
-import com.infinityraider.agricraft.gui.component.IComponent;
-import org.lwjgl.opengl.GL11;
+import com.infinityraider.agricraft.gui.component.ComponentRenderer;
+import com.infinityraider.agricraft.gui.component.GuiComponent;
+import com.infinityraider.agricraft.gui.component.GuiComponentBuilder;
 
 @SideOnly(Side.CLIENT)
 public class GuiJournal extends GuiBase {
+
+	public static final ResourceLocation LEFT_ARROW = new ResourceLocation("agricraft:textures/gui/journal/arrow_left.png");
+	public static final ResourceLocation RIGHT_ARROW = new ResourceLocation("agricraft:textures/gui/journal/arrow_right.png");
 
 	/**
 	 * Some dimensions and constants
@@ -38,7 +43,7 @@ public class GuiJournal extends GuiBase {
 	/**
 	 * Stuff to render
 	 */
-	final List<IComponent> components = new ArrayList<>();
+	List<GuiComponent> components = new ArrayList<>();
 
 	private final ItemStack journal;
 
@@ -56,7 +61,8 @@ public class GuiJournal extends GuiBase {
 		this.guiLeft = (this.width - this.xSize) / 2;
 		this.guiTop = (this.height - 16 - this.ySize) / 2;
 		currentPage = getCurrentPage();
-		this.components.clear();
+		this.components = new ArrayList<>();
+		addNavArrows(components);
 		currentPage.addComponents(components);
 	}
 
@@ -76,11 +82,11 @@ public class GuiJournal extends GuiBase {
 		drawBackground(0);
 		//draw foreground
 		drawTexture(currentPage.getForeground());
-		//draw navigation arrows
-		drawNavigationArrows(x, y);
 		//draw tooltip
 		final int mouseX = x - this.guiLeft;
 		final int mouseY = y - this.guiTop;
+		// Update Mouse
+		this.components.forEach(c -> c.onMouseMove(mouseX, mouseY));
 		List<String> toolTip = new ArrayList<>();
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
@@ -89,40 +95,22 @@ public class GuiJournal extends GuiBase {
 				// Render Components
 				.peek(c -> c.renderComponent(this))
 				// Filter ToolTips
-				.filter(c -> c.isOverComponent(mouseX, mouseY))
+				.filter(c -> c.contains(mouseX, mouseY))
 				// Add ToolTips
 				.forEach(c -> c.addToolTip(toolTip, Minecraft.getMinecraft().thePlayer));
 		currentPage.addTooltip(mouseX, mouseY, toolTip);
 		GlStateManager.popAttrib();
-		this.drawTooltip(toolTip, mouseX, mouseY);
+		drawHoveringText(toolTip, mouseX, mouseY, fontRendererObj);
 		GlStateManager.popMatrix();
 	}
 
 	@Override
 	public void mouseClicked(int x, int y, int rightClick) {
-		//find number of pages to browse
-		int pageIncrement = 0;
-		//clicked for next page or previous page
-		if (y > this.guiTop + 172 && y <= this.guiTop + 172 + 16 && rightClick == 0) {
-			if (x > this.guiLeft + 221 && x <= this.guiLeft + 221 + 16) {
-				//next page
-				pageIncrement = 1;
-			} else if (x > this.guiLeft + 19 && x <= this.guiLeft + 19 + 16 && this.currentPageNumber > 0) {
-				//prev page
-				pageIncrement = -1;
-			}
-			//clicked to browse from within the page
-		} else {
-			pageIncrement = getCurrentPage().getPagesToBrowseOnMouseClick(x - this.guiLeft, y - this.guiTop);
-		}
-		//go to new page
-		int newPage = currentPageNumber + pageIncrement;
-		newPage = Math.max(0, newPage); //don't go negative
-		newPage = Math.min(newPage, getNumberOfPages() - 1); //don't go outside array bounds
-		if (newPage != currentPageNumber) {
-			this.currentPageNumber = newPage;
-			this.initGui();
-		}
+		final int mouseX = x - this.guiLeft;
+		final int mouseY = y - this.guiTop;
+		this.components.stream()
+				.filter(c -> c.contains(mouseX, mouseY))
+				.anyMatch(c -> c.onClick(mouseX, mouseY));
 	}
 
 	private JournalPage getCurrentPage() {
@@ -132,7 +120,7 @@ public class GuiJournal extends GuiBase {
 			case 1:
 				return new JournalPageIntroduction();
 		}
-		return new JournalPageSeed(getDiscoveredSeeds(), currentPageNumber - MINIMUM_PAGES);
+		return new JournalPageSeed(this, getDiscoveredSeeds(), currentPageNumber - MINIMUM_PAGES);
 	}
 
 	private List<IAgriPlant> getDiscoveredSeeds() {
@@ -160,22 +148,38 @@ public class GuiJournal extends GuiBase {
 		GlStateManager.popAttrib();
 	}
 
-	private void drawNavigationArrows(int x, int y) {
-		GlStateManager.pushAttrib();
-		if (y > this.guiTop + 172 && y <= this.guiTop + 172 + 16) {
-			if (x > this.guiLeft + 221 && x <= this.guiLeft + 221 + 16) {
-				Minecraft.getMinecraft().getTextureManager().bindTexture(JournalPage.getBackground());
-				drawTexturedModalRect(this.guiLeft + 223, this.guiTop + 178, 224, 239, 32, 17);
-			} else if (x > this.guiLeft + 19 && x <= this.guiLeft + 19 + 16 && this.currentPageNumber > 0) {
-				Minecraft.getMinecraft().getTextureManager().bindTexture(JournalPage.getBackground());
-				drawTexturedModalRect(this.guiLeft + 1, this.guiTop + 178, 0, 239, 32, 17);
-			}
-		}
-		GlStateManager.popAttrib();
+	private void addNavArrows(List<GuiComponent> components) {
+		GuiComponent leftArrow = new GuiComponentBuilder<>(LEFT_ARROW, 1, 170, 32, 32)
+				.setRenderAction(ComponentRenderer::renderIconComponent)
+				.setMouseEnterAction((c, p) -> c.setVisable(this.currentPageNumber > 0))
+				.setMouseLeaveAction((c, p) -> c.setVisable(false))
+				.setMouseClickAction((c, p) -> incPage(-1))
+				.setVisable(false)
+				.build();
+		GuiComponent rightArrow = new GuiComponentBuilder<>(RIGHT_ARROW, 223, 170, 32, 32)
+				.setRenderAction(ComponentRenderer::renderIconComponent)
+				.setMouseEnterAction((c, p) -> c.setVisable(this.currentPageNumber < this.getNumberOfPages() - 1))
+				.setMouseLeaveAction((c, p) -> c.setVisable(false))
+				.setMouseClickAction((c, p) -> incPage(1))
+				.setVisable(false)
+				.build();
+		components.add(leftArrow);
+		components.add(rightArrow);
+	}
+	
+	public boolean switchPage(IAgriPlant plant) {
+		final int page = this.getDiscoveredSeeds().indexOf(plant) + 2;
+		return page != -1 && setPage(page);
 	}
 
-	private void drawTooltip(List<String> toolTip, int x, int y) {
-		drawHoveringText(toolTip, x, y, fontRendererObj);
+	public boolean incPage(int inc) {
+		return this.setPage(this.currentPageNumber + inc);
+	}
+	
+	public boolean setPage(int page) {
+		this.currentPageNumber = MathHelper.inRange(page, 0, this.getNumberOfPages() - 1);
+		this.initGui();
+		return true;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.gui.component.IComponent;
+import com.infinityraider.agricraft.gui.component.GuiComponent;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,12 +34,7 @@ public abstract class JournalPage {
 	/**
 	 * Gets a list of text components to render on this page
 	 */
-	public void addComponents(List<IComponent> components) {
+	public void addComponents(List<GuiComponent> components) {
 	}
 
-	/**
-	 * Gets the increment to the page number on a mouseclick, >0 means browse
-	 * forwards, <0 means browse backwards and 0 means stay on this page
-	 */
-	public abstract int getPagesToBrowseOnMouseClick(int x, int y);
 }

@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.gui.journal;
 
+import com.infinityraider.agricraft.gui.component.ComponentRenderer;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.util.ResourceLocation;
-import com.infinityraider.agricraft.gui.component.ComponentText;
-import com.infinityraider.agricraft.gui.component.IComponent;
+import com.infinityraider.agricraft.gui.component.GuiComponent;
+import com.infinityraider.agricraft.gui.component.GuiComponentBuilder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,12 +19,12 @@ public class JournalPageIntroduction extends JournalPage {
     }
 
     @Override
-    public void addComponents(List<IComponent> components) {
-        components.add(new ComponentText("agricraft_journal.introduction", 24, 28, 0.5f, false));
+    public void addComponents(List<GuiComponent> components) {
+		components.add(new GuiComponentBuilder<>("agricraft_journal.introduction", 24, 28, 0, 0)
+				.setRenderAction(ComponentRenderer::renderComponentText)
+				.setScale(0.5)
+				.build()
+		);
     }
 
-    @Override
-    public int getPagesToBrowseOnMouseClick(int x, int y) {
-        return 0;
-    }
 }
