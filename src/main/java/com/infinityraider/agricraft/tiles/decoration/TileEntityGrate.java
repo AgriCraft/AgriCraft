@@ -2,24 +2,20 @@ package com.infinityraider.agricraft.tiles.decoration;
 
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.reference.WoodType;
-import com.infinityraider.agricraft.utility.AxisPosition;
-import net.minecraft.block.state.IBlockState;
 
 public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebuggable {
 
 	private static final double WIDTH = 2 * Constants.UNIT;
 	private static final double LENGTH = 1;
-	private static final double[] OFFSETS = new double[]{
+	private static final double[] OFFSETS = new double[] {
 	// The compiler does these calculations at compile time so no need to worry.
 		0 * 7 * Constants.UNIT, //offset 0
 		1 * 7 * Constants.UNIT, //offset 1
@@ -32,11 +28,6 @@ public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebugg
 
 	public TileEntityGrate() {
 		super();
-	}
-
-	@Override
-	public boolean isRotatable() {
-		return true;
 	}
 
 	@Override
@@ -54,7 +45,7 @@ public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebugg
 	}
 
 	public void calculateBounds() {
-		if (null != this.orientation) switch (this.orientation) {
+		if (null != this.getOrientation()) switch (this.getOrientation()) {
 			default:
 			case NORTH:
 				this.bounds = new double[]{0, 0, OFFSETS[offset], LENGTH, LENGTH, OFFSETS[offset] + WIDTH};
@@ -83,7 +74,7 @@ public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebugg
 	}
 
 	public boolean isPlayerInFront(EntityPlayer player) {
-		switch (this.orientation) {
+		switch (this.getOrientation()) {
 			default:
 			case NORTH:
 				return player.posZ < this.zCoord() + OFFSETS[offset] + Constants.UNIT;
@@ -118,7 +109,7 @@ public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebugg
 	}
 
 	public AxisAlignedBB getBoundingBox() {
-		switch (this.orientation) {
+		switch (this.getOrientation()) {
 			default:
 			case NORTH:
 				return new AxisAlignedBB(xCoord(), yCoord(), zCoord() + OFFSETS[offset], xCoord() + LENGTH, yCoord() + LENGTH, zCoord() + OFFSETS[offset] + WIDTH);
@@ -139,20 +130,11 @@ public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebugg
 		list.add("GRATE:");
 		super.addDebugInfo(list);
 		list.add("Offset: " + offset);
-		list.add("Orientation: " + orientation + " (" + (orientation == AgriForgeDirection.NORTH ? "xy" : orientation == AgriForgeDirection.EAST ? "zy" : "xz") + ")");
+		list.add("Orientation: " + getOrientation() + " (" + (getOrientation() == EnumFacing.NORTH ? "xy" : getOrientation() == EnumFacing.EAST ? "zy" : "xz") + ")");
 		list.add("Bounds: ");
 		list.add(" - x: " + bounds[0] + " - " + bounds[3]);
 		list.add(" - y: " + bounds[1] + " - " + bounds[4]);
 		list.add(" - z: " + bounds[2] + " - " + bounds[5]);
 	}
-	
-	// Blockstate
-	@Override
-	public IBlockState getStateWood(IBlockState state) {
-		return state
-				.withProperty(AgriProperties.WOOD_TYPE, WoodType.getType(this.getMaterialMeta()))
-				.withProperty(AgriProperties.AXIS_POS, AxisPosition.convert(orientation.axis, offset))
-				.withProperty(AgriProperties.VINES, this.vines);
-	}
-	
+
 }

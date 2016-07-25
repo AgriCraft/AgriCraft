@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public abstract class DebugHelper {
      * @param pos the block position
      */
     public static void debug(EntityPlayer player, World world, BlockPos pos) {
-        PlayerHelper.sendMessage(player, getDebugData(world, pos));
+        getDebugData(world, pos).forEach((msg) -> player.addChatComponentMessage(new TextComponentString(msg)));
     }
 
     /**

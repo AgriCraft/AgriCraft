@@ -1,23 +1,24 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
-import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.RenderUtil;
-import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.Axis;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
 
 @SideOnly(Side.CLIENT)
-public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
+public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntityTank> {
 
 	// Values to stop z-fighting.
 	final static float A = 00.001f;
@@ -27,31 +28,17 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 		super(block, new TileEntityTank(), true, true, true);
 	}
 
-	@Override
-	public void renderDynamicWood(ITessellator tess, TileEntityTank te, float partialTicks, int destroyStage, TextureAtlasSprite sprite) {
-		drawWater(te, tess);
-	}
-
-	@Override
-	public void renderStaticWood(ITessellator tess, TileEntityTank te, IBlockState state, TextureAtlasSprite sprite) {
-		renderSide(tess, AgriForgeDirection.NORTH, state.getValue(AgriProperties.NORTH), sprite);
-		renderSide(tess, AgriForgeDirection.EAST, state.getValue(AgriProperties.EAST), sprite);
-		renderSide(tess, AgriForgeDirection.SOUTH, state.getValue(AgriProperties.SOUTH), sprite);
-		renderSide(tess, AgriForgeDirection.WEST, state.getValue(AgriProperties.WEST), sprite);
-		renderBottom(tess, state.getValue(AgriProperties.DOWN), sprite);
-	}
-
 	private void renderBottom(ITessellator tessellator, int code, TextureAtlasSprite icon) {
 		if (code == 0) {
 			tessellator.drawScaledPrism(A, 0, A, B, 1, B, icon);
 		}
 	}
 
-	private void renderSide(ITessellator tessellator, AgriForgeDirection dir, int code, TextureAtlasSprite icon) {
+	private void renderSide(ITessellator tessellator, EnumFacing dir, int code, TextureAtlasSprite icon) {
 		if (code != 3) {
 			tessellator.pushMatrix();
-			RenderUtil.rotateBlock(tessellator, dir);
-			final float C = dir.axis == Axis.X ? 0 : A;
+			this.rotateBlock(tessellator, dir);
+			final float C = dir.getAxis() == EnumFacing.Axis.X ? 0 : A;
 			final float D = Constants.WHOLE - C;
 			if (code == 0) {
 				tessellator.drawScaledPrism(A, C, 0, B, D, 2, icon);
@@ -87,4 +74,25 @@ public class RenderTank extends RenderBlockCustomWood<TileEntityTank> {
 		}
 	}
 
+	@Override
+	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockWaterTank block,
+										TileEntityTank tile, TextureAtlasSprite sprite, boolean dynamic) {
+		if(dynamic) {
+			drawWater(tile, tess);
+		} else {
+            //TODO: figure out what these code parameters do
+			renderSide(tess, EnumFacing.NORTH, 0, sprite);
+			renderSide(tess, EnumFacing.EAST, 0, sprite);
+			renderSide(tess, EnumFacing.SOUTH, 0, sprite);
+			renderSide(tess, EnumFacing.WEST, 0, sprite);
+			renderBottom(tess, 0, sprite);
+		}
+
+	}
+
+	@Override
+	protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockWaterTank block, TileEntityTank tile,
+											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+
+	}
 }

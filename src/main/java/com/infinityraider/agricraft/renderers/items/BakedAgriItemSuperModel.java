@@ -5,9 +5,11 @@ package com.infinityraider.agricraft.renderers.items;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.renderers.AgriTransform;
-import com.infinityraider.agricraft.renderers.items.IItemRenderingHandler;
+
 import java.util.List;
 import javax.vecmath.Matrix4f;
+
+import com.infinityraider.infinitylib.render.item.IItemRenderingHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;

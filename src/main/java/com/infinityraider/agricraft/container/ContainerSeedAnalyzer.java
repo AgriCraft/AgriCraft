@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.container;
 
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.infinitylib.container.ContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
@@ -10,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerSeedAnalyzer extends ContainerAgricraft {
+public class ContainerSeedAnalyzer extends ContainerBase {
     public TileEntitySeedAnalyzer seedAnalyzer;
     public int progress;
     public static final int seedSlotId = 36;

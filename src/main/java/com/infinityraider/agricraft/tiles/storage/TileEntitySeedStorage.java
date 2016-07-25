@@ -3,10 +3,10 @@ package com.infinityraider.agricraft.tiles.storage;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
-import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.NBTHelper;
+import com.infinityraider.infinitylib.network.NetworkWrapper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -128,11 +128,6 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 		list.add("Locked Seed: " + info);
 		list.add("Nr of map entries: " + mapSize);
 		list.add("Nr of list entries: " + listSize);
-	}
-
-	@Override
-	public boolean isRotatable() {
-		return true;
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.particles;
 
-import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import com.infinityraider.infinitylib.render.tessellation.TessellatorVertexBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -59,7 +59,7 @@ public abstract  class AgriCraftFX extends Particle {
             float f12 = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) f0 - interpPosY);
             float f13 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) f0 - interpPosZ);
             Minecraft.getMinecraft().renderEngine.bindTexture(this.texture);
-            tessellator.setColorRGBA(1, 1, 1, 0.5F);
+            tessellator.setColorRGBA_F(1, 1, 1, 0.5F);
             tessellator.addVertexWithUV((f11 - f1 * f10 - f4 * f10), (f12 - f2 * f10), (f13 - f3 * f10 - f6 * f10), f7, f9);
             tessellator.addVertexWithUV((f11 - f1 * f10 + f4 * f10), (f12 + f2 * f10), (f13 - f3 * f10 + f6 * f10), f7, f8);
             tessellator.addVertexWithUV((f11 + f1 * f10 + f4 * f10), (f12 + f2 * f10), (f13 + f3 * f10 + f6 * f10), f6, f8);

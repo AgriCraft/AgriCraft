@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.tiles.analyzer;
 
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemJournal;
+import com.infinityraider.infinitylib.block.tile.TileEntityRotatableBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -18,12 +19,9 @@ import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.utility.StackHelper;
-import net.minecraft.block.state.IBlockState;
 
-public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, ITickable {
+public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements ISidedInventory, ITickable {
 
 	private static final int[] SLOTS = new int[]{0, 1};
 
@@ -56,7 +54,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 		if (this.journal != null && this.journal.getItem() != null) {
 			NBTTagCompound journalTag = new NBTTagCompound();
 			this.journal.writeToNBT(journalTag);
-			tag.setTag(AgriItems.JOURNAL.getUnlocalizedName(), journalTag);
+			tag.setTag(AgriItems.getInstance().JOURNAL.getUnlocalizedName(), journalTag);
 		}
 		tag.setInteger("progress", this.progress);
 	}
@@ -69,8 +67,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 			//Not certain this is required... Unsure if networking thing?
 			this.specimen = null;
 		}
-		if (tag.hasKey(AgriItems.JOURNAL.getUnlocalizedName())) {
-			this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriItems.JOURNAL.getUnlocalizedName()));
+		if (tag.hasKey(AgriItems.getInstance().JOURNAL.getUnlocalizedName())) {
+			this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriItems.getInstance().JOURNAL.getUnlocalizedName()));
 		} else {
 			this.journal = null;
 		}
@@ -422,19 +420,6 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 		this.journal = null;
 	}
 
-	@Override
-	public boolean isRotatable() {
-		return true;
-	}
-	
-	@Override
-	public IBlockState getState(IBlockState state) {
-		return state
-					.withProperty(AgriProperties.FACING, this.orientation.getEnumFacing())
-					.withProperty(AgriProperties.JOURNAL, this.hasJournal());
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public void addDisplayInfo(List information) {

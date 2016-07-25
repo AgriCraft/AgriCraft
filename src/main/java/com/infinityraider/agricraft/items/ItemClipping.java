@@ -3,13 +3,13 @@ package com.infinityraider.agricraft.items;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
@@ -18,10 +18,12 @@ import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.items.IAutoRenderedItem;
-import com.infinityraider.agricraft.renderers.items.ItemModelTexture;
+import com.infinityraider.infinitylib.render.item.IAutoRenderedItem;
+import com.infinityraider.infinitylib.render.item.ItemModelTexture;
+
+import java.util.Collections;
 import java.util.List;
-import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -68,7 +70,7 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(AgriNBT.SEED, seed.getPlant().getId());
 		seed.getStat().writeToNBT(tag);
-		ItemStack stack = new ItemStack(AgriItems.AGRI_CLIPPING);
+		ItemStack stack = new ItemStack(AgriItems.getInstance().AGRI_CLIPPING);
 		stack.setTagCompound(tag);
 		return stack;
 	}
@@ -104,4 +106,13 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 		);
 	}
 
+	@Override
+	public List<String> getOreTags() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+		return Collections.emptyList();
+	}
 }

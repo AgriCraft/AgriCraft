@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
+import com.infinityraider.infinitylib.network.MessageBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -11,7 +12,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageContainerSeedStorage extends MessageBase {
+public class MessageContainerSeedStorage extends MessageBase<IMessage> {
     private Item item;
     private int meta;
     private int amount;
@@ -62,7 +63,7 @@ public class MessageContainerSeedStorage extends MessageBase {
         this.writeItemToByteBuf(this.item, buf);
         buf.writeInt(this.meta);
         buf.writeInt(this.amount);
-        this.writePlayerToByteBuf(this.player, buf);
+        this.writePlayerToByteBuf(buf, this.player);
         buf.writeInt(this.slotId);
     }
 }

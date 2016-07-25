@@ -3,10 +3,11 @@ package com.infinityraider.agricraft.container;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
-import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageController;
 import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
+import com.infinityraider.infinitylib.container.ContainerBase;
+import com.infinityraider.infinitylib.network.NetworkWrapper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.List;
 
-public abstract class ContainerSeedStorageBase extends ContainerAgricraft {
+public abstract class ContainerSeedStorageBase extends ContainerBase {
 
 	public ContainerSeedStorageBase(InventoryPlayer inventory, int xOffset, int yOffset) {
 		super(inventory, xOffset, yOffset);

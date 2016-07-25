@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -8,7 +8,7 @@ public class TileEntityChannelFull extends TileEntityChannel {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean hasNeighbourCheck(AgriForgeDirection direction) {
+	public boolean hasNeighbourCheck(EnumFacing direction) {
 		if (this.worldObj == null) {
 			return true;
 		} else {

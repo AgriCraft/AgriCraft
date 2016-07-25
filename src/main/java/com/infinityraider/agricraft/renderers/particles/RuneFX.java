@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.particles;
 
-import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.renderers.tessellation.TessellatorVertexBuffer;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import com.infinityraider.infinitylib.render.tessellation.TessellatorVertexBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;

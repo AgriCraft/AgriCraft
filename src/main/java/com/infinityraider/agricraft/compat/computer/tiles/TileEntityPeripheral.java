@@ -23,8 +23,8 @@ import com.infinityraider.agricraft.compat.computer.methods.MethodGetBaseBlock;
 import com.infinityraider.agricraft.compat.computer.methods.MethodIsFertile;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,11 +45,11 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     @SideOnly(Side.CLIENT)
     private int updateCheck;
     @SideOnly(Side.CLIENT)
-    private HashMap<AgriForgeDirection, Integer> timers;
+    private HashMap<EnumFacing, Integer> timers;
     @SideOnly(Side.CLIENT)
-    private HashMap<AgriForgeDirection, Boolean> activeSides;
+    private HashMap<EnumFacing, Boolean> activeSides;
 
-    public static final AgriForgeDirection[] VALID_DIRECTIONS = {AgriForgeDirection.NORTH, AgriForgeDirection.EAST, AgriForgeDirection.SOUTH, AgriForgeDirection.WEST};
+    public static final EnumFacing[] VALID_DIRECTIONS = {EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST};
     public static final int MAX = 60;
 
     public TileEntityPeripheral() {
@@ -92,7 +92,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
             if(updateCheck == 0) {
                 checkSides();
             }
-            for(AgriForgeDirection dir:VALID_DIRECTIONS) {
+            for(EnumFacing dir:VALID_DIRECTIONS) {
                 int timer = timers.get(dir);
                 timer = timer + (isSideActive(dir)?1:-1);
                 timer = timer<0?0:timer;
@@ -104,7 +104,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     @SideOnly(Side.CLIENT)
-    public int getTimer(AgriForgeDirection dir) {
+    public int getTimer(EnumFacing dir) {
         if(updateCheck == 0 || timers == null) {
             checkSides();
         }
@@ -112,20 +112,20 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     @SideOnly(Side.CLIENT)
-    private boolean isSideActive(AgriForgeDirection dir) {
+    private boolean isSideActive(EnumFacing dir) {
         return activeSides.containsKey(dir) && activeSides.get(dir);
     }
 
     @SideOnly(Side.CLIENT)
     public void checkSides() {
-        for(AgriForgeDirection dir:VALID_DIRECTIONS) {
+        for(EnumFacing dir:VALID_DIRECTIONS) {
             checkSide(dir);
         }
         updateCheck = 0;
     }
 
     @SideOnly(Side.CLIENT)
-    private void checkSide(AgriForgeDirection dir) {
+    private void checkSide(EnumFacing dir) {
         if(timers == null) {
             timers = new HashMap<>();
         }
@@ -138,8 +138,8 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
         activeSides.put(dir, isCrop(dir));
     }
 
-    private boolean isCrop(AgriForgeDirection dir) {
-        return worldObj.getBlockState(new BlockPos(xCoord() + dir.offsetX, yCoord() + dir.offsetY, zCoord() + dir.offsetZ)).getBlock() instanceof BlockCrop;
+    private boolean isCrop(EnumFacing dir) {
+        return worldObj.getBlockState(new BlockPos(xCoord() + dir.getFrontOffsetX(), yCoord() + dir.getFrontOffsetY(), zCoord() + dir.getFrontOffsetZ())).getBlock() instanceof BlockCrop;
     }
 
     public void startAnalyzing() {
@@ -160,11 +160,6 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
             mayAnalyze = false;
             this.markForUpdate();
         }
-    }
-
-    @Override
-    public boolean isRotatable() {
-        return false;
     }
 
 	@Override

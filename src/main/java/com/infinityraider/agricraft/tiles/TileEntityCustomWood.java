@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.renderers.RenderUtil;
+import com.infinityraider.infinitylib.block.tile.TileEntityRotatableBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -17,14 +17,13 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.WoodType;
 
 /**
  * This class represents the root tile entity for all AgriCraft custom WOOD
  * blocks. Through this class, the custom woods are remembered for the blocks. *
  */
-public class TileEntityCustomWood extends TileEntityBase implements IAgriDebuggable {
+public class TileEntityCustomWood extends TileEntityRotatableBase implements IAgriDebuggable {
 
 	/**
 	 * The default MATERIAL to use. Currently is WOOD planks.
@@ -64,7 +63,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 		return new ResourceLocation(WoodType.getType(materialMeta).getTexture());
 	}
 
-	@Override
 	public final void writeTileNBT(NBTTagCompound tag) {
 		tag.setString(AgriNBT.MATERIAL, this.getMaterial().getRegistryName().toString());
 		tag.setInteger(AgriNBT.MATERIAL_META, this.getMaterialMeta());
@@ -81,7 +79,6 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 	 *
 	 * @param tag the TAG to load the entity data from.
 	 */
-	@Override
 	public final void readTileNBT(NBTTagCompound tag) {
 		this.setMaterial(tag);
 		this.readNBT(tag);
@@ -217,34 +214,9 @@ public class TileEntityCustomWood extends TileEntityBase implements IAgriDebugga
 		list.add("this material is: " + this.material.getRegistryName() + ":" + this.getMaterialMeta());
 	}
 
-	@Override
-	public boolean isRotatable() {
-		return false;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public int colorMultiplier() {
-		if (this.worldObj == null) {
-			return 16777215;
-		} else {
-			return RenderUtil.getColorMultiplier(worldObj, this.getPos(), getBlockType());
-		}
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public void addDisplayInfo(List information) {
 		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.material") + ": " + new ItemStack(this.material, 1, this.materialMeta).getDisplayName());
 	}
-
-	@Override
-	public final IBlockState getState(IBlockState state) {
-		return getStateWood(state).withProperty(AgriProperties.WOOD_TYPE, WoodType.getType(materialMeta));
-	}
-
-	protected IBlockState getStateWood(IBlockState state) {
-		return state;
-	}
-
 }

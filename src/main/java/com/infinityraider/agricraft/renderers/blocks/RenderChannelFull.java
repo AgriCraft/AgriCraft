@@ -1,15 +1,15 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
-import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelFull;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RenderChannelFull extends RenderChannel<TileEntityChannelFull> {
+public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, TileEntityChannelFull> {
 
 	public RenderChannelFull(BlockWaterChannelFull block) {
 		super(block, new TileEntityChannelFull());
@@ -30,8 +30,8 @@ public class RenderChannelFull extends RenderChannel<TileEntityChannelFull> {
 	}
 
 	@Override
-	protected void renderSideRotated(ITessellator tessellator, TileEntityChannelFull channel, AgriForgeDirection dir, int code, TextureAtlasSprite matIcon) {
-		if (code == 0) {
+	protected void renderSideRotated(ITessellator tessellator, TileEntityChannelFull channel, EnumFacing dir, boolean hasNeighbour, TextureAtlasSprite matIcon) {
+		if (!hasNeighbour) {
 			tessellator.drawScaledPrism(5, 5, 0, 11, 12, 5, matIcon);
 		}
 	}

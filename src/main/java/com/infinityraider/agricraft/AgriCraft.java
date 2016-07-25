@@ -6,13 +6,16 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.*;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.init.AgriItems;
-import com.infinityraider.agricraft.network.NetworkWrapper;
+import com.infinityraider.agricraft.network.*;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.apiimpl.PluginHandler;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.infinitylib.IInfinityMod;
+import com.infinityraider.infinitylib.InfinityMod;
+import com.infinityraider.infinitylib.network.INetworkWrapper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -58,13 +61,40 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 		guiFactory = Reference.GUI_FACTORY_CLASS,
 		updateJSON = Reference.UPDATE_URL
 )
-public class AgriCraft {
+@InfinityMod
+public class AgriCraft implements IInfinityMod {
 	
     @Mod.Instance(Reference.MOD_ID)
     public static AgriCraft instance;
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
+
+    @Override
+    public String getModId() {
+        return Reference.MOD_ID;
+    }
+
+    @Override
+    public Object getModBlockRegistry() {
+        return AgriBlocks.getInstance();
+    }
+
+    @Override
+    public Object getModItemRegistry() {
+        return AgriItems.getInstance();
+    }
+
+    @Override
+    public void registerMessages(INetworkWrapper wrapper) {
+        wrapper.registerMessage(MessageContainerSeedStorage.class);
+        wrapper.registerMessage(MessageFertilizerApplied.class);
+        wrapper.registerMessage(MessageGuiSeedStorageClearSeed.class);
+        wrapper.registerMessage(MessagePeripheralCheckNeighbours.class);
+        wrapper.registerMessage(MessageSendNEISetting.class);
+        wrapper.registerMessage(MessageSyncFluidLevel.class);
+        wrapper.registerMessage(MessageTileEntitySeedStorage.class);
+    }
 	
     @Mod.EventHandler
     @SuppressWarnings("unused")
@@ -73,13 +103,9 @@ public class AgriCraft {
 		CoreHandler.preinit(event);
         AgriCore.getLogger("AgriCraft").debug("Starting Pre-Initialization");
 		MinecraftForge.EVENT_BUS.register(instance);
-        NetworkWrapper.getInstance().initMessages();
         proxy.initConfiguration(event);
 		StatRegistry.getInstance().registerAdapter(new PlantStats());
-        AgriBlocks.init();
-		AgriItems.init();
 		PluginHandler.preInit(event);
-        proxy.registerRenderers();
         AgriCore.getLogger("AgriCraft").debug("Pre-Initialization Complete");
     }
 
@@ -129,5 +155,4 @@ public class AgriCraft {
 		CoreHandler.loadTextures(e.getMap()::registerSprite);
 		PluginHandler.loadTextures(e.getMap()::registerSprite);
 	}
-
 }

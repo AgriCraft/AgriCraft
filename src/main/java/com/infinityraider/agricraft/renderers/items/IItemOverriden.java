@@ -18,7 +18,7 @@ public interface IItemOverriden {
 
 	BakedAgriItemModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity);
 
-	public static final class Wrapper extends ItemOverrideList {
+	final class Wrapper extends ItemOverrideList {
 
 		public final IItemOverriden override;
 

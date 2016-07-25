@@ -4,9 +4,11 @@ package com.infinityraider.agricraft.renderers.items;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.renderers.tessellation.TessellatorBakedQuad;
 import java.util.List;
 import javax.vecmath.Matrix4f;
+
+import com.infinityraider.infinitylib.render.item.IItemRenderingHandler;
+import com.infinityraider.infinitylib.render.tessellation.TessellatorBakedQuad;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -47,7 +49,7 @@ public class BakedAgriItemModel implements IPerspectiveAwareModel {
 			final TessellatorBakedQuad tessellator = TessellatorBakedQuad.getInstance();
 			tessellator.setTextureFunction(this.parent.textures);
 			tessellator.startDrawingQuads(this.parent.format);
-			this.parent.renderer.renderItem(tessellator, world, stack, entity);
+			this.parent.renderer.renderItem(tessellator, world, stack.getItem(), stack, entity, ItemCameraTransforms.TransformType.NONE);
 			list = tessellator.getQuads();
 			tessellator.draw();
 		} else {

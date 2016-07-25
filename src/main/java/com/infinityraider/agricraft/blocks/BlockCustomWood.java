@@ -1,17 +1,21 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tabs.AgriTabs;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
-import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
+import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
@@ -23,17 +27,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import net.minecraft.block.properties.IProperty;
 
-public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends BlockBaseTile<T> {
+public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends BlockTileCustomRenderedBase<T> {
 
 	// Should drastically speed up getTypes()
 	private static final List<ItemStack> woodTypes = new ArrayList<>();
 
-	public BlockCustomWood(String internalName, boolean isMultiBlock) {
-		super(Material.WOOD, internalName, isMultiBlock);
+	public BlockCustomWood(String internalName) {
+		super(internalName, Material.WOOD);
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
 		setHarvestLevel("axe", 0);
@@ -143,6 +146,12 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public List<ResourceLocation> getTextures() {
+		return Collections.emptyList();
+	}
+
+	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
@@ -162,12 +171,24 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 	}
 
 	@Override
-	public final void addProperties(Set<IProperty> properties) {
-		addPropertiesWood(properties);
-		properties.add(AgriProperties.WOOD_TYPE);
+	@SideOnly(Side.CLIENT)
+	public ModelResourceLocation getBlockModelResourceLocation() {
+		return new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + getInternalName());
 	}
 
-	protected void addPropertiesWood(Set<IProperty> properties) {
+	@Override
+	public List<String> getOreTags() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	protected InfinityProperty[] getPropertyArray() {
+		return new InfinityProperty[0];
+	}
+
+	@Override
+	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state, T tile) {
+		return true;
 	}
 
 }

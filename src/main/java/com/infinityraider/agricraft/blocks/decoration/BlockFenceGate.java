@@ -5,8 +5,6 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockFenceGate;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityFenceGate;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.PlayerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockFenceGate extends BlockCustomWood<TileEntityFenceGate> {
 
 	public BlockFenceGate() {
-		super("fence_gate", false);
+		super("fence_gate");
 	}
 	
     @Override
@@ -69,11 +67,6 @@ public class BlockFenceGate extends BlockCustomWood<TileEntityFenceGate> {
     }
 
     @Override
-    public AxisAlignedBB getDefaultBoundingBox() {
-        return net.minecraft.block.BlockFence.PILLAR_AABB;
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
         return getSelectedBoundingBox(state, world, pos);
@@ -104,9 +97,9 @@ public class BlockFenceGate extends BlockCustomWood<TileEntityFenceGate> {
         @Override
         public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
             if (super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) {
-                AgriForgeDirection dir = PlayerHelper.getPlayerFacing(player);
+                EnumFacing dir = player.getHorizontalFacing();
                 TileEntityFenceGate gate = (TileEntityFenceGate) world.getTileEntity(pos);
-                gate.setZAxis(dir == AgriForgeDirection.NORTH || dir == AgriForgeDirection.SOUTH);
+                gate.setZAxis(dir == EnumFacing.NORTH || dir == EnumFacing.SOUTH);
                 return true;
             } else {
                 return false;

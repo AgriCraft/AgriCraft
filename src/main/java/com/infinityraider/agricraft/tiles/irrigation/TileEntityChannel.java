@@ -4,10 +4,9 @@ import com.infinityraider.agricraft.api.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
-import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.infinitylib.network.NetworkWrapper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import com.agricraft.agricore.core.AgriCore;
@@ -20,18 +19,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.reference.WoodType;
 import com.infinityraider.agricraft.utility.AgriWorldHelper;
 import net.minecraft.block.state.IBlockState;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IAgriDebuggable {
 
-	public static final AgriForgeDirection[] VALID_DIRECTIONS = new AgriForgeDirection[]{
-		AgriForgeDirection.NORTH,
-		AgriForgeDirection.SOUTH,
-		AgriForgeDirection.WEST,
-		AgriForgeDirection.EAST
+	public static final EnumFacing[] VALID_DIRECTIONS = new EnumFacing[]{
+			EnumFacing.NORTH,
+			EnumFacing.SOUTH,
+			EnumFacing.WEST,
+			EnumFacing.EAST
 	};
 
 	private final IIrrigationComponent[] neighbours = new IIrrigationComponent[4];
@@ -145,13 +142,13 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
 	public final void findNeighbours() {
 		for (int i = 0; i < VALID_DIRECTIONS.length; i++) {
-			AgriForgeDirection dir = VALID_DIRECTIONS[i];
-			TileEntity te = worldObj.getTileEntity(dir.offset(getPos()));
+			EnumFacing dir = VALID_DIRECTIONS[i];
+			TileEntity te = worldObj.getTileEntity(pos.offset(dir));
 			if (!(te instanceof IIrrigationComponent)) {
 				neighbours[i] = null;
 			} else {
 				IIrrigationComponent neighbour = (IIrrigationComponent) te;
-				neighbours[i] = (neighbour.canConnectTo(dir.getEnumFacing().getOpposite(), this) || this.canConnectTo(dir.getEnumFacing().getOpposite(), neighbour)) ? neighbour : null;
+				neighbours[i] = (neighbour.canConnectTo(dir.getOpposite(), this) || this.canConnectTo(dir.getOpposite(), neighbour)) ? neighbour : null;
 			}
 		}
 		ticksSinceNeighbourCheck = 0;
@@ -161,19 +158,19 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	 * Only used for rendering
 	 */
 	@SideOnly(Side.CLIENT)
-	public boolean hasNeighbourCheck(AgriForgeDirection direction) {
+	public boolean hasNeighbourCheck(EnumFacing direction) {
 		if (this.worldObj == null) {
 			return false;
 		}
-		TileEntity tileEntityAt = this.worldObj.getTileEntity(direction.offset(getPos()));
+		TileEntity tileEntityAt = this.worldObj.getTileEntity(pos.offset(direction));
 		return (tileEntityAt != null) && (tileEntityAt instanceof IIrrigationComponent) && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
 	}
 
-	public IIrrigationComponent getNeighbor(AgriForgeDirection direction) {
+	public IIrrigationComponent getNeighbor(EnumFacing direction) {
 		if (this.worldObj == null) {
 			return null;
-		} else if (direction.offsetY == 0 && direction.offsetX + direction.offsetZ != 0) {
-			TileEntity tileEntityAt = this.worldObj.getTileEntity(this.getPos().add(direction.offsetX, 0, direction.offsetZ));
+		} else if (direction.getFrontOffsetY() == 0 && direction.getFrontOffsetX() + direction.getFrontOffsetZ() != 0) {
+			TileEntity tileEntityAt = this.worldObj.getTileEntity(this.getPos().add(direction.getFrontOffsetX(), 0, direction.getFrontOffsetZ()));
 			return tileEntityAt instanceof IIrrigationComponent ? (IIrrigationComponent) tileEntityAt : null;
 		}
 		return null;
@@ -291,7 +288,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 		list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
 		list.add("  - FluidHeight: " + this.getFluidHeight());
 		list.add("  - Connections: ");
-		for (AgriForgeDirection dir : VALID_DIRECTIONS) {
+		for (EnumFacing dir : EnumFacing.values()) {
 			if (this.hasNeighbourCheck(dir)) {
 				list.add("      - " + dir.name());
 			}
@@ -307,26 +304,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
 	}
 
-	@Override
-	public final IBlockState getStateWood(IBlockState state) {
-		return getStateChannel(state)
-				.withProperty(AgriProperties.WOOD_TYPE, WoodType.getType(this.getMaterialMeta()))
-				.withProperty(AgriProperties.NORTH, getCode(AgriForgeDirection.NORTH))
-				.withProperty(AgriProperties.EAST, getCode(AgriForgeDirection.EAST))
-				.withProperty(AgriProperties.SOUTH, getCode(AgriForgeDirection.SOUTH))
-				.withProperty(AgriProperties.WEST, getCode(AgriForgeDirection.WEST));
-	}
-	
 	protected IBlockState getStateChannel(IBlockState state) {
 		return state;
-	}
-
-	public int getCode(AgriForgeDirection dir) {
-		if (this.hasNeighbourCheck(dir)) {
-			return 1;
-		} else {
-			return 0;
-		}
 	}
 
 }

@@ -6,8 +6,8 @@ import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.particles.LiquidSprayFX;
-import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
@@ -21,7 +21,6 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -37,7 +36,6 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 	private boolean isSprinkled = false;
 
 	//this saves the data on the tile entity
-	@Override
 	public void writeTileNBT(NBTTagCompound tag) {
 		if (this.counter > 0) {
 			tag.setInteger(AgriNBT.LEVEL, this.counter);
@@ -46,7 +44,6 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 	}
 
 	//this loads the saved data for the tile entity
-	@Override
 	public void readTileNBT(NBTTagCompound tag) {
 		if (tag.hasKey(AgriNBT.LEVEL)) {
 			this.counter = tag.getInteger(AgriNBT.LEVEL);
@@ -225,16 +222,5 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 	private void spawnLiquidSpray(double xOffset, double zOffset, Vec3d vector) {
 		LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord() + 0.5F + xOffset, this.yCoord() + 8 * Constants.UNIT, this.zCoord() + 0.5F + zOffset, 0.3F, 0.7F, vector);
 		Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
-	}
-
-	@Override
-	public boolean isRotatable() {
-		return false;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addDisplayInfo(List information) {
-		//Nothing to add here. Move along!
 	}
 }

@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -25,7 +24,6 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 
 	protected static final float MIN = Constants.UNIT * Constants.QUARTER;
 	protected static final float MAX = Constants.UNIT * Constants.THREE_QUARTER;
-	public static final AxisAlignedBB BOX = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX);
 
 	public BlockWaterChannel() {
 		super("normal");
@@ -56,19 +54,19 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityChannel) {
 			TileEntityChannel channel = (TileEntityChannel) te;
-			if (channel.hasNeighbourCheck(AgriForgeDirection.EAST)) {
+			if (channel.hasNeighbourCheck(EnumFacing.EAST)) {
 				AxisAlignedBB box = new AxisAlignedBB(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX);
 				addCollisionBoxToList(pos, mask, list, box);
 			}
-			if (channel.hasNeighbourCheck(AgriForgeDirection.WEST)) {
+			if (channel.hasNeighbourCheck(EnumFacing.WEST)) {
 				AxisAlignedBB box = new AxisAlignedBB(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX);
 				addCollisionBoxToList(pos, mask, list, box);
 			}
-			if (channel.hasNeighbourCheck(AgriForgeDirection.SOUTH)) {
+			if (channel.hasNeighbourCheck(EnumFacing.SOUTH)) {
 				AxisAlignedBB box = new AxisAlignedBB(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE);
 				addCollisionBoxToList(pos, mask, list, box);
 			}
-			if (channel.hasNeighbourCheck(AgriForgeDirection.NORTH)) {
+			if (channel.hasNeighbourCheck(EnumFacing.NORTH)) {
 				AxisAlignedBB box = new AxisAlignedBB(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT);
 				addCollisionBoxToList(pos, mask, list, box);
 			}
@@ -90,16 +88,16 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof TileEntityChannel) {
 			TileEntityChannel channel = (TileEntityChannel) te;
-			if (channel.hasNeighbourCheck(AgriForgeDirection.EAST)) {
+			if (channel.hasNeighbourCheck(EnumFacing.EAST)) {
 				minBB.addCoord(1, MAX, minBB.maxZ);
 			}
-			if (channel.hasNeighbourCheck(AgriForgeDirection.WEST)) {
+			if (channel.hasNeighbourCheck(EnumFacing.WEST)) {
 				minBB.addCoord(0, MIN, minBB.minZ);
 			}
-			if (channel.hasNeighbourCheck(AgriForgeDirection.SOUTH)) {
+			if (channel.hasNeighbourCheck(EnumFacing.SOUTH)) {
 				minBB.addCoord(minBB.maxX, MAX, 1);
 			}
-			if (channel.hasNeighbourCheck(AgriForgeDirection.NORTH)) {
+			if (channel.hasNeighbourCheck(EnumFacing.NORTH)) {
 				minBB.addCoord(minBB.minX, MIN, 0);
 			}
 		}
@@ -118,17 +116,12 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public RenderChannel getRenderer() {
-		return new RenderChannel(this);
+		return new RenderChannel(this, new TileEntityChannel());
 	}
 
 	@Override
 	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return false;
-	}
-
-	@Override
-	public AxisAlignedBB getDefaultBoundingBox() {
-		return BOX;
 	}
 
 	@Override

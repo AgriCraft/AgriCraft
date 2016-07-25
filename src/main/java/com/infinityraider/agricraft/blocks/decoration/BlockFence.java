@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.entity.EntityLeashKnotAgricraft;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockFence;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityFence;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -27,13 +26,8 @@ import java.util.List;
 public class BlockFence extends BlockCustomWood<TileEntityFence> {
 
 	public BlockFence() {
-		super("fence", false);
+		super("fence");
 	}
-
-    @Override
-    public AxisAlignedBB getDefaultBoundingBox() {
-        return net.minecraft.block.BlockFence.PILLAR_AABB;
-    }
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -79,27 +73,27 @@ public class BlockFence extends BlockCustomWood<TileEntityFence> {
     @Override
     public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
         addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.PILLAR_AABB);
-        if (this.canConnect(world, pos, AgriForgeDirection.NORTH)) {
+        if (this.canConnect(world, pos, EnumFacing.NORTH)) {
             addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.NORTH_AABB);
         }
-        if (this.canConnect(world, pos, AgriForgeDirection.EAST)) {
+        if (this.canConnect(world, pos, EnumFacing.EAST)) {
             addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.EAST_AABB);
         }
-        if (this.canConnect(world, pos, AgriForgeDirection.SOUTH)) {
+        if (this.canConnect(world, pos, EnumFacing.SOUTH)) {
             addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.SOUTH_AABB);
         }
-        if (this.canConnect(world, pos, AgriForgeDirection.WEST)) {
+        if (this.canConnect(world, pos, EnumFacing.WEST)) {
             addCollisionBoxToList(pos, mask, list, net.minecraft.block.BlockFence.WEST_AABB);
         }
     }
 
-    public boolean canConnect(IBlockAccess world, BlockPos pos, AgriForgeDirection dir) {
-        IBlockState state = world.getBlockState(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
+    public boolean canConnect(IBlockAccess world, BlockPos pos, EnumFacing dir) {
+        IBlockState state = world.getBlockState(pos.add(dir.getFrontOffsetX(), dir.getFrontOffsetY(), dir.getFrontOffsetZ()));
         Block block = state.getBlock();
         if (block == null) {
             return false;
         }
-        if (block.isAir(state, world, pos.add(dir.offsetX, dir.offsetY, dir.offsetZ))) {
+        if (block.isAir(state, world, pos.add(dir.getFrontOffsetX(), dir.getFrontOffsetY(), dir.getFrontOffsetZ()))) {
             return false;
         }
         if (block.isOpaqueCube(state)) {

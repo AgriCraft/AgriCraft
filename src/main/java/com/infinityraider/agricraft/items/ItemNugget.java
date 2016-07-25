@@ -1,13 +1,19 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.reference.AgriNuggetType;
-import com.infinityraider.agricraft.renderers.items.IAutoRenderedItem;
-import java.util.ArrayList;
 import java.util.List;
+
+import com.infinityraider.infinitylib.render.item.IAutoRenderedItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.Collections;
+
+import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemNugget extends ItemBase implements IAutoRenderedItem {
@@ -36,23 +42,39 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 		return "item.agricraft:" + AgriNuggetType.values()[stack.getMetadata()].nugget;
 	}
 
-	@Override
-	public List<ResourceLocation> getAllTextures() {
-		final List<ResourceLocation> tex = new ArrayList<>();
-		for (AgriNuggetType type : AgriNuggetType.values()) {
-			tex.add(new ResourceLocation(type.texture));
+    /*
+	@SideOnly(Side.CLIENT)
+	public void registerItemRenderer() {
+		for (int i = 0; i < AgriNuggetType.values().length; i++) {
+			ModelResourceLocation model = RegisterHelper.getItemModel("agricraft:items/" + AgriNuggetType.values()[i].nugget);
+			ModelLoader.setCustomModelResourceLocation(this, i, model);
 		}
 		return tex;
 	}
+	*/
 
 	@Override
-	public String getModelId(ItemStack stack) {
-		return AgriNuggetType.getNugget(stack.getMetadata()).nugget;
+	public List<String> getOreTags() {
+		return Collections.emptyList();
 	}
 
 	@Override
-	public String getBaseTexture(ItemStack stack) {
-		return AgriNuggetType.getNugget(stack.getMetadata()).texture;
+	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+		return Collections.emptyList();
 	}
 
+    @Override
+    public String getModelId(ItemStack stack) {
+        return AgriNuggetType.getNugget(stack.getMetadata()).nugget;
+    }
+
+    @Override
+    public String getBaseTexture(ItemStack stack) {
+        return AgriNuggetType.getNugget(stack.getMetadata()).texture;
+    }
+
+    @Override
+    public List<ResourceLocation> getAllTextures() {
+        return Collections.emptyList();
+    }
 }

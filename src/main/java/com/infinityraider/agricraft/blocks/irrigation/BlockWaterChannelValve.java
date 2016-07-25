@@ -78,11 +78,6 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
 		return ItemBlockValve.class;
 	}
 
-	@Override
-	public AxisAlignedBB getDefaultBoundingBox() {
-		return BOX;
-	}
-
 	public static class ItemBlockValve extends ItemBlockCustomWood {
 
 		public ItemBlockValve(Block block) {

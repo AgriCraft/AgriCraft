@@ -4,11 +4,8 @@ import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.blocks.ItemBlockGrate;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.renderers.blocks.IBlockRenderingHandler;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockGrate;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
-import com.infinityraider.agricraft.utility.AxisPosition;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -16,24 +13,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
-import java.util.Set;
-import net.minecraft.block.properties.IProperty;
 
 public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 
 	public BlockGrate() {
-		super("grate", false);
+		super("grate");
 		this.fullBlock = false;
-		this.setDefaultState(this.blockState.getBaseState()
-				.withProperty(AgriProperties.AXIS_POS, AxisPosition.Z_MID)
-		);
 	}
 
 	@Override
@@ -42,13 +33,8 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 	}
 
 	@Override
-	public AxisAlignedBB getDefaultBoundingBox() {
-		return new AxisAlignedBB(0, 0, 0, 1, 1, 1);
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
-	public IBlockRenderingHandler getRenderer() {
+	public RenderBlockGrate getRenderer() {
 		return new RenderBlockGrate(this);
 	}
 
@@ -121,12 +107,6 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
 	@Override
 	public boolean isEnabled() {
 		return AgriCraftConfig.enableGrates;
-	}
-
-	@Override
-	public void addPropertiesWood(Set<IProperty> properties) {
-		properties.add(AgriProperties.AXIS_POS);
-		properties.add(AgriProperties.VINES);
 	}
 
 	@Override

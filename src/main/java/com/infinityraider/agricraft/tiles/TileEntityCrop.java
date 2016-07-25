@@ -7,6 +7,8 @@ import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.farming.mutation.MutationEngine;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,8 +36,6 @@ import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDebuggable {
 
@@ -52,11 +52,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 
 	public TileEntityCrop() {
 		this.mutationEngine = new MutationEngine(this);
-	}
-
-	@Override
-	public boolean isRotatable() {
-		return false;
 	}
 
 	// =========================================================================
@@ -106,28 +101,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		}
 	}
 
-	/*
-	 * get growthrate
-	 */
 	public int getGrowthRate() {
 		// TODO: update!
 		return AgriCraftConfig.weedGrowthRate;
 	}
 
-	// =========================================================================
-	// Blockstate
-	// ========================================================================+
-	@Override
-	public IBlockState getState(IBlockState state) {
-		return state
-				.withProperty(AgriProperties.PLANT, this.hasPlant())
-				.withProperty(AgriProperties.CROSSCROP, this.crossCrop)
-				.withProperty(AgriProperties.GROWTHSTAGE, (int) this.stats.getMeta());
-	}
 
-	// =========================================================================
-	// Growthstage
-	// =========================================================================
 	@Override
 	public int getGrowthStage() {
 		return this.getBlockMetadata();
@@ -142,9 +121,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		}
 	}
 
-	// =========================================================================
-	// IPlantAcceptor Methods
-	// =========================================================================
 	@Override
 	public boolean acceptsPlant(IAgriPlant plant) {
 		return plant != null && !this.hasPlant() && !this.isCrossCrop();
@@ -178,9 +154,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		return oldPlant;
 	}
 
-	// =========================================================================
-	// IStatAcceptor Methods
-	// =========================================================================
 	@Override
 	public boolean acceptsStat(IAgriStat stat) {
 		return true;
@@ -291,8 +264,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	//when fertilizer is applied
 	@Override
 	public boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
-		if (this.hasPlant() && this.getGrowthStage() < Constants.MATURE) {
-			((BlockCrop) AgriBlocks.CROP).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
+		if (this.getGrowthStage() < Constants.MATURE && (this.hasPlant())) {
+			((BlockCrop) AgriBlocks.getInstance().CROP).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
 			return true;
 		} else if (AgriCraftConfig.bonemealMutation && fertilizer.canTriggerMutation() && this.isCrossCrop()) {
 			this.crossOver();
@@ -358,11 +331,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		}
 	}
 
-	// =========================================================================
-	// NBT
-	// =========================================================================
-	//this saves the data on the tile entity
-	@Override
+
 	public void writeTileNBT(NBTTagCompound tag) {
 		this.stats.writeToNBT(tag);
 		tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
@@ -375,8 +344,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		//AgriCore.getLogger("Plant-Tag").debug("Write Tag: {0}", tag);
 	}
 
-	//this loads the saved data for the tile entity
-	@Override
 	public void readTileNBT(NBTTagCompound tag) {
 		this.stats = StatRegistry.getInstance().getValue(tag);
 		this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
@@ -433,9 +400,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 	@Override
 	public List<IAgriCrop> getMatureNeighbours() {
 		List<IAgriCrop> neighbours = getNeighbours();
-		neighbours.removeIf((p) -> {
-			return !(p.hasPlant() && p.isMature());
-		});
+		neighbours.removeIf((p) -> !(p.hasPlant() && p.isMature()));
 		return neighbours;
 	}
 
@@ -466,7 +431,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IAgriDe
 		}
 	}
 
-	@Override
+
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")
 	public void addDisplayInfo(List information) {

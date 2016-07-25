@@ -1,12 +1,9 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.renderers.player.renderhooks.RenderPlayerHooks;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.relauncher.Side;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 
 @SuppressWarnings("unused")
@@ -38,11 +35,6 @@ public class InterModComsHandler {
                     }
                 } catch (ClassNotFoundException e) {
                     AgriCore.getLogger("AgriCraft").error("[IMC] CropPlant registering errored: No class found for "+message.key);
-                }
-            }
-            else if (message.key.equals("renderHooks")) {
-                if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-                    RenderPlayerHooks.onIMCMessage(message);
                 }
             }
         }
