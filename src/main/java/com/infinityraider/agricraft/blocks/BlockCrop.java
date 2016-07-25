@@ -28,7 +28,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -56,7 +55,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * The most important block in the mod.
  */
 public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> implements IGrowable, IPlantable {
-	public static ResourceLocation TEXTURE = new ResourceLocation("agricraft:blocks/crops");
+	public static ResourceLocation TEXTURE = new ResourceLocation("agricraft:blocks/crop");
 
 	public static final Class[] ITEM_EXCLUDES = new Class[]{
 		IAgriRakeItem.class,
