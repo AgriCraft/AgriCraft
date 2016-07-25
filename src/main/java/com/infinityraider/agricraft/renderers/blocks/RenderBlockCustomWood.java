@@ -36,7 +36,7 @@ public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T exte
 									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 		if (tile != null) {
 			tile.setMaterial(stack);
-			this.renderInventoryBlockWood(tessellator, world, state, block, tile, stack, entity, type getIcon(tile));
+			this.renderInventoryBlockWood(tessellator, world, state, block, tile, stack, entity, type, getIcon(tile));
 		}
 	}
 
@@ -45,7 +45,6 @@ public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T exte
 
 	protected abstract void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, B block, T tile,
 			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon);
-
 
 	@Override
 	public TextureAtlasSprite getIcon() {
