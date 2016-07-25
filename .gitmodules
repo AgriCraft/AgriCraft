@@ -4,6 +4,11 @@
 [submodule "AgriPlants"]
 	path = lib/AgriPlants
 	url = https://github.com/AgriCraft/AgriPlants
+<<<<<<< master
 [submodule "lib/InfinityLib"]
 	path = lib/InfinityLib
+=======
+[submodule "libs/InfinityLib"]
+	path = libs/InfinityLib
+>>>>>>> Added submodule libs/InfinityLib
 	url = https://github.com/InfinityRaider/InfinityLib.git
