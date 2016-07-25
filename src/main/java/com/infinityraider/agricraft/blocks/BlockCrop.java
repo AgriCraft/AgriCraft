@@ -543,7 +543,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 	 */
 	@Override
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return false;
+		return true;
 	}
 
 	/**
