@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.function.Consumer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -40,6 +42,10 @@ public final class PluginHandler {
 		registerStats(StatRegistry.getInstance());
 		registerSeeds(SeedRegistry.getInstance());
 		registerFertilizers(FertilizerRegistry.getInstance());
+	}
+	
+	public static void loadTextures(Consumer<ResourceLocation> registry) {
+		plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerTextures(registry));
 	}
 
 	public static void registerPlants(IAgriPlantRegistry plantRegistry) {

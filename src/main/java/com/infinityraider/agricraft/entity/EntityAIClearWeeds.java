@@ -119,7 +119,7 @@ public class EntityAIClearWeeds extends EntityAIBase {
                     TileEntity te = villager.worldObj.getTileEntity(new BlockPos(x, y, z));
                     if (te != null && te instanceof TileEntityCrop) {
                         TileEntityCrop crop = (TileEntityCrop) te;
-                        if (crop.hasWeed()) {
+                        if (crop.canWeed()) {
                             weedsToClear.add(crop);
                         }
                     }

@@ -5,6 +5,8 @@ package com.infinityraider.agricraft.api.mutation;
 import java.util.List;
 import javax.annotation.Nonnull;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * An interface for managing mutations.
@@ -18,13 +20,29 @@ public interface IAgriMutationRegistry {
 	 * onServerAboutToStartEvent, so any calls before that will return null
 	 */
 	List<IAgriMutation> getMutations();
-
+	
 	/**
 	 * Gets a list of all mutations that have this stack as a parent Mutations
 	 * are populated onServerAboutToStartEvent, so any calls before that will
 	 * return null
 	 */
-	List<IAgriMutation> getMutationsForParent(IAgriPlant parent);
+	List<IAgriMutation> getMutationsForParent(Collection<IAgriPlant> parents);
+	
+	/**
+	 * Gets a list of all mutations that have this stack as a parent Mutations
+	 * are populated onServerAboutToStartEvent, so any calls before that will
+	 * return null
+	 */
+	default List<IAgriMutation> getMutationsForParent(IAgriPlant... parents) {
+		return this.getMutationsForParent(Arrays.asList(parents));
+	}
+	
+	/**
+	 * Gets a list of all mutations that have this stack as a parent Mutations
+	 * are populated onServerAboutToStartEvent, so any calls before that will
+	 * return null
+	 */
+	List<IAgriMutation> getMutationsForParent(IAgriPlant parents);
 
 	/**
 	 * Gets a list of all mutations that have this stack as a child Mutations
@@ -54,5 +72,11 @@ public interface IAgriMutationRegistry {
 	 * @return True if successful
 	 */
 	boolean removeMutation(IAgriPlant result);
+	
+	default List<IAgriMutation> getPossibleMutations(IAgriPlant... parents) {
+		return getPossibleMutations(Arrays.asList(parents));
+	}
+	
+	List<IAgriMutation> getPossibleMutations(Collection<IAgriPlant> parents);
 
 }

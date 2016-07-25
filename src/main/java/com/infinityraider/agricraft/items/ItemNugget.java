@@ -1,21 +1,19 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.reference.AgriNuggetType;
-import com.infinityraider.agricraft.utility.RegisterHelper;
+import com.infinityraider.agricraft.renderers.items.IAutoRenderedItem;
+import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ItemNugget extends ItemBase {
+public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 
 	public ItemNugget() {
-		super("agri_nugget", true, AgriNuggetType.getNuggets());
+		super("agri_nugget", false);
 		this.setCreativeTab(CreativeTabs.MATERIALS);
 	}
 
@@ -39,12 +37,22 @@ public class ItemNugget extends ItemBase {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerItemRenderer() {
-		for (int i = 0; i < AgriNuggetType.values().length; i++) {
-			ModelResourceLocation model = RegisterHelper.getItemModel("agricraft:items/" + AgriNuggetType.values()[i].nugget);
-			ModelLoader.setCustomModelResourceLocation(this, i, model);
+	public List<ResourceLocation> getAllTextures() {
+		final List<ResourceLocation> tex = new ArrayList<>();
+		for (AgriNuggetType type : AgriNuggetType.values()) {
+			tex.add(new ResourceLocation(type.texture));
 		}
+		return tex;
+	}
+
+	@Override
+	public String getModelId(ItemStack stack) {
+		return AgriNuggetType.getNugget(stack.getMetadata()).nugget;
+	}
+
+	@Override
+	public String getBaseTexture(ItemStack stack) {
+		return AgriNuggetType.getNugget(stack.getMetadata()).texture;
 	}
 
 }

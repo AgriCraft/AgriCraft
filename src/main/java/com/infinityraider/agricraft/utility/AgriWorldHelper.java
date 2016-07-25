@@ -15,9 +15,9 @@ import net.minecraft.world.World;
  *
  * @author RlonRyan
  */
-public class WorldHelper {
+public class AgriWorldHelper {
 	
-	public static <T> T getBlock(IBlockAccess world, BlockPos pos, Class<T> type) {
+	public static final <T> T getBlock(IBlockAccess world, BlockPos pos, Class<T> type) {
 		Block b = world.getBlockState(pos).getBlock();
 		if (b != null && type.isAssignableFrom(b.getClass())) {
 			return type.cast(b);
@@ -26,7 +26,7 @@ public class WorldHelper {
 		}
 	}
 	
-	public static <T> T getTile(IBlockAccess world, BlockPos pos, Class<T> type) {
+	public static final <T> T getTile(IBlockAccess world, BlockPos pos, Class<T> type) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && type.isAssignableFrom(te.getClass())) {
 			return type.cast(te);
@@ -35,11 +35,11 @@ public class WorldHelper {
 		}
 	}
 	
-	public static <T> List<T> getTileNeighbors(World world, BlockPos pos, Class<T> type) {
+	public static final <T> List<T> getTileNeighbors(World world, BlockPos pos, Class<T> type) {
 		return getTileNeighbors(world, pos, type, AgriForgeDirection.NORTH, AgriForgeDirection.EAST, AgriForgeDirection.SOUTH, AgriForgeDirection.WEST);
 	}
 
-	public static <T> List<T> getTileNeighbors(World world, BlockPos pos, Class<T> type, AgriForgeDirection... dirs) {
+	public static final <T> List<T> getTileNeighbors(World world, BlockPos pos, Class<T> type, AgriForgeDirection... dirs) {
 		List<T> neighbours = new ArrayList<>();
 		for (AgriForgeDirection dir : dirs) {
 			TileEntity te = world.getTileEntity(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));

@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.BaseIcons;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -60,7 +59,7 @@ public class RenderSprinkler extends RenderBlockBase<TileEntitySprinkler> {
 
 	@Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntitySprinkler tile,
-			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+			ItemStack stack, EntityLivingBase entity) {
 		// Draw Top
 		tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, BaseIcons.OAK_PLANKS.getIcon());
 		// Get Core Icon

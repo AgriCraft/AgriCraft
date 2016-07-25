@@ -16,9 +16,9 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 public class CrossOverResult {
 
     private final double chance;
-
-	private @Nonnull IAgriPlant plant;
-    private @Nonnull IAgriStat stats = new PlantStats();
+	private final @Nonnull IAgriPlant plant;
+    
+	private @Nonnull IAgriStat stats = new PlantStats();
 
     public CrossOverResult(@Nonnull IAgriPlant plant, double chance) {
         this.plant = plant;

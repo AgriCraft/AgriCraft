@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.farming.mutation.MutationHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 
 public abstract class StatCalculatorBase extends StatCalculator {
 
@@ -68,7 +68,7 @@ public abstract class StatCalculatorBase extends StatCalculator {
 		} else if (child.equals(parent)) {
 			return validParentId == 3;
 		}
-		for (IAgriMutation mutation : MutationHandler.getMutationsFromChild(child)) {
+		for (IAgriMutation mutation : MutationRegistry.getInstance().getMutationsForChild(child)) {
 			for (IAgriPlant p : mutation.getParents()) {
 				if (parent.equals(p)) {
 					return true;

@@ -9,9 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 
 public final class CropPlantNone extends CropPlant {
 	
@@ -57,11 +55,6 @@ public final class CropPlantNone extends CropPlant {
     @Override
     public boolean canBonemeal() {
         return false;
-    }
-
-    @Override
-    public List<IAgriMutation> getDefaultMutations() {
-        return new ArrayList<>();
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.tiles.decoration.TileEntityFence;
 import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -41,7 +40,7 @@ public class RenderBlockFence extends RenderBlockCustomWood<TileEntityFence> {
 
 	@Override
 	public void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, Block block, TileEntityFence tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite matIcon) {
+									 ItemStack stack, EntityLivingBase entity, TextureAtlasSprite matIcon) {
 		tess.drawScaledPrism(6, 0, 0, 10, 16, 4, matIcon);
 		tess.drawScaledPrism(6, 0, 12, 10, 16, 16, matIcon);
 		tess.drawScaledPrism(7, 12, 4, 9, 15, 12, matIcon);

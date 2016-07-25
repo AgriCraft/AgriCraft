@@ -22,7 +22,7 @@ import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.WoodType;
-import com.infinityraider.agricraft.utility.WorldHelper;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
 import net.minecraft.block.state.IBlockState;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IAgriDebuggable {
@@ -235,7 +235,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 				}
 			}
 			// Handle Sprinklers
-			TileEntitySprinkler spr = WorldHelper.getTile(worldObj, this.pos.add(0, 1, 0), TileEntitySprinkler.class);
+			TileEntitySprinkler spr = AgriWorldHelper.getTile(worldObj, this.pos.add(0, 1, 0), TileEntitySprinkler.class);
 			if (spr != null) {
 				updatedLevel = spr.acceptFluid(1000, updatedLevel, true);
 			}

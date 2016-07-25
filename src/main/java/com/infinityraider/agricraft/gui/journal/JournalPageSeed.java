@@ -1,7 +1,5 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.farming.mutation.MutationHandler;
-import com.infinityraider.agricraft.gui.Component;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -11,34 +9,38 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.apiimpl.MutationRegistry;
+import com.infinityraider.agricraft.gui.component.BasicComponents;
+import com.infinityraider.agricraft.gui.component.GuiComponent;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @SideOnly(Side.CLIENT)
 public class JournalPageSeed extends JournalPage {
 
-	private static final ResourceLocation ICON_FRAME = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalSeedFrame.png");
 	private static final ResourceLocation MUTATION_TEMPLATE = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalMutationTemplate.png");
 	private static final ResourceLocation QUESTION_MARK = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalQuestionMark.png");
 	private static final ResourceLocation BRIGHTNESS_BAR = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalBrightnessBar.png");
 	private static final ResourceLocation BRIGHTNESS_FRAME = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalBrightnessFrame.png");
 
-	private List<IAgriPlant> discoveredSeeds;
-	private int page;
+	private final GuiJournal journal;
+	private final int page;
+	private final IAgriPlant plant;
+	private final List<IAgriPlant> discoveredSeeds;
 
-	private IAgriPlant plant;
+	private final List<GuiComponent> fruits = new ArrayList<>();
+	private final List<GuiComponent> seeds = new ArrayList<>();
 
-	private List<Component<ItemStack>> fruits;
-	private List<Component<ItemStack>> seeds;
-
-	public JournalPageSeed(List<IAgriPlant> discoveredSeeds, int page) {
+	public JournalPageSeed(GuiJournal journal, List<IAgriPlant> discoveredSeeds, int page) {
+		this.journal = journal;
 		this.discoveredSeeds = discoveredSeeds;
 		this.page = page;
 		this.plant = discoveredSeeds.get(page);
-		this.fruits = getFruits();
-		this.seeds = getSeeds();
+		addFruits(fruits);
+		addSeeds(seeds);
 	}
 
 	@Override
@@ -47,188 +49,119 @@ public class JournalPageSeed extends JournalPage {
 	}
 
 	@Override
-	public ArrayList<String> getTooltip(int x, int y) {
-		for (Component<ItemStack> component : fruits) {
-			if (component.isOverComponent(x, y)) {
-				ArrayList<String> toolTip = new ArrayList<>();
-				toolTip.add(component.getComponent().getDisplayName());
-				return toolTip;
-			}
-		}
-		for (Component<ItemStack> component : seeds) {
-			if (component.isOverComponent(x, y)) {
-				ArrayList<String> toolTip = new ArrayList<>();
-				toolTip.add(component.getComponent().getDisplayName());
-				return toolTip;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public int getPagesToBrowseOnMouseClick(int x, int y) {
-		for (Component<ItemStack> component : seeds) {
-			if (component.isOverComponent(x, y)) {
-				ItemStack selected = component.getComponent();
-				for (int i = 0; i < discoveredSeeds.size(); i++) {
-					ItemStack current = discoveredSeeds.get(i).getSeed();
-					if (selected.getItem() == current.getItem() && selected.getItemDamage() == current.getItemDamage()) {
-						return i - page;
-					}
-				}
-				break;
-			}
-		}
-		return 0;
+	public void addTooltip(int x, int y, List<String> toolTip) {
+		// Pre-Handled
 	}
 
 	// *************************** //
 	// TEXT TO RENDER ON THIS PAGE //
 	// *************************** //
 	@Override
-	public ArrayList<Component<String>> getTextComponents() {
-		ArrayList<Component<String>> textComponents = new ArrayList<>();
-		textComponents.add(getTitle());
-		textComponents.add(getDescriptionHead());
-		textComponents.add(getSeedInformation());
-		textComponents.add(getTier());
-		textComponents.add(getBrightnessTitle());
-		textComponents.add(getFruitTitle());
-		textComponents.add(getGrowthTitle());
-		textComponents.addAll(getMutationTitles());
-		return textComponents;
+	public void addComponents(List<GuiComponent> components) {
+		components.add(getTitle());
+		components.add(getDescriptionHead());
+		components.add(getSeedInformation());
+		components.add(getTier());
+		components.add(getBrightnessTitle());
+		components.add(getFruitTitle());
+		components.add(getGrowthTitle());
+		components.add(getMutationTitle());
+
+		// Items
+		addSeed(components);
+		addFruits(components);
+		addSeeds(components);
+
+		// Textures
+		addBrightnessTextures(components);
+		addMutationTemplates(components);
+		addGrowthStageIcons(components);
 	}
 
-	private Component<String> getTitle() {
-		String text = plant.getSeedName();
-		int x = 82;
-		int y = 17;
-		float scale = 0.8F;
+	private GuiComponent<String> getTitle() {
+		final String text = plant.getSeedName();
+		double scale = 0.8F;
 		while (Minecraft.getMinecraft().fontRendererObj.getStringWidth(text) * scale > 74) {
 			scale = scale - 0.1F;
 		}
-		return new Component<>(text, x, y, scale, true);
+		return BasicComponents.getTextComponent(text, 82, 17, scale, true);
 	}
 
-	private Component<String> getDescriptionHead() {
-		String text = AgriCore.getTranslator().translate("agricraft_journal.information") + ": ";
-		int x = 29;
-		int y = 31;
-		float scale = 0.5F;
-		return new Component<>(text, x, y, scale);
+	private GuiComponent<String> getDescriptionHead() {
+		final String text = AgriCore.getTranslator().translate("agricraft_journal.information") + ": ";
+		return BasicComponents.getTextComponent(text, 29, 31, 0.5);
 	}
 
-	private Component<String> getSeedInformation() {
-		String text = AgriCore.getTranslator().translate(plant.getInformation());
-		int x = 29;
-		int y = 38;
-		float scale = 0.5F;
-		return new Component<>(text, x, y, scale);
+	private GuiComponent<String> getSeedInformation() {
+		return BasicComponents.getTextComponent(plant.getInformation(), 29, 38, 0.5);
 	}
 
-	private Component<String> getTier() {
-		String text = AgriCore.getTranslator().translate("agricraft_journal.tier") + ": " + plant.getTier();
-		int x = 29;
-		int y = 66;
-		float scale = 0.5F;
-		return new Component<>(text, x, y, scale);
+	private GuiComponent<String> getTier() {
+		final String text = AgriCore.getTranslator().translate("agricraft_journal.tier") + ": " + plant.getTier();
+		return BasicComponents.getTextComponent(text, 29, 66, 0.5);
 	}
 
-	private Component<String> getBrightnessTitle() {
-		String text = AgriCore.getTranslator().translate("agricraft_journal.brightness") + ": ";
-		int x = 29;
-		int y = 76;
-		float scale = 0.5F;
-		return new Component<>(text, x, y, scale);
+	private GuiComponent<String> getBrightnessTitle() {
+		final String text = AgriCore.getTranslator().translate("agricraft_journal.brightness") + ": ";
+		return BasicComponents.getTextComponent(text, 29, 76, 0.5);
 	}
 
-	private Component<String> getFruitTitle() {
-		String text = AgriCore.getTranslator().translate("agricraft_journal.fruits") + ": ";
-		int x = 29;
-		int y = 95;
-		float scale = 0.5F;
-		return new Component<>(text, x, y, scale);
+	private GuiComponent<String> getFruitTitle() {
+		final String text = AgriCore.getTranslator().translate("agricraft_journal.fruits") + ": ";
+		return BasicComponents.getTextComponent(text, 29, 95, 0.5);
 	}
 
-	private Component<String> getGrowthTitle() {
-		String text = AgriCore.getTranslator().translate("agricraft_journal.growthStages") + ": ";
-		int x = 29;
-		int y = 122;
-		float scale = 0.5F;
-		return new Component<>(text, x, y, scale);
+	private GuiComponent<String> getGrowthTitle() {
+		final String text = AgriCore.getTranslator().translate("agricraft_journal.growthStages") + ": ";
+		return BasicComponents.getTextComponent(text, 29, 122, 0.5);
 	}
 
-	private ArrayList<Component<String>> getMutationTitles() {
-		String text = AgriCore.getTranslator().translate("agricraft_journal.mutations") + ": ";
-		int x = 132;
-		int y = 13;
-		float scale = 0.5F;
-		ArrayList<Component<String>> list = new ArrayList<>();
-		list.add(new Component<>(text, x, y, scale));
-		return list;
+	private GuiComponent<String> getMutationTitle() {
+		final String text = AgriCore.getTranslator().translate("agricraft_journal.mutations") + ": ";
+		return BasicComponents.getTextComponent(text, 132, 13, 0.5);
 	}
 
 	// **************************** //
 	// ITEMS TO RENDER ON THIS PAGE //
 	// **************************** //
-	@Override
-	public ArrayList<Component<ItemStack>> getItemComponents() {
-		ArrayList<Component<ItemStack>> itemComponents = new ArrayList<>();
-		itemComponents.add(getSeed());
-		itemComponents.addAll(fruits);
-		itemComponents.addAll(seeds);
-		return itemComponents;
+	private void addSeed(List<GuiComponent> components) {
+		components.add(BasicComponents.getStackComponent(plant.getSeed(), 26, 11));
 	}
 
-	private Component<ItemStack> getSeed() {
-		ItemStack stack = plant.getSeed();
-		int x = 26;
-		int y = 11;
-		return new Component<>(stack, x, y);
-	}
-
-	private List<Component<ItemStack>> getFruits() {
-		if (this.plant == null) {
-			this.plant = discoveredSeeds.get(page);
+	private void addFruits(List<GuiComponent> components) {
+		int x = 30;
+		for (ItemStack stack : discoveredSeeds.get(page).getAllFruits()) {
+			components.add(BasicComponents.getStackComponentFramed(stack, x, 102));
+			x += 24;
 		}
-		List<Component<ItemStack>> fruits = new ArrayList<>();
-		List<ItemStack> allFruits = plant.getAllFruits();
-		if (allFruits != null) {
-			for (int i = 0; i < allFruits.size(); i++) {
-				ItemStack stack = allFruits.get(i);
-				if (stack != null && stack.getItem() != null) {
-					int x = 30 + 24 * i;
-					int y = 102;
-					fruits.add(new Component<>(stack, x, y, 16, 16));
-				}
-			}
-		}
-		return fruits;
 	}
 
-	private List<Component<ItemStack>> getSeeds() {
+	private void addSeeds(List<GuiComponent> components) {
 		List<IAgriMutation> completedMutations = getCompletedMutations();
 		List<IAgriMutation> uncompletedMutations = getUncompleteMutations();
-		List<Component<ItemStack>> seeds = new ArrayList<>();
 		int y = 1;
 		int x = 132;
 		for (IAgriMutation mutation : completedMutations) {
 			y = y + 20;
 			ItemStack resultStack = mutation.getChild().getSeed();
-			ItemStack parent1Stack = mutation.getParents()[0].getSeed();
-			ItemStack parent2Stack = mutation.getParents()[1].getSeed();
-			seeds.add(new Component<>(parent1Stack, x, y, 16, 16));
-			seeds.add(new Component<>(parent2Stack, x + 35, y, 16, 16));
-			seeds.add(new Component<>(resultStack, x + 69, y, 16, 16));
+			ItemStack parent1Stack = mutation.getParents().get(0).getSeed();
+			ItemStack parent2Stack = mutation.getParents().get(1).getSeed();
+			components.add(BasicComponents.getStackComponent(parent1Stack, x, y));
+			components.get(components.size() - 1).setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(0)));
+			components.add(BasicComponents.getStackComponent(parent2Stack, x + 35, y));
+			components.get(components.size() - 1).setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(1)));
+			components.add(BasicComponents.getStackComponent(resultStack, x + 69, y));
+			components.get(components.size() - 1).setMouseClickAction((c, p) -> journal.switchPage(mutation.getChild()));
 		}
 		for (IAgriMutation mutation : uncompletedMutations) {
 			y = y + 20;
-			ItemStack parent1Stack = mutation.getParents()[0].getSeed();
-			ItemStack parent2Stack = mutation.getParents()[1].getSeed();
-			seeds.add(new Component<>(parent1Stack, x, y, 16, 16));
-			seeds.add(new Component<>(parent2Stack, x + 35, y, 16, 16));
+			ItemStack parent1Stack = mutation.getParents().get(0).getSeed();
+			ItemStack parent2Stack = mutation.getParents().get(1).getSeed();
+			components.add(BasicComponents.getStackComponent(parent1Stack, x, y));
+			components.get(components.size() - 1).setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(0)));
+			components.add(BasicComponents.getStackComponent(parent2Stack, x + 35, y));
+			components.get(components.size() - 1).setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(1)));
 		}
-		return seeds;
 	}
 
 	private List<IAgriMutation> getCompletedMutations() {
@@ -238,39 +171,21 @@ public class JournalPageSeed extends JournalPage {
 	}
 
 	private List<IAgriMutation> getDiscoveredParentMutations() {
-		ArrayList<IAgriMutation> allMutations = new ArrayList<>();
-		ArrayList<IAgriMutation> mutations = new ArrayList<>();
-		allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromParent(discoveredSeeds.get(page))));
-		for (IAgriMutation mutation : allMutations) {
-			if (isMutationDiscovered(mutation)) {
-				mutations.add(mutation);
-			}
-		}
-		return mutations;
+		return MutationRegistry.getInstance().getMutationsForParent(discoveredSeeds.get(page)).stream()
+				.filter(this::isMutationDiscovered)
+				.collect(Collectors.toList());
 	}
 
 	private List<IAgriMutation> getDiscoveredChildMutations() {
-		ArrayList<IAgriMutation> allMutations = new ArrayList<>();
-		ArrayList<IAgriMutation> mutations = new ArrayList<>();
-		allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromChild(discoveredSeeds.get(page))));
-		for (IAgriMutation mutation : allMutations) {
-			if (isMutationDiscovered(mutation)) {
-				mutations.add(mutation);
-			}
-		}
-		return mutations;
+		return MutationRegistry.getInstance().getMutationsForChild(discoveredSeeds.get(page)).stream()
+				.filter(this::isMutationDiscovered)
+				.collect(Collectors.toList());
 	}
 
 	private List<IAgriMutation> getUncompleteMutations() {
-		ArrayList<IAgriMutation> allMutations = new ArrayList<>();
-		ArrayList<IAgriMutation> mutations = new ArrayList<>();
-		allMutations.addAll(Arrays.asList(MutationHandler.getMutationsFromParent(discoveredSeeds.get(page))));
-		for (IAgriMutation mutation : allMutations) {
-			if (isMutationHalfDiscovered(mutation)) {
-				mutations.add(mutation);
-			}
-		}
-		return mutations;
+		return MutationRegistry.getInstance().getMutationsForParent(discoveredSeeds.get(page)).stream()
+				.filter(this::isMutationHalfDiscovered)
+				.collect(Collectors.toList());
 	}
 
 	private boolean isMutationDiscovered(IAgriMutation mutation) {
@@ -283,7 +198,7 @@ public class JournalPageSeed extends JournalPage {
 	}
 
 	private boolean areParentsDiscovered(IAgriMutation mutation) {
-		return this.discoveredSeeds.containsAll(Arrays.asList(mutation.getParents()));
+		return this.discoveredSeeds.containsAll(mutation.getParents());
 	}
 
 	private boolean isSeedDiscovered(IAgriPlant seed) {
@@ -293,68 +208,41 @@ public class JournalPageSeed extends JournalPage {
 	// ******************************* //
 	// TEXTURES TO RENDER ON THIS PAGE //
 	// ******************************* //
-	@Override
-	public ArrayList<Component<ResourceLocation>> getTextureComponents() {
-		ArrayList<Component<ResourceLocation>> textureComponents = new ArrayList<>();
-		textureComponents.addAll(getBrightnessTextures());
-		textureComponents.addAll(getFruitIconFrames());
-		textureComponents.addAll(getMutationTemplates());
-		textureComponents.addAll(getGrowthStageIcons());
-		return textureComponents;
-	}
-
-	private ArrayList<Component<ResourceLocation>> getBrightnessTextures() {
-		ArrayList<Component<ResourceLocation>> textures = new ArrayList<>();
+	private void addBrightnessTextures(List<GuiComponent> textures) {
 		int x = 29;
 		int y = 81;
 		int u = 4;
 		int v = 8;
 		int[] brightnessRange = plant.getGrowthRequirement().getBrightnessRange();
-		textures.add(new Component<>(BRIGHTNESS_BAR, x, y, 2 + 16 * u, v));
-		textures.add(new Component<>(BRIGHTNESS_FRAME, x + u * brightnessRange[0], y, 1, v));
-		textures.add(new Component<>(BRIGHTNESS_FRAME, x + u * brightnessRange[1] + 1, y, 1, v));
-		textures.add(new Component<>(BRIGHTNESS_FRAME, x + u * brightnessRange[0] + 1, y, u * (brightnessRange[1] - brightnessRange[0]), 1));
-		textures.add(new Component<>(BRIGHTNESS_FRAME, x + u * brightnessRange[0] + 1, y + v - 1, u * (brightnessRange[1] - brightnessRange[0]), 1));
-		return textures;
+		textures.add(BasicComponents.getIconComponent(BRIGHTNESS_BAR, x, y, 2 + 16 * u, v, Arrays.toString(brightnessRange)));
+		textures.add(BasicComponents.getIconComponent(BRIGHTNESS_FRAME, x + u * brightnessRange[0], y, 1, v));
+		textures.add(BasicComponents.getIconComponent(BRIGHTNESS_FRAME, x + u * brightnessRange[1] + 1, y, 1, v));
+		textures.add(BasicComponents.getIconComponent(BRIGHTNESS_FRAME, x + u * brightnessRange[0] + 1, y, u * (brightnessRange[1] - brightnessRange[0]), 1));
+		textures.add(BasicComponents.getIconComponent(BRIGHTNESS_FRAME, x + u * brightnessRange[0] + 1, y + v - 1, u * (brightnessRange[1] - brightnessRange[0]), 1));
 	}
 
-	private List<Component<ResourceLocation>> getFruitIconFrames() {
-		if (this.fruits == null) {
-			this.fruits = getFruits();
-		}
-		ArrayList<Component<ResourceLocation>> components = new ArrayList<>();
-		for (int i = 0; i < fruits.size(); i++) {
-			components.add(new Component<>(ICON_FRAME, 29 + 24 * i, 101, 18, 18));
-		}
-		return components;
-	}
-
-	private ArrayList<Component<ResourceLocation>> getMutationTemplates() {
+	private void addMutationTemplates(List<GuiComponent> components) {
 		int n = getCompletedMutations().size();
 		int l = getUncompleteMutations().size();
-		ArrayList<Component<ResourceLocation>> components = new ArrayList<>();
 		int y = 0;
 		for (int i = 0; i < n; i++) {
 			y = y + 20;
-			components.add(new Component<>(MUTATION_TEMPLATE, 132, y, 86, 18));
+			components.add(BasicComponents.getIconComponent(MUTATION_TEMPLATE, 132, y, 86, 18));
 		}
 		for (int i = 0; i < l; i++) {
 			y = y + 20;
-			components.add(new Component<>(MUTATION_TEMPLATE, 132, y, 86, 18));
-			components.add(new Component<>(QUESTION_MARK, 201, y + 1, 16, 16));
+			components.add(BasicComponents.getIconComponent(MUTATION_TEMPLATE, 132, y, 86, 18));
+			components.add(BasicComponents.getIconComponent(QUESTION_MARK, 201, y + 1, 16, 16));
 		}
-		return components;
 	}
 
-	private ArrayList<Component<ResourceLocation>> getGrowthStageIcons() {
-		ArrayList<Component<ResourceLocation>> growthStages = new ArrayList<>();
+	private void addGrowthStageIcons(List<GuiComponent> components) {
 		for (int i = 0; i < 8; i++) {
 			int x = 30 + 24 * (i % 4);
 			int y = 129 + 24 * (i / 4);
 			// Hackity-Hack, don't talk back. This is pure magic.
 			final ResourceLocation loc = new ResourceLocation(plant.getPrimaryPlantTexture(i).toString().replace(":blocks/", ":textures/blocks/").concat(".png"));
-			growthStages.add(new Component<>(loc, x, y, 16, 16));
+			components.add(BasicComponents.getIconComponent(loc, x, y, 16, 16));
 		}
-		return growthStages;
 	}
 }

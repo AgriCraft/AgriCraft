@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.api.plant;
 
-import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.google.common.base.Function;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
@@ -22,7 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
-import net.minecraft.item.Item;
 
 /**
  * This interface is used both for you to read the AgriCraft CropPlants as well
@@ -39,10 +37,21 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 	default String getSeedName() {
 		return getPlantName() + " Seeds";
 	}
-
-	// TODO
+	
+	default boolean isWeedable() {
+		return false;
+	}
+	
+	default boolean isAgressive() {
+		return false;
+	}
+	
 	default double getSpreadChance() {
 		return 0.5;
+	}
+	
+	default double getSpawnChance() {
+		return 0;
 	}
 
 	/**
@@ -185,8 +194,6 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 	 */
 	IGrowthRequirement getGrowthRequirement();
 
-	List<IAgriMutation> getDefaultMutations();
-
 	/**
 	 * When a growth thick is allowed for this plant
 	 */
@@ -245,13 +252,11 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 
 	@Override
 	default int compareTo(IAgriPlant plant) {
-		ItemStack seedThis = this.getSeed();
-		ItemStack seedOther = plant.getSeed();
-		int idThis = seedThis == null ? 0 : Item.getIdFromItem(seedThis.getItem());
-		int idOther = seedOther == null ? 0 : Item.getIdFromItem(seedOther.getItem());
-		if (idOther == idThis && idThis != 0) {
-			return seedThis.getItemDamage() - seedOther.getItemDamage();
+		if (this.getTier() > plant.getTier()) {
+			return 1;
+		} else {
+			return this.getId().compareTo(plant.getId());
 		}
-		return idThis - idOther;
 	}
+
 }

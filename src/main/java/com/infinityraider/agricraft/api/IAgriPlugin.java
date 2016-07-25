@@ -8,6 +8,8 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
+import java.util.function.Consumer;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Interface for mod plugins to AgriCraft.
@@ -42,6 +44,10 @@ public interface IAgriPlugin {
 	}
 	
 	default void registerFertilizers(IAgriAdapterRegistry<IAgriFertilizer> fertilizerRegistry) {
+		// Default Implementation: Do nothing.
+	}
+	
+	default void registerTextures(Consumer<ResourceLocation> textureRegistry) {
 		// Default Implementation: Do nothing.
 	}
 

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -42,11 +41,11 @@ public class RenderItemAuto<T extends Item & IAutoRenderedItem> implements IItem
 	}
 
 	@Override
-	public void renderItem(ITessellator tessellator, World world, ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+	public void renderItem(ITessellator tessellator, World world, ItemStack stack, EntityLivingBase entity) {
 		final String id = item.getModelId(stack);
 		List<BakedQuad> model = models.get(id);
 		if (model == null) {
-			AgriCore.getLogger("AgriCraft").debug("Baking Clipping Model: {0}!", id);
+			AgriCore.getLogger("AgriCraft").debug("Baking AgriItem Model: {0}!", id);
 			model = ItemQuadGenerator.generateItemQuads(
 					DefaultVertexFormats.ITEM,
 					tessellator::getIcon,

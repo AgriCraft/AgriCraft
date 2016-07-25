@@ -20,7 +20,6 @@ public interface AgriProperties {
     PropertyDirection FACING = PropertyDirection.create("facing");
 	
 	PropertyBool CROSSCROP = PropertyBool.create("crosscrop");
-	PropertyBool WEEDS = PropertyBool.create("weeds");
 	PropertyBool PLANT = PropertyBool.create("plant");
     PropertyInteger GROWTHSTAGE = PropertyInteger.create("age", 0, 7);
 

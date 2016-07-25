@@ -1,46 +1,30 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.gui.Component;
+import com.infinityraider.agricraft.gui.component.ComponentRenderer;
 import com.infinityraider.agricraft.reference.Reference;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.gui.component.GuiComponent;
+import com.infinityraider.agricraft.gui.component.GuiComponentBuilder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class JournalPageIntroduction extends JournalPage {
+	
     @Override
     public ResourceLocation getForeground() {
         return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalIntroduction.png");
     }
 
     @Override
-    public ArrayList<String> getTooltip(int x, int y) {
-        return null;
+    public void addComponents(List<GuiComponent> components) {
+		components.add(new GuiComponentBuilder<>("agricraft_journal.introduction", 24, 28, 0, 0)
+				.setRenderAction(ComponentRenderer::renderComponentText)
+				.setScale(0.5)
+				.build()
+		);
     }
 
-    @Override
-    public ArrayList<Component<String>> getTextComponents() {
-        ArrayList<Component<String>> textComponents = new ArrayList<>();
-        textComponents.add(new Component<>(AgriCore.getTranslator().translate("agricraft_journal.introduction"), 24, 28, 0.5F));
-        return textComponents;
-    }
-
-    @Override
-    public ArrayList<Component<ItemStack>> getItemComponents() {
-        return null;
-    }
-
-    @Override
-    public ArrayList<Component<ResourceLocation>> getTextureComponents() {
-        return null;
-    }
-
-    @Override
-    public int getPagesToBrowseOnMouseClick(int x, int y) {
-        return 0;
-    }
 }

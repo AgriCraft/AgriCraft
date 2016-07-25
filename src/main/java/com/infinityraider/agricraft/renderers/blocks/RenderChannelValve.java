@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -27,7 +26,7 @@ public class RenderChannelValve extends RenderChannel<TileEntityChannelValve> {
 
 	@Override
 	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityChannelValve tile,
-			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+			ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
 
 		final TextureAtlasSprite sepIcon = BaseIcons.IRON_BLOCK.getIcon();
 

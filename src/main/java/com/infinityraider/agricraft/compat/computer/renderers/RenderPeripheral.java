@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
@@ -50,7 +49,7 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 
 	@Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntityPeripheral tile,
-			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+			ItemStack stack, EntityLivingBase entity) {
 		renderBase(tessellator);
 	}
 

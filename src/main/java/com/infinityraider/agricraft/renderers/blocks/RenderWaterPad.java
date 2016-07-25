@@ -9,7 +9,6 @@ import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemBlock;
@@ -50,7 +49,7 @@ public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
 
 	@Override
 	public void renderInventoryBlock(ITessellator tess, World world, IBlockState state, Block block, @Nullable TileEntityBase tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+									 ItemStack stack, EntityLivingBase entity) {
 
 		// Icon
 		final TextureAtlasSprite dirtIcon = BaseIcons.DIRT.getIcon();

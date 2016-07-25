@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import com.agricraft.agricore.core.AgriCore;
+import java.util.List;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -124,11 +125,11 @@ public class GuiPeripheral extends GuiContainer {
 			this.fontRendererObj.drawString(AgriCore.getTranslator().translate("agricraft_description.peripheralHelp") + ": " + method.getSignature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
 			float scale = 0.9F;
 			GL11.glScalef(scale, scale, scale);
-			String[] write = GuiHelper.getLinesArrayFromData(GuiHelper.splitInLines(this.fontRendererObj, method.getDescription(), 230, scale));
+			List<String> write = GuiHelper.getLinesFromData(GuiHelper.splitInLines(this.fontRendererObj, method.getDescription(), 230, scale));
 			int x = 4 + this.guiLeft + 7;
 			int y = this.guiTop + 175 + height;
-			for (int i = 0; i < write.length; i++) {
-				String line = write[i];
+			for (int i = 0; i < write.size(); i++) {
+				String line = write.get(i);
 				int yOffset = i * height;
 				this.fontRendererObj.drawString(line, (int) (x / scale), (int) (y / scale) + yOffset, WHITE);    //1644054 means black
 			}

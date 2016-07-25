@@ -2,8 +2,6 @@
  */
 package com.infinityraider.agricraft.api.misc;
 
-import java.util.Random;
-
 /**
  * An interface for weedable objects.
  *
@@ -12,32 +10,11 @@ import java.util.Random;
 public interface IAgriWeedable {
 	
 	/**
-	 * Determines the chance of the object generating a weed, at random.
+	 * Determines if the instance is currently overrun with nasty weeds, and may be weeded.
 	 * 
-	 * @return the weed spawn chance.
+	 * @return if the instance has weeds in it, and can be weeded.
 	 */
-	double getWeedSpawnChance();
-	
-	/**
-	 * Determines if the instance is currently overrun with nasty weeds.
-	 * 
-	 * @return if the instance has weeds in it.
-	 */
-	boolean hasWeed();
-
-	/**
-	 * Spawns weeds in the instance.
-	 * 
-	 * @return if weeds were spawned in the instance.
-	 */
-	boolean spawnWeed(Random rand);
-
-	/**
-	 * Attempts to spread weeds to neighboring IWeedable instances.
-	 * 
-	 * @return if weeds were successfully spread.
-	 */
-	boolean spreadWeed(Random rand);
+	boolean canWeed();
 
 	/**
 	 * Clears weeds from the instance.
