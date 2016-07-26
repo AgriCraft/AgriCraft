@@ -35,8 +35,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.BlockRenderLayer;
 
 public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySeedAnalyzer> {
-	public static ResourceLocation TEXTURE_ANALYZER = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/seedAnalyzer.png");
-	public static ResourceLocation TEXTURE_BOOK = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":textures/blocks/seedAnalyzerBook.png");
+	public static ResourceLocation TEXTURE_ANALYZER = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":blocks/seedAnalyzer");
 
 	public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT, 0, Constants.UNIT, Constants.UNIT * (Constants.WHOLE - 1), Constants.UNIT * Constants.QUARTER, Constants.UNIT * (Constants.WHOLE - 1));
 
@@ -159,7 +158,6 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 	public List<ResourceLocation> getTextures() {
 		List<ResourceLocation> textures = new ArrayList<>();
 		textures.add(TEXTURE_ANALYZER);
-		textures.add(TEXTURE_BOOK);
 		return textures;
 	}
 

@@ -80,7 +80,6 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 		if(dynamic) {
 			drawWater(tile, tess);
 		} else {
-			tess.setApplyDiffuseLighting(true);
             //TODO: figure out what these code parameters do
 			renderSide(tess, EnumFacing.NORTH, 0, sprite);
 			renderSide(tess, EnumFacing.EAST, 0, sprite);

@@ -45,7 +45,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 			if (!bookQuads.containsKey(dir)) {
 				tessellator.rotate(dir.getHorizontalAngle(), 0, 1, 0);
 				tessellator.addQuads(MODEL_ANALYZER.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER), 1));
-				tessellator.addQuads(MODEL_BOOK.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_BOOK), 1));
+				tessellator.addQuads(MODEL_BOOK.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER), 1));
 				bookQuads.put(dir, tessellator.getQuads());
 			} else {
 				tessellator.addQuads(bookQuads.get(dir));
