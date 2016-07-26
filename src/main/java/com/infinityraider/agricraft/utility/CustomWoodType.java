@@ -154,7 +154,7 @@ public class CustomWoodType {
             ItemBlock block = ((ItemBlock) plank.getItem());
             if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
                 List<ItemStack> subItems = new ArrayList<>();
-                block.getSubItems(block, null, subItems);
+                block.getSubItems(block, block.getCreativeTab(), subItems);
                 for (ItemStack subItem : subItems) {
                     new CustomWoodType(block.block, subItem.getItemDamage(), getTextureForBlockAndMeta(block.block, subItem.getItemDamage()));
                 }

@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class RenderBlockFenceGate extends RenderBlockCustomWood<BlockFenceGate, TileEntityFenceGate> {
 
 	public RenderBlockFenceGate(BlockFenceGate block) {
-		super(block, new TileEntityFenceGate(), true, false, true);
+		super(block, new TileEntityFenceGate(), true, true, false);
 	}
 
 	@Override

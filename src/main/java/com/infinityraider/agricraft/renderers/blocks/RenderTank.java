@@ -80,6 +80,7 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 		if(dynamic) {
 			drawWater(tile, tess);
 		} else {
+			tess.setApplyDiffuseLighting(false);
             //TODO: figure out what these code parameters do
 			renderSide(tess, EnumFacing.NORTH, 0, sprite);
 			renderSide(tess, EnumFacing.EAST, 0, sprite);
@@ -92,7 +93,12 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 
 	@Override
 	protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockWaterTank block, TileEntityTank tile,
-											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite sprite) {
+		renderSide(tess, EnumFacing.NORTH, 0, sprite);
+		renderSide(tess, EnumFacing.EAST, 0, sprite);
+		renderSide(tess, EnumFacing.SOUTH, 0, sprite);
+		renderSide(tess, EnumFacing.WEST, 0, sprite);
+		renderBottom(tess, 0, sprite);
 
 	}
 }

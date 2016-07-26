@@ -21,8 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T extends TileEntityCustomWood> extends RenderBlockBase<B, T> {
 
-	protected RenderBlockCustomWood(B block, T te, boolean inventory, boolean tesr, boolean isbrh) {
-		super(block, te, inventory, tesr, isbrh);
+	protected RenderBlockCustomWood(B block, T te, boolean inventory, boolean staticRender, boolean dynRender) {
+		super(block, te, inventory, staticRender, dynRender);
 	}
 
 	@Override

@@ -4,11 +4,11 @@ package com.infinityraider.agricraft.renderers.items;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.renderers.AgriTransform;
 
 import java.util.List;
 import javax.vecmath.Matrix4f;
 
+import com.infinityraider.infinitylib.render.DefaultTransforms;
 import com.infinityraider.infinitylib.render.item.IItemRenderingHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -70,7 +70,7 @@ public class BakedAgriItemSuperModel<T extends IItemRenderingHandler> implements
 	}
 	
 	public Matrix4f handlePerspective(ItemCameraTransforms.TransformType transform) {
-		return AgriTransform.getItemMatrix(transform);
+		return DefaultTransforms.getItemMatrix(transform);
 	}
 	
 	@Override

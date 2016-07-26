@@ -116,8 +116,13 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 	}
 
 	@Override
-	protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, B block, T tile, ItemStack stack,
+	protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, B block, T channel, ItemStack stack,
 											EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+		this.renderBottom(tessellator, icon);
+		this.renderSide(tessellator, channel, EnumFacing.NORTH, false, icon);
+		this.renderSide(tessellator, channel, EnumFacing.EAST, false, icon);
+		this.renderSide(tessellator, channel, EnumFacing.SOUTH, false, icon);
+		this.renderSide(tessellator, channel, EnumFacing.WEST, false, icon);
 
 	}
 }

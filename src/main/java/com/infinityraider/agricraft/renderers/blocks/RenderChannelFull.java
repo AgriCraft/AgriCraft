@@ -3,8 +3,13 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelFull;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,5 +39,16 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
 		if (!hasNeighbour) {
 			tessellator.drawScaledPrism(5, 5, 0, 11, 12, 5, matIcon);
 		}
+	}
+
+	@Override
+	protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelFull block, TileEntityChannelFull channel,
+											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+		this.renderBottom(tessellator, icon);
+		this.renderSide(tessellator, channel, EnumFacing.NORTH, true, icon);
+		this.renderSide(tessellator, channel, EnumFacing.EAST, true, icon);
+		this.renderSide(tessellator, channel, EnumFacing.SOUTH, true, icon);
+		this.renderSide(tessellator, channel, EnumFacing.WEST, true, icon);
+
 	}
 }

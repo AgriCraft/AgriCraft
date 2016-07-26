@@ -44,7 +44,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 		this.getSubItems(list);
 	}
 

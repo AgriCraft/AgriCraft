@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEntityGrate> {
 	public RenderBlockGrate(BlockGrate block) {
-		super(block, new TileEntityGrate(), true, false, true);
+		super(block, new TileEntityGrate(), true, true, false);
 	}
 
 	@Override
