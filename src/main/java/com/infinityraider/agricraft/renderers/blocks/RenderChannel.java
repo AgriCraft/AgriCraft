@@ -125,4 +125,9 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 		this.renderSide(tessellator, channel, EnumFacing.WEST, false, icon);
 
 	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return false;
+	}
 }

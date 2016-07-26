@@ -67,4 +67,9 @@ public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEnti
 			tess.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.NORTH, vinesIcon, 1.999f);
 		}
 	}
+
+    @Override
+    public boolean applyAmbientOcclusion() {
+        return false;
+    }
 }

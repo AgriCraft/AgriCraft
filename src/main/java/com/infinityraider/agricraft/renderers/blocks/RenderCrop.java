@@ -68,4 +68,9 @@ public class RenderCrop extends RenderBlockBase<BlockCrop, TileEntityCrop> {
 	public TextureAtlasSprite getIcon() {
 		return getIcon(BlockCrop.TEXTURE);
 	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return true;
+	}
 }

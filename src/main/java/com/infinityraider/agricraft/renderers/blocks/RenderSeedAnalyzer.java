@@ -102,4 +102,9 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 	public TextureAtlasSprite getIcon() {
 		return null;
 	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return false;
+	}
 }

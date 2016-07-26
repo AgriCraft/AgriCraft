@@ -219,4 +219,9 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad, TileE
 	public TextureAtlasSprite getIcon() {
 		return null;
 	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return true;
+	}
 }

@@ -84,4 +84,9 @@ public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, T
 											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
 		renderSides(tess, icon);
 	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return true;
+	}
 }

@@ -87,4 +87,9 @@ public class RenderSprinkler extends RenderBlockBase<BlockSprinkler, TileEntityS
 	public TextureAtlasSprite getIcon() {
 		return getTileEntity().getChannelIcon();
 	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return false;
+	}
 }

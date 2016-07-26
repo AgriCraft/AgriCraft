@@ -49,4 +49,9 @@ public class RenderBlockFence extends RenderBlockCustomWood<BlockFence, TileEnti
 		tess.drawScaledPrism(7, 12, 4, 9, 15, 12, matIcon);
 		tess.drawScaledPrism(7, 5, 4, 9, 8, 12, matIcon);
 	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return false;
+	}
 }

@@ -85,4 +85,9 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<BlockFenceGate, 
 			tessellator.drawScaledPrism(14, 9, 13, 16, 12, 15, icon);
 		}
 	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return false;
+	}
 }

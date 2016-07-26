@@ -111,6 +111,11 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 		return Collections.emptyList();
 	}
 
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;

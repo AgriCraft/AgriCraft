@@ -170,4 +170,9 @@ public class RenderPeripheral extends RenderBlockBase<BlockPeripheral, TileEntit
 	public TextureAtlasSprite getIcon() {
 		return null;
 	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return false;
+	}
 }
