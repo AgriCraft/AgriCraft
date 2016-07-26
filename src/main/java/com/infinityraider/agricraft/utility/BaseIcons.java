@@ -10,8 +10,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * An enum for tracking commonly used icons.
  * 
  * Cached internally as to ensure fast access.
- *
- * @author RlonRyan
  */
 @SideOnly(Side.CLIENT)
 public enum BaseIcons {
@@ -32,7 +30,7 @@ public enum BaseIcons {
 	@Nonnull
 	private boolean isLoaded;
 
-	private BaseIcons(String location) {
+	BaseIcons(String location) {
 		this.location = location;
 		this.cachedIcon = IconHelper.getDefaultIcon();
 		this.isLoaded = false;

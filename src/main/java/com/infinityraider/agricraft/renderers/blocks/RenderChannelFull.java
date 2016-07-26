@@ -35,11 +35,29 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
 	}
 
 	@Override
-	protected void renderSideRotated(ITessellator tessellator, TileEntityChannelFull channel, EnumFacing dir, boolean hasNeighbour, TextureAtlasSprite matIcon) {
-		if (!hasNeighbour) {
-			tessellator.drawScaledPrism(5, 5, 0, 11, 12, 5, matIcon);
-		}
-	}
+    protected void renderSide(ITessellator tessellator, TileEntityChannelFull channel, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
+        if(connect) {
+            return;
+        }
+        switch(dir) {
+            case EAST:
+                //positive x
+                tessellator.drawScaledFace(5, 5, 11, 12, dir, matIcon, 16);
+                break;
+            case WEST:
+                //negative x
+                tessellator.drawScaledFace(5, 5, 11, 12, dir, matIcon, 0);
+                break;
+            case NORTH:
+                //negative z
+                tessellator.drawScaledFace(5, 5, 11, 12, dir, matIcon, 0);
+                break;
+            case SOUTH:
+                //positive z
+                tessellator.drawScaledFace(5, 5, 11, 12, dir, matIcon, 16);
+                break;
+        }
+    }
 
 	@Override
 	protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelFull block, TileEntityChannelFull channel,

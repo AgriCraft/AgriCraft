@@ -30,7 +30,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 		super(block, channel, true, true, true);
 	}
 
-	protected void renderWoodChannel(ITessellator tessellator, T channel, IBlockState state, TextureAtlasSprite icon) {
+	protected void renderWoodChannel(ITessellator tessellator, T channel, TextureAtlasSprite icon) {
 		this.renderBottom(tessellator, icon);
 		this.renderSide(tessellator, channel, EnumFacing.NORTH, channel.hasNeighbourCheck(EnumFacing.NORTH), icon);
 		this.renderSide(tessellator, channel, EnumFacing.EAST, channel.hasNeighbourCheck(EnumFacing.EAST), icon);
@@ -48,24 +48,49 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 		tessellator.drawScaledPrism(11, 5, 11, 12, 12, 12, matIcon);
 	}
 	
-	protected final void renderSide(ITessellator tessellator, T channel, EnumFacing dir, boolean hasNeighbour, TextureAtlasSprite matIcon) {
-		tessellator.pushMatrix();
-		this.rotateBlock(tessellator, dir);
-		renderSideRotated(tessellator, channel, dir, hasNeighbour, matIcon);
-		tessellator.popMatrix();
-	}
-
-	//renders one of the four sides of a channel
-	protected void renderSideRotated(ITessellator tessellator, T channel, EnumFacing dir, boolean hasNeighbor, TextureAtlasSprite matIcon) {
-		if (!hasNeighbor) {
-			// draw an edge
-			tessellator.drawScaledPrism(5, 5, 4, 11, 12, 5, matIcon);
-		} else {
-			// extend bottom plane and side edges
-			tessellator.drawScaledPrism(4, 4, 0, 12, 5, 4, matIcon);
-			tessellator.drawScaledPrism(4, 5, 0, 5, 12, 5, matIcon);
-			tessellator.drawScaledPrism(11, 5, 0, 12, 12, 5, matIcon);
-		}
+	protected void renderSide(ITessellator tessellator, T channel, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
+        switch(dir) {
+            case EAST:
+                //positive x
+                if(connect) {
+                    tessellator.drawScaledPrism(12, 4, 4, 16, 5, 12, matIcon);
+                    tessellator.drawScaledPrism(12, 5, 4, 16, 12, 5, matIcon);
+                    tessellator.drawScaledPrism(12, 5, 11, 16, 12, 12, matIcon);
+                } else {
+                    tessellator.drawScaledPrism(11, 5, 5, 12, 12, 11, matIcon);
+                }
+                break;
+            case WEST:
+                //negative x
+                if(connect) {
+                    tessellator.drawScaledPrism(0, 4, 4, 4, 5, 12, matIcon);
+                    tessellator.drawScaledPrism(0, 5, 4, 4, 12, 5, matIcon);
+                    tessellator.drawScaledPrism(0, 5, 11, 4, 12, 12, matIcon);
+                } else {
+                    tessellator.drawScaledPrism(4, 5, 5, 5, 12, 11, matIcon);
+                }
+                break;
+            case NORTH:
+                //negative z
+                if(connect) {
+                    tessellator.drawScaledPrism(4, 4, 0, 12, 5, 4, matIcon);
+                    tessellator.drawScaledPrism(4, 5, 0, 5, 12, 4, matIcon);
+                    tessellator.drawScaledPrism(11, 5, 0, 12, 12, 4, matIcon);
+                } else {
+                    tessellator.drawScaledPrism(5, 5, 4, 11, 12, 5, matIcon);
+                }
+                break;
+            case SOUTH:
+                //positive z
+                if(connect) {
+                    tessellator.drawScaledPrism(4, 4, 12, 12, 5, 16, matIcon);
+                    tessellator.drawScaledPrism(4, 5, 12, 5, 12, 16, matIcon);
+                    tessellator.drawScaledPrism(11, 5, 12, 12, 12, 16, matIcon);
+                } else {
+                    tessellator.drawScaledPrism(5, 5, 11, 11, 12, 12, matIcon);
+                }
+                break;
+        }
 	}
 
 	protected void drawWater(ITessellator tessellator, T channel, TextureAtlasSprite icon) {
@@ -111,7 +136,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 		if(dynamic) {
 			this.drawWater(tess, tile, BaseIcons.WATER_STILL.getIcon());
 		} else {
-			this.renderWoodChannel(tess, tile, state, icon);
+			this.renderWoodChannel(tess, tile, icon);
 		}
 	}
 
