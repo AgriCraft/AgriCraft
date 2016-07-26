@@ -60,7 +60,7 @@ public class TileEntityChannelValve extends TileEntityChannel implements IAgriDe
         list.add("  - State: "+(this.isPowered()?"closed":"open"));
         list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + Constants.BUCKET_mB / 2);
         list.add("  - FluidHeight: " + this.getFluidHeight());
-        list.add("  - Material: " + this.getMaterial().getRegistryName() + ":" + this.getMaterialMeta()); //Much Nicer.
+        list.add("  - Material: " + this.getMaterialBlock().getRegistryName() + ":" + this.getMaterialMeta()); //Much Nicer.
     }
     
     @Override

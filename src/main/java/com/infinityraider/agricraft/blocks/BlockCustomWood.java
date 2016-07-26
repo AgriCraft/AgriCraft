@@ -12,7 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -21,20 +20,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends BlockTileCustomRenderedBase<T> {
-
-	// Should drastically speed up getTypes()
-	private static final List<ItemStack> woodTypes = new ArrayList<>();
-
 	public BlockCustomWood(String internalName) {
 		super(internalName, Material.WOOD);
 		this.setHardness(2.0F);
@@ -42,39 +35,6 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 		setHarvestLevel("axe", 0);
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		this.setSoundType(SoundType.WOOD);
-	}
-
-	/**
-	 * TODO: Clean up this method. This method has already been cleaned some,
-	 * which helps loading...
-	 */
-	public static List<ItemStack> getWoodTypes() {
-
-		if (!woodTypes.isEmpty()) {
-			return woodTypes;
-		}
-
-		for (ItemStack plank : OreDictionary.getOres("plankWood")) {
-			if (plank.getItem() instanceof ItemBlock) {
-				ItemBlock block = ((ItemBlock) plank.getItem());
-				if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-					Side side = FMLCommonHandler.instance().getEffectiveSide();
-					if (side == Side.CLIENT) {
-						List<ItemStack> subItems = new ArrayList<>();
-						block.getSubItems(block, null, subItems);
-						woodTypes.addAll(subItems);
-					} else {
-						for (int i = 0; i < 16; i++) {
-							//on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
-							woodTypes.add(new ItemStack(block, 1, i));
-						}
-					}
-				} else {
-					woodTypes.add(plank);
-				}
-			}
-		}
-		return woodTypes;
 	}
 
 	@Override
