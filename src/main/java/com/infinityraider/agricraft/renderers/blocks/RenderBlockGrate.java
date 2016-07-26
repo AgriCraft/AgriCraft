@@ -36,11 +36,11 @@ public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEnti
 	@Override
 	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockGrate block,
 										TileEntityGrate grate, TextureAtlasSprite sprite, boolean dynamic) {
-		// Setup
-		final float offset = ((float) grate.getOffset() * 7) / 16.0F;
+        // Setup
+        final float offset = ((float) grate.getOffset() * 7) / 16.0F;
 
-		// Offset
-		tess.translate(0, 0, offset);
+        // Offset
+        tess.translate(0, 0, offset);
 
 		// Draw Grate
 		tess.drawScaledPrism(1, 0, 0, 3, 16, 2, sprite);
