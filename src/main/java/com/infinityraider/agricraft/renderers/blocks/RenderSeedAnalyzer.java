@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileEntitySeedAnalyzer> {
@@ -41,6 +42,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 
 	private void renderModel(ITessellator tessellator, TileEntitySeedAnalyzer tile) {
 		EnumFacing dir = tile.getOrientation();
+		dir = (dir == null) ? EnumFacing.NORTH : dir;
 		if(tile.hasJournal()) {
 			if (!bookQuads.containsKey(dir)) {
 				tessellator.rotate(dir.getHorizontalAngle(), 0, 1, 0);
@@ -61,7 +63,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 		}
 	}
 
-	private void renderSeed(TileEntitySeedAnalyzer te, double x, double y, double z) {
+	private void renderSeed(ITessellator tess, TileEntitySeedAnalyzer te, double x, double y, double z) {
 		// Save Settings
 		GlStateManager.pushAttrib();
 		GlStateManager.pushMatrix();
@@ -73,7 +75,9 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 		// Render Seed
 		if (te != null && te.hasSpecimen()) {
 			// Draw Item
+			tess.draw();
 			this.renderItemStack(te.getSpecimen(), 0.5, 0.5, 0.5, 0.75, true);
+			tess.startDrawingQuads(DefaultVertexFormats.BLOCK);
 		}
 
 		// Restore Settings
@@ -85,7 +89,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockSeedAnalyzer block,
 								 @Nullable TileEntitySeedAnalyzer tile, boolean dynamicRender, float partialTick, int destroyStage) {
 		if(dynamicRender) {
-			this.renderSeed(tile, x, y, z);
+			this.renderSeed(tessellator, tile, x, y, z);
 		} else {
 			this.renderModel(tessellator, tile);
 		}
