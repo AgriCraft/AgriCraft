@@ -1,2 +1,3 @@
 rootProject.name = 'AgriCraft'
 include 'lib/AgriCore'
+include 'lib/InfinityLib'
