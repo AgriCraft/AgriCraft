@@ -57,9 +57,10 @@ public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, T
 	 * Render the seed as TESR
 	 */
 	private void drawSeed(ItemStack seed) {
-		if(seed == null) {
+		if(seed == null || seed.getItem() == null) {
 			return;
 		}
+
 		float dx = 8 * Constants.UNIT;
 		float dy = 5 * Constants.UNIT;
 		float dz = 0.99F * Constants.UNIT;
@@ -71,12 +72,19 @@ public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, T
 	@Override
 	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockSeedStorage block,
 										TileEntitySeedStorage tile, TextureAtlasSprite icon, boolean dynamic) {
+        int angle = 90 * tile.getOrientation().getHorizontalIndex();
+        tess.pushMatrix();
+        if(angle != 0) {
+            tess.translate(0.5, 0, 0.5);
+            tess.rotate(angle, 0, 1, 0);
+            tess.translate(-0.5, 0, -0.5);
+        }
 		if(dynamic) {
 			drawSeed(tile.getLockedSeed());
 		} else {
 			renderSides(tess, icon);
 		}
-
+        tess.popMatrix();
 	}
 
 	@Override
