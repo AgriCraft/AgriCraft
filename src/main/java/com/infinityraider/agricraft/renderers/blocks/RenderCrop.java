@@ -4,7 +4,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
-import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.Block;

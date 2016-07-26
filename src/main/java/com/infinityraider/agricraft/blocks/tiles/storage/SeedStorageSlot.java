@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.tiles.storage;
+package com.infinityraider.agricraft.blocks.tiles.storage;
 
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;

@@ -4,7 +4,7 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
 import com.infinityraider.agricraft.items.ItemJournal;
-import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import java.util.List;
 import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;

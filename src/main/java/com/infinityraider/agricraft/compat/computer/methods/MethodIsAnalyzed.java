@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 
 import java.util.ArrayList;

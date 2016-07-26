@@ -1,7 +1,7 @@
-package com.infinityraider.agricraft.tiles.decoration;
+package com.infinityraider.agricraft.blocks.tiles.decoration;
 
 import com.infinityraider.agricraft.blocks.decoration.BlockFence;
-import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 

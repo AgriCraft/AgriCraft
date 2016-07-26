@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;

@@ -59,7 +59,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 		name = Reference.MOD_NAME,
 		version = Reference.MOD_VERSION,
 		guiFactory = Reference.GUI_FACTORY_CLASS,
-		updateJSON = Reference.UPDATE_URL
+		updateJSON = Reference.UPDATE_URL,
+        dependencies = "required-after-infinitylib"
 )
 @InfinityMod
 public class AgriCraft implements IInfinityMod {

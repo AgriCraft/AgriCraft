@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.decoration.BlockFenceGate;
-import com.infinityraider.agricraft.tiles.decoration.TileEntityFenceGate;
+import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityFenceGate;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;

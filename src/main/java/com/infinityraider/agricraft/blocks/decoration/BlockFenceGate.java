@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockFenceGate;
-import com.infinityraider.agricraft.tiles.decoration.TileEntityFenceGate;
+import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityFenceGate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

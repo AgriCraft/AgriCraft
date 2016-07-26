@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.tiles.analyzer;
+package com.infinityraider.agricraft.blocks.tiles.analyzer;
 
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemJournal;

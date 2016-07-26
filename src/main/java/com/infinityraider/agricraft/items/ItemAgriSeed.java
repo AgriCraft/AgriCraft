@@ -25,7 +25,7 @@ import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.infinitylib.render.item.IAutoRenderedItem;
-import com.infinityraider.agricraft.tabs.AgriTabs;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.NBTHelper;
 import java.util.ArrayList;
 

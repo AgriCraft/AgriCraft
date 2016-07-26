@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
-import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

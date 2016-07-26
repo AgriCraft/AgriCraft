@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.tiles;
+package com.infinityraider.agricraft.blocks.tiles;
 
 import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.farming.PlantStats;

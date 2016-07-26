@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.tabs.AgriTabs;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
-import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.SoundType;
@@ -159,12 +159,9 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-		return false;
+		return true;
 	}
 
-	/*
-	 * TODO: What is this?
-	 */
 	@Override
 	public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
 		return ItemBlockCustomWood.class;

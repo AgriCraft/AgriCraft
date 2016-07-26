@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.tiles.irrigation;
+package com.infinityraider.agricraft.blocks.tiles.irrigation;
 
 
 import com.infinityraider.agricraft.reference.Constants;

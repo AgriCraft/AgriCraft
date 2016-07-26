@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.tabs;
+package com.infinityraider.agricraft.items.tabs;
 
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.Reference;

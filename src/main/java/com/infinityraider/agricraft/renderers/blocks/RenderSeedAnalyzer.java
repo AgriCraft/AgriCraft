@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.analyzer.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzerBook;
-import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.model.ModelTechne;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;

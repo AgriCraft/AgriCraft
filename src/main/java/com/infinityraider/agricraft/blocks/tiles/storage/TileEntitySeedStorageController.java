@@ -1,6 +1,6 @@
-package com.infinityraider.agricraft.tiles.storage;
+package com.infinityraider.agricraft.blocks.tiles.storage;
 
-import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
