@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.blocks.analyzer.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzerBook;
 import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.model.ModelTechne;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
@@ -39,26 +40,37 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 		this.bookQuads = new HashMap<>();
 	}
 
-	private void renderModel(ITessellator tessellator, TileEntitySeedAnalyzer tile) {
-		EnumFacing dir = tile.getOrientation();
-		if(tile.hasJournal()) {
-			if (!bookQuads.containsKey(dir)) {
-				tessellator.rotate(dir.getHorizontalAngle(), 0, 1, 0);
-				tessellator.addQuads(MODEL_ANALYZER.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER), 1));
-				tessellator.addQuads(MODEL_BOOK.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER), 1));
-				bookQuads.put(dir, tessellator.getQuads());
-			} else {
-				tessellator.addQuads(bookQuads.get(dir));
-			}
+	private void renderModel(ITessellator tessellator, EnumFacing direction, boolean journal) {
+		if (!analyzerQuads.containsKey(direction)) {
+            tessellator.pushMatrix();
+            int angle = (90 * direction.getHorizontalIndex() + 180) % 360;
+            if(angle != 0) {
+                tessellator.translate(0.5, 0, 0.5);
+                tessellator.rotate(angle, 0, 1, 0);
+                tessellator.translate(-0.5, 0, -0.5);
+            }
+			tessellator.addQuads(MODEL_ANALYZER.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER),1));
+			analyzerQuads.put(direction, tessellator.getQuads());
+            tessellator.popMatrix();
 		} else {
-			if (!analyzerQuads.containsKey(dir)) {
-				tessellator.rotate(dir.getHorizontalAngle(), 0, 1, 0);
-				tessellator.addQuads(MODEL_ANALYZER.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER), 1));
-				analyzerQuads.put(dir, tessellator.getQuads());
-			} else {
-				tessellator.addQuads(analyzerQuads.get(dir));
-			}
+			tessellator.addQuads(analyzerQuads.get(direction));
 		}
+		if(journal) {
+            if (!bookQuads.containsKey(direction)) {
+                tessellator.pushMatrix();
+                int angle = (90 * direction.getHorizontalIndex() + 180) % 360;
+                if(angle != 0) {
+                    tessellator.translate(0.5, 0, 0.5);
+                    tessellator.rotate(angle, 0, 1, 0);
+                    tessellator.translate(-0.5, 0, -0.5);
+                }
+                tessellator.addQuads(MODEL_BOOK.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER), Constants.UNIT));
+                bookQuads.put(direction, tessellator.getQuads());
+                tessellator.popMatrix();
+            } else {
+                tessellator.addQuads(bookQuads.get(direction));
+            }
+        }
 	}
 
 	private void renderSeed(TileEntitySeedAnalyzer te, double x, double y, double z) {
@@ -85,9 +97,9 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockSeedAnalyzer block,
 								 @Nullable TileEntitySeedAnalyzer tile, boolean dynamicRender, float partialTick, int destroyStage) {
 		if(dynamicRender) {
-			this.renderSeed(tile, x, y, z);
+            this.renderSeed(tile, x, y, z);
 		} else {
-			this.renderModel(tessellator, tile);
+			this.renderModel(tessellator, tile.getOrientation(), tile.hasJournal());
 		}
 
 	}
@@ -95,7 +107,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 	@Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSeedAnalyzer block, @Nullable TileEntitySeedAnalyzer tile,
 									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-
+        renderModel(tessellator, EnumFacing.NORTH, false);
 	}
 
 	@Override
@@ -105,6 +117,6 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 
 	@Override
 	public boolean applyAmbientOcclusion() {
-		return false;
+		return true;
 	}
 }

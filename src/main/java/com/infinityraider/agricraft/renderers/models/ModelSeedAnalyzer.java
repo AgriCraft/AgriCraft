@@ -8,49 +8,59 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelSeedAnalyzer extends ModelBase {
+    //fields
+    ModelRenderer base;
+    ModelRenderer stick1;
+    ModelRenderer stick2;
+    ModelRenderer frame1;
+    ModelRenderer frame2;
+    ModelRenderer window;
+
     public ModelSeedAnalyzer() {
+        textureWidth = 64;
+        textureHeight = 64;
+
         base = new ModelRenderer(this, 0, 0);
-        base.addBox(0F, 0F, 0F, 14, 4, 14, 0F);
+        base.addBox(0F, 0F, 0F, 14, 4, 14);
         base.setRotationPoint(-7F, 20F, -7F);
-        base.rotateAngleX = 0F;
-        base.rotateAngleY = 0F;
-        base.rotateAngleZ = 0F;
-        base.mirror = false;
+        base.setTextureSize(textureWidth, textureHeight);
+        base.mirror = true;
+        setRotation(base, 0F, 0F, 0F);
+
         stick1 = new ModelRenderer(this, 57, 0);
-        stick1.addBox(0F, -13F, 0F, 1, 13, 1, 0F);
+        stick1.addBox(0F, -13F, 0F, 1, 13, 1);
         stick1.setRotationPoint(7F, 22F, -5F);
-        stick1.rotateAngleX = -1.07818F;
-        stick1.rotateAngleY = 0F;
-        stick1.rotateAngleZ = 0F;
-        stick1.mirror = false;
+        stick1.setTextureSize(textureWidth, textureHeight);
+        stick1.mirror = true;
+        setRotation(stick1, -1.07818F, 0F, 0F);
+
         stick2 = new ModelRenderer(this, 57, 0);
-        stick2.addBox(0F, 0F, 0F, 1, 13, 1, 0F);
+        stick2.addBox(0F, 0F, 0F, 1, 13, 1);
         stick2.setRotationPoint(6F, 16.16667F, 6.9F);
-        stick2.rotateAngleX = -1.896109F;
-        stick2.rotateAngleY = 0F;
-        stick2.rotateAngleZ = 0F;
-        stick2.mirror = false;
+        stick2.setTextureSize(textureWidth, textureHeight);
+        stick2.mirror = true;
+
+        setRotation(stick2, -1.896109F, 0F, 0F);
         frame1 = new ModelRenderer(this, 0, 19);
-        frame1.addBox(0F, 0F, 0F, 1, 10, 1, 0F);
+        frame1.addBox(0F, 0F, 0F, 1, 10, 1);
         frame1.setRotationPoint(-6F, 9F, 1.7F);
-        frame1.rotateAngleX = -1.115358F;
-        frame1.rotateAngleY = 0F;
-        frame1.rotateAngleZ = 0F;
-        frame1.mirror = false;
+        frame1.setTextureSize(textureWidth, textureHeight);
+        frame1.mirror = true;
+
+        setRotation(frame1, -1.115358F, 0F, 0F);
         frame2 = new ModelRenderer(this, 0, 19);
-        frame2.addBox(0F, 0F, 0F, 1, 10, 1, 0F);
+        frame2.addBox(0F, 0F, 0F, 1, 10, 1);
         frame2.setRotationPoint(5F, 9F, 1.7F);
-        frame2.rotateAngleX = -1.115358F;
-        frame2.rotateAngleY = 0F;
-        frame2.rotateAngleZ = 0F;
-        frame2.mirror = false;
+        frame2.setTextureSize(textureWidth, textureHeight);
+        frame2.mirror = true;
+        setRotation(frame2, -1.115358F, 0F, 0F);
+
         window = new ModelRenderer(this, 5, 19);
-        window.addBox(0F, 0F, 0F, 10, 10, 0, 0F);
+        window.addBox(0F, 0F, 0F, 10, 10, 0);
         window.setRotationPoint(-5F, 9.4F, 1.9F);
-        window.rotateAngleX = -1.115358F;
-        window.rotateAngleY = 0F;
-        window.rotateAngleZ = 0F;
-        window.mirror = false;
+        window.setTextureSize(textureWidth, textureHeight);
+        window.mirror = true;
+        setRotation(window, -1.115358F, 0F, 0F);
     }
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -64,15 +74,13 @@ public class ModelSeedAnalyzer extends ModelBase {
         window.render(f5);
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
-    //fields
-    public ModelRenderer base;
-    public ModelRenderer stick1;
-    public ModelRenderer stick2;
-    public ModelRenderer frame1;
-    public ModelRenderer frame2;
-    public ModelRenderer window;
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity e) {
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, e);
+    }
 }
