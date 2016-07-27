@@ -4,6 +4,7 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,6 +36,7 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem {
 	public ItemClipper() {
 		super("clipper", true);
 		this.setMaxStackSize(1);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
 	@Override

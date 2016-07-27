@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.items;
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.WeightedRandom;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -49,6 +50,7 @@ public class ItemHandRake extends ItemBase implements IAgriRakeItem {
 		super("hand_rake", true, "", "iron");
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -21,6 +22,7 @@ public class ItemCrop extends ItemBase {
 
 	public ItemCrop() {
 		super("crop_sticks", true);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
 	//I'm overriding this just to be sure

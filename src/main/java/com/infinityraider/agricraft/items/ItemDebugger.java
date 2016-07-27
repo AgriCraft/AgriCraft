@@ -4,6 +4,8 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
 import com.infinityraider.agricraft.init.WorldGen;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.infinitylib.handler.ConfigurationHandler;
 import com.infinityraider.infinitylib.item.ItemDebuggerBase;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.block.Block;
@@ -41,6 +43,9 @@ public class ItemDebugger extends ItemDebuggerBase {
 	public ItemDebugger() {
 		super(true);
 		this.setMaxStackSize(1);
+		if(ConfigurationHandler.getInstance().debug) {
+			this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
+		}
 	}
 
 	@Override

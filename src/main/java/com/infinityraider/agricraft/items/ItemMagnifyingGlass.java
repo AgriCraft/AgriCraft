@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.items;
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -37,6 +38,7 @@ public class ItemMagnifyingGlass extends ItemBase {
 	public ItemMagnifyingGlass() {
 		super("magnifying_glass", true);
 		this.setMaxStackSize(1);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
 	//I'm overriding this just to be sure

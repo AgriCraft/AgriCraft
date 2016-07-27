@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,6 +31,7 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
 	public ItemJournal() {
 		super("journal", true);
 		this.setMaxStackSize(1);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
 	//this has to return true to make it so the getContainerItem method gets called when this item is used in a recipe
