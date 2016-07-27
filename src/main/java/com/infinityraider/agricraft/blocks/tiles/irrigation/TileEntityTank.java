@@ -208,6 +208,20 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 		return false;
 	}
 
+    public Connection getConnectionType(EnumFacing facing) {
+        if(this.hasNeighbour(facing)) {
+            return Connection.TANK;
+        }
+        if(facing.getAxis() == EnumFacing.Axis.Y) {
+            return Connection.NONE;
+        }
+        TileEntity te = worldObj.getTileEntity(getPos().offset(facing));
+        if(te instanceof TileEntityChannel) {
+            return ((TileEntityChannel) te).isSameMaterial(this) ? Connection.CHANNEL : Connection.NONE;
+        }
+        return Connection.NONE;
+    }
+
 	@Override
 	public int getCapacity() {
 		return SINGLE_CAPACITY * getMultiBlockData().size();
@@ -436,6 +450,12 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 		} else {
 			return 0;
 		}
+	}
+
+	public enum Connection {
+		NONE,
+		TANK,
+		CHANNEL
 	}
 
 }

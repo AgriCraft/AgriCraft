@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
-import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
+import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -28,28 +28,54 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 		super(block, new TileEntityTank(), true, true, true);
 	}
 
-	private void renderBottom(ITessellator tessellator, int code, TextureAtlasSprite icon) {
-		if (code == 0) {
-			tessellator.drawScaledPrism(A, 0, A, B, 1, B, icon);
-		}
+	private void renderBottom(ITessellator tessellator, TextureAtlasSprite icon) {
+        tessellator.drawScaledFace(A, A, B, B, EnumFacing.DOWN, icon, 0);
+        tessellator.drawScaledFace(A, A, B, B, EnumFacing.UP, icon, 1);
 	}
 
-	private void renderSide(ITessellator tessellator, EnumFacing dir, int code, TextureAtlasSprite icon) {
-		if (code != 3) {
-			tessellator.pushMatrix();
-			this.rotateBlock(tessellator, dir);
-			final float C = dir.getAxis() == EnumFacing.Axis.X ? 0 : A;
-			final float D = Constants.WHOLE - C;
-			if (code == 0) {
-				tessellator.drawScaledPrism(A, C, 0, B, D, 2, icon);
-			} else if (code == 1) {
-				tessellator.drawScaledPrism(2, 0, 0, 14, 5, 2, icon);
-				tessellator.drawScaledPrism(2, 5, 0, 5, 12, 2, icon);
-				tessellator.drawScaledPrism(11, 5, 0, 14, 12, 2, icon);
-				tessellator.drawScaledPrism(2, 12, 0, 14, 16, 2, icon);
-			}
-			tessellator.popMatrix();
-		}
+	private void renderSide(ITessellator tessellator, EnumFacing dir, TileEntityTank.Connection connection, TextureAtlasSprite icon) {
+        if(connection == TileEntityTank.Connection.TANK) {
+            return;
+        }
+        //data about side to render
+        boolean xAxis = dir.getAxis() == EnumFacing.Axis.X;
+        int index = xAxis ? dir.getFrontOffsetX() : dir.getFrontOffsetZ();
+        int min = index < 0 ? 0 : 14;
+        int max = index < 0 ? 2 : 16;
+
+        //render upper face
+        tessellator.drawScaledFace(xAxis ? min : 0, xAxis ? 0 : min, xAxis? max : 16, xAxis ? 16 : max, EnumFacing.UP, icon, 16);
+
+        //render side
+        if(connection == TileEntityTank.Connection.NONE) {
+            tessellator.drawScaledFace(0, 0, 16, 16, dir, icon, index > 0 ? 16 : 0);
+            tessellator.drawScaledFace(0, 0, 16, 16, dir.getOpposite(), icon, index > 0 ? 14 : 2);
+        } else {
+            //vertical faces
+
+            //lower part, under the channel
+            tessellator.drawScaledFace(0, 0, 16, 5, dir, icon, index > 0 ? 16 : 0);
+            tessellator.drawScaledFace(0, 0, 16, 5, dir.getOpposite(), icon, index > 0 ? 14 : 2);
+            //left center part, same height as the channel
+            tessellator.drawScaledFace(0, 5, 5, 12, dir, icon, index > 0 ? 16 : 0);
+            tessellator.drawScaledFace(0, 5, 5, 12, dir.getOpposite(), icon, index > 0 ? 14 : 2);
+            //right center part, same height as the channel
+            tessellator.drawScaledFace(11, 5, 16, 12, dir, icon, index > 0 ? 16 : 0);
+            tessellator.drawScaledFace(11, 5, 16, 12, dir.getOpposite(), icon, index > 0 ? 14 : 2);
+            //upper part, above the channel
+            tessellator.drawScaledFace(0, 12, 16, 16, dir, icon, index > 0 ? 16 : 0);
+            tessellator.drawScaledFace(0, 12, 16, 16, dir.getOpposite(), icon, index > 0 ? 14 : 2);
+
+            //inside of the gap
+            tessellator.drawScaledFace(xAxis ? min : 5, xAxis ? 5 : min, xAxis ? max : 11, xAxis ? 11 : max, EnumFacing.UP, icon, 5);
+            tessellator.drawScaledFace(xAxis ? min : 5, xAxis ? 5 : min, xAxis ? max : 11, xAxis ? 11 : max, EnumFacing.DOWN, icon, 12);
+
+            EnumFacing left = xAxis ? EnumFacing.NORTH : EnumFacing.WEST;
+            EnumFacing right = left.getOpposite();
+
+            tessellator.drawScaledFace(min, 5, max, 12, left, icon, 11);
+            tessellator.drawScaledFace(min, 5, max, 12, right, icon, 5);
+        }
 	}
 
 	private void drawWater(TileEntityTank tank, ITessellator tessellator) {
@@ -80,12 +106,17 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 		if(dynamic) {
 			drawWater(tile, tess);
 		} else {
-            //TODO: figure out what these code parameters do
-			renderSide(tess, EnumFacing.NORTH, 0, sprite);
-			renderSide(tess, EnumFacing.EAST, 0, sprite);
-			renderSide(tess, EnumFacing.SOUTH, 0, sprite);
-			renderSide(tess, EnumFacing.WEST, 0, sprite);
-			renderBottom(tess, 0, sprite);
+            TileEntityTank.Connection north = tile.getConnectionType(EnumFacing.NORTH);
+            TileEntityTank.Connection east = tile.getConnectionType(EnumFacing.EAST);
+            TileEntityTank.Connection south = tile.getConnectionType(EnumFacing.SOUTH);
+            TileEntityTank.Connection west = tile.getConnectionType(EnumFacing.WEST);
+			renderSide(tess, EnumFacing.NORTH, north, sprite);
+			renderSide(tess, EnumFacing.EAST, east, sprite);
+			renderSide(tess, EnumFacing.SOUTH, south, sprite);
+			renderSide(tess, EnumFacing.WEST, west, sprite);
+            if(!tile.hasNeighbour(EnumFacing.DOWN)) {
+                renderBottom(tess, sprite);
+            }
 		}
 
 	}
@@ -93,16 +124,16 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 	@Override
 	protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockWaterTank block, TileEntityTank tile,
 											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite sprite) {
-		renderSide(tess, EnumFacing.NORTH, 0, sprite);
-		renderSide(tess, EnumFacing.EAST, 0, sprite);
-		renderSide(tess, EnumFacing.SOUTH, 0, sprite);
-		renderSide(tess, EnumFacing.WEST, 0, sprite);
-		renderBottom(tess, 0, sprite);
-
+		renderSide(tess, EnumFacing.NORTH, TileEntityTank.Connection.NONE, sprite);
+		renderSide(tess, EnumFacing.EAST, TileEntityTank.Connection.NONE, sprite);
+		renderSide(tess, EnumFacing.SOUTH, TileEntityTank.Connection.NONE, sprite);
+		renderSide(tess, EnumFacing.WEST, TileEntityTank.Connection.NONE, sprite);
+		renderBottom(tess, sprite);
 	}
 
     @Override
     public boolean applyAmbientOcclusion() {
         return true;
     }
+
 }
