@@ -34,7 +34,7 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 		return woodType.getTexture();
 	}
 
-	public final void writeTileNBT(NBTTagCompound tag) {
+	protected final void writeRotatableTileNBT(NBTTagCompound tag) {
         woodType.writeToNBT(tag);
 		this.writeNBT(tag);
 	}
@@ -47,7 +47,7 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	 *
 	 * @param tag the TAG to load the entity data from.
 	 */
-	public final void readTileNBT(NBTTagCompound tag) {
+	protected final void readRotatableTileNBT(NBTTagCompound tag) {
 		this.setMaterial(CustomWoodType.readFromNBT(tag));
 		this.readNBT(tag);
 	}

@@ -58,14 +58,14 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     @Override
-    public void writeTileNBT(NBTTagCompound tag) {
-        super.writeTileNBT(tag);
+    protected void writeRotatableTileNBT(NBTTagCompound tag) {
+        super.writeRotatableTileNBT(tag);
         tag.setBoolean(AgriNBT.FLAG, mayAnalyze);
     }
 
     @Override
-    public void readTileNBT(NBTTagCompound tag) {
-        super.readTileNBT(tag);
+    protected void readRotatableTileNBT(NBTTagCompound tag) {
+        super.readRotatableTileNBT(tag);
         mayAnalyze = tag.hasKey(AgriNBT.FLAG) && tag.getBoolean(AgriNBT.FLAG);
     }
 

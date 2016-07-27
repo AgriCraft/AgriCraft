@@ -45,7 +45,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
 	private int progress = 0;
 
 	@Override
-	public void writeTileNBT(NBTTagCompound tag) {
+	protected void writeRotatableTileNBT(NBTTagCompound tag) {
 		if (this.specimen != null && this.specimen.getItem() != null) {
 			NBTTagCompound seedTag = new NBTTagCompound();
 			this.specimen.writeToNBT(seedTag);
@@ -60,7 +60,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
 	}
 
 	@Override
-	public void readTileNBT(NBTTagCompound tag) {
+	protected void readRotatableTileNBT(NBTTagCompound tag) {
 		if (tag.hasKey(AgriNBT.SEED)) {
 			this.specimen = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriNBT.SEED));
 		} else {
