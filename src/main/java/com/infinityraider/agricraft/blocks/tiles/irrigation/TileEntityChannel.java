@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import com.infinityraider.infinitylib.network.NetworkWrapper;
+import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import com.agricraft.agricore.core.AgriCore;
@@ -17,12 +18,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.utility.AgriWorldHelper;
 import net.minecraft.block.state.IBlockState;
 
-public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IAgriDebuggable {
+public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
 
 	public static final EnumFacing[] VALID_DIRECTIONS = new EnumFacing[]{
 			EnumFacing.NORTH,

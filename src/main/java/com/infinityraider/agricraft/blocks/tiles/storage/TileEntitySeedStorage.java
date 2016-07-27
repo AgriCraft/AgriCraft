@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.NBTHelper;
 import com.infinityraider.infinitylib.network.NetworkWrapper;
+import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -24,12 +25,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
+
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
-public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IAgriDebuggable, ISidedInventory {
+public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable, ISidedInventory {
 
 	private Item lockedSeed;
 	private int lockedSeedMeta;

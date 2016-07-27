@@ -12,6 +12,7 @@ import com.infinityraider.infinitylib.block.multiblock.IMultiBlockPartData;
 import com.infinityraider.infinitylib.block.multiblock.MultiBlockManager;
 import com.infinityraider.infinitylib.block.multiblock.MultiBlockPartData;
 import com.infinityraider.infinitylib.network.NetworkWrapper;
+import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,10 +27,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
-public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IAgriDebuggable {
+public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
 
 	public static final int SYNC_DELTA = Constants.HALF_BUCKET_mB;
 

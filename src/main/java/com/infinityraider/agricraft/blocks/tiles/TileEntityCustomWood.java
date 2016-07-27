@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.blocks.tiles;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.tile.TileEntityRotatableBase;
+import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -14,13 +15,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
 
 /**
  * This class represents the root tile entity for all AgriCraft custom WOOD
  * blocks. Through this class, the custom woods are remembered for the blocks. *
  */
-public class TileEntityCustomWood extends TileEntityRotatableBase implements IAgriDebuggable {
+public class TileEntityCustomWood extends TileEntityRotatableBase implements IDebuggable {
 	/**  A pointer to the the block the CustomWoodBlock is imitating. */
 	@Nonnull
 	private CustomWoodType woodType = CustomWoodType.getDefault();

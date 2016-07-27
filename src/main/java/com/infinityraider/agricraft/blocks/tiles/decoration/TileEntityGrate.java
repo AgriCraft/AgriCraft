@@ -2,16 +2,17 @@ package com.infinityraider.agricraft.blocks.tiles.decoration;
 
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
+import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
-import com.infinityraider.agricraft.api.misc.IAgriDebuggable;
+
 import com.infinityraider.agricraft.reference.AgriNBT;
 
-public class TileEntityGrate extends TileEntityCustomWood implements IAgriDebuggable {
+public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable {
 
 	private static final double WIDTH = 2 * Constants.UNIT;
 	private static final double LENGTH = 1;
