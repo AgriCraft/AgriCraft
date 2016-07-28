@@ -22,55 +22,40 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.GlStateManager;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileEntitySeedAnalyzer> {
 	private static ModelTechne<ModelSeedAnalyzer> MODEL_ANALYZER = new ModelTechne<>(new ModelSeedAnalyzer());
 	private static ModelTechne<ModelSeedAnalyzerBook> MODEL_BOOK = new ModelTechne<>(new ModelSeedAnalyzerBook());
 
-	private Map<EnumFacing, List<BakedQuad>> analyzerQuads;
-	private Map<EnumFacing, List<BakedQuad>> bookQuads;
+	private List<BakedQuad> analyzerQuads;
+	private List<BakedQuad> bookQuads;
 
 	public RenderSeedAnalyzer(BlockSeedAnalyzer block) {
 		super(block, new TileEntitySeedAnalyzer(), true, true, true);
-		this.analyzerQuads = new HashMap<>();
-		this.bookQuads = new HashMap<>();
 	}
 
 	private void renderModel(ITessellator tessellator, EnumFacing direction, boolean journal) {
-		if (!analyzerQuads.containsKey(direction)) {
-            tessellator.pushMatrix();
-            int angle = (90 * direction.getHorizontalIndex() + 180) % 360;
-            if(angle != 0) {
-                tessellator.translate(0.5, 0, 0.5);
-                tessellator.rotate(angle, 0, 1, 0);
-                tessellator.translate(-0.5, 0, -0.5);
-            }
-			tessellator.addQuads(MODEL_ANALYZER.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER),1));
-			analyzerQuads.put(direction, tessellator.getQuads());
-            tessellator.popMatrix();
-		} else {
-			tessellator.addQuads(analyzerQuads.get(direction));
+		tessellator.pushMatrix();
+		int angle = (90 * direction.getHorizontalIndex() + 180) % 360;
+		if(angle != 0) {
+			tessellator.translate(0.5, 0, 0.5);
+			tessellator.rotate(angle, 0, 1, 0);
+			tessellator.translate(-0.5, 0, -0.5);
 		}
+		if (analyzerQuads == null) {
+            analyzerQuads = MODEL_ANALYZER.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER),1);
+		}
+        tessellator.addQuads(analyzerQuads);
 		if(journal) {
-            if (!bookQuads.containsKey(direction)) {
-                tessellator.pushMatrix();
-                int angle = (90 * direction.getHorizontalIndex() + 180) % 360;
-                if(angle != 0) {
-                    tessellator.translate(0.5, 0, 0.5);
-                    tessellator.rotate(angle, 0, 1, 0);
-                    tessellator.translate(-0.5, 0, -0.5);
-                }
-                tessellator.addQuads(MODEL_BOOK.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER), Constants.UNIT));
-                bookQuads.put(direction, tessellator.getQuads());
-                tessellator.popMatrix();
-            } else {
-                tessellator.addQuads(bookQuads.get(direction));
+            if (bookQuads == null) {
+                bookQuads = MODEL_BOOK.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(BlockSeedAnalyzer.TEXTURE_ANALYZER), Constants.UNIT);
             }
+            tessellator.addQuads(bookQuads);
         }
+        tessellator.setApplyDiffuseLighting(false);
+		tessellator.popMatrix();
 	}
 
 	private void renderSeed(TileEntitySeedAnalyzer te, double x, double y, double z) {
@@ -117,6 +102,6 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 
 	@Override
 	public boolean applyAmbientOcclusion() {
-		return true;
+		return false;
 	}
 }
