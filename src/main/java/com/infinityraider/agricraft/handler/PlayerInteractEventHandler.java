@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.handler;
 import com.infinityraider.agricraft.blocks.decoration.BlockGrate;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -107,7 +107,7 @@ public class PlayerInteractEventHandler {
 			if (event.getWorld().isRemote) {
 				denyEvent(event, true);
 			}
-			event.getWorld().setBlockState(event.getPos(), com.infinityraider.agricraft.init.AgriBlocks.WATER_PAD.getDefaultState(), 3);
+			event.getWorld().setBlockState(event.getPos(), com.infinityraider.agricraft.init.AgriBlocks.getInstance().WATER_PAD.getDefaultState(), 3);
 			if (!player.capabilities.isCreativeMode) {
 				stack.damageItem(1, player);
 				event.setResult(Event.Result.ALLOW);

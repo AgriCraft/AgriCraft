@@ -4,10 +4,14 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -16,6 +20,9 @@ import net.minecraft.tileentity.TileEntity;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
+
+import java.util.Collections;
+import java.util.List;
 
 public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 	
@@ -29,6 +36,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 	public ItemTrowel() {
 		super("trowel", true, "", "full");
 		this.maxStackSize = 1;
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
 	//I'm overriding this just to be sure
@@ -77,4 +85,13 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 		return enableTrowel;
 	}
 
+	@Override
+	public List<String> getOreTags() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+		return Collections.emptyList();
+	}
 }

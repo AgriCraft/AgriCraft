@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.entity;
 
-import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.log.AgriLogger;
 import com.agricraft.agricore.plant.AgriMutation;
@@ -8,6 +7,7 @@ import com.agricraft.agricore.plant.AgriPlant;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
 import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
 import java.util.List;
+import com.infinityraider.infinitylib.network.NetworkWrapper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -20,6 +20,7 @@ public class PlayerConnectToServerHandler {
 	private static final AgriLogger log = AgriCore.getLogger("Agri-Net");
 
 	@SubscribeEvent
+	@SuppressWarnings("unused")
 	public void onConnect(PlayerEvent.PlayerLoggedInEvent event) {
 		EntityPlayerMP player = (EntityPlayerMP) event.player;
 		syncPlants(player);

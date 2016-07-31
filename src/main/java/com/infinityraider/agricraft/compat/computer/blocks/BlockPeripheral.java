@@ -1,23 +1,22 @@
 package com.infinityraider.agricraft.compat.computer.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.blocks.BlockBaseTile;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
-import com.infinityraider.agricraft.network.NetworkWrapper;
 import com.infinityraider.agricraft.compat.computer.renderers.RenderPeripheral;
-import com.infinityraider.agricraft.tiles.TileEntityBase;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
-import net.minecraft.block.Block;
+import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import com.infinityraider.infinitylib.network.NetworkWrapper;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
@@ -27,21 +26,19 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Optional.Interface(modid = "ComputerCraft", iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
-public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
-	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite textureTop;
-	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite textureSide;
-	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite textureBottom;
-	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite textureInner;
+public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPeripheral> {
+	public static ResourceLocation TEXTURE_TOP = new ResourceLocation("agricraft:blocks/peripheralTop");
+	public static ResourceLocation TEXTURE_SIDE = new ResourceLocation("agricraft:blocks/peripheralSide");
+	public static ResourceLocation TEXTURE_BOTTOM = new ResourceLocation("agricraft:blocks/peripheralBottom");
+	public static ResourceLocation TEXTURE_INNER = new ResourceLocation("agricraft:blocks/peripheralInner");
 
 	public BlockPeripheral() {
-		super(Material.IRON, "peripheral", false);
+		super("peripheral", Material.IRON);
 	}
 
 	@Override
@@ -56,13 +53,38 @@ public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 	}
 
 	@Override
-	public Class<? extends ItemBlock> getItemBlockClass() {
+	public ModelResourceLocation getBlockModelResourceLocation() {
 		return null;
 	}
 
 	@Override
-	public AxisAlignedBB getDefaultBoundingBox() {
-		return Block.FULL_BLOCK_AABB;
+	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state, TileEntityPeripheral tile) {
+		return false;
+	}
+
+	@Override
+	public List<ResourceLocation> getTextures() {
+		List<ResourceLocation> list = new ArrayList<>();
+		list.add(TEXTURE_TOP);
+		list.add(TEXTURE_SIDE);
+		list.add(TEXTURE_BOTTOM);
+		list.add(TEXTURE_INNER);
+		return list;
+	}
+
+	@Override
+	public List<String> getOreTags() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	protected InfinityProperty[] getPropertyArray() {
+		return new InfinityProperty[0];
+	}
+
+	@Override
+	public Class<? extends ItemBlock> getItemBlockClass() {
+		return null;
 	}
 
 	/*
@@ -129,18 +151,5 @@ public class BlockPeripheral extends BlockBaseTile<TileEntityPeripheral> {
 	@Override
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return true;
-	}
-
-	public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
-		if (side == null) {
-			return this.textureInner;
-		}
-		if (side == EnumFacing.UP) {
-			return this.textureTop;
-		}
-		if (side == EnumFacing.DOWN) {
-			return this.textureBottom;
-		}
-		return this.textureSide;
 	}
 }

@@ -134,7 +134,7 @@ public abstract class CropPlant implements IAgriPlant {
 
 	@Override
 	public final ItemStack getSeed() {
-		ItemStack stack = new ItemStack(AgriItems.AGRI_SEED);
+		ItemStack stack = new ItemStack(AgriItems.getInstance().AGRI_SEED);
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(AgriNBT.SEED, this.getId());
 		new PlantStats().writeToNBT(tag);
@@ -266,7 +266,7 @@ public abstract class CropPlant implements IAgriPlant {
      */
     @Override
     public boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state) {
-        return state.getValue(AgriProperties.GROWTHSTAGE) >= Constants.MATURE;
+        return AgriProperties.GROWTHSTAGE.getValue(state) >= Constants.MATURE;
     }
 
     /**

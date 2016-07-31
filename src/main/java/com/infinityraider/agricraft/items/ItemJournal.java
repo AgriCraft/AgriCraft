@@ -2,6 +2,9 @@ package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,12 +12,14 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import com.agricraft.agricore.core.AgriCore;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
@@ -26,6 +31,7 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
 	public ItemJournal() {
 		super("journal", true);
 		this.setMaxStackSize(1);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
 	//this has to return true to make it so the getContainerItem method gets called when this item is used in a recipe
@@ -105,4 +111,13 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
 		return list;
 	}
 
+	@Override
+	public List<String> getOreTags() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+		return Collections.emptyList();
+	}
 }

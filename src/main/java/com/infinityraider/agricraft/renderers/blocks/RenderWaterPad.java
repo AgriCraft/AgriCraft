@@ -3,12 +3,13 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.pad.AbstractBlockWaterPad;
 import com.infinityraider.agricraft.blocks.pad.BlockWaterPad;
 import com.infinityraider.agricraft.blocks.pad.BlockWaterPadFull;
-import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.tiles.TileEntityBase;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
+import com.infinityraider.infinitylib.block.tile.TileEntityBase;
+import com.infinityraider.infinitylib.render.block.RenderBlockBase;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemBlock;
@@ -25,31 +26,28 @@ import com.infinityraider.agricraft.utility.BaseIcons;
 import javax.annotation.Nullable;
 
 @SideOnly(Side.CLIENT)
-public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
+public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad, TileEntityBase> {
 
 	public RenderWaterPad(AbstractBlockWaterPad block) {
 		super(block, null, true, false, true);
 	}
 
 	@Override
-	public void renderStatic(ITessellator tess, TileEntityBase te, IBlockState state) {
+	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, AbstractBlockWaterPad block,
+								 @Nullable TileEntityBase tile, boolean dynamicRender, float partialTick, int destroyStage) {
 		// Check Full
-		final boolean full = te.getBlockType() instanceof BlockWaterPadFull;
-		// Get World
-		final World world = te.getWorld();
-		// Get Pos
-		final BlockPos pos = te.getPos();
+		final boolean full = block instanceof BlockWaterPadFull;
 		// Render
-		this.renderBase(tess, world, pos, full);
-		this.renderSide(tess, world, pos, full, AgriForgeDirection.NORTH);
-		this.renderSide(tess, world, pos, full, AgriForgeDirection.EAST);
-		this.renderSide(tess, world, pos, full, AgriForgeDirection.SOUTH);
-		this.renderSide(tess, world, pos, full, AgriForgeDirection.WEST);
+		this.renderBase(tessellator, world, pos, full);
+		this.renderSide(tessellator, world, pos, full, EnumFacing.NORTH);
+		this.renderSide(tessellator, world, pos, full, EnumFacing.EAST);
+		this.renderSide(tessellator, world, pos, full, EnumFacing.SOUTH);
+		this.renderSide(tessellator, world, pos, full, EnumFacing.WEST);
 	}
 
 	@Override
-	public void renderInventoryBlock(ITessellator tess, World world, IBlockState state, Block block, @Nullable TileEntityBase tile,
-									 ItemStack stack, EntityLivingBase entity) {
+	public void renderInventoryBlock(ITessellator tess, World world, IBlockState state, AbstractBlockWaterPad block, @Nullable TileEntityBase tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 
 		// Icon
 		final TextureAtlasSprite dirtIcon = BaseIcons.DIRT.getIcon();
@@ -73,7 +71,7 @@ public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
 
 		//tess.setBrightness(Blocks.farmland.getMixedBrightnessForBlock(world, pos));
 		tess.setColorRGBA(1, 1, 1, 1);
-		if (shouldRenderCorner(world, pos, full, AgriForgeDirection.WEST, AgriForgeDirection.NORTH)) {
+		if (shouldRenderCorner(world, pos, full, EnumFacing.WEST, EnumFacing.NORTH)) {
 			//renderer.setRenderBounds(0, 8 * u, 0, u, 15 * u, 1 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
@@ -91,7 +89,7 @@ public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
 			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 		}
 
-		if (shouldRenderCorner(world, pos, full, AgriForgeDirection.NORTH, AgriForgeDirection.EAST)) {
+		if (shouldRenderCorner(world, pos, full, EnumFacing.NORTH, EnumFacing.EAST)) {
 			//renderer.setRenderBounds(15 * u, 8 * u, 0, 16 * u, 15 * u, 1 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
@@ -109,7 +107,7 @@ public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
 			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 		}
 
-		if (shouldRenderCorner(world, pos, full, AgriForgeDirection.EAST, AgriForgeDirection.SOUTH)) {
+		if (shouldRenderCorner(world, pos, full, EnumFacing.EAST, EnumFacing.SOUTH)) {
 			//renderer.setRenderBounds(15 * u, 8 * u, 15 * u, 16 * u, 15 * u, 16 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
@@ -127,7 +125,7 @@ public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
 			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 		}
 
-		if (shouldRenderCorner(world, pos, full, AgriForgeDirection.SOUTH, AgriForgeDirection.WEST)) {
+		if (shouldRenderCorner(world, pos, full, EnumFacing.SOUTH, EnumFacing.WEST)) {
 			//renderer.setRenderBounds(0, 8 * u, 15 * u, u, 15 * u, 16 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
@@ -161,31 +159,31 @@ public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
 		}
 	}
 
-	private boolean shouldRenderCorner(IBlockAccess world, BlockPos pos, boolean full, AgriForgeDirection dir1, AgriForgeDirection dir2) {
-		Block block = world.getBlockState(pos.add(dir1.offsetX, 0, dir1.offsetZ)).getBlock();
+	private boolean shouldRenderCorner(IBlockAccess world, BlockPos pos, boolean full, EnumFacing dir1, EnumFacing dir2) {
+		Block block = world.getBlockState(pos.add(dir1.getFrontOffsetX(), 0, dir1.getFrontOffsetZ())).getBlock();
 		boolean flag1 = block instanceof BlockWaterPad;
 		boolean flag2 = block instanceof BlockWaterPadFull;
 		if (!flag1 || (full != flag2)) {
 			return true;
 		}
-		block = world.getBlockState(pos.add(dir2.offsetX, 0, dir2.offsetZ)).getBlock();
+		block = world.getBlockState(pos.add(dir2.getFrontOffsetX(), 0, dir2.getFrontOffsetZ())).getBlock();
 		flag1 = block instanceof BlockWaterPad;
 		flag2 = block instanceof BlockWaterPadFull;
 		if (!flag1 || (full != flag2)) {
 			return true;
 		}
-		block = world.getBlockState(pos.add(dir1.offsetX + dir2.offsetX, 0, dir1.offsetZ + dir2.offsetZ)).getBlock();
+		block = world.getBlockState(pos.add(dir1.getFrontOffsetX() + dir2.getFrontOffsetX(), 0, dir1.getFrontOffsetZ() + dir2.getFrontOffsetZ())).getBlock();
 		flag1 = block instanceof BlockWaterPad;
 		flag2 = block instanceof BlockWaterPadFull;
 		return !flag1 || (full != flag2);
 	}
 
-	private void renderSide(ITessellator tess, IBlockAccess world, BlockPos pos, boolean full, AgriForgeDirection side) {
-		int xLower = Math.max(0, 1 + 14 * side.offsetX);
-		int xUpper = Math.min(16, 15 + 14 * side.offsetX);
-		int zLower = Math.max(0, 1 + 14 * side.offsetZ);
-		int zUpper = Math.min(16, 15 + 14 * side.offsetZ);
-		Block block = world.getBlockState(pos.add(side.offsetX, 0, side.offsetZ)).getBlock();
+	private void renderSide(ITessellator tess, IBlockAccess world, BlockPos pos, boolean full, EnumFacing side) {
+		int xLower = Math.max(0, 1 + 14 * side.getFrontOffsetX());
+		int xUpper = Math.min(16, 15 + 14 * side.getFrontOffsetX());
+		int zLower = Math.max(0, 1 + 14 * side.getFrontOffsetZ());
+		int zUpper = Math.min(16, 15 + 14 * side.getFrontOffsetZ());
+		Block block = world.getBlockState(pos.add(side.getFrontOffsetX(), 0, side.getFrontOffsetZ())).getBlock();
 		if (block != null && block instanceof BlockWaterPad) {
 			boolean flag = block instanceof BlockWaterPadFull;
 			if (full) {
@@ -220,5 +218,10 @@ public class RenderWaterPad extends RenderBlockBase<TileEntityBase> {
 	@Override
 	public TextureAtlasSprite getIcon() {
 		return null;
+	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return true;
 	}
 }

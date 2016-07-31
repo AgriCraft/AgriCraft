@@ -1,11 +1,12 @@
 package com.infinityraider.agricraft.network;
 
+import com.infinityraider.infinitylib.network.MessageBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageSendNEISetting extends MessageBase {
+public class MessageSendNEISetting extends MessageBase<IMessage> {
     private String className;
     private boolean value;
 

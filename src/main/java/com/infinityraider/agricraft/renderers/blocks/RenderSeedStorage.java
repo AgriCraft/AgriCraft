@@ -2,35 +2,26 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.storage.BlockSeedStorage;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.RenderUtil;
-import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
 
 @SideOnly(Side.CLIENT)
-public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStorage> {
+public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, TileEntitySeedStorage> {
 
 	public RenderSeedStorage(BlockSeedStorage block) {
 		super(block, new TileEntitySeedStorage(), true, true, true);
-	}
-
-	@Override
-	protected void renderStaticWood(ITessellator tess, TileEntitySeedStorage te, IBlockState state, TextureAtlasSprite sprite) {
-		renderSides(tess, sprite);
-	}
-
-	@Override
-	protected void renderDynamicWood(ITessellator tess, TileEntitySeedStorage te, float partialTicks, int destroyStage, TextureAtlasSprite sprite) {
-		if (te.hasLockedSeed()) {
-			drawSeed(te.getLockedSeed());
-		}
 	}
 
 	private void renderSides(ITessellator tessellator, TextureAtlasSprite matIcon) {
@@ -66,12 +57,44 @@ public class RenderSeedStorage extends RenderBlockCustomWood<TileEntitySeedStora
 	 * Render the seed as TESR
 	 */
 	private void drawSeed(ItemStack seed) {
-		float a = 180;
+		if(seed == null || seed.getItem() == null) {
+			return;
+		}
+
 		float dx = 8 * Constants.UNIT;
 		float dy = 5 * Constants.UNIT;
 		float dz = 0.99F * Constants.UNIT;
 		float f = 0.75F;
 		
-		RenderUtil.renderItemStack(seed, dx, dy, dz, f, false);
+		this.renderItemStack(seed, dx, dy, dz, f, false);
+	}
+
+	@Override
+	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockSeedStorage block,
+										TileEntitySeedStorage tile, TextureAtlasSprite icon, boolean dynamic) {
+        int angle = 90 * tile.getOrientation().getHorizontalIndex();
+        tess.pushMatrix();
+        if(angle != 0) {
+            tess.translate(0.5, 0, 0.5);
+            tess.rotate(angle, 0, 1, 0);
+            tess.translate(-0.5, 0, -0.5);
+        }
+		if(dynamic) {
+			drawSeed(tile.getLockedSeed());
+		} else {
+			renderSides(tess, icon);
+		}
+        tess.popMatrix();
+	}
+
+	@Override
+	protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockSeedStorage block, TileEntitySeedStorage tile,
+											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+		renderSides(tess, icon);
+	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return true;
 	}
 }

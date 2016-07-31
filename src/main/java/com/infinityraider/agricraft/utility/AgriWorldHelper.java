@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -36,13 +37,13 @@ public class AgriWorldHelper {
 	}
 	
 	public static final <T> List<T> getTileNeighbors(World world, BlockPos pos, Class<T> type) {
-		return getTileNeighbors(world, pos, type, AgriForgeDirection.NORTH, AgriForgeDirection.EAST, AgriForgeDirection.SOUTH, AgriForgeDirection.WEST);
+		return getTileNeighbors(world, pos, type, EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST);
 	}
 
-	public static final <T> List<T> getTileNeighbors(World world, BlockPos pos, Class<T> type, AgriForgeDirection... dirs) {
+	public static final <T> List<T> getTileNeighbors(World world, BlockPos pos, Class<T> type, EnumFacing... dirs) {
 		List<T> neighbours = new ArrayList<>();
-		for (AgriForgeDirection dir : dirs) {
-			TileEntity te = world.getTileEntity(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
+		for (EnumFacing dir : dirs) {
+			TileEntity te = world.getTileEntity(pos.add(dir.getFrontOffsetX(), dir.getFrontOffsetY(), dir.getFrontOffsetZ()));
 			if (te != null && type.isAssignableFrom(te.getClass())) {
 				neighbours.add(type.cast(te));
 			}

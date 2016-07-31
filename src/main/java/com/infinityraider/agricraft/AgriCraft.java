@@ -1,26 +1,20 @@
 package com.infinityraider.agricraft;
 
 import com.infinityraider.agricraft.core.CoreHandler;
-import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.handler.GuiHandler;
-import com.infinityraider.agricraft.init.*;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.init.AgriItems;
-import com.infinityraider.agricraft.network.NetworkWrapper;
+import com.infinityraider.agricraft.network.*;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.apiimpl.PluginHandler;
-import com.infinityraider.agricraft.apiimpl.StatRegistry;
-import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.infinitylib.InfinityMod;
+import com.infinityraider.infinitylib.network.INetworkWrapper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.ArrayList;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -56,57 +50,64 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 		name = Reference.MOD_NAME,
 		version = Reference.MOD_VERSION,
 		guiFactory = Reference.GUI_FACTORY_CLASS,
-		updateJSON = Reference.UPDATE_URL
+		updateJSON = Reference.UPDATE_URL,
+        dependencies = "required-after:infinitylib"
 )
-public class AgriCraft {
+public class AgriCraft extends InfinityMod {
 	
     @Mod.Instance(Reference.MOD_ID)
     public static AgriCraft instance;
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
+
+    @Override
+    public IProxy proxy() {
+        return proxy;
+    }
+
+    @Override
+    public String getModId() {
+        return Reference.MOD_ID;
+    }
+
+    @Override
+    public Object getModBlockRegistry() {
+        return AgriBlocks.getInstance();
+    }
+
+    @Override
+    public Object getModItemRegistry() {
+        return AgriItems.getInstance();
+    }
+
+    @Override
+    public void registerMessages(INetworkWrapper wrapper) {
+        wrapper.registerMessage(MessageContainerSeedStorage.class);
+        wrapper.registerMessage(MessageFertilizerApplied.class);
+        wrapper.registerMessage(MessageGuiSeedStorageClearSeed.class);
+        wrapper.registerMessage(MessagePeripheralCheckNeighbours.class);
+        wrapper.registerMessage(MessageSendNEISetting.class);
+        wrapper.registerMessage(MessageSyncFluidLevel.class);
+        wrapper.registerMessage(MessageTileEntitySeedStorage.class);
+    }
 	
     @Mod.EventHandler
     @SuppressWarnings("unused")
-    public static void preInit(FMLPreInitializationEvent event) {
-		// Core
-		CoreHandler.preinit(event);
-        AgriCore.getLogger("AgriCraft").debug("Starting Pre-Initialization");
-		MinecraftForge.EVENT_BUS.register(instance);
-        NetworkWrapper.getInstance().initMessages();
-        proxy.initConfiguration(event);
-		StatRegistry.getInstance().registerAdapter(new PlantStats());
-        AgriBlocks.init();
-		AgriItems.init();
-		PluginHandler.preInit(event);
-        proxy.registerRenderers();
-        AgriCore.getLogger("AgriCraft").debug("Pre-Initialization Complete");
+    public void onPreInit(FMLPreInitializationEvent event) {
+		super.preInit(event);
     }
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
-    public static void init(FMLInitializationEvent event) {
-        AgriCore.getLogger("AgriCraft").debug("Starting Initialization");
-        proxy.registerEventHandlers();
-        NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-		AgriEntities.init();
-		PluginHandler.init();
-        AgriCore.getLogger("AgriCraft").debug("Initialization Complete");
+    public void onInit(FMLInitializationEvent event) {
+        super.init(event);
     }
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
-    public static void postInit(FMLPostInitializationEvent event) {
-        AgriCore.getLogger("AgriCraft").debug("Starting Post-Initialization");
-		// Core
-		CoreHandler.postInit(event);
-		// Plugins
-		PluginHandler.postInit();
-        //Have to do this in postInit because some mods don't register their items/blocks until init
-        AgriRecipes.init();
-        GrowthRequirementHandler.init();
-        WorldGen.init();
-        AgriCore.getLogger("AgriCraft").debug("Post-Initialization Complete");
+    public void onPostInit(FMLPostInitializationEvent event) {
+        super.postInit(event);
     }
 
     @Mod.EventHandler
@@ -129,5 +130,4 @@ public class AgriCraft {
 		CoreHandler.loadTextures(e.getMap()::registerSprite);
 		PluginHandler.loadTextures(e.getMap()::registerSprite);
 	}
-
 }

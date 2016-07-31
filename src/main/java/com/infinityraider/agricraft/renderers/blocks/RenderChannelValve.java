@@ -2,15 +2,15 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
-import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelValve;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import net.minecraft.block.Block;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelValve;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,15 +18,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.utility.BaseIcons;
 
 @SideOnly(Side.CLIENT)
-public class RenderChannelValve extends RenderChannel<TileEntityChannelValve> {
+public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, TileEntityChannelValve> {
 
 	public RenderChannelValve(BlockWaterChannelValve block) {
 		super(block, new TileEntityChannelValve());
 	}
 
 	@Override
-	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, Block block, TileEntityChannelValve tile,
-			ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
+	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelValve block, TileEntityChannelValve tile,
+										 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
 
 		final TextureAtlasSprite sepIcon = BaseIcons.IRON_BLOCK.getIcon();
 
@@ -53,33 +53,87 @@ public class RenderChannelValve extends RenderChannel<TileEntityChannelValve> {
 	}
 
 	@Override
-	protected void renderSideRotated(ITessellator tessellator, TileEntityChannelValve channel, AgriForgeDirection dir, int code, TextureAtlasSprite matIcon) {
+	protected void renderSide(ITessellator tessellator, TileEntityChannelValve channel, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
+		super.renderSide(tessellator, channel, dir, connect, matIcon);
 		if (channel.getWorld() != null) {
-			IBlockState neighbour = channel.getWorld().getBlockState(channel.getPos().add(dir.offsetX, 0, dir.offsetZ));
-			if (neighbour != null) {
-				if (neighbour instanceof BlockLever && neighbour.getValue(BlockLever.FACING).getFacing() == dir.getEnumFacing()) {
-					tessellator.drawScaledPrism(5, 4, 0, 11, 12, 4, matIcon);
-				}
-			}
+            IBlockState neighbour = channel.getWorld().getBlockState(channel.getPos().add(dir.getFrontOffsetX(), 0, dir.getFrontOffsetZ()));
+            if (neighbour.getBlock() instanceof BlockLever && neighbour.getValue(BlockLever.FACING).getFacing() == dir) {
+                renderConnector(tessellator, dir, matIcon);
+            }
+        }
+		if (connect) {
+			renderSeparator(tessellator, channel, dir, matIcon, BaseIcons.IRON_BLOCK.getIcon());
 		}
-		if (code != 0) {
-			renderSeparator(tessellator, channel, matIcon, BaseIcons.IRON_BLOCK.getIcon());
-		}
-		super.renderSideRotated(tessellator, channel, dir, code, matIcon);
 	}
 
-	protected void renderSeparator(ITessellator tessellator, TileEntityChannelValve valve, TextureAtlasSprite matIcon, TextureAtlasSprite sepIcon) {
-		if (valve.isPowered()) {
-			//Draw closed separator.
-			tessellator.drawScaledPrism(6, 5, 0, 10, 12, 2, sepIcon);
-		} else {
-			//Draw open separator.
-			tessellator.drawScaledPrism(6, 1, 0, 10, 5.001F, 2, sepIcon);
-			tessellator.drawScaledPrism(6, 12, 0, 10, 15, 2, sepIcon);
-		}
-		//Draw rails.
-		tessellator.drawScaledPrism(3, 0, 0, 6, 16, 2, matIcon);
-		tessellator.drawScaledPrism(10, 0, 0, 13, 16, 2, matIcon);
+    private void renderConnector(ITessellator tessellator, EnumFacing dir, TextureAtlasSprite matIcon) {
+        switch(dir) {
+            case EAST:
+                //positive x
+                tessellator.drawScaledPrism(12, 4, 5, 16, 12, 11, matIcon);
+                break;
+            case WEST:
+                //negative x
+                tessellator.drawScaledPrism(0, 4, 5, 4, 12, 11, matIcon);
+                break;
+            case NORTH:
+                //negative z
+                tessellator.drawScaledPrism(5, 4, 0, 11, 12, 4, matIcon);
+                break;
+            case SOUTH:
+                //positive z
+                tessellator.drawScaledPrism(5, 4, 12, 11, 12, 16, matIcon);
+                break;
+        }
+    }
+
+	private void renderSeparator(ITessellator tessellator, TileEntityChannelValve valve, EnumFacing dir, TextureAtlasSprite matIcon, TextureAtlasSprite sepIcon) {
+        switch(dir) {
+            case EAST:
+                //positive x
+                tessellator.drawScaledPrism(14, 0, 3, 16, 16, 6, matIcon);
+                tessellator.drawScaledPrism(14, 0, 10, 16, 16, 13, matIcon);
+                if(valve.isPowered()) {
+                    tessellator.drawScaledPrism(14, 5, 6, 16, 12, 10, sepIcon);
+                } else {
+                    tessellator.drawScaledPrism(14, 1, 6, 16, 5.001F, 10, sepIcon);
+                    tessellator.drawScaledPrism(14, 12, 6, 16, 15, 10, sepIcon);
+                }
+                break;
+            case WEST:
+                //negative x
+                tessellator.drawScaledPrism(0, 0, 3, 2, 16, 6, matIcon);
+                tessellator.drawScaledPrism(0, 0, 10, 2, 16, 13, matIcon);
+                if(valve.isPowered()) {
+                    tessellator.drawScaledPrism(0, 5, 6, 2, 12, 10, sepIcon);
+                } else {
+                    tessellator.drawScaledPrism(0, 1, 6, 2, 5.001F, 10, sepIcon);
+                    tessellator.drawScaledPrism(0, 12, 6, 2, 15, 10, sepIcon);
+                }
+                break;
+            case NORTH:
+                //negative z
+                tessellator.drawScaledPrism(3, 0, 0, 6, 16, 2, matIcon);
+                tessellator.drawScaledPrism(10, 0, 0, 13, 16, 2, matIcon);
+                if(valve.isPowered()) {
+                    tessellator.drawScaledPrism(6, 5, 0, 10, 12, 2, sepIcon);
+                } else {
+                    tessellator.drawScaledPrism(6, 1, 0, 10, 5.001F, 2, sepIcon);
+                    tessellator.drawScaledPrism(6, 12, 0, 10, 15, 2, sepIcon);
+                }
+                break;
+            case SOUTH:
+                //positive z
+                tessellator.drawScaledPrism(3, 0, 14, 6, 16, 16, matIcon);
+                tessellator.drawScaledPrism(10, 0, 14, 13, 16, 16, matIcon);
+                if(valve.isPowered()) {
+                    tessellator.drawScaledPrism(6, 5, 14, 10, 12, 16, sepIcon);
+                } else {
+                    tessellator.drawScaledPrism(6, 1, 14, 10, 5.001F, 16, sepIcon);
+                    tessellator.drawScaledPrism(6, 12, 14, 10, 15, 16, sepIcon);
+                }
+                break;
+        }
 	}
 
 }

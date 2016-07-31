@@ -1,8 +1,6 @@
 package com.infinityraider.agricraft.items.blocks;
 
-import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import com.infinityraider.agricraft.utility.PlayerHelper;
+import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,14 +40,14 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
         if (super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) {
             TileEntityGrate grate = (TileEntityGrate) world.getTileEntity(pos);
             if (side == EnumFacing.UP || side == EnumFacing.DOWN) {
-                AgriForgeDirection dir = PlayerHelper.getPlayerFacing(player);
-                if (dir == AgriForgeDirection.NORTH || dir == AgriForgeDirection.SOUTH) {
-                    setOffsetAndOrientation(grate, hitZ, AgriForgeDirection.NORTH);
+                EnumFacing dir = player.getHorizontalFacing();
+                if (dir == EnumFacing.NORTH || dir == EnumFacing.SOUTH) {
+                    setOffsetAndOrientation(grate, hitZ, EnumFacing.NORTH);
                 } else {
-                    setOffsetAndOrientation(grate, hitX, AgriForgeDirection.EAST);
+                    setOffsetAndOrientation(grate, hitX, EnumFacing.EAST);
                 }
             } else {
-                setOffsetAndOrientation(grate, hitY, AgriForgeDirection.DOWN);
+                setOffsetAndOrientation(grate, hitY, EnumFacing.DOWN);
             }
             return true;
         } else {
@@ -64,7 +62,7 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
      * @param hit the hit location, on the axis matching the orientation.
      * @param orientation the orientation.
      */
-    private static void setOffsetAndOrientation(TileEntityGrate grate, float hit, AgriForgeDirection orientation) {
+    private static void setOffsetAndOrientation(TileEntityGrate grate, float hit, EnumFacing orientation) {
         grate.setOrientation(orientation);
         if (hit <= 0.3333F) {
             grate.setOffSet((short) 0);

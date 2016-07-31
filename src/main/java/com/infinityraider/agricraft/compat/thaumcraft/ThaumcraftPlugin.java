@@ -25,7 +25,7 @@ public class ThaumcraftPlugin implements IAgriPlugin {
         FMLInterModComms.sendMessage(
 				"Thaumcraft",
 				"harvestClickableCrop",
-				new ItemStack(AgriBlocks.CROP, 1, Constants.MATURE)
+				new ItemStack(AgriBlocks.getInstance().CROP, 1, Constants.MATURE)
 		);
 
     }

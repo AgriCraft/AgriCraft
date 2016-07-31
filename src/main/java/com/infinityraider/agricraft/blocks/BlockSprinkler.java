@@ -2,20 +2,23 @@ package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.tabs.AgriTabs;
+import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
-import com.infinityraider.agricraft.tiles.TileEntityBase;
-import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntitySprinkler;
+import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -27,7 +30,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 
-public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
+import java.util.Collections;
+import java.util.List;
+
+public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprinkler> {
 
 	public static final AxisAlignedBB BOX = new AxisAlignedBB(
 			Constants.UNIT * Constants.QUARTER,
@@ -39,7 +45,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 	);
 
 	public BlockSprinkler() {
-		super(Material.IRON, "sprinkler", false);
+		super("sprinkler", Material.IRON);
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
@@ -118,6 +124,22 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelResourceLocation getBlockModelResourceLocation() {
+		return new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + getInternalName());
+	}
+
+	@Override
+	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state, TileEntitySprinkler tile) {
+		return true;
+	}
+
+	@Override
+	public List<ResourceLocation> getTextures() {
+		return Collections.emptyList();
+	}
+
+	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 		return world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockWaterChannel && state.getBlock().getMaterial(state) == Material.AIR;
@@ -128,23 +150,28 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
 		return null;
 	}
 
-	@Override
-	public AxisAlignedBB getDefaultBoundingBox() {
-		return BOX;
-	}
-
 	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
+	public ResourceLocation getIcon(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
 		TileEntity channel = world.getTileEntity(pos.add(0, 1, 0));
 		if (channel != null && channel instanceof TileEntityChannel) {
-			return ((TileEntityChannel) channel).getTexture(state, side);
+			return ((TileEntityChannel) channel).getTexture();
 		}
-		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+		return null;
 	}
 
 	@Override
 	public boolean isEnabled() {
 		return !AgriCraftConfig.disableIrrigation;
+	}
+
+	@Override
+	public List<String> getOreTags() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	protected InfinityProperty[] getPropertyArray() {
+		return new InfinityProperty[0];
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.items.blocks;
 
-import com.infinityraider.agricraft.tabs.AgriTabs;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 

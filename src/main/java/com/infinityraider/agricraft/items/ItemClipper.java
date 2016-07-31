@@ -4,16 +4,21 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collections;
 import java.util.List;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.tileentity.TileEntity;
@@ -31,6 +36,7 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem {
 	public ItemClipper() {
 		super("clipper", true);
 		this.setMaxStackSize(1);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
 	@Override
@@ -70,4 +76,13 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem {
 		return enableClipper;
 	}
 
+	@Override
+	public List<String> getOreTags() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+		return Collections.emptyList();
+	}
 }

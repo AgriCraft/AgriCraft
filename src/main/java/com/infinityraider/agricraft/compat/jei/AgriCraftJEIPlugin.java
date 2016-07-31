@@ -41,10 +41,10 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 				new ProduceRecipeHandler()
 		);
 
-		registry.addRecipeCategoryCraftingItem(new ItemStack(AgriItems.CROPS), CATEGORY_MUTATION, CATEGORY_PRODUCE);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(AgriItems.getInstance().CROPS), CATEGORY_MUTATION, CATEGORY_PRODUCE);
 
-		jeiHelpers.getSubtypeRegistry().useNbtForSubtypes(AgriItems.AGRI_SEED);
-		jeiHelpers.getSubtypeRegistry().registerNbtInterpreter(AgriItems.AGRI_SEED, (stack) -> {
+		jeiHelpers.getSubtypeRegistry().useNbtForSubtypes(AgriItems.getInstance().AGRI_SEED);
+		jeiHelpers.getSubtypeRegistry().registerNbtInterpreter(AgriItems.getInstance().AGRI_SEED, (stack) -> {
 			AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
 			return seed == null ? "generic" : seed.getPlant().getId();
 		});

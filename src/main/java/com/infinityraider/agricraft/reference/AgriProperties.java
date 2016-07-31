@@ -1,40 +1,23 @@
 package com.infinityraider.agricraft.reference;
 
-import com.infinityraider.agricraft.utility.AxisPosition;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.properties.PropertyInteger;
 
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.util.EnumFacing;
 
 /**
- * A class containing AgriCraft block states.
- * 
- * These are useless since the crop block far exceeds 16 combinations.
- * 
+ * A class containing AgriCraft block state properties, most of these are unlisted
  */
 public interface AgriProperties {
-	
-	
-	PropertyBool JOURNAL = PropertyBool.create("journal");
-    PropertyDirection FACING = PropertyDirection.create("facing");
-	
-	PropertyBool CROSSCROP = PropertyBool.create("crosscrop");
-	PropertyBool PLANT = PropertyBool.create("plant");
-    PropertyInteger GROWTHSTAGE = PropertyInteger.create("age", 0, 7);
+	InfinityProperty<Boolean> JOURNAL = new InfinityProperty<>(PropertyBool.create("journal"), false);
+	InfinityProperty<EnumFacing> FACING = new InfinityProperty<>(PropertyDirection.create("facing"), EnumFacing.NORTH);
 
-	PropertyInteger VINES = PropertyInteger.create("vines", 0, 3);
-	PropertyEnum<AxisPosition> AXIS_POS = PropertyEnum.create("axis_pos", AxisPosition.class);
+	InfinityProperty<Boolean> CROSSCROP = new InfinityProperty<>(PropertyBool.create("crosscrop"), false);
+	InfinityProperty<Boolean> WEEDS = new InfinityProperty<>(PropertyBool.create("weeds"), false);
+	InfinityProperty<Boolean> PLANT = new InfinityProperty<>(PropertyBool.create("plant"), false);
+    InfinityProperty<Integer> GROWTHSTAGE = new InfinityProperty<>(PropertyInteger.create("age", 0, 7), 0);
 
-	PropertyEnum<WoodType> WOOD_TYPE = PropertyEnum.create("wood_type", WoodType.class);
-	
-	// Tank
-	PropertyInteger NORTH = PropertyInteger.create("north", 0, 2);
-	PropertyInteger EAST = PropertyInteger.create("east", 0, 2);
-	PropertyInteger SOUTH = PropertyInteger.create("south", 0, 2);
-	PropertyInteger WEST = PropertyInteger.create("west", 0, 2);
-	
-	PropertyInteger UP = PropertyInteger.create("up", 0, 2);
-	PropertyInteger DOWN = PropertyInteger.create("down", 0, 2);
-
+	InfinityProperty<Integer> VINES = new InfinityProperty<>(PropertyInteger.create("age", 0, 3), 0);
 }

@@ -70,7 +70,6 @@ public final class CoreHandler {
 				.filter(AGRI_FOLDER_PATTERN.asPredicate())
 				.forEach(r -> ResourceHelper.copyResource(r, configDir.resolve(r), false)
 				);
-
 	}
 
 	@EventHandler

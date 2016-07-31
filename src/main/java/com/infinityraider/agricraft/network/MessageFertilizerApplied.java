@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.network;
 
+import com.infinityraider.infinitylib.network.MessageBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
@@ -10,7 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 
-public class MessageFertilizerApplied extends MessageBase {
+public class MessageFertilizerApplied extends MessageBase<IMessage> {
     private BlockPos pos;
     private Item fertilizer;
     private int meta;

@@ -1,6 +1,8 @@
 package com.infinityraider.agricraft.blocks.pad;
 
 import net.minecraft.block.material.Material;
+
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +19,9 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Collections;
+import java.util.List;
+
 public class BlockWaterPad extends AbstractBlockWaterPad {
 	
 	public BlockWaterPad() {
@@ -25,6 +30,16 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
 
     protected BlockWaterPad(Material mat) {
         super(mat, "normal");
+    }
+
+    @Override
+    public List<String> getOreTags() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    protected InfinityProperty[] getPropertyArray() {
+        return new InfinityProperty[0];
     }
 
     @Override
@@ -98,5 +113,4 @@ public class BlockWaterPad extends AbstractBlockWaterPad {
 
     @Override
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {return true;}
-
 }

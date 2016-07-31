@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.items.blocks;
 
-import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.utility.NBTHelper;
+import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.BaseIcons;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -45,7 +44,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 		this.getSubItems(list);
 	}
 
@@ -58,10 +57,10 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 	 * @param list the list to populate.
 	 */
 	public void getSubItems(List<ItemStack> list) {
-		for (ItemStack e : BlockCustomWood.getWoodTypes()) {
-			ItemStack varient = new ItemStack(this.block, 1, 0);
-			varient.setTagCompound(NBTHelper.getMaterialTag(e));
-			list.add(varient);
+		for (CustomWoodType type : CustomWoodType.getAllTypes()) {
+			ItemStack variant = new ItemStack(this.block, 1, 0);
+			variant.setTagCompound(type.writeToNBT(new NBTTagCompound()));
+			list.add(variant);
 		}
 	}
 

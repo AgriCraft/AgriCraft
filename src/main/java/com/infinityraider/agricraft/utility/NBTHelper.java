@@ -1,7 +1,5 @@
 package com.infinityraider.agricraft.utility;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -9,19 +7,6 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import javax.annotation.Nullable;
 
 public abstract class NBTHelper {
-
-	public static NBTTagCompound getMaterialTag(ItemStack stack) {
-		NBTTagCompound tag = null;
-		if (stack != null && stack.getItem() != null) {
-			Block block = (((ItemBlock) stack.getItem()).block);
-			if (block != null) {
-				tag = new NBTTagCompound();
-				tag.setString(AgriNBT.MATERIAL, block.getRegistryName().toString());
-				tag.setInteger(AgriNBT.MATERIAL_META, stack.getMetadata());
-			}
-		}
-		return tag;
-	}
 
 	public static boolean listContainsStack(NBTTagList list, ItemStack stack) {
 		if (stack == null || stack.getItem() == null) {

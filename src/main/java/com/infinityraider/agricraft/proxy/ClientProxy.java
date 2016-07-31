@@ -1,99 +1,20 @@
 package com.infinityraider.agricraft.proxy;
 
-import com.infinityraider.agricraft.blocks.BlockBase;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.MissingJsonHandler;
 import com.infinityraider.agricraft.handler.SoundHandler;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.init.AgriBlocks;
-import com.infinityraider.agricraft.init.AgriItems;
-import com.infinityraider.agricraft.items.ItemBase;
-import com.infinityraider.agricraft.renderers.blocks.BlockRendererRegistry;
-import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.util.ReflectionHelper;
-import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.renderers.items.ItemRendererRegistry;
+import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.ModelErrorSuppressor;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.b3d.B3DLoader;
-import net.minecraftforge.client.model.obj.OBJLoader;
+import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ClientProxy implements IProxy {
-
-	@Override
-	public Side getPhysicalSide() {
-		return Side.CLIENT;
-	}
-
-	@Override
-	public Side getEffectiveSide() {
-		return FMLCommonHandler.instance().getEffectiveSide();
-	}
-
-	@Override
-	public EntityPlayer getClientPlayer() {
-		return Minecraft.getMinecraft().thePlayer;
-	}
-
-	@Override
-	public World getClientWorld() {
-		return Minecraft.getMinecraft().theWorld;
-	}
-
-	@Override
-	public World getWorldByDimensionId(int dimension) {
-		return FMLClientHandler.instance().getServer().worldServerForDimension(dimension);
-	}
-
-	@Override
-	public Entity getEntityById(World world, int id) {
-		return world.getEntityByID(id);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public void registerRenderers() {
-
-		// Init Model Loader
-		ModelLoaderRegistry.registerLoader(ItemRendererRegistry.getInstance());
-
-		// Init OBJ Loader
-		OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
-		B3DLoader.INSTANCE.addDomain(Reference.MOD_ID);
-
-		//BLOCKS
-		//------
-		ReflectionHelper.forEachIn(AgriBlocks.class, BlockBase.class, (block) -> {
-				BlockRendererRegistry.getInstance().registerCustomBlockRenderer(block);
-		});
-
-		//ITEMS
-		//-----
-		ReflectionHelper.forEachIn(AgriItems.class, ItemBase.class, (item) -> {
-			item.registerItemRenderer();
-		});
-
-		//villager
-		if (!AgriCraftConfig.disableWorldGen && AgriCraftConfig.villagerEnabled) {
-			//TODO: register villager skin
-			//VillagerRegistry.instance().registerVillagerSkin(78943, new ResourceLocation("textures/entity/villager/farmer.png"));  //For now, it uses the texture for the vanilla farmer
-		}
-
-		AgriCore.getLogger("AgriCraft").debug("Renderers registered");
-	}
-
+@SuppressWarnings("unused")
+public class ClientProxy implements IClientProxyBase, IProxy {
 	@Override
 	public void registerEventHandlers() {
 		IProxy.super.registerEventHandlers();
@@ -109,23 +30,13 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
-	public void registerVillagerSkin(int id, String resource) {
-		//TODO
-		//VillagerRegistry.instance().registerVillagerSkin(id, new ResourceLocation(Reference.MOD_ID, resource));
-	}
-
-	@Override
 	public void initConfiguration(FMLPreInitializationEvent event) {
 		IProxy.super.initConfiguration(event);
 		MinecraftForge.EVENT_BUS.register(new ModelErrorSuppressor());
 	}
 
 	@Override
-	public void queueTask(Runnable task) {
-		if (getEffectiveSide() == Side.CLIENT) {
-			Minecraft.getMinecraft().addScheduledTask(task);
-		} else {
-			FMLClientHandler.instance().getServer().addScheduledTask(task);
-		}
+	public void initCustomWoodTypes() {
+		CustomWoodType.initClient();
 	}
 }

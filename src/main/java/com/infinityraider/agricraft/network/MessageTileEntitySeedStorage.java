@@ -2,8 +2,9 @@ package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
-import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
-import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.blocks.tiles.storage.SeedStorageSlot;
+import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.infinitylib.network.MessageBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,7 +16,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageTileEntitySeedStorage extends MessageBase {
+public class MessageTileEntitySeedStorage extends MessageBase<IMessage> {
 
 	private BlockPos pos;
 	private int slotId;

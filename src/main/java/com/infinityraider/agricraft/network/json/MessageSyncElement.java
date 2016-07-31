@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.network.json;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.network.MessageBase;
+import com.infinityraider.infinitylib.network.MessageBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;

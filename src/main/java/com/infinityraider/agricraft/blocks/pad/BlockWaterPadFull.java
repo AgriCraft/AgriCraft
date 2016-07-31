@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks.pad;
 
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -19,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collections;
 import java.util.List;
 
 public class BlockWaterPadFull extends AbstractBlockWaterPad {
@@ -70,6 +72,16 @@ public class BlockWaterPadFull extends AbstractBlockWaterPad {
     @Override
     public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
         return false;
+    }
+
+    @Override
+    public List<String> getOreTags() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    protected InfinityProperty[] getPropertyArray() {
+        return new InfinityProperty[0];
     }
 
     @Override

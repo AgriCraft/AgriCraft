@@ -5,29 +5,28 @@ import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.models.ModelPeripheralProbe;
-import com.infinityraider.agricraft.renderers.tessellation.ITessellator;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockBase;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
-import net.minecraft.block.Block;
+import com.infinityraider.infinitylib.render.block.RenderBlockBase;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.agricraft.utility.IconHelper;
 
 import javax.annotation.Nullable;
 
-public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
+public class RenderPeripheral extends RenderBlockBase<BlockPeripheral, TileEntityPeripheral> {
 
 	private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID + ":textures/blocks/peripheralProbe.png");
 	private static final ModelBase probeModel = new ModelPeripheralProbe();
@@ -36,20 +35,8 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 		super(block, new TileEntityPeripheral(), true, true, true);
 	}
 
-	@Override
-	public void renderDynamic(ITessellator tess, TileEntityPeripheral te, float partialTicks, int destroyStage) {
-		drawSeed(tess, te);
-		performAnimations(tess, te, BaseIcons.DEBUG.getIcon());
-	}
-
-	@Override
-	public void renderStatic(ITessellator tess, TileEntityPeripheral te, IBlockState state) {
-		this.renderBase(tess);
-	}
-
-	@Override
-	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntityPeripheral tile,
-			ItemStack stack, EntityLivingBase entity) {
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockPeripheral block, @Nullable TileEntityPeripheral tile,
+			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 		renderBase(tessellator);
 	}
 
@@ -91,7 +78,7 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 
 		GL11.glPushMatrix();
 
-		for (AgriForgeDirection dir : TileEntityPeripheral.VALID_DIRECTIONS) {
+		for (EnumFacing dir : TileEntityPeripheral.VALID_DIRECTIONS) {
 			int timer = peripheral.getTimer(dir);
 
 			//doors
@@ -138,10 +125,10 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 	}
 
 	private void renderBase(ITessellator tessellator) {
-		final TextureAtlasSprite iconTop = IconHelper.getIcon("agricraft:blocks/peripheralTop");
-		final TextureAtlasSprite iconSide = IconHelper.getIcon("agricraft:blocks/peripheralSide");
-		final TextureAtlasSprite iconBottom = IconHelper.getIcon("agricraft:blocks/peripheralBottom");
-		final TextureAtlasSprite iconInside = IconHelper.getIcon("agricraft:blocks/peripheralInner");
+		final TextureAtlasSprite iconTop = this.getIcon(BlockPeripheral.TEXTURE_TOP);
+		final TextureAtlasSprite iconSide = this.getIcon(BlockPeripheral.TEXTURE_SIDE);
+		final TextureAtlasSprite iconBottom = this.getIcon(BlockPeripheral.TEXTURE_BOTTOM);
+		final TextureAtlasSprite iconInside = this.getIcon(BlockPeripheral.TEXTURE_INNER);
 		float unit = Constants.UNIT;
 
 		//top
@@ -169,7 +156,23 @@ public class RenderPeripheral extends RenderBlockBase<TileEntityPeripheral> {
 	}
 
 	@Override
+	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockPeripheral block,
+								 @Nullable TileEntityPeripheral tile, boolean dynamicRender, float partialTick, int destroyStage) {
+		if(dynamicRender) {
+			drawSeed(tessellator, tile);
+			performAnimations(tessellator, tile, BaseIcons.DEBUG.getIcon());
+		} else {
+			this.renderBase(tessellator);
+		}
+	}
+
+	@Override
 	public TextureAtlasSprite getIcon() {
 		return null;
+	}
+
+	@Override
+	public boolean applyAmbientOcclusion() {
+		return false;
 	}
 }

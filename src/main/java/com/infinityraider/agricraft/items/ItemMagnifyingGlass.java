@@ -3,13 +3,17 @@ package com.infinityraider.agricraft.items;
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.TextComponentString;
@@ -19,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ItemMagnifyingGlass extends ItemBase {
@@ -33,6 +38,7 @@ public class ItemMagnifyingGlass extends ItemBase {
 	public ItemMagnifyingGlass() {
 		super("magnifying_glass", true);
 		this.setMaxStackSize(1);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
 	//I'm overriding this just to be sure
@@ -73,4 +79,13 @@ public class ItemMagnifyingGlass extends ItemBase {
 		return enableMagnifyingGlass;
 	}
 
+	@Override
+	public List<String> getOreTags() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+		return Collections.emptyList();
+	}
 }

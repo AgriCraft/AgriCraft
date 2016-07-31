@@ -3,7 +3,10 @@ package com.infinityraider.agricraft.items;
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.WeightedRandom;
+import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import com.agricraft.agricore.core.AgriCore;
@@ -19,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import net.minecraft.tileentity.TileEntity;
@@ -45,6 +50,7 @@ public class ItemHandRake extends ItemBase implements IAgriRakeItem {
 		super("hand_rake", true, "", "iron");
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
+		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
 	@Override
@@ -102,6 +108,16 @@ public class ItemHandRake extends ItemBase implements IAgriRakeItem {
 	@Override
 	public boolean isEnabled() {
 		return enableHandRake;
+	}
+
+	@Override
+	public List<String> getOreTags() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+		return Collections.emptyList();
 	}
 
 	public static final class ItemDropRegistry {

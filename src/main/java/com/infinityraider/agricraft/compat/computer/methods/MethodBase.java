@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
-import com.infinityraider.agricraft.utility.AgriForgeDirection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.world.World;
@@ -60,13 +60,13 @@ public abstract class MethodBase implements IMethod {
 			}
 		} else if (appliesToCrop) {
 
-			AgriForgeDirection dir = AgriForgeDirection.valueOf(args[0].toString());
+			EnumFacing dir = EnumFacing.valueOf(args[0].toString());
 
-			if (dir == AgriForgeDirection.UNKNOWN) {
+			if (dir == null) {
 				throw new MethodException(this, "Invalid Direction!");
 			}
 
-			TileEntity tile = world.getTileEntity(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
+			TileEntity tile = world.getTileEntity(pos.add(dir.getFrontOffsetX(), dir.getFrontOffsetY(), dir.getFrontOffsetZ()));
 
 			if (tile == null) {
 				throw new MethodException(this, "Missing Crop!");

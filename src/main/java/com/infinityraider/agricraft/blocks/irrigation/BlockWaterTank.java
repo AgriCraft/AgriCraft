@@ -1,13 +1,10 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -15,22 +12,15 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import com.infinityraider.agricraft.renderers.blocks.RenderTank;
-import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
-import java.util.Set;
-import net.minecraft.block.properties.IProperty;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
 
 	public BlockWaterTank() {
-		super("water_tank", true);
-		this.setDefaultState(this.blockState.getBaseState()
-				.withProperty(AgriProperties.NORTH, 0)
-				.withProperty(AgriProperties.EAST, 0)
-				.withProperty(AgriProperties.SOUTH, 0)
-				.withProperty(AgriProperties.WEST, 0)
-		);
+		super("water_tank");
 	}
 
 	@Override
@@ -102,23 +92,9 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
 	}
 
 	@Override
-	public AxisAlignedBB getDefaultBoundingBox() {
-		return Block.FULL_BLOCK_AABB;
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public RenderTank getRenderer() {
 		return new RenderTank(this);
-	}
-
-	@Override
-	public void addPropertiesWood(Set<IProperty> properties) {
-		properties.add(AgriProperties.NORTH);
-		properties.add(AgriProperties.EAST);
-		properties.add(AgriProperties.SOUTH);
-		properties.add(AgriProperties.WEST);
-		properties.add(AgriProperties.DOWN);
 	}
 
 }

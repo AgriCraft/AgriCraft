@@ -1,47 +1,61 @@
 package com.infinityraider.agricraft.proxy;
 
-import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.apiimpl.PluginHandler;
+import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.core.CoreHandler;
+import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
+import com.infinityraider.agricraft.init.AgriEntities;
+import com.infinityraider.agricraft.init.AgriRecipes;
+import com.infinityraider.agricraft.init.WorldGen;
+import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.RenderLogger;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
+import com.infinityraider.infinitylib.proxy.base.IProxyBase;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
-public interface IProxy {
-    /** Returns the physical side, is always Side.SERVER on the server and Side.CLIENT on the client */
-    Side getPhysicalSide();
-
-    /** Returns the effective side, on the server, this is always Side.SERVER, on the client it is dependent on the thread */
-    Side getEffectiveSide();
-
-    /** Returns the instance of the EntityPlayer on the client, null on the server */
-    EntityPlayer getClientPlayer();
-
-    /** Returns the client World object on the client, null on the server */
-    World getClientWorld();
-
-    /** Returns the World object corresponding to the dimension id */
-    World getWorldByDimensionId(int dimension);
-
-    /** Returns the entity in that dimension with that id */
-	default Entity getEntityById(int dimension, int id) {
-        return getEntityById(getWorldByDimensionId(dimension), id);
+public interface IProxy extends IProxyBase {
+    @Override
+    default void preInitStart(FMLPreInitializationEvent event) {
+        CoreHandler.preinit(event);
+        MinecraftForge.EVENT_BUS.register(AgriCraft.instance);
+        initConfiguration(event);
+        StatRegistry.getInstance().registerAdapter(new PlantStats());
+        PluginHandler.preInit(event);
     }
 
-    /** Returns the entity in that World object with that id */
-	default Entity getEntityById(World world, int id) {
-        return world.getEntityByID(id);
+    @Override
+    default void initStart(FMLInitializationEvent event) {
+        this.registerEventHandlers();
+        NetworkRegistry.INSTANCE.registerGuiHandler(AgriCraft.instance, new GuiHandler());
+        AgriEntities.init();
+        PluginHandler.init();
+        initCustomWoodTypes();
+    }
+    @Override
+    default void postInitStart(FMLPostInitializationEvent event) {
+        CoreHandler.postInit(event);
+        PluginHandler.postInit();
+        AgriRecipes.init();
+        GrowthRequirementHandler.init();
+        WorldGen.init();
     }
 
-    /** Registers the renderers on the client, does nothing on the server */
-    void registerRenderers();
+    default void registerVillagerSkin(int id, String resource) {}
 
-    /** Registers all the needed event handlers to the correct event bus */
-	default public void registerEventHandlers() {
+    default void initCustomWoodTypes() {
+        CustomWoodType.init();
+    }
+
+    default void registerEventHandlers() {
         PlayerInteractEventHandler playerInteractEventHandler = new PlayerInteractEventHandler();
         MinecraftForge.EVENT_BUS.register(playerInteractEventHandler);
 
@@ -50,14 +64,5 @@ public interface IProxy {
         }
     }
 
-    /** Registers a villager skin on the client, does nothing on the server */
-    void registerVillagerSkin(int id, String resource);
-
-    /** Initializes the configuration file */
-	default void initConfiguration(FMLPreInitializationEvent event) {
-        // Move along! Nothing to see here!
-    }
-
-    /** Queue a task */
-    void queueTask(Runnable task);
+    default void initConfiguration(FMLPreInitializationEvent event) {}
 }

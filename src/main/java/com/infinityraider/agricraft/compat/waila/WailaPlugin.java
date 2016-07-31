@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.compat.waila;
 
 import com.infinityraider.agricraft.api.AgriPlugin;
 import com.infinityraider.agricraft.api.IAgriPlugin;
-import com.infinityraider.agricraft.blocks.BlockBase;
+import com.infinityraider.infinitylib.block.BlockBase;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
