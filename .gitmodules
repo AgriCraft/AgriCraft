@@ -1,6 +1,3 @@
-[submodule "AgriCore"]
-	path = lib/AgriCore
-	url = https://github.com/AgriCraft/AgriCore.git
 [submodule "AgriPlants"]
 	path = lib/AgriPlants
 	url = https://github.com/AgriCraft/AgriPlants
