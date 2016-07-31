@@ -49,7 +49,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 	}
 	
 	protected void renderSide(ITessellator tessellator, T channel, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
-        switch(dir) {
+		switch(dir) {
             case EAST:
                 //positive x
                 if(connect) {
