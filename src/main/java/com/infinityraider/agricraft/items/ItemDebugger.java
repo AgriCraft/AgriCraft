@@ -10,11 +10,9 @@ import com.infinityraider.infinitylib.item.ItemDebuggerBase;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -43,7 +41,7 @@ public class ItemDebugger extends ItemDebuggerBase {
 	public ItemDebugger() {
 		super(true);
 		this.setMaxStackSize(1);
-		if(ConfigurationHandler.getInstance().debug) {
+		if (ConfigurationHandler.getInstance().debug) {
 			this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		}
 	}
@@ -51,13 +49,14 @@ public class ItemDebugger extends ItemDebuggerBase {
 	@Override
 	protected List<DebugMode> getDebugModes() {
 		List<DebugMode> list = new ArrayList<>();
-		if(enableGrassBreaker) {
+		if (enableGrassBreaker) {
 			list.add(new DebugModeClearGrass());
 		}
 		return list;
 	}
 
 	public static class DebugModeClearGrass extends DebugMode {
+
 		@Override
 		public String debugName() {
 			return "clear grass";
@@ -81,6 +80,7 @@ public class ItemDebugger extends ItemDebuggerBase {
 	}
 
 	public static class DebugModeSpawnFarmer extends DebugMode {
+
 		@Override
 		public String debugName() {
 			return "spawn farmer";
@@ -101,8 +101,4 @@ public class ItemDebugger extends ItemDebuggerBase {
 		return Collections.emptyList();
 	}
 
-	@Override
-	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-		return Collections.emptyList();
-	}
 }

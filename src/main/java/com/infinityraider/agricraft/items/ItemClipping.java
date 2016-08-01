@@ -4,7 +4,6 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -111,8 +110,4 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 		return Collections.emptyList();
 	}
 
-	@Override
-	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-		return Collections.emptyList();
-	}
 }
