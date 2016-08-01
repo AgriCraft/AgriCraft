@@ -25,8 +25,7 @@ public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, Ti
 	}
 
 	@Override
-	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelValve block, TileEntityChannelValve tile,
-										 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+	public void renderInventoryBlockWood(ITessellator tessellator, World world, TileEntityChannelValve tile, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
 
 		final TextureAtlasSprite sepIcon = BaseIcons.IRON_BLOCK.getIcon();
 

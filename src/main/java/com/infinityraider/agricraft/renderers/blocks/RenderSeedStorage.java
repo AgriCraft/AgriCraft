@@ -88,8 +88,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, T
 	}
 
 	@Override
-	protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockSeedStorage block, TileEntitySeedStorage tile,
-											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+	public void renderInventoryBlockWood(ITessellator tess, World world, TileEntitySeedStorage tile, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
 		renderSides(tess, icon);
 	}
 

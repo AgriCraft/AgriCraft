@@ -326,7 +326,7 @@ public abstract class CropPlant implements IAgriPlant {
     public List<BakedQuad> renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage, Function<ResourceLocation, TextureAtlasSprite> textureToIcon) {
         //The quads returned from this method are added to the tessellator,
         // however the plant renderer directly adds them to the tessellator, so an empty list is returned
-        PlantRenderer.renderPlant(world, pos, growthStage, this);
+        PlantRenderer.renderPlant(this, growthStage);
         return Collections.emptyList();
     }
 

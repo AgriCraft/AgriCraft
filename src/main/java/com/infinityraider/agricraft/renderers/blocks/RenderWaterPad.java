@@ -46,9 +46,8 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad, TileE
 	}
 
 	@Override
-	public void renderInventoryBlock(ITessellator tess, World world, IBlockState state, AbstractBlockWaterPad block, @Nullable TileEntityBase tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-
+	public void renderItem(ITessellator tess, World world, ItemStack stack, EntityLivingBase entity) {
+		
 		// Icon
 		final TextureAtlasSprite dirtIcon = BaseIcons.DIRT.getIcon();
 

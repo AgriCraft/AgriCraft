@@ -29,13 +29,12 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<BlockFenceGate, 
 	}
 
 	@Override
-	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockFenceGate block, TileEntityFenceGate tile,
-                                         ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
-		tessellator.drawScaledPrism(7, 5, 0, 9, 16, 2, icon);
-		tessellator.drawScaledPrism(7, 5, 14, 9, 16, 16, icon);
-		tessellator.drawScaledPrism(7, 12, 2, 9, 15, 14, icon);
-		tessellator.drawScaledPrism(7, 6, 2, 9, 9, 14, icon);
-		tessellator.drawScaledPrism(7, 9, 6, 9, 12, 10, icon);
+	public void renderInventoryBlockWood(ITessellator tess, World world, TileEntityFenceGate tile, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
+		tess.drawScaledPrism(7, 5, 0, 9, 16, 2, icon);
+		tess.drawScaledPrism(7, 5, 14, 9, 16, 16, icon);
+		tess.drawScaledPrism(7, 12, 2, 9, 15, 14, icon);
+		tess.drawScaledPrism(7, 6, 2, 9, 9, 14, icon);
+		tess.drawScaledPrism(7, 9, 6, 9, 12, 10, icon);
 	}
 
 	private void renderGateX(ITessellator tessellator, TileEntityFenceGate gate, TextureAtlasSprite icon) {

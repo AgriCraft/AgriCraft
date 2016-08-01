@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.blocks.analyzer.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzerBook;
 import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.model.ModelTechne;
@@ -15,7 +16,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -60,7 +60,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 	}
 
 	@Override
-	public void renderDynamic(ITessellator tess, TileEntitySeedAnalyzer tile) {
+	public void renderDynamic(ITessellator tess, TileEntitySeedAnalyzer tile, float partialTicks, int destroyStage) {
 		// Render Seed
 		if (tile.hasSpecimen()) {
 			// Correct Draw Mode
@@ -73,18 +73,13 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockSeedAnalyzer block,
-								 @Nullable TileEntitySeedAnalyzer tile, boolean dynamicRender, float partialTick, int destroyStage) {
-		if(!dynamicRender) {
-			this.renderModel(tessellator, tile.getOrientation(), tile.hasJournal());
-		}
-
+	public void renderStatic(ITessellator tess, IBlockState state) {
+		this.renderModel(tess, AgriProperties.FACING.getValue(state), AgriProperties.JOURNAL.getValue(state));
 	}
 
 	@Override
-	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSeedAnalyzer block, @Nullable TileEntitySeedAnalyzer tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-        renderModel(tessellator, EnumFacing.SOUTH, true);
+	public void renderItem(ITessellator tessellator, World world, ItemStack stack, EntityLivingBase entity) {
+		renderModel(tessellator, EnumFacing.SOUTH, true);
 	}
 
 	@Override

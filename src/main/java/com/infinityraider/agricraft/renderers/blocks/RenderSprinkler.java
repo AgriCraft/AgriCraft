@@ -58,8 +58,7 @@ public class RenderSprinkler extends RenderBlockBase<BlockSprinkler, TileEntityS
 	}
 
 	@Override
-	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSprinkler block, @Nullable TileEntitySprinkler tile,
-			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+	public void renderItem(ITessellator tessellator, World world, ItemStack stack, EntityLivingBase entity) {
 		// Draw Top
 		tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, BaseIcons.OAK_PLANKS.getIcon());
 		// Get Core Icon
@@ -69,7 +68,6 @@ public class RenderSprinkler extends RenderBlockBase<BlockSprinkler, TileEntityS
 		// Draw Blades
 		tessellator.drawScaledPrism(BMX_A, MIN_Y - 8, MIN_C, BMX_B, BMX_Y - 8, MAX_C, coreIcon);
 		tessellator.drawScaledPrism(MIN_C, MIN_Y - 8, BMX_A, MAX_C, BMX_Y - 8, BMX_B, coreIcon);
-
 	}
 
 	@Override

@@ -122,8 +122,7 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 	}
 
 	@Override
-	protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockWaterTank block, TileEntityTank tile,
-											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite sprite) {
+	public void renderInventoryBlockWood(ITessellator tess, World world, TileEntityTank tile, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite sprite) {
 		renderSide(tess, EnumFacing.NORTH, TileEntityTank.Connection.NONE, sprite);
 		renderSide(tess, EnumFacing.EAST, TileEntityTank.Connection.NONE, sprite);
 		renderSide(tess, EnumFacing.SOUTH, TileEntityTank.Connection.NONE, sprite);

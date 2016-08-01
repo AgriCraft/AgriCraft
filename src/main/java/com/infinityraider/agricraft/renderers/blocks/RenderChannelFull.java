@@ -60,8 +60,7 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
     }
 
 	@Override
-	protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelFull block, TileEntityChannelFull channel,
-											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+	public void renderInventoryBlockWood(ITessellator tessellator, World world, TileEntityChannelFull channel, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
 		this.renderBottom(tessellator, icon);
 		this.renderSide(tessellator, channel, EnumFacing.NORTH, true, icon);
 		this.renderSide(tessellator, channel, EnumFacing.EAST, true, icon);

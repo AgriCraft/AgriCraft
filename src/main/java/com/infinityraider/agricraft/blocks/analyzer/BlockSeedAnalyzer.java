@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
 import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.material.Material;
@@ -168,12 +169,31 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 
 	@Override
 	protected InfinityProperty[] getPropertyArray() {
-		return new InfinityProperty[0];
+		return new InfinityProperty[]{
+			AgriProperties.JOURNAL,
+			AgriProperties.FACING
+		};
 	}
 
 	@Override
 	public Class<? extends ItemBlock> getItemBlockClass() {
 		return null;
+	}
+
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof TileEntitySeedAnalyzer) {
+			TileEntitySeedAnalyzer ana = (TileEntitySeedAnalyzer)te;
+			state = AgriProperties.FACING.applyToBlockState(state, ana.getOrientation());
+			state = AgriProperties.JOURNAL.applyToBlockState(state, ana.hasJournal());
+		}
+		return state;
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return 0;
 	}
 
 }

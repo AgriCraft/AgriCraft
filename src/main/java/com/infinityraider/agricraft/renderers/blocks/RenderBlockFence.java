@@ -42,8 +42,7 @@ public class RenderBlockFence extends RenderBlockCustomWood<BlockFence, TileEnti
 	}
 
 	@Override
-	public void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockFence block, TileEntityFence tile,
-										 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite matIcon) {
+	public void renderInventoryBlockWood(ITessellator tess, World world, TileEntityFence tile, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite matIcon) {
 		tess.drawScaledPrism(6, 0, 0, 10, 16, 4, matIcon);
 		tess.drawScaledPrism(6, 0, 12, 10, 16, 16, matIcon);
 		tess.drawScaledPrism(7, 12, 4, 9, 15, 12, matIcon);
