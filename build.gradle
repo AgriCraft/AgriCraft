@@ -11,60 +11,16 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
 
-// Load Properties
-Properties mod = new Properties()
-mod.load(new FileInputStream("${project.rootDir}/mod.properties"))
-
-sourceCompatibility = mod.version_java
-targetCompatibility = mod.version_java
-version = "${mod.version_major}.${mod.version_minor}.${mod.version_patch}"
-mod.version = version
-group = "${mod.group}.${mod.id}"
-archivesBaseName = mod.id
-
-minecraft {
-    version = "${mod.version_minecraft}-${mod.version_forge}"
-    mappings = mod.version_mappings
-    runDir = "/run/${mod.version_minecraft}"
-    makeObfSourceJar = false
-	useDepAts = true
-
-	// Replace mod information in reference class.
-	replaceIn mod.reference_class
-    mod.each { prop ->
-		replace "\${mod.${prop.key}}", prop.value
-		replace "/*^", "\""
-		replace "^*/", "\"; // Default:"
-    }
+// Plugins
+plugins {
+	id 'com.rlonryan.quikmod' version '1.0.16'
 }
 
-task modInfo() {
-	println ""
-	println "#################################################"
-	println "	Quikmod"
-	println "#################################################"
-
-	// Verify mod id follows proper conventions.
-	assert mod.id == mod.id.toLowerCase();
-	assert mod.id == mod.id.replace(' ', '');
-	assert mod.id == mod.id.replace('.', '');
-
-	// Verify mod group follows proper conventions.
-	assert mod.group == mod.group.toLowerCase();
-	assert mod.group == mod.group.replace(' ', '');
-
-	// Print Gradle Information
-	println ":" + "version_gradle".padRight(20) + " = " + GradleVersion.current().version
-
-	// Print Information Tokens
-	mod.each { prop ->
-        println ":" + prop.key.padRight(20) + " = " + prop.value
-    }
-
-	println "#################################################"
-	println ""
+// Tweak MineCraft Task
+minecraft {
+    makeObfSourceJar = false
+	useDepAts = true
 }
 
 repositories {
@@ -94,11 +50,6 @@ repositories {
 	}
 }
 
-configurations {
-	shade
-	compile.extendsFrom shade
-}
-
 dependencies {
     // Mods (For auto-import)
 	compile project(':lib/InfinityLib')
@@ -108,33 +59,9 @@ dependencies {
 }
 
 processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-		exclude 'mcmod.info'
-    }
-	
 	from('lib/AgriPlants') {
 		include '**/*.json'
 		into 'plants/defaults'
-	}
-	
-}
-
-// Add Packages
-jar {
-    configurations.shade.copyRecursive().setTransitive(false).each { artifact ->
-		from (zipTree(artifact)) {
-			exclude 'META-INF', 'META-INF/**'
-		}
 	}
 }
 
@@ -168,29 +95,9 @@ task javadocJar(type: Jar, dependsOn: mainJavadoc) {
 task apiJar(type: Jar) {
     from sourceSets.main.allSource
     from sourceSets.main.output
-    include "${mod.group.replace('.', '/')}/${mod.id}/api/**/*"
+    include "${mod.package.replace('.', '/')}/api/**/*"
     classifier = 'api'
 }
 
 // Tell build that it needs the API compiled first.
 build.dependsOn apiJar
-
-// Collate distribution files.
-task dist(dependsOn: ['build', 'sourcesJar', 'javadocJar']) {
-	description "Generate the dist folder."
-	doLast{
-		delete "${projectDir}/dist"
-		copy {
-			from "${buildDir}/libs"
-			into "${projectDir}/dist"
-		}
-	}
-}
-
-// Run Stuff
-runClient {
-	if( project.hasProperty('minecraft_username') && project.hasProperty('minecraft_password') ) {
-		args "--username=${project.minecraft_username}"
-		args "--password=${project.minecraft_password}"
-	}
-}

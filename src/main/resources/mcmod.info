@@ -1,12 +1,12 @@
 [
 	{
-		"modid": "agricraft",
-		"name": "AgriCraft",
+		"modid": "${mod.id}",
+		"name": "${mod.name}",
 
-		"version": "${version}",
-		"mcversion": "${mcversion}",
+		"version": "${mod.version}",
+		"mcversion": "${mod.mcversion}",
 
-		"logoFile": "assets/agricraft/textures/logo.png",
+		"logoFile": "assets/${mod.id}/textures/logo.png",
 		"screenshots": [],
 
 		"parent":"",
