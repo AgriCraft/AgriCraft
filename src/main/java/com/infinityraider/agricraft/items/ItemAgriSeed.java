@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
@@ -140,8 +139,4 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
 		return Collections.emptyList();
 	}
 
-	@Override
-	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-		return Collections.emptyList();
-	}
 }

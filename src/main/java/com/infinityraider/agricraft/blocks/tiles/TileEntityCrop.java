@@ -43,8 +43,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
 	private boolean crossCrop = false;
 
-	private @Nonnull
-	IAgriStat stats = new PlantStats();
+	@Nonnull
+	private IAgriStat stats = new PlantStats();
 	private IAgriPlant plant;
 	private IAdditionalCropData data;
 
@@ -105,7 +105,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		// TODO: update!
 		return AgriCraftConfig.weedGrowthRate;
 	}
-
 
 	@Override
 	public int getGrowthStage() {
@@ -331,15 +330,16 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		}
 	}
 
-
 	public void writeTileNBT(NBTTagCompound tag) {
-		this.stats.writeToNBT(tag);
-		tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
-		if (plant != null) {
-			tag.setString(AgriNBT.SEED, plant.getId());
-		}
-		if (getAdditionalCropData() != null) {
-			tag.setTag(AgriNBT.INVENTORY, getAdditionalCropData().writeToNBT());
+		if (this.stats != null) {
+			this.stats.writeToNBT(tag);
+			tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
+			if (plant != null) {
+				tag.setString(AgriNBT.SEED, plant.getId());
+			}
+			if (getAdditionalCropData() != null) {
+				tag.setTag(AgriNBT.INVENTORY, getAdditionalCropData().writeToNBT());
+			}
 		}
 		//AgriCore.getLogger("Plant-Tag").debug("Write Tag: {0}", tag);
 	}
@@ -430,7 +430,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 			list.add(" - This crop has no plant");
 		}
 	}
-
 
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("unchecked")

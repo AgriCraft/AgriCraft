@@ -19,15 +19,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.GlStateManager;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileEntitySeedAnalyzer> {
-	private static ModelTechne<ModelSeedAnalyzer> MODEL_ANALYZER = new ModelTechne<>(new ModelSeedAnalyzer());
-	private static ModelTechne<ModelSeedAnalyzerBook> MODEL_BOOK = new ModelTechne<>(new ModelSeedAnalyzerBook());
+	private static final ModelTechne<ModelSeedAnalyzer> MODEL_ANALYZER = new ModelTechne<>(new ModelSeedAnalyzer());
+	private static final ModelTechne<ModelSeedAnalyzerBook> MODEL_BOOK = new ModelTechne<>(new ModelSeedAnalyzerBook());
 
 	private List<BakedQuad> analyzerQuads;
 	private List<BakedQuad> bookQuads;
@@ -38,6 +38,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 
 	private void renderModel(ITessellator tessellator, EnumFacing direction, boolean journal) {
 		tessellator.pushMatrix();
+		direction = (direction == null) ? EnumFacing.NORTH : direction;
 		int angle = (90 * direction.getHorizontalIndex() + 180) % 360;
 		if(angle != 0) {
 			tessellator.translate(0.5, 0, 0.5);
@@ -58,32 +59,23 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 		tessellator.popMatrix();
 	}
 
-	private void renderSeed(TileEntitySeedAnalyzer te, double x, double y, double z) {
-		// Save Settings
-		GlStateManager.pushAttrib();
-		GlStateManager.pushMatrix();
-
-		// Translate to the location of our tile entity
-		GlStateManager.translate(x, y, z);
-		GlStateManager.disableRescaleNormal();
-
+	@Override
+	public void renderDynamic(ITessellator tess, TileEntitySeedAnalyzer tile) {
 		// Render Seed
-		if (te != null && te.hasSpecimen()) {
+		if (tile.hasSpecimen()) {
+			// Correct Draw Mode
+			tess.draw();
 			// Draw Item
-			this.renderItemStack(te.getSpecimen(), 0.5, 0.5, 0.5, 0.75, true);
+			this.renderItemStack(tile.getSpecimen(), 0.5, 0.5, 0.5, 0.75, true);
+			// Correct Draw Mode
+			tess.startDrawingQuads(DefaultVertexFormats.BLOCK);
 		}
-
-		// Restore Settings
-		GlStateManager.popMatrix();
-		GlStateManager.popAttrib();
 	}
 
 	@Override
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockSeedAnalyzer block,
 								 @Nullable TileEntitySeedAnalyzer tile, boolean dynamicRender, float partialTick, int destroyStage) {
-		if(dynamicRender) {
-            this.renderSeed(tile, x, y, z);
-		} else {
+		if(!dynamicRender) {
 			this.renderModel(tessellator, tile.getOrientation(), tile.hasJournal());
 		}
 
@@ -92,7 +84,7 @@ public class RenderSeedAnalyzer extends RenderBlockBase<BlockSeedAnalyzer, TileE
 	@Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSeedAnalyzer block, @Nullable TileEntitySeedAnalyzer tile,
 									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-        renderModel(tessellator, EnumFacing.NORTH, false);
+        renderModel(tessellator, EnumFacing.SOUTH, true);
 	}
 
 	@Override

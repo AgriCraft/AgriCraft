@@ -11,9 +11,7 @@ import net.minecraft.item.ItemStack;
 import java.util.Collections;
 
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemNugget extends ItemBase implements IAutoRenderedItem {
@@ -31,7 +29,7 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 			varients.add(stack);
 		}
 	}
-	
+
 	@Override
 	public boolean getHasSubtypes() {
 		return true;
@@ -42,7 +40,7 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 		return "item.agricraft:" + AgriNuggetType.values()[stack.getMetadata()].nugget;
 	}
 
-    /*
+	/*
 	@SideOnly(Side.CLIENT)
 	public void registerItemRenderer() {
 		for (int i = 0; i < AgriNuggetType.values().length; i++) {
@@ -51,30 +49,25 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 		}
 		return tex;
 	}
-	*/
-
+	 */
 	@Override
 	public List<String> getOreTags() {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+	public String getModelId(ItemStack stack) {
+		return AgriNuggetType.getNugget(stack.getMetadata()).nugget;
+	}
+
+	@Override
+	public String getBaseTexture(ItemStack stack) {
+		return AgriNuggetType.getNugget(stack.getMetadata()).texture;
+	}
+
+	@Override
+	public List<ResourceLocation> getAllTextures() {
 		return Collections.emptyList();
 	}
 
-    @Override
-    public String getModelId(ItemStack stack) {
-        return AgriNuggetType.getNugget(stack.getMetadata()).nugget;
-    }
-
-    @Override
-    public String getBaseTexture(ItemStack stack) {
-        return AgriNuggetType.getNugget(stack.getMetadata()).texture;
-    }
-
-    @Override
-    public List<ResourceLocation> getAllTextures() {
-        return Collections.emptyList();
-    }
 }
