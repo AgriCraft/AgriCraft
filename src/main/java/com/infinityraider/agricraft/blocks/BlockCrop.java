@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.items.IAgriClipperItem;
@@ -12,7 +13,6 @@ import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
-import com.infinityraider.agricraft.items.ItemAgriSeed;
 import com.infinityraider.agricraft.items.ItemDebugger;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
@@ -193,20 +193,21 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 	 * @return if the planting operation was successful.
 	 */
 	public boolean plantSeed(ItemStack stack, World world, BlockPos pos) {
-		if (!world.isRemote) {
-			TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
+		TileEntity te = world.getTileEntity(pos);
+		if (!world.isRemote && te instanceof TileEntityCrop) {
+			TileEntityCrop crop = (TileEntityCrop)te;
 			//is the cropEmpty a crosscrop or does it already have a plant
 			if (crop.isCrossCrop() || crop.hasPlant()) {
 				return false;
 			}
 			//the SEED can be planted here
 			AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
-			if (seed == null || !seed.getPlant().getGrowthRequirement().isValidSoil(world, pos.add(0, -1, 0))) {
+			if (seed == null || !seed.getPlant().getGrowthRequirement().canGrow(world, pos)) {
 				return false;
 			}
 			//get AgriCraftNBT data from the seeds
-			crop.setSeed(seed);
-			return true;
+			boolean res = crop.setSeed(seed);
+			return res;
 		}
 		return false;
 	}
@@ -240,28 +241,14 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 			} else if (FertilizerRegistry.getInstance().hasAdapter(heldItem)) {
 				IAgriFertilizer fert = FertilizerRegistry.getInstance().getValue(heldItem);
 				return fert == null ? false : fert.applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
-			} else if (heldItem.getItem() instanceof ItemAgriSeed && !crop.isCrossCrop() && !crop.canWeed()) {
-				AgriSeed seed = SeedRegistry.getInstance().getValue(heldItem);
-				if (seed != null && seed.getPlant().getGrowthRequirement().canGrow(world, pos)) {
-					if (crop.setSeed(seed) && !player.capabilities.isCreativeMode) {
-						heldItem.stackSize--;
-					}
-					return true;
-				}
-				return false;
+			} else if (plantSeed(heldItem, world, pos)) {
+				return true;
 			} //check to see if the player clicked with crops (crosscrop attempt)
 			else if (heldItem.getItem() == AgriItems.getInstance().CROPS) {
 				this.setCrossCrop(world, pos, state, player, heldItem);
 			} else {
 				//harvest operation
 				this.harvest(world, pos, state, player, crop);
-				//check to see if clicked with seeds
-				if (SeedRegistry.getInstance().hasAdapter(heldItem)) {
-					if (this.plantSeed(heldItem, world, pos)) {
-						//take one SEED away if the player is not in creative
-						heldItem.stackSize = heldItem.stackSize - (player.capabilities.isCreativeMode ? 0 : 1);
-					}
-				}
 			}
 		}
 		//Returning true will prevent other things from happening
