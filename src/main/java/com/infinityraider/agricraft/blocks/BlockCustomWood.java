@@ -148,9 +148,4 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 		return new InfinityProperty[0];
 	}
 
-	@Override
-	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state, T tile) {
-		return true;
-	}
-
 }

@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import java.util.Collections;
 
 import com.infinityraider.infinitylib.item.ItemBase;
+import java.util.ArrayList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -40,16 +41,6 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 		return "item.agricraft:" + AgriNuggetType.values()[stack.getMetadata()].nugget;
 	}
 
-	/*
-	@SideOnly(Side.CLIENT)
-	public void registerItemRenderer() {
-		for (int i = 0; i < AgriNuggetType.values().length; i++) {
-			ModelResourceLocation model = RegisterHelper.getItemModel("agricraft:items/" + AgriNuggetType.values()[i].nugget);
-			ModelLoader.setCustomModelResourceLocation(this, i, model);
-		}
-		return tex;
-	}
-	 */
 	@Override
 	public List<String> getOreTags() {
 		return Collections.emptyList();
@@ -67,7 +58,11 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 
 	@Override
 	public List<ResourceLocation> getAllTextures() {
-		return Collections.emptyList();
+		List<ResourceLocation> textures = new ArrayList<>(AgriNuggetType.values().length);
+		for (AgriNuggetType type : AgriNuggetType.values()) {
+			textures.add(new ResourceLocation("agricraft:items/" + type.nugget));
+		}
+		return textures;
 	}
 
 }

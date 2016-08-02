@@ -3,16 +3,14 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.decoration.BlockGrate;
 import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.infinitylib.render.RenderUtilBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEntityGrate> {
@@ -33,8 +31,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEnti
 	}
 
 	@Override
-	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockGrate block,
-										TileEntityGrate grate, TextureAtlasSprite sprite, boolean dynamic) {
+	protected void renderStaticWood(ITessellator tess, TileEntityGrate grate, TextureAtlasSprite sprite) {
         // Setup
         final float offset = ((float) grate.getOffset() * 7) / 16.0F;
 
@@ -53,7 +50,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEnti
 
 		//vines
 		final TextureAtlasSprite vinesIcon = BaseIcons.VINE.getIcon();
-		int l = this.getMixedBrightness(grate.getWorld(), grate.getPos(), Blocks.VINE.getDefaultState());
+		int l = RenderUtilBase.getMixedBrightness(grate.getWorld(), grate.getPos(), Blocks.VINE.getDefaultState());
 		float f0 = (float) (l >> 16 & 255) / 255.0F;
 		float f1 = (float) (l >> 8 & 255) / 255.0F;
 		float f2 = (float) (l & 255) / 255.0F;

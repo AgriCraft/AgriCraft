@@ -6,38 +6,30 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.models.ModelPeripheralProbe;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
-import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.infinitylib.render.RenderUtilBase;
+import com.infinityraider.infinitylib.render.block.RenderBlockTile;
 
-import javax.annotation.Nullable;
 
-public class RenderPeripheral extends RenderBlockBase<BlockPeripheral, TileEntityPeripheral> {
+public class RenderPeripheral extends RenderBlockTile<BlockPeripheral, TileEntityPeripheral> {
 
 	private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID + ":textures/blocks/peripheralProbe.png");
 	private static final ModelBase probeModel = new ModelPeripheralProbe();
 
 	public RenderPeripheral(BlockPeripheral block) {
 		super(block, new TileEntityPeripheral(), true, true, true);
-	}
-
-	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockPeripheral block, @Nullable TileEntityPeripheral tile,
-			ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-		renderBase(tessellator);
 	}
 
 	private void drawSeed(ITessellator tessellator, TileEntityPeripheral peripheral) {
@@ -125,10 +117,10 @@ public class RenderPeripheral extends RenderBlockBase<BlockPeripheral, TileEntit
 	}
 
 	private void renderBase(ITessellator tessellator) {
-		final TextureAtlasSprite iconTop = this.getIcon(BlockPeripheral.TEXTURE_TOP);
-		final TextureAtlasSprite iconSide = this.getIcon(BlockPeripheral.TEXTURE_SIDE);
-		final TextureAtlasSprite iconBottom = this.getIcon(BlockPeripheral.TEXTURE_BOTTOM);
-		final TextureAtlasSprite iconInside = this.getIcon(BlockPeripheral.TEXTURE_INNER);
+		final TextureAtlasSprite iconTop = RenderUtilBase.getIcon(BlockPeripheral.TEXTURE_TOP);
+		final TextureAtlasSprite iconSide = RenderUtilBase.getIcon(BlockPeripheral.TEXTURE_SIDE);
+		final TextureAtlasSprite iconBottom = RenderUtilBase.getIcon(BlockPeripheral.TEXTURE_BOTTOM);
+		final TextureAtlasSprite iconInside = RenderUtilBase.getIcon(BlockPeripheral.TEXTURE_INNER);
 		float unit = Constants.UNIT;
 
 		//top
@@ -156,14 +148,19 @@ public class RenderPeripheral extends RenderBlockBase<BlockPeripheral, TileEntit
 	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockPeripheral block,
-								 @Nullable TileEntityPeripheral tile, boolean dynamicRender, float partialTick, int destroyStage) {
-		if(dynamicRender) {
-			drawSeed(tessellator, tile);
-			performAnimations(tessellator, tile, BaseIcons.DEBUG.getIcon());
-		} else {
-			this.renderBase(tessellator);
-		}
+	public void renderStaticTile(ITessellator tess, TileEntityPeripheral Tile) {
+		this.renderBase(tess);
+	}
+
+	@Override
+	public void renderDynamicTile(ITessellator tess, TileEntityPeripheral tile, float partialTicks, int destroyStage) {
+		drawSeed(tess, tile);
+		performAnimations(tess, tile, BaseIcons.DEBUG.getIcon());
+	}
+
+	@Override
+	public void renderItem(ITessellator tessellator, World world, ItemStack stack, EntityLivingBase entity) {
+		renderBase(tessellator);
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorageController;
-import com.infinityraider.infinitylib.render.block.IBlockRenderingHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,6 +12,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import com.infinityraider.infinitylib.render.block.RenderBlock;
 
 public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedStorageController> {
 
@@ -37,7 +37,7 @@ public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedSt
     }
 
     @Override
-	public IBlockRenderingHandler<BlockSeedStorageController, TileEntitySeedStorageController> getRenderer() {
+	public RenderBlock<BlockSeedStorageController> getRenderer() {
 		return null;
 	}
 

@@ -586,11 +586,6 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 	}
 
 	@Override
-	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state, TileEntityCrop tile) {
-		return true;
-	}
-
-	@Override
 	public List<String> getOreTags() {
 		return Collections.emptyList();
 	}

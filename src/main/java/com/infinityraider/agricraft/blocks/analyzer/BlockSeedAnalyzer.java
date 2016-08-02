@@ -150,12 +150,6 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state, TileEntitySeedAnalyzer tile) {
-		return true;
-	}
-
-	@Override
 	public List<ResourceLocation> getTextures() {
 		List<ResourceLocation> textures = new ArrayList<>();
 		textures.add(TEXTURE_ANALYZER);

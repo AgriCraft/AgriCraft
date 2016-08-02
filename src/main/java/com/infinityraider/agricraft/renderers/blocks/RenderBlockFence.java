@@ -3,13 +3,10 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.decoration.BlockFence;
 import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityFence;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class RenderBlockFence extends RenderBlockCustomWood<BlockFence, TileEntityFence> {
@@ -19,9 +16,7 @@ public class RenderBlockFence extends RenderBlockCustomWood<BlockFence, TileEnti
 	}
 
 	@Override
-	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockFence block,
-										TileEntityFence fence, TextureAtlasSprite sprite, boolean dynamic) {
-
+	protected void renderStaticWood(ITessellator tess, TileEntityFence fence, TextureAtlasSprite sprite) {
 		tess.drawScaledPrism(6, 0, 6, 10, 16, 10, sprite);
 		if (fence.canConnect(EnumFacing.EAST)) {
 			tess.drawScaledPrism(10, 12, 7, 16, 15, 9, sprite);

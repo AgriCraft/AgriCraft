@@ -130,11 +130,6 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 	}
 
 	@Override
-	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state, TileEntitySprinkler tile) {
-		return true;
-	}
-
-	@Override
 	public List<ResourceLocation> getTextures() {
 		return Collections.emptyList();
 	}

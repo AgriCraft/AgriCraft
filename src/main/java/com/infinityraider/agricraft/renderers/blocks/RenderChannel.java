@@ -4,19 +4,17 @@ import com.infinityraider.agricraft.blocks.irrigation.AbstractBlockWaterChannel;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.infinitylib.render.RenderUtilBase;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -101,7 +99,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 		}
 
 		//stolen from Vanilla code
-		final int l = this.getMixedBrightness(channel.getWorld(), channel.getPos(), Blocks.WATER.getDefaultState());
+		final int l = RenderUtilBase.getMixedBrightness(channel.getWorld(), channel.getPos(), Blocks.WATER.getDefaultState());
 		final float y = channel.getFluidHeight() * Constants.UNIT;
 		final float f = (float) (l >> 16 & 255) / 255.0F;
 		final float f1 = (float) (l >> 8 & 255) / 255.0F;
@@ -131,13 +129,13 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 	}
 
 	@Override
-	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, B block,
-										T tile, TextureAtlasSprite icon, boolean dynamic) {
-		if(dynamic) {
-			this.drawWater(tess, tile, BaseIcons.WATER_STILL.getIcon());
-		} else {
-			this.renderWoodChannel(tess, tile, icon);
-		}
+	public void renderDynamicTile(ITessellator tess, T tile, float partialTicks, int destroyStage) {
+		this.drawWater(tess, tile, BaseIcons.WATER_STILL.getIcon());
+	}
+
+	@Override
+	protected final void renderStaticWood(ITessellator tess, T tile, TextureAtlasSprite matIcon) {
+		this.renderWoodChannel(tess, tile, matIcon);
 	}
 
 	@Override

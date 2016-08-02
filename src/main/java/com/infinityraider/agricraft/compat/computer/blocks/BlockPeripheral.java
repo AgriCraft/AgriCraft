@@ -58,7 +58,7 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
 	}
 
 	@Override
-	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state, TileEntityPeripheral tile) {
+	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state) {
 		return false;
 	}
 
