@@ -5,7 +5,6 @@ package com.infinityraider.agricraft.items.modes;
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.items.ItemDebugger;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;

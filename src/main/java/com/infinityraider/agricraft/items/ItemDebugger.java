@@ -1,23 +1,11 @@
 package com.infinityraider.agricraft.items;
 
 import com.infinityraider.agricraft.items.modes.DebugModeClearGrass;
-import com.agricraft.agricore.config.AgriConfigCategory;
-import com.agricraft.agricore.config.AgriConfigurable;
-import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
-import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.items.modes.DebugModeDirtPlane;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.handler.ConfigurationHandler;
 import com.infinityraider.infinitylib.item.ItemDebuggerBase;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.Collections;

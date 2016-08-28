@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.items.IAgriClipperItem;
@@ -230,7 +229,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			if (AgriItems.getInstance().HAND_RAKE.isEnabled() && heldItem == null) {
+			if (AgriItems.getInstance().HAND_RAKE.isEnabled() && heldItem == null && crop.canWeed()) {
 				//if weeds can only be removed by using a hand rake, nothing should happen
 				return false;
 			} else if (player.isSneaking() || heldItem == null || heldItem.getItem() == null) {
