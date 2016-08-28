@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.renderers.blocks.RenderChannelFull;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelFull;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelFull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;

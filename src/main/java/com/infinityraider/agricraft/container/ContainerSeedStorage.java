@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.container;
 
-import com.infinityraider.agricraft.blocks.tiles.storage.SeedStorageSlot;
-import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
+import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -1,10 +1,10 @@
-package com.infinityraider.agricraft.blocks.tiles.storage;
+package com.infinityraider.agricraft.tiles.storage;
 
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
+import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.NBTHelper;
 import com.infinityraider.infinitylib.network.NetworkWrapper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;

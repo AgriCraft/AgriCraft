@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

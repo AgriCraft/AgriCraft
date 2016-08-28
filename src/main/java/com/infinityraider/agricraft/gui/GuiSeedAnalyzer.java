@@ -4,7 +4,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.gui.journal.GuiJournal;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;

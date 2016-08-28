@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.farming.mutation;
 
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 
 import java.util.Random;
 

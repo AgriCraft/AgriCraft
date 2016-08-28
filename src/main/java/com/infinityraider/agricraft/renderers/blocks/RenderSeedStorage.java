@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.storage.BlockSeedStorage;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;

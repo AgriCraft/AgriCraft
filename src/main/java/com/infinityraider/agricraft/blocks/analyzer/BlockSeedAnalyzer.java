@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedAnalyzer;
-import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;

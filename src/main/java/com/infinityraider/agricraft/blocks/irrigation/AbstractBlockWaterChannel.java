@@ -4,7 +4,7 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 
 public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> extends BlockCustomWood<T> {
 

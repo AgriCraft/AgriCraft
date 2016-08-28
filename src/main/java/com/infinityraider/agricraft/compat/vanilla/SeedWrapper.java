@@ -1,6 +1,6 @@
 /*
  */
-package com.infinityraider.agricraft.vanilla;
+package com.infinityraider.agricraft.compat.vanilla;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
