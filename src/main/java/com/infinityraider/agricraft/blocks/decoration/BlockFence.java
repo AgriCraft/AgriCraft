@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.entity.EntityLeashKnotAgricraft;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockFence;
-import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityFence;
+import com.infinityraider.agricraft.tiles.decoration.TileEntityFence;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;

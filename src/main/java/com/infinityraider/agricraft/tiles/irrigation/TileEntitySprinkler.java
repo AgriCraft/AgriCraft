@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.blocks.tiles.irrigation;
+package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.infinityraider.agricraft.api.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;

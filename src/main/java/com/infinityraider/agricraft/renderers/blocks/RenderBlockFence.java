@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.decoration.BlockFence;
-import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityFence;
+import com.infinityraider.agricraft.tiles.decoration.TileEntityFence;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
