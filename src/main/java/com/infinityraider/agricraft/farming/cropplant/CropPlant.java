@@ -31,6 +31,7 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import net.minecraft.item.Item;
 
 /**
  * The main class used by TileEntityCrop.
@@ -132,9 +133,14 @@ public abstract class CropPlant implements IAgriPlant {
     @Override
     public abstract Block getBlock();
 
+    @Override
+    public Item getSeedItem() {
+        return AgriItems.getInstance().AGRI_SEED;
+    }
+
 	@Override
 	public final ItemStack getSeed() {
-		ItemStack stack = new ItemStack(AgriItems.getInstance().AGRI_SEED);
+		ItemStack stack = new ItemStack(this.getSeedItem());
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(AgriNBT.SEED, this.getId());
 		new PlantStats().writeToNBT(tag);

@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
+import net.minecraft.item.Item;
 
 /**
  * This interface is used both for you to read the AgriCraft CropPlants as well
@@ -37,6 +38,8 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 	default String getSeedName() {
 		return getPlantName() + " Seeds";
 	}
+    
+    Item getSeedItem();
 	
 	default boolean isWeedable() {
 		return false;
