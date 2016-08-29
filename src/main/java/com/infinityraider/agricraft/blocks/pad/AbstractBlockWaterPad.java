@@ -31,6 +31,7 @@ public abstract class AbstractBlockWaterPad extends BlockCustomRenderedBase {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public RenderBlock getRenderer() {
 		return new RenderWaterPad(this);
 	}

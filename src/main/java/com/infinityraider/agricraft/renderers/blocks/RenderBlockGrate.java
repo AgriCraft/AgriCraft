@@ -12,7 +12,10 @@ import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.render.RenderUtilBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEntityGrate> {
 	public RenderBlockGrate(BlockGrate block) {
 		super(block, new TileEntityGrate(), true, true, false);

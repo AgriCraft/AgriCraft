@@ -8,7 +8,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RenderBlockFence extends RenderBlockCustomWood<BlockFence, TileEntityFence> {
 
 	public RenderBlockFence(BlockFence block) {

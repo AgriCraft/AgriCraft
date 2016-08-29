@@ -13,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import com.infinityraider.infinitylib.render.block.RenderBlock;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedStorageController> {
 
@@ -37,6 +39,7 @@ public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedSt
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
 	public RenderBlock<BlockSeedStorageController> getRenderer() {
 		return null;
 	}

@@ -21,8 +21,10 @@ import org.lwjgl.opengl.GL11;
 import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.render.RenderUtilBase;
 import com.infinityraider.infinitylib.render.block.RenderBlockTile;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-
+@SideOnly(Side.CLIENT)
 public class RenderPeripheral extends RenderBlockTile<BlockPeripheral, TileEntityPeripheral> {
 
 	private static final ResourceLocation probeTexture = new ResourceLocation(Reference.MOD_ID + ":textures/blocks/peripheralProbe.png");
