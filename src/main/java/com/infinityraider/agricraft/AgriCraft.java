@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.network.*;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.apiimpl.PluginHandler;
+import com.infinityraider.agricraft.init.AgriEntities;
 import com.infinityraider.infinitylib.InfinityMod;
 import com.infinityraider.infinitylib.network.INetworkWrapper;
 import net.minecraftforge.fml.common.Mod;
@@ -135,5 +136,10 @@ public class AgriCraft extends InfinityMod {
 		CoreHandler.loadTextures(e.getMap()::registerSprite);
 		PluginHandler.loadTextures(e.getMap()::registerSprite);
 	}
+
+    @Override
+    public Object getModEntityRegistry() {
+        return AgriEntities.class;
+    }
 
 }
