@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.render.RenderMethod;
+import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -39,7 +40,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 		return getPlantName() + " Seeds";
 	}
     
-    Item getSeedItem();
+    Collection<Item> getSeedItems();
 	
 	default boolean isWeedable() {
 		return false;

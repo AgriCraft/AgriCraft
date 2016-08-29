@@ -31,6 +31,8 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import java.util.Arrays;
+import java.util.Collection;
 import net.minecraft.item.Item;
 
 /**
@@ -134,13 +136,13 @@ public abstract class CropPlant implements IAgriPlant {
     public abstract Block getBlock();
 
     @Override
-    public Item getSeedItem() {
-        return AgriItems.getInstance().AGRI_SEED;
+    public Collection<Item> getSeedItems() {
+        return Arrays.asList(AgriItems.getInstance().AGRI_SEED);
     }
 
 	@Override
 	public final ItemStack getSeed() {
-		ItemStack stack = new ItemStack(this.getSeedItem());
+		ItemStack stack = new ItemStack(this.getSeedItems().stream().findFirst().orElse(AgriItems.getInstance().AGRI_SEED));
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(AgriNBT.SEED, this.getId());
 		new PlantStats().writeToNBT(tag);

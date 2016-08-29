@@ -2,7 +2,6 @@
  */
 package com.infinityraider.agricraft.vanilla;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
@@ -12,7 +11,6 @@ import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
 import java.util.Optional;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 /**
  *
@@ -35,30 +33,15 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed> {
     }
 
     private AgriSeed resolve(ItemStack stack) {
-        IAgriPlant plant = resolveSeedItem(stack);
-        plant = plant == null ? resolveOreDict(stack) : plant;
-        Optional<IAgriStat> stats = StatRegistry.getInstance().valueOf(stack.getTagCompound());
-        return plant == null ? null : new AgriSeed(plant, stats.orElseGet(PlantStats::new));
-    }
-
-    private IAgriPlant resolveOreDict(ItemStack stack) {
-        int[] ids = OreDictionary.getOreIDs(stack);
-        for (int i : ids) {
-            String id = OreDictionary.getOreName(i).replace("_seed", "_plant");
-            IAgriPlant plant = PlantRegistry.getInstance().getPlant(id);
-            if (plant != null) {
-                AgriCore.getLogger("AgriCraft").debug("Resolved OreDict Seed: \"{0}\"!", id);
-                return plant;
-            }
+        Optional<IAgriPlant> plant = PlantRegistry.getInstance().getPlants().stream()
+                .filter(p -> p.getSeedItems().contains(stack.getItem()))
+                .findFirst();
+        if (plant.isPresent()) {
+            Optional<IAgriStat> stats = StatRegistry.getInstance().valueOf(stack.getTagCompound());
+            return new AgriSeed(plant.get(), stats.orElseGet(PlantStats::new));
+        } else {
+            return null;
         }
-        return null;
-    }
-
-    private IAgriPlant resolveSeedItem(ItemStack stack) {
-        return PlantRegistry.getInstance().getPlants().stream()
-                .filter(p -> p.getSeedItem().equals(stack.getItem()))
-                .findFirst()
-                .orElse(null);
     }
 
 }

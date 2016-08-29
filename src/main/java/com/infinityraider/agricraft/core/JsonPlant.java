@@ -6,6 +6,7 @@ package com.infinityraider.agricraft.core;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriProduct;
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.requirment.IGrowthRequirementBuilder;
@@ -13,11 +14,13 @@ import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirment.RequirementType;
 import com.infinityraider.agricraft.farming.cropplant.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.IconHelper;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -36,7 +39,7 @@ public class JsonPlant extends CropPlant {
 
     public final AgriPlant plant;
 
-    private Item seedItem;
+    private List<Item> seedItems;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = plant;
@@ -59,12 +62,14 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
-    public Item getSeedItem() {
-        if (this.seedItem == null) {
-            this.seedItem = Item.getByNameOrId(this.plant.getSeedItem());
-            this.seedItem = this.seedItem == null ? AgriItems.getInstance().AGRI_SEED : this.seedItem;
+    public Collection<Item> getSeedItems() {
+        if (this.seedItems == null) {
+            this.seedItems = this.plant.getSeedItems().stream()
+                    .map(i -> Item.getByNameOrId(i))
+                    .filter(TypeHelper::isNonNull)
+                    .collect(Collectors.toList());
         }
-        return this.seedItem;
+        return this.seedItems;
     }
 
     @Override
