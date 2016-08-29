@@ -5,6 +5,7 @@ package com.infinityraider.agricraft.vanilla;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import java.util.Optional;
 import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -54,11 +55,11 @@ public class BonemealWrapper implements IAgriFertilizer, IAgriAdapter<IAgriFerti
 	}
 
 	@Override
-	public IAgriFertilizer getValue(Object obj) {
+	public Optional<IAgriFertilizer> valueOf(Object obj) {
 		if (obj instanceof ItemStack && BONEMEAL.isItemEqual((ItemStack) obj)) {
-			return this;
+			return Optional.of(this);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	

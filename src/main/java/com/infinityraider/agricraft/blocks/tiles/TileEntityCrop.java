@@ -345,7 +345,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	}
 
 	public void readTileNBT(NBTTagCompound tag) {
-		this.stats = StatRegistry.getInstance().getValue(tag);
+		this.stats = StatRegistry.getInstance().valueOf(tag).get();
 		this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
 		this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
 		if (tag.hasKey(AgriNBT.INVENTORY) && this.plant != null) {

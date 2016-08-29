@@ -26,17 +26,18 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed> {
     }
 
     @Override
-    public AgriSeed getValue(Object obj) {
-        return (obj instanceof ItemStack) ? resolve((ItemStack) obj) : null;
+    public Optional<AgriSeed> valueOf(Object obj) {
+        if (obj instanceof ItemStack) {
+            return Optional.ofNullable(resolve((ItemStack) obj));
+        } else {
+            return Optional.empty();
+        }
     }
 
     private AgriSeed resolve(ItemStack stack) {
         IAgriPlant plant = resolveSeedItem(stack);
         plant = plant == null ? resolveOreDict(stack) : plant;
-        Optional<IAgriStat> stats = Optional.empty();
-        if (stack.hasTagCompound()) {
-            stats = Optional.ofNullable(StatRegistry.getInstance().getValue(stack.getTagCompound()));
-        }
+        Optional<IAgriStat> stats = StatRegistry.getInstance().valueOf(stack.getTagCompound());
         return plant == null ? null : new AgriSeed(plant, stats.orElseGet(PlantStats::new));
     }
 

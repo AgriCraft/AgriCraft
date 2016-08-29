@@ -2,6 +2,8 @@
  */
 package com.infinityraider.agricraft.api.adapter;
 
+import java.util.Optional;
+
 /**
  *
  * @author RlonRyan
@@ -12,15 +14,14 @@ public interface IAgriAdapterRegistry<T> {
 	
 	boolean hasAdapter(Object object);
 	
-	IAgriAdapter<T> getAdapter(Object obj);
+	Optional<IAgriAdapter<T>> getAdapter(Object obj);
 	
 	boolean registerAdapter(IAgriAdapter<T> adapter);
 	
 	boolean unregisterAdapter(IAgriAdapter<T> adapter);
 	
-	default T getValue(Object obj) {
-		IAgriAdapter<T> adapter = getAdapter(obj);
-		return adapter == null ? null : adapter.getValue(obj);
+	default Optional<T> valueOf(Object obj) {
+        return getAdapter(obj).flatMap(a -> a.valueOf(obj));
 	}
 	
 }

@@ -52,7 +52,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof IAgriCrop) {
 			IAgriCrop crop = (IAgriCrop) te;
-			AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
+			AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
 			if (seed == null && crop.hasPlant()) {
 				seed = crop.removeSeed();
 				if (seed != null) {

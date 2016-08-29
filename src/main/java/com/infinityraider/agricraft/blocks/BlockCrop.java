@@ -200,13 +200,10 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 				return false;
 			}
 			//the SEED can be planted here
-			AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
-			if (seed == null || !seed.getPlant().getGrowthRequirement().canGrow(world, pos)) {
-				return false;
-			}
-			//get AgriCraftNBT data from the seeds
-			boolean res = crop.setSeed(seed);
-			return res;
+			Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+			return seed.isPresent()
+                    && seed.get().getPlant().getGrowthRequirement().canGrow(world, pos)
+                    && crop.setSeed(seed.get());
 		}
 		return false;
 	}
@@ -238,8 +235,8 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 				// Allow the excludes to do their things.
 				return false;
 			} else if (FertilizerRegistry.getInstance().hasAdapter(heldItem)) {
-				IAgriFertilizer fert = FertilizerRegistry.getInstance().getValue(heldItem);
-				return fert == null ? false : fert.applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
+				Optional<IAgriFertilizer> fert = FertilizerRegistry.getInstance().valueOf(heldItem);
+				return fert.isPresent() && fert.get().applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
 			} else if (plantSeed(heldItem, world, pos)) {
 				return true;
 			} //check to see if the player clicked with crops (crosscrop attempt)

@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeHandler;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeCategory;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeHandler;
 import com.infinityraider.agricraft.init.AgriItems;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
@@ -20,42 +21,42 @@ import net.minecraft.item.ItemStack;
 @JEIPlugin
 public class AgriCraftJEIPlugin implements IModPlugin {
 
-	public static final String CATEGORY_MUTATION = "agricraft.mutation";
-	public static final String CATEGORY_PRODUCE = "agricraft.produce";
+    public static final String CATEGORY_MUTATION = "agricraft.mutation";
+    public static final String CATEGORY_PRODUCE = "agricraft.produce";
 
-	private static IJeiRuntime jeiRuntime;
-	private static IJeiHelpers jeiHelpers;
+    private static IJeiRuntime jeiRuntime;
+    private static IJeiHelpers jeiHelpers;
 
-	@Override
-	public void register(@Nonnull IModRegistry registry) {
+    @Override
+    public void register(@Nonnull IModRegistry registry) {
 
-		jeiHelpers = registry.getJeiHelpers();
+        jeiHelpers = registry.getJeiHelpers();
 
-		registry.addRecipeCategories(
-				new MutationRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
-				new ProduceRecipeCategory(registry.getJeiHelpers().getGuiHelper())
-		);
+        registry.addRecipeCategories(
+                new MutationRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
+                new ProduceRecipeCategory(registry.getJeiHelpers().getGuiHelper())
+        );
 
-		registry.addRecipeHandlers(
-				new MutationRecipeHandler(),
-				new ProduceRecipeHandler()
-		);
+        registry.addRecipeHandlers(
+                new MutationRecipeHandler(),
+                new ProduceRecipeHandler()
+        );
 
-		registry.addRecipeCategoryCraftingItem(new ItemStack(AgriItems.getInstance().CROPS), CATEGORY_MUTATION, CATEGORY_PRODUCE);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(AgriItems.getInstance().CROPS), CATEGORY_MUTATION, CATEGORY_PRODUCE);
 
-		jeiHelpers.getSubtypeRegistry().useNbtForSubtypes(AgriItems.getInstance().AGRI_SEED);
-		jeiHelpers.getSubtypeRegistry().registerNbtInterpreter(AgriItems.getInstance().AGRI_SEED, (stack) -> {
-			AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
-			return seed == null ? "generic" : seed.getPlant().getId();
-		});
+        jeiHelpers.getSubtypeRegistry().useNbtForSubtypes(AgriItems.getInstance().AGRI_SEED);
+        jeiHelpers.getSubtypeRegistry().registerNbtInterpreter(AgriItems.getInstance().AGRI_SEED, (stack) -> {
+            Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+            return seed.map(s -> s.getPlant().getId()).orElse("generic");
+        });
 
-	}
+    }
 
-	@Override
-	public void onRuntimeAvailable(IJeiRuntime jeiRuntimeInstance) {
-		jeiRuntime = jeiRuntimeInstance;
-		PlantRegistry.getInstance().getPlants().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
-		MutationRegistry.getInstance().getMutations().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
-	}
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntimeInstance) {
+        jeiRuntime = jeiRuntimeInstance;
+        PlantRegistry.getInstance().getPlants().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
+        MutationRegistry.getInstance().getMutations().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
+    }
 
 }

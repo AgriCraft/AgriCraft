@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.NBTHelper;
+import java.util.Optional;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
@@ -147,15 +148,19 @@ public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
 	}
 
 	@Override
-	public IAgriStat getValue(Object obj) {
+	public Optional<IAgriStat> valueOf(Object obj) {
 		NBTTagCompound tag = NBTHelper.asTag(obj);
-		return tag == null ? null : new PlantStats(
+        if (tag != null) {
+            return Optional.of(new PlantStats(
 				tag.getByte(NBT_GAIN),
 				tag.getByte(NBT_GROWTH),
 				tag.getByte(NBT_STRENGTH),
 				tag.getBoolean(NBT_ANALYZED),
 				tag.getByte(NBT_META)
-		);
+            ));
+        } else {
+            return Optional.empty();
+        }
 	}
 
 }

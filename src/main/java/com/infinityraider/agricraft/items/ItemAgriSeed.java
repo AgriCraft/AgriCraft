@@ -27,6 +27,7 @@ import com.infinityraider.infinitylib.render.item.IAutoRenderedItem;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.NBTHelper;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -65,8 +66,8 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        final AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
-        return (seed == null ? "Generic Seeds" : seed.getPlant().getSeedName());
+        final Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+        return seed.map(s -> s.getPlant().getSeedName()).orElse("Generic Seeds");
     }
 
     @Override
@@ -96,32 +97,32 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
     }
 
     @Override
-    public AgriSeed getValue(Object obj) {
+    public Optional<AgriSeed> valueOf(Object obj) {
         NBTTagCompound tag = NBTHelper.asTag(obj);
         if (tag == null) {
-            return null;
+            return Optional.empty();
         }
         IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
-        IAgriStat stat = StatRegistry.getInstance().getValue(tag);
+        IAgriStat stat = StatRegistry.getInstance().valueOf(tag).get();
         if (plant != null && stat != null) {
-            return new AgriSeed(plant, stat);
+            return Optional.of(new AgriSeed(plant, stat));
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public String getModelId(ItemStack stack) {
-        AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
-        return seed == null ? "" : seed.getPlant().getId();
+        Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+        return seed.map(s -> s.getPlant().getId()).orElse("");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public String getBaseTexture(ItemStack stack) {
-        AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
-        return seed == null ? "agricraft:items/seed_unknown" : seed.getPlant().getSeedTexture().toString();
+        Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+        return seed.map(s -> s.getPlant().getSeedTexture().toString()).orElse("agricraft:items/seed_unknown");
     }
 
     @Override
