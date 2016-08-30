@@ -9,8 +9,8 @@ import com.agricraft.agricore.plant.AgriProduct;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
-import com.infinityraider.agricraft.api.requirment.IGrowthRequirementBuilder;
 import com.infinityraider.agricraft.api.render.RenderMethod;
+import com.infinityraider.agricraft.api.requirment.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.requirment.RequirementType;
 import com.infinityraider.agricraft.farming.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
@@ -144,7 +144,7 @@ public class JsonPlant extends CropPlant {
 
     protected final IGrowthRequirement initGrowthRequirementJSON() {
 
-        IGrowthRequirementBuilder builder = GrowthRequirementHandler.getNewBuilder();
+        IGrowthReqBuilder builder = GrowthRequirementHandler.getNewBuilder();
 
         if (this.plant == null) {
             AgriCore.getLogger("AgriCraft").warn("Null plant!");
@@ -156,7 +156,7 @@ public class JsonPlant extends CropPlant {
                 ItemStack stack = (ItemStack) b;
                 if (stack.getItem() instanceof ItemBlock) {
                     ItemBlock ib = (ItemBlock) stack.getItem();
-                    builder.soil(new BlockWithMeta(ib.block, ib.getMetadata(stack)));
+                    builder.setSoil(new BlockWithMeta(ib.block, ib.getMetadata(stack)));
                 }
             }
         });
@@ -166,7 +166,7 @@ public class JsonPlant extends CropPlant {
                 ItemStack stack = (ItemStack) b;
                 if (stack.getItem() instanceof ItemBlock) {
                     ItemBlock ib = (ItemBlock) stack.getItem();
-                    builder.requiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), RequirementType.BELOW, false);
+                    builder.addRequiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), RequirementType.BELOW);
                 }
             }
         });
@@ -176,12 +176,13 @@ public class JsonPlant extends CropPlant {
                 ItemStack stack = (ItemStack) obj;
                 if (stack.getItem() instanceof ItemBlock) {
                     ItemBlock ib = (ItemBlock) stack.getItem();
-                    builder.nearbyBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), dist, true);
+                    builder.addRequiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), RequirementType.BELOW);
                 }
             }
         });
 
-        builder.brightnessRange(plant.getRequirement().getMinLight(), plant.getRequirement().getMaxLight());
+        builder.setMinBrightness(plant.getRequirement().getMinLight());
+        builder.setMaxBrightness(plant.getRequirement().getMaxLight());
 
         return builder.build();
 
