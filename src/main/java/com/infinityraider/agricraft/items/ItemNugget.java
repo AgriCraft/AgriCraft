@@ -11,9 +11,8 @@ import net.minecraft.item.ItemStack;
 import java.util.Collections;
 
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import java.util.ArrayList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemNugget extends ItemBase implements IAutoRenderedItem {
@@ -31,7 +30,7 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 			varients.add(stack);
 		}
 	}
-	
+
 	@Override
 	public boolean getHasSubtypes() {
 		return true;
@@ -42,39 +41,28 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 		return "item.agricraft:" + AgriNuggetType.values()[stack.getMetadata()].nugget;
 	}
 
-    /*
-	@SideOnly(Side.CLIENT)
-	public void registerItemRenderer() {
-		for (int i = 0; i < AgriNuggetType.values().length; i++) {
-			ModelResourceLocation model = RegisterHelper.getItemModel("agricraft:items/" + AgriNuggetType.values()[i].nugget);
-			ModelLoader.setCustomModelResourceLocation(this, i, model);
-		}
-		return tex;
-	}
-	*/
-
 	@Override
 	public List<String> getOreTags() {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-		return Collections.emptyList();
+	public String getModelId(ItemStack stack) {
+		return AgriNuggetType.getNugget(stack.getMetadata()).nugget;
 	}
 
-    @Override
-    public String getModelId(ItemStack stack) {
-        return AgriNuggetType.getNugget(stack.getMetadata()).nugget;
-    }
+	@Override
+	public String getBaseTexture(ItemStack stack) {
+		return AgriNuggetType.getNugget(stack.getMetadata()).texture;
+	}
 
-    @Override
-    public String getBaseTexture(ItemStack stack) {
-        return AgriNuggetType.getNugget(stack.getMetadata()).texture;
-    }
+	@Override
+	public List<ResourceLocation> getAllTextures() {
+		List<ResourceLocation> textures = new ArrayList<>(AgriNuggetType.values().length);
+		for (AgriNuggetType type : AgriNuggetType.values()) {
+			textures.add(new ResourceLocation("agricraft:items/" + type.nugget));
+		}
+		return textures;
+	}
 
-    @Override
-    public List<ResourceLocation> getAllTextures() {
-        return Collections.emptyList();
-    }
 }

@@ -6,12 +6,10 @@ import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -25,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
-	
+
 	@AgriConfigurable(
 			category = AgriConfigCategory.TOOLS,
 			key = "Enable Trowel",
@@ -54,7 +52,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof IAgriCrop) {
 			IAgriCrop crop = (IAgriCrop) te;
-			AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
+			AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
 			if (seed == null && crop.hasPlant()) {
 				seed = crop.removeSeed();
 				if (seed != null) {
@@ -90,8 +88,4 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 		return Collections.emptyList();
 	}
 
-	@Override
-	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-		return Collections.emptyList();
-	}
 }

@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.farming.cropplant;
+package com.infinityraider.agricraft.farming;
 
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
@@ -31,6 +31,9 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import java.util.Arrays;
+import java.util.Collection;
+import net.minecraft.item.Item;
 
 /**
  * The main class used by TileEntityCrop.
@@ -132,9 +135,14 @@ public abstract class CropPlant implements IAgriPlant {
     @Override
     public abstract Block getBlock();
 
+    @Override
+    public Collection<Item> getSeedItems() {
+        return Arrays.asList(AgriItems.getInstance().AGRI_SEED);
+    }
+
 	@Override
 	public final ItemStack getSeed() {
-		ItemStack stack = new ItemStack(AgriItems.getInstance().AGRI_SEED);
+		ItemStack stack = new ItemStack(this.getSeedItems().stream().findFirst().orElse(AgriItems.getInstance().AGRI_SEED));
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(AgriNBT.SEED, this.getId());
 		new PlantStats().writeToNBT(tag);
@@ -326,7 +334,7 @@ public abstract class CropPlant implements IAgriPlant {
     public List<BakedQuad> renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage, Function<ResourceLocation, TextureAtlasSprite> textureToIcon) {
         //The quads returned from this method are added to the tessellator,
         // however the plant renderer directly adds them to the tessellator, so an empty list is returned
-        PlantRenderer.renderPlant(world, pos, growthStage, this);
+        PlantRenderer.renderPlant(this, growthStage);
         return Collections.emptyList();
     }
 

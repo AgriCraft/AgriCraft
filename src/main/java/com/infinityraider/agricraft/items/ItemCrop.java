@@ -7,7 +7,6 @@ import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -54,8 +53,4 @@ public class ItemCrop extends ItemBase {
 		return Collections.emptyList();
 	}
 
-	@Override
-	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-		return Collections.emptyList();
-	}
 }

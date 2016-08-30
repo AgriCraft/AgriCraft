@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelVal
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -25,8 +24,7 @@ public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, Ti
 	}
 
 	@Override
-	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelValve block, TileEntityChannelValve tile,
-										 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+	public void renderInventoryBlockWood(ITessellator tessellator, World world, TileEntityChannelValve tile, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
 
 		final TextureAtlasSprite sepIcon = BaseIcons.IRON_BLOCK.getIcon();
 

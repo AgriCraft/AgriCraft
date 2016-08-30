@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
-import com.infinityraider.agricraft.handler.MissingJsonHandler;
 import com.infinityraider.agricraft.handler.SoundHandler;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.ModelErrorSuppressor;
@@ -18,9 +17,6 @@ public class ClientProxy implements IClientProxyBase, IProxy {
 	@Override
 	public void registerEventHandlers() {
 		IProxy.super.registerEventHandlers();
-
-		MissingJsonHandler missingJsonHandler = new MissingJsonHandler();
-		MinecraftForge.EVENT_BUS.register(missingJsonHandler);
 
 		ItemToolTipHandler itemToolTipHandler = new ItemToolTipHandler();
 		MinecraftForge.EVENT_BUS.register(itemToolTipHandler);

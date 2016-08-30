@@ -6,18 +6,23 @@ package com.infinityraider.agricraft.core;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriProduct;
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
-import com.infinityraider.agricraft.api.requirment.IGrowthRequirementBuilder;
 import com.infinityraider.agricraft.api.render.RenderMethod;
+import com.infinityraider.agricraft.api.requirment.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.requirment.RequirementType;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.farming.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.IconHelper;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -32,200 +37,213 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class JsonPlant extends CropPlant {
 
-	public final AgriPlant plant;
+    public final AgriPlant plant;
 
-	public JsonPlant(AgriPlant plant) {
-		this.plant = plant;
-		this.setGrowthRequirement(this.initGrowthRequirementJSON());
-	}
+    private List<Item> seedItems;
 
-	@Override
-	public String getId() {
-		return this.plant.getId();
-	}
+    public JsonPlant(AgriPlant plant) {
+        this.plant = plant;
+        this.setGrowthRequirement(this.initGrowthRequirementJSON());
+    }
 
-	@Override
-	public String getPlantName() {
-		return this.plant.getPlantName();
-	}
+    @Override
+    public String getId() {
+        return this.plant.getId();
+    }
 
-	@Override
-	public String getSeedName() {
-		return this.plant.getSeedName();
-	}
+    @Override
+    public String getPlantName() {
+        return this.plant.getPlantName();
+    }
 
-	@Override
-	public String getInformation() {
-		return this.plant.getDescription().toString();
-	}
+    @Override
+    public String getSeedName() {
+        return this.plant.getSeedName();
+    }
 
-	@Override
-	public boolean isWeedable() {
-		return this.plant.isWeedable();
-	}
+    @Override
+    public Collection<Item> getSeedItems() {
+        if (this.seedItems == null) {
+            this.seedItems = this.plant.getSeedItems().stream()
+                    .map(i -> Item.getByNameOrId(i))
+                    .filter(TypeHelper::isNonNull)
+                    .collect(Collectors.toList());
+        }
+        return this.seedItems;
+    }
 
-	@Override
-	public boolean isAgressive() {
-		return this.plant.isAgressive();
-	}
+    @Override
+    public String getInformation() {
+        return this.plant.getDescription().toString();
+    }
 
-	@Override
-	public double getSpreadChance() {
-		return this.plant.getSpreadChance();
-	}
+    @Override
+    public boolean isWeedable() {
+        return this.plant.isWeedable();
+    }
 
-	@Override
-	public double getSpawnChance() {
-		return this.plant.getSpawnChance();
-	}
+    @Override
+    public boolean isAgressive() {
+        return this.plant.isAgressive();
+    }
 
-	@Override
-	public ArrayList<ItemStack> getAllFruits() {
-		ArrayList<ItemStack> fruits = new ArrayList<>();
-		for (AgriProduct p : this.plant.getProducts().getAll()) {
-			Object s = p.toStack();
-			if (s instanceof ItemStack) {
-				fruits.add((ItemStack) s);
-			}
-		}
-		return fruits;
-	}
+    @Override
+    public double getSpreadChance() {
+        return this.plant.getSpreadChance();
+    }
 
-	@Override
-	public ItemStack getRandomFruit(Random rand) {
-		for (AgriProduct p : this.plant.getProducts().getRandom(rand)) {
-			Object s = p.toStack();
-			if (s instanceof ItemStack) {
-				return (ItemStack) s;
-			}
-		}
-		return null;
-	}
+    @Override
+    public double getSpawnChance() {
+        return this.plant.getSpawnChance();
+    }
 
-	@Override
-	public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
-		int amount = (int) (Math.ceil((gain + 0.00) / 3));
-		ArrayList<ItemStack> list = new ArrayList<>();
-		while (amount > 0) {
-			list.add(getRandomFruit(rand));
-			amount--;
-		}
-		return list;
-	}
+    @Override
+    public ArrayList<ItemStack> getAllFruits() {
+        ArrayList<ItemStack> fruits = new ArrayList<>();
+        for (AgriProduct p : this.plant.getProducts().getAll()) {
+            Object s = p.toStack();
+            if (s instanceof ItemStack) {
+                fruits.add((ItemStack) s);
+            }
+        }
+        return fruits;
+    }
 
-	@Override
-	public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
-		// Holder
-	}
+    @Override
+    public ItemStack getRandomFruit(Random rand) {
+        for (AgriProduct p : this.plant.getProducts().getRandom(rand)) {
+            Object s = p.toStack();
+            if (s instanceof ItemStack) {
+                return (ItemStack) s;
+            }
+        }
+        return null;
+    }
 
-	@Override
-	protected IGrowthRequirement initGrowthRequirement() {
-		// Hack to avert annoying auto-call.
-		return GrowthRequirementHandler.getNewBuilder().build();
-	}
-	
-	protected final IGrowthRequirement initGrowthRequirementJSON() {
+    @Override
+    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
+        int amount = (int) (Math.ceil((gain + 0.00) / 3));
+        ArrayList<ItemStack> list = new ArrayList<>();
+        while (amount > 0) {
+            list.add(getRandomFruit(rand));
+            amount--;
+        }
+        return list;
+    }
 
-		IGrowthRequirementBuilder builder = GrowthRequirementHandler.getNewBuilder();
+    @Override
+    public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
+        // Holder
+    }
 
-		if (this.plant == null) {
-			AgriCore.getLogger("AgriCraft").warn("Null plant!");
-			return builder.build();
-		}
+    @Override
+    protected IGrowthRequirement initGrowthRequirement() {
+        // Hack to avert annoying auto-call.
+        return GrowthRequirementHandler.getNewBuilder().build();
+    }
 
-		this.plant.getRequirement().getSoils().forEach((b) -> {
-			if (b instanceof ItemStack) {
-				ItemStack stack = (ItemStack) b;
-				if (stack.getItem() instanceof ItemBlock) {
-					ItemBlock ib = (ItemBlock) stack.getItem();
-					builder.soil(new BlockWithMeta(ib.block, ib.getMetadata(stack)));
-				}
-			}
-		});
+    protected final IGrowthRequirement initGrowthRequirementJSON() {
 
-		this.plant.getRequirement().getBases().forEach((b) -> {
-			if (b instanceof ItemStack) {
-				ItemStack stack = (ItemStack) b;
-				if (stack.getItem() instanceof ItemBlock) {
-					ItemBlock ib = (ItemBlock) stack.getItem();
-					builder.requiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), RequirementType.BELOW, false);
-				}
-			}
-		});
+        IGrowthReqBuilder builder = GrowthRequirementHandler.getNewBuilder();
 
-		this.plant.getRequirement().getNearby().forEach((obj, dist) -> {
-			if (obj instanceof ItemStack) {
-				ItemStack stack = (ItemStack) obj;
-				if (stack.getItem() instanceof ItemBlock) {
-					ItemBlock ib = (ItemBlock) stack.getItem();
-					builder.nearbyBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), dist, true);
-				}
-			}
-		});
+        if (this.plant == null) {
+            AgriCore.getLogger("AgriCraft").warn("Null plant!");
+            return builder.build();
+        }
 
-		builder.brightnessRange(plant.getRequirement().getMinLight(), plant.getRequirement().getMaxLight());
+        this.plant.getRequirement().getSoils().forEach((b) -> {
+            if (b instanceof ItemStack) {
+                ItemStack stack = (ItemStack) b;
+                if (stack.getItem() instanceof ItemBlock) {
+                    ItemBlock ib = (ItemBlock) stack.getItem();
+                    builder.setSoil(new BlockWithMeta(ib.block, ib.getMetadata(stack)));
+                }
+            }
+        });
 
-		return builder.build();
+        this.plant.getRequirement().getBases().forEach((b) -> {
+            if (b instanceof ItemStack) {
+                ItemStack stack = (ItemStack) b;
+                if (stack.getItem() instanceof ItemBlock) {
+                    ItemBlock ib = (ItemBlock) stack.getItem();
+                    builder.addRequiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), RequirementType.BELOW);
+                }
+            }
+        });
 
-	}
+        this.plant.getRequirement().getNearby().forEach((obj, dist) -> {
+            if (obj instanceof ItemStack) {
+                ItemStack stack = (ItemStack) obj;
+                if (stack.getItem() instanceof ItemBlock) {
+                    ItemBlock ib = (ItemBlock) stack.getItem();
+                    builder.addRequiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), RequirementType.BELOW);
+                }
+            }
+        });
 
-	@Override
-	public boolean canBonemeal() {
-		return this.plant.canBonemeal();
-	}
+        builder.setMinBrightness(plant.getRequirement().getMinLight());
+        builder.setMaxBrightness(plant.getRequirement().getMaxLight());
 
-	@Override
-	public Block getBlock() {
-		return null;
-	}
+        return builder.build();
 
-	@Override
-	public int getTier() {
-		return this.plant == null ? 1 : this.plant.getTier();
-	}
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public float getHeight(int meta) {
-		return Constants.UNIT * 13;
-	}
+    @Override
+    public boolean canBonemeal() {
+        return this.plant.canBonemeal();
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public RenderMethod getRenderMethod() {
-		switch (this.plant.getTexture().getRenderType()) {
-			default:
-			case HASH:
-				return RenderMethod.HASHTAG;
-			case CROSS:
-				return RenderMethod.CROSSED;
-		}
-	}
+    @Override
+    public Block getBlock() {
+        return null;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getPrimaryPlantTexture(int growthStage) {
-		return new ResourceLocation(plant.getTexture().getPlantTexture(growthStage));
-	}
-	
+    @Override
+    public int getTier() {
+        return this.plant == null ? 1 : this.plant.getTier();
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getSecondaryPlantTexture(int growthStage) {
-		return null;
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public float getHeight(int meta) {
+        return Constants.UNIT * 13;
+    }
 
-	@Override
-	public ResourceLocation getSeedTexture() {
-		return new ResourceLocation(plant.getTexture().getSeedTexture());
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderMethod getRenderMethod() {
+        switch (this.plant.getTexture().getRenderType()) {
+            default:
+            case HASH:
+                return RenderMethod.HASHTAG;
+            case CROSS:
+                return RenderMethod.CROSSED;
+        }
+    }
 
-	@SideOnly(Side.CLIENT)
-	public void registerIcons() {
-		for (String tex : this.plant.getTexture().getPlantTextures()) {
-			//AgriCore.getLogger("AgriCraft").debug("Registering: " + tex);
-			IconHelper.registerIcon(tex);
-		}
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getPrimaryPlantTexture(int growthStage) {
+        return new ResourceLocation(plant.getTexture().getPlantTexture(growthStage));
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getSecondaryPlantTexture(int growthStage) {
+        return null;
+    }
+
+    @Override
+    public ResourceLocation getSeedTexture() {
+        return new ResourceLocation(plant.getTexture().getSeedTexture());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerIcons() {
+        for (String tex : this.plant.getTexture().getPlantTextures()) {
+            //AgriCore.getLogger("AgriCraft").debug("Registering: " + tex);
+            IconHelper.registerIcon(tex);
+        }
+    }
 
 }

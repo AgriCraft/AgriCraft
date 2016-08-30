@@ -4,7 +4,6 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -23,6 +22,7 @@ import com.infinityraider.infinitylib.render.item.ItemModelTexture;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -48,7 +48,7 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 			return EnumActionResult.PASS;
 		}
 		IAgriCrop crop = (IAgriCrop) te;
-		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
+		AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
 		if (!crop.acceptsSeed(seed) || seed == null) {
 			return EnumActionResult.FAIL;
 		}
@@ -62,8 +62,8 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String text = AgriCore.getTranslator().translate("item.agricraft:clipping.name");
-		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
-		return (seed == null ? "Generic" : seed.getPlant().getPlantName()) + " " + text;
+		Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+        return seed.map(s -> s.getPlant().getPlantName()) + " " + text;
 	}
 
 	public static ItemStack getClipping(AgriSeed seed, int amount) {
@@ -78,8 +78,8 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getModelId(ItemStack stack) {
-		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
-		return seed == null ? "" : seed.getPlant().getId();
+		Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+        return seed.map(s -> s.getPlant().getId()).orElse("");
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public List<ItemModelTexture> getOverlayTextures(ItemStack stack) {
-		AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
+		AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
 		ResourceLocation tex = (seed == null) ? new ResourceLocation("agricraft:items/debugger") : seed.getPlant().getPrimaryPlantTexture(Constants.MATURE);
 		return TypeHelper.asList(
 				new ItemModelTexture(tex, 4, 4, 12, 12, 0, 0, 16, 16)
@@ -111,8 +111,4 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 		return Collections.emptyList();
 	}
 
-	@Override
-	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-		return Collections.emptyList();
-	}
 }

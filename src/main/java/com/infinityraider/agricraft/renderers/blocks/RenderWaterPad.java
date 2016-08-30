@@ -3,13 +3,10 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.pad.AbstractBlockWaterPad;
 import com.infinityraider.agricraft.blocks.pad.BlockWaterPad;
 import com.infinityraider.agricraft.blocks.pad.BlockWaterPadFull;
-import com.infinityraider.infinitylib.block.tile.TileEntityBase;
-import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemBlock;
@@ -22,33 +19,31 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.infinitylib.render.block.RenderBlock;
 
-import javax.annotation.Nullable;
 
 @SideOnly(Side.CLIENT)
-public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad, TileEntityBase> {
+public class RenderWaterPad extends RenderBlock<AbstractBlockWaterPad> {
 
 	public RenderWaterPad(AbstractBlockWaterPad block) {
-		super(block, null, true, false, true);
+		super(block, true, true);
 	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, AbstractBlockWaterPad block,
-								 @Nullable TileEntityBase tile, boolean dynamicRender, float partialTick, int destroyStage) {
+	public void renderStatic(ITessellator tess, IBlockAccess world, IBlockState state, BlockPos pos) {
 		// Check Full
-		final boolean full = block instanceof BlockWaterPadFull;
+		final boolean full = state.getBlock() instanceof BlockWaterPadFull;
 		// Render
-		this.renderBase(tessellator, world, pos, full);
-		this.renderSide(tessellator, world, pos, full, EnumFacing.NORTH);
-		this.renderSide(tessellator, world, pos, full, EnumFacing.EAST);
-		this.renderSide(tessellator, world, pos, full, EnumFacing.SOUTH);
-		this.renderSide(tessellator, world, pos, full, EnumFacing.WEST);
+		this.renderBase(tess, world, pos, full);
+		this.renderSide(tess, world, pos, full, EnumFacing.NORTH);
+		this.renderSide(tess, world, pos, full, EnumFacing.EAST);
+		this.renderSide(tess, world, pos, full, EnumFacing.SOUTH);
+		this.renderSide(tess, world, pos, full, EnumFacing.WEST);
 	}
 
 	@Override
-	public void renderInventoryBlock(ITessellator tess, World world, IBlockState state, AbstractBlockWaterPad block, @Nullable TileEntityBase tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-
+	public void renderItem(ITessellator tess, World world, ItemStack stack, EntityLivingBase entity) {
+		
 		// Icon
 		final TextureAtlasSprite dirtIcon = BaseIcons.DIRT.getIcon();
 
@@ -102,9 +97,7 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad, TileE
 			tess.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
 			tess.setColorRGBA(f4 * f, f4 * f1, f4 * f2, 0.8F);
 			*/
-			tess.translate(pos.getX(), pos.getY(), pos.getZ());
 			tess.drawScaledFace(15, 0, 16, 1, EnumFacing.UP, waterIcon, 14);
-			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 		}
 
 		if (shouldRenderCorner(world, pos, full, EnumFacing.EAST, EnumFacing.SOUTH)) {
@@ -120,9 +113,7 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad, TileE
 			tess.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
 			tess.setColorRGBA(f4 * f, f4 * f1, f4 * f2, 0.8F);
 			*/
-			tess.translate(pos.getX(), pos.getY(), pos.getZ());
 			tess.drawScaledFace(15, 15, 16, 16, EnumFacing.UP, waterIcon, 14);
-			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 		}
 
 		if (shouldRenderCorner(world, pos, full, EnumFacing.SOUTH, EnumFacing.WEST)) {
@@ -138,9 +129,7 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad, TileE
 			tess.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
 			tess.setColorRGBA(f4 * f, f4 * f1, f4 * f2, 0.8F);
 			*/
-			tess.translate(pos.getX(), pos.getY(), pos.getZ());
 			tess.drawScaledFace(0, 15, 1, 16, EnumFacing.UP, waterIcon, 14);
-			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 		}
 		//renderer.renderAllFaces = renderAllFaces;
 		if (full) {
@@ -153,9 +142,7 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad, TileE
 			tess.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
 			tess.setColorRGBA(f4 * f, f4 * f1, f4 * f2, 0.8F);
 			*/
-			tess.translate(pos.getX(), pos.getY(), pos.getZ());
 			tess.drawScaledFace(1, 1, 15, 15, EnumFacing.UP, waterIcon, 14);
-			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 		}
 	}
 
@@ -200,7 +187,6 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad, TileE
 				*/
 
 				tess.drawScaledFace(xLower, zLower, xUpper, zUpper, EnumFacing.UP, icon, 14);
-				tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 			}
 			if (flag == full) {
 				return;
@@ -217,7 +203,7 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad, TileE
 
 	@Override
 	public TextureAtlasSprite getIcon() {
-		return null;
+		return BaseIcons.DIRT.getIcon();
 	}
 
 	@Override

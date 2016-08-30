@@ -12,7 +12,6 @@ import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
-import com.infinityraider.agricraft.items.ItemAgriSeed;
 import com.infinityraider.agricraft.items.ItemDebugger;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
@@ -193,20 +192,18 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 	 * @return if the planting operation was successful.
 	 */
 	public boolean plantSeed(ItemStack stack, World world, BlockPos pos) {
-		if (!world.isRemote) {
-			TileEntityCrop crop = (TileEntityCrop) world.getTileEntity(pos);
+		TileEntity te = world.getTileEntity(pos);
+		if (!world.isRemote && te instanceof TileEntityCrop) {
+			TileEntityCrop crop = (TileEntityCrop)te;
 			//is the cropEmpty a crosscrop or does it already have a plant
 			if (crop.isCrossCrop() || crop.hasPlant()) {
 				return false;
 			}
 			//the SEED can be planted here
-			AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
-			if (seed == null || !seed.getPlant().getGrowthRequirement().isValidSoil(world, pos.add(0, -1, 0))) {
-				return false;
-			}
-			//get AgriCraftNBT data from the seeds
-			crop.setSeed(seed);
-			return true;
+			Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+			return seed.isPresent()
+                    && seed.get().getPlant().getGrowthRequirement().canGrow(world, pos)
+                    && crop.setSeed(seed.get());
 		}
 		return false;
 	}
@@ -229,7 +226,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof TileEntityCrop) {
 			TileEntityCrop crop = (TileEntityCrop) te;
-			if (AgriItems.getInstance().HAND_RAKE.isEnabled() && heldItem == null) {
+			if (AgriItems.getInstance().HAND_RAKE.isEnabled() && heldItem == null && crop.canWeed()) {
 				//if weeds can only be removed by using a hand rake, nothing should happen
 				return false;
 			} else if (player.isSneaking() || heldItem == null || heldItem.getItem() == null) {
@@ -238,30 +235,16 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 				// Allow the excludes to do their things.
 				return false;
 			} else if (FertilizerRegistry.getInstance().hasAdapter(heldItem)) {
-				IAgriFertilizer fert = FertilizerRegistry.getInstance().getValue(heldItem);
-				return fert == null ? false : fert.applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
-			} else if (heldItem.getItem() instanceof ItemAgriSeed && !crop.isCrossCrop() && !crop.canWeed()) {
-				AgriSeed seed = SeedRegistry.getInstance().getValue(heldItem);
-				if (seed != null && seed.getPlant().getGrowthRequirement().canGrow(world, pos)) {
-					if (crop.setSeed(seed) && !player.capabilities.isCreativeMode) {
-						heldItem.stackSize--;
-					}
-					return true;
-				}
-				return false;
+				Optional<IAgriFertilizer> fert = FertilizerRegistry.getInstance().valueOf(heldItem);
+				return fert.isPresent() && fert.get().applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
+			} else if (plantSeed(heldItem, world, pos)) {
+				return true;
 			} //check to see if the player clicked with crops (crosscrop attempt)
 			else if (heldItem.getItem() == AgriItems.getInstance().CROPS) {
 				this.setCrossCrop(world, pos, state, player, heldItem);
 			} else {
 				//harvest operation
 				this.harvest(world, pos, state, player, crop);
-				//check to see if clicked with seeds
-				if (SeedRegistry.getInstance().hasAdapter(heldItem)) {
-					if (this.plantSeed(heldItem, world, pos)) {
-						//take one SEED away if the player is not in creative
-						heldItem.stackSize = heldItem.stackSize - (player.capabilities.isCreativeMode ? 0 : 1);
-					}
-				}
 			}
 		}
 		//Returning true will prevent other things from happening
@@ -583,11 +566,6 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getBlockModelResourceLocation() {
 		return new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + getInternalName());
-	}
-
-	@Override
-	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state, TileEntityCrop tile) {
-		return true;
 	}
 
 	@Override

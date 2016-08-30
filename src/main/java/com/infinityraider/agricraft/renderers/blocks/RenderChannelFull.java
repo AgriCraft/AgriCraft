@@ -3,8 +3,6 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelFull;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -60,8 +58,7 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
     }
 
 	@Override
-	protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelFull block, TileEntityChannelFull channel,
-											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+	public void renderInventoryBlockWood(ITessellator tessellator, World world, TileEntityChannelFull channel, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
 		this.renderBottom(tessellator, icon);
 		this.renderSide(tessellator, channel, EnumFacing.NORTH, true, icon);
 		this.renderSide(tessellator, channel, EnumFacing.EAST, true, icon);

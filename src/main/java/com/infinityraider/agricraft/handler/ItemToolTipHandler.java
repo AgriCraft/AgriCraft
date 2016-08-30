@@ -26,7 +26,7 @@ public class ItemToolTipHandler {
 		ItemStack stack = event.getItemStack();
 		// Add Seed Information.
 		if (stack != null) {
-			AgriSeed seed = SeedRegistry.getInstance().getValue(stack);
+			AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
 			if (seed != null) {
 				if (seed.getStat().isAnalyzed()) {
 					seed.getStat().addStats(event.getToolTip());
@@ -46,7 +46,7 @@ public class ItemToolTipHandler {
 	public void addTrowelTooltip(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
 		if (stack != null && stack.getItem() instanceof IAgriTrowelItem) {
-			AgriSeed seed = SeedRegistry.getInstance().getValue(event.getItemStack());
+			AgriSeed seed = SeedRegistry.getInstance().valueOf(event.getItemStack()).orElse(null);
 			if (seed != null) {
 				event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + seed.getPlant().getSeedName());
 			} else {

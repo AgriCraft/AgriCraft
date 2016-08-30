@@ -11,20 +11,27 @@ public class BlockWithMeta {
     private final Block block;
     private final int meta;
     private final boolean ignoreMeta;
+    private final boolean useOreDict;
 
     public BlockWithMeta(Block block) {
-        this(block, 0, true);
+        this(block, 0, true, false);
     }
 
     public BlockWithMeta(Block block, int meta) {
-        this(block, meta, false);
+        this(block, meta, false, false);
+    }
+    
+    public BlockWithMeta(Block block, int meta, boolean fuzzy) {
+        this(block, meta, fuzzy, false);
     }
 
-    public BlockWithMeta(Block block, int meta, boolean fuzzy) {
+    public BlockWithMeta(Block block, int meta, boolean fuzzy, boolean useOreDict) {
         this.block = block;
         this.meta = meta;
         this.ignoreMeta = fuzzy;
+        this.useOreDict = useOreDict;
     }
+    
 	public Block getBlock() {
         return block;
     }
@@ -35,6 +42,10 @@ public class BlockWithMeta {
 
 	public boolean ignoreMeta() {
         return ignoreMeta;
+    }
+
+    public boolean isUseOreDict() {
+        return useOreDict;
     }
 
     public ItemStack toStack() {

@@ -1,11 +1,10 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
 import com.infinityraider.agricraft.api.util.BlockWithMeta;
-import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.misc.ISoilContainer;
-import com.infinityraider.agricraft.api.requirment.IGrowthRequirementBuilder;
-import com.infinityraider.agricraft.api.requirment.RequirementType;
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.util.TypeHelper;
+import com.infinityraider.agricraft.api.requirment.IGrowthReqBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -17,28 +16,30 @@ import java.util.*;
 import net.minecraft.world.IBlockAccess;
 
 /**
- * Holds all the default soils and soil.
- * Also holds all GrowthRequirements.
+ * Holds all the default soils and soil. Also holds all GrowthRequirements.
  */
 public class GrowthRequirementHandler {
-    public static final IGrowthRequirement NULL = new GrowthRequirementNull();
-    public static IGrowthRequirementBuilder getNewBuilder() {return new GrowthRequirementHandler.Builder();}
+
+    public static IGrowthReqBuilder getNewBuilder() {
+        return new GrowthRequirementBuilder();
+    }
 
     /**
-     * This list contains soils which pose as a default soil, meaning any CropPlant which doesn't require a specific soil will be able to grown on these
-     * This list can be modified with MineTweaker
+     * This list contains soils which pose as a default soil, meaning any
+     * CropPlant which doesn't require a specific soil will be able to grown on
+     * these This list can be modified with MineTweaker
      */
     public static List<BlockWithMeta> defaultSoils = new ArrayList<>();
 
     /**
-     * This list contains soils needed for certain CropPlants
-     * This list cannot be modified externally
+     * This list contains soils needed for certain CropPlants This list cannot
+     * be modified externally
      */
     static List<BlockWithMeta> soils = new ArrayList<>();
 
     //Methods for fertile soils
     //-------------------------
-    public static boolean isSoilValid(IBlockAccess world,BlockPos pos) {
+    public static boolean isSoilValid(IBlockAccess world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         int meta = block.getMetaFromState(state);
@@ -62,22 +63,22 @@ public class GrowthRequirementHandler {
 
     private static void registerCustomEntries() {
         //reads custom entries
-    	AgriCore.getLogger("AgriCraft").info("Registering soils to whitelist:");
-		// TODO Decide if to replace!
+        AgriCore.getLogger("AgriCraft").info("Registering soils to whitelist:");
+        // TODO Decide if to replace!
         String[] data = new String[]{"minecraft:dirt"};
         String total = " of " + data.length + ".";
         for (String line : data) {
             AgriCore.getLogger("AgriCraft").debug("  Parsing " + line + total);
-            ItemStack stack = (ItemStack)AgriCore.getConverter().toStack(line);
+            ItemStack stack = (ItemStack) AgriCore.getConverter().toStack(line);
             Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).block : null;
-            
+
             if (block != null) {
                 addDefaultSoil(new BlockWithMeta(block, stack.getItemDamage()));
             } else {
                 AgriCore.getLogger("AgriCraft").info(" Error when adding block to soil whitelist: Invalid block (line: " + line + ")");
             }
         }
-        
+        soils.removeIf(TypeHelper::isNull);
         AgriCore.getLogger("AgriCraft").info("Completed soil whitelist:");
         for (BlockWithMeta soil : soils) {
             AgriCore.getLogger("AgriCraft").info(" - " + Block.REGISTRY.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
@@ -108,43 +109,4 @@ public class GrowthRequirementHandler {
         return false;
     }
 
-    //Builder class
-    //-------------
-    private static class Builder implements IGrowthRequirementBuilder {
-
-        private final GrowthRequirement growthRequirement;
-
-        public Builder() {
-            this.growthRequirement = new GrowthRequirement();
-        }
-
-        /** Adds a required block to this GrowthRequirement instance */
-        @Override
-        public Builder requiredBlock(BlockWithMeta requiredBlock, RequirementType requiredType, boolean oreDict) {
-            if (requiredBlock == null || requiredType == RequirementType.NONE) {
-                throw new IllegalArgumentException("Required block must be not null and required type must be other than NONE.");
-            }
-            growthRequirement.setRequiredBlock(requiredBlock, requiredType, oreDict);
-            return this;
-        }
-
-        /** Sets the required soil */
-        @Override
-        public Builder soil(BlockWithMeta block) {
-            growthRequirement.setSoil(block);
-            addSoil(block);
-            return this;
-        }
-
-        @Override
-        public Builder brightnessRange(int min, int max) {
-            this.growthRequirement.setBrightnessRange(Math.max(0, min), Math.min(16, max));
-            return this;
-        }
-
-        @Override
-        public IGrowthRequirement build() {
-            return growthRequirement;
-        }
-    }
 }

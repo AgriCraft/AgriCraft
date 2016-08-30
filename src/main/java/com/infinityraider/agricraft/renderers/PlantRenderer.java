@@ -1,16 +1,11 @@
 package com.infinityraider.agricraft.renderers;
 
-import com.agricraft.agricore.config.AgriConfigCategory;
-import com.agricraft.agricore.config.AgriConfigurable;
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.infinityraider.infinitylib.render.tessellation.TessellatorVertexBuffer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -19,34 +14,19 @@ import com.infinityraider.agricraft.api.plant.IAgriPlant;
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
 
-	@AgriConfigurable(key = "Flip Plants", category = AgriConfigCategory.CLIENT, comment = "Set to true to flip rendered plants upside down, in the case of upside-down plants.")
-	public static boolean FLIP_PLANT = true;
-
-	static {
-		AgriCore.getConfig().addConfigurable(PlantRenderer.class);
-	}
-
-	public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, IAgriPlant plant) {
+	public static void renderPlant(IAgriPlant plant, int growthStage) {
 		ITessellator tessellator = TessellatorVertexBuffer.getInstance();
 		tessellator.setColorRGBA(255, 255, 255, 255);
 		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
-		renderPlant(world, pos, growthStage, plant, tessellator);
+		renderPlant(tessellator, plant, growthStage);
 		tessellator.draw();
 	}
 
-	public static void renderPlant(IBlockAccess world, BlockPos pos, int growthStage, IAgriPlant plant, ITessellator tessellator) {
+	public static void renderPlant(ITessellator tessellator, IAgriPlant plant, int growthStage) {
 		TextureAtlasSprite iconA = tessellator.getIcon(plant.getPrimaryPlantTexture(growthStage));
 		TextureAtlasSprite iconB = tessellator.getIcon(plant.getSecondaryPlantTexture(growthStage));
-		tessellator.pushMatrix();
-
-		// Correct inverted crops.
-		if (FLIP_PLANT) {
-			tessellator.rotate(180, 1, 0, 0);
-			tessellator.translate(0, -1, -1);
-		}
 
 		if (iconA != null) {
-			tessellator.translate(pos);
 			switch (plant.getRenderMethod()) {
 				case CROSSED:
 					renderCrossPattern(tessellator, iconA, 0);
@@ -55,7 +35,7 @@ public abstract class PlantRenderer {
 					renderHashTagPattern(tessellator, iconA, 0);
 					break;
 				case STEM:
-					renderStemPlant(tessellator, world, pos, iconA, iconB, growthStage, plant.getBlock());
+					renderStemPlant(tessellator, iconA, iconB, growthStage, plant.getBlock());
 					break;
 				case TALL_CROSSED:
 					renderCrossPattern(tessellator, iconA, 0);
@@ -71,7 +51,6 @@ public abstract class PlantRenderer {
 					break;
 			}
 		}
-		tessellator.popMatrix();
 	}
 
 	public static void renderHashTagPattern(ITessellator tessellator, TextureAtlasSprite icon, int layer) {
@@ -96,8 +75,9 @@ public abstract class PlantRenderer {
 		tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.EAST, icon, 12.001F);
 	}
 
-	public static void renderStemPlant(ITessellator tessellator, IBlockAccess world, BlockPos pos, TextureAtlasSprite vineIcon, TextureAtlasSprite fruitIcon, int stage, Block vine) {
+	public static void renderStemPlant(ITessellator tessellator, TextureAtlasSprite vineIcon, TextureAtlasSprite fruitIcon, int stage, Block vine) {
 		int translation = stage >= 6 ? 0 : 5 - stage;
+		tessellator.pushMatrix();
 		tessellator.translate(0, -Constants.UNIT * 2 * translation, 0);
 		if (stage >= Constants.MATURE) {
 			//render the vines
@@ -113,7 +93,7 @@ public abstract class PlantRenderer {
 			//render the vines
 			renderCrossPattern(tessellator, vineIcon, 0);
 		}
-		tessellator.translate(0, Constants.UNIT * 2 * translation, 0);
+		tessellator.popMatrix();
 	}
 
 	public static void renderStemPattern(ITessellator tessellator, TextureAtlasSprite icon) {

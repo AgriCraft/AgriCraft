@@ -364,7 +364,7 @@ public abstract class GuiSeedStorageBase extends GuiContainer {
 		private final int amount;
 
 		public StorageElement(int id, @Nonnull ItemStack stack) {
-			this.stats = StatRegistry.getInstance().getValue(StackHelper.getTag(stack));
+			this.stats = StatRegistry.getInstance().valueOf(StackHelper.getTag(stack)).get();
 			this.amount = stack.stackSize;
 			this.id = id;
 		}
