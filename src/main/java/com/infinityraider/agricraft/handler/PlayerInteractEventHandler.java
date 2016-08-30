@@ -54,32 +54,10 @@ public class PlayerInteractEventHandler {
 	}
 
 	private static boolean allowVanillaPlanting(ItemStack seed) {
-		if (seed == null || seed.getItem() == null) {
-			return false;
-		}
-		if (AgriCraftConfig.disableVanillaFarming) {
-			if (ignoresVanillaPlantingSetting(seed)) {
-				return true;
-			}
-			if (SeedRegistry.getInstance().hasAdapter(seed)) {
-				return false;
-			}
-			if (seed.getItem() == Items.POTATO) {
-				return false;
-			}
-			if (seed.getItem() == Items.CARROT) {
-				return false;
-			}
-			if (seed.getItem() == Items.REEDS) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private static boolean ignoresVanillaPlantingSetting(ItemStack seed) {
-		// TODO: REPLACE
-		return true;
+		return !(
+                AgriCraftConfig.disableVanillaFarming
+                && SeedRegistry.getInstance().hasAdapter(seed)
+                );
 	}
 
 	/**
@@ -141,7 +119,7 @@ public class PlayerInteractEventHandler {
 
 	/**
 	 * Event handler to deny bonemeal while sneaking on crops that are not
-	 * allowed to be bone mealed
+	 * allowed to be bonemealed
 	 */
 	@SubscribeEvent
 	public void denyBonemeal(PlayerInteractEvent.RightClickBlock event) {

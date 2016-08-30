@@ -12,7 +12,7 @@ import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
 import com.infinityraider.agricraft.api.requirment.IGrowthRequirementBuilder;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirment.RequirementType;
-import com.infinityraider.agricraft.farming.cropplant.CropPlant;
+import com.infinityraider.agricraft.farming.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.IconHelper;

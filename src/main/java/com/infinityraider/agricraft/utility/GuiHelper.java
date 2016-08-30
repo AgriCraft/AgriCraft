@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 //helper class to read, write and parse data to and from the config files
+/**
+ * This class is candidate to be moved to InfinityLib!
+ */
 public abstract class GuiHelper {
 
     /**

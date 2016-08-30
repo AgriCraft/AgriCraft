@@ -4,7 +4,7 @@ package com.infinityraider.agricraft.apiimpl;
 
 import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.vanilla.SeedWrapper;
+import com.infinityraider.agricraft.compat.vanilla.SeedWrapper;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;

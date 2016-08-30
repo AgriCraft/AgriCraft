@@ -1,6 +1,6 @@
 /*
  */
-package com.infinityraider.agricraft.vanilla;
+package com.infinityraider.agricraft.compat.vanilla;
 
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizable;
@@ -23,7 +23,6 @@ public class BonemealWrapper implements IAgriFertilizer, IAgriAdapter<IAgriFerti
 
 	@Override
 	public boolean isFertilizerAllowed(int tier) {
-		// TODO: CORRECT THIS!
 		return tier < 3;
 	}
 

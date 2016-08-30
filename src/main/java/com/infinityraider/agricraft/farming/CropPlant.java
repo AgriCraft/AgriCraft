@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.farming.cropplant;
+package com.infinityraider.agricraft.farming;
 
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
