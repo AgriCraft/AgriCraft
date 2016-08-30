@@ -70,6 +70,7 @@ public class GrowthRequirement implements IGrowthRequirement {
                 .collect(Collectors.toList());
     }
     
+    @Override
     public List<BlockWithMeta> getRequiredBlocks(RequirementType reqType) {
         return this.requiredBlocks.stream()
                 .filter(p -> p.getValue().equals(RequirementType.NEARBY))

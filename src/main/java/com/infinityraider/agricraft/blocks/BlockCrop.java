@@ -601,6 +601,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 	}
 
 	@SideOnly(Side.CLIENT)
+    @Override
 	public List<ResourceLocation> getTextures() {
 		List<ResourceLocation> list = new ArrayList<>();
 		list.add(getBlockTexture());

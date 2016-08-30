@@ -81,11 +81,13 @@ public abstract class CropPlant implements IAgriPlant {
      * 
      * @return the tier of the seed.
      */
+    @Override
     public int getTier() {
         return 1;
     }
 
     /** Gets the spread chance in percent for this plant */
+    @Override
     public double getSpreadChance() {
         return 1 / getTier();
     }

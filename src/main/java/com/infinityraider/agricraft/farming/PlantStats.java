@@ -120,6 +120,7 @@ public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
 		return MAX;
 	}
 
+    @Override
 	public boolean writeToNBT(NBTTagCompound tag) {
 		tag.setBoolean(NBT_ANALYZED, analyzed);
 		tag.setByte(NBT_GAIN, gain);
@@ -129,6 +130,7 @@ public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
 		return true;
 	}
 
+    @Override
 	public boolean addStats(List<String> lines) {
 		try {
 			lines.add(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.growth"), getGrowth(), cropStatCap));

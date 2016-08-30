@@ -330,6 +330,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		}
 	}
 
+    @Override
 	public void writeTileNBT(NBTTagCompound tag) {
 		if (this.stats != null) {
 			this.stats.writeToNBT(tag);
@@ -344,6 +345,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		//AgriCore.getLogger("Plant-Tag").debug("Write Tag: {0}", tag);
 	}
 
+    @Override
 	public void readTileNBT(NBTTagCompound tag) {
 		this.stats = StatRegistry.getInstance().valueOf(tag).get();
 		this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
