@@ -1,7 +1,8 @@
-package com.infinityraider.agricraft.api.requirment;
+package com.infinityraider.agricraft.api.requirement;
 
 import com.infinityraider.agricraft.api.util.BlockWithMeta;
 import java.util.List;
+import java.util.Optional;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -39,8 +40,6 @@ public interface IGrowthRequirement {
 	 */
 	boolean isValidSoil(BlockWithMeta soil);
 
-	RequirementType getRequiredType();
-
 	//Methods to change specific requirements
 	//--------------------------------------
 	BlockWithMeta getSoil();
@@ -49,10 +48,8 @@ public interface IGrowthRequirement {
     
     int getMaxBrightness();
 
-    BlockWithMeta getRequiredBlock();
+    Optional<BlockWithMeta> getRequiredBlock();
     
-    List<BlockWithMeta> getRequiredBlocks();
-    
-    List<BlockWithMeta> getRequiredBlocks(RequirementType req);
+    Optional<RequirementType> getRequiredType();
 
 }

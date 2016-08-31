@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.misc.ISoilContainer;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.api.requirment.IGrowthReqBuilder;
+import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -21,7 +21,7 @@ import net.minecraft.world.IBlockAccess;
 public class GrowthRequirementHandler {
 
     public static IGrowthReqBuilder getNewBuilder() {
-        return new GrowthRequirementBuilder();
+        return new GrowthReqBuilder();
     }
 
     /**

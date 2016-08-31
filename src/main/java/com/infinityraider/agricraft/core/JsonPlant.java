@@ -8,10 +8,10 @@ import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriProduct;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.util.BlockWithMeta;
-import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.render.RenderMethod;
-import com.infinityraider.agricraft.api.requirment.IGrowthReqBuilder;
-import com.infinityraider.agricraft.api.requirment.RequirementType;
+import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
+import com.infinityraider.agricraft.api.requirement.RequirementType;
 import com.infinityraider.agricraft.farming.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.reference.Constants;
@@ -166,7 +166,8 @@ public class JsonPlant extends CropPlant {
                 ItemStack stack = (ItemStack) b;
                 if (stack.getItem() instanceof ItemBlock) {
                     ItemBlock ib = (ItemBlock) stack.getItem();
-                    builder.addRequiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), RequirementType.BELOW);
+                    builder.setRequiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)));
+                    builder.setRequiredType(RequirementType.BELOW);
                 }
             }
         });
@@ -176,7 +177,8 @@ public class JsonPlant extends CropPlant {
                 ItemStack stack = (ItemStack) obj;
                 if (stack.getItem() instanceof ItemBlock) {
                     ItemBlock ib = (ItemBlock) stack.getItem();
-                    builder.addRequiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), RequirementType.BELOW);
+                    builder.setRequiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)));
+                    builder.setRequiredType(RequirementType.NEARBY);
                 }
             }
         });

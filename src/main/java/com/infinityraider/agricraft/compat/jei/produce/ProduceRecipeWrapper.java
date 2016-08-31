@@ -32,8 +32,8 @@ public class ProduceRecipeWrapper implements IRecipeWrapper {
 			} else {
 				builder.add(new ItemStack(Blocks.DIRT));
 			}
-			if (recipe.getGrowthRequirement().getRequiredBlock() != null) {
-				builder.add(recipe.getGrowthRequirement().getRequiredBlock().toStack());
+			if (recipe.getGrowthRequirement().getRequiredBlock().isPresent()) {
+				builder.add(recipe.getGrowthRequirement().getRequiredBlock().get().toStack());
 			}
 		}
 

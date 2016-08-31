@@ -1,7 +1,9 @@
 package com.infinityraider.agricraft.api.util;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Simple utility class combining a Block with a meta value.
@@ -12,6 +14,10 @@ public class BlockWithMeta {
     private final int meta;
     private final boolean ignoreMeta;
     private final boolean useOreDict;
+    
+    public BlockWithMeta(IBlockState state) {
+        this(state.getBlock(), state.getBlock().getMetaFromState(state));
+    }
 
     public BlockWithMeta(Block block) {
         this(block, 0, true, false);
@@ -20,7 +26,7 @@ public class BlockWithMeta {
     public BlockWithMeta(Block block, int meta) {
         this(block, meta, false, false);
     }
-    
+
     public BlockWithMeta(Block block, int meta, boolean fuzzy) {
         this(block, meta, fuzzy, false);
     }
@@ -31,16 +37,16 @@ public class BlockWithMeta {
         this.ignoreMeta = fuzzy;
         this.useOreDict = useOreDict;
     }
-    
-	public Block getBlock() {
+
+    public Block getBlock() {
         return block;
     }
 
-	public int getMeta() {
+    public int getMeta() {
         return meta;
     }
 
-	public boolean ignoreMeta() {
+    public boolean ignoreMeta() {
         return ignoreMeta;
     }
 
@@ -54,7 +60,7 @@ public class BlockWithMeta {
 
     @Override
     public String toString() {
-        return Block.REGISTRY.getNameForObject(this.block)+":"+this.meta;
+        return Block.REGISTRY.getNameForObject(this.block) + ":" + this.meta;
     }
 
     @Override
@@ -64,13 +70,22 @@ public class BlockWithMeta {
         }
         if (obj instanceof BlockWithMeta) {
             BlockWithMeta block = (BlockWithMeta) obj;
-            if(this.ignoreMeta || block.ignoreMeta) {
-                return block.block == this.block;
+            if ((block.block == this.block) && (this.ignoreMeta || block.ignoreMeta || block.meta == this.meta)) {
+                return true;
             }
-            else {
-                return block.block == this.block && block.meta == this.meta;
+            if (this.useOreDict || block.useOreDict) {
+                int[] ids1 = OreDictionary.getOreIDs(this.toStack());
+                int[] ids2 = OreDictionary.getOreIDs(block.toStack());
+                for (int id1 : ids1) {
+                    for (int id2 : ids2) {
+                        if (id1 == id2) {
+                            return true;
+                        }
+                    }
+                }
             }
         }
         return false;
     }
+
 }

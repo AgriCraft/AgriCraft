@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 
@@ -38,8 +38,8 @@ public class MutationRecipeWrapper implements IRecipeWrapper {
 			} else {
 				builder.add(new ItemStack(Blocks.DIRT));
 			}
-			if (rec.getRequiredBlock() != null) {
-				builder.add(rec.getRequiredBlock().toStack());
+			if (rec.getRequiredBlock().isPresent()) {
+				builder.add(rec.getRequiredBlock().get().toStack());
 			}
 		}
 

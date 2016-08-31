@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.api.plant;
 import com.google.common.base.Function;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
-import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import java.util.Collection;
 import net.minecraft.block.Block;
