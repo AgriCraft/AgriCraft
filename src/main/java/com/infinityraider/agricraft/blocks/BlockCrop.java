@@ -38,7 +38,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -54,7 +53,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * The most important block in the mod.
  */
 public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> implements IGrowable, IPlantable {
-	public static ResourceLocation TEXTURE = new ResourceLocation("agricraft:blocks/crop");
 
 	public static final Class[] ITEM_EXCLUDES = new Class[]{
 		IAgriRakeItem.class,
@@ -598,33 +596,6 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 		// TODO: Fix propertycropplant
 		// TileEntity tileEntity = world.getTileEntity(pos);
 		return world.getBlockState(pos);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public List<ResourceLocation> getTextures() {
-		List<ResourceLocation> list = new ArrayList<>();
-		list.add(getBlockTexture());
-		for (int i = 0; i < 16; i++) {
-			if (i == 0) {
-				list.add(getWeedTexture(i));
-			} else {
-				ResourceLocation texture = getWeedTexture(i);
-				if (texture != list.get(list.size() - 1)) {
-					list.add(texture);
-				}
-			}
-		}
-		return list;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getWeedTexture(int growthStage) {
-		return new ResourceLocation("agricraft:blocks/weed_" + growthStage);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getBlockTexture() {
-		return TEXTURE;
 	}
 
 	@Override

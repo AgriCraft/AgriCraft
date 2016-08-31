@@ -3,14 +3,14 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.decoration.BlockFenceGate;
 import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityFenceGate;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class RenderBlockFenceGate extends RenderBlockCustomWood<BlockFenceGate, TileEntityFenceGate> {
 
 	public RenderBlockFenceGate(BlockFenceGate block) {
@@ -18,21 +18,24 @@ public class RenderBlockFenceGate extends RenderBlockCustomWood<BlockFenceGate, 
 	}
 
 	@Override
-	protected void renderStaticWood(ITessellator tess, TileEntityFenceGate gate, TextureAtlasSprite matIcon) {
+	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockFenceGate block,
+										TileEntityFenceGate gate, TextureAtlasSprite sprite, boolean dynamic) {
+
 		if (gate.isZAxis()) {
-			renderGateZ(tess, gate, matIcon);
+			renderGateZ(tess, gate, sprite);
 		} else {
-			renderGateX(tess, gate, matIcon);
+			renderGateX(tess, gate, sprite);
 		}
 	}
 
 	@Override
-	public void renderInventoryBlockWood(ITessellator tess, World world, TileEntityFenceGate tile, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
-		tess.drawScaledPrism(7, 5, 0, 9, 16, 2, icon);
-		tess.drawScaledPrism(7, 5, 14, 9, 16, 16, icon);
-		tess.drawScaledPrism(7, 12, 2, 9, 15, 14, icon);
-		tess.drawScaledPrism(7, 6, 2, 9, 9, 14, icon);
-		tess.drawScaledPrism(7, 9, 6, 9, 12, 10, icon);
+	public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockFenceGate block, TileEntityFenceGate tile,
+										 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+		tessellator.drawScaledPrism(7, 5, 0, 9, 16, 2, icon);
+		tessellator.drawScaledPrism(7, 5, 14, 9, 16, 16, icon);
+		tessellator.drawScaledPrism(7, 12, 2, 9, 15, 14, icon);
+		tessellator.drawScaledPrism(7, 6, 2, 9, 9, 14, icon);
+		tessellator.drawScaledPrism(7, 9, 6, 9, 12, 10, icon);
 	}
 
 	private void renderGateX(ITessellator tessellator, TileEntityFenceGate gate, TextureAtlasSprite icon) {

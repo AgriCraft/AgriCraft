@@ -4,16 +4,18 @@ import com.infinityraider.agricraft.blocks.storage.BlockSeedStorage;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.infinitylib.render.RenderUtilBase;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, TileEntitySeedStorage> {
@@ -55,7 +57,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, T
 	 * Render the seed as TESR
 	 */
 	private void drawSeed(ItemStack seed) {
-		if (seed == null || seed.getItem() == null) {
+		if(seed == null || seed.getItem() == null) {
 			return;
 		}
 
@@ -64,27 +66,30 @@ public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, T
 		float dz = 0.99F * Constants.UNIT;
 		float f = 0.75F;
 
-		RenderUtilBase.renderItemStack(seed, dx, dy, dz, f, false);
+		this.renderItemStack(seed, dx, dy, dz, f, false);
 	}
 
 	@Override
-	protected void renderStaticWood(ITessellator tess, TileEntitySeedStorage tile, TextureAtlasSprite icon) {
+	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockSeedStorage block,
+										TileEntitySeedStorage tile, TextureAtlasSprite icon, boolean dynamic) {
+		int angle = 90 * tile.getOrientation().getHorizontalIndex();
 		tess.pushMatrix();
-		RenderUtilBase.rotateBlock(tess, tile.getOrientation());
-		renderSides(tess, icon);
+		if(angle != 0) {
+			tess.translate(0.5, 0, 0.5);
+			tess.rotate(angle, 0, 1, 0);
+			tess.translate(-0.5, 0, -0.5);
+		}
+		if(dynamic) {
+			drawSeed(tile.getLockedSeed());
+		} else {
+			renderSides(tess, icon);
+		}
 		tess.popMatrix();
 	}
 
 	@Override
-	public void renderDynamicTile(ITessellator tess, TileEntitySeedStorage tile, float partialTicks, int destroyStage) {
-		tess.pushMatrix();
-		RenderUtilBase.rotateBlock(tess, tile.getOrientation());
-		drawSeed(tile.getLockedSeed());
-		tess.popMatrix();
-	}
-
-	@Override
-	public void renderInventoryBlockWood(ITessellator tess, World world, TileEntitySeedStorage tile, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
+	protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockSeedStorage block, TileEntitySeedStorage tile,
+											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
 		renderSides(tess, icon);
 	}
 

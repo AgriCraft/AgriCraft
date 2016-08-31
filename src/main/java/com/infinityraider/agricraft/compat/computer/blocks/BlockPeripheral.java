@@ -16,7 +16,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
@@ -26,17 +25,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Optional.Interface(modid = "ComputerCraft", iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPeripheral> {
-	public static ResourceLocation TEXTURE_TOP = new ResourceLocation("agricraft:blocks/peripheralTop");
-	public static ResourceLocation TEXTURE_SIDE = new ResourceLocation("agricraft:blocks/peripheralSide");
-	public static ResourceLocation TEXTURE_BOTTOM = new ResourceLocation("agricraft:blocks/peripheralBottom");
-	public static ResourceLocation TEXTURE_INNER = new ResourceLocation("agricraft:blocks/peripheralInner");
-
 	public BlockPeripheral() {
 		super("peripheral", Material.IRON);
 	}
@@ -55,21 +48,6 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
 	@Override
 	public ModelResourceLocation getBlockModelResourceLocation() {
 		return null;
-	}
-
-	@Override
-	public boolean needsRenderUpdate(World world, BlockPos pos, IBlockState state) {
-		return false;
-	}
-
-	@Override
-	public List<ResourceLocation> getTextures() {
-		List<ResourceLocation> list = new ArrayList<>();
-		list.add(TEXTURE_TOP);
-		list.add(TEXTURE_SIDE);
-		list.add(TEXTURE_BOTTOM);
-		list.add(TEXTURE_INNER);
-		return list;
 	}
 
 	@Override

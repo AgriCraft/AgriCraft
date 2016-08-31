@@ -17,7 +17,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.infinitylib.render.block.RenderBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,7 +31,7 @@ public abstract class AbstractBlockWaterPad extends BlockCustomRenderedBase {
 
 	@Override
     @SideOnly(Side.CLIENT)
-	public RenderBlock getRenderer() {
+	public RenderWaterPad getRenderer() {
 		return new RenderWaterPad(this);
 	}
 

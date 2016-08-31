@@ -3,23 +3,27 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.decoration.BlockFence;
 import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityFence;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+import java.util.List;
+
 public class RenderBlockFence extends RenderBlockCustomWood<BlockFence, TileEntityFence> {
-
 	public RenderBlockFence(BlockFence block) {
 		super(block, new TileEntityFence(), true, true, false);
 	}
 
 	@Override
-	protected void renderStaticWood(ITessellator tess, TileEntityFence fence, TextureAtlasSprite sprite) {
+	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockFence block,
+										TileEntityFence fence, TextureAtlasSprite sprite, boolean dynamic) {
+
 		tess.drawScaledPrism(6, 0, 6, 10, 16, 10, sprite);
 		if (fence.canConnect(EnumFacing.EAST)) {
 			tess.drawScaledPrism(10, 12, 7, 16, 15, 9, sprite);
@@ -40,7 +44,8 @@ public class RenderBlockFence extends RenderBlockCustomWood<BlockFence, TileEnti
 	}
 
 	@Override
-	public void renderInventoryBlockWood(ITessellator tess, World world, TileEntityFence tile, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite matIcon) {
+	public void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockFence block, TileEntityFence tile,
+										 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite matIcon) {
 		tess.drawScaledPrism(6, 0, 0, 10, 16, 4, matIcon);
 		tess.drawScaledPrism(6, 0, 12, 10, 16, 16, matIcon);
 		tess.drawScaledPrism(7, 12, 4, 9, 15, 12, matIcon);

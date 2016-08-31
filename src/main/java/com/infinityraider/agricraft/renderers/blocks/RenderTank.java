@@ -4,10 +4,13 @@ import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,7 +34,7 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 	}
 
 	private void renderSide(ITessellator tessellator, EnumFacing dir, TileEntityTank.Connection connection, TextureAtlasSprite icon) {
-		if (connection == TileEntityTank.Connection.TANK) {
+		if(connection == TileEntityTank.Connection.TANK) {
 			return;
 		}
 		//data about side to render
@@ -41,10 +44,10 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 		int max = index < 0 ? 2 : 16;
 
 		//render upper face
-		tessellator.drawScaledFace(xAxis ? min : 0, xAxis ? 0 : min, xAxis ? max : 16, xAxis ? 16 : max, EnumFacing.UP, icon, 16);
+		tessellator.drawScaledFace(xAxis ? min : 0, xAxis ? 0 : min, xAxis? max : 16, xAxis ? 16 : max, EnumFacing.UP, icon, 16);
 
 		//render side
-		if (connection == TileEntityTank.Connection.NONE) {
+		if(connection == TileEntityTank.Connection.NONE) {
 			tessellator.drawScaledFace(0, 0, 16, 16, dir, icon, index > 0 ? 16 : 0);
 			tessellator.drawScaledFace(0, 0, 16, 16, dir.getOpposite(), icon, index > 0 ? 14 : 2);
 		} else {
@@ -75,23 +78,7 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 		}
 	}
 
-	@Override
-	protected void renderStaticWood(ITessellator tess, TileEntityTank tile, TextureAtlasSprite sprite) {
-		TileEntityTank.Connection north = tile.getConnectionType(EnumFacing.NORTH);
-		TileEntityTank.Connection east = tile.getConnectionType(EnumFacing.EAST);
-		TileEntityTank.Connection south = tile.getConnectionType(EnumFacing.SOUTH);
-		TileEntityTank.Connection west = tile.getConnectionType(EnumFacing.WEST);
-		renderSide(tess, EnumFacing.NORTH, north, sprite);
-		renderSide(tess, EnumFacing.EAST, east, sprite);
-		renderSide(tess, EnumFacing.SOUTH, south, sprite);
-		renderSide(tess, EnumFacing.WEST, west, sprite);
-		if (!tile.hasNeighbour(EnumFacing.DOWN)) {
-			renderBottom(tess, sprite);
-		}
-	}
-
-	@Override
-	public void renderDynamicTile(ITessellator tess, TileEntityTank tank, float partialTicks, int destroyStage) {
+	private void drawWater(TileEntityTank tank, ITessellator tessellator) {
 		//only render water on the bottom layer
 		if (tank.getYPosition() == 0) {
 			//-0.0001F to avoid Z-fighting on maximum filled tanks
@@ -109,12 +96,34 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 			 */
 			//draw surface
 			final TextureAtlasSprite waterIcon = BaseIcons.WATER_STILL.getIcon();
-			tess.drawScaledFace(0, 0, 16, 16, EnumFacing.UP, waterIcon, y);
+			tessellator.drawScaledFace(0, 0, 16, 16, EnumFacing.UP, waterIcon, y);
 		}
 	}
 
 	@Override
-	public void renderInventoryBlockWood(ITessellator tess, World world, TileEntityTank tile, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite sprite) {
+	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockWaterTank block,
+										TileEntityTank tile, TextureAtlasSprite sprite, boolean dynamic) {
+		if(dynamic) {
+			drawWater(tile, tess);
+		} else {
+			TileEntityTank.Connection north = tile.getConnectionType(EnumFacing.NORTH);
+			TileEntityTank.Connection east = tile.getConnectionType(EnumFacing.EAST);
+			TileEntityTank.Connection south = tile.getConnectionType(EnumFacing.SOUTH);
+			TileEntityTank.Connection west = tile.getConnectionType(EnumFacing.WEST);
+			renderSide(tess, EnumFacing.NORTH, north, sprite);
+			renderSide(tess, EnumFacing.EAST, east, sprite);
+			renderSide(tess, EnumFacing.SOUTH, south, sprite);
+			renderSide(tess, EnumFacing.WEST, west, sprite);
+			if(!tile.hasNeighbour(EnumFacing.DOWN)) {
+				renderBottom(tess, sprite);
+			}
+		}
+
+	}
+
+	@Override
+	protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockWaterTank block, TileEntityTank tile,
+											ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite sprite) {
 		renderSide(tess, EnumFacing.NORTH, TileEntityTank.Connection.NONE, sprite);
 		renderSide(tess, EnumFacing.EAST, TileEntityTank.Connection.NONE, sprite);
 		renderSide(tess, EnumFacing.SOUTH, TileEntityTank.Connection.NONE, sprite);

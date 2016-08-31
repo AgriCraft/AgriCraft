@@ -14,7 +14,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
@@ -103,12 +102,6 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 			TileEntityCustomWood tile = (TileEntityCustomWood) te;
 			stack.setTagCompound(tile.getMaterialTag());
 		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public List<ResourceLocation> getTextures() {
-		return Collections.emptyList();
 	}
 
     @Override
