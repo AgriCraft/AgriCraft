@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.handler.SoundHandler;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.ModelErrorSuppressor;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -17,18 +16,13 @@ public class ClientProxy implements IClientProxyBase, IProxy {
 	@Override
 	public void registerEventHandlers() {
 		IProxy.super.registerEventHandlers();
-
-		ItemToolTipHandler itemToolTipHandler = new ItemToolTipHandler();
-		MinecraftForge.EVENT_BUS.register(itemToolTipHandler);
-
-		SoundHandler soundHandler = new SoundHandler();
-		MinecraftForge.EVENT_BUS.register(soundHandler);
+		registerEventHandler(new ItemToolTipHandler());
+		registerEventHandler( new SoundHandler());
 	}
 
 	@Override
 	public void initConfiguration(FMLPreInitializationEvent event) {
-		IProxy.super.initConfiguration(event);
-		MinecraftForge.EVENT_BUS.register(new ModelErrorSuppressor());
+		registerEventHandler(new ModelErrorSuppressor());
 	}
 
 	@Override
