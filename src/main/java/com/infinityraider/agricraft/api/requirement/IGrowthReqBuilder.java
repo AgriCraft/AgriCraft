@@ -2,6 +2,7 @@
  */
 package com.infinityraider.agricraft.api.requirement;
 
+import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.util.BlockWithMeta;
 
 /**
@@ -13,7 +14,7 @@ public interface IGrowthReqBuilder {
 
     IGrowthReqBuilder setMinBrightness(int minBrightness);
 
-    IGrowthReqBuilder setSoil(BlockWithMeta soil);
+    IGrowthReqBuilder addSoil(IAgriSoil soil);
     
     IGrowthReqBuilder setRequiredBlock(BlockWithMeta reqBlock);
     

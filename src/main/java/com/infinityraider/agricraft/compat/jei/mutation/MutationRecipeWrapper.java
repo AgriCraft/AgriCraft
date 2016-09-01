@@ -21,68 +21,64 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutation;
  */
 public class MutationRecipeWrapper implements IRecipeWrapper {
 
-	private final List input;
-	private final ItemStack output;
+    private final List input;
+    private final ItemStack output;
 
-	public MutationRecipeWrapper(IAgriMutation recipe) {
-		ImmutableList.Builder builder = ImmutableList.builder();
-		for (IAgriPlant p : recipe.getParents()) {
-			builder.add(p.getSeed());
-		}
+    public MutationRecipeWrapper(IAgriMutation recipe) {
+        ImmutableList.Builder builder = ImmutableList.builder();
+        for (IAgriPlant p : recipe.getParents()) {
+            builder.add(p.getSeed());
+        }
+        
+        builder.add(recipe.getChild().getGrowthRequirement().getSoils().stream()
+                .flatMap(s -> s.getVarients().stream())
+                .findFirst()
+                .orElse(new ItemStack(Blocks.FARMLAND))
+        );
+        recipe.getChild().getGrowthRequirement().getRequiredBlock()
+                .map(b -> b.toStack())
+                .ifPresent(builder::add);
 
-		IGrowthRequirement rec = recipe.getChild().getGrowthRequirement();
+        input = builder.build();
+        output = recipe.getChild().getSeed();
+    }
 
-		if (rec != null) {
-			if (rec.getSoil() != null) {
-				builder.add(rec.getSoil().toStack());
-			} else {
-				builder.add(new ItemStack(Blocks.DIRT));
-			}
-			if (rec.getRequiredBlock().isPresent()) {
-				builder.add(rec.getRequiredBlock().get().toStack());
-			}
-		}
+    @Override
+    public List getInputs() {
+        return input;
+    }
 
-		input = builder.build();
-		output = recipe.getChild().getSeed();
-	}
+    @Override
+    public List<ItemStack> getOutputs() {
+        return ImmutableList.of(output);
+    }
 
-	@Override
-	public List getInputs() {
-		return input;
-	}
+    @Override
+    public List<FluidStack> getFluidInputs() {
+        return ImmutableList.of();
+    }
 
-	@Override
-	public List<ItemStack> getOutputs() {
-		return ImmutableList.of(output);
-	}
+    @Override
+    public List<FluidStack> getFluidOutputs() {
+        return ImmutableList.of();
+    }
 
-	@Override
-	public List<FluidStack> getFluidInputs() {
-		return ImmutableList.of();
-	}
+    @Override
+    public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+    }
 
-	@Override
-	public List<FluidStack> getFluidOutputs() {
-		return ImmutableList.of();
-	}
+    @Override
+    public void drawAnimations(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight) {
+    }
 
-	@Override
-	public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-	}
+    @Override
+    public List<String> getTooltipStrings(int mouseX, int mouseY) {
+        return ImmutableList.of();
+    }
 
-	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight) {
-	}
-
-	@Override
-	public List<String> getTooltipStrings(int mouseX, int mouseY) {
-		return ImmutableList.of();
-	}
-
-	@Override
-	public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
-		return false;
-	}
+    @Override
+    public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
+        return false;
+    }
 
 }

@@ -151,15 +151,9 @@ public class JsonPlant extends CropPlant {
             return builder.build();
         }
 
-        this.plant.getRequirement().getSoils().forEach((b) -> {
-            if (b instanceof ItemStack) {
-                ItemStack stack = (ItemStack) b;
-                if (stack.getItem() instanceof ItemBlock) {
-                    ItemBlock ib = (ItemBlock) stack.getItem();
-                    builder.setSoil(new BlockWithMeta(ib.block, ib.getMetadata(stack)));
-                }
-            }
-        });
+        this.plant.getRequirement().getSoils().stream()
+                .map(JsonSoil::new)
+                .forEach(builder::addSoil);
 
         this.plant.getRequirement().getBases().forEach((b) -> {
             if (b instanceof ItemStack) {

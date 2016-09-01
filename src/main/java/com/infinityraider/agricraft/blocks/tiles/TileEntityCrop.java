@@ -428,6 +428,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 			list.add(" - Strength: " + this.stats.getStrength());
 			list.add(" - Fertile: " + this.isFertile());
 			list.add(" - Mature: " + this.isMature());
+            list.add(" - AgriSoil: " + this.plant.getGrowthRequirement().getSoils().stream()
+                    .findFirst().map(s -> s.toString()).orElse("Any")
+            );
 		} else {
 			list.add(" - This crop has no plant");
 		}

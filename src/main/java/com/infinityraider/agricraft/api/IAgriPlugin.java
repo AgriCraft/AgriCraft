@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import java.util.function.Consumer;
 import net.minecraft.util.ResourceLocation;
@@ -24,6 +25,10 @@ public interface IAgriPlugin {
 	boolean isEnabled();
 	
 	default void initPlugin() {
+		// Default Implementation: Do nothing.
+	}
+    
+    default void registerSoils(IAgriSoilRegistry soilRegistry) {
 		// Default Implementation: Do nothing.
 	}
 

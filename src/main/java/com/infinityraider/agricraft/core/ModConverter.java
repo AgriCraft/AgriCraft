@@ -12,13 +12,8 @@ import com.agricraft.agricore.util.AgriConverter;
 public class ModConverter implements AgriConverter {
 
 	@Override
-	public Object toStack(String element) {
-		return GameRegistry.makeItemStack(element, 0, 0, "");
-	}
-
-	@Override
-	public Object toStack(String element, int amount, int meta) {
-		return GameRegistry.makeItemStack(element, meta, amount, "");
+	public Object toStack(String element, int meta, int amount, String tags) {
+		return GameRegistry.makeItemStack(element, meta, amount, tags);
 	}
 
 }

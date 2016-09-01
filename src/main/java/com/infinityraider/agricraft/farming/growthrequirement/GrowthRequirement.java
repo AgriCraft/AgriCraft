@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.misc.ISoilContainer;
 import com.infinityraider.agricraft.api.requirement.RequirementType;
+import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.utility.BlockRange;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +13,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,29 +36,19 @@ public class GrowthRequirement implements IGrowthRequirement {
      */
     private final int minBrightness;
 
-    private final BlockWithMeta soil;
+    private final Collection<IAgriSoil> soils;
     
     private final Optional<BlockWithMeta> reqBlock;
     private final Optional<RequirementType> reqType;
 
-    GrowthRequirement(int maxBrightness, int minBrightness, BlockWithMeta soil, BlockWithMeta reqBlock, RequirementType reqType) {
+    GrowthRequirement(int maxBrightness, int minBrightness, Collection<IAgriSoil> soils, BlockWithMeta reqBlock, RequirementType reqType) {
+        assert soils != null;
+        
         this.maxBrightness = maxBrightness;
         this.minBrightness = minBrightness;
-        this.soil = soil;
+        this.soils = soils;
         this.reqBlock = Optional.ofNullable(reqBlock);
         this.reqType = Optional.ofNullable(reqType);
-
-        // Other stuff.
-        GrowthRequirementHandler.addSoil(soil);
-    }
-
-    public List<BlockWithMeta> getSoilBlocks() {
-        if (this.requiresSpecificSoil()) {
-            List<BlockWithMeta> list = new ArrayList<>();
-            list.add(soil);
-            return list;
-        }
-        return GrowthRequirementHandler.defaultSoils;
     }
 
     @Override
@@ -133,16 +125,8 @@ public class GrowthRequirement implements IGrowthRequirement {
     }
 
     @Override
-    public boolean isValidSoil(BlockWithMeta soil) {
-        if (this.requiresSpecificSoil()) {
-            return this.soil.equals(soil);
-        } else {
-            return GrowthRequirementHandler.defaultSoils.contains(soil);
-        }
-    }
-
-    public boolean requiresSpecificSoil() {
-        return this.soil != null;
+    public boolean isValidSoil(IAgriSoil soil) {
+        return this.soils.contains(soil);
     }
 
     public boolean requiresBaseBlock() {
@@ -157,8 +141,8 @@ public class GrowthRequirement implements IGrowthRequirement {
     //Methods to change specific requirements
     //--------------------------------------
     @Override
-    public BlockWithMeta getSoil() {
-        return this.soil;
+    public Collection<IAgriSoil> getSoils() {
+        return this.soils;
     }
 
     @Override

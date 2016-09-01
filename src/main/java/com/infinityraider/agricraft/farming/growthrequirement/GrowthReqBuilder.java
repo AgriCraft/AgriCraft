@@ -5,18 +5,22 @@ package com.infinityraider.agricraft.farming.growthrequirement;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.requirement.RequirementType;
+import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.util.BlockWithMeta;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GrowthReqBuilder implements IGrowthReqBuilder {
 
     private int maxBrightness = 16;
     private int minBrightness = 8;
-    private BlockWithMeta soil;
+    private final List<IAgriSoil> soils;
     private BlockWithMeta reqBlock;
     private RequirementType reqType;
 
     public GrowthReqBuilder() {
+        this.soils = new ArrayList<>();
     }
 
     @Override
@@ -32,8 +36,8 @@ public class GrowthReqBuilder implements IGrowthReqBuilder {
     }
 
     @Override
-    public GrowthReqBuilder setSoil(BlockWithMeta soil) {
-        this.soil = soil;
+    public GrowthReqBuilder addSoil(IAgriSoil soil) {
+        this.soils.add(soil);
         return this;
     }
     
@@ -51,7 +55,7 @@ public class GrowthReqBuilder implements IGrowthReqBuilder {
 
     @Override
     public IGrowthRequirement build() {
-        return new GrowthRequirement(maxBrightness, minBrightness, soil, reqBlock, reqType);
+        return new GrowthRequirement(maxBrightness, minBrightness, soils, reqBlock, reqType);
     }
 	
 }
