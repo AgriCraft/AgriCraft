@@ -33,6 +33,7 @@ public class MutationRecipeWrapper implements IRecipeWrapper {
         builder.add(recipe.getChild().getGrowthRequirement().getSoils().stream()
                 .flatMap(s -> s.getVarients().stream())
                 .findFirst()
+                .map(s -> s.toStack())
                 .orElse(new ItemStack(Blocks.FARMLAND))
         );
         recipe.getChild().getGrowthRequirement().getRequiredBlock()

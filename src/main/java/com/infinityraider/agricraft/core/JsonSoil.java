@@ -4,6 +4,7 @@ package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.plant.AgriSoil;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +16,7 @@ import net.minecraft.item.ItemStack;
 public class JsonSoil implements IAgriSoil {
     
     private final AgriSoil soil;
-    private List<ItemStack> varients;
+    private List<FuzzyStack> varients;
 
     public JsonSoil(AgriSoil soil) {
         this.soil = soil;
@@ -32,11 +33,11 @@ public class JsonSoil implements IAgriSoil {
     }
 
     @Override
-    public Collection<ItemStack> getVarients() {
+    public Collection<FuzzyStack> getVarients() {
         if(this.varients == null) {
             this.varients = this.soil.getVarients().stream()
-                    .filter(s -> s instanceof ItemStack)
-                    .map(s -> (ItemStack)s)
+                    .filter(s -> s instanceof FuzzyStack)
+                    .map(s -> (FuzzyStack)s)
                     .collect(Collectors.toList());
         }
         return this.varients;

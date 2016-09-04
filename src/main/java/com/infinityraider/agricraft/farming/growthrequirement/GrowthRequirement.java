@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
-import com.infinityraider.agricraft.api.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.misc.ISoilContainer;
 import com.infinityraider.agricraft.api.requirement.RequirementType;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.utility.BlockRange;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -38,10 +38,10 @@ public class GrowthRequirement implements IGrowthRequirement {
 
     private final Collection<IAgriSoil> soils;
     
-    private final Optional<BlockWithMeta> reqBlock;
+    private final Optional<FuzzyStack> reqBlock;
     private final Optional<RequirementType> reqType;
 
-    GrowthRequirement(int maxBrightness, int minBrightness, Collection<IAgriSoil> soils, BlockWithMeta reqBlock, RequirementType reqType) {
+    GrowthRequirement(int maxBrightness, int minBrightness, Collection<IAgriSoil> soils, FuzzyStack reqBlock, RequirementType reqType) {
         assert soils != null;
         
         this.maxBrightness = maxBrightness;
@@ -52,7 +52,7 @@ public class GrowthRequirement implements IGrowthRequirement {
     }
 
     @Override
-    public Optional<BlockWithMeta> getRequiredBlock() {
+    public Optional<FuzzyStack> getRequiredBlock() {
         return this.reqBlock;
     }
 
@@ -101,32 +101,14 @@ public class GrowthRequirement implements IGrowthRequirement {
      * @return true, if this block corresponds to the required block *
      */
     private boolean isBlockAdequate(World world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
-        BlockWithMeta block = new BlockWithMeta(state);
-        return (!this.reqBlock.isPresent()) || this.reqBlock.get().equals(block);
+        FuzzyStack stack = new FuzzyStack(world.getBlockState(pos));
+        return (!this.reqBlock.isPresent()) || this.reqBlock.equals(stack);
     }
 
     public boolean isBrightnessGood(World world, BlockPos pos) {
         BlockPos above = pos.add(0, 1, 0);
         int lvl = Math.max(world.getLightFor(EnumSkyBlock.BLOCK, above), world.getLightFor(EnumSkyBlock.SKY, above));
         return lvl < this.maxBrightness && lvl >= this.minBrightness;
-    }
-
-    @Override
-    public boolean isValidSoil(World world, BlockPos pos) {
-        Block block = world.getBlockState(pos).getBlock();
-        IBlockState state = world.getBlockState(pos);
-        int meta = block.getMetaFromState(state);
-        BlockWithMeta soil = new BlockWithMeta(block, meta);
-        if (block instanceof ISoilContainer) {
-            soil = new BlockWithMeta(((ISoilContainer) block).getSoil(world, pos), ((ISoilContainer) block).getSoilMeta(world, pos));
-        }
-        return isValidSoil(soil);
-    }
-
-    @Override
-    public boolean isValidSoil(IAgriSoil soil) {
-        return this.soils.contains(soil);
     }
 
     public boolean requiresBaseBlock() {

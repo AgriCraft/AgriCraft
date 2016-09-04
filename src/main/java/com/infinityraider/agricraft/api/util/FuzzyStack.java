@@ -2,7 +2,12 @@
  */
 package com.infinityraider.agricraft.api.util;
 
+import com.agricraft.agricore.core.AgriCore;
+import java.util.Optional;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
@@ -15,38 +20,65 @@ public class FuzzyStack {
     private final boolean ignoreMeta;
     private final boolean ignoreTags;
     private final boolean useOreDict;
+    
+    public FuzzyStack(IBlockState state) {
+        this(new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state)));
+    }
+
+    public FuzzyStack(ItemStack stack) {
+        this(stack, false, false, false);
+    }
 
     public FuzzyStack(ItemStack stack, boolean ignoreMeta, boolean ignoreTags, boolean useOreDict) {
+        if (stack == null || stack.getItem() == null) {
+            throw new NullPointerException();
+        }
+        
         this.stack = stack;
         this.ignoreMeta = ignoreMeta;
         this.ignoreTags = ignoreTags;
         this.useOreDict = useOreDict;
-
-        if (this.ignoreMeta) {
-            this.stack.setItemDamage(0);
-        }
-
-        if (this.ignoreTags) {
-            this.stack.setTagCompound(null);
-        }
     }
 
     public ItemStack toStack() {
-        return stack.copy();
+        return this.stack.copy();
+    }
+    
+    public Item getItem() {
+        return this.stack.getItem();
+    }
+    
+    public int getMeta() {
+        return this.stack.getMetadata();
+    }
+    
+    public Optional<NBTTagCompound> getTags() {
+        return Optional.ofNullable(this.stack.getTagCompound()).map(t -> t.copy());
+    }
+    
+    public boolean matches(ItemStack stack) {
+        return stack != null && this.equals(new FuzzyStack(stack));
+    }
+    
+    public boolean areMetaEqual(FuzzyStack other) {
+        return other != null && (this.ignoreMeta || other.ignoreMeta || this.getMeta() == other.getMeta());
+    }
+    
+    public boolean areTagsEqual(FuzzyStack other) {
+        return other != null && (this.ignoreTags || other.ignoreTags || this.getTags().equals(other.getTags()));
+    }
+    
+    public boolean areItemEqual(FuzzyStack other) {
+        return other != null && this.stack.getItem().equals(other.stack.getItem());
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
         if (obj instanceof FuzzyStack) {
             FuzzyStack other = (FuzzyStack) obj;
+            AgriCore.getLogger("AgriCraft").debug("Comparing Stacks: {0} & {1}", this, other);
 
-            if ((this.stack.equals(other.stack))
-                    || ((this.stack.isItemEqual(other.stack))
-                    && ((this.ignoreMeta) || (other.ignoreMeta) || (this.stack.getMetadata() == other.stack.getMetadata()))
-                    && ((this.ignoreTags) || (other.ignoreTags) || (this.stack.getTagCompound().equals(other.stack.getTagCompound()))))) {
+            if (this.areItemEqual(other) && this.areMetaEqual(other) && this.areTagsEqual(other)) {
                 return true;
             }
 

@@ -2,6 +2,7 @@
  */
 package com.infinityraider.agricraft.api.soil;
 
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import java.util.Collection;
 import net.minecraft.item.ItemStack;
 
@@ -18,6 +19,14 @@ public interface IAgriSoil {
      * Returns an ItemStack representative of this AgriSoil.
      * @return an ItemStack representing this soil.
      */
-    Collection<ItemStack> getVarients();
+    Collection<FuzzyStack> getVarients();
+    
+    default boolean isVarient(ItemStack stack) {
+        return stack != null && isVarient(new FuzzyStack(stack));
+    }
+    
+    default boolean isVarient(FuzzyStack stack) {
+        return this.getVarients().contains(stack);
+    }
     
 }

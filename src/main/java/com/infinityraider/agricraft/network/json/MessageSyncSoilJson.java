@@ -2,33 +2,33 @@ package com.infinityraider.agricraft.network.json;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriSaver;
-import com.agricraft.agricore.plant.AgriPlant;
+import com.agricraft.agricore.plant.AgriSoil;
 import com.google.gson.Gson;
-import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.apiimpl.SoilRegistry;
 import com.infinityraider.agricraft.core.CoreHandler;
-import com.infinityraider.agricraft.core.JsonPlant;
+import com.infinityraider.agricraft.core.JsonSoil;
 import java.nio.file.Path;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class MessageSyncPlantJson extends MessageSyncElement<AgriPlant> {
+public class MessageSyncSoilJson extends MessageSyncElement<AgriSoil> {
 
 	private static final Gson gson = new Gson();
 
-	public MessageSyncPlantJson() {
+	public MessageSyncSoilJson() {
 	}
 	
-	public MessageSyncPlantJson(AgriPlant plant, int index, int count) {
-		super(plant, index, count);
+	public MessageSyncSoilJson(AgriSoil soil, int index, int count) {
+		super(soil, index, count);
 	}
 
 	@Override
-	protected String toString(AgriPlant element) {
+	protected String toString(AgriSoil element) {
 		return gson.toJson(element);
 	}
 
 	@Override
-	protected AgriPlant fromString(String element) {
-		return gson.fromJson(element, AgriPlant.class);
+	protected AgriSoil fromString(String element) {
+		return gson.fromJson(element, AgriSoil.class);
 	}
 	
 	@Override
@@ -38,16 +38,16 @@ public class MessageSyncPlantJson extends MessageSyncElement<AgriPlant> {
 
 	@Override
 	protected void onMessage(MessageContext ctx) {
-		AgriCore.getPlants().addPlant(this.element);
+		AgriCore.getSoils().addSoil(this.element);
 	}
 	
 	@Override
 	public void onFinishSync(MessageContext ctx) {
 		final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());
-		AgriSaver.saveElements(worldDir, AgriCore.getPlants().getAll());
-		AgriCore.getPlants().getAll().stream()
-				.map(JsonPlant::new)
-				.forEach(PlantRegistry.getInstance()::addPlant);
+		AgriSaver.saveElements(worldDir, AgriCore.getSoils().getAll());
+		AgriCore.getSoils().getAll().stream()
+				.map(JsonSoil::new)
+				.forEach(SoilRegistry.getInstance()::addSoil);
 	}
 
 }

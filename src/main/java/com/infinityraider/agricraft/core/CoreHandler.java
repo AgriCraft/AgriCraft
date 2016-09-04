@@ -29,7 +29,7 @@ public final class CoreHandler {
 	public static final Pattern AGRI_FOLDER_PATTERN = Pattern.compile("json/defaults/.*", Pattern.CASE_INSENSITIVE);
 
 	private static Path configDir;
-	private static Path plantDir;
+	private static Path jsonDir;
 	private static Path defaultDir;
 	private static Configuration config;
 
@@ -44,8 +44,8 @@ public final class CoreHandler {
 		return configDir;
 	}
 
-	public static Path getPlantDir() {
-		return plantDir;
+	public static Path getJsonDir() {
+		return jsonDir;
 	}
 
 	@EventHandler
@@ -56,8 +56,8 @@ public final class CoreHandler {
 		config = new Configuration(configDir.resolve("config.cfg").toFile());
 
 		// Setup Plant Dir.
-		plantDir = configDir.resolve("json");
-		defaultDir = plantDir.resolve("defaults");
+		jsonDir = configDir.resolve("json");
+		defaultDir = jsonDir.resolve("defaults");
 
 		// Setup Provider
 		AgriConfigAdapter provider = new ModProvider(config);
@@ -143,7 +143,7 @@ public final class CoreHandler {
 	@SideOnly(Side.CLIENT)
 	public static void loadTextures(Consumer<ResourceLocation> register) {
 		final AgriPlants preloaded = new AgriPlants();
-		AgriLoader.loadDirectory(plantDir, preloaded);
+		AgriLoader.loadDirectory(jsonDir, preloaded);
 		preloaded.getAll().stream()
 				.flatMap(p -> p.getTexture().getAllTextures().stream())
 				.filter(TypeHelper::isNonNull)

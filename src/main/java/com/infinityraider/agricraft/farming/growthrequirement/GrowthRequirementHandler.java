@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
-import com.infinityraider.agricraft.api.util.BlockWithMeta;
 import com.infinityraider.agricraft.api.misc.ISoilContainer;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
+import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -29,26 +30,18 @@ public class GrowthRequirementHandler {
      * CropPlant which doesn't require a specific soil will be able to grown on
      * these This list can be modified with MineTweaker
      */
-    public static List<BlockWithMeta> defaultSoils = new ArrayList<>();
+    public static List<FuzzyStack> defaultSoils = new ArrayList<>();
 
     /**
      * This list contains soils needed for certain CropPlants This list cannot
      * be modified externally
      */
-    static List<BlockWithMeta> soils = new ArrayList<>();
+    static List<FuzzyStack> soils = new ArrayList<>();
 
     //Methods for fertile soils
     //-------------------------
     public static boolean isSoilValid(IBlockAccess world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
-        Block block = state.getBlock();
-        int meta = block.getMetaFromState(state);
-        BlockWithMeta soil;
-        if (block instanceof ISoilContainer) {
-            soil = new BlockWithMeta(((ISoilContainer) block).getSoil(world, pos), ((ISoilContainer) block).getSoilMeta(world, pos));
-        } else {
-            soil = new BlockWithMeta(block, meta);
-        }
+        FuzzyStack soil = new FuzzyStack(world.getBlockState(pos));
         return soils.contains(soil) || defaultSoils.contains(soil);
     }
 
@@ -58,7 +51,7 @@ public class GrowthRequirementHandler {
     }
 
     private static void registerSoils() {
-        addDefaultSoil(new BlockWithMeta(Blocks.FARMLAND));
+        addDefaultSoil(new FuzzyStack(new ItemStack(Blocks.FARMLAND)));
     }
 
     private static void registerCustomEntries() {
@@ -69,39 +62,39 @@ public class GrowthRequirementHandler {
         String total = " of " + data.length + ".";
         for (String line : data) {
             AgriCore.getLogger("AgriCraft").debug("  Parsing " + line + total);
-            ItemStack stack = (ItemStack) AgriCore.getConverter().toStack(line);
+            ItemStack stack = ((FuzzyStack) AgriCore.getConverter().toStack(line)).toStack();
             Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).block : null;
 
             if (block != null) {
-                addDefaultSoil(new BlockWithMeta(block, stack.getItemDamage()));
+                addDefaultSoil(new FuzzyStack(new ItemStack(block, stack.getItemDamage())));
             } else {
                 AgriCore.getLogger("AgriCraft").info(" Error when adding block to soil whitelist: Invalid block (line: " + line + ")");
             }
         }
         soils.removeIf(TypeHelper::isNull);
         AgriCore.getLogger("AgriCraft").info("Completed soil whitelist:");
-        for (BlockWithMeta soil : soils) {
-            AgriCore.getLogger("AgriCraft").info(" - " + Block.REGISTRY.getNameForObject(soil.getBlock()) + ":" + soil.getMeta());
+        for (FuzzyStack soil : soils) {
+            AgriCore.getLogger("AgriCraft").info(" - " + Item.REGISTRY.getNameForObject(soil.getItem()) + ":" + soil.getMeta());
         }
     }
 
-    public static void addAllToSoilWhitelist(Collection<? extends BlockWithMeta> list) {
-        for (BlockWithMeta block : list) {
+    public static void addAllToSoilWhitelist(Collection<? extends FuzzyStack> list) {
+        for (FuzzyStack block : list) {
             addDefaultSoil(block);
         }
     }
 
-    public static void removeAllFromSoilWhitelist(Collection<? extends BlockWithMeta> list) {
+    public static void removeAllFromSoilWhitelist(Collection<? extends FuzzyStack> list) {
         defaultSoils.removeAll(list);
     }
 
-    public static void addSoil(BlockWithMeta block) {
+    public static void addSoil(FuzzyStack block) {
         if (!soils.contains(block)) {
             soils.add(block);
         }
     }
 
-    public static boolean addDefaultSoil(BlockWithMeta block) {
+    public static boolean addDefaultSoil(FuzzyStack block) {
         if (!defaultSoils.contains(block)) {
             defaultSoils.add(block);
             return true;

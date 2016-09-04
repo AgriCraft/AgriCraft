@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.requirement;
 
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.util.BlockWithMeta;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.apiimpl.SoilRegistry;
 import java.util.Collection;
 import java.util.Optional;
@@ -36,25 +36,17 @@ public interface IGrowthRequirement {
      * @return true, if the given block is a valid soil (position is the
      * position of the soil)
      */
-    boolean isValidSoil(World world, BlockPos pos);
-
-    /**
-     * @return true, if the given block is a valid soil
-     */
-    default boolean isValidSoil(BlockWithMeta soil) {
-        final ItemStack stack = soil.toStack();
-        return this.isValidSoil(
-                SoilRegistry.getInstance().getSoils().stream()
-                .filter(s -> s.getVarients().contains(stack))
-                .findFirst()
-                .orElse(null)
-        );
+    default boolean isValidSoil(World world, BlockPos pos) {
+        return this.isValidSoil(new FuzzyStack(world.getBlockState(pos)));
     }
 
     /**
      * @return true, if the given block is a valid soil
      */
-    boolean isValidSoil(IAgriSoil soil);
+    default boolean isValidSoil(FuzzyStack soil) {
+        return this.getSoils().isEmpty() || this.getSoils().stream()
+                .anyMatch(s -> s.isVarient(soil));
+    }
 
     //Methods to change specific requirements
     //--------------------------------------
@@ -64,7 +56,7 @@ public interface IGrowthRequirement {
 
     int getMaxBrightness();
 
-    Optional<BlockWithMeta> getRequiredBlock();
+    Optional<FuzzyStack> getRequiredBlock();
 
     Optional<RequirementType> getRequiredType();
 

@@ -3,7 +3,7 @@
 package com.infinityraider.agricraft.api.requirement;
 
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.util.BlockWithMeta;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 
 /**
  * Interface for interacting with the GrowthRequirement Builder.
@@ -16,7 +16,7 @@ public interface IGrowthReqBuilder {
 
     IGrowthReqBuilder addSoil(IAgriSoil soil);
     
-    IGrowthReqBuilder setRequiredBlock(BlockWithMeta reqBlock);
+    IGrowthReqBuilder setRequiredBlock(FuzzyStack reqBlock);
     
     IGrowthReqBuilder setRequiredType(RequirementType reqType);
     

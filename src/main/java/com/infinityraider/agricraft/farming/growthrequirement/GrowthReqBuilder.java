@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.requirement.RequirementType;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.util.BlockWithMeta;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class GrowthReqBuilder implements IGrowthReqBuilder {
     private int maxBrightness = 16;
     private int minBrightness = 8;
     private final List<IAgriSoil> soils;
-    private BlockWithMeta reqBlock;
+    private FuzzyStack reqBlock;
     private RequirementType reqType;
 
     public GrowthReqBuilder() {
@@ -42,7 +42,7 @@ public class GrowthReqBuilder implements IGrowthReqBuilder {
     }
     
     @Override
-    public GrowthReqBuilder setRequiredBlock(BlockWithMeta reqBlock) {
+    public GrowthReqBuilder setRequiredBlock(FuzzyStack reqBlock) {
         this.reqBlock = reqBlock;
         return this;
     }
