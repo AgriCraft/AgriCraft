@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.apiimpl.SoilRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
-import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -30,17 +29,11 @@ public class GrowthRequirementHandler {
      */
     public static List<FuzzyStack> defaultSoils = new ArrayList<>();
 
-    /**
-     * This list contains soils needed for certain CropPlants This list cannot
-     * be modified externally
-     */
-    static List<FuzzyStack> soils = new ArrayList<>();
-
     //Methods for fertile soils
     //-------------------------
     public static boolean isSoilValid(IBlockAccess world, BlockPos pos) {
         FuzzyStack soil = new FuzzyStack(world.getBlockState(pos));
-        return soils.contains(soil) || defaultSoils.contains(soil);
+        return SoilRegistry.getInstance().isSoil(soil) || defaultSoils.contains(soil);
     }
 
     public static void init() {
@@ -69,11 +62,7 @@ public class GrowthRequirementHandler {
                 AgriCore.getLogger("AgriCraft").info(" Error when adding block to soil whitelist: Invalid block (line: " + line + ")");
             }
         }
-        soils.removeIf(TypeHelper::isNull);
         AgriCore.getLogger("AgriCraft").info("Completed soil whitelist:");
-        for (FuzzyStack soil : soils) {
-            AgriCore.getLogger("AgriCraft").info(" - " + Item.REGISTRY.getNameForObject(soil.getItem()) + ":" + soil.getMeta());
-        }
     }
 
     public static void addAllToSoilWhitelist(Collection<? extends FuzzyStack> list) {
@@ -84,12 +73,6 @@ public class GrowthRequirementHandler {
 
     public static void removeAllFromSoilWhitelist(Collection<? extends FuzzyStack> list) {
         defaultSoils.removeAll(list);
-    }
-
-    public static void addSoil(FuzzyStack block) {
-        if (!soils.contains(block)) {
-            soils.add(block);
-        }
     }
 
     public static boolean addDefaultSoil(FuzzyStack block) {
