@@ -130,11 +130,6 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 	}
 
 	@Override
-	public List<ResourceLocation> getTextures() {
-		return Collections.emptyList();
-	}
-
-	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 		return world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockWaterChannel && state.getBlock().getMaterial(state) == Material.AIR;

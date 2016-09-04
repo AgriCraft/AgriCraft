@@ -15,7 +15,6 @@ import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.RenderLogger;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -26,20 +25,19 @@ public interface IProxy extends IProxyBase {
     @Override
     default void preInitStart(FMLPreInitializationEvent event) {
         CoreHandler.preinit(event);
-        MinecraftForge.EVENT_BUS.register(AgriCraft.instance);
-        initConfiguration(event);
+        registerEventHandler(AgriCraft.instance);
         StatRegistry.getInstance().registerAdapter(new PlantStats());
         PluginHandler.preInit(event);
     }
 
     @Override
     default void initStart(FMLInitializationEvent event) {
-        this.registerEventHandlers();
         NetworkRegistry.INSTANCE.registerGuiHandler(AgriCraft.instance, new GuiHandler());
         AgriEntities.init();
         PluginHandler.init();
         initCustomWoodTypes();
     }
+
     @Override
     default void postInitStart(FMLPostInitializationEvent event) {
         CoreHandler.postInit(event);
@@ -56,13 +54,14 @@ public interface IProxy extends IProxyBase {
     }
 
     default void registerEventHandlers() {
-        PlayerInteractEventHandler playerInteractEventHandler = new PlayerInteractEventHandler();
-        MinecraftForge.EVENT_BUS.register(playerInteractEventHandler);
-
+        registerEventHandler(new PlayerInteractEventHandler());
         if (AgriCraftConfig.debug) {
             FMLCommonHandler.instance().bus().register(new RenderLogger());
         }
     }
+
+    @Override
+    default void activateRequiredModules() {}
 
     default void initConfiguration(FMLPreInitializationEvent event) {}
 }

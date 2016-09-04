@@ -4,17 +4,19 @@ import com.infinityraider.agricraft.blocks.irrigation.AbstractBlockWaterChannel;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.infinitylib.render.RenderUtilBase;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -45,50 +47,50 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 		tessellator.drawScaledPrism(4, 5, 11, 5, 12, 12, matIcon);
 		tessellator.drawScaledPrism(11, 5, 11, 12, 12, 12, matIcon);
 	}
-	
+
 	protected void renderSide(ITessellator tessellator, T channel, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
 		switch(dir) {
-            case EAST:
-                //positive x
-                if(connect) {
-                    tessellator.drawScaledPrism(12, 4, 4, 16, 5, 12, matIcon);
-                    tessellator.drawScaledPrism(12, 5, 4, 16, 12, 5, matIcon);
-                    tessellator.drawScaledPrism(12, 5, 11, 16, 12, 12, matIcon);
-                } else {
-                    tessellator.drawScaledPrism(11, 5, 5, 12, 12, 11, matIcon);
-                }
-                break;
-            case WEST:
-                //negative x
-                if(connect) {
-                    tessellator.drawScaledPrism(0, 4, 4, 4, 5, 12, matIcon);
-                    tessellator.drawScaledPrism(0, 5, 4, 4, 12, 5, matIcon);
-                    tessellator.drawScaledPrism(0, 5, 11, 4, 12, 12, matIcon);
-                } else {
-                    tessellator.drawScaledPrism(4, 5, 5, 5, 12, 11, matIcon);
-                }
-                break;
-            case NORTH:
-                //negative z
-                if(connect) {
-                    tessellator.drawScaledPrism(4, 4, 0, 12, 5, 4, matIcon);
-                    tessellator.drawScaledPrism(4, 5, 0, 5, 12, 4, matIcon);
-                    tessellator.drawScaledPrism(11, 5, 0, 12, 12, 4, matIcon);
-                } else {
-                    tessellator.drawScaledPrism(5, 5, 4, 11, 12, 5, matIcon);
-                }
-                break;
-            case SOUTH:
-                //positive z
-                if(connect) {
-                    tessellator.drawScaledPrism(4, 4, 12, 12, 5, 16, matIcon);
-                    tessellator.drawScaledPrism(4, 5, 12, 5, 12, 16, matIcon);
-                    tessellator.drawScaledPrism(11, 5, 12, 12, 12, 16, matIcon);
-                } else {
-                    tessellator.drawScaledPrism(5, 5, 11, 11, 12, 12, matIcon);
-                }
-                break;
-        }
+			case EAST:
+				//positive x
+				if(connect) {
+					tessellator.drawScaledPrism(12, 4, 4, 16, 5, 12, matIcon);
+					tessellator.drawScaledPrism(12, 5, 4, 16, 12, 5, matIcon);
+					tessellator.drawScaledPrism(12, 5, 11, 16, 12, 12, matIcon);
+				} else {
+					tessellator.drawScaledPrism(11, 5, 5, 12, 12, 11, matIcon);
+				}
+				break;
+			case WEST:
+				//negative x
+				if(connect) {
+					tessellator.drawScaledPrism(0, 4, 4, 4, 5, 12, matIcon);
+					tessellator.drawScaledPrism(0, 5, 4, 4, 12, 5, matIcon);
+					tessellator.drawScaledPrism(0, 5, 11, 4, 12, 12, matIcon);
+				} else {
+					tessellator.drawScaledPrism(4, 5, 5, 5, 12, 11, matIcon);
+				}
+				break;
+			case NORTH:
+				//negative z
+				if(connect) {
+					tessellator.drawScaledPrism(4, 4, 0, 12, 5, 4, matIcon);
+					tessellator.drawScaledPrism(4, 5, 0, 5, 12, 4, matIcon);
+					tessellator.drawScaledPrism(11, 5, 0, 12, 12, 4, matIcon);
+				} else {
+					tessellator.drawScaledPrism(5, 5, 4, 11, 12, 5, matIcon);
+				}
+				break;
+			case SOUTH:
+				//positive z
+				if(connect) {
+					tessellator.drawScaledPrism(4, 4, 12, 12, 5, 16, matIcon);
+					tessellator.drawScaledPrism(4, 5, 12, 5, 12, 16, matIcon);
+					tessellator.drawScaledPrism(11, 5, 12, 12, 12, 16, matIcon);
+				} else {
+					tessellator.drawScaledPrism(5, 5, 11, 11, 12, 12, matIcon);
+				}
+				break;
+		}
 	}
 
 	protected void drawWater(ITessellator tessellator, T channel, TextureAtlasSprite icon) {
@@ -99,7 +101,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 		}
 
 		//stolen from Vanilla code
-		final int l = RenderUtilBase.getMixedBrightness(channel.getWorld(), channel.getPos(), Blocks.WATER.getDefaultState());
+		final int l = this.getMixedBrightness(channel.getWorld(), channel.getPos(), Blocks.WATER.getDefaultState());
 		final float y = channel.getFluidHeight() * Constants.UNIT;
 		final float f = (float) (l >> 16 & 255) / 255.0F;
 		final float f1 = (float) (l >> 8 & 255) / 255.0F;
@@ -129,17 +131,18 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 	}
 
 	@Override
-	public void renderDynamicTile(ITessellator tess, T tile, float partialTicks, int destroyStage) {
-		this.drawWater(tess, tile, BaseIcons.WATER_STILL.getIcon());
+	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, B block,
+										T tile, TextureAtlasSprite icon, boolean dynamic) {
+		if(dynamic) {
+			this.drawWater(tess, tile, BaseIcons.WATER_STILL.getIcon());
+		} else {
+			this.renderWoodChannel(tess, tile, icon);
+		}
 	}
 
 	@Override
-	protected final void renderStaticWood(ITessellator tess, T tile, TextureAtlasSprite matIcon) {
-		this.renderWoodChannel(tess, tile, matIcon);
-	}
-
-	@Override
-	public void renderInventoryBlockWood(ITessellator tessellator, World world, T channel, ItemStack stack, EntityLivingBase entity, TextureAtlasSprite icon) {
+	protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, B block, T channel, ItemStack stack,
+											EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
 		this.renderBottom(tessellator, icon);
 		this.renderSide(tessellator, channel, EnumFacing.NORTH, false, icon);
 		this.renderSide(tessellator, channel, EnumFacing.EAST, false, icon);

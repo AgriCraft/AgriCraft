@@ -4,19 +4,25 @@ import com.infinityraider.agricraft.blocks.BlockSprinkler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.infinitylib.render.block.RenderBlockTile;
+import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
+import java.util.Collections;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class RenderSprinkler extends RenderBlockTile<BlockSprinkler, TileEntitySprinkler> {
+public class RenderSprinkler extends RenderBlockWithTileBase<BlockSprinkler, TileEntitySprinkler> {
 
 	// Dimensions
 	private static final float MIN_Y = 8.0F;
@@ -35,17 +41,12 @@ public class RenderSprinkler extends RenderBlockTile<BlockSprinkler, TileEntityS
 		super(block, new TileEntitySprinkler(), true, true, true);
 	}
 
-	@Override
-	protected void renderStaticTile(ITessellator tess, TileEntitySprinkler tile) {
-		tess.pushMatrix();
+	public void renderStatic(ITessellator tess, TileEntitySprinkler te) {
 		tess.translate(0, 4 * Constants.UNIT, 0);
-		// TODO: TEMP!
-		tess.drawScaledPrism(4, 8, 4, 12, 16, 12, BaseIcons.OAK_PLANKS.getIcon());
-		tess.popMatrix();
+		tess.drawScaledPrism(4, 8, 4, 12, 16, 12, te.getChannelIcon());
 	}
 
-	@Override
-	public void renderDynamicTile(ITessellator tess, TileEntitySprinkler te, float partialTicks, int destroyStage) {
+	public void renderDynamic(ITessellator tess, TileEntitySprinkler te) {
 		tess.translate(0.5F, 0, 0.5F);
 		tess.rotate(te.angle, 0, 1, 0);
 		tess.translate(-0.5F, 0, -0.5F);
@@ -59,7 +60,8 @@ public class RenderSprinkler extends RenderBlockTile<BlockSprinkler, TileEntityS
 	}
 
 	@Override
-	public void renderItem(ITessellator tessellator, World world, ItemStack stack, EntityLivingBase entity) {
+	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSprinkler block, TileEntitySprinkler tile,
+									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 		// Draw Top
 		tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, BaseIcons.OAK_PLANKS.getIcon());
 		// Get Core Icon
@@ -69,6 +71,22 @@ public class RenderSprinkler extends RenderBlockTile<BlockSprinkler, TileEntityS
 		// Draw Blades
 		tessellator.drawScaledPrism(BMX_A, MIN_Y - 8, MIN_C, BMX_B, BMX_Y - 8, MAX_C, coreIcon);
 		tessellator.drawScaledPrism(MIN_C, MIN_Y - 8, BMX_A, MAX_C, BMX_Y - 8, BMX_B, coreIcon);
+
+	}
+
+	@Override
+	public List<ResourceLocation> getAllTextures() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockSprinkler block,
+								 TileEntitySprinkler tile, boolean dynamicRender, float partialTick, int destroyStage) {
+		if(dynamicRender) {
+			this.renderDynamic(tessellator, tile);
+		} else {
+			this.renderStatic(tessellator, tile);
+		}
 	}
 
 	@Override
