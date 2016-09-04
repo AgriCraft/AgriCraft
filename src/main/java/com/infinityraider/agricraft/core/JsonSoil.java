@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.api.util.FuzzyStack;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import net.minecraft.item.ItemStack;
 
 /**
  * Class wrapping the AgriCore AgriSoil.

@@ -2,10 +2,8 @@ package com.infinityraider.agricraft.api.requirement;
 
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
-import com.infinityraider.agricraft.apiimpl.SoilRegistry;
 import java.util.Collection;
 import java.util.Optional;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

@@ -2,14 +2,9 @@
  */
 package com.infinityraider.agricraft.items.modes;
 
-import com.agricraft.agricore.config.AgriConfigCategory;
-import com.agricraft.agricore.config.AgriConfigurable;
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.apiimpl.SoilRegistry;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;

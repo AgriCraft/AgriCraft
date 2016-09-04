@@ -1,12 +1,10 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
-import com.infinityraider.agricraft.api.misc.ISoilContainer;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;

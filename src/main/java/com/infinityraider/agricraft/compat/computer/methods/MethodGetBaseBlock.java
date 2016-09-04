@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import java.util.Optional;

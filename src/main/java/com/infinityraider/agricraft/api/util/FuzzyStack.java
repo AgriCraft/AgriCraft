@@ -2,7 +2,6 @@
  */
 package com.infinityraider.agricraft.api.util;
 
-import com.agricraft.agricore.core.AgriCore;
 import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -76,7 +75,6 @@ public class FuzzyStack {
     public boolean equals(Object obj) {
         if (obj instanceof FuzzyStack) {
             FuzzyStack other = (FuzzyStack) obj;
-            AgriCore.getLogger("AgriCraft").debug("Comparing Stacks: {0} & {1}", this, other);
 
             if (this.areItemEqual(other) && this.areMetaEqual(other) && this.areTagsEqual(other)) {
                 return true;
