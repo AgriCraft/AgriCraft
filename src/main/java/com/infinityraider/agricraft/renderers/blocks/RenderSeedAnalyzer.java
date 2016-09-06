@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyzer, TileEntitySeedAnalyzer> {
@@ -93,7 +94,9 @@ public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyze
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockSeedAnalyzer block,
 								 TileEntitySeedAnalyzer tile, boolean dynamicRender, float partialTick, int destroyStage) {
 		if(dynamicRender) {
-			this.renderSeed(tile, x, y, z);
+            tessellator.draw();
+			this.renderSeed(tile, 0, 0, 0);
+            tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
 		} else {
 			this.renderModel(tessellator, tile.getOrientation(), tile.hasJournal());
 		}

@@ -33,7 +33,7 @@ public abstract class MessageSyncElement<T> extends MessageBase {
 
 	@Override
 	protected final void processMessage(MessageContext ctx) {
-		AgriCore.getLogger("Agri-Net").debug("Recieved Element {0} ({1} of {2}).", element.getClass().getCanonicalName(), index + 1, count);
+		AgriCore.getLogger("Agri-Net").info("Recieved Element {0} ({1} of {2}).", element.getClass().getCanonicalName(), index + 1, count);
 		if (this.index == 0) {
 			onSyncStart(ctx);
 		}

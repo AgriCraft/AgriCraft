@@ -1,8 +1,6 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.items.modes.DebugModeCheckSoil;
-import com.infinityraider.agricraft.items.modes.DebugModeClearGrass;
-import com.infinityraider.agricraft.items.modes.DebugModeDirtPlane;
+import com.infinityraider.agricraft.items.modes.*;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.handler.ConfigurationHandler;
 import com.infinityraider.infinitylib.item.ItemDebuggerBase;
@@ -27,7 +25,7 @@ public class ItemDebugger extends ItemDebuggerBase {
 		List<DebugMode> list = new ArrayList<>();
         list.add(new DebugModeCheckSoil());
 		list.add(new DebugModeClearGrass());
-		list.add(new DebugModeDirtPlane());
+		list.add(new DebugModeCoreInfo());
 		return list;
 	}
 

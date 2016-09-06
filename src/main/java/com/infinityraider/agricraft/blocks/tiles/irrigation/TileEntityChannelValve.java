@@ -56,7 +56,7 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     }
 
     @Override
-    public void addDebugInfo(List<String> list) {
+    public void addServerDebugInfo(List<String> list) {
         list.add("VALVE");
         list.add("  - State: "+(this.isPowered()?"closed":"open"));
         list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + Constants.BUCKET_mB / 2);

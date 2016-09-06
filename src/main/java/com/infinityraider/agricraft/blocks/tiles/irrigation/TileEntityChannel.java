@@ -282,9 +282,9 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addDebugInfo(List<String> list) {
+	public void addServerDebugInfo(List<String> list) {
 		list.add("CHANNEL:");
-		super.addDebugInfo(list);
+		super.addServerDebugInfo(list);
 		list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
 		list.add("  - FluidHeight: " + this.getFluidHeight());
 		list.add("  - Connections: ");

@@ -139,7 +139,7 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	}
 
 	@Override
-	public void addDebugInfo(List<String> list) {
+	public void addServerDebugInfo(List<String> list) {
 		list.add("this material is: " + this.getMaterialBlock().getRegistryName() + ":" + this.getMaterialMeta());
 	}
 
