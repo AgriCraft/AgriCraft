@@ -8,6 +8,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -39,7 +40,7 @@ public class DebugModeClearGrass extends DebugMode {
 	}
 
 	@Override
-	public void debugAction(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		pos = pos.toImmutable();
 		for (int x = -radius; x < radius; x++) {
 			for (int z = -radius; z < radius; z++) {
@@ -51,5 +52,15 @@ public class DebugModeClearGrass extends DebugMode {
 			}
 		}
 	}
+    
+    @Override
+    public void debugActionClicked(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+        // NOP
+    }
+
+    @Override
+    public void debugActionEntityClicked(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+        // NOP
+    }
 	
 }
