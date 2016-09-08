@@ -1,16 +1,11 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.analyzer.BlockSeedAnalyzer;
-import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;
-import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzerBook;
 import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
-import com.infinityraider.infinitylib.reference.Constants;
+import com.infinityraider.agricraft.renderers.AgriObjModelLoader;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
-import com.infinityraider.infinitylib.render.model.ModelTechne;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,97 +20,93 @@ import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyzer, TileEntitySeedAnalyzer> {
-	public static ResourceLocation TEXTURE_ANALYZER = new ResourceLocation(Reference.MOD_ID.toLowerCase()+":blocks/seedAnalyzer");
 
-	private static ModelTechne<ModelSeedAnalyzer> MODEL_ANALYZER = new ModelTechne<>(new ModelSeedAnalyzer());
-	private static ModelTechne<ModelSeedAnalyzerBook> MODEL_BOOK = new ModelTechne<>(new ModelSeedAnalyzerBook());
+    private static final String seedAnalyzerObj = "agricraft:models/block/seed_analyzer.obj";
+    private static final String seedBookObj = "agricraft:models/block/seed_analyzer_book.obj";
 
-	private List<BakedQuad> analyzerQuads;
-	private List<BakedQuad> bookQuads;
+    public RenderSeedAnalyzer(BlockSeedAnalyzer block) {
+        super(block, new TileEntitySeedAnalyzer(), true, true, true);
+    }
 
-	public RenderSeedAnalyzer(BlockSeedAnalyzer block) {
-		super(block, new TileEntitySeedAnalyzer(), true, true, true);
-	}
+    private void renderModel(ITessellator tessellator, EnumFacing direction, boolean journal) {
+        tessellator.pushMatrix();
+        rotateBlock(tessellator, direction);
+        AgriObjModelLoader.getBasicObjQuads(seedAnalyzerObj, tessellator.getVertexFormat(), tessellator::getIcon).ifPresent(tessellator::addQuads);
+        if (journal) {
+            AgriObjModelLoader.getBasicObjQuads(seedBookObj, tessellator.getVertexFormat(), tessellator::getIcon).ifPresent(tessellator::addQuads);
+        }
+        tessellator.setApplyDiffuseLighting(false);
+        tessellator.popMatrix();
+    }
 
-	private void renderModel(ITessellator tessellator, EnumFacing direction, boolean journal) {
-		tessellator.pushMatrix();
-		int angle = (90 * direction.getHorizontalIndex() + 180) % 360;
-		if(angle != 0) {
-			tessellator.translate(0.5, 0, 0.5);
-			tessellator.rotate(angle, 0, 1, 0);
-			tessellator.translate(-0.5, 0, -0.5);
-		}
-		if (analyzerQuads == null) {
-			analyzerQuads = MODEL_ANALYZER.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(TEXTURE_ANALYZER),1);
-		}
-		tessellator.addQuads(analyzerQuads);
-		if(journal) {
-			if (bookQuads == null) {
-				bookQuads = MODEL_BOOK.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(TEXTURE_ANALYZER), Constants.UNIT);
-			}
-			tessellator.addQuads(bookQuads);
-		}
-		tessellator.setApplyDiffuseLighting(false);
-		tessellator.popMatrix();
-	}
+    private void renderSeed(TileEntitySeedAnalyzer te, double x, double y, double z) {
+        // Save Settings
+        GlStateManager.pushAttrib();
+        GlStateManager.pushMatrix();
 
-	private void renderSeed(TileEntitySeedAnalyzer te, double x, double y, double z) {
-		// Save Settings
-		GlStateManager.pushAttrib();
-		GlStateManager.pushMatrix();
+        // Translate to the location of our tile entity
+        GlStateManager.translate(x, y, z);
+        GlStateManager.disableRescaleNormal();
 
-		// Translate to the location of our tile entity
-		GlStateManager.translate(x, y, z);
-		GlStateManager.disableRescaleNormal();
+        // Render Seed
+        if (te != null && te.hasSpecimen()) {
+            // Draw Item
+            this.renderItemStack(te.getSpecimen(), 0.5, 0.5, 0.5, 0.75, true);
+        }
 
-		// Render Seed
-		if (te != null && te.hasSpecimen()) {
-			// Draw Item
-			this.renderItemStack(te.getSpecimen(), 0.5, 0.5, 0.5, 0.75, true);
-		}
-
-		// Restore Settings
-		GlStateManager.popMatrix();
-		GlStateManager.popAttrib();
-	}
+        // Restore Settings
+        GlStateManager.popMatrix();
+        GlStateManager.popAttrib();
+    }
 
     @Override
     public List<ResourceLocation> getAllTextures() {
         List<ResourceLocation> textures = new ArrayList<>();
-        textures.add(TEXTURE_ANALYZER);
+        AgriObjModelLoader.getObjModel(seedAnalyzerObj).map(m -> m.getTextures()).ifPresent(textures::addAll);
+        AgriObjModelLoader.getObjModel(seedBookObj).map(m -> m.getTextures()).ifPresent(textures::addAll);
         return textures;
     }
 
     @Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockSeedAnalyzer block,
-								 TileEntitySeedAnalyzer tile, boolean dynamicRender, float partialTick, int destroyStage) {
-		if(dynamicRender) {
+    public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockSeedAnalyzer block,
+            TileEntitySeedAnalyzer tile, boolean dynamicRender, float partialTick, int destroyStage) {
+        if (dynamicRender) {
+            final VertexFormat form = tessellator.getVertexFormat();
             tessellator.draw();
-			this.renderSeed(tile, 0, 0, 0);
-            tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
-		} else {
-			this.renderModel(tessellator, tile.getOrientation(), tile.hasJournal());
-		}
+            this.renderSeed(tile, 0, 0, 0);
+            tessellator.startDrawingQuads(form);
+        } else {
+            this.renderModel(tessellator, tile.getOrientation(), tile.hasJournal());
+            final IModel mod = ModelLoaderRegistry.getMissingModel();
+            tessellator.addQuads(
+                    mod
+                    .bake(mod.getDefaultState(), tessellator.getVertexFormat(), tessellator::getIcon)
+                    .getQuads(null, EnumFacing.UP, 0)
+            );
+        }
 
-	}
+    }
 
-	@Override
-	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSeedAnalyzer block, TileEntitySeedAnalyzer tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-		renderModel(tessellator, EnumFacing.SOUTH, false);
-	}
+    @Override
+    public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSeedAnalyzer block, TileEntitySeedAnalyzer tile,
+            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+        renderModel(tessellator, EnumFacing.NORTH, true);
+    }
 
-	@Override
-	public TextureAtlasSprite getIcon() {
-		return null;
-	}
+    @Override
+    public TextureAtlasSprite getIcon() {
+        return null;
+    }
 
-	@Override
-	public boolean applyAmbientOcclusion() {
-		return false;
-	}
+    @Override
+    public boolean applyAmbientOcclusion() {
+        return false;
+    }
+
 }
