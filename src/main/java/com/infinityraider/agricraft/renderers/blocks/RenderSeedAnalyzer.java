@@ -106,7 +106,7 @@ public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyze
 	@Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSeedAnalyzer block, TileEntitySeedAnalyzer tile,
 									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-		renderModel(tessellator, EnumFacing.NORTH, false);
+		renderModel(tessellator, EnumFacing.SOUTH, false);
 	}
 
 	@Override
