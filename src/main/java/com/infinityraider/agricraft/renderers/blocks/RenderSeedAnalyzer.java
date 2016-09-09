@@ -21,8 +21,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyzer, TileEntitySeedAnalyzer> {
@@ -83,12 +81,6 @@ public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyze
             tessellator.startDrawingQuads(form);
         } else {
             this.renderModel(tessellator, tile.getOrientation(), tile.hasJournal());
-            final IModel mod = ModelLoaderRegistry.getMissingModel();
-            tessellator.addQuads(
-                    mod
-                    .bake(mod.getDefaultState(), tessellator.getVertexFormat(), tessellator::getIcon)
-                    .getQuads(null, EnumFacing.UP, 0)
-            );
         }
 
     }

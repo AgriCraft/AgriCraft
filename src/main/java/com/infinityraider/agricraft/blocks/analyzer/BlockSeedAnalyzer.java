@@ -121,7 +121,7 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 
 	@Override
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return false;
+		return true;
 	}
 
 	@Override
