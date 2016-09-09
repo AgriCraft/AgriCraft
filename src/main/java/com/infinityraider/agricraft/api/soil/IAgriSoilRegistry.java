@@ -4,6 +4,9 @@ package com.infinityraider.agricraft.api.soil;
 
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import java.util.List;
+import java.util.Optional;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 
 /**
  * An interface for managing AgriCraft plants.
@@ -14,13 +17,20 @@ public interface IAgriSoilRegistry {
 	
 	boolean isSoil(IAgriSoil plant);
 	
-	IAgriSoil getSoil(String id);
+	Optional<IAgriSoil> getSoil(String id);
     
-    default IAgriSoil getSoil(FuzzyStack stack) {
+    default Optional<IAgriSoil> getSoil(IBlockState state) {
+        return this.getSoil(new FuzzyStack(state));
+    }
+    
+    default Optional<IAgriSoil> getSoil(ItemStack stack) {
+        return this.getSoil(new FuzzyStack(stack));
+    }
+    
+    default Optional<IAgriSoil> getSoil(FuzzyStack stack) {
         return this.getSoils().stream()
                 .filter(s -> s.isVarient(stack))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
 	boolean addSoil(IAgriSoil plant);

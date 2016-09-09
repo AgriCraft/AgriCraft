@@ -3,7 +3,6 @@
 package com.infinityraider.agricraft.utility;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.tileentity.TileEntity;

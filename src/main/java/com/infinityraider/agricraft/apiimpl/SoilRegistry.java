@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.soil.IAgriSoilRegistry;
+import java.util.Optional;
 
 /**
  *
@@ -33,8 +34,8 @@ public class SoilRegistry implements IAgriSoilRegistry {
 	}
 
 	@Override
-	public IAgriSoil getSoil(String id) {
-		return this.soils.get(id);
+	public Optional<IAgriSoil> getSoil(String id) {
+		return Optional.ofNullable(this.soils.get(id));
 	}
 
 	@Override

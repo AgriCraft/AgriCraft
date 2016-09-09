@@ -53,6 +53,7 @@ public interface IProxy extends IProxyBase {
         CustomWoodType.init();
     }
 
+    @Override
     default void registerEventHandlers() {
         registerEventHandler(new PlayerInteractEventHandler());
         if (AgriCraftConfig.debug) {
@@ -63,5 +64,6 @@ public interface IProxy extends IProxyBase {
     @Override
     default void activateRequiredModules() {}
 
+    @Override
     default void initConfiguration(FMLPreInitializationEvent event) {}
 }

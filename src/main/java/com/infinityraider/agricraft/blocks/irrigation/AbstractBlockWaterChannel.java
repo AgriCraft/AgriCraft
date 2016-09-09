@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.utility.AgriWorldHelper;
-import com.infinityraider.agricraft.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import java.util.Optional;
 import net.minecraft.block.state.IBlockState;

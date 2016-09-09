@@ -41,6 +41,7 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
 		super(block, new TileEntityPeripheral(), true, true, true);
 	}
 
+    @Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockPeripheral block, @Nullable TileEntityPeripheral tile,
 									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 		renderBase(tessellator);

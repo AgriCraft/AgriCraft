@@ -33,11 +33,15 @@ import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.agricraft.agricore.util.MathHelper;
+import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.soil.IAgriSoil;
+import com.infinityraider.agricraft.apiimpl.SoilRegistry;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import java.util.Optional;
 
-public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable {
+public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable, IAgriDisplayable {
 
     public static final String NAME = "crops";
 
@@ -197,6 +201,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Override
     public boolean isMature() {
         return getGrowthStage() >= Constants.MATURE;
+    }
+
+    @Override
+    public Optional<IAgriSoil> getSoil() {
+        return SoilRegistry.getInstance().getSoil(this.worldObj.getBlockState(this.pos.add(0, -1, 0)));
     }
 
     // =========================================================================
@@ -440,9 +449,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         lines.add(" - Texture: " + this.plant.getPrimaryPlantTexture(this.getGrowthStage()).toString());
     }
 
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
+    @Override
     public void addDisplayInfo(List information) {
+        
+        // Add Soil Information
+        information.add("Soil: " + this.getSoil().map(s -> s.getName()).orElse("Unknown"));
+        
         if (this.hasPlant()) {
             //Add the SEED name.
             information.add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + this.plant.getSeedName());
@@ -465,5 +477,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         } else {
             information.add(AgriCore.getTranslator().translate("agricraft_tooltip.empty"));
         }
+        
     }
 }
