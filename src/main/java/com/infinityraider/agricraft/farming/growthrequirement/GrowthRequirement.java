@@ -97,7 +97,7 @@ public class GrowthRequirement implements IGrowthRequirement {
      */
     private boolean isBlockAdequate(World world, BlockPos pos) {
         FuzzyStack stack = new FuzzyStack(world.getBlockState(pos));
-        return (!this.reqBlock.isPresent()) || this.reqBlock.equals(stack);
+        return (!this.reqBlock.isPresent()) || this.reqBlock.get().equals(stack);
     }
 
     public boolean isBrightnessGood(World world, BlockPos pos) {
