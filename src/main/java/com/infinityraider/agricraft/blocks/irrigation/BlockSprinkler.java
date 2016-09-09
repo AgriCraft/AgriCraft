@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.blocks;
+package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
 import com.infinityraider.agricraft.config.AgriCraftConfig;

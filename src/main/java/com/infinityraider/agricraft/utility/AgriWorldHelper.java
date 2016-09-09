@@ -3,8 +3,9 @@
 package com.infinityraider.agricraft.utility;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import net.minecraft.block.Block;
+import java.util.Optional;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -18,22 +19,17 @@ import net.minecraft.world.World;
  */
 public class AgriWorldHelper {
 	
-	public static final <T> T getBlock(IBlockAccess world, BlockPos pos, Class<T> type) {
-		Block b = world.getBlockState(pos).getBlock();
-		if (b != null && type.isAssignableFrom(b.getClass())) {
-			return type.cast(b);
-		} else {
-			return null;
-		}
+	public static final <T> Optional<T> getBlock(IBlockAccess world, BlockPos pos, Class<T> type) {
+        return Optional.ofNullable(world.getBlockState(pos))
+                .map(s -> s.getBlock())
+                .filter(b -> type.isAssignableFrom(b.getClass()))
+                .map(b -> type.cast(b));
 	}
 	
-	public static final <T> T getTile(IBlockAccess world, BlockPos pos, Class<T> type) {
-		TileEntity te = world.getTileEntity(pos);
-		if (te != null && type.isAssignableFrom(te.getClass())) {
-			return type.cast(te);
-		} else {
-			return null;
-		}
+	public static final <T> Optional<T> getTile(IBlockAccess world, BlockPos pos, Class<T> type) {
+        return Optional.ofNullable(world.getTileEntity(pos))
+                .filter(te -> type.isAssignableFrom(te.getClass()))
+                .map(te -> type.cast(te));
 	}
 	
 	public static final <T> List<T> getTileNeighbors(World world, BlockPos pos, Class<T> type) {

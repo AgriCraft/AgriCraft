@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,6 +14,11 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import com.infinityraider.agricraft.renderers.blocks.RenderTank;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import java.util.Optional;
+import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -96,5 +102,45 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
 	public RenderTank getRenderer() {
 		return new RenderTank(this);
 	}
+    
+    @Override
+    protected InfinityProperty[] getPropertyArray() {
+        return new InfinityProperty[]{
+            AgriProperties.CHANNEL_NORTH,
+            AgriProperties.CHANNEL_EAST,
+            AgriProperties.CHANNEL_SOUTH,
+            AgriProperties.CHANNEL_WEST,
+            AgriProperties.TANK_NORTH,
+            AgriProperties.TANK_EAST,
+            AgriProperties.TANK_SOUTH,
+            AgriProperties.TANK_WEST,
+            AgriProperties.TANK_DOWN,
+        };
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        Optional<TileEntityTank> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntityTank.class);
+        if(tile.isPresent()) {
+            TileEntityTank tank = tile.get();
+            
+            state = AgriProperties.CHANNEL_NORTH.applyToBlockState(state, tank.isConnectedToChannel(EnumFacing.NORTH));
+            state = AgriProperties.CHANNEL_EAST.applyToBlockState(state, tank.isConnectedToChannel(EnumFacing.EAST));
+            state = AgriProperties.CHANNEL_SOUTH.applyToBlockState(state, tank.isConnectedToChannel(EnumFacing.SOUTH));
+            state = AgriProperties.CHANNEL_WEST.applyToBlockState(state, tank.isConnectedToChannel(EnumFacing.WEST));
+
+            state = AgriProperties.TANK_NORTH.applyToBlockState(state, tank.hasNeighbour(EnumFacing.NORTH));
+            state = AgriProperties.TANK_EAST.applyToBlockState(state, tank.hasNeighbour(EnumFacing.EAST));
+            state = AgriProperties.TANK_SOUTH.applyToBlockState(state, tank.hasNeighbour(EnumFacing.SOUTH));
+            state = AgriProperties.TANK_WEST.applyToBlockState(state, tank.hasNeighbour(EnumFacing.WEST));
+            state = AgriProperties.TANK_DOWN.applyToBlockState(state, tank.hasNeighbour(EnumFacing.DOWN));
+        }
+        return state;
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return 0;
+    }
 
 }

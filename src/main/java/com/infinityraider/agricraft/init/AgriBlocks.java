@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.init;
 
+import com.infinityraider.agricraft.blocks.irrigation.BlockSprinkler;
 import com.infinityraider.agricraft.blocks.pad.BlockWaterPadFull;
 import com.infinityraider.agricraft.blocks.pad.BlockWaterPad;
 import com.infinityraider.agricraft.blocks.analyzer.BlockSeedAnalyzer;
