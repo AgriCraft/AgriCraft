@@ -66,9 +66,9 @@ public class BlockRange implements Iterable<BlockPos> {
     }
     
     public int getVolume() {
-        return (max.getX() - min.getX())
-                * (max.getY() - min.getY())
-                * (max.getZ() - min.getZ());
+        return (max.getX() - min.getX() + 1)
+                * (max.getY() - min.getY() + 1)
+                * (max.getZ() - min.getZ() + 1);
     }
 
     public boolean contains(BlockPos pos) {

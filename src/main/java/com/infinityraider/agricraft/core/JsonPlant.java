@@ -9,7 +9,6 @@ import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
-import com.infinityraider.agricraft.api.requirement.RequirementType;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.farming.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
@@ -133,24 +132,15 @@ public class JsonPlant extends CropPlant {
                 .map(JsonSoil::new)
                 .forEach(builder::addSoil);
 
-        this.plant.getRequirement().getBases().forEach((b) -> {
-            if (b instanceof FuzzyStack) {
-                FuzzyStack stack = (FuzzyStack) b;
-                builder.setRequiredBlock(stack);
-                builder.setRequiredType(RequirementType.BELOW);
-            }
-        });
-
         this.plant.getRequirement().getNearby().forEach((obj, dist) -> {
             if (obj instanceof FuzzyStack) {
                 FuzzyStack stack = (FuzzyStack) obj;
-                builder.setRequiredBlock(stack);
-                builder.setRequiredType(RequirementType.NEARBY);
+                builder.addRequiredBlock(stack, dist);
             }
         });
-
-        builder.setMinBrightness(plant.getRequirement().getMinLight());
-        builder.setMaxBrightness(plant.getRequirement().getMaxLight());
+        
+        builder.setMinLight(this.plant.getRequirement().getMinLight());
+        builder.setMaxLight(this.plant.getRequirement().getMaxLight());
 
         return builder.build();
 

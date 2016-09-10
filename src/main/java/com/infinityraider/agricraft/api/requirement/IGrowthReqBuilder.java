@@ -4,21 +4,29 @@ package com.infinityraider.agricraft.api.requirement;
 
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.utility.BlockRange;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Interface for interacting with the GrowthRequirement Builder.
  */
 public interface IGrowthReqBuilder {
 
-    IGrowthReqBuilder setMaxBrightness(int maxBrightness);
-
-    IGrowthReqBuilder setMinBrightness(int minBrightness);
-
     IGrowthReqBuilder addSoil(IAgriSoil soil);
     
-    IGrowthReqBuilder setRequiredBlock(FuzzyStack reqBlock);
+    IGrowthReqBuilder addCondition(ICondition condition);
     
-    IGrowthReqBuilder setRequiredType(RequirementType reqType);
+    IGrowthReqBuilder setMinLight(int minLight);
+    
+    IGrowthReqBuilder setMaxLight(int maxLight);
+    
+    default IGrowthReqBuilder addRequiredBlock(FuzzyStack stack, BlockPos pos) {
+        return this.addCondition(new BlockCondition(stack, new BlockRange(pos, 0)));
+    }
+    
+    default IGrowthReqBuilder addRequiredBlock(FuzzyStack stack, int radius) {
+        return this.addCondition(new BlockCondition(stack, new BlockRange(BlockPos.ORIGIN, 0)));
+    }
     
     IGrowthRequirement build();
 	

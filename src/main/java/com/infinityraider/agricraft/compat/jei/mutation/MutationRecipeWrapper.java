@@ -35,7 +35,7 @@ public class MutationRecipeWrapper implements IRecipeWrapper {
                 .map(s -> s.toStack())
                 .orElse(new ItemStack(Blocks.FARMLAND))
         );
-        recipe.getChild().getGrowthRequirement().getRequiredBlock()
+        recipe.getChild().getGrowthRequirement().getConditionStack()
                 .map(b -> b.toStack())
                 .ifPresent(builder::add);
 

@@ -7,6 +7,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
@@ -19,6 +21,10 @@ public class FuzzyStack {
     private final boolean ignoreMeta;
     private final boolean ignoreTags;
     private final boolean useOreDict;
+    
+    public FuzzyStack(IBlockAccess world, BlockPos pos) {
+        this(world.getBlockState(pos));
+    }
     
     public FuzzyStack(IBlockState state) {
         this(new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state)));

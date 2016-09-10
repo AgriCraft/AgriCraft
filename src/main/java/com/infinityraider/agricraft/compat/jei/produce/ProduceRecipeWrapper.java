@@ -33,7 +33,7 @@ public class ProduceRecipeWrapper implements IRecipeWrapper {
                 .map(s -> s.toStack())
                 .orElse(new ItemStack(Blocks.FARMLAND))
         );
-        recipe.getGrowthRequirement().getRequiredBlock()
+        recipe.getGrowthRequirement().getConditionStack()
                 .map(b -> b.toStack())
                 .ifPresent(builder::add);
 

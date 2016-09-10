@@ -214,8 +214,8 @@ public class JournalPageSeed extends JournalPage {
 		int u = 4;
 		int v = 8;
 		int[] brightnessRange = new int[]{
-            plant.getGrowthRequirement().getMinBrightness(),
-            plant.getGrowthRequirement().getMaxBrightness()
+            plant.getGrowthRequirement().getMinLight(),
+            plant.getGrowthRequirement().getMaxLight()
         };
 		textures.add(BasicComponents.getIconComponent(BRIGHTNESS_BAR, x, y, 2 + 16 * u, v, Arrays.toString(brightnessRange)));
 		textures.add(BasicComponents.getIconComponent(BRIGHTNESS_FRAME, x + u * brightnessRange[0], y, 1, v));

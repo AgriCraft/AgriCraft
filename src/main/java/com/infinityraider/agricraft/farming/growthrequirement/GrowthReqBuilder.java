@@ -2,37 +2,25 @@
  */
 package com.infinityraider.agricraft.farming.growthrequirement;
 
+import com.agricraft.agricore.util.MathHelper;
+import com.infinityraider.agricraft.api.requirement.ICondition;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
-import com.infinityraider.agricraft.api.requirement.RequirementType;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class GrowthReqBuilder implements IGrowthReqBuilder {
 
-    private int maxBrightness = 16;
-    private int minBrightness = 8;
     private final List<IAgriSoil> soils;
-    private FuzzyStack reqBlock;
-    private RequirementType reqType;
+    private final List<ICondition> conditions;
+    private int minLight = 0;
+    private int maxLight = 16;
 
     public GrowthReqBuilder() {
         this.soils = new ArrayList<>();
-    }
-
-    @Override
-    public GrowthReqBuilder setMaxBrightness(int maxBrightness) {
-        this.maxBrightness = maxBrightness;
-        return this;
-    }
-
-    @Override
-    public GrowthReqBuilder setMinBrightness(int minBrightness) {
-        this.minBrightness = minBrightness;
-        return this;
+        this.conditions = new ArrayList<>();
     }
 
     @Override
@@ -42,20 +30,26 @@ public class GrowthReqBuilder implements IGrowthReqBuilder {
     }
     
     @Override
-    public GrowthReqBuilder setRequiredBlock(FuzzyStack reqBlock) {
-        this.reqBlock = reqBlock;
+    public IGrowthReqBuilder addCondition(ICondition condition) {
+        this.conditions.add(condition);
         return this;
     }
     
     @Override
-    public GrowthReqBuilder setRequiredType(RequirementType reqType) {
-        this.reqType = reqType;
+    public IGrowthReqBuilder setMinLight(int minLight) {
+        this.minLight = MathHelper.inRange(minLight, 0, 16);
+        return this;
+    }
+
+    @Override
+    public IGrowthReqBuilder setMaxLight(int maxLight) {
+        this.maxLight = MathHelper.inRange(maxLight, 0, 16);
         return this;
     }
 
     @Override
     public IGrowthRequirement build() {
-        return new GrowthRequirement(maxBrightness, minBrightness, soils, reqBlock, reqType);
+        return new GrowthRequirement(soils, conditions, minLight, maxLight);
     }
 	
 }

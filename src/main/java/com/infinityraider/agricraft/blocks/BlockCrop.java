@@ -202,7 +202,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
             //the SEED can be planted here
             Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
             return seed.isPresent()
-                    && seed.get().getPlant().getGrowthRequirement().canGrow(world, pos)
+                    && seed.get().getPlant().getGrowthRequirement().isMet(world, pos)
                     && crop.setSeed(seed.get());
         }
         return false;

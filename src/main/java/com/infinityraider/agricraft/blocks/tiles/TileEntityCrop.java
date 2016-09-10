@@ -184,7 +184,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
      */
     @Override
     public boolean isFertile() {
-        return worldObj.isAirBlock(this.getPos().add(0, 1, 0)) && plant.getGrowthRequirement().canGrow(this.worldObj, pos);
+        return worldObj.isAirBlock(this.getPos().add(0, 1, 0)) && plant.getGrowthRequirement().isMet(this.worldObj, pos);
     }
 
     /*
