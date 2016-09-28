@@ -3,7 +3,7 @@
 Agricultural farming extended.
 
 ## Contact [![discord]][discord-link]
-I have a Slack channel where you can contact me for support/suggestions which you don't think fit on this issue tracker. Also if you want to discuss something with me, this is the place to be!
+I have a Discord channel where you can contact me for support/suggestions which you don't think fit on this issue tracker. Also if you want to discuss something with me, this is the place to be!
 
 ## Supported Versions
 AgriCraft has releases for Minecraft versions 1.7.10 and onwards, status per Minecraft version is as follows:
