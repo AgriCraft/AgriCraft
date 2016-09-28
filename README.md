@@ -34,7 +34,7 @@ this kind of information is, most of the time, only needed by pack creators and 
 [minecraft]:https://img.shields.io/badge/minecraft-1.10-blue.svg "Minecraft Version"
 [curse-link]:http://minecraft.curseforge.com/mc-mods/225635-AgriCraft
 [curse]:https://img.shields.io/badge/curse-AgriCraft-dd602a.svg "CurseForge"
-[slack-link]:https://InfinityRaider.slack.com/ "InfinityRaider Slack"
+[slack-link]:https://join-infinityraider-slack.herokuapp.com/ "InfinityRaider Slack"
 [slack]:https://img.shields.io/badge/slack-InfinityRaider-ff69b4.svg "InfinityRaider Slack"
 
 [bug-link]:https://www.github.com/InfinityRaider/AgriCraft/issues
