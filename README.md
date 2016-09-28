@@ -2,7 +2,7 @@
 
 Agricultural farming extended.
 
-## Contact [![slack]][slack-link]
+## Contact [![discord]][discord-link]
 I have a Slack channel where you can contact me for support/suggestions which you don't think fit on this issue tracker. Also if you want to discuss something with me, this is the place to be!
 
 ## Supported Versions
@@ -34,8 +34,8 @@ this kind of information is, most of the time, only needed by pack creators and 
 [minecraft]:https://img.shields.io/badge/minecraft-1.10-blue.svg "Minecraft Version"
 [curse-link]:http://minecraft.curseforge.com/mc-mods/225635-AgriCraft
 [curse]:https://img.shields.io/badge/curse-AgriCraft-dd602a.svg "CurseForge"
-[slack-link]:https://join-infinityraider-slack.herokuapp.com/ "InfinityRaider Slack"
-[slack]:https://img.shields.io/badge/slack-InfinityRaider-ff69b4.svg "InfinityRaider Slack"
+[discord-link]:https://discord.gg/9qfhaWc/ "InfinityRaider Discord"
+[discord]:https://img.shields.io/badge/discord-InfinityRaider-ff69b4.svg "InfinityRaider Discord"
 
 [bug-link]:https://www.github.com/InfinityRaider/AgriCraft/issues
 [bug]:https://img.shields.io/badge/issue-bug-aa1111.svg
