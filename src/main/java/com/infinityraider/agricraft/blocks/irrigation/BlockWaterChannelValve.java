@@ -47,10 +47,10 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
 		return AgriProperties.POWERED.applyToBlockState(super.getActualState(state, worldIn, pos), tile.isPresent() && tile.get().isPowered());
 	}
 
-	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos ownPos, BlockPos changedPos) {
-		super.onNeighborChange(world, ownPos, changedPos);
-		updatePowerStatus(world, ownPos);
+
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+		super.neighborChanged(state, world, pos, block);
+		updatePowerStatus(world, pos);
 	}
 
 	@Override
