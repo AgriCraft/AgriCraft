@@ -31,7 +31,7 @@ this kind of information is, most of the time, only needed by pack creators and 
 [build-link]:https://travis-ci.org/InfinityRaider/AgriCraft
 [build]:https://travis-ci.org/InfinityRaider/AgriCraft.svg?branch=1.8.9 "Travis-CI Build Status"
 [branch]:https://img.shields.io/badge/branch-1.8.9-aaaaff.svg "GitHub Branch"
-[minecraft]:https://agricraft.github.io/versions/1.10/minecraft.svg "Minecraft Version"
+[minecraft]:https://agricraft.github.io/versions/1.8.9/minecraft.svg "Minecraft Version"
 [curse-link]:http://agricraft.github.io/curse
 [curse]:https://agricraft.github.io/images/curse.svg "CurseForge"
 [contact-link]:https://agricraft.github.io/contact
