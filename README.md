@@ -2,7 +2,7 @@
 
 Agricultural farming extended.
 
-## Contact [![discord]][discord-link]
+## Contact [![contact]][contact-link]
 I have a Discord channel where you can contact me for support/suggestions which you don't think fit on this issue tracker. Also if you want to discuss something with me, this is the place to be!
 
 ## Supported Versions
@@ -31,17 +31,17 @@ this kind of information is, most of the time, only needed by pack creators and 
 [build-link]:https://travis-ci.org/InfinityRaider/AgriCraft
 [build]:https://travis-ci.org/InfinityRaider/AgriCraft.svg?branch=master "Travis-CI Build Status"
 [branch]:https://img.shields.io/badge/branch-master-aaaaff.svg "GitHub Branch"
-[minecraft]:https://img.shields.io/badge/minecraft-1.10-blue.svg "Minecraft Version"
-[curse-link]:http://minecraft.curseforge.com/mc-mods/225635-AgriCraft
-[curse]:https://img.shields.io/badge/curse-AgriCraft-dd602a.svg "CurseForge"
-[discord-link]:https://discord.gg/9qfhaWc/ "InfinityRaider Discord"
-[discord]:https://img.shields.io/badge/discord-InfinityRaider-ff69b4.svg "InfinityRaider Discord"
+[minecraft]:https://agricraft.github.io/versions/1.10/minecraft.svg "Minecraft Version"
+[curse-link]:http://agricraft.github.io/curse
+[curse]:https://agricraft.github.io/images/curse.svg "CurseForge"
+[contact-link]:https://agricraft.github.io/contact
+[contact]:https://agricraft.github.io/images/contact.svg "InfinityRaider Contact"
 
-[bug-link]:https://www.github.com/InfinityRaider/AgriCraft/issues
-[bug]:https://img.shields.io/badge/issue-bug-aa1111.svg
+[bug-link]:https://agricraft.github.io/issues
+[bug]:https://agricraft.github.io/images/bug.svg "AgriCraft Issues"
 
-[wiki-link]:https://www.github.com/InfinityRaider/AgriCraft/wiki
-[wiki]:https://img.shields.io/badge/wiki-AgriCraft-lightgray.svg "AgriCraft GitHub Wiki"
+[wiki-link]:https://agricraft.github.io/wiki
+[wiki]:https://agricraft.github.io/images/wiki.svg "AgriCraft GitHub Wiki"
 
 [1.7.10]:https://agricraft.github.io/versions/1.7.10/status.svg
 [1.8.9]:https://agricraft.github.io/versions/1.8.9/status.svg
