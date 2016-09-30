@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.farming.mutation;
+package com.infinityraider.agricraft.api.mutation;
 
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 /**
  * Base interface for different cross over strategies.
  */
-public interface ICrossOverStrategy {
+public interface IAgriCrossStrategy {
 
     @Nonnull
     Optional<AgriSeed> executeStrategy(IAgriCrop crop, Random rand);

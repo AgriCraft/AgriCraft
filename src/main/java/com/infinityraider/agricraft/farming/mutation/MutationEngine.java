@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.farming.mutation;
 
+import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
+import com.infinityraider.agricraft.api.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 
@@ -10,7 +12,7 @@ import java.util.Random;
  * calculates the new stats (growth, gain, strength) of the new plant based on
  * the 4 neighbours.
  */
-public final class MutationEngine {
+public final class MutationEngine implements IAgriMutationEngine {
     
     private static final MutationEngine INSTANCE = new MutationEngine();
 
@@ -25,6 +27,7 @@ public final class MutationEngine {
     /*
      * Applies one of the 2 strategies and notifies the TE if it should update
      */
+    @Override
     public void executeCrossOver(TileEntityCrop crop, Random rand) {
         rollStrategy(rand)
                 .executeStrategy(crop, rand)
@@ -35,7 +38,8 @@ public final class MutationEngine {
                 });
     }
 
-    public ICrossOverStrategy rollStrategy(Random rand) {
+    @Override
+    public IAgriCrossStrategy rollStrategy(Random rand) {
         if (rand.nextDouble() < AgriCraftConfig.mutationChance) {
             return MutateStrategy.getInstance();
         } else {
