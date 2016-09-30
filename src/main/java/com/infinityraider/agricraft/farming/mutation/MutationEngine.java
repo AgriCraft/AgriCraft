@@ -12,9 +12,9 @@ import java.util.Random;
  * calculates the new stats (growth, gain, strength) of the new plant based on
  * the 4 neighbours.
  */
-public final class MutationEngine implements IAgriMutationEngine {
+public class MutationEngine implements IAgriMutationEngine {
     
-    private static final MutationEngine INSTANCE = new MutationEngine();
+    private static MutationEngine INSTANCE = new MutationEngine();
 
     private MutationEngine() {
 
@@ -38,7 +38,6 @@ public final class MutationEngine implements IAgriMutationEngine {
                 });
     }
 
-    @Override
     public IAgriCrossStrategy rollStrategy(Random rand) {
         if (rand.nextDouble() < AgriCraftConfig.mutationChance) {
             return MutateStrategy.getInstance();
