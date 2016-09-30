@@ -14,7 +14,6 @@ import com.infinityraider.agricraft.compat.computer.methods.MethodGetSpecimen;
 import com.infinityraider.agricraft.compat.computer.methods.IMethod;
 import com.infinityraider.agricraft.compat.computer.methods.MethodHasPlant;
 import com.infinityraider.agricraft.compat.computer.methods.MethodIsMature;
-import com.infinityraider.agricraft.compat.computer.methods.MethodGetBaseBlockType;
 import com.infinityraider.agricraft.compat.computer.methods.MethodAnalyze;
 import com.infinityraider.agricraft.compat.computer.methods.MethodGetPlant;
 import com.infinityraider.agricraft.compat.computer.methods.MethodIsAnalyzed;
@@ -183,7 +182,6 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
         return new IMethod[] {
                 new MethodAnalyze(),
                 new MethodGetBaseBlock(),
-                new MethodGetBaseBlockType(),
                 new MethodGetBrightness(),
                 new MethodGetBrightnessRange(),
                 new MethodGetCurrentSoil(),

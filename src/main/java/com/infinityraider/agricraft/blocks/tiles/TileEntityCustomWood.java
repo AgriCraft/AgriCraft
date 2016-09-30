@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,7 +21,7 @@ import javax.annotation.Nonnull;
  * This class represents the root tile entity for all AgriCraft custom WOOD
  * blocks. Through this class, the custom woods are remembered for the blocks. *
  */
-public class TileEntityCustomWood extends TileEntityRotatableBase implements IDebuggable {
+public class TileEntityCustomWood extends TileEntityRotatableBase implements IDebuggable, IAgriDisplayable {
 	/**  A pointer to the the block the CustomWoodBlock is imitating. */
 	@Nonnull
 	private CustomWoodType woodType = CustomWoodType.getDefault();
@@ -34,6 +35,7 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 		return woodType.getTexture();
 	}
 
+    @Override
 	protected final void writeRotatableTileNBT(NBTTagCompound tag) {
         woodType.writeToNBT(tag);
 		this.writeNBT(tag);
@@ -47,6 +49,7 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	 *
 	 * @param tag the TAG to load the entity data from.
 	 */
+    @Override
 	protected final void readRotatableTileNBT(NBTTagCompound tag) {
 		this.setMaterial(CustomWoodType.readFromNBT(tag));
 		this.readNBT(tag);
@@ -137,12 +140,11 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	}
 
 	@Override
-	public void addDebugInfo(List<String> list) {
+	public void addServerDebugInfo(List<String> list) {
 		list.add("this material is: " + this.getMaterialBlock().getRegistryName() + ":" + this.getMaterialMeta());
 	}
 
-	@SideOnly(Side.CLIENT)
-	@SuppressWarnings("unchecked")
+    @Override
 	public void addDisplayInfo(List information) {
 		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.material") + ": " + getMaterialStack().getDisplayName());
 	}

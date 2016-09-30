@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
@@ -18,7 +19,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
@@ -35,23 +35,7 @@ public class RenderCrop extends RenderBlockWithTileBase<BlockCrop, TileEntityCro
 
 	@Override
 	public List<ResourceLocation> getAllTextures() {
-		List<ResourceLocation> list = new ArrayList<>();
-		list.add(TEXTURE);
-		for (int i = 0; i < 16; i++) {
-			if (i == 0) {
-				list.add(getWeedTexture(i));
-			} else {
-				ResourceLocation texture = getWeedTexture(i);
-				if (texture != list.get(list.size() - 1)) {
-					list.add(texture);
-				}
-			}
-		}
-		return list;
-	}
-
-	public ResourceLocation getWeedTexture(int growthStage) {
-		return new ResourceLocation("agricraft:blocks/weed_" + growthStage);
+		return TypeHelper.asList(TEXTURE);
 	}
 
 	@Override

@@ -8,6 +8,9 @@ import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.apiimpl.PluginHandler;
 import com.infinityraider.agricraft.init.AgriEntities;
+import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
+import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
+import com.infinityraider.agricraft.network.json.MessageSyncSoilJson;
 import com.infinityraider.infinitylib.InfinityMod;
 import com.infinityraider.infinitylib.network.INetworkWrapper;
 import net.minecraftforge.fml.common.Mod;
@@ -96,6 +99,9 @@ public class AgriCraft extends InfinityMod {
 		wrapper.registerMessage(MessageSendNEISetting.class);
 		wrapper.registerMessage(MessageSyncFluidLevel.class);
 		wrapper.registerMessage(MessageTileEntitySeedStorage.class);
+        wrapper.registerMessage(MessageSyncSoilJson.class);
+        wrapper.registerMessage(MessageSyncPlantJson.class);
+        wrapper.registerMessage(MessageSyncMutationJson.class);
 	}
 
 	@Mod.EventHandler

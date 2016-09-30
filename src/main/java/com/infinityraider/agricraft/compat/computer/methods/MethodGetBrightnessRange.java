@@ -10,8 +10,8 @@ public class MethodGetBrightnessRange extends MethodBaseGrowthReq {
     @Override
     protected Object[] onMethodCalled(IAgriPlant plant) {
         return new Object[] {
-            plant.getGrowthRequirement().getMinBrightness(),
-            plant.getGrowthRequirement().getMaxBrightness()
+            plant.getGrowthRequirement().getMinLight(),
+            plant.getGrowthRequirement().getMaxLight()
         };
     }
 }

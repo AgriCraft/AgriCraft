@@ -61,7 +61,7 @@ dependencies {
 processResources {
 	from('lib/AgriPlants') {
 		include '**/*.json'
-		into 'plants/defaults'
+		into 'json/defaults'
 	}
 }
 

@@ -5,25 +5,21 @@ package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.plant.AgriProduct;
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.api.util.BlockWithMeta;
-import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.render.RenderMethod;
-import com.infinityraider.agricraft.api.requirment.IGrowthReqBuilder;
-import com.infinityraider.agricraft.api.requirment.RequirementType;
+import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.farming.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.IconHelper;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -94,37 +90,22 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
-    public ArrayList<ItemStack> getAllFruits() {
-        ArrayList<ItemStack> fruits = new ArrayList<>();
-        for (AgriProduct p : this.plant.getProducts().getAll()) {
-            Object s = p.toStack();
-            if (s instanceof ItemStack) {
-                fruits.add((ItemStack) s);
-            }
-        }
-        return fruits;
+    public List<ItemStack> getAllFruits() {
+        return this.plant.getProducts().getAll().stream()
+                .map(p -> p.toStack())
+                .filter(p -> p instanceof FuzzyStack)
+                .map(p -> ((FuzzyStack) p).toStack())
+                .collect(Collectors.toList());
     }
 
     @Override
     public ItemStack getRandomFruit(Random rand) {
-        for (AgriProduct p : this.plant.getProducts().getRandom(rand)) {
-            Object s = p.toStack();
-            if (s instanceof ItemStack) {
-                return (ItemStack) s;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
-        int amount = (int) (Math.ceil((gain + 0.00) / 3));
-        ArrayList<ItemStack> list = new ArrayList<>();
-        while (amount > 0) {
-            list.add(getRandomFruit(rand));
-            amount--;
-        }
-        return list;
+        return this.plant.getProducts().getRandom(rand).stream()
+                .map(p -> p.toStack())
+                .filter(p -> p instanceof FuzzyStack)
+                .map(p -> ((FuzzyStack) p).toStack())
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -147,38 +128,19 @@ public class JsonPlant extends CropPlant {
             return builder.build();
         }
 
-        this.plant.getRequirement().getSoils().forEach((b) -> {
-            if (b instanceof ItemStack) {
-                ItemStack stack = (ItemStack) b;
-                if (stack.getItem() instanceof ItemBlock) {
-                    ItemBlock ib = (ItemBlock) stack.getItem();
-                    builder.setSoil(new BlockWithMeta(ib.block, ib.getMetadata(stack)));
-                }
-            }
-        });
-
-        this.plant.getRequirement().getBases().forEach((b) -> {
-            if (b instanceof ItemStack) {
-                ItemStack stack = (ItemStack) b;
-                if (stack.getItem() instanceof ItemBlock) {
-                    ItemBlock ib = (ItemBlock) stack.getItem();
-                    builder.addRequiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), RequirementType.BELOW);
-                }
-            }
-        });
+        this.plant.getRequirement().getSoils().stream()
+                .map(JsonSoil::new)
+                .forEach(builder::addSoil);
 
         this.plant.getRequirement().getNearby().forEach((obj, dist) -> {
-            if (obj instanceof ItemStack) {
-                ItemStack stack = (ItemStack) obj;
-                if (stack.getItem() instanceof ItemBlock) {
-                    ItemBlock ib = (ItemBlock) stack.getItem();
-                    builder.addRequiredBlock(new BlockWithMeta(ib.block, ib.getMetadata(stack)), RequirementType.BELOW);
-                }
+            if (obj instanceof FuzzyStack) {
+                FuzzyStack stack = (FuzzyStack) obj;
+                builder.addRequiredBlock(stack, dist);
             }
         });
-
-        builder.setMinBrightness(plant.getRequirement().getMinLight());
-        builder.setMaxBrightness(plant.getRequirement().getMaxLight());
+        
+        builder.setMinLight(this.plant.getRequirement().getMinLight());
+        builder.setMaxLight(this.plant.getRequirement().getMaxLight());
 
         return builder.build();
 

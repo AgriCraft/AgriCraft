@@ -17,7 +17,7 @@ public class ClientProxy implements IClientProxyBase, IProxy {
 	public void registerEventHandlers() {
 		IProxy.super.registerEventHandlers();
 		registerEventHandler(new ItemToolTipHandler());
-		registerEventHandler( new SoundHandler());
+		registerEventHandler(new SoundHandler());
 	}
 
 	@Override

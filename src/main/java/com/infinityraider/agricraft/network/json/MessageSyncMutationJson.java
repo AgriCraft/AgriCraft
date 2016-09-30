@@ -43,7 +43,7 @@ public class MessageSyncMutationJson extends MessageSyncElement<AgriMutation> {
 	
 	@Override
 	public void onFinishSync(MessageContext ctx) {
-		final Path worldDir = CoreHandler.getPlantDir().resolve(this.getServerId());
+		final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());
 		AgriSaver.saveElements(worldDir, AgriCore.getMutations().getAll());
 		AgriCore.getMutations().getAll().stream()
 				.map(JsonMutation::new)

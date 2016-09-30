@@ -403,8 +403,8 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	 */
 	//debug info
 	@Override
-	public void addDebugInfo(List<String> list) {
-		super.addDebugInfo(list);
+	public void addServerDebugInfo(List<String> list) {
+		super.addServerDebugInfo(list);
 		IMultiBlockPartData data = this.getMultiBlockData();
 		TileEntityTank root = getMainComponent();
 		list.add("TANK:");

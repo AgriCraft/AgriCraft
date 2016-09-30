@@ -122,7 +122,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
 	//Debug method
 	@Override
-	public void addDebugInfo(List<String> list) {
+	public void addServerDebugInfo(List<String> list) {
 		String info = this.lockedSeed == null ? "null" : this.getLockedSeed().getDisplayName();
 		int mapSize = this.slots == null ? 0 : this.slots.size();
 		int listSize = this.slotsList == null ? 0 : this.slotsList.size();

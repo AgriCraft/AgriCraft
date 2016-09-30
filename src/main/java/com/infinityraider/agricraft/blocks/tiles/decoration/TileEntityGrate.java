@@ -127,9 +127,9 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
 
 	//debug info
 	@Override
-	public void addDebugInfo(List<String> list) {
+	public void addServerDebugInfo(List<String> list) {
 		list.add("GRATE:");
-		super.addDebugInfo(list);
+		super.addServerDebugInfo(list);
 		list.add("Offset: " + offset);
 		list.add("Orientation: " + getOrientation() + " (" + (getOrientation() == EnumFacing.NORTH ? "xy" : getOrientation() == EnumFacing.EAST ? "zy" : "xz") + ")");
 		list.add("Bounds: ");

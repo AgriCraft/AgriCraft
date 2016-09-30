@@ -16,6 +16,7 @@ import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.apiimpl.SoilRegistry;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import net.minecraft.util.ResourceLocation;
@@ -25,10 +26,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class CoreHandler {
 
 	public static final Pattern JSON_FILE_PATTERN = Pattern.compile(".*\\.json", Pattern.CASE_INSENSITIVE);
-	public static final Pattern AGRI_FOLDER_PATTERN = Pattern.compile("plants/defaults/.*", Pattern.CASE_INSENSITIVE);
+	public static final Pattern AGRI_FOLDER_PATTERN = Pattern.compile("json/defaults/.*", Pattern.CASE_INSENSITIVE);
 
 	private static Path configDir;
-	private static Path plantDir;
+	private static Path jsonDir;
 	private static Path defaultDir;
 	private static Configuration config;
 
@@ -43,8 +44,8 @@ public final class CoreHandler {
 		return configDir;
 	}
 
-	public static Path getPlantDir() {
-		return plantDir;
+	public static Path getJsonDir() {
+		return jsonDir;
 	}
 
 	@EventHandler
@@ -55,8 +56,8 @@ public final class CoreHandler {
 		config = new Configuration(configDir.resolve("config.cfg").toFile());
 
 		// Setup Plant Dir.
-		plantDir = configDir.resolve("plants");
-		defaultDir = plantDir.resolve("defaults");
+		jsonDir = configDir.resolve("json");
+		defaultDir = jsonDir.resolve("defaults");
 
 		// Setup Provider
 		AgriConfigAdapter provider = new ModProvider(config);
@@ -79,10 +80,16 @@ public final class CoreHandler {
 		AgriCore.getLogger("AgriCraft").info("Attempting to load plants!");
 		AgriLoader.loadDirectory(
 				defaultDir,
+                AgriCore.getSoils(),
 				AgriCore.getPlants(),
 				AgriCore.getMutations()
 		);
 		AgriCore.getLogger("AgriCraft").info("Finished trying to load plants!");
+        
+        // See if plants are valid...
+		AgriCore.getCoreLogger().debug("Unvalidated Soils: {0}", AgriCore.getSoils().getAll().size());
+		AgriCore.getSoils().validate();
+		AgriCore.getCoreLogger().debug("Validated Soils: {0}", AgriCore.getSoils().getAll().size());
 
 		// See if plants are valid...
 		AgriCore.getCoreLogger().debug("Unvalidated Plants: {0}", AgriCore.getPlants().getAll().size());
@@ -98,9 +105,19 @@ public final class CoreHandler {
 		AgriCore.getConfig().save();
 
 		// Load JSON Stuff
+        initSoils();
 		initPlants();
 		initMutations();
 
+	}
+    
+    public static void initSoils() {
+		AgriCore.getLogger("AgriCraft").info("Registering Custom Soils!");
+		AgriCore.getSoils().validate();
+		AgriCore.getSoils().getAll().stream()
+				.map(JsonSoil::new)
+				.forEach(SoilRegistry.getInstance()::addSoil);
+		AgriCore.getLogger("AgriCraft").info("Custom Soils registered!");
 	}
 
 	public static void initPlants() {
@@ -109,7 +126,7 @@ public final class CoreHandler {
 		AgriCore.getPlants().getAll().stream()
 				.map(JsonPlant::new)
 				.forEach(PlantRegistry.getInstance()::addPlant);
-		AgriCore.getLogger("AgriCraft").info("Custom crops registered!");
+		AgriCore.getLogger("AgriCraft").info("Custom Plants registered!");
 	}
 
 	public static void initMutations() {
@@ -126,7 +143,7 @@ public final class CoreHandler {
 	@SideOnly(Side.CLIENT)
 	public static void loadTextures(Consumer<ResourceLocation> register) {
 		final AgriPlants preloaded = new AgriPlants();
-		AgriLoader.loadDirectory(plantDir, preloaded);
+		AgriLoader.loadDirectory(jsonDir, preloaded);
 		preloaded.getAll().stream()
 				.flatMap(p -> p.getTexture().getAllTextures().stream())
 				.filter(TypeHelper::isNonNull)

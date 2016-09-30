@@ -9,6 +9,8 @@ import com.infinityraider.agricraft.api.misc.IAgriHarvestable;
 import com.infinityraider.agricraft.api.misc.IAgriWeedable;
 import com.infinityraider.agricraft.api.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.seed.IAgriSeedProvider;
+import com.infinityraider.agricraft.api.soil.IAgriSoil;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -82,6 +84,8 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
 			return false;
 		}
 	}
+    
+    Optional<IAgriSoil> getSoil();
 
 	/**
 	 * Utility method to get access to the TileEntity fields and methods for the

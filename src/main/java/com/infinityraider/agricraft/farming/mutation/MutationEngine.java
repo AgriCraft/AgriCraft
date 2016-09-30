@@ -39,7 +39,7 @@ public class MutationEngine {
     }
 
     private boolean resultIsValid(CrossOverResult result) {
-        return result != null && result.getPlant().getGrowthRequirement().canGrow(crop.getWorld(), crop.getPos());
+        return result != null && result.getPlant().getGrowthRequirement().isMet(crop.getWorld(), crop.getPos());
     }
 
     public ICrossOverStrategy rollStrategy() {

@@ -11,8 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import com.agricraft.agricore.core.AgriCore;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 
 import java.util.List;
 import net.minecraft.util.ITickable;
@@ -22,7 +21,7 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.utility.StackHelper;
 import java.util.Optional;
 
-public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements ISidedInventory, ITickable {
+public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements ISidedInventory, ITickable, IAgriDisplayable {
 
     private static final int[] SLOTS = new int[]{0, 1};
 
@@ -421,8 +420,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
         this.journal = null;
     }
 
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
+    @Override
     public void addDisplayInfo(List information) {
         information.add(AgriCore.getTranslator().translate("agricraft_tooltip.analyzer") + ": " + (this.hasSpecimen() ? specimen.getDisplayName() : AgriCore.getTranslator().translate("agricraft_tooltip.none")));
     }

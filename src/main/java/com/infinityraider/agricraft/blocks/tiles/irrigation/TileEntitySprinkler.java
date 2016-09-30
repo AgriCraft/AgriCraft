@@ -36,6 +36,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 	private boolean isSprinkled = false;
 
 	//this saves the data on the tile entity
+    @Override
 	public void writeTileNBT(NBTTagCompound tag) {
 		if (this.counter > 0) {
 			tag.setInteger(AgriNBT.LEVEL, this.counter);
@@ -44,6 +45,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 	}
 
 	//this loads the saved data for the tile entity
+    @Override
 	public void readTileNBT(NBTTagCompound tag) {
 		if (tag.hasKey(AgriNBT.LEVEL)) {
 			this.counter = tag.getInteger(AgriNBT.LEVEL);

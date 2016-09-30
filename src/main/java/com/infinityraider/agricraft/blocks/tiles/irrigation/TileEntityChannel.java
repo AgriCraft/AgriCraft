@@ -167,13 +167,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 	}
 
 	public IIrrigationComponent getNeighbor(EnumFacing direction) {
-		if (this.worldObj == null) {
-			return null;
-		} else if (direction.getFrontOffsetY() == 0 && direction.getFrontOffsetX() + direction.getFrontOffsetZ() != 0) {
-			TileEntity tileEntityAt = this.worldObj.getTileEntity(this.getPos().add(direction.getFrontOffsetX(), 0, direction.getFrontOffsetZ()));
-			return tileEntityAt instanceof IIrrigationComponent ? (IIrrigationComponent) tileEntityAt : null;
-		}
-		return null;
+		return neighbours[direction.getHorizontalIndex()];
 	}
 
 	//updates the tile entity every tick
@@ -232,7 +226,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 				}
 			}
 			// Handle Sprinklers
-			TileEntitySprinkler spr = AgriWorldHelper.getTile(worldObj, this.pos.add(0, 1, 0), TileEntitySprinkler.class);
+			TileEntitySprinkler spr = AgriWorldHelper.getTile(worldObj, this.pos.add(0, 1, 0), TileEntitySprinkler.class).orElse(null);
 			if (spr != null) {
 				updatedLevel = spr.acceptFluid(1000, updatedLevel, true);
 			}
@@ -282,9 +276,9 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addDebugInfo(List<String> list) {
+	public void addServerDebugInfo(List<String> list) {
 		list.add("CHANNEL:");
-		super.addDebugInfo(list);
+		super.addServerDebugInfo(list);
 		list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
 		list.add("  - FluidHeight: " + this.getFluidHeight());
 		list.add("  - Connections: ");

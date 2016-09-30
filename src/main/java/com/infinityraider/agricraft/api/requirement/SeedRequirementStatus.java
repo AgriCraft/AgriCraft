@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.requirment;
+package com.infinityraider.agricraft.api.requirement;
 
 /**
  * Status codes for seed planting interactions.

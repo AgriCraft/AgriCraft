@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.BlockSprinkler;
+import com.infinityraider.agricraft.blocks.irrigation.BlockSprinkler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.BaseIcons;

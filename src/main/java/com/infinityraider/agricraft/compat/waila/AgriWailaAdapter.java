@@ -16,41 +16,41 @@ import net.minecraft.block.Block;
 
 public class AgriWailaAdapter implements IWailaDataProvider {
 
-	@Override
-	public ItemStack getWailaStack(IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
-		// NAH.
-		return null;
-	}
+    @Override
+    public ItemStack getWailaStack(IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
+        // NAH.
+        return null;
+    }
 
-	@Override
-	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
-		return currenttip;
-	}
+    @Override
+    public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
+        return currenttip;
+    }
 
-	@Override
-	public List<String> getWailaBody(ItemStack itemStack, List<String> list, IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
-		Block b = dataAccessor.getBlock();
-		if (b instanceof IAgriDisplayable) {
-			((IAgriDisplayable) b).addDisplayInfo(list);
-		}
-		TileEntity te = dataAccessor.getTileEntity();
-		if (te instanceof IAgriDisplayable) {
-			((IAgriDisplayable) te).addDisplayInfo(list);
-		}
-		return list;
-	}
+    @Override
+    public List<String> getWailaBody(ItemStack itemStack, List<String> list, IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
+        Block b = dataAccessor.getBlock();
+        if (b instanceof IAgriDisplayable) {
+            ((IAgriDisplayable) b).addDisplayInfo(list);
+        }
+        TileEntity te = dataAccessor.getTileEntity();
+        if (te instanceof IAgriDisplayable) {
+            ((IAgriDisplayable) te).addDisplayInfo(list);
+        }
+        return list;
+    }
 
-	@Override
+    @Override
 	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
 		return currenttip;
-	}
+    }
 
-	@Override
-	public NBTTagCompound getNBTData(EntityPlayerMP epmp, TileEntity te, NBTTagCompound tag, World world, BlockPos bp) {
-		if (te != null) {
-			te.writeToNBT(tag);
-		}
-		return tag;
-	}
+    @Override
+    public NBTTagCompound getNBTData(EntityPlayerMP epmp, TileEntity te, NBTTagCompound tag, World world, BlockPos bp) {
+        if (te != null) {
+            te.writeToNBT(tag);
+        }
+        return tag;
+    }
 
 }

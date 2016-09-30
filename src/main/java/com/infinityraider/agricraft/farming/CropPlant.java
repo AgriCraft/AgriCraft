@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.farming;
 
 import com.infinityraider.agricraft.api.render.RenderMethod;
-import com.infinityraider.agricraft.api.requirment.IGrowthRequirement;
+import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.google.common.base.Function;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
@@ -21,16 +21,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import net.minecraft.item.Item;
@@ -81,11 +80,13 @@ public abstract class CropPlant implements IAgriPlant {
      * 
      * @return the tier of the seed.
      */
+    @Override
     public int getTier() {
         return 1;
     }
 
     /** Gets the spread chance in percent for this plant */
+    @Override
     public double getSpreadChance() {
         return 1 / getTier();
     }
@@ -161,7 +162,7 @@ public abstract class CropPlant implements IAgriPlant {
      * @return a list containing of all possible fruit drops.
      */
     @Override
-    public abstract ArrayList<ItemStack> getAllFruits();
+    public abstract List<ItemStack> getAllFruits();
 
     /**
      * Returns a random fruit for this plant.
@@ -181,7 +182,15 @@ public abstract class CropPlant implements IAgriPlant {
      * @return a list containing random fruit drops from this plant.
      */
     @Override
-    public abstract ArrayList<ItemStack> getFruitsOnHarvest(int gain, Random rand);
+    public List<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
+        int amount = (int) (Math.ceil((gain + 0.00) / 3));
+        ArrayList<ItemStack> list = new ArrayList<>();
+        while (amount > 0) {
+            list.add(getRandomFruit(rand));
+            amount--;
+        }
+        return list;
+    }
 
     /**
      * Gets called right before a harvest attempt, player may be null if harvested by automation.
