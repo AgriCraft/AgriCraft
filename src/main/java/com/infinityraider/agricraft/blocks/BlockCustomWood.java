@@ -1,9 +1,11 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
+import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.SoundType;
@@ -19,12 +21,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends BlockTileCustomRenderedBase<T> {
 	public BlockCustomWood(String internalName) {
@@ -139,6 +144,35 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 	@Override
 	protected InfinityProperty[] getPropertyArray() {
 		return new InfinityProperty[0];
+	}
+
+	@Override
+	protected final IBlockState extendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		Optional<TileEntityCustomWood> tile = getCustomWoodTile(world, pos);
+		return ((IExtendedBlockState) extendedCustomWoodState(state, world, pos))
+				.withProperty(AgriProperties.CUSTOM_WOOD_TYPE, tile.map(TileEntityCustomWood::getMaterial).orElse(CustomWoodType.getDefault()));
+	}
+
+	protected IBlockState extendedCustomWoodState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return state;
+    }
+
+	@Override
+	public final IUnlistedProperty[] getUnlistedPropertyArray() {
+        List<IUnlistedProperty> list = getUnlistedProperties();
+        IUnlistedProperty[] props = list.toArray(new IUnlistedProperty[list.size() + 1]);
+        props[props.length - 1 ] = AgriProperties.CUSTOM_WOOD_TYPE;
+		return props;
+	}
+
+    protected List<IUnlistedProperty> getUnlistedProperties() {
+        return Collections.emptyList();
+    }
+
+	public Optional<TileEntityCustomWood> getCustomWoodTile(IBlockAccess world, BlockPos pos) {
+		return Optional.of(world.getTileEntity(pos))
+				.filter(t -> t instanceof TileEntityCustomWood)
+				.map(t -> (TileEntityCustomWood) t);
 	}
 
 }

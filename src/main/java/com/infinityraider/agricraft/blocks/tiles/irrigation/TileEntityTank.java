@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import com.agricraft.agricore.core.AgriCore;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -102,7 +103,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 			lastFluidLevel = fluidLevel;
 			return true;
 		}
-		//sync when the fluid LEVEL ahs changed too much
+		//sync when the fluid LEVEL has changed too much (used for big tanks, where a change in discrete fluid level is very big)
 		if (SYNC_DELTA <= Math.abs(lastFluidLevel - fluidLevel)) {
 			lastDiscreteFluidLevel = newDiscreteLvl;
 			lastFluidLevel = fluidLevel;
@@ -452,10 +453,15 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 		}
 	}
 
-	public enum Connection {
+	public enum Connection implements IStringSerializable {
 		NONE,
 		TANK,
-		CHANNEL
+		CHANNEL;
+
+		@Override
+		public String getName() {
+			return this.name().toLowerCase();
+		}
 	}
 
 }

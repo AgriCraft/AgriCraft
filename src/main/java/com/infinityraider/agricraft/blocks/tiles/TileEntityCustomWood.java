@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks.tiles;
 
-import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.tile.TileEntityRotatableBase;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
@@ -132,11 +131,6 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	 */
 	public final NBTTagCompound getMaterialTag() {
 		return getMaterial().writeToNBT(new NBTTagCompound());
-	}
-
-	@Override
-	public BlockCustomWood getBlockType() {
-		return (BlockCustomWood) super.getBlockType();
 	}
 
 	@Override

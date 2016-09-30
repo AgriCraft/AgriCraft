@@ -15,6 +15,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> extends BlockCustomWood<T> {
+    @SuppressWarnings("unchecked")
+    public static final InfinityProperty<Boolean>[] CONNECTION_PROPERTIES = new InfinityProperty[] {
+            AgriProperties.CHANNEL_SOUTH,
+            AgriProperties.CHANNEL_WEST,
+            AgriProperties.CHANNEL_NORTH,
+            AgriProperties.CHANNEL_EAST
+    };
 
 	public AbstractBlockWaterChannel(String internalName) {
 		super("water_channel_" + internalName);
@@ -22,12 +29,7 @@ public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> ext
 
     @Override
     protected InfinityProperty[] getPropertyArray() {
-        return new InfinityProperty[]{
-            AgriProperties.CHANNEL_NORTH,
-            AgriProperties.CHANNEL_EAST,
-            AgriProperties.CHANNEL_SOUTH,
-            AgriProperties.CHANNEL_WEST
-        };
+        return CONNECTION_PROPERTIES;
     }
 
     @Override
@@ -35,10 +37,9 @@ public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> ext
         Optional<TileEntityChannel> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntityChannel.class);
         if(tile.isPresent()) {
             TileEntityChannel channel = tile.get();
-            state = AgriProperties.CHANNEL_NORTH.applyToBlockState(state, channel.hasNeighbourCheck(EnumFacing.NORTH));
-            state = AgriProperties.CHANNEL_EAST.applyToBlockState(state, channel.hasNeighbourCheck(EnumFacing.EAST));
-            state = AgriProperties.CHANNEL_SOUTH.applyToBlockState(state, channel.hasNeighbourCheck(EnumFacing.SOUTH));
-            state = AgriProperties.CHANNEL_WEST.applyToBlockState(state, channel.hasNeighbourCheck(EnumFacing.WEST));
+            for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+                state = CONNECTION_PROPERTIES[facing.getHorizontalIndex()].applyToBlockState(state, channel.hasNeighbourCheck(facing));
+            }
         }
         return state;
     }

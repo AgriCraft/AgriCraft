@@ -21,10 +21,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-/**
- * This class is candidate for removal!
- */
-@Deprecated
 public class CustomWoodType {
     /** The default MATERIAL to use. Currently is WOOD planks. */
     @Nonnull
