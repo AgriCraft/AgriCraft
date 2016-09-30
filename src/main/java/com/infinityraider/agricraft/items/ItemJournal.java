@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,17 +18,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.api.items.IAgriJournalItem;
 
-public class ItemJournal extends ItemBase implements IAgriJournalItem {
+public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWithModel {
 
 	public ItemJournal() {
-		super("journal", true);
+		super("journal");
 		this.setMaxStackSize(1);
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
@@ -108,10 +108,4 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
 		}
 		return list;
 	}
-
-	@Override
-	public List<String> getOreTags() {
-		return Collections.emptyList();
-	}
-
 }

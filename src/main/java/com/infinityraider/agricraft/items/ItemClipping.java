@@ -17,10 +17,9 @@ import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.infinitylib.render.item.IAutoRenderedItem;
+import com.infinityraider.infinitylib.item.IAutoRenderedItem;
 import com.infinityraider.infinitylib.render.item.ItemModelTexture;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 
 	public ItemClipping() {
-		super("clipping", false);
+		super("clipping");
 		this.setCreativeTab(null);
 	}
 
@@ -105,10 +104,4 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 				new ResourceLocation("agricraft:items/clipping")
 		);
 	}
-
-	@Override
-	public List<String> getOreTags() {
-		return Collections.emptyList();
-	}
-
 }

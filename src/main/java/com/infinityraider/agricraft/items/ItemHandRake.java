@@ -2,10 +2,13 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
+import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.WeightedRandom;
+import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import com.agricraft.agricore.core.AgriCore;
@@ -21,7 +25,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import net.minecraft.tileentity.TileEntity;
@@ -31,7 +34,7 @@ import com.infinityraider.agricraft.api.misc.IAgriWeedable;
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.
  */
-public class ItemHandRake extends ItemBase implements IAgriRakeItem {
+public class ItemHandRake extends ItemBase implements IAgriRakeItem, IItemWithModel {
 	
 	@AgriConfigurable(
 			category = AgriConfigCategory.TOOLS,
@@ -45,7 +48,7 @@ public class ItemHandRake extends ItemBase implements IAgriRakeItem {
 	private static final int[] dropChance = new int[]{10, 25};
 
 	public ItemHandRake() {
-		super("hand_rake", true, "", "iron");
+		super("hand_rake");
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
@@ -109,8 +112,11 @@ public class ItemHandRake extends ItemBase implements IAgriRakeItem {
 	}
 
 	@Override
-	public List<String> getOreTags() {
-		return Collections.emptyList();
+	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+		return ImmutableList.of(
+				new Tuple<>(0, new ModelResourceLocation(this.getRegistryName() + "")),
+				new Tuple<>(1, new ModelResourceLocation(this.getRegistryName() + "_iron"))
+		);
 	}
 
 	public static final class ItemDropRegistry {

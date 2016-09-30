@@ -2,14 +2,18 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
+import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -19,10 +23,9 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 
-import java.util.Collections;
 import java.util.List;
 
-public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
+public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithModel {
 
 	@AgriConfigurable(
 			category = AgriConfigCategory.TOOLS,
@@ -32,7 +35,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 	public static boolean enableTrowel = true;
 
 	public ItemTrowel() {
-		super("trowel", true, "", "full");
+		super("trowel");
 		this.maxStackSize = 1;
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
@@ -84,8 +87,10 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 	}
 
 	@Override
-	public List<String> getOreTags() {
-		return Collections.emptyList();
+	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+		return ImmutableList.of(
+            new Tuple<>(0, new ModelResourceLocation(this.getRegistryName() + "")),
+            new Tuple<>(1, new ModelResourceLocation(this.getRegistryName() + "_full"))
+		);
 	}
-
 }

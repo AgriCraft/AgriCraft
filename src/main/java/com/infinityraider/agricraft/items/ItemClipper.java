@@ -5,6 +5,7 @@ import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,13 +17,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collections;
 import java.util.List;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.tileentity.TileEntity;
 import com.infinityraider.agricraft.api.items.IAgriClipperItem;
 
-public class ItemClipper extends ItemBase implements IAgriClipperItem {
+public class ItemClipper extends ItemBase implements IAgriClipperItem, IItemWithModel {
 	
 	@AgriConfigurable(
 			category = AgriConfigCategory.TOOLS,
@@ -32,7 +32,7 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem {
 	public static boolean enableClipper = true;
 
 	public ItemClipper() {
-		super("clipper", true);
+		super("clipper");
 		this.setMaxStackSize(1);
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
@@ -73,10 +73,4 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem {
 	public boolean isEnabled() {
 		return enableClipper;
 	}
-
-	@Override
-	public List<String> getOreTags() {
-		return Collections.emptyList();
-	}
-
 }

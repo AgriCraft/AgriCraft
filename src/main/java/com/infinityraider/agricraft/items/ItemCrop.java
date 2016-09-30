@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -14,13 +15,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Collections;
-import java.util.List;
-
-public class ItemCrop extends ItemBase {
+public class ItemCrop extends ItemBase implements IItemWithModel {
 
 	public ItemCrop() {
-		super("crop_sticks", true);
+		super("crop_sticks");
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
 
@@ -47,10 +45,4 @@ public class ItemCrop extends ItemBase {
 		}
 		return EnumActionResult.PASS;   //return false or else no other use methods will be called (for instance "onBlockActivated" on the crops block)
 	}
-
-	@Override
-	public List<String> getOreTags() {
-		return Collections.emptyList();
-	}
-
 }

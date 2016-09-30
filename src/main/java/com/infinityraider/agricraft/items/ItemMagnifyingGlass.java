@@ -4,6 +4,7 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,10 +22,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class ItemMagnifyingGlass extends ItemBase {
+public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel {
 	
 	@AgriConfigurable(
 			category = AgriConfigCategory.TOOLS,
@@ -34,7 +34,7 @@ public class ItemMagnifyingGlass extends ItemBase {
 	public static boolean enableMagnifyingGlass = true;
 
 	public ItemMagnifyingGlass() {
-		super("magnifying_glass", true);
+		super("magnifying_glass");
 		this.setMaxStackSize(1);
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 	}
@@ -76,10 +76,4 @@ public class ItemMagnifyingGlass extends ItemBase {
 	public boolean isEnabled() {
 		return enableMagnifyingGlass;
 	}
-
-	@Override
-	public List<String> getOreTags() {
-		return Collections.emptyList();
-	}
-
 }

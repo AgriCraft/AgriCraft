@@ -3,12 +3,10 @@ package com.infinityraider.agricraft.items;
 import com.infinityraider.agricraft.reference.AgriNuggetType;
 import java.util.List;
 
-import com.infinityraider.infinitylib.render.item.IAutoRenderedItem;
+import com.infinityraider.infinitylib.item.IAutoRenderedItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import java.util.Collections;
 
 import com.infinityraider.infinitylib.item.ItemBase;
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 
 	public ItemNugget() {
-		super("agri_nugget", false);
+		super("agri_nugget");
 		this.setCreativeTab(CreativeTabs.MATERIALS);
 	}
 
@@ -39,11 +37,6 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		return "item.agricraft:" + AgriNuggetType.values()[stack.getMetadata()].nugget;
-	}
-
-	@Override
-	public List<String> getOreTags() {
-		return Collections.emptyList();
 	}
 
 	@Override

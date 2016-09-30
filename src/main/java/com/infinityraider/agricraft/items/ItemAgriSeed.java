@@ -9,7 +9,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Collections;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -23,7 +22,7 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
-import com.infinityraider.infinitylib.render.item.IAutoRenderedItem;
+import com.infinityraider.infinitylib.item.IAutoRenderedItem;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.NBTHelper;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
      * constructor will create the seed for you
      */
     public ItemAgriSeed() {
-        super("agri_seed", false);
+        super("agri_seed");
         this.setCreativeTab(AgriTabs.TAB_AGRICRAFT_SEED);
     }
 
@@ -136,10 +135,4 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
         }
         return textures;
     }
-
-    @Override
-    public List<String> getOreTags() {
-        return Collections.emptyList();
-    }
-
 }
