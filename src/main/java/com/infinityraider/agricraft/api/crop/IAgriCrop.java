@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.misc.IAgriHarvestable;
 import com.infinityraider.agricraft.api.misc.IAgriWeedable;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.seed.IAgriSeedProvider;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
@@ -55,7 +56,11 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
 	/**
 	 * @return if this crop is fertile and thus can grow
 	 */
-	boolean isFertile();
+    default boolean isFertile() {
+        return this.isFertile(this.getSeed());
+    }
+    
+    boolean isFertile(AgriSeed seed);
 
 	/**
 	 * @return if this crop is fully grown

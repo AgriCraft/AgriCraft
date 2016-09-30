@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.blocks.tiles;
 import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.farming.mutation.CrossOverResult;
 import com.infinityraider.agricraft.farming.mutation.MutationEngine;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
@@ -51,12 +50,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     private IAgriStat stats = new PlantStats();
     private IAgriPlant plant;
     private IAdditionalCropData data;
-
-    private final MutationEngine mutationEngine;
-
-    public TileEntityCrop() {
-        this.mutationEngine = new MutationEngine(this);
-    }
 
     // =========================================================================
     // IPlantProvider Methods
@@ -183,8 +176,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	 * check if the crop is fertile
      */
     @Override
-    public boolean isFertile() {
-        return worldObj.isAirBlock(this.getPos().add(0, 1, 0)) && plant.getGrowthRequirement().isMet(this.worldObj, pos);
+    public boolean isFertile(AgriSeed seed) {
+        return worldObj.isAirBlock(this.getPos().add(0, 1, 0))
+                && seed.getPlant().getGrowthRequirement().isMet(this.worldObj, pos);
     }
 
     /*
@@ -272,10 +266,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     //when fertilizer is applied
     @Override
     public boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
-        if (this.getGrowthStage() < Constants.MATURE && (this.hasPlant())) {
+        if (this.hasPlant() && this.getGrowthStage() < Constants.MATURE) {
             ((BlockCrop) AgriBlocks.getInstance().CROP).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
             return true;
-        } else if (AgriCraftConfig.bonemealMutation && fertilizer.canTriggerMutation() && this.isCrossCrop()) {
+        } else if (this.isCrossCrop() && AgriCraftConfig.bonemealMutation && fertilizer.canTriggerMutation()) {
             this.crossOver();
             return true;
         }
@@ -384,15 +378,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
      * the code that makes the crop cross with neighboring crops
      */
     public void crossOver() {
-        mutationEngine.executeCrossOver();
-    }
-
-    /*
-	 * Called by the mutation engine to apply the result of a cross over
-     */
-    public void applyCrossOverResult(CrossOverResult result) {
-        this.setCrossCrop(false);
-        this.setSeed(new AgriSeed(result.getPlant(), result.getStats()));
+        MutationEngine.getInstance().executeCrossOver(this, this.worldObj.rand);
     }
 
     /**

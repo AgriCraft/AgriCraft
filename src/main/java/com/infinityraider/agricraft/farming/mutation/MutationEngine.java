@@ -10,48 +10,37 @@ import java.util.Random;
  * calculates the new stats (growth, gain, strength) of the new plant based on
  * the 4 neighbours.
  */
-public class MutationEngine {
+public final class MutationEngine {
+    
+    private static final MutationEngine INSTANCE = new MutationEngine();
 
-    private final TileEntityCrop crop;
-    private final Random random;
+    private MutationEngine() {
 
-    public MutationEngine(TileEntityCrop crop) {
-        this(crop, new Random());
+    }
+    
+    public static MutationEngine getInstance() {
+        return INSTANCE;
     }
 
-    public MutationEngine(TileEntityCrop crop, Random random) {
-        this.crop = crop;
-        this.random = random;
-    }
-
-    /**
+    /*
      * Applies one of the 2 strategies and notifies the TE if it should update
      */
-    public void executeCrossOver() {
-        ICrossOverStrategy strategy = rollStrategy();
-        CrossOverResult result = strategy.executeStrategy();
-        if (result == null) {
-            return;
+    public void executeCrossOver(TileEntityCrop crop, Random rand) {
+        rollStrategy(rand)
+                .executeStrategy(crop, rand)
+                .filter(crop::isFertile)
+                .ifPresent(seed -> {
+                    crop.setCrossCrop(false);
+                    crop.setSeed(seed);
+                });
+    }
+
+    public ICrossOverStrategy rollStrategy(Random rand) {
+        if (rand.nextDouble() < AgriCraftConfig.mutationChance) {
+            return MutateStrategy.getInstance();
+        } else {
+            return SpreadStrategy.getInstance();
         }
-        if (resultIsValid(result) && random.nextDouble() < result.getChance()) {
-            crop.applyCrossOverResult(result);
-        }
     }
 
-    private boolean resultIsValid(CrossOverResult result) {
-        return result != null && result.getPlant().getGrowthRequirement().isMet(crop.getWorld(), crop.getPos());
-    }
-
-    public ICrossOverStrategy rollStrategy() {
-        boolean spreading = random.nextDouble() > AgriCraftConfig.mutationChance;
-        return spreading ? new SpreadStrategy(this) : new MutateStrategy(this);
-    }
-
-    public TileEntityCrop getCrop() {
-        return crop;
-    }
-
-    public Random getRandom() {
-        return random;
-    }
 }
