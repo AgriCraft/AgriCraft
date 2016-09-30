@@ -24,6 +24,7 @@ public interface AgriProperties {
     InfinityProperty<Integer> GROWTHSTAGE = new InfinityProperty<>(PropertyInteger.create("age", 0, 7), 0);
 
     InfinityProperty<Integer> VINES = new InfinityProperty<>(PropertyInteger.create("age", 0, 3), 0);
+    InfinityProperty<Boolean> POWERED = new InfinityProperty<>(PropertyBool.create("powered"), false);
     
     InfinityProperty<Boolean> CHANNEL_NORTH = new InfinityProperty<>(PropertyBool.create("channel_north"), false);
     InfinityProperty<Boolean> CHANNEL_EAST = new InfinityProperty<>(PropertyBool.create("channel_east"), false);

@@ -1,9 +1,12 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannelValve;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelValve;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,7 +22,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntityChannelValve> {
 
@@ -30,9 +35,22 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
 	}
 
 	@Override
-	public void onNeighborChange(IBlockAccess iba, BlockPos pos1, BlockPos pos2) {
-		super.onNeighborChange(iba, pos1, pos2);
-		updatePowerStatus(iba, pos1);
+	protected InfinityProperty[] getPropertyArray() {
+        InfinityProperty[] properties = Arrays.copyOf(super.getPropertyArray(), super.getPropertyArray().length + 1);
+        properties[properties.length - 1] = AgriProperties.POWERED;
+        return properties;
+	}
+
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        Optional<TileEntityChannelValve> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntityChannelValve.class);
+		return AgriProperties.POWERED.applyToBlockState(super.getActualState(state, worldIn, pos), tile.isPresent() && tile.get().isPowered());
+	}
+
+	@Override
+	public void onNeighborChange(IBlockAccess world, BlockPos ownPos, BlockPos changedPos) {
+		super.onNeighborChange(world, ownPos, changedPos);
+		updatePowerStatus(world, ownPos);
 	}
 
 	@Override
