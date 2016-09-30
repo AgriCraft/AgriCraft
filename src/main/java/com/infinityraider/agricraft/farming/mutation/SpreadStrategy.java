@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.farming.mutation;
 
+import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
 
@@ -11,7 +12,7 @@ import com.infinityraider.agricraft.api.stat.IAgriStat;
 import java.util.Optional;
 import java.util.Random;
 
-public class SpreadStrategy implements ICrossOverStrategy {
+public class SpreadStrategy implements IAgriCrossStrategy {
 
     private static final SpreadStrategy INSTANCE = new SpreadStrategy();
 
