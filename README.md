@@ -2,8 +2,8 @@
 
 Agricultural farming extended.
 
-## Contact [![slack]][slack-link]
-I have a Slack channel where you can contact me for support/suggestions which you don't think fit on this issue tracker. Also if you want to discuss something with me, this is the place to be!
+## Contact [![contact]][contact-link]
+I have a Discord channel where you can contact me for support/suggestions which you don't think fit on this issue tracker. Also if you want to discuss something with me, this is the place to be!
 
 ## Supported Versions
 AgriCraft has releases for Minecraft versions 1.7.10 and onwards, status per Minecraft version is as follows:
@@ -11,7 +11,7 @@ AgriCraft has releases for Minecraft versions 1.7.10 and onwards, status per Min
 | Version  | Notes
 |----------|:----------
 |![1.7.10] | One more release to end the 1.7.10 chapter will be done, fixing all bugs from the previous version.
-|![1.8.9]  | The 1.8.9 branch was highly experimental and the rendering is one big hack. Don't expect anything.
+|![1.8.9]   | The 1.8.9 branch was highly experimental and the rendering is one big hack. Don't expect anything.
 |![1.9]    | Skipped 1.9, as it was an incredibly short-lived release.
 |![1.10]   | Port in progress.
 
@@ -29,19 +29,19 @@ AgriCraft is documented in the official GitHub wiki. Note that
 this kind of information is, most of the time, only needed by pack creators and not the average user.
 
 [build-link]:https://travis-ci.org/InfinityRaider/AgriCraft
-[build]:https://travis-ci.org/InfinityRaider/AgriCraft.svg?branch=master "Travis-CI Build Status"
+[build]:https://travis-ci.org/InfinityRaider/AgriCraft.svg?branch=1.8.9 "Travis-CI Build Status"
 [branch]:https://img.shields.io/badge/branch-1.8.9-aaaaff.svg "GitHub Branch"
-[minecraft]:https://img.shields.io/badge/minecraft-1.8.9-blue.svg "Minecraft Version"
-[curse-link]:http://minecraft.curseforge.com/mc-mods/225635-AgriCraft
-[curse]:https://img.shields.io/badge/curse-AgriCraft-dd602a.svg "CurseForge"
-[slack-link]:https://InfinityRaider.slack.com/ "InfinityRaider Slack"
-[slack]:https://img.shields.io/badge/slack-InfinityRaider-ff69b4.svg "InfinityRaider Slack"
+[minecraft]:https://agricraft.github.io/versions/1.10/minecraft.svg "Minecraft Version"
+[curse-link]:http://agricraft.github.io/curse
+[curse]:https://agricraft.github.io/images/curse.svg "CurseForge"
+[contact-link]:https://agricraft.github.io/contact
+[contact]:https://agricraft.github.io/images/contact.svg "InfinityRaider Contact"
 
-[bug-link]:https://www.github.com/InfinityRaider/AgriCraft/issues
-[bug]:https://img.shields.io/badge/issue-bug-aa1111.svg
+[bug-link]:https://agricraft.github.io/issues
+[bug]:https://agricraft.github.io/images/bug.svg "AgriCraft Issues"
 
-[wiki-link]:https://www.github.com/InfinityRaider/AgriCraft/wiki
-[wiki]:https://img.shields.io/badge/wiki-AgriCraft-lightgray.svg "AgriCraft GitHub Wiki"
+[wiki-link]:https://agricraft.github.io/wiki
+[wiki]:https://agricraft.github.io/images/wiki.svg "AgriCraft GitHub Wiki"
 
 [1.7.10]:https://agricraft.github.io/versions/1.7.10/status.svg
 [1.8.9]:https://agricraft.github.io/versions/1.8.9/status.svg
