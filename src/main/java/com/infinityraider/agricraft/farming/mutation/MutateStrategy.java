@@ -3,11 +3,12 @@ package com.infinityraider.agricraft.farming.mutation;
 import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculator;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
+import com.infinityraider.agricraft.apiimpl.StatCalculatorRegistry;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -15,14 +16,9 @@ import java.util.stream.Collectors;
 
 public class MutateStrategy implements IAgriCrossStrategy {
 
-    private static final MutateStrategy INSTANCE = new MutateStrategy();
-
-    private MutateStrategy() {
-
-    }
-
-    public static MutateStrategy getInstance() {
-        return INSTANCE;
+    @Override
+    public double getRollChance() {
+        return AgriCraftConfig.mutationChance;
     }
 
     @Override
@@ -37,9 +33,9 @@ public class MutateStrategy implements IAgriCrossStrategy {
         if (!crossOvers.isEmpty()) {
             int index = rand.nextInt(crossOvers.size());
             IAgriMutation mutation = crossOvers.get(index);
-            IAgriStat stat = StatCalculator.getInstance().calculateStats(mutation.getChild(), matureNeighbors, true);
-            if (rand.nextDouble() < mutation.getChance()) {
-                return Optional.of(new AgriSeed(mutation.getChild(), stat));
+            Optional<IAgriStat> stat = StatCalculatorRegistry.getInstance().calculateStats(mutation, matureNeighbors);
+            if (stat.isPresent() && rand.nextDouble() < mutation.getChance()) {
+                return Optional.of(new AgriSeed(mutation.getChild(), stat.get()));
             }
         }
         return Optional.empty();

@@ -10,6 +10,8 @@ import javax.annotation.Nonnull;
  * Base interface for different cross over strategies.
  */
 public interface IAgriCrossStrategy {
+    
+    double getRollChance();
 
     @Nonnull
     Optional<AgriSeed> executeStrategy(IAgriCrop crop, Random rand);

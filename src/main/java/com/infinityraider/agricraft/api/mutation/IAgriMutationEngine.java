@@ -2,18 +2,34 @@
  */
 package com.infinityraider.agricraft.api.mutation;
 
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /**
  *
- * @author Ryan
  */
 public interface IAgriMutationEngine {
 
-    /*
-     * Applies one of the 2 strategies and notifies the TE if it should update
-     */
-    void executeCrossOver(TileEntityCrop crop, Random rand);
-	
+    boolean registerStrategy(IAgriCrossStrategy strategy);
+
+    List<IAgriCrossStrategy> getStrategies();
+
+    boolean hasStrategy(IAgriCrossStrategy strategy);
+
+    Optional<IAgriCrossStrategy> rollStrategy(Random rand);
+
+    default boolean attemptCross(IAgriCrop crop, Random rand) {
+        return rollStrategy(rand)
+                .flatMap(s -> s.executeStrategy(crop, rand))
+                .filter(crop::isFertile)
+                .map(seed -> {
+                    crop.setCrossCrop(false);
+                    crop.setSeed(seed);
+                    return true;
+                })
+                .orElse(false);
+    }
+
 }

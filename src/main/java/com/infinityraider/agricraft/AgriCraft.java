@@ -108,18 +108,21 @@ public class AgriCraft extends InfinityMod {
 	@SuppressWarnings("unused")
 	public void onPreInit(FMLPreInitializationEvent event) {
 		super.preInit(event);
+        PluginHandler.preInit(event);
 	}
 
 	@Mod.EventHandler
 	@SuppressWarnings("unused")
 	public void onInit(FMLInitializationEvent event) {
 		super.init(event);
+        PluginHandler.init();
 	}
 
 	@Mod.EventHandler
 	@SuppressWarnings("unused")
 	public void onPostInit(FMLPostInitializationEvent event) {
 		super.postInit(event);
+        PluginHandler.postInit();
 	}
 
 	@Mod.EventHandler

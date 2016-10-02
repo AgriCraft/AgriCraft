@@ -1,6 +1,9 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
+import java.util.Optional;
 
 public class StatCalculatorHardcore extends StatCalculatorBase {
     /**
@@ -62,4 +65,15 @@ public class StatCalculatorHardcore extends StatCalculatorBase {
             return input + incr;
         }
     }
+
+    @Override
+    public boolean accepts(Object obj) {
+        return (AgriCraftConfig.hardCoreStats) && (obj instanceof IAgriPlant);
+    }
+
+    @Override
+    public Optional<IAgriStatCalculator> valueOf(Object obj) {
+        return accepts(obj) ? Optional.of(this) : Optional.empty();
+    }
+    
 }
