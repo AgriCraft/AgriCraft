@@ -28,6 +28,7 @@ import java.util.Map;
 
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
+import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable, ISidedInventory {
@@ -66,7 +67,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 						//tag
 						NBTTagCompound slotTag = new NBTTagCompound();
 						slotTag.setInteger(AgriNBT.COUNT, slot.count);
-						IAgriStat stats = StatRegistry.getInstance().valueOf(tag).get();
+						IAgriStat stats = StatRegistry.getInstance().valueOf(tag).orElseGet(PlantStats::new);
 						stats.writeToNBT(slotTag);
 						slotTag.setInteger(AgriNBT.ID, slot.getId());
 						//add the TAG to the list

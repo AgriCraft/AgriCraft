@@ -43,12 +43,7 @@ public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyze
 
 	private void renderModel(ITessellator tessellator, EnumFacing direction, boolean journal) {
 		tessellator.pushMatrix();
-		int angle = (90 * direction.getHorizontalIndex() + 180) % 360;
-		if(angle != 0) {
-			tessellator.translate(0.5, 0, 0.5);
-			tessellator.rotate(angle, 0, 1, 0);
-			tessellator.translate(-0.5, 0, -0.5);
-		}
+		rotateBlock(tessellator, direction);
 		if (analyzerQuads == null) {
 			analyzerQuads = MODEL_ANALYZER.getBakedQuads(tessellator.getVertexFormat(), this.getIcon(TEXTURE_ANALYZER),1);
 		}
@@ -106,7 +101,7 @@ public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyze
 	@Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSeedAnalyzer block, TileEntitySeedAnalyzer tile,
 									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-		renderModel(tessellator, EnumFacing.SOUTH, false);
+		renderModel(tessellator, EnumFacing.NORTH, false);
 	}
 
 	@Override
