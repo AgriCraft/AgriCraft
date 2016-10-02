@@ -20,152 +20,153 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiComponent<C> {
 
-	private final C component;
-	private final Rectangle bounds;
-	private final Rectangle uv;
-	private final double scale;
-	private final boolean centered;
-	
-	private BiConsumer<GuiComponent<C>, List<String>> tootipAdder;
-	private BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction;
-	private BiConsumer<GuiComponent<C>, Point> mouseEnterAction;
-	private BiConsumer<GuiComponent<C>, Point> mouseLeaveAction;
-	private BiConsumer<GuiBase, GuiComponent<C>> renderAction;
+    private final C component;
+    private final Rectangle bounds;
+    private final Rectangle uv;
+    private final double scale;
+    private final boolean centered;
 
-	private boolean isVisible;
-	private boolean isEnabled;
-	private boolean isHovered = false;
+    private BiConsumer<GuiComponent<C>, List<String>> tootipAdder;
+    private BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction;
+    private BiConsumer<GuiComponent<C>, Point> mouseEnterAction;
+    private BiConsumer<GuiComponent<C>, Point> mouseLeaveAction;
+    private BiConsumer<GuiBase, GuiComponent<C>> renderAction;
 
-	public GuiComponent(C component, Rectangle bounds, Rectangle uv, double scale, boolean centered, boolean visable, boolean enabled, BiConsumer<GuiComponent<C>, List<String>> tootipAdder, BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction, BiConsumer<GuiComponent<C>, Point> mouseEnterAction, BiConsumer<GuiComponent<C>, Point> mouseLeaveAction, BiConsumer<GuiBase, GuiComponent<C>> renderAction) {
-		this.component = component;
-		this.bounds = bounds;
-		this.uv = uv;
-		this.scale = scale;
-		this.centered = centered;
-		this.isVisible = visable;
-		this.isEnabled = enabled;
-		this.tootipAdder = tootipAdder;
-		this.mouseClickAction = mouseClickAction;
-		this.mouseEnterAction = mouseEnterAction;
-		this.mouseLeaveAction = mouseLeaveAction;
-		this.renderAction = renderAction;
-	}
+    private boolean isVisible;
+    private boolean isEnabled;
+    private boolean isHovered = false;
 
-	public final C getComponent() {
-		return this.component;
-	}
+    public GuiComponent(C component, Rectangle bounds, Rectangle uv, double scale, boolean centered, boolean visable, boolean enabled, BiConsumer<GuiComponent<C>, List<String>> tootipAdder, BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction, BiConsumer<GuiComponent<C>, Point> mouseEnterAction, BiConsumer<GuiComponent<C>, Point> mouseLeaveAction, BiConsumer<GuiBase, GuiComponent<C>> renderAction) {
+        this.component = component;
+        this.bounds = bounds;
+        this.uv = uv;
+        this.scale = scale;
+        this.centered = centered;
+        this.isVisible = visable;
+        this.isEnabled = enabled;
+        this.tootipAdder = tootipAdder;
+        this.mouseClickAction = mouseClickAction;
+        this.mouseEnterAction = mouseEnterAction;
+        this.mouseLeaveAction = mouseLeaveAction;
+        this.renderAction = renderAction;
+    }
 
-	public final Rectangle getBounds() {
-		return bounds;
-	}
+    public final C getComponent() {
+        return this.component;
+    }
 
-	public Rectangle getUV() {
-		return uv;
-	}
+    public final Rectangle getBounds() {
+        return bounds;
+    }
 
-	public double getScale() {
-		return scale;
-	}
+    public Rectangle getUV() {
+        return uv;
+    }
 
-	public final boolean isCentered() {
-		return centered;
-	}
+    public double getScale() {
+        return scale;
+    }
 
-	public final boolean isHovered() {
-		return isHovered;
-	}
+    public final boolean isCentered() {
+        return centered;
+    }
 
-	public final boolean isVisable() {
-		return isVisible;
-	}
+    public final boolean isHovered() {
+        return isHovered;
+    }
 
-	public final boolean isEnabled() {
-		return isEnabled;
-	}
+    public final boolean isVisable() {
+        return isVisible;
+    }
 
-	public final void setEnabled(boolean enabled) {
-		this.isEnabled = enabled;
-	}
+    public final boolean isEnabled() {
+        return isEnabled;
+    }
 
-	public final void setVisable(boolean visable) {
-		this.isVisible = visable;
-	}
-	
-	public void setTootipAdder(BiConsumer<GuiComponent<C>, List<String>> tootipAdder) {
-		this.tootipAdder = tootipAdder;
-	}
+    public final void setEnabled(boolean enabled) {
+        this.isEnabled = enabled;
+    }
 
-	public void setMouseClickAction(BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction) {
-		this.mouseClickAction = mouseClickAction;
-	}
+    public final void setVisable(boolean visable) {
+        this.isVisible = visable;
+    }
 
-	public void setMouseEnterAction(BiConsumer<GuiComponent<C>, Point> mouseEnterAction) {
-		this.mouseEnterAction = mouseEnterAction;
-	}
+    public void setTootipAdder(BiConsumer<GuiComponent<C>, List<String>> tootipAdder) {
+        this.tootipAdder = tootipAdder;
+    }
 
-	public void setMouseLeaveAction(BiConsumer<GuiComponent<C>, Point> mouseLeaveAction) {
-		this.mouseLeaveAction = mouseLeaveAction;
-	}
+    public void setMouseClickAction(BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction) {
+        this.mouseClickAction = mouseClickAction;
+    }
 
-	public void setRenderAction(BiConsumer<GuiBase, GuiComponent<C>> renderAction) {
-		this.renderAction = renderAction;
-	}
+    public void setMouseEnterAction(BiConsumer<GuiComponent<C>, Point> mouseEnterAction) {
+        this.mouseEnterAction = mouseEnterAction;
+    }
 
-	public final boolean contains(int x, int y) {
-		return this.getBounds().contains(x, y);
-	}
+    public void setMouseLeaveAction(BiConsumer<GuiComponent<C>, Point> mouseLeaveAction) {
+        this.mouseLeaveAction = mouseLeaveAction;
+    }
 
-	public final boolean onClick(int x, int y) {
-		return this.isEnabled && this.mouseClickAction != null && this.mouseClickAction.apply(this, relativize(x, y));
-	}
+    public void setRenderAction(BiConsumer<GuiBase, GuiComponent<C>> renderAction) {
+        this.renderAction = renderAction;
+    }
 
-	public final void onMouseMove(int x, int y) {
-		if (this.isEnabled) {
-			final boolean over = contains(x, y);
-			if (over) {
-				if (!isHovered()) {
-					this.isHovered = true;
-					this.onMouseEnter(x, y);
-				}
-			} else if (isHovered()) {
-				this.isHovered = false;
-				this.onMouseLeave(x, y);
-			}
-		}
-	}
+    public final boolean contains(int x, int y) {
+        return this.getBounds().contains(x, y);
+    }
 
-	public final void onMouseEnter(int x, int y) {
-		if (this.isEnabled && this.mouseEnterAction != null) {
-			this.mouseEnterAction.accept(this, this.relativize(x, y));
-		}
-	}
+    public final boolean onClick(int x, int y) {
+        return this.isEnabled && this.mouseClickAction != null && this.mouseClickAction.apply(this, relativize(x, y));
+    }
 
-	public final void onMouseLeave(int x, int y) {
-		if (this.isEnabled && this.mouseLeaveAction != null) {
-			this.mouseLeaveAction.accept(this, this.relativize(x, y));
-		}
-	}
+    public final void onMouseMove(int x, int y) {
+        if (this.isEnabled) {
+            final boolean over = contains(x, y);
+            if (over) {
+                if (!isHovered()) {
+                    this.isHovered = true;
+                    this.onMouseEnter(x, y);
+                }
+            } else if (isHovered()) {
+                this.isHovered = false;
+                this.onMouseLeave(x, y);
+            }
+        }
+    }
 
-	public final void addToolTip(List<String> toolTip, EntityPlayer player) {
-		if (this.isEnabled && this.tootipAdder != null) {
-			this.tootipAdder.accept(this, toolTip);
-		}
-	}
+    public final void onMouseEnter(int x, int y) {
+        if (this.isEnabled && this.mouseEnterAction != null) {
+            this.mouseEnterAction.accept(this, this.relativize(x, y));
+        }
+    }
 
-	public final void renderComponent(GuiBase gui) {
-		if (this.isVisible && this.renderAction != null) {
-			GlStateManager.pushAttrib();
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(this.bounds.x, this.bounds.y, 0);
-			GlStateManager.scale(scale, scale, scale);
-			this.renderAction.accept(gui, this);
-			GlStateManager.popMatrix();
-			GlStateManager.popAttrib();
-		}
-	}
-	
-	public final Point relativize(int x, int y) {
-		return new Point(x - this.bounds.x, y - this.bounds.y);
-	}
+    public final void onMouseLeave(int x, int y) {
+        if (this.isEnabled && this.mouseLeaveAction != null) {
+            this.mouseLeaveAction.accept(this, this.relativize(x, y));
+        }
+    }
+
+    public final void addToolTip(List<String> toolTip, EntityPlayer player) {
+        if (this.isEnabled && this.tootipAdder != null) {
+            this.tootipAdder.accept(this, toolTip);
+        }
+    }
+
+    public final void renderComponent(GuiBase gui) {
+        if (this.isVisible && this.renderAction != null) {
+            GlStateManager.pushAttrib();
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(this.bounds.x, this.bounds.y, 0);
+            GlStateManager.scale(scale, scale, scale);
+            GlStateManager.color(1, 1, 1, 1);
+            this.renderAction.accept(gui, this);
+            GlStateManager.popMatrix();
+            GlStateManager.popAttrib();
+        }
+    }
+
+    public final Point relativize(int x, int y) {
+        return new Point(x - this.bounds.x, y - this.bounds.y);
+    }
 
 }

@@ -8,7 +8,7 @@ import com.infinityraider.agricraft.utility.GuiHelper;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -40,9 +40,8 @@ public final class ComponentRenderer {
 	}
 
 	public static void renderComponentStack(GuiBase gui, GuiComponent<ItemStack> component) {
-		RenderHelper.enableGUIStandardItemLighting();
 		gui.getRenderItem().renderItemAndEffectIntoGUI(component.getComponent(), 0, 0);
-		RenderHelper.disableStandardItemLighting();
+        GlStateManager.enableAlpha();
 	}
 
 	public static void renderStackFrame(GuiBase gui, GuiComponent<ItemStack> component) {
@@ -52,7 +51,7 @@ public final class ComponentRenderer {
 	
 	public static void renderComponentText(GuiBase gui, GuiComponent<String> component) {
 		final FontRenderer fontRenderer = gui.getFontRenderer();
-
+        
 		String text = AgriCore.getTranslator().translate(component.getComponent());
 		text = GuiHelper.splitInLines(gui.getFontRenderer(), text, 95, component.getScale());
 		List<String> write = GuiHelper.getLinesFromData(text);
